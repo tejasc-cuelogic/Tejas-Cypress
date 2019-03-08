@@ -34,7 +34,9 @@ export class CategoryStore {
         fetchPolicy: 'network-only',
         variables: { types: null },
         onFetch: () => {
-          this.setAllCategoriesData();
+          if (!this.data.loading) {
+            this.setAllCategoriesData();
+          }
         },
       });
     }

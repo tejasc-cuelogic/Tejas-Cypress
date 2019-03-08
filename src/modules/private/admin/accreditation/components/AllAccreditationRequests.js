@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
@@ -60,13 +61,9 @@ export default class AllAccreditationRequests extends Component {
                       <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
                     </Table.Cell>
                     <Table.Cell>
-                      {accreditation.accountType ?
-                        <Icon size="large" className="ns-entity-line" color="green" /> :
-                        <Aux>
-                          <Icon size="large" className="ns-individual-line" color="green" />
-                          <Icon size="large" className="ns-ira-line" color="green" />
-                        </Aux>
-                      }
+                      {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
+                      {accreditation.accountType && accreditation.accountType.includes('INDIVIDUAL') && <Icon size="large" className="ns-individual-line" color="green" />}
+                      {accreditation.accountType && accreditation.accountType.includes('IRA') && <Icon size="large" className="ns-ira-line" color="green" />}
                     </Table.Cell>
                     <Table.Cell>
                       <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
@@ -104,7 +101,7 @@ export default class AllAccreditationRequests extends Component {
                       <Actions
                         accountId={accreditation.accountId}
                         userId={accreditation.userId}
-                        accountType={accreditation.accountType}
+                        accountType={get(accreditation, 'accountType[0]')}
                         {...this.props}
                       /> :
                       <Table.Cell>

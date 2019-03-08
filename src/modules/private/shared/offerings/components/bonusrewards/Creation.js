@@ -54,7 +54,7 @@ export default class Creation extends Component {
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : 'ui card fluid form-card'}>
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
         <Route path={`${match.url}/add-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
-        <Route path={`${match.url}/edit-bonus-reward/:rewardId`} render={props => <AddNewBonusReward refLink={match.url} isEditForm {...props} />} />
+        <Route path={`${match.url}/edit-bonus-reward/:rewardId/:tier`} render={props => <AddNewBonusReward isReadOnly={isReadOnly} refLink={match.url} isEditForm {...props} />} />
         {!isReadOnly &&
         <div className="clearfix">
           <Button as={Link} to={`${match.url}/add-new-tier`} floated="right" primary content="Add new rewards tier" />

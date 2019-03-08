@@ -2,11 +2,12 @@ import React from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, startsWith } from 'lodash';
 import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
+// import ChangeInvestmentLimit from '../../ChangeInvestmentLimit';
 
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'agreementsStore')
 @withRouter
@@ -21,7 +22,6 @@ export default class Agreement extends React.Component {
   componentWillMount() {
     const {
       stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm, setFieldValue,
-      updateAgreementDetailFormAsPerRegulation,
     } = this.props.investmentStore;
     const {
       getLegalDocsFileIds, alreadySet,
@@ -32,10 +32,7 @@ export default class Agreement extends React.Component {
         console.log('successfully doc get');
       });
     }
-    const { campaign } = this.props.campaignStore;
-    const offeringRegulationType = get(campaign, 'keyTerms.regulation');
     resetAggrementForm();
-    updateAgreementDetailFormAsPerRegulation(offeringRegulationType);
     if (investAccTypes.value === '') {
       this.props.history.push(`${this.props.refLink}/invest-now`);
     } else if (stepToBeRendered === 2) {
@@ -44,7 +41,7 @@ export default class Agreement extends React.Component {
     setFieldValue('investmentFlowErrorMessage', null);
   }
   handleCloseModal = (e) => {
-    if (!this.state.showDocuSign) {
+    if (!this.state.showDocuSign && !this.state.showAgreementPdf) {
       this.props.investmentStore.resetData();
       this.props.accreditationStore.resetUserAccreditatedStatus();
     }
@@ -94,9 +91,11 @@ export default class Agreement extends React.Component {
   }
   agreementPDFLoader = (event, state, agreementKey, agreementType) => {
     event.preventDefault();
-    const { getNavItems, getBoxEmbedLink } = this.props.agreementsStore;
-    const doc = getNavItems.find(ele => ele.to.toString() === agreementKey);
-    getBoxEmbedLink(doc.to, doc.id, agreementType);
+    if (state === true) {
+      const { getNavItems, getBoxEmbedLink } = this.props.agreementsStore;
+      const doc = getNavItems.find(ele => ele.to.toString() === agreementKey);
+      getBoxEmbedLink(doc.to, doc.id, agreementType);
+    }
     this.setState({ showAgreementPdf: state });
   }
   render() {
@@ -107,11 +106,12 @@ export default class Agreement extends React.Component {
       agreementDetails,
       investmentFlowErrorMessage,
     } = this.props.investmentStore;
-    const { uiStore } = this.props;
+    const { uiStore, match } = this.props;
     const { inProgress } = uiStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
+    const offeringRegulationType = get(campaign, 'keyTerms.regulation');
     return (
       <Aux>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -154,7 +154,7 @@ export default class Agreement extends React.Component {
                 }
               </div>
               <div className="center-align mt-20">
-                <Button type="button" content="Go Back" primary onClick={e => this.docuSignHandeler(e, false)} />
+                <Button type="button" content="Go Back" primary onClick={e => this.agreementPDFLoader(e, false)} />
               </div>
             </div>
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
@@ -181,6 +181,37 @@ export default class Agreement extends React.Component {
                           customLabel={(
                             <Aux>
                               I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
+                            </Aux>
+                          )}
+                          conditionalCustomLabel={(
+                            startsWith(offeringRegulationType, 'BD_') ?
+                              <Aux>
+                                I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                the entire amount of my investment may be lost,
+                                and confirm that I am in a
+                                financial condition to bear the loss.
+                                I have read and agree to the terms of
+                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
+                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
+                                and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
+                              </Aux>
+                              :
+                              <Aux>
+                                <Aux>
+                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  the entire amount of my investment may be lost,
+                                  and confirm that I am in a
+                                  financial condition to bear the loss.
+                                  I have read and agree to the terms of
+                                  the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
+                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
+                                  and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
+                                </Aux>
+                              </Aux>
+                          )}
+                          customUpdateLimitLabel={(
+                            <Aux>
+                              I confirm that I am complying with my <b>annual investment limit</b> (<Link to={`${match.url}/change-investment-limit`}>update</Link>)
                             </Aux>
                           )}
                         />

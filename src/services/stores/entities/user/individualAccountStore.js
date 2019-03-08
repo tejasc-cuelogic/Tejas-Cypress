@@ -110,8 +110,8 @@ class IndividualAccountStore {
             resolve(result);
           }))
           .catch(action((err) => {
-            uiStore.setProgress(false);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.setProgress(false);
             reject();
           }));
         // .finally(() => {

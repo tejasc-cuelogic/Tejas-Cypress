@@ -27,6 +27,7 @@ export class TransactionStore {
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
   @observable cash = null;
+  @observable cashAvailable = {};
   @observable showConfirmPreview = false;
   @observable reSendVerificationCode = null;
   @observable transactionOtpRequestId = null;
@@ -76,8 +77,7 @@ export class TransactionStore {
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (props && props.statement) {
-          console.log(data);
+        if (props && props.statement && !this.data.loading) {
           this.setFirstTransaction(data);
         }
       },
@@ -99,7 +99,8 @@ export class TransactionStore {
   }
 
   @computed get loading() {
-    return this.data.loading || this.investmentsByOffering.loading;
+    return this.data.loading || this.investmentsByOffering.loading ||
+    this.paymentHistoryData.loading;
   }
 
   @computed get error() {
@@ -142,7 +143,7 @@ export class TransactionStore {
       { name: field, value: values.floatValue },
     );
     if (checkWithdrawAmt && values.floatValue !== undefined) {
-      this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) <= 0 && values.floatValue > 0;
+      this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
     }
   };
 
@@ -359,7 +360,7 @@ export class TransactionStore {
           includeInFlight,
         },
         onFetch: (data) => {
-          if (data) {
+          if (data && !this.cashAvailable.loading) {
             this.transact(data.getInvestorAvailableCash, null);
             resolve(data);
           }
@@ -383,7 +384,7 @@ export class TransactionStore {
         offeringId: offeringCreationStore.currentOfferingId,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.paymentHistoryData.loading) {
           resolve();
         }
       },
@@ -404,7 +405,7 @@ export class TransactionStore {
         offeringId: offeringCreationStore.currentOfferingId,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.investmentsByOffering.loading) {
           this.setInvestmentOptions(data.getInvestmentsByOfferingId);
           if (data.getInvestmentsByOfferingId[0]) {
             this.setInvestment(data.getInvestmentsByOfferingId[0].investmentId);

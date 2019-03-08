@@ -7,6 +7,7 @@ import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
+// import LinkbankSummary from './LinkbankSummary';
 import NSImage from '../../../../shared/NSImage';
 
 @inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
@@ -38,6 +39,7 @@ export default class Plaid extends Component {
       bankListing,
       showAddFunds,
       isPlaidBankVerified,
+      // linkbankSummary,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
     const { action, refLink } = this.props;
@@ -55,6 +57,10 @@ export default class Plaid extends Component {
     if (showAddFunds) {
       return <AddFunds />;
     }
+
+    // if (linkbankSummary) {
+    //   return <LinkbankSummary />;
+    // }
     if (bankLinkInterface === 'form') {
       return <ManualForm action={action} refLink={refLink} />;
     }
