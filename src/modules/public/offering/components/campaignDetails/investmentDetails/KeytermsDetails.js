@@ -353,10 +353,6 @@ class KeyTermsDetails extends Component {
           :
             null
         }
-        <p className="note">
-          * For illustration only. See expanded Payment Calculator view to read more
-          regarding actual performance variables.
-        </p>
       </Aux>
     );
   }
