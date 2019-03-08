@@ -690,12 +690,14 @@ class EntityAccountStore {
     this.resetFormData('GEN_INFO_FRM');
     this.resetFormData('PERSONAL_INFO_FRM');
     this.resetFormData('FORM_DOCS_FRM');
-    this.TRUST_INFO_FRM.fields.isTrust.value = true;
-    this.TRUST_INFO_FRM.fields.isTrust.error = undefined;
-    this.TRUST_INFO_FRM.fields.trustDate.value = moment(`${new Date().getFullYear()}-01-01`).format('MM/DD/YYYY');
-    this.TRUST_INFO_FRM.fields.trustDate.error = undefined;
-    this.TRUST_INFO_FRM.meta.isValid = false;
-    this.TRUST_INFO_FRM.meta.error = '';
+    this.resetFormData('TRUST_INFO_FRM');
+    // this.TRUST_INFO_FRM.fields.isTrust.value = true;
+    // this.TRUST_INFO_FRM.fields.isTrust.error = undefined;
+    // this.TRUST_INFO_FRM.fields.trustDate.value =
+    // moment(`${new Date().getFullYear()}-01-01`).format('MM/DD/YYYY');
+    // this.TRUST_INFO_FRM.fields.trustDate.error = undefined;
+    // this.TRUST_INFO_FRM.meta.isValid = false;
+    // this.TRUST_INFO_FRM.meta.error = '';
     this.entityData = {};
     this.stepToBeRendered = '';
     this.entityAccountId = null;
