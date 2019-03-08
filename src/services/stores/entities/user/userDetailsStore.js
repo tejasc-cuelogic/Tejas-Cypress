@@ -4,7 +4,7 @@ import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
 import cookie from 'react-cookies';
-import { concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase } from 'lodash';
+import { concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
@@ -146,7 +146,7 @@ export class UserDetailsStore {
           res(result);
         }
         const user = { ...this.currentUser };
-        this.currentUser.data &&
+        this.currentUser && this.currentUser.data &&
           this.currentUser.data.user &&
           this.currentUser.data.user.roles &&
           this.currentUser.data.user.roles.map((role, index) => {
@@ -159,6 +159,21 @@ export class UserDetailsStore {
       },
     });
   })
+
+  @computed
+  get isInvestorAccreditated() {
+    let entityAccreditation = null;
+    this.currentUser && this.currentUser.data
+    && this.currentUser.data.user
+    && this.currentUser.data.user.roles.map((role) => {
+      if (role.name === 'entity') {
+        entityAccreditation = get(role, 'details.accreditation.status') || null;
+      }
+      return null;
+    });
+    const accreditation = get(this.currentUser, 'data.user.accreditation.status');
+    return (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
+  }
 
   @action
   getUserProfileDetails = (userId) => {

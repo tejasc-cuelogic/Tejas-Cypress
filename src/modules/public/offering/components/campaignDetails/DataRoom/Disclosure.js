@@ -4,7 +4,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { Button, Header } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-@inject('campaignStore', 'accreditationStore', 'userStore', 'navStore')
+@inject('campaignStore', 'accreditationStore', 'userDetailsStore', 'userStore', 'navStore')
 @withRouter
 class Disclosure extends Component {
   render() {
@@ -12,10 +12,12 @@ class Disclosure extends Component {
     if (!doc) {
       return <InlineLoader />;
     }
+    const { isInvestorAccreditated } = this.props.userDetailsStore;
     const { stepInRoute } = this.props.navStore;
-    if (doc.accreditedOnly && (!this.props.userStore.currentUser ||
-      (this.props.userStore.currentUser && this.props.userStore.currentUser.roles &&
-      this.props.userStore.currentUser.roles.includes('investor') &&
+    if (doc.accreditedOnly
+      && (!this.props.userStore.currentUser
+      || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles &&
+      this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated &&
       !this.props.accreditationStore.isUserAccreditated))) {
       return (
         <div className="updates-modal">
