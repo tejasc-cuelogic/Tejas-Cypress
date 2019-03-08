@@ -105,7 +105,7 @@ export default class WhyNextseed extends Component {
             <Header as="h2" className="mb-30" textAlign={isMobile ? 'left' : 'center'}>
             Small business investing, made easy.
             </Header>
-            <Responsive as="Divider" hidden maxWidth={767} />
+            <Responsive as={Divider} hidden maxWidth={767} />
             <Grid stackable centered className={!isMobile && 'mt-50'}>
               <Grid.Column width={14}>
                 <Item.Group className="horizontal-items">
