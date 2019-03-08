@@ -140,21 +140,21 @@ export class UserDetailsStore {
       fetchPolicy: 'network-only',
       variables: { userId },
       onFetch: (result) => {
-        identityStore.setProfileInfo(this.userDetails);
-        accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         if (!this.currentUser.loading) {
+          identityStore.setProfileInfo(this.userDetails);
+          accountStore.setInvestmentAccTypeValues(this.validAccTypes);
           res(result);
-        }
-        const user = { ...this.currentUser };
-        this.currentUser && this.currentUser.data &&
-          this.currentUser.data.user &&
-          this.currentUser.data.user.roles &&
-          this.currentUser.data.user.roles.map((role, index) => {
-            this.currentUser.data.user.roles[index].name = lowerCase(role.name);
-            return this.currentUser;
-          });
-        if (user && user.data && user.data.user && user.data.user.capabilities) {
-          authStore.setCurrentUserCapabilites(user.data.user.capabilities);
+          const user = { ...this.currentUser };
+          this.currentUser.data &&
+            this.currentUser.data.user &&
+            this.currentUser.data.user.roles &&
+            this.currentUser.data.user.roles.map((role, index) => {
+              this.currentUser.data.user.roles[index].name = lowerCase(role.name);
+              return this.currentUser;
+            });
+          if (user && user.data && user.data.user && user.data.user.capabilities) {
+            authStore.setCurrentUserCapabilites(user.data.user.capabilities);
+          }
         }
       },
     });

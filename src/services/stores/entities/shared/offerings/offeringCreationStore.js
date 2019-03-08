@@ -1528,7 +1528,7 @@ export class OfferingCreationStore {
   @computed
   get allBonusRewards() {
     return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards &&
-    toJS(this.bonusRewards.data.getBonusRewards)) || [];
+      orderBy(toJS(this.bonusRewards.data.getBonusRewards), 'created.date', 'asc')) || [];
   }
 
   @computed
@@ -1537,7 +1537,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  deleteBonusReward = (id) => {
+  deleteBonusReward = id => new Promise((res, rej) => {
     uiStore.setProgress();
     client
       .mutate({
@@ -1556,27 +1556,30 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
+        res();
         Helper.toast('Bonus Reward has been deleted successfully.', 'success');
       })
       .catch(action((err) => {
+        rej();
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
       }))
       .finally(() => {
         uiStore.setProgress(false);
       });
-  }
+  });
 
   @action
   setUpdateBonusRewardsData = (rewardId) => {
+    this.resetBonusRewardForm();
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     const bonusRewards = this.allBonusRewards;
     if (bonusRewards && bonusRewards.length) {
       bonusRewards.map((reward) => {
         if (reward.id === rewardId) {
           fields.name.value = reward.title;
-          fields.description.value = reward.description;
-          fields.expirationDate.value = moment(reward.expirationDate).format('MM/DD/YYYY');
+          fields.description.value = reward.description ? reward.description : '';
+          fields.expirationDate.value = reward.expirationDate ? moment(reward.expirationDate).format('MM/DD/YYYY') : '';
           map(fields, (f) => {
             if (f.earlyBirdQuantity > 0 && reward.earlyBirdQuantity > 0) {
               f.value.push('EARLY_BIRDS');
@@ -1589,6 +1592,7 @@ export class OfferingCreationStore {
         return null;
       });
     }
+    Validator.validateForm(this.ADD_NEW_BONUS_REWARD_FRM);
   }
 
   createUpdateBonusReward = (earlyBirdQty, id = false) => {

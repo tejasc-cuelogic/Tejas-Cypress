@@ -232,7 +232,9 @@ export class BankAccountStore {
         query: getlistLinkedBankUsers,
         variables,
         onFetch: (res) => {
-          this.setDb(res.listLinkedBankUsers.linkedBankList);
+          if (res && !this.data.loading) {
+            this.setDb(res.listLinkedBankUsers.linkedBankList);
+          }
         },
       });
     }
