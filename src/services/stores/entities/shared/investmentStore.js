@@ -255,7 +255,7 @@ export class InvestmentStore {
         includeInFlight: true,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.cashAvailable.loading) {
           rewardStore.getUserRewardBalance().then(() => {
             resolve(data);
           });

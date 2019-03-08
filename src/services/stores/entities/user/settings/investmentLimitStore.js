@@ -48,7 +48,7 @@ export class InvestmentLimitStore {
         accountId,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.investorInvestmentLimit.loading) {
           resolve(data);
         }
       },
@@ -67,7 +67,7 @@ export class InvestmentLimitStore {
         offeringId,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.investNowHealthCheckDetails.loading) {
           resolve(data);
         }
       },
@@ -277,7 +277,7 @@ export class InvestmentLimitStore {
         dateFilterStop,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.investorInvestmentLimit.loading) {
           resolve(data);
         }
       },

@@ -77,7 +77,7 @@ export class TransactionsStore {
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        if (res) {
+        if (res && !this.data.loading) {
           this.setData(res);
         }
       },

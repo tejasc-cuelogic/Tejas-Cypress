@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { get } from 'lodash';
+import { get, orderBy } from 'lodash';
 import { Header, Grid, Segment, Label } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 import BonusRewardsList from './BonusRewardsList';
@@ -24,7 +24,7 @@ class BonusRewards extends Component {
     const { campaign } = this.props.campaignStore;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const earlyBird = get(campaign, 'earlyBird') || null;
-    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const bonusRewards = orderBy(get(campaign, 'bonusRewards'), 'created.date', 'asc') || [];
     rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
     const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     const earlyBirdsCount = get(campaign, 'earlyBirdsCount') || 0;
