@@ -109,7 +109,7 @@ export default class AllCrowdPay extends Component {
                     }
                     {type === 'cip' &&
                     <Table.Cell>
-                      {account.processing && account.processing.gs && account.processing.gs.date ? moment.unix(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
+                      {account.processing && account.processing.gs && account.processing.gs.date ? moment(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     }
                     {type === 'ira' ?
