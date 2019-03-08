@@ -47,6 +47,9 @@ export const userDetailsQuery = gql`
     user(id: $userId) {
       id
       status
+      accreditation {
+        status
+      }
       saasquatch {
         signupCode
         referredBy
@@ -89,6 +92,9 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            accreditation {
+              status
+            }
             limits {
               income
               netWorth
@@ -158,6 +164,7 @@ export const userDetailsQuery = gql`
               plaidAccessToken
               dateLinked
               pendingUpdate
+              accountType
               changeRequest {
                 accountNumber
                 bankName

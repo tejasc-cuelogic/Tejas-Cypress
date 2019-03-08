@@ -107,7 +107,7 @@ class FinancialInfo extends Component {
           />
         </Form>
         {this.props.changeInvest &&
-          <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(getDiffInvestmentLimitAmount || 0)}</span></p>
+          <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0)}</span></p>
         }
         <Divider hidden />
         {isValidInvestAmtInOffering &&

@@ -46,7 +46,11 @@ export class ReferralStore {
       query: getUserRewardBalance,
       variables: { userId: userDetails.id },
       fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   });
@@ -58,7 +62,11 @@ export class ReferralStore {
       query: getReferralCreditsInformation,
       variables: { code },
       fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   });
@@ -70,7 +78,11 @@ export class ReferralStore {
       query: getReferralCreditsInformation,
       variables: { code },
       fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   });
@@ -84,7 +96,11 @@ export class ReferralStore {
           mutation,
           variables: type === 'partial' ? { code: val } : { userId: val },
         })
-        .then(result => resolve(result))
+        .then((result) => {
+          if (result) {
+            resolve(result);
+          }
+        })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
@@ -100,7 +116,11 @@ export class ReferralStore {
         mutation: upsertUserReferralCredits,
         variables: { userId },
       })
-      .then(result => resolve(result))
+      .then((result) => {
+        if (result) {
+          resolve(result);
+        }
+      })
       .catch((error) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         uiStore.setErrors(error.message);

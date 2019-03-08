@@ -52,9 +52,11 @@ export class OfferingsStore {
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        this.requestState.page = 1;
-        this.requestState.skip = 0;
-        this.setDb(res.getOfferings);
+        if (res && !this.data.loading) {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
+          this.setDb(res.getOfferings);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');

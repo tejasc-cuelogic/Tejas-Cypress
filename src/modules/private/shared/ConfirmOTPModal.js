@@ -47,7 +47,7 @@ export default class ConfirmOTPModal extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {mfaMode && mfaMode === 'PHONE' ?
-            <p className="display-only">{this.getMaskedPhoneNumber()}</p>
+            <p className="display-only">{this.props.maskedPhoneNumber}</p>
             :
             <FormInput
               ishidelabel
