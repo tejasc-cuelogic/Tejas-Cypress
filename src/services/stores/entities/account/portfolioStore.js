@@ -43,6 +43,7 @@ export class PortfolioStore {
         BREWERY_AND_BREWPUB: { name: 'Brewery and Brewpub', value: 0 },
         HEALTH_AND_WELLNESS: { name: 'Health and Wellness', value: 0 },
         FITNESS: { name: 'Fitness', value: 0 },
+        OFFICE: { name: 'Office', value: 0 },
         FASHION_AND_APPAREL: { name: 'Fashion and Apparel', value: 0 },
         COMMERCIAL_REAL_ESTATE: { name: 'Commercial Real Estate', value: 0 },
         OTHER: { name: 'Other', value: 0 },
