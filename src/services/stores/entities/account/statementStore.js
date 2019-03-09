@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { observable, computed, action } from 'mobx';
-import { sortBy } from 'lodash';
+import { orderBy } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
 import { uiStore, userDetailsStore, transactionStore } from '../../index';
@@ -124,7 +124,7 @@ export class StatementStore {
 
   @computed get taxForms() {
     const { taxStatement } = userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatement && taxStatement.length && sortBy(taxStatement, ['year'])
+    return (taxStatement && taxStatement.length && orderBy(taxStatement, ['year'], ['desc'])
       .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
