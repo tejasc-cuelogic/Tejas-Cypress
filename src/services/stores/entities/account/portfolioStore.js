@@ -143,7 +143,7 @@ export class PortfolioStore {
       },
       // fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.investmentLists.loading) {
           this.calculateInvestmentType();
         }
       },
