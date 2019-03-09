@@ -60,7 +60,7 @@ export default class PayOffChart extends Component {
           <XAxis axisLine={false} dataKey="name" interval={4} />
           <YAxis tickFormatter={this.formatY} axisLine={false} orientation="right" />
           <Tooltip
-            content={<CustomTooltip data={this.props.data[this.state.activeIndex]} />}
+            content={<CustomTooltip data={data[this.state.activeIndex]} />}
           />
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
