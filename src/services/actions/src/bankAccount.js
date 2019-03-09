@@ -86,6 +86,7 @@ export class BankAccount {
           ACC_LINK_BANK_MAPPING[accountValue].store
             .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
           bankAccountStore.setShowAddFunds();
+          // bankAccountStore.setLinkBankSummary();
         }
       },
       onExit: (err) => {

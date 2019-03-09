@@ -445,8 +445,8 @@ export const FP_REGULATION_VALUES = [
   { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
 ];
 export const NS_FEE_PERCENTAGE = [
-  { key: '1%', value: '1', text: '1%' },
-  { key: '2%', value: '2', text: '2%' },
+  { key: '1', value: '1.00', text: '1%' },
+  { key: '2', value: '2.00', text: '2%' },
 ];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {
@@ -2344,21 +2344,21 @@ export const ADD_NEW_BONUS_REWARD = {
     label: 'Name of new bonus reward',
     value: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'required',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   description: {
     label: 'Description',
     value: '',
     error: undefined,
-    rule: 'string',
+    rule: 'required',
     placeHolder: 'Description',
   },
   expirationDate: {
     label: 'Expiration Date',
     value: '',
     error: undefined,
-    rule: 'date',
+    rule: 'optional|date',
     customErrors: {
       date: 'Expiration Date is not a valid date format.',
     },

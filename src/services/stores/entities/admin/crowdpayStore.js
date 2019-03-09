@@ -84,10 +84,12 @@ export class CrowdpayStore {
       variables: { limit: 1000 },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        this.requestState.page = 1;
-        this.requestState.skip = 0;
-        this.setData('isApiHit', true);
-        this.setCrowdpayAccountsSummary();
+        if (!this.data.loading) {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
+          this.setData('isApiHit', true);
+          this.setCrowdpayAccountsSummary();
+        }
       },
     });
   }
@@ -187,7 +189,7 @@ export class CrowdpayStore {
         })
         .then(action((data) => {
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
-            Helper.toast('CIP is not satisfied.', 'error');
+            Helper.toast('CIP is not satisfied.', 'success');
             uiStore.setProgress(false);
           } else {
             this.requestState.oldType = this.requestState.type;

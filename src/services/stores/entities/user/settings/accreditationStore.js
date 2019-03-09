@@ -554,7 +554,7 @@ export class AccreditationStore {
         variables: { userId: userDetailsStore.currentUserId },
         onFetch: () => {
           if (!this.userData.loading) {
-            res(); 
+            res();
           }
         },
         onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); },

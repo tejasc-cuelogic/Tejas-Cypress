@@ -27,6 +27,7 @@ export class TransactionStore {
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
   @observable cash = null;
+  @observable cashAvailable = {};
   @observable showConfirmPreview = false;
   @observable reSendVerificationCode = null;
   @observable transactionOtpRequestId = null;
@@ -98,7 +99,8 @@ export class TransactionStore {
   }
 
   @computed get loading() {
-    return this.data.loading || this.investmentsByOffering.loading;
+    return this.data.loading || this.investmentsByOffering.loading ||
+    this.paymentHistoryData.loading;
   }
 
   @computed get error() {
@@ -141,7 +143,7 @@ export class TransactionStore {
       { name: field, value: values.floatValue },
     );
     if (checkWithdrawAmt && values.floatValue !== undefined) {
-      this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) <= 0 && values.floatValue > 0;
+      this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
     }
   };
 

@@ -132,7 +132,7 @@ export class BusinessAppStore {
       },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        if(!this.businessApplicationsDataById.loading) {
+        if (!this.businessApplicationsDataById.loading) {
           this.setBusinessApplicationData(isPartialApp);
           uiStore.setAppLoader(false);
           resolve();
@@ -164,19 +164,21 @@ export class BusinessAppStore {
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
-        const {
-          prequalDetails, signupCode, businessGeneralInfo, utmSource,
-        } = data.businessApplicationsDetailsAdmin;
-        businessAppAdminStore
-          .setBusinessDetails(
-            ((businessGeneralInfo && businessGeneralInfo.businessName) ||
-            (prequalDetails.businessGeneralInfo.businessName)),
-            signupCode, utmSource,
-          );
-        this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
-        uiStore.setAppLoader(false);
-        resolve(data);
+        if (data && !this.businessApplicationsDataById.loading) {
+          this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
+          const {
+            prequalDetails, signupCode, businessGeneralInfo, utmSource,
+          } = data.businessApplicationsDetailsAdmin;
+          businessAppAdminStore
+            .setBusinessDetails(
+              ((businessGeneralInfo && businessGeneralInfo.businessName) ||
+              (prequalDetails.businessGeneralInfo.businessName)),
+              signupCode, utmSource,
+            );
+          this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
+          uiStore.setAppLoader(false);
+          resolve(data);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -1013,7 +1015,9 @@ export class BusinessAppStore {
     } else if (this.applicationStep === 'documentation') {
       stepName = 'DOCUMENTATION';
       this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
-      isPartialDataFlag = !this.BUSINESS_DOC_FRM.meta.isValid;
+      isPartialDataFlag = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+        !(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
+          this.BUSINESS_DOC_FRM.meta.isValid) : !this.BUSINESS_DOC_FRM.meta.isValid;
       key = 3;
     }
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';

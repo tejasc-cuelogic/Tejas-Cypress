@@ -149,7 +149,8 @@ class KeyTermsDetails extends Component {
               <Table.Cell width={5} className="neutral-text"><b>Payments{' '}</b>
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
-                  content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
+                  content={`The Issuer will make ${KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
+                    : ''} payments based on the relevant revenue sharing percentage.`}
                   position="top center"
                 />
               </Table.Cell>
@@ -352,10 +353,6 @@ class KeyTermsDetails extends Component {
           :
             null
         }
-        <p className="note">
-          * For illustration only. See expanded Payment Calculator view to read more
-          regarding actual performance variables.
-        </p>
       </Aux>
     );
   }

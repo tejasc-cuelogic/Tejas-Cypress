@@ -1,8 +1,8 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, min, max, floor, mapValues, startsWith, findLast } from 'lodash';
+import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO, SECURITY_CHECKBOX_LABLE, SERVICE_CHECKBOX_LABLE } from '../../../constants/investment';
+import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -61,10 +61,23 @@ export class InvestmentStore {
   }
 
   @computed get getDiffInvestmentLimitAmount() {
-    const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
-      portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
-    const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
-    return currentLimit - oldLimit;
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    if (userAmountDetails && !money.isZero(this.investmentAmount)) {
+      const getPreviousInvestedAmount =
+        (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
+      const differenceResult = money.subtract(
+        this.investmentAmount,
+        getPreviousInvestedAmount,
+      );
+
+      return differenceResult;
+    }
+    return 0;
+    // const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
+    //   portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
+    // const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
+
+    // return currentLimit - oldLimit;
   }
 
   @computed get getSelectedAccountTypeId() {
@@ -427,20 +440,24 @@ export class InvestmentStore {
 
   @action
   finishInvestment = () => {
-    if (this.agreementDetails) {
+    const offeringIdToUpdate = campaignStore.getOfferingId ?
+      campaignStore.getOfferingId : portfolioStore.currentOfferingId;
+    if (this.agreementDetails && offeringIdToUpdate) {
+      const varObj = {
+        userId: userDetailsStore.currentUserId,
+        accountId: this.getSelectedAccountTypeId,
+        offeringId: offeringIdToUpdate,
+        investmentAmount: this.investmentAmount,
+        agreementId: this.agreementDetails.agreementId,
+        // transferAmount: this.getTransferRequestAmount,
+        transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount : 0,
+      };
       uiStore.setProgress();
       return new Promise((resolve) => {
         client
           .mutate({
             mutation: finishInvestment,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-              accountId: this.getSelectedAccountTypeId,
-              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-              investmentAmount: this.investmentAmount,
-              agreementId: this.agreementDetails.agreementId,
-              transferAmount: this.getTransferRequestAmount,
-            },
+            variables: varObj,
             refetchQueries: [{
               query: getInvestorAccountPortfolio,
               variables: {
@@ -451,9 +468,14 @@ export class InvestmentStore {
           })
           .then((data) => {
             // resolve(data.data.finishInvestment);
-            const { status, message } = data.data.investNowSubmit;
-            const errorMessage = !status ? message : null;
-            this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            const { status, message, flag } = data.data.investNowSubmit;
+
+            if (flag === 1) {
+              this.isGetTransferRequestCall = true;
+            } else {
+              const errorMessage = !status ? message : null;
+              this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            }
             resolve(status);
           })
           .catch((error) => {
@@ -577,14 +599,6 @@ export class InvestmentStore {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
-    }
-  }
-  @action
-  updateAgreementDetailFormAsPerRegulation = (offeringType) => {
-    const agreementLabel = findLast(this.AGREEMENT_DETAILS_FORM.fields.checkboxesRight.values);
-    if (agreementLabel.value.includes('6')) {
-      const labelForCheckBox = startsWith(offeringType, 'BD_') ? SECURITY_CHECKBOX_LABLE.label : SERVICE_CHECKBOX_LABLE.label;
-      this.AGREEMENT_DETAILS_FORM.fields.checkboxesRight.values[1].label = labelForCheckBox;
     }
   }
 }

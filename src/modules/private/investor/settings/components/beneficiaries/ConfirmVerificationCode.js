@@ -17,10 +17,10 @@ export default class ConfirmVerificationCode extends Component {
     }
   }
 
-  getMaskedPhoneNumber = () => {
-    const number = this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber;
-    return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';
-  }
+  // getMaskedPhoneNumber = () => {
+  //   const number = this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber;
+  //   return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';
+  // }
 
   submit = (e) => {
     e.preventDefault();
@@ -66,7 +66,7 @@ export default class ConfirmVerificationCode extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          <p className="display-only">{this.getMaskedPhoneNumber()}</p>
+          <p className="display-only">{this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber}</p>
           <p><Link to="/app/profile-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
           <Form error onSubmit={this.submit}>
             <Form.Field className="otp-wrap">

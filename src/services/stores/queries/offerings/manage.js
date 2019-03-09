@@ -1088,12 +1088,10 @@ query _getBonusRewards($offeringId: String!){
     earlyBirdQuantity
     tiers
     created{
-      id
       by
       date
     }
     updated{
-      id
       by
       date
     }
