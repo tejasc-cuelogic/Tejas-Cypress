@@ -83,7 +83,7 @@ class KeyTerms extends Component {
                   <Popup
                     hoverable
                     trigger={<Icon name="help circle" color="green" />}
-                    content={(<span>The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the <Link to={`${this.props.refLink}/investment-details`}>Key Terms</Link> for more details.</span>)}
+                    content={(<span>The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the <Link to={`${this.props.refLink}/investment-details/#key-terms`}>Key Terms</Link> for more details.</span>)}
                     position="top center"
                   />
                 </Table.Cell>

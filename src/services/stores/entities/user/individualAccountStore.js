@@ -27,19 +27,20 @@ class IndividualAccountStore {
 
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-    uiStore.setProgress();
     const payLoad = {
       accountId: get(accountDetails, 'details.accountId') || this.individualAccId,
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
       bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+        uiStore.setProgress();
         client
           .mutate({
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
           .then(() => {
+            uiStore.setProgress(false);
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           })

@@ -1,5 +1,6 @@
 import Aux from 'react-aux';
 import React, { Component } from 'react';
+import { includes } from 'lodash';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
@@ -19,7 +20,8 @@ const result = {
 export default class MonthlyStatements extends Component {
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
-    setFieldValue('currentActiveAccount', 'individual');
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    setFieldValue('currentActiveAccount', accountType);
     this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
   }
 
