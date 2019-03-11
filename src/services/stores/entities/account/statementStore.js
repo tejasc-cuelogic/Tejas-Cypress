@@ -140,6 +140,17 @@ export class StatementStore {
     const { taxStatement } = userDetailsStore.currentActiveAccountDetails.details;
     return (taxStatement && taxStatement.length) || 0;
   }
+
+  @action
+  resetPagination = () => {
+    this.requestState = {
+      skip: 0,
+      page: 1,
+      perPage: 10,
+      displayTillIndex: 10,
+      search: {},
+    };
+  }
 }
 
 export default new StatementStore();
