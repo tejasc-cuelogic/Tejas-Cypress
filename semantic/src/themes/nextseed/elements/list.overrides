@@ -57,6 +57,7 @@
         }
         .icon {
             margin-left: @5px !important;
+            text-decoration: none;
         }
         strong {
             color: @neutral;
