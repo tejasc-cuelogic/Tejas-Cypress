@@ -15,10 +15,20 @@ const isTablet = document.documentElement.clientWidth < 992;
 export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
+    console.log(e.target.className, this.state.active, this.state.byArrow);
     if (this.props.refLoc !== 'public') {
       const newState = this.state.active === name ? '' : name;
       this.setState({ active: newState });
     }
+    // if (this.props.isApp && e.target.className === 'dropdown icon') {
+    //   const { byArrow } = this.state; , byArrow: []
+    //   if (byArrow.includes(this.state.active)) {
+    //     this.setState({ byArrow: byArrow.filter(i => i !== this.state.active) });
+    //   } else {
+    //     byArrow.push(this.state.active);
+    //     this.setState({ byArrow });
+    //   }
+    // }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
@@ -28,7 +38,7 @@ export class NavItems extends Component {
       return subNavigations.find(s => location.pathname.startsWith(`/${s.to}`));
     }
     return ((to !== '' && this.state.active === to) ||
-      ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
+      ((this.props.refLoc !== 'public' && (location.pathname.startsWith(`/${app}/${to}`))) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
   isActiveSubMenu = (to, location, hashCheck = false) => (hashCheck ? (this.props.navStore.currentActiveHash === null && location.hash === '') : this.props.navStore.currentActiveHash === null ? location.hash === to : this.props.navStore.currentActiveHash === to);
@@ -68,7 +78,7 @@ export class NavItems extends Component {
             `}
             name={item.to}
             disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
+            onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
                 {item.icon &&
@@ -81,7 +91,7 @@ export class NavItems extends Component {
             }
           >
             <Dropdown.Menu
-              className={`${this.isActive(item.to, location, app, item.subNavigations) && isMobile ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
+              className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
               `}
             >
               {item.subNavigations.map(sn => (

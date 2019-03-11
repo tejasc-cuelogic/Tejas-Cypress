@@ -10,7 +10,7 @@ import { NsPagination } from './../../../../../../theme/shared';
 const result = {
   columns: [
     { title: 'Statement Date', field: 'year' },
-    { title: 'Form Type', field: 'formType' },
+    { title: 'Form Type', field: 'fileName' },
     { title: 'Download as', field: 'file', textAlign: 'right' },
   ],
 };
