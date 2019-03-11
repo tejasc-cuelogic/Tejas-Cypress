@@ -43,7 +43,7 @@ export default class Plaid extends Component {
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
     const { action, refLink } = this.props;
-    const headerText = action && action === 'change' ? 'Link bank account' : 'Link bank account';
+    const headerText = 'Link bank account';
     const subHeaderText = action && action === 'change' ?
       'Select your bank from the list'
       :
