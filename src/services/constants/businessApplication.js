@@ -772,13 +772,13 @@ export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
       congratulations: 'Congratulations!',
       header: 'Funds have been disbursed',
       message: 'Congrats! Please check your account and confirm that you have received your funds.',
-      offeringStage: ['STARTUP_PREIOD'],
+      offeringStage: ['STARTUP_PERIOD'],
     },
     {
       congratulations: '!',
       header: 'How are things progressing?',
       message: 'It’s time to provide your monthly update. Please go to your Updates section to share the latest with your investors.',
-      offeringStage: ['STARTUP_PREIOD', 'IN_REPAYMENT'],
+      offeringStage: ['STARTUP_PERIOD', 'IN_REPAYMENT'],
     },
   ],
 };
