@@ -21,6 +21,7 @@ class Login extends Component {
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.uiStore.clearErrors();
     const { email, password } = this.props.authStore.LOGIN_FRM.fields;
     const userCredentials = { email: email.value, password: password.value };
     this.props.authStore.checkMigrationByEmail(userCredentials).then((res) => {
