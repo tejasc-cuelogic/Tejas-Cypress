@@ -15,17 +15,19 @@
             text-decoration: none;
         }
         .campaign-image-wrap{
-            position:relative;
-            padding-top:66.66%;
-            >div{
-                background-size:cover;
-                background-repeat:no-repeat;
-                background-position:center center;
-                position:absolute;
-                top:0;
-                right:0;
-                bottom:0;
-                left:0;
+            .campaign-card-image{
+                position:relative;
+                padding-top:66.66%;
+                >div{
+                    background-size:cover;
+                    background-repeat:no-repeat;
+                    background-position:center center;
+                    position:absolute;
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    left:0;
+                }
             }
         }
         > .ui.image {
