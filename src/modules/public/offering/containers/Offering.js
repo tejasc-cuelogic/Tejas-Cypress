@@ -29,13 +29,13 @@ class Offering extends Component {
     return (
       <Aux>
         <Banner />
-        <section>
-          <Responsive maxWidth={767} as={Container}>
+        <Responsive maxWidth={767} as={Container}>
+          <section>
             <Header as="h2">
             Invest in growing local<br /> businesses
             </Header>
-          </Responsive>
-        </section>
+          </section>
+        </Responsive>
         <CampaignList
           loading={loading}
           campaigns={active}

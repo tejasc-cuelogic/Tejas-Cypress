@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
@@ -63,10 +63,10 @@ class InvestmentDetails extends Component {
           title: 'My Investment', content: get(getInvestor, 'myInvestment') ? get(getInvestor, 'myInvestment') : 'NA', type: 1,
         },
         {
-          title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') ? get(getInvestor, 'netPaymentsReceived') : 'NA', type: 1, info: 'Your Net Payments Received till date',
+          title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') ? get(getInvestor, 'netPaymentsReceived') : 'NA', type: 1, info: 'Payments received to date from this investment, minus NextSeed fees.',
         },
         {
-          title: 'Net Annualied Returns', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'NA', info: 'Your Net Annualied Returns till date',
+          title: 'Net Annualied Returns', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'NA', info: `${(<span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. See the Education Center for a full explanation of how NAR <Link to="/resources/education-center">Education Center</Link> is calculated. </span>)}`,
         },
       ],
     };
