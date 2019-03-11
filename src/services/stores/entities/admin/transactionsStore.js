@@ -231,7 +231,7 @@ export class TransactionsStore {
     }
 
     if (dateFilterStart || dateFilterStop) {
-      ClientDb.filterByDate(dateFilterStart, dateFilterStop, 'startDate');
+      ClientDb.filterByDate(dateFilterStart, dateFilterStop || moment().unix(), 'startDate');
     }
 
     if (minAmount && maxAmount) {
@@ -245,8 +245,7 @@ export class TransactionsStore {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
       searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonTerminatedStatus, name, this.isNonTerminatedStatus) : '';
-      if (this.requestState.search.dateFilterStart === '' ||
-        this.requestState.search.dateFilterStop === '') {
+      if (this.requestState.search.dateFilterStart === '' && this.requestState.search.dateFilterStop === '') {
         delete searchparams[name];
       }
     } else {
