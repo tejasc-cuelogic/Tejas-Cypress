@@ -20,6 +20,7 @@ const result = {
 export default class MonthlyStatements extends Component {
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
+    this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
     this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
