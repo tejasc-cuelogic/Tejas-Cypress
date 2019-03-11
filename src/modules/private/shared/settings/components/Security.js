@@ -43,7 +43,7 @@ export default class Security extends Component {
                       {(section.action[0] === 'mfa' && getUserMfaMode) ? (
                         <dl className="dl-horizontal">
                           <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                          <dd>{userDetails.email.address} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-email-address">Update Email</Link></dd>
+                          <dd>{userDetails.email && userDetails.email.address} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-email-address">Update Email</Link></dd>
                           <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
                           <dd>{userDetails.phone && userDetails.phone.number ? userDetails.phone.number : '--'} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-phone-number">Update Phone</Link></dd>
                         </dl>

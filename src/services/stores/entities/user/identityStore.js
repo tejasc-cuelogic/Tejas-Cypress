@@ -271,6 +271,9 @@ export class IdentityStore {
             this.updateUserInfo().then(() => {
               uiStore.setProgress(false);
               resolve();
+            }).catch(() => {
+              uiStore.setProgress(false);
+              reject();
             });
           } else {
             uiStore.setErrors(data.data.verifyCIPIdentity.message);
@@ -530,8 +533,11 @@ export class IdentityStore {
         },
       })
       .then((data) => {
-        userDetailsStore.getUser(userStore.currentUser.sub);
-        resolve(data);
+        userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
+          if (d) {
+            resolve(data);
+          }
+        });
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));

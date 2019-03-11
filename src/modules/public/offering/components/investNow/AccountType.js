@@ -33,7 +33,7 @@ class AccountType extends Component {
       sendAdminEmailOfFrozenAccount,
     } = this.props.userDetailsStore;
     const { campaign } = this.props.campaignStore;
-    const offeringId = campaign && campaign.id;
+    const offeringId = campaign && campaign.id ? campaign.id : this.props.match.params.offeringId;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;

@@ -28,6 +28,7 @@ export const upsertInvestorAccount = gql`
         accountNumber
         routingNumber
         bankName
+        accountType
       }
       accountType
     }

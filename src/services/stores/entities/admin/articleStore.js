@@ -77,7 +77,7 @@ export class ArticleStore {
         query,
         variables: { id },
         onFetch: (res) => {
-          if (!isPublic) {
+          if (!isPublic && res) {
             Object.keys(this.ARTICLE_FRM.fields).map((key) => {
               this.ARTICLE_FRM.fields[key].value = res.insightsArticle[key];
               return null;

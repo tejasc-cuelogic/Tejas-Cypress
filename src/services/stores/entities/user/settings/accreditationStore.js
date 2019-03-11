@@ -552,7 +552,11 @@ export class AccreditationStore {
         query: userAccreditationQuery,
         fetchPolicy: 'network-only',
         variables: { userId: userDetailsStore.currentUserId },
-        onFetch: () => { res(); },
+        onFetch: () => {
+          if (!this.userData.loading) {
+            res();
+          }
+        },
         onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); },
       });
     }

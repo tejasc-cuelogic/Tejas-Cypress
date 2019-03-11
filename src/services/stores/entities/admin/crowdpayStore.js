@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray } from 'lodash';
+import { isArray, get } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
@@ -68,6 +68,7 @@ export class CrowdpayStore {
     const filter = defaultFilter ? CROWDPAY_FILTERS[this.requestState.type].initialFilters :
       CROWDPAY_FILTERS[this.requestState.type].initialStatus;
     this.db = ClientDb.filterData('accountStatus', filter, 'like');
+    uiStore.setProgress(false);
   }
 
   @action
@@ -83,10 +84,12 @@ export class CrowdpayStore {
       variables: { limit: 1000 },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        this.requestState.page = 1;
-        this.requestState.skip = 0;
-        this.setData('isApiHit', true);
-        this.setCrowdpayAccountsSummary();
+        if (!this.data.loading) {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
+          this.setData('isApiHit', true);
+          this.setCrowdpayAccountsSummary();
+        }
       },
     });
   }
@@ -116,7 +119,12 @@ export class CrowdpayStore {
       keyword, startDate, endDate, accountStatus,
     } = this.requestState.search;
     const accountStatus2 = this.requestState.type === 'review' && !accountStatus ? ['FULL'] : accountStatus;
-    ClientDb.filterData('accountStatus', accountStatus2, 'like');
+    if (accountStatus2) {
+      ClientDb.filterData('accountStatus', accountStatus2, 'like');
+    }
+    if (!accountStatus) {
+      delete this.requestState.search.accountStatus;
+    }
     if (keyword) {
       ClientDb.filterFromNestedObjs(['firstName', 'lastName', 'email'], keyword);
     }
@@ -176,12 +184,18 @@ export class CrowdpayStore {
           variables,
           refetchQueries: [{
             query: listCrowdPayUsers,
-            variables: { limit: 500 },
+            variables: { limit: 1000 },
           }],
         })
-        .then(action(() => {
-          this.requestState.oldType = this.requestState.type;
-          Helper.toast(sMsg, 'success'); resolve();
+        .then(action((data) => {
+          if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
+            Helper.toast('CIP is not satisfied.', 'success');
+            uiStore.setProgress(false);
+          } else {
+            this.requestState.oldType = this.requestState.type;
+            Helper.toast(sMsg, 'success');
+            resolve();
+          }
         }))
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');

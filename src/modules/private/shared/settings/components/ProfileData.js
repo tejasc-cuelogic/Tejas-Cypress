@@ -28,6 +28,7 @@ export default class ProfileData extends Component {
     if (selectedState) {
       setStateValue(selectedState.value);
     }
+    this.props.uiStore.setProgress(false);
   }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
@@ -48,7 +49,7 @@ export default class ProfileData extends Component {
   }
   render() {
     const {
-      email, legalDetails, info, phone, investorProfileData,
+      email, legalDetails, info, phone, investorProfileData, status,
     } = this.props.userDetailsStore.userDetails;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
@@ -171,6 +172,7 @@ export default class ProfileData extends Component {
                 email={email}
                 legalDetails={legalDetails}
                 isUserVerified={this.isVerified}
+                status={status}
               />
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile &&

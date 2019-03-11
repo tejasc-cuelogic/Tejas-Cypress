@@ -49,7 +49,7 @@ export default class FinancialInfo extends Component {
   }
   getDate = (accName) => {
     let date = '';
-    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.formatedDate(accName.requestDate) : accName && (accName.status === 'APPROVED' || accName.status === 'DECLINED') && accName.reviewed && accName.reviewed.date ? DataFormatter.formatedDate(accName.reviewed.date) : '-';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.formatedDate(accName.requestDate) : accName && (accName.status === 'CONFIRMED' || accName.status === 'INVALID') && accName.reviewed && accName.reviewed.date ? DataFormatter.formatedDate(accName.reviewed.date) : '-';
     return date;
   }
   render() {
@@ -127,7 +127,7 @@ export default class FinancialInfo extends Component {
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <b><dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd></b>
+                            <b><dd className={`${this.getStatus(accreditationData[account.name]) === 'REQUESTED' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'CONFIRMED' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd></b>
                             <dt>Date :</dt>
                             <dd>{this.getDate(accreditationData[account.name])}</dd>
                           </dl>

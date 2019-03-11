@@ -149,8 +149,15 @@
             font-size:@13px;
             font-weight:700;
             line-height:@16px;
-            color:@neutral-middark;
+            color:@border-color;
             position:relative;
+            span {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                display: block;
+                color: @neutral;
+            }
             &:before{
                 content:"";
                 width:9px;
@@ -171,6 +178,9 @@
                 &:before{
                     background-color:@link-color;
                     box-shadow:0 0 4px 1px @link-color;
+                }
+                span {
+                    color:@primary-one;
                 }
             }
             &:first-child:after, &:last-child:after{

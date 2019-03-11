@@ -172,6 +172,9 @@ export const getOfferingDetails = gql`
         isHealthcare
         isFood
         isAlcohol
+        totalProjectCost
+        raisedThroughSaleOfEquity
+        nsFeePercentage
         uploadProformas {
           fileId
           fileName
@@ -1085,12 +1088,10 @@ query _getBonusRewards($offeringId: String!){
     earlyBirdQuantity
     tiers
     created{
-      id
       by
       date
     }
     updated{
-      id
       by
       date
     }

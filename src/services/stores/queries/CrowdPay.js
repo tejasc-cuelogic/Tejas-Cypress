@@ -41,32 +41,26 @@ query listCrowdPayUsers($limit: Int) {
             }
           }
           created {
-            id
             by
             date
           }
           updated {
-            id
             by
             date
           }
           approved {
-            id
             by
             date
           }
           declined {
-            id
             by
             date
           }
           deleted {
-            id
             by
             date
           }
           frozen {
-            id
             by
             date
           }

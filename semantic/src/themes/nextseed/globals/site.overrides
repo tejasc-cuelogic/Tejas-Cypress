@@ -310,6 +310,7 @@ i.icon.right {
 }
 .parsed-data img { // for migrated/parsed images
 	max-width: 100%;
+	height: auto;
 }
 //	Helper Classes Ends
 
