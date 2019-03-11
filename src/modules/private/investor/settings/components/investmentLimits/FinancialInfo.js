@@ -49,7 +49,7 @@ export default class FinancialInfo extends Component {
   }
   getDate = (accName) => {
     let date = '';
-    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.formatedDate(accName.requestDate) : accName && (accName.status === 'APPROVED' || accName.status === 'DECLINED') && accName.reviewed && accName.reviewed.date ? DataFormatter.formatedDate(accName.reviewed.date) : '-';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.formatedDate(accName.requestDate) : accName && accName.status === 'CONFIRMED' && accName.expiration ? DataFormatter.formatedDate(accName.expiration) : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? DataFormatter.formatedDate(accName.reviewed.date) : '-';
     return date;
   }
   render() {
@@ -123,12 +123,15 @@ export default class FinancialInfo extends Component {
                         <Card.Content>
                           <Header as="h4">
                             Accreditation
-                            <Link as={Button} to="/" className="link" onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)}><small>Update accreditation</small></Link>
+                            {/* <Link as={Button} to="/" className="link" onClick={e =>
+                             this.handleVerifyAccreditation
+                            (e, account.name, account.details.accountId)}><small>Update
+                             accreditation</small></Link> */}
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
                             <b><dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd></b>
-                            <dt>Date :</dt>
+                            <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
                             <dd>{this.getDate(accreditationData[account.name])}</dd>
                           </dl>
                         </Card.Content>

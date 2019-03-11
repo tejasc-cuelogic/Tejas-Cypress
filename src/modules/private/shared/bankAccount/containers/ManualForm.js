@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput } from '../../../../../theme/form';
+import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
+// import LinkbankSummary from './LinkbankSummary';
+
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
@@ -30,10 +33,14 @@ export default class ManualForm extends Component {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
         if (investmentAccType === 'individual') {
           this.props[accTypeStore].setStepToBeRendered(1);
+          // TODO Link bank form changes
+          // this.props.bankAccountStore.setLinkBankSummary();
           // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
         } else {
           this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
           this.props.bankAccountStore.setShowAddFunds();
+          // TODO Link bank form changes
+          // this.props.bankAccountStore.();
         }
       })
         .catch(() => { });
@@ -52,17 +59,22 @@ export default class ManualForm extends Component {
       isEncrypted,
       formLinkBankManually,
       linkBankManuallyChange,
+      accountTypeChange,
+      // linkbankSummary
     }
       = this.props.bankAccountStore;
     if (showAddFunds) {
       return <AddFunds />;
     }
+    // if (linkbankSummary) {
+    //   return <LinkbankSummary />;
+    // }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
       <div className="center-align">
         <Header as="h3">Link bank manually</Header>
         <p>Enter your bank{"'"}s routing number and your checking account number.</p>
-        <Form error onSubmit={this.handleSubmitForm}>
+        <Form error={!!errors} onSubmit={this.handleSubmitForm}>
           <div className="field-wrap left-align">
             <MaskedInput
               name="accountNumber"
@@ -80,6 +92,18 @@ export default class ManualForm extends Component {
               routingNumber
               showerror
             />
+            <Form.Field>
+              <Aux>
+                {
+                  <FormRadioGroup
+                    fielddata={formLinkBankManually.fields.accountType}
+                    changed={accountTypeChange}
+                    name="accountType"
+                    value={formLinkBankManually.fields.value}
+                  />
+                }
+              </Aux>
+            </Form.Field>
           </div>
           {errors &&
             <Message error className="mb-30">

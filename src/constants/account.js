@@ -175,6 +175,28 @@ export const IND_LINK_BANK_MANUALLY = {
     // tooltip: 'Put your 4 to 17 digit bank account number',
     maxLength: 17,
   },
+  accountType: {
+    value: '',
+    key: 'accountType',
+    values: [
+      {
+        label: 'Savings',
+        name: 'savings',
+        value: 'SAVINGS',
+        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
+        rawValue: 'savings',
+      },
+      {
+        label: 'Checking',
+        name: 'checking',
+        value: 'CHECKING',
+        description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
+        rawValue: 'checking',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
 };
 
 export const IND_ADD_FUND = {

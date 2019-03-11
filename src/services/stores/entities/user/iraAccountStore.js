@@ -226,35 +226,39 @@ class IraAccountStore {
         break;
       case 'Link bank':
         bankAccountStore.validateAddFunds();
-        if (bankAccountStore.bankLinkInterface === 'list') {
+        if (bankAccountStore.manualLinkBankSubmitted) {
           currentStep.validate();
         }
         isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
           bankAccountStore.isValidLinkBank;
         if (isValidCurrentStep && bankAccountStore.formAddFunds.meta.isFieldValid) {
           uiStore.setProgress();
-          if (!isEmpty(bankAccountStore.plaidAccDetails) &&
-          !bankAccountStore.manualLinkBankSubmitted) {
-            const { public_token, account_id } = bankAccountStore.plaidAccDetails;
-            accountAttributes.linkedBank = {};
-            accountAttributes.linkedBank.plaidPublicToken = public_token;
-            accountAttributes.linkedBank.plaidAccountId = account_id;
-          } else {
-            const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
-            if (accountNumber && routingNumber) {
-              const plaidBankDetails = {
-                accountNumber: accountNumber.value,
-                routingNumber: routingNumber.value,
-              };
-              accountAttributes.linkedBank = plaidBankDetails;
-            }
-          }
+          // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
+          // !bankAccountStore.manualLinkBankSubmitted) {
+          //   const { public_token, account_id } = bankAccountStore.plaidAccDetails;
+          //   accountAttributes.linkedBank = {};
+          //   accountAttributes.linkedBank.plaidPublicToken = public_token;
+          //   accountAttributes.linkedBank.plaidAccountId = account_id;
+          // } else {
+          //   const { accountNumber, routingNumber } =
+          // bankAccountStore.formLinkBankManually.fields;
+          //   if (accountNumber && routingNumber) {
+          //     const plaidBankDetails = {
+          //       accountNumber: accountNumber.value,
+          //       routingNumber: routingNumber.value,
+          //       accountType: accountType.value,
+          //     };
+          //     accountAttributes.linkedBank = plaidBankDetails;
+          //   }
+          // }
+          accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
           accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
           bankAccountStore.isValidOpeningDepositAmount().then(() => {
             this.submitForm(currentStep, accountAttributes).then(() => {
               res();
             })
               .catch(() => {
+                uiStore.setProgress(false);
                 rej();
               });
           })
@@ -374,7 +378,7 @@ class IraAccountStore {
         this.setFormData('FUNDING_FRM', account.details);
         this.setFormData('ACC_TYPES_FRM', account.details);
         this.setFormData('IDENTITY_FRM', account.details);
-        if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+        if (get(account.details, 'linkedBank.routingNumber')) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {

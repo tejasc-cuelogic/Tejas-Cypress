@@ -20,8 +20,8 @@ export default class TransferFunds extends Component {
     this.props.uiStore.clearErrors();
   }
   render() {
-    const { cash } = this.props.transactionStore;
-    if (!cash) {
+    const { cash, cashAvailable } = this.props.transactionStore;
+    if (!cash && cashAvailable.loading) {
       return <InlineLoader />;
     }
     return (

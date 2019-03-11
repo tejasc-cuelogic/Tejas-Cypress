@@ -52,9 +52,11 @@ export class OfferingsStore {
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        this.requestState.page = 1;
-        this.requestState.skip = 0;
-        this.setDb(res.getOfferings);
+        if (res && !this.data.loading) {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
+          this.setDb(res.getOfferings);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -110,12 +112,13 @@ export class OfferingsStore {
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
     if (keyword) {
+      this.setDb(this.allOfferingsList);
       ClientDb.filterFromNestedObjs('keyTerms.legalBusinessName', keyword);
       this.db = ClientDb.getDatabase();
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
-      this.setDb(this.data.data.getOfferings);
+      this.setDb(this.allOfferingsList);
     }
   }
   @action
@@ -174,6 +177,11 @@ export class OfferingsStore {
 
   @computed get allPhases() {
     return values(mapValues(this.phases, s => s.ref.toUpperCase()));
+  }
+
+  @computed get allOfferingsList() {
+    return (this.data.data && this.data.data.getOfferings &&
+      toJS(this.data.data.getOfferings)) || [];
   }
 
   @computed get totalRecords() {

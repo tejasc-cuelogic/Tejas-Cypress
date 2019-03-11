@@ -43,6 +43,7 @@ export class PortfolioStore {
         BREWERY_AND_BREWPUB: { name: 'Brewery and Brewpub', value: 0 },
         HEALTH_AND_WELLNESS: { name: 'Health and Wellness', value: 0 },
         FITNESS: { name: 'Fitness', value: 0 },
+        OFFICE: { name: 'Office', value: 0 },
         FASHION_AND_APPAREL: { name: 'Fashion and Apparel', value: 0 },
         COMMERCIAL_REAL_ESTATE: { name: 'Commercial Real Estate', value: 0 },
         OTHER: { name: 'Other', value: 0 },
@@ -110,7 +111,9 @@ export class PortfolioStore {
     if (rawData) {
       rawData.map((k) => {
         formattedData.push({
-          name: moment(k.yearMonth).format('MMM YYYY'), Payment: Helper.CurrencyFormat(k.payment || 0), 'Paid to date': Helper.CurrencyFormat(k.paidToDate || 0),
+          name: moment(k.yearMonth).format('MMM YYYY'),
+          Payment: k.payment ? parseFloat(k.payment) : 0,
+          'Paid to date': k.paidToDate ? parseFloat(k.paidToDate) : 0,
         });
         return null;
       });
@@ -140,7 +143,7 @@ export class PortfolioStore {
       },
       // fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.investmentLists.loading) {
           this.calculateInvestmentType();
         }
       },
@@ -180,7 +183,9 @@ export class PortfolioStore {
         offeringId,
       },
       onFetch: () => {
-        resolve();
+        if (!this.investmentDetails.loading) {
+          resolve();
+        }
       },
       fetchPolicy: 'network-only',
     });

@@ -181,7 +181,7 @@ export class BusinessAppStore {
       variables: filterParams,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.businessApplicationsList.loading) {
           const { lek, businessApplications } = data.businessApplicationsAdmin;
           this.requestState = {
             ...this.requestState,

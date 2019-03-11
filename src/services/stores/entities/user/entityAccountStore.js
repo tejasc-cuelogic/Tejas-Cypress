@@ -391,22 +391,23 @@ class EntityAccountStore {
         bankAccountStore.isValidLinkBank;
       if (isValidCurrentStep && isValidAddFunds) {
         uiStore.setProgress();
-        if (!isEmpty(bankAccountStore.plaidAccDetails) &&
-          !bankAccountStore.manualLinkBankSubmitted) {
-          const plaidBankDetails = {};
-          plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
-          plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
-          accountAttributes.linkedBank = plaidBankDetails;
-        } else {
-          const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
-          if (accountNumber && routingNumber) {
-            const plaidBankDetails = {
-              accountNumber: accountNumber.value,
-              routingNumber: routingNumber.value,
-            };
-            accountAttributes.linkedBank = plaidBankDetails;
-          }
-        }
+        // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
+        //   !bankAccountStore.manualLinkBankSubmitted) {
+        //   const plaidBankDetails = {};
+        //   plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+        //   plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
+        //   accountAttributes.linkedBank = plaidBankDetails;
+        // } else {
+        //   const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
+        //   if (accountNumber && routingNumber) {
+        //     const plaidBankDetails = {
+        //       accountNumber: accountNumber.value,
+        //       routingNumber: routingNumber.value,
+        //     };
+        //     accountAttributes.linkedBank = plaidBankDetails;
+        //   }
+        // }
+        accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
         accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         bankAccountStore.isValidOpeningDepositAmount().then(() => {
           this.submitForm(currentStep, accountAttributes)

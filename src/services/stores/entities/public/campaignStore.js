@@ -46,7 +46,7 @@ export class CampaignStore {
           query: referralCode ? getOfferingsReferral : allOfferings,
           variables: { filters },
           onFetch: (data) => {
-            if (data) {
+            if (data && !this.data.loading) {
               const offering = data.getOfferingList.length && data.getOfferingList[0];
               resolve(offering);
             }
@@ -72,7 +72,7 @@ export class CampaignStore {
       query: getOfferingById,
       variables: { id },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.details.loading) {
           resolve(data.getOfferingDetailsBySlug);
         }
       },

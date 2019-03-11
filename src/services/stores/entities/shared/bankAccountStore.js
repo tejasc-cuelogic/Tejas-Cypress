@@ -32,6 +32,7 @@ export class BankAccountStore {
   @observable activeBankPladLogo = null;
   @observable pendingBankPladLogo = null;
   @observable db;
+  // @observable linkbankSummary = false;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -44,7 +45,7 @@ export class BankAccountStore {
 
   @action
   setDb = (data) => {
-    this.db = ClientDb.initiateDb(data);
+    this.db = ClientDb.initiateDb(data, null, null, null, true);
   }
   @action
   setDepositMoneyNow(status) {
@@ -59,6 +60,14 @@ export class BankAccountStore {
   @action
   setIsManualLinkBankSubmitted = (submitted = true) => {
     this.manualLinkBankSubmitted = submitted;
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    this[form] = Validator.onChange(
+      this[form],
+      Validator.pullValues(e, result),
+    );
   }
 
   @action
@@ -132,24 +141,28 @@ export class BankAccountStore {
         public_token,
         accountNumber,
         routingNumber,
+        accountType,
       } = this.plaidAccDetails;
       if (account_id && public_token) {
         plaidBankDetails.linkedBank = {
           plaidPublicToken: public_token,
           plaidAccountId: account_id,
+          accountType,
         };
       } else {
         plaidBankDetails.linkedBank = {
           accountNumber,
           routingNumber,
+          accountType,
         };
       }
       accountAttributes = { ...plaidBankDetails };
     } else {
-      const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
+      const { accountNumber, routingNumber, accountType } = this.formLinkBankManually.fields;
       plaidBankDetails.linkedBank = {
         accountNumber: accountNumber.value,
         routingNumber: routingNumber.value,
+        accountType: accountType.value.toUpperCase(),
       };
       accountAttributes = { ...plaidBankDetails };
     }
@@ -174,9 +187,19 @@ export class BankAccountStore {
   }
 
   @action
+  accountTypeChange = (e, result) => {
+    this.formChange(e, result, 'formLinkBankManually');
+  }
+
+  @action
   setShowAddFunds = (funds = true) => {
     this.showAddFunds = funds;
   }
+
+  // @action
+  // setLinkBankSummary = (showbank = true) => {
+  //   this.linkbankSummary = showbank;
+  // }
 
   @action
   resetShowAddFunds = () => {
@@ -209,7 +232,9 @@ export class BankAccountStore {
         query: getlistLinkedBankUsers,
         variables,
         onFetch: (res) => {
-          this.setDb(res.listLinkedBankUsers.linkedBankList);
+          if (res && !this.data.loading) {
+            this.setDb(res.listLinkedBankUsers.linkedBankList);
+          }
         },
       });
     }
@@ -224,13 +249,14 @@ export class BankAccountStore {
     const { keyword } = this.requestState.search;
     let resultArray = [];
     if (keyword) {
-      resultArray = ClientDb.filterData('firstName', keyword, 'likenocase');
-      resultArray = [...resultArray, ...ClientDb.filterData('lastName', keyword, 'likenocase')];
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
+      ClientDb.filterFromNestedObjs(['firstName', 'lastName'], keyword);
+      resultArray = ClientDb.getDatabase();
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
-      this.setDb(this.data.data.listLinkedBankUsers.linkedBankList);
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
     }
   }
   @action

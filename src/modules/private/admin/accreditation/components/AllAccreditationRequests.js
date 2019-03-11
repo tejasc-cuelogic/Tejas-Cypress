@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
@@ -40,7 +41,6 @@ export default class AllAccreditationRequests extends Component {
                 <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
                 <Table.HeaderCell>Method</Table.HeaderCell>
-                <Table.HeaderCell>Box Link</Table.HeaderCell>
                 <Table.HeaderCell textAlign="center" />
               </Table.Row>
             </Table.Header>
@@ -60,17 +60,13 @@ export default class AllAccreditationRequests extends Component {
                       <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
                     </Table.Cell>
                     <Table.Cell>
-                      {accreditation.accountType ?
-                        <Icon size="large" className="ns-entity-line" color="green" /> :
-                        <Aux>
-                          <Icon size="large" className="ns-individual-line" color="green" />
-                          <Icon size="large" className="ns-ira-line" color="green" />
-                        </Aux>
-                      }
+                      {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
+                      {accreditation.accountType && accreditation.accountType.includes('INDIVIDUAL') && <Icon size="large" className="ns-individual-line" color="green" />}
+                      {accreditation.accountType && accreditation.accountType.includes('IRA') && <Icon size="large" className="ns-ira-line" color="green" />}
                     </Table.Cell>
                     <Table.Cell>
                       <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
-                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') &&
+                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') && accreditation.netWorth &&
                           <Aux><br /><b>Net Worth: </b>
                             {ACCREDITATION_NETWORTH_LABEL[accreditation.netWorth]}
                           </Aux>
@@ -83,7 +79,12 @@ export default class AllAccreditationRequests extends Component {
                       </p>
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ? 'Uploads' : 'Verifier'}
+                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
+                        accreditation.assetsUpload[0].fileInfo &&
+                        accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
+                          <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >Uploads</a>
+                        : <p className="intro-text">N/A</p>
+                        : 'Verifier'}
                         {accreditation.verifier &&
                           <Aux>
                             <br /><b>Role: </b> {accreditation.verifier.role}
@@ -92,19 +93,11 @@ export default class AllAccreditationRequests extends Component {
                         }
                       </p>
                     </Table.Cell>
-                    <Table.Cell>
-                      {accreditation.assetsUpload && accreditation.assetsUpload.length &&
-                      accreditation.assetsUpload[0].fileInfo &&
-                      accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                        <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
-                      : <p className="intro-text">N/A</p>
-                      }
-                    </Table.Cell>
                     {accreditation.accreditationStatus === 'REQUESTED' ?
                       <Actions
                         accountId={accreditation.accountId}
                         userId={accreditation.userId}
-                        accountType={accreditation.accountType}
+                        accountType={get(accreditation, 'accountType[0]')}
                         {...this.props}
                       /> :
                       <Table.Cell>
