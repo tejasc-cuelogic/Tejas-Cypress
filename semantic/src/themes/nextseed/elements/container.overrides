@@ -4,6 +4,7 @@
 section{
     &.banner { 
         height:568px;
+        background-size: cover;
         @media only screen and (max-width : @computerBreakpoint) {
             height:400px;
             padding-top: 80px;
@@ -52,71 +53,72 @@ section{
             }
         }
         &.home-banner{
-            background:url(../../assets/images/banners/home-banner.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/home-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/home-banner-mobile.jpg) center center no-repeat / cover;
+                background:url(../../assets/images/banners/home-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.mission-banner{
-            background:url(../../assets/images/banners/mission-banner.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/mission-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/mission-banner-mobile.jpg) center center no-repeat / cover;
+                background:url(../../assets/images/banners/mission-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.campaign-list-banner{
-            background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat;
             height: 300px;
             @media only screen and (max-width : @largestMobileScreen){
                 height:226px;
-                background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat / cover;
+                background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat;
             }
         }
         &.business-banner{
-            background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat / cover;
+                background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.invest-banner{
-            background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/why-us-banner-mobile.jpg) center center no-repeat / cover;
+                background:url(../../assets/images/banners/why-us-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.resources-banner {
-            background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat / cover;  
+            background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat;  
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
             }
             @media only screen and (max-width : @largestMobileScreen){
                 height: 380px; 
-                background:url(../../assets/images/banners/resources-banner-mobile.jpg) center center no-repeat / cover;
+                background:url(../../assets/images/banners/resources-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.edu-center-business-banner {
-            background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat;
         }
         &.edu-center-investor-banner {
-            background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
             }
         }
         &.account-types {
-            background:url(../../assets/images/investors/account_types_mobile.jpg) center center no-repeat / cover;
+            background:url(../../assets/images/investors/account_types_mobile.jpg) center center no-repeat;
         }
         &.security {
-            background:url(../../assets/images/investors/security_mobile.jpg) center center no-repeat / cover;
+            background:url(../../assets/images/investors/security_mobile.jpg) center center no-repeat;
         }
         &.track {
-            background:url(../../assets/images/investors/laptop_mobile.png) center center no-repeat / contain;
+            background:url(../../assets/images/investors/laptop_mobile.png) center center no-repeat;
+            background-size: contain;
             height: 160px;
         }
         &.process {
-            background:url(../../assets/images/business/process_mobile.jpg) center center no-repeat / cover;
+            background:url(../../assets/images/business/process_mobile.jpg) center center no-repeat;
         }
         &.all-inclusive {
-            background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat / cover;
+            background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat;
         }
         &.campaign-details-banner{
             background-position: top center;
