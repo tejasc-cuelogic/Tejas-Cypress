@@ -98,9 +98,13 @@ export default class AccountDetails extends Component {
             <div className="inner-content-spacer">
               <Switch>
                 {
-                  navItems.map(item => (
-                    <Route key={item.to} path={`${match.url}/${item.to}`} component={item.load === false ? item.component : getModule(item.component)} />
-                  ))
+                  navItems.map((item) => {
+                    const CurrentModule = item.load === false ?
+                      item.component : getModule(item.component);
+                    return (
+                      <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule {...props} resourceId={details.id} />} />
+                    );
+                  })
                 }
               </Switch>
             </div>

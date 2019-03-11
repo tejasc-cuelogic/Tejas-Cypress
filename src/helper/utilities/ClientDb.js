@@ -3,10 +3,13 @@ import { uniqWith, isEqual, isArray, map } from 'lodash';
 
 class ClientDb {
   database = null;
-  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId') => {
+  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId', addIdKey = false) => {
     let updatedData = data;
     if (isReplaceId) {
       updatedData = map(data, e => ({ [idReplaceKey]: e.id, ...e }));
+    }
+    if (addIdKey) {
+      updatedData = data.map((d, i) => ({ id: i, ...d }));
     }
     this.database = TAFFY(isUniqWith ? uniqWith(updatedData, isEqual) : updatedData);
     return this.getDatabase();
