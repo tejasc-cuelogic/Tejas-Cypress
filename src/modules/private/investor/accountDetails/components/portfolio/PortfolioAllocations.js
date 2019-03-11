@@ -13,7 +13,7 @@ const PortfolioAllocations = ({ pieChart }) => (
         <Grid.Column className="portfolio-allocation" widescreen={5} largeScreen={5} computer={8} tablet={16} mobile={16}>
           <ChartPie title="Investment Type" data={pieChart.investmentType} colors={COLORS} />
         </Grid.Column>
-        <Grid.Column className="portfolio-allocation" widescreen={5} largeScreen={5} computer={8} tablet={16} mobile={16}>
+        <Grid.Column className="portfolio-allocation" widescreen={6} largeScreen={6} computer={8} tablet={16} mobile={16}>
           <ChartPie title="Industry" data={pieChart.industry} colors={COLORS} />
         </Grid.Column>
       </Grid.Row>
