@@ -10,7 +10,7 @@ import { NsPagination } from './../../../../../../theme/shared';
 const result = {
   columns: [
     { title: 'Statement Date', field: 'year' },
-    { title: 'Form Type', field: 'formType' },
+    { title: 'Form Type', field: 'fileName' },
     { title: 'Download as', field: 'file', textAlign: 'right' },
   ],
 };
@@ -20,6 +20,7 @@ const result = {
 export default class TaxForms extends Component {
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
+    this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
   }

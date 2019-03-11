@@ -3,7 +3,7 @@ import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
 import money from 'money-math';
-import { includes } from 'lodash';
+import { get, includes } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, investmentsByOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
@@ -86,7 +86,7 @@ export class TransactionStore {
 
   @action
   setFirstTransaction = (t) => {
-    this.statementDate = t ? t.getAccountTransactions.transactions[0].date : '';
+    this.statementDate = get(t.getAccountTransactions, 'transactions[0].date');
   }
 
   @computed get getAllTransactions() {

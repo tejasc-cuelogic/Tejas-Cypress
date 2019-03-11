@@ -25,7 +25,6 @@ window.jQuery = $;
 @inject('uiStore')
 @observer
 export default class HtmlEditor extends React.Component {
-  state = { inProgress: false };
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
@@ -38,9 +37,16 @@ export default class HtmlEditor extends React.Component {
       heightMax: '70vh',
       imageManager: false,
       events: {
+        'froalaEditor.image.inserted': (e, editor, image) => {
+          if (image.prevObject) {
+            editor.edit.on();
+          } else {
+            editor.edit.off();
+          }
+        },
         'froalaEditor.image.beforeUpload': (e, editor, images) => {
+          editor.edit.off();
           this.props.uiStore.setFieldvalue('htmlEditorImageLoading', true);
-          this.setState({ inProgress: true });
           if (images.length) {
             const fileName = get(images, '[0].name');
             const file = get(images, '[0]');
@@ -50,26 +56,30 @@ export default class HtmlEditor extends React.Component {
               name: fileName,
             };
             fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
+              editor.edit.off();
               if (editor && editor.image && editor.image.get()) {
+                editor.edit.off();
                 const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
-                // console.log(editor.image.get(), 'heyyyy');
-                editor.image.get().attr('src', imgUrl);
+                editor.edit.off();
+                // editor.image.get().attr('src', imgUrl);
                 editor.image.insert(imgUrl, null, null, editor.image.get());
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
-                this.setState({ inProgress: false });
+                editor.edit.on();
               } else {
+                editor.edit.off();
                 console.log('else block');
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
-                this.setState({ inProgress: false });
               }
+              editor.edit.off();
               return false;
             }).catch((err) => {
+              editor.edit.on();
               console.log('catch image', err);
               this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
-              this.setState({ inProgress: false });
               return false;
             });
           }
+          editor.edit.off();
         },
         'froalaEditor.image.error': (e, editor, error) => {
           console.log(error);
@@ -90,7 +100,7 @@ export default class HtmlEditor extends React.Component {
       return <div className="parsed-data"><FroalaEditorView model={this.props.content} /></div>;
     }
     return (
-      <div className={this.state.inProgress ? 'no-pointer-events' : ''}>
+      <div>
         <FroalaEditor
           tag="textarea"
           model={this.props.content}

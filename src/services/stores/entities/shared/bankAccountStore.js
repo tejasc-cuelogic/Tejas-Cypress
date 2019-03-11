@@ -45,7 +45,7 @@ export class BankAccountStore {
 
   @action
   setDb = (data) => {
-    this.db = ClientDb.initiateDb(data);
+    this.db = ClientDb.initiateDb(data, null, null, null, true);
   }
   @action
   setDepositMoneyNow(status) {
@@ -135,25 +135,26 @@ export class BankAccountStore {
   get accountAttributes() {
     let accountAttributes = {};
     const plaidBankDetails = {};
-    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidAccDetails)) {
+    if (!this.isAccountEmpty) {
       const {
         account_id,
         public_token,
         accountNumber,
         routingNumber,
         accountType,
+        account,
       } = this.plaidAccDetails;
       if (account_id && public_token) {
         plaidBankDetails.linkedBank = {
           plaidPublicToken: public_token,
           plaidAccountId: account_id,
-          accountType,
+          accountType: account.subtype.toUpperCase(),
         };
       } else {
         plaidBankDetails.linkedBank = {
           accountNumber,
           routingNumber,
-          accountType,
+          accountType: accountType.toUpperCase(),
         };
       }
       accountAttributes = { ...plaidBankDetails };
@@ -171,6 +172,10 @@ export class BankAccountStore {
       accountAttributes.initialDepositAmount = this.formAddFunds.fields.value.value;
     }
     return accountAttributes;
+  }
+
+  @computed get isAccountEmpty() {
+    return isEmpty(this.plaidAccDetails.accountNumber);
   }
 
   @computed
@@ -249,13 +254,14 @@ export class BankAccountStore {
     const { keyword } = this.requestState.search;
     let resultArray = [];
     if (keyword) {
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
       ClientDb.filterFromNestedObjs(['firstName', 'lastName'], keyword);
       resultArray = ClientDb.getDatabase();
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
-      this.setDb(this.data.data.listLinkedBankUsers.linkedBankList);
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
     }
   }
   @action

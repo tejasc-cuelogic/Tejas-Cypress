@@ -367,6 +367,7 @@ export class AuthStore {
     })
       .then((data) => {
         if (!data.data.checkMigrationByEmail) {
+          uiStore.setProgress(false);
           uiStore.setErrors({
             message: 'There was a problem with authentication',
             code: 'checkMigrationByEmailFailed',
@@ -375,6 +376,7 @@ export class AuthStore {
         res(data.data.checkMigrationByEmail);
       })
       .catch((err) => {
+        uiStore.setProgress(false);
         uiStore.setErrors({
           message: 'There was a problem with authentication',
           code: 'checkMigrationByEmailFailed',
