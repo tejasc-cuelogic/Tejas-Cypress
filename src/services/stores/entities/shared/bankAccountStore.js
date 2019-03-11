@@ -135,25 +135,26 @@ export class BankAccountStore {
   get accountAttributes() {
     let accountAttributes = {};
     const plaidBankDetails = {};
-    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidAccDetails)) {
+    if (!this.isAccountEmpty) {
       const {
         account_id,
         public_token,
         accountNumber,
         routingNumber,
         accountType,
+        account,
       } = this.plaidAccDetails;
       if (account_id && public_token) {
         plaidBankDetails.linkedBank = {
           plaidPublicToken: public_token,
           plaidAccountId: account_id,
-          accountType,
+          accountType: account.subtype.toUpperCase(),
         };
       } else {
         plaidBankDetails.linkedBank = {
           accountNumber,
           routingNumber,
-          accountType,
+          accountType: accountType.toUpperCase(),
         };
       }
       accountAttributes = { ...plaidBankDetails };
@@ -171,6 +172,10 @@ export class BankAccountStore {
       accountAttributes.initialDepositAmount = this.formAddFunds.fields.value.value;
     }
     return accountAttributes;
+  }
+
+  @computed get isAccountEmpty() {
+    return isEmpty(this.plaidAccDetails.accountNumber);
   }
 
   @computed
