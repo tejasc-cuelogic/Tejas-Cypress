@@ -45,7 +45,7 @@ export class BankAccountStore {
 
   @action
   setDb = (data) => {
-    this.db = ClientDb.initiateDb(data);
+    this.db = ClientDb.initiateDb(data, null, null, null, true);
   }
   @action
   setDepositMoneyNow(status) {
@@ -249,13 +249,14 @@ export class BankAccountStore {
     const { keyword } = this.requestState.search;
     let resultArray = [];
     if (keyword) {
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
       ClientDb.filterFromNestedObjs(['firstName', 'lastName'], keyword);
       resultArray = ClientDb.getDatabase();
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
-      this.setDb(this.data.data.listLinkedBankUsers.linkedBankList);
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
     }
   }
   @action
