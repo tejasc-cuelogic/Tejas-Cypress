@@ -12,8 +12,8 @@ import { validationActions } from '../../../../../services/actions';
 @observer
 export default class LinkbankSummary extends React.Component {
   componentDidUpdate() {
-    const { isAccountEmpty } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(!isAccountEmpty);
+    const { isAccountPresent } = this.props.bankAccountStore;
+    this.props.uiStore.setProgress(!isAccountPresent);
   }
 
   handleSubmit = () => {
@@ -34,18 +34,13 @@ export default class LinkbankSummary extends React.Component {
     });
   }
 
-  changeLinkbank = () => {
-    this.props.bankAccountStore.setBankLinkInterface('list');
-    this.props.bankAccountStore.setLinkBankSummary(false);
-    this.props.uiStore.clearErrors();
-  }
-
   render() {
     const { errors } = this.props.uiStore;
     const {
       plaidAccDetails,
       formLinkBankManually,
       isEncrypted,
+      changeLinkbank,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -88,7 +83,7 @@ export default class LinkbankSummary extends React.Component {
           <Button primary size="large" className="relaxed" content="Continue" onClick={() => this.handleSubmit()} disabled={errors || !bankAccountNumber} />
         </div>
         <div className="center-align mt-30">
-          <Button color="green" className="link-button mt-30" content="or change linked bank" onClick={() => this.changeLinkbank()} />
+          <Button color="green" className="link-button" content="or change linked bank" onClick={() => changeLinkbank()} />
         </div>
       </Aux>
     );
