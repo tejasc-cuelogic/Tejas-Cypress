@@ -370,6 +370,18 @@ ol.ui.list.step-list{
     padding-right:@14px;
     margin:@5px 0;
 }
+.bonus-tier-list {
+    column-count: 2;
+    .ui.list.rewards-tier{
+        width:auto;
+        display:block;
+        padding-right:@14px;
+        margin:@10px 0;
+        &:first-child{
+            margin-top: 0;
+        }
+    }
+}
 
 .ui.bulleted.list .list>.item,
 .ui.bulleted.list>.item,
