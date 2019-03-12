@@ -37,7 +37,9 @@ export class UserListingStore {
       accountType,
       accountStatus,
       page: reqParams ? reqParams.page : 1,
+      limit: this.requestState.perPage,
     };
+
     this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
