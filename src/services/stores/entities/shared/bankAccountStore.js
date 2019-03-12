@@ -32,7 +32,7 @@ export class BankAccountStore {
   @observable activeBankPladLogo = null;
   @observable pendingBankPladLogo = null;
   @observable db;
-  // @observable linkbankSummary = false;
+  @observable linkbankSummary = false;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -107,6 +107,12 @@ export class BankAccountStore {
   }
 
   @action
+  resetAddFundsForm() {
+    Validator.resetFormData(this.formAddFunds);
+  }
+
+
+  @action
   setCurrentAccount = (accountType) => {
     if (!isEmpty(userDetailsStore.userDetails)) {
       const { roles } = userDetailsStore.userDetails;
@@ -135,7 +141,7 @@ export class BankAccountStore {
   get accountAttributes() {
     let accountAttributes = {};
     const plaidBankDetails = {};
-    if (!this.isAccountEmpty) {
+    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidAccDetails)) {
       const {
         account_id,
         public_token,
@@ -174,10 +180,6 @@ export class BankAccountStore {
     return accountAttributes;
   }
 
-  @computed get isAccountEmpty() {
-    return isEmpty(this.plaidAccDetails.accountNumber);
-  }
-
   @computed
   get isValidLinkBank() {
     return !isEmpty(this.plaidAccDetails);
@@ -201,14 +203,19 @@ export class BankAccountStore {
     this.showAddFunds = funds;
   }
 
-  // @action
-  // setLinkBankSummary = (showbank = true) => {
-  //   this.linkbankSummary = showbank;
-  // }
+  @action
+  setLinkBankSummary = (showbank = true) => {
+    this.linkbankSummary = showbank;
+  }
 
   @action
   resetShowAddFunds = () => {
     this.showAddFunds = false;
+  }
+
+  @computed get isAccountEmpty() {
+    return isEmpty(this.plaidAccDetails.public_token) ||
+      isEmpty(this.plaidAccDetails.accountNumber);
   }
 
   @action
@@ -416,6 +423,8 @@ export class BankAccountStore {
     this.bankListing = undefined;
     this.depositMoneyNow = true;
     this.showAddFunds = false;
+    this.isManualLinkBankSubmitted = false;
+    this.linkbankSummary = false;
   }
   @action
   setPlaidBankVerificationStatus = (booleanValue) => {
