@@ -7,7 +7,7 @@ import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
-// import LinkbankSummary from './LinkbankSummary';
+import LinkbankSummary from './LinkbankSummary';
 import NSImage from '../../../../shared/NSImage';
 
 @inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
@@ -16,13 +16,16 @@ import NSImage from '../../../../shared/NSImage';
 export default class Plaid extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
+    // this.props.bankAccountStore.setBankLinkInterface('list');
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-    const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
-    if (INVESTMENT_ACC_TYPES.fields.accType.value !== 0) {
-      const { manualLinkBankSubmitted } = this.props.bankAccountStore;
-      this.props.bankAccountStore.setShowAddFunds(manualLinkBankSubmitted);
-    }
+    // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    // const { manualLinkBankSubmitted } = this.props.bankAccountStore;
     this.props.uiStore.clearErrors();
+  }
+
+  componentDidUpdate() {
+    const { linkbankSummary } = this.props.bankAccountStore;
+    this.props.bankAccountStore.setLinkBankSummary(linkbankSummary);
   }
   handleBankSelect = (referenceLink) => {
     // const returnResult = bankAccountActions.bankSelect(institutionID, action);
@@ -39,7 +42,7 @@ export default class Plaid extends Component {
       bankListing,
       showAddFunds,
       isPlaidBankVerified,
-      // linkbankSummary,
+      linkbankSummary,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
     const { action, refLink } = this.props;
@@ -58,9 +61,9 @@ export default class Plaid extends Component {
       return <AddFunds />;
     }
 
-    // if (linkbankSummary) {
-    //   return <LinkbankSummary />;
-    // }
+    if (linkbankSummary) {
+      return <LinkbankSummary />;
+    }
     if (bankLinkInterface === 'form') {
       return <ManualForm action={action} refLink={refLink} />;
     }
