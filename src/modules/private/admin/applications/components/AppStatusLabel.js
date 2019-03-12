@@ -17,6 +17,7 @@ export const AppStatusLabel = (props) => {
   cStatus = appStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'SIGNED' : cStatus;
   cStatus = appStatus === BUSINESS_APPLICATION_STATUS.REVIEW_FAILED ? 'NS_DECLINED' : cStatus;
   cStatus = appStatus === BUSINESS_APPLICATION_STATUS.ISSUER_DECLINED ? 'ISSUER_DECLINED' : cStatus;
+  cStatus = appStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_DECLINED ? 'APPLICATION_DECLINED' : cStatus;
 
   appStatusLabel = find(BUSINESS_APP_ADMIN_STATUS, status => status.status === cStatus);
   return (
