@@ -38,6 +38,7 @@ export class TransactionStore {
   @observable investmentOptions = [];
   @observable selectedInvestment = '';
   @observable validWithdrawAmt = false;
+  @observable availableWithdrawCash = null;
 
   @action
   initRequest = (props) => {
@@ -112,10 +113,13 @@ export class TransactionStore {
   }
 
   @action
-  transact = (amount, operation) => {
-    this.cash = operation ? (this.cash + parseFloat(operation === 'add' ? amount : -amount)) :
-      amount;
-    this.cash = !this.cash ? 0.00 : this.cash;
+  transact = (amount, operation, includeInFlight = true) => {
+    if (includeInFlight) {
+      this.cash = operation ? money.add(`${this.cash}`, money.format('USD', money.floatToAmount(`${(operation === 'add' ? amount : -amount)}`))) : amount;
+      this.cash = this.cash ? money.format('USD', this.cash.replace(/,/, '')) : 0.00;
+    } else {
+      this.availableWithdrawCash = amount ? money.format('USD', amount.replace(/,/, '')) : 0.00;
+    }
   }
 
   @action
@@ -143,7 +147,7 @@ export class TransactionStore {
       { name: field, value: values.floatValue },
     );
     if (checkWithdrawAmt && values.floatValue !== undefined) {
-      this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
+      this.validWithdrawAmt = money.cmp(this.availableWithdrawCash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
     }
   };
 
@@ -361,7 +365,7 @@ export class TransactionStore {
         },
         onFetch: (data) => {
           if (data && !this.cashAvailable.loading) {
-            this.transact(data.getInvestorAvailableCash, null);
+            this.transact(data.getInvestorAvailableCash, null, includeInFlight);
             resolve(data);
           }
         },

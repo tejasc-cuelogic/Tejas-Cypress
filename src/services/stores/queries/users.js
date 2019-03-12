@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
-    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page) {
+  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int) {
+    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit) {
       resultCount
       users {
         id
@@ -46,6 +46,7 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      wpUserId
       status
       accreditation {
         status

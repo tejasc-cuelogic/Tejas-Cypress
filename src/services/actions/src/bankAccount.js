@@ -4,11 +4,13 @@ import {
 import apiService from '../../../api/restApi';
 import { bankAccountStore, accountStore, uiStore, individualAccountStore, iraAccountStore, entityAccountStore } from '../../stores';
 import Helper from '../../../helper/utility';
+import { validationActions } from '../../../services/actions';
+
 
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
 const sharedPublicPayload = { public_key: PLAID_PUBLIC_KEY };
 const ACC_LINK_BANK_MAPPING = {
-  0: { store: individualAccountStore, location: 1 },
+  0: { store: individualAccountStore, location: 0 },
   1: { store: iraAccountStore, location: 3 },
   2: { store: entityAccountStore, location: 5 },
 };
@@ -68,11 +70,10 @@ export class BankAccount {
       product: ['auth, transactions'],
       onLoad: () => {
         // The Link module finished loading.
+        uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        if (ACC_LINK_BANK_MAPPING[accountValue].store !== individualAccountStore) {
-          ACC_LINK_BANK_MAPPING[accountValue].store
-            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
-        }
+        ACC_LINK_BANK_MAPPING[accountValue].store
+          .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
@@ -83,11 +84,17 @@ export class BankAccount {
         } else {
           Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
           const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-          ACC_LINK_BANK_MAPPING[accountValue].store
-            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
-          bankAccountStore.setShowAddFunds();
-          // bankAccountStore.setLinkBankSummary();
+          const currentStep = {
+            name: 'Link bank',
+            stepToBeRendered: ACC_LINK_BANK_MAPPING[accountValue].location,
+            validate: validationActions.validateLinkBankForm,
+          };
+          bankAccountStore.resetAddFundsForm();
+          ACC_LINK_BANK_MAPPING[accountValue].store.createAccount(currentStep);
+          // ACC_LINK_BANK_MAPPING[accountValue].store
+          //   .setStepToBeRendered();
         }
+        bankAccountStore.setLinkBankSummary();
       },
       onExit: (err) => {
         // The user exited the Link flow.

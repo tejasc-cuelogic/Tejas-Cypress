@@ -7,7 +7,7 @@ import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
-// import LinkbankSummary from './LinkbankSummary';
+import LinkbankSummary from './LinkbankSummary';
 
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
@@ -20,6 +20,7 @@ export default class ManualForm extends Component {
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     const { investmentAccType } = this.props.accountStore;
     const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
@@ -32,18 +33,13 @@ export default class ManualForm extends Component {
     } else {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
         if (investmentAccType === 'individual') {
-          this.props[accTypeStore].setStepToBeRendered(1);
-          // TODO Link bank form changes
-          // this.props.bankAccountStore.setLinkBankSummary();
+          this.props[accTypeStore].setStepToBeRendered(0);
           // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
         } else {
           this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
-          this.props.bankAccountStore.setShowAddFunds();
-          // TODO Link bank form changes
-          // this.props.bankAccountStore.();
         }
-      })
-        .catch(() => { });
+        this.props.bankAccountStore.setLinkBankSummary();
+      });
     }
   }
 
@@ -60,15 +56,15 @@ export default class ManualForm extends Component {
       formLinkBankManually,
       linkBankManuallyChange,
       accountTypeChange,
-      // linkbankSummary
+      linkbankSummary,
     }
       = this.props.bankAccountStore;
     if (showAddFunds) {
       return <AddFunds />;
     }
-    // if (linkbankSummary) {
-    //   return <LinkbankSummary />;
-    // }
+    if (linkbankSummary) {
+      return <LinkbankSummary />;
+    }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
       <div className="center-align">

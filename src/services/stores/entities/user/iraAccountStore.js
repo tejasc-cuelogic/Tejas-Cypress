@@ -138,32 +138,46 @@ class IraAccountStore {
     }
     return payload;
   }
-  submitAccount = () => {
+  @action
+  submitAccount = () => new Promise((resolve) => {
+    if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+        this.submitMutation().then(() => {
+          resolve();
+        });
+      });
+    } else {
+      this.submitMutation().then(() => {
+        resolve();
+      });
+    }
+  });
+
+  @action
+  submitMutation = () => new Promise((resolve, reject) => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
     uiStore.setProgress();
     const payLoad = {
       accountId: get(accountDetails, 'details.accountId') || this.iraAccountId,
       accountType: 'IRA',
     };
-    return new Promise((resolve, reject) => {
-      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
-        client
-          .mutate({
-            mutation: submitinvestorAccount,
-            variables: payLoad,
-          })
-          .then(() => {
-            Helper.toast('IRA account submitted successfully.', 'success');
-            resolve();
-          })
-          .catch((err) => {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.setProgress(false);
-            reject();
-          });
+    client
+      .mutate({
+        mutation: submitinvestorAccount,
+        variables: payLoad,
+      })
+      .then(() => {
+        bankAccountStore.resetStoreData();
+        Helper.toast('IRA account submitted successfully.', 'success');
+        resolve();
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        uiStore.setProgress(false);
+        reject();
       });
-    });
-  }
+  });
+
   @action
   createAccount = (currentStep, removeUploadedData = false) => new Promise((resolve) => {
     this.validateAndSubmitStep(currentStep, removeUploadedData).then(() => {
@@ -406,9 +420,11 @@ class IraAccountStore {
         } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (bankAccountStore.manualLinkBankSubmitted ||
+          bankAccountStore.formAddFunds.fields.value.value === null ||
           (this.FUNDING_FRM.fields.fundingType.value === 0 &&
           !bankAccountStore.formLinkBankManually.meta.isValid &&
-          isEmpty(bankAccountStore.plaidAccDetails))) {
+          !bankAccountStore.isAccountPresent &&
+          bankAccountStore.linkbankSummary)) {
           this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
           if (this.FUNDING_FRM.fields.fundingType.value === 0) {

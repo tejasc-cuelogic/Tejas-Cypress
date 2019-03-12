@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Form, Header, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class General extends Component {
@@ -28,9 +29,12 @@ export default class General extends Component {
     const { GENERAL_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, GENERAL_FRM.fields, 'legal', 'general', true, undefined, isApproved);
   }
+  editorChange =
+  (field, value, form) =>
+    this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const {
-      GENERAL_FRM,
+      GENERAL_FRM, currentOfferingId,
       formArrayChange,
       maskArrayChange,
       removeData,
@@ -146,33 +150,19 @@ export default class General extends Component {
             <Aux>
               {/* <MaskedInput
                 displayMode={isReadonly}
-                name="minOfferingExpenseAmount"
-                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmount}
+                name="offeringExpenseAmount"
+                fielddata={GENERAL_FRM.fields.offeringExpenseAmount}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
                 prefix="$"
               /> */}
-              <FormTextarea
+              <HtmlEditor
+                imageUploadPath={`offerings/${currentOfferingId}`}
                 readOnly={isReadonly}
-                name="minOfferingExpenseAmountDescription"
-                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmountDescription}
-                changed={(e, result) => formArrayChange(e, result, formName)}
-                containerclassname="secondary"
-              />
-              {/* <MaskedInput
-                displayMode={isReadonly}
-                name="maxOfferingExpenseAmount"
-                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmount}
-                changed={(values, name) => maskArrayChange(values, formName, name)}
-                currency
-                prefix="$"
-              /> */}
-              <FormTextarea
-                readOnly={isReadonly}
-                name="maxOfferingExpenseAmountDescription"
-                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmountDescription}
-                changed={(e, result) => formArrayChange(e, result, formName)}
-                containerclassname="secondary"
+                changed={this.editorChange}
+                name="offeringExpenseAmountDescription"
+                form={formName}
+                content={GENERAL_FRM.fields.offeringExpenseAmountDescription.value}
               />
             </Aux>
           }

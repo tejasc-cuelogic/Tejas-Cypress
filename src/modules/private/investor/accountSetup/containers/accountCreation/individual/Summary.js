@@ -22,9 +22,9 @@ export default class Summary extends React.Component {
       getLegalDocsFileIds();
     }
   }
-  componentDidMount() {
-    const { plaidAccDetails } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(isEmpty(plaidAccDetails));
+  componentDidUpdate() {
+    const { isAccountPresent } = this.props.bankAccountStore;
+    this.props.uiStore.setProgress(!isAccountPresent);
   }
   handleCreateAccount = () => {
     const {
@@ -48,6 +48,7 @@ export default class Summary extends React.Component {
           setPartialInvestmenSession();
         } else {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+          this.props.bankAccountStore.resetLinkBank();
           this.props.history.replace('app/summary');
         }
       }).catch(() => { });

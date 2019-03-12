@@ -17,7 +17,7 @@ export default class AccountCreation extends React.Component {
     this.updateUser();
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
-    this.props.bankAccountStore.resetLinkBank();
+    this.props.bankAccountStore.resetStoreData();
     this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
@@ -75,6 +75,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Summary',
         component: <Summary />,
+        disableNextButton: true,
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
       },
     ];

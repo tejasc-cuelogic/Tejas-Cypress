@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-
+import Aux from 'react-aux';
 import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 import { ListErrors } from '../../../../../theme/shared';
@@ -14,7 +14,7 @@ export default class AddFunds extends Component {
     this.props.bankAccountStore.validateForm('formAddFunds');
   }
   componentWillUnmount() {
-    this.props.bankAccountStore.resetShowAddFunds();
+    // this.props.bankAccountStore.resetShowAddFunds();
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
@@ -67,36 +67,45 @@ export default class AddFunds extends Component {
   }
 
   render() {
-    const { formAddFunds, addFundChange } = this.props.bankAccountStore;
+    const {
+      formAddFunds,
+      addFundChange,
+      changeLinkbank,
+    } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
 
     return (
-      <div className="center-align">
-        <Header as="h3">Add funds</Header>
-        <p>How much would you like to deposit into your account today?</p>
-        <Form error onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap left-align">
-            <MaskedInput
-              name="value"
-              type="tel"
-              currency
-              placeholder="$ 15,000"
-              fielddata={formAddFunds.fields.value}
-              changed={values => addFundChange(values, 'value')}
-              maxLength={formAddFunds.fields.value.maxLength}
-              prefix="$ "
-              showerror
-            />
-          </div>
-          {errors &&
-            <Message error className="mb-30">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
-          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formAddFunds.meta.isValid || !formAddFunds.fields.value.value} />
-        </Form>
-        <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-      </div>
+      <Aux>
+        <div className="center-align">
+          <Header as="h3">Add funds</Header>
+          <p>How much would you like to deposit into your account today?</p>
+          <Form error onSubmit={this.handleSubmitForm}>
+            <div className="field-wrap left-align">
+              <MaskedInput
+                name="value"
+                type="tel"
+                currency
+                placeholder="$ 15,000"
+                fielddata={formAddFunds.fields.value}
+                changed={values => addFundChange(values, 'value')}
+                maxLength={formAddFunds.fields.value.maxLength}
+                prefix="$ "
+                showerror
+              />
+            </div>
+            {errors &&
+              <Message error className="mb-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
+            <Button primary size="large" className="relaxed" content="Confirm" disabled={!formAddFunds.meta.isValid || !formAddFunds.fields.value.value} />
+          </Form>
+          <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+        </div>
+        <div className="center-align mt-30">
+          <Button color="green" className="link-button" content="or change linked bank" onClick={() => changeLinkbank()} />
+        </div>
+      </Aux>
     );
   }
 }
