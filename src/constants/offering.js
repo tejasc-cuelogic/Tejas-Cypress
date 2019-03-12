@@ -83,10 +83,10 @@ export const OFFERING_COMMENTS_SCOPE = {
 };
 
 export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {
-  PENDING: { header: 'Accrditation Verification In Review', subHeader: 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.' },
-  NOT_ELGIBLE: { header: 'Accrditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
-  INACTIVE: { header: 'Accrditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
-  EXPIRED: { header: 'Accrditation Expired - Renewal Required', subHeader: 'Your accreditation status has expired.  Please confirm the following to renew.' },
+  PENDING: { header: 'Accreditation Verification In Review', subHeader: 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.' },
+  NOT_ELGIBLE: { header: 'Accreditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
+  INACTIVE: { header: 'Accreditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
+  EXPIRED: { header: 'Accreditation Expired - Renewal Required', subHeader: 'Your accreditation status has expired.  Please confirm the following to renew.' },
   ELGIBLE: { header: 'ELGIBLE', subHeader: '' },
 };
 
