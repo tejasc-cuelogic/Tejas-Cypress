@@ -246,7 +246,7 @@ class AccountType extends Component {
                         <Aux>
                           <Link to={redirectURL} className="text-link">
                             <Icon className="ns-arrow-right" color="green" />
-                            Apply for accrditation
+                            Apply for accreditation
                           </Link>
                           <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         </Aux>

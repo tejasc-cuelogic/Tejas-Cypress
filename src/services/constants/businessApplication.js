@@ -47,6 +47,7 @@ export const BUSINESS_APP_ADMIN_STATUS = [
   { status: 'OFFERED', color: 'blue', title: 'Offered' },
   { status: 'DELETED', color: 'red', title: 'Deleted' },
   { status: 'REMOVED', color: 'red', title: 'Removed' },
+  { status: 'APPLICATION_DECLINED', color: 'red', title: 'Admin Declined' },
 ];
 
 export const BUSINESS_APP_USER_STATUS = {

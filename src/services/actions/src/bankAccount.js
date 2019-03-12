@@ -70,11 +70,10 @@ export class BankAccount {
       product: ['auth, transactions'],
       onLoad: () => {
         // The Link module finished loading.
+        uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        if (ACC_LINK_BANK_MAPPING[accountValue].store !== individualAccountStore) {
-          ACC_LINK_BANK_MAPPING[accountValue].store
-            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
-        }
+        ACC_LINK_BANK_MAPPING[accountValue].store
+          .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
@@ -90,6 +89,7 @@ export class BankAccount {
             stepToBeRendered: ACC_LINK_BANK_MAPPING[accountValue].location,
             validate: validationActions.validateLinkBankForm,
           };
+          bankAccountStore.resetAddFundsForm();
           ACC_LINK_BANK_MAPPING[accountValue].store.createAccount(currentStep);
           // ACC_LINK_BANK_MAPPING[accountValue].store
           //   .setStepToBeRendered();

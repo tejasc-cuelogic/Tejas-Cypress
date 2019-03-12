@@ -111,6 +111,12 @@ export class BankAccountStore {
     Validator.resetFormData(this.formAddFunds);
   }
 
+  changeLinkbank = () => {
+    this.setBankLinkInterface('list');
+    this.setLinkBankSummary(false);
+    this.resetShowAddFunds();
+    uiStore.clearErrors();
+  }
 
   @action
   setCurrentAccount = (accountType) => {
@@ -189,7 +195,8 @@ export class BankAccountStore {
   get isPlaidDirty() {
     return (!isEmpty(this.plaidAccDetails) &&
     this.formLinkBankManually.meta.isDirty &&
-    this.formAddFunds.meta.isDirty) ||
+    this.formAddFunds.meta.isDirty &&
+    !this.linkbankSummary) ||
     this.showAddFunds;
   }
 
@@ -213,9 +220,9 @@ export class BankAccountStore {
     this.showAddFunds = false;
   }
 
-  @computed get isAccountEmpty() {
-    return isEmpty(this.plaidAccDetails.public_token) ||
-      isEmpty(this.plaidAccDetails.accountNumber);
+  @computed get isAccountPresent() {
+    return !isEmpty(this.plaidAccDetails.accountNumber) ||
+      !isEmpty(this.plaidAccDetails.public_token);
   }
 
   @action

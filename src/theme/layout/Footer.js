@@ -5,7 +5,6 @@ import { Container, Menu, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { SocialLinks } from '../shared';
 import NSImage from '../../modules/shared/NSImage';
-import HtmlEditor from '../../modules/shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -28,24 +27,24 @@ class Footer extends Component {
   toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
-    const { path, campaign } = this.props;
+    const { path } = this.props;
     const OfferFooter = ['/offerings/:id/:section?'];
     const isCampaign = matchPath(path, { path: OfferFooter }) != null;
-    const offeirngDisclaimer = campaign && campaign.keyTerms &&
-      campaign.keyTerms.offeringDisclaimer ?
-      campaign.keyTerms.offeringDisclaimer : null;
-    const shorthandBusinessName = campaign && campaign.keyTerms &&
-      campaign.keyTerms.shorthandBusinessName ?
-      campaign.keyTerms.shorthandBusinessName : '';
+    // const offeirngDisclaimer = campaign && campaign.keyTerms &&
+    //   campaign.keyTerms.offeringDisclaimer ?
+    //   campaign.keyTerms.offeringDisclaimer : null;
+    // const shorthandBusinessName = campaign && campaign.keyTerms &&
+    //   campaign.keyTerms.shorthandBusinessName ?
+    //   campaign.keyTerms.shorthandBusinessName : '';
     return (
       <footer className={isCampaign ? 'offering-footer' : ''}>
         <Container>
-          {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
+          {/* {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
               <b>{`${shorthandBusinessName} Disclaimer: `}</b>
               <HtmlEditor readOnly content={(offeirngDisclaimer)} />
             </p>
-          }
+          } */}
           <Grid stackable>
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
               <div className="footer-left-nav mb-30">

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { observable, computed, action } from 'mobx';
 import { orderBy } from 'lodash';
+import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
 import { uiStore, userDetailsStore, transactionStore } from '../../index';
@@ -8,6 +9,7 @@ import { uiStore, userDetailsStore, transactionStore } from '../../index';
 export class StatementStore {
   @observable data = [];
   @observable tranStore = [];
+  @observable pdfLinkData = {};
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -20,25 +22,25 @@ export class StatementStore {
   handlePdfDownload = (fileId) => {
     console.log(fileId);
     return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: downloadFile,
-          variables: {
-            fileId,
-          },
-        })
-        .then((result) => {
-          if (result.data) {
-            const { preSignedUrl } = result.data.downloadFile;
-            resolve(preSignedUrl);
-          } else {
-            reject();
+      this.pdfLinkData = graphql({
+        client,
+        query: downloadFile,
+        variables: {
+          fileId,
+          accountType: 'SERVICES',
+        },
+        onFetch: (data) => {
+          if (data && !this.pdfLinkData.loading) {
+            if (data.getBoxDownloadLinkByFileId.preSignedUrl) {
+              resolve(data.getBoxDownloadLinkByFileId.preSignedUrl);
+            } else {
+              uiStore.setErrors('Unable to Fetch the File');
+              reject();
+            }
           }
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          reject(error);
-        });
+        },
+        onError: () => reject(),
+      });
     });
   }
 
