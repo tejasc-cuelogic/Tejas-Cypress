@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-expressions */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import mapValues from 'lodash/mapValues';
-import map from 'lodash/map';
 import cookie from 'react-cookies';
-import { concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get } from 'lodash';
+import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
@@ -492,6 +490,11 @@ export class UserDetailsStore {
       routingUrl = '/app/summary';
     }
     return routingUrl;
+  }
+
+  @computed
+  get getAnalyticsUserId() {
+    return this.userDetails ? get(this.userDetails, 'id') : false;
   }
 }
 
