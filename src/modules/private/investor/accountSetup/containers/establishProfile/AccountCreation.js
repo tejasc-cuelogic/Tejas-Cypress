@@ -95,7 +95,7 @@ export default class AccountCreation extends React.Component {
         isValid: (INVESTMENT_EXP_FORM.meta.isValid && !errors) ? '' : stepToBeRendered > 5 ? 'error' : '',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 5,
+        stepToBeRendered: 6,
         disableNextButton: true,
       },
     ];

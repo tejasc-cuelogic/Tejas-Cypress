@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { inject } from 'mobx-react';
 import { Header, Divider } from 'semantic-ui-react';
 import KeytermsDetails from './investmentDetails/KeytermsDetails';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
@@ -40,18 +42,7 @@ class InvestmentDetails extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyContent = 'No data found.';
-    const minOfferingExpenseDesc = campaign && campaign.legal &&
-      campaign.legal.general && campaign.legal.general.useOfProceeds &&
-      campaign.legal.general.useOfProceeds.minOfferingExpenseAmountDescription ?
-      campaign.legal.general.useOfProceeds.minOfferingExpenseAmountDescription
-      :
-      null;
-    const maxOfferingExpenseDesc = campaign && campaign.legal &&
-      campaign.legal.general && campaign.legal.general.useOfProceeds &&
-      campaign.legal.general.useOfProceeds.maxOfferingExpenseAmountDescription ?
-      campaign.legal.general.useOfProceeds.maxOfferingExpenseAmountDescription
-      :
-      null;
+    const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <Aux>
         <Header as="h3" className="mt-10 mb-30 anchor-wrap">
@@ -60,12 +51,7 @@ class InvestmentDetails extends Component {
         </Header>
         {campaign && campaign.legal &&
           campaign.legal.general && campaign.legal.general.useOfProceeds ?
-            <Aux>
-              <Header as="h6">If minimum offering amount is reached:</Header>
-              <p>{minOfferingExpenseDesc || emptyContent}</p>
-              <Header as="h6">If maximum offering amount is reached:</Header>
-              <p>{maxOfferingExpenseDesc || emptyContent}</p>
-            </Aux>
+            <HtmlEditor readOnly content={offeringExpenseAmountDescription || emptyContent} />
             :
             <InlineLoader text={emptyContent} className="bg-offwhite" />
         }

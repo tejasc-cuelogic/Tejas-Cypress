@@ -226,7 +226,7 @@ export default class KeyTerms extends Component {
                   changed={this.editorChange}
                   name={field}
                   form={formName}
-                  content={KEY_TERMS_FRM.fields[field].value}
+                  content={field !== 'offeringDisclaimer' ? KEY_TERMS_FRM.fields[field].value : KEY_TERMS_FRM.fields[field].value || KEY_TERMS_FRM.fields[field].defaultValue}
                 />
               </Form.Field>
             ))}

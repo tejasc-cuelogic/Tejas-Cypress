@@ -675,7 +675,7 @@ export class AccreditationStore {
       }
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       switch (accountStatus) {
         case 'REQUESTED':
           this.userAccredetiationState = 'PENDING';
@@ -763,6 +763,7 @@ export class AccreditationStore {
     this.showAccountList = true;
     investmentStore.resetAccTypeChanged();
     investmentStore.setFieldValue('disableNextbtn', true);
+    investmentStore.setFieldValue('isGetTransferRequestCall', false);
   }
   checkIsAccreditationExpired = (expirationDate) => {
     let dateDiff = '';
@@ -806,16 +807,15 @@ export class AccreditationStore {
           headerSubheaderTextObj.subHeader = 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
           break;
         case 'NOT_ELGIBLE':
-          headerSubheaderTextObj.header = `Accrditation Verification for ${accountType} Investor Account Required`;
+          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
           headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
           break;
         case 'INACTIVE':
-          headerSubheaderTextObj.header = `Accrditation Verification for ${accountType} Investor Account Required`;
+          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
           headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
           break;
         case 'EXPIRED':
-          // headerSubheaderTextObj.header = `Accrditation Expired for ${accountType}
-          //  Investor Account- Renewal Required`;
+          // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
           headerSubheaderTextObj.header = 'Accredited Status Expired';
           headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
           break;

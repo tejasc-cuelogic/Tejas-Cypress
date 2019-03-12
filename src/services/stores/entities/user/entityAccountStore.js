@@ -106,7 +106,7 @@ class EntityAccountStore {
     return this.FIN_INFO_FRM.meta.isValid && this.GEN_INFO_FRM.meta.isValid
       && this.TRUST_INFO_FRM.meta.isValid &&
       this.PERSONAL_INFO_FRM.meta.isValid && this.FORM_DOCS_FRM.meta.isValid &&
-      (bankAccountStore.formLinkBankManually.meta.isValid || !bankAccountStore.isAccountEmpty);
+      (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isAccountPresent);
   }
 
   @action
@@ -128,7 +128,7 @@ class EntityAccountStore {
             variables: payLoad,
           })
           .then(() => {
-            bankAccountStore.resetLinkBank();
+            bankAccountStore.resetStoreData();
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })
@@ -651,7 +651,7 @@ class EntityAccountStore {
             }
           }
           // eslint-disable-next-line no-undef
-          uiStore.setProgress(isPersonalForm);
+          uiStore.setProgress(false);
         })
         .catch((err) => {
           uiStore.setProgress(false);

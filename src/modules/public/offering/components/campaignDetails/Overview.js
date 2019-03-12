@@ -9,6 +9,7 @@ import LatestUpdates from './Overview/LatestUpdates';
 import VideoModal from './Overview/VideoModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
+import IssuerStatement from './Overview/IssuerStatement';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -34,7 +35,7 @@ class Overview extends Component {
   }
   handleOnScroll = () => {
     const { campaign } = this.props.campaignStore;
-    const arr = get(campaign, 'updates') ? get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery'] : ['top-things-to-know', 'investment-highlights', 'gallery'] : [];
+    const arr = get(campaign, 'updates') ? get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery', 'issuer-statement'] : ['top-things-to-know', 'investment-highlights', 'gallery', 'issuer-statement'] : [];
     arr.forEach((item) => {
       if (document.getElementById(item).getBoundingClientRect().top < 200 &&
       document.getElementById(item).getBoundingClientRect().top > -1) {
@@ -65,6 +66,8 @@ class Overview extends Component {
           galleryUrl={this.props.match.url}
           campaign={campaign}
         />
+        <Divider hidden section />
+        <IssuerStatement campaign={campaign} />
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
       </div>

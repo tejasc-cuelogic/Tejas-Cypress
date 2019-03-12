@@ -8,6 +8,13 @@ import { InlineLoader } from '../../../../../theme/shared';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
 import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
+const NO_PERMISSION_MSG = `Please contact
+  <a href="mailto:support@nextseed.com">support@nextseed.com</a>
+  to request a transfer of your IRA funds.`;
+
+const NO_LINKED_BANK_MSG = `No Linked Bank available to Transfer Fund, go to
+  <a href='/app/account-details/ira/bank-accounts'>Bank Accounts<a>`;
+
 @inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -50,25 +57,13 @@ export default class TransferFunds extends Component {
           </Aux> : accountType === 'ira' ?
             <section className="center-align">
               <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor
-                  readOnly
-                  content={(`Please contact
-    <a href="mailto:support@nextseed.com">support@nextseed.com</a> to request a transfer of your IRA funds.`)}
-                />
+                <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
               </h4>
             </section>
           :
             <section className="center-align">
               <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor
-                  readOnly
-                  content={
-                    `No Linked Bank available to Transfer Fund, go to
-                    <a href='/app/account-details/ira/bank-accounts'>
-                    Bank Accounts
-                    <a>}`
-                    }
-                />
+                <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
               </h4>
             </section>
         }

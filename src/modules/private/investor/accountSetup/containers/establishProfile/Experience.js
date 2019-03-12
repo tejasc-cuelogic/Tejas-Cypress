@@ -24,8 +24,9 @@ export default class Experience extends Component {
       if (isValidInvestorProfileForm) {
         this.props.uiStore.setErrors(undefined);
         const currentStep = {
+          name: 'Investment Experience',
           form: 'INVESTMENT_EXP_FORM',
-          stepToBeRendered: 5,
+          stepToBeRendered: 6,
         };
         updateInvestorProfileData(currentStep).then(() => {
           const { signupStatus } = this.props.userDetailsStore;

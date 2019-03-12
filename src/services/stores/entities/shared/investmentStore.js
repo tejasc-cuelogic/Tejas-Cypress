@@ -309,8 +309,10 @@ export class InvestmentStore {
             const { status, message, flag } = resp.data.investNowGeneratePurchaseAgreement;
             this.setFieldValue('isValidInvestAmtInOffering', status);
             this.setFieldValue('disableNextbtn', status);
-            this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
-            this.INVESTMONEY_FORM.meta.isValid = status;
+            if (flag !== 1) {
+              this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
+              this.INVESTMONEY_FORM.meta.isValid = status;
+            }
             // Validated investment amount fields:
             if (flag === 1) {
               this.isGetTransferRequestCall = true;
@@ -551,6 +553,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    this.setFieldValue('isGetTransferRequestCall', false);
   }
 
   @action

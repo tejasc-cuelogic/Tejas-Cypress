@@ -266,7 +266,7 @@ class InvestorProfileStore {
         })
         .then(action(() => {
           // Helper.toast('Investor profile updated successfully.', 'success');
-          if (currentStep.name === 'Financial Information') {
+          if (currentStep.name === 'Investment Experience') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           FormValidator.setIsDirty(this[currentStep.form], false);

@@ -41,7 +41,7 @@ class IndividualAccountStore {
           })
           .then(() => {
             uiStore.setProgress(false);
-            bankAccountStore.resetLinkBank();
+            bankAccountStore.resetStoreData();
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           })
@@ -143,8 +143,9 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        const renderStep = bankAccountStore.isAccountEmpty ? this.stepToBeRendered : 2;
-        individualAccountStore.setStepToBeRendered(renderStep);
+        // const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
+        //   2 : this.stepToBeRendered;
+        individualAccountStore.setStepToBeRendered(this.stepToBeRendered);
         // if (!this.isManualLinkBankSubmitted && (
         //   bankAccountStore.formLinkBankManually.meta.isValid ||
         //   !isEmpty(bankAccountStore.plaidAccDetails))) {
