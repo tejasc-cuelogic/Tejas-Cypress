@@ -1341,7 +1341,7 @@ export const GENERAL = {
     error: undefined,
     rule: 'optional',
   },
-  // minOfferingExpenseAmount: {
+  // offeringExpenseAmount: {
   //   label: 'Minimum offering amount expense',
   //   value: '',
   //   error: undefined,
@@ -1351,7 +1351,7 @@ export const GENERAL = {
   //   placeHolder: 'Type amount here',
   //   objRefOutput: 'useOfProceeds',
   // },
-  minOfferingExpenseAmountDescription: {
+  offeringExpenseAmountDescription: {
     label: 'If minimum offering amount is reached:',
     value: '',
     error: undefined,
@@ -1371,16 +1371,6 @@ export const GENERAL = {
   //   placeHolder: 'Type amount here',
   //   objRefOutput: 'useOfProceeds',
   // },
-  maxOfferingExpenseAmountDescription: {
-    label: 'If maximum offering amount is reached:',
-    value: '',
-    error: undefined,
-    rule: 'optional',
-    objRef: 'legal.general.useOfProceeds',
-    objType: 'useOfProceeds',
-    placeHolder: 'Type your text here...',
-    objRefOutput: 'useOfProceeds',
-  },
   equityShareholderRights: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
