@@ -26,7 +26,7 @@ export default class CashMovement extends Component {
           <XAxis axisLine={false} dataKey="name" interval={4} />
           <YAxis tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
-            formatter={(value, name, props) => [this.formatY(props.payload[name])]}
+            formatter={(value, name, props) => [this.formatY(props.payload[name], name)]}
           />
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
