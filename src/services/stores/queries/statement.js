@@ -36,9 +36,10 @@ export const allTaxForms = gql`
   }
 `;
 export const downloadFile = gql`
-  mutation downloadFile($fileId: String!) {
-    downloadFile (
-      fileId: $fileId
+query getBoxDownloadLinkByFileId($fileId: String, $accountType: AccountTypeEnum ) {
+    getBoxDownloadLinkByFileId (
+      boxFileId: $fileId
+      accountType: $accountType
     ) {
       preSignedUrl
     }
