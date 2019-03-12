@@ -153,6 +153,7 @@ class IraAccountStore {
             variables: payLoad,
           })
           .then(() => {
+            bankAccountStore.resetLinkBank();
             Helper.toast('IRA account submitted successfully.', 'success');
             resolve();
           })
@@ -406,9 +407,11 @@ class IraAccountStore {
         } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (bankAccountStore.manualLinkBankSubmitted ||
+          bankAccountStore.formAddFunds.fields.value.value === null ||
           (this.FUNDING_FRM.fields.fundingType.value === 0 &&
           !bankAccountStore.formLinkBankManually.meta.isValid &&
-          isEmpty(bankAccountStore.plaidAccDetails))) {
+          bankAccountStore.isAccountEmpty &&
+          bankAccountStore.linkbankSummary)) {
           this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
           if (this.FUNDING_FRM.fields.fundingType.value === 0) {

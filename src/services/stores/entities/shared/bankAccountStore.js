@@ -32,7 +32,7 @@ export class BankAccountStore {
   @observable activeBankPladLogo = null;
   @observable pendingBankPladLogo = null;
   @observable db;
-  // @observable linkbankSummary = false;
+  @observable linkbankSummary = false;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -45,7 +45,7 @@ export class BankAccountStore {
 
   @action
   setDb = (data) => {
-    this.db = ClientDb.initiateDb(data);
+    this.db = ClientDb.initiateDb(data, null, null, null, true);
   }
   @action
   setDepositMoneyNow(status) {
@@ -107,6 +107,12 @@ export class BankAccountStore {
   }
 
   @action
+  resetAddFundsForm() {
+    Validator.resetFormData(this.formAddFunds);
+  }
+
+
+  @action
   setCurrentAccount = (accountType) => {
     if (!isEmpty(userDetailsStore.userDetails)) {
       const { roles } = userDetailsStore.userDetails;
@@ -142,18 +148,19 @@ export class BankAccountStore {
         accountNumber,
         routingNumber,
         accountType,
+        account,
       } = this.plaidAccDetails;
       if (account_id && public_token) {
         plaidBankDetails.linkedBank = {
           plaidPublicToken: public_token,
           plaidAccountId: account_id,
-          accountType,
+          accountType: account.subtype.toUpperCase(),
         };
       } else {
         plaidBankDetails.linkedBank = {
           accountNumber,
           routingNumber,
-          accountType,
+          accountType: accountType.toUpperCase(),
         };
       }
       accountAttributes = { ...plaidBankDetails };
@@ -196,14 +203,19 @@ export class BankAccountStore {
     this.showAddFunds = funds;
   }
 
-  // @action
-  // setLinkBankSummary = (showbank = true) => {
-  //   this.linkbankSummary = showbank;
-  // }
+  @action
+  setLinkBankSummary = (showbank = true) => {
+    this.linkbankSummary = showbank;
+  }
 
   @action
   resetShowAddFunds = () => {
     this.showAddFunds = false;
+  }
+
+  @computed get isAccountEmpty() {
+    return isEmpty(this.plaidAccDetails.public_token) ||
+      isEmpty(this.plaidAccDetails.accountNumber);
   }
 
   @action
@@ -249,13 +261,14 @@ export class BankAccountStore {
     const { keyword } = this.requestState.search;
     let resultArray = [];
     if (keyword) {
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
       ClientDb.filterFromNestedObjs(['firstName', 'lastName'], keyword);
       resultArray = ClientDb.getDatabase();
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
-      this.setDb(this.data.data.listLinkedBankUsers.linkedBankList);
+      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
     }
   }
   @action
@@ -410,6 +423,8 @@ export class BankAccountStore {
     this.bankListing = undefined;
     this.depositMoneyNow = true;
     this.showAddFunds = false;
+    this.isManualLinkBankSubmitted = false;
+    this.linkbankSummary = false;
   }
   @action
   setPlaidBankVerificationStatus = (booleanValue) => {

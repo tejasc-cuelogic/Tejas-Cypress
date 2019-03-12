@@ -23,6 +23,10 @@ export default class Summary extends Component {
       getLegalDocsFileIds();
     }
   }
+  componentDidUpdate() {
+    const { isAccountEmpty } = this.props.bankAccountStore;
+    this.props.uiStore.setProgress(!isAccountEmpty);
+  }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
@@ -36,6 +40,7 @@ export default class Summary extends Component {
     } else {
       this.props.entityAccountStore.submitAccount().then(() => {
         this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        this.props.bankAccountStore.resetLinkBank();
         this.props.history.push('app/summary');
       });
     }
@@ -62,6 +67,7 @@ export default class Summary extends Component {
     const {
       plaidAccDetails, formLinkBankManually,
       depositMoneyNow, formAddFunds,
+      isAccountEmpty,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -139,7 +145,7 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm && !isAccountEmpty} />
         </div>
         <p className="center-align grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}

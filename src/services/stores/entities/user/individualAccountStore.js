@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find, get } from 'lodash';
-import { bankAccountStore, uiStore, userDetailsStore, individualAccountStore } from '../../index';
+import { bankAccountStore, uiStore, userDetailsStore, individualAccountStore, userStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -27,19 +27,21 @@ class IndividualAccountStore {
 
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-    uiStore.setProgress();
     const payLoad = {
       accountId: get(accountDetails, 'details.accountId') || this.individualAccId,
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
       bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+        uiStore.setProgress();
         client
           .mutate({
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
           .then(() => {
+            uiStore.setProgress(false);
+            bankAccountStore.resetLinkBank();
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           })
@@ -88,7 +90,7 @@ class IndividualAccountStore {
             variables,
           })
           .then(action((result) => {
-            // userDetailsStore.getUser(userStore.currentUser.sub);
+            userDetailsStore.getUser(userStore.currentUser.sub);
             if (result.data.upsertInvestorAccount) {
               this.individualAccId = result.data.upsertInvestorAccount.accountId;
               const { linkedBank } = result.data.upsertInvestorAccount;
@@ -141,7 +143,8 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        individualAccountStore.setStepToBeRendered(2);
+        const renderStep = bankAccountStore.isAccountEmpty ? this.stepToBeRendered : 2;
+        individualAccountStore.setStepToBeRendered(renderStep);
         // if (!this.isManualLinkBankSubmitted && (
         //   bankAccountStore.formLinkBankManually.meta.isValid ||
         //   !isEmpty(bankAccountStore.plaidAccDetails))) {
@@ -157,7 +160,6 @@ class IndividualAccountStore {
   resetStoreData = () => {
     this.stepToBeRendered = 0;
     this.submited = false;
-    this.isManualLinkBankSubmitted = false;
     this.individualAccId = null;
   }
 }

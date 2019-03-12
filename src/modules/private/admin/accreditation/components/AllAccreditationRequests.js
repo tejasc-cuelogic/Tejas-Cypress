@@ -41,7 +41,6 @@ export default class AllAccreditationRequests extends Component {
                 <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
                 <Table.HeaderCell>Method</Table.HeaderCell>
-                <Table.HeaderCell>Box Link</Table.HeaderCell>
                 <Table.HeaderCell textAlign="center" />
               </Table.Row>
             </Table.Header>
@@ -67,7 +66,7 @@ export default class AllAccreditationRequests extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
-                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') &&
+                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') && accreditation.netWorth &&
                           <Aux><br /><b>Net Worth: </b>
                             {ACCREDITATION_NETWORTH_LABEL[accreditation.netWorth]}
                           </Aux>
@@ -80,7 +79,12 @@ export default class AllAccreditationRequests extends Component {
                       </p>
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ? 'Uploads' : 'Verifier'}
+                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
+                        accreditation.assetsUpload[0].fileInfo &&
+                        accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
+                          <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >Uploads</a>
+                        : <p className="intro-text">N/A</p>
+                        : 'Verifier'}
                         {accreditation.verifier &&
                           <Aux>
                             <br /><b>Role: </b> {accreditation.verifier.role}
@@ -88,14 +92,6 @@ export default class AllAccreditationRequests extends Component {
                           </Aux>
                         }
                       </p>
-                    </Table.Cell>
-                    <Table.Cell>
-                      {accreditation.assetsUpload && accreditation.assetsUpload.length &&
-                      accreditation.assetsUpload[0].fileInfo &&
-                      accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                        <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
-                      : <p className="intro-text">N/A</p>
-                      }
                     </Table.Cell>
                     {accreditation.accreditationStatus === 'REQUESTED' ?
                       <Actions
