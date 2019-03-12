@@ -14,7 +14,7 @@ export default class AddFunds extends Component {
     this.props.bankAccountStore.validateForm('formAddFunds');
   }
   componentWillUnmount() {
-    this.props.bankAccountStore.resetShowAddFunds();
+    // this.props.bankAccountStore.resetShowAddFunds();
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);

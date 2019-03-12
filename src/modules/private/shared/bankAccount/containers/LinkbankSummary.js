@@ -5,23 +5,38 @@ import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { ListErrors } from '../../../../../theme/shared';
+import { validationActions } from '../../../../../services/actions';
 
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'accountStore', 'iraAccountStore', 'entityAccountStore')
 @withRouter
 @observer
-
 export default class LinkbankSummary extends React.Component {
-  componentDidMount() {
-    const { plaidAccDetails } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(isEmpty(plaidAccDetails));
+  componentDidUpdate() {
+    const { isAccountEmpty } = this.props.bankAccountStore;
+    this.props.uiStore.setProgress(!isAccountEmpty);
   }
 
   handleSubmit = () => {
-    this.props.bankAccountStore.setShowAddFunds();
+    const { investmentAccType } = this.props.accountStore;
+    const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
+    this.props.bankAccountStore.resetAddFundsForm();
+    this.props[accTypeStore].createAccount(currentStep).then(() => {
+      if (investmentAccType === 'individual') {
+        this.props[accTypeStore].setStepToBeRendered(1);
+        // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
+      } else {
+        this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
+        this.props.bankAccountStore.setLinkBankSummary(false);
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.bankAccountStore.setShowAddFunds();
+      }
+    });
   }
 
   changeLinkbank = () => {
     this.props.bankAccountStore.setBankLinkInterface('list');
+    this.props.bankAccountStore.setLinkBankSummary(false);
     this.props.uiStore.clearErrors();
   }
 
@@ -72,7 +87,9 @@ export default class LinkbankSummary extends React.Component {
         <div className="center-align mt-30">
           <Button primary size="large" className="relaxed" content="Continue" onClick={() => this.handleSubmit()} disabled={errors || !bankAccountNumber} />
         </div>
-        <Button color="green" className="link-button mt-30" content="or change linked bank" onClick={() => this.changeLinkbank()} />
+        <div className="center-align mt-30">
+          <Button color="green" className="link-button mt-30" content="or change linked bank" onClick={() => this.changeLinkbank()} />
+        </div>
       </Aux>
     );
   }
