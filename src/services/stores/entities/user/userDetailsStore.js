@@ -494,7 +494,8 @@ export class UserDetailsStore {
 
   @computed
   get getAnalyticsUserId() {
-    return this.userDetails ? get(this.userDetails, 'id') : false;
+    return this.userDetails ?
+      (get(this.userDetails, 'wpUserId') || get(this.userDetails, 'id')) : false;
   }
 }
 
