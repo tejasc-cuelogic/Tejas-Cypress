@@ -433,10 +433,8 @@ export const getOfferingDetails = gql`
           accountNumber
           businessCapitalization
           useOfProceeds {
-            minOfferingExpenseAmount
-            minOfferingExpenseAmountDescription
-            maxOfferingExpenseAmount
-            maxOfferingExpenseAmountDescription
+            offeringExpenseAmount
+            offeringExpenseAmountDescription
           }
           equityShareholderRights
           security {
