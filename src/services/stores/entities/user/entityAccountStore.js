@@ -106,7 +106,7 @@ class EntityAccountStore {
     return this.FIN_INFO_FRM.meta.isValid && this.GEN_INFO_FRM.meta.isValid
       && this.TRUST_INFO_FRM.meta.isValid &&
       this.PERSONAL_INFO_FRM.meta.isValid && this.FORM_DOCS_FRM.meta.isValid &&
-      (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isValidLinkBank);
+      (bankAccountStore.formLinkBankManually.meta.isValid || !bankAccountStore.isAccountEmpty);
   }
 
   @action
@@ -128,6 +128,7 @@ class EntityAccountStore {
             variables: payLoad,
           })
           .then(() => {
+            bankAccountStore.resetLinkBank();
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })
@@ -383,7 +384,7 @@ class EntityAccountStore {
       }
     } else if (currentStep.name === 'Link bank') {
       bankAccountStore.validateAddFunds();
-      if (bankAccountStore.bankLinkInterface === 'list') {
+      if (bankAccountStore.manualLinkBankSubmitted) {
         currentStep.validate();
       }
       const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
@@ -602,6 +603,7 @@ class EntityAccountStore {
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
     } else if (bankAccountStore.manualLinkBankSubmitted ||
+      bankAccountStore.formAddFunds.fields.value.value === null ||
       (isEmpty(bankAccountStore.plaidAccDetails) &&
       !bankAccountStore.formLinkBankManually.meta.isValid &&
       !bankAccountStore.formAddFunds.meta.isValid)) {
