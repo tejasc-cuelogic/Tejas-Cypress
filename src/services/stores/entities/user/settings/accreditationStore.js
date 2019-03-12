@@ -806,15 +806,15 @@ export class AccreditationStore {
           headerSubheaderTextObj.subHeader = 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
           break;
         case 'NOT_ELGIBLE':
-          headerSubheaderTextObj.header = `Accrditation Verification for ${accountType} Investor Account Required`;
+          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
           headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
           break;
         case 'INACTIVE':
-          headerSubheaderTextObj.header = `Accrditation Verification for ${accountType} Investor Account Required`;
+          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
           headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
           break;
         case 'EXPIRED':
-          // headerSubheaderTextObj.header = `Accrditation Expired for ${accountType}
+          // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
           //  Investor Account- Renewal Required`;
           headerSubheaderTextObj.header = 'Accredited Status Expired';
           headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
