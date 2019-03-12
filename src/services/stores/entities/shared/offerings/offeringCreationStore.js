@@ -1410,6 +1410,8 @@ export class OfferingCreationStore {
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+        offeringsStore.getOne(getOfferingById.id);
+
         // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })
