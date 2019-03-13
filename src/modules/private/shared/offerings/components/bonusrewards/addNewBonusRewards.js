@@ -78,20 +78,22 @@ export default class AddNewBonusReward extends Component {
                 containerclassname="ui relaxed list"
               />
               }
-              {map(ADD_NEW_BONUS_REWARD_FRM.fields, ((field) => {
-                if (!field.key) {
-                  return null;
-                }
-                return (
-                  <FormCheckbox
-                    fielddata={field}
-                    name={field.key}
-                    changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
-                    defaults
-                    containerclassname="ui list rewards-tier"
-                  />
-                );
-              }))}
+              <div className="bonus-tier-list">
+                {map(ADD_NEW_BONUS_REWARD_FRM.fields, ((field) => {
+                  if (!field.key) {
+                    return null;
+                  }
+                  return (
+                    <FormCheckbox
+                      fielddata={field}
+                      name={field.key}
+                      changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
+                      defaults
+                      containerclassname="ui list rewards-tier"
+                    />
+                  );
+                }))}
+              </div>
               <div className="featured-section">
                 {
                   ['name', 'description'].map(field => (

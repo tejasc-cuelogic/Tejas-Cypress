@@ -82,6 +82,9 @@ export class BusinessAppStore {
   @action
   businessDocChange = (e, res) => {
     this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, Validator.pullValues(e, res));
+    this.BUSINESS_DOC_FRM.meta.isValid = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+      Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
+      this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   };
 
   @computed get getInvestmentTypeTooltip() {
@@ -103,7 +106,10 @@ export class BusinessAppStore {
       status = this.BUSINESS_PERF_FRM.meta.isValid;
     } else if (step === 'documentation') {
       this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM, false, showErrors);
-      status = this.BUSINESS_DOC_FRM.meta.isValid;
+      status = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+        Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
+          this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
+      this.BUSINESS_DOC_FRM.meta.isValid = status;
     }
     return status;
   }

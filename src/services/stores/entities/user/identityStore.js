@@ -1,7 +1,7 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, omit } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, omit, get } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -368,8 +368,8 @@ export class IdentityStore {
 
   startPhoneVerification = (type, address = undefined) => {
     const { user } = userDetailsStore.currentUser.data;
-    const phoneNumber = user.phone.number;
-    const emailAddress = user.email.address;
+    const phoneNumber = address || get(user, 'phone.number');
+    const emailAddress = get(user, 'email.address');
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();

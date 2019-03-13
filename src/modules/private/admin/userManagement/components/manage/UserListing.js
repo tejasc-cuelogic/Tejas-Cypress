@@ -61,6 +61,7 @@ class UserListing extends Component {
                             avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
                             roles: user.roles.map(r => r.scope),
                           }}
+                          base64url
                           size="mini"
                         />
                       </div>
