@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const BUSINESS_GOAL = {
   UPGRADE: 'UPGRADE',
@@ -728,25 +729,25 @@ export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
     {
       congratulations: '',
       header: 'You have been pre-qualified for a NextSeed campaign',
-      message: 'Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at apply@nextseedsecurities.com.',
+      message: <span>Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at <Link to="apply@nextseedsecurities.com">apply@nextseedsecurities.com</Link>.</span>,
       applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
     },
     {
       congratulations: '',
       header: 'You’re almost there',
-      message: 'Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at apply@nextseedsecurities.com.',
+      message: <span>Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at <Link to="apply@nextseedsecurities.com">apply@nextseedsecurities.com</Link>.</span>,
       applicationStage: 'IN_PROGRESS',
     },
     {
       congratulations: 'Congratulations!',
       header: 'We’re reviewing your application',
-      message: 'Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at apply@nextseedsecurities.com.',
+      message: <span>Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at <Link to="apply@nextseedsecurities.com">apply@nextseedsecurities.com</Link>.</span>,
       applicationStatus: 'APPLICATION_SUBMITTED',
     },
     {
       congratulations: 'Congratulations!',
       header: 'You’ve received an offer!',
-      message: 'We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at apply@nextseedsecurities.com.',
+      message: <span>We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at <Link to="apply@nextseedsecurities.com">apply@nextseedsecurities.com</Link>.</span>,
       applicationStatus: 'APPLICATION_OFFERED',
     },
   ],

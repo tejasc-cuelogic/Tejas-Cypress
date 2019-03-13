@@ -2138,10 +2138,13 @@ svg:not(:root).recharts-surface{
 		}
 		.chartLegends li{
 			font-size:@22px;
+			line-height: 30px;
 			span{
 				font-size:@13px;
 				color:@fullBlack;
-				vertical-align:top;
+				i {
+					color: @neutral-offdark;
+				}
 			}
 		}
 	}
@@ -2871,4 +2874,7 @@ input[type='range']::-webkit-slider-thumb {
 		border-width: 15px 0 15px 15px;
 		border-color: transparent transparent transparent @white;
 	}
+}
+.fr-view span[style~="color:"] a {
+	color: @primary-one !important;
 }
