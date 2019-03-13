@@ -4,7 +4,6 @@ import Aux from 'react-aux';
 import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
-import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 991;
@@ -17,9 +16,6 @@ export default class CampaignSecondaryMenu extends Component {
   }
   render() {
     const { campaign } = this.props.campaignStore;
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-    && campaign.offering.launch.terminationDate;
-    const diff = DataFormatter.diffDays(terminationDate);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const { navStatus, subNavStatus } = this.props.navStore;
@@ -33,7 +29,9 @@ export default class CampaignSecondaryMenu extends Component {
               {!isMobile &&
                 <Aux>
                   <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  <List.Item>{diff} days left</List.Item>
+                  {isClosed && get(campaign, 'closureSummary.repayment.count') &&
+                    <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
+                  }
                 </Aux>
             }
               {!isClosed &&

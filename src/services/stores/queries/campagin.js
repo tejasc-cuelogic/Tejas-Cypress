@@ -318,6 +318,9 @@ export const campaignDetailsQuery = gql`
     closureSummary {
       totalInvestmentAmount
       totalInvestorCount
+      repayment {
+        count
+      }
     }
     comments {
       id
