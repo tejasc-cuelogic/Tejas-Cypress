@@ -52,7 +52,7 @@ class Overview extends Component {
                         {keyTerms && keyTerms.shorthandBusinessName ?
                           keyTerms.shorthandBusinessName
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -62,20 +62,10 @@ class Overview extends Component {
                         {keyTerms && keyTerms.securities ?
                           CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
-                    {/* <Table.Row verticalAlign="top">
-                      <Table.Cell>Entity Type</Table.Cell>
-                      <Table.Cell>
-                        {keyTerms && keyTerms.legalBusinessType ?
-                          BUSINESS_TYPE_ENUM[keyTerms.legalBusinessType]
-                          :
-                          'NA'
-                        }
-                      </Table.Cell>
-                    </Table.Row> */}
                     <Table.Row verticalAlign="top">
                       <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
                       <Table.Cell>
@@ -83,7 +73,7 @@ class Overview extends Component {
                           offering.launch.targetDate ?
                           moment(offering.launch.targetDate).format('ll')
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -97,7 +87,7 @@ class Overview extends Component {
                       </Table.Cell>
                       {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                         <Table.Cell>
-                          {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'NA'}{' '}
+                          {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'N/A'}{' '}
                           <HtmlEditor
                             readOnly
                             content={(keyTerms && keyTerms.investmentMultipleSummary ?
@@ -107,7 +97,7 @@ class Overview extends Component {
                         :
                         <Table.Cell>
                           {keyTerms && keyTerms.interestRate ?
-                            `${keyTerms.interestRate}%` : 'NA'
+                            `${keyTerms.interestRate}%` : 'N/A'
                           }
                         </Table.Cell>
                       }
@@ -116,7 +106,7 @@ class Overview extends Component {
                       <Table.Cell>Payments</Table.Cell>
                       <Table.Cell>
                         {keyTerms && keyTerms.frequencyOfPayments ?
-                          keyTerms.frequencyOfPayments : 'NA'}
+                          keyTerms.frequencyOfPayments : 'N/A'}
                       </Table.Cell>
                     </Table.Row>
                     {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
@@ -124,9 +114,9 @@ class Overview extends Component {
                         <Table.Cell>Revenue Sharing Percentage</Table.Cell>
                         <Table.Cell>
                           {keyTerms && keyTerms.revSharePercentage ?
-                            keyTerms.revSharePercentage
+                            `${keyTerms.revSharePercentage}%`
                             :
-                            'NA'}
+                            'N/A'}
                           <HtmlEditor
                             readOnly
                             content={(keyTerms && keyTerms.revShareSummary ?
@@ -143,7 +133,7 @@ class Overview extends Component {
                         {keyTerms && keyTerms.maturity ?
                           `${keyTerms.maturity} Months to Offering Summary`
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -153,7 +143,7 @@ class Overview extends Component {
                         {keyTerms && keyTerms.securityInterest ?
                           keyTerms.securityInterest
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -166,7 +156,7 @@ class Overview extends Component {
                           the Issuer or any voting or management rights with respect
                           to the Issuer as a result of an investment in Securities.`
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -191,7 +181,7 @@ class Overview extends Component {
                       offering.launch.targetDate ?
                       moment(offering.launch.targetDate).format('MMM Do YYYY')
                       :
-                      'NA'
+                      'N/A'
                     }
                   </Statistic.Value>
                 </Statistic>
@@ -201,10 +191,18 @@ class Overview extends Component {
                     {keyTerms && keyTerms.maturity ?
                       `${keyTerms.maturity} months`
                       :
-                      'NA'
+                      'N/A'
                     }
                   </Statistic.Value>
                 </Statistic>
+                {get(offering, 'closureSummary.repaymentCompleteDate') && (
+                  <Statistic>
+                    <Statistic.Label>Payoff Date</Statistic.Label>
+                    <Statistic.Value>
+                      {get(offering, 'closureSummary.repaymentCompleteDate') || 'N/A'}
+                    </Statistic.Value>
+                  </Statistic>
+                )}
               </Statistic.Group>
             </Grid.Column>
           </Grid>

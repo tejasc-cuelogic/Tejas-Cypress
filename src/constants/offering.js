@@ -51,7 +51,7 @@ export const INDUSTRY_TYPES_ICONS = {
   FASHION_AND_APPAREL: 'ns-store',
   OFFICE: 'ns-bag',
   COMMERCIAL_REAL_ESTATE: 'ns-real-estate',
-  OTHER: '',
+  OTHER: 'ns-other',
 };
 export const CAMPAIGN_OFFERING_STATUS = {
   FUNDED: 'Funded',
