@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { includes } from 'lodash';
+import moment from 'moment';
+import { includes, orderBy } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Grid, Card, Button } from 'semantic-ui-react';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
+import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
 import InvestmentDetails from './InvestmentDetails';
@@ -18,10 +20,17 @@ import ChangeInvestmentLimit from '../../../../public/offering/components/invest
 @inject('portfolioStore')
 @observer
 export default class Portfolio extends Component {
+  state = { inActiveItems: [] }
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     this.props.portfolioStore.calculateInvestmentType();
+  }
+  toggleAccordion = (of) => {
+    const { inActiveItems } = this.state;
+    const updatedList = inActiveItems.includes(of) ? inActiveItems.filter(i => i !== of) :
+      [...inActiveItems, of];
+    this.setState({ inActiveItems: updatedList });
   }
   render() {
     const { match, portfolioStore } = this.props;
@@ -47,6 +56,9 @@ export default class Portfolio extends Component {
         },
       ],
     };
+    const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => DataFormatter.diffDays(o.offering.offering.launch.terminationDate), ['asc']) : [];
+    const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => moment(o.offering.offering.launch.terminationDate).unix(), ['desc']) : [];
+    const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => moment(o.offering.offering.launch.terminationDate).unix(), ['desc']) : [];
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
@@ -54,14 +66,14 @@ export default class Portfolio extends Component {
           <PortfolioAllocations pieChart={getPieChartData} />
         }
         <Header as="h4">My Investments</Header>
-        {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
-          <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
+        {pendingSorted.length ?
+          <InvestmentList inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.active.length ?
-          <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
+        {activeSorted.length ?
+          <InvestmentList inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.completed.length ?
-          <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
+        {completedSorted.length ?
+          <InvestmentList inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&

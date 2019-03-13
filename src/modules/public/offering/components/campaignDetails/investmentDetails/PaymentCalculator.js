@@ -34,7 +34,7 @@ export default class PaymentCalculator extends Component {
           <XAxis dataKey="month" />
           <YAxis tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
-            formatter={(value, name, props) => [this.formatY(props.payload[name]), name]}
+            formatter={(value, name, props) => this.formatY(props.payload[name])}
           />
           <Legend />
           <Bar dataKey="Projected total payment" barSize={7} onMouseOver={this.handleHover}>
