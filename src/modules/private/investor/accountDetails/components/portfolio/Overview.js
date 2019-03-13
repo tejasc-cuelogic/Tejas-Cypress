@@ -114,7 +114,8 @@ class Overview extends Component {
                         <Table.Cell>Revenue Sharing Percentage</Table.Cell>
                         <Table.Cell>
                           {keyTerms && keyTerms.revSharePercentage ?
-                            `${keyTerms.revSharePercentage}%`
+                            keyTerms.revSharePercentage.includes('%') ?
+                              keyTerms.revSharePercentage : `${keyTerms.revSharePercentage}%`
                             :
                             'N/A'}
                           <HtmlEditor
