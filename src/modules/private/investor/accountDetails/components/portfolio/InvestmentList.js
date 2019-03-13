@@ -14,11 +14,11 @@ const InvestmentList = (props) => {
   const { investments, match } = props;
   return (
     <Accordion fluid styled className="card-style">
-      <Accordion.Title active className="text-capitalize">
+      <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active className="text-capitalize">
         <Icon className="ns-chevron-up" />
         {`${props.listOf} (${props.listOfCount})`}
       </Accordion.Title>
-      <Accordion.Content active>
+      <Accordion.Content active={props.inActiveItems.includes(props.listOf)}>
         {!investments || !investments.length ?
           <InlineLoader text="No data available" /> :
           <div className="table-wrapper">
