@@ -24,7 +24,7 @@ export default class CashMovement extends Component {
         >
           <Legend />
           <XAxis axisLine={false} dataKey="name" interval={4} />
-          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="left" />
+          <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
             formatter={(value, name, props) => this.formatY(props.payload[name])}
           />

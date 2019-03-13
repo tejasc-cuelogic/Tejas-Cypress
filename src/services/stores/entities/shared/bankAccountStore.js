@@ -179,10 +179,9 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-    const isValidAddFunds = this.formAddFunds.meta.isValid;
-    if (isValidAddFunds && this.depositMoneyNow) {
-      accountAttributes.initialDepositAmount = this.formAddFunds.fields.value.value;
-    }
+
+    accountAttributes.initialDepositAmount = this.depositMoneyNow ?
+      this.formAddFunds.fields.value.value : 0;
     return accountAttributes;
   }
 
@@ -193,7 +192,7 @@ export class BankAccountStore {
 
   @computed
   get isPlaidDirty() {
-    return (!isEmpty(this.plaidAccDetails) &&
+    return (this.isAccountPresent &&
     this.formLinkBankManually.meta.isDirty &&
     this.formAddFunds.meta.isDirty &&
     !this.linkbankSummary) ||

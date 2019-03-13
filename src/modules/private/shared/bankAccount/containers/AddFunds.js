@@ -11,7 +11,7 @@ import { validationActions } from '../../../../../services/actions';
 @observer
 export default class AddFunds extends Component {
   componentDidMount() {
-    this.props.bankAccountStore.validateForm('formAddFunds');
+    // this.props.bankAccountStore.validateForm('formAddFunds');
   }
   componentWillUnmount() {
     // this.props.bankAccountStore.resetShowAddFunds();
@@ -49,6 +49,7 @@ export default class AddFunds extends Component {
         validate: validationActions.validateLinkBankForm,
       };
       this.props.entityAccountStore.createAccount(currentStep).then(() => {
+        this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
         this.props.entityAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
       });
@@ -60,6 +61,8 @@ export default class AddFunds extends Component {
         stepToBeRendered: 4,
       };
       this.props.iraAccountStore.createAccount(currentStep).then(() => {
+        // this.props.bankAccountStore.resetAddFundsForm();
+        this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
         this.props.iraAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
       });

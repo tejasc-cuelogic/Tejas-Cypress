@@ -4,7 +4,7 @@ import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
-import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
+import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
@@ -25,6 +25,8 @@ class Overview extends Component {
       campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
+    const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '0 Months';
+    const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Aux>
         <div className="inner-content-spacer bg-offwhite">
@@ -129,10 +131,16 @@ class Overview extends Component {
                       null
                     }
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>Maturity</Table.Cell>
-                      <Table.Cell>
-                        {keyTerms && keyTerms.maturity ?
-                          `${keyTerms.maturity} Months to Offering Summary`
+                      <Table.Cell width={5}><b>Maturity</b>{' '}
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                          position="top center"
+                        />
+                      </Table.Cell>
+                      <Table.Cell className="grey-header">
+                        {maturityMonth ?
+                          `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
                           :
                           'N/A'
                         }
