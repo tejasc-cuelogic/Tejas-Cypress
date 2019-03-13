@@ -108,7 +108,7 @@ export default class AccountSetup extends Component {
                 <SummaryHeader details={summaryDetails(summary)} />
                 <Card fluid>
                   <Card.Content>
-                    <Header as="h4">Cash Movement, LTM</Header>
+                    <Header as="h4">Cash Movement from Inception</Header>
                     <CashMovement data={summary.cashMovement} />
                   </Card.Content>
                 </Card>

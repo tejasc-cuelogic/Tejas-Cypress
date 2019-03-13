@@ -129,7 +129,7 @@ export class TransactionsStore {
   }
 
   @action
-  transactionChange = (requestID, transStatus, actionName) => {
+  transactionChange = (requestID, transStatus, actionName, direction = '') => {
     this.setDataValue('btnLoader', requestID);
     client
       .mutate({
@@ -141,7 +141,14 @@ export class TransactionsStore {
         this.initRequest(transStatus);
         Helper.toast(`Transaction ${actionName} successfully.`, 'success');
       })
-      .catch(() => { Helper.toast('Something went wrong please try again after sometime.', 'error'); this.setDataValue('btnLoader', false); });
+      .catch((error) => {
+        if (direction === 'WITHDRAWAL' && transStatus === 'PENDING') {
+          Helper.toast(error.message, 'error');
+        } else {
+          Helper.toast('Something went wrong please try again after sometime.', 'error');
+        }
+        this.setDataValue('btnLoader', false);
+      });
   };
 
   @action
