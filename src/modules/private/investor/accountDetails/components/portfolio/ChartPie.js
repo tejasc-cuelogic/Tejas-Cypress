@@ -55,17 +55,21 @@ export default class ChartPie extends Component {
 
   renderLegend = (props) => {
     const { payload } = props;
-    const hasIcons = this.props.icons ? true : false;
+    const hasIcons = !!this.props.icons;
     return (
       <ul className="chartLegends">
         {
-          payload.map(entry => {
+          payload.map((entry) => {
             const icon = get(entry, 'payload.payload.key');
             return (
               <li style={{ color: entry.color }} key={`item-${entry.value}`}>
-                <span>{entry.icon}{hasIcons && <Icon className={this.props.icons[icon]} />} {entry.value}</span>
+                <span>
+                  {entry.icon}
+                  {hasIcons && <Icon className={this.props.icons[icon]} />}
+                  {entry.value}
+                </span>
               </li>
-            )
+            );
           })
         }
       </ul>
