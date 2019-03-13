@@ -21,12 +21,21 @@ export default class Plaid extends Component {
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
     // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     // const { manualLinkBankSubmitted } = this.props.bankAccountStore;
+    this.setLinkBankSummary();
     this.props.uiStore.clearErrors();
   }
 
-  componentDidUpdate() {
-    const { linkbankSummary } = this.props.bankAccountStore;
-    this.props.bankAccountStore.setLinkBankSummary(linkbankSummary);
+  setLinkBankSummary = () => {
+    const {
+      isAccountPresent,
+      showAddFunds,
+      manualLinkBankSubmitted,
+    } = this.props.bankAccountStore;
+    if (isAccountPresent &&
+      !showAddFunds &&
+      !manualLinkBankSubmitted) {
+      this.props.bankAccountStore.setLinkBankSummary();
+    }
   }
   handleBankSelect = (referenceLink) => {
     // const returnResult = bankAccountActions.bankSelect(institutionID, action);

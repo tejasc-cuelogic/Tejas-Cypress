@@ -603,10 +603,8 @@ class EntityAccountStore {
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
     } else if (bankAccountStore.manualLinkBankSubmitted ||
-      bankAccountStore.formAddFunds.fields.value.value === null ||
-      (isEmpty(bankAccountStore.plaidAccDetails) &&
-      !bankAccountStore.formLinkBankManually.meta.isValid &&
-      !bankAccountStore.formAddFunds.meta.isValid)) {
+      bankAccountStore.isPlaidDirty ||
+      bankAccountStore.linkbankSummary) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);
