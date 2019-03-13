@@ -12,13 +12,14 @@ const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Am
 const InvestmentList = (props) => {
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
   const { investments, match } = props;
+  const isActive = !props.inActiveItems.includes(props.listOf);
   return (
     <Accordion fluid styled className="card-style">
-      <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active className="text-capitalize">
-        <Icon className="ns-chevron-up" />
+      <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
+        <Icon className={`ns-chevron-${isActive ? 'up' : 'down'}`} />
         {`${props.listOf} (${props.listOfCount})`}
       </Accordion.Title>
-      <Accordion.Content active={props.inActiveItems.includes(props.listOf)}>
+      <Accordion.Content active={!props.inActiveItems.includes(props.listOf)}>
         {!investments || !investments.length ?
           <InlineLoader text="No data available" /> :
           <div className="table-wrapper">
