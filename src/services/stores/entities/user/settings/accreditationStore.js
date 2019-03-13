@@ -763,6 +763,7 @@ export class AccreditationStore {
     this.showAccountList = true;
     investmentStore.resetAccTypeChanged();
     investmentStore.setFieldValue('disableNextbtn', true);
+    investmentStore.setFieldValue('isGetTransferRequestCall', false);
   }
   checkIsAccreditationExpired = (expirationDate) => {
     let dateDiff = '';
@@ -815,7 +816,6 @@ export class AccreditationStore {
           break;
         case 'EXPIRED':
           // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
-          //  Investor Account- Renewal Required`;
           headerSubheaderTextObj.header = 'Accredited Status Expired';
           headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
           break;

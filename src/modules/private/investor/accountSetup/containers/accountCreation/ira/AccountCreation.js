@@ -22,7 +22,7 @@ export default class AccountCreation extends React.Component {
     this.updateUser();
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
-    this.props.bankAccountStore.resetLinkBank();
+    this.props.bankAccountStore.resetStoreData();
     this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
@@ -96,7 +96,7 @@ export default class AccountCreation extends React.Component {
           name: 'Identity',
           component: <Identity />,
           isValid: IDENTITY_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
-          isDirty: IDENTITY_FRM.meta.isDirty,
+          isDirty: IDENTITY_FRM.meta.isDirty && isPlaidDirty,
           validate: validationActions.validateIRAIdentityInfo,
           form: 'IDENTITY_FRM',
           stepToBeRendered: 5,

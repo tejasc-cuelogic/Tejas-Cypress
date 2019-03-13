@@ -49,6 +49,7 @@ export const INDUSTRY_TYPES_ICONS = {
   HEALTH_AND_WELLNESS: 'ns-beauty-spa',
   FITNESS: 'ns-dumbbells',
   FASHION_AND_APPAREL: 'ns-store',
+  OFFICE: 'ns-bag',
   COMMERCIAL_REAL_ESTATE: 'ns-real-estate',
   OTHER: '',
 };
