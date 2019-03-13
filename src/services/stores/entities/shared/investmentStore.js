@@ -524,11 +524,35 @@ export class InvestmentStore {
     let matchedTierAmount = 0;
     if (campaign && campaign.bonusRewards && campaign.bonusRewards.length) {
       campaign.bonusRewards.map((reward) => {
-        const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
+        // const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
+        const tiersArray = orderBy(reward.tiers);
         tiersArray.map((tier) => {
-          if (this.investmentAmount >= tier.amount &&
-            (matchedTierAmount === 0 || tier.amount === matchedTierAmount)) {
-            matchedTierAmount = tier.amount;
+          if (this.investmentAmount >= tier &&
+            (matchedTierAmount === 0 || tier === matchedTierAmount)) {
+            matchedTierAmount = tier;
+            bonusRewards.push(reward);
+          }
+          return null;
+        });
+        return null;
+      });
+      bonusRewards = [...new Set(toJS(bonusRewards))];
+    }
+    return bonusRewards;
+  }
+
+  investmentBonusRewards = (investedAmount) => {
+    const { campaign } = campaignStore;
+    const offeringInvestedAmount = money.floatToAmount(investedAmount || 0);
+    let bonusRewards = [];
+    let matchedTierAmount = 0;
+    if (campaign && campaign.bonusRewards && campaign.bonusRewards.length) {
+      campaign.bonusRewards.map((reward) => {
+        const tiersArray = orderBy(reward.tiers);
+        tiersArray.map((tier) => {
+          if (offeringInvestedAmount >= tier &&
+            (matchedTierAmount === 0 || tier === matchedTierAmount)) {
+            matchedTierAmount = tier;
             bonusRewards.push(reward);
           }
           return null;
