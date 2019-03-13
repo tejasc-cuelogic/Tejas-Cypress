@@ -20,6 +20,7 @@ export default class ManualForm extends Component {
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     const { investmentAccType } = this.props.accountStore;
     const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';

@@ -472,6 +472,9 @@ export const PUBLIC_NAV = [
           {
             title: 'Gallery', to: '#gallery', useRefLink: true,
           },
+          {
+            title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true,
+          },
         ],
       },
       {

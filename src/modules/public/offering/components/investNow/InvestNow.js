@@ -52,6 +52,7 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
       this.props.investmentStore.setFieldValue('disableNextbtn', false);
+      this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
     } else if (step === 0) {
       this.handleStepChnageOnPreviousForAlert();
     }
@@ -71,6 +72,7 @@ export default class InvestNow extends React.Component {
     const stepRendered = currentStep && currentStep > 0 ? currentStep - 1 : 0;
     this.props.investmentStore.setStepToBeRendered(stepRendered);
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
+    this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
     this.props.history.push('invest-now');
   }
 

@@ -24,8 +24,8 @@ export default class Summary extends Component {
     }
   }
   componentDidUpdate() {
-    const { isAccountEmpty } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(!isAccountEmpty);
+    const { isValidIraForm } = this.props.iraAccountStore;
+    this.props.uiStore.setProgress(!isValidIraForm);
   }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
@@ -74,7 +74,7 @@ export default class Summary extends Component {
     const {
       plaidAccDetails, formLinkBankManually,
       formAddFunds, depositMoneyNow,
-      isAccountEmpty,
+      isAccountPresent,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -139,7 +139,7 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm && !isAccountEmpty} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm && !isAccountPresent} />
         </div>
         <p className="center-align mt-30 grey-header">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
