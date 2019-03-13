@@ -57,7 +57,7 @@ class InvestmentDetails extends Component {
           title: 'Total Raised Amount', content: get(getInvestor, 'totalRaisedAmount') ? get(getInvestor, 'totalRaisedAmount') : 'NA', type: 1,
         },
         {
-          title: 'Funded Date', content: get(getInvestor, 'fundedDate') ? moment(get(getInvestor, 'fundedDate')).format('ll') : 'NA', info: 'Date on which funds were disbursed to the issuer.',
+          title: 'Close Date', content: get(campaign, 'offering.launch.terminationDate') ? moment(get(campaign, 'offering.launch.terminationDate')).format('ll') : 'NA',
         },
         {
           title: 'My Investment', content: get(getInvestor, 'myInvestment') ? get(getInvestor, 'myInvestment') : 'NA', type: 1,
