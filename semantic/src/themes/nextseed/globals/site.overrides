@@ -2872,3 +2872,6 @@ input[type='range']::-webkit-slider-thumb {
 		border-color: transparent transparent transparent @white;
 	}
 }
+.fr-view span[style~="color:"] a {
+	color: @primary-one !important;
+}
