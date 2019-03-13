@@ -604,6 +604,12 @@ export class InvestmentStore {
       this.setFieldValue('disableNextbtn', false);
     }
   }
+
+  @action
+  resetFormErrors = (form) => {
+    this[form].fields.investmentAmount.error = undefined;
+    this[form].meta.isValid = true;
+  }
 }
 
 export default new InvestmentStore();

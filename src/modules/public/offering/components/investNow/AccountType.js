@@ -205,6 +205,9 @@ class AccountType extends Component {
       redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
         `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && isRegulationCheck && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
+    if (isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) {
+      return <Spinner loaderMessage="Loading.." />;
+    }
     let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : offeringAccreditatoinStatusMessage(selectedAccountStatus);
     let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
@@ -246,7 +249,7 @@ class AccountType extends Component {
                         <Aux>
                           <Link to={redirectURL} className="text-link">
                             <Icon className="ns-arrow-right" color="green" />
-                            Apply for accreditation
+                            Apply for accrditation
                           </Link>
                           <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         </Aux>
