@@ -42,7 +42,7 @@ export const INDUSTRY_TYPES_ICONS = {
   FOOD_AND_BEVERAGE: 'ns-food-light',
   REAL_ESTATE: 'ns-real-estate',
   FITNESS_AND_WELLNESS: 'ns-dumbbells',
-  HOSPITALITY: 'ns-first-aid',
+  HOSPITALITY: 'ns-hospitality-2',
   TECHNOLOGY: 'ns-technology',
   RESTAURANT_AND_BAR: 'ns-food-light',
   BREWERY_AND_BREWPUB: 'ns-bar',
