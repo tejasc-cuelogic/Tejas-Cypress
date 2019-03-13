@@ -1,7 +1,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { forEach } from 'lodash';
+import { forEach, sortBy } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
@@ -110,10 +110,11 @@ export class PortfolioStore {
     const formattedData = [];
     const rawData = type === 'cashMovement' ? this.summary.cashMovement : (this.PayOffData.data && this.PayOffData.data.getMonthlyPaymentsToInvestorByOffering) || [];
     if (rawData) {
-      rawData.map((k) => {
+      sortBy(rawData, ['yearMonth']).map((k) => {
         formattedData.push({
           name: moment(k.yearMonth).format('MMM YYYY'),
           Payment: k.payment ? parseFloat(k.payment) : 0,
+          Invested: k.invested ? parseFloat(k.invested) : 0,
           'Paid to date': k.paidToDate ? parseFloat(k.paidToDate) : 0,
         });
         return null;
