@@ -20,7 +20,7 @@ export default class LinkbankSummary extends React.Component {
     const { investmentAccType } = this.props.accountStore;
     const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
     const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
-    this.props.bankAccountStore.resetAddFundsForm();
+    // this.props.bankAccountStore.resetAddFundsForm();
     this.props[accTypeStore].createAccount(currentStep).then(() => {
       if (investmentAccType === 'individual') {
         this.props[accTypeStore].setStepToBeRendered(1);
