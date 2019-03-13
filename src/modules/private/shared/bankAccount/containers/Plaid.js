@@ -73,7 +73,7 @@ export default class Plaid extends Component {
       return <AddFunds />;
     }
 
-    if (linkbankSummary) {
+    if (action !== 'change' && linkbankSummary) {
       return <LinkbankSummary />;
     }
     if (bankLinkInterface === 'form') {
