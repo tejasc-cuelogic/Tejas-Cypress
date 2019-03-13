@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Icon } from 'semantic-ui-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend, Sector } from 'recharts';
+import { get } from 'lodash';
 // import Helper from '../../../../../helper/utility';
 
 /*
@@ -53,12 +55,18 @@ export default class ChartPie extends Component {
 
   renderLegend = (props) => {
     const { payload } = props;
+    const hasIcons = this.props.icons ? true : false;
     return (
       <ul className="chartLegends">
         {
-          payload.map(entry => (
-            <li style={{ color: entry.color }} key={`item-${entry.value}`}><span>{entry.icon} {entry.value}</span></li>
-          ))
+          payload.map(entry => {
+            const icon = get(entry, 'payload.payload.key');
+            return (
+              <li style={{ color: entry.color }} key={`item-${entry.value}`}>
+                <span>{entry.icon}{hasIcons && <Icon className={this.props.icons[icon]} />} {entry.value}</span>
+              </li>
+            )
+          })
         }
       </ul>
     );
