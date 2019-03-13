@@ -25,11 +25,17 @@ class TransferRequest extends Component {
     setStepToBeRendered(2);
   }
   componentWillUnmount() {
-    const { stepToBeRendered, setStepToBeRendered, setFieldValue } = this.props.investmentStore;
+    const {
+      stepToBeRendered,
+      setStepToBeRendered,
+      setFieldValue,
+      resetFormErrors,
+    } = this.props.investmentStore;
     if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
     setFieldValue('investmentFlowErrorMessage', null);
+    resetFormErrors('INVESTMONEY_FORM');
   }
   handleShowTransferErrRequest = () => {
     this.props.investmentStore.setShowTransferRequestErr(false);
@@ -74,12 +80,12 @@ class TransferRequest extends Component {
               </Table.Cell>
             </Table.Row>
             {changeInvest &&
-            <Table.Row>
-              <Table.Cell>Previous Investment:</Table.Cell>
-              <Table.Cell collapsing>
-                {Helper.MoneyMathDisplayCurrency(getPreviousInvestedAmount)}
-              </Table.Cell>
-            </Table.Row>
+              <Table.Row>
+                <Table.Cell>Previous Investment:</Table.Cell>
+                <Table.Cell collapsing>
+                  {Helper.MoneyMathDisplayCurrency(getPreviousInvestedAmount)}
+                </Table.Cell>
+              </Table.Row>
             }
             <Table.Row>
               <Table.Cell>
