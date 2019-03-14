@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from 'semantic-ui-react';
 
 const RewardList = ({ list }) => (
-  <Card.Group stackable itemsPerRow={list.length}>
+  <Card.Group stackable itemsPerRow={3}>
     {
       list.map(card => (
         <Card key={card.id}>

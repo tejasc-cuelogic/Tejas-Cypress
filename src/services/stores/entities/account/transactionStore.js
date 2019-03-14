@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import isArray from 'lodash/isArray';
 import money from 'money-math';
-import { get, includes } from 'lodash';
+import { get, includes, orderBy } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, investmentsByOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
@@ -98,7 +99,11 @@ export class TransactionStore {
   @computed get totalRecords() {
     return this.getAllTransactions.totalCount || 0;
   }
-
+  @computed get allPaymentHistoryData() {
+    return this.paymentHistoryData.data &&
+      this.paymentHistoryData.data.getPaymentHistory
+      ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => moment(o.completeDate).unix(), ['desc']) : [];
+  }
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading ||
     this.paymentHistoryData.loading;
