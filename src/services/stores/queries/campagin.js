@@ -314,6 +314,11 @@ export const campaignDetailsQuery = gql`
           }
         }
       }
+      documentation {
+        admin {
+          npa
+        }
+      }
     }
     closureSummary {
       totalInvestmentAmount
