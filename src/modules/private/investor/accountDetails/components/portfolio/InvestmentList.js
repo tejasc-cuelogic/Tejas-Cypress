@@ -67,12 +67,6 @@ const InvestmentList = (props) => {
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
-                          DataFormatter.diffDays(data && data.offering &&
-                            data.offering.offering && data.offering.offering.launch &&
-                            data.offering.offering.launch.terminationDate ?
-                            data.offering.offering.launch.terminationDate : null) <= 0 ?
-                              <Button as={Link} to={`${match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
-                            :
                             null
                           :
                             <Button.Group size="mini" compact>
