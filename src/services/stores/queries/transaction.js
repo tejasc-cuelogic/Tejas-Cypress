@@ -81,13 +81,16 @@ export const paymentHistory = gql`
   }
 `;
 
-export const investmentsByOfferingId = gql`
-  query _getInvestmentsByOfferingId($offeringId: String!) {
-    getInvestmentsByOfferingId(offeringId: $offeringId) {
+export const getInvestmentsByUserIdAndOfferingId = gql`
+  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String!) {
+    getInvestmentsByUserIdAndOfferingId(offeringId: $offeringId, userId: $userId) {
       investmentId
       accountId
       status
       amount
+      agreement {
+        agreementId
+      }
     }
   }
 `;
@@ -178,3 +181,14 @@ mutation transferRequestAdminSync($id: Int!){
   id: $id
   )
 }`;
+
+export const viewLoanAgreement = gql`
+  query viewLoanAgreement($agreementId: Int!, $callbackUrl: String) {
+    viewLoanAgreement(agreementId: $agreementId, callbackUrl: $callbackUrl) {
+      agreementId
+      envelopeId
+      docuSignViewURL
+      npaViewUrl
+    }
+  }
+`;

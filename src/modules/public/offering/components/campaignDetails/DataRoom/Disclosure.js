@@ -20,19 +20,17 @@ class Disclosure extends Component {
       this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated &&
       !this.props.accreditationStore.isUserAccreditated))) {
       return (
-        <div className="updates-modal">
-          <div className="no-updates">
-            <Header as="h3" className="mb-20">
-              This document is only available to accredited investors.
-            </Header>
-            <p>Please confirm your accredited investor status to view this document.</p>
-            {
-              !this.props.userStore.currentUser ?
-                <Button as={Link} to={`/auth/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20" /> :
-                <Button as={Link} to="/app/profile-settings/investment-limits" primary content="Confirm Status" className="mt-20" />
-            }
-          </div>
-        </div>
+        <section className="no-updates center-align bg-offwhite padded">
+          <Header as="h3" className="mb-20 mt-50">
+            This investment is only available to accredited investors.
+          </Header>
+          <p>Please confirm your accredited investor status to access the Data Room.</p>
+          {
+            !this.props.userStore.currentUser ?
+              <Button as={Link} to={`/auth/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" /> :
+              <Button as={Link} to="/app/profile-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+          }
+        </section>
       );
     }
     return (

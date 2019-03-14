@@ -3,7 +3,7 @@ import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -53,7 +53,7 @@ class KeyTermsDetails extends Component {
             <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Offering</b><br />{get(campaign, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[campaign.regulation] : 'NA'}</p>
+            <p><b>Type of Offering</b><br />{get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
@@ -78,7 +78,7 @@ class KeyTermsDetails extends Component {
                     <Table.Cell>
                       <p>
                         {get(KeyTerms, type.key) ?
-                          Helper.CurrencyFormat(get(KeyTerms, type.key))
+                          Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
                           :
                           'NA'}
                       </p>
@@ -169,7 +169,7 @@ class KeyTermsDetails extends Component {
               <Table.Cell width={5} className="neutral-text"><b>Security Interest{' '}</b>
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
-                  content="The Issuer will grant a security interest in all of its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
+                  content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
                   position="top center"
                 />
               </Table.Cell>

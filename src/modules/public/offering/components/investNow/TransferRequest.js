@@ -76,14 +76,14 @@ class TransferRequest extends Component {
             <Table.Row>
               <Table.Cell>Investment Amount:</Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(investmentAmount)}
+                {Helper.CurrencyFormat(investmentAmount, 0)}
               </Table.Cell>
             </Table.Row>
             {changeInvest &&
               <Table.Row>
                 <Table.Cell>Previous Investment:</Table.Cell>
                 <Table.Cell collapsing>
-                  {Helper.MoneyMathDisplayCurrency(getPreviousInvestedAmount)}
+                  {Helper.MoneyMathDisplayCurrency(getPreviousInvestedAmount, false)}
                 </Table.Cell>
               </Table.Row>
             }
@@ -98,20 +98,20 @@ class TransferRequest extends Component {
                 />
               </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.MoneyMathDisplayCurrency(getCurrCashAvailable)}
+                {Helper.MoneyMathDisplayCurrency(getCurrCashAvailable, false)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Available Credit: </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(getCurrCreditAvailable)}
+                {Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-              <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(getTransferRequestAmount)}</Table.HeaderCell>
+              <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>

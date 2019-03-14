@@ -33,7 +33,12 @@ export default class CampaignSecondaryMenu extends Component {
               {!isMobile &&
                 <Aux>
                   <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  <List.Item>{diff} days left</List.Item>
+                  {!isClosed &&
+                    <List.Item>{diff} days left</List.Item>
+                  }
+                  {isClosed && get(campaign, 'closureSummary.repayment.count') &&
+                    <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
+                  }
                 </Aux>
             }
               {!isClosed &&
@@ -45,10 +50,13 @@ export default class CampaignSecondaryMenu extends Component {
                 <List.Header>{get(campaign, 'keyTerms.shorthandBusinessName')}</List.Header>
               </List.Item>
               <List.Item>
-                <List.Header><span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised</List.Header>
+                <List.Header>
+                  <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span>
+                  {!isClosed && (get(campaign, 'keyTerms.securities') === 'TERM_NOTE' || maxFlagStatus || get(campaign, 'stage') === 'LIVE' || get(campaign, 'stage') === 'PROCESSING' || get(campaign, 'stage') === 'LOCK') ? ' raised' : ' invested'}
+                </List.Header>
               </List.Item>
               {!isMobile &&
-              <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
+              <List.Item>{!isClosed && get(campaign, 'keyTerms.securities') === 'TERM_NOTE' ? `${get(campaign, 'keyTerms.interestRate')}% Interest Rate` : `${get(campaign, 'keyTerms.investmentMultiple')}x Investment Multiple`}</List.Item>
             }
             </List>
           </Container>
