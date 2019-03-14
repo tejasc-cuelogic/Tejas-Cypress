@@ -2,13 +2,13 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { Header, Divider, List } from 'semantic-ui-react';
 
 const PrivacyPolicy = () => (
   <Aux>
     <Header as="h2">NextSeed Securities, LLC<br />Privacy Policy</Header>
-    <p>Last updated: Junuary 2018</p>
+    <p>Last updated: March 2019</p>
     <Divider section />
     <div className="justify-text">
       <p>
@@ -66,7 +66,7 @@ const PrivacyPolicy = () => (
         We will continue to conduct our business in a manner that conforms with our pledge
         to you, your expectations and all applicable laws.  If you have questions about
         this Privacy Policy, please contact us at{' '}
-        <Link className="positive-text" to="/agreements/legal/privacy-policy">privacy@nextseedsecurities.com.</Link>
+        <a className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseedsecurities.com</a>.
       </p>
     </div>
   </Aux>
