@@ -399,6 +399,9 @@ footer{
             font-size:@14px !important;
             font-weight:@fontMedium !important;
             line-height:1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
             &:last-child{
                 margin:0;
             }
