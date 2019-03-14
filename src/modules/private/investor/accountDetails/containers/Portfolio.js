@@ -43,7 +43,7 @@ export default class Portfolio extends Component {
       className: 'investment-summary',
       summary: [
         {
-          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits.',
+          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits but excludes pending investments.',
         },
         {
           title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
@@ -62,8 +62,8 @@ export default class Portfolio extends Component {
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
-        {(getPieChartData.investmentType.length || getPieChartData.industry.length) &&
-          <PortfolioAllocations pieChart={getPieChartData} />
+        {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
+          <PortfolioAllocations pieChart={getPieChartData} /> : ''
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
