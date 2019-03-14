@@ -316,7 +316,10 @@ export const campaignDetailsQuery = gql`
       }
       documentation {
         admin {
-          npa
+          npa {
+            fileName
+            fileId
+          }
         }
       }
     }
@@ -564,6 +567,16 @@ query getOfferingById($id: ID) {
     earlyBird {
       quantity
       amount
+    }
+    legal {
+      documentation {
+        admin {
+          npa {
+            fileName
+            fileId
+          }
+        }
+      }
     }
   }
 }
