@@ -385,7 +385,7 @@ footer{
 		}
 		a {
 			color: @neutral-middark !important;
-			text-decoration: underline;
+			text-decoration: underline !important;
 			&:hover, &:focus{
 				text-decoration: underline !important;
 			}
