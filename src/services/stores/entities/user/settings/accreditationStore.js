@@ -210,6 +210,10 @@ export class AccreditationStore {
       this.setFormFileArray(form, field, 'value', '');
       this.setFormFileArray(form, field, 'preSignedUrl', '');
     }
+    if (form === 'INCOME_UPLOAD_DOC_FORM') {
+      this[form].fields.isAcceptedForfilling.value = [];
+      this[form].fields.isAcceptedForUnfilling.value = [];
+    }
     this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
