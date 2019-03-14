@@ -25,7 +25,7 @@ class BonusRewards extends Component {
         {rewardList.length > 0 &&
         <Aux>
         <Header as="h4">Your rewards</Header>
-        <p className="mb-30">{metaTitle}</p>
+        <p className="neutral-text mb-30">{metaTitle}</p>
         <RewardList title="Your investment" match={props.match} list={rewardList} />
         </Aux>
         }
