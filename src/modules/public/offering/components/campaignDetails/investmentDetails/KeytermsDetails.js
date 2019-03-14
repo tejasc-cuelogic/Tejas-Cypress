@@ -78,7 +78,7 @@ class KeyTermsDetails extends Component {
                     <Table.Cell>
                       <p>
                         {get(KeyTerms, type.key) ?
-                          Helper.CurrencyFormat(get(KeyTerms, type.key))
+                          Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
                           :
                           'NA'}
                       </p>

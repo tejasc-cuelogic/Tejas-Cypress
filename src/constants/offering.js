@@ -76,6 +76,7 @@ export const CAMPAIGN_REGULATION_DETAILED = {
     BD_CF_506C: 'Parallel Offering',
   },
   TOOLTIP: {
+    FP_TX: '<span>Regulation Crowdfunding offerings allow everyone to invest.<Link to="/resources/education-center">Learn more</Link></span>',
     FP_CF: '<span>Regulation Crowdfunding offerings allow everyone to invest.<Link to="/resources/education-center">Learn more</Link></span>',
     BD_CF: '<span>Regulation Crowdfunding offerings allow everyone to invest.<Link to="/resources/education-center">Learn more</Link></span>',
     BD_506C: '<span>Regulation D 506(C) offerings allow Accredited Investors to invest.<Link to="/resources/education-center">Learn more</Link></span>',
