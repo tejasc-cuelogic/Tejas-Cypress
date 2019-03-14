@@ -88,6 +88,9 @@ export const getInvestmentsByUserIdAndOfferingId = gql`
       accountId
       status
       amount
+      agreement {
+        agreementId
+      }
     }
   }
 `;
@@ -178,3 +181,14 @@ mutation transferRequestAdminSync($id: Int!){
   id: $id
   )
 }`;
+
+export const viewLoanAgreement = gql`
+  query viewLoanAgreement($agreementId: Int!, $callbackUrl: String) {
+    viewLoanAgreement(agreementId: $agreementId, callbackUrl: $callbackUrl) {
+      agreementId
+      envelopeId
+      docuSignViewURL
+      npaViewUrl
+    }
+  }
+`;
