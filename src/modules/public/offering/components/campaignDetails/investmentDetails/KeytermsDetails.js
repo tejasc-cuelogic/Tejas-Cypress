@@ -169,7 +169,7 @@ class KeyTermsDetails extends Component {
               <Table.Cell width={5} className="neutral-text"><b>Security Interest{' '}</b>
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
-                  content="The Issuer will grant a security interest in all of its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
+                  content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
                   position="top center"
                 />
               </Table.Cell>
