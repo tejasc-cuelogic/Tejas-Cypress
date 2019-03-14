@@ -57,8 +57,8 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((this.props.changeInvest || (accountToConsider && accountToConsider.length === 1))
-      && isDocumentUpload) {
+    } else if (this.props.changeInvest || (accountToConsider &&
+      accountToConsider.length === 1 && isDocumentUpload)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
