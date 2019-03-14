@@ -197,9 +197,9 @@ export class IdentityStore {
       cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
     } else {
       cip.expiration = Helper.getDaysfromNow(21);
-      cip.requestId = response.hardFailId;
+      cip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
       cip.failType = 'FAIL_WITH_UPLOADS';
-      if (response.qualifiers !== null) {
+      if (response.qualifiers && response.qualifiers !== null) {
         cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
       }
     }
@@ -286,10 +286,13 @@ export class IdentityStore {
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
-            this.setCipStatus('FAIL');
+            this.setCipStatus('HARD_FAIL');
             this.updateUserInfo().then(() => {
               uiStore.setProgress(false);
               resolve();
+            }).catch(() => {
+              uiStore.setProgress(false);
+              reject();
             });
           // reject(err);
           }
