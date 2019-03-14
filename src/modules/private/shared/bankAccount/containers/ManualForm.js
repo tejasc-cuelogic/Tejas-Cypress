@@ -32,12 +32,12 @@ export default class ManualForm extends Component {
       });
     } else {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
-        if (investmentAccType === 'individual') {
-          this.props[accTypeStore].setStepToBeRendered(0);
-          // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
-        } else {
-          this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
-        }
+        // if (investmentAccType === 'individual') {
+        //   this.props[accTypeStore].setStepToBeRendered(0);
+        //   // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
+        // } else {
+        // }
+        this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
         this.props.bankAccountStore.setLinkBankSummary();
       });
     }
