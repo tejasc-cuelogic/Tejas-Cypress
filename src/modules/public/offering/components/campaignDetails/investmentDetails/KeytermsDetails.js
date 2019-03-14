@@ -3,7 +3,7 @@ import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -53,7 +53,7 @@ class KeyTermsDetails extends Component {
             <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Offering</b><br />{get(campaign, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[campaign.regulation] : 'NA'}</p>
+            <p><b>Type of Offering</b><br />{get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>

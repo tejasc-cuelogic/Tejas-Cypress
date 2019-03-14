@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
 const isTablet = document.documentElement.clientWidth < 991;
 
@@ -43,7 +43,16 @@ class KeyTerms extends Component {
               </Table.Cell>
               <Table.Cell className="grey-header">
                 {get(campaign, 'regulation') ?
-                  CAMPAIGN_KEYTERMS_REGULATION[campaign.regulation] : '-'}
+                  CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : '-'}
+                { CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={
+                      CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
+                    }
+                    position="top center"
+                  /> : ''
+                }
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
