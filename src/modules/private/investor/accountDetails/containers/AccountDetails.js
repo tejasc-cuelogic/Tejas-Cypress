@@ -9,6 +9,7 @@ import PrivateLayout from '../../../shared/PrivateLayout';
 import { InlineLoader } from '../../../../../theme/shared';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import AccountSetup from './AccountSetup';
 
 const getModule = component => Loadable({
   loader: () => import(`./${component}`),
@@ -30,10 +31,14 @@ export default class AccountDetails extends Component {
   }
   render() {
     const { match } = this.props;
-    const { processingAccounts } = this.props.userDetailsStore.signupStatus;
+    const {
+      processingAccounts,
+      partialAccounts,
+    } = this.props.userDetailsStore.signupStatus;
     const splittedUrl = match.url.split('/');
     const accType = splittedUrl.pop();
     const isAccProcessing = processingAccounts.includes(accType);
+    const isAccPartial = partialAccounts.includes(accType);
     const navItems = isAccProcessing ? [] : GetNavMeta(match.url).subNavigations;
     const processing = includes(this.props.location.pathname, 'transactions') ?
       (<div className="content-spacer">
@@ -46,7 +51,7 @@ export default class AccountDetails extends Component {
       </section>);
     return (
       <PrivateLayout {...this.props}>
-        {isAccProcessing ? processing : (
+        { isAccPartial ? <AccountSetup /> : isAccProcessing ? processing : (
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
             {
