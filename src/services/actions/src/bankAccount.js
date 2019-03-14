@@ -10,7 +10,7 @@ import { validationActions } from '../../../services/actions';
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
 const sharedPublicPayload = { public_key: PLAID_PUBLIC_KEY };
 const ACC_LINK_BANK_MAPPING = {
-  0: { store: individualAccountStore, location: 0 },
+  0: { store: individualAccountStore, location: 1 },
   1: { store: iraAccountStore, location: 3 },
   2: { store: entityAccountStore, location: 5 },
 };
@@ -72,8 +72,10 @@ export class BankAccount {
         // The Link module finished loading.
         uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        ACC_LINK_BANK_MAPPING[accountValue].store
-          .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
+        if (accountValue !== 0) {
+          ACC_LINK_BANK_MAPPING[accountValue].store
+            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
+        }
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
@@ -91,10 +93,10 @@ export class BankAccount {
           };
           bankAccountStore.resetAddFundsForm();
           ACC_LINK_BANK_MAPPING[accountValue].store.createAccount(currentStep);
-          // ACC_LINK_BANK_MAPPING[accountValue].store
-          //   .setStepToBeRendered();
+          ACC_LINK_BANK_MAPPING[accountValue].store
+            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
         }
-        bankAccountStore.setLinkBankSummary();
+        // bankAccountStore.setLinkBankSummary();
       },
       onExit: (err) => {
         // The user exited the Link flow.
