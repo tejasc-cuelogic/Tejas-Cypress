@@ -161,9 +161,7 @@ class Overview extends Component {
                       <Table.Cell>
                         {keyTerms && keyTerms.securitiesOwnershipPercentage ?
                           `${keyTerms.securitiesOwnershipPercentage}%
-                          Investors will not receive any equity interests in
-                          the Issuer or any voting or management rights with respect
-                          to the Issuer as a result of an investment in Securities.`
+                          equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
                           :
                           'N/A'
                         }
@@ -204,11 +202,11 @@ class Overview extends Component {
                     }
                   </Statistic.Value>
                 </Statistic>
-                {get(offering, 'closureSummary.repaymentCompleteDate') && (
+                {get(offering, 'closureSummary.repayment.completeDate') && (
                   <Statistic>
                     <Statistic.Label>Payoff Date</Statistic.Label>
                     <Statistic.Value>
-                      {get(offering, 'closureSummary.repaymentCompleteDate') || 'N/A'}
+                      {moment(get(offering, 'closureSummary.repayment.completeDate').format('MMM Do YYYY')) || 'N/A'}
                     </Statistic.Value>
                   </Statistic>
                 )}

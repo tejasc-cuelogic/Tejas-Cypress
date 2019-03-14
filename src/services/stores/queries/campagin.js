@@ -128,6 +128,7 @@ export const campaignDetailsQuery = gql`
     earlyBird {
       quantity
       amount
+      available
     }
     offering {
       overview {
@@ -314,10 +315,21 @@ export const campaignDetailsQuery = gql`
           }
         }
       }
+      documentation {
+        admin {
+          npa {
+            fileName
+            fileId
+          }
+        }
+      }
     }
     closureSummary {
       totalInvestmentAmount
       totalInvestorCount
+      repayment {
+        count
+      }
     }
     comments {
       id
@@ -457,6 +469,9 @@ query getOfferingById($id: ID) {
     stage
     closureSummary {
       totalInvestmentAmount
+      repayment {
+        completeDate
+      }
     }
     keyTerms {
       regulation
@@ -556,6 +571,16 @@ query getOfferingById($id: ID) {
     earlyBird {
       quantity
       amount
+    }
+    legal {
+      documentation {
+        admin {
+          npa {
+            fileName
+            fileId
+          }
+        }
+      }
     }
   }
 }

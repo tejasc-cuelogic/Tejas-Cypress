@@ -179,9 +179,9 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-
-    accountAttributes.initialDepositAmount = this.depositMoneyNow ?
-      this.formAddFunds.fields.value.value : 0;
+    const { value } = this.formAddFunds.fields.value;
+    accountAttributes.initialDepositAmount = this.depositMoneyNow && value !== '' ?
+      value : -1;
     return accountAttributes;
   }
 

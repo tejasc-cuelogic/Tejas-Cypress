@@ -96,7 +96,7 @@ export default class BankAccount extends Component {
                         accountType="active"
                         pendingAccoungDetails={pendingAccoungDetails}
                       />
-                      {!isEmpty(pendingAccoungDetails) &&
+                      {plaidAccDetails.pendingUpdate &&
                         <AccountDetailsView
                           accountDetails={pendingAccoungDetails}
                           click={this.handleLinkBankInterface}
