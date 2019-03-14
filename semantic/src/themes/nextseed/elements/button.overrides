@@ -56,6 +56,9 @@
                 color:@neutral;
                 &:hover, &:focus, &:active{
                     text-decoration: underline;
+                    .icon:not(.button) {
+                        text-decoration: none !important;
+                    }
                 }
             }
             &.grey{

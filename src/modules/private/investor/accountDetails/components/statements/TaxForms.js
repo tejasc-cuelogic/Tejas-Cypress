@@ -1,12 +1,11 @@
 import Aux from 'react-aux';
 import { includes } from 'lodash';
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, Card, Icon } from 'semantic-ui-react';
+import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
-import { NsPagination } from './../../../../../../theme/shared';
+import { NsPagination, InlineLoader } from './../../../../../../theme/shared';
 
 const result = {
   columns: [
@@ -18,7 +17,7 @@ const result = {
   ],
 };
 
-@inject('statementStore', 'educationStore', 'userDetailsStore')
+@inject('agreementsStore', 'statementStore', 'educationStore', 'userDetailsStore')
 @observer
 export default class TaxForms extends Component {
   componentWillMount() {
@@ -26,6 +25,12 @@ export default class TaxForms extends Component {
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    const {
+      getLegalDocsFileIds, alreadySet,
+    } = this.props.agreementsStore;
+    if (!alreadySet) {
+      getLegalDocsFileIds();
+    }
   }
 
   paginate = params => this.props.statementStore.pageRequest(params);
@@ -42,8 +47,15 @@ export default class TaxForms extends Component {
 
   render() {
     const { taxFormCount, requestState, taxForms } = this.props.statementStore;
+    const { getAgreementsList, docIdsLoading } = this.props.agreementsStore;
+    const instructions = getAgreementsList.filter(i => i.key.includes('instruction'));
     const totalRecords = taxFormCount() || 0;
     result.rows = taxForms;
+
+    if (docIdsLoading) {
+      return <InlineLoader />;
+    }
+
     return (
       <Aux>
         <Grid>
@@ -53,12 +65,9 @@ export default class TaxForms extends Component {
                 <FillTable
                   download={this.downloadhandler}
                   result={result}
-                  actionRule={{ key: 'year', val: [2017, 2018] }}
-                  additionalActions={
-                    <Link to="/" style={{ textTransform: 'none' }} className="action" >
-                      <Icon className="ns-file" /> Instructions&nbsp;&nbsp;&nbsp;
-                    </Link>
-                  }
+                  aRule={{ key: 'year', val: [2017, 2018] }}
+                  additionalActions
+                  instructions={instructions}
                 />
               </Card>
               {totalRecords > 0 &&
