@@ -477,6 +477,8 @@ export class BankAccountStore {
       if (!this.depositMoneyNow) {
         resolve();
       } else {
+        const isLoader = individualAccountStore.stepToBeRendered === 1 || this.showAddFunds
+          || this.manualLinkBankSubmitted;
         graphql({
           client,
           query: isValidOpeningDepositAmount,
@@ -484,13 +486,12 @@ export class BankAccountStore {
           fetchPolicy: 'network-only',
           onFetch: () => {
             if (resetProgress) {
-              const isLoader = individualAccountStore.stepToBeRendered === 1 || this.showAddFunds;
               uiStore.setProgress(isLoader || false);
             }
             resolve();
           },
           onError: (err) => {
-            uiStore.setProgress(false);
+            uiStore.setProgress(isLoader || false);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject();
           },
