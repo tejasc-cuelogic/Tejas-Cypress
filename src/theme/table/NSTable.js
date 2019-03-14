@@ -19,20 +19,31 @@ export const THeader = ({ columns }) => (
   </Table.Header>
 );
 
-const Actions = props => (
-  <Aux>
-    <Link to="/" className="action" onClick={e => props.download(e, props.actions.fileId)} >
-      <Icon className={`ns-file ${props[0]}`} /> PDF
-    </Link>
-  </Aux>
-);
+const Actions = (props) => {
+  let additionalFileIdRef = null;
+  if (props.additionalActions && props.dataSet) {
+    additionalFileIdRef = props.dataSet.instructions.find(i => i.key === `instruction${props.dataSet.mapKey}`).id;
+  }
+  return (
+    <Aux>
+      {props.additionalActions && additionalFileIdRef && (
+        <Link to="/" style={{ textTransform: 'none' }} onClick={e => props.download(e, additionalFileIdRef)} className="action" >
+          <Icon className="ns-file" /> Instructions&nbsp;&nbsp;&nbsp;
+        </Link>
+      )}
+      <Link to="/" className="action" onClick={e => props.download(e, props.actions.fileId)} >
+        <Icon className={`ns-file ${props[0]}`} /> {props.label || 'PDF'}
+      </Link>
+    </Aux>
+  );
+};
 
 export const NoR = ({ cols, msg }) => (
   <Table.Row><Table.Cell textAlign="center" colSpan={cols}>{msg}</Table.Cell></Table.Row>
 );
 
 export const FillTable = ({
-  result, loading, error, download,
+  result, loading, error, download, additionalActions, aRule, instructions,
 }) => (
   <div className="table-wrapper">
     <Table unstackable singleLine className="investment-details">
@@ -52,7 +63,21 @@ export const FillTable = ({
                           {['amount'].includes(col.field) ? row.type === 'Withdrawal' ? `(${Helper.CurrencyFormat(row[col.field])})` : Helper.CurrencyFormat(row[col.field]) : (
                               ['createdAt', 'date'].includes(col.field) ?
                                 <DateTimeFormat datetime={row[col.field]} /> : (
-                                  (col.field === 'file') ? <Actions download={download} actions={{ fileId: row.fileId }} /> : (
+                                  (col.field === 'file') ? (
+                                    <Actions
+                                      download={download}
+                                      actions={{ fileId: row.fileId }}
+                                      additionalActions={aRule &&
+                                        aRule.val.includes(parseFloat(row[aRule.key])) ?
+                                        additionalActions : false
+                                      }
+                                      dataSet={{
+                                        instructions,
+                                        mapKey: aRule ? row[aRule.key] : null,
+                                      }}
+                                      label={col.label}
+                                    />
+                                  ) : (
                                     Array.isArray(row[col.field]) ? row[col.field].join(' and ') : row[col.field]
                                   )
                                 )

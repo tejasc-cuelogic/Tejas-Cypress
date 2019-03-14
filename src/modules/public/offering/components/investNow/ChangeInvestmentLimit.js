@@ -107,7 +107,7 @@ class ChangeInvestmentLimit extends Component {
               <Table.Footer>
                 <Table.Row>
                   <Table.HeaderCell>Your Investment Limit:</Table.HeaderCell>
-                  <Table.HeaderCell textAlign="right" className="positive-text">{Helper.CurrencyFormat(changedInvestmentLimit)}</Table.HeaderCell>
+                  <Table.HeaderCell textAlign="right" className="positive-text">{Helper.CurrencyFormat(changedInvestmentLimit, 0)}</Table.HeaderCell>
                 </Table.Row>
               </Table.Footer>
             </Table>

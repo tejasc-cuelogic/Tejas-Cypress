@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { isArray } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
-import { Form, Grid, Table } from 'semantic-ui-react';
+import { Form, Grid, Table, Button } from 'semantic-ui-react';
 import { THeader } from '../../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
-import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, IframeModal } from '../../../../../../theme/shared';
 
 const termNote = {
   columns: [
@@ -34,14 +33,34 @@ const revShare = {
 @inject('transactionStore', 'campaignStore')
 @observer
 export default class Transactions extends Component {
+  state = {
+    open: false,
+    embedUrl: '',
+  };
   componentDidMount() {
     const { getInvestmentsByOfferingId } = this.props.transactionStore;
     getInvestmentsByOfferingId();
+    window.addEventListener('message', this.docuSignListener);
   }
   setSearchParam = (e, { value }) => this.props.transactionStore.setInvestment(value);
-
+  docuSignListener = (e) => {
+    if (e.data === 'viewing_complete') {
+      this.setState({ open: false });
+    }
+  };
+  handleViewLoanAgreement = () => {
+    this.props.transactionStore.getDocuSignViewURL().then((res) => {
+      this.setState({
+        open: true,
+        embedUrl: res,
+      });
+    });
+  }
+  closeModal = () => {
+    this.setState({ open: false });
+  }
   render() {
-    const { investmentOptions, loading, allPaymentHistoryData } = this.props.transactionStore;
+    const { investmentOptions, loading, allPaymentHistoryData, aggrementId } = this.props.transactionStore;
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
     if (loading) {
@@ -62,9 +81,11 @@ export default class Transactions extends Component {
               <Grid.Column width={4}>
                 <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select investment" options={investmentOptions} />
               </Grid.Column>
-              <Grid.Column floated="right" align="right" width={4}>
-                <Link to="/">View Loan Agreement</Link>
-              </Grid.Column>
+              {aggrementId &&
+                <Grid.Column floated="right" align="right" width={4}>
+                  <Button onClick={this.handleViewLoanAgreement} className="link-button highlight-text">View Loan Agreement</Button>
+                </Grid.Column>
+              }
             </Grid.Row>
           </Grid>
         </Form>
@@ -112,6 +133,12 @@ export default class Transactions extends Component {
             </Table>
           }
         </div>
+        <IframeModal
+          open={this.state.open}
+          close={this.closeModal}
+          srcUrl={this.state.embedUrl}
+          loading={false}
+        />
       </Aux>
     );
   }
