@@ -22,7 +22,7 @@ export default class FinancialInformation extends Component {
         <Header as="h3" textAlign="center">Calculating your investment limit</Header>
         <p className="center-align">
           Your net worth and annual income are used to determine your 12-month investment limit.{' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://www.nextseed.com/education-center/for-investors/investment-limits-explained/investment-limit-calcuator/" className="link">How is this calculated?</a>
+          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/for-investors/investment-limits-explained/investment-limit-calcuator/`} className="link">How is this calculated?</a>
         </p>
         <Form error>
           <div className="field-wrap">
