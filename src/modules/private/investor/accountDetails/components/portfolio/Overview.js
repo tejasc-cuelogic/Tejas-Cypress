@@ -161,9 +161,7 @@ class Overview extends Component {
                       <Table.Cell>
                         {keyTerms && keyTerms.securitiesOwnershipPercentage ?
                           `${keyTerms.securitiesOwnershipPercentage}%
-                          Investors will not receive any equity interests in
-                          the Issuer or any voting or management rights with respect
-                          to the Issuer as a result of an investment in Securities.`
+                          equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
                           :
                           'N/A'
                         }
