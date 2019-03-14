@@ -66,7 +66,7 @@ class InvestmentDetails extends Component {
           title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') ? get(getInvestor, 'netPaymentsReceived') : 'NA', type: 1, info: 'Payments received to date from this investment, minus NextSeed fees.',
         },
         {
-          title: 'Net Annualized Returns', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'NA', info: `${(<span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. See the Education Center for a full explanation of how NAR <Link to="/resources/education-center">Education Center</Link> is calculated. </span>)}`,
+          title: 'Net Annualized Returns', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'NA', info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. See the Education Center for a full explanation of how NAR <Link to="/resources/education-center">Education Center</Link> is calculated. </span>,
         },
       ],
     };

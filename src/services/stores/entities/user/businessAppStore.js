@@ -472,6 +472,9 @@ export class BusinessAppStore {
       });
     }
     this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
+    this.BUSINESS_DOC_FRM.meta.isValid = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+      (this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
+      this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   }
 
   @computed get fetchBusinessApplicationsDataById() {

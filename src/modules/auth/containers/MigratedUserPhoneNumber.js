@@ -9,8 +9,13 @@ import { MaskedInput } from '../../../theme/form';
 @observer
 export default class MigratedUserPhoneNumber extends Component {
   componentWillMount() {
-    const { validateForm } = this.props.identityStore;
-    validateForm('ID_VERIFICATION_FRM');
+    const {
+      personalInfoMaskedChange,
+      ID_VERIFICATION_FRM,
+    } = this.props.identityStore;
+    const { value } = ID_VERIFICATION_FRM.fields.phoneNumber;
+    personalInfoMaskedChange({ value }, 'phoneNumber');
+    // validateForm('ID_VERIFICATION_FRM');
   }
   handlePhoneNumberConfirmation = () => {
     const { ID_VERIFICATION_FRM } = this.props.identityStore;

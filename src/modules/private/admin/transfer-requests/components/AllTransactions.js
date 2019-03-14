@@ -89,11 +89,11 @@ export default class AllTransactions extends Component {
                       <Table.Cell>
                         <Button.Group vertical compact size="mini">
                           {(has(STATUS_MAPPING[statusType], 'syncCta') && row.gsProcessId && !row.gsTransactionId) ?
-                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].syncCta.action)}>
+                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].syncCta.action, row.direction)}>
                               {STATUS_MAPPING[statusType].syncCta.title}
                             </Button> :
                             has(STATUS_MAPPING[statusType], 'affirmativeCta') &&
-                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action)}>
+                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
                               {STATUS_MAPPING[statusType].affirmativeCta.title}
                             </Button>
                           }

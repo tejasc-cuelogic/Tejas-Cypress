@@ -41,7 +41,7 @@ export default class Transactions extends Component {
   setSearchParam = (e, { value }) => this.props.transactionStore.setInvestment(value);
 
   render() {
-    const { paymentHistoryData, investmentOptions, loading } = this.props.transactionStore;
+    const { investmentOptions, loading, allPaymentHistoryData } = this.props.transactionStore;
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
     if (loading) {
@@ -69,18 +69,14 @@ export default class Transactions extends Component {
           </Grid>
         </Form>
         <div className="table-wrapper">
-          {((paymentHistoryData.data &&
-          (!paymentHistoryData.data.getPaymentHistory ||
-           !paymentHistoryData.data.getPaymentHistory.length))
-          || !paymentHistoryData.data) ?
+          {!allPaymentHistoryData.length ?
             <InlineLoader text="No Payments." />
           :
             <Table unstackable singleLine className="investment-details" textAlign="right">
               <THeader columns={finalResult.columns} />
               <Table.Body>
                 {
-                  paymentHistoryData.data && paymentHistoryData.data.getPaymentHistory
-                  && paymentHistoryData.data.getPaymentHistory.map(row => (
+                  allPaymentHistoryData.map(row => (
                     <Table.Row key={Helper.guid()}>
                       <Table.Cell collapsing textAlign="left">
                         <DateTimeFormat format="MM-DD-YYYY" datetime={row.completeDate} />
