@@ -60,7 +60,12 @@ export default class Transactions extends Component {
     this.setState({ open: false });
   }
   render() {
-    const { investmentOptions, loading, allPaymentHistoryData, aggrementId } = this.props.transactionStore;
+    const {
+      investmentOptions,
+      loading,
+      allPaymentHistoryData,
+      aggrementId,
+    } = this.props.transactionStore;
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
     if (loading) {

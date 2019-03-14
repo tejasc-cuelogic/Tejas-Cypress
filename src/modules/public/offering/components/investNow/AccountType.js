@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { includes, uniq } from 'lodash';
+import { includes, uniq, get } from 'lodash';
 import { Header, Form, Icon, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -37,6 +37,7 @@ class AccountType extends Component {
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
+    const isDocumentUpload = get(campaign, 'legal.documentation.admin.npa');
     const {
       userAccredetiationState,
       resetAccreditationExpirayForm,
@@ -56,7 +57,8 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (this.props.changeInvest || (accountToConsider && accountToConsider.length === 1)) {
+    } else if (this.props.changeInvest || (accountToConsider &&
+      accountToConsider.length === 1 && isDocumentUpload)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
@@ -104,12 +106,13 @@ class AccountType extends Component {
     prepareAccountTypes(accountToConsider);
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
+    const isDocumentUpload = get(campaign, 'legal.documentation.admin.npa');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (accountToConsider && accountToConsider.length === 1) {
+    } else if (accountToConsider && accountToConsider.length === 1 && isDocumentUpload) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         setFieldValue('disableNextbtn', false);
         setStepToBeRendered(1);
@@ -129,11 +132,12 @@ class AccountType extends Component {
     } = this.props.accreditationStore;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
+    const isDocumentUpload = get(campaign, 'legal.documentation.admin.npa');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (investAccTypes && investAccTypes.values.length === 1) {
+    } else if (investAccTypes && investAccTypes.values.length === 1 && isDocumentUpload) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         setFieldValue('disableNextbtn', false);
         setStepToBeRendered(1);
@@ -169,6 +173,7 @@ class AccountType extends Component {
     } = this.props.investmentStore;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
+    const isDocumentUpload = get(campaign, 'legal.documentation.admin.npa');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const {
       userDetails,
@@ -228,120 +233,135 @@ class AccountType extends Component {
     }
     setHeaderAndSubHeader(headerToShow, subHeaderToShow);
     return (
-      <Aux>
-        <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
-        <Form error className="account-type-tab">
-          {investAccTypes.values.length && selectedAccountStatus ?
-            <Aux>
-              {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest ?
-                <FormRadioGroup
-                  name="investAccountType"
-                  containerclassname="button-radio center-align"
-                  fielddata={investAccTypes}
-                  changed={accTypeChanged}
-                />
-                :
-                <Aux>
-                  {selectedAccountStatus === 'FULL' ?
-                    <div className="center-align">
-                      <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                      {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
-                        <Aux>
-                          <Link to={redirectURL} className="text-link">
-                            <Icon className="ns-arrow-right" color="green" />
-                            Apply for accreditation
-                          </Link>
-                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                        </Aux>
-                        :
-                        userAccredetiationState === 'EXPIRED' ?
+      !isDocumentUpload ?
+        <Aux>
+          <Header as="h3" textAlign="center">Your investment transaction not processed</Header>
+          <Form error className="account-type-tab">
+            <div className="center-align">
+              <Aux>
+                <p>Offering is under legal documentation process! Please contact
+                  <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.
+                </p>
+                <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+              </Aux>
+            </div>
+          </Form>
+        </Aux>
+        :
+        <Aux>
+          <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
+          <Form error className="account-type-tab">
+            {investAccTypes.values.length && selectedAccountStatus ?
+              <Aux>
+                {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest ?
+                  <FormRadioGroup
+                    name="investAccountType"
+                    containerclassname="button-radio center-align"
+                    fielddata={investAccTypes}
+                    changed={accTypeChanged}
+                  />
+                  :
+                  <Aux>
+                    {selectedAccountStatus === 'FULL' ?
+                      <div className="center-align">
+                        <p className="center-align">{headerSubheaderObj.subHeader}</p>
+                        {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
                           <Aux>
-                            <Form error>
-                              <FormCheckbox
-                                fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
-                                name="financialStatus"
-                                changed={expirationChange}
-                                defaults
-                                containerclassname="ui relaxed list"
-                              />
-                              <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
-                              <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
-                            </Form>
+                            <Link to={redirectURL} className="text-link">
+                              <Icon className="ns-arrow-right" color="green" />
+                              Apply for accreditation
+                            </Link>
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                           </Aux>
                           :
-                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                      }
-                    </div>
-                    :
-                    <div className="center-align">
-                      {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
-                        <Aux>
-                          <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
-                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                        </Aux>
-                        :
-                        null}
-                      {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL') ?
-                        <Aux>
-                          <Link to={redirectURL} className="text-link">
-                            <Icon className="ns-arrow-right" color="green" />
-                            Please finish your account setup.
-                          </Link>
-                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                        </Aux>
-                        :
-                        null}
-                      {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING') ?
-                        <Aux>
-                          <p>
-                            We are currently processing your new {investAccTypes.value} account.
-                            You will recive notification when your account is ready.
+                          userAccredetiationState === 'EXPIRED' ?
+                            <Aux>
+                              <Form error>
+                                <FormCheckbox
+                                  fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
+                                  name="financialStatus"
+                                  changed={expirationChange}
+                                  defaults
+                                  containerclassname="ui relaxed list"
+                                />
+                                <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
+                                <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
+                              </Form>
+                            </Aux>
+                            :
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                        }
+                      </div>
+                      :
+                      <div className="center-align">
+                        {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
+                          <Aux>
+                            <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                          </Aux>
+                          :
+                          null}
+                        {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL') ?
+                          <Aux>
+                            <Link to={redirectURL} className="text-link">
+                              <Icon className="ns-arrow-right" color="green" />
+                              Please finish your account setup.
+                            </Link>
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                          </Aux>
+                          :
+                          null}
+                        {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING') ?
+                          <Aux>
+                            <p>
+                              We are currently processing your new {investAccTypes.value} account.
+                              You will recive notification when your account is ready.
                             Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
-                          </p>
-                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                        </Aux>
-                        :
-                        null}
-                    </div>
-                  }
-                </Aux>
-              }
-            </Aux>
-            :
-            <div className="center-align">
-              {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
-                <Aux>
-                  <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
-                  <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                </Aux>
-                :
-                null}
-              {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
-                ?
+                            </p>
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                          </Aux>
+                          :
+                          null}
+                      </div>
+                    }
+                  </Aux>
+                }
+              </Aux>
+              :
+              <div className="center-align">
+                {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
                   <Aux>
-                    <Link to={redirectURL} className="text-link">
-                      <Icon className="ns-arrow-right" color="green" />
-                      Please finish your account setup.
-                    </Link>
+                    <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
                     <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                   </Aux>
-                :
-                null}
-              {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
-                <Aux>
-                  <p>
-                    We are currently processing your new {investAccTypes.value} account.
-                    You will recive notification when your account is ready.
+                  :
+                  null}
+                {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
+                  ?
+                    <Aux>
+                      <Link to={redirectURL} className="text-link">
+                        <Icon className="ns-arrow-right" color="green" />
+                      Please finish your account setup.
+                      </Link>
+                      <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                    </Aux>
+                  :
+                  null}
+                {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
+                  <Aux>
+                    <p>
+                      We are currently processing your new {investAccTypes.value} account.
+                      You will recive notification when your account is ready.
                     Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
-                  </p>
-                  <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                </Aux>
-                :
-                null}
-            </div>
-          }
-        </Form>
-      </Aux>
+                    </p>
+                    <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                  </Aux>
+                  :
+                  null}
+              </div>
+            }
+          </Form>
+        </Aux>
     );
   }
 }
