@@ -1,7 +1,8 @@
 import Aux from 'react-aux';
 import { includes } from 'lodash';
 import React, { Component } from 'react';
-import { Grid, Card } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Grid, Card, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
@@ -11,7 +12,9 @@ const result = {
   columns: [
     { title: 'Statement Date', field: 'year' },
     { title: 'Form Type', field: 'fileName' },
-    { title: 'Download as', field: 'file', textAlign: 'right' },
+    {
+      title: 'Download', field: 'file', textAlign: 'right', label: '1099',
+    },
   ],
 };
 
@@ -50,6 +53,12 @@ export default class TaxForms extends Component {
                 <FillTable
                   download={this.downloadhandler}
                   result={result}
+                  actionRule={{ key: 'year', val: [2017, 2018] }}
+                  additionalActions={
+                    <Link to="/" style={{ textTransform: 'none' }} className="action" >
+                      <Icon className="ns-file" /> Instructions&nbsp;&nbsp;&nbsp;
+                    </Link>
+                  }
                 />
               </Card>
               {totalRecords > 0 &&

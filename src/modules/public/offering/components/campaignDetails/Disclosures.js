@@ -50,7 +50,7 @@ export default class TermsOfUse extends Component {
   }
   module = name => DataFormatter.upperCamelCase(name);
   dataRoomHeader = (<Header as="h3" className="mb-30 anchor-wrap">
-                      Data Rooms
+                      Data Room
     <span className="anchor-scroll" />
                     </Header>)
   render() {
