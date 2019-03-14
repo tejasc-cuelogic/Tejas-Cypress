@@ -27,7 +27,7 @@ class FinancialInfo extends Component {
   render() {
     const {
       investmentAmount,
-      isValidInvestAmtInOffering,
+      // isValidInvestAmtInOffering,
       INVESTMONEY_FORM,
       investMoneyChange,
       estReturnVal,
@@ -111,7 +111,8 @@ class FinancialInfo extends Component {
           <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p>
         }
         <Divider hidden />
-        {isValidInvestAmtInOffering &&
+        {// isValidInvestAmtInOffering &&
+         estReturnVal && estReturnVal !== '-' &&
           investmentAmount ?
             <Header as="h4">Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
               <Popup
