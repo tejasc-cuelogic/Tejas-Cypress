@@ -11,6 +11,7 @@ import {
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
+import individualAccountStore from '../user/individualAccountStore';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -483,7 +484,8 @@ export class BankAccountStore {
           fetchPolicy: 'network-only',
           onFetch: () => {
             if (resetProgress) {
-              uiStore.setProgress(false);
+              const isLoader = individualAccountStore.stepToBeRendered === 1 || this.showAddFunds;
+              uiStore.setProgress(isLoader || false);
             }
             resolve();
           },
