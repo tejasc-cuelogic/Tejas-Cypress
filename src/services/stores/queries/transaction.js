@@ -81,9 +81,9 @@ export const paymentHistory = gql`
   }
 `;
 
-export const investmentsByOfferingId = gql`
-  query _getInvestmentsByOfferingId($offeringId: String!) {
-    getInvestmentsByOfferingId(offeringId: $offeringId) {
+export const getInvestmentsByUserIdAndOfferingId = gql`
+  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String!) {
+    getInvestmentsByUserIdAndOfferingId(offeringId: $offeringId, userId: $userId) {
       investmentId
       accountId
       status

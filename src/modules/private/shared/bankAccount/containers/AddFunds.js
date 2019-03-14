@@ -10,11 +10,17 @@ import { validationActions } from '../../../../../services/actions';
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
+  componentWillMount() {
+    const { value } = this.props.bankAccountStore.formAddFunds.fields.value;
+    if (parseFloat(value, 0) === -1) {
+      this.props.bankAccountStore.resetAddFundsForm();
+    }
+  }
   componentDidMount() {
     // this.props.bankAccountStore.validateForm('formAddFunds');
   }
   componentWillUnmount() {
-    // this.props.bankAccountStore.resetShowAddFunds();
+    this.props.bankAccountStore.resetShowAddFunds();
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);

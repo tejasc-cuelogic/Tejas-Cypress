@@ -7,7 +7,7 @@ import { capitalize, get } from 'lodash';
 import { Container, Card, List, Grid, Message } from 'semantic-ui-react';
 // import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -64,7 +64,7 @@ export default class CampaignList extends Component {
                             <div className="tags mb-10">
                               {offering && offering.keyTerms && offering.keyTerms.industry ? capitalize(offering.keyTerms.industry.split('_').join(' ')) : '-'}
                               <span className="pull-right">
-                                {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[offering.keyTerms.regulation] : '-'}
+                                {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_REGULATION_ABREVIATION[offering.keyTerms.regulation] : '-'}
                               </span>
                             </div>
                             <Card.Header>{offering && offering.keyTerms &&

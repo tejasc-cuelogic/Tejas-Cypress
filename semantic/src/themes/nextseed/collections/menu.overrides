@@ -123,6 +123,9 @@
     // box-shadow:none;
     // background-color:@white;
     // transition: all .3s ease-in-out;
+    @media only screen and (max-width : @largestLargeMonitor){
+        background-color: fade(@white, 50%);
+    }
     .item{
         padding:@3px @18px;
         &:hover {
