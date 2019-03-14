@@ -315,6 +315,14 @@ export const campaignDetailsQuery = gql`
           }
         }
       }
+      documentation {
+        admin {
+          npa {
+            fileName
+            fileId
+          }
+        }
+      }
     }
     closureSummary {
       totalInvestmentAmount
@@ -563,6 +571,16 @@ query getOfferingById($id: ID) {
     earlyBird {
       quantity
       amount
+    }
+    legal {
+      documentation {
+        admin {
+          npa {
+            fileName
+            fileId
+          }
+        }
+      }
     }
   }
 }
