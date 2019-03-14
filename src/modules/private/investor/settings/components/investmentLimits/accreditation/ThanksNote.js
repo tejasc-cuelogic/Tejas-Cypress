@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, Header, Divider, Icon } from 'semantic-ui-react';
+import { Modal, Header, Divider, Icon, Button } from 'semantic-ui-react';
 
 const ThanksNote = props => (
-  <Modal open closeIcon onClose={props.closeModal} size="mini" closeOnDimmerClick={false}>
+  <Modal open size="mini">
     <Modal.Header className="center-align signup-header">
       <Header as="h2">
         <Icon.Group>
@@ -18,6 +18,10 @@ const ThanksNote = props => (
       </p>
       <Divider hidden />
     </Modal.Header>
+    <div className="center-align">
+      <Button onClick={props.closeModal} primary size="large">Close</Button>
+    </div>
+    <Divider hidden />
   </Modal>
 );
 
