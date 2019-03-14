@@ -4,8 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
-import { Container, Card, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
-import Filters from './Filters';
+import { Container, Card, List, Grid, Message } from 'semantic-ui-react';
+// import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
@@ -30,9 +30,9 @@ export default class CampaignList extends Component {
     const { campaigns, loading } = this.props;
     return (
       <Aux>
-        {this.props.filters &&
+        {/* {this.props.filters &&
           <Filters toggleFilters={this.toggleFilters} status={this.state.filters} />
-        }
+        } */}
         <section className="campaign-list-wrapper">
           <Container>
             {this.props.heading}
@@ -55,8 +55,10 @@ export default class CampaignList extends Component {
                             />
                           </div>
                         </div>
-                        <Label color="green">NEW</Label> {/* apply attribute basic for successful campaigns */}
-                        <Icon name="heart" /> {/* change name to "heart outline" for unliked campaigns */}
+                        {/* <Label color="green">NEW</Label>  apply attribute basic for
+                        successful campaigns */}
+                        {/* <Icon name="heart" />  change name to "heart outline" for
+                        unliked campaigns */}
                         <Aux>
                           <Card.Content>
                             <div className="tags mb-10">
