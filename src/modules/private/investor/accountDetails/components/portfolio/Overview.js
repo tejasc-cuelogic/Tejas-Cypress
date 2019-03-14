@@ -204,11 +204,11 @@ class Overview extends Component {
                     }
                   </Statistic.Value>
                 </Statistic>
-                {get(offering, 'closureSummary.repaymentCompleteDate') && (
+                {get(offering, 'closureSummary.repayment.completeDate') && (
                   <Statistic>
                     <Statistic.Label>Payoff Date</Statistic.Label>
                     <Statistic.Value>
-                      {get(offering, 'closureSummary.repaymentCompleteDate') || 'N/A'}
+                      {moment(get(offering, 'closureSummary.repayment.completeDate').format('MMM Do YYYY')) || 'N/A'}
                     </Statistic.Value>
                   </Statistic>
                 )}

@@ -460,6 +460,9 @@ query getOfferingById($id: ID) {
     stage
     closureSummary {
       totalInvestmentAmount
+      repayment {
+        completeDate
+      }
     }
     keyTerms {
       regulation
