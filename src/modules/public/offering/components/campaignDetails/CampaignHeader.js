@@ -68,13 +68,14 @@ export default class CampaignHeader extends Component {
                           </Statistic.Value>
                           <Statistic.Label>Investors</Statistic.Label>
                         </Statistic>
-                        <Statistic size="mini" className="basic">
-                          <Statistic.Value>
-                            {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount)
-                              || 0}
-                          </Statistic.Value>
-                          <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                        </Statistic>
+                        {(campaign && campaign.earlyBird && campaign.earlyBird.available) &&
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {campaign.earlyBird.available}
+                            </Statistic.Value>
+                            <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                          </Statistic>
+                        }
                       </Statistic.Group>
                     </div>
                   </div>

@@ -128,6 +128,7 @@ export const campaignDetailsQuery = gql`
     earlyBird {
       quantity
       amount
+      available
     }
     offering {
       overview {
