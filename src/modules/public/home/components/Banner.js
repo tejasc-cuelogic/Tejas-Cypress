@@ -5,8 +5,8 @@ import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Container, Responsive, Button } from 'semantic-ui-react';
 
-const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
+const { clientWidth } = document.documentElement;
+const isTablet = clientWidth >= 768 && clientWidth < 992;
 
 @inject('navStore', 'userDetailsStore', 'authStore', 'userStore')
 @observer
@@ -26,7 +26,7 @@ class Banner extends Component {
           <Responsive minWidth={768} as={Aux}>
             <div className="banner-caption">
               <Header as="h2">
-            Build an investment<br />portfolio you care about.
+                Build an investment<br />portfolio you care about.
               </Header>
               { showButton ?
                 <Button
@@ -36,13 +36,12 @@ class Banner extends Component {
                   as={Link}
                   to={redirectUrl}
                 /> : ''
-          }
+              }
             </div>
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Ian Tucker | Poitín</b><br />
-          Raised $224,700 from 182 investors
+              <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
             </p>
           </div>
         </Container>
