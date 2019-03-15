@@ -71,6 +71,7 @@ export default class Summary extends React.Component {
       formLinkBankManually,
       depositMoneyNow,
       isEncrypted,
+      shouldValidateAmount,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
@@ -111,7 +112,8 @@ export default class Summary extends React.Component {
                   <Table.Cell>
                     {!depositMoneyNow ?
                       Helper.CurrencyFormat(0) :
-                      formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value || 0)}` :
+                      formAddFunds.fields.value.value !== '' && shouldValidateAmount
+                       ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value || 0)}` :
                         Helper.CurrencyFormat(0)}
                   </Table.Cell>
                 </Table.Row>
