@@ -82,7 +82,7 @@ export class BusinessAppStore {
   @action
   businessDocChange = (e, res) => {
     this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, Validator.pullValues(e, res));
-    this.BUSINESS_DOC_FRM.meta.isValid = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+    this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
       Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
       this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   };
@@ -106,7 +106,7 @@ export class BusinessAppStore {
       status = this.BUSINESS_PERF_FRM.meta.isValid;
     } else if (step === 'documentation') {
       this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM, false, showErrors);
-      status = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+      status = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
         Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
           this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
       this.BUSINESS_DOC_FRM.meta.isValid = status;
@@ -472,7 +472,7 @@ export class BusinessAppStore {
       });
     }
     this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
-    this.BUSINESS_DOC_FRM.meta.isValid = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+    this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
       (this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
       this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   }
@@ -1024,7 +1024,7 @@ export class BusinessAppStore {
     } else if (this.applicationStep === 'documentation') {
       stepName = 'DOCUMENTATION';
       this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
-      isPartialDataFlag = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+      isPartialDataFlag = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
         !(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
           this.BUSINESS_DOC_FRM.meta.isValid) : !this.BUSINESS_DOC_FRM.meta.isValid;
       key = 3;
