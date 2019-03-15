@@ -512,6 +512,9 @@
             text-align:right;
         }
     }
+    &.confirm-investment>.content {
+        padding: @20px @30px;
+    }
 }
 .ui.inverted.dimmer .ui.modal > .close{
     height:32px;

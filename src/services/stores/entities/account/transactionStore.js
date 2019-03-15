@@ -453,12 +453,12 @@ export class TransactionStore {
   }
 
   @action
-  getDocuSignViewURL = () => new Promise((resolve, reject) => {
+  getDocuSignViewURL = aggrementId => new Promise((resolve, reject) => {
     this.loanAgreementData = graphql({
       client,
       query: viewLoanAgreement,
       variables: {
-        agreementId: this.aggrementId,
+        agreementId: aggrementId || this.aggrementId,
         callbackUrl: `${window.location.origin}/secure-gateway`,
       },
       fetchPolicy: 'network-only',
