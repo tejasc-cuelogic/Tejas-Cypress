@@ -145,7 +145,7 @@ class IndividualAccountStore {
         const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
           2 : this.stepToBeRendered;
         this.setStepToBeRendered(renderStep);
-        uiStore.setProgress(false);
+        // uiStore.setProgress(false);
         // if (!this.isManualLinkBankSubmitted && (
         //   bankAccountStore.formLinkBankManually.meta.isValid ||
         //   !isEmpty(bankAccountStore.plaidAccDetails))) {
@@ -155,6 +155,7 @@ class IndividualAccountStore {
         // }
       }
     }
+    uiStore.setProgress(false);
   }
 
   @action
