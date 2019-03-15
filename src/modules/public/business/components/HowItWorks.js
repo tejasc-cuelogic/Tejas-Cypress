@@ -266,8 +266,8 @@ class HowItWorks extends Component {
                 <p>
               The above figures include the total amount raised in offerings completed through
               NextSeed US, LLC (
-                  {Helper.MoneyMathDisplayCurrency(get(amount, 'amountRaisedUS') || 0)}) and NextSeed TX, LLC (
-                  {Helper.MoneyMathDisplayCurrency(get(amount, 'amountRaisedTX') || 0)}). Historical
+                  {Helper.MoneyMathDisplayCurrency((get(amount, 'amountRaisedUS') || 0), false)}) and NextSeed TX, LLC (
+                  {Helper.MoneyMathDisplayCurrency((get(amount, 'amountRaisedTX') || 0), false)}). Historical
               figures only. Past performance of one business is not a guarantee of future
               results of another business.
                 </p>
