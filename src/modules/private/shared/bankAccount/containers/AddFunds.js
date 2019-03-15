@@ -11,10 +11,7 @@ import { validationActions } from '../../../../../services/actions';
 @observer
 export default class AddFunds extends Component {
   componentWillMount() {
-    const { value } = this.props.bankAccountStore.formAddFunds.fields.value;
-    if (parseFloat(value, 0) === -1) {
-      this.props.bankAccountStore.resetAddFundsForm();
-    }
+    this.props.bankAccountStore.validateAddfundsAmount();
   }
   componentDidMount() {
     // this.props.bankAccountStore.validateForm('formAddFunds');
@@ -31,9 +28,8 @@ export default class AddFunds extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setDepositMoneyNow(true);
-    this.props.bankAccountStore.isValidOpeningDepositAmount().then(() => {
-      this.renderStep();
-    });
+    this.props.bankAccountStore.setShouldValidateAmount(true);
+    this.renderStep();
   }
 
   renderStep = () => {
