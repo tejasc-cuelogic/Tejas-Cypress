@@ -68,10 +68,10 @@ const InvestmentList = (props) => {
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' && (
                           <Button.Group size="mini" compact>
-                            <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
                             {viewAgreement && data.agreementId} {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
+                            <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
                             {DataFormatter.diffDays(data && data.offering &&
                               data.offering.offering && data.offering.offering.launch &&
                               data.offering.offering.launch.terminationDate ?
