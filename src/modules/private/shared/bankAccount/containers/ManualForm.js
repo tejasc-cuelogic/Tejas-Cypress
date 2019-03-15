@@ -9,7 +9,6 @@ import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 
-
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
 @observer
