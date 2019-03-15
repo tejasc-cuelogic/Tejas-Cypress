@@ -21,6 +21,11 @@ export default class Congratulation extends React.Component {
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push('overview');
   }
+  handleCloseModalWithRefferalLink = () => {
+    this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.history.push('/app/referrals');
+  }
   render() {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { investmentAmount } = this.props.investmentStore;
@@ -52,7 +57,7 @@ export default class Congratulation extends React.Component {
             <div className="center-align">
               <Button
                 primary
-                onClick={this.handleCloseModal}
+                onClick={this.handleCloseModalWithRefferalLink}
               >Give $20 & Get $20
               </Button>
             </div>

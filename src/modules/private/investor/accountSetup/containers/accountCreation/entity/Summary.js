@@ -24,8 +24,7 @@ export default class Summary extends Component {
     }
   }
   componentDidUpdate() {
-    const { isAccountPresent } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(!isAccountPresent);
+    this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
