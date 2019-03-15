@@ -98,7 +98,7 @@ export class AgreementsStore {
     const agreementsList = this.getAgreementsList;
     const navList = [];
     forEach(agreementsList, (ele) => {
-      if (ele.key !== 'welcomeKit' && ele.key !== 'businessPan') {
+      if (!['welcomeKit', 'businessPan'].includes(ele.key) && !ele.key.includes('instruction')) {
         navList.push({ title: ele.title, to: ele.key, id: ele.id });
       }
     });

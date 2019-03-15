@@ -22,7 +22,11 @@ export const THeader = ({ columns }) => (
 const Actions = (props) => {
   let additionalFileIdRef = null;
   if (props.additionalActions && props.dataSet) {
-    additionalFileIdRef = props.dataSet.instructions.find(i => i.key === `instruction${props.dataSet.mapKey}`).id;
+    try {
+      additionalFileIdRef = props.dataSet.instructions.find(i => i.key === `instruction${props.dataSet.mapKey}`).id;
+    } catch (e) {
+      additionalFileIdRef = null;
+    }
   }
   return (
     <Aux>

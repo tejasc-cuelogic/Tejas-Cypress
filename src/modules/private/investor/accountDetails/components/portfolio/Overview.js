@@ -131,14 +131,14 @@ class Overview extends Component {
                       null
                     }
                     <Table.Row verticalAlign="top">
-                      <Table.Cell width={5}><b>Maturity</b>{' '}
+                      <Table.Cell width={5}>Maturity{' '}
                         <Popup
                           trigger={<Icon name="help circle" color="green" />}
                           content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
                           position="top center"
                         />
                       </Table.Cell>
-                      <Table.Cell className="grey-header">
+                      <Table.Cell>
                         {maturityMonth ?
                           `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
                           :
@@ -182,21 +182,11 @@ class Overview extends Component {
               <Header as="h4">Key Dates & Values</Header>
               <Statistic.Group size="mini" className="vertical">
                 <Statistic>
-                  <Statistic.Label>Open date</Statistic.Label>
+                  <Statistic.Label>Expected Business Openin</Statistic.Label>
                   <Statistic.Value>
                     {offering && offering.launch &&
                       offering.launch.targetDate ?
                       moment(offering.launch.targetDate).format('MMM Do YYYY')
-                      :
-                      'N/A'
-                    }
-                  </Statistic.Value>
-                </Statistic>
-                <Statistic>
-                  <Statistic.Label>Months to Maturity</Statistic.Label>
-                  <Statistic.Value>
-                    {keyTerms && keyTerms.maturity ?
-                      `${keyTerms.maturity} months`
                       :
                       'N/A'
                     }
