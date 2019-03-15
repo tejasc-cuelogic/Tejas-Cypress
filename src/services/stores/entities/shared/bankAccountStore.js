@@ -34,6 +34,7 @@ export class BankAccountStore {
   @observable pendingBankPladLogo = null;
   @observable db;
   @observable linkbankSummary = false;
+  @observable shouldValidateAmount = false;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -51,6 +52,11 @@ export class BankAccountStore {
   @action
   setDepositMoneyNow(status) {
     this.depositMoneyNow = status;
+  }
+
+  @action
+  setShouldValidateAmount = (val) => {
+    this.shouldValidateAmount = val;
   }
 
   @action
@@ -110,6 +116,15 @@ export class BankAccountStore {
   @action
   resetAddFundsForm() {
     Validator.resetFormData(this.formAddFunds);
+  }
+
+  @action
+  validateAddfundsAmount = () => {
+    const { value } = this.formAddFunds.fields.value;
+    if (parseFloat(value, 0) === -1) {
+      this.shouldValidateAmount = true;
+      this.resetAddFundsForm();
+    }
   }
 
   changeLinkbank = () => {
@@ -432,6 +447,7 @@ export class BankAccountStore {
     this.showAddFunds = false;
     this.isManualLinkBankSubmitted = false;
     this.linkbankSummary = false;
+    this.shouldValidateAmount = false;
   }
   @action
   setPlaidBankVerificationStatus = (booleanValue) => {
@@ -474,7 +490,9 @@ export class BankAccountStore {
       }
     }
     return new Promise((resolve, reject) => {
-      if (!this.depositMoneyNow) {
+      console.log('this.depositMoneyNow :', this.depositMoneyNow);
+      console.log('this.shouldValidateAmount :', this.shouldValidateAmount);
+      if (!this.depositMoneyNow || !this.shouldValidateAmount) {
         resolve();
       } else {
         const isLoader = individualAccountStore.stepToBeRendered === 1 || this.showAddFunds
