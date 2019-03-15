@@ -70,6 +70,7 @@ export class BankAccount {
       product: ['auth, transactions'],
       onLoad: () => {
         // The Link module finished loading.
+        bankAccountStore.setLinkBankSummary(false);
         uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
         if (accountValue !== 0) {

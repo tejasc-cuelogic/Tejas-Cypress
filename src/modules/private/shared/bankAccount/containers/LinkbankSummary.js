@@ -11,9 +11,8 @@ import { validationActions } from '../../../../../services/actions';
 @withRouter
 @observer
 export default class LinkbankSummary extends React.Component {
-  componentDidUpdate() {
-    const { isAccountPresent } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(!isAccountPresent);
+  componentDidMount() {
+    this.props.bankAccountStore.setLoaderForAccountBlank();
   }
 
   handleSubmit = () => {

@@ -458,6 +458,11 @@ export class BankAccountStore {
   }
 
   @action
+  setLoaderForAccountBlank = () => {
+    uiStore.setProgress(!this.isAccountPresent);
+  }
+
+  @action
   isValidOpeningDepositAmount = (resetProgress = true) => {
     uiStore.setProgress();
     const variables = {
@@ -486,12 +491,12 @@ export class BankAccountStore {
           fetchPolicy: 'network-only',
           onFetch: () => {
             if (resetProgress) {
-              uiStore.setProgress(isLoader || false);
+              uiStore.setProgress(isLoader);
             }
             resolve();
           },
           onError: (err) => {
-            uiStore.setProgress(isLoader || false);
+            uiStore.setProgress(isLoader);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject();
           },

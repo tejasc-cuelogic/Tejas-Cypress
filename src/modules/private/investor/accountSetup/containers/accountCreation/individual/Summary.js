@@ -23,8 +23,7 @@ export default class Summary extends React.Component {
     }
   }
   componentDidUpdate() {
-    const { isAccountPresent } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(!isAccountPresent);
+    this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
     const {
