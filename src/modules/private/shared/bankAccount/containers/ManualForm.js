@@ -16,6 +16,7 @@ import LinkbankSummary from './LinkbankSummary';
 export default class ManualForm extends Component {
   componentWillMount() {
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
+    this.props.bankAccountStore.setShouldValidateAmount();
     this.props.uiStore.clearErrors();
   }
   handleSubmitForm = (e) => {
