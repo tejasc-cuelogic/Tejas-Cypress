@@ -9,13 +9,13 @@ import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 
-
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
 @observer
 export default class ManualForm extends Component {
   componentWillMount() {
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
+    this.props.bankAccountStore.setShouldValidateAmount();
     this.props.uiStore.clearErrors();
   }
   handleSubmitForm = (e) => {
@@ -32,12 +32,12 @@ export default class ManualForm extends Component {
       });
     } else {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
-        if (investmentAccType === 'individual') {
-          this.props[accTypeStore].setStepToBeRendered(0);
-          // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
-        } else {
-          this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
-        }
+        // if (investmentAccType === 'individual') {
+        //   this.props[accTypeStore].setStepToBeRendered(0);
+        //   // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
+        // } else {
+        // }
+        this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
         this.props.bankAccountStore.setLinkBankSummary();
       });
     }
@@ -62,7 +62,7 @@ export default class ManualForm extends Component {
     if (showAddFunds) {
       return <AddFunds />;
     }
-    if (linkbankSummary) {
+    if (this.props.action !== 'change' && linkbankSummary) {
       return <LinkbankSummary />;
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);

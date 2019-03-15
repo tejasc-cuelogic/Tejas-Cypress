@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import money from 'money-math';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
@@ -131,7 +132,13 @@ export default class InvestNow extends React.Component {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then(() => {
-            this.handleStepChange(step.stepToBeRendered);
+            const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+            const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+            if (!isDocumentUpload) {
+              this.handleStepChangeForPartialAccounts(0);
+            } else {
+              this.handleStepChange(step.stepToBeRendered);
+            }
           });
       } else {
         this.handleStepChangeForPartialAccounts(0);

@@ -12,7 +12,9 @@ class TransferRequest extends Component {
     const {
       getTransferRequestAmount,
       setStepToBeRendered,
+      resetFormErrors,
     } = this.props.investmentStore;
+    resetFormErrors('INVESTMONEY_FORM');
     if (getTransferRequestAmount > 0) {
       setStepToBeRendered(2);
     } else {
@@ -83,7 +85,7 @@ class TransferRequest extends Component {
               <Table.Row>
                 <Table.Cell>Previous Investment:</Table.Cell>
                 <Table.Cell collapsing>
-                  {Helper.MoneyMathDisplayCurrency(getPreviousInvestedAmount, false)}
+                  {Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
                 </Table.Cell>
               </Table.Row>
             }
@@ -98,7 +100,7 @@ class TransferRequest extends Component {
                 />
               </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.MoneyMathDisplayCurrency(getCurrCashAvailable, false)}
+                {Helper.CurrencyFormat(getCurrCashAvailable, 0)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>

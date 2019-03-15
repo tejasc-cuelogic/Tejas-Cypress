@@ -41,6 +41,7 @@ export const getInvestNowHealthCheck = gql`
       rewardBalance
       previousAmountInvested
       bankNameAndAccountNumber
+      availibityForNPAInOffering
     }
   }
 `;

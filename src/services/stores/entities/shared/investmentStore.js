@@ -28,7 +28,7 @@ export class InvestmentStore {
   @observable offeringMetaData = {
     campaignType: 0,
     rate: 5,
-    rateMin: campaignStore.minInvestAmt,
+    rateMin: 1.5,
     annualReturn: 1000,
     targetTerm: 5000,
   }
@@ -69,7 +69,6 @@ export class InvestmentStore {
         this.investmentAmount,
         getPreviousInvestedAmount,
       );
-
       return differenceResult;
     }
     return 0;
@@ -221,20 +220,28 @@ export class InvestmentStore {
   calculateEstimatedReturn = () => {
     const {
       rateMin,
-      campaignType,
     } = this.offeringMetaData;
     const investAmt = this.investmentAmount;
+    // if (investAmt >= 100) {
+    //   if (campaignType === 0) {
+    //     const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt));
+    //     this.estReturnVal = estReturnMIN;
+    //     return this.estReturnVal;
+    //   } else if (campaignType === 1) {
+    //     this.estReturnVal =
+    // `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan))}`;
+    //     return this.estReturnVal;
+    //   }
+    // } else {
+    //   this.estReturnVal = '-';
+    //   return this.estReturnVal;
+    // }
     if (investAmt >= 100) {
-      if (campaignType === 0) {
-        const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt));
-        this.estReturnVal = estReturnMIN;
-        return this.estReturnVal;
-      } else if (campaignType === 1) {
-        this.estReturnVal = `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan))}`;
-        return this.estReturnVal;
-      }
-    } else {
-      this.estReturnVal = '-';
+      const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt), 0);
+      this.estReturnVal = estReturnMIN;
+      return this.estReturnVal;
+    } else if (investAmt <= 100) {
+      this.setFieldValue('estReturnVal', '-');
       return this.estReturnVal;
     }
     return this.estReturnVal;
@@ -578,6 +585,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
     this.setFieldValue('isGetTransferRequestCall', false);
+    this.setFieldValue('estReturnVal', '-');
   }
 
   @action
@@ -622,7 +630,7 @@ export class InvestmentStore {
   }
   @action
   validateMaskedInputForAmount = () => {
-    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
@@ -633,6 +641,7 @@ export class InvestmentStore {
   resetFormErrors = (form) => {
     this[form].fields.investmentAmount.error = undefined;
     this[form].meta.isValid = true;
+    this.setFieldValue('investmentFlowErrorMessage', undefined);
   }
 }
 

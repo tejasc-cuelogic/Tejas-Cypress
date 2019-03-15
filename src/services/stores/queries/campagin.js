@@ -70,6 +70,9 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
+    created {
+      id
+    }
     keyTerms {
       unitPrice
       roundType
@@ -312,14 +315,6 @@ export const campaignDetailsQuery = gql`
             fileHandle {
               boxFileId
             }
-          }
-        }
-      }
-      documentation {
-        admin {
-          npa {
-            fileName
-            fileId
           }
         }
       }
@@ -571,16 +566,6 @@ query getOfferingById($id: ID) {
     earlyBird {
       quantity
       amount
-    }
-    legal {
-      documentation {
-        admin {
-          npa {
-            fileName
-            fileId
-          }
-        }
-      }
     }
   }
 }

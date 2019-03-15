@@ -204,11 +204,12 @@ export const IND_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'optional|numeric|min:100',
+    rule: 'optional|numeric|min:100|max:25000',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least 100.',
+      max: 'The deposit amount should be at less than 25000.',
     },
   },
 };

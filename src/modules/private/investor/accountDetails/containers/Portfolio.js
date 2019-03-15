@@ -11,20 +11,41 @@ import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
 import InvestmentDetails from './InvestmentDetails';
 import CancelInvestment from '../components/portfolio/CancelInvestment';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, IframeModal } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 
-@inject('portfolioStore')
+@inject('portfolioStore', 'transactionStore')
 @observer
 export default class Portfolio extends Component {
-  state = { inActiveItems: [] }
+  state = {
+    open: false,
+    embedUrl: '',
+    inActiveItems: [],
+  };
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     this.props.portfolioStore.calculateInvestmentType();
+    window.addEventListener('message', this.docuSignListener);
+  }
+  docuSignListener = (e) => {
+    if (e.data === 'viewing_complete') {
+      this.setState({ open: false });
+    }
+  };
+  viewLoanAgreement = (aggrementId) => {
+    this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
+      this.setState({
+        open: true,
+        embedUrl: res,
+      });
+    });
+  }
+  closeModal = () => {
+    this.setState({ open: false });
   }
   toggleAccordion = (of) => {
     const { inActiveItems } = this.state;
@@ -52,7 +73,7 @@ export default class Portfolio extends Component {
           title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
         {
-          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: 'The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the Education Center [link to Education Center article] for a full explanation of how TNAR is calculated.',
+          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
         },
       ],
     };
@@ -67,7 +88,7 @@ export default class Portfolio extends Component {
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
-          <InvestmentList inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
+          <InvestmentList viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
         }
         {activeSorted.length ?
           <InvestmentList inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
@@ -108,6 +129,12 @@ export default class Portfolio extends Component {
         <Route
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
+        />
+        <IframeModal
+          open={this.state.open}
+          close={this.closeModal}
+          srcUrl={this.state.embedUrl}
+          loading={false}
         />
       </Aux>
     );
