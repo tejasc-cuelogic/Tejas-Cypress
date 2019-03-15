@@ -55,11 +55,7 @@ export class BankAccountStore {
   }
 
   @action
-<<<<<<< HEAD
   setShouldValidateAmount = (val = false) => {
-=======
-  setShouldValidateAmount = (val) => {
->>>>>>> 911be82f5ff322f62257fb47bd51feeb458f5dc3
     this.shouldValidateAmount = val;
   }
 
