@@ -630,7 +630,7 @@ export class InvestmentStore {
   }
   @action
   validateMaskedInputForAmount = () => {
-    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
