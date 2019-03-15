@@ -73,7 +73,7 @@ export default class Portfolio extends Component {
           title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
         {
-          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: 'The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the Education Center [link to Education Center article] for a full explanation of how TNAR is calculated.',
+          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
         },
       ],
     };
