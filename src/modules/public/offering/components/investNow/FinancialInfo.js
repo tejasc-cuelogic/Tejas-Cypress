@@ -60,7 +60,7 @@ class FinancialInfo extends Component {
         <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest ?'}</Header>
         {this.props.changeInvest &&
           <Aux>
-            <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.MoneyMathDisplayCurrency(currentInvestedAmount, false)}</span></Header>
+            <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
             <p>
