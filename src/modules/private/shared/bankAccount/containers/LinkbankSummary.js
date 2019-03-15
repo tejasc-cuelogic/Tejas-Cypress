@@ -26,13 +26,6 @@ export default class LinkbankSummary extends React.Component {
       this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
       this.props.bankAccountStore.setShowAddFunds();
     }
-    // this.props[accTypeStore].createAccount(currentStep).then(() => {
-    //   // if (investmentAccType === 'individual') {
-    //   //   // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
-    //   // } else {
-
-    //   // }
-    // });
   }
 
   render() {
@@ -81,7 +74,14 @@ export default class LinkbankSummary extends React.Component {
           </Message>
         } */}
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Continue" onClick={() => this.handleSubmit()} disabled={errors || !bankAccountNumber} />
+          <Button
+            primary
+            size="large"
+            className="relaxed"
+            content="Continue"
+            onClick={() => this.handleSubmit()}
+            disabled={errors || !bankAccountNumber}
+          />
         </div>
         <div className="center-align mt-30">
           <Button color="green" className="link-button" content="or change linked bank" onClick={() => changeLinkbank()} />
