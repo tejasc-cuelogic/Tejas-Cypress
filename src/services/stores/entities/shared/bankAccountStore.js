@@ -55,7 +55,11 @@ export class BankAccountStore {
   }
 
   @action
+<<<<<<< HEAD
+  setShouldValidateAmount = (val = false) => {
+=======
   setShouldValidateAmount = (val) => {
+>>>>>>> 911be82f5ff322f62257fb47bd51feeb458f5dc3
     this.shouldValidateAmount = val;
   }
 
@@ -380,6 +384,7 @@ export class BankAccountStore {
       bankRoutingNumber: data.routingNumber,
       bankAccountNumber: data.accountNumber,
       accountId: this.CurrentAccountId,
+      accountType: data.accountType,
     };
     return new Promise((resolve, reject) => {
       client
