@@ -62,7 +62,7 @@ export default class ManualForm extends Component {
     if (showAddFunds) {
       return <AddFunds />;
     }
-    if (linkbankSummary) {
+    if (this.props.action !== 'change' && linkbankSummary) {
       return <LinkbankSummary />;
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
