@@ -54,7 +54,8 @@ export default class AccountCreation extends React.Component {
     } = this.props.entityAccountStore;
     const {
       formAddFunds, plaidAccDetails, formLinkBankManually,
-      isPlaidDirty,
+      isPlaidDirty, linkbankSummary, bankSummarySubmit,
+
     } = this.props.bankAccountStore;
     const steps =
     [
@@ -109,7 +110,7 @@ export default class AccountCreation extends React.Component {
         isValid: (formAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : (stepToBeRendered === 5 || stepToBeRendered > 5) ? 'error' : '',
         isDirty: isPlaidDirty,
         validate: validationActions.validateLinkBankForm,
-        disableNextButton: true,
+        disableNextButton: !linkbankSummary,
         stepToBeRendered: 6,
       },
       {
@@ -120,7 +121,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress" >
-        <MultiStep page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep page disablePrevBtn bankSummary={linkbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }
