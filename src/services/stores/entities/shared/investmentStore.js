@@ -641,6 +641,7 @@ export class InvestmentStore {
   resetFormErrors = (form) => {
     this[form].fields.investmentAmount.error = undefined;
     this[form].meta.isValid = true;
+    this.setFieldValue('investmentFlowErrorMessage', undefined);
   }
 }
 
