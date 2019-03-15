@@ -39,22 +39,22 @@ class KeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Type of Offering</b>
+              <Table.Cell><b>Type of Offering {' '}</b>
+                { get(campaign, 'regulation') &&
+                  CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={
+                        CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
+                      }
+                      hoverable
+                      position="top center"
+                    /> : ''
+                }
               </Table.Cell>
               <Table.Cell className="grey-header">
                 {get(campaign, 'regulation') ?
-                  `${CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation]} ` : '-'}
-                { get(campaign, 'regulation') &&
-                CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={
-                      CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
-                    }
-                    hoverable
-                    position="top center"
-                  /> : ''
-                }
+                  CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
