@@ -182,7 +182,7 @@ class Overview extends Component {
               <Header as="h4">Key Dates & Values</Header>
               <Statistic.Group size="mini" className="vertical">
                 <Statistic>
-                  <Statistic.Label>Expected Business Openin</Statistic.Label>
+                  <Statistic.Label>Expected Business Opening</Statistic.Label>
                   <Statistic.Value>
                     {offering && offering.launch &&
                       offering.launch.targetDate ?
