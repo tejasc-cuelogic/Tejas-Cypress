@@ -85,7 +85,7 @@ export default class Summary extends React.Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Investor: </Table.Cell>
-                  <Table.Cell>{`${get(userDetails, 'info.firstName')} ${get(userDetails, 'info.lastName')}`}</Table.Cell>
+                  <Table.Cell>{`${get(userDetails, 'info.firstName') || ''} ${get(userDetails, 'info.lastName') || ''} `}</Table.Cell>
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
                   <Table.Row>

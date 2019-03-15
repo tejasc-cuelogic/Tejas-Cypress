@@ -105,7 +105,7 @@ class IndividualAccountStore {
             } else {
               Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
             }
-            this.setStepToBeRendered(currentStep.stepToBeRendered);
+            // this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);
@@ -142,11 +142,8 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        // const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
-        //   2 : this.stepToBeRendered;
-        const { isAccountPresent, formAddFunds } = bankAccountStore;
-        const { value } = formAddFunds.fields.value;
-        const renderStep = isAccountPresent && value !== '' ? 2 : this.stepToBeRendered;
+        const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
+          2 : this.stepToBeRendered;
         this.setStepToBeRendered(renderStep);
         uiStore.setProgress(false);
         // if (!this.isManualLinkBankSubmitted && (
