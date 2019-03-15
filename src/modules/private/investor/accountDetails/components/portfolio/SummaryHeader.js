@@ -52,6 +52,7 @@ const SummaryHeader = props => (
                         content={row.info}
                         position="top center"
                         wide
+                        hoverable
                       />
                     }
                   </Statistic.Label>
