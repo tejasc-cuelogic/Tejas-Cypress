@@ -5,7 +5,10 @@ import { withRouter } from 'react-router-dom';
 import { Header, Button, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 // import { ListErrors } from '../../../../../theme/shared';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 911be82f5ff322f62257fb47bd51feeb458f5dc3
 
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'accountStore', 'iraAccountStore', 'entityAccountStore')
 @withRouter

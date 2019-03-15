@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { get } from 'lodash';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Helper from '../../../../helper/utility';
 
 @inject('offeringsStore')
 @observer
 class Banner extends Component {
+
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
   }
+
   render() {
-    const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
-    const amount = this.props.offeringsStore.totalAmountRaised;
+    const { clientWidth } = document.documentElement;
+    const isTablet = clientWidth >= 768 && clientWidth < 992;
     return (
       <section className="banner business-banner">
         <Container>
           <Responsive minWidth={768} as={Aux}>
             <div className="banner-caption">
               <Header as="h2">
-          Accelerate your<br />
-          growth with the<br />
-          power of the crowd.
+                Accelerate your<br />
+                growth with the<br />
+                power of the crowd.
               </Header>
               <Button.Group className={!isTablet && 'mt-30'}>
                 <Button secondary content="Business Application" as={Link} to="/business-application/business" />
@@ -34,9 +33,7 @@ class Banner extends Component {
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Jessica Hughes | Citizen Pilates</b><br />
-          Raised {`${Helper.MoneyMathDisplayCurrency(get(amount, 'amountRaisedUS') || 0)} `}
-           from {get(amount, 'totalInvestorsUS') || 0} investors
+              <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,00 from 75 investors
             </p>
           </div>
         </Container>

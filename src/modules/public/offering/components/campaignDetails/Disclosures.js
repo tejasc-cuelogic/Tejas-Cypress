@@ -29,6 +29,8 @@ export default class TermsOfUse extends Component {
     <span className="anchor-scroll" />
                     </Header>)
   render() {
+    const { campaign } = this.props.campaignStore;
+    const campaignCreatedBy = get(campaign, 'created.id') || null;
     const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
     if (!dataRoomDocs.length) {
       return (
@@ -45,7 +47,7 @@ export default class TermsOfUse extends Component {
       <div className="campaign-content-wrapper">
         {this.dataRoomHeader}
         <Header as="h4" className="mb-20 grey-header">{sortedDocswithBoxLink[index - 1].name}</Header>
-        <Disclosure doc={sortedDocswithBoxLink[index - 1]} />
+        <Disclosure campaignCreatedBy={campaignCreatedBy} doc={sortedDocswithBoxLink[index - 1]} />
       </div>
     );
   }
