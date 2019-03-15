@@ -16,7 +16,7 @@ export default class FillingStatus extends Component {
         Do you have documentation to verify your income for 2018?
         </p>
         <Form error className="account-type-tab">
-          <Grid columns={1}>
+          <Grid columns={3} centered reversed>
             {FILLING_STATUS_FORM.fields.method.values.map(method => (
               <Grid.Column
                 onClick={e => accreditationMethodChange(e, 'FILLING_STATUS_FORM', { name: 'method', value: method.value })}

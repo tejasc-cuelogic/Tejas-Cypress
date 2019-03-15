@@ -11,7 +11,7 @@ import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const InvestmentList = (props) => {
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
-  const { investments, match } = props;
+  const { investments, match, viewAgreement } = props;
   const isActive = !props.inActiveItems.includes(props.listOf);
   return (
     <Accordion fluid styled className="card-style">
@@ -66,19 +66,20 @@ const InvestmentList = (props) => {
                         <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.offering.launch.terminationDate')} />}
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        {props.listOf !== 'pending' ?
-                            null
-                          :
-                            <Button.Group size="mini" compact>
-                              <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
-                              {DataFormatter.diffDays(data && data.offering &&
-                                data.offering.offering && data.offering.offering.launch &&
-                                data.offering.offering.launch.terminationDate ?
-                                data.offering.offering.launch.terminationDate : null) > 2 &&
-                                <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
-                              }
-                            </Button.Group>
-                        }
+                        {props.listOf === 'pending' && (
+                          <Button.Group size="mini" compact>
+                            <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
+                            {viewAgreement && data.agreementId} {
+                              <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
+                            }
+                            {DataFormatter.diffDays(data && data.offering &&
+                              data.offering.offering && data.offering.offering.launch &&
+                              data.offering.offering.launch.terminationDate ?
+                              data.offering.offering.launch.terminationDate : null) > 2 &&
+                              <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
+                            }
+                          </Button.Group>
+                        )}
                       </Table.Cell>
                     </Table.Row>
                   ))
