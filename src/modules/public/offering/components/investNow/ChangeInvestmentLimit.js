@@ -114,10 +114,10 @@ class ChangeInvestmentLimit extends Component {
                 </Table.Row>
               </Table.Footer>
             </Table>
-            <div className="center-align">
+            <div className="center-align mt-30">
               <Button.Group>
-                <Button primary content="Update" onClick={this.changeInvestmentLimit} />
                 <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
+                <Button primary content="Update" onClick={this.changeInvestmentLimit} />
               </Button.Group>
             </div>
           </Form>
