@@ -8,6 +8,7 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.uiStore.setProgress();
     this.props.userDetailsStore.setUserAccDetails('individual');
     this.props.accountStore.setAccTypeChange(0);
   }
@@ -41,6 +42,7 @@ export default class AccountCreation extends React.Component {
       validateAddFunds,
       depositMoneyNow,
       isPlaidDirty,
+      linkbankSummary,
     } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
@@ -51,7 +53,7 @@ export default class AccountCreation extends React.Component {
         // isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
         isDirty: isPlaidDirty,
         stepToBeRendered: 1,
-        disableNextButton: true,
+        disableNextButton: !linkbankSummary,
       },
       {
         name: 'Add funds',
