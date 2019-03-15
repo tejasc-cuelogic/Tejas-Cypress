@@ -16,9 +16,6 @@ export default class Congratulation extends React.Component {
       this.props.campaignStore.setFieldValue('showFireworkAnimation', true);
     }
   }
-  getReferral = () => {
-    this.props.history.push('/app/referrals');
-  }
   handleCloseModal = () => {
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
@@ -55,7 +52,7 @@ export default class Congratulation extends React.Component {
             <div className="center-align">
               <Button
                 primary
-                onClick={this.getReferral}
+                onClick={this.handleCloseModal}
               >Give $20 & Get $20
               </Button>
             </div>
