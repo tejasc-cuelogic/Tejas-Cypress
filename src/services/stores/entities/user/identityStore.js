@@ -730,13 +730,15 @@ export class IdentityStore {
   @action
   isSsnExist = ssn => new Promise((resolve) => {
     uiStore.setProgress();
-    graphql({
+    const result = graphql({
       client,
       query: isUniqueSSN,
       fetchPolicy: 'network-only',
       variables: { ssn },
       onFetch: (data) => {
-        resolve(data.isUniqueSSN.alreadyExists);
+        if (result && !result.loading) {
+          resolve(data.isUniqueSSN.alreadyExists);
+        }
       },
     });
   })
@@ -753,13 +755,15 @@ export class IdentityStore {
       zipCode: zipCode.value,
     };
     uiStore.setProgress();
-    graphql({
+    const result = graphql({
       client,
       query: checkValidAddress,
       fetchPolicy: 'network-only',
       variables: payLoad,
       onFetch: (res) => {
-        resolve(res.checkValidInvestorAddress);
+        if (result && !result.loading) {
+          resolve(res.checkValidInvestorAddress);
+        }
       },
     });
   })

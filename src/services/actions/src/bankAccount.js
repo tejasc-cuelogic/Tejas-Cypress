@@ -70,12 +70,12 @@ export class BankAccount {
       product: ['auth, transactions'],
       onLoad: () => {
         // The Link module finished loading.
+        bankAccountStore.setLinkBankSummary(false);
         uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        if (accountValue !== 0) {
-          ACC_LINK_BANK_MAPPING[accountValue].store
-            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
-        }
+        const renderStep = accountValue !== 0 ? ACC_LINK_BANK_MAPPING[accountValue].location : 0;
+        ACC_LINK_BANK_MAPPING[accountValue].store
+          .setStepToBeRendered(renderStep);
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
