@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { isEmpty, map, uniqWith, isEqual, find, get } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
+import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
 import { linkBankRequestPlaid, linkBankRequestManual, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
@@ -11,7 +11,7 @@ import {
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
-import individualAccountStore from '../user/individualAccountStore';
+import { validationActions } from '../../../../services/actions';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -522,6 +522,20 @@ export class BankAccountStore {
         });
       }
     });
+  }
+
+  @action
+  bankSummarySubmit = () => {
+    const { investmentAccType } = accountStore;
+    const accTypeStore = investmentAccType === 'individual' ? individualAccountStore : investmentAccType === 'entity' ? entityAccountStore : investmentAccType === 'ira' ? iraAccountStore : individualAccountStore;
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
+    // this.props.bankAccountStore.resetAddFundsForm();
+    accTypeStore.setStepToBeRendered(currentStep.stepToBeRendered);
+    if (investmentAccType !== 'individual') {
+      this.setLinkBankSummary(false);
+      this.setIsManualLinkBankSubmitted(false);
+      this.setShowAddFunds();
+    }
   }
 
   @action

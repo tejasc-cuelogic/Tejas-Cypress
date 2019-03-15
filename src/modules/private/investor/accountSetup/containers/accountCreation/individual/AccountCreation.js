@@ -42,6 +42,7 @@ export default class AccountCreation extends React.Component {
       validateAddFunds,
       depositMoneyNow,
       isPlaidDirty,
+      linkbankSummary,
     } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
@@ -52,7 +53,7 @@ export default class AccountCreation extends React.Component {
         // isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
         isDirty: isPlaidDirty,
         stepToBeRendered: 1,
-        disableNextButton: true,
+        disableNextButton: !linkbankSummary,
       },
       {
         name: 'Add funds',
