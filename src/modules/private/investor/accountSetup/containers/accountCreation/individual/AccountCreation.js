@@ -8,6 +8,7 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.uiStore.setProgress();
     this.props.userDetailsStore.setUserAccDetails('individual');
     this.props.accountStore.setAccTypeChange(0);
   }
