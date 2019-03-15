@@ -138,7 +138,7 @@ class Overview extends Component {
                           position="top center"
                         />
                       </Table.Cell>
-                      <Table.Cell className="grey-header">
+                      <Table.Cell>
                         {maturityMonth ?
                           `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
                           :
