@@ -50,6 +50,10 @@ section{
 	.caption{
 		margin-bottom:@50px !important;
 	}
+	&.padded{
+		padding-left: @50px;
+		padding-right: @50px;
+	}
 }
 //	Helper Classes Starts
 iframe{

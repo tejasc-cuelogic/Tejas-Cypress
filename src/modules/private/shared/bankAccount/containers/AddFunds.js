@@ -10,11 +10,17 @@ import { validationActions } from '../../../../../services/actions';
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
+  componentWillMount() {
+    const { value } = this.props.bankAccountStore.formAddFunds.fields.value;
+    if (parseFloat(value, 0) === -1) {
+      this.props.bankAccountStore.resetAddFundsForm();
+    }
+  }
   componentDidMount() {
     // this.props.bankAccountStore.validateForm('formAddFunds');
   }
   componentWillUnmount() {
-    // this.props.bankAccountStore.resetShowAddFunds();
+    this.props.bankAccountStore.resetShowAddFunds();
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
@@ -73,7 +79,6 @@ export default class AddFunds extends Component {
     const {
       formAddFunds,
       addFundChange,
-      changeLinkbank,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
 
@@ -104,9 +109,6 @@ export default class AddFunds extends Component {
             <Button primary size="large" className="relaxed" content="Confirm" disabled={!formAddFunds.meta.isValid || !formAddFunds.fields.value.value} />
           </Form>
           <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-        </div>
-        <div className="center-align mt-30">
-          <Button color="green" className="link-button" content="or change linked bank" onClick={() => changeLinkbank()} />
         </div>
       </Aux>
     );

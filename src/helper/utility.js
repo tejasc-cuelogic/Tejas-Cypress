@@ -70,8 +70,16 @@ export class Utility {
     return result;
   }
 
-  MoneyMathDisplayCurrency = amount => `$${amount}`;
-  CurrencyFormat = (amount, fraction = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maxFractionDigits: fraction }).format(amount)
+  MoneyMathDisplayCurrency = (amount, fraction = true) => {
+    try {
+      return fraction ? `$${amount}` : `$${amount}`.split('.')[0];
+    } catch (e) {
+      return '$0.00';
+    }
+  }
+  CurrencyFormat = (amount, fraction = 2) => new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: 2,
+  }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;

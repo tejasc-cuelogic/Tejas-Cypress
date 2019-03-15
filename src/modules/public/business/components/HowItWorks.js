@@ -139,13 +139,14 @@ class HowItWorks extends Component {
                 </div>
               </Grid.Column>
             </Grid>
-            <div className="center-align mt-50">
+            {/* <div className="center-align mt-50">
               <List horizontal relaxed className="learn-more-list">
                 <List.Item>
-                  <List.Content><strong>Learn more:</strong> Is fundraising on <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
+                  <List.Content><strong>Learn more:</strong> Is fundraising on
+                  <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
                 </List.Item>
               </List>
-            </div>
+            </div> */}
           </Container>
         </section>
         <Divider fitted as={Container} />
@@ -264,12 +265,10 @@ class HowItWorks extends Component {
                 </Grid>
                 <Divider hidden />
                 <p>
-              The above figures include the total amount raised in offerings completed through
-              NextSeed US, LLC (
-                  {Helper.MoneyMathDisplayCurrency(get(amount, 'amountRaisedUS') || 0)}) and NextSeed TX, LLC (
-                  {Helper.MoneyMathDisplayCurrency(get(amount, 'amountRaisedTX') || 0)}). Historical
-              figures only. Past performance of one business is not a guarantee of future
-              results of another business.
+                  The above figures include the total amount raised in offerings completed through
+                  NextSeed US, LLC ( {Helper.MoneyMathDisplayCurrency(get(amount, 'amountRaisedUS') || 0)}) and
+                  NextSeed TX, LLC ($1,303,500). Historical figures only. Past performance of one
+                  business is not a guarantee of future results of another business.
                 </p>
               </Grid.Column>
               <Grid.Column>

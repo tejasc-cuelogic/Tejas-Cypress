@@ -68,13 +68,14 @@ export default class CampaignHeader extends Component {
                           </Statistic.Value>
                           <Statistic.Label>Investors</Statistic.Label>
                         </Statistic>
-                        <Statistic size="mini" className="basic">
-                          <Statistic.Value>
-                            {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount)
-                              || 0}
-                          </Statistic.Value>
-                          <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                        </Statistic>
+                        {(campaign && campaign.earlyBird && campaign.earlyBird.available) &&
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {campaign.earlyBird.available}
+                            </Statistic.Value>
+                            <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                          </Statistic>
+                        }
                       </Statistic.Group>
                     </div>
                   </div>
@@ -111,7 +112,7 @@ export default class CampaignHeader extends Component {
                   <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
-                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                      content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
                       position="top center"
                     />
                   </p>

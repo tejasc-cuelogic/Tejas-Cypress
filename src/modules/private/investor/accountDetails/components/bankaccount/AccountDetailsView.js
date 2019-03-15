@@ -88,25 +88,27 @@ export default class AccountDetailsView extends Component {
                 </Item.Content>
               </Item>
             </Grid.Column>
-            <Grid.Column>
-              <Item>
-                <Item.Content>
-                  <Item.Extra>Status</Item.Extra>
-                  {accountType === 'pending' ?
-                    <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
-                      {currentStaus}
-                    </Item.Header>
-                    :
-                    <Item.Header>
-                      {currentStaus}
-                    </Item.Header>
-                  }
-                </Item.Content>
-              </Item>
-            </Grid.Column>
+            {accountDetails.pendingUpdate &&
+              <Grid.Column>
+                <Item>
+                  <Item.Content>
+                    <Item.Extra>Status</Item.Extra>
+                    {accountType === 'pending' ?
+                      <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
+                        {currentStaus}
+                      </Item.Header>
+                      :
+                      <Item.Header>
+                        {currentStaus}
+                      </Item.Header>
+                    }
+                  </Item.Content>
+                </Item>
+              </Grid.Column>
+            }
             <Grid.Column width={3} textAlign="right" verticalAlign="middle">
               {accountType === 'active' ?
-                accountDetails && !pendingAccoungDetails &&
+                accountDetails && !accountDetails.pendingUpdate &&
                 <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
                 :
                 <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />

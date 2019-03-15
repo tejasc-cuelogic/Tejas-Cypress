@@ -93,7 +93,6 @@ export class PortfolioStore {
       });
     }
     ['investmentType', 'industry'].forEach((field) => {
-      console.log(this.pieChartDataEval);
       forEach(this.pieChartDataEval[field], (data, key) => {
         if (data.value) {
           this.pieChartData[field].push({ ...data, key });
