@@ -239,13 +239,16 @@ class IraAccountStore {
         }
         break;
       case 'Link bank':
-        bankAccountStore.validateAddFunds();
+        if (parseFloat(bankAccountStore.formAddFunds.fields.value.value, 0) !== 0) {
+          bankAccountStore.validateAddFunds();
+        }
         if (bankAccountStore.manualLinkBankSubmitted) {
           currentStep.validate();
         }
-        isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
-          bankAccountStore.isValidLinkBank;
-        if (isValidCurrentStep && bankAccountStore.formAddFunds.meta.isFieldValid) {
+        isValidCurrentStep = bankAccountStore.isAccountPresent ||
+          bankAccountStore.formLinkBankManually.meta.isValid ||
+          bankAccountStore.formAddFunds.meta.isValid;
+        if (isValidCurrentStep) {
           uiStore.setProgress();
           // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
           // !bankAccountStore.manualLinkBankSubmitted) {
@@ -266,7 +269,8 @@ class IraAccountStore {
           //   }
           // }
           accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
-          accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+          accountAttributes.initialDepositAmount =
+            bankAccountStore.accountAttributes.initialDepositAmount;
           bankAccountStore.isValidOpeningDepositAmount().then(() => {
             this.submitForm(currentStep, accountAttributes).then(() => {
               res();
@@ -411,7 +415,6 @@ class IraAccountStore {
           }
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
-
         const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
@@ -419,11 +422,9 @@ class IraAccountStore {
           this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
         } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
-        } else if (bankAccountStore.manualLinkBankSubmitted ||
-          bankAccountStore.formAddFunds.fields.value.value === null ||
-          (this.FUNDING_FRM.fields.fundingType.value === 0 &&
-          !bankAccountStore.formLinkBankManually.meta.isValid &&
-          !bankAccountStore.isAccountPresent &&
+        } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
+          (bankAccountStore.manualLinkBankSubmitted ||
+          bankAccountStore.isPlaidDirty ||
           bankAccountStore.linkbankSummary)) {
           this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
@@ -492,7 +493,7 @@ class IraAccountStore {
             name: 'Identity',
             validate: validationActions.validateIRAIdentityInfo,
             form: 'IDENTITY_FRM',
-            stepToBeRendered: this.stepToBeRendered === 3 ? 4 : 5,
+            stepToBeRendered: this.FUNDING_FRM.fields.fundingType.value === 0 ? 5 : 4,
           };
           this.createAccount(currentStep, false);
         })

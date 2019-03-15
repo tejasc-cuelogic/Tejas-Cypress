@@ -21,12 +21,22 @@ export default class Plaid extends Component {
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
     // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     // const { manualLinkBankSubmitted } = this.props.bankAccountStore;
+    this.props.bankAccountStore.setShouldValidateAmount();
+    this.setBankSummary();
     this.props.uiStore.clearErrors();
   }
 
-  componentDidUpdate() {
-    const { linkbankSummary } = this.props.bankAccountStore;
-    this.props.bankAccountStore.setLinkBankSummary(linkbankSummary);
+  setBankSummary = () => {
+    const {
+      isAccountPresent,
+      showAddFunds,
+      manualLinkBankSubmitted,
+    } = this.props.bankAccountStore;
+    if (isAccountPresent &&
+      !showAddFunds &&
+      !manualLinkBankSubmitted) {
+      this.props.bankAccountStore.setLinkBankSummary();
+    }
   }
   handleBankSelect = (referenceLink) => {
     // const returnResult = bankAccountActions.bankSelect(institutionID, action);
@@ -64,7 +74,7 @@ export default class Plaid extends Component {
       return <AddFunds />;
     }
 
-    if (linkbankSummary) {
+    if (action !== 'change' && linkbankSummary) {
       return <LinkbankSummary />;
     }
     if (bankLinkInterface === 'form') {
@@ -146,7 +156,7 @@ export default class Plaid extends Component {
         </div>
         <div className="center-align mt-30">
           {
-            isAccountPresent &&
+            (isAccountPresent && action !== 'change') &&
             <Button color="green" className="link-button" content="I dont want to change bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
           }
         </div>

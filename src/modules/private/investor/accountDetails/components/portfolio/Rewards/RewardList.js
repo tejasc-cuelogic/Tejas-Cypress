@@ -1,16 +1,20 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
+import HtmlEditor from '../../../../../../shared/HtmlEditor';
 
 const RewardList = ({ list }) => (
-  <Card.Group stackable itemsPerRow={list.length}>
+  <Card.Group stackable itemsPerRow={3}>
     {
       list.map(card => (
         <Card key={card.id}>
           <Card.Content>
             <Card.Header>{card.title}</Card.Header>
             <Card.Description>
-              {card.description}
+              <HtmlEditor
+                readOnly
+                content={(card.description ? card.description : '')}
+              />
             </Card.Description>
             {/* {card.action === 'redeem' &&
               <Button as={Link} to={`${match.url}/redeem/${card.id}`}

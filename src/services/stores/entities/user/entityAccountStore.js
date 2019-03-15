@@ -383,14 +383,17 @@ class EntityAccountStore {
         }
       }
     } else if (currentStep.name === 'Link bank') {
-      bankAccountStore.validateAddFunds();
+      if (parseFloat(bankAccountStore.formAddFunds.fields.value.value, 0) !== 0) {
+        bankAccountStore.validateAddFunds();
+      }
       if (bankAccountStore.manualLinkBankSubmitted) {
         currentStep.validate();
       }
-      const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
-      isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
-        bankAccountStore.isValidLinkBank;
-      if (isValidCurrentStep && isValidAddFunds) {
+      // const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
+      isValidCurrentStep = bankAccountStore.isAccountPresent ||
+      bankAccountStore.formLinkBankManually.meta.isValid ||
+      bankAccountStore.formAddFunds.meta.isValid;
+      if (isValidCurrentStep) {
         uiStore.setProgress();
         // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
         //   !bankAccountStore.manualLinkBankSubmitted) {
@@ -409,7 +412,8 @@ class EntityAccountStore {
         //   }
         // }
         accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
-        accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+        accountAttributes.initialDepositAmount =
+          bankAccountStore.accountAttributes.initialDepositAmount;
         bankAccountStore.isValidOpeningDepositAmount().then(() => {
           this.submitForm(currentStep, accountAttributes)
             .then(() => res()).catch(() => rej());
@@ -603,10 +607,8 @@ class EntityAccountStore {
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
     } else if (bankAccountStore.manualLinkBankSubmitted ||
-      bankAccountStore.formAddFunds.fields.value.value === null ||
-      (isEmpty(bankAccountStore.plaidAccDetails) &&
-      !bankAccountStore.formLinkBankManually.meta.isValid &&
-      !bankAccountStore.formAddFunds.meta.isValid)) {
+      bankAccountStore.isPlaidDirty ||
+      bankAccountStore.linkbankSummary) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);

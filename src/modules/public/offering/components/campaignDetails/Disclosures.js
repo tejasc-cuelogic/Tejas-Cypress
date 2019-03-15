@@ -2,9 +2,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Divider } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import { get } from 'lodash';
-import Aux from 'react-aux';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -14,7 +13,6 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
-    window.addEventListener('scroll', this.handleOnScroll);
     if (this.props.campaignStore.docsWithBoxLink.length === 0) {
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');
@@ -25,35 +23,14 @@ export default class TermsOfUse extends Component {
       this.props.accreditationStore.getUserAccreditation();
     }
   }
-  componentDidMount() {
-    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
-      this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
-        block: 'start',
-        behavior: 'smooth',
-      });
-    }
-  }
-  componentWillUnmount() {
-    this.props.navStore.setFieldValue('currentActiveHash', null);
-    window.removeEventListener('scroll', this.handleOnScroll);
-  }
-  handleOnScroll = () => {
-    const { docsWithBoxLink } = this.props.campaignStore;
-    docsWithBoxLink.map((item, index) => {
-      if (document.getElementById(`doc-${index}`) && document.getElementById(`doc-${index}`).getBoundingClientRect().top < 200 &&
-      document.getElementById(`doc-${index}`).getBoundingClientRect().top > -1) {
-        this.props.navStore.setFieldValue('currentActiveHash', `#doc-${index}`);
-      }
-      return null;
-    });
-  }
   module = name => DataFormatter.upperCamelCase(name);
   dataRoomHeader = (<Header as="h3" className="mb-30 anchor-wrap">
-                      Data Rooms
+                      Data Room
     <span className="anchor-scroll" />
                     </Header>)
   render() {
+    const { campaign } = this.props.campaignStore;
+    const campaignCreatedBy = get(campaign, 'created.id') || null;
     const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
     if (!dataRoomDocs.length) {
       return (
@@ -65,16 +42,12 @@ export default class TermsOfUse extends Component {
     if (dataRoomDocs.length !== sortedDocswithBoxLink.length) {
       return <InlineLoader />;
     }
+    const index = (this.props.location.hash || '#1').substr(1);
     return (
       <div className="campaign-content-wrapper">
         {this.dataRoomHeader}
-        {sortedDocswithBoxLink && sortedDocswithBoxLink.map((item, index) => (
-          <Aux>
-            <Header id={`doc-${index}`} as="h4" className="mb-20 grey-header">{item.name}</Header>
-            <Disclosure doc={item} />
-            <Divider section hidden />
-          </Aux>
-        ))}
+        <Header as="h4" className="mb-20 grey-header">{sortedDocswithBoxLink[index - 1].name}</Header>
+        <Disclosure campaignCreatedBy={campaignCreatedBy} doc={sortedDocswithBoxLink[index - 1]} />
       </div>
     );
   }

@@ -1115,6 +1115,7 @@ export class OfferingCreationStore {
             payloadData.earlyBird = {
               amount: fields.amountForEarlyBird.value,
               quantity: fields.earlyBirdQuantity.value,
+              available: fields.earlyBirdQuantity.value,
             };
           } else {
             rewardsTiersData.push(fields.amountForThisTier.value);

@@ -50,6 +50,10 @@ section{
 	.caption{
 		margin-bottom:@50px !important;
 	}
+	&.padded{
+		padding-left: @50px;
+		padding-right: @50px;
+	}
 }
 //	Helper Classes Starts
 iframe{
@@ -308,9 +312,19 @@ i.icon.right {
 .no-pointer-events {
 	pointer-events: none !important;
 }
-.parsed-data img { // for migrated/parsed images
-	max-width: 100%;
-	height: auto;
+.parsed-data { // for migrated/parsed data
+	.fr-view blockquote {
+		border-left: solid 3px @primary-one;
+		padding: @15px @20px;
+		color: @neutral;
+		font-size: @16px;
+		font-style: italic;
+		background: @neutral-offwhite;
+	}
+	img {
+		max-width: 100%;
+		height: auto;
+	}
 }
 //	Helper Classes Ends
 
@@ -374,8 +388,8 @@ footer{
 			float:none;
 		}
 		a {
-			color: @neutral-middark;
-			text-decoration: underline;
+			color: @neutral-middark !important;
+			text-decoration: underline !important;
 			&:hover, &:focus{
 				text-decoration: underline !important;
 			}
@@ -2138,10 +2152,13 @@ svg:not(:root).recharts-surface{
 		}
 		.chartLegends li{
 			font-size:@22px;
+			line-height: 30px;
 			span{
 				font-size:@13px;
 				color:@fullBlack;
-				vertical-align:top;
+				i {
+					color: @neutral-offdark;
+				}
 			}
 		}
 	}
@@ -2871,4 +2888,7 @@ input[type='range']::-webkit-slider-thumb {
 		border-width: 15px 0 15px 15px;
 		border-color: transparent transparent transparent @white;
 	}
+}
+.fr-view span[style~="color:"] a {
+	color: @primary-one !important;
 }

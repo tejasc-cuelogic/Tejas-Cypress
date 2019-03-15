@@ -10,11 +10,14 @@ import { validationActions } from '../../../../../services/actions';
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
+  componentWillMount() {
+    this.props.bankAccountStore.validateAddfundsAmount();
+  }
   componentDidMount() {
-    this.props.bankAccountStore.validateForm('formAddFunds');
+    // this.props.bankAccountStore.validateForm('formAddFunds');
   }
   componentWillUnmount() {
-    // this.props.bankAccountStore.resetShowAddFunds();
+    this.props.bankAccountStore.resetShowAddFunds();
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
@@ -25,9 +28,8 @@ export default class AddFunds extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setDepositMoneyNow(true);
-    this.props.bankAccountStore.isValidOpeningDepositAmount().then(() => {
-      this.renderStep();
-    });
+    this.props.bankAccountStore.setShouldValidateAmount(true);
+    this.renderStep();
   }
 
   renderStep = () => {
@@ -49,6 +51,7 @@ export default class AddFunds extends Component {
         validate: validationActions.validateLinkBankForm,
       };
       this.props.entityAccountStore.createAccount(currentStep).then(() => {
+        this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
         this.props.entityAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
       });
@@ -60,6 +63,8 @@ export default class AddFunds extends Component {
         stepToBeRendered: 4,
       };
       this.props.iraAccountStore.createAccount(currentStep).then(() => {
+        // this.props.bankAccountStore.resetAddFundsForm();
+        this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
         this.props.iraAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
       });
@@ -70,7 +75,6 @@ export default class AddFunds extends Component {
     const {
       formAddFunds,
       addFundChange,
-      changeLinkbank,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
 
@@ -101,9 +105,6 @@ export default class AddFunds extends Component {
             <Button primary size="large" className="relaxed" content="Confirm" disabled={!formAddFunds.meta.isValid || !formAddFunds.fields.value.value} />
           </Form>
           <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-        </div>
-        <div className="center-align mt-30">
-          <Button color="green" className="link-button" content="or change linked bank" onClick={() => changeLinkbank()} />
         </div>
       </Aux>
     );

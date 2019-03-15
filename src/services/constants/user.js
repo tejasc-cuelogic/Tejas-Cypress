@@ -138,6 +138,7 @@ export const USER_IDENTITY = {
     rule: 'required|maskedPhoneNumber',
     customErrors: {
       required: '* required.',
+      maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
     },
   },
   dateOfBirth: {

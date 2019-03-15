@@ -4,7 +4,7 @@ import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
-import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
+import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
@@ -25,6 +25,8 @@ class Overview extends Component {
       campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
+    const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '0 Months';
+    const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Aux>
         <div className="inner-content-spacer bg-offwhite">
@@ -52,7 +54,7 @@ class Overview extends Component {
                         {keyTerms && keyTerms.shorthandBusinessName ?
                           keyTerms.shorthandBusinessName
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -62,20 +64,10 @@ class Overview extends Component {
                         {keyTerms && keyTerms.securities ?
                           CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
-                    {/* <Table.Row verticalAlign="top">
-                      <Table.Cell>Entity Type</Table.Cell>
-                      <Table.Cell>
-                        {keyTerms && keyTerms.legalBusinessType ?
-                          BUSINESS_TYPE_ENUM[keyTerms.legalBusinessType]
-                          :
-                          'NA'
-                        }
-                      </Table.Cell>
-                    </Table.Row> */}
                     <Table.Row verticalAlign="top">
                       <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
                       <Table.Cell>
@@ -83,7 +75,7 @@ class Overview extends Component {
                           offering.launch.targetDate ?
                           moment(offering.launch.targetDate).format('ll')
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -97,7 +89,7 @@ class Overview extends Component {
                       </Table.Cell>
                       {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                         <Table.Cell>
-                          {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'NA'}{' '}
+                          {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'N/A'}{' '}
                           <HtmlEditor
                             readOnly
                             content={(keyTerms && keyTerms.investmentMultipleSummary ?
@@ -107,7 +99,7 @@ class Overview extends Component {
                         :
                         <Table.Cell>
                           {keyTerms && keyTerms.interestRate ?
-                            `${keyTerms.interestRate}%` : 'NA'
+                            `${keyTerms.interestRate}%` : 'N/A'
                           }
                         </Table.Cell>
                       }
@@ -116,7 +108,7 @@ class Overview extends Component {
                       <Table.Cell>Payments</Table.Cell>
                       <Table.Cell>
                         {keyTerms && keyTerms.frequencyOfPayments ?
-                          keyTerms.frequencyOfPayments : 'NA'}
+                          keyTerms.frequencyOfPayments : 'N/A'}
                       </Table.Cell>
                     </Table.Row>
                     {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
@@ -124,9 +116,10 @@ class Overview extends Component {
                         <Table.Cell>Revenue Sharing Percentage</Table.Cell>
                         <Table.Cell>
                           {keyTerms && keyTerms.revSharePercentage ?
-                            keyTerms.revSharePercentage
+                            keyTerms.revSharePercentage.includes('%') ?
+                              keyTerms.revSharePercentage : `${keyTerms.revSharePercentage}%`
                             :
-                            'NA'}
+                            'N/A'}
                           <HtmlEditor
                             readOnly
                             content={(keyTerms && keyTerms.revShareSummary ?
@@ -138,12 +131,18 @@ class Overview extends Component {
                       null
                     }
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>Maturity</Table.Cell>
+                      <Table.Cell width={5}>Maturity{' '}
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                          position="top center"
+                        />
+                      </Table.Cell>
                       <Table.Cell>
-                        {keyTerms && keyTerms.maturity ?
-                          `${keyTerms.maturity} Months to Offering Summary`
+                        {maturityMonth ?
+                          `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -153,7 +152,7 @@ class Overview extends Component {
                         {keyTerms && keyTerms.securityInterest ?
                           keyTerms.securityInterest
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -162,11 +161,9 @@ class Overview extends Component {
                       <Table.Cell>
                         {keyTerms && keyTerms.securitiesOwnershipPercentage ?
                           `${keyTerms.securitiesOwnershipPercentage}%
-                          Investors will not receive any equity interests in
-                          the Issuer or any voting or management rights with respect
-                          to the Issuer as a result of an investment in Securities.`
+                          equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
                           :
-                          'NA'
+                          'N/A'
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -185,26 +182,24 @@ class Overview extends Component {
               <Header as="h4">Key Dates & Values</Header>
               <Statistic.Group size="mini" className="vertical">
                 <Statistic>
-                  <Statistic.Label>Open date</Statistic.Label>
+                  <Statistic.Label>Expected Business Opening</Statistic.Label>
                   <Statistic.Value>
                     {offering && offering.launch &&
                       offering.launch.targetDate ?
                       moment(offering.launch.targetDate).format('MMM Do YYYY')
                       :
-                      'NA'
+                      'N/A'
                     }
                   </Statistic.Value>
                 </Statistic>
-                <Statistic>
-                  <Statistic.Label>Months to Maturity</Statistic.Label>
-                  <Statistic.Value>
-                    {keyTerms && keyTerms.maturity ?
-                      `${keyTerms.maturity} months`
-                      :
-                      'NA'
-                    }
-                  </Statistic.Value>
-                </Statistic>
+                {get(offering, 'closureSummary.repayment.completeDate') && (
+                  <Statistic>
+                    <Statistic.Label>Payoff Date</Statistic.Label>
+                    <Statistic.Value>
+                      {moment(get(offering, 'closureSummary.repayment.completeDate').format('MMM Do YYYY')) || 'N/A'}
+                    </Statistic.Value>
+                  </Statistic>
+                )}
               </Statistic.Group>
             </Grid.Column>
           </Grid>

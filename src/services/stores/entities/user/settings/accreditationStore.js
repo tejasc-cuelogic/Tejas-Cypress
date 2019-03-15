@@ -210,6 +210,10 @@ export class AccreditationStore {
       this.setFormFileArray(form, field, 'value', '');
       this.setFormFileArray(form, field, 'preSignedUrl', '');
     }
+    if (form === 'INCOME_UPLOAD_DOC_FORM') {
+      this[form].fields.isAcceptedForfilling.value = [];
+      this[form].fields.isAcceptedForUnfilling.value = [];
+    }
     this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
@@ -675,7 +679,7 @@ export class AccreditationStore {
       }
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && currentAcitveObject.status === 'REQUESTED' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && currentAcitveObject.status === 'REQUESTED' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       switch (accountStatus) {
         case 'REQUESTED':
           this.userAccredetiationState = 'PENDING';

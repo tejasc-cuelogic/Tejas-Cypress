@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const CAMPAIGN_KEYTERMS_SECURITIES = {
   TERM_NOTE: 'Term Note',
   REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
@@ -42,7 +44,7 @@ export const INDUSTRY_TYPES_ICONS = {
   FOOD_AND_BEVERAGE: 'ns-food-light',
   REAL_ESTATE: 'ns-real-estate',
   FITNESS_AND_WELLNESS: 'ns-dumbbells',
-  HOSPITALITY: 'ns-first-aid',
+  HOSPITALITY: 'ns-hospitality-2',
   TECHNOLOGY: 'ns-technology',
   RESTAURANT_AND_BAR: 'ns-food-light',
   BREWERY_AND_BREWPUB: 'ns-bar',
@@ -51,7 +53,7 @@ export const INDUSTRY_TYPES_ICONS = {
   FASHION_AND_APPAREL: 'ns-store',
   OFFICE: 'ns-bag',
   COMMERCIAL_REAL_ESTATE: 'ns-real-estate',
-  OTHER: '',
+  OTHER: 'ns-other',
 };
 export const CAMPAIGN_OFFERING_STATUS = {
   FUNDED: 'Funded',
@@ -66,6 +68,29 @@ export const CAMPAIGN_KEYTERMS_REGULATION = {
   BD_CF: 'Reg CF Offering',
   BD_506C: 'Reg D Offering',
   BD_CF_506C: 'Parallel Offering',
+};
+export const CAMPAIGN_REGULATION_DETAILED = {
+  REGULATION: {
+    FP_TX: 'Texas Intrastate Crowdfunding',
+    FP_CF: 'Regulation Crowdfunding',
+    BD_CF: 'Regulation Crowdfunding',
+    BD_506C: 'Regulation D 506(c)',
+    BD_CF_506C: 'Parallel Offering',
+  },
+  TOOLTIP: {
+    FP_TX: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
+    FP_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
+    BD_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
+    BD_506C: <span>Regulation D 506(C) offerings allow Accredited Investors to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
+    BD_CF_506C: <span>Parallel offerings are raising money under two different regulations. A portion of this raise is being conducted under Reg D 506(C) <a target="_blank" href="/resources/education-center">Learn more</a> and a portion is being raised under Regulation Crowdfunding <a target="_blank" href="/resources/education-center">Learn more</a></span>,
+  },
+};
+export const CAMPAIGN_REGULATION_ABREVIATION = {
+  FP_TX: 'TX INTRASTATE',
+  FP_CF: 'REG CF',
+  BD_CF: 'REG CF',
+  BD_506C: 'REG D 506(C)',
+  BD_CF_506C: 'REG CF & REG D 506(C)',
 };
 export const CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING = {
   FP_TX: 'TX',
