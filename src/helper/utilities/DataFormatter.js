@@ -93,7 +93,7 @@ class DataFormatter {
   }
   /** reference https://www.npmjs.com/package/handlebars */
   stringTemplateFormatting = (string, data) => {
-    const template = Handlebars.precompile(string);
+    const template = Handlebars.compile(string);
     return template(data);
   }
   fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
