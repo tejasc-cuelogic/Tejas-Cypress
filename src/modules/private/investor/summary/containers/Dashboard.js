@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import { Header, Card, Button } from 'semantic-ui-react';
+import { Header, Card, Button, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
@@ -43,6 +43,7 @@ export default class Dashboard extends Component {
   }
   render() {
     const { summaryLoading, summary, getChartData } = this.props.portfolioStore;
+    const cashMovementData = getChartData('cashMovement');
     if (summaryLoading) {
       return <InlineLoader />;
     }
@@ -57,14 +58,40 @@ export default class Dashboard extends Component {
             <Button secondary as={Link} to="/offerings" content="Invest Now" />
           }
         >
-          <Header as="h4">Values Performance</Header>
+          <Header as="h4">Portfolio Summary</Header>
           <SummaryHeader details={summaryDetails(summary)} />
-          <Card fluid>
-            <Card.Content>
-              <Header as="h4">Cash Movement from Inception</Header>
-              <CashMovement data={getChartData('cashMovement')} />
-            </Card.Content>
-          </Card>
+          {
+              cashMovementData && cashMovementData.length ?
+                <Aux>
+                  <Card fluid>
+                    <Card.Content>
+                      <Header as="h4">Cash Movement from Inception</Header>
+                      <CashMovement data={cashMovementData} />
+                    </Card.Content>
+                  </Card>
+                </Aux>
+              :
+                <Aux>
+                  <Grid>
+                    <Grid.Row>
+                      <Grid.Column
+                        widescreen={6}
+                        largeScreen={6}
+                        computer={6}
+                        tablet={8}
+                        mobile={16}
+                      >
+                        <Card className="form-card" fluid>
+                          <Card.Content>
+                            <Header as="h4">Browse the latest investment opportunities.</Header>
+                            <Button fluid as={Link} to="/offerings" size="large" color="green">Start investing now</Button>
+                          </Card.Content>
+                        </Card>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Aux>
+            }
         </PrivateLayout>
       </Aux>
     );
