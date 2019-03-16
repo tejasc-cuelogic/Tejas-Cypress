@@ -9,6 +9,7 @@ import Identity from './Identity';
 import Summary from './Summary';
 import { validationActions } from '../../../../../../../services/actions';
 import { Plaid } from '../../../../../shared/bankAccount';
+import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'iraAccountStore', 'userDetailsStore', 'userStore', 'bankAccountStore')
 @observer
@@ -33,7 +34,10 @@ export default class AccountCreation extends React.Component {
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
-
+  closeProcessingModal = () => {
+    this.props.iraAccountStore.setFieldValue('showProcessingModal', false);
+    this.props.history.push('app/summary');
+  }
   render() {
     let steps = [];
     const {
@@ -43,7 +47,7 @@ export default class AccountCreation extends React.Component {
       setIsEnterPressed,
     } = this.props.uiStore;
     const {
-      FIN_INFO_FRM,
+      FIN_INFO_FRM, showProcessingModal,
       ACC_TYPES_FRM,
       FUNDING_FRM,
       IDENTITY_FRM,
@@ -152,7 +156,9 @@ export default class AccountCreation extends React.Component {
         },
       ];
     }
-
+    if (showProcessingModal) {
+      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
+    }
     return (
       <div className="step-progress">
         <MultiStep bankSummary={linkbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
