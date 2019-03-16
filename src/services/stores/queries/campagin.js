@@ -567,16 +567,6 @@ query getOfferingById($id: ID) {
       quantity
       amount
     }
-    legal {
-      documentation {
-        admin {
-          npa {
-            fileName
-            fileId
-          }
-        }
-      }
-    }
   }
 }
 `;
