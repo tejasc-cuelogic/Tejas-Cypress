@@ -38,7 +38,7 @@ class AccountType extends Component {
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
-    const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+    let isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
     const {
       userAccredetiationState,
       resetAccreditationExpirayForm,
@@ -50,10 +50,14 @@ class AccountType extends Component {
     const userStatusFound = userSelectedAccountStatus(investAccTypes.value);
     setUserSelectedAccountStatus(userStatusFound);
     resetAccreditationExpirayForm('ACCREDITATION_EXPIRY_FORM');
-    if (activeAccounts.length && (investAccTypes.values.length === 1 || this.props.changeInvest)) {
+    if ((activeAccounts.length && (investAccTypes.values.length === 1 || this.props.changeInvest))
+      || (investAccTypes.values.length > 1 && !getCurrentInvestNowHealthCheck)) {
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         this.props.investmentLimitStore
-          .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
+          .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
+          .then((resp) => {
+            isDocumentUpload = get(resp, 'investNowHealthCheck.availibityForNPAInOffering');
+          });
       }
     }
     if (!byDefaultRender) {
@@ -165,7 +169,7 @@ class AccountType extends Component {
   }
   render() {
     const {
-      activeAccounts,
+      // activeAccounts,
       frozenAccounts,
       partialAccounts,
       inActiveAccounts,
@@ -196,7 +200,7 @@ class AccountType extends Component {
       userAccreditatedStatus,
       headerSubheaderObj,
       offeringAccreditatoinStatusMessage,
-      setHeaderAndSubHeader,
+      // setHeaderAndSubHeader,
     } = this.props.accreditationStore;
     const isAccountCreated = !(inActiveAccounts && inActiveAccounts.length >= 3);
     if (userProfileFullStatus !== 'FULL' || (userAccredetiationState && (userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE'))) {
@@ -218,25 +222,32 @@ class AccountType extends Component {
     if (isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) {
       return <Spinner loaderMessage="Loading.." />;
     }
-    let headerToShow = (!showAccountList && !isDocumentUpload) || (!isDocumentUpload && investAccTypes.values.length && investAccTypes.values.length >= 1) ? 'Your investment transaction not processed' : (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : offeringAccreditatoinStatusMessage(selectedAccountStatus);
-    let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
-    if ((activeAccounts.length || investAccTypes.values.length) && isRegulationCheck && selectedAccountStatus === 'FULL') {
-      headerToShow = (showAccountList && investAccTypes.values.length >= 2) ?
-        headerToShow : userAccredetiationState ?
-          offeringAccreditatoinStatusMessage(userAccredetiationState).header : headerToShow;
-      subHeaderToShow = userAccredetiationState ?
-        offeringAccreditatoinStatusMessage(userAccredetiationState).subHeader : subHeaderToShow;
-    } else if (!showAccountList && selectedAccountStatus !== 'FULL') {
-      headerToShow = offeringAccreditatoinStatusMessage(selectedAccountStatus).header;
-    }
+    offeringAccreditatoinStatusMessage(
+      selectedAccountStatus, userAccredetiationState,
+      isRegulationCheck, investAccTypes, showAccountList, isDocumentUpload,
+    );
+    // setHeaderAndSubHeader(headerToShow);
+    // if ((activeAccounts.length || investAccTypes.values.length) &&
+    // isRegulationCheck && selectedAccountStatus === 'FULL') {
+    //   headerToShow = (showAccountList && investAccTypes.values.length >= 2) ?
+    //     headerToShow : userAccredetiationState ?
+    //       offeringAccreditatoinStatusMessage(userAccredetiationState).header : headerToShow;
+    //   subHeaderToShow = userAccredetiationState ?
+    //     offeringAccreditatoinStatusMessage(userAccredetiationState).subHeader : subHeaderToShow;
+    // } else if (!showAccountList && selectedAccountStatus !== 'FULL') {
+    //   headerToShow = offeringAccreditatoinStatusMessage(selectedAccountStatus).header;
+    // }
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin:
         sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
-    setHeaderAndSubHeader(headerToShow, subHeaderToShow);
+    if (headerSubheaderObj.header === '') {
+      return <Spinner loaderMessage="Loading.." />;
+    }
+    // setHeaderAndSubHeader(headerToShow);
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
@@ -244,12 +255,15 @@ class AccountType extends Component {
           {investAccTypes.values.length && selectedAccountStatus ?
             <Aux>
               {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest ?
-                <FormRadioGroup
-                  name="investAccountType"
-                  containerclassname="button-radio center-align"
-                  fielddata={investAccTypes}
-                  changed={accTypeChanged}
-                />
+                <Aux>
+                  <p className="center-align">{headerSubheaderObj.subHeader}</p>
+                  <FormRadioGroup
+                    name="investAccountType"
+                    containerclassname="button-radio center-align"
+                    fielddata={investAccTypes}
+                    changed={accTypeChanged}
+                  />
+                </Aux>
                 :
                 <Aux>
                   {isDocumentUpload === false ?
