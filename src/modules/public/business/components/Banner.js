@@ -32,7 +32,7 @@ class Banner extends Component {
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,00 from 75 investors
+              <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,000 from 75 investors
             </p>
           </div>
         </Container>
