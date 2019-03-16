@@ -19,7 +19,7 @@ const Banner = () => (
       </Responsive>
       <div className="banner-meta">
         <p>
-          <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
+          <b>Ian Tucker | Poitín</b><br />Raised $224,700 from 182 investors
         </p>
       </div>
     </Container>
