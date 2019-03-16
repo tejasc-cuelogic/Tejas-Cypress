@@ -44,7 +44,7 @@ class ChangeInvestmentLimit extends Component {
       <Modal open closeIcon onClose={this.handleCloseModal}>
         <Modal.Content className="center-align">
           <Header as="h3" textAlign="center">Update your investment limits</Header>
-          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/for-investors/investment-limits-explained/investment-limit-calcuator/`} className="link">How is this calculated?</a>
+          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
           <Form>
             <Table basic="very" className="confirm-transfer-table mt-30" compact>
               <Table.Body>

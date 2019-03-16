@@ -10,6 +10,7 @@ import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
 import { Plaid } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
+import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
@@ -35,6 +36,10 @@ export default class AccountCreation extends React.Component {
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+  closeProcessingModal = () => {
+    this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
+    this.props.history.push('app/summary');
+  }
   render() {
     const {
       inProgress,
@@ -50,7 +55,7 @@ export default class AccountCreation extends React.Component {
       FORM_DOCS_FRM,
       stepToBeRendered,
       createAccount,
-      isValidEntityForm,
+      isValidEntityForm, showProcessingModal,
     } = this.props.entityAccountStore;
     const {
       formAddFunds, plaidAccDetails, formLinkBankManually,
@@ -119,6 +124,9 @@ export default class AccountCreation extends React.Component {
         isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
       },
     ];
+    if (showProcessingModal) {
+      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
+    }
     return (
       <div className="step-progress" >
         <MultiStep page disablePrevBtn bankSummary={linkbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
