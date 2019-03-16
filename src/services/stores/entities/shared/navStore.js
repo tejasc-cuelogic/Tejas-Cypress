@@ -41,6 +41,7 @@ export class NavStore {
       permitted = [...this.params.roles];
     } else {
       permitted = [...this.params.roles,
+        ...userDetailsStore.signupStatus.partialAccounts,
         ...userDetailsStore.signupStatus.activeAccounts,
         ...userDetailsStore.signupStatus.processingAccounts];
     }
