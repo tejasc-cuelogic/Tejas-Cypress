@@ -467,6 +467,11 @@ query getOfferingById($id: ID) {
       repayment {
         completeDate
       }
+      keyTerms {
+        multiple
+        revSharePercentage
+        interestRate
+      }
     }
     keyTerms {
       regulation
