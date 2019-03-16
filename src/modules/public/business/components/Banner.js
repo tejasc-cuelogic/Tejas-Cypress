@@ -7,7 +7,6 @@ import { inject, observer } from 'mobx-react';
 @inject('offeringsStore')
 @observer
 class Banner extends Component {
-
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
   }

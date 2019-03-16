@@ -168,7 +168,6 @@ class IraAccountStore {
         variables: payLoad,
       })
       .then((res) => {
-        console.log('res->', res);
         this.setFieldValue('showProcessingModal', true);
         bankAccountStore.resetStoreData();
         Helper.toast('IRA account submitted successfully.', 'success');
