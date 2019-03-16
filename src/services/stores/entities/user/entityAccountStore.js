@@ -28,6 +28,7 @@ class EntityAccountStore {
   @observable entityData = {};
   @observable stepToBeRendered = '';
   @observable entityAccountId = null;
+  @observable showProcessingModal = false;
 
 
   @action
@@ -128,6 +129,7 @@ class EntityAccountStore {
             variables: payLoad,
           })
           .then(() => {
+            this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
@@ -139,6 +141,11 @@ class EntityAccountStore {
           });
       });
     });
+  }
+
+  @action
+  setFieldValue = (field, val) => {
+    this[field] = val;
   }
 
   @action
