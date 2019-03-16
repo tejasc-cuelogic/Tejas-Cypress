@@ -22,7 +22,7 @@ export default class Plaid extends Component {
     // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     // const { manualLinkBankSubmitted } = this.props.bankAccountStore;
     this.props.bankAccountStore.setShouldValidateAmount();
-    this.setBankSummary();
+    // this.setBankSummary();
     this.props.uiStore.clearErrors();
   }
 
