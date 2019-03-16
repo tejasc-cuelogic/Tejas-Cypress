@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -489,7 +489,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = (field === 'maturityDate' || field === 'dob' || field === 'dateOfService') ? values.formattedValue : values.floatValue;
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'investmentMultiple', 'startupPeriod', 'interestRate'], field) ? Math.abs(values.floatValue) || '' : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,

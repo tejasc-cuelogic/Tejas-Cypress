@@ -99,7 +99,7 @@ class KeyTerms extends Component {
                   />
                 </Table.Cell>
                 <Table.Cell className="grey-header">
-                  {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : '-'}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? `Up to ${campaign.keyTerms.investmentMultiple}x` : '-'}
                 </Table.Cell>
               </Table.Row>
               <Table.Row verticalAlign="top">

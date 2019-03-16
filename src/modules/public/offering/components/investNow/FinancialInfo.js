@@ -107,8 +107,9 @@ class FinancialInfo extends Component {
             autoFocus
           />
         </Form>
-        {this.props.changeInvest &&
-          <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p>
+        {this.props.changeInvest && getDiffInvestmentLimitAmount &&
+         INVESTMONEY_FORM.fields.investmentAmount.value > 0 ?
+           <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }
         <Divider hidden />
         {// isValidInvestAmtInOffering &&
