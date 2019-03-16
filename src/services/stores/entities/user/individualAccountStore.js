@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find, get } from 'lodash';
-import { bankAccountStore, uiStore, userDetailsStore, individualAccountStore, userStore } from '../../index';
+import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -105,7 +105,7 @@ class IndividualAccountStore {
             } else {
               Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
             }
-            this.setStepToBeRendered(currentStep.stepToBeRendered);
+            // this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);
@@ -142,9 +142,10 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        // const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
-        //   2 : this.stepToBeRendered;
-        individualAccountStore.setStepToBeRendered(this.stepToBeRendered);
+        const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
+          2 : this.stepToBeRendered;
+        this.setStepToBeRendered(renderStep);
+        // uiStore.setProgress(false);
         // if (!this.isManualLinkBankSubmitted && (
         //   bankAccountStore.formLinkBankManually.meta.isValid ||
         //   !isEmpty(bankAccountStore.plaidAccDetails))) {
@@ -154,6 +155,7 @@ class IndividualAccountStore {
         // }
       }
     }
+    uiStore.setProgress(false);
   }
 
   @action

@@ -266,7 +266,7 @@ class HowItWorks extends Component {
                 <Divider hidden />
                 <p>
                   The above figures include the total amount raised in offerings completed through
-                  NextSeed US, LLC ( {Helper.MoneyMathDisplayCurrency(get(amount, 'amountRaisedUS') || 0)}) and
+                  NextSeed US, LLC ( {Helper.MoneyMathDisplayCurrency((get(amount, 'amountRaisedUS') || 0), false)}) and
                   NextSeed TX, LLC ($1,303,500). Historical figures only. Past performance of one
                   business is not a guarantee of future results of another business.
                 </p>

@@ -8,7 +8,7 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @withRouter
 class Disclosure extends Component {
   render() {
-    const { doc } = this.props;
+    const { doc, campaignCreatedBy } = this.props;
     if (!doc) {
       return <InlineLoader />;
     }
@@ -16,6 +16,7 @@ class Disclosure extends Component {
     const { stepInRoute } = this.props.navStore;
     if (doc.accreditedOnly
       && (!this.props.userStore.currentUser
+      || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles &&
       this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated &&
       !this.props.accreditationStore.isUserAccreditated))) {

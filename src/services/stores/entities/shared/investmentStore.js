@@ -630,7 +630,7 @@ export class InvestmentStore {
   }
   @action
   validateMaskedInputForAmount = () => {
-    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
@@ -641,6 +641,7 @@ export class InvestmentStore {
   resetFormErrors = (form) => {
     this[form].fields.investmentAmount.error = undefined;
     this[form].meta.isValid = true;
+    this.setFieldValue('investmentFlowErrorMessage', undefined);
   }
 }
 
