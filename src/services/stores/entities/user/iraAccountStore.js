@@ -167,7 +167,7 @@ class IraAccountStore {
         mutation: submitinvestorAccount,
         variables: payLoad,
       })
-      .then((res) => {
+      .then(() => {
         this.setFieldValue('showProcessingModal', true);
         bankAccountStore.resetStoreData();
         Helper.toast('IRA account submitted successfully.', 'success');
