@@ -26,7 +26,7 @@ const statusDetails = {
 @observer
 export default class AllCrowdPay extends Component {
   componentWillMount() {
-    const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('cip') ? 'cip' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
+    const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
     this.props.crowdpayStore.setAccountTypes(type);
     this.props.crowdpayStore.reset();
     this.props.uiStore.setProgress(false);
@@ -37,7 +37,7 @@ export default class AllCrowdPay extends Component {
     const {
       accounts, count, requestState, crowdPayCtaHandler,
     } = crowdpayStore;
-    const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('cip') ? 'cip' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
+    const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
     if (count === 0) {
       return <InlineLoader text="No data found." />;
     }
@@ -57,10 +57,10 @@ export default class AllCrowdPay extends Component {
                 {type !== 'review' &&
                   <Table.HeaderCell>Status</Table.HeaderCell>
                 }
-                {(type !== 'review' && type === 'cip') &&
+                {(type !== 'review' && type === 'individual') &&
                 <Table.HeaderCell>Fail Reason</Table.HeaderCell>
                 }
-                {type === 'cip' &&
+                {type === 'individual' &&
                 <Table.HeaderCell>GS Processing Date</Table.HeaderCell>
                 }
                 {type !== 'entity' &&
@@ -102,12 +102,12 @@ export default class AllCrowdPay extends Component {
                       <Icon className="ns-warning-circle" />{statusDetails[account.accountStatus]}
                     </Table.Cell>
                     }
-                    {(type !== 'review' && type === 'cip') &&
+                    {(type !== 'review' && type === 'individual') &&
                     <Table.Cell>
                       {account.cip && account.cip.failReason && account.cip.failReason.message ? account.cip.failReason.message : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     }
-                    {type === 'cip' &&
+                    {type === 'individual' &&
                     <Table.Cell>
                       {account.processing && account.processing.gs && account.processing.gs.date ? moment(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
