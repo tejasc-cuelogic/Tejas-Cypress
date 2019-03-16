@@ -48,7 +48,7 @@ export default class LinkbankSummary extends React.Component {
                 {(formLinkBankManually.fields.routingNumber.value &&
                   !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
                   <Table.Row>
-                    <Table.Cell>Routingssssss Number</Table.Cell>
+                    <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       {formLinkBankManually.fields.routingNumber.value}
                     </Table.Cell>
