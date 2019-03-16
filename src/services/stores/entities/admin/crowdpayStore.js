@@ -191,11 +191,11 @@ export class CrowdpayStore {
           }],
         })
         .then(action((data) => {
-          this.initiateFilters();
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
             Helper.toast('CIP is not satisfied.', 'error');
             uiStore.setProgress(false);
           } else if (ctaAction === 'CREATEACCOUNT' && data.data.submitInvestorAccount) {
+            this.requestState.oldType = this.requestState.type;
             Helper.toast(data.data.submitInvestorAccount, 'success');
             resolve();
           } else {
