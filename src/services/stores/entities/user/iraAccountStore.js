@@ -21,6 +21,7 @@ class IraAccountStore {
   @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES);
   @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING);
   @observable iraAccountId = null;
+  @observable showProcessingModal = false;
 
   @observable stepToBeRendered = 0;
   @observable accountNotSet = '';
@@ -166,7 +167,9 @@ class IraAccountStore {
         mutation: submitinvestorAccount,
         variables: payLoad,
       })
-      .then(() => {
+      .then((res) => {
+        console.log('res->', res);
+        this.setFieldValue('showProcessingModal', true);
         bankAccountStore.resetStoreData();
         Helper.toast('IRA account submitted successfully.', 'success');
         resolve();
@@ -177,6 +180,11 @@ class IraAccountStore {
         reject();
       });
   });
+
+  @action
+  setFieldValue = (field, val) => {
+    this[field] = val;
+  }
 
   @action
   createAccount = (currentStep, removeUploadedData = false) => new Promise((resolve) => {
