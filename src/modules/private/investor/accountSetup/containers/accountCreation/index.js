@@ -11,7 +11,11 @@ import EntityAccCreation from './entity/AccountCreation';
 @observer
 export default class AccountCreation extends Component {
   componentWillMount() {
-    // this.props.bankAccountStore.setBankLinkInterface('list');
+    this.props.bankAccountStore.setBankLinkInterface('list');
+    const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    // eslint-disable-next-line prefer-destructuring
+    const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0].value;
+    this.props.accountStore.setAccTypeChange(accType);
   }
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
