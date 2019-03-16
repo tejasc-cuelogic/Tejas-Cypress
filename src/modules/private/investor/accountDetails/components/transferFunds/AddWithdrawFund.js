@@ -74,7 +74,7 @@ export default class AddWithdrawFund extends Component {
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
     return (
       <Aux>
-        {availableWithdrawCash && !cashAvailable.loading &&
+        {!cashAvailable.loading &&
           <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
             <Modal.Header className="signup-header">
               <Header as="h3"><AccTypeTitle noText />

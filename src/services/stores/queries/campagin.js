@@ -70,6 +70,9 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
+    created {
+      id
+    }
     keyTerms {
       unitPrice
       roundType
@@ -128,6 +131,7 @@ export const campaignDetailsQuery = gql`
     earlyBird {
       quantity
       amount
+      available
     }
     offering {
       overview {
@@ -318,6 +322,9 @@ export const campaignDetailsQuery = gql`
     closureSummary {
       totalInvestmentAmount
       totalInvestorCount
+      repayment {
+        count
+      }
     }
     comments {
       id

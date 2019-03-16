@@ -20,10 +20,21 @@ export const THeader = ({ columns }) => (
 );
 
 const Actions = (props) => {
-  console.log(props);
+  let additionalFileIdRef = null;
+  if (props.additionalActions && props.dataSet) {
+    try {
+      additionalFileIdRef = props.dataSet.instructions.find(i => i.key === `instruction${props.dataSet.mapKey}`).id;
+    } catch (e) {
+      additionalFileIdRef = null;
+    }
+  }
   return (
     <Aux>
-      {props.additionalActions}
+      {props.additionalActions && additionalFileIdRef && (
+        <Link to="/" style={{ textTransform: 'none' }} onClick={e => props.download(e, additionalFileIdRef)} className="action" >
+          <Icon className="ns-file" /> Instructions&nbsp;&nbsp;&nbsp;
+        </Link>
+      )}
       <Link to="/" className="action" onClick={e => props.download(e, props.actions.fileId)} >
         <Icon className={`ns-file ${props[0]}`} /> {props.label || 'PDF'}
       </Link>
@@ -36,7 +47,7 @@ export const NoR = ({ cols, msg }) => (
 );
 
 export const FillTable = ({
-  result, loading, error, download, additionalActions, actionRule,
+  result, loading, error, download, additionalActions, aRule, instructions,
 }) => (
   <div className="table-wrapper">
     <Table unstackable singleLine className="investment-details">
@@ -60,11 +71,14 @@ export const FillTable = ({
                                     <Actions
                                       download={download}
                                       actions={{ fileId: row.fileId }}
-                                      additionalActions={actionRule &&
-                                        actionRule.val.includes(col[actionRule.key]) ?
+                                      additionalActions={aRule &&
+                                        aRule.val.includes(parseFloat(row[aRule.key])) ?
                                         additionalActions : false
                                       }
-                                      actionRule={actionRule}
+                                      dataSet={{
+                                        instructions,
+                                        mapKey: aRule ? row[aRule.key] : null,
+                                      }}
                                       label={col.label}
                                     />
                                   ) : (

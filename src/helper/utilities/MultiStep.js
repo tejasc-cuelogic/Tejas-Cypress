@@ -91,8 +91,7 @@ export default class MultiStep extends React.Component {
   }
 
   handleKeyDown(evt) {
-    if ((evt.which === 13 && (evt.target.name !== 'bankName' &&
-      evt.target.name !== 'investmentAmount') &&
+    if ((evt.which === 13 && (evt.target.name !== 'bankName') &&
       (!this.props.steps[this.state.compState].disableNextButton))) {
       this.next();
     }
@@ -124,7 +123,11 @@ export default class MultiStep extends React.Component {
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
-      this.props.setStepTobeRendered(this.state.compState + 1);
+      if (this.props.bankSummary) {
+        this.props.bankSummarySubmit();
+      } else {
+        this.props.setStepTobeRendered(this.state.compState + 1);
+      }
     } else {
       this.props.createAccount(this.props.steps[this.state.compState]);
       if (!this.props.steps[this.state.compState].isDirty) {

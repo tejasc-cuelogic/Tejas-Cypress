@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { isEmpty, map, uniqWith, isEqual, find, get } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
+import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
 import { linkBankRequestPlaid, linkBankRequestManual, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
@@ -11,6 +11,7 @@ import {
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
+import { validationActions } from '../../../../services/actions';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -33,6 +34,7 @@ export class BankAccountStore {
   @observable pendingBankPladLogo = null;
   @observable db;
   @observable linkbankSummary = false;
+  @observable shouldValidateAmount = false;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -50,6 +52,11 @@ export class BankAccountStore {
   @action
   setDepositMoneyNow(status) {
     this.depositMoneyNow = status;
+  }
+
+  @action
+  setShouldValidateAmount = (val = false) => {
+    this.shouldValidateAmount = val;
   }
 
   @action
@@ -109,6 +116,15 @@ export class BankAccountStore {
   @action
   resetAddFundsForm() {
     Validator.resetFormData(this.formAddFunds);
+  }
+
+  @action
+  validateAddfundsAmount = () => {
+    const { value } = this.formAddFunds.fields.value;
+    if (parseFloat(value, 0) === -1) {
+      this.shouldValidateAmount = true;
+      this.resetAddFundsForm();
+    }
   }
 
   changeLinkbank = () => {
@@ -179,9 +195,9 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-
-    accountAttributes.initialDepositAmount = this.depositMoneyNow ?
-      this.formAddFunds.fields.value.value : 0;
+    const { value } = this.formAddFunds.fields.value;
+    accountAttributes.initialDepositAmount = this.depositMoneyNow && value !== '' ?
+      value : -1;
     return accountAttributes;
   }
 
@@ -364,6 +380,7 @@ export class BankAccountStore {
       bankRoutingNumber: data.routingNumber,
       bankAccountNumber: data.accountNumber,
       accountId: this.CurrentAccountId,
+      accountType: data.accountType,
     };
     return new Promise((resolve, reject) => {
       client
@@ -431,6 +448,7 @@ export class BankAccountStore {
     this.showAddFunds = false;
     this.isManualLinkBankSubmitted = false;
     this.linkbankSummary = false;
+    this.shouldValidateAmount = false;
   }
   @action
   setPlaidBankVerificationStatus = (booleanValue) => {
@@ -457,6 +475,11 @@ export class BankAccountStore {
   }
 
   @action
+  setLoaderForAccountBlank = () => {
+    uiStore.setProgress(!this.isAccountPresent);
+  }
+
+  @action
   isValidOpeningDepositAmount = (resetProgress = true) => {
     uiStore.setProgress();
     const variables = {
@@ -473,9 +496,13 @@ export class BankAccountStore {
       }
     }
     return new Promise((resolve, reject) => {
-      if (!this.depositMoneyNow) {
+      console.log('this.depositMoneyNow :', this.depositMoneyNow);
+      console.log('this.shouldValidateAmount :', this.shouldValidateAmount);
+      if (!this.depositMoneyNow || !this.shouldValidateAmount) {
         resolve();
       } else {
+        const isLoader = individualAccountStore.stepToBeRendered === 1 || this.showAddFunds
+          || this.manualLinkBankSubmitted;
         graphql({
           client,
           query: isValidOpeningDepositAmount,
@@ -483,18 +510,32 @@ export class BankAccountStore {
           fetchPolicy: 'network-only',
           onFetch: () => {
             if (resetProgress) {
-              uiStore.setProgress(false);
+              uiStore.setProgress(isLoader);
             }
             resolve();
           },
           onError: (err) => {
-            uiStore.setProgress(false);
+            uiStore.setProgress(isLoader);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject();
           },
         });
       }
     });
+  }
+
+  @action
+  bankSummarySubmit = () => {
+    const { investmentAccType } = accountStore;
+    const accTypeStore = investmentAccType === 'individual' ? individualAccountStore : investmentAccType === 'entity' ? entityAccountStore : investmentAccType === 'ira' ? iraAccountStore : individualAccountStore;
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
+    // this.props.bankAccountStore.resetAddFundsForm();
+    accTypeStore.setStepToBeRendered(currentStep.stepToBeRendered);
+    if (investmentAccType !== 'individual') {
+      this.setLinkBankSummary(false);
+      this.setIsManualLinkBankSubmitted(false);
+      this.setShowAddFunds();
+    }
   }
 
   @action

@@ -142,12 +142,12 @@ export const FILLING_STATUS = {
     values:
       [
         {
-          label: 'Yes',
-          value: true,
-        },
-        {
           label: 'No',
           value: false,
+        },
+        {
+          label: 'Yes',
+          value: true,
         },
       ],
     error: undefined,

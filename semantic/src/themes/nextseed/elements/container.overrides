@@ -53,9 +53,9 @@ section{
             }
         }
         &.home-banner{
-            background:url(../../assets/images/banners/home-banner.jpg) top center no-repeat;
+            background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/home-banner-mobile.jpg) center center no-repeat;
+                background:url(../../assets/images/banners/why-us-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.mission-banner{
@@ -79,9 +79,9 @@ section{
             }
         }
         &.invest-banner{
-            background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat;
+            background:url(../../assets/images/banners/home-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/why-us-banner-mobile.jpg) center center no-repeat;
+                background:url(../../assets/images/banners/home-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.resources-banner {

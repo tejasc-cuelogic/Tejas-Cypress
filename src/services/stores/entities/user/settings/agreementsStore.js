@@ -39,6 +39,16 @@ export class AgreementsStore {
       title: 'NextSeed Broker-Dealer Investor Agreement',
       refEnum: 'SECURITIES_INVESTOR_AGREEMENT',
     },
+    {
+      key: 'instruction2017',
+      title: 'Instruction 2017',
+      refEnum: 'INSTRUCTIONS_1099_2017',
+    },
+    {
+      key: 'instruction2018',
+      title: 'Instruction 2018',
+      refEnum: 'INSTRUCTIONS_1099_2018',
+    },
   ];
   @observable embedUrl = null;
   @observable docLoading = false;
@@ -88,7 +98,7 @@ export class AgreementsStore {
     const agreementsList = this.getAgreementsList;
     const navList = [];
     forEach(agreementsList, (ele) => {
-      if (ele.key !== 'welcomeKit' && ele.key !== 'businessPan') {
+      if (!['welcomeKit', 'businessPan'].includes(ele.key) && !ele.key.includes('instruction')) {
         navList.push({ title: ele.title, to: ele.key, id: ele.id });
       }
     });
