@@ -56,7 +56,7 @@ export default class CampaignSecondaryMenu extends Component {
                 </List.Header>
               </List.Item>
               {!isMobile && (get(campaign, 'keyTerms.interestRate') || get(campaign, 'keyTerms.investmentMultiple')) &&
-              <List.Item>{!isClosed && get(campaign, 'keyTerms.securities') === 'TERM_NOTE' ? `${get(campaign, 'keyTerms.interestRate')}% Interest Rate` : `${get(campaign, 'keyTerms.investmentMultiple')}x Investment Multiple`}</List.Item>
+              <List.Item>{!isClosed && get(campaign, 'keyTerms.securities') === 'TERM_NOTE' ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : `Up to ${get(campaign, 'keyTerms.investmentMultiple') || ''}x Investment Multiple`}</List.Item>
             }
             </List>
           </Container>
