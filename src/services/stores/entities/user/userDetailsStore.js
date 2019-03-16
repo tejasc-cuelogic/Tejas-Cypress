@@ -54,7 +54,9 @@ export class UserDetailsStore {
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details && account.details.accountStatus === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' &&
+        account.details &&
+        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
     }
     return accDetails;
   }
@@ -62,6 +64,10 @@ export class UserDetailsStore {
   @computed get currentActiveAccountDetails() {
     const activeAccounts = this.getActiveAccounts;
     return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
+  }
+
+  @computed get isAccountFrozen() {
+    return this.signupStatus.frozenAccounts.includes(this.currentActiveAccount);
   }
 
   @action
