@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import { Header, Card, Button } from 'semantic-ui-react';
+import { Header, Card, Button, Divider } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
@@ -43,6 +43,7 @@ export default class Dashboard extends Component {
   }
   render() {
     const { summaryLoading, summary, getChartData } = this.props.portfolioStore;
+    const cashMovementData = getChartData('cashMovement');
     if (summaryLoading) {
       return <InlineLoader />;
     }
@@ -57,14 +58,29 @@ export default class Dashboard extends Component {
             <Button secondary as={Link} to="/offerings" content="Invest Now" />
           }
         >
-          <Header as="h4">Values Performance</Header>
+          <Header as="h4">Portfolio Summary</Header>
           <SummaryHeader details={summaryDetails(summary)} />
-          <Card fluid>
-            <Card.Content>
-              <Header as="h4">Cash Movement from Inception</Header>
-              <CashMovement data={getChartData('cashMovement')} />
-            </Card.Content>
-          </Card>
+          {
+              cashMovementData && cashMovementData.length ?
+                <Aux>
+                  <Card fluid>
+                    <Card.Content>
+                      <Header as="h4">Cash Movement from Inception</Header>
+                      <CashMovement data={cashMovementData} />
+                    </Card.Content>
+                  </Card>
+                </Aux>
+              :
+                <Aux>
+                  <Card>
+                    <Card.Content>
+                      <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
+                      <Button fluid as={Link} compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
+                      <Divider hidden />
+                    </Card.Content>
+                  </Card>
+                </Aux>
+            }
         </PrivateLayout>
       </Aux>
     );
