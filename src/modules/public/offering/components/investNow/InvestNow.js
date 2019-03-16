@@ -106,8 +106,8 @@ export default class InvestNow extends React.Component {
           this.setState({ submitLoading: false });
           this.props.history.push('agreement');
         } else if (response.flag === 1) {
-          const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
-          if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
+          const { getTransferRequestAmount } = this.props.investmentStore;
+          if (getTransferRequestAmount > 0) {
             this.handleStepChange(step.stepToBeRendered);
           }
         }
