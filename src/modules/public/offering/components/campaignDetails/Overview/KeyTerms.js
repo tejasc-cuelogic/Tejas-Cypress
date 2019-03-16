@@ -43,13 +43,15 @@ class KeyTerms extends Component {
               </Table.Cell>
               <Table.Cell className="grey-header">
                 {get(campaign, 'regulation') ?
-                  CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : '-'}
-                { CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
+                  `${CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation]} ` : '-'}
+                { get(campaign, 'regulation') &&
+                CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
                     content={
                       CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                     }
+                    hoverable
                     position="top center"
                   /> : ''
                 }

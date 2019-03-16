@@ -3,8 +3,8 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 
-const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
+const { clientWidth } = document.documentElement;
+const isTablet = clientWidth >= 768 && clientWidth < 992;
 
 const Banner = () => (
   <section fluid className="banner invest-banner">
@@ -19,8 +19,7 @@ const Banner = () => (
       </Responsive>
       <div className="banner-meta">
         <p>
-          <b>Brian Ching | Pitch 25</b><br />
-          Raised $549,000 from 392 investors
+          <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
         </p>
       </div>
     </Container>

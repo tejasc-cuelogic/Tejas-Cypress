@@ -1,7 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { isEmpty } from 'lodash';
-
 import { MultiStep } from '../../../../../../../helper';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
@@ -10,6 +8,7 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.uiStore.setProgress();
     this.props.userDetailsStore.setUserAccDetails('individual');
     this.props.accountStore.setAccTypeChange(0);
   }
@@ -41,10 +40,9 @@ export default class AccountCreation extends React.Component {
     const {
       formAddFunds,
       validateAddFunds,
-      plaidAccDetails,
-      formLinkBankManually,
       depositMoneyNow,
-      showAddFunds,
+      isPlaidDirty,
+      linkbankSummary,
     } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
@@ -53,10 +51,9 @@ export default class AccountCreation extends React.Component {
         name: 'Link Bank',
         component: <Plaid />,
         // isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
-        isDirty: !isEmpty(plaidAccDetails) ||
-        formLinkBankManually.meta.isDirty,
+        isDirty: isPlaidDirty,
         stepToBeRendered: 1,
-        disableNextButton: true,
+        disableNextButton: !linkbankSummary,
       },
       {
         name: 'Add funds',
@@ -66,9 +63,7 @@ export default class AccountCreation extends React.Component {
         // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
         // : stepToBeRendered > 1 ? 'error' : '',
         validate: validateAddFunds,
-        isDirty: (!isEmpty(plaidAccDetails) &&
-        formAddFunds.meta.isDirty) ||
-        showAddFunds,
+        isDirty: isPlaidDirty,
         disableNextButton: true,
         stepToBeRendered: 2,
       },

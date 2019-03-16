@@ -6,7 +6,7 @@ import money from 'money-math';
 import { get, includes, orderBy, isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
-import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
+import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
@@ -39,6 +39,8 @@ export class TransactionStore {
   @observable selectedInvestment = '';
   @observable validWithdrawAmt = false;
   @observable availableWithdrawCash = null;
+  @observable aggrementId = '';
+  @observable loanAgreementData = {};
 
   @action
   initRequest = (props) => {
@@ -105,7 +107,7 @@ export class TransactionStore {
   }
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading ||
-    this.paymentHistoryData.loading;
+    this.paymentHistoryData.loading || this.loanAgreementData.loading;
   }
 
   @computed get error() {
@@ -444,8 +446,33 @@ export class TransactionStore {
   @action
   setInvestment = (value) => {
     this.selectedInvestment = value;
+    const ob = this.investmentsByOffering.data.getInvestmentsByUserIdAndOfferingId
+      .find(obj => obj.investmentId === value);
+    this.aggrementId = get(ob, 'agreement.agreementId') || '';
     this.getPaymentHistory();
   }
+
+  @action
+  getDocuSignViewURL = aggrementId => new Promise((resolve, reject) => {
+    this.loanAgreementData = graphql({
+      client,
+      query: viewLoanAgreement,
+      variables: {
+        agreementId: aggrementId || this.aggrementId,
+        callbackUrl: `${window.location.origin}/secure-gateway`,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (!this.loanAgreementData.loading) {
+          resolve(data.viewLoanAgreement.docuSignViewURL);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+    });
+  });
 }
 
 export default new TransactionStore();

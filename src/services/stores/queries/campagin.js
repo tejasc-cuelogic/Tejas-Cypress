@@ -70,6 +70,9 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
+    created {
+      id
+    }
     keyTerms {
       unitPrice
       roundType

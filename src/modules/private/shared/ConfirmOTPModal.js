@@ -74,14 +74,14 @@ export default class ConfirmOTPModal extends Component {
                 fielddata={OTPVerifyMeta.fields.code}
                 onChange={VerificationChange}
               />
-              <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" onClick={e => resendVerification(e)} />
+              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" onClick={e => resendVerification(e)} />
             </Form.Field>
             {errors &&
               <Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
+            <Button type="submit" primary size="large" className="very relaxed" content="Submit to approval" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
           </Form>
         </Modal.Content>
       </Modal>
