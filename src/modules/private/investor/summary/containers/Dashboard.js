@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import { Header, Card, Button, Grid, Divider } from 'semantic-ui-react';
+import { Header, Card, Button, Divider } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
