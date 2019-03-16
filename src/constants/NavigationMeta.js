@@ -341,7 +341,7 @@ export const PRIVATE_NAV = [
     subPanel: 0,
     subNavigations: [
       { title: 'Review', to: 'review', component: 'ApplicationsList' },
-      { title: 'CIP', to: 'cip', component: 'ApplicationsList' },
+      { title: 'Individual', to: 'individual', component: 'ApplicationsList' },
       { title: 'IRA', to: 'ira', component: 'ApplicationsList' },
       {
         title: 'Entity',
