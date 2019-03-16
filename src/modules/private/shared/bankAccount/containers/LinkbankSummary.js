@@ -6,7 +6,6 @@ import { Header, Button, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 // import { ListErrors } from '../../../../../theme/shared';
 
-
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'accountStore', 'iraAccountStore', 'entityAccountStore')
 @withRouter
 @observer
