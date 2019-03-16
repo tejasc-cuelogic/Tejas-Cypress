@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import { Header, Card, Button, Grid } from 'semantic-ui-react';
+import { Header, Card, Button, Grid, Divider } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
@@ -72,24 +72,13 @@ export default class Dashboard extends Component {
                 </Aux>
               :
                 <Aux>
-                  <Grid>
-                    <Grid.Row>
-                      <Grid.Column
-                        widescreen={6}
-                        largeScreen={6}
-                        computer={6}
-                        tablet={8}
-                        mobile={16}
-                      >
-                        <Card className="form-card" fluid>
-                          <Card.Content>
-                            <Header as="h4">Browse the latest investment opportunities.</Header>
-                            <Button fluid as={Link} to="/offerings" size="large" color="green">Start investing now</Button>
-                          </Card.Content>
-                        </Card>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
+                  <Card>
+                    <Card.Content>
+                      <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
+                      <Button fluid as={Link} compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
+                      <Divider hidden />
+                    </Card.Content>
+                  </Card>
                 </Aux>
             }
         </PrivateLayout>
