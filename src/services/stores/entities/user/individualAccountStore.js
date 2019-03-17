@@ -14,6 +14,7 @@ class IndividualAccountStore {
   @observable submited = false;
   @observable isManualLinkBankSubmitted = false;
   @observable individualAccId = null;
+  @observable showProcessingModal = false;
 
   @action
   setIsManualLinkBankSubmitted = (status) => {
@@ -39,8 +40,11 @@ class IndividualAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => {
+          .then((res) => {
             uiStore.setProgress(false);
+            if (res.data.submitInvestorAccount) {
+              this.setFieldValue('showProcessingModal', true);
+            }
             bankAccountStore.resetStoreData();
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
@@ -52,6 +56,10 @@ class IndividualAccountStore {
           });
       });
     });
+  }
+  @action
+  setFieldValue = (field, val) => {
+    this[field] = val;
   }
 
   investmentLimitsAttributes = () => {

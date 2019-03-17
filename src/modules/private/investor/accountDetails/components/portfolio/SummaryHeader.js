@@ -58,7 +58,7 @@ const SummaryHeader = props => (
                   </Statistic.Label>
                   <Statistic.Value>{showValue(row)}</Statistic.Value>
                   {row.title === 'Total Balance' &&
-                    <Statistic.Label as={Link} to={`/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Statistic.Label>
+                    <Statistic.Label as={Link} className={props.details.isAccountFrozen ? 'disabled' : ''}to={`/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Statistic.Label>
                   }
                 </Statistic>
               </Card.Content>

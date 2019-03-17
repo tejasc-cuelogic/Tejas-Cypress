@@ -89,7 +89,7 @@ class Overview extends Component {
                       </Table.Cell>
                       {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                         <Table.Cell>
-                          {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'N/A'}{' '}
+                          {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? get(campaign, 'closureSummary.keyTerms.multiple') : 'N/A'}{' '}
                           <HtmlEditor
                             readOnly
                             content={(keyTerms && keyTerms.investmentMultipleSummary ?
@@ -98,8 +98,8 @@ class Overview extends Component {
                         </Table.Cell>
                         :
                         <Table.Cell>
-                          {keyTerms && keyTerms.interestRate ?
-                            `${keyTerms.interestRate}%` : 'N/A'
+                          {campaign && get(campaign, 'closureSummary.keyTerms.interestRate') ?
+                            `${get(campaign, 'closureSummary.keyTerms.interestRate')}%` : 'N/A'
                           }
                         </Table.Cell>
                       }
@@ -115,9 +115,9 @@ class Overview extends Component {
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Revenue Sharing Percentage</Table.Cell>
                         <Table.Cell>
-                          {keyTerms && keyTerms.revSharePercentage ?
-                            keyTerms.revSharePercentage.includes('%') ?
-                              keyTerms.revSharePercentage : `${keyTerms.revSharePercentage}%`
+                          {campaign && get(campaign, 'closureSummary.keyTerms.revSharePercentage') ?
+                            get(campaign, 'closureSummary.keyTerms.revSharePercentage').includes('%') ?
+                            get(campaign, 'closureSummary.keyTerms.revSharePercentage') : `${get(campaign, 'closureSummary.keyTerms.revSharePercentage')}%`
                             :
                             'N/A'}
                           <HtmlEditor

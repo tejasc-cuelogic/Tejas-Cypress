@@ -17,7 +17,7 @@ import Agreement from '../../../../public/offering/components/investNow/agreemen
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 
-@inject('portfolioStore', 'transactionStore')
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore')
 @observer
 export default class Portfolio extends Component {
   state = {
@@ -54,12 +54,13 @@ export default class Portfolio extends Component {
     this.setState({ inActiveItems: updatedList });
   }
   render() {
-    const { match, portfolioStore } = this.props;
+    const { match, portfolioStore, userDetailsStore } = this.props;
     if (portfolioStore.loading) {
       return <InlineLoader />;
     }
     const { getInvestorAccounts, getPieChartData } = portfolioStore;
     const summaryDetails = {
+      isAccountFrozen: userDetailsStore.isAccountFrozen,
       accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
       summary: [
@@ -107,7 +108,7 @@ export default class Portfolio extends Component {
                   <Card className="form-card" fluid>
                     <Card.Content>
                       <Header as="h4">Browse the latest investment opportunities.</Header>
-                      <Button as={Link} to="/offerings" size="medium" color="green">Start investing now</Button>
+                      <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
                     </Card.Content>
                   </Card>
                 </Grid.Column>

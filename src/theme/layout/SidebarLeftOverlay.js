@@ -83,7 +83,7 @@ const MySidebar = observer(props => (
           </Scrollbars>
         </Sidebar>
         {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
-          props.signupStatus && props.signupStatus.activeAccounts.length > 0 &&
+          props.signupStatus &&
           !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
           <Link className="add-account" to="/app/summary/account-creation">
             <Icon name="add circle" />
