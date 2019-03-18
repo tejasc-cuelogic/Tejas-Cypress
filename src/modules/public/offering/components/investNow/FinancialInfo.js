@@ -23,6 +23,10 @@ class FinancialInfo extends Component {
         getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
       }
     }
+    if (this.props.investmentStore.getSelectedAccountTypeId) {
+      this.props.investmentLimitStore
+        .getInvestorAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
+    }
   }
   render() {
     const {
@@ -64,7 +68,7 @@ class FinancialInfo extends Component {
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
             <p>
-              Your investment limit:
+              Your investment limit: {' '}
               {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
               <Popup
                 wide
