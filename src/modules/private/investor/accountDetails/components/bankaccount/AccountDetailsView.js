@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
@@ -89,24 +90,26 @@ export default class AccountDetailsView extends Component {
                 </Item.Content>
               </Item>
             </Grid.Column>
-            {accountDetails.pendingUpdate &&
               <Grid.Column>
                 <Item>
                   <Item.Content>
-                    <Item.Extra>Status</Item.Extra>
-                    {accountType === 'pending' ?
-                      <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
-                        {currentStaus}
-                      </Item.Header>
-                      :
-                      <Item.Header>
-                        {currentStaus}
-                      </Item.Header>
+                    {accountDetails.pendingUpdate &&
+                      <Aux>
+                        <Item.Extra>Status</Item.Extra>
+                        {accountType === 'pending' ?
+                          <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
+                            {currentStaus}
+                          </Item.Header>
+                          :
+                          <Item.Header>
+                            {currentStaus}
+                          </Item.Header>
+                        }
+                      </Aux>
                     }
                   </Item.Content>
                 </Item>
               </Grid.Column>
-            }
             <Grid.Column width={3} textAlign="right" verticalAlign="middle">
               {accountType === 'active' ?
                 accountDetails && !accountDetails.pendingUpdate &&

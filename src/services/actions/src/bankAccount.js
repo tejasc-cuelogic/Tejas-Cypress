@@ -84,7 +84,8 @@ export class BankAccount {
           // bankAccountStore.changeBankPlaid();
           bankAccountStore.setPlaidBankVerificationStatus(true);
         } else {
-          Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
+          // Helper.toast(`Account with Bank ${metadata.institution.name}
+          // successfully linked.`, 'success');
           const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
           const currentStep = {
             name: 'Link bank',
