@@ -116,6 +116,7 @@ export class AuthStore {
 
   @action
   ConfirmChange = (e) => {
+    uiStore.setErrors('');
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'code', value: e },
