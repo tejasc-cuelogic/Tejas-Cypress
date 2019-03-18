@@ -40,13 +40,13 @@ export default class Finances extends Component {
             <Form.Group widths={2}>
               {['netWorth', 'annualIncomeCurrentYear'].map(field => (
                 <MaskedInput
-                  type="tel"
                   key={field}
                   name={field}
                   currency
                   fielddata={FINANCES_FORM.fields[field]}
                   changed={financesChange}
                   prefix="$ "
+                  number
                   showerror
                 />
               ))}
