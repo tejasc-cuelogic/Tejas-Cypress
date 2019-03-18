@@ -2,7 +2,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
-import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get } from 'lodash';
+import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
@@ -24,6 +24,7 @@ export class UserDetailsStore {
   @observable currentUser = {};
   @observable currentActiveAccount = null;
   @observable isAddressSkip = false;
+  @observable isFrozen = false;
   @observable detailsOfUser = {};
   @observable editCard = 0;
   @observable deleting = 0;
@@ -67,7 +68,9 @@ export class UserDetailsStore {
   }
 
   @computed get isAccountFrozen() {
-    return this.signupStatus.frozenAccounts.includes(this.currentActiveAccount);
+    const isFrozonAccountExists =
+      findIndex(this.signupStatus.frozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
   }
 
   @action
@@ -168,13 +171,13 @@ export class UserDetailsStore {
   get isInvestorAccreditated() {
     let entityAccreditation = null;
     this.currentUser && this.currentUser.data
-    && this.currentUser.data.user
-    && this.currentUser.data.user.roles.map((role) => {
-      if (role.name === 'entity') {
-        entityAccreditation = get(role, 'details.accreditation.status') || null;
-      }
-      return null;
-    });
+      && this.currentUser.data.user
+      && this.currentUser.data.user.roles.map((role) => {
+        if (role.name === 'entity') {
+          entityAccreditation = get(role, 'details.accreditation.status') || null;
+        }
+        return null;
+      });
     const accreditation = get(this.currentUser, 'data.user.accreditation.status');
     return (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
   }
