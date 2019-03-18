@@ -413,6 +413,7 @@ class InvestorProfileStore {
       }
       return this[form].fields[f];
     });
+    FormValidator.onChange(this[form], '', '', false);
   }
 
   @action
