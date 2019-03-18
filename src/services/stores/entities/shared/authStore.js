@@ -3,11 +3,13 @@ import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
+import Helper from '../../../../helper/utility';
 import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
+import { subscribeToNewsLetter } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
@@ -391,6 +393,32 @@ export class AuthStore {
   setUserRole = (userData) => {
     this.SIGNUP_FRM.fields.role.value = userData;
   }
+
+  @action
+  subscribeToNewsletter = () => new Promise((res, rej) => {
+    if (!this.NEWSLETTER_FRM.meta.isValid) {
+      this.resetForm('NEWSLETTER_FRM', null);
+      rej();
+    } else {
+      uiStore.setProgress();
+      const params = Validator.ExtractValues(this.NEWSLETTER_FRM.fields);
+      clientPublic.mutate({
+        mutation: subscribeToNewsLetter,
+        variables: { ...params },
+      })
+        .then(() => {
+          uiStore.setProgress(false);
+          res();
+        })
+        .catch((err) => {
+          Helper.toast('Error while subscribing to NewsLetter, please try again.', 'error');
+          rej(err);
+        })
+        .finally(() => {
+          this.resetForm('NEWSLETTER_FRM', null);
+        });
+    }
+  });
 }
 
 export default new AuthStore();
