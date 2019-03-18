@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style  */
 import React, { Component } from 'react';
-import { Link, matchPath } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container, Menu, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { SocialLinks } from '../shared';
@@ -28,8 +28,8 @@ class Footer extends Component {
 
   render() {
     const { path } = this.props;
-    const OfferFooter = ['/offerings/:id/:section?'];
-    const isCampaign = matchPath(path, { path: OfferFooter }) != null;
+    // const OfferFooter = ['/offerings/:id/:section?'];
+    // const isCampaign = matchPath(path, { path: OfferFooter }) != null;
     // const offeirngDisclaimer = campaign && campaign.keyTerms &&
     //   campaign.keyTerms.offeringDisclaimer ?
     //   campaign.keyTerms.offeringDisclaimer : null;
@@ -37,7 +37,8 @@ class Footer extends Component {
     //   campaign.keyTerms.shorthandBusinessName ?
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
-      <footer className={isCampaign ? 'offering-footer' : ''}>
+      // <footer className={isCampaign ? 'offering-footer' : ''}>
+      <footer>
         <Container>
           {/* {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
@@ -65,26 +66,28 @@ class Footer extends Component {
                 } */}
                 <Menu
                   text
-                  vertical={!isTablet
-                    || (!OfferFooter.find(item => matchPath(path, { path: item })))}
-                  className={isTablet && (OfferFooter.find(item => matchPath(path, { path: item }))) ? 'center-align' : ''}
+                  vertical={!isTablet}
+                  // || (!OfferFooter.find(item => matchPath(path, { path: item })))
+                  // className={isTablet && (OfferFooter.find(item => matchPath(path,
+                  // { path: item }))) ? 'center-align' : ''}
+                  className={isTablet ? 'center-align' : ''}
                 >
-                  {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                    <Menu.Item header>Legal</Menu.Item>
-                  }
+                  {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
+                  <Menu.Item header>Legal</Menu.Item>
+                  {/* } */}
                   <Menu.Item as={Link} to="/agreements/legal/terms-of-use">Terms of Use</Menu.Item>
                   <Menu.Item as={Link} to="/agreements/legal/privacy-policy">Privacy Policy</Menu.Item>
-                  {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                    <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
-                  }
+                  {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
+                  <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
+                  {/* } */}
                 </Menu>
-                {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                  <Aux path={path}>
-                    <div className={isMobile && 'mb-30'}>
-                      <NSImage path="secure-horizontal-1.jpg" />
-                    </div>
-                  </Aux>
-                }
+                {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
+                <Aux path={path}>
+                  <div className={isMobile && 'mb-30'}>
+                    <NSImage path="secure-horizontal-1.jpg" />
+                  </div>
+                </Aux>
+                {/* } */}
               </div>
               <div className={`${isMobile && 'mb-20'} footer-social`}>
                 <SocialLinks />
