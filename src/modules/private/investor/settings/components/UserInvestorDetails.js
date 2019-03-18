@@ -209,7 +209,7 @@ export default class UserInvestorDetails extends Component {
                 hidelabel
               />
             </dd>
-            {map(yearValues, (year, key) => (
+            {map(yearValues.annualIncomePreviousYear, (year, key) => (
               <Aux>
                 <dt className="regular-text">Annual Income {year}</dt>
                 <dd>

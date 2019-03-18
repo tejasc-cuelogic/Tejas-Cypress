@@ -255,7 +255,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'list layout',
     title: 'Categories',
-    capability: 'Category',
+    capability: 'CATEGORIES_ANY',
     to: 'categories',
     path: 'admin/categories',
     accessibleTo: ['admin', 'manager', 'support'],

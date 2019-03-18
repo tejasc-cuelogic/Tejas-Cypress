@@ -117,12 +117,12 @@ export const RESET_PASS = {
 };
 
 export const NEWSLETTER = {
-  name: {
+  subscriberName: {
     value: '',
     error: undefined,
     rule: 'required',
     label: 'Name',
     placeHolder: 'Name',
   },
-  email: { ...COMMON.email },
+  emailAddress: { ...COMMON.email },
 };

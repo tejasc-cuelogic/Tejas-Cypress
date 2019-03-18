@@ -85,10 +85,11 @@ const MySidebar = observer(props => (
         {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
           props.signupStatus &&
           !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
-          <Link className="add-account" to="/app/summary/account-creation">
-            <Icon name="add circle" />
-            <span>Add New Account</span>
-          </Link>
+           props.signupStatus.investorProfileCompleted &&
+           <Link className="add-account" to="/app/summary/account-creation">
+             <Icon name="add circle" />
+             <span>Add New Account</span>
+           </Link>
         }
         {props.desktop &&
           <Button onClick={props.toggle} className="item collapseIcon">

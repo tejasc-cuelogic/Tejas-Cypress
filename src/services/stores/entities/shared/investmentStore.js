@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
+import { capitalize, orderBy, mapValues } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
@@ -594,27 +594,10 @@ export class InvestmentStore {
   }
 
   @computed get changedInvestmentLimit() {
-    const { fields } = this.INVESTMENT_LIMITS_FORM;
-    const annualIncome = fields.annualIncome.value;
-    const netWorth = fields.netWorth.value;
-    const annualInvestmentLimitFloor = 2200;
-    const annualInvestmentLimit = 107000;
-    const annualIncomeLimitHighPct = 0.10;
-    let annualInvestmentLimitLowPct = 0;
-    let limit = null;
-
-    if (this.INVESTMENT_LIMITS_FORM.meta.isValid) {
-      annualInvestmentLimitLowPct = 0.05;
-
-      limit = floor(annualIncomeLimitHighPct * min([annualIncome, netWorth]));
-      if (annualIncome < annualInvestmentLimit || netWorth < annualInvestmentLimit) {
-        limit = max([
-          annualInvestmentLimitFloor,
-          floor(annualInvestmentLimitLowPct * min([annualIncome, netWorth]))]);
-      }
-      limit = min([limit, annualInvestmentLimit]);
-    }
-    return limit;
+    const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
+    console.log(investmentLimitStore.getInvestorAmountInvestedValue);
+    return investmentLimitStore
+      .getInvestmentLimit(data, investmentLimitStore.getInvestorAmountInvestedValue);
   }
   @action
   setInvestmentLimitData = () => {

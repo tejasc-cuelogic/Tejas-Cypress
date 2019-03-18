@@ -16,6 +16,7 @@ import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
+  @observable hasError = false;
   @observable statementDate = [];
   @observable filters = false;
   @observable requestState = {
@@ -82,7 +83,11 @@ export class TransactionStore {
       onFetch: (data) => {
         if (props && props.statement && !this.data.loading) {
           this.setFirstTransaction(data);
+          this.hasError = false;
         }
+      },
+      onError: () => {
+        this.hasError = true;
       },
     });
   }
@@ -245,7 +250,7 @@ export class TransactionStore {
   requestOtpForManageTransactions = () => {
     uiStore.setProgress();
     const { userDetails } = userDetailsStore;
-    const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type : 'EMAIL';
+    const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type || 'TEXT' : 'EMAIL';
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -253,7 +258,7 @@ export class TransactionStore {
           variables: {
             userId: userStore.currentUser.sub,
             type: otpType,
-            address: userDetails.email.address || '',
+            address: otpType === 'EMAIL' ? userDetails.email.address : '',
           },
         })
         .then((result) => {

@@ -103,13 +103,18 @@ class AccountType extends Component {
       userAccredetiationState,
       selectedAccountStatus,
       userAccreditatedStatus,
+      // showAccountList,
     } = this.props.accreditationStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    // if (!showAccountList && !getCurrentInvestNowHealthCheck) {
+    //   this.props.cancel();
+    //   this.props.history.push(this.props.refLink);
+    // }
     const { activeAccounts, inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
       [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
         activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     prepareAccountTypes(accountToConsider);
-    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
@@ -227,17 +232,6 @@ class AccountType extends Component {
       selectedAccountStatus, userAccredetiationState,
       isRegulationCheck, investAccTypes, showAccountList, isDocumentUpload,
     );
-    // setHeaderAndSubHeader(headerToShow);
-    // if ((activeAccounts.length || investAccTypes.values.length) &&
-    // isRegulationCheck && selectedAccountStatus === 'FULL') {
-    //   headerToShow = (showAccountList && investAccTypes.values.length >= 2) ?
-    //     headerToShow : userAccredetiationState ?
-    //       offeringAccreditatoinStatusMessage(userAccredetiationState).header : headerToShow;
-    //   subHeaderToShow = userAccredetiationState ?
-    //     offeringAccreditatoinStatusMessage(userAccredetiationState).subHeader : subHeaderToShow;
-    // } else if (!showAccountList && selectedAccountStatus !== 'FULL') {
-    //   headerToShow = offeringAccreditatoinStatusMessage(selectedAccountStatus).header;
-    // }
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin:
@@ -247,7 +241,6 @@ class AccountType extends Component {
     if (headerSubheaderObj.header === '') {
       return <Spinner loaderMessage="Loading.." />;
     }
-    // setHeaderAndSubHeader(headerToShow);
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
@@ -270,8 +263,8 @@ class AccountType extends Component {
                     <Aux>
                       <div className="center-align">
                         <Aux>
-                          <p>Offering is under legal documentation process! Please contact
-                            <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.
+                          <p>Please contact
+                            <a href="mailto:support@nextseed.com"> support@nextseed.com</a> with any question.
                           </p>
                           <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         </Aux>
