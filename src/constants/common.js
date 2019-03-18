@@ -49,3 +49,5 @@ export const ACTIVITY_HISTORY_SCOPE = {
 export const SAASQUATCH_TENANT_ALIAS = process.env.REACT_APP_SAASQUATCH_TENANT_ALIAS;
 
 export const FROALA_EDITOR_LICENSE = process.env.REACT_APP_FROALA_API_KEY_NEW;
+
+export const userIdleTime = (1000 * 60 * 15);

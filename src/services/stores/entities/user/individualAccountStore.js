@@ -15,6 +15,7 @@ class IndividualAccountStore {
   @observable isManualLinkBankSubmitted = false;
   @observable individualAccId = null;
   @observable showProcessingModal = false;
+  @observable isFormSubmitted = false;
 
   @action
   setIsManualLinkBankSubmitted = (status) => {
@@ -46,6 +47,7 @@ class IndividualAccountStore {
               this.setFieldValue('showProcessingModal', true);
             }
             bankAccountStore.resetStoreData();
+            this.isFormSubmitted = true;
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           })

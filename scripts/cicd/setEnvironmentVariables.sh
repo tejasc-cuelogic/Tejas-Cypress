@@ -19,6 +19,9 @@ settingEnv()
 	sed -i.bak "s/^\(REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=\).*/\1${REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID}/" .envTEMPLATE
 
 	REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url/ { print $3 }')
+	if [ "$environment" = "predev" ]; then
+        REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url\/distribution/ { print $3 }')
+    fi
 	sed -i.bak "s#^\(REACT_APP_API_URL=\).*#\1${REACT_APP_API_URL}#" .envTEMPLATE
 
 	REACT_APP_BOX_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/box\/url/ { print $3 }')
@@ -69,6 +72,9 @@ settingEnv()
 
 	#Public API endpoint- url
     REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url/ { print $3 }')
+    if [ "$environment" = "predev" ]; then
+        REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url\/distribution/ { print $3 }')
+    fi
     sed -i.bak "s#^\(REACT_APP_PUBLIC_API=\).*#\1${REACT_APP_PUBLIC_API}#" .envTEMPLATE
 
     #Public API endpoint- key
