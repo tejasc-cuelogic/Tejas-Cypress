@@ -13,22 +13,19 @@ const isTablet = document.documentElement.clientWidth < 992;
 @inject('navStore')
 @observer
 export class NavItems extends Component {
-  state = { active: '' };
+  state = { active: '', active2: '', byHideArrow: '' };
   navClick = (e, { name }) => {
-    console.log(e.target.className, this.state.active, this.state.byArrow);
     if (this.props.refLoc !== 'public') {
       const newState = this.state.active === name ? '' : name;
-      this.setState({ active: newState });
+      const newState2 = name;
+      this.setState({ active: newState, active2: newState2 });
     }
-    // if (this.props.isApp && e.target.className === 'dropdown icon') {
-    //   const { byArrow } = this.state; , byArrow: []
-    //   if (byArrow.includes(this.state.active)) {
-    //     this.setState({ byArrow: byArrow.filter(i => i !== this.state.active) });
-    //   } else {
-    //     byArrow.push(this.state.active);
-    //     this.setState({ byArrow });
-    //   }
-    // }
+    if (this.props.isApp && e.target.className === 'dropdown icon') {
+      const { active2 } = this.state;
+      if (active2 === name) {
+        this.setState({ byHideArrow: name });
+      }
+    }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
@@ -37,7 +34,11 @@ export class NavItems extends Component {
     if (to === '' && subNavigations) {
       return subNavigations.find(s => location.pathname.startsWith(`/${s.to}`));
     }
-    return ((to !== '' && this.state.active === to) ||
+    const { active, active2, byHideArrow } = this.state;
+    if (active2 === byHideArrow && active2 !== '') {
+      return false;
+    }
+    return ((to !== '' && active === to) ||
       ((this.props.refLoc !== 'public' && (location.pathname.startsWith(`/${app}/${to}`))) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
@@ -161,14 +162,8 @@ export class NavigationItems extends Component {
       <Menu
         stackable
         borderless
-        // inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' })
-        // || navStatus === 'sub'}
-        // inverted={navStatus === 'sub'}
         fixed="top"
-        // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
-      // className={`${navStatus === 'sub' ? 'active' : ''}
-      // ${bottomPassed ? { subNavStatus } : ''}`}
       >
         <Container fluid>
           <Menu.Item as={Link} to="/" header>

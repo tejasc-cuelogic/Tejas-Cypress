@@ -68,7 +68,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Financial info',
           component: <FinancialInformation />,
-          isValid: FIN_INFO_FRM.meta.isValid ? '' : 'error',
+          isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
           isDirty: FIN_INFO_FRM.meta.isDirty,
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',
@@ -120,7 +120,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Financial info',
           component: <FinancialInformation />,
-          isValid: FIN_INFO_FRM.meta.isValid ? '' : 'error',
+          isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
           isDirty: FIN_INFO_FRM.meta.isDirty,
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',

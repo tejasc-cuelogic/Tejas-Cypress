@@ -21,11 +21,6 @@ const AccTypeDescription = observer((props) => {
             is FDIC-insured up to $250,000 and is interest-bearing.
           </p>
           <p>We safeguard your information with bank-level security measures.</p>
-          <p>
-            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA
-            GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for
-            uninvested cash in NextSeed accounts.
-          </p>
           <p className="grey-text">
             NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA
             GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for

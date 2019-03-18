@@ -53,10 +53,10 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
       this.props.investmentStore.setFieldValue('disableNextbtn', false);
-      this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
     } else if (step === 0) {
       this.handleStepChnageOnPreviousForAlert();
     }
+    this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleStepChangeForPartialAccounts = (step) => {
@@ -101,14 +101,14 @@ export default class InvestNow extends React.Component {
       this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
         this.setState({ submitLoading: response.isValid });
         if (response.isValid) {
-          Helper.toast('Agreement has been generated successfully!', 'success');
+          // Helper.toast('Agreement has been generated successfully!', 'success');
           this.props.investmentStore.setStepToBeRendered(0);
           this.setState({ submitLoading: false });
           this.props.history.push('agreement');
         } else if (response.flag === 1) {
           const { getTransferRequestAmount } = this.props.investmentStore;
           if (getTransferRequestAmount > 0) {
-            this.handleStepChange(step.stepToBeRendered);
+            this.handleStepChangeForPartialAccounts(step.stepToBeRendered);
           }
         }
       }).catch(() => {
@@ -123,7 +123,7 @@ export default class InvestNow extends React.Component {
       const offeringReuglation = campaign && campaign.regulation;
       const regulationType = offeringReuglation;
       const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C'
-       || offeringReuglation === 'BD_CF_506C'));
+        || offeringReuglation === 'BD_CF_506C'));
       const {
         changeShowAccountListFlag,
         userAccredetiationState,
@@ -175,6 +175,7 @@ export default class InvestNow extends React.Component {
           component: <AccountType
             refLink={this.props.refLink}
             changeInvest={changeInvest}
+            cancel={this.handleCancel}
           />,
           isValid: '',
           stepToBeRendered: 1,
@@ -200,6 +201,7 @@ export default class InvestNow extends React.Component {
             cancel={this.handleCancel}
           />,
           isValid: '',
+          onlyDisableNextButton: true,
         },
       ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
