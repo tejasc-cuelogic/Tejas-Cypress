@@ -22,6 +22,8 @@ class IraAccountStore {
   @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING);
   @observable iraAccountId = null;
   @observable showProcessingModal = false;
+  @observable isFormSubmitted = false;
+
 
   @observable stepToBeRendered = 0;
   @observable accountNotSet = '';
@@ -170,6 +172,7 @@ class IraAccountStore {
       .then(() => {
         this.setFieldValue('showProcessingModal', true);
         bankAccountStore.resetStoreData();
+        this.isFormSubmitted = true;
         Helper.toast('IRA account submitted successfully.', 'success');
         resolve();
       })

@@ -29,7 +29,7 @@ class EntityAccountStore {
   @observable stepToBeRendered = '';
   @observable entityAccountId = null;
   @observable showProcessingModal = false;
-
+  @observable isFormSubmitted = false;
 
   @action
   setStepToBeRendered(step) {
@@ -131,6 +131,7 @@ class EntityAccountStore {
           .then(() => {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
+            this.isFormSubmitted = true;
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })
@@ -347,6 +348,7 @@ class EntityAccountStore {
       currentStep.validate();
       isValidCurrentStep = this[currentStep.form].meta.isValid;
       if (isValidCurrentStep) {
+        uiStore.setProgress();
         if (currentStep.name === 'Financial info') {
           accountAttributes.limits = {
             netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
