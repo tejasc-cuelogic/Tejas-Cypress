@@ -861,7 +861,7 @@ export class BusinessAppStore {
   }
 
   @action
-  businessPreQualificationBasicFormSumbit = () => {
+  businessPreQualificationBasicFormSumbit = (resetLoader = true) => {
     uiStore.setProgress();
     let payload = Validator.ExtractValues(this.BUSINESS_APP_FRM_BASIC.fields);
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
@@ -889,7 +889,9 @@ export class BusinessAppStore {
           reject(error);
         })
         .finally(() => {
-          uiStore.setProgress(false);
+          if (resetLoader) {
+            uiStore.setProgress(false);
+          }
         });
     });
   }

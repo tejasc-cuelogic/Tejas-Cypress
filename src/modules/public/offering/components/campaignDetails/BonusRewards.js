@@ -27,7 +27,7 @@ class BonusRewards extends Component {
     const bonusRewards = orderBy(get(campaign, 'bonusRewards'), 'created.date', 'asc') || [];
     rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
     const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
-    const earlyBirdsCount = get(campaign, 'earlyBirdsCount') || 0;
+    // const earlyBirdsCount = get(campaign, 'earlyBirdsCount') || 0;
     const offeringMISC = campaign && campaign.offering && campaign.offering.misc &&
       campaign.offering.misc.additionalBonusRewardsContent ?
       campaign.offering.misc.additionalBonusRewardsContent : null;
@@ -47,7 +47,7 @@ class BonusRewards extends Component {
                     <Segment padded className="reward-block">
                       <Aux>
                         <Header textAlign="left" as="h6" className="text-uppercase mb-40">Early Bird Reward
-                          <Label size="small" color="green" className="text-uppercase pull-right">{earlyBirdsCount} remaining</Label>
+                          <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
                         </Header>
                         <Header as="h5" className="intro-text">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
                       </Aux>

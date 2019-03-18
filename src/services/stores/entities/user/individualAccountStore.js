@@ -42,7 +42,7 @@ class IndividualAccountStore {
           })
           .then((res) => {
             uiStore.setProgress(false);
-            if (!res.data.submitInvestorAccount) {
+            if (res.data.submitInvestorAccount) {
               this.setFieldValue('showProcessingModal', true);
             }
             bankAccountStore.resetStoreData();

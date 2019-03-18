@@ -26,6 +26,7 @@ export const INVESTMENT_ACCOUNT_TYPES = {
   2: 'entity',
 };
 
+
 export const US_STATES_FOR_INVESTOR = [
   { key: 'AL', value: 'Alabama', text: 'ALABAMA' },
   { key: 'AK', value: 'Alaska', text: 'ALASKA' },
