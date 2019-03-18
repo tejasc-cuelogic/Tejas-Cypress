@@ -48,11 +48,8 @@ export default class GeneralDisclosures extends Component {
             businesses seeking growth capital through investment crowdfunding tend to be in earlier
             stages of development, and their business model, products and services may not yet be
             fully developed, operational or tested in the public marketplace. There is no guarantee
-            that companies will be able to generate sufficient cashflow to 1Need to link <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>
-            {' '}and <Link className="positive-text" to="/agreements/legal/privacy-policy">Privacy Policy</Link> to the actual URL that has them.
-          </p>
-          <p>
-            Service their outstanding debt securities, or that the stated equity valuation and other
+            that companies will be able to generate sufficient cashflow to service their outstanding
+            debt securities, or that the stated equity valuation and other
             terms are accurate or in agreement with the market or industry valuations. Additionally,
             investors may receive illiquid and/or restricted stock that may be subject to holding
             period requirements and/or liquidity concerns. As a prudent matter, investing in startups
