@@ -131,7 +131,7 @@ export default class ConfirmPhoneNumber extends Component {
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || (errors && errors.message)} />
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">

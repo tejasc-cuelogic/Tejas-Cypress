@@ -245,7 +245,7 @@ export class TransactionStore {
   requestOtpForManageTransactions = () => {
     uiStore.setProgress();
     const { userDetails } = userDetailsStore;
-    const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type : 'EMAIL';
+    const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type || 'TEXT' : 'EMAIL';
     return new Promise((resolve, reject) => {
       client
         .mutate({

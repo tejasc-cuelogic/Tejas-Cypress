@@ -128,6 +128,7 @@ export class IdentityStore {
 
   @action
   phoneVerificationChange = (e) => {
+    uiStore.setErrors('');
     this.ID_PHONE_VERIFICATION = FormValidator.onChange(
       this.ID_PHONE_VERIFICATION,
       { name: 'code', value: e },

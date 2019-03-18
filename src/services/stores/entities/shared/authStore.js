@@ -116,6 +116,7 @@ export class AuthStore {
 
   @action
   ConfirmChange = (e) => {
+    uiStore.setErrors('');
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'code', value: e },
@@ -345,7 +346,7 @@ export class AuthStore {
       },
       onFetch: (data) => {
         if (data && data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
+          this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
           this.SIGNUP_FRM.meta.isValid = false;
           rej();
         } else {
