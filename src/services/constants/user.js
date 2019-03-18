@@ -16,6 +16,19 @@ Validator.register(
   },
   "The :attribute should be less than today's date.",
 );
+Validator.register(
+  'afterDate', (value, attribute) => {
+    console.log(value);
+    return moment(value, 'MM/DD/YYYY').isAfter('01-01-1900');
+  },
+  'Invalid Date',
+);
+Validator.register(
+  'leastAge', (value, attribute) => {
+    return moment().diff(value, 'years') > 18;
+  },
+  'Investor must be at least 18 years old in order to proceed',
+);
 
 Validator.register(
   'maskedPhoneNumber', (value, attribute) => {
@@ -62,7 +75,7 @@ export const USER_IDENTITY = {
     label: 'First Name (Legal)',
     placeHolder: 'John',
     error: undefined,
-    rule: 'required',
+    rule: 'required|alpha',
     customErrors: {
       required: '* required.',
     },
@@ -74,7 +87,7 @@ export const USER_IDENTITY = {
     label: 'Last Name (Legal)',
     placeHolder: 'Smith',
     error: undefined,
-    rule: 'required',
+    rule: 'required|alpha',
     customErrors: {
       required: '* required.',
     },
@@ -147,7 +160,7 @@ export const USER_IDENTITY = {
     label: 'Date of Birth',
     placeHolder: 'mm/dd/yyyy',
     error: undefined,
-    rule: 'required|date|dob',
+    rule: 'required|date|dob|leastAge|afterDate',
     customErrors: {
       required: '* required.',
     },

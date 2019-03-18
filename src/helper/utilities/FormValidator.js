@@ -246,9 +246,9 @@ class FormValidator {
     } else {
       this.onChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet });
     }
-    this.onChange(currentForm, { name: 'state', value: data.state });
-    this.onChange(currentForm, { name: 'city', value: data.city });
-    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
+    this.onChange(currentForm, { name: 'state', value: data.state || '' });
+    this.onChange(currentForm, { name: 'city', value: data.city || '' });
+    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
   }
 
   setAddressFieldsIndex = (place, form, formName, subForm = 'data', index) => {
