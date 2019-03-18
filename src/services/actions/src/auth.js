@@ -1,7 +1,7 @@
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
 import cookie from 'react-cookies';
-import { map, mapValues, camelCase } from 'lodash';
+import { map, mapValues, camelCase, get } from 'lodash';
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
@@ -165,13 +165,19 @@ export class Auth {
             // Extract JWT from token
             commonStore.setToken(result.idToken.jwtToken);
             userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
-            if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
-              cookie.remove('ISSUER_REFERRAL_CODE');
-            }
-            if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
-              cookie.remove('SAASQUATCH_REFERRAL_CODE');
-            }
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+            userDetailsStore.getUser(userStore.currentUser.sub).then((data) => {
+              if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+                cookie.remove('ISSUER_REFERRAL_CODE');
+              }
+              if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+                cookie.remove('SAASQUATCH_REFERRAL_CODE');
+              }
+              if (window.analytics && false) {
+                window.analytics.identify(userStore.currentUser.sub, {
+                  name: `${get(data, 'user.info.firstName')} ${get(data, 'user.info.lastName')}`,
+                  email: get(data, 'user.email.address'),
+                });
+              }
               res();
             });
             AWS.config.region = AWS_REGION;
