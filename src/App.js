@@ -12,6 +12,7 @@ import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
+import { userIdleTime } from './constants/common';
 /**
  * Main App
  */
@@ -40,6 +41,7 @@ const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', 
 @observer
 class App extends Component {
   componentWillMount() {
+    this.checkUserIdleStatus();
     const { authStore, location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
@@ -65,6 +67,7 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    this.checkUserIdleStatus();
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
     const currentLocation = this.props.location.pathname;
@@ -94,6 +97,16 @@ class App extends Component {
       });
     }
   }
+  checkUserIdleStatus = () => {
+    if (this.props.authStore.isUserLoggedIn && localStorage.getItem('lastActiveTime')) {
+      const idleTime = (new Date().getTime() - localStorage.getItem('lastActiveTime'));
+      if (idleTime >= userIdleTime) {
+        this.onIdle();
+      }
+    } else if (this.props.authStore.isUserLoggedIn && !localStorage.getItem('lastActiveTime')) {
+      localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+    }
+  }
   checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
   render() {
@@ -114,9 +127,15 @@ class App extends Component {
         <IdleTimer
           ref={(ref) => { this.props.authStore.idleTimer = ref; }}
           element={document}
+          events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
           onIdle={this.onIdle}
+          onAction={() => {
+            if (this.props.authStore.idleTimer) {
+              localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+            }
+          }}
           debounce={250}
-          timeout={1000 * 60 * 15}
+          timeout={userIdleTime}
           stopOnIdle
         />
         }

@@ -606,7 +606,12 @@ export class Auth {
     new Promise((res) => {
       commonStore.setToken(undefined);
       userStore.forgetUser();
-      this.cognitoUser.signOut();
+      // this.cognitoUser.signOut();
+      this.cognitoUser.globalSignOut({
+        onSuccess: result => console.log(result),
+        onFailure: err => console.log(err),
+      });
+      localStorage.removeItem('lastActiveTime');
       AWS.config.clear();
       authStore.setUserLoggedIn(false);
       authStore.resetStoreData();
