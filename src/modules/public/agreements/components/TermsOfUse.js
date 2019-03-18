@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent react/jsx-closing-tag-location */
 /* eslint-disable max-len */
 import React from 'react';
 import Aux from 'react-aux';

@@ -130,7 +130,7 @@ export default class Agreement extends React.Component {
             </div>
           </Modal.Content>
         </Modal>
-        <Modal size="large" className="confirm-investment" open closeIcon closeOnRootNodeClick={false} onClose={e => this.handleCloseModal(e)}>
+        <Modal size="large" className="confirm-investment" open closeIcon closeOnRootNodeClick={false} closeOnDimmerClick={false} onClose={e => this.handleCloseModal(e)}>
           <Modal.Content className="signup-content">
             <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">

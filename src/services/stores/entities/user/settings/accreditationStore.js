@@ -812,7 +812,7 @@ export class AccreditationStore {
       // return headerSubheaderTextObj;
     } else if ((!showAccountList && !isDocumentUpload) ||
       (!isDocumentUpload && accountCreated.values.length === 1)) {
-      headerSubheaderTextObj.header = 'Your investment transaction not processed';
+      headerSubheaderTextObj.header = null;
       headerSubheaderTextObj.subHeader = '';
       // return headerSubheaderTextObj;
     } else {
