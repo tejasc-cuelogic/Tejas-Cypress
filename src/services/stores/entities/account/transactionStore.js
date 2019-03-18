@@ -253,7 +253,7 @@ export class TransactionStore {
           variables: {
             userId: userStore.currentUser.sub,
             type: otpType,
-            address: userDetails.email.address || '',
+            address: otpType === 'EMAIL' ? userDetails.email.address : '',
           },
         })
         .then((result) => {
