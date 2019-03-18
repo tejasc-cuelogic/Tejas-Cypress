@@ -60,6 +60,8 @@ export default class SubscribeForNewsletter extends Component {
   submit = () => {
     this.props.authStore.subscribeToNewsletter().then(() => {
       this.setState({ dialog: true });
+      document.getElementsByName('subscriberName')[0].value = '';
+      document.getElementsByName('emailAddress')[0].value = '';
     });
   }
   render() {
