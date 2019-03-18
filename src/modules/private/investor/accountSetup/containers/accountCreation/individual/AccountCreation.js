@@ -9,9 +9,11 @@ import GsModal from '../../../components/GsProcessingModal';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    this.props.uiStore.setProgress();
-    this.props.userDetailsStore.setUserAccDetails('individual');
-    this.props.accountStore.setAccTypeChange(0);
+    if (!this.props.individualAccountStore.isFormSubmitted) {
+      this.props.uiStore.setProgress();
+      this.props.userDetailsStore.setUserAccDetails('individual');
+      this.props.accountStore.setAccTypeChange(0);
+    }
   }
   handleMultiStepModalclose = () => {
     this.updateUser();
