@@ -4,7 +4,7 @@ import moment from 'moment';
 import { includes, orderBy } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Header, Grid, Card, Button } from 'semantic-ui-react';
+import { Header, Card, Button } from 'semantic-ui-react';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
