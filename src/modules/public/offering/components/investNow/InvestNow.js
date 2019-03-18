@@ -101,7 +101,7 @@ export default class InvestNow extends React.Component {
       this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
         this.setState({ submitLoading: response.isValid });
         if (response.isValid) {
-          Helper.toast('Agreement has been generated successfully!', 'success');
+          // Helper.toast('Agreement has been generated successfully!', 'success');
           this.props.investmentStore.setStepToBeRendered(0);
           this.setState({ submitLoading: false });
           this.props.history.push('agreement');

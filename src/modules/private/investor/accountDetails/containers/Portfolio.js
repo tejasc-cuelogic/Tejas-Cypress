@@ -102,18 +102,14 @@ export default class Portfolio extends Component {
         !getInvestorAccounts.investments.completed.length ?
           <Aux>
             <p>No investments or reservations pending.</p>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column widescreen={4} largeScreen={4} computer={4} tablet={8} mobile={16}>
-                  <Card className="form-card" fluid>
-                    <Card.Content>
-                      <Header as="h4">Browse the latest investment opportunities.</Header>
-                      <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
-                    </Card.Content>
-                  </Card>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+            <Card.Group itemsPerRow={4} stackable doubling>
+              <Card fluid>
+                <Card.Content>
+                  <Header as="h4">Browse the latest investment opportunities.</Header>
+                  <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+                </Card.Content>
+              </Card>
+            </Card.Group>
           </Aux> : null
         }
         <Route
