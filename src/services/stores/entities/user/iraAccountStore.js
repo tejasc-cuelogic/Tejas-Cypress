@@ -9,7 +9,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, userStore } from '../../index';
+import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, userStore, accountStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -379,7 +379,7 @@ class IraAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);

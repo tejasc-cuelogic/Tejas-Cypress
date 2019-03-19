@@ -37,6 +37,7 @@ export class AuthStore {
   @observable pwdInputType = 'password';
   @observable currentScore = 0;
   @observable idleTimer = null;
+  @observable checkEmail = false;
 
   @action
   setFieldvalue = (field, value) => {
@@ -340,18 +341,18 @@ export class AuthStore {
 
   @action
   checkEmailExistsPresignup = email => new Promise((res, rej) => {
-    graphql({
+    this.checkEmail = graphql({
       client: clientPublic,
       query: checkEmailExistsPresignup,
       variables: {
         email,
       },
       onFetch: (data) => {
-        if (data && data.checkEmailExistsPresignup) {
+        if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
           this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
           this.SIGNUP_FRM.meta.isValid = false;
           rej();
-        } else {
+        } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
           res();
         }
       },

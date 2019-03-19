@@ -187,10 +187,10 @@ export default class GeneralRiskFactors extends Component {
           it is possible that you may not be able to identify any buyers, leaving you with
           very little recourse.
         </p>
-        <Divider hidden />
         <Header as="h5">There are few potential avenues for financial return</Header>
         <p>
-          The source of payment on an investment is from the Issuer, as laid out in the investment agreement.
+          The source of payment on an investment is from the Issuer, as laid out in the
+          investment agreement.
         </p>
         <p>
           Even if commercially reasonable steps are taken on behalf of investors to

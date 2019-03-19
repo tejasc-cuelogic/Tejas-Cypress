@@ -133,6 +133,7 @@ export class BankAccountStore {
     this.resetShowAddFunds();
     uiStore.clearErrors();
   }
+  stepbankSummary = step => step.bankSummary;
 
   @action
   setCurrentAccount = (accountType) => {

@@ -14,7 +14,7 @@ export default class Resources extends Component {
         <Route path={`${match.url}/education-center`} component={EducationCenter} />
         <Route key="insights" exact path={`${match.url}/insights`} component={Insights} />
         <Route key="category" exact path={`${match.url}/insights/category/:id`} component={Insights} />
-        <Route exact path={`${match.url}/insights/:id`} component={InsightsDetails} />
+        <Route exact path={`${match.url}/insights/:slug`} component={InsightsDetails} />
         <Route exact path={`${match.url}/case-studies`} component={CaseStudies} />
         <Route exact path={`${match.url}/community`} component={Community} />
       </Switch>

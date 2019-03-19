@@ -11,7 +11,7 @@ import {
   FILE_UPLOAD_STEPS,
   US_STATES_FOR_INVESTOR,
 } from '../../../../constants/account';
-import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
+import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, accountStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount, isUniqueTaxId } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -486,7 +486,7 @@ class EntityAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);
