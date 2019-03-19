@@ -610,7 +610,8 @@ export class InvestmentStore {
   }
   @action
   validateMaskedInputForAmount = () => {
-    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount) &&
+      this.isValidMultipleAmount(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
@@ -622,6 +623,10 @@ export class InvestmentStore {
     this[form].fields.investmentAmount.error = undefined;
     this[form].meta.isValid = true;
     this.setFieldValue('investmentFlowErrorMessage', undefined);
+  }
+  isValidMultipleAmount = (amount) => {
+    const formatedAmount = parseFloat(amount) || 0;
+    return formatedAmount >= 100 && formatedAmount % 100 === 0;
   }
 }
 
