@@ -16,6 +16,7 @@ import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
+  @observable hasError = false;
   @observable statementDate = [];
   @observable filters = false;
   @observable requestState = {
@@ -82,7 +83,11 @@ export class TransactionStore {
       onFetch: (data) => {
         if (props && props.statement && !this.data.loading) {
           this.setFirstTransaction(data);
+          this.hasError = false;
         }
+      },
+      onError: () => {
+        this.hasError = true;
       },
     });
   }

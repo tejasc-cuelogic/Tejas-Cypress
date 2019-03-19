@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent react/jsx-closing-tag-location */
 /* eslint-disable max-len */
 import React from 'react';
 import Aux from 'react-aux';
@@ -15,7 +15,7 @@ const TermsOfUse = () => (
         Welcome to the NextSeed financial platform. Except as otherwise indicated in these terms
         of use (these <b>“Terms”</b>) or elsewhere on the Website (as defined below), the
         NextSeed service and network (collectively, the <b>“Service”</b>) are operated by
-        NextSeed Services LLC, a Delaware limited liability company (<b>“NextSeed,” “we,”</b>
+        NextSeed Services LLC, a Delaware limited liability company (<b>“NextSeed,” “we,” </b>
         or <b>“us”</b>). Our Privacy Policy is incorporated by reference in these Terms. By
         accessing or using the web site at www.nextseed.com, including any subdomain thereof
         (the <b>“Website”</b>), you (the <b>“User”</b>) signify that you have read, understand
@@ -87,8 +87,7 @@ const TermsOfUse = () => (
         of your Credentials and are responsible for all activities that occur through the use of
         your Credentials. You agree to notify NextSeed immediately if you believe the
         confidentiality of your Credentials has been compromised or if you suspect unauthorized
-        use of your account.
-        <b>You agree that NextSeed will not be liable for any loss or damage
+        use of your account. <b>You agree that NextSeed will not be liable for any loss or damage
         arising from unauthorized use of your Credentials.
         </b>
       </p>

@@ -138,37 +138,6 @@ export default class GeneralRiskFactors extends Component {
           revenues earned by the business each month, among other factors.
         </p>
         <p>
-          For any equity investments, any potential dividend payments are made as set
-          forth in the underlying investment agreement. Any increase in the value of
-          equity stock may be realized through a sale of that stock, however, your ability
-          to sell equity stock is limited because there is no secondary market where you
-          can freely buy and sell your stock.
-        </p>
-        <Divider hidden />
-        <Header as="h5">Past performances of businesses on NextSeed are not reliable predictors of success for other businesses</Header>
-        <p>
-          The success of past businesses that have raised funds on NextSeed does not
-          guarantee the success of any other business raising funds on NextSeed.
-        </p>
-        <p>
-          The historic returns and data on past NextSeed businesses are provided for
-          informational purposes only to celebrate the successes of local communities.
-          This information should not be interpreted as investment advice or as any
-          guarantee of investment returns on any other business raising funds on NextSeed.
-          Each business and each investment is unique, and you may not see similar, if any,
-          returns on your own investments.
-        </p>
-        <p>
-          For term notes, the interest rate is set up front. Some businesses have chosen to
-          make prepayments in full or in part without penalty, but this does not mean you
-          will see the same results with any other business you invest in.
-        </p>
-        <p>
-          For revenue sharing notes, the rate of return is ultimately dependent on each
-          business’ success, such as how quickly the business opens and the amount of
-          revenues earned by the business each month, among other factors.
-        </p>
-        <p>
           For any equity investments, any potential dividend payments are made as set forth
           in the underlying investment agreement. Any increase in the value of equity stock
           may be realized through a sale of that stock, however, your ability to sell equity
@@ -218,8 +187,8 @@ export default class GeneralRiskFactors extends Component {
           it is possible that you may not be able to identify any buyers, leaving you with
           very little recourse.
         </p>
+        <Header as="h5">There are few potential avenues for financial return</Header>
         <p>
-          There are few potential avenues for financial return<br />
           The source of payment on an investment is from the Issuer, as laid out in the
           investment agreement.
         </p>

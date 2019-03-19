@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
@@ -12,7 +13,7 @@ export default class GeneralDisclosures extends Component {
         <div className="justify-text legal-desc">
           <p>
             This website is operated by NextSeed Services LLC (“NextSeed”), which is not a
-            registered broker-dealernor funding portal.This website includes content about a
+            registered broker-dealer nor funding portal. This website includes content about a
             variety of topics relating to community development, small businesses and investing.
             NextSeed does not give investment advice, endorsement, analysis or recommendations
             with respect to any securities. All securities offerings listed on certain sections
@@ -27,18 +28,18 @@ export default class GeneralDisclosures extends Component {
           </p>
           <p>
             All securities-related activity on this site is conducted by NextSeed Securities, LLC
-            (“NextSeed Securities”), an affiliate of NextSeedand a SEC-registered broker-dealer and
+            (“NextSeed Securities”), an affiliate of NextSeed and a SEC-registered broker-dealer and
             member <a className="positive-text" href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>/SIPC, unless otherwise specifically indicated as being conducted by
-            NextSeed US LLC (“NextSeed Funding Portal”), anotheraffiliate of NextSeedand a
+            NextSeed US LLC (“NextSeed Funding Portal”), another affiliate of NextSeed and a
             SEC-registered Funding Portal and member FINRA, both located at 3 Greenway Plaza, Ste
             110, Houston TX 77046. NextSeed Securities and NextSeed Funding Portal does not make
             investment recommendations and no communication, through this website or in any other
             medium should be construed as a recommendation for any security offered on or off this
             investment platform. Any investments in private placements, any Regulation A offerings,
             or any investment crowdfunding offerings, and in particular any investments in startups
-            and small businesses are highly speculative, illiquid,and involve a high degree of risk.
+            and small businesses are highly speculative, illiquid, and involve a high degree of risk.
             Investors who cannot afford to lose their entire investment should not invest in
-            start-upsor small businesses.
+            start-ups or small businesses.
           </p>
           <p>
             Investment crowdfunding, whether offered via Regulation CF, Regulation A, or Regulation
@@ -46,17 +47,14 @@ export default class GeneralDisclosures extends Component {
             to make consistent investment returns over time and should not be assumed or relied
             upon as such under any circumstances. Companies seeking startup investments or small
             businesses seeking growth capital through investment crowdfunding tend to be in earlier
-            stages of development,and their business model, products and services may not yet be
+            stages of development, and their business model, products and services may not yet be
             fully developed, operational or tested in the public marketplace. There is no guarantee
-            that companies will be able to generate sufficient cashflow to 1Need to link <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>
-            {' '}and <Link className="positive-text" to="/agreements/legal/privacy-policy">Privacy Policy</Link> to the actual URL that has them.
-          </p>
-          <p>
-            Service their outstanding debt securities, or that the stated equity valuation and other
-            terms are accurate or in agreement with the market or industry valuations.Additionally,
+            that companies will be able to generate sufficient cashflow to service their outstanding
+            debt securities, or that the stated equity valuation and other
+            terms are accurate or in agreement with the market or industry valuations. Additionally,
             investors may receive illiquid and/or restricted stock that may be subject to holding
-            period requirements and/or liquidity concerns. As a prudent matter, investingin startups
-            or small businesses should not be a large part of your overall investment portfolioand
+            period requirements and/or liquidity concerns. As a prudent matter, investing in startups
+            or small businesses should not be a large part of your overall investment portfolio and
             only completed after careful consideration and consultation with your legal, financial
             and tax advisers. Investments in startups and small businesses are highly illiquid and
             those investors who cannot hold an investment for the long term should not invest.
@@ -64,7 +62,7 @@ export default class GeneralDisclosures extends Component {
           <p>
             NextSeed Securities and NextSeed Funding Portal do not provide custody services in
             connection any investments made through this website. Customer securities and account
-            balancesare held by custodial solutions managed by GoldStar Trust Company (“GoldStar”),
+            balances are held by custodial solutions managed by GoldStar Trust Company (“GoldStar”),
             the trust branch of Happy State Bank headquartered in Amarillo, Texas.
           </p>
         </div>

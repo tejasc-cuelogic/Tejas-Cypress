@@ -137,6 +137,10 @@ export class AgreementsStore {
     });
   });
 
+  @computed get legalDocs() {
+    return toJS(this.legalDocsList);
+  }
+
   @action
   setFileIdsData = (meta, data) => {
     meta.forEach((item) => {
