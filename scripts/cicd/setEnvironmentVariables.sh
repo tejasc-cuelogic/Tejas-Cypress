@@ -23,6 +23,7 @@ settingEnv()
 	if [ "$environment" = "predev" ]; then
         REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url\/distribution/ { print $3 }')
     fi
+    echo $REACT_APP_API_URL
     REACT_APP_API_URL_TRIM=`echo "$REACT_APP_API_URL" | xargs`
     echo $REACT_APP_API_URL_TRIM
 	sed -i.bak "s#^\(REACT_APP_API_URL=\).*#\1${REACT_APP_API_URL_TRIM}#" .envTEMPLATE
@@ -74,10 +75,12 @@ settingEnv()
 	sed -i.bak "s#^\(REACT_APP_DEPLOY_BRANCH=\).*#\1${CI_COMMIT_REF_NAME}#" .envTEMPLATE
 
 	#Public API endpoint- url
+	echo "checking REACT_APP_PUBLIC_API"
     REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url\s/ { print $3 }')
     if [ "$environment" = "predev" ]; then
         REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url\/distribution/ { print $3 }')
     fi
+    echo $REACT_APP_PUBLIC_API
     REACT_APP_PUBLIC_API_TRIM=`echo "$REACT_APP_PUBLIC_API" | xargs`
     echo $REACT_APP_PUBLIC_API_TRIM
     sed -i.bak "s#^\(REACT_APP_PUBLIC_API=\).*#\1${REACT_APP_PUBLIC_API_TRIM}#" .envTEMPLATE
