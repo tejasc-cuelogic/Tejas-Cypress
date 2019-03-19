@@ -123,7 +123,9 @@ class offerDetails extends Component {
     });
     return newNavData;
   }
-  modifyInvestmentDetailsSubNav = (navList) => {
+  modifyInvestmentDetailsSubNav = (navList, campaign) => {
+    const offeringStage = get(campaign, 'stage');
+    const terminationDate = get(campaign, 'offering.launch.terminationDate');
     const newNavList = [];
     const offeringSecurityType = this.props.campaignStore.offerStructure;
     navList.forEach((item) => {
@@ -155,7 +157,13 @@ class offerDetails extends Component {
         this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
         tempItem.subNavigations = uniqWith(temNavList, isEqual);
       }
-      newNavList.push(tempItem);
+      if (tempItem.to === 'data-room') {
+        if ((['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) || (['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULT'].includes(offeringStage) && terminationDate))) {
+          newNavList.push(tempItem);
+        }
+      } else {
+        newNavList.push(tempItem);
+      }
     });
     return newNavList;
   }
@@ -186,7 +194,7 @@ class offerDetails extends Component {
       navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
     navItems =
-      this.modifyInvestmentDetailsSubNav(navItems);
+      this.modifyInvestmentDetailsSubNav(navItems, campaign);
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;

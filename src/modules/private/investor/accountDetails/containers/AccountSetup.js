@@ -4,9 +4,10 @@ import { Header, Card, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { includes, capitalize } from 'lodash';
 import Aux from 'react-aux';
+
+@inject('userDetailsStore', 'uiStore')
 @withRouter
 @observer
-@inject('userDetailsStore', 'uiStore')
 export default class AccountSetup extends Component {
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
