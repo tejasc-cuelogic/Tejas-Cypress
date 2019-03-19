@@ -225,13 +225,16 @@ export class InvestmentStore {
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
       if (offeringSecurityType === 'TERM_NOTE') {
+        const formatedIntrestRate = money.floatToAmount(interestRate);
+        const calculatedIntrestAmount = money.percent(investAmt, formatedIntrestRate);
         const estReturnMIN =
-          Helper.CurrencyFormat(Math.round((interestRate * investAmt) / 100), 0);
+          Helper.CurrencyFormat(money.add(investAmt, calculatedIntrestAmount), 0);
         this.estReturnVal = estReturnMIN;
         return this.estReturnVal;
       }
+      const formatedInvestmentMultiple = money.floatToAmount(investmentMultiple);
       const estReturnMIN =
-        Helper.CurrencyFormat(Math.round(investmentMultiple * investAmt), 0);
+        Helper.CurrencyFormat(money.mul(formatedInvestmentMultiple, investAmt), 0);
       this.estReturnVal = estReturnMIN;
       return this.estReturnVal;
     } else if (investAmt <= 100) {

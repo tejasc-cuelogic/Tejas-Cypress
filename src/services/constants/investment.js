@@ -146,17 +146,20 @@ export const INVESTMENT_LIMITS = {
     label: 'Net Worth',
     error: undefined,
     rule: 'numeric|required',
+    tooltip: 'Mention your Net Worth here',
   },
   annualIncome: {
     value: '',
     label: 'Annual Income',
     error: undefined,
     rule: 'numeric|required',
+    tooltip: 'Mention your Annual Income here',
   },
   cfInvestments: {
     value: '',
-    label: 'Other Reg CF Investments:',
+    label: 'Other Regulation Crowdfunding investments made in prior 12 months',
     error: undefined,
     rule: 'numeric|required',
+    tooltip: 'Other Crowdfunding investments',
   },
 };
