@@ -68,7 +68,10 @@ export default class UpdateInvestmentLimits extends Component {
                 </Message>
               }
               <div className="center-align mt-30">
-                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} />
+                <Button.Group>
+                  <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
+                  <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} />
+                </Button.Group>
               </div>
             </Form>
           </Modal.Content>
