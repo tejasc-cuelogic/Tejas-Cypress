@@ -69,17 +69,17 @@ export default class Agreement extends React.Component {
   }
   handleCancelAgreement = (e) => {
     e.preventDefault();
-    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.setState({ open: true });
   }
-  handleCancel = () => {
+  handleCancel = (e) => {
+    e.preventDefault();
     this.props.history.push('agreement');
     this.setState({ open: false });
   }
   handleConfirm = () => {
-    const { agreementDetails } = this.props.investmentStore;
-    const { cancelAgreement } = this.props.portfolioStore;
-    cancelAgreement(agreementDetails.agreementId);
+    // const { agreementDetails } = this.props.investmentStore;
+    // const { cancelAgreement } = this.props.portfolioStore;
+    // cancelAgreement(agreementDetails.agreementId);
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(`${this.props.refLink}/invest-now`);
@@ -233,6 +233,19 @@ export default class Agreement extends React.Component {
                   <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
                 }
               </Form>
+              {investmentFlowErrorMessage &&
+                <Message error className="mt-30">
+                  {investmentFlowErrorMessage}
+                </Message>
+              }
+              <div className="center-align mt-30">
+                <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
+                <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
+              </div>
+              {this.state.showError &&
+                !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid &&
+                <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
+              }
             </div>
           </Modal.Content>
         </Modal>
