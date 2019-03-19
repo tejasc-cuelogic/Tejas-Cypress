@@ -105,15 +105,16 @@ class IndividualAccountStore {
               const { linkedBank } = result.data.upsertInvestorAccount;
               bankAccountStore.setPlaidAccDetails(linkedBank);
             }
+            const { isValid } = bankAccountStore.formAddFunds.meta;
             if (currentStep) {
               // FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
               if (!bankAccountStore.depositMoneyNow) {
-                Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-              } else if (currentStep.name !== 'Add funds') {
+                // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+              } else if (currentStep.name === 'Add funds' && isValid) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
             } else {
-              Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+              // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
             }
             // this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
