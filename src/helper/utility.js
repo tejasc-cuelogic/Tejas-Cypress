@@ -160,7 +160,7 @@ export class Utility {
         .getElementsByTagName('input');
       for (let i = 0; i < OtpItems.length; i += 1) {
         OtpItems[i].addEventListener('keydown', (e) => {
-          if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+          if ([16, 107, 110, 109, 69, 187, 188, 189, 190].includes(e.keyCode)) {
             e.preventDefault();
           }
         });
