@@ -5,12 +5,16 @@ import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../theme/shared';
+import Helper from '../../../helper/utility';
 import { FormInput } from '../../../theme/form';
 
 @inject('uiStore')
 @withRouter
 @observer
 export default class ConfirmOTPModal extends Component {
+  componentDidMount() {
+    Helper.otpShield();
+  }
   getMaskedPhoneNumber = () => {
     const number = this.props.maskedPhoneNumber;
     return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';

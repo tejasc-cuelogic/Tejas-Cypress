@@ -1,5 +1,6 @@
-/* eslint-disable react/jsx-indent react/jsx-closing-tag-location */
+/* eslint-disable react/jsx-indent  */
 /* eslint-disable max-len */
+/* eslint-disable react/jsx-closing-tag-location */
 import React from 'react';
 import Aux from 'react-aux';
 import { Header, Divider, List } from 'semantic-ui-react';

@@ -153,6 +153,22 @@ export class Utility {
       annualIncomePreviousYear: currentYear - 1,
     };
   }
+
+  otpShield = () => {
+    try {
+      const OtpItems = document.getElementsByClassName('otp-field')[0]
+        .getElementsByTagName('input');
+      for (let i = 0; i < OtpItems.length; i += 1) {
+        OtpItems[i].addEventListener('keydown', (e) => {
+          if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+            e.preventDefault();
+          }
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 export default new Utility();

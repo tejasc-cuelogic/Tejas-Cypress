@@ -16,11 +16,9 @@ export default class ConfirmVerificationCode extends Component {
       this.props.history.push(this.props.refLink);
     }
   }
-
-  // getMaskedPhoneNumber = () => {
-  //   const number = this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber;
-  //   return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';
-  // }
+  componentDidMount() {
+    Helper.otpShield();
+  }
 
   submit = (e) => {
     e.preventDefault();
