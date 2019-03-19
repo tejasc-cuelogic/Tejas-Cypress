@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
+import Helper from '../../../helper/utility';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
@@ -13,6 +14,9 @@ export default class ResetPassword extends Component {
   componentWillMount() {
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
+  }
+  componentDidMount() {
+    Helper.otpShield();
   }
   componentWillUnmount() {
     this.props.authStore.resetForm('RESET_PASS_FRM');

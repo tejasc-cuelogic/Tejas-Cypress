@@ -23,6 +23,9 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
   }
+  componentDidMount() {
+    Helper.otpShield();
+  }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
