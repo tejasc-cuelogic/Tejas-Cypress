@@ -13,7 +13,7 @@ export const INVESTMENT_INFO = {
     customErrors: {
       required: '* required.',
     },
-    rule: 'required',
+    rule: 'required|hundreds',
     placeHolder: '$ 0',
     maxLength: 15,
   },

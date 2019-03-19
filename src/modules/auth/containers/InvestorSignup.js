@@ -121,7 +121,7 @@ class InvestorSignup extends Component {
               </Message>
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={errors || !SIGNUP_FRM.meta.isValid || !currentScore} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
             </div>
           </Form>
         </Modal.Content>

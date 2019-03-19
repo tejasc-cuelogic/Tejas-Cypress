@@ -43,7 +43,7 @@ const ThanksNote = props => (
       <Divider hidden />
     </Modal.Header>
     <div className="center-align">
-      <Button onClick={props.closeModal} primary size="large">Close</Button>
+      <Button onClick={props.closeModal} primary size="medium">Close</Button>
     </div>
     <Divider hidden />
   </Modal>
