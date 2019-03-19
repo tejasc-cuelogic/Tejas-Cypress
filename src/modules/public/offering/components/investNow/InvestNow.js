@@ -52,8 +52,10 @@ export default class InvestNow extends React.Component {
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
+      this.props.investmentStore.setByDefaultRender(true);
       this.props.investmentStore.setFieldValue('disableNextbtn', false);
     } else if (step === 0) {
+      this.props.investmentStore.setByDefaultRender(true);
       this.handleStepChnageOnPreviousForAlert();
     }
     this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
