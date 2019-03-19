@@ -38,6 +38,11 @@ class CustomValidations extends Component {
       });
       return value >= 20 && value <= 100 && total <= 100;
     }, 'Minimum ownership should be 20% and max 100%.');
+
+    Validator.register('hundreds', (value) => {
+      const amount = parseFloat(value) || 0;
+      return amount >= 100 && amount % 100 === 0;
+    }, 'Investment amount should be in multiples of 100');
   }
 }
 
