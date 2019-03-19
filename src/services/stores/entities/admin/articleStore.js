@@ -9,7 +9,7 @@ import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES } from '../../../constants/admin/article';
-import { allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
+import { allInsightArticles, getArticleDetails, getArticleDetailsBySlug, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
 import { getCategories } from '../../queries/category';
 
 export class ArticleStore {
@@ -112,6 +112,15 @@ export class ArticleStore {
       this.article = graphql({ client: clientPublic, query: getArticleDetails, variables: { id } });
     }
 
+    @action
+    getArticleDetailsBySlug = (slug) => {
+      this.article = graphql({
+        client: clientPublic,
+        query: getArticleDetailsBySlug,
+        variables: { slug },
+      });
+    }
+
     @computed get InsightArticles() {
       return (this.data.data && (toJS(this.data.data.insightsArticles)
         || toJS(this.data.data.insightArticlesByCategoryId)
@@ -123,7 +132,7 @@ export class ArticleStore {
     }
 
     @computed get ArticlesDetails() {
-      return (this.article.data && toJS(this.article.data.insightsArticleById)) || null;
+      return (this.article.data && toJS(this.article.data.insightArticleBySlug)) || null;
     }
 
     @computed get articleLoading() {
