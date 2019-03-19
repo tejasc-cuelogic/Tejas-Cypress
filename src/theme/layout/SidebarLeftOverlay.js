@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
+import { Responsive, Sidebar, Menu, Button, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
@@ -20,6 +20,11 @@ class SidebarLeftPush extends Component {
       <Aux>
         {showFireworkAnimation &&
         <FireworksAnimation />
+        }
+        {this.props.uiStore.inProgress === 'viewLoanAgreement' &&
+          <Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
+            <Loader active={this.props.uiStore.inProgress} />
+          </Dimmer>
         }
         <Responsive minWidth={1200}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />

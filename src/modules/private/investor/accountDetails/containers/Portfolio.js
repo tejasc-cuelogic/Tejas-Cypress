@@ -17,7 +17,7 @@ import Agreement from '../../../../public/offering/components/investNow/agreemen
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 
-@inject('portfolioStore', 'transactionStore', 'userDetailsStore')
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class Portfolio extends Component {
   state = {
@@ -37,11 +37,13 @@ export default class Portfolio extends Component {
     }
   };
   viewLoanAgreement = (aggrementId) => {
+    this.props.uiStore.setProgress('viewLoanAgreement');
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
       this.setState({
         open: true,
         embedUrl: res,
       });
+      this.props.uiStore.setProgress(false);
     });
   }
   closeModal = () => {
