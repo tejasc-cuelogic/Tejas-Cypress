@@ -8,7 +8,6 @@ import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
-import DataFormatter from '../../../../../helper/utilities/DataFormatter';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 991;
@@ -84,9 +83,7 @@ class Comments extends Component {
     const readMoreLength = 50;
     const { campaign } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
-    const terminationDate = get(campaign, 'offering.launch.terminationDate');
-    console.log(DataFormatter.diffDays(terminationDate, false, true));
-    const disablePostComment = !['LIVE', 'LOCK'].includes(campaignStage) || (['LIVE', 'LOCK'].includes(campaignStage) && (terminationDate && DataFormatter.diffDays(terminationDate, false, true) < 0));
+    const disablePostComment = !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage);
     const comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
