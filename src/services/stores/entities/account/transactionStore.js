@@ -22,7 +22,7 @@ export class TransactionStore {
   @observable requestState = {
     search: {},
     page: 1,
-    perPage: 10,
+    perPage: 25,
     skip: 0,
   };
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
@@ -77,7 +77,7 @@ export class TransactionStore {
         accountId: account.details.accountId,
         userId: userDetails.id,
         orderBy: (props && props.order) || 'DESC',
-        limit: (props && props.limitData) || 10,
+        limit: (props && props.limitData) || 25,
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
@@ -152,11 +152,24 @@ export class TransactionStore {
   }
 
   @action
+  resetTransferForm = () => {
+    this.TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
+  }
+
+  @action
   TransferChange = (values, field, formName = 'TRANSFER_FRM', checkWithdrawAmt = false) => {
+    uiStore.clearErrors();
+    const errorMessage = 'Please enter a valid amount to deposit.';
     this[formName] = Validator.onChange(
       this[formName],
       { name: field, value: values.floatValue },
     );
+    if (formName === 'TRANSFER_FRM' && values.floatValue <= 0) {
+      uiStore.setErrors(errorMessage);
+      if (values.floatValue === 0) {
+        this.resetTransferForm();
+      }
+    }
     if (checkWithdrawAmt && values.floatValue !== undefined) {
       this.validWithdrawAmt = money.cmp(this.availableWithdrawCash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
     }

@@ -97,7 +97,7 @@ export class BankAccount {
           ACC_LINK_BANK_MAPPING[accountValue].store
             .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
         }
-        // bankAccountStore.setLinkBankSummary();
+        bankAccountStore.setLinkBankSummary();
       },
       onExit: (err) => {
         // The user exited the Link flow.

@@ -61,6 +61,7 @@ export default class AccountCreation extends React.Component {
       formAddFunds, plaidAccDetails,
       formLinkBankManually, isPlaidDirty,
       linkbankSummary, bankSummarySubmit,
+      stepbankSummary,
     } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps =
@@ -73,6 +74,7 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',
           stepToBeRendered: 1,
+          bankSummary: false,
         },
         {
           name: 'Account type',
@@ -81,6 +83,7 @@ export default class AccountCreation extends React.Component {
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
           stepToBeRendered: 2,
+          bankSummary: false,
         },
         {
           name: 'Funding',
@@ -89,6 +92,7 @@ export default class AccountCreation extends React.Component {
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
           stepToBeRendered: 3,
+          bankSummary: false,
         },
         {
           name: 'Link bank',
@@ -98,6 +102,7 @@ export default class AccountCreation extends React.Component {
           disableNextButton: !linkbankSummary,
           validate: validationActions.validateLinkBankForm,
           stepToBeRendered: 4,
+          bankSummary: linkbankSummary,
         },
         {
           name: 'Identity',
@@ -107,6 +112,7 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAIdentityInfo,
           form: 'IDENTITY_FRM',
           stepToBeRendered: 5,
+          bankSummary: false,
         },
         {
           name: 'Summary',
@@ -125,6 +131,7 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',
           stepToBeRendered: 1,
+          bankSummary: false,
         },
         {
           name: 'Account type',
@@ -133,6 +140,7 @@ export default class AccountCreation extends React.Component {
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
           stepToBeRendered: 2,
+          bankSummary: false,
         },
         {
           name: 'Funding',
@@ -141,6 +149,7 @@ export default class AccountCreation extends React.Component {
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
           stepToBeRendered: 3,
+          bankSummary: false,
         },
         {
           name: 'Identity',
@@ -150,11 +159,13 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAIdentityInfo,
           form: 'IDENTITY_FRM',
           stepToBeRendered: 4,
+          bankSummary: false,
         },
         {
           name: 'Summary',
           component: <Summary />,
           isValid: isValidIraForm ? '' : stepToBeRendered > 4 ? 'error' : '',
+          bankSummary: false,
         },
       ];
     }
@@ -163,7 +174,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress">
-        <MultiStep bankSummary={linkbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

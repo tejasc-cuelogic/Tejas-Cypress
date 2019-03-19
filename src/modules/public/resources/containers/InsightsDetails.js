@@ -9,7 +9,7 @@ import HtmlEditor from '../../../shared/HtmlEditor';
 @observer
 export default class InsightsDetails extends Component {
   componentWillMount() {
-    this.props.articleStore.getArticle(this.props.match.params.id);
+    this.props.articleStore.getArticleDetailsBySlug(this.props.match.params.slug);
   }
   render() {
     const { ArticlesDetails, articleLoading } = this.props.articleStore;

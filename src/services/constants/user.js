@@ -19,7 +19,7 @@ Validator.register(
 Validator.register(
   'afterDate', (value, attribute) => {
     console.log(value);
-    return moment(value, 'MM/DD/YYYY').isAfter('01-01-1900');
+    return moment(value, 'MM/DD/YYYY').isAfter('01-01-1910');
   },
   'Invalid Date',
 );

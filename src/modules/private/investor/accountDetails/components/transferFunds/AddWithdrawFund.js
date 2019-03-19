@@ -5,10 +5,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
+import { capitalize } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { AccTypeTitle, ListErrors } from '../../../../../../theme/shared';
-import { DataFormatter } from '../../../../../../helper';
+// import { DataFormatter } from '../../../../../../helper';
 import Helper from '../../../../../../helper/utility';
 
 @inject('transactionStore', 'userDetailsStore', 'uiStore')
@@ -69,6 +70,8 @@ export default class AddWithdrawFund extends Component {
     const linkBankDetials = currentActiveAccountDetails && currentActiveAccountDetails.details &&
       currentActiveAccountDetails.details.linkedBank ?
       currentActiveAccountDetails.details.linkedBank : null;
+    const accountType =
+    linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
     const { errors } = this.props.uiStore;
     const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
@@ -100,10 +103,9 @@ export default class AddWithdrawFund extends Component {
                 }
                 {!showConfirmPreview &&
                   <MaskedInput
-                    // disabled={showConfirmPreview ? 'disabled' : ''}
                     readonly={showConfirmPreview ? 'readonly' : false}
                     hoverable
-                    label={match.params.action === 'add' ? 'Deposit amount' : labelForWithdrawInput}
+                    label={match.params.action === 'add' ? '' : labelForWithdrawInput}
                     key="amount"
                     prefix="$ "
                     name="amount"
@@ -118,8 +120,7 @@ export default class AddWithdrawFund extends Component {
                     <div className="field fund-amount">
                       {match.params.action === 'withdraw' ?
                         <label>Withdrawal amount</label>
-                        :
-                        <label>Deposit amount</label>
+                        : ''
                       }
                       <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
                         <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
@@ -130,21 +131,21 @@ export default class AddWithdrawFund extends Component {
                         {match.params.action === 'withdraw' ?
                           <Aux>
                             <Header.Subheader>From</Header.Subheader>
-                            NextSeed {currentActiveAccountDetails &&
+                            {currentActiveAccountDetails &&
                             currentActiveAccountDetails.name ?
-                              currentActiveAccountDetails.name : null} Investment Account
+                              currentActiveAccountDetails.name : null} Account
                             <Divider hidden />
                             <Header.Subheader>To</Header.Subheader>
-                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
+                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                           </Aux> :
                           <Aux>
                             <Header.Subheader>From</Header.Subheader>
-                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
+                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                             <Divider hidden />
                             <Header.Subheader>To</Header.Subheader>
-                            NextSeed {currentActiveAccountDetails &&
+                            {currentActiveAccountDetails &&
                             currentActiveAccountDetails.name ?
-                              currentActiveAccountDetails.name : null} Investment Account
+                              currentActiveAccountDetails.name : null} Account
                           </Aux>}
                       </Header>
                     </Statistic>
@@ -164,7 +165,11 @@ export default class AddWithdrawFund extends Component {
                     {showConfirmPreview ?
                       <Button onClick={this.cancelTransfer} content="Cancel" /> : null
                     }
-                    <Button primary disabled={!((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton} content="Confirm" />
+                    <Button
+                      primary
+                      disabled={!((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton}
+                      content="Confirm"
+                    />
                   </Button.Group>
                 </div>
               </Form>

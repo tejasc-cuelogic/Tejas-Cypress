@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { includes } from 'lodash';
 import { Modal, Header, Divider, Button } from 'semantic-ui-react';
 
 @withRouter
-@observer
 export default class VerifyBankUpdate extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
