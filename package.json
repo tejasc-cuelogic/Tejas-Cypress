@@ -52,7 +52,6 @@
     "graphql": "0.13.2",
     "graphql-tag": "^2.8.0",
     "gulp": "^3.9.1",
-    "handlebars": "^4.1.0",
     "history": "4.6.3",
     "html-react-parser": "^0.4.7",
     "html-webpack-plugin": "2.29.0",
