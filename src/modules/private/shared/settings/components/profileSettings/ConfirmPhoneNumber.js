@@ -27,6 +27,9 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
   }
+  componentDidMount() {
+    Helper.otpShield();
+  }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     this.props.identityStore.setReSendVerificationCode(false);

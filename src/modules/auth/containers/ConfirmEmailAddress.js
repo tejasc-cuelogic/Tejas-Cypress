@@ -29,6 +29,9 @@ export default class ConfirmEmailAddress extends Component {
       this.props.identityStore.startPhoneVerification('EMAIL');
     }
   }
+  componentDidMount() {
+    Helper.otpShield();
+  }
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.uiStore.clearErrors();
