@@ -424,6 +424,7 @@ export class UserDetailsStore {
   @action
   resetStoreData = () => {
     this.currentUser = {};
+    this.setPartialInvestmenSession();
   }
 
   @computed get isCipExpired() {
