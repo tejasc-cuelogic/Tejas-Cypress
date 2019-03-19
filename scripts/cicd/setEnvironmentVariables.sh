@@ -18,10 +18,12 @@ settingEnv()
 	REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/aws\/cognito\/identityPool\/id/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=\).*/\1${REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID}/" .envTEMPLATE
 
+    echo "checking REACT_APP_API_URL"
 	REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url/ { print $3 }')
 	if [ "$environment" = "predev" ]; then
         REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url\/distribution/ { print $3 }')
     fi
+    echo $REACT_APP_API_URL
 	sed -i.bak "s#^\(REACT_APP_API_URL=\).*#\1${REACT_APP_API_URL}#" .envTEMPLATE
 
 	REACT_APP_BOX_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/box\/url/ { print $3 }')
@@ -61,7 +63,7 @@ settingEnv()
 	sed -i.bak "s#^\(REACT_APP_FROALA_API_KEY_NEW=\).*#\1${REACT_APP_FROALA_API_KEY_NEW}#" .envTEMPLATE
 
 	#HONEYPOT URL
-	REACT_APP_HONEYPOT_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/honeypot\/url/ { print $3 }')
+	REACT_APP_HONEYPOT_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/v1\/waf\/honeypotEndpoint/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_HONEYPOT_URL=\).*#\1${REACT_APP_HONEYPOT_URL}#" .envTEMPLATE
 
 	#Timestamp
