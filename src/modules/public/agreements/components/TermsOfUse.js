@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-indent react/jsx-closing-tag-location */
+/* eslint-disable react/jsx-indent */
 /* eslint-disable max-len */
 import React from 'react';
 import Aux from 'react-aux';
@@ -87,7 +87,8 @@ const TermsOfUse = () => (
         of your Credentials and are responsible for all activities that occur through the use of
         your Credentials. You agree to notify NextSeed immediately if you believe the
         confidentiality of your Credentials has been compromised or if you suspect unauthorized
-        use of your account. <b>You agree that NextSeed will not be liable for any loss or damage
+        use of your account.
+        <b>You agree that NextSeed will not be liable for any loss or damage
         arising from unauthorized use of your Credentials.
         </b>
       </p>

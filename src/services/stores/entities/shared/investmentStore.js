@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, mapValues } from 'lodash';
+import { capitalize, orderBy, mapValues, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
@@ -218,26 +218,20 @@ export class InvestmentStore {
 
   @action
   calculateEstimatedReturn = () => {
-    const {
-      rateMin,
-    } = this.offeringMetaData;
+    const { campaign } = campaignStore;
+    const offeringSecurityType = get(campaign, 'keyTerms.securities');
+    const interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
+    const investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
     const investAmt = this.investmentAmount;
-    // if (investAmt >= 100) {
-    //   if (campaignType === 0) {
-    //     const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt));
-    //     this.estReturnVal = estReturnMIN;
-    //     return this.estReturnVal;
-    //   } else if (campaignType === 1) {
-    //     this.estReturnVal =
-    // `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan))}`;
-    //     return this.estReturnVal;
-    //   }
-    // } else {
-    //   this.estReturnVal = '-';
-    //   return this.estReturnVal;
-    // }
     if (investAmt >= 100) {
-      const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt), 0);
+      if (offeringSecurityType === 'TERM_NOTE') {
+        const estReturnMIN =
+          Helper.CurrencyFormat(Math.round((interestRate * investAmt) / 100), 0);
+        this.estReturnVal = estReturnMIN;
+        return this.estReturnVal;
+      }
+      const estReturnMIN =
+        Helper.CurrencyFormat(Math.round(investmentMultiple * investAmt), 0);
       this.estReturnVal = estReturnMIN;
       return this.estReturnVal;
     } else if (investAmt <= 100) {
