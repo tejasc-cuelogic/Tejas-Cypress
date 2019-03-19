@@ -95,7 +95,7 @@ settingEnv()
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1review#" .envTEMPLATE
 	fi
 
-	# cat .envTEMPLATE
+	cat .envTEMPLATE
 }
 
 if [ "$region" = "" ]; then
@@ -108,6 +108,7 @@ if [ "$environment" = "" ]; then
 fi
 
 aws ssm get-parameters-by-path --recursive --path "/ns-client/" --region $region --output json| jq -r '.Parameters| .[] | .Name + " = " + .Value +""  ' > Env.txt || { echo "aws ssm command not executed properly in setEnvironmentVariables.sh script. Try again." ; exit 1; }
+cat Env.txt
 
 case $environment in
 dev)
