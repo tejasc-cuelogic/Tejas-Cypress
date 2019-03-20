@@ -58,12 +58,9 @@ const InvestmentList = (props) => {
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        {props.listOf === 'pending' ? `${DataFormatter.diffDays(data && data.offering && data.offering.offering &&
-                          data.offering.closureSummary &&
-                          data.offering.closureSummary.processingDate ?
-                          data.offering.closureSummary.processingDate : null)} days`
+                        {props.listOf === 'pending' ? get(data, 'offering.closureSummary.hardCloseDate') ? `${DataFormatter.diffDays(get(data, 'offering.closureSummary.hardCloseDate'))} days` : 'N/A'
                           :
-                        <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.closureSummary.hardCloseDate')} />}
+                          get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.closureSummary.hardCloseDate')} /> : 'N/A'}
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' && (
