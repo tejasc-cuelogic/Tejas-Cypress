@@ -1199,6 +1199,7 @@ a.icon-link {
 				width: @25px;
 				left: -@13px;
 				background-color: @neutral-darkwhite !important;
+				margin-left: 0;
 			}
 		}
 		&.vertical-timeline-element--right .vertical-timeline-element-content .vertical-timeline-element-date {
@@ -1243,9 +1244,11 @@ a.icon-link {
 			.image {
 				>img {
 					border-radius: 50%;
+					height: 60px;
+					width: 60px;
 				}
 				&+.content {
-					margin-left: @34px;
+					margin-left: @15px;
 					padding: 0;
 					text-transform: capitalize;
 					span {
