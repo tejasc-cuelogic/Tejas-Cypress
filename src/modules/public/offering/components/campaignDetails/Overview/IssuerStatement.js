@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../../modules/shared/HtmlEditor';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 class IssuerStatement extends Component {
   handleViewGallary = (e, index) => {
@@ -23,10 +24,14 @@ class IssuerStatement extends Component {
           Issuer Statement
           <span className="anchor" id="issuer-statement" />
         </Header>
-        <p className="mb-40 copyright-info">
-          {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
-          <HtmlEditor readOnly content={(offeirngDisclaimer)} />
-        </p>
+        {offeirngDisclaimer ?
+          <p className="mb-40 copyright-info">
+            {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
+            <HtmlEditor readOnly content={(offeirngDisclaimer)} />
+          </p>
+          :
+          <InlineLoader text="No Data Found" className="bg-offwhite" />
+        }
       </Aux>
     );
   }

@@ -72,7 +72,7 @@ const InvestmentList = (props) => {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
                             {!props.isAccountFrozen &&
-                              <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
+                              <Button onClick={() => props.handleInvestNowClick(data.offering.id)} primary content="Change" />
                             }
                             {DataFormatter.diffDays(data && data.offering &&
                               data.offering.offering && data.offering.offering.launch &&

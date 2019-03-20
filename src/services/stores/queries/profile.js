@@ -205,9 +205,10 @@ export const verifyOtp = gql`
 `;
 
 export const requestOtpWrapper = gql`
-  mutation requestOTPWrapper($address: String!){
+  mutation requestOTPWrapper($address: String!, $firstName: String){
     requestOTPWrapper(
       address: $address
+      firstName: $firstName
     )
   }
 `;

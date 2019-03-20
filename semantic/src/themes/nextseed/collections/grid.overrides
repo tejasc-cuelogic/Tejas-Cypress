@@ -154,6 +154,10 @@
         >.column {
             padding: 0;
         }
+        .sticky-sidebar {
+            top: 50%;
+            transform: translate(0, -50%);
+        }
     }
 }
 .featured-statistic {

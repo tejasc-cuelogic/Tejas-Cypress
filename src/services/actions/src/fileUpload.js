@@ -56,7 +56,7 @@ export class FileUpload {
   }
 
   putUploadedFileOnS3 = fileObj => new Promise((resolve, reject) => {
-    apiService.uploadOnS3(fileObj.preSignedUrl, fileObj.fileData).then(() => {
+    apiService.uploadOnS3(fileObj.preSignedUrl, fileObj.fileData, fileObj.fileType).then(() => {
       resolve();
     })
       .catch((err) => {

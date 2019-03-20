@@ -155,7 +155,7 @@ export default class KeyTerms extends Component {
               name="investmentMultiple"
               fielddata={KEY_TERMS_FRM.fields.investmentMultiple}
               changed={(values, name) => maskArrayChange(values, formName, name)}
-              number
+              currency
             />
             {['revSharePercentage', 'interestRate'].map(field => (
               <MaskedInput

@@ -17,7 +17,8 @@ export default class Overview extends Component {
       <Aux>
         <p>
           Investment offerings on <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
-          {' '}are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of FINRA)
+          {' '}are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of{' '}
+          <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>)
           and NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
           <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
         </p>

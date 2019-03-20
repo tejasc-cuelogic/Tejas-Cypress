@@ -28,6 +28,12 @@ export class IdentityStore {
   @observable userCipStatus = '';
   @observable isOptConfirmed = false;
   @observable sendOtpToMigratedUser = [];
+  @observable signUpLoading = false;
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   setSendOtpToMigratedUser = (step) => {
@@ -274,6 +280,7 @@ export class IdentityStore {
               resolve();
             }).catch(() => {
               uiStore.setProgress(false);
+              this.setFieldValue('signUpLoading', false);
               reject();
             });
           } else {
@@ -297,6 +304,7 @@ export class IdentityStore {
             });
           // reject(err);
           }
+          this.setFieldValue('signUpLoading', false);
         });
       // .finally(() => {
       //   uiStore.setProgress(false);
@@ -309,6 +317,7 @@ export class IdentityStore {
     const { response } = this.ID_VERIFICATION_FRM;
     const questionsArray = identityHelper.setIdentityQuestions(response);
     this.ID_VERIFICATION_QUESTIONS.fields = questionsArray;
+    this.setFieldValue('signUpLoading', false);
   }
 
   @action
@@ -326,7 +335,7 @@ export class IdentityStore {
         this.ID_VERIFICATION_DOCS_FRM,
         { name: field, value: fileData.fileName },
       );
-      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
         .then(() => { })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
@@ -396,6 +405,7 @@ export class IdentityStore {
           }
           this.setRequestOtpResponse(result.data.requestOtp);
           Helper.toast(`Verification ${requestMode}.`, 'success');
+          this.setFieldValue('signUpLoading', false);
           resolve();
         })
         .catch((err) => {
@@ -756,6 +766,7 @@ export class IdentityStore {
       zipCode: zipCode.value,
     };
     uiStore.setProgress();
+    this.setFieldValue('signUpLoading', true);
     const result = graphql({
       client,
       query: checkValidAddress,
@@ -810,14 +821,16 @@ export class IdentityStore {
 
   requestOtpWrapper = () => {
     uiStore.setProgress();
-    const { email } = authStore.SIGNUP_FRM.fields;
+    const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
+    const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
     return new Promise((resolve, reject) => {
       publicClient
         .mutate({
           mutation: requestOtpWrapper,
           variables: {
             address: email.value || emailInCookie,
+            firstName: givenName.value || firstNameInCookie,
           },
         })
         .then((result) => {

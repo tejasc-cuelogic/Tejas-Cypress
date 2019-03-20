@@ -25,6 +25,7 @@ export class CampaignStore {
   @observable principalAmt = 0;
   @observable totalPaymentChart = [];
   @observable showFireworkAnimation = false;
+  @observable isInvestBtnClicked = false;
 
 
   @action
