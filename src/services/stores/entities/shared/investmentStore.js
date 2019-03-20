@@ -591,6 +591,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    this.setByDefaultRender(true);
     this.setFieldValue('isGetTransferRequestCall', false);
     this.setFieldValue('estReturnVal', '-');
   }

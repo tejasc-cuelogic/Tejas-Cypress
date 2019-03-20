@@ -55,9 +55,10 @@ export default class Portfolio extends Component {
       [...inActiveItems, of];
     this.setState({ inActiveItems: updatedList });
   }
-  handleInvestNowClick = (id) => {
+  handleInvestNowOnChangeClick = (e, id) => {
+    const redirectURL = `${this.props.match.url}/${id}/invest-now`;
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
-    this.props.history.push(`${this.props.match.url}/${id}/invest-now`);
+    this.props.history.push(redirectURL);
   }
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
@@ -96,13 +97,13 @@ export default class Portfolio extends Component {
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowClick} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
         }
         {activeSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
         }
         {completedSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&
