@@ -8,7 +8,7 @@ export const USER_ROLES = [
 
 export const USER_TYPES_META = [
   {
-    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue', exclude: ['applynow'],
+    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Open an investment account', exclude: ['applynow'],
   },
   {
     key: 'o', icon: 'ns-business', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business', exclude: [],
