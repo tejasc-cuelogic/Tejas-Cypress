@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 import {
@@ -202,6 +202,12 @@ export class AuthStore {
       this.CONFIRM_FRM,
       { name: 'password', value: credentials.password },
     );
+    if (get(credentials, 'givenName')) {
+      this.CONFIRM_FRM = Validator.onChange(
+        this.CONFIRM_FRM,
+        { name: 'givenName', value: credentials.givenName },
+      );
+    }
   }
 
   @computed get devPasswdProtection() {
