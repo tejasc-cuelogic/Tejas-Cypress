@@ -219,9 +219,19 @@ export class InvestmentStore {
   @action
   calculateEstimatedReturn = () => {
     const { campaign } = campaignStore;
-    const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    const interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
-    const investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+    const { getInvestorAccountById } = portfolioStore;
+    let offeringSecurityType = '';
+    let interestRate = '';
+    let investmentMultiple = '';
+    if (campaign && campaign.keyTerms) {
+      offeringSecurityType = get(campaign, 'keyTerms.securities');
+      interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
+      investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+    } else {
+      offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
+      interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
+      investmentMultiple = get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') && get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') !== null ? get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') : '0';
+    }
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
       if (offeringSecurityType === 'TERM_NOTE') {
