@@ -819,7 +819,7 @@ export class IdentityStore {
           mutation: requestOtpWrapper,
           variables: {
             address: email.value || emailInCookie,
-            firstName: givenName || firstNameInCookie,
+            firstName: givenName.value || firstNameInCookie,
           },
         })
         .then((result) => {
