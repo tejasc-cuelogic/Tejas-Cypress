@@ -64,7 +64,7 @@ export class InvestmentStore {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     if (userAmountDetails && !money.isZero(this.investmentAmount)) {
       const getPreviousInvestedAmount =
-        (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
+        (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
       const differenceResult = money.subtract(
         this.investmentAmount,
         getPreviousInvestedAmount,
@@ -93,23 +93,23 @@ export class InvestmentStore {
   }
   @computed get getTransferRequestAmount() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
-    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
-    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
     const cashAndCreditBalance = money.add(getCurrCashAvailable, getCurrCreditAvailable);
     const getPreviousInvestedAmount =
-      (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
+      (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
     const transferAmount = money.subtract(
       this.investmentAmount,
       // money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
       money.add(cashAndCreditBalance, getPreviousInvestedAmount),
     );
-    return money.isNegative(transferAmount) || money.isZero(transferAmount) ? 0 : transferAmount;
-    // return transferAmount < 0 ? 0 : transferAmount;
+    return money.isNegative(transferAmount) || money.isZero(transferAmount) ? '0' : transferAmount;
+    // return transferAmount < '0' ? '0' : transferAmount;
   }
   @computed get getSpendCreditValue() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
-    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
-    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
     let spendAmount = 0;
     // if (this.getCurrCashAvailable < this.investmentAmount) {
     //   const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
