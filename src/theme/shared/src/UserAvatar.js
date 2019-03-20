@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Image } from 'semantic-ui-react';
+// import { Image } from 'semantic-ui-react';
 import Avatar from 'react-avatar';
 import { Image64 } from '../../../theme/shared';
 import { ASSETS_URL } from '../../../constants/aws';
@@ -20,22 +20,22 @@ class UserAvatar extends Component {
     console.log(avatarProfile, base64url, isBase64ImgTag);
     if (avatarProfile) {
       return (
-        base64url && isBase64ImgTag ?
-          <Image64
-            srcUrl={avatarProfile}
-            alt={UserInfo.firstName}
-            size={imgSize}
-            avatar
-            circular
-          />
-          :
-          <Image
-            src={avatarProfile}
-            alt={UserInfo.firstName}
-            size={imgSize}
-            avatar
-            circular
-          />
+        // base64url && isBase64ImgTag ?
+        <Image64
+          srcUrl={avatarProfile}
+          alt={UserInfo.firstName}
+          size={imgSize}
+          avatar
+          circular
+        />
+        // :
+        // <Image
+        //   src={avatarProfile}
+        //   alt={UserInfo.firstName}
+        //   size={imgSize}
+        //   avatar
+        //   circular
+        // />
       );
     }
     return (
