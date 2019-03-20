@@ -18,19 +18,21 @@ class team extends Component {
     const { teamMembers, loading } = this.props.teamStore;
     const teamInfo = (
       <Grid doubling columns={2} className="team-list">
-        <Grid.Column verticalAlign="middle">
-          <Grid centered>
-            <Grid.Column centered largeScreen={8} computer={9} tablet={8} mobile={14} className={`${isTablet && 'mt-30 mb-30'}`}>
-              <div className="sticky-sidebar team">
-                <Header as="h2">Meet our team.</Header>
-                <p>
-                  We&apos;re a team of entrepreneurs with backgrounds in business, finance,
-                  law, marketing and technology. We&apos;re here to empower business owners
-                  and everyday people to invest in one another.
-                </p>
-              </div>
-            </Grid.Column>
-          </Grid>
+        <Grid.Column>
+          <div className="sticky-sidebar">
+            <Grid centered>
+              <Grid.Column centered largeScreen={8} computer={9} tablet={8} mobile={14} className={`${isTablet && 'mt-30 mb-30'}`}>
+                <div className="team">
+                  <Header as="h2">Meet our team.</Header>
+                  <p>
+                    We&apos;re a team of entrepreneurs with backgrounds in business, finance,
+                    law, marketing and technology. We&apos;re here to empower business owners
+                    and everyday people to invest in one another.
+                  </p>
+                </div>
+              </Grid.Column>
+            </Grid>
+          </div>
         </Grid.Column>
         <TeamList
           columns={3}

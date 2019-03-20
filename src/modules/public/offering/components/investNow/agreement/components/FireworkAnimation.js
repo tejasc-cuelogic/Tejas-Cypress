@@ -9,7 +9,7 @@ const Firework = sizeMe({
   render() {
     return (
       <div className="animation-container">
-        <Confetti {...this.props.size} recycle />
+        <Confetti {...this.props.size} recycle={false} />
       </div>
     );
   }
