@@ -362,7 +362,7 @@ export class AuthStore {
           res();
         }
       },
-      // fetchPolicy: 'network-only',
+      fetchPolicy: 'network-only',
     });
   });
 
