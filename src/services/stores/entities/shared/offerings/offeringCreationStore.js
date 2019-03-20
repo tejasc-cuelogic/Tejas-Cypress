@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
 import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
@@ -534,7 +534,7 @@ export class OfferingCreationStore {
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
-            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => {
               this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
               this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
               this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
@@ -650,7 +650,7 @@ export class OfferingCreationStore {
             { name: field, value: fileData.fileName },
           );
         }
-        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
           .then(() => {
             if (updateOnUpload) {
               this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} uploaded successfully.`);
