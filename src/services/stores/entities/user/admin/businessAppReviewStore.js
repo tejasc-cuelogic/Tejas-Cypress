@@ -167,7 +167,7 @@ export class BusinessAppReviewStore {
         this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
         fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', userId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
             this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);

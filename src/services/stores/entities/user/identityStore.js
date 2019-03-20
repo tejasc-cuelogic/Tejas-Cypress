@@ -326,7 +326,7 @@ export class IdentityStore {
         this.ID_VERIFICATION_DOCS_FRM,
         { name: field, value: fileData.fileName },
       );
-      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
         .then(() => { })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');

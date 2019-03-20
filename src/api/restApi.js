@@ -90,6 +90,7 @@ export class Api {
       request
         .put(`${url}`)
         .set('Content-Type', type) // File upload (Binary Mode)
+        .set('x-amz-acl', 'bucket-owner-full-control')
         .send(file)
         .end((err, data) => {
           if (err) {
