@@ -59,11 +59,11 @@ const InvestmentList = (props) => {
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' ? `${DataFormatter.diffDays(data && data.offering && data.offering.offering &&
-                          data.offering.offering.launch &&
-                          data.offering.offering.launch.terminationDate ?
-                          data.offering.offering.launch.terminationDate : null)} days`
+                          data.offering.closureSummary &&
+                          data.offering.closureSummary.processingDate ?
+                          data.offering.closureSummary.processingDate : null)} days`
                           :
-                        <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.offering.launch.terminationDate')} />}
+                        <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.closureSummary.hardCloseDate')} />}
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' && (
@@ -75,9 +75,9 @@ const InvestmentList = (props) => {
                               <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
                             }
                             {DataFormatter.diffDays(data && data.offering &&
-                              data.offering.offering && data.offering.offering.launch &&
-                              data.offering.offering.launch.terminationDate ?
-                              data.offering.offering.launch.terminationDate : null) > 2 &&
+                              data.offering.closureSummary &&
+                              data.offering.closureSummary.processingDate ?
+                              data.offering.closureSummary.processingDate : null) > 2 &&
                               <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             }
                           </Button.Group>

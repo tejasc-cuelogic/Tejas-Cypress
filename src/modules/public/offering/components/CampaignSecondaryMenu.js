@@ -17,8 +17,8 @@ export default class CampaignSecondaryMenu extends Component {
   }
   render() {
     const { campaign } = this.props.campaignStore;
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-    && campaign.offering.launch.terminationDate;
+    const terminationDate = campaign && campaign.closureSummary
+    && campaign.closureSummary.processingDate;
     const diff = DataFormatter.diffDays(terminationDate);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;

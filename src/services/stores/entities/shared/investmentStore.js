@@ -350,9 +350,9 @@ export class InvestmentStore {
     const offeringDetails = portfolioStore.getInvestorAccountById;
     if (offeringDetails) {
       const isLokcinPeriod = DataFormatter.diffDays(offeringDetails && offeringDetails.offering &&
-        offeringDetails.offering.offering && offeringDetails.offering.offering.launch &&
-        offeringDetails.offering.offering.launch.terminationDate ?
-        offeringDetails.offering.offering.launch.terminationDate : null) <= 2;
+        offeringDetails.offering.closureSummary &&
+        offeringDetails.offering.closureSummary.processingDate ?
+        offeringDetails.offering.closureSummary.processingDate : null) <= 2;
       if (isLokcinPeriod) {
         const alreadyInvestedAmount = offeringDetails.investedAmount;
         resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;

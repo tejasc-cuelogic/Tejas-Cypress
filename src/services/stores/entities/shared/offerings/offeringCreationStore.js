@@ -1058,6 +1058,8 @@ export class OfferingCreationStore {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.closureSummary = get(payloadData[keyName].launch, 'terminationDate') ? { ...getOfferingById.closureSummary, processingDate: get(payloadData[keyName].launch, 'terminationDate') } : null;
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
           Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
