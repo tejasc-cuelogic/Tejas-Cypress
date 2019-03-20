@@ -173,7 +173,7 @@ export class AccreditationStore {
         this.setFormFileArray(form, field, 'showLoader', true);
         fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(form, field, 'fileData', file);
             this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
             this.setFormFileArray(form, field, 'fileId', fileId);
