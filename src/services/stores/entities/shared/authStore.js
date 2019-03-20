@@ -359,6 +359,7 @@ export class AuthStore {
           this.SIGNUP_FRM.meta.isValid = false;
           rej();
         } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
+          this.SIGNUP_FRM.fields.email.error = '';
           res();
         }
       },
