@@ -54,7 +54,7 @@ export const CONFIRM = {
   givenName: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     label: 'First Name',
     placeHolder: 'First Name',
     customErrors: {
