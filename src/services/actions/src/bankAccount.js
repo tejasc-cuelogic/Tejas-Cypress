@@ -84,7 +84,8 @@ export class BankAccount {
           // bankAccountStore.changeBankPlaid();
           bankAccountStore.setPlaidBankVerificationStatus(true);
         } else {
-          Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
+          // Helper.toast(`Account with Bank ${metadata.institution.name}
+          // successfully linked.`, 'success');
           const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
           const currentStep = {
             name: 'Link bank',
@@ -96,7 +97,7 @@ export class BankAccount {
           ACC_LINK_BANK_MAPPING[accountValue].store
             .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
         }
-        // bankAccountStore.setLinkBankSummary();
+        bankAccountStore.setLinkBankSummary();
       },
       onExit: (err) => {
         // The user exited the Link flow.

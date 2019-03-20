@@ -3,11 +3,13 @@ import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
+import Helper from '../../../../helper/utility';
 import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
+import { subscribeToNewsLetter } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
@@ -35,6 +37,7 @@ export class AuthStore {
   @observable pwdInputType = 'password';
   @observable currentScore = 0;
   @observable idleTimer = null;
+  @observable checkEmail = false;
 
   @action
   setFieldvalue = (field, value) => {
@@ -116,6 +119,7 @@ export class AuthStore {
 
   @action
   ConfirmChange = (e) => {
+    uiStore.setErrors('');
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'code', value: e },
@@ -337,22 +341,22 @@ export class AuthStore {
 
   @action
   checkEmailExistsPresignup = email => new Promise((res, rej) => {
-    graphql({
+    this.checkEmail = graphql({
       client: clientPublic,
       query: checkEmailExistsPresignup,
       variables: {
         email,
       },
       onFetch: (data) => {
-        if (data && data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
+        if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
+          this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
           this.SIGNUP_FRM.meta.isValid = false;
           rej();
-        } else {
+        } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
           res();
         }
       },
-      fetchPolicy: 'network-only',
+      // fetchPolicy: 'network-only',
     });
   });
 
@@ -390,6 +394,32 @@ export class AuthStore {
   setUserRole = (userData) => {
     this.SIGNUP_FRM.fields.role.value = userData;
   }
+
+  @action
+  subscribeToNewsletter = () => new Promise((res, rej) => {
+    if (!this.NEWSLETTER_FRM.meta.isValid) {
+      this.resetForm('NEWSLETTER_FRM', null);
+      rej();
+    } else {
+      uiStore.setProgress();
+      const params = Validator.ExtractValues(this.NEWSLETTER_FRM.fields);
+      clientPublic.mutate({
+        mutation: subscribeToNewsLetter,
+        variables: { ...params },
+      })
+        .then(() => {
+          uiStore.setProgress(false);
+          res();
+        })
+        .catch((err) => {
+          Helper.toast('Error while subscribing to NewsLetter, please try again.', 'error');
+          rej(err);
+        })
+        .finally(() => {
+          this.resetForm('NEWSLETTER_FRM', null);
+        });
+    }
+  });
 }
 
 export default new AuthStore();

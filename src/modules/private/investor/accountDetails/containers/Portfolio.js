@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import moment from 'moment';
-import { includes, orderBy } from 'lodash';
+import { includes, orderBy, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Header, Grid, Card, Button } from 'semantic-ui-react';
+import { Header, Card, Button } from 'semantic-ui-react';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
@@ -17,7 +17,7 @@ import Agreement from '../../../../public/offering/components/investNow/agreemen
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 
-@inject('portfolioStore', 'transactionStore')
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class Portfolio extends Component {
   state = {
@@ -37,11 +37,13 @@ export default class Portfolio extends Component {
     }
   };
   viewLoanAgreement = (aggrementId) => {
+    this.props.uiStore.setProgress('viewLoanAgreement');
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
       this.setState({
         open: true,
         embedUrl: res,
       });
+      this.props.uiStore.setProgress(false);
     });
   }
   closeModal = () => {
@@ -54,12 +56,14 @@ export default class Portfolio extends Component {
     this.setState({ inActiveItems: updatedList });
   }
   render() {
-    const { match, portfolioStore } = this.props;
+    const { match, portfolioStore, userDetailsStore } = this.props;
+    const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     if (portfolioStore.loading) {
       return <InlineLoader />;
     }
     const { getInvestorAccounts, getPieChartData } = portfolioStore;
     const summaryDetails = {
+      isAccountFrozen: isUserAccountFrozen,
       accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
       summary: [
@@ -78,8 +82,8 @@ export default class Portfolio extends Component {
       ],
     };
     const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => DataFormatter.diffDays(o.offering.offering.launch.terminationDate), ['asc']) : [];
-    const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => moment(o.offering.offering.launch.terminationDate).unix(), ['desc']) : [];
-    const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => moment(o.offering.offering.launch.terminationDate).unix(), ['desc']) : [];
+    const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.offering.launch.terminationDate') && moment(new Date(o.offering.offering.launch.terminationDate)).unix(), ['desc']) : [];
+    const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.offering.launch.terminationDate') && moment(new Date(o.offering.offering.launch.terminationDate)).unix(), ['desc']) : [];
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
@@ -88,31 +92,27 @@ export default class Portfolio extends Component {
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
-          <InvestmentList viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
+          <InvestmentList isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
         }
         {activeSorted.length ?
-          <InvestmentList inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
+          <InvestmentList isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
         }
         {completedSorted.length ?
-          <InvestmentList inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
+          <InvestmentList isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&
         !getInvestorAccounts.investments.completed.length ?
           <Aux>
             <p>No investments or reservations pending.</p>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column widescreen={4} largeScreen={4} computer={4} tablet={8} mobile={16}>
-                  <Card className="form-card" fluid>
-                    <Card.Content>
-                      <Header as="h4">Browse the latest investment opportunities.</Header>
-                      <Button as={Link} to="/offerings" size="medium" color="green">Start investing now</Button>
-                    </Card.Content>
-                  </Card>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+            <Card.Group itemsPerRow={4} stackable doubling>
+              <Card fluid>
+                <Card.Content>
+                  <Header as="h4">Browse the latest investment opportunities.</Header>
+                  <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+                </Card.Content>
+              </Card>
+            </Card.Group>
           </Aux> : null
         }
         <Route

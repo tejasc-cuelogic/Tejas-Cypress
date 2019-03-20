@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import PrivateLayout from '../../shared/PrivateLayout';
@@ -13,12 +12,7 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
-@inject('accreditationStore')
-@observer
-export default class CrowdPay extends Component {
-  componentWillMount() {
-    this.props.accreditationStore.initRequest();
-  }
+export default class Dev extends Component {
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], false).subNavigations;

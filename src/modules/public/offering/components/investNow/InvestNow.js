@@ -17,6 +17,7 @@ export default class InvestNow extends React.Component {
 
   componentWillMount() {
     this.props.investmentStore.setStepToBeRendered(0);
+    this.props.investmentStore.resetData();
     this.props.uiStore.setProgress(false);
     this.setState({ isInvestmentUpdate: false });
     const { isUserLoggedIn } = this.props.authStore;
@@ -44,19 +45,21 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.uiStore.clearErrors();
     this.props.uiStore.setProgress(false);
-    this.props.history.push(this.props.refLink);
     this.props.investmentStore.resetData();
     this.props.investmentStore.setByDefaultRender(true);
     this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.history.push(this.props.refLink);
   }
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
+      this.props.investmentStore.setByDefaultRender(true);
       this.props.investmentStore.setFieldValue('disableNextbtn', false);
-      this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
     } else if (step === 0) {
+      this.props.investmentStore.setByDefaultRender(true);
       this.handleStepChnageOnPreviousForAlert();
     }
+    this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleStepChangeForPartialAccounts = (step) => {
@@ -101,14 +104,14 @@ export default class InvestNow extends React.Component {
       this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
         this.setState({ submitLoading: response.isValid });
         if (response.isValid) {
-          Helper.toast('Agreement has been generated successfully!', 'success');
+          // Helper.toast('Agreement has been generated successfully!', 'success');
           this.props.investmentStore.setStepToBeRendered(0);
           this.setState({ submitLoading: false });
           this.props.history.push('agreement');
         } else if (response.flag === 1) {
-          const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
-          if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
-            this.handleStepChange(step.stepToBeRendered);
+          const { getTransferRequestAmount } = this.props.investmentStore;
+          if (getTransferRequestAmount > 0) {
+            this.handleStepChangeForPartialAccounts(step.stepToBeRendered);
           }
         }
       }).catch(() => {
@@ -122,7 +125,8 @@ export default class InvestNow extends React.Component {
       const offeringId = campaign && campaign.id;
       const offeringReuglation = campaign && campaign.regulation;
       const regulationType = offeringReuglation;
-      const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+      const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C'
+        || offeringReuglation === 'BD_CF_506C'));
       const {
         changeShowAccountListFlag,
         userAccredetiationState,
@@ -131,9 +135,8 @@ export default class InvestNow extends React.Component {
       if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
-          .then(() => {
-            const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
-            const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+          .then((resp) => {
+            const isDocumentUpload = get(resp, 'investNowHealthCheck.availibityForNPAInOffering');
             if (!isDocumentUpload) {
               this.handleStepChangeForPartialAccounts(0);
             } else {
@@ -175,6 +178,7 @@ export default class InvestNow extends React.Component {
           component: <AccountType
             refLink={this.props.refLink}
             changeInvest={changeInvest}
+            cancel={this.handleCancel}
           />,
           isValid: '',
           stepToBeRendered: 1,
@@ -200,6 +204,7 @@ export default class InvestNow extends React.Component {
             cancel={this.handleCancel}
           />,
           isValid: '',
+          onlyDisableNextButton: true,
         },
       ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;

@@ -123,7 +123,7 @@ class offerDetails extends Component {
     });
     return newNavData;
   }
-  modifyInvestmentDetailsSubNav = (navList) => {
+  modifyInvestmentDetailsSubNav = (navList, offeringStage) => {
     const newNavList = [];
     const offeringSecurityType = this.props.campaignStore.offerStructure;
     navList.forEach((item) => {
@@ -155,7 +155,13 @@ class offerDetails extends Component {
         this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
         tempItem.subNavigations = uniqWith(temNavList, isEqual);
       }
-      newNavList.push(tempItem);
+      if (tempItem.to === 'data-room') {
+        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+          newNavList.push(tempItem);
+        }
+      } else {
+        newNavList.push(tempItem);
+      }
     });
     return newNavList;
   }
@@ -185,8 +191,9 @@ class offerDetails extends Component {
           .subNavigations, get(campaign, 'legal.dataroom.documents'));
       navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
+    const offeringStage = get(campaign, 'stage');
     navItems =
-      this.modifyInvestmentDetailsSubNav(navItems);
+      this.modifyInvestmentDetailsSubNav(navItems, offeringStage);
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;

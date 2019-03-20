@@ -244,6 +244,7 @@ deploy:demo:
   script: 
     # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
+    - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:demo
 

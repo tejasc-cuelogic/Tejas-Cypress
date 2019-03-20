@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
@@ -9,7 +10,7 @@ import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
 import NSImage from '../../../../../shared/NSImage';
 
-@inject('bankAccountStore', 'transactionStore', 'uiStore')
+@inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class AccountDetailsView extends Component {
@@ -37,6 +38,7 @@ export default class AccountDetailsView extends Component {
   render() {
     const {
       accountDetails, click, match, accountType, pendingAccoungDetails, uiStore,
+      userDetailsStore,
     } = this.props;
     const { activeBankPladLogo, pendingBankPladLogo } = this.props.bankAccountStore;
     const pladidLogo = accountType === 'pending' ? pendingBankPladLogo : activeBankPladLogo;
@@ -88,28 +90,30 @@ export default class AccountDetailsView extends Component {
                 </Item.Content>
               </Item>
             </Grid.Column>
-            {accountDetails.pendingUpdate &&
               <Grid.Column>
                 <Item>
                   <Item.Content>
-                    <Item.Extra>Status</Item.Extra>
-                    {accountType === 'pending' ?
-                      <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
-                        {currentStaus}
-                      </Item.Header>
-                      :
-                      <Item.Header>
-                        {currentStaus}
-                      </Item.Header>
+                    {accountDetails.pendingUpdate &&
+                      <Aux>
+                        <Item.Extra>Status</Item.Extra>
+                        {accountType === 'pending' ?
+                          <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
+                            {currentStaus}
+                          </Item.Header>
+                          :
+                          <Item.Header>
+                            {currentStaus}
+                          </Item.Header>
+                        }
+                      </Aux>
                     }
                   </Item.Content>
                 </Item>
               </Grid.Column>
-            }
             <Grid.Column width={3} textAlign="right" verticalAlign="middle">
               {accountType === 'active' ?
                 accountDetails && !accountDetails.pendingUpdate &&
-                <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
+                <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} color="green" content="Change Linked Bank" />
                 :
                 <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }

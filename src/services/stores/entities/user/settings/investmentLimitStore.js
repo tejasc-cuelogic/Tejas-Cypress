@@ -2,7 +2,6 @@ import { observable, action, computed, toJS } from 'mobx';
 import { mapValues, filter, find, map } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import money from 'money-math';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
@@ -75,7 +74,16 @@ export class InvestmentLimitStore {
     });
   });
 
-  @computed get getCurrentLimitForAccount() {
+  @computed get getInvestorAmountInvestedValue() {
+    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
+      this.investorInvestmentLimit.data.getInvestorAmountInvested) || 0;
+  }
+
+  @computed get getInvestorAmountInvestedLoading() {
+    return this.investorInvestmentLimit.loading;
+  }
+
+  @computed get getCurrentInForAccount() {
     return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
       this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
   }
@@ -86,7 +94,8 @@ export class InvestmentLimitStore {
   }
 
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
-  getInvestmentLimit = (data) => {
+  getInvestmentLimit = (data, investedAmount = false) => {
+    const investedAmtFloat = parseFloat(investedAmount ? investedAmount.replace(/,/g, '') : this.investedAmount);
     let limit = 2200;
     const maxLimit = 107000;
     const annualIncomeOrNetWorth = data.annualIncome > data.netWorth ?
@@ -100,13 +109,11 @@ export class InvestmentLimitStore {
         limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
       }
     }
-
-    const remainingAmount = limit - (data.cfInvestments || 0 + parseFloat(this.investedAmount));
+    const remainingAmount = limit - ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
-    if ((this.investedAmount + data.cfInvestments) >= maxLimit) {
+    if ((investedAmtFloat + data.cfInvestments) >= maxLimit) {
       remaining = 0;
     }
-
     remaining -= remaining % 100;
     return remaining;
   }
@@ -247,7 +254,7 @@ export class InvestmentLimitStore {
           dateFilterStart,
           dateFilterStop,
         ).then((data) => {
-          this.setFieldValue('investedAmount', money.floatToAmount(data.getInvestorAmountInvested || 0));
+          this.setFieldValue('investedAmount', parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0));
         });
       }
     });
@@ -258,7 +265,7 @@ export class InvestmentLimitStore {
         dateFilterStart,
         dateFilterStop,
       ).then((data) => {
-        const investedAmount = money.floatToAmount(data.getInvestorAmountInvested || 0) +
+        const investedAmount = parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0) +
         this.investedAmount;
         this.setFieldValue('investedAmount', investedAmount);
       });
@@ -266,7 +273,7 @@ export class InvestmentLimitStore {
   }
 
   getInvestorAmountInvested =
-  (accountId, dateFilterStart, dateFilterStop) => new Promise((resolve) => {
+  (accountId, dateFilterStart = moment().subtract(1, 'y').toISOString(), dateFilterStop = moment().toISOString()) => new Promise((resolve) => {
     this.investorInvestmentLimit = graphql({
       client,
       query: getInvestorAmountInvested,

@@ -29,7 +29,7 @@ export default class TransferFunds extends Component {
     this.props.uiStore.clearErrors();
   }
   render() {
-    const { userDetails } = this.props.userDetailsStore;
+    const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { cash, cashAvailable } = this.props.transactionStore;
     if (!cash && cashAvailable.loading) {
@@ -50,7 +50,11 @@ export default class TransferFunds extends Component {
             <Grid>
               <Grid.Row>
                 <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
-                  <AvailableCashTransfer match={this.props.match} cash={cash} />
+                  <AvailableCashTransfer
+                    match={this.props.match}
+                    isAccountFrozen={isAccountFrozen}
+                    cash={cash}
+                  />
                 </Grid.Column>
               </Grid.Row>
             </Grid>

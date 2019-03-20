@@ -41,8 +41,10 @@ export class NavStore {
       permitted = [...this.params.roles];
     } else {
       permitted = [...this.params.roles,
+        ...userDetailsStore.signupStatus.partialAccounts,
         ...userDetailsStore.signupStatus.activeAccounts,
-        ...userDetailsStore.signupStatus.processingAccounts];
+        ...userDetailsStore.signupStatus.processingAccounts,
+        ...userDetailsStore.signupStatus.frozenAccounts];
     }
     const routes = _.filter(
       this.NAV_ITEMS,

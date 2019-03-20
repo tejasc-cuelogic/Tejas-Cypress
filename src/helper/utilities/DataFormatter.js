@@ -1,6 +1,5 @@
 import { camelCase, upperFirst, reduce, assign } from 'lodash';
 import moment from 'moment';
-import Handlebars from 'handlebars';
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -91,10 +90,13 @@ class DataFormatter {
     });
     return JSON.parse(JSON.stringify(result));
   }
-  /** reference https://www.npmjs.com/package/handlebars */
+  replaceAll = (input, search, replacement) => input.replace(new RegExp(search, 'g'), replacement);
   stringTemplateFormatting = (string, data) => {
-    const template = Handlebars.compile(string);
-    return template(data);
+    let result = string;
+    Object.keys(data).forEach((item) => {
+      result = this.replaceAll(result, `{{${item}}}`, data[item]);
+    });
+    return result;
   }
   fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
   getDateFromNow = afterDays =>

@@ -104,3 +104,12 @@ mutation _crowdPayAccountValidate($userId: String!, $accountId: String!) {
   )
 }
 `;
+
+export const createIndividualAccount = gql`
+mutation _submitInvestorAccount($userId: String,$accountId: String!, $accountType: InvestorAccountTypeEnum!){
+  submitInvestorAccount(
+    userId: $userId,
+    accountId: $accountId,
+    accountType: $accountType
+  )
+}`;

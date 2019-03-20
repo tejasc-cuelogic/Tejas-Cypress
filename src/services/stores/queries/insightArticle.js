@@ -11,6 +11,7 @@ query insights($sortByCreationDateAsc: Boolean!, $categoryId: String){
     articleStatus
     minuteRead
     title
+    slug
     updated {
       date
     }
@@ -75,6 +76,17 @@ query insight($id: ID!) {
 export const getArticleDetails = gql`
 query insight($id:ID! ) {
   insightsArticleById(id: $id){
+    id
+    title
+    featuredImage
+    content
+  }
+}
+`;
+
+export const getArticleDetailsBySlug = gql`
+query insightArticleBySlug($slug:String ) {
+  insightArticleBySlug(slug: $slug){
     id
     title
     featuredImage

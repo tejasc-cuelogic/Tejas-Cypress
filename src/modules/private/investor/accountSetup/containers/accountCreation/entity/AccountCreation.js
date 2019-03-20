@@ -10,14 +10,17 @@ import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
 import { Plaid } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
+import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    this.props.uiStore.setProgress();
-    this.props.userDetailsStore.setUserAccDetails('entity');
-    this.props.accountStore.setAccTypeChange(2);
+    if (!this.props.entityAccountStore.isFormSubmitted) {
+      this.props.uiStore.setProgress();
+      this.props.userDetailsStore.setUserAccDetails('entity');
+      this.props.accountStore.setAccTypeChange(2);
+    }
     this.props.investmentLimitStore.getInvestedAmount();
   }
   handleMultiStepModalclose = () => {
@@ -35,6 +38,10 @@ export default class AccountCreation extends React.Component {
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+  closeProcessingModal = () => {
+    this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
+    this.props.history.push('app/summary');
+  }
   render() {
     const {
       inProgress,
@@ -50,11 +57,12 @@ export default class AccountCreation extends React.Component {
       FORM_DOCS_FRM,
       stepToBeRendered,
       createAccount,
-      isValidEntityForm,
+      isValidEntityForm, showProcessingModal,
     } = this.props.entityAccountStore;
     const {
       formAddFunds, plaidAccDetails, formLinkBankManually,
       isPlaidDirty, linkbankSummary, bankSummarySubmit,
+      stepbankSummary,
 
     } = this.props.bankAccountStore;
     const steps =
@@ -62,11 +70,12 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Financial info',
         component: <FinancialInformation />,
-        isValid: FIN_INFO_FRM.meta.isValid ? '' : 'error',
+        isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
         isDirty: FIN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityFinancialInfo,
         form: 'FIN_INFO_FRM',
         stepToBeRendered: 1,
+        bankSummary: false,
       },
       {
         name: 'General',
@@ -76,6 +85,7 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityGeneralInformation,
         form: 'GEN_INFO_FRM',
         stepToBeRendered: 2,
+        bankSummary: false,
       },
       {
         name: 'Trust Status',
@@ -85,6 +95,7 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityInfo,
         form: 'TRUST_INFO_FRM',
         stepToBeRendered: 3,
+        bankSummary: false,
       },
       {
         name: 'Personal info',
@@ -94,6 +105,7 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityPersonalInfo,
         form: 'PERSONAL_INFO_FRM',
         stepToBeRendered: 4,
+        bankSummary: false,
       },
       {
         name: 'Formation doc',
@@ -103,6 +115,7 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityFormationDoc,
         form: 'FORM_DOCS_FRM',
         stepToBeRendered: 5,
+        bankSummary: false,
       },
       {
         name: 'Link bank',
@@ -111,17 +124,22 @@ export default class AccountCreation extends React.Component {
         isDirty: isPlaidDirty,
         validate: validationActions.validateLinkBankForm,
         disableNextButton: !linkbankSummary,
+        bankSummary: linkbankSummary,
         stepToBeRendered: 6,
       },
       {
         name: 'Summary',
         component: <Summary />,
         isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
+        bankSummary: false,
       },
     ];
+    if (showProcessingModal) {
+      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
+    }
     return (
       <div className="step-progress" >
-        <MultiStep page disablePrevBtn bankSummary={linkbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

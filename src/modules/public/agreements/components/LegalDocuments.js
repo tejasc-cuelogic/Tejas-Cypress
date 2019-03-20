@@ -1,5 +1,7 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { Route, withRouter, Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
 import { InlineLoader, IframeModal } from '../../../../theme/shared';
@@ -27,12 +29,46 @@ const legalDocsMeta = [
     id: 6, docName: (<Aux>NextSeed US LLC Membership Agreement</Aux>), refEnum: 'MEMBERSHIP_AGREEMENT',
   },
 ];
+
+@inject('agreementsStore')
+@withRouter
+@observer
+class LegalDoc extends Component {
+  state = { embedUrl: null };
+  componentWillMount() {
+    const { docKey } = this.props.match.params;
+    const { legalDocs } = this.props.agreementsStore;
+    const legalDoc = legalDocs.find(d => d.refEnum.toLowerCase() === docKey);
+    if (legalDoc) {
+      this.getBoxUrl(legalDoc.boxId);
+    }
+  }
+  getBoxUrl = (boxId) => {
+    this.props.agreementsStore.setField('docLoading', true);
+    this.props.agreementsStore.getBoxLink(boxId).then((res) => {
+      this.setState({
+        embedUrl: res.data.getBoxEmbedLink,
+      });
+      this.props.agreementsStore.setField('docLoading', false);
+    });
+  }
+  close = () => this.props.history.push('/agreements/legal/legal-documents');
+  render() {
+    const { docIdsLoading, docLoading } = this.props.agreementsStore;
+    return (
+      <IframeModal
+        srcUrl={this.state.embedUrl}
+        loading={docIdsLoading || docLoading}
+        open
+        close={this.close}
+      />
+    );
+  }
+}
 @inject('agreementsStore')
 @observer
 export default class LegalDocuments extends Component {
-  state = {
-    open: false,
-  };
+  state = { loaded: false };
   componentWillMount() {
     const {
       getLegalDocsFileIds, setFileIdsData, legalDocsList,
@@ -40,28 +76,17 @@ export default class LegalDocuments extends Component {
     if (!legalDocsList.length) {
       getLegalDocsFileIds().then((res) => {
         setFileIdsData(legalDocsMeta, res.getLegalDocsFileIds);
+        this.setState({ loaded: true });
       });
+    } else {
+      this.setState({ loaded: true });
     }
   }
   componentWillUnmount() {
     this.props.agreementsStore.setField('alreadySet', false);
   }
-  getBoxUrl = (boxId) => {
-    this.setState({ open: true });
-    this.props.agreementsStore.setField('docLoading', true);
-    this.props.agreementsStore.getBoxLink(boxId).then((res) => {
-      this.setState({
-        open: true,
-        embedUrl: res.data.getBoxEmbedLink,
-      });
-      this.props.agreementsStore.setField('docLoading', false);
-    });
-  }
-  closeModal = () => {
-    this.setState({ open: false });
-  }
   render() {
-    const { legalDocsList, docLoading, docIdsLoading } = this.props.agreementsStore;
+    const { legalDocsList, docIdsLoading } = this.props.agreementsStore;
     if (docIdsLoading) {
       return <InlineLoader />;
     }
@@ -75,18 +100,23 @@ export default class LegalDocuments extends Component {
               <Grid.Column key={l.id}>
                 <Segment padded textAlign="center" className="legal-documents">
                   <p>{l.docName}</p>
-                  <Button className="relaxed" onClick={() => this.getBoxUrl(l.boxId)} primary compact>View</Button>
+                  <Button
+                    as={Link}
+                    to={`${this.props.match.url}/${l.refEnum.toLowerCase()}`}
+                    className="relaxed"
+                    primary
+                    compact
+                  >
+                    View
+                  </Button>
                 </Segment>
               </Grid.Column>
             ))
           }
         </Grid>
-        <IframeModal
-          open={this.state.open}
-          close={this.closeModal}
-          srcUrl={this.state.embedUrl}
-          loading={docLoading}
-        />
+        {this.state.loaded &&
+          <Route path={`${this.props.match.url}/:docKey`} component={LegalDoc} />
+        }
       </Aux>
     );
   }

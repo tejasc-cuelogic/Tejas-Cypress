@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
+import { capitalize, orderBy, mapValues, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
@@ -218,26 +218,23 @@ export class InvestmentStore {
 
   @action
   calculateEstimatedReturn = () => {
-    const {
-      rateMin,
-    } = this.offeringMetaData;
+    const { campaign } = campaignStore;
+    const offeringSecurityType = get(campaign, 'keyTerms.securities');
+    const interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
+    const investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
     const investAmt = this.investmentAmount;
-    // if (investAmt >= 100) {
-    //   if (campaignType === 0) {
-    //     const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt));
-    //     this.estReturnVal = estReturnMIN;
-    //     return this.estReturnVal;
-    //   } else if (campaignType === 1) {
-    //     this.estReturnVal =
-    // `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan))}`;
-    //     return this.estReturnVal;
-    //   }
-    // } else {
-    //   this.estReturnVal = '-';
-    //   return this.estReturnVal;
-    // }
     if (investAmt >= 100) {
-      const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt), 0);
+      if (offeringSecurityType === 'TERM_NOTE') {
+        const formatedIntrestRate = money.floatToAmount(interestRate);
+        const calculatedIntrestAmount = money.percent(investAmt, formatedIntrestRate);
+        const estReturnMIN =
+          Helper.CurrencyFormat(money.add(investAmt, calculatedIntrestAmount), 0);
+        this.estReturnVal = estReturnMIN;
+        return this.estReturnVal;
+      }
+      const formatedInvestmentMultiple = money.floatToAmount(investmentMultiple);
+      const estReturnMIN =
+        Helper.CurrencyFormat(money.mul(formatedInvestmentMultiple, investAmt), 0);
       this.estReturnVal = estReturnMIN;
       return this.estReturnVal;
     } else if (investAmt <= 100) {
@@ -594,27 +591,10 @@ export class InvestmentStore {
   }
 
   @computed get changedInvestmentLimit() {
-    const { fields } = this.INVESTMENT_LIMITS_FORM;
-    const annualIncome = fields.annualIncome.value;
-    const netWorth = fields.netWorth.value;
-    const annualInvestmentLimitFloor = 2200;
-    const annualInvestmentLimit = 107000;
-    const annualIncomeLimitHighPct = 0.10;
-    let annualInvestmentLimitLowPct = 0;
-    let limit = null;
-
-    if (this.INVESTMENT_LIMITS_FORM.meta.isValid) {
-      annualInvestmentLimitLowPct = 0.05;
-
-      limit = floor(annualIncomeLimitHighPct * min([annualIncome, netWorth]));
-      if (annualIncome < annualInvestmentLimit || netWorth < annualInvestmentLimit) {
-        limit = max([
-          annualInvestmentLimitFloor,
-          floor(annualInvestmentLimitLowPct * min([annualIncome, netWorth]))]);
-      }
-      limit = min([limit, annualInvestmentLimit]);
-    }
-    return limit;
+    const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
+    console.log(investmentLimitStore.getInvestorAmountInvestedValue);
+    return investmentLimitStore
+      .getInvestmentLimit(data, investmentLimitStore.getInvestorAmountInvestedValue);
   }
   @action
   setInvestmentLimitData = () => {
@@ -630,7 +610,8 @@ export class InvestmentStore {
   }
   @action
   validateMaskedInputForAmount = () => {
-    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount) &&
+      this.isValidMultipleAmount(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
@@ -642,6 +623,10 @@ export class InvestmentStore {
     this[form].fields.investmentAmount.error = undefined;
     this[form].meta.isValid = true;
     this.setFieldValue('investmentFlowErrorMessage', undefined);
+  }
+  isValidMultipleAmount = (amount) => {
+    const formatedAmount = parseFloat(amount) || 0;
+    return formatedAmount >= 100 && formatedAmount % 100 === 0;
   }
 }
 

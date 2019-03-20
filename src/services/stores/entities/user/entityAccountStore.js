@@ -11,7 +11,7 @@ import {
   FILE_UPLOAD_STEPS,
   US_STATES_FOR_INVESTOR,
 } from '../../../../constants/account';
-import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
+import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, accountStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount, isUniqueTaxId } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -28,7 +28,8 @@ class EntityAccountStore {
   @observable entityData = {};
   @observable stepToBeRendered = '';
   @observable entityAccountId = null;
-
+  @observable showProcessingModal = false;
+  @observable isFormSubmitted = false;
 
   @action
   setStepToBeRendered(step) {
@@ -128,7 +129,9 @@ class EntityAccountStore {
             variables: payLoad,
           })
           .then(() => {
+            this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
+            this.isFormSubmitted = true;
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })
@@ -139,6 +142,11 @@ class EntityAccountStore {
           });
       });
     });
+  }
+
+  @action
+  setFieldValue = (field, val) => {
+    this[field] = val;
   }
 
   @action
@@ -340,6 +348,7 @@ class EntityAccountStore {
       currentStep.validate();
       isValidCurrentStep = this[currentStep.form].meta.isValid;
       if (isValidCurrentStep) {
+        uiStore.setProgress();
         if (currentStep.name === 'Financial info') {
           accountAttributes.limits = {
             netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
@@ -477,7 +486,7 @@ class EntityAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);

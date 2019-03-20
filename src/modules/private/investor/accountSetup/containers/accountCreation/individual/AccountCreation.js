@@ -3,14 +3,17 @@ import { inject, observer } from 'mobx-react';
 import { MultiStep } from '../../../../../../../helper';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
+import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    this.props.uiStore.setProgress();
-    this.props.userDetailsStore.setUserAccDetails('individual');
-    this.props.accountStore.setAccTypeChange(0);
+    if (!this.props.individualAccountStore.isFormSubmitted) {
+      this.props.uiStore.setProgress();
+      this.props.userDetailsStore.setUserAccDetails('individual');
+      this.props.accountStore.setAccTypeChange(0);
+    }
   }
   handleMultiStepModalclose = () => {
     this.updateUser();
@@ -27,7 +30,10 @@ export default class AccountCreation extends React.Component {
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
-
+  closeProcessingModal = () => {
+    this.props.individualAccountStore.setFieldValue('showProcessingModal', false);
+    this.props.history.push('app/summary');
+  }
   render() {
     const {
       inProgress,
@@ -44,7 +50,9 @@ export default class AccountCreation extends React.Component {
       isPlaidDirty,
       linkbankSummary,
     } = this.props.bankAccountStore;
-    const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
+    const {
+      stepToBeRendered, createAccount, showProcessingModal,
+    } = this.props.individualAccountStore;
     const steps =
     [
       {
@@ -74,6 +82,9 @@ export default class AccountCreation extends React.Component {
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
       },
     ];
+    if (showProcessingModal) {
+      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
+    }
     return (
       <div className="step-progress" >
         <MultiStep page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />

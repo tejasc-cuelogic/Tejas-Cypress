@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
+import { Responsive, Sidebar, Menu, Button, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
@@ -20,6 +20,11 @@ class SidebarLeftPush extends Component {
       <Aux>
         {showFireworkAnimation &&
         <FireworksAnimation />
+        }
+        {this.props.uiStore.inProgress === 'viewLoanAgreement' &&
+          <Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
+            <Loader active={this.props.uiStore.inProgress} />
+          </Dimmer>
         }
         <Responsive minWidth={1200}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
@@ -83,12 +88,13 @@ const MySidebar = observer(props => (
           </Scrollbars>
         </Sidebar>
         {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
-          props.signupStatus && props.signupStatus.activeAccounts.length > 0 &&
+          props.signupStatus &&
           !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
-          <Link className="add-account" to="/app/summary/account-creation">
-            <Icon name="add circle" />
-            <span>Add New Account</span>
-          </Link>
+           props.signupStatus.investorProfileCompleted &&
+           <Link className="add-account" to="/app/summary/account-creation">
+             <Icon name="add circle" />
+             <span>Add New Account</span>
+           </Link>
         }
         {props.desktop &&
           <Button onClick={props.toggle} className="item collapseIcon">

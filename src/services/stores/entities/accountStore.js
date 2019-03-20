@@ -1,5 +1,9 @@
 import { observable, action, computed } from 'mobx';
 import { FormValidator } from '../../../helper';
+import { bankAccountStore } from '../index';
+import Helper from '../../../helper/utility';
+
+
 import {
   INVESTMENT_ACCOUNT_TYPES,
   ACC_TYPE,
@@ -14,6 +18,16 @@ export class AccountStore {
       this.INVESTMENT_ACC_TYPES,
       FormValidator.pullValues(e, result),
     );
+  }
+
+  accountToastMessage = (currentStep, actionName) => {
+    const { isValid } = bankAccountStore.formAddFunds.meta;
+    if (currentStep.name === 'Link bank' && isValid) {
+      const actionPerformed = isValid ? 'submitted' : actionName;
+      Helper.toast(`${isValid ? 'Add Funds' : currentStep.name} ${actionPerformed} successfully.`, 'success');
+    } else if (currentStep.name !== 'Link bank') {
+      Helper.toast(`${currentStep.name} ${actionName} successfully.`, 'success');
+    }
   }
 
   @action

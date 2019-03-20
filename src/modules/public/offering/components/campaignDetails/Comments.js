@@ -82,6 +82,8 @@ class Comments extends Component {
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && activeAccounts && activeAccounts.length);
     const readMoreLength = 50;
     const { campaign } = this.props.campaignStore;
+    const campaignStage = get(campaign, 'stage');
+    const disablePostComment = !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage);
     const comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
@@ -124,20 +126,20 @@ class Comments extends Component {
                   }
             </Form>
           </section>
-              :
-          <Aux>
-            { visiblePost ?
-              <Form className="public-form mt-30 clearfix" reply>
-                <FormTextarea
-                  fielddata={MESSAGE_FRM.fields.comment}
-                  name="comment"
-                  changed={msgEleChange}
-                  containerclassname="secondary"
-                />
-                <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
-              </Form> : ''
-            }
-          </Aux>
+              : !disablePostComment &&
+              <Aux>
+                { visiblePost ?
+                  <Form className="public-form mt-30 clearfix" reply>
+                    <FormTextarea
+                      fielddata={MESSAGE_FRM.fields.comment}
+                      name="comment"
+                      changed={msgEleChange}
+                      containerclassname="secondary"
+                    />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                  </Form> : ''
+                }
+              </Aux>
         }
         {comments && comments.length ?
           <Aux>
@@ -154,7 +156,7 @@ class Comments extends Component {
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                           </Comment.Author>
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
-                          {isUserLoggedIn &&
+                          {isUserLoggedIn && !disablePostComment &&
                           <Comment.Actions>
                             <Comment.Action onClick={() => this.toggleVisibility(c.id)}>
                               Reply
@@ -210,7 +212,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
-                                {isUserLoggedIn &&
+                                {isUserLoggedIn && !disablePostComment &&
                                 <Comment.Actions>
                                   <Comment.Action
                                     onClick={() => this.toggleVisibility(tc.id)}

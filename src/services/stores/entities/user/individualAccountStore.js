@@ -14,6 +14,8 @@ class IndividualAccountStore {
   @observable submited = false;
   @observable isManualLinkBankSubmitted = false;
   @observable individualAccId = null;
+  @observable showProcessingModal = false;
+  @observable isFormSubmitted = false;
 
   @action
   setIsManualLinkBankSubmitted = (status) => {
@@ -39,9 +41,13 @@ class IndividualAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => {
+          .then((res) => {
             uiStore.setProgress(false);
+            if (res.data.submitInvestorAccount) {
+              this.setFieldValue('showProcessingModal', true);
+            }
             bankAccountStore.resetStoreData();
+            this.isFormSubmitted = true;
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           })
@@ -52,6 +58,10 @@ class IndividualAccountStore {
           });
       });
     });
+  }
+  @action
+  setFieldValue = (field, val) => {
+    this[field] = val;
   }
 
   investmentLimitsAttributes = () => {
@@ -95,15 +105,16 @@ class IndividualAccountStore {
               const { linkedBank } = result.data.upsertInvestorAccount;
               bankAccountStore.setPlaidAccDetails(linkedBank);
             }
+            const { isValid } = bankAccountStore.formAddFunds.meta;
             if (currentStep) {
               // FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
               if (!bankAccountStore.depositMoneyNow) {
-                Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-              } else {
+                // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+              } else if (currentStep.name === 'Add funds' && isValid) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
             } else {
-              Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+              // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
             }
             // this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);

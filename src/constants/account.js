@@ -26,6 +26,7 @@ export const INVESTMENT_ACCOUNT_TYPES = {
   2: 'entity',
 };
 
+
 export const US_STATES_FOR_INVESTOR = [
   { key: 'AL', value: 'Alabama', text: 'ALABAMA' },
   { key: 'AK', value: 'Alaska', text: 'ALASKA' },
@@ -629,22 +630,26 @@ export const FINANCES = {
     value: '',
     label: 'Net Worth',
     error: undefined,
-    rule: 'required',
-    placeHolder: 'Net Worth',
+    rule: 'required|min:1|max:2147483647',
+    placeHolder: 'Enter here',
     customErrors: {
       required: 'required',
+      min: 'Please enter a valid amount to deposit',
+      max: 'Please enter a valid amount to deposit',
     },
   },
   annualIncomeCurrentYear: {
     value: '',
-    label: `Annual Income ${Helper.getLastThreeYearsLabel().annualIncomeCurrentYear}`,
+    label: `Annual Income ${Helper.getLastThreeYearsLabel().annualIncomePreviousYear}`,
     error: undefined,
-    rule: 'required',
-    year: '2018',
-    placeHolder: '$60,000',
+    rule: 'required|min:1|max:2147483647',
+    year: `${Helper.getLastThreeYearsLabel().annualIncomePreviousYear}`,
+    placeHolder: 'Enter here',
     objRefOutput: 'annualIncome',
     customErrors: {
       required: 'required',
+      min: 'Please enter a valid amount to deposit.',
+      max: 'Please enter a valid amount to deposit.',
     },
   },
 };

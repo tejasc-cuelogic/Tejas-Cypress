@@ -150,7 +150,24 @@ export class Utility {
     const currentYear = parseInt(moment().format('YYYY'), 10);
     return {
       annualIncomeCurrentYear: currentYear,
+      annualIncomePreviousYear: currentYear - 1,
     };
+  }
+
+  otpShield = () => {
+    try {
+      const OtpItems = document.getElementsByClassName('otp-field')[0]
+        .getElementsByTagName('input');
+      for (let i = 0; i < OtpItems.length; i += 1) {
+        OtpItems[i].addEventListener('keydown', (e) => {
+          if ([16, 107, 110, 109, 69, 187, 188, 189, 190].includes(e.keyCode)) {
+            e.preventDefault();
+          }
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 

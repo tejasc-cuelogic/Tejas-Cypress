@@ -47,8 +47,9 @@ export default class Summary extends React.Component {
           setPartialInvestmenSession();
         } else {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-          this.props.bankAccountStore.resetLinkBank();
-          this.props.history.replace('app/summary');
+          if (!this.props.individualAccountStore.showProcessingModal) {
+            this.props.history.replace('app/summary');
+          }
         }
       }).catch(() => { });
     }

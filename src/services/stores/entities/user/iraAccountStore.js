@@ -9,7 +9,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, userStore } from '../../index';
+import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, userStore, accountStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -21,6 +21,9 @@ class IraAccountStore {
   @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES);
   @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING);
   @observable iraAccountId = null;
+  @observable showProcessingModal = false;
+  @observable isFormSubmitted = false;
+
 
   @observable stepToBeRendered = 0;
   @observable accountNotSet = '';
@@ -167,7 +170,9 @@ class IraAccountStore {
         variables: payLoad,
       })
       .then(() => {
+        this.setFieldValue('showProcessingModal', true);
         bankAccountStore.resetStoreData();
+        this.isFormSubmitted = true;
         Helper.toast('IRA account submitted successfully.', 'success');
         resolve();
       })
@@ -177,6 +182,11 @@ class IraAccountStore {
         reject();
       });
   });
+
+  @action
+  setFieldValue = (field, val) => {
+    this[field] = val;
+  }
 
   @action
   createAccount = (currentStep, removeUploadedData = false) => new Promise((resolve) => {
@@ -369,7 +379,7 @@ class IraAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);

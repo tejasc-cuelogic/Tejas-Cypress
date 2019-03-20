@@ -57,7 +57,7 @@ class InvestmentDetails extends Component {
           title: 'Total Raised Amount', content: get(getInvestor, 'totalRaisedAmount') || 'N/A', type: 1, fraction: false,
         },
         {
-          title: 'Close Date', content: get(campaign, 'offering.launch.terminationDate') ? moment(get(campaign, 'offering.launch.terminationDate')).format('ll') : 'NA',
+          title: 'Close Date', content: get(campaign, 'offering.launch.terminationDate') ? moment(new Date(get(campaign, 'offering.launch.terminationDate'))).format('ll') : 'NA',
         },
         {
           title: 'My Investment', content: get(getInvestor, 'myInvestment') || 'N/A', type: 1, fraction: false,

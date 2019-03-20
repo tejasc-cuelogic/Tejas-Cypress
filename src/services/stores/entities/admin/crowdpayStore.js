@@ -4,7 +4,7 @@ import { isArray, get } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
-import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate } from '../../queries/CrowdPay';
+import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
@@ -12,7 +12,7 @@ import { uiStore } from '../../index';
 
 const types = {
   review: null,
-  cip: 'INDIVIDUAL',
+  individual: 'INDIVIDUAL',
   ira: 'IRA',
   entity: 'ENTITY',
 };
@@ -22,7 +22,7 @@ export class CrowdpayStore {
   @observable filters = false;
   @observable isApiHit = false;
   @observable summary = {
-    review: 0, cip: 0, ira: 0, entity: 0,
+    review: 0, individual: 0, ira: 0, entity: 0,
   };
   @observable requestState = {
     skip: 0,
@@ -40,6 +40,7 @@ export class CrowdpayStore {
     APPROVE: crowdPayAccountReview,
     DECLINE: crowdPayAccountReview,
     VALIDATE: crowdPayAccountValidate,
+    CREATEACCOUNT: createIndividualAccount,
   }
 
   @action
@@ -176,6 +177,8 @@ export class CrowdpayStore {
         ...variables,
         action: ctaAction,
       };
+    } else if (ctaAction === 'CREATEACCOUNT') {
+      variables.accountType = types[this.requestState.type];
     }
     return new Promise((resolve, reject) => {
       client
@@ -191,6 +194,10 @@ export class CrowdpayStore {
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
             Helper.toast('CIP is not satisfied.', 'error');
             uiStore.setProgress(false);
+          } else if (ctaAction === 'CREATEACCOUNT' && data.data.submitInvestorAccount) {
+            this.requestState.oldType = this.requestState.type;
+            Helper.toast(data.data.submitInvestorAccount, 'success');
+            resolve();
           } else {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(sMsg, 'success');

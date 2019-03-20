@@ -29,6 +29,9 @@ export default class ConfirmEmailAddress extends Component {
       this.props.identityStore.startPhoneVerification('EMAIL');
     }
   }
+  componentDidMount() {
+    Helper.otpShield();
+  }
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.uiStore.clearErrors();
@@ -203,7 +206,7 @@ export default class ConfirmEmailAddress extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
+            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail)) || (errors && errors.message)} />
           </Form>
         </Modal.Content>
       </Modal>

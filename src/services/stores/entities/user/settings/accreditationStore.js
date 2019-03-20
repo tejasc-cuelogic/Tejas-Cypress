@@ -801,52 +801,67 @@ export class AccreditationStore {
     const urlToReturn = selectedAccountName === 'entity' ? `/app/profile-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/app/profile-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
     return urlToReturn;
   }
-  offeringAccreditatoinStatusMessage = (currentStatus) => {
+  offeringAccreditatoinStatusMessage = (
+    currentStatus, accreditedStatus, isRegulationCheck = false,
+    accountCreated, showAccountList = true, isDocumentUpload = true,
+  ) => {
     const headerSubheaderTextObj = {};
-    if (currentStatus) {
-      const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
-      switch (currentStatus) {
-        case 'PENDING':
-          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account In Review`;
-          headerSubheaderTextObj.subHeader = 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
-          break;
-        case 'NOT_ELGIBLE':
-          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
-          headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
-          break;
-        case 'INACTIVE':
-          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
-          headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
-          break;
-        case 'EXPIRED':
-          // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
-          headerSubheaderTextObj.header = 'Accredited Status Expired';
-          headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
-          break;
-        case 'PROCESSING':
-          headerSubheaderTextObj.header = `New ${accountType} Account Processing`;
-          headerSubheaderTextObj.subHeader = '';
-          break;
-        case 'PARTIAL':
-          headerSubheaderTextObj.header = `You do not have a full ${accountType} Investment Account.`;
-          headerSubheaderTextObj.subHeader = '';
-          break;
-        case 'FROZEN':
-          headerSubheaderTextObj.header = `Your ${accountType} Account Is Frozen For Investments.`;
-          headerSubheaderTextObj.subHeader = '';
-          break;
-        default:
-          headerSubheaderTextObj.header = '';
-          headerSubheaderTextObj.subHeader = '';
-          break;
+    if (showAccountList && accountCreated.values.length >= 2) {
+      headerSubheaderTextObj.header = 'Which Investment Account would you like to invest from ?';
+      headerSubheaderTextObj.subHeader = 'Choose an account type';
+      // return headerSubheaderTextObj;
+    } else if ((!showAccountList && !isDocumentUpload) ||
+      (!isDocumentUpload && accountCreated.values.length === 1)) {
+      headerSubheaderTextObj.header = null;
+      headerSubheaderTextObj.subHeader = '';
+      // return headerSubheaderTextObj;
+    } else {
+      const userCurrentState = (isRegulationCheck && currentStatus === 'FULL') ? accreditedStatus : currentStatus;
+      if (userCurrentState) {
+        const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
+        switch (userCurrentState) {
+          case 'PENDING':
+            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account In Review`;
+            headerSubheaderTextObj.subHeader = 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
+            break;
+          case 'NOT_ELGIBLE':
+            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
+            headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
+            break;
+          case 'INACTIVE':
+            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
+            headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
+            break;
+          case 'EXPIRED':
+            // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
+            headerSubheaderTextObj.header = 'Accredited Status Expired';
+            headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
+            break;
+          case 'PROCESSING':
+            headerSubheaderTextObj.header = `New ${accountType} Account Processing`;
+            headerSubheaderTextObj.subHeader = '';
+            break;
+          case 'PARTIAL':
+            headerSubheaderTextObj.header = `You do not have a full ${accountType} Investment Account.`;
+            headerSubheaderTextObj.subHeader = '';
+            break;
+          case 'FROZEN':
+            headerSubheaderTextObj.header = `Your ${accountType} Account Is Frozen For Investments.`;
+            headerSubheaderTextObj.subHeader = '';
+            break;
+          default:
+            headerSubheaderTextObj.header = '';
+            headerSubheaderTextObj.subHeader = '';
+            break;
+        }
       }
-      return headerSubheaderTextObj;
     }
-    return headerSubheaderTextObj;
+    // return headerSubheaderTextObj;
+    this.setHeaderAndSubHeader(headerSubheaderTextObj);
   }
   @action
   setHeaderAndSubHeader = (headerText, subHeaderText) => {
-    this.headerSubheaderObj.header = headerText.header || headerText;
+    this.headerSubheaderObj.header = headerText.header;
     this.headerSubheaderObj.subHeader = headerText.subHeader || subHeaderText;
   }
   @action

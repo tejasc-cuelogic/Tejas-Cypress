@@ -23,6 +23,10 @@ class FinancialInfo extends Component {
         getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
       }
     }
+    if (this.props.investmentStore.getSelectedAccountTypeId) {
+      this.props.investmentLimitStore
+        .getInvestorAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
+    }
   }
   render() {
     const {
@@ -64,7 +68,7 @@ class FinancialInfo extends Component {
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
             <p>
-              Your investment limit:
+              Your investment limit: {' '}
               {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
               <Popup
                 wide
@@ -107,8 +111,9 @@ class FinancialInfo extends Component {
             autoFocus
           />
         </Form>
-        {this.props.changeInvest && getDiffInvestmentLimitAmount ?
-          <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
+        {this.props.changeInvest && getDiffInvestmentLimitAmount &&
+         INVESTMONEY_FORM.fields.investmentAmount.value > 0 ?
+           <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }
         <Divider hidden />
         {// isValidInvestAmtInOffering &&

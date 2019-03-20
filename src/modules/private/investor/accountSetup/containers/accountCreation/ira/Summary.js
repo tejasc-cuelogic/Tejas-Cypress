@@ -40,8 +40,7 @@ export default class Summary extends Component {
     } else {
       this.props.iraAccountStore.submitAccount().then(() => {
         this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-        this.props.bankAccountStore.resetLinkBank();
-        this.props.history.push('app/summary');
+        // this.props.history.push('app/summary');
       });
     }
   }

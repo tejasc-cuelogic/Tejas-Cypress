@@ -35,7 +35,7 @@ export default class Transactions extends Component {
 
   render() {
     const {
-      getAllTransactions, loading, error, totalRecords, requestState,
+      getAllTransactions, loading, error, hasError, totalRecords, requestState,
     } = this.props.transactionStore;
     result.rows = getAllTransactions.transactions;
     return (
@@ -57,7 +57,7 @@ export default class Transactions extends Component {
         <div className="content-spacer">
           <Header as="h4">Transactions</Header>
           <Card fluid>
-            <FillTable loading={loading} error={error} result={result} />
+            <FillTable loading={loading} error={hasError || error} result={result} />
           </Card>
           {totalRecords > 0 &&
             <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />

@@ -100,6 +100,7 @@ export const FILTER_META = {
     { text: 'Admin', value: ACTIVITY_HISTORY_SCOPE.ADMIN },
     // { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER },
     { text: 'Investor', value: ACTIVITY_HISTORY_SCOPE.INVESTOR },
+    { text: 'Dev', value: ACTIVITY_HISTORY_SCOPE.DEV },
   ],
 };
 
