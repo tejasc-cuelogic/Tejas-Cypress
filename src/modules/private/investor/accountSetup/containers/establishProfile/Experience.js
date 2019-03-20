@@ -94,7 +94,7 @@ export default class Experience extends Component {
             <Button primary className="relaxed" content="Continue to Account" disabled={!(INVESTMENT_EXP_FORM.meta.isValid && isInvestmentExperienceValid)} />
             {!isInvestmentExperienceValid &&
               <p className="negative-text mt-20">
-                Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center</Link> to
+                Otherwise, please reference our <Link to="/resources/education-center">Education Center</Link> to
                 learn more about investing on NextSeed.
               </p>
             }
