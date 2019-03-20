@@ -42,8 +42,10 @@ export default class ElasticSearch extends Component {
               <Card.Content>
                 <Card.Description>
                   <Button.Group compact size="mini" widths={3}>
-                    <Button onClick={() => this.toggleConfirmModal(`${es.module}CreateIndices`, `Create ${es.title}`)} loading={inProgress === `${es.module}CreateIndices`} content="Create" color="green" />
-                    <Button onClick={() => this.toggleConfirmModal(`${es.module}PopulateIndex`, `Populate ${es.title}`)} loading={inProgress === `${es.module}PopulateIndex`} content="Populate" color="blue" />
+                    {/* <Button onClick={() => this.toggleConfirmModal(`${es.module}
+                  CreateIndices`, `Create ${es.title}`)} loading={inProgress === 
+                  `${es.module}CreateIndices`} content="Create" color="green" /> */}
+                    <Button onClick={() => this.toggleConfirmModal(`${es.module}PopulateIndex`, `Populate ${es.title}`)} loading={inProgress === `${es.module}PopulateIndex`} content="Generate" color="blue" />
                     <Button onClick={() => this.toggleConfirmModal(`${es.module}DeleteIndices`, `Delete ${es.title}`)} loading={inProgress === `${es.module}DeleteIndices`} content="Delete" color="red" />
                   </Button.Group>
                 </Card.Description>
@@ -56,7 +58,7 @@ export default class ElasticSearch extends Component {
           <div className="sticky-sidebar">
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
-              <ActivityHistory resourceId="ElasticSearch" />
+              <ActivityHistory resourceId="ELASTIC_SEARCH" />
             </Card>
           </div>
         </Grid.Column>

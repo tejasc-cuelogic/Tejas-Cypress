@@ -123,7 +123,7 @@ export default class MultiStep extends React.Component {
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
-      if (this.props.bankSummary) {
+      if (this.props.bankSummary(this.props.steps[this.state.compState])) {
         this.props.bankSummarySubmit();
       } else {
         this.props.setStepTobeRendered(this.state.compState + 1);
