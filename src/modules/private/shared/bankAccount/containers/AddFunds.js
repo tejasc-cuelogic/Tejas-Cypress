@@ -95,6 +95,7 @@ export default class AddFunds extends Component {
                 maxLength={formAddFunds.fields.value.maxLength}
                 prefix="$ "
                 showerror
+                allowNegative={false}
               />
             </div>
             {errors &&
