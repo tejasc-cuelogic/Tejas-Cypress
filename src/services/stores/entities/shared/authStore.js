@@ -349,10 +349,10 @@ export class AuthStore {
       },
       onFetch: (data) => {
         if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
+          this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
           this.SIGNUP_FRM.meta.isValid = false;
           rej();
-        } else if (this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
+        } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
           res();
         }
       },
