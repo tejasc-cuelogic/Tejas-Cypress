@@ -20,8 +20,8 @@ export default class CampaignHeader extends Component {
   render() {
     const { campaignStore } = this.props;
     const { campaign, offerStructure } = campaignStore;
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-    && campaign.offering.launch.terminationDate;
+    const terminationDate = campaign && campaign.closureSummary
+    && campaign.closureSummary.processingDate;
     const diff = DataFormatter.diffDays(terminationDate);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;

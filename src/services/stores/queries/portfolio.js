@@ -27,10 +27,19 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            investmentMultiple
+            interestRate
           }
           offering {
             launch {
               terminationDate
+            }
+          }
+          closureSummary {
+            processingDate
+            hardCloseDate
+            disbursement {
+              date
             }
           }
         }
@@ -47,6 +56,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            investmentMultiple
+            interestRate
           }
           offering {
             launch {
@@ -54,6 +65,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             }
           }
           closureSummary {
+            processingDate
+            hardCloseDate
             disbursement {
               date
             }
@@ -72,6 +85,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            investmentMultiple
+            interestRate
           }
           offering {
             launch {
@@ -79,6 +94,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             }
           }
           closureSummary {
+            processingDate
+            hardCloseDate
             disbursement {
               date
             }
