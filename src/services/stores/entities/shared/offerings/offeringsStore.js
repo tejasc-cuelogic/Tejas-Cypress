@@ -113,7 +113,7 @@ export class OfferingsStore {
     const { keyword } = this.requestState.search;
     if (keyword) {
       this.setDb(this.allOfferingsList);
-      ClientDb.filterFromNestedObjs('keyTerms.legalBusinessName', keyword);
+      ClientDb.filterFromNestedObjs(['keyTerms.legalBusinessName', 'keyTerms.shorthandBusinessName'], keyword);
       this.db = ClientDb.getDatabase();
       this.requestState.page = 1;
       this.requestState.skip = 0;
