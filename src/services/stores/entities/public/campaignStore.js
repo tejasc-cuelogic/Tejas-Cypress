@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, reduce, get } from 'lodash';
+import { pickBy, get } from 'lodash';
 import money from 'money-math';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
@@ -203,14 +203,21 @@ export class CampaignStore {
   });
   @computed get navCountData() {
     const res = { updates: 0, comments: 0 };
+    let sum = 0;
     if (this.campaign) {
       const { updates, comments } = this.campaign;
       res.updates = updates && updates.length ? updates.length : 0;
       // eslint-disable-next-line arrow-body-style
-      res.comments = reduce(comments, (sum, c) => {
-        return (c.scope === 'PUBLIC' && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved)) ? (sum + 1) : sum);
-      }, 0);
+      comments.map((c) => {
+        if (c.scope === 'PUBLIC' &&
+        ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
+          (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+          sum = sum + 1 + (get(c, 'threadComment.length') || 0);
+        }
+        return null;
+      });
     }
+    res.comments = sum;
     return res;
   }
 

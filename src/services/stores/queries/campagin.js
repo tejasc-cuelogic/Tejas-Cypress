@@ -477,6 +477,7 @@ query getOfferingById($id: ID) {
         multiple
         revSharePercentage
         interestRate
+        businessOpenDate
       }
     }
     keyTerms {
