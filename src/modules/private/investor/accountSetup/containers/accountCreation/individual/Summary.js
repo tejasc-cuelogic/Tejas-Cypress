@@ -24,6 +24,8 @@ export default class Summary extends React.Component {
   }
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
+    const { userDetails } = this.props.userDetailsStore;
+    this.props.uiStore.setProgress(!get(userDetails, 'info.firstName'));
   }
   handleCreateAccount = () => {
     const {

@@ -821,14 +821,16 @@ export class IdentityStore {
 
   requestOtpWrapper = () => {
     uiStore.setProgress();
-    const { email } = authStore.SIGNUP_FRM.fields;
+    const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
+    const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
     return new Promise((resolve, reject) => {
       publicClient
         .mutate({
           mutation: requestOtpWrapper,
           variables: {
             address: email.value || emailInCookie,
+            firstName: givenName.value || firstNameInCookie,
           },
         })
         .then((result) => {

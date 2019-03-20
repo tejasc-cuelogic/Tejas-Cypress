@@ -858,6 +858,8 @@ export const getOfferingDetails = gql`
         }
       }
       closureSummary {
+        processingDate
+        hardCloseDate
         disbursement {
           date
           amount

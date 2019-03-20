@@ -61,8 +61,7 @@ export default class Close extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer } = this.props.offeringsStore;
-    const closeDate = offer.offering && offer.offering.launch &&
-    offer.offering.launch.terminationDate;
+    const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
       <Form>

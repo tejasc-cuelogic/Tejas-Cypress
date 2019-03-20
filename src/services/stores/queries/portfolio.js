@@ -33,6 +33,13 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
               terminationDate
             }
           }
+          closureSummary {
+            processingDate
+            hardCloseDate
+            disbursement {
+              date
+            }
+          }
         }
       }
       active {
@@ -54,6 +61,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             }
           }
           closureSummary {
+            processingDate
+            hardCloseDate
             disbursement {
               date
             }
@@ -79,6 +88,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             }
           }
           closureSummary {
+            processingDate
+            hardCloseDate
             disbursement {
               date
             }

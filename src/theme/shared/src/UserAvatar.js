@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Image } from 'semantic-ui-react';
+// import { Image } from 'semantic-ui-react';
 import Avatar from 'react-avatar';
 import { Image64 } from '../../../theme/shared';
 import { ASSETS_URL } from '../../../constants/aws';
@@ -11,31 +11,34 @@ const userRoles = {
 @observer
 class UserAvatar extends Component {
   render() {
-    const { UserInfo, size, base64url } = this.props;
-    const isBase64ImgTag = !!(UserInfo.avatarUrl || (UserInfo.firstName !== '' && UserInfo.lastName !== '') || UserInfo.name);
+    const {
+      UserInfo, size,
+      // base64url,
+    } = this.props;
+    // const isBase64ImgTag = !!(UserInfo.avatarUrl ||
+    // (UserInfo.firstName !== '' && UserInfo.lastName !== '') || UserInfo.name);
     const imgSize = size || 'tiny';
     const fullName = UserInfo.name && UserInfo.name.split(' ');
     const avatarName = (UserInfo.firstName && UserInfo.lastName) ? `${UserInfo.firstName[0]} ${UserInfo.lastName[0]}` : UserInfo.name && fullName.length > 0 ? (fullName.length === 1 ? fullName[0] : `${fullName[0]} ${fullName[fullName.length - 1]}`) : '';
     const avatarProfile = UserInfo.avatarUrl || (UserInfo.firstName && UserInfo.lastName) || UserInfo.name ? UserInfo.avatarUrl : `${ASSETS_URL}images/leader-placeholder.jpg`;
-    console.log(avatarProfile, base64url, isBase64ImgTag);
     if (avatarProfile) {
       return (
-        base64url && isBase64ImgTag ?
-          <Image64
-            srcUrl={avatarProfile}
-            alt={UserInfo.firstName}
-            size={imgSize}
-            avatar
-            circular
-          />
-          :
-          <Image
-            src={avatarProfile}
-            alt={UserInfo.firstName}
-            size={imgSize}
-            avatar
-            circular
-          />
+        // base64url && isBase64ImgTag ?
+        <Image64
+          srcUrl={avatarProfile}
+          alt={UserInfo.firstName}
+          size={imgSize}
+          avatar
+          circular
+        />
+        // :
+        // <Image
+        //   src={avatarProfile}
+        //   alt={UserInfo.firstName}
+        //   size={imgSize}
+        //   avatar
+        //   circular
+        // />
       );
     }
     return (
