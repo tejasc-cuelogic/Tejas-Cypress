@@ -85,9 +85,9 @@ export default class Portfolio extends Component {
         },
       ],
     };
-    const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => DataFormatter.diffDays(o.offering.offering.launch.terminationDate), ['asc']) : [];
-    const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.offering.launch.terminationDate') && moment(new Date(o.offering.offering.launch.terminationDate)).unix(), ['desc']) : [];
-    const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.offering.launch.terminationDate') && moment(new Date(o.offering.offering.launch.terminationDate)).unix(), ['desc']) : [];
+    const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
+    const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
+    const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />

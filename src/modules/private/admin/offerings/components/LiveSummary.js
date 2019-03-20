@@ -13,7 +13,7 @@ const leftSummary = offer => [
       )),
   },
   { title: 'Launch Date', content: DataFormatter.formatedDate(get(offer, 'offering.launch.targetDate')) },
-  { title: DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'), false, true) < 0 ? 'Close Date' : `${DataFormatter.diffInDaysHoursMin(get(offer, 'offering.launch.terminationDate')).diffType} Till Close`, content: get(offer, 'offering.launch.terminationDate') ? (DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'), false, true) < 0) ? get(offer, 'offering.launch.terminationDate') : DataFormatter.diffInDaysHoursMin(get(offer, 'offering.launch.terminationDate')).diffText : 'N/A' },
+  { title: DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0 ? 'Close Date' : `${DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.processingDate')).diffType} Till Close`, content: get(offer, 'closureSummary.processingDate') ? (DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0) ? get(offer, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.processingDate')).diffText : 'N/A' },
 ];
 
 const rightSummary = offer => [

@@ -219,9 +219,19 @@ export class InvestmentStore {
   @action
   calculateEstimatedReturn = () => {
     const { campaign } = campaignStore;
-    const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    const interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
-    const investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+    const { getInvestorAccountById } = portfolioStore;
+    let offeringSecurityType = '';
+    let interestRate = '';
+    let investmentMultiple = '';
+    if (campaign && campaign.keyTerms) {
+      offeringSecurityType = get(campaign, 'keyTerms.securities');
+      interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
+      investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+    } else {
+      offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
+      interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
+      investmentMultiple = get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') && get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') !== null ? get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') : '0';
+    }
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
       if (offeringSecurityType === 'TERM_NOTE') {
@@ -350,9 +360,9 @@ export class InvestmentStore {
     const offeringDetails = portfolioStore.getInvestorAccountById;
     if (offeringDetails) {
       const isLokcinPeriod = DataFormatter.diffDays(offeringDetails && offeringDetails.offering &&
-        offeringDetails.offering.offering && offeringDetails.offering.offering.launch &&
-        offeringDetails.offering.offering.launch.terminationDate ?
-        offeringDetails.offering.offering.launch.terminationDate : null) <= 2;
+        offeringDetails.offering.closureSummary &&
+        offeringDetails.offering.closureSummary.processingDate ?
+        offeringDetails.offering.closureSummary.processingDate : null) <= 2;
       if (isLokcinPeriod) {
         const alreadyInvestedAmount = offeringDetails.investedAmount;
         resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
