@@ -11,7 +11,9 @@ import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const InvestmentList = (props) => {
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
-  const { investments, match, viewAgreement } = props;
+  const {
+    investments, match, viewAgreement, handleInvestNowClick,
+  } = props;
   const isActive = !props.inActiveItems.includes(props.listOf);
   return (
     <Accordion fluid styled className="card-style">
@@ -69,7 +71,7 @@ const InvestmentList = (props) => {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
                             {!props.isAccountFrozen &&
-                              <Button onClick={() => props.handleInvestNowClick(data.offering.id)} primary content="Change" />
+                              <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                             }
                             {DataFormatter.diffDays(data && data.offering &&
                               data.offering.closureSummary &&

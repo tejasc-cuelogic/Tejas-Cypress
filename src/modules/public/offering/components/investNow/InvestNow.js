@@ -42,7 +42,12 @@ export default class InvestNow extends React.Component {
     window.addEventListener('message', this.handleIframeTask);
   }
   componentWillUnmount() {
-    this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+    const { changeInvest } = this.props;
+    const isUpdateScreen = changeInvest;
+    const reflectedURL = this.props.history.location.pathname;
+    if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
+      this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+    }
   }
   handleIframeTask = (e) => {
     console.log(e.data);
