@@ -99,8 +99,11 @@ export const TRANSACTION_FAILURE = {
     value: '',
     label: 'Justify your decision',
     error: undefined,
-    rule: 'required',
+    rule: 'required|max:250',
     placeHolder: 'Type your comment here...',
+    customErrors: {
+      max: 'Description cannot be greater than 250 characters.',
+    },
   },
 };
 

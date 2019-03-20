@@ -13,6 +13,10 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 export default class CampaignHeader extends Component {
+  handleInvestNowClick = () => {
+    this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
+    this.props.history.push(`${this.props.match.url}/invest-now`);
+  }
   render() {
     const { campaignStore } = this.props;
     const { campaign, offerStructure } = campaignStore;
@@ -161,7 +165,7 @@ export default class CampaignHeader extends Component {
                   }
                   <div className="center-align mt-20">
                     {!isClosed &&
-                      <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
+                      <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
                     }
                     <small>
                       ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
