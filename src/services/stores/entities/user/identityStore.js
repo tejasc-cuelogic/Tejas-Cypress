@@ -28,6 +28,12 @@ export class IdentityStore {
   @observable userCipStatus = '';
   @observable isOptConfirmed = false;
   @observable sendOtpToMigratedUser = [];
+  @observable signUpLoading = false;
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   setSendOtpToMigratedUser = (step) => {
@@ -274,6 +280,7 @@ export class IdentityStore {
               resolve();
             }).catch(() => {
               uiStore.setProgress(false);
+              this.setFieldValue('signUpLoading', false);
               reject();
             });
           } else {
@@ -297,6 +304,7 @@ export class IdentityStore {
             });
           // reject(err);
           }
+          this.setFieldValue('signUpLoading', false);
         });
       // .finally(() => {
       //   uiStore.setProgress(false);
@@ -309,6 +317,7 @@ export class IdentityStore {
     const { response } = this.ID_VERIFICATION_FRM;
     const questionsArray = identityHelper.setIdentityQuestions(response);
     this.ID_VERIFICATION_QUESTIONS.fields = questionsArray;
+    this.setFieldValue('signUpLoading', false);
   }
 
   @action
@@ -396,6 +405,7 @@ export class IdentityStore {
           }
           this.setRequestOtpResponse(result.data.requestOtp);
           Helper.toast(`Verification ${requestMode}.`, 'success');
+          this.setFieldValue('signUpLoading', false);
           resolve();
         })
         .catch((err) => {
@@ -756,6 +766,7 @@ export class IdentityStore {
       zipCode: zipCode.value,
     };
     uiStore.setProgress();
+    this.setFieldValue('signUpLoading', true);
     const result = graphql({
       client,
       query: checkValidAddress,
