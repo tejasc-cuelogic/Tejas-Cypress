@@ -11,7 +11,6 @@ import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
 
-import Firework from '../components/investNow/agreement/components/FireworkAnimation';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
@@ -206,9 +205,9 @@ class offerDetails extends Component {
         {!isMobile &&
           <CampaignHeader {...this.props} />
         }
-        {campaignStore && campaignStore.showFireworkAnimation &&
+        {/* {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />
-        }
+        } */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>

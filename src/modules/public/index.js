@@ -12,8 +12,9 @@ import Auth from '../auth';
 import NotFound from '../shared/NotFound';
 import Referral from '../shared/Referral';
 import Helper from '../../helper/utility';
+import Firework from '../public/offering/components/investNow/agreement/components/FireworkAnimation';
 
-@inject('uiStore', 'navStore', 'userStore', 'businessAppStore')
+@inject('uiStore', 'navStore', 'userStore', 'businessAppStore', 'campaignStore')
 @observer
 export default class Public extends React.Component {
   state = {
@@ -73,6 +74,9 @@ export default class Public extends React.Component {
     const { visible } = this.state;
     return (
       <Aux>
+        {this.props.campaignStore.showFireworkAnimation &&
+          <Firework />
+        }
         <Responsive minWidth={768} as={Aux}>
           {hasHeader && (
             <Header
