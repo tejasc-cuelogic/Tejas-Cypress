@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Container, Button, Visibility, List } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
@@ -10,10 +10,15 @@ import Helper from '../../../../helper/utility';
 const isMobile = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore', 'navStore')
+@withRouter
 @observer
 export default class CampaignSecondaryMenu extends Component {
   handleUpdate = (e, { calculations }) => {
     this.props.navStore.setNavStatus(calculations);
+  }
+  handleInvestNowClick = () => {
+    this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
+    this.props.history.push(`${this.props.match.url}/invest-now`);
   }
   render() {
     const { campaign } = this.props.campaignStore;
@@ -42,7 +47,7 @@ export default class CampaignSecondaryMenu extends Component {
                 </Aux>
             }
               {!isClosed &&
-                <Button compact primary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
+                <Button compact primary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>

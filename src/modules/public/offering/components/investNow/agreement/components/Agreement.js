@@ -225,27 +225,14 @@ export default class Agreement extends React.Component {
                   </Message>
                 }
                 <div className="center-align mt-30">
-                  <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
                   <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
+                  <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
                 </div>
                 {this.state.showError &&
                   !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid &&
                   <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
                 }
               </Form>
-              {investmentFlowErrorMessage &&
-                <Message error className="mt-30">
-                  {investmentFlowErrorMessage}
-                </Message>
-              }
-              <div className="center-align mt-30">
-                <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
-                <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
-              </div>
-              {this.state.showError &&
-                !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid &&
-                <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
-              }
             </div>
           </Modal.Content>
         </Modal>

@@ -72,9 +72,13 @@ class News extends Component {
     if (this.props.authStore.newPasswordRequired) {
       this.props.history.push('/auth/change-password');
     } else {
-      const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+      const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
-        this.props.authStore.setCredentials({ email: email.value, password: password.value });
+        this.props.authStore.setCredentials({
+          email: email.value,
+          password: password.value,
+          givenName: givenName.value,
+        });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
           this.props.identityStore.requestOtpWrapper().then(() => {
             this.props.history.push('/auth/confirm-email');

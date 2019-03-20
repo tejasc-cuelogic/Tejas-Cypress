@@ -21,6 +21,10 @@ const isMobile = document.documentElement.clientWidth < 991;
 @withRouter
 @observer
 export default class CampaignSideBar extends Component {
+  handleInvestNowClick = () => {
+    this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
+    this.props.history.push(`${this.props.match.url}/invest-now`);
+  }
   render() {
     const { className, campaignStore } = this.props;
     const { campaign, navCountData } = campaignStore;
@@ -124,7 +128,7 @@ export default class CampaignSideBar extends Component {
               </p>
               <Divider hidden />
               {!isClosed &&
-                <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+                <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
               }
               <p>
                 ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)

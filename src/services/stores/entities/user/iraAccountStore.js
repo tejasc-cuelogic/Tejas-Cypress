@@ -497,7 +497,7 @@ class IraAccountStore {
         { name: field, value: fileData.fileName },
       );
       uiStore.setProgress();
-      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
         .then(() => {
           const currentStep = {
             name: 'Identity',

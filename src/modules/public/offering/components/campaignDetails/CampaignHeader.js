@@ -13,6 +13,10 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 export default class CampaignHeader extends Component {
+  handleInvestNowClick = () => {
+    this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
+    this.props.history.push(`${this.props.match.url}/invest-now`);
+  }
   render() {
     const { campaignStore } = this.props;
     const { campaign, offerStructure } = campaignStore;
@@ -28,6 +32,11 @@ export default class CampaignHeader extends Component {
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const isClosed = campaign.stage !== 'LIVE';
+    let rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const earlyBird = get(campaign, 'earlyBird') || null;
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
+    const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     return (
       <Aux>
         <div className="campaign-banner">
@@ -68,16 +77,15 @@ export default class CampaignHeader extends Component {
                           </Statistic.Value>
                           <Statistic.Label>Investors</Statistic.Label>
                         </Statistic>
-                        {(campaign && campaign.bonusRewards &&
-                        campaign.bonusRewards.length > 0 && campaign.earlyBird &&
-                        campaign.earlyBird.quantity && campaign.earlyBird.quantity > 0
-                        && campaign.earlyBird.available) &&
-                          <Statistic size="mini" className="basic">
-                            <Statistic.Value>
-                              {campaign.earlyBird.available}
-                            </Statistic.Value>
-                            <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                          </Statistic>
+                        {((rewardsTiers && rewardsTiers.length) ||
+                        (earlyBird && earlyBird.quantity > 0)) && isEarlyBirdRewards &&
+                          bonusRewards ?
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>
+                                {campaign.earlyBird.available}
+                              </Statistic.Value>
+                              <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                            </Statistic> : ''
                         }
                       </Statistic.Group>
                     </div>
@@ -157,7 +165,7 @@ export default class CampaignHeader extends Component {
                   }
                   <div className="center-align mt-20">
                     {!isClosed &&
-                      <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
+                      <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
                     }
                     <small>
                       ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
