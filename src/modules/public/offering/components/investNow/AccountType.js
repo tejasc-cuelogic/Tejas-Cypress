@@ -174,7 +174,7 @@ class AccountType extends Component {
   }
   render() {
     const {
-      // activeAccounts,
+      activeAccounts,
       frozenAccounts,
       partialAccounts,
       inActiveAccounts,
@@ -214,7 +214,7 @@ class AccountType extends Component {
       setPartialInvestmenSession();
     }
     if ((isRegulationCheck && (!accreditationData.ira)) || (!selectedAccountStatus) ||
-      (!showAccountList && !getCurrentInvestNowHealthCheck)) {
+      (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0)) {
       return <Spinner loaderMessage="Loading.." />;
     }
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);

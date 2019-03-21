@@ -11,7 +11,9 @@ import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const InvestmentList = (props) => {
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
-  const { investments, match, viewAgreement } = props;
+  const {
+    investments, match, viewAgreement, handleInvestNowClick,
+  } = props;
   const isActive = !props.inActiveItems.includes(props.listOf);
   return (
     <Accordion fluid styled className="card-style">
@@ -58,12 +60,9 @@ const InvestmentList = (props) => {
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        {props.listOf === 'pending' ? `${DataFormatter.diffDays(data && data.offering && data.offering.offering &&
-                          data.offering.offering.launch &&
-                          data.offering.offering.launch.terminationDate ?
-                          data.offering.offering.launch.terminationDate : null)} days`
+                        {props.listOf === 'pending' ? get(data, 'offering.closureSummary.hardCloseDate') ? `${DataFormatter.diffDays(get(data, 'offering.closureSummary.hardCloseDate'))} days` : 'N/A'
                           :
-                        <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.offering.launch.terminationDate')} />}
+                          get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.closureSummary.hardCloseDate')} /> : 'N/A'}
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' && (
@@ -72,12 +71,12 @@ const InvestmentList = (props) => {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
                             {!props.isAccountFrozen &&
-                              <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
+                              <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                             }
                             {DataFormatter.diffDays(data && data.offering &&
-                              data.offering.offering && data.offering.offering.launch &&
-                              data.offering.offering.launch.terminationDate ?
-                              data.offering.offering.launch.terminationDate : null) > 2 &&
+                              data.offering.closureSummary &&
+                              data.offering.closureSummary.processingDate ?
+                              data.offering.closureSummary.processingDate : null) > 2 &&
                               <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             }
                           </Button.Group>

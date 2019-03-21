@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
 import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
@@ -489,7 +489,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'investmentMultiple', 'startupPeriod', 'interestRate'], field) ? Math.abs(values.floatValue) || '' : values.floatValue;
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod', 'interestRate'], field) ? Math.abs(values.floatValue) || '' : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,
@@ -534,7 +534,7 @@ export class OfferingCreationStore {
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
-            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => {
               this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
               this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
               this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
@@ -650,7 +650,7 @@ export class OfferingCreationStore {
             { name: field, value: fileData.fileName },
           );
         }
-        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
           .then(() => {
             if (updateOnUpload) {
               this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} uploaded successfully.`);
@@ -1058,6 +1058,8 @@ export class OfferingCreationStore {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.closureSummary = get(payloadData[keyName].launch, 'terminationDate') ? { ...getOfferingById.closureSummary, processingDate: get(payloadData[keyName].launch, 'terminationDate') } : null;
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
           Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);

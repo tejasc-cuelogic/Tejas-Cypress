@@ -51,6 +51,16 @@ export const CONFIRM = {
   email: { ...COMMON.email },
   password: { ...COMMON.password },
   code: { ...COMMON.code },
+  givenName: {
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    label: 'First Name',
+    placeHolder: 'First Name',
+    customErrors: {
+      required: '* required field.',
+    },
+  },
 };
 
 export const SIGNUP = {

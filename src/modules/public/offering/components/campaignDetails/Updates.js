@@ -73,7 +73,7 @@ class Updates extends Component {
                       <HtmlEditor
                         readOnly
                         content={dataItem.content.length <= 805 ?
-                          dataItem.content : dataItem.content.substring(1, 805)}
+                          dataItem.content : dataItem.content.substring(0, 805)}
                       />
                       {dataItem.content.length > 805 ?
                         <a

@@ -16,6 +16,9 @@ export default class InvestNow extends React.Component {
   state = { submitLoading: false, isInvestmentUpdate: false };
 
   componentWillMount() {
+    if (!this.props.campaignStore.isInvestBtnClicked) {
+      this.props.history.push(this.props.refLink);
+    }
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.resetData();
     this.props.uiStore.setProgress(false);
@@ -38,6 +41,14 @@ export default class InvestNow extends React.Component {
   componentDidMount() {
     window.addEventListener('message', this.handleIframeTask);
   }
+  componentWillUnmount() {
+    const { changeInvest } = this.props;
+    const isUpdateScreen = changeInvest;
+    const reflectedURL = this.props.history.location.pathname;
+    if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
+      this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+    }
+  }
   handleIframeTask = (e) => {
     console.log(e.data);
   };
@@ -56,7 +67,9 @@ export default class InvestNow extends React.Component {
       this.props.investmentStore.setByDefaultRender(true);
       this.props.investmentStore.setFieldValue('disableNextbtn', false);
     } else if (step === 0) {
+      this.props.investmentStore.resetData();
       this.props.investmentStore.setByDefaultRender(true);
+      this.props.accreditationStore.resetUserAccreditatedStatus();
       this.handleStepChnageOnPreviousForAlert();
     }
     this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);

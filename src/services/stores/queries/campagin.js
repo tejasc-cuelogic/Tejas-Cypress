@@ -20,6 +20,8 @@ query getOfferingList($filters: OfferingFilterInputType){
         }
       }
       closureSummary {
+        processingDate
+        hardCloseDate
         totalInvestmentAmount
         totalInvestorCount
       }
@@ -320,6 +322,8 @@ export const campaignDetailsQuery = gql`
       }
     }
     closureSummary {
+      processingDate
+      hardCloseDate
       totalInvestmentAmount
       totalInvestorCount
       repayment {
@@ -463,6 +467,8 @@ query getOfferingById($id: ID) {
     isAvailablePublicly
     stage
     closureSummary {
+      processingDate
+      hardCloseDate
       totalInvestmentAmount
       repayment {
         completeDate
@@ -471,6 +477,7 @@ query getOfferingById($id: ID) {
         multiple
         revSharePercentage
         interestRate
+        businessOpenDate
       }
     }
     keyTerms {

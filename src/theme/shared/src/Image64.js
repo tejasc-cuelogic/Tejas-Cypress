@@ -8,7 +8,7 @@ import emptyImage2 from '../../../assets/images/gallery-placeholder-16-9.jpg';
 @inject('imageStore')
 @observer
 class Image64 extends React.Component {
-  state = { data: '' };
+  state = { data: this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1 };
   componentWillMount() {
     const emptyImage = this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (this.props.srcUrl) {
@@ -17,7 +17,7 @@ class Image64 extends React.Component {
         if (res.includes('data:')) {
           this.setState({ data: res || emptyImage });
         } else {
-          this.setState({ data: this.props.srcUrl || emptyImage });
+          this.setState({ data: imgUrl || emptyImage });
         }
       }).catch((err) => {
         console.log(err);
@@ -35,7 +35,7 @@ class Image64 extends React.Component {
         if (res.includes('data:')) {
           this.setState({ data: res || emptyImage });
         } else {
-          this.setState({ data: this.props.srcUrl || emptyImage });
+          this.setState({ data: imgUrl || emptyImage });
         }
       }).catch((err) => {
         console.log(err);

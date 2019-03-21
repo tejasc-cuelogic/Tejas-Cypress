@@ -168,6 +168,7 @@ export default class IdentityVerification extends Component {
       personalInfoMaskedChange,
       identityQuestionAnswerChange,
       setAddressFieldsForUserVerification,
+      signUpLoading,
     } = this.props.identityStore;
     const { errors, confirmBox, inProgress } = this.props.uiStore;
     const { givenName } = this.props.userStore.currentUser;
@@ -178,7 +179,7 @@ export default class IdentityVerification extends Component {
           <LegalDetails
             form={ID_VERIFICATION_FRM}
             name={givenName}
-            inProgress={inProgress}
+            inProgress={signUpLoading}
             close={this.handleCloseModal}
             change={personalInfoChange}
             maskChange={personalInfoMaskedChange}

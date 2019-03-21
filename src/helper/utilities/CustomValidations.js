@@ -37,7 +37,7 @@ class CustomValidations extends Component {
             undefined : true;
       });
       return value >= 20 && value <= 100 && total <= 100;
-    }, 'Minimum ownership should be 20% and max 100%.');
+    }, 'Minimum ownership should be 20% and max 100% or sum of all ownership percentage should not be greater than 100 ');
 
     Validator.register('hundreds', (value) => {
       const amount = parseFloat(value) || 0;

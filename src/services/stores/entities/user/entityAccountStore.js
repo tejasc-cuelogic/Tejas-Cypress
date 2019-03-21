@@ -640,7 +640,7 @@ class EntityAccountStore {
         { name: field, value: fileData.fileName },
       );
       uiStore.setProgress();
-      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
         .then(() => {
           const isPersonalForm = form === 'PERSONAL_INFO_FRM';
           if (this[form].meta.isValid) {

@@ -27,9 +27,13 @@ class InvestorSignup extends Component {
     if (this.props.authStore.newPasswordRequired) {
       this.props.history.push('/auth/change-password');
     } else {
-      const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+      const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
-        this.props.authStore.setCredentials({ email: email.value, password: password.value });
+        this.props.authStore.setCredentials({
+          email: email.value,
+          password: password.value,
+          givenName: givenName.value,
+        });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
           this.props.identityStore.requestOtpWrapper().then(() => {
             this.props.history.push('/auth/confirm-email');
@@ -121,7 +125,7 @@ class InvestorSignup extends Component {
               </Message>
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={errors || !SIGNUP_FRM.meta.isValid || !currentScore} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore} />
             </div>
           </Form>
         </Modal.Content>

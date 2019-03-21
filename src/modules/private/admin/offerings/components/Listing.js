@@ -109,9 +109,8 @@ export default class Listing extends Component {
                     </Table.Cell>
                     {stage === 'live' &&
                       <Table.HeaderCell>
-                        {offering.offering && offering.offering.launch &&
-                        offering.offering.launch.terminationDate ?
-                        DataFormatter.diffDays(get(offering, 'offering.launch.terminationDate'), false, true) < 0 ? get(offering, 'offering.launch.terminationDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.terminationDate')).diffText : 'N/A'
+                        {offering.closureSummary && offering.closureSummary.processingDate ?
+                        DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                         }
                       </Table.HeaderCell>
                     }
