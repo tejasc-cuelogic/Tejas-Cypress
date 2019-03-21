@@ -33,8 +33,7 @@ class KeyTermsDetails extends Component {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
     const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
-    const investmentMultipleTooltip = isNaN(toNumber(investmentMultiple) * 100) ?
-      0 : investmentMultiple;
+    const investmentMultipleTooltip = isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
@@ -99,7 +98,7 @@ class KeyTermsDetails extends Component {
               </Table.Cell>
               <Table.Cell>
                 <p>
-                  {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
+                  {get(KeyTerms, 'investmentMultiple') ? `Up to ${get(KeyTerms, 'investmentMultiple')}x` : 'NA'}
                 </p>
                 <HtmlEditor
                   readOnly
@@ -138,10 +137,10 @@ class KeyTermsDetails extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : 'NA'}
+                {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} months` : 'N/A'}
                 {
                     KeyTerms && KeyTerms.startupPeriod &&
-                    ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
+                    `, including a ${KeyTerms.startupPeriod}-month startup period for ramp up`
                   }
               </Table.Cell>
             </Table.Row>
