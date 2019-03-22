@@ -100,7 +100,7 @@ export default class IdentityVerification extends Component {
               .catch(() => { });
           } else {
             const defaultMsg = 'Please enter a valid residential address.';
-            this.props.uiStore.showErrorMessage(res.message || defaultMsg);
+            this.props.uiStore.showErrorMessage(res.message || defaultMsg, true);
             this.props.uiStore.setProgress(false);
           }
         });
