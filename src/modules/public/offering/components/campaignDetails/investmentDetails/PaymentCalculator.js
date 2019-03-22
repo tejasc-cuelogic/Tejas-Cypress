@@ -32,7 +32,7 @@ export default class PaymentCalculator extends Component {
           }}
         >
           <XAxis dataKey="month" />
-          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="left" />
+          <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
             formatter={(value, name, props) => this.formatY(props.payload[name])}
           />

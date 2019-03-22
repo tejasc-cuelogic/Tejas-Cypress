@@ -47,8 +47,8 @@ export default class IdentityVerification extends Component {
     this.props.identityStore.setFormError();
     if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
       this.props.identityStore.checkValidAddress()
-        .then((isAddressValid) => {
-          if (isAddressValid) {
+        .then((res) => {
+          if (res.valid) {
             const ssnValue = this.props.identityStore.ID_VERIFICATION_FRM.fields.ssn.value;
             this.props.identityStore.isSsnExist(ssnValue)
               .then((isSSNPresent) => {
@@ -99,8 +99,9 @@ export default class IdentityVerification extends Component {
               })
               .catch(() => { });
           } else {
+            const defaultMsg = 'Please enter a valid residential address.';
+            this.props.uiStore.showErrorMessage(res.message || defaultMsg);
             this.props.identityStore.setFieldValue('signUpLoading', false);
-            this.props.uiStore.showErrorMessage('Please enter a valid residential address.');
           }
         });
     }
