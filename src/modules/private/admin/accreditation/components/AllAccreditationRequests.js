@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
+import moment from 'moment';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
-import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
+import { InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Actions from './Actions';
 import ConfirmModel from './ConfirmModel';
 import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../services/constants/accreditation';
@@ -57,7 +58,7 @@ export default class AllAccreditationRequests extends Component {
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
+                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('mm-dd-yyyy') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
