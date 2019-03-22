@@ -31,7 +31,7 @@ export default class Experience extends Component {
         updateInvestorProfileData(currentStep).then(() => {
           const { signupStatus } = this.props.userDetailsStore;
           if (signupStatus.isMigratedFullAccount ||
-            (signupStatus.accStatus && signupStatus.accStatus.includes('FULL'))) {
+            signupStatus.investorAccStatus.includes('FULL')) {
             this.props.history.push('/app/summary');
           } else {
             this.props.history.push('/app/summary/account-creation');
