@@ -33,8 +33,8 @@ class KeyTermsDetails extends Component {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
     const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
-    const investmentMultipleTooltip = isNaN(toNumber(investmentMultiple) * 100)
-      ? 0 : investmentMultiple;
+    const investmentMultipleTooltip =
+    isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
