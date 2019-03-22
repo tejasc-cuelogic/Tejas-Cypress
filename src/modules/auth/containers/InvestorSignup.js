@@ -64,7 +64,7 @@ class InvestorSignup extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3" className="mb-0">
             Sign up as {' '}
-            {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
+            {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'an Investor' : 'Business Owner'}
           </Header>
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
