@@ -4,6 +4,21 @@ import React, { Component } from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Cell } from 'recharts';
 import Helper from '../../../../../../helper/utility';
 
+class CustomTooltip extends Component {
+  render() {
+    const { active, data } = this.props;
+    if (active) {
+      return (
+        <div className="custom-tooltip">
+          <p><b>{`${data.month} Month`}</b></p>
+          <p className="label" style={{ fontWeight: 'normal' }}>Projected total payment</p>
+          <p className="highlight-text">{Helper.CurrencyFormat(data['Projected total payment'])}</p>
+        </div>
+      );
+    }
+    return null;
+  }
+}
 export default class PaymentCalculator extends Component {
   state = {
     activeIndex: 0,
@@ -31,10 +46,10 @@ export default class PaymentCalculator extends Component {
             top: 5, right: 30, left: 20, bottom: 5,
           }}
         >
-          <XAxis dataKey="month" />
+          <XAxis interval={6} dataKey="month" />
           <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
-            formatter={(value, name, props) => this.formatY(props.payload[name])}
+            content={<CustomTooltip data={this.props.data[this.state.activeIndex]} />}
           />
           <Legend />
           <Bar dataKey="Projected total payment" barSize={7} onMouseOver={this.handleHover}>
