@@ -12,7 +12,6 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-
 @inject('accreditationStore')
 @withRouter
 @observer
