@@ -1,12 +1,14 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get } from 'lodash';
+import { pickBy, get, filter } from 'lodash';
 import money from 'money-math';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
+import { userDetailsStore } from '../../index';
 
 export class CampaignStore {
   @observable data = [];
@@ -25,6 +27,7 @@ export class CampaignStore {
   @observable principalAmt = 0;
   @observable totalPaymentChart = [];
   @observable showFireworkAnimation = false;
+  @observable earlyBirdCheck = null;
   @observable isInvestBtnClicked = false;
 
 
@@ -132,6 +135,26 @@ export class CampaignStore {
 
   @computed get getOfferingId() {
     return (this.campaign && this.campaign.id);
+  }
+
+  @action
+  isEarlyBirdExist() {
+    const offeringId = this.getOfferingId;
+    const { userDetails } = userDetailsStore;
+    const accountId = get(userDetails, 'id') || null;
+    this.earlyBirdCheck =
+    graphql({
+      client,
+      query: checkIfEarlyBirdExist,
+      variables: { offeringId, accountId },
+    });
+  }
+
+  @computed
+  get earlyBirdRewards() {
+    const currentCampagin = this.campaign;
+    const rewards = get(currentCampagin, 'bonusRewards') || [];
+    return filter(rewards, br => br.earlyBirdQuantity);
   }
 
   @computed get loading() {

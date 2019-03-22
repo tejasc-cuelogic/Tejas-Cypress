@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Button } from 'semantic-ui-react';
+import { capitalize } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
@@ -44,7 +45,7 @@ export default class Actions extends Component {
                 <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
               }
               {(type === 'individual' || type === 'ira') && isAccProcess &&
-                <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', 'Crowdpay account is Created successfully.')} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
+                <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
               }
               {type !== 'review' && isGsProcess &&
                 <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
