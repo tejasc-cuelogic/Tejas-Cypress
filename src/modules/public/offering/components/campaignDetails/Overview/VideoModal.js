@@ -18,7 +18,7 @@ class VideoModal extends Component {
       <Modal open onClose={this.handleClose} size="large" closeIcon className="video-modal">
         <div className={isTabletLand && 'mt-30'}>
           {videoUrl ?
-            <Embed active id={vimeoId} source="vimeo" /> : <InlineLoader text="No video is uploaded." className="bg-offwhite" />
+            <Embed autoplay active id={vimeoId} source="vimeo" /> : <InlineLoader text="No video is uploaded." className="bg-offwhite" />
           }
         </div>
       </Modal>
