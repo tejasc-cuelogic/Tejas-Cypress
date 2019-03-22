@@ -403,6 +403,14 @@ export class AuthStore {
   }
 
   @action
+  notifyApplicationError = (params) => {
+    clientPublic.mutate({
+      mutation: subscribeToNewsLetter,
+      variables: { ...params },
+    });
+  };
+
+  @action
   subscribeToNewsletter = () => new Promise((res, rej) => {
     if (!this.NEWSLETTER_FRM.meta.isValid) {
       this.resetForm('NEWSLETTER_FRM', null);
