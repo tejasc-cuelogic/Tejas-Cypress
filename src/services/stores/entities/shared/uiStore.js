@@ -187,7 +187,7 @@ export class UiStore {
   }
 
   @action
-  showErrorMessage = (message) => {
+  showErrorMessage = (message, override = false) => {
     const setErrorMessage = (
       `<span>
         There was an issue with the information you submitted.
@@ -196,7 +196,7 @@ export class UiStore {
       </span>`
     );
     this.setProgress(false);
-    this.setErrors(setErrorMessage);
+    this.setErrors(override ? (`<span>${message}<span>`) : setErrorMessage);
   }
 
   @action

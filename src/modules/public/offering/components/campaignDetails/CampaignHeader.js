@@ -27,6 +27,7 @@ export default class CampaignHeader extends Component {
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
+    const percentBefore = (minOffering / maxOffering) * 100;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percent = (collected / maxOffering) * 100;
     const address = campaign && campaign.keyTerms ?
@@ -119,7 +120,7 @@ export default class CampaignHeader extends Component {
                       </Statistic.Label>
                     }
                   </Statistic>
-                  <Progress percent={percent} size="tiny" color="green" />
+                  <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
                   <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
