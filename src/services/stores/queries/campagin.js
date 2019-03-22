@@ -40,6 +40,11 @@ query getOfferingList($filters: OfferingFilterInputType){
   }
 `;
 
+export const checkIfEarlyBirdExist = gql`
+query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accountId: String!) {
+  checkEarlyBirdByInvestorAccountAndOfferingId(offeringId: $offeringId, accountId: $accountId)
+}`;
+
 export const getOfferingsReferral = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
