@@ -52,7 +52,7 @@ class AccountType extends Component {
     resetAccreditationExpirayForm('ACCREDITATION_EXPIRY_FORM');
     if ((activeAccounts.length && (investAccTypes.values.length === 1 || this.props.changeInvest))
       || (investAccTypes.values.length > 1 && !getCurrentInvestNowHealthCheck)) {
-      if (this.props.investmentStore.getSelectedAccountTypeId) {
+      if (this.props.investmentStore.getSelectedAccountTypeId && !getCurrentInvestNowHealthCheck) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
@@ -87,9 +87,11 @@ class AccountType extends Component {
         sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
-    this.props.accreditationStore.getUserAccreditation().then(() => {
-      initiateAccreditation();
-    });
+    if (!this.props.accreditationStore.accreditationData.ira) {
+      this.props.accreditationStore.getUserAccreditation().then(() => {
+        initiateAccreditation();
+      });
+    }
   }
   componentDidMount() {
     const {
@@ -354,7 +356,7 @@ class AccountType extends Component {
                     </Link>
                     <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                   </Aux>
-                :
+                  :
                 null}
               {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
                 <Aux>

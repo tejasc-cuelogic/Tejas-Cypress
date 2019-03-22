@@ -304,6 +304,7 @@ export class InvestmentStore {
         this.setFieldValue('disableNextbtn', false);
         this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
         this.INVESTMONEY_FORM.meta.isValid = false;
+        uiStore.setProgress(false);
         resolve();
       } else {
         client
@@ -568,10 +569,13 @@ export class InvestmentStore {
   }
 
   @action
-  updateInvestmentLimits = () => new Promise((resolve) => {
+  updateInvestmentLimits = offeringId => new Promise((resolve) => {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
-      .updateInvestmentLimits(data, this.getSelectedAccountTypeId, userDetailsStore.currentUserId)
+      .updateInvestmentLimits(
+        data, this.getSelectedAccountTypeId,
+        userDetailsStore.currentUserId, true, offeringId,
+      )
       .then(() => resolve());
   })
 
@@ -581,6 +585,8 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
     this.setByDefaultRender(true);
+    // investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+    // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
     this.setFieldValue('estReturnVal', '-');
   }

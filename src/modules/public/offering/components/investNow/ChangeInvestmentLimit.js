@@ -15,14 +15,19 @@ class ChangeInvestmentLimit extends Component {
     this.props.investmentStore.setInvestmentLimitData();
   }
   changeInvestmentLimit = () => {
-    this.props.investmentStore.updateInvestmentLimits().then(() => {
+    const offeringId =
+      this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
+    this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
       Helper.toast('Investment limit changed successfully.', 'success');
       this.handleCloseModal();
     });
   }
   handleCloseModal = () => {
+    console.log(this.props);
+    console.log(this.props.refLink);
     if (this.props.changeInvestment) {
-      this.props.history.push(`${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`);
+      const redirectPath = this.props.match.url.includes('agreement') ? `${this.props.refLink}/${this.props.match.params.offeringId}/agreement` : `${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`;
+      this.props.history.push(redirectPath);
     } else {
       this.props.history.push(this.props.refLink);
     }
@@ -75,9 +80,9 @@ class ChangeInvestmentLimit extends Component {
               ))
             }
             {errors &&
-            <Message error className="mt-30">
-              <ListErrors errors={[errors]} />
-            </Message>
+              <Message error className="mt-30">
+                <ListErrors errors={[errors]} />
+              </Message>
             }
             <div className="center-align mt-30">
               <Button.Group>
