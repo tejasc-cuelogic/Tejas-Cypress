@@ -774,6 +774,9 @@ export class IdentityStore {
       variables: payLoad,
       onFetch: (res) => {
         if (result && !result.loading) {
+          if (res.checkValidInvestorAddress && res.checkValidInvestorAddress.valid === false) {
+            this.setFieldValue('signUpLoading', false);
+          }
           resolve(res.checkValidInvestorAddress);
         }
       },
