@@ -260,7 +260,6 @@ export class IdentityStore {
   verifyUserIdentity = () => {
     this.ID_VERIFICATION_FRM.response = {};
     this.setCipStatus('');
-    uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -276,30 +275,26 @@ export class IdentityStore {
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
             this.updateUserInfo().then(() => {
-              uiStore.setProgress(false);
               resolve();
             }).catch(() => {
-              uiStore.setProgress(false);
               this.setFieldValue('signUpLoading', false);
               reject();
             });
           } else {
+            this.setFieldValue('signUpLoading', false);
             uiStore.setErrors(data.data.verifyCIPIdentity.message);
           }
         })
         .catch((err) => {
           if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.setProgress(false);
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('HARD_FAIL');
             this.updateUserInfo().then(() => {
-              uiStore.setProgress(false);
               resolve();
             }).catch(() => {
-              uiStore.setProgress(false);
               reject();
             });
           // reject(err);
@@ -405,11 +400,11 @@ export class IdentityStore {
           }
           this.setRequestOtpResponse(result.data.requestOtp);
           Helper.toast(`Verification ${requestMode}.`, 'success');
-          this.setFieldValue('signUpLoading', false);
           resolve();
         })
         .catch((err) => {
           // uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          this.setFieldValue('signUpLoading', false);
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
@@ -765,7 +760,6 @@ export class IdentityStore {
       state: state.value,
       zipCode: zipCode.value,
     };
-    uiStore.setProgress();
     this.setFieldValue('signUpLoading', true);
     const result = graphql({
       client,
@@ -774,6 +768,9 @@ export class IdentityStore {
       variables: payLoad,
       onFetch: (res) => {
         if (result && !result.loading) {
+          if (res.checkValidInvestorAddress && res.checkValidInvestorAddress.valid === false) {
+            this.setFieldValue('signUpLoading', false);
+          }
           resolve(res.checkValidInvestorAddress);
         }
       },

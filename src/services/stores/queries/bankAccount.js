@@ -8,6 +8,7 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
       accountId
       firstName
       lastName
+      accountType
       linkedBank {
         changeRequest {
           accountNumber
