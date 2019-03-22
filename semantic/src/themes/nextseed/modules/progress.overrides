@@ -31,4 +31,30 @@
 // .offer-details
 .campaign-banner .ui.progress {
     margin-bottom: @15px;
+    >.label {
+        top: 0;
+    }
+    .sub-progress {
+        background: @primary-one-darken;
+        display: block;
+        position: absolute;
+        top: -2px;
+        left: 0;
+        height: 6px;
+        border-radius: 4px;
+    }
+}
+.offering-intro .ui.progress {
+    >.label {
+        top: 0;
+    }
+    .sub-progress {
+        background: @primary-one-darken;
+        display: block;
+        position: absolute;
+        top: -2px;
+        left: 0;
+        height: 6px;
+        border-radius: 4px;
+    }
 }
