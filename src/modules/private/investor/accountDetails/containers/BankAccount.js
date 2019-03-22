@@ -22,6 +22,9 @@ export default class BankAccount extends Component {
 
   render() {
     const { plaidAccDetails } = this.props.bankAccountStore;
+    const NO_PERMISSION_MSG = `Please contact
+  <a href="mailto:support@nextseed.com">support@nextseed.com</a>
+  to request a transfer of your IRA funds.`;
     const { userDetails } = this.props.userDetailsStore;
     const pendingAccoungDetails = plaidAccDetails && plaidAccDetails.changeRequest &&
       plaidAccDetails.changeRequest.status !== 'REQUEST_CANCELLATION' ? plaidAccDetails.changeRequest : null;
@@ -111,7 +114,7 @@ export default class BankAccount extends Component {
             </Grid>
           </Aux> :
           <section className="center-align">
-            <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content="Linked Bank accounts are not available for an IRA Account with funding by Check" /></h4>
+            <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={NO_PERMISSION_MSG} /></h4>
           </section>
         }
       </div>

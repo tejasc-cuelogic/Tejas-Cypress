@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { findLastIndex, toInteger, get } from 'lodash';
+import { findLastIndex, toInteger, get, uniqWith, isEqual } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
@@ -26,17 +26,17 @@ class InvestmentTimeline extends Component {
     const { getInvestor } = this.props.portfolioStore;
     const minInvestAmt = get(campaign, 'keyTerms.minInvestAmt') || null;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
-    const myInvestment = get(getInvestor, 'myInvestment') || 0;
+    const myInvestment = get(getInvestor, 'myInvestment') ? parseFloat(get(getInvestor, 'myInvestment').replace(/,/, '')) : 0;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const investBonusReward = rewardsTiers.filter(r =>
       bonusRewards.filter(b => b.tiers.includes(r)).length);
     if (parseFloat(myInvestment) < (investBonusReward.length && parseFloat(investBonusReward[0]))) {
       investBonusReward.splice(0, 0, minInvestAmt);
     }
-    rewardsTiers = investBonusReward;
+    rewardsTiers = uniqWith(investBonusReward, isEqual).sort((a, b) => a - b);
     const progress =
-      investBonusReward.length ? calcSmartProgress(investBonusReward, myInvestment) : 0;
-    const calculatedMargin = calMargin(investBonusReward);
+      investBonusReward.length ? calcSmartProgress(rewardsTiers, myInvestment) : 0;
+    const calculatedMargin = calMargin(rewardsTiers);
     return (
       rewardsTiers && rewardsTiers.length ?
         <Aux>
