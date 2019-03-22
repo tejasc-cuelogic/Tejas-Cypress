@@ -1,5 +1,6 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 // TODO: Improve the component
@@ -7,6 +8,7 @@ import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 const catchErrorBoundry = ['production', 'demo'].includes(REACT_APP_DEPLOY_ENV);
 
 @inject('authStore')
+@withRouter
 @observer
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -21,7 +23,6 @@ class ErrorBoundary extends React.Component {
     console.log('Error payload:: ', error);
     console.log('Error info:: ', info);
     if (catchErrorBoundry) {
-      window.catching = true;
       try {
         const params = {
           subject: 'Application error occured',
@@ -31,9 +32,7 @@ class ErrorBoundary extends React.Component {
       } catch (e) {
         console.log(e);
       }
-      setTimeout(() => {
-        window.location = window.location.origin;
-      }, 1000);
+      window.location = window.location.origin;
     }
   }
 
@@ -53,8 +52,7 @@ class ErrorBoundary extends React.Component {
         </div>
       );
     }
-    return (catchErrorBoundry && this.state.hasError) || window.catching ?
-      null : this.props.children;
+    return (catchErrorBoundry && this.state.hasError) ? null : this.props.children;
   }
 }
 
