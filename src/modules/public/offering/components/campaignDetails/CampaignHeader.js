@@ -68,10 +68,13 @@ export default class CampaignHeader extends Component {
                     }
                     <div className="offer-stats">
                       <Statistic.Group>
-                        <Statistic size="mini" className="basic">
-                          <Statistic.Value>{diff || 0}</Statistic.Value>
-                          <Statistic.Label>Days left</Statistic.Label>
-                        </Statistic>
+                        {diff ?
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>{diff}</Statistic.Value>
+                            <Statistic.Label>Days left</Statistic.Label>
+                          </Statistic>
+                          : ''
+                        }
                         <Statistic size="mini" className="basic">
                           <Statistic.Value>
                             {get(campaign, 'closureSummary.totalInvestorCount') || 0}

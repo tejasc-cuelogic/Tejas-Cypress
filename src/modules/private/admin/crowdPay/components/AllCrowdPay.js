@@ -5,7 +5,7 @@ import moment from 'moment';
 import { kebabCase, lowerCase } from 'lodash';
 import { withRouter, Route } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
-import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
+import { InlineLoader, NsPagination } from './../../../../../theme/shared';
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Actions from './Actions';
 import MessageModal from '../components/MessageModal';
@@ -92,7 +92,7 @@ export default class AllCrowdPay extends Component {
                     }
                     <Table.Cell>
                       {account.created && account.created.date ?
-                        <DateTimeFormat fromNow unix datetime={account.created.date} />
+                        moment.unix(account.created.date).format('MM-DD-YYYY')
                         :
                         <p className="intro-text">N/A</p>
                       }
@@ -109,7 +109,7 @@ export default class AllCrowdPay extends Component {
                     }
                     {type === 'individual' &&
                     <Table.Cell>
-                      {account.processing && account.processing.gs && account.processing.gs.date ? moment(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
+                      {account.processing && account.processing.gs && account.processing.gs.date ? moment.unix(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     }
                     {type === 'ira' ?
