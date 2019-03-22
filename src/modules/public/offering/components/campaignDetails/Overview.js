@@ -13,7 +13,7 @@ import IssuerStatement from './Overview/IssuerStatement';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
-const topsAsPerWindowheight = window.innerHeight > 1000 ? 550 : 150;
+const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 @inject('campaignStore', 'navStore')
 @observer
 class Overview extends Component {
