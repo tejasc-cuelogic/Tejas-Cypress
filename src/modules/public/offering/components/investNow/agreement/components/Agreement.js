@@ -60,6 +60,7 @@ export default class Agreement extends React.Component {
     if (this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
       this.props.investmentStore.finishInvestment().then((investmentStatus) => {
         if (investmentStatus) {
+          console.log(this.props);
           this.props.history.push('congratulation');
         }
       });
