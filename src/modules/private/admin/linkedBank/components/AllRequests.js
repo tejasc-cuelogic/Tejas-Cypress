@@ -1,8 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
-import { Card, Table, Button } from 'semantic-ui-react';
+import { get, lowerCase } from 'lodash';
+import { Card, Table, Button, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
@@ -48,6 +48,7 @@ export default class AllRequests extends Component {
               <Table.Row>
                 <Table.HeaderCell>Investor</Table.HeaderCell>
                 <Table.HeaderCell>Requested Date</Table.HeaderCell>
+                <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
                 <Table.HeaderCell>GS Transaction #</Table.HeaderCell>
                 <Table.HeaderCell>Account</Table.HeaderCell>
@@ -68,6 +69,11 @@ export default class AllRequests extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <DateTimeFormat datetime={req.dateRequested} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      {req.accountType ?
+                        <Icon size="large" className={`ns-${lowerCase(req.accountType)}-line`} color="green" /> : 'N/A'
+                      }
                     </Table.Cell>
                     <Table.Cell>
                       <p>{req.linkedBank && req.linkedBank.changeRequest &&
