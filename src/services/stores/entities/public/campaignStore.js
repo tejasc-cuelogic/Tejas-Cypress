@@ -231,14 +231,16 @@ export class CampaignStore {
       const { updates, comments } = this.campaign;
       res.updates = updates && updates.length ? updates.length : 0;
       // eslint-disable-next-line arrow-body-style
-      comments.map((c) => {
-        if (c.scope === 'PUBLIC' &&
-        ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
-          (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
-          sum = sum + 1 + (get(c, 'threadComment.length') || 0);
-        }
-        return null;
-      });
+      if (comments) {
+        comments.map((c) => {
+          if (c.scope === 'PUBLIC' &&
+          ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
+            (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+            sum = sum + 1 + (get(c, 'threadComment.length') || 0);
+          }
+          return null;
+        });
+      }
     }
     res.comments = sum;
     return res;

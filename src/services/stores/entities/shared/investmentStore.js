@@ -560,7 +560,7 @@ export class InvestmentStore {
     const offeringInvestedAmount = investedAmount || 0;
     const rewardsTiers = campaign && campaign.rewardsTiers &&
       campaign.rewardsTiers.sort((a, b) => b - a);
-    const matchTier = rewardsTiers.find(t => offeringInvestedAmount >= t);
+    const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
     let bonusRewards = [];
     bonusRewards = campaign && campaign.bonusRewards
       .filter(reward => reward.tiers.includes(matchTier));
