@@ -98,7 +98,6 @@ export default class AddWithdrawFund extends Component {
                       containerclassname="fund-amount"
                       currency
                       fielddata={{ value: availableWithdrawCash }}
-                      allowNegative={false}
                     />
                   </div>
                 }
@@ -114,7 +113,6 @@ export default class AddWithdrawFund extends Component {
                     currency
                     fielddata={TRANSFER_FRM.fields.amount}
                     changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
-                    allowNegative={false}
                   />
                 }
                 {showConfirmPreview ?

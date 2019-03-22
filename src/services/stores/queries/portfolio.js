@@ -27,6 +27,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            investmentMultiple
+            interestRate
           }
           offering {
             launch {
@@ -54,6 +56,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            investmentMultiple
+            interestRate
           }
           offering {
             launch {
@@ -81,6 +85,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            investmentMultiple
+            interestRate
           }
           offering {
             launch {
