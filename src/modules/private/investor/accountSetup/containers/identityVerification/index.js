@@ -54,6 +54,7 @@ export default class IdentityVerification extends Component {
               .then((isSSNPresent) => {
                 if (isSSNPresent) {
                   // set error
+                  this.props.identityStore.setFieldValue('signUpLoading', false);
                   this.props.uiStore.showErrorMessage('The SSN entered is already in use.');
                   throw new Error('Stop the execution');
                 }
@@ -84,7 +85,7 @@ export default class IdentityVerification extends Component {
                           this.props.history.push('/app/summary/identity-verification/3');
                         })
                           .catch((err) => {
-                            this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+                            this.props.uiStore.showErrorMessage(err.graphQLErrors[0].message);
                           });
                       }
                     } else {
@@ -94,14 +95,13 @@ export default class IdentityVerification extends Component {
                       }
                       this.props.history.push(route);
                     }
-                    this.props.uiStore.setProgress(false);
                   });
               })
               .catch(() => { });
           } else {
             const defaultMsg = 'Please enter a valid residential address.';
             this.props.uiStore.showErrorMessage(res.message || defaultMsg, true);
-            this.props.uiStore.setProgress(false);
+            this.props.identityStore.setFieldValue('signUpLoading', false);
           }
         });
     }
