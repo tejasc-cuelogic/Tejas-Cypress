@@ -3,13 +3,12 @@ import Aux from 'react-aux';
 import { Header, Container, Grid, Statistic, Responsive, Divider } from 'semantic-ui-react';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const Mission = props => (
+const Mission = () => (
   <Aux>
     <section>
       <Container>
         <Responsive maxWidth={767} as={Aux}>
           <Header as="h2">Everyone thrives when we invest in each other.</Header>
-          {props.a.b}
           <Divider section />
         </Responsive>
         <Grid centered stackable>
