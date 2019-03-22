@@ -880,5 +880,9 @@ export class AccreditationStore {
   setDefaultCheckboxVal = () => {
     this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = [true];
   }
+  @action
+  resetAccreditationObject = () => {
+    this.accreditationData = { ira: null, individual: null, entity: null };
+  }
 }
 export default new AccreditationStore();

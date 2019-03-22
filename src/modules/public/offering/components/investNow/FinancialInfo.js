@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
@@ -53,14 +54,14 @@ class FinancialInfo extends Component {
     const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
       getInvestorAccountById.offering.keyTerms &&
       getInvestorAccountById.offering.keyTerms.shorthandBusinessName ? getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails && offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ? offeringDetails.keyTerms.shorthandBusinessName : '-';
-
+    const offeringId = get(this.props, 'match.params.offeringId') ? get(this.props, 'match.params.offeringId') : get(getInvestorAccountById, 'offering.id') ? get(getInvestorAccountById, 'offering.id') : offeringDetails && offeringDetails.id;
     if (!getCurrentInvestNowHealthCheck) {
       return <Spinner loaderMessage="Loading.." />;
     }
 
     return (
       <Aux>
-        <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest ?'}</Header>
         {this.props.changeInvest &&
           <Aux>
