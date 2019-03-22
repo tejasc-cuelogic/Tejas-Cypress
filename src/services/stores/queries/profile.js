@@ -239,6 +239,9 @@ export const checkValidAddress = gql`
       city: $city,
       state: $state,
       zipCode: $zipCode
-    )
+    ){
+      valid
+      message
+    }
   }
 `;
