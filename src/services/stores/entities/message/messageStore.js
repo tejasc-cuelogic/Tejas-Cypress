@@ -101,14 +101,12 @@ export class NewMessage {
       .mutate({
         mutation: this.editMessageId ? updateOfferingCommentsInfo : createOfferingComments,
         variables: payload,
-        refetchQueries: [{
-          query: offeringCommentsByOfferId,
-          variables: { offerId: offeringCreationStore.currentOfferingId },
-        }],
       })
       .then(() => {
         if (!offeringCreationStore.currentOfferingId) {
           campaignStore.getCampaignDetails(campaignSlug, false);
+        } else {
+          this.initRequest();
         }
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
