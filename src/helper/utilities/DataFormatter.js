@@ -101,6 +101,9 @@ class DataFormatter {
   fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
   getDateFromNow = afterDays =>
     new Date((new Date()).getTime() - (afterDays * 86400000)).toISOString();
+
+  // eslint-disable-next-line no-useless-escape
+  validateEmail = email => email.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm);
 }
 
 export default new DataFormatter();

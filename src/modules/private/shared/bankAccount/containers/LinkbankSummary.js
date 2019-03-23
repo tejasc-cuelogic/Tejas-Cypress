@@ -30,7 +30,7 @@ export default class LinkbankSummary extends React.Component {
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Linked  Bank</Header>
+        <Header as="h3" textAlign="center">Linked Bank</Header>
         <div className="field-wrap">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
