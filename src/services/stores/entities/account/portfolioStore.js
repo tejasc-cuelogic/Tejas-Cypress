@@ -59,6 +59,7 @@ export class PortfolioStore {
   getSummary = () => {
     this.accSummary = graphql({
       client,
+      fetchPolicy: 'network-only',
       query: getUserAccountSummary,
       variables: { userId: userStore.currentUser.sub },
     });
