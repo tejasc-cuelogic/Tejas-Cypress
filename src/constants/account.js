@@ -215,6 +215,21 @@ export const IND_ADD_FUND = {
   },
 };
 
+export const ENTITY_ADD_FUND = {
+  value: {
+    value: '',
+    key: 'value',
+    error: undefined,
+    rule: 'optional|numeric|min:5000|max:25000',
+    label: 'Deposit Amount',
+    maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least 5000.',
+      max: 'The deposit amount should be at less than 25000.',
+    },
+  },
+};
+
 export const IND_BANK_ACC_SEARCH = {
   bankName: {
     value: '',
@@ -368,7 +383,7 @@ export const ENTITY_FIN_INFO = {
   annualIncome: {
     key: 'annualIncome',
     value: '',
-    label: 'Entity Annual Income',
+    label: 'Entity Annual Revenue',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
