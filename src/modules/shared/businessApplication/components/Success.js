@@ -108,6 +108,7 @@ class Success extends Component {
                             key="password"
                             name="password"
                             type="password"
+                            userInputs={[fields.email.value]}
                             iconDisplay
                             minLength={8}
                             minScore={4}
