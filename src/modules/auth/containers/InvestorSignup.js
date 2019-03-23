@@ -108,6 +108,10 @@ class InvestorSignup extends Component {
               inputProps={{
                 name: 'password', autoComplete: 'off', placeholder: 'Password',
               }}
+              userInputs={
+                [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
+                  SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
+              }
               changed={signupChange}
               fielddata={SIGNUP_FRM.fields.password}
               showRequiredError
