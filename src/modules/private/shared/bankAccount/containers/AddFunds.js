@@ -106,7 +106,10 @@ export default class AddFunds extends Component {
             }
             <Button primary size="large" className="relaxed" content="Confirm" disabled={isValid} />
           </Form>
-          <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+          {this.props.accountStore.investmentAccType !== 'entity' ?
+            <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+            : ''
+          }
         </div>
       </Aux>
     );
