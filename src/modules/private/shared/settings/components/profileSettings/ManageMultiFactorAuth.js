@@ -17,13 +17,13 @@ export default class ManageMultiFactorAuth extends Component {
   submit = (e) => {
     e.preventDefault();
     this.props.multiFactorAuthStore.updateMfaModeType().then(() => {
-      this.props.history.goBack();
+      this.props.history.push(this.props.refLink);
     });
   }
 
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.push(this.props.refLink);
   }
   render() {
     const {
