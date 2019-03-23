@@ -265,13 +265,15 @@ class InvestorProfileStore {
           variables: formPayload,
         })
         .then(action(() => {
-          // Helper.toast('Investor profile updated successfully.', 'success');
-          if (currentStep.name === 'Investment Experience') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
           FormValidator.setIsDirty(this[currentStep.form], false);
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          resolve();
+          if (currentStep.name === 'Investment Experience') {
+            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              res();
+            });
+          } else {
+            resolve();
+          }
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
