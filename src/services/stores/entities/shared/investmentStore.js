@@ -559,8 +559,12 @@ export class InvestmentStore {
   investmentBonusRewards = (investedAmount) => {
     const { campaign } = campaignStore;
     const offeringInvestedAmount = investedAmount || 0;
-    const rewardsTiers = campaign && campaign.rewardsTiers &&
-      campaign.rewardsTiers.sort((a, b) => b - a);
+    let rewardsTiers = [];
+    campaign.bonusRewards.map((reward) => {
+      rewardsTiers = reward.tiers.concat(rewardsTiers);
+      return false;
+    });
+    rewardsTiers = [...new Set(toJS(rewardsTiers))].sort((a, b) => b - a);
     const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
     let bonusRewards = [];
     bonusRewards = campaign && campaign.bonusRewards
