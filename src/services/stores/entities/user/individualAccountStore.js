@@ -4,7 +4,7 @@ import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../in
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { submitinvestorAccount, upsertInvestorAccount } from '../../queries/account';
+import { submitinvestorAccount, upsertInvestorAccount, createIndividualGoldStarInvestor } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 // import userStore from '../userStore';
@@ -27,6 +27,22 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
+  createIndividualGoldStarInvestor = accountId => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: createIndividualGoldStarInvestor,
+        variables: {
+          userId: userStore.currentUser.sub,
+          accountId,
+        },
+      })
+      .then(res => resolve(res))
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        reject(err);
+      });
+  });
+
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
     const payLoad = {
@@ -41,17 +57,22 @@ class IndividualAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then((res) => {
-            uiStore.setProgress(false);
-            if (res.data.submitInvestorAccount) {
-              this.setFieldValue('showProcessingModal', true);
-            }
-            bankAccountStore.resetStoreData();
-            this.isFormSubmitted = true;
-            Helper.toast('Individual account submitted successfully.', 'success');
-            resolve();
-          })
-          .catch((err) => {
+          .then(() => {
+            this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
+              uiStore.setProgress(false);
+              if (!res.data.createIndividualGoldStarInvestor) {
+                this.setFieldValue('showProcessingModal', true);
+              }
+              bankAccountStore.resetStoreData();
+              this.isFormSubmitted = true;
+              Helper.toast('Individual account submitted successfully.', 'success');
+              resolve();
+            }).catch((err) => {
+              uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              uiStore.setProgress(false);
+              reject();
+            });
+          }).catch((err) => {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();

@@ -18,7 +18,6 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    console.log(value);
     return moment(value, 'MM/DD/YYYY').isAfter('12-31-1909');
   },
   'Invalid Date',
@@ -292,6 +291,7 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     fileName: '',
     rule: '',
+    meta: '',
     label: '',
     src: '',
     base64String: '',

@@ -7,7 +7,7 @@ import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, in
 import { linkBankRequestPlaid, linkBankRequestManual, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
-  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
+  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
@@ -22,6 +22,7 @@ export class BankAccountStore {
   @observable showAddFunds = false;
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
+  @observable formEntityAddFunds = Validator.prepareFormObject(ENTITY_ADD_FUND);
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable filters = false;
@@ -89,9 +90,14 @@ export class BankAccountStore {
   };
 
   @action
-  addFundChange = (values, field) => {
-    this.formAddFunds =
-      Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
+  addFundChange = (values, field, accType = '') => {
+    if (accType === 'entity') {
+      this.formEntityAddFunds =
+      Validator.onChange(this.formEntityAddFunds, { name: field, value: values.floatValue });
+    } else {
+      this.formAddFunds =
+        Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
+    }
   };
 
   @action
@@ -119,11 +125,24 @@ export class BankAccountStore {
   }
 
   @action
-  validateAddfundsAmount = () => {
-    const { value } = this.formAddFunds.fields.value;
-    if (parseFloat(value, 0) === -1) {
-      this.shouldValidateAmount = true;
-      this.resetAddFundsForm();
+  resetEntityAddFundsForm() {
+    Validator.resetFormData(this.formEntityAddFunds);
+  }
+
+  @action
+  validateAddfundsAmount = (accType = '') => {
+    if (accType === 'entity') {
+      const { value } = this.formEntityAddFunds.fields.value;
+      if (parseFloat(value, 0) === -1) {
+        this.shouldValidateAmount = true;
+        this.resetEntityAddFundsForm();
+      }
+    } else {
+      const { value } = this.formAddFunds.fields.value;
+      if (parseFloat(value, 0) === -1) {
+        this.shouldValidateAmount = true;
+        this.resetAddFundsForm();
+      }
     }
   }
 
@@ -196,7 +215,7 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-    const { value } = this.formAddFunds.fields.value;
+    const { value } = accountStore.investmentAccType === 'entity' ? this.formEntityAddFunds.fields.value : this.formAddFunds.fields.value;
     accountAttributes.initialDepositAmount = this.depositMoneyNow && value !== '' ?
       value : -1;
     return accountAttributes;
@@ -250,6 +269,7 @@ export class BankAccountStore {
   resetLinkBank = () => {
     Validator.resetFormData(this.formLinkBankManually);
     Validator.resetFormData(this.formAddFunds);
+    Validator.resetFormData(this.formEntityAddFunds);
     if (accountStore.investmentAccType !== 'ira') {
       this.plaidAccDetails = {};
     } else if (accountStore.investmentAccType === 'ira' && iraAccountStore.stepToBeRendered < 3) {
@@ -322,15 +342,27 @@ export class BankAccountStore {
 
   @action
   validateAddFunds = () => {
-    map(this.formAddFunds.fields, (value) => {
-      const { key } = value;
-      const { errors } = validationService.validate(value);
-      Validator.setFormError(
-        this.formAddFunds,
-        key,
-        errors && errors[key][0],
-      );
-    });
+    if (accountStore.investmentAccType !== 'entity') {
+      map(this.formAddFunds.fields, (value) => {
+        const { key } = value;
+        const { errors } = validationService.validate(value);
+        Validator.setFormError(
+          this.formAddFunds,
+          key,
+          errors && errors[key][0],
+        );
+      });
+    } else {
+      map(this.formEntityAddFunds.fields, (value) => {
+        const { key } = value;
+        const { errors } = validationService.validate(value);
+        Validator.setFormError(
+          this.formEntityAddFunds,
+          key,
+          errors && errors[key][0],
+        );
+      });
+    }
   }
 
   @action
@@ -439,6 +471,7 @@ export class BankAccountStore {
   resetStoreData = () => {
     this.resetFormData('formBankSearch');
     this.resetFormData('formAddFunds');
+    this.resetFormData('formEntityAddFunds');
     this.resetFormData('formLinkBankManually');
     this.bankLinkInterface = 'list';
     this.plaidAccDetails = {};

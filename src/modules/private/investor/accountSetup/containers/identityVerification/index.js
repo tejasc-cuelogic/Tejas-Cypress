@@ -95,7 +95,7 @@ export default class IdentityVerification extends Component {
                       }
                       this.props.history.push(route);
                     }
-                  });
+                  }).catch(() => { });
               })
               .catch(() => { });
           } else {
