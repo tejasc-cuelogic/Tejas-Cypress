@@ -266,12 +266,12 @@ class InvestorProfileStore {
         })
         .then(action(() => {
           FormValidator.setIsDirty(this[currentStep.form], false);
-          this.setStepToBeRendered(currentStep.stepToBeRendered);
           if (currentStep.name === 'Investment Experience') {
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
               resolve();
             });
           } else {
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
             resolve();
           }
         }))
