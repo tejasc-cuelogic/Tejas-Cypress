@@ -479,7 +479,9 @@ export class IdentityStore {
         .then((result) => {
           if (result.data.verifyOtp) {
             this.updateUserPhoneDetails();
-            resolve();
+            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              resolve();
+            });
           } else {
             const error = {
               message: 'Please enter correct verification code.',
