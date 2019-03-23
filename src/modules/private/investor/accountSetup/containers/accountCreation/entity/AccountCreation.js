@@ -60,7 +60,7 @@ export default class AccountCreation extends React.Component {
       isValidEntityForm, showProcessingModal,
     } = this.props.entityAccountStore;
     const {
-      formAddFunds, plaidAccDetails, formLinkBankManually,
+      formEntityAddFunds, plaidAccDetails, formLinkBankManually,
       isPlaidDirty, linkbankSummary, bankSummarySubmit,
       stepbankSummary,
 
@@ -120,7 +120,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Link bank',
         component: <Plaid />,
-        isValid: (formAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : (stepToBeRendered === 5 || stepToBeRendered > 5) ? 'error' : '',
+        isValid: (formEntityAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : (stepToBeRendered === 5 || stepToBeRendered > 5) ? 'error' : '',
         isDirty: isPlaidDirty,
         validate: validationActions.validateLinkBankForm,
         disableNextButton: !linkbankSummary,

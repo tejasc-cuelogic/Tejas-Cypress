@@ -4,7 +4,7 @@ import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import { UserAvatar, InlineLoader } from '../../../../../theme/shared';
+import { Image64, InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('campaignStore')
@@ -25,6 +25,7 @@ class Updates extends Component {
     const updates = campaign && campaign.updates;
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
+    const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mb-30 anchor-wrap">
@@ -49,20 +50,11 @@ class Updates extends Component {
                   <Item.Group>
                     <Item>
                       <div className="ui image">
-                        <UserAvatar
-                          UserInfo={dataItem.actingUserInfo && dataItem.actingUserInfo.info ? {
-                            firstName: dataItem.actingUserInfo.info.firstName,
-                            lastName: dataItem.actingUserInfo.info.lastName,
-                            roles: ['investor'],
-                            avatarUrl: dataItem.actingUserInfo.info.avatar ?
-                              dataItem.actingUserInfo.info.avatar.url : null,
-                          } : {
-                              firstName: 'T',
-                              lastName: 'T',
-                              roles: ['investor'],
-                              avatarUrl: null,
-                            }}
-                        />
+                        {companyAvatarUrl && companyAvatarUrl.length ?
+                          <div className="avatar-image">
+                            <Image64 size="mini" srcUrl={companyAvatarUrl} />
+                          </div> : null
+                        }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header" >{dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName} <br /><span>{moment(dataItem.updated.date).format('ll')}</span></Item.Content>
                     </Item>

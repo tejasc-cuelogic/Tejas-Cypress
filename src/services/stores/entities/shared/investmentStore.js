@@ -311,11 +311,11 @@ export class InvestmentStore {
           .mutate({
             mutation: investNowGeneratePurchaseAgreement,
             variables: {
-              investmentAmount: this.investmentAmount,
+              investmentAmount: this.investmentAmount.toString(),
               offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
               userId: userDetailsStore.currentUserId,
               accountId: this.getSelectedAccountTypeId,
-              transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount : 0,
+              transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
               // creditToSpend: this.getSpendCreditValue,
               callbackUrl: `${window.location.origin}/secure-gateway`,
             },
@@ -464,10 +464,10 @@ export class InvestmentStore {
         userId: userDetailsStore.currentUserId,
         accountId: this.getSelectedAccountTypeId,
         offeringId: offeringIdToUpdate,
-        investmentAmount: this.investmentAmount,
+        investmentAmount: this.investmentAmount.toString(),
         agreementId: this.agreementDetails.agreementId,
         // transferAmount: this.getTransferRequestAmount,
-        transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount : 0,
+        transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
       };
       uiStore.setProgress();
       return new Promise((resolve) => {
@@ -559,8 +559,12 @@ export class InvestmentStore {
   investmentBonusRewards = (investedAmount) => {
     const { campaign } = campaignStore;
     const offeringInvestedAmount = investedAmount || 0;
-    const rewardsTiers = campaign && campaign.rewardsTiers &&
-      campaign.rewardsTiers.sort((a, b) => b - a);
+    let rewardsTiers = [];
+    campaign.bonusRewards.map((reward) => {
+      rewardsTiers = reward.tiers.concat(rewardsTiers);
+      return false;
+    });
+    rewardsTiers = [...new Set(toJS(rewardsTiers))].sort((a, b) => b - a);
     const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
     let bonusRewards = [];
     bonusRewards = campaign && campaign.bonusRewards

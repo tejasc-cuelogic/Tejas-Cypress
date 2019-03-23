@@ -49,6 +49,7 @@ export default class PaymentCalculator extends Component {
           <XAxis interval={6} dataKey="month" />
           <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
+            cursor={{ fill: 'none', fillOpacity: 0.00 }}
             content={<CustomTooltip data={this.props.data[this.state.activeIndex]} />}
           />
           <Legend />
