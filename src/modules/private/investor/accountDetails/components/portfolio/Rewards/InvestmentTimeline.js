@@ -26,7 +26,7 @@ class InvestmentTimeline extends Component {
     const { getInvestor } = this.props.portfolioStore;
     const minInvestAmt = get(campaign, 'keyTerms.minInvestAmt') || null;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
-    const myInvestment = get(getInvestor, 'myInvestment') ? parseFloat(get(getInvestor, 'myInvestment').replace(/,/, '')) : 0;
+    const myInvestment = get(getInvestor, 'myInvestment') ? parseFloat(get(getInvestor, 'myInvestment').replace(/,/g, '')) : 0;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const investBonusReward = rewardsTiers.filter(r =>
       bonusRewards.filter(b => b.tiers.includes(r)).length);
