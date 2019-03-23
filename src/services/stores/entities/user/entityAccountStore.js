@@ -308,9 +308,9 @@ class EntityAccountStore {
       }
     }
 
-    const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
+    const isValidAddFunds = bankAccountStore.formEntityAddFunds.meta.isFieldValid;
     if (isValidAddFunds) {
-      payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+      payload.initialDepositAmount = bankAccountStore.formEntityAddFunds.fields.value.value;
     }
 
     return payload;
@@ -392,7 +392,7 @@ class EntityAccountStore {
         }
       }
     } else if (currentStep.name === 'Link bank') {
-      if (parseFloat(bankAccountStore.formAddFunds.fields.value.value, 0) !== 0) {
+      if (parseFloat(bankAccountStore.formEntityAddFunds.fields.value.value, 0) !== 0) {
         bankAccountStore.validateAddFunds();
       }
       if (bankAccountStore.manualLinkBankSubmitted) {
@@ -401,7 +401,7 @@ class EntityAccountStore {
       // const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
       isValidCurrentStep = bankAccountStore.isAccountPresent ||
       bankAccountStore.formLinkBankManually.meta.isValid ||
-      bankAccountStore.formAddFunds.meta.isValid;
+      bankAccountStore.formEntityAddFunds.meta.isValid;
       if (isValidCurrentStep) {
         uiStore.setProgress();
         // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
@@ -467,7 +467,7 @@ class EntityAccountStore {
             userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
-            FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
+            FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
             // if (bankAccountStore.ManualLinkBankSubmitted) {
             //   FormValidator.resetFormData(bankAccountStore.formAddFunds);
             // }
@@ -581,7 +581,8 @@ class EntityAccountStore {
         }
         if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
+          bankAccountStore.formEntityAddFunds.fields.value.value =
+          account.details.initialDepositAmount;
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -595,7 +596,8 @@ class EntityAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
-          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
+          bankAccountStore.formEntityAddFunds.fields.value.value =
+          account.details.initialDepositAmount;
         }
         this.renderAfterPopulate();
       }

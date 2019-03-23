@@ -64,7 +64,7 @@ export default class Summary extends Component {
     const { errors } = this.props.uiStore;
     const {
       plaidAccDetails, formLinkBankManually,
-      depositMoneyNow, formAddFunds,
+      depositMoneyNow, formEntityAddFunds,
       isAccountPresent,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
@@ -129,7 +129,7 @@ export default class Summary extends Component {
                   <Table.Cell>
                     {!depositMoneyNow ?
                     Helper.CurrencyFormat(0) :
-                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                    formEntityAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formEntityAddFunds.fields.value.value)}` :
                     Helper.CurrencyFormat(0)}
                   </Table.Cell>
                 </Table.Row>

@@ -53,7 +53,7 @@ export default class FinancialInformation extends Component {
           <Message error className="center-align">
             Based on your net assets and annual income, your 12-month investment
             limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
-            This is below the $5,000 minimum opening deposit for IRA accounts.
+            This is below the $5,000 minimum opening deposit for Entity accounts.
           </Message>
           }
         </Form>
