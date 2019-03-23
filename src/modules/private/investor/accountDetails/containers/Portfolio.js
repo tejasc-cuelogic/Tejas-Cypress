@@ -128,7 +128,7 @@ export default class Portfolio extends Component {
         />
         <Route path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
         <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
-        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}/:offeringId/agreement`} {...props} />} />
+        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
         <Route
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
