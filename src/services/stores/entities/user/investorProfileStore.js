@@ -269,7 +269,7 @@ class InvestorProfileStore {
           this.setStepToBeRendered(currentStep.stepToBeRendered);
           if (currentStep.name === 'Investment Experience') {
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-              res();
+              resolve();
             });
           } else {
             resolve();

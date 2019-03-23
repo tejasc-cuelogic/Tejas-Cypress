@@ -53,7 +53,7 @@ class InvestorSignup extends Component {
       <Modal
         size="mini"
         open
-        closeOnDimmerClick
+        closeOnDimmerClick={false}
         onClose={
           () => {
             this.props.authStore.resetForm('SIGNUP_FRM');

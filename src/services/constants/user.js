@@ -292,6 +292,7 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     fileName: '',
     rule: '',
+    meta: '',
     label: '',
     src: '',
     base64String: '',

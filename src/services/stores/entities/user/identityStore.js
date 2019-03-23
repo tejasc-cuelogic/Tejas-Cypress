@@ -573,8 +573,9 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       // const b64Text = profileData.split(',')[1];
       const fileObj = {
-        name: `${moment().unix()}.jpg`,
+        name: `${moment().unix()}.${get(this.ID_PROFILE_INFO, 'fields.profilePhoto.meta.ext') || 'jpg'}`,
         obj: this.ID_PROFILE_INFO.fields.profilePhoto.base64String,
+        type: get(this.ID_PROFILE_INFO, 'fields.profilePhoto.meta.type'),
       };
       fileUpload.uploadToS3(fileObj, `profile-photo/${userStore.currentUser.sub}`)
         .then(action((response) => {
@@ -651,7 +652,7 @@ export class IdentityStore {
 
   @action
   resetProfilePhoto = () => {
-    const attributes = ['src', 'error', 'value', 'base64String', 'fileName'];
+    const attributes = ['src', 'error', 'value', 'base64String', 'fileName', 'meta'];
     attributes.forEach((val) => {
       this.ID_PROFILE_INFO.fields.profilePhoto[val] = '';
     });
