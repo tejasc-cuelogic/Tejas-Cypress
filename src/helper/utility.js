@@ -143,7 +143,6 @@ export class Utility {
     const d = new Date();
     let daysFromNow = d.setDate(d.getDate() + days);
     daysFromNow = new Date(daysFromNow).toISOString();
-    console.log(daysFromNow);
     return daysFromNow;
   }
   getLastThreeYearsLabel = () => {
