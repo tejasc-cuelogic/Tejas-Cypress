@@ -81,8 +81,8 @@ export default class CancelInvestment extends Component {
                 </Message>
               }
               <div className="center-align mt-30">
-                <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
                 <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
+                <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
               </div>
             </Form>
             :
