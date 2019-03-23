@@ -20,7 +20,7 @@ export default class NewPhoneNumber extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.push('/app/profile-settings/profile-data');
+    this.props.history.push(this.props.refLink);
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
@@ -33,7 +33,7 @@ export default class NewPhoneNumber extends Component {
     this.props.identityStore.startPhoneVerification(type, phoneNumberValue).then(() => {
       this.props.identityStore.setIsOptConfirmed(false);
       this.props.uiStore.clearErrors();
-      this.props.history.push('/app/profile-settings/profile-data/confirm');
+      this.props.history.push(`${this.props.refLink}/confirm`);
     })
       .catch(() => {});
   }

@@ -72,7 +72,9 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
   handleContinue = () => {
-    this.props.history.push('/app/profile-settings/profile-data');
+    if (this.props.refLink) {
+      this.props.history.push(this.props.refLink);
+    }
     this.props.identityStore.setIsOptConfirmed(false);
   }
   render() {
