@@ -93,7 +93,7 @@ class KeyTermsDetails extends Component {
               <Table.Cell width={5} className="neutral-text"><b>Investment Multiple{' '}</b>
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
-                  content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                  content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX]' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
                   position="top center"
                 />
               </Table.Cell>
