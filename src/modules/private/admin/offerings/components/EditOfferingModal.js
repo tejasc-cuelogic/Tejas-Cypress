@@ -51,7 +51,7 @@ export default class EditOffering extends React.Component {
               ))
             }
               <div className="center-align">
-                <Button className="relaxed" primary >Save Changes</Button>
+                <Button className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} primary >Save Changes</Button>
               </div>
             </Form>
           </Modal.Content>

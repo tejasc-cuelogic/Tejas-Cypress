@@ -38,7 +38,7 @@ export default class CampaignSecondaryMenu extends Component {
               {!isMobile &&
                 <Aux>
                   <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  {!isClosed &&
+                  {!isClosed && diff > 0 &&
                     <List.Item>{diff} days left</List.Item>
                   }
                   {isClosed && get(campaign, 'closureSummary.repayment.count') &&
