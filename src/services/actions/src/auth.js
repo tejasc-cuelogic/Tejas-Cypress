@@ -99,7 +99,7 @@ export class Auth {
             res();
           }))
         .then(() => { })
-        .catch(() => { })
+        .catch(() => { console.log('verify seesion catch!!!!!'); })
         .finally(() => {
           commonStore.setAppLoaded();
           uiStore.setAppLoader(false);
@@ -335,9 +335,7 @@ export class Auth {
         onSuccess: data => res(data), onFailure: err => rej(err),
       });
     })
-      .then(() => {
-        Helper.toast('Password changed successfully', 'success');
-      })
+      .then(() => { })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
         throw err;
@@ -598,6 +596,27 @@ export class Auth {
       });
   }
 
+  forceLogout = () => (
+    new Promise((res) => {
+      commonStore.setToken(undefined);
+      localStorage.removeItem('lastActiveTime');
+      authStore.setUserLoggedIn(false);
+      userStore.forgetUser();
+      authStore.resetStoreData();
+      accountStore.resetStoreData();
+      identityStore.resetStoreData();
+      investorProfileStore.resetStoreData();
+      userDetailsStore.resetStoreData();
+      iraAccountStore.resetStoreData();
+      entityAccountStore.resetStoreData();
+      bankAccountStore.resetStoreData();
+      individualAccountStore.resetStoreData();
+      uiStore.clearErrors();
+      res();
+    })
+    // Clear all AWS credentials
+  );
+
   /**
    * @desc Logs out user and clears all tokens stored in browser's local storage
    * @return null
@@ -605,6 +624,7 @@ export class Auth {
   logout = () => (
     new Promise((res) => {
       commonStore.setToken(undefined);
+      authStore.setUserLoggedIn(false);
       userStore.forgetUser();
       // this.cognitoUser.signOut();
       this.cognitoUser.globalSignOut({
@@ -613,7 +633,6 @@ export class Auth {
       });
       localStorage.removeItem('lastActiveTime');
       AWS.config.clear();
-      authStore.setUserLoggedIn(false);
       authStore.resetStoreData();
       accountStore.resetStoreData();
       identityStore.resetStoreData();

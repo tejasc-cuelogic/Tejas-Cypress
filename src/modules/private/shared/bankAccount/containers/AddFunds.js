@@ -11,6 +11,7 @@ import { validationActions } from '../../../../../services/actions';
 @observer
 export default class AddFunds extends Component {
   componentWillMount() {
+    this.props.bankAccountStore.validateAddFunds();
     this.props.bankAccountStore.validateAddfundsAmount(this.props.accountStore.investmentAccType);
   }
   componentDidMount() {
@@ -18,6 +19,8 @@ export default class AddFunds extends Component {
   }
   componentWillUnmount() {
     this.props.bankAccountStore.resetShowAddFunds();
+    // this.props.bankAccountStore.resetEntityAddFundsForm();
+    // this.props.bankAccountStore.resetAddFundsForm();
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
