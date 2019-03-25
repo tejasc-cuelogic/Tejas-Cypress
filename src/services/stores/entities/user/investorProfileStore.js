@@ -264,12 +264,14 @@ class InvestorProfileStore {
           mutation: updateInvestorProfileData,
           variables: formPayload,
         })
-        .then(action(() => {
+        .then(action((data) => {
           FormValidator.setIsDirty(this[currentStep.form], false);
-          if (currentStep.name === 'Investment Experience') {
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-              resolve();
-            });
+          if (currentStep.form === 'INVESTMENT_EXP_FORM') {
+            if (data.data.createInvestorProfile && data.data.createInvestorProfile.status) {
+              userDetailsStore.setUserStatus(data.data.createInvestorProfile.status);
+            }
+            userDetailsStore.getUser(userStore.currentUser.sub);
+            resolve();
           } else {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
             resolve();
@@ -280,7 +282,9 @@ class InvestorProfileStore {
           reject(err);
         })
         .finally(() => {
-          uiStore.setProgress(false);
+          if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
+            uiStore.setProgress(false);
+          }
         });
     });
   }
