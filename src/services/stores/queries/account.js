@@ -88,3 +88,11 @@ export const crowdPayAccountNotifyGs = gql`
       accountId: $accountId
     )
   }`;
+export const createIndividualGoldStarInvestor = gql`
+  mutation createIndividualGoldStarInvestor($userId: String!, $accountId: String!) {
+    createIndividualGoldStarInvestor(
+      userId: $userId
+      accountId: $accountId
+    )
+  }
+`;
