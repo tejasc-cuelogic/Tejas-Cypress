@@ -142,7 +142,9 @@ export default class Media extends Component {
         </Grid>
         <Divider section />
         <Grid columns={2} stackable>
-          {['tombstoneImage', 'locationHeroImage'].map(field => (
+          {['tombstoneImage',
+          // 'locationHeroImage'
+          ].map(field => (
             <Grid.Column>
               <Header as="h4">{MEDIA_FRM.fields[field].label}</Header>
               <Form className="cropper-wrap tombstone-img">
@@ -175,7 +177,9 @@ export default class Media extends Component {
         </Grid>
         <Divider section />
         <Grid columns={2} stackable>
-          {['useOfProceeds', 'businessModelImage'].map(field => (
+          {['useOfProceeds',
+          // 'businessModelImage'
+          ].map(field => (
             <Grid.Column>
               <Header as="h4">{MEDIA_FRM.fields[field].label}</Header>
               <Form className="cropper-wrap tombstone-img">
