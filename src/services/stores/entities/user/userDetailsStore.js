@@ -34,6 +34,7 @@ export class UserDetailsStore {
   @observable accountForWhichCipExpired = '';
   @observable partialInvestNowSessionURL = '';
   @observable userStatus = null;
+  @observable selectedUserId = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -129,7 +130,7 @@ export class UserDetailsStore {
 
   @action
   toggleAddressVerification = () => {
-    const payLoad = { userId: this.currentUserId, shouldSkip: !this.isAddressSkip };
+    const payLoad = { userId: this.selectedUserId, shouldSkip: !this.isAddressSkip };
     client
       .mutate({
         mutation: skipAddressValidation,
@@ -185,6 +186,7 @@ export class UserDetailsStore {
 
   @action
   getUserProfileDetails = (userId) => {
+    this.setFieldValue('selectedUserId', userId);
     this.detailsOfUser = graphql({
       client,
       query: userDetailsQuery,
