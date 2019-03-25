@@ -20,9 +20,9 @@ export default class CampaignHeader extends Component {
   render() {
     const { campaignStore } = this.props;
     const { campaign, offerStructure } = campaignStore;
-    const terminationDate = campaign && campaign.closureSummary
+    const processingDate = campaign && campaign.closureSummary
     && campaign.closureSummary.processingDate;
-    const diff = DataFormatter.diffDays(terminationDate);
+    const diff = DataFormatter.diffDays(processingDate);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
@@ -168,13 +168,15 @@ export default class CampaignHeader extends Component {
                     </Aux>
                   }
                   <div className="center-align mt-20">
-                    {!isClosed &&
-                      <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
+                    {(!isClosed && diff > 0) &&
+                      <Aux>
+                        <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
+                        <small>
+                          ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+                            || 0} min investment
+                        </small>
+                      </Aux>
                     }
-                    <small>
-                      ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                        || 0} min investment
-                    </small>
                   </div>
                 </Grid.Column>
               </Grid>

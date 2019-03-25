@@ -57,6 +57,7 @@ export const updateInvestorProfileData = gql`
       isPartialProfile: $isPartialProfile
     ) {
       id
+      status
     }
   }`;
 
@@ -88,3 +89,11 @@ export const crowdPayAccountNotifyGs = gql`
       accountId: $accountId
     )
   }`;
+export const createIndividualGoldStarInvestor = gql`
+  mutation createIndividualGoldStarInvestor($userId: String!, $accountId: String!) {
+    createIndividualGoldStarInvestor(
+      userId: $userId
+      accountId: $accountId
+    )
+  }
+`;

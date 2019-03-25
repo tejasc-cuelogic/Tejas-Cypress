@@ -1078,8 +1078,10 @@ export class OfferingCreationStore {
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
       } else if (keyName === 'editForm') {
+        const launchForm = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData.offering = {};
-        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.offering.launch = { targetDate: launchForm.targetDate };
+        payloadData.closureSummary = { processingDate: launchForm.terminationDate };
         payloadData = {
           ...payloadData,
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
