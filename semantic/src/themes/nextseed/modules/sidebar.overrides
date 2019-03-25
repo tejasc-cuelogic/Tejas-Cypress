@@ -168,6 +168,10 @@
 						.item{
 							padding:@8px @16px @8px @42px !important;
 							color:@tertiary-text !important;
+							font-weight: @normal !important;
+							&:hover, &:focus, &.active, &.active:hover{
+								font-weight: @fontMedium !important;
+							}
 						}
 					}
 				}

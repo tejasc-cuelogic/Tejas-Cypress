@@ -121,7 +121,7 @@ class FinancialInfo extends Component {
         {// isValidInvestAmtInOffering &&
          estReturnVal && estReturnVal !== '-' &&
           investmentAmount ?
-            <Header as="h4">Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
+            <Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
               <Popup
                 wide
                 trigger={<Icon className="ns-help-circle" color="green" />}
