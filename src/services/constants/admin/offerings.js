@@ -2342,7 +2342,7 @@ export const ADD_NEW_BONUS_REWARD = {
     label: 'Description',
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Description',
   },
   expirationDate: {

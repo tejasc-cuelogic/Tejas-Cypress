@@ -35,11 +35,11 @@ export default class CampaignSideBar extends Component {
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
     const percent = (collected / maxOffering) * 100;
-    const terminationDate = campaign && campaign.closureSummary &&
+    const processingDate = campaign && campaign.closureSummary &&
     campaign.closureSummary.processingDate;
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const diff = DataFormatter.diffDays(terminationDate);
+    const diff = DataFormatter.diffDays(processingDate);
     const rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const { offerStructure } = campaign;
     const isClosed = campaign.stage !== 'LIVE';
@@ -128,13 +128,15 @@ export default class CampaignSideBar extends Component {
                 Maturity: {get(campaign, 'keyTerms.maturity')} Months
               </p>
               <Divider hidden />
-              {!isClosed &&
-                <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+              {(!isClosed && diff > 0) &&
+                <Aux>
+                  <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+                  <p>
+                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+                      || 0} min investment
+                  </p>
+                </Aux>
               }
-              <p>
-                ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                  || 0} min investment
-              </p>
             </div>
           </Responsive>
           {!isMobile &&
