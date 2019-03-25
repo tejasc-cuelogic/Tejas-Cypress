@@ -2225,6 +2225,7 @@ svg:not(:root).recharts-surface{
 	}
 	h1.ui.header{
 		font-size:@32px;
+		font-weight:@fontMedium;
 		.sub.header{
 			font-size:@14px;
 			line-height:18px;
