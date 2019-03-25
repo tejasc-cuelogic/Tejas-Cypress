@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { isEmpty } from 'lodash';
 import { MultiStep } from '../../../../../../../helper';
 import FinancialInformation from './FinancialInformation';
 import AccountType from './AccountType';
@@ -58,7 +57,7 @@ export default class AccountCreation extends React.Component {
       isValidIraForm,
     } = this.props.iraAccountStore;
     const {
-      formAddFunds, plaidAccDetails,
+      formAddFunds, isAccountPresent,
       formLinkBankManually, isPlaidDirty,
       linkbankSummary, bankSummarySubmit,
       stepbankSummary,
@@ -73,6 +72,7 @@ export default class AccountCreation extends React.Component {
           isDirty: FIN_INFO_FRM.meta.isDirty,
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',
+          validForm: FIN_INFO_FRM.meta.isValid,
           stepToBeRendered: 1,
           bankSummary: false,
         },
@@ -83,6 +83,7 @@ export default class AccountCreation extends React.Component {
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
           stepToBeRendered: 2,
+          validForm: ACC_TYPES_FRM.meta.isValid,
           bankSummary: false,
         },
         {
@@ -92,16 +93,18 @@ export default class AccountCreation extends React.Component {
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
           stepToBeRendered: 3,
+          validForm: FUNDING_FRM.meta.isValid,
           bankSummary: false,
         },
         {
           name: 'Link bank',
           component: <Plaid />,
-          isValid: (formAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : stepToBeRendered > 3 ? 'error' : '',
+          isValid: (formAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 3 ? 'error' : '',
           isDirty: isPlaidDirty,
           disableNextButton: !linkbankSummary,
           validate: validationActions.validateLinkBankForm,
           stepToBeRendered: 4,
+          validForm: isAccountPresent,
           bankSummary: linkbankSummary,
         },
         {
@@ -111,12 +114,14 @@ export default class AccountCreation extends React.Component {
           isDirty: IDENTITY_FRM.meta.isDirty && isPlaidDirty,
           validate: validationActions.validateIRAIdentityInfo,
           form: 'IDENTITY_FRM',
+          validForm: IDENTITY_FRM.meta.isValid,
           stepToBeRendered: 5,
           bankSummary: false,
         },
         {
           name: 'Summary',
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
+          validForm: isValidIraForm,
           component: <Summary />,
         },
       ];
@@ -131,6 +136,7 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',
           stepToBeRendered: 1,
+          validForm: FIN_INFO_FRM.meta.isValid,
           bankSummary: false,
         },
         {
@@ -140,6 +146,7 @@ export default class AccountCreation extends React.Component {
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
           stepToBeRendered: 2,
+          validForm: ACC_TYPES_FRM.meta.isValid,
           bankSummary: false,
         },
         {
@@ -149,6 +156,7 @@ export default class AccountCreation extends React.Component {
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
           stepToBeRendered: 3,
+          validForm: FUNDING_FRM.meta.isValid,
           bankSummary: false,
         },
         {
@@ -159,12 +167,14 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAIdentityInfo,
           form: 'IDENTITY_FRM',
           stepToBeRendered: 4,
+          validForm: IDENTITY_FRM.meta.isValid,
           bankSummary: false,
         },
         {
           name: 'Summary',
           component: <Summary />,
           isValid: isValidIraForm ? '' : stepToBeRendered > 4 ? 'error' : '',
+          validForm: isValidIraForm,
           bankSummary: false,
         },
       ];

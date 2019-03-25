@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { isEmpty } from 'lodash';
 import { MultiStep } from '../../../../../../../helper';
 import FinancialInformation from './FinancialInformation';
 import { validationActions } from '../../../../../../../services/actions';
@@ -60,10 +59,9 @@ export default class AccountCreation extends React.Component {
       isValidEntityForm, showProcessingModal,
     } = this.props.entityAccountStore;
     const {
-      formEntityAddFunds, plaidAccDetails, formLinkBankManually,
+      formEntityAddFunds, isAccountPresent, formLinkBankManually,
       isPlaidDirty, linkbankSummary, bankSummarySubmit,
       stepbankSummary,
-
     } = this.props.bankAccountStore;
     const steps =
     [
@@ -75,6 +73,7 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityFinancialInfo,
         form: 'FIN_INFO_FRM',
         stepToBeRendered: 1,
+        validForm: FIN_INFO_FRM.meta.isValid,
         bankSummary: false,
       },
       {
@@ -85,6 +84,7 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityGeneralInformation,
         form: 'GEN_INFO_FRM',
         stepToBeRendered: 2,
+        validForm: GEN_INFO_FRM.meta.isValid,
         bankSummary: false,
       },
       {
@@ -95,6 +95,7 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityInfo,
         form: 'TRUST_INFO_FRM',
         stepToBeRendered: 3,
+        validForm: TRUST_INFO_FRM.meta.isValid,
         bankSummary: false,
       },
       {
@@ -104,6 +105,7 @@ export default class AccountCreation extends React.Component {
         isDirty: PERSONAL_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityPersonalInfo,
         form: 'PERSONAL_INFO_FRM',
+        validForm: PERSONAL_INFO_FRM.meta.isValid,
         stepToBeRendered: 4,
         bankSummary: false,
       },
@@ -114,16 +116,18 @@ export default class AccountCreation extends React.Component {
         isDirty: FORM_DOCS_FRM.meta.isDirty,
         validate: validationActions.validateEntityFormationDoc,
         form: 'FORM_DOCS_FRM',
+        validForm: FORM_DOCS_FRM.meta.isValid,
         stepToBeRendered: 5,
         bankSummary: false,
       },
       {
         name: 'Link bank',
         component: <Plaid />,
-        isValid: (formEntityAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : (stepToBeRendered === 5 || stepToBeRendered > 5) ? 'error' : '',
+        isValid: (formEntityAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 5 ? 'error' : '',
         isDirty: isPlaidDirty,
         validate: validationActions.validateLinkBankForm,
         disableNextButton: !linkbankSummary,
+        validForm: isAccountPresent,
         bankSummary: linkbankSummary,
         stepToBeRendered: 6,
       },
@@ -131,6 +135,7 @@ export default class AccountCreation extends React.Component {
         name: 'Summary',
         component: <Summary />,
         isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
+        validForm: isValidEntityForm,
         bankSummary: false,
       },
     ];
