@@ -49,6 +49,7 @@ export default class AccountCreation extends React.Component {
       depositMoneyNow,
       isPlaidDirty,
       linkbankSummary,
+      isAccountPresent,
     } = this.props.bankAccountStore;
     const {
       stepToBeRendered, createAccount, showProcessingModal,
@@ -62,16 +63,18 @@ export default class AccountCreation extends React.Component {
         isDirty: isPlaidDirty,
         stepToBeRendered: 1,
         disableNextButton: !linkbankSummary,
+        validForm: isAccountPresent,
       },
       {
         name: 'Add funds',
         component: <AddFunds />,
-        // isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
+        isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
         // Done changes for saving link bank details - Alan's feedback point
         // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
         // : stepToBeRendered > 1 ? 'error' : '',
         validate: validateAddFunds,
         isDirty: isPlaidDirty,
+        validForm: formAddFunds.meta.isValid,
         disableNextButton: true,
         stepToBeRendered: 2,
       },
@@ -79,6 +82,7 @@ export default class AccountCreation extends React.Component {
         name: 'Summary',
         component: <Summary />,
         disableNextButton: true,
+        validForm: formAddFunds.meta.isValid || !depositMoneyNow,
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
       },
     ];
