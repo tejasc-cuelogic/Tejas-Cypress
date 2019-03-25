@@ -1,7 +1,7 @@
 export const ACCREDITATION_STATUS_LABEL = {
   REQUESTED: 'Requested',
   CONFIRMED: 'Approved',
-  INVALID: 'Declined',
+  INVALID: 'Invalid',
 };
 
 export const INVESTEMENT_LIMIT = {
