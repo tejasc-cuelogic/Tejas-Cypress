@@ -30,14 +30,14 @@ class CustomValidations extends Component {
     /* Business App owners percentage validation register */
     Validator.register('ownerPercentage', (value, requirement) => {
       const total = sumBy(currentForm.fields.owners, currentValue =>
-        parseInt(currentValue[requirement].value, 10));
+        parseFloat(currentValue[requirement].value));
       forEach(currentForm.fields.owners, (ele, key) => {
         currentForm.fields.owners[key][requirement].error =
           value >= 20 && value <= 100 && total <= 100 ?
             undefined : true;
       });
       return value >= 20 && value <= 100 && total <= 100;
-    }, 'Minimum ownership should be 20% and max 100% or sum of all ownership percentage should not be greater than 100 ');
+    }, 'Minimum ownership should be 20% and max 100% or sum of all ownership percentage should not be greater than 100%');
 
     Validator.register('hundreds', (value) => {
       const amount = parseFloat(value) || 0;
