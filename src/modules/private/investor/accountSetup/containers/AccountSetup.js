@@ -49,7 +49,10 @@ export default class AccountSetup extends Component {
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
-    this.props.portfolioStore.getSummary();
+    // TODO change to regex
+    if (!window.location.href.includes('account-creation')) {
+      this.props.portfolioStore.getSummary();
+    }
   }
 
   navToAccTypes = (step) => {
