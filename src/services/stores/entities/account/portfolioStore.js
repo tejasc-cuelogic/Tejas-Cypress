@@ -1,7 +1,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { forEach, sortBy } from 'lodash';
+import { forEach, sortBy, get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
@@ -103,7 +103,8 @@ export class PortfolioStore {
   }
 
   @computed get summary() {
-    return (this.accSummary.data && toJS(this.accSummary.data.getUserAccountSummary)) || {};
+    const summary = get(this.accSummary, 'data.getUserAccountSummary');
+    return summary ? toJS(summary) : {};
   }
 
   getChartData = (type) => {
@@ -124,7 +125,7 @@ export class PortfolioStore {
   }
 
   @computed get summaryLoading() {
-    return this.accSummary.loading;
+    return get(this.accSummary, 'loading') || false;
   }
 
   @computed get getPieChartData() {
