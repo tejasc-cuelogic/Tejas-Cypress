@@ -1,6 +1,6 @@
 export const MFA_MODE_TYPES = {
   mfaModeTypes: {
-    value: '',
+    value: 'PHONE',
     values: [
       {
         label: 'Phone number',
@@ -15,7 +15,7 @@ export const MFA_MODE_TYPES = {
     rule: 'required',
   },
   mfaPhoneModeTypes: {
-    value: '',
+    value: 'TEXT',
     values: [
       {
         label: 'Text',

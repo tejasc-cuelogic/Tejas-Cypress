@@ -21,7 +21,7 @@ class BonusRewards extends Component {
     const { getInvestor } = props.portfolioStore;
     const { investmentBonusRewards } = props.investmentStore
     const investedAmount = get(getInvestor, 'myInvestment') ? get(getInvestor, 'myInvestment') : 0;
-    const rewardList = investmentBonusRewards(investedAmount ? parseFloat(investedAmount.replace(/,/, '')) : 0);
+    const rewardList = investmentBonusRewards(investedAmount ? parseFloat(investedAmount.replace(/,/g, '')) : 0);
     const metaTitle = 'Check the Updates tab for the latest information on when rewards will be delivered.  Unless otherwise indicated, rewards will be available after the business is open.';
     return (
       <div className="inner-content-spacer">

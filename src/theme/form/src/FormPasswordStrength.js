@@ -65,6 +65,7 @@ export default class FormPasswordStrength extends Component {
           tooShortWord={props.tooShortWord}
           scoreWords={props.scoreWords}
           inputProps={{ ...props.inputProps, type: pwdInputType }}
+          userInputs={props.userInputs || []}
           changeCallback={(e) => { props.changed(e); this.triggerError(false); }}
           onBlur={() => this.triggerError(true)}
           defaultValue={value}

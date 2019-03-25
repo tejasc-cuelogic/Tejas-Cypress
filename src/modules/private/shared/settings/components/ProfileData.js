@@ -68,13 +68,13 @@ export default class ProfileData extends Component {
     }
     return (
       <Grid>
-        <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
+        <Route path={`${this.props.match.url}/new-phone-number`} render={() => <NewPhoneNumber refLink={this.props.match.url} />} />
         <Route
           path={`${this.props.match.url}/confirm`}
           render={props =>
             <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
         />
-        <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
+        <Route path={`${this.props.match.url}/new-email-address`} render={() => <NewEmailAddress refLink={this.props.match.url} />} />
         <Route
           path={`${this.props.match.url}/confirm-email-address`}
           render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
