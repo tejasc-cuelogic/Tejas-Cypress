@@ -8,7 +8,7 @@ import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowd
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
-import { uiStore } from '../../index';
+import { uiStore, individualAccountStore } from '../../index';
 
 const types = {
   review: null,
@@ -192,15 +192,35 @@ export class CrowdpayStore {
         })
         .then(action((data) => {
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
+            this.requestState.oldType = this.requestState.type;
             Helper.toast('CIP is not satisfied.', 'error');
             uiStore.setProgress(false);
+          } else if (ctaAction === 'CREATEACCOUNT' && this.requestState.type === 'individual' && data.data.submitInvestorAccount !== 'The account is Processing') {
+            individualAccountStore.createIndividualGoldStarInvestor(userId, accountId)
+              .then((res) => {
+                if (res.data.createIndividualGoldStarInvestor) {
+                  Helper.toast(sMsg, 'success');
+                } else {
+                  Helper.toast(data.data.submitInvestorAccount, 'success');
+                }
+                this.requestState.oldType = this.requestState.type;
+                uiStore.setProgress(false);
+                resolve();
+              })
+              .catch(() => {
+                uiStore.setProgress(false);
+                Helper.toast('Something went wrong, please try again later.', 'error');
+                reject();
+              });
           } else if (ctaAction === 'CREATEACCOUNT' && data.data.submitInvestorAccount) {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(data.data.submitInvestorAccount, 'success');
+            uiStore.setProgress(false);
             resolve();
           } else {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(sMsg, 'success');
+            uiStore.setProgress(false);
             resolve();
           }
         }))
