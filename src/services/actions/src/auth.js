@@ -172,7 +172,7 @@ export class Auth {
               if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
                 cookie.remove('SAASQUATCH_REFERRAL_CODE');
               }
-              if (window.analytics && false) {
+              if (window.analytics) { // && false
                 window.analytics.identify(userStore.currentUser.sub, {
                   name: `${get(data, 'user.info.firstName')} ${get(data, 'user.info.lastName')}`,
                   email: get(data, 'user.email.address'),

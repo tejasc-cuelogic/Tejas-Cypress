@@ -64,6 +64,10 @@ class App extends Component {
     if (this.props.uiStore.devBanner) {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
     }
+
+    if (window.analytics) {
+      window.analytics.page();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -97,6 +101,9 @@ class App extends Component {
         isMoveTop: true,
       };
       this.props.navStore.setNavStatus(calculations, 'main');
+    }
+    if (window.analytics) {
+      window.analytics.page();
     }
   }
   onIdle = () => {
