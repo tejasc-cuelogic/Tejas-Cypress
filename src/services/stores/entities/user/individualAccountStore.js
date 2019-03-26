@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find, get } from 'lodash';
-import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
+import { bankAccountStore, uiStore, userDetailsStore, userStore, accountStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -186,8 +186,10 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
-          2 : this.stepToBeRendered;
+        bankAccountStore.validateAddFunds();
+        bankAccountStore.validateAddfundsAmount(accountStore.investmentAccType);
+        const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0) ||
+          bankAccountStore.formAddFunds.meta.isValid ? 2 : this.stepToBeRendered;
         this.setStepToBeRendered(renderStep);
         // uiStore.setProgress(false);
         // if (!this.isManualLinkBankSubmitted && (
