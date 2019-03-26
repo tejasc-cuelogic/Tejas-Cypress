@@ -18,7 +18,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: commonStore.token ? `Bearer ${commonStore.token}1` : '',
+      authorization: commonStore.token ? `Bearer ${commonStore.token}` : '',
     },
   };
 });
