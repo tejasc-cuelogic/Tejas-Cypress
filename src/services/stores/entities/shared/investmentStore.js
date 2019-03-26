@@ -589,7 +589,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
     this.setByDefaultRender(true);
-    // investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+    investmentLimitStore.setInvestNowErrorStatus(false);
     // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
     this.setFieldValue('estReturnVal', '-');

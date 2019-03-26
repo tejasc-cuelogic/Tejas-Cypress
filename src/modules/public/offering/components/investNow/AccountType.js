@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { includes, uniq, get } from 'lodash';
-import { Header, Form, Icon, Button } from 'semantic-ui-react';
+import { Header, Form, Icon, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
@@ -174,6 +174,15 @@ class AccountType extends Component {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     this.props.history.push(this.props.refLink);
   }
+  handleInvestmentWihoutAccreditation = (e) => {
+    e.preventDefault();
+    const {
+      setStepToBeRendered,
+      setFieldValue,
+    } = this.props.investmentStore;
+    setFieldValue('disableNextbtn', false);
+    setStepToBeRendered(1);
+  }
   render() {
     const {
       activeAccounts,
@@ -185,10 +194,22 @@ class AccountType extends Component {
       accTypeChanged,
       investAccTypes,
     } = this.props.investmentStore;
-    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const { getCurrentInvestNowHealthCheck, investNowError } = this.props.investmentLimitStore;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
+    const offeringTitle = get(campaign, 'keyTerms.shorthandBusinessName');
+    const offeringRegulationDMinAmount = get(campaign, 'keyTerms.minOfferingAmount506C');
+    const offeringRegulationDMaxAmount = get(campaign, 'keyTerms.maxOfferingAmount506C');
+    const OfferingRegulationCFMinAmount = get(campaign, 'keyTerms.minOfferingAmountCF');
+    const OfferingRegulationCFMaxAmount = get(campaign, 'keyTerms.maxOfferingAmountCF');
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+    const offeringDetailsObj = {
+      offeringTitle,
+      offeringRegulationDMinAmount,
+      offeringRegulationDMaxAmount,
+      OfferingRegulationCFMinAmount,
+      OfferingRegulationCFMaxAmount,
+    };
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const {
       userDetails,
@@ -209,6 +230,9 @@ class AccountType extends Component {
       offeringAccreditatoinStatusMessage,
       // setHeaderAndSubHeader,
     } = this.props.accreditationStore;
+    if (investNowError) {
+      this.props.cancel();
+    }
     const isAccountCreated = !(inActiveAccounts && inActiveAccounts.length >= 3);
     if (userProfileFullStatus !== 'FULL' || (userAccredetiationState && (userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE'))) {
       setPartialInvestmenSession(offeringInvestnowURL);
@@ -216,7 +240,8 @@ class AccountType extends Component {
       setPartialInvestmenSession();
     }
     if ((isRegulationCheck && (!accreditationData.ira)) || (!selectedAccountStatus) ||
-      (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0)) {
+      (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0) ||
+      this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
     }
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
@@ -226,13 +251,14 @@ class AccountType extends Component {
       redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
         `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && isRegulationCheck && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
-    if (isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) {
+    if ((isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) || this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
     }
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
     offeringAccreditatoinStatusMessage(
       selectedAccountStatus, userAccredetiationState,
       isRegulationCheck, investAccTypes, showAccountList, isDocumentUpload,
+      offeringReuglation, offeringDetailsObj,
     );
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
@@ -240,7 +266,7 @@ class AccountType extends Component {
         sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
-    if (headerSubheaderObj.header === '') {
+    if (headerSubheaderObj.header === '' || this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
     }
     return (
@@ -277,13 +303,38 @@ class AccountType extends Component {
                       <div className="center-align">
                         <p className="center-align">{headerSubheaderObj.subHeader}</p>
                         {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
-                          <Aux>
-                            <Link to={redirectURL} className="text-link">
-                              <Icon className="ns-arrow-right" color="green" />
-                              Apply for accreditation
-                            </Link>
-                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                          </Aux>
+                          offeringReuglation && offeringReuglation === 'BD_CF_506C' ?
+                            <Aux>
+                              <Divider hidden section />
+                              <Header as="h3">Investing under Regulation D has its benefits</Header>
+                              <p className="cneter-align">For a limited time, if you <span className="highlight-text"><b><Link to={redirectURL}>verify your accredited investor status</Link></b></span>,{' '}
+                                we’ll add a <span className="highlight-text"><b><Link to={redirectURL}>$100 bonus</Link></b></span> to your account. See rules for details.
+                              </p>
+                              <Divider hidden section />
+                              <p>
+                                <b>Would you like to verify your accredited investor status?</b>
+                              </p>
+                              <Button as={Link} to={redirectURL} primary className="relaxed" content="Yes, verify status" />
+                              <Button basic className="relaxed" content="No, thanks" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
+                            </Aux>
+                            :
+                            <Aux>
+                              <Link to={redirectURL} className="text-link">
+                                <Icon className="ns-arrow-right" color="green" />
+                                Apply for accreditation
+                              </Link>
+                              <div className="mt-30">
+                                <Button
+                                  as={Link}
+                                  to="/"
+                                  onClick={e =>
+                                    this.handlBackToOffering(e)}
+                                  primary
+                                  className="relaxed"
+                                  content="Back to Offering"
+                                />
+                              </div>
+                            </Aux>
                           :
                           userAccredetiationState === 'EXPIRED' ?
                             <Aux>
@@ -356,7 +407,7 @@ class AccountType extends Component {
                     </Link>
                     <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                   </Aux>
-                  :
+                :
                 null}
               {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
                 <Aux>

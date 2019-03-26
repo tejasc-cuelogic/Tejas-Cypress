@@ -22,12 +22,16 @@ export class InvestmentLimitStore {
   @observable individualIRACurrentLimit = 0;
   @observable investedAmount = 0;
   @observable investNowHealthCheckDetails = null;
+  @observable investNowError = false;
 
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
   }
-
+  @action
+  setInvestNowErrorStatus = (status) => {
+    this.investNowError = status;
+  }
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
     const accList = filter(this.activeAccounts, (account) => {
@@ -56,7 +60,7 @@ export class InvestmentLimitStore {
   });
 
   @action
-  getInvestNowHealthCheck = (accountId, offeringId) => new Promise((resolve) => {
+  getInvestNowHealthCheck = (accountId, offeringId) => new Promise((resolve, reject) => {
     this.investNowHealthCheckDetails = graphql({
       client,
       query: getInvestNowHealthCheck,
@@ -69,6 +73,12 @@ export class InvestmentLimitStore {
         if (data && this.investNowHealthCheckDetails && !this.investNowHealthCheckDetails.loading) {
           resolve(data);
         }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
+        this.setInvestNowErrorStatus(true);
+        reject();
       },
       fetchPolicy: 'network-only',
     });
