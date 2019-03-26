@@ -51,9 +51,9 @@ export default class FinancialInformation extends Component {
           </div>
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
           <Message error className="center-align">
-            Based on your net assets and annual income, your 12-month investment
+            Based on your entity&apos;s net assets and annual income, your 12-month investment
             limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
-            This is below the $5,000 minimum opening deposit for Entity accounts.
+            This is below the $5,000 minimum opening deposit.
           </Message>
           }
         </Form>
