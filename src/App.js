@@ -43,6 +43,12 @@ class App extends Component {
   componentWillMount() {
     this.checkUserIdleStatus();
     const { authStore, location, history } = this.props;
+    history.listen((location, action) => { // eslint-disable-line
+      if (window.analytics) {
+        window.analytics.page();
+      }
+    });
+
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
       const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
