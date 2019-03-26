@@ -210,7 +210,7 @@ export const IND_ADD_FUND = {
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $100.',
-      max: 'The deposit amount should be at less than $25,000.',
+      max: 'The deposit amount should be less than $25,000.',
     },
   },
 };
@@ -225,7 +225,7 @@ export const ENTITY_ADD_FUND = {
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $5,000.',
-      max: 'The deposit amount should be at less than $25,000.',
+      max: 'The deposit amount should be less than $25,000.',
     },
   },
 };

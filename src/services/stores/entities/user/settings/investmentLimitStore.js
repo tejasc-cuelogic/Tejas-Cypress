@@ -144,10 +144,15 @@ export class InvestmentLimitStore {
     const { accountList } = this.getActiveAccountList;
     accountList.forEach((account) => {
       this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
-        if (account.name === 'entity') {
-          this.setFieldValue('entityCurrentLimit', data.getInvestorInvestmentLimit);
+        if (data.getInvestorInvestmentLimit === '0.00') {
+          this.setInvestmentLimitInfo(account.name, account.details.accountId);
         } else {
-          this.setFieldValue('individualIRACurrentLimit', data.getInvestorInvestmentLimit);
+          this.currentLimit = data.getInvestorInvestmentLimit;
+        }
+        if (account.name === 'entity') {
+          this.setFieldValue('entityCurrentLimit', this.currentLimit);
+        } else {
+          this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
         }
       });
     });
