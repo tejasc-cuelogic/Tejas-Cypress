@@ -23,7 +23,9 @@ const LegalDetails = observer(({
     </Modal.Header>
     <Modal.Content className="signup-content">
       <Dimmer className="fullscreen" active={inProgress}>
-        <Loader active={inProgress} />
+        <Loader active={inProgress} >
+        Please wait...<br /><br /> We are verifying your identity. This can take up to a minute.
+        </Loader>
       </Dimmer>
       <Form error onSubmit={onSubmit}>
         <Form.Group widths="equal">
