@@ -132,17 +132,16 @@ export class BankAccountStore {
   @action
   validateAddfundsAmount = (accType = '') => {
     if (accType === 'entity') {
-      const { value } = this.formEntityAddFunds.fields.value;
-      if (parseFloat(value, 0) === -1) {
+      if (parseFloat(this.formEntityAddFunds.fields.value.value, 0) === -1) {
         this.shouldValidateAmount = true;
         this.resetEntityAddFundsForm();
       }
-    } else {
-      const { value } = this.formAddFunds.fields.value;
-      if (parseFloat(value, 0) === -1) {
-        this.shouldValidateAmount = true;
-        this.resetAddFundsForm();
-      }
+    } else if (parseFloat(
+      this.formAddFunds.fields.value.value
+      , 0,
+    ) === -1) {
+      this.shouldValidateAmount = true;
+      this.resetAddFundsForm();
     }
   }
 
@@ -342,10 +341,12 @@ export class BankAccountStore {
 
   @action
   validateAddFunds = () => {
-    if (userDetailsStore.currentActiveAccount !== 'entity') {
+    if (accountStore.investmentAccType !== 'entity') {
       map(this.formAddFunds.fields, (value) => {
         const { key } = value;
-        const { errors } = validationService.validate(value);
+        const fundValue = value;
+        fundValue.value = parseFloat(value.value, 0) === -1 ? '' : parseFloat(value.value, 0);
+        const { errors } = validationService.validate(fundValue);
         Validator.setFormError(
           this.formAddFunds,
           key,
@@ -356,6 +357,8 @@ export class BankAccountStore {
     } else {
       map(this.formEntityAddFunds.fields, (value) => {
         const { key } = value;
+        const fundValue = value;
+        fundValue.value = parseFloat(value.value, 0) === -1 ? '' : parseFloat(value.value, 0);
         const { errors } = validationService.validate(value);
         Validator.setFormError(
           this.formEntityAddFunds,
@@ -374,6 +377,12 @@ export class BankAccountStore {
 
   @computed get count() {
     return (this.changeRequests && this.changeRequests.length) || 0;
+  }
+  @computed get isLinkbankInComplete() {
+    return this.manualLinkBankSubmitted ||
+    this.isPlaidDirty ||
+    this.linkbankSummary ||
+    !this.isAccountPresent;
   }
 
   @action

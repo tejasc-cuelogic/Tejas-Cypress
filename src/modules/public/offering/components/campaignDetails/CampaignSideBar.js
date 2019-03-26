@@ -81,7 +81,10 @@ export default class CampaignSideBar extends Component {
                   </Statistic.Label>
                 }
               </Statistic>
-              <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
+              {!isClosed ?
+                <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                <Progress percent="100" size="tiny" color="green" />
+              }
               <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
@@ -125,7 +128,7 @@ export default class CampaignSideBar extends Component {
               Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
               </p>
               <p className="mt-half">
-                Maturity: {get(campaign, 'keyTerms.maturity')} Months
+                Maturity: {get(campaign, 'keyTerms.maturity')} months
               </p>
               <Divider hidden />
               {(!isClosed && diff > 0) &&

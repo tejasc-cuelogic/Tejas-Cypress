@@ -73,7 +73,6 @@ export default class Summary extends Component {
     const {
       plaidAccDetails, formLinkBankManually,
       formAddFunds, depositMoneyNow,
-      isAccountPresent,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -138,7 +137,7 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm || !isAccountPresent} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
         <p className="center-align mt-30 grey-header">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
