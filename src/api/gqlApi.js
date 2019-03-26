@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch';
 import { ApolloClient, HttpLink, InMemoryCache, IntrospectionFragmentMatcher, ApolloLink } from 'apollo-client-preset';
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
+import { get } from 'lodash';
 import { commonStore, authStore } from '../services/stores';
 import { API_ROOT, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
@@ -25,7 +26,7 @@ const authLink = setContext((_, { headers }) => {
 
 const errorLink = onError((res) => {
   console.log(res);
-  if (res.networkError === 'The incoming token has expired') {
+  if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
     authActions.logout().then(() => {
       this.props.history.push('/auth/login');
     });
