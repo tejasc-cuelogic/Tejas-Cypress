@@ -89,9 +89,10 @@ export default class AccountCreation extends React.Component {
     if (showProcessingModal) {
       return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
     }
+    const loaderMsg = stepToBeRendered === 2 ? 'Please wait...<br /><br /> We are finalizing your account. This can take up to a minute.' : '';
     return (
       <div className="step-progress" >
-        <MultiStep page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep loaderMsg={loaderMsg} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }
