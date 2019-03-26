@@ -143,7 +143,7 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm && !isAccountPresent} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
         </div>
         <p className="center-align grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}

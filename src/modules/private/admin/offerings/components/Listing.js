@@ -100,7 +100,7 @@ export default class Listing extends Component {
                         STAGES[offering.stage].label : '-'
                       }
                     </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
                       offering.offering.launch.targetDate ?

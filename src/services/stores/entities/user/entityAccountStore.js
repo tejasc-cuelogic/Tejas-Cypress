@@ -107,6 +107,7 @@ class EntityAccountStore {
     return this.FIN_INFO_FRM.meta.isValid && this.GEN_INFO_FRM.meta.isValid
       && this.TRUST_INFO_FRM.meta.isValid &&
       this.PERSONAL_INFO_FRM.meta.isValid && this.FORM_DOCS_FRM.meta.isValid &&
+      bankAccountStore.formEntityAddFunds.meta.isValid &&
       (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isAccountPresent);
   }
 
@@ -399,9 +400,9 @@ class EntityAccountStore {
         currentStep.validate();
       }
       // const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
-      isValidCurrentStep = bankAccountStore.isAccountPresent ||
-      bankAccountStore.formLinkBankManually.meta.isValid ||
-      bankAccountStore.formEntityAddFunds.meta.isValid;
+      isValidCurrentStep = bankAccountStore.formEntityAddFunds.meta.isValid ||
+      bankAccountStore.isAccountPresent ||
+      bankAccountStore.formLinkBankManually.meta.isValid;
       if (isValidCurrentStep) {
         uiStore.setProgress();
         // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
@@ -599,6 +600,8 @@ class EntityAccountStore {
           bankAccountStore.formEntityAddFunds.fields.value.value =
           account.details.initialDepositAmount;
         }
+        bankAccountStore.validateAddFunds();
+        bankAccountStore.validateAddfundsAmount(accountStore.investmentAccType);
         this.renderAfterPopulate();
       }
     }

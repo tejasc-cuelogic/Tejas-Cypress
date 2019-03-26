@@ -256,8 +256,8 @@ export class BankAccountStore {
   }
 
   @computed get isAccountPresent() {
-    return !isEmpty(this.plaidAccDetails.accountNumber) ||
-      !isEmpty(this.plaidAccDetails.public_token);
+    return !isEmpty(get(this.plaidAccDetails, 'accountNumber')) ||
+      !isEmpty(get(this.plaidAccDetails, 'public_token'));
   }
 
   @action
@@ -342,7 +342,7 @@ export class BankAccountStore {
 
   @action
   validateAddFunds = () => {
-    if (accountStore.investmentAccType !== 'entity') {
+    if (userDetailsStore.currentActiveAccount !== 'entity') {
       map(this.formAddFunds.fields, (value) => {
         const { key } = value;
         const { errors } = validationService.validate(value);
@@ -352,6 +352,7 @@ export class BankAccountStore {
           errors && errors[key][0],
         );
       });
+      this.validateForm('formAddFunds');
     } else {
       map(this.formEntityAddFunds.fields, (value) => {
         const { key } = value;
@@ -362,6 +363,7 @@ export class BankAccountStore {
           errors && errors[key][0],
         );
       });
+      this.validateForm('formEntityAddFunds');
     }
   }
 

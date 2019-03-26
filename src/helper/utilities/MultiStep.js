@@ -4,11 +4,13 @@ import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 
-const getNavStates = (indx, length) => {
+const hasData = compState => compState.validForm;
+const getNavStates = (indx, length, steps) => {
   const styles = [];
   /* eslint-disable no-plusplus */
+  const isAccountCreation = window.location.href.includes('account-creation');
   for (let i = 0; i < length; i++) {
-    if (i < indx) {
+    if ((isAccountCreation && hasData(steps[i]) && i !== indx) || i < indx) {
       styles.push('done');
     } else if (i === indx) {
       styles.push('doing');
@@ -25,7 +27,10 @@ export default class MultiStep extends React.Component {
       showPreviousBtn: false,
       showNextBtn: true,
       compState: this.props.stepToBeRendered || 0,
-      navState: getNavStates((this.props.stepToBeRendered || 0), this.props.steps.length),
+      navState: getNavStates(
+        (this.props.stepToBeRendered || 0), this.props.steps.length,
+        this.props.steps,
+      ),
     };
     this.hidden = {
       display: 'none',
@@ -64,7 +69,12 @@ export default class MultiStep extends React.Component {
   }
 
   setNavState(next) {
-    this.setState({ navState: getNavStates(next, this.props.steps.length) });
+    this.setState({
+      navState: getNavStates(
+        next, this.props.steps.length,
+        this.props.steps,
+      ),
+    });
     if (next < this.props.steps.length) {
       this.setState({ compState: next });
     }
@@ -123,7 +133,8 @@ export default class MultiStep extends React.Component {
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
-      if (this.props.bankSummary(this.props.steps[this.state.compState])) {
+      if (this.props.bankSummary &&
+        this.props.bankSummary(this.props.steps[this.state.compState])) {
         this.props.bankSummarySubmit();
       } else {
         this.props.setStepTobeRendered(this.state.compState + 1);

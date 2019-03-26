@@ -122,7 +122,7 @@ export default class AddWithdrawFund extends Component {
                         <label>Withdrawal amount</label>
                         : ''
                       }
-                      <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
+                      <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
                         <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
                       </Header>
                     </div>

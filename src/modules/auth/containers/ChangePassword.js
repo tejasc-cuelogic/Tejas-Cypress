@@ -18,7 +18,9 @@ export default class ChangePassword extends Component {
       'changeMyPassword' : 'updatePassword';
     authActions[method](this.props.refModule)
       .then(() => {
-        this.props.history.goBack();
+        authActions.logout().then(() => {
+          this.props.history.push('/auth/login');
+        });
       })
       .catch((err) => {
         console.log(err);

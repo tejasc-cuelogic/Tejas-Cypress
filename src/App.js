@@ -67,6 +67,15 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        // console.log('Browser tab is hidden');
+      } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
+        authActions.forceLogout().then(() => {
+          this.props.history.push('/auth/login');
+        });
+      }
+    });
     this.checkUserIdleStatus();
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
