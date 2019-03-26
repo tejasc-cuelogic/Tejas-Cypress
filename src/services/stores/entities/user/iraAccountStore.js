@@ -437,9 +437,7 @@ class IraAccountStore {
         } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
-          (bankAccountStore.manualLinkBankSubmitted ||
-          bankAccountStore.isPlaidDirty ||
-          bankAccountStore.linkbankSummary)) {
+          (bankAccountStore.isLinkbankInComplete)) {
           this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid || this.stepToBeRendered === 4) {
           if (this.FUNDING_FRM.fields.fundingType.value === 0) {

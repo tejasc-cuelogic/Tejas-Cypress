@@ -66,8 +66,9 @@ export class BankAccount {
     const linkHandler = Plaid.create({
       env: PLAID_ENV,
       clientName: 'NS',
+      apiVersion: 'v2',
       ...sharedPayload,
-      product: ['auth, transactions'],
+      product: ['auth'],
       onLoad: () => {
         // The Link module finished loading.
         bankAccountStore.setLinkBankSummary(false);
