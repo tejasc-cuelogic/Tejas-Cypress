@@ -27,7 +27,6 @@
         "aspects": ["noHref", "invalidHref", "preferButton"]
       }
     ],
-    "linebreak-style": ["error", "windows"],
     "no-underscore-dangle": ["error", { "allow": ["_id", "_allUsersMeta"] }]
   }
 }
