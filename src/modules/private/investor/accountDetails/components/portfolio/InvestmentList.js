@@ -41,13 +41,13 @@ const InvestmentList = (props) => {
                   investments.map(data => (
                     <Table.Row key={data.name}>
                       <Table.Cell>
-                        <Icon className={`${INDUSTRY_TYPES_ICONS[data.offering.keyTerms.industry]} offering-icon`} />
-                        {props.listOf === 'pending' ? (<Link to={`/offerings/${data.offering.offeringSlug}/overview`} target="_blank">{data.offering.keyTerms.shorthandBusinessName}</Link>) : (
-                          <Link to={`${match.url}/investment-details/${data.offering.id}`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
+                        <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
+                        {props.listOf === 'pending' ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
+                          <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                         )}
                       </Table.Cell>
-                      <Table.Cell>{data.offering.keyTerms.city ? `${data.offering.keyTerms.city}, ` : ''}{data.offering.keyTerms.state}</Table.Cell>
-                      <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
+                      <Table.Cell>{get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}</Table.Cell>
+                      <Table.Cell>{get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
                       <Table.Cell>
                         {Helper.MoneyMathDisplayCurrency(data.investedAmount, false)}
                         <p className="date-stamp">
