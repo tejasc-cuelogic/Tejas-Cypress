@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import Vimeo from 'react-vimeo';
 import { Embed, Modal } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 
@@ -21,7 +20,6 @@ class VideoModal extends Component {
           {videoUrl ?
             <Embed autoplay active id={vimeoId} source="vimeo" /> : <InlineLoader text="No video is uploaded." className="bg-offwhite" />
           }
-          <Vimeo autoplay videoId={vimeoId} />
         </div>
       </Modal>
     );
