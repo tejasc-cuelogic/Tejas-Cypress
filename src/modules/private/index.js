@@ -15,6 +15,9 @@ import NotFound from '../shared/NotFound';
 @observer
 export default class Private extends React.Component {
   componentDidMount() {
+    if (window.analytics) {
+      window.analytics.page();
+    }
     if (!this.props.authStore.isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
       this.props.history.push('/auth/login');

@@ -65,9 +65,9 @@ class App extends Component {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
     }
 
-    if (window.analytics) {
-      window.analytics.page();
-    }
+    // if (window.analytics) {
+    //   window.analytics.page();
+    // }
   }
 
   componentDidUpdate(prevProps) {
@@ -102,9 +102,9 @@ class App extends Component {
       };
       this.props.navStore.setNavStatus(calculations, 'main');
     }
-    if (window.analytics) {
-      window.analytics.page();
-    }
+    // if (window.analytics) {
+    //   window.analytics.page();
+    // }
   }
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
