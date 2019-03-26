@@ -104,6 +104,8 @@ export const campaignDetailsQuery = gql`
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       industry
       minInvestAmt
       appendixATitle
@@ -501,6 +503,8 @@ query getOfferingById($id: ID) {
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       industry
       minInvestAmt
       revShareSummary
