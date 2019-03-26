@@ -12,7 +12,7 @@ export default class ReferralsDetails extends Component {
   state = { loading: true, availableCredit: '0' };
   componentWillMount() {
     const { userDetails } = this.props.userDetailsStore;
-    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
+    const saasQuatchUserId = get(userDetails, 'id');
     if (saasQuatchUserId) {
       this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
     }
