@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, FILLING_STATUS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
@@ -43,11 +43,12 @@ export class AccreditationStore {
   @observable data = [];
   @observable accreditaionMethod = null;
   @observable accreditationDetails = {};
-  @observable userAccredetiationState = undefined;
+  @observable userAccredetiationState = null;
   @observable selectedAccountStatus = undefined;
   @observable showAccountList = true;
   @observable headerSubheaderObj = {};
   @observable accType = '';
+  @observable currentInvestmentStatus = '';
 
   @action
   initRequest = (reqParams) => {
@@ -671,15 +672,18 @@ export class AccreditationStore {
       accountSelected || userDetailsStore.currentActiveAccountDetails.name;
     const intialAccountStatus = this.userSelectedAccountStatus(currentSelectedAccount);
     this.setUserSelectedAccountStatus(intialAccountStatus);
+    let investmentType = 'CF';
     if (intialAccountStatus === 'FULL' && regulationCheck) {
       let currentAcitveObject = {};
       if (aggreditationDetails) {
         currentAcitveObject =
           find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
+      investmentType = regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'D506C' : 'CF';
+      const validAccreditationStatus = ['REQUESTED', 'INVALID'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && currentAcitveObject.status === 'REQUESTED' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && currentAcitveObject.status === 'REQUESTED' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       switch (accountStatus) {
         case 'REQUESTED':
           this.userAccredetiationState = 'PENDING';
@@ -700,6 +704,7 @@ export class AccreditationStore {
     } else if (intialAccountStatus === 'FULL') {
       this.userAccredetiationState = 'ELGIBLE';
     }
+    this.setCurrentInvestmentStatus(investmentType);
   }
   @action
   setUserSelectedAccountStatus = (intialAccountStatus) => {
@@ -762,7 +767,7 @@ export class AccreditationStore {
   }
   @action
   resetUserAccreditatedStatus = () => {
-    this.userAccredetiationState = undefined;
+    // this.userAccredetiationState = null;
     this.selectedAccountStatus = undefined;
     this.showAccountList = true;
     investmentStore.resetAccTypeChanged();
@@ -804,6 +809,7 @@ export class AccreditationStore {
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,
     accountCreated, showAccountList = true, isDocumentUpload = true,
+    offeringReuglation = undefined, offeringDetailsObj = undefined,
   ) => {
     const headerSubheaderTextObj = {};
     if (showAccountList && accountCreated.values.length >= 2) {
@@ -817,6 +823,9 @@ export class AccreditationStore {
       // return headerSubheaderTextObj;
     } else {
       const userCurrentState = (isRegulationCheck && currentStatus === 'FULL') ? accreditedStatus : currentStatus;
+      const offeringTitleInHeader = offeringDetailsObj && offeringDetailsObj.offeringTitle ? offeringDetailsObj.offeringTitle : 'Offering';
+      const subHeaderForParallelOffering = `Up to ${Helper.CurrencyFormat((offeringDetailsObj && offeringDetailsObj.offeringRegulationDMaxAmount) || 0, 0)} is being raised under Regulation D and up to
+      ${Helper.CurrencyFormat((offeringDetailsObj && offeringDetailsObj.OfferingRegulationCFMaxAmount) || 0, 0)} is being raised under Regulation Crowdfunding`;
       if (userCurrentState) {
         const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
         switch (userCurrentState) {
@@ -829,8 +838,8 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
             break;
           case 'INACTIVE':
-            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
-            headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? `${offeringTitleInHeader} is a Parallel Offering` : `Accreditation Verification for ${accountType} Investor Account Required`;
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? subHeaderForParallelOffering : 'You must be an accredited investor to make an investment in this offering.';
             break;
           case 'EXPIRED':
             // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
@@ -883,6 +892,10 @@ export class AccreditationStore {
   @action
   resetAccreditationObject = () => {
     this.accreditationData = { ira: null, individual: null, entity: null };
+  }
+  @action
+  setCurrentInvestmentStatus = (val) => {
+    this.currentInvestmentStatus = val;
   }
 }
 export default new AccreditationStore();

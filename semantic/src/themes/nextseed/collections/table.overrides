@@ -267,7 +267,7 @@
             span {
                 color: @primary-two;
             }
-            &.attached{
+            &.attached:not(.downloadable){
                 padding:0 0 0 @14px;
             }
         }

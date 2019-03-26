@@ -113,6 +113,7 @@ export default class Agreement extends React.Component {
     const { campaign } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
+    const { currentInvestmentStatus } = this.props.accreditationStore;
     return (
       <Aux>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -161,7 +162,7 @@ export default class Agreement extends React.Component {
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
                 Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in
+                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in
                 {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                   getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
               </Header>
@@ -211,10 +212,18 @@ export default class Agreement extends React.Component {
                               </Aux>
                           )}
                           customUpdateLimitLabel={(
-                            <Aux>
-                              I confirm that I am complying with my <b>annual investment limit</b> (<Link to={`${match.url}/change-investment-limit`}>update</Link>)
-                            </Aux>
+                            currentInvestmentStatus && currentInvestmentStatus === 'D506C' ?
+                              <Aux>
+                                I hereby certify that I have a reasonable expectation that I will
+                                 continue to meet or exceed the requirements to be considered an
+                                  accredited investor.
+                              </Aux>
+                              :
+                              <Aux>
+                                I confirm that I am complying with my <b>annual investment limit</b> (<Link to={`${match.url}/change-investment-limit`}>update</Link>)
+                              </Aux>
                           )}
+                          conditonalTooltip={!(currentInvestmentStatus && currentInvestmentStatus === 'D506C')}
                         />
                       </Grid.Column>
                     ))}

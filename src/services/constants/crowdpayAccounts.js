@@ -58,3 +58,13 @@ export const CROWDPAY_ACCOUNTS_STATUS = {
   DELETED: 'DELETED',
   ACCOUNT_PROCESSING: 'ACCOUNT_PROCESSING',
 };
+
+export const CONFIRM_CROWDPAY = {
+  justifyDescription: {
+    value: '',
+    label: 'Justify your decision',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your comment here...',
+  },
+};

@@ -674,6 +674,17 @@ export const MISC = {
   },
 };
 
+export const CLOSURE_SUMMARY = {
+  processingDate: {
+    value: '',
+    label: 'Close Date',
+    error: undefined,
+    rule: 'date',
+    customErrors: { date: 'Close Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
+  },
+};
+
 export const COMPANY_LAUNCH = {
   targetDate: {
     value: '',
@@ -1242,7 +1253,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'Month 20XX',
   },
   offeringDeadline: {
     label: 'Offering Deadline',

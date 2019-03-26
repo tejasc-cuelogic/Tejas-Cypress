@@ -620,9 +620,7 @@ class EntityAccountStore {
       this.setStepToBeRendered(getEntityStep.PERSONAL_INFO_FRM);
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
-    } else if (bankAccountStore.manualLinkBankSubmitted ||
-      bankAccountStore.isPlaidDirty ||
-      bankAccountStore.linkbankSummary) {
+    } else if (bankAccountStore.isLinkbankInComplete) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);

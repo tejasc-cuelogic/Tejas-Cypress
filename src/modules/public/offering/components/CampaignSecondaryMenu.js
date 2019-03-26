@@ -22,9 +22,10 @@ export default class CampaignSecondaryMenu extends Component {
   }
   render() {
     const { campaign } = this.props.campaignStore;
-    const terminationDate = campaign && campaign.closureSummary
+    const processingDate = campaign && campaign.closureSummary
     && campaign.closureSummary.processingDate;
-    const diff = DataFormatter.diffDays(terminationDate);
+    const diff = DataFormatter.diffDays(processingDate);
+    const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const { navStatus, subNavStatus } = this.props.navStore;
@@ -41,13 +42,14 @@ export default class CampaignSecondaryMenu extends Component {
                   {!isClosed && diff > 0 &&
                     <List.Item>{diff} days left</List.Item>
                   }
-                  {isClosed && get(campaign, 'closureSummary.repayment.count') &&
-                    <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
+                  {isClosed && get(campaign, 'closureSummary.repayment.count') ?
+                    <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item> :
+                    (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item> : ''
                   }
                 </Aux>
             }
               {!isClosed &&
-                <Button compact primary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
+                <Button compact primary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || diffForProcessing === 0} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>

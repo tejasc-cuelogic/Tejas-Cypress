@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find, get } from 'lodash';
-import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
+import { bankAccountStore, uiStore, userDetailsStore, userStore, accountStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -27,21 +27,22 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
-  createIndividualGoldStarInvestor = accountId => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: createIndividualGoldStarInvestor,
-        variables: {
-          userId: userStore.currentUser.sub,
-          accountId,
-        },
-      })
-      .then(res => resolve(res))
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        reject(err);
-      });
-  });
+  createIndividualGoldStarInvestor = (accountId, userId = userStore.currentUser.sub) =>
+    new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createIndividualGoldStarInvestor,
+          variables: {
+            userId,
+            accountId,
+          },
+        })
+        .then(res => resolve(res))
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        });
+    });
 
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
@@ -57,21 +58,32 @@ class IndividualAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => {
-            this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
+          .then((res1) => {
+            if (res1.data.submitInvestorAccount !== 'The account is Processing') {
+              this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
+                uiStore.setProgress(false);
+                if (!res.data.createIndividualGoldStarInvestor) {
+                  this.setFieldValue('showProcessingModal', true);
+                  Helper.toast('Individual account submitted successfully.', 'success');
+                } else {
+                  Helper.toast('Individual account created successfully.', 'success');
+                }
+                bankAccountStore.resetStoreData();
+                this.isFormSubmitted = true;
+                resolve();
+              }).catch((err) => {
+                uiStore.setErrors(DataFormatter.getSimpleErr(err));
+                uiStore.setProgress(false);
+                reject();
+              });
+            } else {
               uiStore.setProgress(false);
-              if (!res.data.createIndividualGoldStarInvestor) {
-                this.setFieldValue('showProcessingModal', true);
-              }
+              this.setFieldValue('showProcessingModal', true);
               bankAccountStore.resetStoreData();
               this.isFormSubmitted = true;
               Helper.toast('Individual account submitted successfully.', 'success');
               resolve();
-            }).catch((err) => {
-              uiStore.setErrors(DataFormatter.getSimpleErr(err));
-              uiStore.setProgress(false);
-              reject();
-            });
+            }
           }).catch((err) => {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
@@ -131,7 +143,7 @@ class IndividualAccountStore {
               // FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
               if (!bankAccountStore.depositMoneyNow) {
                 // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-              } else if (currentStep.name === 'Add funds' && isValid) {
+              } else if (currentStep.name !== 'Add funds' && isValid) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
             } else {
@@ -174,8 +186,10 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        const renderStep = bankAccountStore.isAccountPresent && this.stepToBeRendered === 0 ?
-          2 : this.stepToBeRendered;
+        bankAccountStore.validateAddFunds();
+        bankAccountStore.validateAddfundsAmount(accountStore.investmentAccType);
+        const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0) ||
+          bankAccountStore.formAddFunds.meta.isValid ? 2 : this.stepToBeRendered;
         this.setStepToBeRendered(renderStep);
         // uiStore.setProgress(false);
         // if (!this.isManualLinkBankSubmitted && (

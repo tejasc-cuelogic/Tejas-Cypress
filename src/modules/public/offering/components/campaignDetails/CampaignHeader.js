@@ -23,6 +23,7 @@ export default class CampaignHeader extends Component {
     const processingDate = campaign && campaign.closureSummary
     && campaign.closureSummary.processingDate;
     const diff = DataFormatter.diffDays(processingDate);
+    const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
@@ -123,8 +124,11 @@ export default class CampaignHeader extends Component {
                       </Statistic.Label>
                     }
                   </Statistic>
-                  <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
-                  <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+                  {!isClosed ?
+                    <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                    <Progress percent="100" size="tiny" color="green" />
+                  }
+                  <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
@@ -156,7 +160,7 @@ export default class CampaignHeader extends Component {
                   }
                   {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
                     <p className="mb-0">
-                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
+                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                     </p> :
                     <Aux>
                       <p className="mb-0">
@@ -170,7 +174,7 @@ export default class CampaignHeader extends Component {
                   <div className="center-align mt-20">
                     {(!isClosed && diff > 0) &&
                       <Aux>
-                        <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
+                        <Button fluid secondary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || diffForProcessing === 0} onClick={this.handleInvestNowClick} />
                         <small>
                           ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                             || 0} min investment
