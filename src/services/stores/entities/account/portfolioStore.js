@@ -86,7 +86,7 @@ export class PortfolioStore {
     if (investmentData) {
       ['pending', 'active', 'completed'].forEach((field) => {
         investmentData.investments[field].forEach((ele) => {
-          if (ele.offering.keyTerms.securities && ele.offering.keyTerms.industry) {
+          if (get(ele, 'offering.keyTerms.securities') && get(ele, 'offering.keyTerms.industry')) {
             this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
             this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
           }
