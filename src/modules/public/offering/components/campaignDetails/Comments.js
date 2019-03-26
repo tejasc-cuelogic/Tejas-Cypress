@@ -80,7 +80,7 @@ class Comments extends Component {
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
     const accountStatusFull = activeAccounts && activeAccounts.length;
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && activeAccounts && activeAccounts.length);
-    const readMoreLength = 50;
+    const readMoreLength = 250;
     const { campaign } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
     const disablePostComment = !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage);
@@ -165,8 +165,9 @@ class Comments extends Component {
                           }
                           <Comment.Text className="mt-20">
                             {this.state.readMore === c.id ?
-                            c.comment : c.comment.substr(0, readMoreLength)}
-                            {(c.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
+                            c.comment : `${c.comment.substr(0, readMoreLength)}`}
+                            {(c.comment.length > readMoreLength) &&
+                            <Aux>{this.state.readMoreInner !== c.id ? ' ...' : ' '}<Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? 'Read More' : 'Read Less'}</Link></Aux>}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
                             <Aux>
@@ -224,8 +225,9 @@ class Comments extends Component {
                                 }
                                 <Comment.Text className="mt-20">
                                   {this.state.readMoreInner === tc.id ?
-                                  tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}...` : tc.comment.substr(0, readMoreLength)}{' '}
-                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'read more' : 'read less'}</Link>}
+                                  tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}` : tc.comment.substr(0, readMoreLength)}
+                                  {(tc.comment.length > readMoreLength) &&
+                                  <Aux>{this.state.readMoreInner !== tc.id ? ' ...' : ' '}<Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}</Link></Aux>}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
                                   <Aux>

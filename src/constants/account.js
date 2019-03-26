@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import moment from 'moment';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
 import Helper from '../helper/utility';
@@ -209,8 +210,8 @@ export const IND_ADD_FUND = {
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
-      min: 'The deposit amount should be at least 100.',
-      max: 'The deposit amount should be at less than 25000.',
+      min: 'The deposit amount should be at least $100.',
+      max: 'The deposit amount should be at less than $25,000.',
     },
   },
 };
@@ -224,8 +225,8 @@ export const ENTITY_ADD_FUND = {
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
-      min: 'The deposit amount should be at least 5000.',
-      max: 'The deposit amount should be at less than 25000.',
+      min: 'The deposit amount should be at least $5,000.',
+      max: 'The deposit amount should be at less than $25,000.',
     },
   },
 };

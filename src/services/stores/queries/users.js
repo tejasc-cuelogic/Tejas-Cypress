@@ -250,7 +250,6 @@ export const userAccreditationQuery = gql`
               expiration
               requestDate
               reviewed {
-                id
                 by
                 date
                 comment
