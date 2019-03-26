@@ -49,7 +49,7 @@ export default class CampaignSecondaryMenu extends Component {
                 </Aux>
             }
               {!isClosed &&
-                <Button compact primary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
+                <Button compact primary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || diffForProcessing === 0} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>

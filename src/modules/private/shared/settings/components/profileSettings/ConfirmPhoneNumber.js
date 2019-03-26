@@ -98,7 +98,7 @@ export default class ConfirmPhoneNumber extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code in the text message sent to your phone</p>
+          <p>Please confirm the 6-digit verification code sent to your phone</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <MaskedInput

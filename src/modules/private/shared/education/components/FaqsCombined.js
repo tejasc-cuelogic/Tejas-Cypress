@@ -85,7 +85,7 @@ export default class FaqsCombined extends Component {
           }
           <p className="note mt-30">
           If you still have questions, please don’t hesitate to contact us
-          at <a href="mailto:apply@nextseed.com" className="link">info@nextseed.com</a>
+          at <a href="mailto:info@nextseed.com" className="link">info@nextseed.com</a>
           </p>
         </div>
       </Aux>

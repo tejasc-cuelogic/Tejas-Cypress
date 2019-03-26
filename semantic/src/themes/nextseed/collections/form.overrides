@@ -770,6 +770,9 @@ textarea{
             font-weight:@normal;
             font-style:italic;
         }
+        &.attached > a{
+            color:@primary-one !important;
+        }
     }
 }
 .file-uploader-large{

@@ -49,6 +49,7 @@ export default class InvestNow extends React.Component {
       this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
       this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
       this.props.accreditationStore.resetAccreditationObject();
+      this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
     }
   }
   handleIframeTask = (e) => {
@@ -193,7 +194,8 @@ export default class InvestNow extends React.Component {
           component: <AccountType
             refLink={this.props.refLink}
             changeInvest={changeInvest}
-            cancel={this.handleCancel}
+            cancel={this.handleMultiStepModalclose}
+            inProgress={inProgress}
           />,
           isValid: '',
           stepToBeRendered: 1,

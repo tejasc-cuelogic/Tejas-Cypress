@@ -31,6 +31,7 @@ export default class LinkbankSummary extends React.Component {
     return (
       <Aux>
         <Header as="h3" textAlign="center">Linked Bank</Header>
+        <p className="center-align mb-50">The bank account you have currently linked to this account is</p>
         <div className="field-wrap">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>

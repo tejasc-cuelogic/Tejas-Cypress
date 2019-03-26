@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import moment from 'moment';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
 import Helper from '../helper/utility';
@@ -336,7 +335,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: <span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <Link to="/"> SEC`s Investor Bulletin</Link> for the latest information</span>,
+    tooltip: (<span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</span>),
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
