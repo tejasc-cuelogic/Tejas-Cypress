@@ -6,7 +6,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
-import { FILTER_META, CROWDPAY_FILTERS } from '../../../constants/crowdpayAccounts';
+import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
 import { uiStore, individualAccountStore } from '../../index';
 
@@ -33,6 +33,7 @@ export class CrowdpayStore {
     search: { accountType: null },
   };
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+  @observable CONFIRM_CROWDPAY_FRM = Validator.prepareFormObject(CONFIRM_CROWDPAY);
   @observable db;
   getMutation = {
     GSPROCESS: crowdPayAccountProcess,
@@ -163,6 +164,7 @@ export class CrowdpayStore {
 
   @action
   crowdPayCtaHandler = (userId, accountId, ctaAction, sMsg) => {
+    const commentData = Validator.evaluateFormData(this.CONFIRM_CROWDPAY_FRM.fields);
     const mutation = this.getMutation[ctaAction];
     if (!mutation) {
       return false;
@@ -176,6 +178,7 @@ export class CrowdpayStore {
       variables = {
         ...variables,
         action: ctaAction,
+        comment: commentData.justifyDescription,
       };
     } else if (ctaAction === 'CREATEACCOUNT') {
       variables.accountType = types[this.requestState.type];
@@ -231,6 +234,19 @@ export class CrowdpayStore {
           reject();
         });
     });
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    this[form] = Validator.onChange(
+      this[form],
+      Validator.pullValues(e, result),
+    );
+  }
+
+  @action
+  resetModalForm = () => {
+    this.CONFIRM_CROWDPAY_FRM = Validator.prepareFormObject(CONFIRM_CROWDPAY);
   }
 
   @action
