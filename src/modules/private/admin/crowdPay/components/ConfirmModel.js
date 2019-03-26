@@ -19,10 +19,11 @@ export default class ConfirmModel extends Component {
     const availableActions = ['APPROVE', 'DECLINE'];
     if (availableActions.includes(action)) {
       const msg = `Crowdpay account is ${action === 'APPROVE' ? 'approved' : 'declined'} successfully.`;
-      this.props.crowdpayStore.crowdPayCtaHandler(userId, accountId, action, msg);
+      this.props.crowdpayStore.crowdPayCtaHandler(userId, accountId, action, msg).then(() => {
+        this.props.history.push(`${this.props.refLink}`);
+      });
     } else {
       this.props.history.push(`${this.props.refLink}`);
-      this.props.history.push(`${this.props.match.url}/${action}`);
     }
   }
   render() {
