@@ -44,7 +44,7 @@ export default class UpdateInvestmentLimits extends Component {
           <Modal.Content>
             <Statistic size="tiny">
               <Statistic.Label>Estimated investment limit</Statistic.Label>
-              <Statistic.Value>{Helper.CurrencyFormat(currentLimit)}</Statistic.Value>
+              <Statistic.Value>{Helper.CurrencyFormat(currentLimit, 0)}</Statistic.Value>
             </Statistic>
             <Divider clearing hidden />
             <Form error onSubmit={this.submit}>
