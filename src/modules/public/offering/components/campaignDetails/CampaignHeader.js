@@ -23,6 +23,7 @@ export default class CampaignHeader extends Component {
     const processingDate = campaign && campaign.closureSummary
     && campaign.closureSummary.processingDate;
     const diff = DataFormatter.diffDays(processingDate);
+    const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
@@ -170,7 +171,7 @@ export default class CampaignHeader extends Component {
                   <div className="center-align mt-20">
                     {(!isClosed && diff > 0) &&
                       <Aux>
-                        <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
+                        <Button fluid secondary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || diffForProcessing === 0} onClick={this.handleInvestNowClick} />
                         <small>
                           ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                             || 0} min investment
