@@ -157,7 +157,7 @@ export default class CampaignHeader extends Component {
                   }
                   {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
                     <p className="mb-0">
-                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
+                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                     </p> :
                     <Aux>
                       <p className="mb-0">
