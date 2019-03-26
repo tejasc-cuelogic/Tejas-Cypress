@@ -33,7 +33,7 @@ export default class UploadDocument extends Component {
         <Header as="h3" textAlign="center">{this.props.isEntity ? 'Upload verification letter' : 'Net Worth'}</Header>
         <p className="center-align">{this.props.isEntity ? 'Upload a signed letter from your lawyer, CPA, investment advisor or investment broker verifying your entity`s status as an accredited investor.' : 'To verify your net worth, you can upload personal financial statements, a statement from a financial institution, asset appraisals, or a signed letter from your lawyer, accountant, investment advisor or investment broker indicating your status as an accredited investor.'}</p>
         <Divider hidden />
-        <Form error>
+        <Form>
           <DropZone
             multiple
             name="statementDoc"
