@@ -87,7 +87,7 @@ export default class General extends Component {
             </Form.Group>
           </div>
           {errors &&
-            <Message error>
+            <Message className="center-align" error>
               <ListErrors errors={[errors]} />
             </Message>
           }

@@ -335,9 +335,7 @@ export class Auth {
         onSuccess: data => res(data), onFailure: err => rej(err),
       });
     })
-      .then(() => {
-        Helper.toast('Password changed successfully', 'success');
-      })
+      .then(() => { })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
         throw err;

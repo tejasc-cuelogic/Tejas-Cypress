@@ -114,14 +114,14 @@ class FinancialInfo extends Component {
           />
         </Form>
         {this.props.changeInvest && getDiffInvestmentLimitAmount &&
-         INVESTMONEY_FORM.fields.investmentAmount.value > 0 ?
+         INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00' ?
            <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }
         <Divider hidden />
         {// isValidInvestAmtInOffering &&
          estReturnVal && estReturnVal !== '-' &&
           investmentAmount ?
-            <Header as="h4">Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
+            <Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
               <Popup
                 wide
                 trigger={<Icon className="ns-help-circle" color="green" />}
