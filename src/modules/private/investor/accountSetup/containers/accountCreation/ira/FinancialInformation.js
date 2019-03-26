@@ -34,6 +34,7 @@ export default class FinancialInformation extends React.Component {
                   name={field}
                   changed={values => finInfoChange(values, field)}
                   prefix="$ "
+                  hoverable={field === 'netWorth'}
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   currency
                 />

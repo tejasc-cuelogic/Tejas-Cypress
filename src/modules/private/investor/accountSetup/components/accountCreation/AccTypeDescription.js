@@ -19,8 +19,8 @@ const AccTypeDescription = observer((props) => {
             account. You can easily connect your account by logging in through our secure system
             or by manually entering your account information. The uninvested cash in your account
             is FDIC-insured up to $250,000 and is interest-bearing.
+            <br />We safeguard your information with bank-level security measures.
           </p>
-          <p>We safeguard your information with bank-level security measures.</p>
           <p className="grey-text">
             NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA
             GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for
