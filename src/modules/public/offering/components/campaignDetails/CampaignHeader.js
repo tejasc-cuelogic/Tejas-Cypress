@@ -124,7 +124,10 @@ export default class CampaignHeader extends Component {
                       </Statistic.Label>
                     }
                   </Statistic>
-                  <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
+                  {!isClosed ?
+                    <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                    <Progress percent="100" size="tiny" color="green" />
+                  }
                   <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
@@ -157,7 +160,7 @@ export default class CampaignHeader extends Component {
                   }
                   {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
                     <p className="mb-0">
-                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
+                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                     </p> :
                     <Aux>
                       <p className="mb-0">
