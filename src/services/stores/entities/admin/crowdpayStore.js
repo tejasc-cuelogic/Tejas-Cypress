@@ -196,7 +196,7 @@ export class CrowdpayStore {
             Helper.toast('CIP is not satisfied.', 'error');
             uiStore.setProgress(false);
           } else if (ctaAction === 'CREATEACCOUNT' && this.requestState.type === 'individual' && data.data.submitInvestorAccount !== 'The account is Processing') {
-            individualAccountStore.createIndividualGoldStarInvestor(userId, accountId)
+            individualAccountStore.createIndividualGoldStarInvestor(accountId, userId)
               .then((res) => {
                 if (res.data.createIndividualGoldStarInvestor) {
                   Helper.toast(sMsg, 'success');

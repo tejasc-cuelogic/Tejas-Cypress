@@ -27,7 +27,7 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
-  createIndividualGoldStarInvestor = (userId = userStore.currentUser.sub, accountId) =>
+  createIndividualGoldStarInvestor = (accountId, userId = userStore.currentUser.sub) =>
     new Promise((resolve, reject) => {
       client
         .mutate({
