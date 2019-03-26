@@ -161,7 +161,7 @@ export default class Agreement extends React.Component {
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
                 Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in
+                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in
                 {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                   getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
               </Header>
