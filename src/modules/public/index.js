@@ -23,11 +23,6 @@ export default class Public extends React.Component {
   componentWillMount() {
     this.props.navStore.setNavStatus({}, 'main');
   }
-  componentDidMount() {
-    if (window.analytics) {
-      window.analytics.page();
-    }
-  }
   componentWillUpdate() {
     this.props.navStore.setNavStatus({}, 'main');
   }
