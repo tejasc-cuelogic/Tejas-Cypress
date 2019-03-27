@@ -49,7 +49,7 @@ const InvestmentList = (props) => {
                       <Table.Cell>{get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}</Table.Cell>
                       <Table.Cell>{get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
                       <Table.Cell>
-                        {Helper.MoneyMathDisplayCurrency(data.investedAmount, false)}
+                        {Helper.CurrencyFormat(data.investedAmount, 0)}
                         <p className="date-stamp">
                           <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
                         </p>
@@ -90,7 +90,7 @@ const InvestmentList = (props) => {
                 <Table.Row>
                   <Table.HeaderCell colSpan="2" />
                   <Table.HeaderCell>Total:</Table.HeaderCell>
-                  <Table.HeaderCell>{Helper.MoneyMathDisplayCurrency(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, false)}</Table.HeaderCell>
+                  <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
                   <Table.HeaderCell colSpan="3" />
                 </Table.Row>
               </Table.Footer>
