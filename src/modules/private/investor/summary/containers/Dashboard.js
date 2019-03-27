@@ -10,6 +10,7 @@ import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHead
 import AccountCreation from './../../accountSetup/containers/accountCreation';
 import IdentityVerification from './../../accountSetup/containers/identityVerification';
 import EstablishProfile from './../../accountSetup/containers/establishProfile';
+import Helper from '../../../../../helper/utility';
 
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
@@ -40,7 +41,7 @@ const summaryDetails = ({
 export default class Dashboard extends Component {
   componentWillMount() {
     // TODO change to regex
-    if (!window.location.href.includes('account-creation')) {
+    if (!Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
       this.props.portfolioStore.getSummary();
     }
   }

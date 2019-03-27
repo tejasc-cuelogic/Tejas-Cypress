@@ -41,6 +41,8 @@ export default class CampaignSideBar extends Component {
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(processingDate);
     const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     const { offerStructure } = campaign;
     const isClosed = campaign.stage !== 'LIVE';
     return (
@@ -145,7 +147,7 @@ export default class CampaignSideBar extends Component {
           {!isMobile &&
             <Aux>
               <Menu vertical>
-                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
+                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} isBonusReward={isBonusReward} />
               </Menu>
             </Aux>
           }

@@ -59,7 +59,7 @@ export default class RiskFactors extends Component {
     updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors', true, undefined, isApproved);
   }
   validateRiskFactorField = (keyTerms, field) => {
-    const v = filter(field.keyTerms, (k, i) => keyTerms[k] === field.dependantValue[i]);
+    const v = filter(field.keyTerms, (k, i) => keyTerms && keyTerms[k] === field.dependantValue[i]);
     return !has(field, 'dependantValue') || v.length === field.dependantValue.length;
   }
   render() {

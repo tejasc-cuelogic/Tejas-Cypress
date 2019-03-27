@@ -119,7 +119,7 @@ export default class Portfolio extends Component {
             <Card>
               <Card.Content>
                 <Header as="h4">Browse the latest investment opportunities.</Header>
-                <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+                <Button as={Link} to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
               </Card.Content>
             </Card>
           </Aux> : null

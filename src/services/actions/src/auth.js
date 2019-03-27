@@ -11,7 +11,6 @@ import {
   userDetailsStore,
   authStore,
   commonStore,
-  adminStore,
   uiStore,
   accountStore,
   identityStore,
@@ -47,6 +46,13 @@ export class Auth {
       ClientId: COGNITO_CLIENT_ID,
     });
   }
+
+  getUserSession = () => new Promise((res, rej) => {
+    this.cognitoUser = this.userPool.getCurrentUser();
+    if (this.cognitoUser) {
+      this.cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
+    }
+  });
 
   /**
    * @desc after refresh or coming to page after some time method verify if session is valid or not
@@ -94,12 +100,11 @@ export class Auth {
             AWS.config.region = AWS_REGION;
             if (userStore.isCurrentUserWithRole('admin')) {
               this.setAWSAdminAccess(data.session.idToken.jwtToken);
-              adminStore.setAdminCredsLoaded(true);
             }
             res();
           }))
         .then(() => { })
-        .catch(() => { console.log('verify seesion catch!!!!!'); })
+        .catch(() => { })
         .finally(() => {
           commonStore.setAppLoaded();
           uiStore.setAppLoader(false);

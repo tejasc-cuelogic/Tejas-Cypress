@@ -187,9 +187,9 @@ class IndividualAccountStore {
           bankAccountStore.linkBankFormChange();
         }
         bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount(accountStore.investmentAccType);
-        const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0) ||
-          bankAccountStore.formAddFunds.meta.isValid ? 2 : this.stepToBeRendered;
+        bankAccountStore.validateAddfundsAmount();
+        const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0)
+          ? 2 : this.stepToBeRendered;
         this.setStepToBeRendered(renderStep);
         // uiStore.setProgress(false);
         // if (!this.isManualLinkBankSubmitted && (
