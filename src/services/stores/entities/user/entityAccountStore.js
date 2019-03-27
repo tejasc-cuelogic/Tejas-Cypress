@@ -601,7 +601,7 @@ class EntityAccountStore {
           account.details.initialDepositAmount;
         }
         bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount(accountStore.investmentAccType);
+        bankAccountStore.validateAddfundsAmount();
         this.renderAfterPopulate();
       }
     }

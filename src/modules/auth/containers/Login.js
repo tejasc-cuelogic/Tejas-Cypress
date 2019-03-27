@@ -11,6 +11,12 @@ import { ListErrors } from '../../../theme/shared';
 @observer
 class Login extends Component {
   componentWillMount() {
+    if (this.props.authStore.isUserLoggedIn) {
+      const { redirectURL } = this.props.uiStore;
+      const { roles } = this.props.userStore.currentUser;
+      this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
+        `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+    }
     this.props.uiStore.clearErrors();
     this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');

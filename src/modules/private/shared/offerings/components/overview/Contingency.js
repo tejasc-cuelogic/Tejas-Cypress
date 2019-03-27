@@ -7,8 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { Header, Button, Checkbox, Confirm, Icon, Modal, Form } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
-@withRouter
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@withRouter
 @observer
 export default class Contingency extends Component {
   state = {

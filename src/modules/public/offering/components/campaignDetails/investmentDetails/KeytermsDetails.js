@@ -186,7 +186,7 @@ class KeyTermsDetails extends Component {
                 <Table.Cell>
                   {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
                     <p>
-                      <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
+                      {KeyTerms.securitiesOwnershipPercentage}% {' '}
                       Investors will not receive any equity interests in the Issuer or
                       any voting or management rights with respect to the Issuer as a result of
                       an investment in Securities.
@@ -339,7 +339,7 @@ class KeyTermsDetails extends Component {
           : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
             <Aux>
               <Header as="h3" className="mb-30 anchor-wrap">
-                Revenue Sharing Summary*
+                Revenue Sharing Summary
                 <span className="anchor" id="revenue-sharing-summary" />
               </Header>
               <p>

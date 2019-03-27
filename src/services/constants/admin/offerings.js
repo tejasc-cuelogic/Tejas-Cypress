@@ -23,8 +23,8 @@ export const STAGES = {
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
   },
-  FAILED: { ref: 'live', accessKey: 4, label: 'Failed' },
-  TERMINATED: { ref: 'live', accessKey: 4, label: 'Terminated' },
+  FAILED: { ref: 'failed', accessKey: 4, label: 'Failed' },
+  TERMINATED: { ref: 'failed', accessKey: 4, label: 'Terminated' },
   STARTUP_PERIOD: {
     ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
   },

@@ -6,8 +6,8 @@ import NewUpdate from './NewUpdate';
 import { DateTimeFormat, NsPagination } from '../../../../../../theme/shared';
 
 const meta = ['Title', 'Recipients', 'Last status change', 'Status', 'Last update'];
-@observer
 @inject('updateStore')
+@observer
 export default class Listing extends Component {
   paginate = params => this.props.updateStore.pageRequest(params);
   render() {

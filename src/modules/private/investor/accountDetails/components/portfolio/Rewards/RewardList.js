@@ -13,11 +13,16 @@ const RewardList = ({ list, earlyBird }) => (
             earlyBird ?
               <Card.Header>EARLY BIRD REWARD</Card.Header> : ''
           }
-            <Card.Header>{card.title}</Card.Header>
+            <Card.Header>
+              <HtmlEditor
+                readOnly
+                content={(card.title || '')}
+              />
+            </Card.Header>
             <Card.Description>
               <HtmlEditor
                 readOnly
-                content={(card.description ? card.description : '')}
+                content={(card.description || '')}
               />
             </Card.Description>
             {/* {card.action === 'redeem' &&

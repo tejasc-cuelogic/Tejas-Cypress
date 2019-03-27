@@ -102,7 +102,18 @@ export default class AccountDetails extends Component {
                     const CurrentModule = item.load === false ?
                       item.component : getModule(item.component);
                     return (
-                      <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule {...props} resourceId={details.id} />} />
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => (
+                          <CurrentModule
+                            module={item.title === 'Activity' ? 'userDetails' : false}
+                            showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
+                            {...props}
+                            resourceId={details.id}
+                          />)
+                              }
+                      />
                     );
                   })
                 }
