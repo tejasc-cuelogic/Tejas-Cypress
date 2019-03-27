@@ -8,7 +8,7 @@ import { MaskedInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors, SuccessScreen } from '../../../../../../theme/shared';
 
-@inject('uiStore', 'identityStore', 'userDetailsStore')
+@inject('uiStore', 'identityStore', 'userDetailsStore', 'multiFactorAuthStore')
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
@@ -32,9 +32,13 @@ export default class ConfirmPhoneNumber extends Component {
   }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
+    const setMfaMode = !this.props.userDetailsStore.userDetails.phone;
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
+        if (setMfaMode) {
+          this.props.multiFactorAuthStore.updateMfaModeType();
+        }
         Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
         this.props.uiStore.clearErrors();
