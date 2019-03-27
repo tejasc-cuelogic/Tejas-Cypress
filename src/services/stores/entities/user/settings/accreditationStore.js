@@ -48,6 +48,7 @@ export class AccreditationStore {
   @observable showAccountList = true;
   @observable headerSubheaderObj = {};
   @observable accType = '';
+  @observable currentInvestmentStatus = '';
 
   @action
   initRequest = (reqParams) => {
@@ -671,12 +672,14 @@ export class AccreditationStore {
       accountSelected || userDetailsStore.currentActiveAccountDetails.name;
     const intialAccountStatus = this.userSelectedAccountStatus(currentSelectedAccount);
     this.setUserSelectedAccountStatus(intialAccountStatus);
+    let investmentType = 'CF';
     if (intialAccountStatus === 'FULL' && regulationCheck) {
       let currentAcitveObject = {};
       if (aggreditationDetails) {
         currentAcitveObject =
           find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
+      investmentType = regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'D506C' : 'CF';
       const validAccreditationStatus = ['REQUESTED', 'INVALID'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)
@@ -701,6 +704,7 @@ export class AccreditationStore {
     } else if (intialAccountStatus === 'FULL') {
       this.userAccredetiationState = 'ELGIBLE';
     }
+    this.setCurrentInvestmentStatus(investmentType);
   }
   @action
   setUserSelectedAccountStatus = (intialAccountStatus) => {
@@ -888,6 +892,10 @@ export class AccreditationStore {
   @action
   resetAccreditationObject = () => {
     this.accreditationData = { ira: null, individual: null, entity: null };
+  }
+  @action
+  setCurrentInvestmentStatus = (val) => {
+    this.currentInvestmentStatus = val;
   }
 }
 export default new AccreditationStore();

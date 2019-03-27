@@ -113,6 +113,7 @@ export default class Agreement extends React.Component {
     const { campaign } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
+    const { currentInvestmentStatus } = this.props.accreditationStore;
     return (
       <Aux>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -211,10 +212,18 @@ export default class Agreement extends React.Component {
                               </Aux>
                           )}
                           customUpdateLimitLabel={(
-                            <Aux>
-                              I confirm that I am complying with my <b>annual investment limit</b> (<Link to={`${match.url}/change-investment-limit`}>update</Link>)
-                            </Aux>
+                            currentInvestmentStatus && currentInvestmentStatus === 'D506C' ?
+                              <Aux>
+                                I hereby certify that I have a reasonable expectation that I will
+                                 continue to meet or exceed the requirements to be considered an
+                                  accredited investor.
+                              </Aux>
+                              :
+                              <Aux>
+                                I confirm that I am complying with my <b>annual investment limit</b> (<Link to={`${match.url}/change-investment-limit`}>update</Link>)
+                              </Aux>
                           )}
+                          conditonalTooltip={!(currentInvestmentStatus && currentInvestmentStatus === 'D506C')}
                         />
                       </Grid.Column>
                     ))}
