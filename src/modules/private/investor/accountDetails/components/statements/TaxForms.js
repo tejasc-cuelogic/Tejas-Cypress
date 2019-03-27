@@ -70,7 +70,7 @@ export default class TaxForms extends Component {
                   instructions={instructions}
                 />
               </Card>
-              {totalRecords > 0 &&
+              {totalRecords > 0 && totalRecords > requestState.perPage &&
               <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>
