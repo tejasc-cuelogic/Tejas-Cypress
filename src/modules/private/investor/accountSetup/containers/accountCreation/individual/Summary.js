@@ -74,6 +74,7 @@ export default class Summary extends React.Component {
       formLinkBankManually,
       depositMoneyNow,
       isEncrypted,
+      isAccountPresent,
       shouldValidateAmount,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
@@ -143,7 +144,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !bankAccountNumber} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
         </div>
       </Aux>
     );

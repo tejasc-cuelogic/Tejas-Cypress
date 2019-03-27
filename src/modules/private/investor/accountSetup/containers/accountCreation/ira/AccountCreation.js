@@ -121,7 +121,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Summary',
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
-          validForm: isValidIraForm,
+          // validForm: isValidIraForm,
           component: <Summary />,
         },
       ];

@@ -48,6 +48,7 @@ export default class Finances extends Component {
                   prefix="$ "
                   number
                   showerror
+                  disableDecimal
                 />
               ))}
             </Form.Group>
