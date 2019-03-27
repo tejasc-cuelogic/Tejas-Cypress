@@ -2,7 +2,6 @@
 import fetch from 'isomorphic-fetch';
 import { ApolloClient, HttpLink, InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-client-preset';
 import { setContext } from 'apollo-link-context';
-import { commonStore } from '../services/stores';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
 
 global.fetch = fetch;
@@ -12,7 +11,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: commonStore.token ? `Bearer ${commonStore.token}` : '',
+      authorization: window.localStorage.getItem('jwt') ? `Bearer ${window.localStorage.getItem('jwt')}` : '',
     },
   };
 });
