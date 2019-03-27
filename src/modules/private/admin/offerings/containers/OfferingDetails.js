@@ -78,7 +78,11 @@ export default class OfferingDetails extends Component {
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
                     return (
-                      <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule {...props} resourceId={offeringid} offeringId={offeringid} />} />
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
+                      />
                     );
                   })
                 }

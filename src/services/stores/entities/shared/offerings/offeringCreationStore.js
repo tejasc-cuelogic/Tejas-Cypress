@@ -1061,14 +1061,20 @@ export class OfferingCreationStore {
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData.closureSummary = get(payloadData[keyName].launch, 'terminationDate') ? { ...getOfferingById.closureSummary, processingDate: get(payloadData[keyName].launch, 'terminationDate') } : null;
-        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
-          Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
+        payloadData.closureSummary = mergeWith(
+          toJS(getOfferingById.closureSummary),
+          payloadData.closureSummary,
+          this.mergeCustomize,
+        );
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       } else if (keyName === 'leadership') {
@@ -1097,10 +1103,17 @@ export class OfferingCreationStore {
           payloadData.offering,
           this.mergeCustomize,
         );
+        payloadData.closureSummary = mergeWith(
+          toJS(getOfferingById.closureSummary),
+          payloadData.closureSummary,
+          this.mergeCustomize,
+        );
         payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
         payloadData.offering = cleanDeep(payloadData.offering);
         payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
         payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'editPocForm') {
         payloadData.offering = {};
         payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);

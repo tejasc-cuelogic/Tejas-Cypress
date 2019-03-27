@@ -192,7 +192,7 @@ export const PRIVATE_NAV = [
       { title: 'Leadership', to: 'leadership', accessFor: [1] },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
       { title: 'Transactions', to: 'transactions', accessFor: [3, 4] },
-      { title: 'Comments', to: 'comments', accessFor: [2] },
+      { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
         title: 'Close', to: 'close', accessFor: [2], accessibleTo: ['admin', 'manager', 'support'],
@@ -245,11 +245,12 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Overview', to: 'overview' },
+      // { title: 'Overview', to: 'overview' },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'Engagement', to: 'engagement' },
       { title: 'Completed', to: 'completed' },
+      { title: '¯\\_(ツ)_/¯', to: 'failed' },
     ],
   },
   {
