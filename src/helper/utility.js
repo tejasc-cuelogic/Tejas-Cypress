@@ -34,6 +34,11 @@ export class Utility {
     maskedInput.split('-').join('')
   )
 
+  matchRegexWithUrl = regexList => _.find(
+    regexList,
+    regex => (window.location.href.match(new RegExp(regex)) !== null),
+  )
+
   guid = () => {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)

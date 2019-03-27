@@ -111,7 +111,10 @@ export class NavItems extends Component {
         ) :
           item.title === 'Bonus Rewards' && !this.props.bonusRewards ?
             null
-            : (
+            : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to]) ||
+            (item.to !== 'updates') ?
+            (item.title === 'Bonus Rewards' && this.props.isBonusReward) ||
+            (item.title !== 'Bonus Rewards') ? (
               <Menu.Item
                 key={item.to}
                 name={item.to}
@@ -126,11 +129,17 @@ export class NavItems extends Component {
                 {item.to === 'messages' &&
                   <Label circular color="red" size="mini" horizontal>3</Label>
                 }
-                <span>{item.title}</span>
+                {
+                    item.title !== 'Updates' ?
+                      <span>{item.title}</span> :
+                    (item.title === 'Updates' && item.to === 'updates' && this.props.countData ?
+                      <span>{item.title}</span> : ''
+                    )
+                }
                 {(item.to === 'updates' || item.to === 'comments') && this.props.countData ?
                   <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
                 }
-              </Menu.Item>
+              </Menu.Item>) : '' : ''
             )}
       </Aux>
     ));

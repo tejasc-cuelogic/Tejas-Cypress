@@ -16,6 +16,7 @@ import {
 } from '../../../../../constants/account';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import CashMovement from '../../summary/components/CashMovement';
+import Helper from '../../../../../helper/utility';
 
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
@@ -50,7 +51,7 @@ export default class AccountSetup extends Component {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
     // TODO change to regex
-    if (!window.location.href.includes('account-creation')) {
+    if (!Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
       this.props.portfolioStore.getSummary();
     }
   }

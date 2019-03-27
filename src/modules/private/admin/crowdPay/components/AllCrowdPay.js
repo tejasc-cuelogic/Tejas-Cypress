@@ -86,7 +86,7 @@ export default class AllCrowdPay extends Component {
                         <Link to={`/app/users/${account.userId}/profile-data`}>
                           <b>{account.firstName} {account.lastName}</b>
                         </Link>
-                        <br />{account.email}<br />{Helper.phoneNumberFormatter(account.phone)}
+                        <br />{account.email}<br />{account.phone ? Helper.phoneNumberFormatter(account.phone) : ''}
                       </p>
                     </Table.Cell>
                     {type === 'review' &&
