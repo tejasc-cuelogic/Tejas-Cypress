@@ -3,12 +3,16 @@ import _ from 'lodash';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
+import Helper from '../../helper/utility';
+
 
 const hasData = compState => compState.validForm;
 const getNavStates = (indx, length, steps) => {
   const styles = [];
   /* eslint-disable no-plusplus */
-  const isAccountCreation = window.location.href.includes('account-creation');
+  // eslint-disable-next-line max-len
+  // const isAccountCreation = window.location.href.includes('account-creation') || window.location.href.includes('establish-profile');
+  const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
   for (let i = 0; i < length; i++) {
     if ((isAccountCreation && hasData(steps[i]) && i !== indx) || i < indx) {
       styles.push('done');
