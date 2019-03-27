@@ -72,7 +72,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
-      this.onRouteChanged();
+      this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
     }
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
@@ -117,9 +117,12 @@ class App extends Component {
       });
     }
   }
-  onRouteChanged = () => {
+  onRouteChanged = ({ oldLocation, newLocation }) => {
     if (window.analytics) {
-      window.analytics.page();
+      window.analytics.page(document.title, {
+        path: newLocation.pathname,
+        referrer: `https://${window.location.hostname}${oldLocation.pathname}`,
+      });
     }
   }
   checkUserIdleStatus = () => {
