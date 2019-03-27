@@ -43,12 +43,6 @@ class App extends Component {
   componentWillMount() {
     this.checkUserIdleStatus();
     const { authStore, location, history } = this.props;
-    history.listen((location, action) => { // eslint-disable-line
-      if (window.analytics) {
-        window.analytics.page();
-      }
-    });
-
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
       const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
@@ -77,6 +71,9 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      this.onRouteChanged();
+    }
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         // console.log('Browser tab is hidden');
@@ -86,6 +83,7 @@ class App extends Component {
         });
       }
     });
+
     this.checkUserIdleStatus();
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
@@ -119,6 +117,11 @@ class App extends Component {
       });
     }
   }
+  onRouteChanged = () => {
+    if (window.analytics) {
+      window.analytics.page();
+    }
+  }
   checkUserIdleStatus = () => {
     if (this.props.authStore.isUserLoggedIn && localStorage.getItem('lastActiveTime')) {
       const idleTime = (new Date().getTime() - localStorage.getItem('lastActiveTime'));
@@ -131,6 +134,7 @@ class App extends Component {
   }
   checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
+
   render() {
     const { location } = this.props;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
