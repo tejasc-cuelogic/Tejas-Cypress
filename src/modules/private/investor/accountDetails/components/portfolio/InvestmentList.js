@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
+import Aux from 'react-aux';
 import { get } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
@@ -8,8 +9,8 @@ import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
-const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const InvestmentList = (props) => {
+  const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Investment Type', 'Invested Amount', 'Status'];
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
   const {
     investments, match, viewAgreement, handleInvestNowClick,
@@ -45,18 +46,38 @@ const InvestmentList = (props) => {
                         {props.listOf === 'pending' ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
                           <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                         )}
-                      </Table.Cell>
-                      <Table.Cell>{get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}</Table.Cell>
-                      <Table.Cell>{get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
-                      <Table.Cell>
-                        {Helper.CurrencyFormat(data.investedAmount, 0)}
                         <p className="date-stamp">
-                          <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                          {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}
                         </p>
                       </Table.Cell>
+                      <Table.Cell>
+                        {props.listOf !== 'pending' ?
+                          data && data.offering && data.offering.stage ?
+                            STAGES[data.offering.stage].label : '-' :
+                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                        }
+                      </Table.Cell>
+                      <Table.Cell>
+                        {props.listOf !== 'pending' ?
+                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share' :
+                          <Aux>
+                            {Helper.CurrencyFormat(data.investedAmount, 0)}
+                            <p className="date-stamp">
+                              <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                            </p>
+                          </Aux>
+                        }
+                      </Table.Cell>
                       <Table.Cell className="text-capitalize">
-                        {data && data.offering && data.offering.stage ?
-                          STAGES[data.offering.stage].label : '-'
+                        {props.listOf !== 'pending' ?
+                          <Aux>
+                            {Helper.CurrencyFormat(data.investedAmount, 0)}
+                            <p className="date-stamp">
+                              <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                            </p>
+                          </Aux> :
+                          data && data.offering && data.offering.stage ?
+                            STAGES[data.offering.stage].label : '-'
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>
