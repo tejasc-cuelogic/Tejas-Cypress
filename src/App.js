@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import { get } from 'lodash';
 import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
@@ -71,6 +72,17 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.authStore.isUserLoggedIn) {
+      authActions.getUserSession().then((session) => {
+        if (!session.isValid()) {
+          this.onIdle();
+        }
+      }).catch((err) => {
+        if (err && (get(err, 'code') === 'NotAuthorizedException' || get(err, 'code') === 'Refresh Token has been revoked' || get(err, 'code') === 'Access Token has been revoked')) {
+          this.onIdle();
+        }
+      });
+    }
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
     }

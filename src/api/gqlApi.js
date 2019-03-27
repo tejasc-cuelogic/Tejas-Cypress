@@ -4,7 +4,7 @@ import { ApolloClient, HttpLink, InMemoryCache, IntrospectionFragmentMatcher, Ap
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
 import { get } from 'lodash';
-import { commonStore, authStore } from '../services/stores';
+import { authStore } from '../services/stores';
 import { API_ROOT, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
@@ -19,16 +19,16 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: commonStore.token ? `Bearer ${commonStore.token}` : '',
+      authorization: window.localStorage.getItem('jwt') ? `Bearer ${window.localStorage.getItem('jwt')}` : '',
     },
   };
 });
 
 const errorLink = onError((res) => {
-  console.log(res);
   if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
+    console.log(res);
     authActions.logout().then(() => {
-      this.props.history.push('/auth/login');
+      window.location = '/auth/login';
     });
   }
 });
