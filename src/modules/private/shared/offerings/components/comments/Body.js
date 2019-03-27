@@ -46,8 +46,8 @@ const Body = props => (
             avatarUrl: get(msg, 'createdUserInfo.info.avatar.url') || null,
             roles: [get(msg, 'createdUserInfo.roles.name')],
           };
-          const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
-          return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : msg.createdUserInfo.id !== props.currentUserId ? (
+          const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
+          return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : get(msg, 'createdUserInfo.id') !== props.currentUserId ? (
             <Aux>
               <Item className="in">
                 <UserAvatar size="mini" UserInfo={userInfo} />
@@ -60,7 +60,7 @@ const Body = props => (
                       <Extra
                         direction="from"
                         showApproval={!props.isIssuer &&
-                          msg.createdUserInfo.id === props.currentOfferingIssuerId}
+                          get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId}
                         approved={msg.approved}
                         isIssuer={props.isIssuer}
                         date={msgDate}
@@ -70,12 +70,12 @@ const Body = props => (
                   }
                   edit={
                     <div className="comment-actions">
-                      {msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && !msg.approved ?
+                      {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved ?
                         <Aux>
                           <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
                           <Link to="/" className="link" loading={props.buttonLoader === msg.id} onClick={e => props.approveComment(e, msg.id)}>Approve</Link>{' | '}
                         </Aux>
-                      : msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && msg.approved &&
+                      : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved &&
                       <Aux>
                         <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
                       </Aux>

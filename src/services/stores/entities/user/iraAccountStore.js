@@ -428,7 +428,7 @@ class IraAccountStore {
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
         bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount(accountStore.investmentAccType);
+        bankAccountStore.validateAddfundsAmount();
         const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);

@@ -1,4 +1,6 @@
 import About from './public/about/containers/About';
+import ReferralProgramTerms from './public/agreements/ReferralProgramTerms';
+import AccreditedIncentiveTerms from './public/agreements/AccreditedIncentiveTerms';
 import Agreements from './public/agreements/containers/Agreements';
 import Blog from './public/blog/containers/Blog';
 import Home from './public/home/containers/Home';
@@ -34,6 +36,14 @@ export const publicRoutes = [
     path: '/subscribe/newsletter',
     component: Home,
     exact: true,
+  },
+  {
+    path: '/agreements/referral-program-terms-and-conditions',
+    component: ReferralProgramTerms,
+  },
+  {
+    path: '/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions',
+    component: AccreditedIncentiveTerms,
   },
   {
     path: '/agreements/:section',
