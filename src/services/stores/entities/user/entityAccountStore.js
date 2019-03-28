@@ -158,6 +158,8 @@ class EntityAccountStore {
   ) => new Promise((resolve) => {
     this.validateAndSubmitStep(currentStep, removeUploadedData, field).then(() => {
       resolve();
+    }).catch(() => {
+      uiStore.setProgress(false);
     });
   })
 
@@ -663,11 +665,17 @@ class EntityAccountStore {
                 validate: validationActions.validateEntityFormationDoc,
               };
             if (isPersonalForm || this.formationDocUploadCount() >= 3) {
-              this.createAccount(currentStep, false);
+              this.createAccount(currentStep, false).then(() => {
+                console.log();
+                uiStore.setProgress(false);
+              });
+            } else {
+              uiStore.setProgress(false);
             }
+          } else {
+            uiStore.setProgress(false);
           }
           // eslint-disable-next-line no-undef
-          uiStore.setProgress(false);
         })
         .catch((err) => {
           uiStore.setProgress(false);
