@@ -43,12 +43,14 @@ const InvestmentList = (props) => {
                     <Table.Row key={data.name} onClick={() => handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : '')}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
-                        {props.listOf === 'pending' ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
-                          <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
-                        )}
-                        <p className="date-stamp">
-                          {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}
-                        </p>
+                        <div className="offering-title">
+                          {props.listOf === 'pending' ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
+                            <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
+                          )}
+                          <p className="date-stamp">
+                            {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}
+                          </p>
+                        </div>
                       </Table.Cell>
                       <Table.Cell>
                         {props.listOf !== 'pending' ?
