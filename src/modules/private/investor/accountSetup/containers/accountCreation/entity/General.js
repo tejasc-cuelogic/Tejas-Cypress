@@ -63,6 +63,12 @@ export default class General extends Component {
             />
             <Form.Group widths="equal">
               <FormInput
+                name="streetTwo"
+                fielddata={GEN_INFO_FRM.fields.streetTwo}
+                changed={genInfoChange}
+                showerror
+              />
+              <FormInput
                 name="city"
                 fielddata={GEN_INFO_FRM.fields.city}
                 changed={genInfoChange}
