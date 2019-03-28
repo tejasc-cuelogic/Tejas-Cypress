@@ -93,13 +93,10 @@ const InvestmentList = (props) => {
                             {viewAgreement && data.agreementId} {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
-                            {!props.isAccountFrozen &&
+                            {!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) === 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
                               <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                             }
-                            {DataFormatter.diffDays(data && data.offering &&
-                              data.offering.closureSummary &&
-                              data.offering.closureSummary.processingDate ?
-                              data.offering.closureSummary.processingDate : null) > 2 &&
+                            {DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2 &&
                               <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             }
                           </Button.Group>
