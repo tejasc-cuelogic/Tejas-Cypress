@@ -133,6 +133,7 @@ class EntityAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
+            uiStore.resetcreateAccountMessage();
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })
@@ -173,6 +174,7 @@ class EntityAccountStore {
           city: this.GEN_INFO_FRM.fields.city.value,
           state: selectedState ? selectedState.key : '',
           zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+          streetTwo: this.GEN_INFO_FRM.fields.streetTwo.value,
         };
         this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
         break;
@@ -601,7 +603,7 @@ class EntityAccountStore {
           account.details.initialDepositAmount;
         }
         bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount();
+        // bankAccountStore.validateAddfundsAmount();
         this.renderAfterPopulate();
       }
     }
