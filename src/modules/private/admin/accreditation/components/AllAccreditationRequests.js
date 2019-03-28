@@ -25,7 +25,7 @@ export default class AllAccreditationRequests extends Component {
   render() {
     const { match, accreditationStore } = this.props;
     const {
-      accreditations, loading, count, requestState,
+      accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
     if (loading) {
       return <InlineLoader />;
@@ -95,12 +95,16 @@ export default class AllAccreditationRequests extends Component {
                       </p>
                     </Table.Cell>
                     {accreditation.accreditationStatus === 'REQUESTED' ?
-                      <Actions
-                        accountId={accreditation.accountId}
-                        userId={accreditation.userId}
-                        accountType={get(accreditation, 'accountType[0]')}
-                        {...this.props}
-                      /> :
+                      <Aux>
+                        <Actions
+                          accountId={accreditation.accountId}
+                          userId={accreditation.userId}
+                          accountType={get(accreditation, 'accountType[0]')}
+                          emailVerifier={emailVerifier}
+                          accreditation={accreditation}
+                          {...this.props}
+                        />
+                      </Aux> :
                       <Table.Cell>
                         <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
                       </Table.Cell>
