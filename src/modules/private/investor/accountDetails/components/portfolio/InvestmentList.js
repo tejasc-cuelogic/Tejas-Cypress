@@ -48,7 +48,7 @@ const InvestmentList = (props) => {
                             <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                           )}
                           <p className="date-stamp">
-                            {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}
+                            {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
                           </p>
                         </div>
                       </Table.Cell>
@@ -126,7 +126,7 @@ const InvestmentList = (props) => {
               </Table.Body>
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell colSpan="2" />
+                  <Table.HeaderCell colSpan={`${props.listOf === 'pending' ? '1' : '2'}`} />
                   <Table.HeaderCell>Total:</Table.HeaderCell>
                   <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
                   <Table.HeaderCell colSpan="3" />
