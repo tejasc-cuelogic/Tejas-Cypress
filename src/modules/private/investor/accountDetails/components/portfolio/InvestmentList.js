@@ -109,7 +109,7 @@ const InvestmentList = (props) => {
               </Table.Body>
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell />
+                  <Table.HeaderCell colSpan={`${props.listOf === 'pending' ? '1' : '2'}`} />
                   <Table.HeaderCell>Total:</Table.HeaderCell>
                   <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
                   <Table.HeaderCell colSpan="3" />
