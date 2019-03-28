@@ -64,7 +64,7 @@ export const FillTable = ({
                     {
                       result.columns.map(col => (
                         <Table.Cell key={col.field} textAlign={col.textAlign}>
-                          {['amount'].includes(col.field) ? row.type === 'Withdrawal' ? `(${Helper.CurrencyFormat(row[col.field])})` : Helper.CurrencyFormat(row[col.field]) : (
+                          {['amount'].includes(col.field) ? (row.type === 'Withdrawal' || ((row.type === 'Investment' || row.type === 'Reservation') && row.status !== 'Cancelled')) ? `(${Helper.CurrencyFormat(row[col.field])})` : Helper.CurrencyFormat(row[col.field]) : (
                               ['createdAt', 'date'].includes(col.field) ?
                                 <DateTimeFormat datetime={row[col.field]} /> : (
                                   (col.field === 'file') ? (
