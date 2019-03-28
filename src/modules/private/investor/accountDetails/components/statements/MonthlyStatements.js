@@ -61,7 +61,7 @@ export default class MonthlyStatements extends Component {
                   result={result}
                 />
               </Card>
-              {totalRecords > 0 &&
+              {totalRecords > 0 && totalRecords > requestState.perPage &&
               <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>

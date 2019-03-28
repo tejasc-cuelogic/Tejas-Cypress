@@ -130,8 +130,8 @@ export class BankAccountStore {
   }
 
   @action
-  validateAddfundsAmount = (accType = '') => {
-    if (accType === 'entity') {
+  validateAddfundsAmount = () => {
+    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
       if (parseFloat(this.formEntityAddFunds.fields.value.value, 0) === -1) {
         this.shouldValidateAmount = true;
         this.resetEntityAddFundsForm();
@@ -341,11 +341,14 @@ export class BankAccountStore {
 
   @action
   validateAddFunds = () => {
-    if (accountStore.investmentAccType !== 'entity') {
+    if (!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
+      // TODO optiimize map function in if and else
       map(this.formAddFunds.fields, (value) => {
         const { key } = value;
         const fundValue = value;
-        fundValue.value = parseFloat(value.value, 0) === -1 ? '' : parseFloat(value.value, 0);
+        fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+         // eslint-disable-next-line no-restricted-globals
+         isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
         const { errors } = validationService.validate(fundValue);
         Validator.setFormError(
           this.formAddFunds,
@@ -358,7 +361,9 @@ export class BankAccountStore {
       map(this.formEntityAddFunds.fields, (value) => {
         const { key } = value;
         const fundValue = value;
-        fundValue.value = parseFloat(value.value, 0) === -1 ? '' : parseFloat(value.value, 0);
+        fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+          // eslint-disable-next-line no-restricted-globals
+          isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
         const { errors } = validationService.validate(value);
         Validator.setFormError(
           this.formEntityAddFunds,

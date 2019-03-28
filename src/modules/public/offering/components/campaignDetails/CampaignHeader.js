@@ -34,6 +34,7 @@ export default class CampaignHeader extends Component {
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const isClosed = campaign.stage !== 'LIVE';
+    const isCreation = campaign.stage === 'CREATION';
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const earlyBird = get(campaign, 'earlyBird') || null;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
@@ -172,6 +173,10 @@ export default class CampaignHeader extends Component {
                     </Aux>
                   }
                   <div className="center-align mt-20">
+                    {isCreation ?
+                      <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
+                    : ''
+                    }
                     {(!isClosed && diff > 0) &&
                       <Aux>
                         <Button fluid secondary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || diffForProcessing === 0} onClick={this.handleInvestNowClick} />

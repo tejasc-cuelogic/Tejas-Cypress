@@ -55,6 +55,12 @@ export default class Portfolio extends Component {
       [...inActiveItems, of];
     this.setState({ inActiveItems: updatedList });
   }
+  handleViewInvestment = (id) => {
+    if (id) {
+      const redirectURL = `${this.props.match.url}/investment-details/${id}`;
+      this.props.history.push(redirectURL);
+    }
+  }
   handleInvestNowOnChangeClick = (e, id) => {
     const redirectURL = `${this.props.match.url}/${id}/invest-now`;
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
@@ -97,13 +103,13 @@ export default class Portfolio extends Component {
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
         }
         {activeSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
         }
         {completedSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&
@@ -113,7 +119,7 @@ export default class Portfolio extends Component {
             <Card>
               <Card.Content>
                 <Header as="h4">Browse the latest investment opportunities.</Header>
-                <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+                <Button as={Link} to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
               </Card.Content>
             </Card>
           </Aux> : null
