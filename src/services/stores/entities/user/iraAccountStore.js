@@ -174,6 +174,7 @@ class IraAccountStore {
         this.setFieldValue('showProcessingModal', true);
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
+        this.props.uiStore.resetcreateAccountMessage();
         Helper.toast('IRA account submitted successfully.', 'success');
         resolve();
       })
@@ -428,7 +429,7 @@ class IraAccountStore {
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
         bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount();
+        // bankAccountStore.validateAddfundsAmount();
         const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
