@@ -56,7 +56,7 @@ export default class AllCrowdPay extends Component {
                 {type === 'review' &&
                   <Aux>
                     <Table.HeaderCell>Account Type</Table.HeaderCell>
-                    <Table.HeaderCell>Brokerage /<br /> Public Compnay</Table.HeaderCell>
+                    <Table.HeaderCell>Brokerage / Public Compnay</Table.HeaderCell>
                   </Aux>
                 }
                 <Table.HeaderCell>Creation date</Table.HeaderCell>
@@ -79,10 +79,6 @@ export default class AllCrowdPay extends Component {
               {
               accounts.length === 0 ? (
                 <Table.Row>
-                  <Table.call>
-                    Firm: {get(accounts, 'investorProfileData.brokerageFirmName')} <br />
-                    Ticker: {get(accounts, 'investorProfileData.publicCompanyTicker')}
-                  </Table.call>
                   <Table.Cell textAlign="center" colSpan={5}>No accounts to display !</Table.Cell>
                 </Table.Row>
                 ) :
@@ -101,10 +97,11 @@ export default class AllCrowdPay extends Component {
                         <Table.Cell>
                           <Icon className={`ns-${lowerCase(account.accountType)}-line`} color="green" size="large" />
                         </Table.Cell>
-                        <Table.call>
-                          Firm: {get(account, 'investorProfileData.brokerageFirmName')} <br />
-                          Ticker: {get(account, 'investorProfileData.publicCompanyTicker')}
-                        </Table.call>
+                        <Table.Cell>
+                          {`Firm: ${get(account, 'investorProfileData.brokerageFirmName') ? get(account, 'investorProfileData.brokerageFirmName') : 'N/A'}`}
+                          <br />
+                          {`Ticker: ${get(account, 'investorProfileData.publicCompanyTicker') ? get(account, 'investorProfileData.publicCompanyTicker') : 'N/A'}`}
+                        </Table.Cell>
                       </Aux>
                     }
                     <Table.Cell>
