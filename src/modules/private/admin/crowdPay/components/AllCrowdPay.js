@@ -56,7 +56,7 @@ export default class AllCrowdPay extends Component {
                 {type === 'review' &&
                   <Aux>
                     <Table.HeaderCell>Account Type</Table.HeaderCell>
-                    <Table.HeaderCell>Brokerage / Public Compnay</Table.HeaderCell>
+                    <Table.HeaderCell>Brokerage / Public Company</Table.HeaderCell>
                   </Aux>
                 }
                 <Table.HeaderCell>Creation date</Table.HeaderCell>
