@@ -11,8 +11,10 @@ import { validationActions } from '../../../../../services/actions';
 @observer
 export default class AddFunds extends Component {
   componentWillMount() {
-    this.props.bankAccountStore.validateAddFunds();
-    this.props.bankAccountStore.validateAddfundsAmount(this.props.accountStore.investmentAccType);
+    // this.props.bankAccountStore.validateAddFunds();
+    // eslint-disable-next-line max-len
+    // this.props.bankAccountStore.validateAddfundsAmount(this.props.accountStore.investmentAccType);
+    this.props.bankAccountStore.setDepositMoneyNow(true);
   }
   componentDidMount() {
     // this.props.bankAccountStore.validateForm('formAddFunds');
@@ -24,9 +26,7 @@ export default class AddFunds extends Component {
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
-    if (!this.props.bankAccountStore.formAddFunds.fields.value.error) {
-      this.renderStep();
-    }
+    this.renderStep();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -109,9 +109,8 @@ export default class AddFunds extends Component {
             }
             <Button primary size="large" className="relaxed" content="Confirm" disabled={isValid} />
           </Form>
-          {this.props.accountStore.investmentAccType !== 'entity' ?
+          {this.props.accountStore.investmentAccType !== 'entity' &&
             <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-            : ''
           }
         </div>
       </Aux>
