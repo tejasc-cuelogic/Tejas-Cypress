@@ -76,6 +76,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         avatar {
           name
@@ -116,6 +117,7 @@ export const userDetailsQuery = gql`
               city
               state
               zipCode
+              streetTwo
             }
             isTrust
             trustDate
@@ -208,6 +210,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         status
       }

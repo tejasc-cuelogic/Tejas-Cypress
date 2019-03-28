@@ -40,6 +40,7 @@ export default class AccountCreation extends React.Component {
       isEnterPressed,
       setIsEnterPressed,
       resetIsEnterPressed,
+      createAccountMessage,
     } = this.props.uiStore;
     // Done changes for saving link bank details - Alan's feedback point
     // const { plaidAccDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;
@@ -69,7 +70,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Add funds',
           component: <AddFunds />,
-          isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
+          isValid: formAddFunds.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
           // Done changes for saving link bank details - Alan's feedback point
           // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
           // : stepToBeRendered > 1 ? 'error' : '',
@@ -89,10 +90,9 @@ export default class AccountCreation extends React.Component {
     if (showProcessingModal) {
       return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
     }
-    const loaderMsg = stepToBeRendered === 2 ? 'Please wait...<br /><br /> We are finalizing your account. This can take up to a minute.' : '';
     return (
       <div className="step-progress" >
-        <MultiStep loaderMsg={loaderMsg} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep loaderMsg={createAccountMessage} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

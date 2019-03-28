@@ -165,6 +165,7 @@ export class IdentityStore {
         city: fields.city.value,
         state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
+        streetTwo: fields.zipCode.value,
       },
     };
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
@@ -225,6 +226,7 @@ export class IdentityStore {
         city: fields.city.value,
         state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
+        streetTwo: fields.streetTwo.value,
       },
     };
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
@@ -643,6 +645,7 @@ export class IdentityStore {
         city: fields.city.value,
         state: selectedState ? selectedState.key : '',
         zipCode: fields.zipCode.value,
+        streetTwo: fields.streetTwo.value,
       },
       avatar: {
         name: fields.profilePhoto.value,
@@ -708,14 +711,14 @@ export class IdentityStore {
       this.setProfileInfoField('phoneNumber', phone.number);
     }
     if (info && info.mailingAddress === null) {
-      const addressFields = ['street', 'city', 'state', 'zipCode'];
+      const addressFields = ['street', 'city', 'state', 'zipCode', 'streetTwo'];
       if (legalDetails && legalDetails.legalAddress !== null) {
         addressFields.forEach((val) => {
           this.setProfileInfoField(val, legalDetails.legalAddress[val]);
         });
       }
     } else if (info && info.mailingAddress) {
-      const mailingAddressFields = ['street', 'city', 'state', 'zipCode'];
+      const mailingAddressFields = ['street', 'city', 'state', 'zipCode', 'streetTwo'];
       mailingAddressFields.forEach((val) => {
         if (info.mailingAddress[val] !== null) {
           this.setProfileInfoField(val, info.mailingAddress[val]);
@@ -755,13 +758,14 @@ export class IdentityStore {
   @action
   checkValidAddress = () => new Promise((resolve) => {
     const {
-      residentalStreet, state, city, zipCode,
+      residentalStreet, state, city, zipCode, streetTwo,
     } = this.ID_VERIFICATION_FRM.fields;
     const payLoad = {
       street: residentalStreet.value,
       city: city.value,
       state: state.value,
       zipCode: zipCode.value,
+      streetTwo: streetTwo.value,
     };
     this.setFieldValue('signUpLoading', true);
     const result = graphql({
@@ -777,6 +781,10 @@ export class IdentityStore {
           resolve(res.checkValidInvestorAddress);
         }
       },
+      onError: (err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        this.setFieldValue('signUpLoading', false);
+      },
     });
   })
 
@@ -786,6 +794,7 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
+    this.signUpLoading = false;
   }
 
   @action

@@ -54,7 +54,10 @@ export default class AllCrowdPay extends Component {
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 {type === 'review' &&
-                  <Table.HeaderCell>Account Type</Table.HeaderCell>
+                  <Aux>
+                    <Table.HeaderCell>Account Type</Table.HeaderCell>
+                    <Table.HeaderCell>Brokerage / Public Company</Table.HeaderCell>
+                  </Aux>
                 }
                 <Table.HeaderCell>Creation date</Table.HeaderCell>
                 {type !== 'review' &&
@@ -90,9 +93,16 @@ export default class AllCrowdPay extends Component {
                       </p>
                     </Table.Cell>
                     {type === 'review' &&
-                    <Table.Cell>
-                      <Icon className={`ns-${lowerCase(account.accountType)}-line`} color="green" size="large" />
-                    </Table.Cell>
+                      <Aux>
+                        <Table.Cell>
+                          <Icon className={`ns-${lowerCase(account.accountType)}-line`} color="green" size="large" />
+                        </Table.Cell>
+                        <Table.Cell>
+                          {`Firm: ${get(account, 'investorProfileData.brokerageFirmName') ? get(account, 'investorProfileData.brokerageFirmName') : 'N/A'}`}
+                          <br />
+                          {`Ticker: ${get(account, 'investorProfileData.publicCompanyTicker') ? get(account, 'investorProfileData.publicCompanyTicker') : 'N/A'}`}
+                        </Table.Cell>
+                      </Aux>
                     }
                     <Table.Cell>
                       {account.created && account.created.date ?
