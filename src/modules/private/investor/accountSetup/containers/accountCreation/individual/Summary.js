@@ -51,7 +51,7 @@ export default class Summary extends React.Component {
         } else {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
           if (!this.props.individualAccountStore.showProcessingModal) {
-            this.props.history.replace('app/summary');
+            this.props.history.push('/app/summary');
           }
         }
       }).catch(() => { });

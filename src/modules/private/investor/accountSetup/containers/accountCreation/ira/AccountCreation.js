@@ -37,7 +37,7 @@ export default class AccountCreation extends React.Component {
   }
   closeProcessingModal = () => {
     this.props.iraAccountStore.setFieldValue('showProcessingModal', false);
-    this.props.history.push('app/summary');
+    this.props.history.push('/app/summary');
   }
   render() {
     let steps = [];
