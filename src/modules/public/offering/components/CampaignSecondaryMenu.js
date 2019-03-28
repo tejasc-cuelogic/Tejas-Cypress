@@ -26,6 +26,7 @@ export default class CampaignSecondaryMenu extends Component {
     && campaign.closureSummary.processingDate;
     const diff = DataFormatter.diffDays(processingDate);
     const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
+    const isInProcessing = diffForProcessing === 0 && !get(campaign, 'closureSummary.hardCloseDate');
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const { navStatus, subNavStatus } = this.props.navStore;
@@ -48,8 +49,8 @@ export default class CampaignSecondaryMenu extends Component {
                   }
                 </Aux>
             }
-              {!isClosed &&
-                <Button compact primary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || diffForProcessing === 0} onClick={this.handleInvestNowClick} />
+              {(!isClosed && diffForProcessing >= 0) &&
+                <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
