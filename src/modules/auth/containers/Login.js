@@ -12,9 +12,9 @@ import { ListErrors } from '../../../theme/shared';
 class Login extends Component {
   componentWillMount() {
     if (this.props.authStore.isUserLoggedIn) {
-      const { redirectURL } = this.props.uiStore;
+      const { authRef } = this.props.uiStore;
       const { roles } = this.props.userStore.currentUser;
-      this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
+      this.props.history.push(authRef || (roles && roles.includes('investor') ?
         `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
     }
     this.props.uiStore.clearErrors();
