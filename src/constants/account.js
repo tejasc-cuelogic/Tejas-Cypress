@@ -645,12 +645,11 @@ export const FINANCES = {
     value: '',
     label: 'Net Worth',
     error: undefined,
-    rule: 'required|min:1|max:2147483647',
+    rule: 'required|min:1',
     placeHolder: 'Enter here',
     customErrors: {
       required: 'required',
       min: 'Please enter a valid amount to deposit',
-      max: 'Please enter a valid amount to deposit',
     },
   },
   annualIncomeCurrentYear: {
