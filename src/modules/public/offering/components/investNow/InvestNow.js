@@ -47,6 +47,7 @@ export default class InvestNow extends React.Component {
     const reflectedURL = this.props.history.location.pathname;
     if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
       this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+      // this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
       this.props.accreditationStore.resetAccreditationObject();
       this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
       if (!reflectedURL.includes('agreement')) {

@@ -418,6 +418,9 @@ export const ENTITY_GEN_INFO = {
   zipCode: {
     key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|maskedField:5', customErrors: { required: '* required', maskedField: 'The ZIP Code should be at least 5 digits' },
   },
+  streetTwo: {
+    key: 'streetTwo', value: '', label: 'Street Two', placeHolder: 'Enter Here', error: undefined, rule: 'required', customErrors: { required: '* required' },
+  },
 };
 
 export const ENTITY_TYPES = [

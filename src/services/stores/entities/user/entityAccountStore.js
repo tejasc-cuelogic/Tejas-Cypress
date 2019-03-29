@@ -133,6 +133,7 @@ class EntityAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
+            uiStore.resetcreateAccountMessage();
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })
@@ -157,6 +158,8 @@ class EntityAccountStore {
   ) => new Promise((resolve) => {
     this.validateAndSubmitStep(currentStep, removeUploadedData, field).then(() => {
       resolve();
+    }).catch(() => {
+      uiStore.setProgress(false);
     });
   })
 
@@ -173,6 +176,7 @@ class EntityAccountStore {
           city: this.GEN_INFO_FRM.fields.city.value,
           state: selectedState ? selectedState.key : '',
           zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+          streetTwo: this.GEN_INFO_FRM.fields.streetTwo.value,
         };
         this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
         break;
@@ -601,7 +605,7 @@ class EntityAccountStore {
           account.details.initialDepositAmount;
         }
         bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount();
+        // bankAccountStore.validateAddfundsAmount();
         this.renderAfterPopulate();
       }
     }
@@ -661,11 +665,17 @@ class EntityAccountStore {
                 validate: validationActions.validateEntityFormationDoc,
               };
             if (isPersonalForm || this.formationDocUploadCount() >= 3) {
-              this.createAccount(currentStep, false);
+              this.createAccount(currentStep, false).then(() => {
+                console.log();
+                uiStore.setProgress(false);
+              });
+            } else {
+              uiStore.setProgress(false);
             }
+          } else {
+            uiStore.setProgress(false);
           }
           // eslint-disable-next-line no-undef
-          uiStore.setProgress(false);
         })
         .catch((err) => {
           uiStore.setProgress(false);
