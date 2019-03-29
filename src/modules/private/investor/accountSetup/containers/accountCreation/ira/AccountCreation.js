@@ -36,8 +36,14 @@ export default class AccountCreation extends React.Component {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   closeProcessingModal = () => {
+    const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
     this.props.iraAccountStore.setFieldValue('showProcessingModal', false);
-    this.props.history.push('/app/summary');
+    if (partialInvestNowSessionURL) {
+      this.props.history.push(partialInvestNowSessionURL);
+      setPartialInvestmenSession();
+    } else {
+      this.props.history.push('app/summary');
+    }
   }
   render() {
     let steps = [];
