@@ -45,7 +45,7 @@ export default class CampaignSecondaryMenu extends Component {
                   }
                   {isClosed && get(campaign, 'closureSummary.repayment.count') ?
                     <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item> :
-                    (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item> : ''
+                    (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
                   }
                 </Aux>
             }
