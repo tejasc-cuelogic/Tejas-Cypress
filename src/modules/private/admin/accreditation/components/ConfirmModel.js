@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { FormTextarea, MaskedInput } from '../../../../../theme/form';
+import { FormTextarea, MaskedInput, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 
 @inject('accreditationStore', 'uiStore')
 @withRouter
@@ -25,8 +25,10 @@ export default class ConfirmModel extends Component {
       });
   }
   render() {
-    const { formChange, maskChange, CONFIRM_ACCREDITATION_FRM } = this.props.accreditationStore;
-    const actionValue = this.props.match.params.action;
+    const {
+      formChange, maskChange, CONFIRM_ACCREDITATION_FRM,
+    } = this.props.accreditationStore;
+    const { actionValue } = this.props.match.params;
     const { inProgress } = this.props.uiStore;
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
@@ -41,15 +43,21 @@ export default class ConfirmModel extends Component {
               fielddata={CONFIRM_ACCREDITATION_FRM.fields.justifyDescription}
               changed={(e, result) => formChange(e, result, 'CONFIRM_ACCREDITATION_FRM')}
             />
-            {actionValue === 'CONFIRMED' &&
-            <MaskedInput
-              name="expiration"
-              placeholder="3/4/2018"
-              fielddata={CONFIRM_ACCREDITATION_FRM.fields.expiration}
-              format="##/##/####"
-              changed={(values, field) => maskChange(values, 'CONFIRM_ACCREDITATION_FRM', field)}
-              dateOfBirth
-            />
+            {actionValue === 'CONFIRMED' ?
+              <MaskedInput
+                name="expiration"
+                placeholder="3/4/2018"
+                fielddata={CONFIRM_ACCREDITATION_FRM.fields.expiration}
+                format="##/##/####"
+                changed={(values, field) => maskChange(values, 'CONFIRM_ACCREDITATION_FRM', field)}
+                dateOfBirth
+              />
+              : <FormTextarea
+                containerclassname="secondary"
+                name="declinedMessage"
+                fielddata={CONFIRM_ACCREDITATION_FRM.fields.declinedMessage}
+                changed={(e, result) => formChange(e, result, 'CONFIRM_ACCREDITATION_FRM')}
+              />
             }
             <div className="center-align mt-30">
               <Button className={actionValue === 'CONFIRMED' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'CONFIRMED' ? 'Approve request' : 'Decline request'} loading={inProgress} disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid} onClick={this.handleConfirm} />

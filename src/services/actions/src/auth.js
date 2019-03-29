@@ -19,6 +19,7 @@ import {
   entityAccountStore,
   bankAccountStore,
   individualAccountStore,
+  portfolioStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -616,6 +617,7 @@ export class Auth {
       entityAccountStore.resetStoreData();
       bankAccountStore.resetStoreData();
       individualAccountStore.resetStoreData();
+      portfolioStore.resetPortfolioData();
       uiStore.clearErrors();
       res();
     })
@@ -647,6 +649,7 @@ export class Auth {
       entityAccountStore.resetStoreData();
       bankAccountStore.resetStoreData();
       individualAccountStore.resetStoreData();
+      portfolioStore.resetPortfolioData();
       uiStore.clearErrors();
       res();
     })

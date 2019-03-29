@@ -13,7 +13,7 @@ export const updateAccreditation = gql`
 `;
 
 export const approveOrDeclineForAccreditationRequest = gql`
-  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $comment: String, $expiration: String!) {
+  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $comment: String, $expiration: String!, $declinedMessage: String) {
     approveOrDeclineForAccreditationRequest (
     userId: $userId
     accountId: $accountId
@@ -21,6 +21,7 @@ export const approveOrDeclineForAccreditationRequest = gql`
     action: $action
     comment: $comment
     expiration: $expiration
+    declinedMessage: $declinedMessage
   )
 }
 `;
@@ -68,3 +69,12 @@ export const listAccreditation = gql`
   }
 }
 `;
+
+export const notifyVerifierForAccreditationRequestByEmail = gql`
+mutation notifyVerifierForAccreditationRequestByEmail($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum!) {
+  notifyVerifierForAccreditationRequestByEmail(
+     userId: $userId
+     accountId: $accountId
+     accountType: $accountType
+   )
+ }`;
