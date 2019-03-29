@@ -12,7 +12,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore')
+@inject('accreditationStore', 'uiStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -27,6 +27,7 @@ export default class AllAccreditationRequests extends Component {
     const {
       accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
+    const { inProgress } = this.props.uiStore;
     if (loading) {
       return <InlineLoader />;
     }
@@ -102,6 +103,7 @@ export default class AllAccreditationRequests extends Component {
                           accountType={get(accreditation, 'accountType[0]')}
                           emailVerifier={emailVerifier}
                           accreditation={accreditation}
+                          inProgress={inProgress}
                           {...this.props}
                         />
                       </Aux> :

@@ -575,6 +575,7 @@ export class AccreditationStore {
 
   @action
   emailVerifier = (userId, accountId, accountType) => {
+    uiStore.setProgress();
     const payLoad = { userId, accountId, accountType };
     return new Promise((resolve, reject) => {
       client
@@ -588,7 +589,10 @@ export class AccreditationStore {
             },
           }],
         })
-        .then(() => resolve())
+        .then(() => {
+          Helper.toast('Email sent for verification.', 'success');
+          resolve();
+        })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
