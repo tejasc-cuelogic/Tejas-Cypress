@@ -88,6 +88,11 @@ export class CampaignStore {
     return this.data;
   }
 
+  @computed get getEarlyBirdCheck() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.data &&
+    this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
+  }
+
   @computed get OfferingList() {
     return (this.allData.data && this.allData.data.getOfferingList &&
       toJS(this.allData.data.getOfferingList)) || [];
@@ -138,10 +143,11 @@ export class CampaignStore {
   }
 
   @action
-  isEarlyBirdExist() {
+  isEarlyBirdExist(accountType) {
     const offeringId = this.getOfferingId;
-    const { userDetails } = userDetailsStore;
-    const accountId = get(userDetails, 'id') || null;
+    userDetailsStore.setFieldValue('currentActiveAccount', accountType);
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountId = get(account, 'details.accountId') || null;
     this.earlyBirdCheck =
     graphql({
       client,
