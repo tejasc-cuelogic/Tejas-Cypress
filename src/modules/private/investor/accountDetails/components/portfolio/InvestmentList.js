@@ -70,24 +70,6 @@ const InvestmentList = (props) => {
                           </Aux>
                         }
                       </Table.Cell>
-                      <Table.Cell>
-                        {props.listOf !== 'pending' ?
-                          data && data.offering && data.offering.stage ?
-                            STAGES[data.offering.stage].label : '-' :
-                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
-                        }
-                      </Table.Cell>
-                      <Table.Cell>
-                        {props.listOf !== 'pending' ?
-                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share' :
-                          <Aux>
-                            {Helper.CurrencyFormat(data.investedAmount, 0)}
-                            <p className="date-stamp">
-                              <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
-                            </p>
-                          </Aux>
-                        }
-                      </Table.Cell>
                       <Table.Cell className="text-capitalize">
                         {props.listOf !== 'pending' ?
                           <Aux>

@@ -135,7 +135,7 @@ export default class FinancialInfo extends Component {
                             {accreditationData[account.name].status === 'INVALID' ?
                               <Aux>
                                 <dt>Message :</dt>
-                                <dd>{accreditationData[account.name].reviewed.comment}</dd>
+                                <dd>{accreditationData[account.name].declinedMessage}</dd>
                               </Aux> : ''
                             }
                             <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
