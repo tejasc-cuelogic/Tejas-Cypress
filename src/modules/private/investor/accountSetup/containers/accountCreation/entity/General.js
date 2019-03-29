@@ -61,6 +61,12 @@ export default class General extends Component {
               onplaceselected={setAddressFields}
               changed={genInfoChange}
             />
+            <FormInput
+              name="streetTwo"
+              fielddata={GEN_INFO_FRM.fields.streetTwo}
+              changed={genInfoChange}
+              showerror
+            />
             <Form.Group widths="equal">
               <FormInput
                 name="city"

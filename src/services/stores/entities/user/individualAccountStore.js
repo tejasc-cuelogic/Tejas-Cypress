@@ -84,6 +84,7 @@ class IndividualAccountStore {
               Helper.toast('Individual account submitted successfully.', 'success');
               resolve();
             }
+            uiStore.resetcreateAccountMessage();
           }).catch((err) => {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);

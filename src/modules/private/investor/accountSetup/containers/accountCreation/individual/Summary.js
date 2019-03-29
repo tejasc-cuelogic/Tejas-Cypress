@@ -34,6 +34,7 @@ export default class Summary extends React.Component {
       partialInvestNowSessionURL,
       setPartialInvestmenSession,
     } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
@@ -50,7 +51,7 @@ export default class Summary extends React.Component {
         } else {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
           if (!this.props.individualAccountStore.showProcessingModal) {
-            this.props.history.replace('app/summary');
+            this.props.history.push('/app/summary');
           }
         }
       }).catch(() => { });
