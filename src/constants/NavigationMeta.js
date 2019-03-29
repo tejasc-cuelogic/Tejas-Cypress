@@ -1,3 +1,4 @@
+
 const INVESTER_ACC_SUB_NAV_ITEMS = {
   subNavigations: [
     { title: 'Portfolio', to: 'portfolio', component: 'Portfolio' },
@@ -218,7 +219,9 @@ export const PRIVATE_NAV = [
         title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
       },
       { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
-      { title: 'FAQ', to: 'faq', component: 'Faq' },
+      {
+        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop'],
+      },
     ],
   },
   // {
@@ -245,7 +248,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      // { title: 'Overview', to: 'overview' },
+      { title: 'Overview', to: 'overview', env: ['localhost', 'develop'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'Engagement', to: 'engagement' },
