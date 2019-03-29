@@ -45,12 +45,6 @@ export const getReferralCreditsInformation = gql`
   }
 `;
 
-export const getUserReferralShareInformation = gql`
-  query getUserReferralShareInformation($userId: String) {
-    getUserRewardBalance(userId: $userId)
-  }
-`;
-
 export const upsertUserReferralCredits = gql`
 mutation upsertUserReferralCredits($userId: String!){
   upsertUserReferralCredits(userId: $userId)

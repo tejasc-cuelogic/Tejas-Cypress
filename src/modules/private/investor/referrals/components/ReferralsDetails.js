@@ -6,26 +6,14 @@ import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import Clipboard from 'react-clipboard.js';
 import { Link } from 'react-router-dom';
-// import { SAASQUATCH_TENANT_ALIAS } from '../../../../../constants/common';
 import { InlineLoader } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 
 
-// import AccountCreation from '../../accountSetup/containers/accountCreation';
-// import IdentityVerification from '../../accountSetup/containers/identityVerification';
-// import EstablishProfile from '../../accountSetup/containers/establishProfile';
-
-
 @inject('referralsStore', 'userDetailsStore')
 @observer
 export default class ReferralsDetails extends Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.onSuccess = this.onSuccess.bind(this);
-  //   this.getText = this.getText.bind(this);
-  // }
   state = {
     loading: true, availableCredit: '0', spentCredit: '0', totalEarnedCredit: '0', totalReferredUsers: '0',
   };
@@ -36,19 +24,6 @@ export default class ReferralsDetails extends Component {
     if (saasQuatchUserId) {
       this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
     }
-    // this.props.referralsStore.getUserReferralDetails()
-    //   .then(data => this.setState({
-    //     availableCredit: get(data, 'availableCredit') || 0,
-    //     spentCredit: get(data, 'spentCredit') || 0,
-    //     totalEarnedCredit: get(data, 'totalEarnedCredit') || 0,
-    //     totalReferredUsers: get(data, 'totalReferredUsers') || 0,
-    //   }));
-    // this.props.referralsStore.getUserRewardBalance()
-    //   .then(data => this.setState({
-    //     totalCreditEarned: get(data, 'totalCreditEarned') || 0,
-    //     totalReferredUsers: get(data, 'totalReferredUsers') || 0,
-    //   }));
-    // this.setState({ loading: false });
   }
   componentDidMount() {
     const { userDetails } = this.props.userDetailsStore;
@@ -88,58 +63,12 @@ export default class ReferralsDetails extends Component {
         }));
     }
   }
-  // componentDidMount() {
-  // const { userDetails } = this.props.userDetailsStore;
-  // const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
-  // const userId = saasQuatchUserId || get(userDetails, 'id');
-  // if (userId) {
-  //   this.props.referralsStore.getJwtReferralEmbeddedWidget().then((data) => {
-  //     const payLoad = {
-  //       id: userId,
-  //       accountId: userId,
-  //     };
-  //     if (!saasQuatchUserId) {
-  //       payLoad.email = get(userDetails, 'email.address');
-  //       payLoad.firstName = get(userDetails, 'info.firstName');
-  //       payLoad.lastName = get(userDetails, 'info.lastName');
-  //     }
-  //     window.squatch.ready(() => {
-  //       window.squatch.init({
-  //         tenantAlias: SAASQUATCH_TENANT_ALIAS,
-  //       });
-  //       const initObj = {
-  //         user: payLoad,
-  //         engagementMedium: 'EMBED',
-  //         widgetType: 'REFERRER_WIDGET',
-  //         jwt: data.getJwtReferralEmbeddedWidget,
-  //       };
-  //       window.squatch.widgets().upsertUser(initObj).then((response) => {
-  //         this.setState({ loading: false });
-  //         if (!saasQuatchUserId) {
-  //           this.props.referralsStore.getReferralCreditsInformation(response.user.referralCode);
-  //         }
-  //       }).catch(() => {
-  //         this.setState({ loading: false });
-  //       });
-  //     });
-  //   }).catch(() => this.setState({ loading: false }));
-  // }
-  // }
-  /* eslint-disable class-methods-use-this */
-  // onSuccess() {
-  //   // e.preventDefault();
-  //   Helper.toast('Referral link copied! Happy sharing.', 'success');
-  //   // console.info(`successfully copied - ${e}`);
-  // }
-  // getText() {
-  //   return document.getElementById('myReferralLink').value;
-  // }
-  // /* eslint-enable class-methods-use-this */
 
   render() {
     if (this.state.loading) {
       return <InlineLoader />;
     }
+
     const codeBoxStyle = {
       // width: '250px',
       paddingLeft: '25px',
@@ -168,13 +97,21 @@ export default class ReferralsDetails extends Component {
       ],
     };
 
+    // pre render components
     const summaryHeader = <SummaryHeader details={summaryDetails} />;
-
+    const myShareLink = (
+      <div className="fluid ui big action input">
+        <input id="myReferralLink" type="text" style={codeBoxStyle} value={this.state.myShareLink} readOnly />
+        <Clipboard component="button" option-text={() => document.getElementById('myReferralLink').value} onSuccess={() => Helper.toast('Referral link copied! Happy sharing.', 'success')} className="ui teal right labeled icon button">
+          <i className="copy icon" />
+          Copy
+        </Clipboard>
+      </div>
+    );
 
     const isMobile = document.documentElement.clientWidth < 768;
 
     let button3;
-
     if (isMobile) {
       const link = this.state.smsShareLink;
       button3 = (
@@ -192,16 +129,6 @@ export default class ReferralsDetails extends Component {
         </Button>
       );
     }
-
-    const myShareLink = (
-      <div className="fluid ui big action input">
-        <input id="myReferralLink" type="text" style={codeBoxStyle} value={this.state.myShareLink} readOnly />
-        <Clipboard component="button" option-text={() => document.getElementById('myReferralLink').value} onSuccess={() => Helper.toast('Referral link copied! Happy sharing.', 'success')} className="ui teal right labeled icon button">
-          <i className="copy icon" />
-          Copy
-        </Clipboard>
-      </div>
-    );
 
     const { emailShareLink } = this.state;
     const { twitterShareLink } = this.state;
@@ -222,7 +149,6 @@ export default class ReferralsDetails extends Component {
         </Button>
       );
     }
-
 
     return (
       <Aux>
