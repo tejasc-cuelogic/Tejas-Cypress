@@ -139,6 +139,7 @@ class EntityAccountStore {
           })
           .catch((err) => {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.resetcreateAccountMessage();
             uiStore.setProgress(false);
             reject();
           });
@@ -435,9 +436,10 @@ class EntityAccountStore {
           .catch(() => {
             rej();
           });
-      } else {
-        rej();
       }
+      // } else {
+      //   rej();
+      // }
     }
     return true;
   })
@@ -473,6 +475,7 @@ class EntityAccountStore {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
+            FormValidator.setIsDirty(bankAccountStore.formLinkBankManually, false);
             // if (bankAccountStore.ManualLinkBankSubmitted) {
             //   FormValidator.resetFormData(bankAccountStore.formAddFunds);
             // }
@@ -584,10 +587,14 @@ class EntityAccountStore {
         if (account.details && account.details.legalDocs) {
           this.setEntityAttributes('Formation doc');
         }
+        bankAccountStore.validateAddFunds();
+        const { isValid } = bankAccountStore.formEntityAddFunds.meta;
         if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          bankAccountStore.formEntityAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
+          if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+          }
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -601,8 +608,10 @@ class EntityAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
-          bankAccountStore.formEntityAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
+          if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+          }
         }
         bankAccountStore.validateAddFunds();
         // bankAccountStore.validateAddfundsAmount();
