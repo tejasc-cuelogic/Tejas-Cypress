@@ -14,6 +14,7 @@ const result = {
     { title: 'Description', field: 'description', className: 'positive-text' },
     { title: 'Type', field: 'type' },
     { title: 'Status', field: 'status' },
+    { title: 'Complete Date', field: 'processDate' },
     { title: 'Amount', field: 'amount', textAlign: 'right' },
   ],
   rows: null,

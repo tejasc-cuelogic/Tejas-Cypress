@@ -58,6 +58,14 @@ const LegalDetails = observer(({
         />
         <Form.Group widths={2}>
           <FormInput
+            key="streetTwo"
+            type="text"
+            name="streetTwo"
+            fielddata={form.fields.streetTwo}
+            changed={change}
+            showerror
+          />
+          <FormInput
             key="city"
             type="text"
             name="city"

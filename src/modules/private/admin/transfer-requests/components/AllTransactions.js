@@ -75,7 +75,7 @@ export default class AllTransactions extends Component {
                       {
                         columns.map(col => (
                           <Table.Cell key={col.field} textAlign={col.textAlign} collapsing={col.field === 'userName'}>
-                            {['amount'].includes(col.field) ? row.type === 'Withdrawal' ? `(${Helper.CurrencyFormat(row[col.field])})` : Helper.CurrencyFormat(row[col.field]) :
+                            {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) :
                               ['startDate', 'failDate', 'estDateAvailable'].includes(col.field) ?
                                 row[col.field] !== null ? <DateTimeFormat unix format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
                                 this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation) :

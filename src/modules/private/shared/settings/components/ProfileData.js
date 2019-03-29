@@ -138,6 +138,11 @@ export default class ProfileData extends Component {
                 />
                 <Form.Group widths={3}>
                   <FormInput
+                    name="streetTwo"
+                    fielddata={ID_PROFILE_INFO.fields.streetTwo}
+                    changed={profileInfoChange}
+                  />
+                  <FormInput
                     name="city"
                     fielddata={ID_PROFILE_INFO.fields.city}
                     changed={profileInfoChange}

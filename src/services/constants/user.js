@@ -104,6 +104,18 @@ export const USER_IDENTITY = {
     },
     objRef: 'legalDetails.legalAddress',
   },
+  streetTwo: {
+    key: 'streetTwo',
+    value: '',
+    label: 'Address Line 2',
+    placeHolder: 'Address Line 2',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+    objRef: 'legalDetails.legalAddress',
+  },
   city: {
     key: 'city',
     value: '',
@@ -264,6 +276,13 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     rule: 'string',
     placeHolder: 'Residential Street',
+  },
+  streetTwo: {
+    value: '',
+    label: 'Address Line 2',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Address Line 2',
   },
   city: {
     value: '',

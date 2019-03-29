@@ -71,7 +71,9 @@ export const AGREEMENT_DETAILS_INFO = {
         label: 'I understand that I may not be able to sell the securities I am acquiring in this offering.', value: '2',
       },
       {
-        label: 'I understand that investing in securities sold in reliance on Regulation Crowdfunding involves risks and I should not invest any funds unless I can afford to lose the entire amount.', value: '3',
+        label: 'I understand that investing in securities sold in reliance on Regulation Crowdfunding involves risks and I should not invest any funds unless I can afford to lose the entire amount.',
+        value: '3',
+        customRegulationLabel: true,
       },
       {
         tooltip: (

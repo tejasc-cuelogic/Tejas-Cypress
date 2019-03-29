@@ -43,12 +43,32 @@ const InvestmentList = (props) => {
                     <Table.Row key={data.name} onClick={() => handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : '')}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
-                        {props.listOf === 'pending' ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
-                          <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
-                        )}
-                        <p className="date-stamp">
-                          {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || 'N/A'}
-                        </p>
+                        <div className="offering-title">
+                          {props.listOf === 'pending' ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
+                            <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
+                          )}
+                          <p className="date-stamp">
+                            {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
+                          </p>
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell>
+                        {props.listOf !== 'pending' ?
+                          data && data.offering && data.offering.stage ?
+                            STAGES[data.offering.stage].label : '-' :
+                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                        }
+                      </Table.Cell>
+                      <Table.Cell>
+                        {props.listOf !== 'pending' ?
+                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share' :
+                          <Aux>
+                            {Helper.CurrencyFormat(data.investedAmount, 0)}
+                            <p className="date-stamp">
+                              <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                            </p>
+                          </Aux>
+                        }
                       </Table.Cell>
                       <Table.Cell>
                         {props.listOf !== 'pending' ?
@@ -91,13 +111,10 @@ const InvestmentList = (props) => {
                             {viewAgreement && data.agreementId} {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
-                            {!props.isAccountFrozen &&
+                            {!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) === 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
                               <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                             }
-                            {DataFormatter.diffDays(data && data.offering &&
-                              data.offering.closureSummary &&
-                              data.offering.closureSummary.processingDate ?
-                              data.offering.closureSummary.processingDate : null) > 2 &&
+                            {DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2 &&
                               <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             }
                           </Button.Group>
@@ -109,7 +126,7 @@ const InvestmentList = (props) => {
               </Table.Body>
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell colSpan="2" />
+                  <Table.HeaderCell colSpan={`${props.listOf === 'pending' ? '1' : '2'}`} />
                   <Table.HeaderCell>Total:</Table.HeaderCell>
                   <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
                   <Table.HeaderCell colSpan="3" />
