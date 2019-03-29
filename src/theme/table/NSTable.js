@@ -64,27 +64,25 @@ export const FillTable = ({
                     {
                       result.columns.map(col => (
                         <Table.Cell key={col.field} textAlign={col.textAlign}>
-                          {['amount'].includes(col.field) ? ((row.type === 'Withdrawal' || row.type === 'Investment' || (row.type === 'Reservation' && (row.status === 'Pending' || row.status === 'Cancelled')))) ? <span className={row.type === 'Reservation' ? 'grey-header' : ''}>{`(${Helper.CurrencyFormat(row[col.field])})`}</span> : Helper.CurrencyFormat(row[col.field]) : (
-                              ['createdAt', 'date'].includes(col.field) ?
-                                <DateTimeFormat datetime={row[col.field]} /> : (
-                                  (col.field === 'file') ? (
-                                    <Actions
-                                      download={download}
-                                      actions={{ fileId: row.fileId }}
-                                      additionalActions={aRule &&
-                                        aRule.val.includes(parseFloat(row[aRule.key])) ?
-                                        additionalActions : false
-                                      }
-                                      dataSet={{
-                                        instructions,
-                                        mapKey: aRule ? row[aRule.key] : null,
-                                      }}
-                                      label={col.label}
-                                    />
-                                  ) : (
-                                    Array.isArray(row[col.field]) ? row[col.field].join(' and ') : row[col.field]
-                                  )
-                                )
+                          {['createdAt', 'date'].includes(col.field) ?
+                            <DateTimeFormat datetime={row[col.field]} /> : (
+                              (col.field === 'file') ? (
+                                <Actions
+                                  download={download}
+                                  actions={{ fileId: row.fileId }}
+                                  additionalActions={aRule &&
+                                    aRule.val.includes(parseFloat(row[aRule.key])) ?
+                                    additionalActions : false
+                                  }
+                                  dataSet={{
+                                    instructions,
+                                    mapKey: aRule ? row[aRule.key] : null,
+                                  }}
+                                  label={col.label}
+                                />
+                              ) : (
+                                Array.isArray(row[col.field]) ? row[col.field].join(' and ') : row[col.field]
+                              )
                             )
                           }
                         </Table.Cell>

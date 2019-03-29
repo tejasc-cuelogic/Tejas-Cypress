@@ -302,7 +302,7 @@ export class InvestmentStore {
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
-        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser than invested amount';
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
