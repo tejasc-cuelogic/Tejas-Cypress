@@ -27,8 +27,10 @@ export default class ConfirmModel extends Component {
   render() {
     const {
       formChange, maskChange, CONFIRM_ACCREDITATION_FRM,
+      setFileUploadData, removeUploadedData,
     } = this.props.accreditationStore;
-    const { actionValue } = this.props.match.params;
+    const { accountType, userId } = this.props.match.params;
+    const actionValue = this.props.match.params.action;
     const { inProgress } = this.props.uiStore;
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
@@ -59,6 +61,12 @@ export default class ConfirmModel extends Component {
                 changed={(e, result) => formChange(e, result, 'CONFIRM_ACCREDITATION_FRM')}
               />
             }
+            <DropZone
+              name="adminJustificationDocs"
+              fielddata={CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs}
+              ondrop={(files, fieldName) => setFileUploadData('CONFIRM_ACCREDITATION_FRM', fieldName, files, accountType || 'individual', 'Admin', userId)}
+              onremove={fieldName => removeUploadedData('CONFIRM_ACCREDITATION_FRM', fieldName)}
+            />
             <div className="center-align mt-30">
               <Button className={actionValue === 'CONFIRMED' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'CONFIRMED' ? 'Approve request' : 'Decline request'} loading={inProgress} disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid} onClick={this.handleConfirm} />
             </div>

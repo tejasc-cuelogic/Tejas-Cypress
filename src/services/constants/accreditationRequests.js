@@ -50,7 +50,7 @@ export const CONFIRM_ACCREDITATION = {
     value: '',
     label: 'Message for User on UI',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Type your comment here...',
   },
   expiration: {
@@ -63,7 +63,7 @@ export const CONFIRM_ACCREDITATION = {
       date: 'Date format is invalid.',
     },
   },
-  justificationDocuemnts: {
+  adminJustificationDocs: {
     value: '',
     label: 'Justification Documents',
     error: undefined,
