@@ -107,8 +107,8 @@ export const USER_IDENTITY = {
   streetTwo: {
     key: 'streetTwo',
     value: '',
-    label: 'Street Two',
-    placeHolder: 'street Two',
+    label: 'Address Line 2',
+    placeHolder: 'Address Line 2',
     error: undefined,
     rule: 'required',
     customErrors: {
@@ -279,10 +279,10 @@ export const UPDATE_PROFILE_INFO = {
   },
   streetTwo: {
     value: '',
-    label: 'Street Two',
+    label: 'Address Line 2',
     error: undefined,
     rule: 'string',
-    placeHolder: 'Street Two',
+    placeHolder: 'Address Line 2',
   },
   city: {
     value: '',

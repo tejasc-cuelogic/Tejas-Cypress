@@ -28,7 +28,7 @@ const userVerifiedDetails = ({ legalDetails, isUserVerified, status }) => {
         <dd>{legalDetails.dateOfBirth ? moment(legalDetails.dateOfBirth, 'MM/DD/YYYY').format('MM-DD-YYYY') : '-'}</dd>
         <dt>Street</dt>
         <dd>{legalDetails.legalAddress.street}</dd>
-        <dt>Street Two</dt>
+        <dt>Address Line 2</dt>
         <dd>{legalDetails.legalAddress.streetTwo}</dd>
         <dt>City</dt>
         <dd>{legalDetails.legalAddress.city}</dd>
