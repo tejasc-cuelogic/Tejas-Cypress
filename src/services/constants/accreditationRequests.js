@@ -46,6 +46,13 @@ export const CONFIRM_ACCREDITATION = {
     rule: 'required',
     placeHolder: 'Type your comment here...',
   },
+  declinedMessage: {
+    value: '',
+    label: 'Message for User on UI',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your comment here...',
+  },
   expiration: {
     value: '12/31/2019',
     label: 'Expiration Date',
@@ -55,6 +62,16 @@ export const CONFIRM_ACCREDITATION = {
     customErrors: {
       date: 'Date format is invalid.',
     },
+  },
+  justificationDocuemnts: {
+    value: '',
+    label: 'Justification Documents',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
   },
 };
 

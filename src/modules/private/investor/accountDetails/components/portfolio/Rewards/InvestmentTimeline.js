@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { findLastIndex, toInteger, get, uniqWith, isEqual } from 'lodash';
+import { findLastIndex, toInteger, get, isNaN, uniqWith, isEqual } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
@@ -34,8 +34,11 @@ class InvestmentTimeline extends Component {
       investBonusReward.splice(0, 0, minInvestAmt);
     }
     rewardsTiers = uniqWith(investBonusReward, isEqual).sort((a, b) => a - b);
-    const progress =
-      investBonusReward.length ? calcSmartProgress(rewardsTiers, myInvestment) : 0;
+    let progress =
+    rewardsTiers.length ? calcSmartProgress(rewardsTiers, myInvestment) : 0;
+    if (isNaN(progress) && rewardsTiers[rewardsTiers.length - 1] < myInvestment) {
+      progress = 100;
+    }
     const calculatedMargin = calMargin(rewardsTiers);
     return (
       rewardsTiers && rewardsTiers.length ?
@@ -63,7 +66,10 @@ class InvestmentTimeline extends Component {
                         reward.tiers.includes(tier) &&
                         <Popup.Content>
                           <Header as="h4" className="mb-half">
-                            {reward.title}
+                            <HtmlEditor
+                              readOnly
+                              content={(reward.title || '')}
+                            />
                           </Header>
                           <p className="detail-section">
                             <HtmlEditor

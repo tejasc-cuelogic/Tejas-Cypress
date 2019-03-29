@@ -17,6 +17,10 @@ export default class Actions extends Component {
     return (
       <Table.Cell collapsing textAlign="center">
         <Button.Group vertical compact size="mini">
+          {this.props.accreditation.verifier &&
+            this.props.accreditation.verifier.email &&
+            <Button loading={this.props.userId === this.props.inProgress} onClick={() => this.props.emailVerifier(this.props.userId, this.props.accountId, this.props.accountType)} className="green" >Email Verifier </Button>
+          }
           {Object.keys(actions).map(action => (
             <Button
               as={Link}

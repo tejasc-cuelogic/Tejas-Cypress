@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Statistic, Icon } from 'semantic-ui-react';
+import { Grid, Statistic } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 
 const OfferingInvestDetails = props => (
@@ -8,9 +8,8 @@ const OfferingInvestDetails = props => (
       <Grid.Row>
         <Grid.Column>
           <Statistic size="mini" className={`basic ${props.disabledClass}`}>
-            <Statistic.Label>Account</Statistic.Label>
+            <Statistic.Label>Offering</Statistic.Label>
             <Statistic.Value>
-              <Icon className={`ns-${props.accType}-line `} color="green" />{' '}
               {(props.offering && props.offering.offering.keyTerms &&
                 props.offering.offering.keyTerms.shorthandBusinessName)}
             </Statistic.Value>
@@ -20,7 +19,7 @@ const OfferingInvestDetails = props => (
           <Statistic size="mini" className={`basic ${props.disabledClass}`}>
             <Statistic.Label>Investment amount</Statistic.Label>
             <Statistic.Value>
-              {Helper.MoneyMathDisplayCurrency((props.offering && props.offering.investedAmount)
+              {Helper.CurrencyFormat((props.offering && props.offering.investedAmount)
               || 0, false)}
             </Statistic.Value>
           </Statistic>
