@@ -85,7 +85,8 @@ export default class CampaignHeader extends Component {
                           <Statistic.Label>Investors</Statistic.Label>
                         </Statistic>
                         {((rewardsTiers && rewardsTiers.length) ||
-                        (earlyBird && earlyBird.quantity > 0)) && isEarlyBirdRewards &&
+                        (earlyBird && earlyBird.available > 0)) &&
+                        isEarlyBirdRewards && !isClosed &&
                           bonusRewards ?
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
