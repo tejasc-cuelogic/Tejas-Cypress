@@ -4,6 +4,7 @@ import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
 import { userStore, userDetailsStore, offeringsStore } from '../../index';
+import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class NavStore {
   @observable NAV_ITEMS = [...PRIVATE_NAV];
@@ -48,7 +49,9 @@ export class NavStore {
     }
     const routes = _.filter(
       this.NAV_ITEMS,
-      n => ((n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0) &&
+      n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
+        _.intersection(n.accessibleTo, permitted).length > 0) &&
+      (!n.env || n.env.length === 0 || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0) &&
         (!n.capability || this.canAccessBasedOnCapability(n.capability))),
     );
     return routes;
@@ -74,9 +77,11 @@ export class NavStore {
     navItems.forEach((navitem) => {
       const nItem = toJS(navitem);
       if (nItem.subNavigations) {
-        const newSubNav = nItem.subNavigations.filter(n => !n.accessibleTo ||
+        const newSubNav = nItem.subNavigations.filter(n => ((!n.accessibleTo ||
           n.accessibleTo.length === 0 ||
-          _.intersection(n.accessibleTo, this.params.roles).length > 0);
+          _.intersection(n.accessibleTo, this.params.roles).length > 0)) && (!n.env ||
+            n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
         nItem.subNavigations = [...newSubNav];
       }
       filteredNavs.push(nItem);
@@ -123,8 +128,10 @@ export class NavStore {
       nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
+          (!n.env || n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
       }
     }
     return nav;
@@ -138,8 +145,10 @@ export class NavStore {
       const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
+          (!n.env || n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
         if (nav.title === 'Application' && key === 'appStatus') {
           nav.subNavigations = this.filterByAccess(nav.subNavigations, appStatus);
         }

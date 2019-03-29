@@ -14,6 +14,7 @@ export const allTransactions = gql`
     ) {
       transactions {
         date
+        processDate
         description
         type
         status
