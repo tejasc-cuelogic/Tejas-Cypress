@@ -84,6 +84,14 @@ export default class CampaignHeader extends Component {
                           </Statistic.Value>
                           <Statistic.Label>Investors</Statistic.Label>
                         </Statistic>
+                        {isClosed && get(campaign, 'closureSummary.repayment.count') > 0 &&
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'closureSummary.repayment.count') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Payments made</Statistic.Label>
+                          </Statistic>
+                        }
                         {((rewardsTiers && rewardsTiers.length) ||
                         (earlyBird && earlyBird.available > 0)) &&
                         isEarlyBirdRewards && !isClosed &&
