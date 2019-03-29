@@ -167,7 +167,7 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod) => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '') => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {

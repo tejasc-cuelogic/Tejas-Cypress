@@ -13,7 +13,7 @@ export const updateAccreditation = gql`
 `;
 
 export const approveOrDeclineForAccreditationRequest = gql`
-  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $comment: String, $expiration: String!, $declinedMessage: String ) {
+  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $comment: String, $expiration: String!, $declinedMessage: String) {
     approveOrDeclineForAccreditationRequest (
     userId: $userId
     accountId: $accountId
