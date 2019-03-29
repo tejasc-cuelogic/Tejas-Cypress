@@ -168,7 +168,6 @@ export class AccreditationStore {
 
   @action
   setFileUploadData = (form, field, files, accountType, accreditationMethod) => {
-    const userRole = accreditationMethod !== 'Admin' ? 'INVESTOR' : 'ADMIN';
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -178,7 +177,7 @@ export class AccreditationStore {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
         this.setFormFileArray(form, field, 'showLoader', true);
-        fileUpload.setFileUploadData('', fileData, stepName, userRole, '', '', tags).then((result) => {
+        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(form, field, 'fileData', file);
