@@ -167,7 +167,7 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '') => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', targetUserId = '') => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -177,7 +177,7 @@ export class AccreditationStore {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
         this.setFormFileArray(form, field, 'showLoader', true);
-        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
+        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags, targetUserId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(form, field, 'fileData', file);
@@ -464,6 +464,10 @@ export class AccreditationStore {
   updateAccreditationAction = (accreditationAction, accountId, userId, accountType) => {
     uiStore.setProgress();
     const data = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
+    const fileData = [{
+      fileId: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.fileId,
+      fileName: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.value,
+    }];
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -476,6 +480,7 @@ export class AccreditationStore {
             comment: data.justifyDescription,
             expiration: data.expiration,
             declinedMessage: data.declinedMessage,
+            adminJustificationDocs: fileData,
           },
           refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
         })
