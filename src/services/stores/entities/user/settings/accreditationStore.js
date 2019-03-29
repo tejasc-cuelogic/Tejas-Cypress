@@ -576,7 +576,7 @@ export class AccreditationStore {
 
   @action
   emailVerifier = (userId, accountId, accountType) => {
-    uiStore.setProgress();
+    uiStore.setProgress(userId);
     const payLoad = { userId, accountId, accountType };
     return new Promise((resolve, reject) => {
       client
