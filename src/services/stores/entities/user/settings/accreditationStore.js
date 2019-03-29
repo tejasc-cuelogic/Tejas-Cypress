@@ -724,6 +724,7 @@ export class AccreditationStore {
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)
           === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+      // if (accountStatus) {
       switch (accountStatus) {
         case 'REQUESTED':
           this.userAccredetiationState = 'PENDING';
@@ -741,6 +742,7 @@ export class AccreditationStore {
           this.userAccredetiationState = 'INACTIVE';
           break;
       }
+      // }
     } else if (intialAccountStatus === 'FULL') {
       this.userAccredetiationState = 'ELGIBLE';
     }
@@ -870,8 +872,8 @@ export class AccreditationStore {
         const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
         switch (userCurrentState) {
           case 'PENDING':
-            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account In Review`;
-            headerSubheaderTextObj.subHeader = 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : `Accreditation Verification for ${accountType} Investor Account In Review`;
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
             break;
           case 'NOT_ELGIBLE':
             headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
