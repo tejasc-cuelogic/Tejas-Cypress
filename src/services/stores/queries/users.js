@@ -251,6 +251,7 @@ export const userAccreditationQuery = gql`
             accreditation {
               status
               expiration
+              declinedMessage
               requestDate
               reviewed {
                 by

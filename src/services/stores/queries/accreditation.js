@@ -13,7 +13,7 @@ export const updateAccreditation = gql`
 `;
 
 export const approveOrDeclineForAccreditationRequest = gql`
-  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $comment: String, $expiration: String!, $adminJustificationDocs: [FileInfoInput] ) {
+  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $comment: String, $expiration: String!, $declinedMessage: String ) {
     approveOrDeclineForAccreditationRequest (
     userId: $userId
     accountId: $accountId
@@ -21,10 +21,7 @@ export const approveOrDeclineForAccreditationRequest = gql`
     action: $action
     comment: $comment
     expiration: $expiration
-    adminJustificationDocs: {
-      fileId: $fileId
-      fileName: $fileName
-    }
+    declinedMessage: $declinedMessage
   )
 }
 `;

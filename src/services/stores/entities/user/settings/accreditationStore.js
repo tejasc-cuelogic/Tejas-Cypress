@@ -476,6 +476,7 @@ export class AccreditationStore {
             accountType,
             comment: data.justifyDescription,
             expiration: data.expiration,
+            declinedMessage: data.declinedMessage,
           },
           refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
         })
