@@ -206,6 +206,15 @@ export class InvestmentLimitStore {
   }
 
   @action
+  initiateInvestmentLimitOfSelectedUser = () => {
+    this.activeAccounts = userDetailsStore.getActiveAccountsOfSelectedUsers;
+    // const activeAccountList = this.getActiveAccountList;
+    // map(activeAccountList.accountList, (account) => {
+    //   this.setInvestmentLimitInfo(account.name);
+    // });
+  }
+
+  @action
   updateInvestmentLimit = () => new Promise((resolve) => {
     const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
     this.updateInvestmentLimits(data, this.currentAccountId).then(() => resolve());

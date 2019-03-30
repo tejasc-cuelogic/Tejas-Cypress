@@ -34,6 +34,7 @@ class Login extends Component {
       if (res) {
         authActions.login()
           .then(() => {
+            localStorage.removeItem('lastActiveTime');
             const { redirectURL } = this.props.uiStore;
             if (this.props.authStore.newPasswordRequired) {
               this.props.history.push('/auth/change-password');

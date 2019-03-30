@@ -27,6 +27,7 @@ export default class Transactions extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.transactionStore.initRequest(10, 0);
   }
 

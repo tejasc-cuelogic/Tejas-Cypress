@@ -391,3 +391,13 @@ mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!,
      activity: $activity
    )
  }`;
+
+export const freezeAccount = gql`
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $message: String) {
+  freezeAccount(
+     userId: $userId
+     accountId: $accountId
+     freeze: $freeze
+     message: $message
+   )
+ }`;

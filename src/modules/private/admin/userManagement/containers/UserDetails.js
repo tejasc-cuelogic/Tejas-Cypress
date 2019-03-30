@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
@@ -48,15 +47,15 @@ export default class AccountDetails extends Component {
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);
   }
-  handleCloseModal = () => this.props.history.goBack();
+  handleCloseModal = () => this.props.history.push(this.props.refLink);
 
   render() {
     const { match } = this.props;
-    const { detailsOfUser } = this.props.userDetailsStore;
-    if (detailsOfUser.loading) {
+    const { getDetailsOfUserLoading, getDetailsOfUser } = this.props.userDetailsStore;
+    if (getDetailsOfUserLoading) {
       return <InlineLoader text="Loading User Details..." />;
     }
-    const details = toJS({ ...detailsOfUser.data.user });
+    const details = getDetailsOfUser;
     if (isEmpty(details)) {
       return <InlineLoader text="No Data Found" />;
     }

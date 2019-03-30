@@ -15,8 +15,9 @@ import {
   investorProfileStore,
   authStore,
   campaignStore,
+  uiStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin } from '../../queries/users';
+import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
@@ -64,8 +65,23 @@ export class UserDetailsStore {
     return accDetails;
   }
 
+  @computed get getActiveAccountsOfSelectedUsers() {
+    let accDetails;
+    if (this.getDetailsOfUser) {
+      accDetails = filter(this.getDetailsOfUser.roles, account => account.name !== 'investor' &&
+        account.details &&
+        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+    }
+    return accDetails;
+  }
+
   @computed get currentActiveAccountDetails() {
     const activeAccounts = this.getActiveAccounts;
+    return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
+  }
+
+  @computed get currentActiveAccountDetailsOfSelectedUsers() {
+    const activeAccounts = this.getActiveAccountsOfSelectedUsers;
     return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
   }
 
@@ -191,7 +207,17 @@ export class UserDetailsStore {
       client,
       query: userDetailsQuery,
       variables: { userId },
+      fetchPolicy: 'network-only',
     });
+  }
+
+  @computed get getDetailsOfUserLoading() {
+    return this.detailsOfUser.loading;
+  }
+
+  @computed get getDetailsOfUser() {
+    return this.detailsOfUser && this.detailsOfUser.data &&
+    this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user);
   }
 
   @action
@@ -225,6 +251,28 @@ export class UserDetailsStore {
       })
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
+
+  @action
+  freezeAccountToggle = (userId, accountId, freeze, message) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: freezeAccount,
+          variables: {
+            userId,
+            accountId,
+            freeze,
+            message,
+          },
+        })
+        .then(() => {
+          resolve();
+          Helper.toast('User Account status updated successfully.', 'success');
+        })
+        .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); });
+    });
+  };
 
   @computed get signupStatus() {
     const details = {

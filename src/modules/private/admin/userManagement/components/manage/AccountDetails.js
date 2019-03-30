@@ -4,7 +4,7 @@ import { withRouter, Switch, Route } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import Overview from './accountDetails/Overview';
-import Transactions from './accountDetails/Transactions';
+import Transactions from '../../../../investor/accountDetails/containers/Transactions';
 import Investments from './accountDetails/Investments';
 
 const navMeta = [
@@ -27,7 +27,7 @@ export default class AccountDetails extends Component {
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
             <Route exact path={`${match.url}/investments`} component={Investments} />
-            <Route exact path={`${match.url}/transactions`} component={Transactions} />
+            <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
             <Route component={Overview} />
           </Switch>
         </Grid.Column>
