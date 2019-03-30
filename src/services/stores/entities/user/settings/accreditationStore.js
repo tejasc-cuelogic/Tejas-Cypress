@@ -161,9 +161,9 @@ export class AccreditationStore {
 
   getFileUploadEnum = (accountType, accreditationMethod) => {
     if (accreditationMethod !== 'Admin') {
-      return ACCREDITATION_FILE_UPLOAD_ENUMS[accountType];
+      return ACCREDITATION_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
     }
-    return ACCREDITATION_APPROVE_DECLINE_FILE_UPLOAD_ENUMS[accountType];
+    return ACCREDITATION_APPROVE_DECLINE_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
   }
 
   @action
