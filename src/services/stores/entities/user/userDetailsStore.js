@@ -69,8 +69,7 @@ export class UserDetailsStore {
     let accDetails;
     if (this.getDetailsOfUser) {
       accDetails = filter(this.getDetailsOfUser.roles, account => account.name !== 'investor' &&
-        account.details &&
-        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+        account.details);
     }
     return accDetails;
   }
