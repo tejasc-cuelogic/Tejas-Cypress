@@ -9,10 +9,11 @@ import {
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
-import { subscribeToNewsLetter } from '../../queries/common';
+import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
+
 
 export class AuthStore {
   @observable hasSession = false;
@@ -347,24 +348,30 @@ export class AuthStore {
 
   @action
   checkEmailExistsPresignup = email => new Promise((res, rej) => {
-    this.checkEmail = graphql({
-      client: clientPublic,
-      query: checkEmailExistsPresignup,
-      variables: {
-        email,
-      },
-      onFetch: (data) => {
-        if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
-          this.SIGNUP_FRM.meta.isValid = false;
-          rej();
-        } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = '';
-          res();
-        }
-      },
-      fetchPolicy: 'network-only',
-    });
+    if (DataFormatter.validateEmail(email)) {
+      this.checkEmail = graphql({
+        client: clientPublic,
+        query: checkEmailExistsPresignup,
+        variables: {
+          email,
+        },
+        onFetch: (data) => {
+          uiStore.clearErrors();
+          if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
+            this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
+            this.SIGNUP_FRM.meta.isValid = false;
+            rej();
+          } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
+            this.SIGNUP_FRM.fields.email.error = '';
+            res();
+          }
+        },
+        onError: (err) => {
+          uiStore.setErrors(err);
+        },
+        fetchPolicy: 'network-only',
+      });
+    }
   });
 
   @action
@@ -392,6 +399,21 @@ export class AuthStore {
           message: 'There was a problem with authentication',
           code: 'checkMigrationByEmailFailed',
         });
+        rej(err);
+      })
+      .finally(() => { });
+  });
+
+  @action
+  notifyApplicationError = params => new Promise((res, rej) => {
+    clientPublic.mutate({
+      mutation: notifyAdmins,
+      variables: { ...params },
+    })
+      .then((data) => {
+        res(data);
+      })
+      .catch((err) => {
         rej(err);
       })
       .finally(() => { });

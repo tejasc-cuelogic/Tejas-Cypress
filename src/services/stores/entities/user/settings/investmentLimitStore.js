@@ -22,12 +22,16 @@ export class InvestmentLimitStore {
   @observable individualIRACurrentLimit = 0;
   @observable investedAmount = 0;
   @observable investNowHealthCheckDetails = null;
+  @observable investNowError = false;
 
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
   }
-
+  @action
+  setInvestNowErrorStatus = (status) => {
+    this.investNowError = status;
+  }
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
     const accList = filter(this.activeAccounts, (account) => {
@@ -56,7 +60,7 @@ export class InvestmentLimitStore {
   });
 
   @action
-  getInvestNowHealthCheck = (accountId, offeringId) => new Promise((resolve) => {
+  getInvestNowHealthCheck = (accountId, offeringId) => new Promise((resolve, reject) => {
     this.investNowHealthCheckDetails = graphql({
       client,
       query: getInvestNowHealthCheck,
@@ -66,9 +70,15 @@ export class InvestmentLimitStore {
         offeringId,
       },
       onFetch: (data) => {
-        if (data && !this.investNowHealthCheckDetails.loading) {
+        if (data && this.investNowHealthCheckDetails && !this.investNowHealthCheckDetails.loading) {
           resolve(data);
         }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
+        this.setInvestNowErrorStatus(true);
+        reject();
       },
       fetchPolicy: 'network-only',
     });
@@ -134,10 +144,15 @@ export class InvestmentLimitStore {
     const { accountList } = this.getActiveAccountList;
     accountList.forEach((account) => {
       this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
-        if (account.name === 'entity') {
-          this.setFieldValue('entityCurrentLimit', data.getInvestorInvestmentLimit);
+        if (data.getInvestorInvestmentLimit === '0.00') {
+          this.setInvestmentLimitInfo(account.name, account.details.accountId);
         } else {
-          this.setFieldValue('individualIRACurrentLimit', data.getInvestorInvestmentLimit);
+          this.currentLimit = data.getInvestorInvestmentLimit;
+        }
+        if (account.name === 'entity') {
+          this.setFieldValue('entityCurrentLimit', this.currentLimit);
+        } else {
+          this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
         }
       });
     });
@@ -197,9 +212,13 @@ export class InvestmentLimitStore {
   })
 
   @action
-  updateInvestmentLimits = (data, accountId, userId = null, resetProgress = true) => {
+  updateInvestmentLimits = (
+    data, accountId, userId = null,
+    resetProgress = true, offeringId = undefined,
+  ) => {
     uiStore.setProgress();
     const { campaign } = campaignStore;
+    const offeringDetailId = offeringId || campaign.id;
     return new Promise((resolve) => {
       client
         .mutate({
@@ -211,22 +230,24 @@ export class InvestmentLimitStore {
             netWorth: data.netWorth,
             otherRegCfInvestments: data.cfInvestments,
           },
-          refetchQueries: [{
-            query: getInvestNowHealthCheck,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-              accountId,
-              offeringId: campaign.id,
-            },
-          },
-          {
-            query: userDetailsQuery,
-            variables: {
-              userId: userId || userDetailsStore.currentUserId,
-            },
-          }],
+          refetchQueries: [
+            //   {
+            //   query: getInvestNowHealthCheck,
+            //   variables: {
+            //     userId: userDetailsStore.currentUserId,
+            //     accountId,
+            //     offeringId: campaign.id,
+            //   },
+            // },
+            {
+              query: userDetailsQuery,
+              variables: {
+                userId: userId || userDetailsStore.currentUserId,
+              },
+            }],
         })
         .then(() => {
+          this.getInvestNowHealthCheck(accountId, offeringDetailId);
           resolve();
         })
         .catch((error) => {
@@ -266,29 +287,29 @@ export class InvestmentLimitStore {
         dateFilterStop,
       ).then((data) => {
         const investedAmount = parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0) +
-        this.investedAmount;
+          this.investedAmount;
         this.setFieldValue('investedAmount', investedAmount);
       });
     }
   }
 
   getInvestorAmountInvested =
-  (accountId, dateFilterStart = moment().subtract(1, 'y').toISOString(), dateFilterStop = moment().toISOString()) => new Promise((resolve) => {
-    this.investorInvestmentLimit = graphql({
-      client,
-      query: getInvestorAmountInvested,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-        accountId,
-        dateFilterStart,
-        dateFilterStop,
-      },
-      onFetch: (data) => {
-        if (data && !this.investorInvestmentLimit.loading) {
-          resolve(data);
-        }
-      },
+    (accountId, dateFilterStart = moment().subtract(1, 'y').toISOString(), dateFilterStop = moment().toISOString()) => new Promise((resolve) => {
+      this.investorInvestmentLimit = graphql({
+        client,
+        query: getInvestorAmountInvested,
+        variables: {
+          userId: userDetailsStore.currentUserId,
+          accountId,
+          dateFilterStart,
+          dateFilterStop,
+        },
+        onFetch: (data) => {
+          if (data && !this.investorInvestmentLimit.loading) {
+            resolve(data);
+          }
+        },
+      });
     });
-  });
 }
 export default new InvestmentLimitStore();

@@ -33,8 +33,10 @@ export default class ImageCropper extends Component {
 
     this.setState({ imageType: files[0].type });
     this.props.setData('fileName', files[0].name);
-    this.props.setData('meta', { type: files[0].type });
-    this.props.verifySize(files[0].size, this.props.name);
+    this.props.setData('meta', { type: files[0].type, ext: files[0].type.split('/')[1] });
+    if (this.props.verifySize) {
+      this.props.verifySize(files[0].size, this.props.name);
+    }
     this.props.verifyExtension(files[0].type.split('/')[1]);
     const reader = new FileReader();
     reader.onload = () => {

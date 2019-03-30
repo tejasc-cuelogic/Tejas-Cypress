@@ -8,7 +8,7 @@ import { MaskedInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors, SuccessScreen } from '../../../../../../theme/shared';
 
-@inject('uiStore', 'identityStore', 'userDetailsStore')
+@inject('uiStore', 'identityStore', 'userDetailsStore', 'multiFactorAuthStore')
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
@@ -32,9 +32,13 @@ export default class ConfirmPhoneNumber extends Component {
   }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
+    const setMfaMode = !this.props.userDetailsStore.userDetails.phone;
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
+        if (setMfaMode) {
+          this.props.multiFactorAuthStore.updateMfaModeType();
+        }
         Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
         this.props.uiStore.clearErrors();
@@ -72,7 +76,9 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
   handleContinue = () => {
-    this.props.history.push('/app/profile-settings/profile-data');
+    if (this.props.refLink) {
+      this.props.history.push(this.props.refLink);
+    }
     this.props.identityStore.setIsOptConfirmed(false);
   }
   render() {
@@ -96,7 +102,7 @@ export default class ConfirmPhoneNumber extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code in the text message sent to your phone</p>
+          <p>Please confirm the 6-digit verification code sent to your phone</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <MaskedInput

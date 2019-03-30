@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
+import moment from 'moment';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
-import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
+import { InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Actions from './Actions';
 import ConfirmModel from './ConfirmModel';
 import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../services/constants/accreditation';
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore')
+@inject('accreditationStore', 'uiStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -24,8 +25,9 @@ export default class AllAccreditationRequests extends Component {
   render() {
     const { match, accreditationStore } = this.props;
     const {
-      accreditations, loading, count, requestState,
+      accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
+    const { inProgress } = this.props.uiStore;
     if (loading) {
       return <InlineLoader />;
     }
@@ -57,7 +59,7 @@ export default class AllAccreditationRequests extends Component {
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
+                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('MM/DD/YYYY') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
@@ -94,12 +96,17 @@ export default class AllAccreditationRequests extends Component {
                       </p>
                     </Table.Cell>
                     {accreditation.accreditationStatus === 'REQUESTED' ?
-                      <Actions
-                        accountId={accreditation.accountId}
-                        userId={accreditation.userId}
-                        accountType={get(accreditation, 'accountType[0]')}
-                        {...this.props}
-                      /> :
+                      <Aux>
+                        <Actions
+                          accountId={accreditation.accountId}
+                          userId={accreditation.userId}
+                          accountType={get(accreditation, 'accountType[0]')}
+                          emailVerifier={emailVerifier}
+                          accreditation={accreditation}
+                          inProgress={inProgress}
+                          {...this.props}
+                        />
+                      </Aux> :
                       <Table.Cell>
                         <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
                       </Table.Cell>

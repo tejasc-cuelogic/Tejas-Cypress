@@ -302,19 +302,20 @@ export class InvestmentStore {
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
-        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser than invested amount';
         this.INVESTMONEY_FORM.meta.isValid = false;
+        uiStore.setProgress(false);
         resolve();
       } else {
         client
           .mutate({
             mutation: investNowGeneratePurchaseAgreement,
             variables: {
-              investmentAmount: this.investmentAmount,
+              investmentAmount: this.investmentAmount.toString(),
               offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
               userId: userDetailsStore.currentUserId,
               accountId: this.getSelectedAccountTypeId,
-              transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount : 0,
+              transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
               // creditToSpend: this.getSpendCreditValue,
               callbackUrl: `${window.location.origin}/secure-gateway`,
             },
@@ -463,10 +464,10 @@ export class InvestmentStore {
         userId: userDetailsStore.currentUserId,
         accountId: this.getSelectedAccountTypeId,
         offeringId: offeringIdToUpdate,
-        investmentAmount: this.investmentAmount,
+        investmentAmount: this.investmentAmount.toString(),
         agreementId: this.agreementDetails.agreementId,
         // transferAmount: this.getTransferRequestAmount,
-        transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount : 0,
+        transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
       };
       uiStore.setProgress();
       return new Promise((resolve) => {
@@ -557,32 +558,28 @@ export class InvestmentStore {
 
   investmentBonusRewards = (investedAmount) => {
     const { campaign } = campaignStore;
-    const offeringInvestedAmount = money.floatToAmount(investedAmount || 0);
+    const offeringInvestedAmount = investedAmount || 0;
+    let rewardsTiers = [];
+    campaign.bonusRewards.map((reward) => {
+      rewardsTiers = reward.tiers.concat(rewardsTiers);
+      return false;
+    });
+    rewardsTiers = [...new Set(toJS(rewardsTiers))].sort((a, b) => b - a);
+    const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
     let bonusRewards = [];
-    let matchedTierAmount = 0;
-    if (campaign && campaign.bonusRewards && campaign.bonusRewards.length) {
-      campaign.bonusRewards.map((reward) => {
-        const tiersArray = orderBy(reward.tiers);
-        tiersArray.map((tier) => {
-          if (offeringInvestedAmount >= tier &&
-            (matchedTierAmount === 0 || tier === matchedTierAmount)) {
-            matchedTierAmount = tier;
-            bonusRewards.push(reward);
-          }
-          return null;
-        });
-        return null;
-      });
-      bonusRewards = [...new Set(toJS(bonusRewards))];
-    }
+    bonusRewards = campaign && campaign.bonusRewards
+      .filter(reward => reward.tiers.includes(matchTier));
     return bonusRewards;
   }
 
   @action
-  updateInvestmentLimits = () => new Promise((resolve) => {
+  updateInvestmentLimits = offeringId => new Promise((resolve) => {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
-      .updateInvestmentLimits(data, this.getSelectedAccountTypeId, userDetailsStore.currentUserId)
+      .updateInvestmentLimits(
+        data, this.getSelectedAccountTypeId,
+        userDetailsStore.currentUserId, true, offeringId,
+      )
       .then(() => resolve());
   })
 
@@ -591,6 +588,9 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    this.setByDefaultRender(true);
+    investmentLimitStore.setInvestNowErrorStatus(false);
+    // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
     this.setFieldValue('estReturnVal', '-');
   }

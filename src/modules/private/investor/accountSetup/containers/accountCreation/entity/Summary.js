@@ -27,6 +27,7 @@ export default class Summary extends Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
+    this.props.uiStore.setcreateAccountMessage();
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
@@ -64,7 +65,7 @@ export default class Summary extends Component {
     const { errors } = this.props.uiStore;
     const {
       plaidAccDetails, formLinkBankManually,
-      depositMoneyNow, formAddFunds,
+      depositMoneyNow, formEntityAddFunds,
       isAccountPresent,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
@@ -129,7 +130,7 @@ export default class Summary extends Component {
                   <Table.Cell>
                     {!depositMoneyNow ?
                     Helper.CurrencyFormat(0) :
-                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                    formEntityAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formEntityAddFunds.fields.value.value)}` :
                     Helper.CurrencyFormat(0)}
                   </Table.Cell>
                 </Table.Row>
@@ -143,7 +144,7 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm && !isAccountPresent} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
         </div>
         <p className="center-align grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}

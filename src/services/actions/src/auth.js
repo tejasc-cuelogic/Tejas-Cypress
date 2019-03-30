@@ -11,7 +11,6 @@ import {
   userDetailsStore,
   authStore,
   commonStore,
-  adminStore,
   uiStore,
   accountStore,
   identityStore,
@@ -20,6 +19,7 @@ import {
   entityAccountStore,
   bankAccountStore,
   individualAccountStore,
+  portfolioStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -47,6 +47,13 @@ export class Auth {
       ClientId: COGNITO_CLIENT_ID,
     });
   }
+
+  getUserSession = () => new Promise((res, rej) => {
+    this.cognitoUser = this.userPool.getCurrentUser();
+    if (this.cognitoUser) {
+      this.cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
+    }
+  });
 
   /**
    * @desc after refresh or coming to page after some time method verify if session is valid or not
@@ -94,7 +101,6 @@ export class Auth {
             AWS.config.region = AWS_REGION;
             if (userStore.isCurrentUserWithRole('admin')) {
               this.setAWSAdminAccess(data.session.idToken.jwtToken);
-              adminStore.setAdminCredsLoaded(true);
             }
             res();
           }))
@@ -172,7 +178,7 @@ export class Auth {
               if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
                 cookie.remove('SAASQUATCH_REFERRAL_CODE');
               }
-              if (window.analytics && false) {
+              if (window.analytics) { // && false
                 window.analytics.identify(userStore.currentUser.sub, {
                   name: `${get(data, 'user.info.firstName')} ${get(data, 'user.info.lastName')}`,
                   email: get(data, 'user.email.address'),
@@ -335,9 +341,7 @@ export class Auth {
         onSuccess: data => res(data), onFailure: err => rej(err),
       });
     })
-      .then(() => {
-        Helper.toast('Password changed successfully', 'success');
-      })
+      .then(() => { })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
         throw err;
@@ -598,22 +602,12 @@ export class Auth {
       });
   }
 
-  /**
-   * @desc Logs out user and clears all tokens stored in browser's local storage
-   * @return null
-   */
-  logout = () => (
+  forceLogout = () => (
     new Promise((res) => {
       commonStore.setToken(undefined);
-      userStore.forgetUser();
-      // this.cognitoUser.signOut();
-      this.cognitoUser.globalSignOut({
-        onSuccess: result => console.log(result),
-        onFailure: err => console.log(err),
-      });
       localStorage.removeItem('lastActiveTime');
-      AWS.config.clear();
       authStore.setUserLoggedIn(false);
+      userStore.forgetUser();
       authStore.resetStoreData();
       accountStore.resetStoreData();
       identityStore.resetStoreData();
@@ -623,6 +617,39 @@ export class Auth {
       entityAccountStore.resetStoreData();
       bankAccountStore.resetStoreData();
       individualAccountStore.resetStoreData();
+      portfolioStore.resetPortfolioData();
+      uiStore.clearErrors();
+      res();
+    })
+    // Clear all AWS credentials
+  );
+
+  /**
+   * @desc Logs out user and clears all tokens stored in browser's local storage
+   * @return null
+   */
+  logout = () => (
+    new Promise((res) => {
+      commonStore.setToken(undefined);
+      authStore.setUserLoggedIn(false);
+      userStore.forgetUser();
+      // this.cognitoUser.signOut();
+      this.cognitoUser.globalSignOut({
+        onSuccess: result => console.log(result),
+        onFailure: err => console.log(err),
+      });
+      localStorage.removeItem('lastActiveTime');
+      AWS.config.clear();
+      authStore.resetStoreData();
+      accountStore.resetStoreData();
+      identityStore.resetStoreData();
+      investorProfileStore.resetStoreData();
+      userDetailsStore.resetStoreData();
+      iraAccountStore.resetStoreData();
+      entityAccountStore.resetStoreData();
+      bankAccountStore.resetStoreData();
+      individualAccountStore.resetStoreData();
+      portfolioStore.resetPortfolioData();
       uiStore.clearErrors();
       res();
     })

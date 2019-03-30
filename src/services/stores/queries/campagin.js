@@ -18,6 +18,9 @@ query getOfferingList($filters: OfferingFilterInputType){
         about {
           theCompany
         }
+        overview {
+          tombstoneDescription
+        }
       }
       closureSummary {
         processingDate
@@ -39,6 +42,11 @@ query getOfferingList($filters: OfferingFilterInputType){
     }
   }
 `;
+
+export const checkIfEarlyBirdExist = gql`
+query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accountId: String!) {
+  checkEarlyBirdByInvestorAccountAndOfferingId(offeringId: $offeringId, accountId: $accountId)
+}`;
 
 export const getOfferingsReferral = gql`
 query getOfferingList($filters: OfferingFilterInputType){
@@ -99,6 +107,8 @@ export const campaignDetailsQuery = gql`
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       industry
       minInvestAmt
       appendixATitle
@@ -477,6 +487,7 @@ query getOfferingById($id: ID) {
         multiple
         revSharePercentage
         interestRate
+        businessOpenDate
       }
     }
     keyTerms {
@@ -495,6 +506,8 @@ query getOfferingById($id: ID) {
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       industry
       minInvestAmt
       revShareSummary

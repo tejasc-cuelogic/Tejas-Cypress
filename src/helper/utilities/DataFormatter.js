@@ -23,7 +23,13 @@ class DataFormatter {
 
   getCommaSeparatedArrStr = array => [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
 
-  getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
+  getJsonFormattedError = (err) => {
+    try {
+      return JSON.parse(err.message.substring(err.message.indexOf('{')));
+    } catch (e) {
+      return {};
+    }
+  };
 
   diffDays = (timeStamp2, inHours = false, returnNegative = false) => {
     const d1 = moment().format('MM/DD/YYYY');
@@ -101,6 +107,9 @@ class DataFormatter {
   fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
   getDateFromNow = afterDays =>
     new Date((new Date()).getTime() - (afterDays * 86400000)).toISOString();
+
+  // eslint-disable-next-line no-useless-escape
+  validateEmail = email => email.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm);
 }
 
 export default new DataFormatter();

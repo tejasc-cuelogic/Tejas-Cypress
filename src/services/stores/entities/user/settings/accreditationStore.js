@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, FILLING_STATUS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
@@ -7,10 +7,10 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore, investmentStore } from '../../../index';
-import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest } from '../../../queries/accreditation';
+import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
-import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS } from '../../../../constants/accreditation';
+import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_APPROVE_DECLINE_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
@@ -43,11 +43,12 @@ export class AccreditationStore {
   @observable data = [];
   @observable accreditaionMethod = null;
   @observable accreditationDetails = {};
-  @observable userAccredetiationState = undefined;
+  @observable userAccredetiationState = null;
   @observable selectedAccountStatus = undefined;
   @observable showAccountList = true;
   @observable headerSubheaderObj = {};
   @observable accType = '';
+  @observable currentInvestmentStatus = '';
 
   @action
   initRequest = (reqParams) => {
@@ -158,20 +159,25 @@ export class AccreditationStore {
     this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
   }
 
-  getFileUploadEnum = accountType => ACCREDITATION_FILE_UPLOAD_ENUMS[accountType];
+  getFileUploadEnum = (accountType, accreditationMethod) => {
+    if (accreditationMethod !== 'Admin') {
+      return ACCREDITATION_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
+    }
+    return ACCREDITATION_APPROVE_DECLINE_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
+  }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod) => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', targetUserId = '') => {
+    const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
+    const tags = [accreditationMethod];
+    if (accreditationMethod === 'Income') {
+      tags.push(this.getFileUploadEnum(field));
+    }
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
-        const stepName = this.getFileUploadEnum(accountType);
-        const tags = [accreditationMethod];
-        if (accreditationMethod === 'Income') {
-          tags.push(this.getFileUploadEnum(field));
-        }
         this.setFormFileArray(form, field, 'showLoader', true);
-        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
+        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags, targetUserId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(form, field, 'fileData', file);
@@ -458,6 +464,10 @@ export class AccreditationStore {
   updateAccreditationAction = (accreditationAction, accountId, userId, accountType) => {
     uiStore.setProgress();
     const data = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
+    const fileData = [{
+      fileId: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.fileId,
+      fileName: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.value,
+    }];
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -469,6 +479,8 @@ export class AccreditationStore {
             accountType,
             comment: data.justifyDescription,
             expiration: data.expiration,
+            declinedMessage: data.declinedMessage,
+            adminJustificationDocs: fileData,
           },
           refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
         })
@@ -565,6 +577,35 @@ export class AccreditationStore {
       });
     }
   })
+
+  @action
+  emailVerifier = (userId, accountId, accountType) => {
+    uiStore.setProgress(userId);
+    const payLoad = { userId, accountId, accountType };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: notifyVerifierForAccreditationRequestByEmail,
+          variables: payLoad,
+          refetchQueries: [{
+            query: userAccreditationQuery,
+            variables: {
+              userId: userDetailsStore.currentUserId,
+            },
+          }],
+        })
+        .then(() => {
+          Helper.toast('Email sent for verification.', 'success');
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        })
+        .finally(() => uiStore.setProgress(false));
+    });
+  }
 
   @computed get userDetails() {
     const details = (this.userData && this.userData.data && toJS(this.userData.data.user)) || {};
@@ -671,15 +712,19 @@ export class AccreditationStore {
       accountSelected || userDetailsStore.currentActiveAccountDetails.name;
     const intialAccountStatus = this.userSelectedAccountStatus(currentSelectedAccount);
     this.setUserSelectedAccountStatus(intialAccountStatus);
+    let investmentType = 'CF';
     if (intialAccountStatus === 'FULL' && regulationCheck) {
       let currentAcitveObject = {};
       if (aggreditationDetails) {
         currentAcitveObject =
           find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
+      investmentType = regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'D506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : 'CF';
+      const validAccreditationStatus = ['REQUESTED', 'INVALID'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && currentAcitveObject.status === 'REQUESTED' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && currentAcitveObject.status === 'REQUESTED' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+      // if (accountStatus) {
       switch (accountStatus) {
         case 'REQUESTED':
           this.userAccredetiationState = 'PENDING';
@@ -697,9 +742,11 @@ export class AccreditationStore {
           this.userAccredetiationState = 'INACTIVE';
           break;
       }
+      // }
     } else if (intialAccountStatus === 'FULL') {
       this.userAccredetiationState = 'ELGIBLE';
     }
+    this.setCurrentInvestmentStatus(investmentType);
   }
   @action
   setUserSelectedAccountStatus = (intialAccountStatus) => {
@@ -762,7 +809,7 @@ export class AccreditationStore {
   }
   @action
   resetUserAccreditatedStatus = () => {
-    this.userAccredetiationState = undefined;
+    // this.userAccredetiationState = null;
     this.selectedAccountStatus = undefined;
     this.showAccountList = true;
     investmentStore.resetAccTypeChanged();
@@ -804,6 +851,7 @@ export class AccreditationStore {
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,
     accountCreated, showAccountList = true, isDocumentUpload = true,
+    offeringReuglation = undefined, offeringDetailsObj = undefined,
   ) => {
     const headerSubheaderTextObj = {};
     if (showAccountList && accountCreated.values.length >= 2) {
@@ -817,20 +865,23 @@ export class AccreditationStore {
       // return headerSubheaderTextObj;
     } else {
       const userCurrentState = (isRegulationCheck && currentStatus === 'FULL') ? accreditedStatus : currentStatus;
+      const offeringTitleInHeader = offeringDetailsObj && offeringDetailsObj.offeringTitle ? offeringDetailsObj.offeringTitle : 'Offering';
+      const subHeaderForParallelOffering = `Up to ${Helper.CurrencyFormat((offeringDetailsObj && offeringDetailsObj.offeringRegulationDMaxAmount) || 0, 0)} is being raised under Regulation D and up to
+      ${Helper.CurrencyFormat((offeringDetailsObj && offeringDetailsObj.OfferingRegulationCFMaxAmount) || 0, 0)} is being raised under Regulation Crowdfunding`;
       if (userCurrentState) {
         const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
         switch (userCurrentState) {
           case 'PENDING':
-            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account In Review`;
-            headerSubheaderTextObj.subHeader = 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : `Accreditation Verification for ${accountType} Investor Account In Review`;
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
             break;
           case 'NOT_ELGIBLE':
             headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
             headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
             break;
           case 'INACTIVE':
-            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
-            headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? `${offeringTitleInHeader} is a Parallel Offering` : `Accreditation Verification for ${accountType} Investor Account Required`;
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? subHeaderForParallelOffering : 'You must be an accredited investor to make an investment in this offering.';
             break;
           case 'EXPIRED':
             // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
@@ -879,6 +930,14 @@ export class AccreditationStore {
   @action
   setDefaultCheckboxVal = () => {
     this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = [true];
+  }
+  @action
+  resetAccreditationObject = () => {
+    this.accreditationData = { ira: null, individual: null, entity: null };
+  }
+  @action
+  setCurrentInvestmentStatus = (val) => {
+    this.currentInvestmentStatus = val;
   }
 }
 export default new AccreditationStore();

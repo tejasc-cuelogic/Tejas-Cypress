@@ -23,8 +23,8 @@ export const STAGES = {
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
   },
-  FAILED: { ref: 'live', accessKey: 4, label: 'Failed' },
-  TERMINATED: { ref: 'live', accessKey: 4, label: 'Terminated' },
+  FAILED: { ref: 'failed', accessKey: 4, label: 'Failed' },
+  TERMINATED: { ref: 'failed', accessKey: 4, label: 'Terminated' },
   STARTUP_PERIOD: {
     ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
   },
@@ -674,6 +674,17 @@ export const MISC = {
   },
 };
 
+export const CLOSURE_SUMMARY = {
+  processingDate: {
+    value: '',
+    label: 'Close Date',
+    error: undefined,
+    rule: 'date',
+    customErrors: { date: 'Close Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
+  },
+};
+
 export const COMPANY_LAUNCH = {
   targetDate: {
     value: '',
@@ -1242,7 +1253,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'Month 20XX',
   },
   offeringDeadline: {
     label: 'Offering Deadline',
@@ -2342,7 +2353,7 @@ export const ADD_NEW_BONUS_REWARD = {
     label: 'Description',
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Description',
   },
   expirationDate: {

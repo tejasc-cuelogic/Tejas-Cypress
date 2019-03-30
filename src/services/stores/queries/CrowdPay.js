@@ -60,6 +60,7 @@ query listCrowdPayUsers($limit: Int) {
             by
             date
           }
+          storageDetails
           frozen {
             by
             date
@@ -70,17 +71,22 @@ query listCrowdPayUsers($limit: Int) {
               by
             }
           }
+          investorProfileData {
+            brokerageFirmName
+            publicCompanyTicker
+          }
       }
   }
 }
 `;
 
 export const crowdPayAccountReview = gql`
-mutation _crowdPayAccountReview($userId: String!, $accountId: String!, $action: ActionTypeEnum!) {
+mutation _crowdPayAccountReview($userId: String!, $accountId: String!, $action: ActionTypeEnum!, $comment: String!) {
   crowdPayAccountReview(
     userId: $userId
     accountId: $accountId
     action: $action
+    comment: $comment
   ) {
     status
   }

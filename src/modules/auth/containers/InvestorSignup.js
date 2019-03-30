@@ -53,7 +53,7 @@ class InvestorSignup extends Component {
       <Modal
         size="mini"
         open
-        closeOnDimmerClick
+        closeOnDimmerClick={false}
         onClose={
           () => {
             this.props.authStore.resetForm('SIGNUP_FRM');
@@ -64,7 +64,7 @@ class InvestorSignup extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3" className="mb-0">
             Sign up as {' '}
-            {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
+            {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'an Investor' : 'Business Owner'}
           </Header>
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
@@ -104,10 +104,15 @@ class InvestorSignup extends Component {
               minScore={4}
               iconDisplay
               tooShortWord="Weak"
-              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
               inputProps={{
                 name: 'password', autoComplete: 'off', placeholder: 'Password',
               }}
+              userInputs={
+                [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
+                  SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
+              }
               changed={signupChange}
               fielddata={SIGNUP_FRM.fields.password}
               showRequiredError

@@ -34,6 +34,7 @@ export default class Summary extends React.Component {
       partialInvestNowSessionURL,
       setPartialInvestmenSession,
     } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
@@ -50,7 +51,8 @@ export default class Summary extends React.Component {
         } else {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
           if (!this.props.individualAccountStore.showProcessingModal) {
-            this.props.history.replace('app/summary');
+            this.props.history.push('/app/summary');
+            this.props.uiStore.resetcreateAccountMessage();
           }
         }
       }).catch(() => { });
@@ -74,6 +76,7 @@ export default class Summary extends React.Component {
       formLinkBankManually,
       depositMoneyNow,
       isEncrypted,
+      isAccountPresent,
       shouldValidateAmount,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
@@ -143,7 +146,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !bankAccountNumber} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
         </div>
       </Aux>
     );

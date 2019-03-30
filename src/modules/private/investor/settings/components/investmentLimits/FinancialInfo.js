@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
+import moment from 'moment';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
@@ -49,7 +50,7 @@ export default class FinancialInfo extends Component {
   }
   getDate = (accName) => {
     let date = '';
-    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.formatedDate(accName.requestDate) : accName && accName.status === 'CONFIRMED' && accName.expiration ? DataFormatter.formatedDate(accName.expiration) : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? DataFormatter.formatedDate(accName.reviewed.date) : '-';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? moment(accName.requestDate).format('MM/DD/YY') : accName && accName.status === 'CONFIRMED' && accName.expiration ? moment(accName.expiration).format('MM/DD/YY') : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? moment(accName.reviewed.date).format('MM/DD/YY') : '-';
     return date;
   }
   render() {
@@ -131,17 +132,32 @@ export default class FinancialInfo extends Component {
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
                             <b><dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd></b>
+                            {accreditationData[account.name].status === 'INVALID' ?
+                              <Aux>
+                                <dt>Message :</dt>
+                                <dd>{accreditationData[account.name].declinedMessage}</dd>
+                              </Aux> : ''
+                            }
                             <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
                             <dd>{this.getDate(accreditationData[account.name])}</dd>
                           </dl>
+                          <Divider hidden />
+                          {accreditationData[account.name].status === 'INVALID' ?
+                            <Card.Description>
+                              <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Accreditation" />
+                            </Card.Description> : ''
+                          }
                         </Card.Content>
                         :
                         <Card.Content>
-                          <Header as="h4">Reg D 506(c) Investor Accreditation</Header>
-                          <p className="intro-text">In order to participate in Reg D offerings, the SEC requires NextSeed to verify your Accredited Investor status</p>
+                          <Header as="h4">Accredited Investor Status</Header>
+                          <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
+                          <Link target="_blank" to="/app/resources/knowledge-base">
+                            &nbsp;What is an accredited investor?
+                          </Link>
                           <Divider hidden />
                           <Card.Description>
-                            <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify accreditation" />
+                            <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Status" />
                           </Card.Description>
                         </Card.Content>
                       }

@@ -64,7 +64,7 @@ class BonusRewards extends Component {
                     <Segment padded className="reward-block">
                       <Aux>
                         <Header as="h6" className="text-uppercase">Invest</Header>
-                        <Header as="h3" className="highlight-text">${tier}+</Header>
+                        <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
                       </Aux>
                       <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
                     </Segment>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { findLastIndex, toInteger, get } from 'lodash';
+import { findLastIndex, toInteger, get, isNaN, uniqWith, isEqual } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
@@ -26,17 +26,20 @@ class InvestmentTimeline extends Component {
     const { getInvestor } = this.props.portfolioStore;
     const minInvestAmt = get(campaign, 'keyTerms.minInvestAmt') || null;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
-    const myInvestment = get(getInvestor, 'myInvestment') || 0;
+    const myInvestment = get(getInvestor, 'myInvestment') ? parseFloat(get(getInvestor, 'myInvestment').replace(/,/g, '')) : 0;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const investBonusReward = rewardsTiers.filter(r =>
       bonusRewards.filter(b => b.tiers.includes(r)).length);
     if (parseFloat(myInvestment) < (investBonusReward.length && parseFloat(investBonusReward[0]))) {
       investBonusReward.splice(0, 0, minInvestAmt);
     }
-    rewardsTiers = investBonusReward;
-    const progress =
-      investBonusReward.length ? calcSmartProgress(investBonusReward, myInvestment) : 0;
-    const calculatedMargin = calMargin(investBonusReward);
+    rewardsTiers = uniqWith(investBonusReward, isEqual).sort((a, b) => a - b);
+    let progress =
+    rewardsTiers.length ? calcSmartProgress(rewardsTiers, myInvestment) : 0;
+    if (isNaN(progress) && rewardsTiers[rewardsTiers.length - 1] < myInvestment) {
+      progress = 100;
+    }
+    const calculatedMargin = calMargin(rewardsTiers);
     return (
       rewardsTiers && rewardsTiers.length ?
         <Aux>
@@ -44,7 +47,7 @@ class InvestmentTimeline extends Component {
           <Grid columns="equal" textAlign="center" className="investment-scale">
             <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
               <span className="investment-progress" style={{ width: `${progress}%` }} />
-              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.MoneyMathDisplayCurrency(myInvestment)}</span></div>
+              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(myInvestment)}</span></div>
             </div>
             <Grid.Row>
               {rewardsTiers.map((tier, index) => (
@@ -63,7 +66,10 @@ class InvestmentTimeline extends Component {
                         reward.tiers.includes(tier) &&
                         <Popup.Content>
                           <Header as="h4" className="mb-half">
-                            {reward.title}
+                            <HtmlEditor
+                              readOnly
+                              content={(reward.title || '')}
+                            />
                           </Header>
                           <p className="detail-section">
                             <HtmlEditor

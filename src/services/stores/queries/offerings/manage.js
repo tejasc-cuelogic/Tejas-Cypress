@@ -860,17 +860,27 @@ export const getOfferingDetails = gql`
       closureSummary {
         processingDate
         hardCloseDate
+        launchDate
         disbursement {
           date
           amount
+        }
+        keyTerms {
+          multiple
+          revSharePercentage
+          interestRate
+          businessOpenDate
         }
         repayment {
           startDate
           completeDate
           currentRepaidAmount
+          count
         }
         totalCommittedAmount
         totalInvestorCount
+        totalInvestmentAmount
+        failedDate
       }
       bonusRewards{
         id

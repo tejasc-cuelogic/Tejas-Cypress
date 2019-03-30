@@ -16,7 +16,7 @@ export default class NewEmailAddress extends Component {
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
       this.props.authStore.setCredentials({ email: email.value, password: password.value });
-      this.props.history.push('/app/profile-settings/profile-data/confirm-email-address');
+      this.props.history.push(`${this.props.refLink}/confirm-email-address`);
     })
       .catch(() => {});
   }
@@ -24,7 +24,7 @@ export default class NewEmailAddress extends Component {
     e.stopPropagation();
     this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('CONFIRM_FRM');
-    this.props.history.push('/app/profile-settings/profile-data');
+    this.props.history.push(this.props.refLink);
   }
   render() {
     const { CONFIRM_FRM, confirmFormChange } = this.props.authStore;

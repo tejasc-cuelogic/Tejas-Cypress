@@ -57,7 +57,7 @@ class InvestmentDetails extends Component {
           title: 'Total Raised Amount', content: get(getInvestor, 'totalRaisedAmount') || 'N/A', type: 1, fraction: false,
         },
         {
-          title: 'Close Date', content: get(campaign, 'closureSummary.processingDate') ? moment(new Date(get(campaign, 'closureSummary.processingDate'))).format('ll') : 'NA',
+          title: 'Close Date', content: get(campaign, 'closureSummary.hardCloseDate') ? moment(new Date(get(campaign, 'closureSummary.hardCloseDate'))).format('ll') : 'NA',
         },
         {
           title: 'My Investment', content: get(getInvestor, 'myInvestment') || 'N/A', type: 1, fraction: false,
@@ -66,7 +66,7 @@ class InvestmentDetails extends Component {
           title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') || 'N/A', type: 1, info: 'Payments received to date from this investment, minus NextSeed fees.',
         },
         {
-          title: 'Net Annualized Returns', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'N/A', info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. See the Education Center for a full explanation of how NAR <Link to="/resources/education-center">Education Center</Link> is calculated. </span>,
+          title: 'Net Annualized Return', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'N/A', info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. See the <Link target="_blank" to="/resources/education-center">Education Center</Link> for a full explanation of how NAR  is calculated.</span>,
         },
       ],
     };

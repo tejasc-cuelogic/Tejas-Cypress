@@ -7,7 +7,7 @@ import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, in
 import { linkBankRequestPlaid, linkBankRequestManual, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
-  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
+  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
@@ -22,6 +22,7 @@ export class BankAccountStore {
   @observable showAddFunds = false;
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
+  @observable formEntityAddFunds = Validator.prepareFormObject(ENTITY_ADD_FUND);
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable filters = false;
@@ -89,9 +90,14 @@ export class BankAccountStore {
   };
 
   @action
-  addFundChange = (values, field) => {
-    this.formAddFunds =
-      Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
+  addFundChange = (values, field, accType = '') => {
+    if (accType === 'entity') {
+      this.formEntityAddFunds =
+      Validator.onChange(this.formEntityAddFunds, { name: field, value: values.floatValue });
+    } else {
+      this.formAddFunds =
+        Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
+    }
   };
 
   @action
@@ -119,9 +125,21 @@ export class BankAccountStore {
   }
 
   @action
+  resetEntityAddFundsForm() {
+    Validator.resetFormData(this.formEntityAddFunds);
+  }
+
+  @action
   validateAddfundsAmount = () => {
-    const { value } = this.formAddFunds.fields.value;
-    if (parseFloat(value, 0) === -1) {
+    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
+      if (parseFloat(this.formEntityAddFunds.fields.value.value, 0) === -1) {
+        this.shouldValidateAmount = true;
+        this.resetEntityAddFundsForm();
+      }
+    } else if (parseFloat(
+      this.formAddFunds.fields.value.value
+      , 0,
+    ) === -1) {
       this.shouldValidateAmount = true;
       this.resetAddFundsForm();
     }
@@ -196,9 +214,10 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-    const { value } = this.formAddFunds.fields.value;
-    accountAttributes.initialDepositAmount = this.depositMoneyNow && value !== '' ?
-      value : -1;
+    const { value } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.fields.value : this.formAddFunds.fields.value;
+    const { isValid } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta : this.formAddFunds.meta;
+    accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid ?
+      value : !isValid ? '' : -1;
     return accountAttributes;
   }
 
@@ -206,12 +225,21 @@ export class BankAccountStore {
   get isValidLinkBank() {
     return !isEmpty(this.plaidAccDetails);
   }
-
+  // TODO optimize method isPlaidDirty and isEntityPlaidDirty
   @computed
   get isPlaidDirty() {
     return (this.isAccountPresent &&
     this.formLinkBankManually.meta.isDirty &&
     this.formAddFunds.meta.isDirty &&
+    !this.linkbankSummary) ||
+    this.showAddFunds;
+  }
+
+  @computed
+  get isEntityPlaidDirty() {
+    return (this.isAccountPresent &&
+    this.formLinkBankManually.meta.isDirty &&
+    this.formEntityAddFunds.meta.isDirty &&
     !this.linkbankSummary) ||
     this.showAddFunds;
   }
@@ -237,8 +265,8 @@ export class BankAccountStore {
   }
 
   @computed get isAccountPresent() {
-    return !isEmpty(this.plaidAccDetails.accountNumber) ||
-      !isEmpty(this.plaidAccDetails.public_token);
+    return !isEmpty(get(this.plaidAccDetails, 'accountNumber')) ||
+      !isEmpty(get(this.plaidAccDetails, 'public_token'));
   }
 
   @action
@@ -250,9 +278,10 @@ export class BankAccountStore {
   resetLinkBank = () => {
     Validator.resetFormData(this.formLinkBankManually);
     Validator.resetFormData(this.formAddFunds);
+    Validator.resetFormData(this.formEntityAddFunds);
     if (accountStore.investmentAccType !== 'ira') {
       this.plaidAccDetails = {};
-    } else if (accountStore.investmentAccType === 'ira' && iraAccountStore.stepToBeRendered < 3) {
+    } else if (Helper.matchRegexWithUrl([/\bira(?![-])\b/]) && iraAccountStore.stepToBeRendered < 3) {
       this.plaidAccDetails = {};
     }
     this.depositMoneyNow = true;
@@ -322,15 +351,38 @@ export class BankAccountStore {
 
   @action
   validateAddFunds = () => {
-    map(this.formAddFunds.fields, (value) => {
-      const { key } = value;
-      const { errors } = validationService.validate(value);
-      Validator.setFormError(
-        this.formAddFunds,
-        key,
-        errors && errors[key][0],
-      );
-    });
+    if (!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
+      // TODO optiimize map function in if and else
+      map(this.formAddFunds.fields, (value) => {
+        const { key } = value;
+        const fundValue = value;
+        fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+         // eslint-disable-next-line no-restricted-globals
+         isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+        const { errors } = validationService.validate(fundValue);
+        Validator.setFormError(
+          this.formAddFunds,
+          key,
+          errors && errors[key][0],
+        );
+      });
+      this.validateForm('formAddFunds');
+    } else {
+      map(this.formEntityAddFunds.fields, (value) => {
+        const { key } = value;
+        const fundValue = value;
+        fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+          // eslint-disable-next-line no-restricted-globals
+          isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+        const { errors } = validationService.validate(value);
+        Validator.setFormError(
+          this.formEntityAddFunds,
+          key,
+          errors && errors[key][0],
+        );
+      });
+      this.validateForm('formEntityAddFunds');
+    }
   }
 
   @action
@@ -340,6 +392,15 @@ export class BankAccountStore {
 
   @computed get count() {
     return (this.changeRequests && this.changeRequests.length) || 0;
+  }
+  @computed get isLinkbankInComplete() {
+    const isAddFundsDirty = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta.isDirty : this.formAddFunds.meta.isDirty;
+    return this.manualLinkBankSubmitted ||
+    isAddFundsDirty ||
+    this.formLinkBankManually.meta.isDirty ||
+    this.linkbankSummary ||
+    !this.isAccountPresent ||
+    this.showAddFunds;
   }
 
   @action
@@ -439,6 +500,7 @@ export class BankAccountStore {
   resetStoreData = () => {
     this.resetFormData('formBankSearch');
     this.resetFormData('formAddFunds');
+    this.resetFormData('formEntityAddFunds');
     this.resetFormData('formLinkBankManually');
     this.bankLinkInterface = 'list';
     this.plaidAccDetails = {};

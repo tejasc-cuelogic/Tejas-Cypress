@@ -27,7 +27,9 @@ class AvailableCashTransfer extends Component {
                         wide
                       />
                     </Statistic.Label>
-                    <Statistic.Value>{Helper.MoneyMathDisplayCurrency(props.cash)}</Statistic.Value>
+                    <Statistic.Value>
+                      {Helper.MoneyMathDisplayCurrency(props.cash, false)}
+                    </Statistic.Value>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column textAlign="right" verticalAlign="middle">

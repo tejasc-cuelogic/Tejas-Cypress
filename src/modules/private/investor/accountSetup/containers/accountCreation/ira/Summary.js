@@ -29,6 +29,7 @@ export default class Summary extends Component {
   }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
@@ -73,7 +74,6 @@ export default class Summary extends Component {
     const {
       plaidAccDetails, formLinkBankManually,
       formAddFunds, depositMoneyNow,
-      isAccountPresent,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -138,7 +138,7 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm && !isAccountPresent} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
         <p className="center-align mt-30 grey-header">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}

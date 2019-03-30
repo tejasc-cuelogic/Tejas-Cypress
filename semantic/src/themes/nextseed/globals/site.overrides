@@ -321,9 +321,13 @@ i.icon.right {
 		font-style: italic;
 		background: @neutral-offwhite;
 	}
+	.wp-caption {
+		max-width: 100%;
+		height: 100%;
+	}
 	img {
 		max-width: 100%;
-		height: auto;
+		height: 100%;
 	}
 }
 //	Helper Classes Ends
@@ -1177,6 +1181,10 @@ a.icon-link {
 	height: 100%;
 	z-index: 9999;
 	pointer-events:none;
+	canvas {
+		width: 100vw !important;
+		height: 100vh !important;
+	}
 }
 // Vertical Timeline
 .vertical-timeline.campaign-updates {
@@ -2221,6 +2229,7 @@ svg:not(:root).recharts-surface{
 	}
 	h1.ui.header{
 		font-size:@32px;
+		font-weight:@fontMedium;
 		.sub.header{
 			font-size:@14px;
 			line-height:18px;
@@ -2904,6 +2913,13 @@ input[type='range']::-webkit-slider-thumb {
 		border-color: transparent transparent transparent @white;
 	}
 }
-.fr-view span[style~="color:"] a {
-	color: @primary-one !important;
+.fr-view{
+	span[style~="color:"] a {
+		color: @primary-one !important;
+	}
+	table{
+		th, td{
+			border:none !important;
+		}
+	}
 }

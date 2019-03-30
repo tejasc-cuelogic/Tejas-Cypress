@@ -1,12 +1,14 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, reduce, get } from 'lodash';
+import { pickBy, get, filter } from 'lodash';
 import money from 'money-math';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
+import { userDetailsStore } from '../../index';
 
 export class CampaignStore {
   @observable data = [];
@@ -25,6 +27,7 @@ export class CampaignStore {
   @observable principalAmt = 0;
   @observable totalPaymentChart = [];
   @observable showFireworkAnimation = false;
+  @observable earlyBirdCheck = null;
   @observable isInvestBtnClicked = false;
 
 
@@ -85,6 +88,11 @@ export class CampaignStore {
     return this.data;
   }
 
+  @computed get getEarlyBirdCheck() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.data &&
+    this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
+  }
+
   @computed get OfferingList() {
     return (this.allData.data && this.allData.data.getOfferingList &&
       toJS(this.allData.data.getOfferingList)) || [];
@@ -132,6 +140,27 @@ export class CampaignStore {
 
   @computed get getOfferingId() {
     return (this.campaign && this.campaign.id);
+  }
+
+  @action
+  isEarlyBirdExist(accountType) {
+    const offeringId = this.getOfferingId;
+    userDetailsStore.setFieldValue('currentActiveAccount', accountType);
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountId = get(account, 'details.accountId') || null;
+    this.earlyBirdCheck =
+    graphql({
+      client,
+      query: checkIfEarlyBirdExist,
+      variables: { offeringId, accountId },
+    });
+  }
+
+  @computed
+  get earlyBirdRewards() {
+    const currentCampagin = this.campaign;
+    const rewards = get(currentCampagin, 'bonusRewards') || [];
+    return filter(rewards, br => br.earlyBirdQuantity);
   }
 
   @computed get loading() {
@@ -203,14 +232,23 @@ export class CampaignStore {
   });
   @computed get navCountData() {
     const res = { updates: 0, comments: 0 };
+    let sum = 0;
     if (this.campaign) {
       const { updates, comments } = this.campaign;
       res.updates = updates && updates.length ? updates.length : 0;
       // eslint-disable-next-line arrow-body-style
-      res.comments = reduce(comments, (sum, c) => {
-        return (c.scope === 'PUBLIC' && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved)) ? (sum + 1) : sum);
-      }, 0);
+      if (comments) {
+        comments.map((c) => {
+          if (c.scope === 'PUBLIC' &&
+          ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
+            (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+            sum = sum + 1 + (get(c, 'threadComment.length') || 0);
+          }
+          return null;
+        });
+      }
     }
+    res.comments = sum;
     return res;
   }
 

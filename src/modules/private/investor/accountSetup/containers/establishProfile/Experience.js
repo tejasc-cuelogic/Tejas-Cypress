@@ -29,9 +29,11 @@ export default class Experience extends Component {
           stepToBeRendered: 6,
         };
         updateInvestorProfileData(currentStep).then(() => {
-          const { signupStatus } = this.props.userDetailsStore;
-          if (signupStatus.isMigratedFullAccount) {
+          const { signupStatus, userStatus } = this.props.userDetailsStore;
+          if (signupStatus.isMigratedFullAccount ||
+            (userStatus && userStatus.includes('FULL'))) {
             this.props.history.push('/app/summary');
+            setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
             this.props.history.push('/app/summary/account-creation');
           }

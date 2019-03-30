@@ -157,7 +157,7 @@ export default class Plaid extends Component {
         <div className="center-align mt-30">
           {
             (isAccountPresent && action !== 'change') &&
-            <Button color="green" className="link-button" content="I dont want to change bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
+            <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
           }
         </div>
       </Aux>

@@ -165,6 +165,10 @@
             font-weight:@fontMedium;
             i.offering-icon{
                 color:@border-color;
+                vertical-align:top;
+            }
+            .offering-title{
+                display:inline-block;
             }
             p.date-stamp{
                 font-size:@12px;
@@ -267,7 +271,7 @@
             span {
                 color: @primary-two;
             }
-            &.attached{
+            &.attached:not(.downloadable){
                 padding:0 0 0 @14px;
             }
         }

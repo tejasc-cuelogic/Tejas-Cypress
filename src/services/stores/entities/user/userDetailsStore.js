@@ -33,6 +33,8 @@ export class UserDetailsStore {
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
   @observable accountForWhichCipExpired = '';
   @observable partialInvestNowSessionURL = '';
+  @observable userStatus = null;
+  @observable selectedUserId = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -128,7 +130,7 @@ export class UserDetailsStore {
 
   @action
   toggleAddressVerification = () => {
-    const payLoad = { userId: this.currentUserId, shouldSkip: !this.isAddressSkip };
+    const payLoad = { userId: this.selectedUserId, shouldSkip: !this.isAddressSkip };
     client
       .mutate({
         mutation: skipAddressValidation,
@@ -184,6 +186,7 @@ export class UserDetailsStore {
 
   @action
   getUserProfileDetails = (userId) => {
+    this.setFieldValue('selectedUserId', userId);
     this.detailsOfUser = graphql({
       client,
       query: userDetailsQuery,
@@ -267,6 +270,7 @@ export class UserDetailsStore {
       details.isMigratedFullAccount =
         (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
           this.userDetails.status === 'MIGRATION_FULL');
+      details.accStatus = this.userDetails.status;
       details.investorProfileCompleted =
         this.userDetails.investorProfileData === null ?
           false : this.userDetails.investorProfileData ?
@@ -465,6 +469,10 @@ export class UserDetailsStore {
   @action setPartialInvestmenSession = (redirectURL = '') => {
     this.partialInvestNowSessionURL = redirectURL;
   }
+
+  @action setUserStatus = (status) => {
+    this.userStatus = status || this.userStatus;
+  }
   @action sendAdminEmailOfFrozenAccount = (activity) => {
     const selectedAccount = this.currentActiveAccountDetails;
     const forzenAccountId =
@@ -506,6 +514,13 @@ export class UserDetailsStore {
   get getAnalyticsUserId() {
     return this.userDetails ?
       (get(this.userDetails, 'wpUserId') || get(this.userDetails, 'id')) : false;
+  }
+  @computed get getUserCreatedAccounts() {
+    let accDetails;
+    if (this.userDetails) {
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor');
+    }
+    return accDetails;
   }
 }
 

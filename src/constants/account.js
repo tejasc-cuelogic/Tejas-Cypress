@@ -209,8 +209,23 @@ export const IND_ADD_FUND = {
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
-      min: 'The deposit amount should be at least 100.',
-      max: 'The deposit amount should be at less than 25000.',
+      min: 'The deposit amount should be at least $100.',
+      max: 'The deposit amount should be less than $25,000.',
+    },
+  },
+};
+
+export const ENTITY_ADD_FUND = {
+  value: {
+    value: '',
+    key: 'value',
+    error: undefined,
+    rule: 'optional|numeric|min:5000|max:25000',
+    label: 'Deposit Amount',
+    maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least $5,000.',
+      max: 'The deposit amount should be less than $25,000.',
     },
   },
 };
@@ -320,7 +335,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: ' Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the SEC`s Investor Bulletin for the latest information',
+    tooltip: (<span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</span>),
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
@@ -368,7 +383,7 @@ export const ENTITY_FIN_INFO = {
   annualIncome: {
     key: 'annualIncome',
     value: '',
-    label: 'Entity Annual Income',
+    label: 'Entity Annual Revenue',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
@@ -402,6 +417,9 @@ export const ENTITY_GEN_INFO = {
   },
   zipCode: {
     key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|maskedField:5', customErrors: { required: '* required', maskedField: 'The ZIP Code should be at least 5 digits' },
+  },
+  streetTwo: {
+    key: 'streetTwo', value: '', label: 'Address Line 2', placeHolder: 'Enter Here', error: undefined, rule: 'optional', customErrors: { required: '* required' },
   },
 };
 
@@ -630,12 +648,11 @@ export const FINANCES = {
     value: '',
     label: 'Net Worth',
     error: undefined,
-    rule: 'required|min:1|max:2147483647',
+    rule: 'required|min:1',
     placeHolder: 'Enter here',
     customErrors: {
       required: 'required',
       min: 'Please enter a valid amount to deposit',
-      max: 'Please enter a valid amount to deposit',
     },
   },
   annualIncomeCurrentYear: {

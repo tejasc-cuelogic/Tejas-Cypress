@@ -127,7 +127,7 @@ export default class ConfirmEmailAddress extends Component {
 
   handleContinue = () => {
     if (this.props.refLink) {
-      this.props.history.push('/app/profile-settings/profile-data');
+      this.props.history.push(this.props.refLink);
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {

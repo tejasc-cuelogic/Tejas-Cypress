@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import { get } from 'lodash';
 import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
@@ -64,9 +65,37 @@ class App extends Component {
     if (this.props.uiStore.devBanner) {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
     }
+
+    if (window.analytics) {
+      window.analytics.page();
+    }
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.authStore.isUserLoggedIn) {
+      authActions.getUserSession().then((session) => {
+        if (!session.isValid()) {
+          this.onIdle();
+        }
+      }).catch((err) => {
+        if (err && (get(err, 'code') === 'NotAuthorizedException' || get(err, 'code') === 'Refresh Token has been revoked' || get(err, 'code') === 'Access Token has been revoked')) {
+          this.onIdle();
+        }
+      });
+    }
+    if (this.props.location !== prevProps.location) {
+      this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        // console.log('Browser tab is hidden');
+      } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
+        authActions.forceLogout().then(() => {
+          this.props.history.push('/auth/login');
+        });
+      }
+    });
+
     this.checkUserIdleStatus();
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
@@ -89,11 +118,22 @@ class App extends Component {
       };
       this.props.navStore.setNavStatus(calculations, 'main');
     }
+    // if (window.analytics) {
+    //   window.analytics.page();
+    // }
   }
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
       authActions.logout().then(() => {
         this.props.history.push('/auth/login');
+      });
+    }
+  }
+  onRouteChanged = ({ oldLocation, newLocation }) => {
+    if (window.analytics) {
+      window.analytics.page(document.title, {
+        path: newLocation.pathname,
+        referrer: `https://${window.location.hostname}${oldLocation.pathname}`,
       });
     }
   }
@@ -109,6 +149,7 @@ class App extends Component {
   }
   checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
+
   render() {
     const { location } = this.props;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {

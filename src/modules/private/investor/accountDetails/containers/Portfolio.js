@@ -55,9 +55,16 @@ export default class Portfolio extends Component {
       [...inActiveItems, of];
     this.setState({ inActiveItems: updatedList });
   }
-  handleInvestNowClick = (id) => {
+  handleViewInvestment = (id) => {
+    if (id) {
+      const redirectURL = `${this.props.match.url}/investment-details/${id}`;
+      this.props.history.push(redirectURL);
+    }
+  }
+  handleInvestNowOnChangeClick = (e, id) => {
+    const redirectURL = `${this.props.match.url}/${id}/invest-now`;
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
-    this.props.history.push(`${this.props.match.url}/${id}/invest-now`);
+    this.props.history.push(redirectURL);
   }
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
@@ -81,7 +88,7 @@ export default class Portfolio extends Component {
           title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
         {
-          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
+          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link target="_blank" to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
         },
       ],
     };
@@ -96,13 +103,13 @@ export default class Portfolio extends Component {
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowClick} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
         }
         {activeSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
         }
         {completedSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&
@@ -112,7 +119,7 @@ export default class Portfolio extends Component {
             <Card>
               <Card.Content>
                 <Header as="h4">Browse the latest investment opportunities.</Header>
-                <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+                <Button as={Link} to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
               </Card.Content>
             </Card>
           </Aux> : null
@@ -127,7 +134,7 @@ export default class Portfolio extends Component {
         />
         <Route path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
         <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
-        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}/:offeringId/agreement`} {...props} />} />
+        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
         <Route
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}

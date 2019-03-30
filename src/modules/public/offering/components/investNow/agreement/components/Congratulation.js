@@ -43,7 +43,7 @@ export default class Congratulation extends React.Component {
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>
             <Header as="h3">
-              You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount)}</span> in
+              You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span> in
               {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                     getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
             </Header>

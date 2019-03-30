@@ -42,7 +42,17 @@ export default class InvestNow extends React.Component {
     window.addEventListener('message', this.handleIframeTask);
   }
   componentWillUnmount() {
-    this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+    const { changeInvest } = this.props;
+    const isUpdateScreen = changeInvest;
+    const reflectedURL = this.props.history.location.pathname;
+    if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
+      this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+      this.props.accreditationStore.resetAccreditationObject();
+      this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
+      if (!reflectedURL.includes('agreement')) {
+        this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+      }
+    }
   }
   handleIframeTask = (e) => {
     console.log(e.data);
@@ -186,7 +196,8 @@ export default class InvestNow extends React.Component {
           component: <AccountType
             refLink={this.props.refLink}
             changeInvest={changeInvest}
-            cancel={this.handleCancel}
+            cancel={this.handleMultiStepModalclose}
+            inProgress={inProgress}
           />,
           isValid: '',
           stepToBeRendered: 1,

@@ -18,7 +18,6 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    console.log(value);
     return moment(value, 'MM/DD/YYYY').isAfter('12-31-1909');
   },
   'Invalid Date',
@@ -100,6 +99,18 @@ export const USER_IDENTITY = {
     placeHolder: 'Street Address, City, State, Zip',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+    objRef: 'legalDetails.legalAddress',
+  },
+  streetTwo: {
+    key: 'streetTwo',
+    value: '',
+    label: 'Address Line 2',
+    placeHolder: 'Address Line 2',
+    error: undefined,
+    rule: 'optional',
     customErrors: {
       required: '* required.',
     },
@@ -266,6 +277,13 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'string',
     placeHolder: 'Residential Street',
   },
+  streetTwo: {
+    value: '',
+    label: 'Address Line 2',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Address Line 2',
+  },
   city: {
     value: '',
     label: 'City',
@@ -292,6 +310,7 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     fileName: '',
     rule: '',
+    meta: '',
     label: '',
     src: '',
     base64String: '',
