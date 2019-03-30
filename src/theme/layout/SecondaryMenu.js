@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
-import map from 'lodash/map';
-import mapKeys from 'lodash/mapKeys';
+import { filter, reject, map, mapKeys } from 'lodash';
 import { MobileDropDownNav } from '../../theme/shared';
 
 const iMap = { to: 'key', title: 'text' };
@@ -71,13 +70,31 @@ class SecondaryMenu extends Component {
     }
   };
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
+  manageSubNavList = (subNavigations, getUserCreatedAccounts) => {
+    const currentPath = this.props.match.url;
+    if (currentPath.includes('profile-settings')) {
+      const InvestmenTabExistsArr = filter(subNavigations, o => o.title === 'Investment limits');
+      if (getUserCreatedAccounts.length <= 0 && InvestmenTabExistsArr &&
+        InvestmenTabExistsArr.length > 0) {
+        const updatedSubnavigation = reject(subNavigations, { title: 'Investment limits' });
+        return updatedSubnavigation;
+      }
+      return subNavigations;
+    }
+    return subNavigations;
+  }
   render() {
     const {
       navItems, match, location, vertical,
       noinvert, attached, className, stepsStatus, addon, heading,
-      force2ary, navCustomClick,
+      force2ary, navCustomClick, userCreatedAccounts,
     } = this.props;
-    const mobNavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
+    let navItemList = navItems;
+    if (navItems && userCreatedAccounts) {
+      const subNavigationItemList = this.manageSubNavList(navItems, userCreatedAccounts);
+      navItemList = subNavigationItemList;
+    }
+    const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
@@ -97,7 +114,7 @@ class SecondaryMenu extends Component {
               addon={addon}
               isActive={this.isActive}
               location={this.props.location}
-              navItems={navItems}
+              navItems={navItemList}
               navClick={this.navClick}
               match={match}
               stepsStatus={stepsStatus}
@@ -111,7 +128,7 @@ class SecondaryMenu extends Component {
             <MobileDropDownNav
               inverted
               refMatch={match}
-              navItems={navItems}
+              navItems={navItemList}
               location={location}
               className="legal-menu"
             />

@@ -42,7 +42,8 @@ export default class AccountCreation extends React.Component {
       this.props.history.push(partialInvestNowSessionURL);
       setPartialInvestmenSession();
     } else {
-      this.props.history.push('app/summary');
+      this.props.history.push('/app/summary');
+      this.props.uiStore.resetcreateAccountMessage();
     }
   }
   render() {
