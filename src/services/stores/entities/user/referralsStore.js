@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { getJwtReferralEmbeddedWidget, getUserRewardBalance, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
+import { getJwtReferralEmbeddedWidget, getUserRewardBalance, getUserReferralDetails, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../index';
 
@@ -55,12 +55,12 @@ export class ReferralStore {
     });
   });
 
-  @action
-  getReferralCreditsInformation = code => new Promise((resolve) => {
+  getUserReferralDetails = () => new Promise((resolve) => {
+    const { userDetails } = userDetailsStore;
     graphql({
-      client: clientPublic,
-      query: getReferralCreditsInformation,
-      variables: { code },
+      client,
+      query: getUserReferralDetails,
+      variables: { userId: userDetails.id },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {
@@ -86,6 +86,22 @@ export class ReferralStore {
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   });
+
+  // @action
+  // getReferralCreditsInformation = code => new Promise((resolve) => {
+  //   graphql({
+  //     client: clientPublic,
+  //     query: getReferralCreditsInformation,
+  //     variables: { code },
+  //     fetchPolicy: 'network-only',
+  //     onFetch: (data) => {
+  //       if (data) {
+  //         resolve(data);
+  //       }
+  //     },
+  //     onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+  //   });
+  // });
 
   @action
   userPartialFullSignupWithReferralCode = (val, type = 'partial') => {
@@ -107,7 +123,7 @@ export class ReferralStore {
           reject(error);
         });
     });
-  }
+  };
 
   @action
   upsertUserReferralCredits = userId => new Promise((resolve, reject) => {
