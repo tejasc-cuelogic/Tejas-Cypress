@@ -515,6 +515,13 @@ export class UserDetailsStore {
     return this.userDetails ?
       (get(this.userDetails, 'wpUserId') || get(this.userDetails, 'id')) : false;
   }
+  @computed get getUserCreatedAccounts() {
+    let accDetails;
+    if (this.userDetails) {
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor');
+    }
+    return accDetails;
+  }
 }
 
 export default new UserDetailsStore();

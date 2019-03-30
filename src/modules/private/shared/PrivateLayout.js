@@ -7,11 +7,12 @@ import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
 const overrideContainerClass = ['account-details/:accountType/transactions'];
-@inject('uiStore', 'navStore')
+@inject('uiStore', 'navStore', 'userDetailsStore')
 @observer
 class PrivateLayout extends Component {
   render() {
     const { location, navStore } = this.props;
+    const { getUserCreatedAccounts } = this.props.userDetailsStore;
     const pageMeta = navStore.navMeta;
     if (!pageMeta) {
       return <NotFound />;
@@ -41,7 +42,7 @@ class PrivateLayout extends Component {
           </Grid>
         </div>
         {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav) &&
-          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
+          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} userCreatedAccounts={getUserCreatedAccounts} />
         }
         {this.props.P1 &&
           <div className="search-filters">
