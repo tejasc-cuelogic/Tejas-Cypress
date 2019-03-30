@@ -18,6 +18,24 @@ export const getUserRewardBalance = gql`
   }
 `;
 
+export const getUserReferralDetails = gql`
+  query getUserReferralDetails($userId: String) {
+    getUserReferralDetails(userId: $userId) {
+      availableCredit
+      spentCredit
+      totalEarnedCredit
+      totalReferredUsers
+      myShareLink
+      emailShareLink
+      twitterShareLink
+      messengerShareLink
+      facebookShareLink
+      smsShareLink
+      messengerMobileShareLink
+    }
+  }
+`;
+
 export const getReferralCreditsInformation = gql`
   query getReferralCreditsInformation($code: String!) {
     getReferralCreditsInformation(code: $code) {
