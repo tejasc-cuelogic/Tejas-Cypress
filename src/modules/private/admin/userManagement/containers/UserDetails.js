@@ -9,6 +9,7 @@ import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/manage/${component}`),
@@ -19,22 +20,22 @@ const getModule = component => Loadable({
 
 const navMeta = [
   {
-    title: 'Profile Data', to: 'profile-data', component: 'ProfileData', accessibleTo: [],
+    title: 'Profile Data', to: 'profile-data', component: 'ProfileData',
   },
   {
-    title: 'Individual', to: 'individual', component: 'AccountDetails', accessibleTo: ['INDIVIDUAL'],
+    title: 'Individual', to: 'individual', component: 'AccountDetails', accessibleTo: ['individual'],
   },
   {
-    title: 'IRA', to: 'ira', component: 'AccountDetails', accessibleTo: ['IRA'],
+    title: 'IRA', to: 'ira', component: 'AccountDetails', accessibleTo: ['ira'],
   },
   {
-    title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['ENTITY'],
+    title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
   },
   {
-    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'],
+    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
   },
   {
-    title: 'Activity', to: 'activity', component: ActivityHistory, load: false, accessibleTo: [],
+    title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
   },
 ];
 
@@ -65,7 +66,9 @@ export default class AccountDetails extends Component {
       roles = [...roles, ...details.roles.map(r => r.name)];
     }
     const navItems = navMeta.filter(n =>
-      n.accessibleTo.length === 0 || intersection(n.accessibleTo, roles).length > 0);
+      ((!n.accessibleTo || n.accessibleTo.length === 0 ||
+        intersection(n.accessibleTo, roles).length > 0)) &&
+      (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
