@@ -225,7 +225,7 @@ export class BankAccountStore {
   get isValidLinkBank() {
     return !isEmpty(this.plaidAccDetails);
   }
-
+  // TODO optimize method isPlaidDirty and isEntityPlaidDirty
   @computed
   get isPlaidDirty() {
     return (this.isAccountPresent &&
@@ -394,12 +394,12 @@ export class BankAccountStore {
     return (this.changeRequests && this.changeRequests.length) || 0;
   }
   @computed get isLinkbankInComplete() {
+    const isAddFundsDirty = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta.isDirty : this.formAddFunds.meta.isDirty;
     return this.manualLinkBankSubmitted ||
-    this.formAddFunds.meta.isDirty ||
+    isAddFundsDirty ||
     this.formLinkBankManually.meta.isDirty ||
     this.linkbankSummary ||
     !this.isAccountPresent ||
-    this.formEntityAddFunds.meta.isDirty ||
     this.showAddFunds;
   }
 
