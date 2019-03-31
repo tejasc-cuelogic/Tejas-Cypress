@@ -6,7 +6,7 @@ import bugsnagReact from '@bugsnag/plugin-react';
 import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
-import Clipboard from 'react-clipboard.js';
+import Clipboard from 'react-clipboard.js/dist/react-clipboard';
 import { Link } from 'react-router-dom';
 import { InlineLoader } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
