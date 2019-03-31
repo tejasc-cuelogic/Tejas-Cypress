@@ -292,7 +292,6 @@ module.exports = {
     fs: 'empty',
     net: 'empty',
     tls: 'empty',
-    global: false,
   },
 };
 
