@@ -83,8 +83,9 @@ export default class CampaignList extends Component {
                               <HtmlEditor
                                 readOnly
                                 content={(offering && offering.offering &&
-                                offering.offering.about && offering.offering.about.theCompany ?
-                                offering.offering.about.theCompany : '')}
+                                offering.offering.overview &&
+                                offering.offering.overview.tombstoneDescription ?
+                                offering.offering.overview.tombstoneDescription : '')}
                               />
                             </Card.Description>
                           </Card.Content>

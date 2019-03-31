@@ -174,7 +174,6 @@ class IraAccountStore {
         this.setFieldValue('showProcessingModal', true);
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
-        uiStore.resetcreateAccountMessage();
         Helper.toast('IRA account submitted successfully.', 'success');
         resolve();
       })
