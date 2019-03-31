@@ -15,7 +15,18 @@ import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHead
 @observer
 export default class ReferralsDetails extends Component {
   state = {
-    loading: true, availableCredit: '0', spentCredit: '0', totalEarnedCredit: '0', totalReferredUsers: '0',
+    loading: true,
+    availableCredit: 0,
+    spentCredit: 0,
+    totalEarnedCredit: 0,
+    totalReferredUsers: 0,
+    myShareLink: '',
+    emailShareLink: '',
+    twitterShareLink: '',
+    messengerShareLink: '',
+    facebookShareLink: '',
+    smsShareLink: '',
+    messengerMobileShareLink: '',
   };
 
   componentWillMount() {
