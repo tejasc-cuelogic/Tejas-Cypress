@@ -227,8 +227,6 @@ build:demo:
     refs:
       - demo
   # <<: *before_script_defination
-  variables:
-    GENERATE_SOURCEMAP: "false"
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
     - npm install
