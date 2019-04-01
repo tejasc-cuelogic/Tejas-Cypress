@@ -105,7 +105,7 @@ export default class ProfileData extends Component {
                       </div>
                     </Table.Cell>
                     <Table.Cell><b>Phone number</b></Table.Cell>
-                    <Table.Cell>{phone && phone.number ? phone.number : 'N/A'}</Table.Cell>
+                    <Table.Cell>{phone && phone.number ? Helper.phoneNumberFormatter(phone.number) : 'N/A'}</Table.Cell>
                     <Table.Cell><Link to={`${this.props.match.url}/new-phone-number`}>Change Phone</Link></Table.Cell>
                   </Table.Row>
                   <Table.Row>
