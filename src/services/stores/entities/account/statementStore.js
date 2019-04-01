@@ -88,9 +88,9 @@ export class StatementStore {
     const dateRange = this.getDateRange(statementObj);
     return dateRange.map(d => (
       {
-        [statementObj.field]: moment(d).format(statementObj.format),
+        [statementObj.field]: moment(new Date(d)).format(statementObj.format),
         description: statementObj.text,
-        fileId: moment(d).format(statementObj.format),
+        fileId: moment(new Date(d)).format(statementObj.format),
       }
     ));
   }
@@ -99,7 +99,7 @@ export class StatementStore {
     const dateStart = statementObj.date ? moment(new Date(statementObj.date)) : '';
     const dateEnd = moment();
     const timeValues = [];
-    while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(dateStart.format('MM/DD/YYYY'), 'month')) {
+    while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
       timeValues.push(dateStart.format('MM/DD/YYYY'));
       dateStart.add(1, statementObj.rangeParam);
     }

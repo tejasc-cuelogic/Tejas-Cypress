@@ -78,6 +78,7 @@ export class OfferingCreationStore {
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
   @observable offeringFilingList = {};
+  @observable filingListApiRes = {};
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
@@ -1674,7 +1675,7 @@ export class OfferingCreationStore {
   @action
   getOfferingFilingList = (offeringId) => {
     const params = { field: 'created', sort: 'asc' };
-    graphql({
+    this.filingListApiRes = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingFilingList,
