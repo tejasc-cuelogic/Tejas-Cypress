@@ -49,7 +49,7 @@ export default class ProfileData extends Component {
   }
   render() {
     const {
-      email, legalDetails, info, phone, investorProfileData, status,
+      email, legalDetails, info, phone, investorProfileData,
     } = this.props.userDetailsStore.userDetails;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
@@ -177,7 +177,6 @@ export default class ProfileData extends Component {
                 email={email}
                 legalDetails={legalDetails}
                 isUserVerified={this.isVerified}
-                status={status}
               />
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile &&
