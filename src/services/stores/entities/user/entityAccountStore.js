@@ -133,7 +133,6 @@ class EntityAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
-            uiStore.resetcreateAccountMessage();
             Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })

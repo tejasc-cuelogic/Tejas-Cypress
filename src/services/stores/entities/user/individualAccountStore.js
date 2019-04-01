@@ -84,9 +84,9 @@ class IndividualAccountStore {
               Helper.toast('Individual account submitted successfully.', 'success');
               resolve();
             }
-            uiStore.resetcreateAccountMessage();
           }).catch((err) => {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.resetcreateAccountMessage();
             uiStore.setProgress(false);
             reject();
           });
@@ -175,8 +175,12 @@ class IndividualAccountStore {
   populateData = (userData) => {
     if (!isEmpty(userData) && !this.formStatus) {
       const account = find(userData.roles, { name: 'individual' });
+      const { isValid } = bankAccountStore.formEntityAddFunds.meta;
       if (account && account.details) {
-        bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
+        if (isValid) {
+          bankAccountStore.formEntityAddFunds.fields.value.value =
+          account.details.initialDepositAmount;
+        }
         if (account.details.linkedBank) {
           const plaidAccDetails = account.details.linkedBank;
           bankAccountStore.setPlaidAccDetails(plaidAccDetails);

@@ -194,6 +194,7 @@ export class UiStore {
     this.loaderMessage = '';
     this.appLoader = false;
     this.submitButtonDisabled = false;
+    this.createAccountMessage = null;
   }
 
   @action

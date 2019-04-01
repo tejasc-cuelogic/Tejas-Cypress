@@ -32,7 +32,8 @@ export default class AccountCreation extends React.Component {
   }
   closeProcessingModal = () => {
     this.props.individualAccountStore.setFieldValue('showProcessingModal', false);
-    this.props.history.push('app/summary');
+    this.props.history.push('/app/summary');
+    this.props.uiStore.resetcreateAccountMessage();
   }
   render() {
     const {
