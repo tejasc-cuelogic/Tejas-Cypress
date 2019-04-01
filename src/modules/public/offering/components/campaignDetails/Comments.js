@@ -8,6 +8,7 @@ import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 991;
@@ -164,10 +165,20 @@ class Comments extends Component {
                           </Comment.Actions>
                           }
                           <Comment.Text className="mt-20">
-                            {this.state.readMore === c.id ?
-                            c.comment : `${c.comment.substr(0, readMoreLength)}`}
+                            <HtmlEditor
+                              readOnly
+                              content={this.state.readMore === c.id ?
+                                c.comment : `${c.comment.substr(0, readMoreLength)}`}
+                            />
                             {(c.comment.length > readMoreLength) &&
-                            <Aux>{this.state.readMoreInner !== c.id ? ' ...' : ' '}<Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? 'Read More' : 'Read Less'}</Link></Aux>}
+                            <Aux>
+                              {this.state.readMoreInner !== c.id ? ' ...' : ' '}
+                              <Link
+                                to="/"
+                                onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
+                              >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
+                              </Link>
+                            </Aux>}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
                             <Aux>
@@ -224,8 +235,11 @@ class Comments extends Component {
                                 </Comment.Actions>
                                 }
                                 <Comment.Text className="mt-20">
-                                  {this.state.readMoreInner === tc.id ?
-                                  tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}` : tc.comment.substr(0, readMoreLength)}
+                                  <HtmlEditor
+                                    readOnly
+                                    content={this.state.readMoreInner === tc.id ?
+                                      tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}` : tc.comment.substr(0, readMoreLength)}
+                                  />
                                   {(tc.comment.length > readMoreLength) &&
                                   <Aux>{this.state.readMoreInner !== tc.id ? ' ...' : ' '}<Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}</Link></Aux>}
                                 </Comment.Text>
