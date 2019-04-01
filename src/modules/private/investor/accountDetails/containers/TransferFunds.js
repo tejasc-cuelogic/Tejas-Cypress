@@ -49,7 +49,7 @@ export default class TransferFunds extends Component {
             <Header as="h4">Transfer funds</Header>
             <Grid>
               <Grid.Row>
-                <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
+                <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
                   <AvailableCashTransfer
                     match={this.props.match}
                     isAccountFrozen={isAccountFrozen}
