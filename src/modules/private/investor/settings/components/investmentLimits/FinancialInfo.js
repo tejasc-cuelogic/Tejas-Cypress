@@ -19,6 +19,8 @@ export default class FinancialInfo extends Component {
     this.props.investmentLimitStore.setAccountsLimits();
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
+    }).then(() => {
+      this.props.investmentLimitStore.setFieldValue('isLoading', false);
     });
   }
   // eslint-disable-next-line react/sort-comp
@@ -55,11 +57,11 @@ export default class FinancialInfo extends Component {
   }
   render() {
     const {
-      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit, isLoading,
     } = this.props.investmentLimitStore;
     const { accreditationData } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    if (currentUser.loading) {
+    if (currentUser.loading || isLoading) {
       return <InlineLoader />;
     }
     return (
