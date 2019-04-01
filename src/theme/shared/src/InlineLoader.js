@@ -26,8 +26,9 @@ const InlineLoader = props => (
           xmlSpace="preserve"
           style={{ height: '60px', width: '100px', display: 'inline-block' }}
         >
-          {pillersMeta.map(p => (
-            <rect fill="#20C86D" x={p.x} width="3" height="50" transform={`translate(0) rotate(180 ${p.rotate} 50)`}>
+          {pillersMeta.map((p, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <rect fill="#20C86D" x={p.x} key={index} width="3" height="50" transform={`translate(0) rotate(180 ${p.rotate} 50)`}>
               <animate
                 attributeName="height"
                 attributeType="XML"

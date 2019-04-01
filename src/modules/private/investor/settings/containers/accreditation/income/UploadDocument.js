@@ -42,7 +42,7 @@ export default class UploadDocument extends Component {
           <Grid stackable columns="equal">
             {
               docsToUpload.map(field => (
-                <Grid.Column>
+                <Grid.Column key={field}>
                   <DropZone
                     name={field}
                     fielddata={INCOME_UPLOAD_DOC_FORM.fields[field]}

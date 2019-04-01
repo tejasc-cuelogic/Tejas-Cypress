@@ -63,7 +63,7 @@ class KeyTermsDetails extends Component {
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
-              <Aux>
+              <Aux key={type.key}>
                 {get(KeyTerms, type.key) ?
                   <Table.Row verticalAlign="top">
                     <Table.Cell width={5} className="neutral-text"><b>{type.label}{' '}</b>
@@ -342,15 +342,13 @@ class KeyTermsDetails extends Component {
                 Revenue Sharing Summary
                 <span className="anchor" id="revenue-sharing-summary" />
               </Header>
-              <p>
-                {revenueShareSummary ?
-                  <p className="detail-section">
-                    <HtmlEditor readOnly content={revenueShareSummary} />
-                  </p>
-                  :
-                  <InlineLoader text="No data available" className="bg-offwhite" />
-                }
-              </p>
+              {revenueShareSummary ?
+                <p className="detail-section">
+                  <HtmlEditor readOnly content={revenueShareSummary} />
+                </p>
+                :
+                <InlineLoader text="No data available" className="bg-offwhite" />
+              }
             </Aux>
             :
             null

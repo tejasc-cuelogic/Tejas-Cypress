@@ -11,7 +11,7 @@ const SubscribeFields = observer(({
     <Grid.Row>
       {
         Object.keys(NEWSLETTER_FRM.fields).map(field => (
-          <Grid.Column computer={4} tablet={5} mobile={16}>
+          <Grid.Column computer={4} tablet={5} mobile={16} key={field}>
             <FormInput
               key={field}
               type="text"

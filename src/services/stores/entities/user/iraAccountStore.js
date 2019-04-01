@@ -148,11 +148,15 @@ class IraAccountStore {
       bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
         this.submitMutation().then(() => {
           resolve();
+        }).catch((e) => {
+          console.log(e);
         });
       });
     } else {
       this.submitMutation().then(() => {
         resolve();
+      }).catch((e) => {
+        console.log(e);
       });
     }
   });
@@ -194,6 +198,8 @@ class IraAccountStore {
   createAccount = (currentStep, removeUploadedData = false) => new Promise((resolve) => {
     this.validateAndSubmitStep(currentStep, removeUploadedData).then(() => {
       resolve();
+    }).catch((e) => {
+      console.log(e);
     });
   })
 

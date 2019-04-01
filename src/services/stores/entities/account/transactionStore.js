@@ -115,7 +115,7 @@ export class TransactionStore {
   @computed get allPaymentHistoryData() {
     return this.paymentHistoryData.data &&
       this.paymentHistoryData.data.getPaymentHistory
-      ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => moment(o.completeDate).unix(), ['desc']) : [];
+      ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), ['desc']) : [];
   }
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading ||

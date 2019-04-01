@@ -89,7 +89,7 @@ export default class AddWithdrawFund extends Component {
                 {!showConfirmPreview && match.params.action === 'withdraw' &&
                   <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
                     <MaskedInput
-                      readonly="readonly"
+                      readOnly="readonly"
                       hoverable
                       label="Total available for withdrawal:"
                       key="amount"
@@ -103,7 +103,7 @@ export default class AddWithdrawFund extends Component {
                 }
                 {!showConfirmPreview &&
                   <MaskedInput
-                    readonly={showConfirmPreview ? 'readonly' : false}
+                    readOnly={showConfirmPreview ? 'readonly' : false}
                     hoverable
                     label={match.params.action === 'add' ? '' : labelForWithdrawInput}
                     key="amount"
