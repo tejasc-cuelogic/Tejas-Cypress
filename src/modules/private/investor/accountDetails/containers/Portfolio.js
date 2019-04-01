@@ -16,6 +16,7 @@ import InvestNow from '../../../../public/offering/components/investNow/InvestNo
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
+import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
 @observer
@@ -27,6 +28,9 @@ export default class Portfolio extends Component {
   };
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    const { setFieldValue } = this.props.userDetailsStore;
+    setFieldValue('currentActiveAccount', accountType);
+    this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     this.props.portfolioStore.calculateInvestmentType();
     window.addEventListener('message', this.docuSignListener);
@@ -97,7 +101,10 @@ export default class Portfolio extends Component {
     const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     return (
       <Aux>
-        <SummaryHeader details={summaryDetails} />
+        {this.props.isAdmin &&
+          <AccountHeader module="Investments" pathname={this.props.location.pathname} />
+        }
+        <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
           <PortfolioAllocations pieChart={getPieChartData} /> : ''
         }
