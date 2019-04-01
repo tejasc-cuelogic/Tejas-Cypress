@@ -1,12 +1,22 @@
 import React from 'react';
-import { Header, Form, Divider } from 'semantic-ui-react';
-import AccountHeader from './AccountHeader';
+// import { Link } from 'react-router-dom';
+import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
 
 const Overview = () => (
   <Form>
-    {this.props.isAdmin &&
-      <AccountHeader module="Overview" pathname={this.props.location.pathname} />
-    }
+    <div className="clearfix">
+      <span className="pull-left">
+        <Header as="h4">
+          <Icon className="ns-individual-line" color="green" />Individual
+        </Header>
+      </span>
+      <span className="pull-right">
+        <Button.Group compact size="tiny">
+          <Button color="blue" className="link-button"><Icon className="ns-pencil" />Edit Account</Button>
+          <Button secondary><Icon className="ns-freeze" />Freeze account</Button>
+        </Button.Group>
+      </span>
+    </div>
     <Header as="h6">Bank Account</Header>
     <Form.Group widths={3}>
       <Form.Input fluid label="Bank Name" placeholder="Bank Name" value="Bank of America" readOnly className="display-only" />
