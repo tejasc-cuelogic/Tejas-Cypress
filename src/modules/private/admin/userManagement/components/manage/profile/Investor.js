@@ -6,19 +6,25 @@ import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Basic from './investor/Basic';
 import InvestorProfile from './investor/InvestorProfile';
 import AccreditationsLimits from './investor/AccreditationsLimits';
+import ConfirmModel from '../../../../accreditation/components/ConfirmModel';
 
-const navMeta = [
-  { title: 'Basic', to: 'basic' },
-  { title: 'Investor Profile', to: 'profile' },
-  { title: 'Accreditations & Limits', to: 'accreditations' },
-];
-
-@inject('userDetailsStore')
+@inject('userDetailsStore', 'investmentLimitStore')
 @withRouter
 @observer
 export default class Investor extends Component {
+  componentWillMount() {
+    this.props.investmentLimitStore.initiateInvestmentLimitOfSelectedUser();
+  }
   render() {
+    const { getActiveAccountList } = this.props.investmentLimitStore;
     const { match } = this.props;
+    const navMeta = [
+      { title: 'Basic', to: 'basic' },
+      { title: 'Investor Profile', to: 'profile' },
+    ];
+    if (getActiveAccountList && getActiveAccountList.accountList.length) {
+      navMeta.push({ title: 'Accreditations & Limits', to: 'accreditations' });
+    }
     return (
       <Grid>
         <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
@@ -26,6 +32,7 @@ export default class Investor extends Component {
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
+            <Route path={`${match.url}/accreditations/:action/:userId/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={`${this.props.match.url}/accreditations`} {...props} />} />
             <Route exact path={`${match.url}/accreditations`} component={AccreditationsLimits} />
             <Route exact path={`${match.url}/profile`} component={InvestorProfile} />
             <Route component={Basic} />

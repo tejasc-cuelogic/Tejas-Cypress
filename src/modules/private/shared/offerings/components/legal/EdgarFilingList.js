@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { Header, Table, Message, Button, Confirm } from 'semantic-ui-react';
 import XmlSubmission from '../../../../admin/edgar/components/XmlSubmission';
 import Helper from '../../../../../../helper/utility';
+import { InlineLoader } from '../../../../../../theme/shared';
 import { businessActions } from '../../../../../../services/actions';
 import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
 
@@ -13,6 +14,9 @@ import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../
 @inject('businessStore', 'offeringCreationStore', 'uiStore')
 @observer
 export default class EdgarFilingList extends Component {
+  state = {
+    showLoader: false,
+  }
   confirmDelete = (e, {
     entity, refid, subrefid, lockedstatus, submissions,
   }) => {
@@ -78,13 +82,16 @@ export default class EdgarFilingList extends Component {
       this.handleDeleteCancel();
       this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
     } else {
+      this.setState({ showLoader: true });
       const filingId = this.props.uiStore.confirmBox.subRefId;
+      this.handleDeleteCancel();
+      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
       businessActions.deleteFiling(currentOfferingId, filingId)
         .then(() => {
-          this.handleDeleteCancel();
-          this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+          this.setState({ showLoader: false });
           Helper.toast('Filing deleted successfully', 'success');
         }).catch(() => {
+          this.setState({ showLoader: false });
           Helper.toast('Something went wrong while deleting filing Please try again.', 'error', { position: 'top-center' });
         });
     }
@@ -97,6 +104,9 @@ export default class EdgarFilingList extends Component {
     const offeringRegulationArr = (regulation && regulation.split('_')) || '';
     const regulationType = get(offeringRegulationArr, '[0]');
     const BOX_URL_TO_CONSIDER = regulationType === 'BD' ? NEXTSEED_SECURITIES_BOX_URL : NEXTSEED_BOX_URL;
+    if (this.props.loading || this.state.showLoader) {
+      return <InlineLoader />;
+    }
     if (isEmpty(offeringFilingList)) {
       return (
         <Message className="center-align">No Generated Docs present in this offering.</Message>

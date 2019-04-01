@@ -47,7 +47,7 @@ export default class OfferingDetails extends Component {
     if (offerLoading || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
-    const isDev = !['production', 'demo'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['production', 'demo'].includes(REACT_APP_DEPLOY_ENV);
     navItems = navStore.filterByAccess(
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),

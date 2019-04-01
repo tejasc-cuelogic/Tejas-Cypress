@@ -177,8 +177,8 @@ export class ArticleStore {
     @action
     maskChange = (values, field) => {
       if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
-          moment(values.formattedValue).add(1, 'day').toISOString();
+        const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString() :
+          moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
         this.setInitiateSrch(field, isoDate);
       } else {
         this.setInitiateSrch(field, values.value);
