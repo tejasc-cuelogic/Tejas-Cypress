@@ -233,12 +233,13 @@ export const checkMigrationByEmail = gql`
  }`;
 
 export const checkValidAddress = gql`
-  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!) {
+  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!, $streetTwo: String!) {
     checkValidInvestorAddress(
       street: $street,
       city: $city,
       state: $state,
-      zipCode: $zipCode
+      zipCode: $zipCode,
+      streetTwo: $streetTwo
     ){
       valid
       message

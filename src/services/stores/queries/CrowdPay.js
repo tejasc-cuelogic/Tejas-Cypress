@@ -71,6 +71,10 @@ query listCrowdPayUsers($limit: Int) {
               by
             }
           }
+          investorProfileData {
+            brokerageFirmName
+            publicCompanyTicker
+          }
       }
   }
 }

@@ -146,7 +146,7 @@ export class PortfolioStore {
       },
       // fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && !this.investmentLists.loading) {
+        if (data && this.investmentLists && !this.investmentLists.loading) {
           this.calculateInvestmentType();
         }
       },
@@ -248,6 +248,10 @@ export class PortfolioStore {
   @action
   currentAccoutType = (type) => {
     this.currentAcccountType = type;
+  }
+  @action
+  resetPortfolioData = () => {
+    this.setFieldValue('investmentLists', null);
   }
 }
 

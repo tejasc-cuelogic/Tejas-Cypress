@@ -24,6 +24,7 @@ export default class CampaignHeader extends Component {
     && campaign.closureSummary.processingDate;
     const diff = DataFormatter.diffDays(processingDate);
     const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
+    const isInProcessing = diffForProcessing === 0 && !get(campaign, 'closureSummary.hardCloseDate');
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
@@ -83,8 +84,17 @@ export default class CampaignHeader extends Component {
                           </Statistic.Value>
                           <Statistic.Label>Investors</Statistic.Label>
                         </Statistic>
+                        {isClosed && get(campaign, 'closureSummary.repayment.count') > 0 &&
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'closureSummary.repayment.count') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Payments made</Statistic.Label>
+                          </Statistic>
+                        }
                         {((rewardsTiers && rewardsTiers.length) ||
-                        (earlyBird && earlyBird.quantity > 0)) && isEarlyBirdRewards &&
+                        (earlyBird && earlyBird.available > 0)) &&
+                        isEarlyBirdRewards && !isClosed &&
                           bonusRewards ?
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
@@ -177,9 +187,9 @@ export default class CampaignHeader extends Component {
                       <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
                     : ''
                     }
-                    {(!isClosed && diff > 0) &&
+                    {(!isClosed && diffForProcessing >= 0) &&
                       <Aux>
-                        <Button fluid secondary={diffForProcessing !== 0} content={`${diffForProcessing === 0 ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || diffForProcessing === 0} onClick={this.handleInvestNowClick} />
+                        <Button fluid secondary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
                         <small>
                           ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                             || 0} min investment

@@ -18,6 +18,9 @@ query getOfferingList($filters: OfferingFilterInputType){
         about {
           theCompany
         }
+        overview {
+          tombstoneDescription
+        }
       }
       closureSummary {
         processingDate

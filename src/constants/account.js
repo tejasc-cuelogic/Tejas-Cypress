@@ -418,6 +418,9 @@ export const ENTITY_GEN_INFO = {
   zipCode: {
     key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|maskedField:5', customErrors: { required: '* required', maskedField: 'The ZIP Code should be at least 5 digits' },
   },
+  streetTwo: {
+    key: 'streetTwo', value: '', label: 'Address Line 2', placeHolder: 'Enter Here', error: undefined, rule: 'optional', customErrors: { required: '* required' },
+  },
 };
 
 export const ENTITY_TYPES = [
@@ -645,12 +648,11 @@ export const FINANCES = {
     value: '',
     label: 'Net Worth',
     error: undefined,
-    rule: 'required|min:1|max:2147483647',
+    rule: 'required|min:1',
     placeHolder: 'Enter here',
     customErrors: {
       required: 'required',
       min: 'Please enter a valid amount to deposit',
-      max: 'Please enter a valid amount to deposit',
     },
   },
   annualIncomeCurrentYear: {
