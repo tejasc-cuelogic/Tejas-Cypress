@@ -76,9 +76,9 @@ export default class AccreditedIncentiveTerms extends Component {
               If NextSeed determines that there has been any abusive, wrongful or fraudulent
               activity, or if any terms of the NextSeed’s Terms of Use have been violated,
               NextSeed reserves the right to suspend accounts or remove Investment Credits.
-              NextSeed reserves the right to review and investigate all referral activities
-              and to suspend accounts or modify referrals in our sole discretion as deemed
-              fair and appropriate.
+              NextSeed reserves the right to review and investigate all activities
+              and to suspend accounts or modify Investment Credits in our sole discretion as
+              deemed fair and appropriate.
             </p>
             <Divider hidden />
             <Header as="h5">Updates to the Terms</Header>

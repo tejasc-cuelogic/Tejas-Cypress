@@ -7,9 +7,9 @@ const MetaTagGenerator = ({ metaTagsData }) => (
     <link rel="canonical" href={window.location.href} />
     {map(metaTagsData, d => (
       d.type === 'meta' ?
-        <meta name={d.name} content={d.content} />
+        <meta key={new Date().getTime()} name={d.name} content={d.content} />
       : d.type === 'ogTag' ?
-        <meta property={d.property} content={d.content} />
+        <meta property={d.property} key={d.type} content={d.content} />
       : null
     ))}
   </Helmet>

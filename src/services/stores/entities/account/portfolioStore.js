@@ -18,6 +18,7 @@ export class PortfolioStore {
   @observable canceledInvestmentDetails = null;
   @observable PayOffData = null;
   @observable currentAcccountType = null;
+  @observable isAdmin = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -135,13 +136,14 @@ export class PortfolioStore {
   @action
   getInvestorAccountPortfolio = (accountType) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
+      userDetailsStore.currentActiveAccountDetails;
+    const { userDetails, getDetailsOfUser } = userDetailsStore;
     this.investmentLists = graphql({
       client,
       query: getInvestorAccountPortfolio,
       variables: {
-        userId: userDetails.id,
+        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
         accountId: (account && account.details) ? account.details.accountId : null,
       },
       // fetchPolicy: 'network-only',

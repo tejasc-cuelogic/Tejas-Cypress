@@ -17,7 +17,7 @@ const FeaturedOn = () => (
           {/* {featuredOn.map(row => (
             <Grid.Row> */}
           {featuredOn.map(row => row.map(f => (
-            <Grid.Column>
+            <Grid.Column key={f}>
               <NSImage centered path={`featured/${f}.png`} />
             </Grid.Column>
           )))}
@@ -26,7 +26,7 @@ const FeaturedOn = () => (
         </Responsive>
         <Responsive maxWidth="767" as={Aux}>
           {featuredOn.map(row => row.map(f => (
-            <Grid.Column className="featured-logos">
+            <Grid.Column className="featured-logos" key={f}>
               <NSImage centered path={`featured/${f}.png`} />
             </Grid.Column>
           )))}

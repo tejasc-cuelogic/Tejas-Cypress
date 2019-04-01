@@ -40,7 +40,7 @@ export default class CampaignList extends Component {
               campaigns && campaigns.length ?
                 <Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
-                    <Grid.Column>
+                    <Grid.Column key={offering.id}>
                       <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}/overview`}>
                         <div className="campaign-image-wrap">
                           <div className="campaign-card-image">

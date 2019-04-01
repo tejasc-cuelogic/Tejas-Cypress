@@ -5,6 +5,7 @@ import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
 import Loadable from 'react-loadable';
+import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -47,7 +48,7 @@ class InvestmentDetails extends Component {
     const { match, portfolioStore } = this.props;
     const { getInvestor } = portfolioStore;
     const { campaign, details } = this.props.campaignStore;
-
+    const netAnnualizedReturn = get(getInvestor, 'netAnnualizedReturn');
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
@@ -66,7 +67,7 @@ class InvestmentDetails extends Component {
           title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') || 'N/A', type: 1, info: 'Payments received to date from this investment, minus NextSeed fees.',
         },
         {
-          title: 'Net Annualized Return', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'N/A', info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. See the <Link target="_blank" to="/resources/education-center">Education Center</Link> for a full explanation of how NAR  is calculated.</span>,
+          title: 'Net Annualized Return', content: netAnnualizedReturn && !money.isZero(netAnnualizedReturn) ? `${netAnnualizedReturn}%` : 'N/A', info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. See the <Link target="_blank" to="/resources/education-center">Education Center</Link> for a full explanation of how NAR  is calculated.</span>,
         },
       ],
     };

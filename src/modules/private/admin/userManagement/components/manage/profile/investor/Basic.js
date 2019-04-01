@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
+import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
@@ -12,11 +13,24 @@ export default class Basic extends Component {
   state = { displayMode: true };
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
+    this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setAddressCheck();
+  }
+  updateMode = (e, val) => {
+    e.preventDefault();
+    this.setState({ displayMode: !val });
+  }
+  updateUserData = (e) => {
+    e.preventDefault();
+    this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
+      this.setState({ displayMode: true });
+    })
+      .catch(() => { });
   }
   render() {
     const {
-      detailsOfUser, USER_BASIC, formChange, isAddressSkip, toggleAddressVerification,
+      detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM,
+      formChange, isAddressSkip, toggleAddressVerification,
     } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
@@ -26,7 +40,13 @@ export default class Basic extends Component {
         <Header as="h4">
           Basic Profile Info
           <Button.Group floated="right">
-            <Link to={this.props.match.url} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
+            {this.state.displayMode ?
+              <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link> :
+              <Aux>
+                <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
+                <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
+              </Aux>
+            }
             <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
           </Button.Group>
         </Header>
@@ -50,53 +70,64 @@ export default class Basic extends Component {
             changed={(values, name) => formChange(values, formName, name)}
             phoneNumber
             format="###-###-####"
-            displayMode={displayMode}
+            displayMode
           />
           <FormInput
             key="address"
             name="address"
             fielddata={USER_BASIC.fields.address}
             changed={(e, result) => formChange(e, result, formName)}
-            displayMode={displayMode}
+            displayMode
           />
         </Form.Group>
         <Form.Group widths={4}>
           {
-          ['firstLegalName', 'lastLegalName'].map(field => (
+          ['firstLegalName', 'lastLegalName', 'ssn'].map(field => (
             <FormInput
               key={field}
               name={field}
               fielddata={USER_BASIC.fields[field]}
               changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
+              displayMode={field === 'ssn' || displayMode}
             />
             ))
           }
-          {
-          ['ssn', 'dateOfBirth'].map(field => (
+          {/* {!displayMode &&
             <MaskedInput
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
+              name="ssn"
+              fielddata={USER_BASIC.fields.ssn}
               changed={formChange}
-              ssn={field === 'ssn'}
-              dateOfBirth={field === 'dateOfBirth'}
+              ssn
               displayMode={displayMode}
             />
-            ))
-          }
+          } */}
+          <MaskedInput
+            name="dateOfBirth"
+            fielddata={USER_BASIC.fields.dateOfBirth}
+            changed={formChange}
+            dateOfBirth
+            displayMode
+          />
         </Form.Group>
         <Divider />
         <Header as="h6">Mailing Address</Header>
         <Form.Group widths={4}>
-          <Form.Input fluid label="Address" placeholder="Address" value="32, East Square Complex" readOnly className="display-only" />
-          <Form.Input fluid label="City" placeholder="City" value="New York" readOnly className="display-only" />
-          <Form.Input fluid label="State" placeholder="State" value="New York" readOnly className="display-only" />
-          <Form.Input fluid label="ZIP Code" placeholder="ZIP Code" value="12458" readOnly className="display-only" />
+          {
+          ['street', 'streetTwo', 'city', 'state', 'zipCode'].map(field => (
+            <FormInput
+              key={field}
+              name={field}
+              fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields[field]}
+              changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+              displayMode={displayMode}
+            />
+            ))
+          }
         </Form.Group>
         <Header as="h6">Legal Address</Header>
         <Form.Group widths={4}>
           {
-          ['street', 'city', 'state', 'zipCode'].map(field => (
+          ['street', 'streetTwo', 'city', 'state', 'zipCode'].map(field => (
             <FormInput
               key={field}
               name={field}

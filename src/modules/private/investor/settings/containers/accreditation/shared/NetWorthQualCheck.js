@@ -22,6 +22,7 @@ export default class NetWorthQualCheck extends Component {
           <Grid columns={1}>
             {NETWORTH_QAL_FORM.fields.method.values.map(method => (
               <Grid.Column
+                key={method.value}
                 onClick={e => accreditationMethodChange(e, 'NETWORTH_QAL_FORM', { name: 'method', value: method.value })}
               >
                 <div className={`user-type ${(NETWORTH_QAL_FORM.fields.method.value === method.value ? 'active' : '')}`}>
