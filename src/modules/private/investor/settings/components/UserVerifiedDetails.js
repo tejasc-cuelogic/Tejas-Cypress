@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
-const userVerifiedDetails = ({ legalDetails, isUserVerified, status }) => {
+const userVerifiedDetails = ({ legalDetails, isUserVerified }) => {
   if (legalDetails === null ||
-    (legalDetails !== null && !isUserVerified(legalDetails.status) && status !== 'FULL')) {
+    (legalDetails !== null && !isUserVerified(legalDetails.status))) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
@@ -26,7 +26,8 @@ const userVerifiedDetails = ({ legalDetails, isUserVerified, status }) => {
         <dd>{Helper.formattedSSNNumber(legalDetails.ssn) || '-'}</dd>
         <dt>DOB</dt>
         <dd>{legalDetails.dateOfBirth ? moment(legalDetails.dateOfBirth, 'MM/DD/YYYY').format('MM-DD-YYYY') : '-'}</dd>
-        <dt>Street</dt>
+        { /* Commented due to change requested in #1483 */}
+        {/* <dt>Street</dt>
         <dd>{legalDetails.legalAddress.street}</dd>
         <dt>Address Line 2</dt>
         <dd>{legalDetails.legalAddress.streetTwo}</dd>
@@ -35,7 +36,7 @@ const userVerifiedDetails = ({ legalDetails, isUserVerified, status }) => {
         <dt>State</dt>
         <dd>{legalDetails.legalAddress.state}</dd>
         <dt>ZIP Code</dt>
-        <dd>{legalDetails.legalAddress.zipCode}</dd>
+        <dd>{legalDetails.legalAddress.zipCode}</dd> */}
       </dl>
       <p className="intro-text">
         If any of this information needs to be updated, please contact support at{' '}

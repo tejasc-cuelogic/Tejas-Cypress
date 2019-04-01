@@ -1,22 +1,46 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
+import bugsnag from '@bugsnag/js';
+import bugsnagReact from '@bugsnag/plugin-react';
 import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
-import Clipboard from 'react-clipboard.js';
+import Clipboard from 'react-clipboard.js/dist/react-clipboard';
 import { Link } from 'react-router-dom';
 import { InlineLoader } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 
+let bugsnagClient;
+if (process.env.REACT_APP_BUG_SNAG_KEY) {
+  bugsnagClient = bugsnag({
+    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+    appType: 'client',
+    appVersion: process.env.CI_PIPELINE_ID,
+    releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
+  });
+  bugsnagClient.use(bugsnagReact, React);
+}
 
 @inject('referralsStore', 'userDetailsStore')
 @observer
 export default class ReferralsDetails extends Component {
   state = {
-    loading: true, availableCredit: '0', spentCredit: '0', totalEarnedCredit: '0', totalReferredUsers: '0',
+    loading: true,
+    availableCredit: 0,
+    spentCredit: 0,
+    totalEarnedCredit: 0,
+    totalReferredUsers: 0,
+    myShareLink: '',
+    emailShareLink: '',
+    twitterShareLink: '',
+    messengerShareLink: '',
+    facebookShareLink: '',
+    smsShareLink: '',
+    messengerMobileShareLink: '',
   };
+
 
   componentWillMount() {
     const { userDetails } = this.props.userDetailsStore;
@@ -47,20 +71,25 @@ export default class ReferralsDetails extends Component {
             loading: false,
           });
         })
-        .catch(() => this.setState({
-          availableCredit: 0,
-          spentCredit: 0,
-          totalEarnedCredit: 0,
-          totalReferredUsers: 0,
-          myShareLink: '',
-          emailShareLink: '',
-          twitterShareLink: '',
-          messengerShareLink: '',
-          facebookShareLink: '',
-          smsShareLink: '',
-          messengerMobileShareLink: '',
-          loading: false,
-        }));
+        .catch((e) => {
+          this.setState({
+            availableCredit: 0,
+            spentCredit: 0,
+            totalEarnedCredit: 0,
+            totalReferredUsers: 0,
+            myShareLink: '',
+            emailShareLink: '',
+            twitterShareLink: '',
+            messengerShareLink: '',
+            facebookShareLink: '',
+            smsShareLink: '',
+            messengerMobileShareLink: '',
+            loading: false,
+          });
+          if (bugsnagClient) {
+            bugsnagClient.notify(e);
+          }
+        });
     }
   }
 

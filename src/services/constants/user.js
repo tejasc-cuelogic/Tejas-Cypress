@@ -110,7 +110,7 @@ export const USER_IDENTITY = {
     label: 'Address Line 2',
     placeHolder: 'Address Line 2',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     customErrors: {
       required: '* required.',
     },
@@ -281,7 +281,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Address Line 2',
     error: undefined,
-    rule: 'string',
+    rule: 'optional',
     placeHolder: 'Address Line 2',
   },
   city: {

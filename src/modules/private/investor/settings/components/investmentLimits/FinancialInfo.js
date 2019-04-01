@@ -90,11 +90,11 @@ export default class FinancialInfo extends Component {
                       <Card.Content>
                         <Header as="h4">Regulation Crowdfunding Limits</Header>
                         <p className="intro-text">
-                          {account.name === 'ira' ? `The total amount you can invest in Regulation
-                            Crowdfunding offerings within a 12-month period depends on your income
-                            and net worth.` : `The total amount you can invest in Regulation
+                          {account.name === 'entity' ? `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on the
-                            entity's annual revenue and net assets.`
+                            entity's annual revenue and net assets.` : `The total amount you can invest in Regulation
+                            Crowdfunding offerings within a 12-month period depends on your income
+                            and net worth.`
                           }
                           <Link target="_blank" to="/app/resources/faq">
                             &nbsp;See FAQ on investment limits
