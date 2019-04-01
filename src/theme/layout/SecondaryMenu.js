@@ -9,7 +9,7 @@ const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
-  <Aux>
+  <Aux key={item.to}>
     {(item.subNavigations) ?
       (
         <Dropdown

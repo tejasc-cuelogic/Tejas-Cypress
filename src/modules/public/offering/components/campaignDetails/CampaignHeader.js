@@ -109,7 +109,7 @@ export default class CampaignHeader extends Component {
                   <div className="clearfix social-links mt-10">
                     {campaign && get(campaign, 'offering.overview.social') ?
                       campaign.offering.overview.social.map(site => (
-                        <Aux>
+                        <Aux key={site.type}>
                           {site.url &&
                             <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
                           }

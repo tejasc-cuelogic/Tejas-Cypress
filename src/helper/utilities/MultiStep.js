@@ -211,7 +211,7 @@ export default class MultiStep extends React.Component {
               </ol>
             </Aux>
           }
-          <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen'}>
+          <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
             <Loader active={this.props.inProgress} >
               {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
             </Loader>

@@ -7,6 +7,7 @@ import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
 import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmEmailAddress';
 import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
+import Helper from '../../../../../helper/utility';
 import { securitySections } from './../../../../../services/constants/user';
 import ManageMultiFactorAuth from '../components/profileSettings/ManageMultiFactorAuth';
 
@@ -60,7 +61,7 @@ export default class Security extends Component {
                           <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
                           <dd>{userDetails.email && userDetails.email.address} <Link className="link pull-right" to="/app/profile-settings/security/new-email-address">Update Email</Link></dd>
                           <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                          <dd>{userDetails.phone && userDetails.phone.number ? userDetails.phone.number : '--'} <Link className="link pull-right" to="/app/profile-settings/security/new-phone-number">Update Phone</Link></dd>
+                          <dd>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'} <Link className="link pull-right" to="/app/profile-settings/security/new-phone-number">Update Phone</Link></dd>
                         </dl>
                       ) : null}
                       {section.action[0] === 'social-connect' ? (

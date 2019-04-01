@@ -23,6 +23,7 @@ export class InvestmentLimitStore {
   @observable investedAmount = 0;
   @observable investNowHealthCheckDetails = null;
   @observable investNowError = false;
+  @observable isLoading = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -141,6 +142,7 @@ export class InvestmentLimitStore {
 
   @action
   setAccountsLimits = () => {
+    this.setFieldValue('isLoading', true);
     const { accountList } = this.getActiveAccountList;
     accountList.forEach((account) => {
       this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
@@ -203,6 +205,15 @@ export class InvestmentLimitStore {
     map(activeAccountList.accountList, (account) => {
       this.setInvestmentLimitInfo(account.name);
     });
+  }
+
+  @action
+  initiateInvestmentLimitOfSelectedUser = () => {
+    this.activeAccounts = userDetailsStore.getActiveAccountsOfSelectedUsers;
+    // const activeAccountList = this.getActiveAccountList;
+    // map(activeAccountList.accountList, (account) => {
+    //   this.setInvestmentLimitInfo(account.name);
+    // });
   }
 
   @action

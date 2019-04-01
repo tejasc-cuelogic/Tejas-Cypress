@@ -42,6 +42,12 @@ export class TransactionStore {
   @observable availableWithdrawCash = null;
   @observable aggrementId = '';
   @observable loanAgreementData = {};
+  @observable isAdmin = false;
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   initRequest = (props) => {
@@ -65,8 +71,9 @@ export class TransactionStore {
     this.requestState.page = page || this.requestState.page;
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
-    const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
+      userDetailsStore.currentActiveAccountDetails;
+    const { userDetails, getDetailsOfUser } = userDetailsStore;
 
     this.data = graphql({
       client,
@@ -75,7 +82,7 @@ export class TransactionStore {
         ...params,
         offset: page || 1,
         accountId: account.details.accountId,
-        userId: userDetails.id,
+        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
         orderBy: (props && props.order) || 'DESC',
         limit: (props && props.limitData) || 25,
       },
@@ -108,7 +115,7 @@ export class TransactionStore {
   @computed get allPaymentHistoryData() {
     return this.paymentHistoryData.data &&
       this.paymentHistoryData.data.getPaymentHistory
-      ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => moment(o.completeDate).unix(), ['desc']) : [];
+      ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), ['desc']) : [];
   }
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading ||

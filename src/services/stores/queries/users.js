@@ -271,6 +271,9 @@ export const userAccreditationQuery = gql`
                 fileInfo {
                   fileId
                   fileName
+                  fileHandle {
+                    boxFolderId
+                  }
                 }
               }
               verifier {
@@ -309,6 +312,9 @@ export const userAccreditationQuery = gql`
           fileInfo {
             fileId
             fileName
+            fileHandle {
+              boxFolderId
+            }
           }
         }
         verifier {
@@ -389,5 +395,15 @@ mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!,
      userId: $userId
      accountId: $accountId
      activity: $activity
+   )
+ }`;
+
+export const freezeAccount = gql`
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $message: String) {
+  freezeAccount(
+     userId: $userId
+     accountId: $accountId
+     freeze: $freeze
+     message: $message
    )
  }`;
