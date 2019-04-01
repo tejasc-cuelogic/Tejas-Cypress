@@ -22,7 +22,7 @@ export default class IncomeQualificationCheck extends Component {
           <Grid columns={1}>
             {ACCREDITATION_FORM.fields.method.values.map(method => (
               <Grid.Column
-                key={method}
+                key={method.value}
                 onClick={e => accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: method.value })}
               >
                 <div className={`user-type ${(ACCREDITATION_FORM.fields.method.value === method.value ? 'active' : '')}`}>
