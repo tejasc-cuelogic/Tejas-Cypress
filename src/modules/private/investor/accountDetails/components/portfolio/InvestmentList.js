@@ -40,7 +40,7 @@ const InvestmentList = (props) => {
               <Table.Body>
                 {
                   investments.map(data => (
-                    <Table.Row key={data.name} onClick={() => handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : '')}>
+                    <Table.Row key={data.investmentDate} onClick={() => handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : '')}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
                         <div className="offering-title">

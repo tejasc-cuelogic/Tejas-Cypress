@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
-const userVerifiedDetails = ({ legalDetails, isUserVerified, status }) => {
+const userVerifiedDetails = ({ legalDetails, isUserVerified }) => {
   if (legalDetails === null ||
-    (legalDetails !== null && !isUserVerified(legalDetails.status) && (status !== 'FULL' || status !== 'MIGRATION_FULL'))) {
+    (legalDetails !== null && !isUserVerified(legalDetails.status))) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>

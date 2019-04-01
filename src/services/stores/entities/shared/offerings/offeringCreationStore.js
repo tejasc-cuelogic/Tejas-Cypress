@@ -1634,7 +1634,7 @@ export class OfferingCreationStore {
         rewardStatus: 'In Review',
         earlyBirdQuantity: fields.isEarlyBirds.value.length ?
           earlyBirdQty : 0,
-        expirationDate: moment(fields.expirationDate.value).toISOString(),
+        expirationDate: fields.expirationDate.value ? moment(new Date(fields.expirationDate.value)).toISOString() : '',
         tiers,
       },
     };

@@ -142,6 +142,8 @@ class EntityAccountStore {
             uiStore.setProgress(false);
             reject();
           });
+      }).catch((e) => {
+        console.log(e);
       });
     });
   }
@@ -371,6 +373,8 @@ class EntityAccountStore {
               this.submitForm(currentStep, accountAttributes)
                 .then(() => res()).catch(() => rej());
             }
+          }).catch((e) => {
+            console.log(e);
           });
         } else {
           this.submitForm(currentStep, accountAttributes)
@@ -676,6 +680,8 @@ class EntityAccountStore {
               this.createAccount(currentStep, false).then(() => {
                 console.log();
                 uiStore.setProgress(false);
+              }).catch((e) => {
+                console.log(e);
               });
             } else {
               uiStore.setProgress(false);

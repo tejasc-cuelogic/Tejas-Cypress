@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import { Header, Card, Button, Divider } from 'semantic-ui-react';
 import Aux from 'react-aux';
+import money from 'money-math';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
@@ -30,7 +31,7 @@ const summaryDetails = ({
         title: 'Paid to Date', content: paidToDate || '', type: 1, info: 'Net payments received to date from all prior investments.',
       },
       {
-        title: 'TNAR', content: tnar ? `${tnar}%` : '', type: 0, info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. Per investment, NAR is calculated as an annualized measure of the rate of return on the principal invested over the life of that investment, calculated based on actual cash payments received each month. We offer different types of debt investments, and NAR is calculated differently for each investment product to better reflect the underlying characteristics. Total Net Annualized Return (&quot;TNAR&quot;) approximates the overall financial return on your investment portfolio. TNAR is a weighted average of NARS on all current investments in your portfolio. See <Link to="/resources/education-center">Education Center</Link> to learn more about how NAR and TNAR are calculated.</span>,
+        title: 'TNAR', content: tnar && !money.isZero(tnar) ? `${tnar}%` : 'N/A', type: 0, info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current financial return of each investment in your portfolio. Per investment, NAR is calculated as an annualized measure of the rate of return on the principal invested over the life of that investment, calculated based on actual cash payments received each month. We offer different types of debt investments, and NAR is calculated differently for each investment product to better reflect the underlying characteristics. Total Net Annualized Return (&quot;TNAR&quot;) approximates the overall financial return on your investment portfolio. TNAR is a weighted average of NARS on all current investments in your portfolio. See <Link to="/resources/education-center">Education Center</Link> to learn more about how NAR and TNAR are calculated.</span>,
       },
     ],
   };

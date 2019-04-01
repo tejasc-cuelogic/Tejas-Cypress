@@ -96,7 +96,7 @@ export class StatementStore {
   }
 
   getDateRange = (statementObj) => {
-    const dateStart = moment(new Date(statementObj.date));
+    const dateStart = statementObj.date ? moment(new Date(statementObj.date)) : '';
     const dateEnd = moment();
     const timeValues = [];
     while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {

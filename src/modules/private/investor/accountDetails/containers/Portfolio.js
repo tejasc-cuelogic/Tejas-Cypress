@@ -5,6 +5,7 @@ import { includes, orderBy, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
+import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
@@ -16,6 +17,7 @@ import InvestNow from '../../../../public/offering/components/investNow/InvestNo
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
+import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
 @observer
@@ -27,6 +29,9 @@ export default class Portfolio extends Component {
   };
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    const { setFieldValue } = this.props.userDetailsStore;
+    setFieldValue('currentActiveAccount', accountType);
+    this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     this.props.portfolioStore.calculateInvestmentType();
     window.addEventListener('message', this.docuSignListener);
@@ -73,6 +78,7 @@ export default class Portfolio extends Component {
       return <InlineLoader />;
     }
     const { getInvestorAccounts, getPieChartData } = portfolioStore;
+    const tnarValue = get(getInvestorAccounts, 'tnar');
     const summaryDetails = {
       isAccountFrozen: isUserAccountFrozen,
       accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
@@ -88,7 +94,7 @@ export default class Portfolio extends Component {
           title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
         {
-          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link target="_blank" to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
+          title: 'TNAR', content: tnarValue && !money.isZero(tnarValue) ? tnarValue : 'N/A', type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link target="_blank" to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
         },
       ],
     };
@@ -97,7 +103,10 @@ export default class Portfolio extends Component {
     const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     return (
       <Aux>
-        <SummaryHeader details={summaryDetails} />
+        {this.props.isAdmin &&
+          <AccountHeader module="Investments" pathname={this.props.location.pathname} />
+        }
+        <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
           <PortfolioAllocations pieChart={getPieChartData} /> : ''
         }

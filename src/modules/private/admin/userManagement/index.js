@@ -11,7 +11,7 @@ export default class UserManagement extends Component {
       <Switch>
         <Route exact path={`${match.url}`} component={Users} />
         <Route exact path={`${match.url}/new`} component={UsersNew} />
-        <Route path={`${match.url}/:userId`} component={UserDetails} />
+        <Route path={`${match.url}/:userId`} render={props => <UserDetails refLink={match.url} {...props} />} />
       </Switch>
     );
   }
