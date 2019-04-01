@@ -33,6 +33,9 @@ const navMeta = [
   {
     title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
   },
+  // {
+  //   title: 'Agreements', to: 'agreements', component: Agreements, load: false,
+  // },
   {
     title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
   },

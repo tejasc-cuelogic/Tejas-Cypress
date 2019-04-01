@@ -2186,6 +2186,13 @@ svg:not(:root).recharts-surface{
 		}
 	}
 }
+.ui.modal{
+	.donut-chart, .portfolio-allocation{
+		.recharts-wrapper .recharts-legend-wrapper{
+			z-index: 0 !important;
+		}
+	}
+}
 .payoff-chart{
 	.xAxis, .yAxis{
 		font-size:@13px;

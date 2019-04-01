@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
 import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -18,6 +18,7 @@ import {
   uiStore,
 } from '../../index';
 import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
@@ -31,6 +32,7 @@ export class UserDetailsStore {
   @observable deleting = 0;
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
+  @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
   @observable accountForWhichCipExpired = '';
   @observable partialInvestNowSessionURL = '';
@@ -252,7 +254,7 @@ export class UserDetailsStore {
   }
 
   @action
-  freezeAccountToggle = (userId, accountId, freeze, message) => {
+  freezeAccountToggle = (userId, accountId, freeze, message = null) => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -264,12 +266,14 @@ export class UserDetailsStore {
             freeze,
             message,
           },
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId } }],
         })
         .then(() => {
           resolve();
+          uiStore.setProgress(false);
           Helper.toast('User Account status updated successfully.', 'success');
         })
-        .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); });
+        .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); uiStore.setProgress(false); });
     });
   };
 
@@ -450,6 +454,7 @@ export class UserDetailsStore {
           return true;
         });
       }
+      this.USER_INVESTOR_PROFILE.fields.investorProfileType = get(details, 'investorProfileData.annualIncome') || '';
     }
     return false;
   }
@@ -561,6 +566,52 @@ export class UserDetailsStore {
   get getAnalyticsUserId() {
     return this.userDetails ?
       (get(this.userDetails, 'wpUserId') || get(this.userDetails, 'id')) : false;
+  }
+
+  @action
+  updateUserProfileForSelectedUser = () => {
+    const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
+    const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
+    const profileDetails = {
+      firstName: basicData.firstName,
+      lastName: basicData.lastName,
+      mailingAddress: {
+        street: infoAdd.street,
+        streetTwo: infoAdd.streetTwo,
+        city: infoAdd.city,
+        state: infoAdd.state,
+        zipCode: infoAdd.zipCode,
+      },
+    };
+    const legalDetails = {
+      street: basicData.street,
+      streetTwo: basicData.streetTwo,
+      city: basicData.city,
+      state: basicData.state,
+      zipCode: basicData.zipCode,
+    };
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserProfileData,
+          variables: {
+            profileDetails: { ...profileDetails },
+            legalDetails: { ...legalDetails },
+            targetUserId: get(this.getDetailsOfUser, 'id'),
+          },
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+        })
+        .then(() => {
+          Helper.toast('Profile has been updated.', 'success');
+          uiStore.setProgress(false);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setProgress(false);
+          reject(err);
+        });
+    });
   }
 }
 

@@ -160,7 +160,9 @@ export class AccreditationStore {
   }
 
   getFileUploadEnum = (accountType, accreditationMethod) => {
-    if (accreditationMethod !== 'Admin') {
+    if (accreditationMethod === 'IncomeDoc') {
+      return UPLOAD_ASSET_ENUMS[accountType];
+    } else if (accreditationMethod !== 'Admin') {
       return ACCREDITATION_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
     }
     return ACCREDITATION_APPROVE_DECLINE_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
@@ -171,7 +173,7 @@ export class AccreditationStore {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
-      tags.push(this.getFileUploadEnum(field));
+      tags.push(this.getFileUploadEnum(field, 'IncomeDoc'));
     }
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
@@ -561,13 +563,13 @@ export class AccreditationStore {
   }
 
   @action
-  getUserAccreditation = () => new Promise((res) => {
-    if (userDetailsStore.currentUserId) {
+  getUserAccreditation = (userId = false) => new Promise((res) => {
+    if (userId || userDetailsStore.currentUserId) {
       this.userData = graphql({
         client,
         query: userAccreditationQuery,
         fetchPolicy: 'network-only',
-        variables: { userId: userDetailsStore.currentUserId },
+        variables: { userId: userId || userDetailsStore.currentUserId },
         onFetch: () => {
           if (!this.userData.loading) {
             res();

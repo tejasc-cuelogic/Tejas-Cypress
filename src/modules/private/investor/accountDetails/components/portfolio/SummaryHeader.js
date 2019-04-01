@@ -20,7 +20,7 @@ const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h3">
     {props.details.businessName}
   </Header>
-) : (
+) : !props.isAdmin && (
   <Aux>
     <Card.Content>
       <Card.Header className="with-icon"><AccTypeTitle /></Card.Header>

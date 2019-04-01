@@ -271,6 +271,9 @@ export const userAccreditationQuery = gql`
                 fileInfo {
                   fileId
                   fileName
+                  fileHandle {
+                    boxFolderId
+                  }
                 }
               }
               verifier {
@@ -309,6 +312,9 @@ export const userAccreditationQuery = gql`
           fileInfo {
             fileId
             fileName
+            fileHandle {
+              boxFolderId
+            }
           }
         }
         verifier {
