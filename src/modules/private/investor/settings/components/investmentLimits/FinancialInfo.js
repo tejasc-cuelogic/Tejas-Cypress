@@ -152,7 +152,7 @@ export default class FinancialInfo extends Component {
                         <Card.Content>
                           <Header as="h4">Accredited Investor Status</Header>
                           <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
-                          <Link target="_blank" to="/app/resources/knowledge-base">
+                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor">
                             &nbsp;What is an accredited investor?
                           </Link>
                           <Divider hidden />
