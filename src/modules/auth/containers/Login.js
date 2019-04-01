@@ -44,6 +44,8 @@ class Login extends Component {
               this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
                 `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
             }
+          }).catch((err) => {
+            console.log(err);
           });
       }
     })
