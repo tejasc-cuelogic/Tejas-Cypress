@@ -19,6 +19,8 @@ export default class FinancialInfo extends Component {
     this.props.investmentLimitStore.setAccountsLimits();
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
+    }).then(() => {
+      this.props.investmentLimitStore.setFieldValue('isLoading', false);
     });
   }
   // eslint-disable-next-line react/sort-comp
@@ -55,11 +57,11 @@ export default class FinancialInfo extends Component {
   }
   render() {
     const {
-      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit, isLoading,
     } = this.props.investmentLimitStore;
     const { accreditationData } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    if (currentUser.loading) {
+    if (currentUser.loading || isLoading) {
       return <InlineLoader />;
     }
     return (
@@ -152,7 +154,7 @@ export default class FinancialInfo extends Component {
                         <Card.Content>
                           <Header as="h4">Accredited Investor Status</Header>
                           <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
-                          <Link target="_blank" to="/app/resources/knowledge-base">
+                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor">
                             &nbsp;What is an accredited investor?
                           </Link>
                           <Divider hidden />
