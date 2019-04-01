@@ -29,6 +29,11 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             state
             investmentMultiple
             interestRate
+            regulation
+            minOfferingAmount506C
+            maxOfferingAmount506C
+            minOfferingAmountCF
+            maxOfferingAmountCF
           }
           offering {
             launch {
@@ -58,6 +63,11 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             state
             investmentMultiple
             interestRate
+            regulation
+            minOfferingAmount506C
+            maxOfferingAmount506C
+            minOfferingAmountCF
+            maxOfferingAmountCF
           }
           offering {
             launch {
@@ -87,6 +97,11 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             state
             investmentMultiple
             interestRate
+            regulation
+            minOfferingAmount506C
+            maxOfferingAmount506C
+            minOfferingAmountCF
+            maxOfferingAmountCF
           }
           offering {
             launch {
