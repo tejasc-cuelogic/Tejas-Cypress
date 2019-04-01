@@ -6,7 +6,7 @@ import Helper from '../../../../../helper/utility';
 
 const userVerifiedDetails = ({ legalDetails, isUserVerified, status }) => {
   if (legalDetails === null ||
-    (legalDetails !== null && !isUserVerified(legalDetails.status) && status !== 'FULL')) {
+    (legalDetails !== null && !isUserVerified(legalDetails.status) && (status !== 'FULL' || status !== 'MIGRATION_FULL'))) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
