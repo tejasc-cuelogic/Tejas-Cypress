@@ -34,7 +34,8 @@ export default class Overview extends Component {
         <Aux>
           <p>
             We{"'"}re pleased to share that certain new investments will now be facilitated
-            by NextSeed Securities LLC (SEC-registered broker-dealer & member of FINRA),
+            by NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
+            <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>),
             an affiliate of NextSeed US LLC (SEC-registered Funding Portal & member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
           </p>
           <Divider hidden />
