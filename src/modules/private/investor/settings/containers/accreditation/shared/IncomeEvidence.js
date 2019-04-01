@@ -29,6 +29,7 @@ export default class IncomeEvidence extends Component {
           <Grid columns={1}>
             {incEvidenceMethods.map(method => (
               <Grid.Column
+                key={method.value}
                 onClick={e => incomeEvidenceChange(e, { name: 'incEvidenceMethods', value: method.value })}
               >
                 <div className={`user-type ${(INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === method.value ? 'active' : '')}`}>
