@@ -2922,4 +2922,11 @@ input[type='range']::-webkit-slider-thumb {
 			border:none !important;
 		}
 	}
+	.video-container iframe, iframe{
+		height: 400px;
+		width: 100%;
+		@media only screen and (max-width : @largestMobileScreen){
+			height: auto;
+		}
+	}
 }
