@@ -19,6 +19,7 @@ export default class FillingStatus extends Component {
           <Grid columns={3} centered reversed>
             {FILLING_STATUS_FORM.fields.method.values.map(method => (
               <Grid.Column
+                key={method.label}
                 onClick={e => accreditationMethodChange(e, 'FILLING_STATUS_FORM', { name: 'method', value: method.value })}
               >
                 <div className={`user-type ${(FILLING_STATUS_FORM.fields.method.value === method.value ? 'active' : '')}`}>

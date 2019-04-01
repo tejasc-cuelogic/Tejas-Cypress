@@ -18,6 +18,9 @@ const result = {
 @inject('statementStore', 'educationStore', 'transactionStore', 'userDetailsStore')
 @observer
 export default class MonthlyStatements extends Component {
+  state = {
+    pdfLoading: false,
+  }
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
     this.props.statementStore.resetPagination();
@@ -30,17 +33,20 @@ export default class MonthlyStatements extends Component {
 
   downloadhandler = (e, fileId) => {
     e.preventDefault();
+    this.setState({ pdfLoading: true });
     this.props.statementStore.generateMonthlyStatementsPdf(fileId).then((pdfUrl) => {
+      this.setState({ pdfLoading: false });
       Helper.toast('File downloaded successfully!', 'success');
       window.open(pdfUrl);
     }).catch(() => {
+      this.setState({ pdfLoading: false });
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
   }
 
   render() {
     const { loading, error } = this.props.transactionStore;
-    if (loading) {
+    if (loading || this.state.pdfLoading) {
       return <InlineLoader />;
     }
     const {
