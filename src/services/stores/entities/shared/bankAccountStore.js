@@ -631,14 +631,14 @@ export class BankAccountStore {
   }
 
   @action
-  getDecryptedRoutingNum = (accountId, userId) => new Promise((resolve, reject) => {
+  getDecryptedRoutingNum = (accountId, userId, requestType = 'CHANGE_REQUEST') => new Promise((resolve, reject) => {
     client
       .mutate({
         mutation: getDecryptedRoutingNumber,
         variables: {
           userId,
           accountId,
-          requestType: 'CHANGE_REQUEST',
+          requestType,
         },
       })
       .then(res => resolve(res.data.getDecryptedRoutingNumber))
