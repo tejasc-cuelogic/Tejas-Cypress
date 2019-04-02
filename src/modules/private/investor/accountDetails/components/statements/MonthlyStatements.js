@@ -5,7 +5,7 @@ import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
-import { NsPagination } from './../../../../../../theme/shared';
+import { InlineLoader, NsPagination } from './../../../../../../theme/shared';
 
 const result = {
   columns: [
@@ -48,7 +48,7 @@ export default class MonthlyStatements extends Component {
   render() {
     const { loading, error } = this.props.transactionStore;
     if (loading || this.state.pdfLoading) {
-      // return <InlineLoader />;
+      return <InlineLoader />;
     }
     const {
       monthlyStatementcount, requestState,
