@@ -8,11 +8,11 @@ const IndividualSummary = ({ account }) => (
   <Table.Body>
     <Table.Row>
       <Table.Cell>Entity Net Assets</Table.Cell>
-      <Table.Cell>{Helper.MoneyMathDisplayCurrency(get(account, 'details.limits.netWorth')) || 'N/A'}</Table.Cell>
+      <Table.Cell>{get(account, 'details.limits.netWorth') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.limits.netWorth')) : 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Other CF Investments</Table.Cell>
-      <Table.Cell>{Helper.MoneyMathDisplayCurrency(get(account, 'details.limits.otherContributions')) || 'N/A'}</Table.Cell>
+      <Table.Cell>{get(account, 'details.limits.otherContributions') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.limits.otherContributions')) : 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Entity{"'"}s Name</Table.Cell>
@@ -40,7 +40,7 @@ const IndividualSummary = ({ account }) => (
     </Table.Row>
     <Table.Row>
       <Table.Cell>Your Initial Deposit</Table.Cell>
-      <Table.Cell>{Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) || 'N/A'}</Table.Cell>
+      <Table.Cell>{get(account, 'details.initialDepositAmount') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) : 'N/A'}</Table.Cell>
     </Table.Row>
   </Table.Body>
 );
