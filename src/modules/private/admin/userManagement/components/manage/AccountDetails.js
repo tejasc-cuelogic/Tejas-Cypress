@@ -24,6 +24,9 @@ export default class AccountDetails extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    if (this.props.match.isExact) {
+      this.props.history.push(`${this.props.match.url}/overview`);
+    }
   }
   render() {
     const { match } = this.props;
@@ -39,7 +42,7 @@ export default class AccountDetails extends Component {
             <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio isAdmin {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
-            <Route component={Overview} isAdmin />
+            <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />
           </Switch>
         </Grid.Column>
       </Grid>
