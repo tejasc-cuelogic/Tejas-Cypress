@@ -569,56 +569,57 @@ class EntityAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!isEmpty(userData)) {
-      const account = find(userData.roles, { name: 'entity' });
-      if (account) {
-        this.setFormData('FIN_INFO_FRM', account.details);
-        this.setFormData('GEN_INFO_FRM', account.details);
-        if (account.details && account.details.address) {
-          this.setEntityAttributes('General');
-        }
-        this.setFormData('TRUST_INFO_FRM', account.details);
-        if (account.details && account.details.isTrust) {
-          this.setEntityAttributes('Trust Status');
-        }
-        this.setFormData('PERSONAL_INFO_FRM', account.details);
-        if (account.details && account.details.legalInfo) {
-          this.setEntityAttributes('Personal info');
-        }
-        this.setFormData('FORM_DOCS_FRM', account.details);
-
-        if (account.details && account.details.legalDocs) {
-          this.setEntityAttributes('Formation doc');
-        }
-        bankAccountStore.validateAddFunds();
-        const { isValid } = bankAccountStore.formEntityAddFunds.meta;
-        if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
-          bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          if (isValid) {
-            bankAccountStore.formEntityAddFunds.fields.value.value =
-            account.details.initialDepositAmount;
+    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+      if (!isEmpty(userData)) {
+        const account = find(userData.roles, { name: 'entity' });
+        if (account) {
+          this.setFormData('FIN_INFO_FRM', account.details);
+          this.setFormData('GEN_INFO_FRM', account.details);
+          if (account.details && account.details.address) {
+            this.setEntityAttributes('General');
           }
-        } else {
-          Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            const { details } = account;
-            if (details.linkedBank && details.linkedBank[f] !== '') {
-              bankAccountStore.formLinkBankManually.fields[f].value = details.linkedBank[f];
-              return bankAccountStore.formLinkBankManually.fields[f];
+          this.setFormData('TRUST_INFO_FRM', account.details);
+          if (account.details && account.details.isTrust) {
+            this.setEntityAttributes('Trust Status');
+          }
+          this.setFormData('PERSONAL_INFO_FRM', account.details);
+          if (account.details && account.details.legalInfo) {
+            this.setEntityAttributes('Personal info');
+          }
+          this.setFormData('FORM_DOCS_FRM', account.details);
+          if (account.details && account.details.legalDocs) {
+            this.setEntityAttributes('Formation doc');
+          }
+          bankAccountStore.validateAddFunds();
+          const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+            bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+            if (isValid) {
+              bankAccountStore.formEntityAddFunds.fields.value.value =
+              account.details.initialDepositAmount;
             }
-            return null;
-          });
-          if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
-          account.details.linkedBank.accountNumber !== '') {
-            bankAccountStore.linkBankFormChange();
+          } else {
+            Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
+              const { details } = account;
+              if (details.linkedBank && details.linkedBank[f] !== '') {
+                bankAccountStore.formLinkBankManually.fields[f].value = details.linkedBank[f];
+                return bankAccountStore.formLinkBankManually.fields[f];
+              }
+              return null;
+            });
+            if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+            account.details.linkedBank.accountNumber !== '') {
+              bankAccountStore.linkBankFormChange();
+            }
+            if (isValid) {
+              bankAccountStore.formEntityAddFunds.fields.value.value =
+              account.details.initialDepositAmount;
+            }
           }
-          if (isValid) {
-            bankAccountStore.formEntityAddFunds.fields.value.value =
-            account.details.initialDepositAmount;
-          }
+          bankAccountStore.validateAddFunds();
+          // bankAccountStore.validateAddfundsAmount();
+          this.renderAfterPopulate();
         }
-        bankAccountStore.validateAddFunds();
-        // bankAccountStore.validateAddfundsAmount();
-        this.renderAfterPopulate();
       }
     }
     uiStore.setProgress(false);

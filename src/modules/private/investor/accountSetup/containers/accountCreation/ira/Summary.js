@@ -73,7 +73,7 @@ export default class Summary extends Component {
     );
     const {
       plaidAccDetails, formLinkBankManually,
-      formAddFunds, depositMoneyNow,
+      accountAttributes,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -113,6 +113,12 @@ export default class Summary extends Component {
                       <span className="negative-text">Not Uploaded</span>}
                   </Table.Cell>
                 </Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
+                  <Table.Row>
+                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
+                }
                 {fundingOption && fundingOption.value === 0 &&
                   <Table.Row>
                     <Table.Cell>Bank Account:</Table.Cell>
@@ -122,10 +128,9 @@ export default class Summary extends Component {
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {!depositMoneyNow ?
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
                     Helper.CurrencyFormat(0) :
-                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
-                    Helper.CurrencyFormat(0)}
+                    Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
