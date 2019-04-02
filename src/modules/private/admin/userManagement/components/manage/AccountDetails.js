@@ -14,7 +14,7 @@ const navMeta = [
   { title: 'Overview', to: 'overview' },
   { title: 'Transactions', to: 'transactions' },
   { title: 'Investments', to: 'investments' },
-  { title: 'Statements', to: 'statements' },
+  // { title: 'Statements', to: 'statements' },
   { title: 'Activity', to: 'activity' },
 ];
 
