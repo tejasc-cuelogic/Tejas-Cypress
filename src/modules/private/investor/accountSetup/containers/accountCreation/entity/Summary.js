@@ -65,7 +65,7 @@ export default class Summary extends Component {
     const { errors } = this.props.uiStore;
     const {
       plaidAccDetails, formLinkBankManually,
-      depositMoneyNow, formEntityAddFunds,
+      accountAttributes,
       isAccountPresent,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
@@ -121,6 +121,12 @@ export default class Summary extends Component {
                   <Table.Cell>Title With the Entity</Table.Cell>
                   <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
                 </Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
+                  <Table.Row>
+                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
+                }
                 <Table.Row>
                   <Table.Cell>Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
@@ -128,10 +134,9 @@ export default class Summary extends Component {
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {!depositMoneyNow ?
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
                     Helper.CurrencyFormat(0) :
-                    formEntityAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formEntityAddFunds.fields.value.value)}` :
-                    Helper.CurrencyFormat(0)}
+                    Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
