@@ -54,6 +54,7 @@ class FinancialInfo extends Component {
     const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
       getInvestorAccountById.offering.keyTerms &&
       getInvestorAccountById.offering.keyTerms.shorthandBusinessName ? getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails && offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ? offeringDetails.keyTerms.shorthandBusinessName : '-';
+    const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const offeringId = get(this.props, 'match.params.offeringId') ? get(this.props, 'match.params.offeringId') : get(getInvestorAccountById, 'offering.id') ? get(getInvestorAccountById, 'offering.id') : offeringDetails && offeringDetails.id;
     const { currentInvestmentStatus } = this.props.accreditationStore;
     if (!getCurrentInvestNowHealthCheck) {
@@ -69,7 +70,7 @@ class FinancialInfo extends Component {
             <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
-            {currentInvestmentStatus !== 'BD_506C' &&
+            {investmentRegulation !== 'BD_506C' &&
               <p>
                 Your investment limit: {' '}
                 {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}

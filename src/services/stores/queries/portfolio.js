@@ -17,6 +17,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         agreementId
         investmentDate
         investedAmount
+        regulation
         offering {
           id
           stage
@@ -52,6 +53,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
       active {
         investedAmount
         investmentDate
+        regulation
         offering {
           id
           stage
@@ -86,6 +88,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
       completed {
         investedAmount
         investmentDate
+        regulation
         offering {
           id
           stage
