@@ -163,6 +163,7 @@ export class Auth {
         // onSuccess: result => res({ data: result }),
         onSuccess: (result) => {
           authStore.setUserLoggedIn(true);
+          localStorage.removeItem('lastActiveTime');
           if (result.action && result.action === 'newPassword') {
             authStore.setEmail(result.data.email);
             authStore.setCognitoUserSession(this.cognitoUser.Session);
