@@ -41,12 +41,14 @@ export default class AccountDetailsView extends Component {
       userDetailsStore,
     } = this.props;
     const { activeBankPladLogo, pendingBankPladLogo } = this.props.bankAccountStore;
-    const pladidLogo = accountType === 'pending' ? pendingBankPladLogo : activeBankPladLogo;
+    const pladidLogo = accountType === 'pending' ?
+      pendingBankPladLogo : activeBankPladLogo;
     let currentStaus = '';
     if (accountType === 'active') {
       currentStaus = pendingAccoungDetails ? 'Pending Removal' : 'Active';
     } else {
-      currentStaus = accountDetails.status ? LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+      currentStaus = accountDetails.status ?
+        LINKED_ACCOUND_STATUS[accountDetails.status] : null;
     }
     return (
       <Card.Content>

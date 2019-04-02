@@ -551,3 +551,13 @@
         box-shadow:none;
     }
 }
+
+.ui.form.account-type-tab .ui.card{
+    box-shadow:none;
+    .content{
+        padding:@21px;
+        p.accredetaion-intro{
+            min-height:84px;
+        }
+    }
+}
