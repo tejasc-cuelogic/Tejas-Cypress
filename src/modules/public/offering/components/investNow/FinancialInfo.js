@@ -109,6 +109,7 @@ class FinancialInfo extends Component {
             name="investmentAmount"
             currency
             prefix="$ "
+            showerror
             fielddata={INVESTMONEY_FORM.fields.investmentAmount}
             changed={values => investMoneyChange(values, 'investmentAmount')}
             onkeyup={validateMaskedInputForAmount}
