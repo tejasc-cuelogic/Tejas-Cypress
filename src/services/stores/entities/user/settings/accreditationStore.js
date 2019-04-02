@@ -33,7 +33,7 @@ export class AccreditationStore {
   @observable stepToBeRendered = '';
   @observable filters = false;
   @observable firstInit = '';
-  @observable userData = null;
+  @observable userData = {};
   @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
     filters: false,
@@ -304,7 +304,7 @@ export class AccreditationStore {
   }
 
   @computed get loading() {
-    return this.data.loading;
+    return this.data.loading || this.userData.loading;
   }
   @computed get accreditations() {
     return (this.data && this.data.data && this.data.data.listAccreditation &&
