@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { inject } from 'mobx-react';
-import { filter } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import ProfileData from '../components/ProfileData';
@@ -22,7 +20,7 @@ const getModule = (component) => {
   return c;
 };
 
-@inject('userDetailsStore')
+
 export default class ProfileSettings extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
@@ -31,11 +29,7 @@ export default class ProfileSettings extends Component {
   }
   render() {
     const { match } = this.props;
-    let navItems = GetNavMeta(match.url).subNavigations;
-    const acctiveAccountList = this.props.userDetailsStore.getActiveAccounts;
-    if (acctiveAccountList && acctiveAccountList.length === 0) {
-      navItems = filter(navItems, navItem => navItem.component !== 'InvestmentLimits');
-    }
+    const navItems = GetNavMeta(match.url).subNavigations;
     return (
       <PrivateLayout {...this.props}>
         <Switch>
