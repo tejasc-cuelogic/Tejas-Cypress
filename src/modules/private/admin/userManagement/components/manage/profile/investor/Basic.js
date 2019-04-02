@@ -25,12 +25,12 @@ export default class Basic extends Component {
     this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
       this.setState({ displayMode: true });
     })
-      .catch(() => { });
+      .catch(() => this.setState({ displayMode: true }));
   }
   render() {
     const {
       detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM,
-      formChange, isAddressSkip, toggleAddressVerification,
+      formChange, maskChange, isAddressSkip, toggleAddressVerification,
     } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
@@ -104,9 +104,9 @@ export default class Basic extends Component {
           <MaskedInput
             name="dateOfBirth"
             fielddata={USER_BASIC.fields.dateOfBirth}
-            changed={formChange}
+            changed={(values, field) => maskChange(values, 'USER_BASIC', field)}
             dateOfBirth
-            displayMode
+            displayMode={displayMode}
           />
         </Form.Group>
         <Divider />

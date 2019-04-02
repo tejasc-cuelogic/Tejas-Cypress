@@ -33,7 +33,7 @@ export class AccreditationStore {
   @observable stepToBeRendered = '';
   @observable filters = false;
   @observable firstInit = '';
-  @observable userData = null;
+  @observable userData = {};
   @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
     filters: false,
@@ -304,7 +304,7 @@ export class AccreditationStore {
   }
 
   @computed get loading() {
-    return this.data.loading;
+    return this.data.loading || this.userData.loading;
   }
   @computed get accreditations() {
     return (this.data && this.data.data && this.data.data.listAccreditation &&
@@ -853,7 +853,7 @@ export class AccreditationStore {
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,
     accountCreated, showAccountList = true, isDocumentUpload = true,
-    offeringReuglation = undefined, offeringDetailsObj = undefined,
+    offeringReuglation = undefined,
   ) => {
     const headerSubheaderTextObj = {};
     if (showAccountList && accountCreated.values.length >= 2) {
@@ -867,9 +867,14 @@ export class AccreditationStore {
       // return headerSubheaderTextObj;
     } else {
       const userCurrentState = (isRegulationCheck && currentStatus === 'FULL') ? accreditedStatus : currentStatus;
-      const offeringTitleInHeader = offeringDetailsObj && offeringDetailsObj.offeringTitle ? offeringDetailsObj.offeringTitle : 'Offering';
-      const subHeaderForParallelOffering = `Up to ${Helper.CurrencyFormat((offeringDetailsObj && offeringDetailsObj.offeringRegulationDMaxAmount) || 0, 0)} is being raised under Regulation D and up to
-      ${Helper.CurrencyFormat((offeringDetailsObj && offeringDetailsObj.OfferingRegulationCFMaxAmount) || 0, 0)} is being raised under Regulation Crowdfunding`;
+      // const offeringTitleInHeader = offeringDetailsObj && offeringDetailsObj.offeringTitle ?
+      // offeringDetailsObj.offeringTitle : 'Offering';
+      // const subHeaderForParallelOffering = `Up to ${Helper.CurrencyFormat((offeringDetailsObj &&
+      // offeringDetailsObj.offeringRegulationDMaxAmount) || 0, 0)} is being raised under Regulation
+      //  D and up to
+      // ${Helper.CurrencyFormat((offeringDetailsObj
+      //  && offeringDetailsObj.OfferingRegulationCFMaxAmount)
+      //  || 0, 0)} is being raised under Regulation Crowdfunding`;
       if (userCurrentState) {
         const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
         switch (userCurrentState) {
@@ -882,8 +887,8 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
             break;
           case 'INACTIVE':
-            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? `${offeringTitleInHeader} is a Parallel Offering` : `Accreditation Verification for ${accountType} Investor Account Required`;
-            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? subHeaderForParallelOffering : 'You must be an accredited investor to make an investment in this offering.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? 'Are you an accredited investor?' : `Accreditation Verification for ${accountType} Investor Account Required`;
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'You must be an accredited investor to make an investment in this offering.';
             break;
           case 'EXPIRED':
             // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}

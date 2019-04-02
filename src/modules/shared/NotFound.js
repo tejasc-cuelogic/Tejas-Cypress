@@ -1,21 +1,22 @@
 import React from 'react';
 import { Header, Divider } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import NSImage from './NSImage';
 
 export default class NotFound extends React.Component {
   render() {
     return (
       <div className="error-page">
-        <Header as="h1">
-          4 0 4
-          <Header.Subheader>Page Not Found</Header.Subheader>
-        </Header>
+        <NSImage path="not-found.svg" centered />
+        <Divider hidden section />
+        <Header as="h2">Page Not Found</Header>
         <p>
-          Sorry, but the page you are looking for is not found.
-          This could be because:
+          Yeesh. Well, this is awkward. Either this page doesn&apos;t exist or you
+          don&apos;t have permission to access it.
+          <br />
+          Either way, let&apos;s head to the <Link to="/">HOME</Link> page or{' '}
+          <Link to="/offerings">BROWSE</Link> some campaigns.
         </p>
-        <p className="small">The page does not exists.</p>
-        <Divider horizontal>or</Divider>
-        <p className="small">The page exists, but you do not have permission to access it.</p>
       </div>
     );
   }

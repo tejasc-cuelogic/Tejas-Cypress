@@ -217,8 +217,13 @@ export class UserDetailsStore {
   }
 
   @computed get getDetailsOfUser() {
-    return this.detailsOfUser && this.detailsOfUser.data &&
-    this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user);
+    const details = (this.detailsOfUser && this.detailsOfUser.data &&
+      this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user)) || {};
+    details.roles && details.roles.map((role, index) => {
+      details.roles[index].name = lowerCase(role.name);
+      return details;
+    });
+    return details;
   }
 
   @action
@@ -460,6 +465,15 @@ export class UserDetailsStore {
   }
 
   @action
+  maskChange = (values, form, field) => {
+    const fieldValue = field === 'dateOfBirth' ? values.formattedValue : values.floatValue;
+    this[form] = Validator.onChange(
+      this[form],
+      { name: field, value: fieldValue },
+    );
+  }
+
+  @action
   formChange = (e, result, form) => {
     if (result && (result.type === 'checkbox')) {
       this[form] = Validator.onChange(
@@ -584,11 +598,18 @@ export class UserDetailsStore {
       },
     };
     const legalDetails = {
-      street: basicData.street,
-      streetTwo: basicData.streetTwo,
-      city: basicData.city,
-      state: basicData.state,
-      zipCode: basicData.zipCode,
+      dateOfBirth: basicData.dateOfBirth,
+      legalAddress: {
+        street: basicData.street,
+        streetTwo: basicData.streetTwo,
+        city: basicData.city,
+        state: basicData.state,
+        zipCode: basicData.zipCode,
+      },
+      legalName: {
+        firstLegalName: basicData.firstLegalName,
+        lastLegalName: basicData.lastLegalName,
+      },
     };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {

@@ -17,6 +17,12 @@ export class StatementStore {
     displayTillIndex: 10,
     search: {},
   };
+  @observable isAdmin = false;
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   handlePdfDownload = (fileId) => {
@@ -48,8 +54,10 @@ export class StatementStore {
   generateMonthlyStatementsPdf = (timeStamp) => {
     const year = parseFloat(moment(timeStamp, 'MMM YYYY').format('YYYY'));
     const month = parseFloat(moment(timeStamp, 'MMM YYYY').format('MM'));
-    const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
+    const account = this.isAdmin ?
+      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
+      userDetailsStore.currentActiveAccountDetails;
+    const { userDetails, getDetailsOfUser } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -57,7 +65,7 @@ export class StatementStore {
           variables: {
             year,
             month,
-            userId: userDetails.id,
+            userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
             accountId: account.details.accountId,
           },
         })
@@ -125,7 +133,9 @@ export class StatementStore {
   }
 
   @computed get taxForms() {
-    const { taxStatement } = userDetailsStore.currentActiveAccountDetails.details;
+    const { taxStatement } = this.isAdmin ?
+      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
+      userDetailsStore.currentActiveAccountDetails.details;
     return (taxStatement && taxStatement.length && orderBy(taxStatement, ['year'], ['desc'])
       .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
@@ -139,7 +149,9 @@ export class StatementStore {
   }
 
   taxFormCount = () => {
-    const { taxStatement } = userDetailsStore.currentActiveAccountDetails.details;
+    const { taxStatement } = this.isAdmin ?
+      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
+      userDetailsStore.currentActiveAccountDetails.details;
     return (taxStatement && taxStatement.length) || 0;
   }
 

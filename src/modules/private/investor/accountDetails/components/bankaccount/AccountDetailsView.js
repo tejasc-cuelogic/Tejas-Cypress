@@ -41,12 +41,14 @@ export default class AccountDetailsView extends Component {
       userDetailsStore,
     } = this.props;
     const { activeBankPladLogo, pendingBankPladLogo } = this.props.bankAccountStore;
-    const pladidLogo = accountType === 'pending' ? pendingBankPladLogo : activeBankPladLogo;
+    const pladidLogo = accountType === 'pending' ?
+      pendingBankPladLogo : activeBankPladLogo;
     let currentStaus = '';
     if (accountType === 'active') {
-      currentStaus = pendingAccoungDetails ? 'Pending Removal' : 'Active';
+      currentStaus = (pendingAccoungDetails && pendingAccoungDetails.status !== 'APPROVED') ? 'Inactive (Pending Removal)' : 'Active';
     } else {
-      currentStaus = accountDetails.status ? LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+      currentStaus = accountDetails.status ?
+        LINKED_ACCOUND_STATUS[accountDetails.status] : null;
     }
     return (
       <Card.Content>
@@ -93,20 +95,12 @@ export default class AccountDetailsView extends Component {
               <Grid.Column>
                 <Item>
                   <Item.Content>
-                    {accountDetails.pendingUpdate &&
-                      <Aux>
-                        <Item.Extra>Status</Item.Extra>
-                        {accountType === 'pending' ?
-                          <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
-                            {currentStaus}
-                          </Item.Header>
-                          :
-                          <Item.Header>
-                            {currentStaus}
-                          </Item.Header>
-                        }
-                      </Aux>
-                    }
+                    <Aux>
+                      <Item.Extra>Status</Item.Extra>
+                        <Item.Header>
+                          {currentStaus}
+                        </Item.Header>
+                    </Aux>
                   </Item.Content>
                 </Item>
               </Grid.Column>
