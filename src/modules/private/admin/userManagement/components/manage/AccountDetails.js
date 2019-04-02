@@ -8,11 +8,13 @@ import Overview from './accountDetails/Overview';
 import Transactions from '../../../../investor/accountDetails/containers/Transactions';
 import Portfolio from '../../../../investor/accountDetails/containers/Portfolio';
 import ActivityHistory from '../../../../shared/ActivityHistory';
+import Statements from '../../../../investor/accountDetails/containers/Statements';
 
 const navMeta = [
   { title: 'Overview', to: 'overview' },
   { title: 'Transactions', to: 'transactions' },
   { title: 'Investments', to: 'investments' },
+  // { title: 'Statements', to: 'statements' },
   { title: 'Activity', to: 'activity' },
 ];
 
@@ -24,6 +26,9 @@ export default class AccountDetails extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    if (this.props.match.isExact) {
+      this.props.history.push(`${this.props.match.url}/overview`);
+    }
   }
   render() {
     const { match } = this.props;
@@ -37,9 +42,10 @@ export default class AccountDetails extends Component {
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
             <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
+            <Route exact path={`${match.url}/statements`} render={props => <Statements isAdmin {...props} />} />
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio isAdmin {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
-            <Route component={Overview} isAdmin />
+            <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />
           </Switch>
         </Grid.Column>
       </Grid>

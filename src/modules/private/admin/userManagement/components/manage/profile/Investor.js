@@ -4,9 +4,10 @@ import { withRouter, Switch, Route } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Basic from './investor/Basic';
-import InvestorProfile from './investor/InvestorProfile';
+// import InvestorProfile from './investor/InvestorProfile';
 import AccreditationsLimits from './investor/AccreditationsLimits';
 import ConfirmModel from '../../../../accreditation/components/ConfirmModel';
+import UserInvestorDetails from '../../../../../investor/settings/components/UserInvestorDetails';
 
 @inject('userDetailsStore', 'investmentLimitStore')
 @withRouter
@@ -14,6 +15,9 @@ import ConfirmModel from '../../../../accreditation/components/ConfirmModel';
 export default class Investor extends Component {
   componentWillMount() {
     this.props.investmentLimitStore.initiateInvestmentLimitOfSelectedUser();
+    if (this.props.match.isExact) {
+      this.props.history.push(`${this.props.match.url}/basic`);
+    }
   }
   render() {
     const { getActiveAccountList } = this.props.investmentLimitStore;
@@ -34,8 +38,8 @@ export default class Investor extends Component {
           <Switch>
             <Route path={`${match.url}/accreditations/:action/:userId/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={`${this.props.match.url}/accreditations`} {...props} />} />
             <Route exact path={`${match.url}/accreditations`} component={AccreditationsLimits} />
-            <Route exact path={`${match.url}/profile`} component={InvestorProfile} />
-            <Route component={Basic} />
+            <Route exact path={`${match.url}/profile`} render={props => <UserInvestorDetails isAdmin refLink={this.props.match.url} {...props} />} />
+            <Route exact path={`${match.url}/basic`} component={Basic} />
           </Switch>
         </Grid.Column>
       </Grid>
