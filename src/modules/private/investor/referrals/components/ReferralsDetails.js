@@ -192,12 +192,12 @@ export default class ReferralsDetails extends Component {
           </Header>
           <p>
             {/* eslint-disable max-len */}
-            When they sign up for an investment account, <b>you both get $20</b> in credit to use on the site.
+            When your friends use your referral link to create a NextSeed Investment Account, you both get $20 towards your next investment.
             {/* eslint-enable max-len */}
           </p>
           <p>
             {/* eslint-disable max-len */}
-            For a limited time, you can <b>invite as many friends as you&apos;d like and earn as much credit as you want.</b> Share the link below and use these shortcuts to tell your friends. The more the merrier!
+            Share the link below, and use these shortcuts to tell your friends.
             {/* eslint-enable max-len */}
           </p>
         </Container>
