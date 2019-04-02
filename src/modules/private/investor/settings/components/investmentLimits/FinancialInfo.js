@@ -19,8 +19,6 @@ export default class FinancialInfo extends Component {
     this.props.investmentLimitStore.setAccountsLimits();
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
-    }).then(() => {
-      this.props.investmentLimitStore.setFieldValue('isLoading', false);
     });
   }
   // eslint-disable-next-line react/sort-comp
@@ -57,15 +55,16 @@ export default class FinancialInfo extends Component {
   }
   render() {
     const {
-      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit, isLoading,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
+      getInvestorAmountInvestedLoading,
     } = this.props.investmentLimitStore;
-    const { accreditationData } = this.props.accreditationStore;
+    const { accreditationData, loading } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    if (currentUser.loading || isLoading) {
+    if (currentUser.loading || getInvestorAmountInvestedLoading || loading) {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <Grid>
         {getActiveAccountList && getActiveAccountList.accountList.length ?
         getActiveAccountList.accountList.map(account => (
           <Grid.Row>
@@ -171,7 +170,7 @@ export default class FinancialInfo extends Component {
           </Grid.Row>
           )) : <EmptyDataSet title="No data available for investment limits." />
         }
-      </Aux>
+      </Grid>
     );
   }
 }
