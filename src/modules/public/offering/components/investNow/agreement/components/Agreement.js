@@ -242,7 +242,7 @@ export default class Agreement extends React.Component {
                             </Aux>
                           )}
                           tooltipHardDisable={(regulationCheck && regulationCheck === 'D506C')}
-                          regulationCheck={regulationCheck}
+                          currentInvestmentStatus={regulationCheck}
                         />
                       </Grid.Column>
                     ))}
