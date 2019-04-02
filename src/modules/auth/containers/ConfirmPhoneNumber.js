@@ -141,7 +141,7 @@ export default class ConfirmPhoneNumber extends Component {
             type="tel"
             name="phoneNumber"
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="###-###-####"
+            format="(###)###-####"
             readOnly={!editMode}
             displayMode={!editMode}
             changed={personalInfoMaskedChange}

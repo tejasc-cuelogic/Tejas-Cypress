@@ -425,3 +425,6 @@ ul.ui.list li{
         }
     }
 }
+.privacy-policy ul.ui.list li {
+	line-height: 24px;
+}

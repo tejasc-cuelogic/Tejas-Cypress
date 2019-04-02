@@ -50,7 +50,7 @@ export default class MigratedUserPhoneNumber extends Component {
               type="tel"
               name="phoneNumber"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              format="###-###-####"
+              format="(###)###-####"
               changed={personalInfoMaskedChange}
               className="display-only"
               phoneNumberDisplayMode

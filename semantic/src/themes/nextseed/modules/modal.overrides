@@ -271,9 +271,6 @@
     }
 }
 .ui.modal{
-    @media only screen and (min-width:@tabletBreakpoint){
-        width:665px;
-    }
     >.close{
         // position:fixed;      commented to resolve issue on iphone
         top:@7px;
@@ -580,6 +577,9 @@
 .ui.modal.basic.multistep-modal{
     color:@neutral;
     will-change:auto;
+    @media only screen and (min-width:@tabletBreakpoint){
+        width:665px;
+    }
     >.close{
         height:30px;
         width:30px;
@@ -603,7 +603,7 @@
         background:@white;
         border-radius:@10px;
         position:relative;
-        padding:@50px @70px;
+        padding:@50px @64px;
         .field-wrap{
             h6{
                 font-weight:@fontMedium;
