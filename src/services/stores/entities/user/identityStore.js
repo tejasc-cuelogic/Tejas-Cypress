@@ -795,6 +795,7 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
+    this.confirmMigratedUserPhoneNumber = false;
     this.signUpLoading = false;
   }
 
