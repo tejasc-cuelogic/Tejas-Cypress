@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { findKey } from 'lodash';
+import { findKey, isEmpty } from 'lodash';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
@@ -75,7 +75,6 @@ export default class AccountSetup extends Component {
       getStepStatus,
       isBasicVerDoneForMigratedFullUser,
     } = this.props.userDetailsStore;
-    const { finishInvestorProfileLater } = this.props.investorProfileStore;
     const { summaryLoading, summary } = this.props.portfolioStore;
     return (
       <PrivateLayout
@@ -103,19 +102,20 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
         {
-          signupStatus.isMigratedFullAccount
-          && finishInvestorProfileLater ?
+         signupStatus.investorProfileCompleted ?
             summaryLoading ?
               <InlineLoader /> :
               <Aux>
                 <Header as="h4">Values Performance</Header>
                 <SummaryHeader details={summaryDetails(summary)} />
-                <Card fluid>
-                  <Card.Content>
-                    <Header as="h4">Cash Movement from Inception</Header>
-                    <CashMovement data={summary.cashMovement} />
-                  </Card.Content>
-                </Card>
+                { !isEmpty(summary.cashMovement) &&
+                  <Card fluid>
+                    <Card.Content>
+                      <Header as="h4">Cash Movement from Inception</Header>
+                      <CashMovement data={summary.cashMovement} />
+                    </Card.Content>
+                  </Card>
+                }
               </Aux>
           : null
         }

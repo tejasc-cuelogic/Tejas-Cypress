@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
 import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -15,8 +15,10 @@ import {
   investorProfileStore,
   authStore,
   campaignStore,
+  uiStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin } from '../../queries/users';
+import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
@@ -30,6 +32,7 @@ export class UserDetailsStore {
   @observable deleting = 0;
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
+  @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
   @observable accountForWhichCipExpired = '';
   @observable partialInvestNowSessionURL = '';
@@ -64,8 +67,22 @@ export class UserDetailsStore {
     return accDetails;
   }
 
+  @computed get getActiveAccountsOfSelectedUsers() {
+    let accDetails;
+    if (this.getDetailsOfUser) {
+      accDetails = filter(this.getDetailsOfUser.roles, account => account.name !== 'investor' &&
+        account.details);
+    }
+    return accDetails;
+  }
+
   @computed get currentActiveAccountDetails() {
     const activeAccounts = this.getActiveAccounts;
+    return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
+  }
+
+  @computed get currentActiveAccountDetailsOfSelectedUsers() {
+    const activeAccounts = this.getActiveAccountsOfSelectedUsers;
     return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
   }
 
@@ -191,7 +208,17 @@ export class UserDetailsStore {
       client,
       query: userDetailsQuery,
       variables: { userId },
+      fetchPolicy: 'network-only',
     });
+  }
+
+  @computed get getDetailsOfUserLoading() {
+    return this.detailsOfUser.loading;
+  }
+
+  @computed get getDetailsOfUser() {
+    return this.detailsOfUser && this.detailsOfUser.data &&
+    this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user);
   }
 
   @action
@@ -225,6 +252,30 @@ export class UserDetailsStore {
       })
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
+
+  @action
+  freezeAccountToggle = (userId, accountId, freeze, message = null) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: freezeAccount,
+          variables: {
+            userId,
+            accountId,
+            freeze,
+            message,
+          },
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId } }],
+        })
+        .then(() => {
+          resolve();
+          uiStore.setProgress(false);
+          Helper.toast('User Account status updated successfully.', 'success');
+        })
+        .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); uiStore.setProgress(false); });
+    });
+  };
 
   @computed get signupStatus() {
     const details = {
@@ -403,6 +454,7 @@ export class UserDetailsStore {
           return true;
         });
       }
+      this.USER_INVESTOR_PROFILE.fields.investorProfileType = get(details, 'investorProfileData.annualIncome') || '';
     }
     return false;
   }
@@ -514,6 +566,60 @@ export class UserDetailsStore {
   get getAnalyticsUserId() {
     return this.userDetails ?
       (get(this.userDetails, 'wpUserId') || get(this.userDetails, 'id')) : false;
+  }
+
+  @action
+  updateUserProfileForSelectedUser = () => {
+    const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
+    const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
+    const profileDetails = {
+      firstName: basicData.firstName,
+      lastName: basicData.lastName,
+      mailingAddress: {
+        street: infoAdd.street,
+        streetTwo: infoAdd.streetTwo,
+        city: infoAdd.city,
+        state: infoAdd.state,
+        zipCode: infoAdd.zipCode,
+      },
+    };
+    const legalDetails = {
+      street: basicData.street,
+      streetTwo: basicData.streetTwo,
+      city: basicData.city,
+      state: basicData.state,
+      zipCode: basicData.zipCode,
+    };
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserProfileData,
+          variables: {
+            profileDetails: { ...profileDetails },
+            legalDetails: { ...legalDetails },
+            targetUserId: get(this.getDetailsOfUser, 'id'),
+          },
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+        })
+        .then(() => {
+          Helper.toast('Profile has been updated.', 'success');
+          uiStore.setProgress(false);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setProgress(false);
+          reject(err);
+        });
+    });
+  }
+
+  @computed get getUserCreatedAccounts() {
+    let accDetails;
+    if (this.userDetails) {
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor');
+    }
+    return accDetails;
   }
 }
 

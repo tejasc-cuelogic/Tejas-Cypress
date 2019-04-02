@@ -49,7 +49,7 @@ export default class ProfileData extends Component {
   }
   render() {
     const {
-      email, legalDetails, info, phone, investorProfileData, status,
+      email, legalDetails, info, phone, investorProfileData,
     } = this.props.userDetailsStore.userDetails;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
@@ -105,7 +105,7 @@ export default class ProfileData extends Component {
                       </div>
                     </Table.Cell>
                     <Table.Cell><b>Phone number</b></Table.Cell>
-                    <Table.Cell>{phone && phone.number ? phone.number : 'N/A'}</Table.Cell>
+                    <Table.Cell>{phone && phone.number ? Helper.phoneNumberFormatter(phone.number) : 'N/A'}</Table.Cell>
                     <Table.Cell><Link to={`${this.props.match.url}/new-phone-number`}>Change Phone</Link></Table.Cell>
                   </Table.Row>
                   <Table.Row>
@@ -137,6 +137,11 @@ export default class ProfileData extends Component {
                   changed={profileInfoChange}
                 />
                 <Form.Group widths={3}>
+                  <FormInput
+                    name="streetTwo"
+                    fielddata={ID_PROFILE_INFO.fields.streetTwo}
+                    changed={profileInfoChange}
+                  />
                   <FormInput
                     name="city"
                     fielddata={ID_PROFILE_INFO.fields.city}
@@ -172,7 +177,6 @@ export default class ProfileData extends Component {
                 email={email}
                 legalDetails={legalDetails}
                 isUserVerified={this.isVerified}
-                status={status}
               />
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile &&

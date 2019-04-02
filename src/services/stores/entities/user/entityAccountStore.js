@@ -138,9 +138,12 @@ class EntityAccountStore {
           })
           .catch((err) => {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.resetcreateAccountMessage();
             uiStore.setProgress(false);
             reject();
           });
+      }).catch((e) => {
+        console.log(e);
       });
     });
   }
@@ -157,6 +160,8 @@ class EntityAccountStore {
   ) => new Promise((resolve) => {
     this.validateAndSubmitStep(currentStep, removeUploadedData, field).then(() => {
       resolve();
+    }).catch(() => {
+      uiStore.setProgress(false);
     });
   })
 
@@ -173,6 +178,7 @@ class EntityAccountStore {
           city: this.GEN_INFO_FRM.fields.city.value,
           state: selectedState ? selectedState.key : '',
           zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+          streetTwo: this.GEN_INFO_FRM.fields.streetTwo.value,
         };
         this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
         break;
@@ -367,6 +373,8 @@ class EntityAccountStore {
               this.submitForm(currentStep, accountAttributes)
                 .then(() => res()).catch(() => rej());
             }
+          }).catch((e) => {
+            console.log(e);
           });
         } else {
           this.submitForm(currentStep, accountAttributes)
@@ -431,9 +439,10 @@ class EntityAccountStore {
           .catch(() => {
             rej();
           });
-      } else {
-        rej();
       }
+      // } else {
+      //   rej();
+      // }
     }
     return true;
   })
@@ -469,6 +478,7 @@ class EntityAccountStore {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
+            FormValidator.setIsDirty(bankAccountStore.formLinkBankManually, false);
             // if (bankAccountStore.ManualLinkBankSubmitted) {
             //   FormValidator.resetFormData(bankAccountStore.formAddFunds);
             // }
@@ -580,10 +590,14 @@ class EntityAccountStore {
         if (account.details && account.details.legalDocs) {
           this.setEntityAttributes('Formation doc');
         }
+        bankAccountStore.validateAddFunds();
+        const { isValid } = bankAccountStore.formEntityAddFunds.meta;
         if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          bankAccountStore.formEntityAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
+          if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+          }
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -597,11 +611,13 @@ class EntityAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
-          bankAccountStore.formEntityAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
+          if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+          }
         }
         bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount();
+        // bankAccountStore.validateAddfundsAmount();
         this.renderAfterPopulate();
       }
     }
@@ -661,11 +677,19 @@ class EntityAccountStore {
                 validate: validationActions.validateEntityFormationDoc,
               };
             if (isPersonalForm || this.formationDocUploadCount() >= 3) {
-              this.createAccount(currentStep, false);
+              this.createAccount(currentStep, false).then(() => {
+                console.log();
+                uiStore.setProgress(false);
+              }).catch((e) => {
+                console.log(e);
+              });
+            } else {
+              uiStore.setProgress(false);
             }
+          } else {
+            uiStore.setProgress(false);
           }
           // eslint-disable-next-line no-undef
-          uiStore.setProgress(false);
         })
         .catch((err) => {
           uiStore.setProgress(false);

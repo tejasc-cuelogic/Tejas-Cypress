@@ -40,7 +40,7 @@ export default class CampaignList extends Component {
               campaigns && campaigns.length ?
                 <Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
-                    <Grid.Column>
+                    <Grid.Column key={offering.id}>
                       <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}/overview`}>
                         <div className="campaign-image-wrap">
                           <div className="campaign-card-image">
@@ -83,8 +83,9 @@ export default class CampaignList extends Component {
                               <HtmlEditor
                                 readOnly
                                 content={(offering && offering.offering &&
-                                offering.offering.about && offering.offering.about.theCompany ?
-                                offering.offering.about.theCompany : '')}
+                                offering.offering.overview &&
+                                offering.offering.overview.tombstoneDescription ?
+                                offering.offering.overview.tombstoneDescription : '')}
                               />
                             </Card.Description>
                           </Card.Content>

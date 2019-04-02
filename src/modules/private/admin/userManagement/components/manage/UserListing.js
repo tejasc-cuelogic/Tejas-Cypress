@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { DateTimeFormat, UserAvatar, NsPagination } from './../../../../../../theme/shared';
+import moment from 'moment';
+import { UserAvatar, NsPagination } from './../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import UserTypeIcon from './UserTypeIcon';
 
@@ -79,13 +80,13 @@ class UserListing extends Component {
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created ?
-                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={user.created.date} /> :
+                      moment.unix(user.created.date).format('MM/DD/YYYY') :
                       'N/A'
                     }
                   </Table.Cell>
                   <Table.Cell>
                     {user.lastLoginDate ?
-                      <DateTimeFormat unix fromNow datetime={user.lastLoginDate} /> :
+                      moment.unix(user.lastLoginDate).format('MM/DD/YYYY') :
                       'N/A'
                     }
                   </Table.Cell>

@@ -38,6 +38,7 @@ export class UiStore {
   @observable showFireworkAnimation = false;
   @observable authRef = '';
   @observable htmlEditorImageLoading = false;
+  @observable createAccountMessage = null;
 
   @action
   setFieldvalue = (field, value) => {
@@ -139,6 +140,15 @@ export class UiStore {
   toggleAsyncCheckLoader() {
     this.asyncCheckLoader = !this.asyncCheckLoader;
   }
+  @action
+  setcreateAccountMessage= () => {
+    this.createAccountMessage = 'Please wait...<br /><br /> We are finalizing your account. This can take up to a minute.';
+  }
+
+  @action
+  resetcreateAccountMessage = () => {
+    this.createAccountMessage = null;
+  }
 
   @action
   setConfirmBox = (entity, refId, subRefId, lockedStatus, isAnyFilingXmlLocked) => {
@@ -184,6 +194,7 @@ export class UiStore {
     this.loaderMessage = '';
     this.appLoader = false;
     this.submitButtonDisabled = false;
+    this.createAccountMessage = null;
   }
 
   @action

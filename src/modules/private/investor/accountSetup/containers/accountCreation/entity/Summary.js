@@ -27,6 +27,7 @@ export default class Summary extends Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
+    this.props.uiStore.setcreateAccountMessage();
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');

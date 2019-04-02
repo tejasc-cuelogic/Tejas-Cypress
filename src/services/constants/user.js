@@ -104,6 +104,18 @@ export const USER_IDENTITY = {
     },
     objRef: 'legalDetails.legalAddress',
   },
+  streetTwo: {
+    key: 'streetTwo',
+    value: '',
+    label: 'Address Line 2',
+    placeHolder: 'Address Line 2',
+    error: undefined,
+    rule: 'optional',
+    customErrors: {
+      required: '* required.',
+    },
+    objRef: 'legalDetails.legalAddress',
+  },
   city: {
     key: 'city',
     value: '',
@@ -265,6 +277,13 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'string',
     placeHolder: 'Residential Street',
   },
+  streetTwo: {
+    value: '',
+    label: 'Address Line 2',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Address Line 2',
+  },
   city: {
     value: '',
     label: 'City',
@@ -296,6 +315,48 @@ export const UPDATE_PROFILE_INFO = {
     src: '',
     base64String: '',
     responseUrl: '',
+  },
+};
+
+export const USER_PROFILE_ADDRESS_ADMIN = {
+  street: {
+    value: '',
+    label: 'Residential Street',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Residential Street',
+    objRef: 'info.mailingAddress',
+  },
+  streetTwo: {
+    value: '',
+    label: 'Address Line 2',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Address Line 2',
+    objRef: 'info.mailingAddress',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'City',
+    objRef: 'info.mailingAddress',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'string',
+    objRef: 'info.mailingAddress',
+  },
+  zipCode: {
+    value: '',
+    label: 'ZIP Code',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'ZIP Code',
+    objRef: 'info.mailingAddress',
   },
 };
 

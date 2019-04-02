@@ -9,7 +9,7 @@ import {
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
-import { subscribeToNewsLetter } from '../../queries/common';
+import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
@@ -405,17 +405,24 @@ export class AuthStore {
   });
 
   @action
+  notifyApplicationError = params => new Promise((res, rej) => {
+    clientPublic.mutate({
+      mutation: notifyAdmins,
+      variables: { ...params },
+    })
+      .then((data) => {
+        res(data);
+      })
+      .catch((err) => {
+        rej(err);
+      })
+      .finally(() => { });
+  });
+
+  @action
   setUserRole = (userData) => {
     this.SIGNUP_FRM.fields.role.value = userData;
   }
-
-  @action
-  notifyApplicationError = (params) => {
-    clientPublic.mutate({
-      mutation: subscribeToNewsLetter,
-      variables: { ...params },
-    });
-  };
 
   @action
   subscribeToNewsletter = () => new Promise((res, rej) => {

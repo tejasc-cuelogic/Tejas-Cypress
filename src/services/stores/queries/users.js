@@ -76,6 +76,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         avatar {
           name
@@ -116,6 +117,7 @@ export const userDetailsQuery = gql`
               city
               state
               zipCode
+              streetTwo
             }
             isTrust
             trustDate
@@ -208,6 +210,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         status
       }
@@ -248,6 +251,7 @@ export const userAccreditationQuery = gql`
             accreditation {
               status
               expiration
+              declinedMessage
               requestDate
               reviewed {
                 by
@@ -267,6 +271,9 @@ export const userAccreditationQuery = gql`
                 fileInfo {
                   fileId
                   fileName
+                  fileHandle {
+                    boxFolderId
+                  }
                 }
               }
               verifier {
@@ -285,6 +292,7 @@ export const userAccreditationQuery = gql`
         status
         expiration
         requestDate
+        declinedMessage
         reviewed {
           id
           by
@@ -304,6 +312,9 @@ export const userAccreditationQuery = gql`
           fileInfo {
             fileId
             fileName
+            fileHandle {
+              boxFolderId
+            }
           }
         }
         verifier {
@@ -384,5 +395,15 @@ mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!,
      userId: $userId
      accountId: $accountId
      activity: $activity
+   )
+ }`;
+
+export const freezeAccount = gql`
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $message: String) {
+  freezeAccount(
+     userId: $userId
+     accountId: $accountId
+     freeze: $freeze
+     message: $message
    )
  }`;

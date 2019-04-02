@@ -33,7 +33,9 @@ export default class GenerateDocs extends Component {
   }
   render() {
     const { inProgress } = this.props.uiStore;
-    const { offeringFilingList, ADMIN_DOCUMENTATION_FRM } = this.props.offeringCreationStore;
+    const {
+      offeringFilingList, ADMIN_DOCUMENTATION_FRM, filingListApiRes,
+    } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
     const { offer } = this.props.offeringsStore;
     const { match } = this.props;
@@ -49,7 +51,11 @@ export default class GenerateDocs extends Component {
             loading={inProgress}
           />
           <Divider section />
-          <EdgarFilingList offeringFilings={offeringFilingList} offeringDetails={offer} />
+          <EdgarFilingList
+            offeringFilings={offeringFilingList}
+            loading={filingListApiRes.loading}
+            offeringDetails={offer}
+          />
           {!isEmpty(offeringFilingList) &&
             <Aux>
               <Header as="h4">Upload Final Signed Docs</Header>

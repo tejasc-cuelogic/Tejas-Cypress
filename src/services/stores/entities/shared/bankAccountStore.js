@@ -214,9 +214,10 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-    const { value } = accountStore.investmentAccType === 'entity' ? this.formEntityAddFunds.fields.value : this.formAddFunds.fields.value;
-    accountAttributes.initialDepositAmount = this.depositMoneyNow && value !== '' ?
-      value : -1;
+    const { value } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.fields.value : this.formAddFunds.fields.value;
+    const { isValid } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta : this.formAddFunds.meta;
+    accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid ?
+      value : !isValid ? '' : -1;
     return accountAttributes;
   }
 
@@ -224,12 +225,21 @@ export class BankAccountStore {
   get isValidLinkBank() {
     return !isEmpty(this.plaidAccDetails);
   }
-
+  // TODO optimize method isPlaidDirty and isEntityPlaidDirty
   @computed
   get isPlaidDirty() {
     return (this.isAccountPresent &&
     this.formLinkBankManually.meta.isDirty &&
     this.formAddFunds.meta.isDirty &&
+    !this.linkbankSummary) ||
+    this.showAddFunds;
+  }
+
+  @computed
+  get isEntityPlaidDirty() {
+    return (this.isAccountPresent &&
+    this.formLinkBankManually.meta.isDirty &&
+    this.formEntityAddFunds.meta.isDirty &&
     !this.linkbankSummary) ||
     this.showAddFunds;
   }
@@ -271,7 +281,7 @@ export class BankAccountStore {
     Validator.resetFormData(this.formEntityAddFunds);
     if (accountStore.investmentAccType !== 'ira') {
       this.plaidAccDetails = {};
-    } else if (accountStore.investmentAccType === 'ira' && iraAccountStore.stepToBeRendered < 3) {
+    } else if (Helper.matchRegexWithUrl([/\bira(?![-])\b/]) && iraAccountStore.stepToBeRendered < 3) {
       this.plaidAccDetails = {};
     }
     this.depositMoneyNow = true;
@@ -384,10 +394,13 @@ export class BankAccountStore {
     return (this.changeRequests && this.changeRequests.length) || 0;
   }
   @computed get isLinkbankInComplete() {
+    const isAddFundsDirty = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta.isDirty : this.formAddFunds.meta.isDirty;
     return this.manualLinkBankSubmitted ||
-    this.isPlaidDirty ||
+    isAddFundsDirty ||
+    this.formLinkBankManually.meta.isDirty ||
     this.linkbankSummary ||
-    !this.isAccountPresent;
+    !this.isAccountPresent ||
+    this.showAddFunds;
   }
 
   @action

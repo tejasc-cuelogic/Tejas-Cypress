@@ -19,6 +19,8 @@ export default class FinancialInfo extends Component {
     this.props.investmentLimitStore.setAccountsLimits();
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
+    }).then(() => {
+      this.props.investmentLimitStore.setFieldValue('isLoading', false);
     });
   }
   // eslint-disable-next-line react/sort-comp
@@ -55,11 +57,11 @@ export default class FinancialInfo extends Component {
   }
   render() {
     const {
-      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit, isLoading,
     } = this.props.investmentLimitStore;
     const { accreditationData } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    if (currentUser.loading) {
+    if (currentUser.loading || isLoading) {
       return <InlineLoader />;
     }
     return (
@@ -90,11 +92,11 @@ export default class FinancialInfo extends Component {
                       <Card.Content>
                         <Header as="h4">Regulation Crowdfunding Limits</Header>
                         <p className="intro-text">
-                          {account.name === 'ira' ? `The total amount you can invest in Regulation
-                            Crowdfunding offerings within a 12-month period depends on your income
-                            and net worth.` : `The total amount you can invest in Regulation
+                          {account.name === 'entity' ? `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on the
-                            entity's annual revenue and net assets.`
+                            entity's annual revenue and net assets.` : `The total amount you can invest in Regulation
+                            Crowdfunding offerings within a 12-month period depends on your income
+                            and net worth.`
                           }
                           <Link target="_blank" to="/app/resources/faq">
                             &nbsp;See FAQ on investment limits
@@ -135,7 +137,7 @@ export default class FinancialInfo extends Component {
                             {accreditationData[account.name].status === 'INVALID' ?
                               <Aux>
                                 <dt>Message :</dt>
-                                <dd>{accreditationData[account.name].reviewed.comment}</dd>
+                                <dd>{accreditationData[account.name].declinedMessage}</dd>
                               </Aux> : ''
                             }
                             <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
@@ -152,7 +154,7 @@ export default class FinancialInfo extends Component {
                         <Card.Content>
                           <Header as="h4">Accredited Investor Status</Header>
                           <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
-                          <Link target="_blank" to="/app/resources/knowledge-base">
+                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor">
                             &nbsp;What is an accredited investor?
                           </Link>
                           <Divider hidden />
