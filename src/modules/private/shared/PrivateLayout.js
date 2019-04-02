@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { matchPath } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Form, Grid, Header } from 'semantic-ui-react';
+import { filter } from 'lodash';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
@@ -14,6 +15,10 @@ class PrivateLayout extends Component {
     const { location, navStore } = this.props;
     const { getUserCreatedAccounts } = this.props.userDetailsStore;
     const pageMeta = navStore.navMeta;
+    const acctiveAccountList = this.props.userDetailsStore.getActiveAccounts;
+    if (acctiveAccountList && acctiveAccountList.length === 0) {
+      pageMeta.subNavigations = filter(pageMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
+    }
     if (!pageMeta) {
       return <NotFound />;
     }
