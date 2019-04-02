@@ -465,6 +465,15 @@ export class UserDetailsStore {
   }
 
   @action
+  maskChange = (values, form, field) => {
+    const fieldValue = field === 'dateOfBirth' ? values.formattedValue : values.floatValue;
+    this[form] = Validator.onChange(
+      this[form],
+      { name: field, value: fieldValue },
+    );
+  }
+
+  @action
   formChange = (e, result, form) => {
     if (result && (result.type === 'checkbox')) {
       this[form] = Validator.onChange(
