@@ -256,7 +256,9 @@ export class InvestmentLimitStore {
             }],
         })
         .then(() => {
-          this.getInvestNowHealthCheck(accountId, offeringDetailId);
+          if (offeringDetailId) {
+            this.getInvestNowHealthCheck(accountId, offeringDetailId);
+          }
           resolve();
         })
         .catch((error) => {
