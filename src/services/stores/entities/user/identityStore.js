@@ -394,6 +394,7 @@ export class IdentityStore {
           },
         })
         .then((result) => {
+          this.setConfirmMigratedUserPhoneNumber(true);
           const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phoneNumber}` : `code texted to ${phoneNumber}`);
           if (type === 'EMAIL') {
             this.setSendOtpToMigratedUser('EMAIL');
@@ -794,6 +795,7 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
+    this.confirmMigratedUserPhoneNumber = false;
     this.signUpLoading = false;
   }
 

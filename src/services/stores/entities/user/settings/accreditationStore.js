@@ -49,6 +49,7 @@ export class AccreditationStore {
   @observable headerSubheaderObj = {};
   @observable accType = '';
   @observable currentInvestmentStatus = '';
+  @observable showLoader = false;
 
   @action
   initRequest = (reqParams) => {
@@ -178,7 +179,11 @@ export class AccreditationStore {
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
-        this.setFormFileArray(form, field, 'showLoader', true);
+        if (accreditationMethod === 'Income') {
+          this.setFieldVal('showLoader', true);
+        } else {
+          this.setFormFileArray(form, field, 'showLoader', true);
+        }
         fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags, targetUserId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
@@ -188,14 +193,26 @@ export class AccreditationStore {
             this.setFormFileArray(form, field, 'value', fileData.fileName);
             this.setFormFileArray(form, field, 'error', undefined);
             this.checkFormValid(form, false, false);
-            this.setFormFileArray(form, field, 'showLoader', false);
+            if (accreditationMethod === 'Income') {
+              this.setFieldVal('showLoader', false);
+            } else {
+              this.setFormFileArray(form, field, 'showLoader', false);
+            }
           }).catch((error) => {
-            this.setFormFileArray(form, field, 'showLoader', false);
+            if (accreditationMethod === 'Income') {
+              this.setFieldVal('showLoader', false);
+            } else {
+              this.setFormFileArray(form, field, 'showLoader', false);
+            }
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
           });
         }).catch((error) => {
-          this.setFormFileArray(form, field, 'showLoader', false);
+          if (accreditationMethod === 'Income') {
+            this.setFieldVal('showLoader', false);
+          } else {
+            this.setFormFileArray(form, field, 'showLoader', false);
+          }
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
         });

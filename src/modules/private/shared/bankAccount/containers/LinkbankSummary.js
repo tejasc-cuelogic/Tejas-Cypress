@@ -14,10 +14,6 @@ export default class LinkbankSummary extends React.Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
   }
 
-  handleSubmit = () => {
-
-  }
-
   render() {
     // const { errors } = this.props.uiStore;
     const {

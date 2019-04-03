@@ -130,7 +130,7 @@ export default class ConfirmPhoneNumber extends Component {
           </p>
           <Divider section />
           <p>
-            {editMode ? 'Please your update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
+            {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
             }
           </p>
         </Modal.Header>

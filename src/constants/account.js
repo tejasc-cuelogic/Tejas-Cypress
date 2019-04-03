@@ -803,7 +803,7 @@ export const FILTER_META = {
 
 export const LINKED_ACCOUND_STATUS = {
   REQUEST_CANCELLATION: 'Canceled',
-  REQUESTED: 'Pending Approval',
+  REQUESTED: 'Active (Pending Verification)',
   DENIED: 'Declined',
   APPROVED: 'Approved',
 };
