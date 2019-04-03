@@ -177,7 +177,7 @@
 }
 .menu-secondary-fixed{
     // border:none;
-    height:@58px;
+    height:@primaryHeaderHeight;
     margin:0 !important;
     // border-radius:0;
     // box-shadow:none;
@@ -204,7 +204,7 @@
             }
         }
         + .animate-placeholder{
-            height:@58px;
+            height:@primaryHeaderHeight;
         }
     }
 }
