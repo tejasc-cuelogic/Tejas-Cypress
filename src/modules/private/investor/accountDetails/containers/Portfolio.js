@@ -85,7 +85,7 @@ export default class Portfolio extends Component {
       className: 'investment-summary',
       summary: [
         {
-          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits but excludes pending investments.',
+          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Total Balance includes funds that are immediately available for investment. This includes pending incoming deposits, but excludes investment credits and pending investments.',
         },
         {
           title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
