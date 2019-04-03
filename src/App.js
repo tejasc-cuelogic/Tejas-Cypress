@@ -82,6 +82,8 @@ class App extends Component {
           this.onIdle();
         }
       });
+    } else {
+      localStorage.removeItem('lastActiveTime');
     }
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });

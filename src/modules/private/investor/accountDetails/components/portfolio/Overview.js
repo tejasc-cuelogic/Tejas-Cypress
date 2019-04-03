@@ -228,7 +228,7 @@ class Overview extends Component {
           <Aux>
             <Divider />
             <div className="inner-content-spacer payoff-chart">
-              <Header as="h4">Pay Off Chart</Header>
+              <Header as="h4">Payments</Header>
               <PayOffChart />
             </div>
           </Aux>

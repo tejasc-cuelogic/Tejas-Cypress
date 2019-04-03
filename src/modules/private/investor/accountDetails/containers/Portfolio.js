@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import moment from 'moment';
-import { includes, orderBy, get } from 'lodash';
+import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
@@ -85,7 +85,7 @@ export default class Portfolio extends Component {
       className: 'investment-summary',
       summary: [
         {
-          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits but excludes pending investments.',
+          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Total Balance includes funds that are immediately available for investment. This includes pending incoming deposits, but excludes investment credits and pending investments.',
         },
         {
           title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
@@ -100,7 +100,8 @@ export default class Portfolio extends Component {
     };
     const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
     const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
-    const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
+    let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
+    completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
     return (
       <Aux>
         {this.props.isAdmin &&
