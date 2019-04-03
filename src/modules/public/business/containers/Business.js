@@ -60,7 +60,7 @@ class Business extends Component {
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {location.pathname === '/business/how-it-works' ||
           location.pathname === '/business' ? <Banner /> :
-          <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
+          <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <PublicSubNav

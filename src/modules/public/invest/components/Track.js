@@ -15,7 +15,7 @@ export default class Track extends Component {
           <Container>
             <Grid padded="vertically">
               <Grid.Row>
-                <Grid.Column widescreen={8} computer={8} tablet={8} mobile={16} verticalAlign="middle" className="side-section track-left-section">
+                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} verticalAlign="middle" className="side-section track-left-section">
                   <div>
                     <Header as="h2">Track your investments.</Header>
                     <p className="mb-30">
@@ -41,7 +41,7 @@ export default class Track extends Component {
             </Grid>
           </Container>
         </section>
-        <Responsive as={Aux} maxWidth={767}>
+        <Responsive as={Aux} maxWidth={991}>
           <section className="banner track mb-50" />
         </Responsive>
       </Aux>
