@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { map } from 'lodash';
+import { map, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Card, Header, Divider, Form, Button } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 import { INVESTMENT_EXPERIENCE_LIST, EMPLOYMENT_LIST, BROKERAGE_EMPLOYMENT_LIST, PUBLIC_COMPANY_REL_LIST, INVESTOR_PROFILE_LIST } from '../../../../../constants/account';
 import { FormInput, MaskedInput, FormDropDown, FormCheckbox } from '../../../../../theme/form';
 
-@inject('investorProfileStore')
+@inject('investorProfileStore', 'userDetailsStore')
 @observer
 export default class UserInvestorDetails extends Component {
   state = {
@@ -17,7 +17,12 @@ export default class UserInvestorDetails extends Component {
   componentWillMount() {
     const { investorProfileData } = this.props;
     const { setInvestorDetailInfo } = this.props.investorProfileStore;
-    setInvestorDetailInfo(investorProfileData);
+    if (this.props.isAdmin) {
+      const investorProfileDataAdmin = get(this.props.userDetailsStore, 'getDetailsOfUser.investorProfileData');
+      setInvestorDetailInfo(investorProfileDataAdmin);
+    } else {
+      setInvestorDetailInfo(investorProfileData);
+    }
   }
   toogleField = (e) => {
     e.preventDefault();
@@ -26,7 +31,12 @@ export default class UserInvestorDetails extends Component {
       setInvestorDetailInfo,
       setIsInvestmentExperienceValidStatus,
     } = this.props.investorProfileStore;
-    setInvestorDetailInfo(investorProfileData);
+    if (this.props.isAdmin) {
+      const investorProfileDataAdmin = get(this.props.userDetailsStore, 'getDetailsOfUser.investorProfileData');
+      setInvestorDetailInfo(investorProfileDataAdmin);
+    } else {
+      setInvestorDetailInfo(investorProfileData);
+    }
     setIsInvestmentExperienceValidStatus(true);
     this.setState({ displayOnly: !this.state.displayOnly });
   }
@@ -49,7 +59,7 @@ export default class UserInvestorDetails extends Component {
       <Card fluid className="form-card">
         <Form>
           <Header as="h5">Investor Profile
-            {this.state.displayOnly ?
+            {!this.props.isAdmin && (this.state.displayOnly ?
               <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={this.toogleField}><small>Edit information</small></Link>
               :
               <Button.Group floated="right" size="mini" compact>
@@ -61,7 +71,7 @@ export default class UserInvestorDetails extends Component {
                 >
                   Update
                 </Button>
-              </Button.Group>
+              </Button.Group>)
             }
           </Header>
           <dl className="dl-horizontal">

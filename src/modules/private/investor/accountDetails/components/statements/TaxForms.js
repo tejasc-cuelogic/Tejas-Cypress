@@ -25,6 +25,7 @@ export default class TaxForms extends Component {
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    this.props.statementStore.setFieldValue('isAdmin', this.props.isAdmin);
     const {
       getLegalDocsFileIds, alreadySet,
     } = this.props.agreementsStore;

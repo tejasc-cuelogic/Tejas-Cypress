@@ -116,7 +116,7 @@ mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $ci
   }`;
 
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: AddressInput, $targetUserId: String) {
+  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $targetUserId: String) {
   updateUserProfileData(
   profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails
   ) {

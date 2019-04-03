@@ -176,7 +176,6 @@ export default class ProfileData extends Component {
                 {...this.props}
                 email={email}
                 legalDetails={legalDetails}
-                isUserVerified={this.isVerified}
                 status={status}
               />
             </Card.Group>

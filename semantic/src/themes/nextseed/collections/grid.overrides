@@ -155,8 +155,18 @@
             padding: 0;
         }
         .sticky-sidebar {
-            top: 50%;
-            transform: translate(0, -50%);
+            top: 130px;
+            // transform: translate(0, -50%);
+        }
+        .team {
+            padding: 30px;
+            max-width: 100%;
+            @media only screen and (min-width : @largeMonitorBreakpoint){
+                max-width: 460px;
+                transform: translate(-50%, 0);
+                left: 50%;
+                position: relative;
+            }
         }
     }
 }

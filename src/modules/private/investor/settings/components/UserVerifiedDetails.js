@@ -1,14 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
-const userVerifiedDetails = ({ legalDetails, isUserVerified, status }) => {
+const userVerifiedDetails = ({ legalDetails, status }) => {
   const setupIncomplete = () => !['FULL', 'MIGRATION_FULL'].includes(status);
-  if (legalDetails === null ||
-    (!isUserVerified(get(legalDetails, 'status') || null) || setupIncomplete())) {
+  if (legalDetails === null || setupIncomplete()) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
