@@ -164,6 +164,7 @@ export class Auth {
         onSuccess: (result) => {
           authStore.setUserLoggedIn(true);
           localStorage.removeItem('lastActiveTime');
+          localStorage.removeItem('defaultNavExpanded');
           if (result.action && result.action === 'newPassword') {
             authStore.setEmail(result.data.email);
             authStore.setCognitoUserSession(this.cognitoUser.Session);
@@ -607,6 +608,7 @@ export class Auth {
     new Promise((res) => {
       commonStore.setToken(undefined);
       localStorage.removeItem('lastActiveTime');
+      localStorage.removeItem('defaultNavExpanded');
       authStore.setUserLoggedIn(false);
       userStore.forgetUser();
       authStore.resetStoreData();
@@ -640,6 +642,7 @@ export class Auth {
         onFailure: err => console.log(err),
       });
       localStorage.removeItem('lastActiveTime');
+      localStorage.removeItem('defaultNavExpanded');
       AWS.config.clear();
       authStore.resetStoreData();
       accountStore.resetStoreData();
