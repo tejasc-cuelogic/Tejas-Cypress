@@ -107,7 +107,7 @@ class KeyTerms extends Component {
                   <Popup
                     hoverable
                     trigger={<Icon name="help circle" color="green" />}
-                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
+                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center/investor/how-revenue-sharing-notes-work">Education Center</Link>.</span>)}
                     position="top center"
                   />
                 </Table.Cell>
