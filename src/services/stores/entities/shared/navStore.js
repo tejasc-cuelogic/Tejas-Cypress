@@ -155,6 +155,11 @@ export class NavStore {
       }
       this.navMeta = nav;
     }
+    const acctiveAccountList = userDetailsStore.getActiveAccounts;
+    if (this.navMeta && this.navMeta.subNavigations &&
+        acctiveAccountList && acctiveAccountList.length === 0) {
+      this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
+    }
   }
 
   @action

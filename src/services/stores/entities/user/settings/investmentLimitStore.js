@@ -147,7 +147,7 @@ export class InvestmentLimitStore {
         if (data.getInvestorInvestmentLimit === '0.00') {
           this.setInvestmentLimitInfo(account.name, account.details.accountId);
         } else {
-          this.currentLimit = data.getInvestorInvestmentLimit;
+          this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
         }
         if (account.name === 'entity') {
           this.setFieldValue('entityCurrentLimit', this.currentLimit);

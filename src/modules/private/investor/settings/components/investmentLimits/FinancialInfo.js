@@ -15,11 +15,13 @@ import { ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constan
 @observer
 export default class FinancialInfo extends Component {
   componentWillMount() {
-    this.props.investmentLimitStore.getInvestedAmount();
-    this.props.investmentLimitStore.setAccountsLimits();
-    this.props.accreditationStore.getUserAccreditation().then(() => {
-      this.props.accreditationStore.initiateAccreditation();
-    });
+    if (this.props.match.isExact) {
+      this.props.investmentLimitStore.getInvestedAmount();
+      this.props.investmentLimitStore.setAccountsLimits();
+      this.props.accreditationStore.getUserAccreditation().then(() => {
+        this.props.accreditationStore.initiateAccreditation();
+      });
+    }
   }
   // eslint-disable-next-line react/sort-comp
   submit = (e) => {
