@@ -21,6 +21,7 @@ class Login extends Component {
     this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
+    localStorage.removeItem('lastActiveTime');
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();

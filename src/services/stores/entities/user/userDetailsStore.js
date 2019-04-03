@@ -17,7 +17,7 @@ import {
   campaignStore,
   uiStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -211,6 +211,24 @@ export class UserDetailsStore {
       fetchPolicy: 'network-only',
     });
   }
+
+  getBoxFolderId = userId => new Promise((resolve, reject) => {
+    graphql({
+      client,
+      query: userDetailsQueryForBoxFolder,
+      variables: { userId },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          resolve(get(data, 'user.storageDetails.rootFolder.id'));
+        }
+      },
+      onError: () => {
+        reject();
+        Helper.toast('Something went wrong, please try again in sometime', 'error');
+      },
+    });
+  });
 
   @computed get getDetailsOfUserLoading() {
     return this.detailsOfUser.loading;

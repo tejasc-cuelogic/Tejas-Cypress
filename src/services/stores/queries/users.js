@@ -42,6 +42,18 @@ export const allUsersQuery = gql`
   }
 `;
 
+export const userDetailsQueryForBoxFolder = gql`
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      storageDetails {
+        rootFolder {
+          id
+        }
+      }
+    }
+  }
+`;
+
 export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
