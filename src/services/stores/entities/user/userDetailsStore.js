@@ -17,7 +17,7 @@ import {
   campaignStore,
   uiStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -55,6 +55,11 @@ export class UserDetailsStore {
       return details;
     });
     return details;
+  }
+
+  @action
+  setAddressFieldsForProfile = (place, form) => {
+    Validator.setAddressFields(place, this[form]);
   }
 
   @computed get getActiveAccounts() {
@@ -211,6 +216,23 @@ export class UserDetailsStore {
       fetchPolicy: 'network-only',
     });
   }
+
+  getUserStorageDetails = userId => new Promise((resolve) => {
+    graphql({
+      client,
+      query: userDetailsQueryForBoxFolder,
+      variables: { userId },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          resolve(get(data, 'user.storageDetails.rootFolder.id'));
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again in sometime', 'error');
+      },
+    });
+  });
 
   @computed get getDetailsOfUserLoading() {
     return this.detailsOfUser.loading;
@@ -390,7 +412,7 @@ export class UserDetailsStore {
       if (this.userDetails.email &&
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
-        routingUrl = '/auth/confirm-email';
+        routingUrl = '/auth/welcome-email';
       } else if (this.signupStatus.isMigratedFullAccount &&
         (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
@@ -631,6 +653,7 @@ export class UserDetailsStore {
         .catch((err) => {
           uiStore.setProgress(false);
           reject(err);
+          Helper.toast('Something went wrong, please try again in sometime', 'error');
         });
     });
   }

@@ -389,16 +389,16 @@ export class IdentityStore {
           mutation: requestOtp,
           variables: {
             userId: userStore.currentUser.sub || authStore.userId,
-            type: type || (mfaMethod.value !== '' ? mfaMethod.value : null),
-            address,
+            type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
+            address: phoneNumber,
           },
         })
         .then((result) => {
-          this.setConfirmMigratedUserPhoneNumber(true);
           const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phoneNumber}` : `code texted to ${phoneNumber}`);
           if (type === 'EMAIL') {
             this.setSendOtpToMigratedUser('EMAIL');
           } else {
+            this.setConfirmMigratedUserPhoneNumber(true);
             this.setSendOtpToMigratedUser('PHONE');
           }
           this.setRequestOtpResponse(result.data.requestOtp);

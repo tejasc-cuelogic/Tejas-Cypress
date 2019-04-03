@@ -86,6 +86,7 @@ class IndividualAccountStore {
             }
           }).catch((err) => {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            console.log('Error', err);
             uiStore.resetcreateAccountMessage();
             uiStore.setProgress(false);
             reject();
