@@ -57,6 +57,11 @@ export class UserDetailsStore {
     return details;
   }
 
+  @action
+  setAddressFieldsForProfile = (place, form) => {
+    Validator.setAddressFields(place, this[form]);
+  }
+
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
@@ -648,6 +653,7 @@ export class UserDetailsStore {
         .catch((err) => {
           uiStore.setProgress(false);
           reject(err);
+          Helper.toast('Something went wrong, please try again in sometime', 'error');
         });
     });
   }
