@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { capitalize } from 'lodash';
+import { capitalize, get } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { AccTypeTitle, ListErrors } from '../../../../../../theme/shared';
@@ -67,9 +67,7 @@ export default class AddWithdrawFund extends Component {
       availableWithdrawCash, cashAvailable,
     } = transactionStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
-    const linkBankDetials = currentActiveAccountDetails && currentActiveAccountDetails.details &&
-      currentActiveAccountDetails.details.linkedBank ?
-      currentActiveAccountDetails.details.linkedBank : null;
+    const linkBankDetials = (get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') && get(currentActiveAccountDetails, 'details.linkedBank.pendingUpdate')) ? get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') : get(currentActiveAccountDetails, 'details.linkedBank') || null;
     const accountType =
     linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
     const { errors } = this.props.uiStore;
