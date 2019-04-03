@@ -394,11 +394,11 @@ export class IdentityStore {
           },
         })
         .then((result) => {
-          this.setConfirmMigratedUserPhoneNumber(true);
           const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phoneNumber}` : `code texted to ${phoneNumber}`);
           if (type === 'EMAIL') {
             this.setSendOtpToMigratedUser('EMAIL');
           } else {
+            this.setConfirmMigratedUserPhoneNumber(true);
             this.setSendOtpToMigratedUser('PHONE');
           }
           this.setRequestOtpResponse(result.data.requestOtp);
