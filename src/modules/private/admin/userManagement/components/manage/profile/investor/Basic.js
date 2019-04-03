@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../../../../../../theme/form';
+import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
 
 @inject('userDetailsStore')
 @withRouter
@@ -29,7 +29,7 @@ export default class Basic extends Component {
   }
   render() {
     const {
-      detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM,
+      detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, setAddressFieldsForProfile,
       formChange, maskChange, isAddressSkip, toggleAddressVerification,
     } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
@@ -112,8 +112,16 @@ export default class Basic extends Component {
         <Divider />
         <Header as="h6">Mailing Address</Header>
         <Form.Group widths={4}>
+          <AutoComplete
+            readOnly={displayMode}
+            displayMode={displayMode}
+            name="street"
+            fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields.street}
+            onplaceselected={places => setAddressFieldsForProfile(places, 'USER_PROFILE_ADD_ADMIN_FRM')}
+            changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+          />
           {
-          ['street', 'streetTwo', 'city', 'state', 'zipCode'].map(field => (
+          ['streetTwo', 'city', 'state', 'zipCode'].map(field => (
             <FormInput
               key={field}
               name={field}
@@ -126,8 +134,16 @@ export default class Basic extends Component {
         </Form.Group>
         <Header as="h6">Legal Address</Header>
         <Form.Group widths={4}>
+          <AutoComplete
+            readOnly={displayMode}
+            displayMode={displayMode}
+            name="street"
+            fielddata={USER_BASIC.fields.street}
+            onplaceselected={places => setAddressFieldsForProfile(places, 'USER_BASIC')}
+            changed={(e, result) => formChange(e, result, 'USER_BASIC')}
+          />
           {
-          ['street', 'streetTwo', 'city', 'state', 'zipCode'].map(field => (
+          ['streetTwo', 'city', 'state', 'zipCode'].map(field => (
             <FormInput
               key={field}
               name={field}
