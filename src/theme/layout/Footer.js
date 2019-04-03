@@ -83,7 +83,7 @@ class Footer extends Component {
                 </Menu>
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
                 <Aux path={path}>
-                  <div className={isMobile && 'mb-30'}>
+                  <div className={isTablet && 'mb-30 center-align'}>
                     <NSImage path="secure-horizontal-1.jpg" />
                   </div>
                 </Aux>
