@@ -21,8 +21,8 @@ export default class Overview extends Component {
   getRoutingNumber = (e, accountId, userId) => {
     e.stopPropagation();
     this.setState({ loading: true });
-    this.props.bankAccountStore.getDecryptedRoutingNum(accountId, userId).then((res) => {
-      this.setState({ loading: true, routingNumber: res });
+    this.props.bankAccountStore.getDecryptedRoutingNum(accountId, userId, 'LINKED_BANK').then((res) => {
+      this.setState({ loading: false, routingNumber: res });
     }).catch(() => this.setState({ loading: false }));
   }
   render() {

@@ -8,13 +8,16 @@ import Overview from './accountDetails/Overview';
 import Transactions from '../../../../investor/accountDetails/containers/Transactions';
 import Portfolio from '../../../../investor/accountDetails/containers/Portfolio';
 import ActivityHistory from '../../../../shared/ActivityHistory';
-import Statements from '../../../../investor/accountDetails/containers/Statements';
+// import Statements from '../../../../investor/accountDetails/containers/Statements';
+import MonthlyStatements from '../../../../investor/accountDetails/components/statements/MonthlyStatements';
+import TaxForms from '../../../../investor/accountDetails/components/statements/TaxForms';
 
 const navMeta = [
   { title: 'Overview', to: 'overview' },
   { title: 'Transactions', to: 'transactions' },
   { title: 'Investments', to: 'investments' },
-  // { title: 'Statements', to: 'statements' },
+  { title: 'Monthly Statements', to: 'statements' },
+  { title: 'Tax Forms', to: 'tax-forms' },
   { title: 'Activity', to: 'activity' },
 ];
 
@@ -42,7 +45,8 @@ export default class AccountDetails extends Component {
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
             <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
-            <Route exact path={`${match.url}/statements`} render={props => <Statements isAdmin {...props} />} />
+            <Route exact path={`${match.url}/statements`} render={props => <MonthlyStatements isAdmin {...props} />} />
+            <Route exact path={`${match.url}/tax-forms`} render={props => <TaxForms isAdmin {...props} />} />
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio isAdmin {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
             <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />

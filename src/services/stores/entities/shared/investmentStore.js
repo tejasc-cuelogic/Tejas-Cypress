@@ -306,6 +306,14 @@ export class InvestmentStore {
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
+      } else if (!this.isValidMultipleAmount(this.investmentAmount)) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.setFieldValue('investmentFlowErrorMessage', 'Investment amount should be in multiples of 100');
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment amount should be in multiples of 100';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+        uiStore.setProgress(false);
+        resolve();
       } else {
         client
           .mutate({
@@ -371,7 +379,6 @@ export class InvestmentStore {
     }
     return resultToReturn;
   }
-
   @action
   validateInvestmentAmount = () => new Promise((resolve, reject) => {
     graphql({

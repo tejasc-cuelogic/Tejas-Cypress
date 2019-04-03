@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { includes, uniq, get } from 'lodash';
-import { Header, Form, Icon, Button, Divider } from 'semantic-ui-react';
+import { Header, Form, Icon, Button, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
@@ -307,7 +307,7 @@ class AccountType extends Component {
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
-        <Form error className="account-type-tab">
+        <Form error className="account-type-tab mb-0">
           {investAccTypes.values.length && selectedAccountStatus ?
             <Aux>
               {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest ?
@@ -339,19 +339,53 @@ class AccountType extends Component {
                         <p className="center-align">{headerSubheaderObj.subHeader}</p>
                         {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
                           offeringReuglation && offeringReuglation === 'BD_CF_506C' ?
-                            <Aux>
-                              <Divider hidden section />
-                              <Header as="h3">Investing under Regulation D has its benefits</Header>
-                              <p className="cneter-align">For a limited time, if you <span className="highlight-text"><b><Link to={redirectURL}>verify your accredited investor status</Link></b></span>,{' '}
-                                we’ll add a <span className="highlight-text"><b><Link to={redirectURL}>$100 bonus</Link></b></span> to your account. See rules for details.
-                              </p>
-                              <Divider hidden section />
-                              <p>
-                                <b>Would you like to verify your accredited investor status?</b>
-                              </p>
-                              <Button as={Link} to={redirectURL} primary className="relaxed" content="Yes, verify status" />
-                              <Button basic className="relaxed" content="No, thanks" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
-                            </Aux>
+                            // <Aux>
+                            //   <Divider hidden section />
+                            //   <Header as="h3">Investing under Regulation D
+                            //    has its benefits</Header>
+                            //   <p className="cneter-align">For a limited time, if you <span
+                            // className="highlight-text"><b><Link to={redirectURL}>verify your
+                            // accredited investor status</Link></b></span>,{' '}
+                            //     we’ll add a <span className="highlight-text"><b><Link
+                            // to={redirectURL}>$100 bonus</Link></b></span> to your account.
+                            // See rules for details.
+                            //   </p>
+                            //   <Divider hidden section />
+                            //   <p>
+                            //     <b>Would you like to verify your accredited investor status?</b>
+                            //   </p>
+                            //   <Button as={Link} to={redirectURL} primary className="relaxed"
+                            // content="Yes, verify status" />
+                            //   <Button basic className="relaxed" content="No, thanks"
+                            // onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
+                            // </Aux>
+                            <Card.Group itemsPerRow={2}>
+                              <Card>
+                                <Card.Content>
+                                  <Header as="h5" color="green">Yes, let’s get you verified.</Header>
+                                  <p className="accredetaion-intro mb-20">
+                                    By verifying your status, you can invest in this offering under
+                                    Reg D and not have this count towards your annual Reg CF limits.
+                                  </p>
+                                  <Button as={Link} to={redirectURL} basic className="relaxed" content="Verify Status" />
+                                  <p className="note mt-20">
+                                    For a limited time, accredited investors can earn a $100 bonus
+                                    by verifying your status on NextSeed.<br />
+                                    <a href="#">See rules for details.</a>
+                                  </p>
+                                </Card.Content>
+                              </Card>
+                              <Card>
+                                <Card.Content>
+                                  <Header as="h5" color="green">No, no problem.</Header>
+                                  <p className="accredetaion-intro mb-20">
+                                    Proceed to invest in this offering
+                                    under Regulation Crowdfunding.
+                                  </p>
+                                  <Button basic className="relaxed" content="Continue" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
+                                </Card.Content>
+                              </Card>
+                            </Card.Group>
                             :
                             <Aux>
                               <Link to={redirectURL} className="text-link">
