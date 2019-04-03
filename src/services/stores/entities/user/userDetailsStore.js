@@ -412,7 +412,7 @@ export class UserDetailsStore {
       if (this.userDetails.email &&
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
-        routingUrl = '/auth/confirm-email';
+        routingUrl = '/auth/welcome-email';
       } else if (this.signupStatus.isMigratedFullAccount &&
         (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
