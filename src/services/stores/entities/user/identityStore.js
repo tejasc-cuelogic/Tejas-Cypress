@@ -389,8 +389,8 @@ export class IdentityStore {
           mutation: requestOtp,
           variables: {
             userId: userStore.currentUser.sub || authStore.userId,
-            type: type || (mfaMethod.value !== '' ? mfaMethod.value : null),
-            address,
+            type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
+            address: phoneNumber,
           },
         })
         .then((result) => {

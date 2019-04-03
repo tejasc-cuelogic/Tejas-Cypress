@@ -81,7 +81,7 @@ export default class IdentityVerification extends Component {
                           this.props.history.push(route);
                         }
                       } else {
-                        this.props.identityStore.startPhoneVerification().then(() => {
+                        this.props.identityStore.startPhoneVerification('NEW').then(() => {
                           this.props.history.push('/app/summary/identity-verification/3');
                         })
                           .catch((err) => {
@@ -120,7 +120,7 @@ export default class IdentityVerification extends Component {
           this.props.history.push('/app/summary');
         }
       } else {
-        this.props.identityStore.startPhoneVerification().then(() => {
+        this.props.identityStore.startPhoneVerification('NEW').then(() => {
           this.props.history.push('/app/summary/identity-verification/3');
         })
           .catch((err) => {
@@ -146,7 +146,7 @@ export default class IdentityVerification extends Component {
             this.props.history.push('/app/summary');
           }
         } else {
-          this.props.identityStore.startPhoneVerification().then(() => {
+          this.props.identityStore.startPhoneVerification('NEW').then(() => {
             this.props.history.push('/app/summary/identity-verification/3');
           })
             .catch((err) => {
