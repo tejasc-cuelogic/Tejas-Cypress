@@ -12,6 +12,7 @@ import ActivityHistory from '../../../../shared/ActivityHistory';
 import MonthlyStatements from '../../../../investor/accountDetails/components/statements/MonthlyStatements';
 import TaxForms from '../../../../investor/accountDetails/components/statements/TaxForms';
 import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
+import Helper from '../../../../../../helper/utility';
 
 const navMeta = [
   { title: 'Overview', to: 'overview' },
@@ -34,12 +35,16 @@ export default class AccountDetails extends Component {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
   }
-  getBoxFolderId = (e) => {
+  getUserStorageDetails = (e) => {
     e.preventDefault();
     const userId = get(this.props.userDetailsStore.getDetailsOfUser, 'id');
     if (userId) {
-      this.props.userDetailsStore.getBoxFolderId(userId).then((folderId) => {
-        window.open(`${NEXTSEED_BOX_URL}folder/${folderId}`, '_blank');
+      this.props.userDetailsStore.getUserStorageDetails(userId).then((folderId) => {
+        if (folderId) {
+          window.open(`${NEXTSEED_BOX_URL}folder/${folderId}`, '_blank');
+        } else {
+          Helper.toast('Box folder is not created for this user', 'error');
+        }
       });
     }
   }
@@ -52,7 +57,7 @@ export default class AccountDetails extends Component {
         <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
           <SecondaryMenu secondary vertical match={match} navItems={navMeta} />
           <Divider hidden />
-          <Button color="blue" className="link-button" content="Users Box Account" onClick={this.getBoxFolderId} />
+          <Button color="blue" className="link-button" content="Users Box Account" onClick={this.getUserStorageDetails} />
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>

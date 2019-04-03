@@ -212,7 +212,7 @@ export class UserDetailsStore {
     });
   }
 
-  getBoxFolderId = userId => new Promise((resolve, reject) => {
+  getUserStorageDetails = userId => new Promise((resolve) => {
     graphql({
       client,
       query: userDetailsQueryForBoxFolder,
@@ -224,7 +224,6 @@ export class UserDetailsStore {
         }
       },
       onError: () => {
-        reject();
         Helper.toast('Something went wrong, please try again in sometime', 'error');
       },
     });
