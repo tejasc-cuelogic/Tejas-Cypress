@@ -19,7 +19,7 @@ export default class MigratedUserPhoneNumber extends Component {
   }
   handlePhoneNumberConfirmation = () => {
     const { ID_VERIFICATION_FRM } = this.props.identityStore;
-    this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
+    // this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
     const { phoneNumber } = ID_VERIFICATION_FRM.fields;
     const phoneNumberValue = phoneNumber.value;
     this.props.identityStore.startPhoneVerification('NEW', phoneNumberValue);
@@ -50,7 +50,7 @@ export default class MigratedUserPhoneNumber extends Component {
               type="tel"
               name="phoneNumber"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              format="###-###-####"
+              format="(###)###-####"
               changed={personalInfoMaskedChange}
               className="display-only"
               phoneNumberDisplayMode

@@ -173,37 +173,39 @@ class IndividualAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!isEmpty(userData) && !this.formStatus) {
-      const account = find(userData.roles, { name: 'individual' });
-      const { isValid } = bankAccountStore.formEntityAddFunds.meta;
-      if (account && account.details) {
-        if (isValid) {
-          bankAccountStore.formEntityAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
+    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+      if (!isEmpty(userData) && !this.formStatus) {
+        const account = find(userData.roles, { name: 'individual' });
+        const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+        if (account && account.details) {
+          if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+          }
+          if (account.details.linkedBank) {
+            const plaidAccDetails = account.details.linkedBank;
+            bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+          } else {
+            Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
+              bankAccountStore.formLinkBankManually.fields[f].value = account.details.linkedBank[f];
+              return bankAccountStore.formLinkBankManually.fields[f];
+            });
+            bankAccountStore.linkBankFormChange();
+          }
+          bankAccountStore.validateAddFunds();
+          bankAccountStore.validateAddfundsAmount();
+          const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0)
+            ? 2 : this.stepToBeRendered;
+          this.setStepToBeRendered(renderStep);
+          // uiStore.setProgress(false);
+          // if (!this.isManualLinkBankSubmitted && (
+          //   bankAccountStore.formLinkBankManually.meta.isValid ||
+          //   !isEmpty(bankAccountStore.plaidAccDetails))) {
+          //   const getIndividualStep = AccCreationHelper.individualSteps();
+          //   this.setStepToBeRendered(getIndividualStep.summary);
+          //   this.setIsManualLinkBankSubmitted(false);
+          // }
         }
-        if (account.details.linkedBank) {
-          const plaidAccDetails = account.details.linkedBank;
-          bankAccountStore.setPlaidAccDetails(plaidAccDetails);
-        } else {
-          Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            bankAccountStore.formLinkBankManually.fields[f].value = account.details.linkedBank[f];
-            return bankAccountStore.formLinkBankManually.fields[f];
-          });
-          bankAccountStore.linkBankFormChange();
-        }
-        bankAccountStore.validateAddFunds();
-        bankAccountStore.validateAddfundsAmount();
-        const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0)
-          ? 2 : this.stepToBeRendered;
-        this.setStepToBeRendered(renderStep);
-        // uiStore.setProgress(false);
-        // if (!this.isManualLinkBankSubmitted && (
-        //   bankAccountStore.formLinkBankManually.meta.isValid ||
-        //   !isEmpty(bankAccountStore.plaidAccDetails))) {
-        //   const getIndividualStep = AccCreationHelper.individualSteps();
-        //   this.setStepToBeRendered(getIndividualStep.summary);
-        //   this.setIsManualLinkBankSubmitted(false);
-        // }
       }
     }
     uiStore.setProgress(false);

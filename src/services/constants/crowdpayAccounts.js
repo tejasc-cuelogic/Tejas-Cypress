@@ -1,6 +1,6 @@
 export const CROWDPAY_FILTERS = {
   review: { initialStatus: ['FULL', 'DECLINED'], initialFilters: ['FULL'], accountType: [] },
-  individual: { initialStatus: ['CIP_PROCESSING', 'GS_PROCESSING', 'DECLINED', 'ACCOUNT_PROCESSING'], initialFilters: ['CIP_PROCESSING'], accountType: ['INDIVIDUAL'] },
+  individual: { initialStatus: ['CIP_PROCESSING', 'GS_PROCESSING', 'DECLINED', 'ACCOUNT_PROCESSING'], initialFilters: ['ACCOUNT_PROCESSING'], accountType: ['INDIVIDUAL'] },
   ira: { initialStatus: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED', 'ACCOUNT_PROCESSING'], initialFilters: ['NS_PROCESSING'], accountType: ['IRA'] },
   entity: { initialStatus: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'], initialFilters: ['NS_PROCESSING'], accountType: ['ENTITY'] },
 };
@@ -15,7 +15,7 @@ export const FILTER_META = {
     rule: 'array',
   },
   individual: {
-    value: ['CIP_PROCESSING'],
+    value: ['ACCOUNT_PROCESSING'],
     values: [
       { label: 'CIP Processing', value: 'CIP_PROCESSING' },
       { label: 'Declined', value: 'DECLINED' },

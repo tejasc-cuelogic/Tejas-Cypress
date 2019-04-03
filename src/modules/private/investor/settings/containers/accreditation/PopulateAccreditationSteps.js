@@ -115,7 +115,7 @@ export default class PopulateAccreditationSteps extends React.Component {
   }
   render() {
     const {
-      formValidCheck,
+      formValidCheck, showLoader,
     } = this.props.accreditationStore;
     const {
       inProgress,
@@ -142,7 +142,7 @@ export default class PopulateAccreditationSteps extends React.Component {
           setIsEnterPressed={setIsEnterPressed}
           isEnterPressed={isEnterPressed}
           resetEnterPressed={resetIsEnterPressed}
-          inProgress={inProgress}
+          inProgress={inProgress || showLoader}
           handleMultiStepModalclose={this.handleMultiStepModalclose}
           setStepTobeRendered={this.handleStepChange}
           stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
