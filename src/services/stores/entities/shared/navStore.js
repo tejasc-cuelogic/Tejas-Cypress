@@ -47,7 +47,6 @@ export class NavStore {
         ...userDetailsStore.signupStatus.processingAccounts,
         ...userDetailsStore.signupStatus.frozenAccounts];
     }
-
     if (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0]) {
       return [];
     }
