@@ -41,7 +41,7 @@ export default class TermsOfUse extends Component {
         }
         <section>
           <Container>
-            <Grid>
+            <Grid className="legal-section">
               {!isMobile &&
                 <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
                   <div className="sticky-sidebar legal-sidebar">

@@ -17,13 +17,14 @@ import {
   campaignStore,
   uiStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+  @observable userFirstLoad = false;
   @observable currentActiveAccount = null;
   @observable isAddressSkip = false;
   @observable isFrozen = false;
@@ -55,6 +56,11 @@ export class UserDetailsStore {
       return details;
     });
     return details;
+  }
+
+  @action
+  setAddressFieldsForProfile = (place, form) => {
+    Validator.setAddressFields(place, this[form]);
   }
 
   @computed get getActiveAccounts() {
@@ -169,6 +175,9 @@ export class UserDetailsStore {
         if (!this.currentUser.loading) {
           identityStore.setProfileInfo(this.userDetails);
           accountStore.setInvestmentAccTypeValues(this.validAccTypes);
+          if (this.userFirstLoad === false) {
+            this.userFirstLoad = true;
+          }
           res(result);
           const user = { ...this.currentUser };
           this.currentUser.data &&
@@ -212,13 +221,35 @@ export class UserDetailsStore {
     });
   }
 
+  getUserStorageDetails = userId => new Promise((resolve) => {
+    graphql({
+      client,
+      query: userDetailsQueryForBoxFolder,
+      variables: { userId },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          resolve(get(data, 'user.storageDetails.rootFolder.id'));
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again in sometime', 'error');
+      },
+    });
+  });
+
   @computed get getDetailsOfUserLoading() {
     return this.detailsOfUser.loading;
   }
 
   @computed get getDetailsOfUser() {
-    return this.detailsOfUser && this.detailsOfUser.data &&
-    this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user);
+    const details = (this.detailsOfUser && this.detailsOfUser.data &&
+      this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user)) || {};
+    details.roles && details.roles.map((role, index) => {
+      details.roles[index].name = lowerCase(role.name);
+      return details;
+    });
+    return details;
   }
 
   @action
@@ -385,7 +416,7 @@ export class UserDetailsStore {
       if (this.userDetails.email &&
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
-        routingUrl = '/auth/confirm-email';
+        routingUrl = '/auth/welcome-email';
       } else if (this.signupStatus.isMigratedFullAccount &&
         (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
@@ -457,6 +488,15 @@ export class UserDetailsStore {
       this.USER_INVESTOR_PROFILE.fields.investorProfileType = get(details, 'investorProfileData.annualIncome') || '';
     }
     return false;
+  }
+
+  @action
+  maskChange = (values, form, field) => {
+    const fieldValue = field === 'dateOfBirth' ? values.formattedValue : values.floatValue;
+    this[form] = Validator.onChange(
+      this[form],
+      { name: field, value: fieldValue },
+    );
   }
 
   @action
@@ -584,11 +624,18 @@ export class UserDetailsStore {
       },
     };
     const legalDetails = {
-      street: basicData.street,
-      streetTwo: basicData.streetTwo,
-      city: basicData.city,
-      state: basicData.state,
-      zipCode: basicData.zipCode,
+      dateOfBirth: basicData.dateOfBirth,
+      legalAddress: {
+        street: basicData.street,
+        streetTwo: basicData.streetTwo,
+        city: basicData.city,
+        state: basicData.state,
+        zipCode: basicData.zipCode,
+      },
+      legalName: {
+        firstLegalName: basicData.firstLegalName,
+        lastLegalName: basicData.lastLegalName,
+      },
     };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -610,6 +657,7 @@ export class UserDetailsStore {
         .catch((err) => {
           uiStore.setProgress(false);
           reject(err);
+          Helper.toast('Something went wrong, please try again in sometime', 'error');
         });
     });
   }

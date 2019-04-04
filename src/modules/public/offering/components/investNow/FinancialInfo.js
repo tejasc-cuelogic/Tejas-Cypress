@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
+import { get, includes } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
@@ -51,11 +51,23 @@ class FinancialInfo extends Component {
     const currentInvestedAmount = getCurrentInvestNowHealthCheck &&
       getCurrentInvestNowHealthCheck.previousAmountInvested ?
       getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
-    const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
-      getInvestorAccountById.offering.keyTerms &&
-      getInvestorAccountById.offering.keyTerms.shorthandBusinessName ? getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails && offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ? offeringDetails.keyTerms.shorthandBusinessName : '-';
+    // const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
+    //   getInvestorAccountById.offering.keyTerms &&
+    //   getInvestorAccountById.offering.keyTerms.shorthandBusinessName ?
+    // getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails &&
+    //  offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ?
+    //  offeringDetails.keyTerms.shorthandBusinessName : '-';
+    const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const offeringId = get(this.props, 'match.params.offeringId') ? get(this.props, 'match.params.offeringId') : get(getInvestorAccountById, 'offering.id') ? get(getInvestorAccountById, 'offering.id') : offeringDetails && offeringDetails.id;
-    const { currentInvestmentStatus } = this.props.accreditationStore;
+    const { currentInvestmentStatus, userDetails } = this.props.accreditationStore;
+    const { campaign } = this.props.campaignStore;
+    const offerName = get(campaign, 'keyTerms.shorthandBusinessName') ? get(campaign, 'keyTerms.shorthandBusinessName') : get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') ? get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') : '-';
+    const campaignRegulation = get(campaign, 'keyTerms.regulation');
+    const accreditationStatus = get(userDetails, 'accreditation.status');
+    const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
+    // const showLimitComponent = offeringReuglation === 'BD_CF_506C' ?
+    //  !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus) : true;
+    const showLimitComponent = !((offeringReuglation === 'BD_506C' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     if (!getCurrentInvestNowHealthCheck) {
       return <Spinner loaderMessage="Loading.." />;
     }
@@ -69,7 +81,7 @@ class FinancialInfo extends Component {
             <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
-            {currentInvestmentStatus !== 'BD_506C' &&
+            {investmentRegulation !== 'BD_506C' && showLimitComponent &&
               <p>
                 Your investment limit: {' '}
                 {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
@@ -93,7 +105,7 @@ class FinancialInfo extends Component {
             }
           </Aux>
         }
-        {!this.props.changeInvest && currentInvestmentStatus !== 'BD_506C' &&
+        {!this.props.changeInvest && currentInvestmentStatus !== 'BD_506C' && currentInvestmentStatus !== 'D506C' &&
           <InvestmentLimit
             changeInvest={this.props.changeInvest}
             match={this.props.match}
@@ -109,6 +121,7 @@ class FinancialInfo extends Component {
             name="investmentAmount"
             currency
             prefix="$ "
+            showerror
             fielddata={INVESTMONEY_FORM.fields.investmentAmount}
             changed={values => investMoneyChange(values, 'investmentAmount')}
             onkeyup={validateMaskedInputForAmount}

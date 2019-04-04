@@ -33,9 +33,6 @@ const navMeta = [
   {
     title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
   },
-  // {
-  //   title: 'Agreements', to: 'agreements', component: Agreements, load: false,
-  // },
   {
     title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
   },
@@ -45,7 +42,9 @@ const navMeta = [
 @observer
 export default class AccountDetails extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
+    if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
+      this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
+    }
   }
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);

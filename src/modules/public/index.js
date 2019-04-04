@@ -77,7 +77,7 @@ export default class Public extends React.Component {
         {this.props.campaignStore.showFireworkAnimation &&
           <Firework />
         }
-        <Responsive minWidth={768} as={Aux}>
+        <Responsive minWidth={992} as={Aux}>
           {hasHeader && (
             <Header
               location={location}
@@ -94,7 +94,7 @@ export default class Public extends React.Component {
           {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
           <Footer path={location.pathname} />}
         </Responsive>
-        <Responsive maxWidth={767} as={Aux}>
+        <Responsive maxWidth={991} as={Aux}>
           <NavBarMobile
             onPusherClick={this.handlePusher}
             onToggle={this.handleToggle}

@@ -371,6 +371,7 @@ class IraAccountStore {
         })
         .then(action((result) => {
           this.iraAccountId = result.data.upsertInvestorAccount.accountId;
+          accountStore.accountToastMessage(currentStep, actionPerformed);
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
@@ -388,7 +389,6 @@ class IraAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);
@@ -409,62 +409,64 @@ class IraAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!isEmpty(userData)) {
-      const account = find(userData.roles, { name: 'ira' });
-      if (account) {
-        this.setFormData('FIN_INFO_FRM', account.details, userData);
-        this.setFormData('FUNDING_FRM', account.details);
-        this.setFormData('ACC_TYPES_FRM', account.details);
-        this.setFormData('IDENTITY_FRM', account.details);
-        bankAccountStore.validateAddFunds();
-        const { isValid } = bankAccountStore.formEntityAddFunds.meta;
-        if (get(account.details, 'linkedBank.routingNumber')) {
-          bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          if (isValid) {
-            bankAccountStore.formEntityAddFunds.fields.value.value =
-            account.details.initialDepositAmount;
-          }
-        } else {
-          Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            const { details } = account;
-            if (details.linkedBank && details.linkedBank[f] !== '') {
-              bankAccountStore.formLinkBankManually.fields[f].value =
-              details.linkedBank[f];
-              return bankAccountStore.formLinkBankManually.fields[f];
+    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+      if (!isEmpty(userData)) {
+        const account = find(userData.roles, { name: 'ira' });
+        if (account) {
+          this.setFormData('FIN_INFO_FRM', account.details, userData);
+          this.setFormData('FUNDING_FRM', account.details);
+          this.setFormData('ACC_TYPES_FRM', account.details);
+          this.setFormData('IDENTITY_FRM', account.details);
+          bankAccountStore.validateAddFunds();
+          const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+          if (get(account.details, 'linkedBank.routingNumber')) {
+            bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+            if (isValid) {
+              bankAccountStore.formEntityAddFunds.fields.value.value =
+              account.details.initialDepositAmount;
             }
-            return null;
-          });
-          if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
-          account.details.linkedBank.accountNumber !== '') {
-            bankAccountStore.linkBankFormChange();
-          }
-          if (isValid) {
-            bankAccountStore.formEntityAddFunds.fields.value.value =
-            account.details.initialDepositAmount;
-          }
-        }
-        bankAccountStore.validateAddFunds();
-        // bankAccountStore.validateAddfundsAmount();
-        const getIraStep = AccCreationHelper.iraSteps();
-        if (!this.FIN_INFO_FRM.meta.isValid) {
-          this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
-        } else if (!this.ACC_TYPES_FRM.meta.isValid) {
-          this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
-        } else if (!this.FUNDING_FRM.meta.isValid) {
-          this.setStepToBeRendered(getIraStep.FUNDING_FRM);
-        } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
-          (bankAccountStore.isLinkbankInComplete)) {
-          this.setStepToBeRendered(getIraStep.LINK_BANK);
-        } else if (!this.IDENTITY_FRM.meta.isValid || this.stepToBeRendered === 4) {
-          if (this.FUNDING_FRM.fields.fundingType.value === 0) {
-            this.setStepToBeRendered(4);
           } else {
-            this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
+            Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
+              const { details } = account;
+              if (details.linkedBank && details.linkedBank[f] !== '') {
+                bankAccountStore.formLinkBankManually.fields[f].value =
+                details.linkedBank[f];
+                return bankAccountStore.formLinkBankManually.fields[f];
+              }
+              return null;
+            });
+            if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+            account.details.linkedBank.accountNumber !== '') {
+              bankAccountStore.linkBankFormChange();
+            }
+            if (isValid) {
+              bankAccountStore.formEntityAddFunds.fields.value.value =
+              account.details.initialDepositAmount;
+            }
           }
-        } else if (this.FUNDING_FRM.fields.fundingType.value === 0) {
-          this.setStepToBeRendered(5);
-        } else {
-          this.setStepToBeRendered(getIraStep.summary);
+          bankAccountStore.validateAddFunds();
+          // bankAccountStore.validateAddfundsAmount();
+          const getIraStep = AccCreationHelper.iraSteps();
+          if (!this.FIN_INFO_FRM.meta.isValid) {
+            this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
+          } else if (!this.ACC_TYPES_FRM.meta.isValid) {
+            this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
+          } else if (!this.FUNDING_FRM.meta.isValid) {
+            this.setStepToBeRendered(getIraStep.FUNDING_FRM);
+          } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
+            (bankAccountStore.isLinkbankInComplete)) {
+            this.setStepToBeRendered(getIraStep.LINK_BANK);
+          } else if (!this.IDENTITY_FRM.meta.isValid || this.stepToBeRendered === 4) {
+            if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+              this.setStepToBeRendered(4);
+            } else {
+              this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
+            }
+          } else if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+            this.setStepToBeRendered(5);
+          } else {
+            this.setStepToBeRendered(getIraStep.summary);
+          }
         }
       }
     }

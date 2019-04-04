@@ -154,6 +154,9 @@ h6{
 .ml-10 {
 	margin-left: @10px !important;
 }
+.pl-50{
+	padding-left: @50px !important;
+}
 .pull-left{
 	float:left !important;
 }
@@ -792,6 +795,9 @@ footer{
 			@media only screen and (max-width : @largestMobileScreen){
 				justify-content: flex-start;
 			}
+			@media only screen and (max-width : @largestTabletScreen){
+				min-height: auto;
+			}
 		}
 	}
 }
@@ -1334,29 +1340,6 @@ a.icon-link {
 .error-page{
 	padding:@80px @14px;
 	text-align:center;
-	flex-grow:1;	// useful on campaign details page
-	h1.ui.header{
-		font-size:@90px !important;
-		font-weight:@bold;
-		line-height:1;
-		margin-bottom:@30px;
-		.sub.header{
-			font-size:0.3em;
-            font-weight:@fontMedium;
-		}
-	}
-	p{
-		font-size:@24px;
-		&.small{
-			font-size:@20px;
-			margin:0;
-		}
-	}
-	.ui.divider{
-		width:290px;
-		margin-left:auto;
-		margin-right:auto;
-	}
 }
 /* END <== PUBLIC PAGES UI STYLES */
 

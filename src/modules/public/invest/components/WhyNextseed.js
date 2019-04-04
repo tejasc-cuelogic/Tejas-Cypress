@@ -22,8 +22,8 @@ const highlights = [
   {
     title: 'Pre-vetted opportunities',
     icon: 'icons/prevetted.svg',
-    meta: `Every business must meet our proprietary financial
-    criteria in addition to federal regulatory requirements. `,
+    meta: `Only the top 3% of businesses meet our
+    proprietary financial criteria.`,
   },
   {
     title: 'Flexible amounts',
@@ -64,7 +64,7 @@ const businesses = [
     {
       title: 'Austin, TX',
       image: 'investors/img-1.png',
-      description: 'The Brewer’s Table raised $3000,000 from 190 investors',
+      description: 'The Brewer’s Table raised $300,000 from 190 investors',
     },
   ],
   [
@@ -127,11 +127,14 @@ export default class WhyNextseed extends Component {
             </Grid>
             <div className="center-align mb-50">
               { !authStore.isUserLoggedIn &&
-              <Button.Group vertical={isMobile} className={!isMobile ? 'mt-50' : ''}>
-                <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
-              </Button.Group>
-            }
+                <Button className={!isMobile ? 'mt-50' : ''} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+              }
             </div>
+            <p className="note center-align mb-50">
+              <sup>1</sup>This represents the percent of businesses that began the application
+              process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering
+              on the platform since NextSeed&apos;s inception.
+            </p>
             {/* <Grid className="business-learn-more mb-30">
             <Grid.Row>
               <Grid.Column className="center-align">

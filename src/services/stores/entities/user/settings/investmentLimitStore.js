@@ -14,7 +14,7 @@ export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
   @observable investmentLimit = {};
   @observable currentLimit = 0;
-  @observable investorInvestmentLimit = null;
+  @observable investorInvestmentLimit = {};
   @observable activeAccounts = null;
   @observable currentAccountType = null;
   @observable currentAccountId = null;
@@ -23,7 +23,6 @@ export class InvestmentLimitStore {
   @observable investedAmount = 0;
   @observable investNowHealthCheckDetails = null;
   @observable investNowError = false;
-  @observable isLoading = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -142,14 +141,13 @@ export class InvestmentLimitStore {
 
   @action
   setAccountsLimits = () => {
-    this.setFieldValue('isLoading', true);
     const { accountList } = this.getActiveAccountList;
     accountList.forEach((account) => {
       this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
         if (data.getInvestorInvestmentLimit === '0.00') {
           this.setInvestmentLimitInfo(account.name, account.details.accountId);
         } else {
-          this.currentLimit = data.getInvestorInvestmentLimit;
+          this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
         }
         if (account.name === 'entity') {
           this.setFieldValue('entityCurrentLimit', this.currentLimit);
@@ -258,7 +256,9 @@ export class InvestmentLimitStore {
             }],
         })
         .then(() => {
-          this.getInvestNowHealthCheck(accountId, offeringDetailId);
+          if (offeringDetailId) {
+            this.getInvestNowHealthCheck(accountId, offeringDetailId);
+          }
           resolve();
         })
         .catch((error) => {

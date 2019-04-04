@@ -6,7 +6,7 @@ import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class Login extends Component {
@@ -21,6 +21,7 @@ class Login extends Component {
     this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
+    localStorage.removeItem('lastActiveTime');
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
@@ -34,7 +35,6 @@ class Login extends Component {
       if (res) {
         authActions.login()
           .then(() => {
-            localStorage.removeItem('lastActiveTime');
             const { redirectURL } = this.props.uiStore;
             if (this.props.authStore.newPasswordRequired) {
               this.props.history.push('/auth/change-password');
@@ -42,6 +42,14 @@ class Login extends Component {
               const { roles } = this.props.userStore.currentUser;
               this.props.authStore.setCredentials({ email: email.value, password: password.value });
               this.props.authStore.resetForm('LOGIN_FRM');
+              const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep :
+                '/app/dashboard';
+              if (invLogsIn === '/app/summary') {
+                const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
+                if (hasExpanded) {
+                  this.props.uiStore.setNavExpanded(hasExpanded.to);
+                }
+              }
               this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
                 `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
             }

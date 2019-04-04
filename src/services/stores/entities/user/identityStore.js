@@ -389,8 +389,8 @@ export class IdentityStore {
           mutation: requestOtp,
           variables: {
             userId: userStore.currentUser.sub || authStore.userId,
-            type: type || (mfaMethod.value !== '' ? mfaMethod.value : null),
-            address,
+            type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
+            address: phoneNumber,
           },
         })
         .then((result) => {
@@ -398,6 +398,7 @@ export class IdentityStore {
           if (type === 'EMAIL') {
             this.setSendOtpToMigratedUser('EMAIL');
           } else {
+            this.setConfirmMigratedUserPhoneNumber(true);
             this.setSendOtpToMigratedUser('PHONE');
           }
           this.setRequestOtpResponse(result.data.requestOtp);
@@ -794,6 +795,7 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
+    this.confirmMigratedUserPhoneNumber = false;
     this.signUpLoading = false;
   }
 

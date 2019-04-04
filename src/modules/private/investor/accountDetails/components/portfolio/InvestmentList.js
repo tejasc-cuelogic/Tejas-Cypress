@@ -55,7 +55,7 @@ const InvestmentList = (props) => {
                       <Table.Cell>
                         {props.listOf !== 'pending' ?
                           data && data.offering && data.offering.stage ?
-                            STAGES[data.offering.stage].label : '-' :
+                            props.listOf === 'active' ? 'Active' : STAGES[data.offering.stage].label : '-' :
                           get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
                         }
                       </Table.Cell>

@@ -6,11 +6,13 @@ import bugsnagReact from '@bugsnag/plugin-react';
 import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
-import Clipboard from 'react-clipboard.js/dist/react-clipboard';
+// import Clipboard from 'react-clipboard.js';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
 import { InlineLoader } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
+
 
 let bugsnagClient;
 if (process.env.REACT_APP_BUG_SNAG_KEY) {
@@ -128,13 +130,27 @@ export default class ReferralsDetails extends Component {
 
     // pre render components
     const summaryHeader = <SummaryHeader details={summaryDetails} />;
+    /* eslint-disable max-len */
+    // const myShareLink = (
+    //   <div className="fluid ui big action input">
+    //     <input id="myReferralLink" type="text" style={codeBoxStyle} value={this.state.myShareLink} readOnly />
+    //     <Clipboard component="button" option-text={() => document.getElementById('myReferralLink').value} onSuccess={() => Helper.toast('Referral link copied! Happy sharing.', 'success')} className="ui teal right labeled icon button">
+    //       <i className="copy icon" />
+    //       Copy
+    //     </Clipboard>
+    //   </div>
+    // );
+    /* eslint-enable max-len */
+
     const myShareLink = (
       <div className="fluid ui big action input">
         <input id="myReferralLink" type="text" style={codeBoxStyle} value={this.state.myShareLink} readOnly />
-        <Clipboard component="button" option-text={() => document.getElementById('myReferralLink').value} onSuccess={() => Helper.toast('Referral link copied! Happy sharing.', 'success')} className="ui teal right labeled icon button">
-          <i className="copy icon" />
-          Copy
-        </Clipboard>
+        <CopyToClipboard text={this.state.myShareLink} onCopy={() => Helper.toast('Referral link copied! Happy sharing.', 'success')}>
+          <button className="ui teal right labeled icon button">
+            <i className="copy icon" />
+            Copy
+          </button>
+        </CopyToClipboard>
       </div>
     );
 
@@ -192,12 +208,12 @@ export default class ReferralsDetails extends Component {
           </Header>
           <p>
             {/* eslint-disable max-len */}
-            When they sign up for an investment account, <b>you both get $20</b> in credit to use on the site.
+            When your friends use your referral link to create a NextSeed Investment Account, you both get $20 towards your next investment.
             {/* eslint-enable max-len */}
           </p>
           <p>
             {/* eslint-disable max-len */}
-            For a limited time, you can <b>invite as many friends as you&apos;d like and earn as much credit as you want.</b> Share the link below and use these shortcuts to tell your friends. The more the merrier!
+            Share the link below, and use these shortcuts to tell your friends.
             {/* eslint-enable max-len */}
           </p>
         </Container>

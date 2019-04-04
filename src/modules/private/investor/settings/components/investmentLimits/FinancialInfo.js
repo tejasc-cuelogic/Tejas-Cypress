@@ -15,13 +15,13 @@ import { ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constan
 @observer
 export default class FinancialInfo extends Component {
   componentWillMount() {
-    this.props.investmentLimitStore.getInvestedAmount();
-    this.props.investmentLimitStore.setAccountsLimits();
-    this.props.accreditationStore.getUserAccreditation().then(() => {
-      this.props.accreditationStore.initiateAccreditation();
-    }).then(() => {
-      this.props.investmentLimitStore.setFieldValue('isLoading', false);
-    });
+    if (this.props.match.isExact) {
+      this.props.investmentLimitStore.getInvestedAmount();
+      this.props.investmentLimitStore.setAccountsLimits();
+      this.props.accreditationStore.getUserAccreditation().then(() => {
+        this.props.accreditationStore.initiateAccreditation();
+      });
+    }
   }
   // eslint-disable-next-line react/sort-comp
   submit = (e) => {
@@ -57,15 +57,16 @@ export default class FinancialInfo extends Component {
   }
   render() {
     const {
-      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit, isLoading,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
+      getInvestorAmountInvestedLoading,
     } = this.props.investmentLimitStore;
-    const { accreditationData } = this.props.accreditationStore;
+    const { accreditationData, loading } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    if (currentUser.loading || isLoading) {
+    if (currentUser.loading || getInvestorAmountInvestedLoading || loading) {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <Grid>
         {getActiveAccountList && getActiveAccountList.accountList.length ?
         getActiveAccountList.accountList.map(account => (
           <Grid.Row>
@@ -137,7 +138,7 @@ export default class FinancialInfo extends Component {
                             {accreditationData[account.name].status === 'INVALID' ?
                               <Aux>
                                 <dt>Message :</dt>
-                                <dd>{accreditationData[account.name].declinedMessage}</dd>
+                                <dd>{accreditationData[account.name].declinedMessage || 'N/A'}</dd>
                               </Aux> : ''
                             }
                             <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
@@ -171,7 +172,7 @@ export default class FinancialInfo extends Component {
           </Grid.Row>
           )) : <EmptyDataSet title="No data available for investment limits." />
         }
-      </Aux>
+      </Grid>
     );
   }
 }

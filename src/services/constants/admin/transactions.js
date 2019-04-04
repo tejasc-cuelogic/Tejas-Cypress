@@ -11,7 +11,7 @@ export const STATUS_MAPPING = {
 };
 
 export const COUNT_STATUS_MAPPING = {
-  // prePendingCount: 'pre-pending',
+  prePendingCount: 'pending',
   pendingCount: 'pending',
   processingCount: 'processing',
   completedCount: 'complete',
@@ -58,8 +58,8 @@ export const STATUS_META = [
     refStatus: ['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {
-    title: 'Account ID',
-    field: 'accountId',
+    title: 'Account Type',
+    field: 'accountType',
     refStatus: ['PENDING'],
   },
   {

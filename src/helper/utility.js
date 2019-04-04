@@ -50,7 +50,8 @@ export class Utility {
 
   getTotal = (from, key) => {
     const total = '0.00';
-    return from.map(r => money.add(total, r[key]))
+    return from.map(f => money.floatToAmount(f[key]))
+      .map(r => money.add(total, r))
       .reduce((sum, n) => money.add(sum, n));
   }
 

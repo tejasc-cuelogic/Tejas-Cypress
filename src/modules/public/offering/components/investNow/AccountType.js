@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { includes, uniq, get } from 'lodash';
-import { Header, Form, Icon, Button, Divider } from 'semantic-ui-react';
+import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
@@ -230,7 +230,6 @@ class AccountType extends Component {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
     const offeringDetailObj = this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
-    // const offeringReuglation = offeringDetailObj && offeringDetailObj.regulation;
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
     const offeringTitle = get(offeringDetailObj, 'keyTerms.shorthandBusinessName');
     const offeringRegulationDMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmount506C');
@@ -251,7 +250,7 @@ class AccountType extends Component {
       setPartialInvestmenSession,
       sendAdminEmailOfFrozenAccount,
     } = this.props.userDetailsStore;
-    const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
+    const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : userDetails.status === 'BASIC' && investAccTypes.values.length > 0 ? 'BASIC' : 'PARTIAL';
     const offeringInvestnowURL = this.props.match.url;
     const {
       accreditationData,
@@ -290,8 +289,9 @@ class AccountType extends Component {
       return <Spinner loaderMessage="Loading.." />;
     }
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
+    const currentStatus = userProfileFullStatus && userProfileFullStatus !== 'FULL' && userProfileFullStatus !== 'BASIC' ? 'USER-PARTIAL' : selectedAccountStatus;
     offeringAccreditatoinStatusMessage(
-      selectedAccountStatus, userAccredetiationState,
+      currentStatus, userAccredetiationState,
       isRegulationCheck, investAccTypes, showAccountList, isDocumentUpload,
       offeringReuglation, offeringDetailsObj,
     );
@@ -307,8 +307,8 @@ class AccountType extends Component {
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
-        <Form error className="account-type-tab">
-          {investAccTypes.values.length && selectedAccountStatus ?
+        <Form error className="account-type-tab mb-0">
+          {investAccTypes.values.length && selectedAccountStatus && (userProfileFullStatus === 'FULL' || userProfileFullStatus === 'BASIC') ?
             <Aux>
               {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest ?
                 <Aux>
@@ -326,9 +326,7 @@ class AccountType extends Component {
                     <Aux>
                       <div className="center-align">
                         <Aux>
-                          <p>Please contact
-                            <a href="mailto:support@nextseed.com"> support@nextseed.com</a> with any question.
-                          </p>
+                          <p>There is a problem with this offering, please upload the NPA.</p>
                           <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         </Aux>
                       </div>
@@ -337,36 +335,70 @@ class AccountType extends Component {
                     selectedAccountStatus === 'FULL' ?
                       <div className="center-align">
                         <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                        {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
+                        {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' ?
                           offeringReuglation && offeringReuglation === 'BD_CF_506C' ?
-                            <Aux>
-                              <Divider hidden section />
-                              <Header as="h3">Investing under Regulation D has its benefits</Header>
-                              <p className="cneter-align">For a limited time, if you <span className="highlight-text"><b><Link to={redirectURL}>verify your accredited investor status</Link></b></span>,{' '}
-                                we’ll add a <span className="highlight-text"><b><Link to={redirectURL}>$100 bonus</Link></b></span> to your account. See rules for details.
-                              </p>
-                              <Divider hidden section />
-                              <p>
-                                <b>Would you like to verify your accredited investor status?</b>
-                              </p>
-                              <Button as={Link} to={redirectURL} primary className="relaxed" content="Yes, verify status" />
-                              <Button basic className="relaxed" content="No, thanks" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
-                            </Aux>
+                            // <Aux>
+                            //   <Divider hidden section />
+                            //   <Header as="h3">Investing under Regulation D
+                            //    has its benefits</Header>
+                            //   <p className="cneter-align">For a limited time, if you <span
+                            // className="highlight-text"><b><Link to={redirectURL}>verify your
+                            // accredited investor status</Link></b></span>,{' '}
+                            //     we’ll add a <span className="highlight-text"><b><Link
+                            // to={redirectURL}>$100 bonus</Link></b></span> to your account.
+                            // See rules for details.
+                            //   </p>
+                            //   <Divider hidden section />
+                            //   <p>
+                            //     <b>Would you like to verify your accredited investor status?</b>
+                            //   </p>
+                            //   <Button as={Link} to={redirectURL} primary className="relaxed"
+                            // content="Yes, verify status" />
+                            //   <Button basic className="relaxed" content="No, thanks"
+                            // onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
+                            // </Aux>
+                            <Card.Group itemsPerRow={2}>
+                              <Card>
+                                <Card.Content>
+                                  <Header as="h5" color="green">Yes, let’s get you verified.</Header>
+                                  <p className="accredetaion-intro mb-20">
+                                    By verifying your status, you can invest in this offering under
+                                    Reg D and not have this count towards your annual Reg CF limits.
+                                  </p>
+                                  <Button as={Link} to={redirectURL} basic className="relaxed" content="Verify Status" />
+                                  <p className="note mt-20">
+                                    For a limited time, accredited investors can earn a $100 bonus
+                                    by verifying your status on NextSeed.<br />
+                                    <a href="#">See rules for details.</a>
+                                  </p>
+                                </Card.Content>
+                              </Card>
+                              <Card>
+                                <Card.Content>
+                                  <Header as="h5" color="green">No, no problem.</Header>
+                                  <p className="accredetaion-intro mb-20">
+                                    Proceed to invest in this offering
+                                    under Regulation Crowdfunding.
+                                  </p>
+                                  <Button basic className="relaxed" content="Continue" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
+                                </Card.Content>
+                              </Card>
+                            </Card.Group>
                             :
                             <Aux>
-                              <Link to={redirectURL} className="text-link">
+                              {/* <Link to={redirectURL} className="text-link">
                                 <Icon className="ns-arrow-right" color="green" />
                                 Apply for accreditation
-                              </Link>
+                              </Link> */}
                               <div className="mt-30">
                                 <Button
                                   as={Link}
-                                  to="/"
+                                  to={redirectURL}
                                   onClick={e =>
                                     this.handlBackToOffering(e)}
                                   primary
                                   className="relaxed"
-                                  content="Back to Offering"
+                                  content="Confirm Status"
                                 />
                               </div>
                             </Aux>
@@ -410,11 +442,7 @@ class AccountType extends Component {
                           null}
                         {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING') ?
                           <Aux>
-                            <p>
-                              We are currently processing your new {investAccTypes.value} account.
-                              You will recive notification when your account is ready.
-                            Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
-                            </p>
+                            <p>We&apos;ll notify you through email when your account is set up.</p>
                             <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                           </Aux>
                           :
@@ -436,21 +464,28 @@ class AccountType extends Component {
               {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
                 ?
                   <Aux>
-                    <Link to={redirectURL} className="text-link">
-                      <Icon className="ns-arrow-right" color="green" />
-                      Please finish your account setup.
-                    </Link>
-                    <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                    Please confirm your investor profile to invest in this offering.
+                    {/* <Link to={redirectURL} className="text-link">
+                        <Icon className="ns-arrow-right" color="green" />
+                        Please finish your account setup.
+                      </Link> */}
+                    {/* <div className="mt-30">
+                    <Button
+                    as={Link}
+                      to="/"
+                      onClick={e => this.handlBackToOffering(e)}
+                        primary
+                        className="relaxed"
+                          content="Confirm Status"
+                          />
+                    </div> */}
+                    <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Confirm Status" /></div>
                   </Aux>
                 :
                 null}
               {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
                 <Aux>
-                  <p>
-                    We are currently processing your new {investAccTypes.value} account.
-                    You will recive notification when your account is ready.
-                    Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
-                  </p>
+                  <p>We&apos;ll notify you through email when your account is set up.</p>
                   <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                 </Aux>
                 :

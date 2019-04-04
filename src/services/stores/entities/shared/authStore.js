@@ -285,15 +285,17 @@ export class AuthStore {
         })
         .then((result) => {
           identityStore.setRequestOtpResponse(result.data.requestEmailChange);
+          uiStore.setProgress(false);
           resolve();
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject(err);
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 

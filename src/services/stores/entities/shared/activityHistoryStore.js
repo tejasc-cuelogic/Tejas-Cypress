@@ -107,7 +107,7 @@ export class ActivityHistoryStore {
   @action
   getActivityTypes = () => {
     if (!this.activityTypes.length) {
-      const tempArr = [];
+      const tempArr = [{ text: 'None', value: null }];
       this.activities.forEach((a) => {
         tempArr.push({ text: capitalize(a.activityType).replace(/_/g, ' '), value: a.activityType });
       });

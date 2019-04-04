@@ -10,7 +10,7 @@ import { SubmitButton } from '../../modules/shared/businessApplication/component
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore')
+@inject('navStore', 'uiStore')
 @observer
 export class NavItems extends Component {
   state = { active: '', active2: '', byHideArrow: '' };
@@ -26,11 +26,15 @@ export class NavItems extends Component {
         this.setState({ byHideArrow: name });
       }
     }
+
+    const { setNavExpanded } = this.props.uiStore;
+    setNavExpanded(false); // reset defaultNavExpanded
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
   };
   isActive = (to, location, app, subNavigations) => {
+    const { defaultNavExpanded } = this.props.uiStore;
     if (to === '' && subNavigations) {
       return subNavigations.find(s => location.pathname.startsWith(`/${s.to}`));
     }
@@ -39,7 +43,7 @@ export class NavItems extends Component {
       return false;
     }
     return ((to !== '' && active === to) ||
-      ((this.props.refLoc !== 'public' && (location.pathname.startsWith(`/${app}/${to}`))) ||
+      ((this.props.refLoc !== 'public' && (location.pathname.startsWith(`/${app}/${to}`) || defaultNavExpanded === to)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
   isActiveSubMenu = (to, location, hashCheck = false) => (hashCheck ? (this.props.navStore.currentActiveHash === null && location.hash === '') : this.props.navStore.currentActiveHash === null ? location.hash === to : this.props.navStore.currentActiveHash === to);

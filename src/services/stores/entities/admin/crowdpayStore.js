@@ -188,10 +188,6 @@ export class CrowdpayStore {
         .mutate({
           mutation,
           variables,
-          refetchQueries: [{
-            query: listCrowdPayUsers,
-            variables: { limit: 1000 },
-          }],
         })
         .then(action((data) => {
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
@@ -208,6 +204,7 @@ export class CrowdpayStore {
                 }
                 this.requestState.oldType = this.requestState.type;
                 uiStore.setProgress(false);
+                this.initRequest();
                 resolve();
               })
               .catch(() => {
@@ -219,11 +216,13 @@ export class CrowdpayStore {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(data.data.submitInvestorAccount, 'success');
             uiStore.setProgress(false);
+            this.initRequest();
             resolve();
           } else {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(sMsg, 'success');
             uiStore.setProgress(false);
+            this.initRequest();
             resolve();
           }
         }))

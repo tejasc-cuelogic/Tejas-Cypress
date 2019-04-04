@@ -106,7 +106,8 @@ export default class MultiStep extends React.Component {
 
   handleKeyDown(evt) {
     if ((evt.which === 13 && (evt.target.name !== 'bankName') &&
-      (!this.props.steps[this.state.compState].disableNextButton))) {
+      (!this.props.steps[this.state.compState].disableNextButton) &&
+      !this.props.steps[this.state.compState].disableKeyDown)) {
       this.next();
     }
   }

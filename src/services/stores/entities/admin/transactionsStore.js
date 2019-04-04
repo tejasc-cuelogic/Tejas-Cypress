@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isArray, get, forOwn, intersection } from 'lodash';
+import { isArray, get, forOwn, intersection, filter, find, findIndex } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminDecline, transferRequestAdminVerified, transactionFailed } from '../../queries/transaction';
@@ -36,11 +36,32 @@ export class TransactionsStore {
     search: {
     },
   };
-  @observable btnLoader = null;
+  @observable btnLoader = [];
 
   @action
   setDataValue = (key, value) => {
     this[key] = value;
+  }
+
+  @action
+  addLoadingRequestId = (requestId) => {
+    this.btnLoader.push(requestId);
+  }
+
+  @action
+  removeLoadingRequestId = (requestId, isFailedProcess = false, isApproved = true) => {
+    this.btnLoader = filter(this.btnLoader, btnId => btnId !== requestId);
+    if (isFailedProcess) {
+      return;
+    }
+    if (isApproved) {
+      this.db = filter(this.db, row => row.requestId !== requestId);
+    } else {
+      const index = findIndex(this.db, record => record.requestId === requestId);
+      const transaction = find(this.db, record => record.requestId === requestId);
+      transaction.gsProcessId = true;
+      this.db[index] = transaction;
+    }
   }
 
   @action
@@ -130,15 +151,18 @@ export class TransactionsStore {
 
   @action
   transactionChange = (requestID, transStatus, actionName, direction = '') => {
-    this.setDataValue('btnLoader', requestID);
+    this.addLoadingRequestId(requestID);
     client
       .mutate({
         mutation: this.ctHandler[actionName],
         variables: { id: requestID },
       })
-      .then(() => {
-        this.setDataValue('btnLoader', false);
-        this.initRequest(transStatus);
+      .then((data) => {
+        if (actionName === 'Approved') {
+          this.removeLoadingRequestId(requestID, false, data && get(data, 'data.transferRequestAdminApprove'));
+        } else {
+          this.removeLoadingRequestId(requestID);
+        }
         Helper.toast(`Transaction ${actionName} successfully.`, 'success');
       })
       .catch((error) => {
@@ -147,14 +171,14 @@ export class TransactionsStore {
         } else {
           Helper.toast('Something went wrong please try again after sometime.', 'error');
         }
-        this.setDataValue('btnLoader', false);
+        this.removeLoadingRequestId(requestID, true);
       });
   };
 
   @action
   failTransaction = (requestID, actionName) => {
     const reason = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
-    this.setDataValue('btnLoader', requestID);
+    this.addLoadingRequestId(requestID);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -165,13 +189,13 @@ export class TransactionsStore {
           },
         })
         .then(() => {
-          this.setDataValue('btnLoader', false);
+          this.removeLoadingRequestId(requestID);
           Helper.toast(`Transaction ${actionName} successfully.`, 'success');
           this.initRequest(this.transactionStatus);
           resolve();
         })
         .catch(() => {
-          this.setDataValue('btnLoader', false);
+          this.removeLoadingRequestId(requestID, true);
           Helper.toast('Something went wrong please try again after sometime.', 'error');
           reject();
         });

@@ -132,10 +132,9 @@ export class TransactionStore {
 
   @action
   transact = (amount, operation, includeInFlight = true) => {
-    if (includeInFlight) {
-      this.cash = operation ? money.add(`${this.cash}`, money.format('USD', money.floatToAmount(`${(operation === 'add' ? amount : -amount)}`))) : amount;
-      this.cash = this.cash ? money.format('USD', this.cash.replace(/,/g, '')) : 0.00;
-    } else {
+    this.cash = operation ? money.add(`${this.cash}`, money.format('USD', money.floatToAmount(`${(operation === 'add' ? amount : -amount)}`))) : amount;
+    this.cash = this.cash ? money.format('USD', this.cash.replace(/,/g, '')) : 0.00;
+    if (!includeInFlight) {
       this.availableWithdrawCash = amount ? money.format('USD', amount.replace(/,/g, '')) : 0.00;
     }
   }
@@ -271,6 +270,8 @@ export class TransactionStore {
     uiStore.setProgress();
     const { userDetails } = userDetailsStore;
     const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type || 'TEXT' : 'EMAIL';
+    const { number } = userDetails.phone;
+    const { address } = userDetails.email;
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -278,16 +279,18 @@ export class TransactionStore {
           variables: {
             userId: userStore.currentUser.sub,
             type: otpType,
-            address: otpType === 'EMAIL' ? userDetails.email.address : '',
+            address: otpType === 'EMAIL' ? address : '',
           },
         })
         .then((result) => {
+          const requestMode = otpType === 'EMAIL' ? `code sent to ${address}` : (otpType === 'CALL' ? `call to ${number}` : `code texted to ${number}`);
           this.transactionOtpRequestId = result.data.requestOtp;
           if (userDetails.mfaMode === 'PHONE') {
-            this.setPhoneNumber(userDetails.phone.number);
+            this.setPhoneNumber(number);
           } else {
-            this.setConfirmEmailAddress(userDetails.email.address);
+            this.setConfirmEmailAddress(address);
           }
+          Helper.toast(`Verification ${requestMode}.`, 'success');
           resolve();
         })
         .catch((error) => {
