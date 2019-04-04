@@ -90,7 +90,7 @@ export default class Private extends React.Component {
               />
             ))}
             {Object.keys(routes).map(route => routes[route])}
-            {myRoutes.length === 0 ? <Route component={NotFound} /> :
+            {myRoutes.length > 0 ? <Route component={NotFound} /> :
             <Route component={InlineLoader} />}
           </Switch>
         </SidebarLeftOverlay>
