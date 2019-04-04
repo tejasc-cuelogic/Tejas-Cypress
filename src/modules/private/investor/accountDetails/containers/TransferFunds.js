@@ -24,7 +24,7 @@ export default class TransferFunds extends Component {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
     if (this.props.match.isExact) {
-      this.props.transactionStore.getInvestorAvailableCash();
+      this.props.transactionStore.getInvestorAvailableCash(false);
     }
     this.props.uiStore.clearErrors();
   }
