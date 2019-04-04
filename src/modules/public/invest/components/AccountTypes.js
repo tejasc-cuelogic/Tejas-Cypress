@@ -10,7 +10,7 @@ const AccountTypes = () => (
       <Container>
         <Grid relaxed padded="vertically">
           <Grid.Row>
-            <Grid.Column computer={10} tablet={10} mobile={16} className="side-section">
+            <Grid.Column computer={10} tablet={16} mobile={16} className="side-section">
               <Header as="h2" className="mb-30">Set up the right account for your investment needs.</Header>
               <Grid columns={2} doubling stackable>
                 <Grid.Column>

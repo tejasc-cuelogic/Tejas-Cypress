@@ -17,7 +17,7 @@ export default class PublicSubNav extends Component {
     const { navStatus, subNavStatus } = navStore;
     return (
       <Aux>
-        <Responsive minWidth={768} as={Aux}>
+        <Responsive minWidth={992} as={Aux}>
           <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous>
             <Menu
               secondary

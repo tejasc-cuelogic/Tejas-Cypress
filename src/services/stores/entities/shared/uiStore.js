@@ -1,4 +1,5 @@
-import { action, observable } from 'mobx';
+/* eslint-disable space-unary-ops */
+import { action, observable, computed } from 'mobx';
 import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
 export class UiStore {
@@ -39,6 +40,7 @@ export class UiStore {
   @observable authRef = '';
   @observable htmlEditorImageLoading = false;
   @observable createAccountMessage = null;
+  @observable defaultNavExpandedVal = + new Date();
 
   @action
   setFieldvalue = (field, value) => {
@@ -55,6 +57,22 @@ export class UiStore {
   @action
   resetIsEnterPressed = () => {
     this.isEnterPressed = false;
+  }
+
+  @action
+  setNavExpanded = (value) => {
+    if (value === false) {
+      localStorage.removeItem('defaultNavExpanded');
+    } else {
+      localStorage.setItem('defaultNavExpanded', value);
+    }
+    this.defaultNavExpandedVal = + new Date();
+  }
+
+  doNothing = k => k;
+  @computed get defaultNavExpanded() {
+    this.doNothing(this.defaultNavExpandedVal);
+    return localStorage.getItem('defaultNavExpanded') || false;
   }
 
   @action

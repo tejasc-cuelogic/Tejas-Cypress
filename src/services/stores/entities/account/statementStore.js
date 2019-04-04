@@ -104,18 +104,22 @@ export class StatementStore {
   }
 
   getDateRange = (statementObj) => {
-    const dateStart = statementObj.date ? moment(new Date(statementObj.date)) : '';
-    const dateEnd = moment();
-    const timeValues = [];
-    while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
-      timeValues.push(dateStart.format('MM/DD/YYYY'));
-      dateStart.add(1, statementObj.rangeParam);
+    try {
+      const dateStart = statementObj.date ? moment(new Date(statementObj.date)) : '';
+      const dateEnd = moment();
+      const timeValues = [];
+      while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
+        timeValues.push(dateStart.format('MM/DD/YYYY'));
+        dateStart.add(1, statementObj.rangeParam);
+      }
+      const fifthDateOfMonth = moment().startOf('month').day(6);
+      if (fifthDateOfMonth > dateEnd) {
+        timeValues.pop();
+      }
+      return timeValues.reverse();
+    } catch (e) {
+      return [];
     }
-    const fifthDateOfMonth = moment().startOf('month').day(6);
-    if (fifthDateOfMonth > dateEnd) {
-      timeValues.pop();
-    }
-    return timeValues.reverse();
   }
 
   @action

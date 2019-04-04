@@ -188,10 +188,6 @@ export class CrowdpayStore {
         .mutate({
           mutation,
           variables,
-          refetchQueries: [{
-            query: listCrowdPayUsers,
-            variables: { limit: 1000 },
-          }],
         })
         .then(action((data) => {
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
