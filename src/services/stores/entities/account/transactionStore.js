@@ -387,7 +387,7 @@ export class TransactionStore {
     });
   }
   @action
-  getInvestorAvailableCash = (includeInFlight = true) => {
+  getInvestorAvailableCash = (includeInFlight = false) => {
     const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
