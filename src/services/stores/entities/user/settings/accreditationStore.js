@@ -879,7 +879,7 @@ export class AccreditationStore {
       // return headerSubheaderTextObj;
     } else if ((!showAccountList && !isDocumentUpload) ||
       (!isDocumentUpload && accountCreated.values.length === 1)) {
-      headerSubheaderTextObj.header = null;
+      headerSubheaderTextObj.header = 'Yikes, sorry.';
       headerSubheaderTextObj.subHeader = '';
       // return headerSubheaderTextObj;
     } else {
@@ -896,16 +896,16 @@ export class AccreditationStore {
         const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
         switch (userCurrentState) {
           case 'PENDING':
-            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : `Accreditation Verification for ${accountType} Investor Account In Review`;
-            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'This investment is only available to accredited investors.';
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'NOT_ELGIBLE':
-            headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account Required`;
-            headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
+            headerSubheaderTextObj.header = 'This investment is only available to accredited investors.';
+            headerSubheaderTextObj.subHeader = 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'INACTIVE':
-            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? 'Are you an accredited investor?' : `Accreditation Verification for ${accountType} Investor Account Required`;
-            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'You must be an accredited investor to make an investment in this offering.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? 'Are you an accredited investor?' : 'This investment is only available to accredited investors.';
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'EXPIRED':
             // headerSubheaderTextObj.header = `Accreditation Expired for ${accountType}
@@ -913,15 +913,21 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
             break;
           case 'PROCESSING':
-            headerSubheaderTextObj.header = `New ${accountType} Account Processing`;
+            headerSubheaderTextObj.header = 'Your account is being processed.';
             headerSubheaderTextObj.subHeader = '';
             break;
           case 'PARTIAL':
             headerSubheaderTextObj.header = `You do not have a full ${accountType} Investment Account.`;
             headerSubheaderTextObj.subHeader = '';
             break;
+          case 'USER-PARTIAL':
+            headerSubheaderTextObj.header = 'This investment is only available verified investors.';
+            headerSubheaderTextObj.subHeader = '';
+            break;
           case 'FROZEN':
-            headerSubheaderTextObj.header = `Your ${accountType} Account Is Frozen For Investments.`;
+            // headerSubheaderTextObj.header =
+            // `Your ${accountType} Account Is Frozen For Investments.`;
+            headerSubheaderTextObj.header = 'This investment account is frozen.';
             headerSubheaderTextObj.subHeader = '';
             break;
           default:
