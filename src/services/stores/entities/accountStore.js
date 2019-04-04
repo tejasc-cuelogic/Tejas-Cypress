@@ -20,11 +20,11 @@ export class AccountStore {
     );
   }
 
-  accountToastMessage = (currentStep, actionName) => {
-    const { isValid } = bankAccountStore.formAddFunds.meta;
-    if (currentStep.name === 'Link bank' && isValid) {
+  accountToastMessage = (currentStep, actionName, formName = 'formAddFunds') => {
+    const { isValid, isDirty } = bankAccountStore[formName].meta;
+    if (isValid && isDirty) {
       const actionPerformed = isValid ? 'submitted' : actionName;
-      Helper.toast(`${isValid ? 'Add Funds' : currentStep.name} ${actionPerformed} successfully.`, 'success');
+      Helper.toast(`${(isValid && isDirty) ? 'Add Funds' : currentStep.name} ${actionPerformed} successfully.`, 'success');
     } else if (currentStep.name !== 'Link bank') {
       Helper.toast(`${currentStep.name} ${actionName} successfully.`, 'success');
     }
