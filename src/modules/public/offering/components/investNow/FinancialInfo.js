@@ -65,7 +65,9 @@ class FinancialInfo extends Component {
     const campaignRegulation = get(campaign, 'keyTerms.regulation');
     const accreditationStatus = get(userDetails, 'accreditation.status');
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
-    const showLimitComponent = offeringReuglation === 'BD_CF_506C' ? !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus) : true;
+    // const showLimitComponent = offeringReuglation === 'BD_CF_506C' ?
+    //  !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus) : true;
+    const showLimitComponent = offeringReuglation === 'BD_506C' ? false : !(offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
     if (!getCurrentInvestNowHealthCheck) {
       return <Spinner loaderMessage="Loading.." />;
     }
