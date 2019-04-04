@@ -19,6 +19,14 @@ export const linkBankRequestManual = gql`
     }
   }
 `;
+export const validateBankAccount = gql`
+  mutation validateBankAccount($accountNumber: String!, $routingNumber: String!, $accountId: String!, $accountType:  InvestorAccountTypeEnum!) {
+    validateBankAccount(accountNumber: $accountNumber, routingNumber: $routingNumber, accountId: $accountId, accountType: $accountType ) {
+      responseCode
+      bankName
+    }
+  }
+  `;
 
 export const linkBankRequestCancel = gql`
   mutation linkBankRequestCancel($accountId: String!) {
