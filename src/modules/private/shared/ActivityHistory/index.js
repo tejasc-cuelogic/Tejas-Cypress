@@ -36,14 +36,14 @@ export default class ActivityHistory extends Component {
         <div className="search-filters more inner-content-spacer">
           <Form>
             <Grid columns={4}>
-              {showFilters && showFilters.includes('activityType') &&
+              {showFilters && showFilters.includes('activityType') && activityTypes.length > 1 &&
                 <Grid.Column>
                   <DropdownFilter value={requestState.filters.activityType} keyName="activityType" change={this.setSearchParam} name="Activity Type" options={activityTypes} />
                 </Grid.Column>
               }
               {showFilters && showFilters.includes('activityUserType') &&
                 <Grid.Column>
-                  <DropdownFilter value={requestState.filters.activityUserType} keyName="activityUserType" change={this.setSearchParam} name="User Type" options={FILTER_META.activityUserType.filter(i => i.applicable.includes(this.props.module))} />
+                  <DropdownFilter value={requestState.filters.activityUserType} keyName="activityUserType" change={this.setSearchParam} name="User Type" options={FILTER_META.activityUserType.filter(i => !i.applicable || i.applicable.length === 0 || i.applicable.includes(this.props.module))} />
                 </Grid.Column>
               }
               {showFilters && showFilters.includes('ActivityDate') &&

@@ -4,7 +4,7 @@ import { Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import MonthlyStatements from '../components/statements/MonthlyStatements';
+// import MonthlyStatements from '../components/statements/MonthlyStatements';
 import TaxForms from '../components/statements/TaxForms';
 
 const getModule = component => Loadable({
@@ -15,7 +15,7 @@ const getModule = component => Loadable({
 });
 
 const navItems = [
-  { title: 'Monthly Statements', to: 'monthly-statements', component: MonthlyStatements },
+  // { title: 'Monthly Statements', to: 'monthly-statements', component: MonthlyStatements },
   { title: 'Tax Forms', to: 'tax-forms', component: TaxForms },
 ];
 

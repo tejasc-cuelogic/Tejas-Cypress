@@ -177,7 +177,7 @@ export default class Media extends Component {
           }
         </Grid>
         <Divider section />
-        <Grid columns={2} stackable>
+        {/* <Grid columns={2} stackable>
           {['useOfProceeds',
           // 'businessModelImage'
           ].map(field => (
@@ -187,7 +187,8 @@ export default class Media extends Component {
                 {MEDIA_FRM.fields[field].preSignedUrl ? (
                   <div className="file-uploader attached">
                     {!isReadonly &&
-                      <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
+                      <Button onClick={() => this.showConfirmModal(field)} circular
+                      icon={{ className: 'ns-close-light' }} />
                     }
                     <Image64 srcUrl={MEDIA_FRM.fields[field].preSignedUrl} />
                   </div>
@@ -211,7 +212,7 @@ export default class Media extends Component {
             </Grid.Column>))
             }
         </Grid>
-        <Divider section />
+        <Divider section /> */}
         <Header as="h4">Gallery</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>

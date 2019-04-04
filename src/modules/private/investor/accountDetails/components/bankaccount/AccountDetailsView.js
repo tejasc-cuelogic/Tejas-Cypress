@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
@@ -20,7 +21,10 @@ export default class AccountDetailsView extends Component {
       accountDetails.plaidInstitutionId : null;
 
     if (activeBankInstutationId) {
-      bankAccountActions.getById(activeBankInstutationId, accountType);
+      this.props.bankAccountStore.setFieldValue('loadingState', true);
+      bankAccountActions.getById(activeBankInstutationId, accountType).then(() => {
+        this.props.bankAccountStore.setFieldValue('loadingState', false);
+      });
     } else if (accountType === 'active') {
       this.props.bankAccountStore.setActiveBankPlaidLogo(null);
     } else if (accountType === 'pending') {
@@ -40,7 +44,7 @@ export default class AccountDetailsView extends Component {
       accountDetails, click, match, accountType, pendingAccoungDetails, uiStore,
       userDetailsStore,
     } = this.props;
-    const { activeBankPladLogo, pendingBankPladLogo } = this.props.bankAccountStore;
+    const { activeBankPladLogo, pendingBankPladLogo, loadingState } = this.props.bankAccountStore;
     const pladidLogo = accountType === 'pending' ?
       pendingBankPladLogo : activeBankPladLogo;
     let currentStaus = '';
@@ -49,6 +53,9 @@ export default class AccountDetailsView extends Component {
     } else {
       currentStaus = accountDetails.status ?
         LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+    }
+    if (loadingState) {
+      return <InlineLoader />;
     }
     return (
       <Card.Content>

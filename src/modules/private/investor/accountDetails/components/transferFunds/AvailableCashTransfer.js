@@ -21,7 +21,7 @@ class AvailableCashTransfer extends Component {
                   <Statistic.Label>Available cash
                     <Popup
                       trigger={<Icon className="ns-help-circle" />}
-                      content="Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits."
+                      content="Available cash includes funds that are immediately available for withdrawal. This excludes pending incoming deposits, pending investments, and investment credits."
                       position="top center"
                       wide
                     />

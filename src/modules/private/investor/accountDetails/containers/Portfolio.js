@@ -5,7 +5,7 @@ import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
-import money from 'money-math';
+// import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
@@ -71,14 +71,41 @@ export default class Portfolio extends Component {
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(redirectURL);
   }
+  routesList = () => {
+    const { match } = this.props;
+    return (
+      <Aux>
+        <Route
+          path={`${match.url}/investment-details/:id`}
+          render={props => <InvestmentDetails refLink={match.url} {...props} />}
+        />
+        <Route
+          path={`${match.url}/:offeringId/invest-now`}
+          render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
+        />
+        <Route path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
+        <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
+        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
+        <Route
+          path={`${match.url}/cancel-investment/:id`}
+          render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
+        />
+      </Aux>
+    );
+  }
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     if (portfolioStore.loading) {
-      return <InlineLoader />;
+      return (
+        <Aux>
+          <InlineLoader />
+          {this.routesList()}
+        </Aux>
+      );
     }
     const { getInvestorAccounts, getPieChartData } = portfolioStore;
-    const tnarValue = get(getInvestorAccounts, 'tnar');
+    // const tnarValue = get(getInvestorAccounts, 'tnar');
     const summaryDetails = {
       isAccountFrozen: isUserAccountFrozen,
       accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
@@ -93,9 +120,13 @@ export default class Portfolio extends Component {
         {
           title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
-        {
-          title: 'TNAR', content: tnarValue && !money.isZero(tnarValue) ? tnarValue : 'N/A', type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link target="_blank" to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
-        },
+        // {
+        //   title: 'TNAR', content: tnarValue && !money.isZero(tnarValue) ? tnarValue :
+        // 'N/A', type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates
+        // the overall financial return on your investment portfolio. See the <Link
+        // target="_blank" to="/resources/education-center">Education Center</Link> for a
+        // full explanation of how TNAR is calculated.</span>,
+        // },
       ],
     };
     const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
@@ -113,13 +144,13 @@ export default class Portfolio extends Component {
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
         }
         {activeSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={activeSorted.length} match={match} /> : null
         }
         {completedSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&
@@ -129,26 +160,12 @@ export default class Portfolio extends Component {
             <Card>
               <Card.Content>
                 <Header as="h4">Browse the latest investment opportunities.</Header>
-                <Button as={Link} to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+                <Button as={Link} target="_blank" to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
               </Card.Content>
             </Card>
           </Aux> : null
         }
-        <Route
-          path={`${match.url}/investment-details/:id`}
-          render={props => <InvestmentDetails refLink={match.url} {...props} />}
-        />
-        <Route
-          path={`${match.url}/:offeringId/invest-now`}
-          render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
-        />
-        <Route path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
-        <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
-        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
-        <Route
-          path={`${match.url}/cancel-investment/:id`}
-          render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
-        />
+        {this.routesList()}
         <IframeModal
           open={this.state.open}
           close={this.closeModal}

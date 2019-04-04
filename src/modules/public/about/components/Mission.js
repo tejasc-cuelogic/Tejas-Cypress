@@ -8,7 +8,7 @@ const Mission = () => (
     <section>
       <Container>
         <Responsive maxWidth={767} as={Aux}>
-          <Header as="h2">Everyone thrives when we invest in each other.</Header>
+          <Header as="h2">Invest in each other.<br /> Grow together.</Header>
           <Divider section />
         </Responsive>
         <Grid centered stackable>
@@ -29,8 +29,8 @@ const Mission = () => (
               <p>
                 Through NextSeed, local entrepreneurs are building places people love, creating
                 jobs, and making a tangible impact in their neighborhoods. Investors are getting
-                access to private investment opportunities once reserved for the wealthy, and
-                connecting with the businesses that matter most to them.
+                access to private investment opportunities once reserved for the well-connected and
+                engaging with the businesses that matter most to them.
               </p>
             </Grid.Column>
             <Grid.Column width={8}>

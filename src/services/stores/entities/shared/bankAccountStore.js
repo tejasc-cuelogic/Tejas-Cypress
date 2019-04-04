@@ -4,7 +4,7 @@ import { isEmpty, map, uniqWith, isEqual, find, get } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
-import { linkBankRequestPlaid, linkBankRequestManual, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
+import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
@@ -36,6 +36,7 @@ export class BankAccountStore {
   @observable db;
   @observable linkbankSummary = false;
   @observable shouldValidateAmount = false;
+  @observable loadingState = false;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -49,6 +50,11 @@ export class BankAccountStore {
   @action
   setDb = (data) => {
     this.db = ClientDb.initiateDb(data, null, null, null, true);
+  }
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
   }
   @action
   setDepositMoneyNow(status) {
@@ -429,6 +435,37 @@ export class BankAccountStore {
           reject(error.message);
         }).finally(() => {
           this.setLinkedBankCancelRequestStatus(false);
+          uiStore.setProgress(false);
+        });
+      // .catch (() => Helper.toast('Error', 'error'));
+    });
+  }
+
+  @action
+  validateManualAccount = (accountType) => {
+    // const data = Validator.ExtractValues(this.formLinkBankManually.fields);
+    const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
+    const accountDetails = find(
+      userDetailsStore.currentUser.data.user.roles,
+      { name: accountType },
+    );
+    return new Promise((resolve) => {
+      client
+        .mutate({
+          mutation: validateBankAccount,
+          variables: {
+            accountNumber: accountNumber.value,
+            routingNumber: routingNumber.value,
+            accountId: get(accountDetails, 'details.accountId'),
+            accountType: accountType.toUpperCase(),
+          },
+        })
+        .then(() => {
+          uiStore.setProgress(false);
+          resolve();
+        })
+        .catch((error) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(error));
           uiStore.setProgress(false);
         });
       // .catch (() => Helper.toast('Error', 'error'));

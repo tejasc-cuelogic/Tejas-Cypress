@@ -24,6 +24,7 @@ import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+  @observable userFirstLoad = false;
   @observable currentActiveAccount = null;
   @observable isAddressSkip = false;
   @observable isFrozen = false;
@@ -174,6 +175,9 @@ export class UserDetailsStore {
         if (!this.currentUser.loading) {
           identityStore.setProfileInfo(this.userDetails);
           accountStore.setInvestmentAccTypeValues(this.validAccTypes);
+          if (this.userFirstLoad === false) {
+            this.userFirstLoad = true;
+          }
           res(result);
           const user = { ...this.currentUser };
           this.currentUser.data &&

@@ -145,7 +145,7 @@ class IndividualAccountStore {
               // FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
               if (!bankAccountStore.depositMoneyNow) {
                 // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-              } else if (currentStep.name !== 'Add funds' && isValid) {
+              } else if (currentStep.name === 'Add funds' && isValid) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
             } else {

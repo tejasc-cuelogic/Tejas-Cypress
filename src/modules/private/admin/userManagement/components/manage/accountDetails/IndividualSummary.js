@@ -32,7 +32,7 @@ const IndividualSummary = ({
     </Table.Row>
     <Table.Row>
       <Table.Cell>Your Initial Deposit</Table.Cell>
-      <Table.Cell>{get(account, 'details.initialDepositAmount') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) : 'N/A'}</Table.Cell>
+      <Table.Cell>{(get(account, 'details.initialDepositAmount') && get(account, 'details.initialDepositAmount') !== '-1.00') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) : 'N/A'}</Table.Cell>
     </Table.Row>
   </Table.Body>
 );
