@@ -8,7 +8,7 @@ import { Header, Divider, List } from 'semantic-ui-react';
 const TermsOfUse = () => (
   <Aux>
     <Header as="h2">Terms of Use</Header>
-    <p>Revision Date: 11/21/2018 <br />Questions or Comments: info@nextseed.com</p>
+    <p>Revision Date: April 8, 2019 <br />Questions or Comments: info@nextseed.com</p>
     <Divider section />
     <div className="justify-text legal-desc">
       <Header as="h5">INTRODUCTION</Header>
