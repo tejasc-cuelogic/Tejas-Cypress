@@ -30,10 +30,9 @@ export default class TermNotes extends Component {
                   How does it work?
                 </Header>
                 <Item.Description>
-                  Term notes offer fixed monthly payments at a set interest rate.
-                  Each month, your payments are steady and predictable. Plus,
-                  with no prepayment penalty, you can pay off the entire balance
-                  early without incurring a fee.
+                  Term notes have fixed payments at a set interest rate, allowing
+                  you to reliably forecast your cashflow. Plus, with no prepayment
+                  penalty, you can pay off the entire balance early without incurring a fee.
                 </Item.Description>
               </Item.Content>
             </Item>

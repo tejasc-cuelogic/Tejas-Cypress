@@ -8,7 +8,7 @@ import { Header, Divider, List } from 'semantic-ui-react';
 const PrivacyPolicy = () => (
   <Aux>
     <Header as="h2">NextSeed Services LLC Privacy Policy</Header>
-    <p>Last updated: March 2019</p>
+    <p>Last updated: April 8, 2019</p>
     <Divider section />
     <div className="justify-text privacy-policy">
       <p>
@@ -23,7 +23,7 @@ const PrivacyPolicy = () => (
       <p>
         This Privacy Policy applies to Personal Information collected or processed through the
         Site and the Platform (collectively, the “Service”).  In addition to this Privacy Policy,
-        please refer to the <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">NextSeed Securities, LLC Privacy Notice</a>
+        please refer to the <a href="https://nextseed.com/agreements/legal/legal-documents" target="_blank" rel="noopener noreferrer">NextSeed Securities, LLC Privacy Notice</a>
         {' '}for information on how NextSeed Securities, LLC handles non-public personal information
         (as defined by federal law) of its customers.
       </p>
@@ -336,7 +336,7 @@ const PrivacyPolicy = () => (
         </p>
         <Divider hidden />
         <Header as="h5">Appendix: NextSeed Service Providers</Header>
-        <p>Last updated: March 2019</p>
+        <p>Last updated:  March 2019</p>
         <p>
           We employ service providers to perform tasks on our behalf and to assist us in
           providing the Service. For more information, please contact us at{' '}
