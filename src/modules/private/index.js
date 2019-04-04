@@ -55,7 +55,8 @@ export default class Private extends React.Component {
 
   render() {
     const User = { ...this.props.userStore.currentUser };
-    const { signupStatus, userDetails } = this.props.userDetailsStore;
+    const { signupStatus, userDetails, currentUser } = this.props.userDetailsStore;
+    const { myRoutes } = this.props.navStore;
     const { info } = userDetails;
     const { match } = this.props;
     const UserInfo = {
@@ -66,6 +67,9 @@ export default class Private extends React.Component {
     };
     const routes = this.getPrivateRoutes(UserInfo.roles);
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    if (currentUser.loading !== false) {
+      return <InlineLoader />;
+    }
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <SidebarLeftOverlay
@@ -86,7 +90,8 @@ export default class Private extends React.Component {
               />
             ))}
             {Object.keys(routes).map(route => routes[route])}
-            <Route component={NotFound} />
+            {myRoutes.length === 0 ? <Route component={NotFound} /> :
+            <Route component={InlineLoader} />}
           </Switch>
         </SidebarLeftOverlay>
       );

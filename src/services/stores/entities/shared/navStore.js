@@ -47,6 +47,10 @@ export class NavStore {
         ...userDetailsStore.signupStatus.processingAccounts,
         ...userDetailsStore.signupStatus.frozenAccounts];
     }
+
+    if (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0]) {
+      return [];
+    }
     const routes = _.filter(
       this.NAV_ITEMS,
       n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
