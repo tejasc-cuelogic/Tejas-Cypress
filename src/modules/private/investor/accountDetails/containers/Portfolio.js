@@ -71,11 +71,38 @@ export default class Portfolio extends Component {
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(redirectURL);
   }
+  routesList = () => {
+    const { match } = this.props;
+    return (
+      <Aux>
+        <Route
+          path={`${match.url}/investment-details/:id`}
+          render={props => <InvestmentDetails refLink={match.url} {...props} />}
+        />
+        <Route
+          path={`${match.url}/:offeringId/invest-now`}
+          render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
+        />
+        <Route path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
+        <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
+        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
+        <Route
+          path={`${match.url}/cancel-investment/:id`}
+          render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
+        />
+      </Aux>
+    );
+  }
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     if (portfolioStore.loading) {
-      return <InlineLoader />;
+      return (
+        <Aux>
+          <InlineLoader />
+          {this.routesList()}
+        </Aux>
+      );
     }
     const { getInvestorAccounts, getPieChartData } = portfolioStore;
     const tnarValue = get(getInvestorAccounts, 'tnar');
@@ -134,21 +161,7 @@ export default class Portfolio extends Component {
             </Card>
           </Aux> : null
         }
-        <Route
-          path={`${match.url}/investment-details/:id`}
-          render={props => <InvestmentDetails refLink={match.url} {...props} />}
-        />
-        <Route
-          path={`${match.url}/:offeringId/invest-now`}
-          render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
-        />
-        <Route path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
-        <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
-        <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
-        <Route
-          path={`${match.url}/cancel-investment/:id`}
-          render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
-        />
+        {this.routesList()}
         <IframeModal
           open={this.state.open}
           close={this.closeModal}
