@@ -36,6 +36,7 @@ export class BankAccountStore {
   @observable db;
   @observable linkbankSummary = false;
   @observable shouldValidateAmount = false;
+  @observable loadingState = false;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -49,6 +50,11 @@ export class BankAccountStore {
   @action
   setDb = (data) => {
     this.db = ClientDb.initiateDb(data, null, null, null, true);
+  }
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
   }
   @action
   setDepositMoneyNow(status) {

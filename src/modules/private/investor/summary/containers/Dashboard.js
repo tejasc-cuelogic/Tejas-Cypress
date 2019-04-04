@@ -91,7 +91,7 @@ export default class Dashboard extends Component {
                   <Card>
                     <Card.Content>
                       <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
-                      <Button fluid as={Link} compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
+                      <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
                       <Divider hidden />
                     </Card.Content>
                   </Card>
