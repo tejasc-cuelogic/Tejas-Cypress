@@ -55,7 +55,7 @@ export class ReferralStore {
     });
   });
 
-  getUserReferralDetails = () => new Promise((resolve) => {
+  getUserReferralDetails = () => new Promise((resolve, reject) => {
     const { userDetails } = userDetailsStore;
     graphql({
       client,
@@ -67,7 +67,10 @@ export class ReferralStore {
           resolve(data);
         }
       },
-      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
     });
   });
 

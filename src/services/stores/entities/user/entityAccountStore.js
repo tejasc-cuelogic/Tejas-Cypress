@@ -473,6 +473,7 @@ class EntityAccountStore {
         })
         .then(action((result) => {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
+          accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
@@ -497,7 +498,6 @@ class EntityAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);

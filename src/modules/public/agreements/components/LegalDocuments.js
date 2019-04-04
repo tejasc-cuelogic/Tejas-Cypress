@@ -28,6 +28,9 @@ const legalDocsMeta = [
   {
     id: 6, docName: (<Aux>NextSeed US LLC Membership Agreement</Aux>), refEnum: 'MEMBERSHIP_AGREEMENT',
   },
+  {
+    id: 7, docName: (<Aux>Regulation Crowdfunding<br /> Welcome Kit</Aux>), refEnum: 'INVESTOR_WELCOME_PACKET',
+  },
 ];
 
 @inject('agreementsStore')

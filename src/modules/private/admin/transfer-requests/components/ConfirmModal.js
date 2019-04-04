@@ -32,7 +32,7 @@ export default class ConfirmModal extends Component {
   }
   render() {
     const { formChange, TRANSACTION_FAILURE, btnLoader } = this.props.transactionsStore;
-    const { statusType } = this.props.match.params;
+    const { statusType, requestId } = this.props.match.params;
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Header className="signup-header">
@@ -47,7 +47,7 @@ export default class ConfirmModal extends Component {
               changed={(e, result) => formChange(e, result, 'TRANSACTION_FAILURE')}
             />
             <div className="center-align mt-30">
-              <Button className="red relaxed" content={`Confirm ${statusType === 'pending' ? 'Decline' : 'Failure'}`} loading={btnLoader} disabled={!TRANSACTION_FAILURE.meta.isValid} onClick={this.handleConfirm} />
+              <Button className="red relaxed" content={`Confirm ${statusType === 'pending' ? 'Decline' : 'Failure'}`} loading={btnLoader.includes(parseInt(requestId, 10))} disabled={!TRANSACTION_FAILURE.meta.isValid} onClick={this.handleConfirm} />
             </div>
           </Form>
         </Modal.Content>

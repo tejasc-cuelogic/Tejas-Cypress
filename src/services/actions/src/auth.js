@@ -20,6 +20,8 @@ import {
   bankAccountStore,
   individualAccountStore,
   portfolioStore,
+  investmentStore,
+  accreditationStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -611,17 +613,7 @@ export class Auth {
       localStorage.removeItem('defaultNavExpanded');
       authStore.setUserLoggedIn(false);
       userStore.forgetUser();
-      authStore.resetStoreData();
-      accountStore.resetStoreData();
-      identityStore.resetStoreData();
-      investorProfileStore.resetStoreData();
-      userDetailsStore.resetStoreData();
-      iraAccountStore.resetStoreData();
-      entityAccountStore.resetStoreData();
-      bankAccountStore.resetStoreData();
-      individualAccountStore.resetStoreData();
-      portfolioStore.resetPortfolioData();
-      uiStore.clearErrors();
+      this.clearMobxStore();
       res();
     })
     // Clear all AWS credentials
@@ -644,22 +636,28 @@ export class Auth {
       localStorage.removeItem('lastActiveTime');
       localStorage.removeItem('defaultNavExpanded');
       AWS.config.clear();
-      authStore.resetStoreData();
-      accountStore.resetStoreData();
-      identityStore.resetStoreData();
-      investorProfileStore.resetStoreData();
-      userDetailsStore.resetStoreData();
-      iraAccountStore.resetStoreData();
-      entityAccountStore.resetStoreData();
-      bankAccountStore.resetStoreData();
-      individualAccountStore.resetStoreData();
-      portfolioStore.resetPortfolioData();
-      uiStore.clearErrors();
+      this.clearMobxStore();
       res();
     })
     // Clear all AWS credentials
   );
-
+  clearMobxStore = () => {
+    authStore.resetStoreData();
+    accountStore.resetStoreData();
+    identityStore.resetStoreData();
+    investorProfileStore.resetStoreData();
+    userDetailsStore.resetStoreData();
+    iraAccountStore.resetStoreData();
+    entityAccountStore.resetStoreData();
+    bankAccountStore.resetStoreData();
+    individualAccountStore.resetStoreData();
+    portfolioStore.resetPortfolioData();
+    userDetailsStore.setPartialInvestmenSession();
+    investmentStore.resetData();
+    investmentStore.resetAccTypeChanged();
+    accreditationStore.resetUserAccreditatedStatus();
+    uiStore.clearErrors();
+  }
   simpleErr = err => ({
     statusCode: err.statusCode,
     code: err.code,

@@ -371,6 +371,7 @@ class IraAccountStore {
         })
         .then(action((result) => {
           this.iraAccountId = result.data.upsertInvestorAccount.accountId;
+          accountStore.accountToastMessage(currentStep, actionPerformed);
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
@@ -388,7 +389,6 @@ class IraAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);

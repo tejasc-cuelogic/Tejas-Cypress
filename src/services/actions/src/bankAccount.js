@@ -55,8 +55,12 @@ export class BankAccount {
           } else {
             bankAccountStore.setActiveBankPlaidLogo(data.body.institution.logo);
           }
+          resolve();
         })
-        .catch(() => reject())
+        .catch(() => {
+          bankAccountStore.changeLoadingState('loadingState', false);
+          reject();
+        })
         .finally(() => { });
     });
   }

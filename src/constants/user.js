@@ -104,12 +104,14 @@ export const FILTER_META = {
     { text: 'Elastic Search Job Id', value: ACTIVITY_HISTORY_TYPES.ES_JOBID },
   ],
   activityUserType: [
-    { text: 'Admin', value: ACTIVITY_HISTORY_SCOPE.ADMIN, applicable: ['elasticSearch', 'offeringDetails', 'applicationDetails', 'userDetails'] },
-    { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER, applicable: ['elasticSearch', 'offeringDetails', 'applicationDetails', 'userDetails'] },
-    { text: 'Investor', value: ACTIVITY_HISTORY_SCOPE.INVESTOR, applicable: ['elasticSearch', 'offeringDetails', 'applicationDetails', 'userDetails'] },
-    { text: 'Dev', value: ACTIVITY_HISTORY_SCOPE.DEV, applicable: ['elasticSearch', 'offeringDetails', 'applicationDetails', 'userDetails'] },
+    { text: 'None', value: null, applicable: [] },
+    { text: 'Admin', value: ACTIVITY_HISTORY_SCOPE.ADMIN, applicable: [] },
+    { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER, applicable: [] },
+    { text: 'Investor', value: ACTIVITY_HISTORY_SCOPE.INVESTOR, applicable: [] },
+    { text: 'Dev', value: ACTIVITY_HISTORY_SCOPE.DEV, applicable: [] },
   ],
   subType: [
+    { text: 'None', value: null },
     { text: 'Users', value: 'USERS' },
     { text: 'Linked Bank', value: 'LINKED_BANK' },
     { text: 'Acceditation', value: 'ACCREDITATION' },

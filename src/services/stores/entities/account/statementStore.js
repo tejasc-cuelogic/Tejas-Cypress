@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { observable, computed, action } from 'mobx';
-import { orderBy } from 'lodash';
+import { orderBy, find, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
@@ -17,6 +17,7 @@ export class StatementStore {
     displayTillIndex: 10,
     search: {},
   };
+  @observable taxFormsCount = 0;
   @observable isAdmin = false;
 
   @action
@@ -140,8 +141,9 @@ export class StatementStore {
     const { taxStatement } = this.isAdmin ?
       userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
       userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatement && taxStatement.length && orderBy(taxStatement, ['year'], ['desc'])
+    this.taxFormsCount = (taxStatement && taxStatement.length && orderBy(taxStatement, ['year'], ['desc'])
       .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return this.taxFormsCount;
   }
 
   @computed get loading() {
@@ -156,6 +158,16 @@ export class StatementStore {
     const { taxStatement } = this.isAdmin ?
       userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
       userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatement && taxStatement.length) || 0;
+  }
+
+  getTaxFormCountInNav = (accountType) => {
+    const accDetails = find(userDetailsStore.userDetails.roles, account =>
+      account.name === accountType &&
+      account.name !== 'investor' &&
+      account && account.details &&
+        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+    const taxStatement = get(accDetails, 'details.taxStatement');
     return (taxStatement && taxStatement.length) || 0;
   }
 
