@@ -3,7 +3,7 @@ import { matchPath } from 'react-router-dom';
 import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
-import { userStore, userDetailsStore, offeringsStore } from '../../index';
+import { userStore, userDetailsStore, offeringsStore, statementStore } from '../../index';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class NavStore {
@@ -86,6 +86,14 @@ export class NavStore {
             n.env.length === 0 ||
             _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
         nItem.subNavigations = [...newSubNav];
+        if (userStore.isInvestor && ['Individual', 'IRA', 'Entity'].includes(nItem.title)) {
+          if (statementStore.getTaxFormCountInNav(nItem.title.toLocaleLowerCase()) === 0) {
+            nItem.subNavigations = _.filter(
+              nItem.subNavigations,
+              subNavigation => subNavigation.component !== 'Statements',
+            );
+          }
+        }
       }
       filteredNavs.push(nItem);
     });
@@ -162,6 +170,13 @@ export class NavStore {
     if (this.navMeta && this.navMeta.subNavigations &&
         acctiveAccountList && acctiveAccountList.length === 0) {
       this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
+    }
+    if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations &&
+      statementStore.getTaxFormCountInNav(this.navMeta.title.toLocaleLowerCase()) === 0) {
+      this.navMeta.subNavigations = _.filter(
+        this.navMeta.subNavigations,
+        subNavigation => subNavigation.component !== 'Statements',
+      );
     }
   }
 
