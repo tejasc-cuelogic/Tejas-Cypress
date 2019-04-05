@@ -123,28 +123,24 @@ class EntityAccountStore {
       accountType: 'ENTITY',
     };
     return new Promise((resolve, reject) => {
-      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
-        client
-          .mutate({
-            mutation: submitinvestorAccount,
-            variables: payLoad,
-          })
-          .then(() => {
-            this.setFieldValue('showProcessingModal', true);
-            bankAccountStore.resetStoreData();
-            this.isFormSubmitted = true;
-            Helper.toast('Entity account submitted successfully.', 'success');
-            resolve();
-          })
-          .catch((err) => {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.resetcreateAccountMessage();
-            uiStore.setProgress(false);
-            reject();
-          });
-      }).catch((e) => {
-        console.log(e);
-      });
+      client
+        .mutate({
+          mutation: submitinvestorAccount,
+          variables: payLoad,
+        })
+        .then(() => {
+          this.setFieldValue('showProcessingModal', true);
+          bankAccountStore.resetStoreData();
+          this.isFormSubmitted = true;
+          Helper.toast('Entity account submitted successfully.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          uiStore.resetcreateAccountMessage();
+          uiStore.setProgress(false);
+          reject();
+        });
     });
   }
 

@@ -394,8 +394,6 @@ class AccountType extends Component {
                                 <Button
                                   as={Link}
                                   to={redirectURL}
-                                  onClick={e =>
-                                    this.handlBackToOffering(e)}
                                   primary
                                   className="relaxed"
                                   content="Confirm Status"
