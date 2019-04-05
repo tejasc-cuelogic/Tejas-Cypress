@@ -145,12 +145,10 @@ class IraAccountStore {
   @action
   submitAccount = () => new Promise((resolve) => {
     if (this.FUNDING_FRM.fields.fundingType.value === 0) {
-      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
-        this.submitMutation().then(() => {
-          resolve();
-        }).catch((e) => {
-          console.log(e);
-        });
+      this.submitMutation().then(() => {
+        resolve();
+      }).catch((e) => {
+        console.log(e);
       });
     } else {
       this.submitMutation().then(() => {

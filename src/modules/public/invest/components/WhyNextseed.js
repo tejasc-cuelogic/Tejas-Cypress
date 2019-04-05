@@ -54,12 +54,12 @@ const businesses = [
     {
       title: 'Houston, TX',
       image: 'investors/img-2.png',
-      description: 'The Sugar Refinery raised $273,800 from 213 investors',
+      description: 'Bravery Chef Hall raised $1,000,000 from 539 investors ',
     },
     {
-      title: 'San Francisco, CA',
+      title: 'Seattle, WA',
       image: 'investors/img.png',
-      description: 'Rambler raised $150,000 from 131 investors',
+      description: 'Fair Isle Brewing raised $327,800 from 292 investors',
     },
     {
       title: 'Austin, TX',
@@ -76,7 +76,7 @@ const businesses = [
     {
       title: 'Brooklyn, NY',
       image: 'investors/img-3.png',
-      description: 'California 88 raised $124,900 from 180 investors',
+      description: 'Oxalis raised $141,500 from 214 investors',
     },
     {
       title: 'Salt Lake City, UT',

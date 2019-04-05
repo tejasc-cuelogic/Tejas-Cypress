@@ -41,6 +41,7 @@ class InvestmentDetails extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.offeringCreationStore.resetOfferingId();
     this.props.history.replace(this.props.refLink);
   };
 
