@@ -17,13 +17,14 @@ import NSImage from '../../../../shared/NSImage';
 export default class Plaid extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
-    // this.props.bankAccountStore.setBankLinkInterface('list');
-    // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-    // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
-    // const { manualLinkBankSubmitted } = this.props.bankAccountStore;
     this.props.bankAccountStore.setShouldValidateAmount();
     this.setBankSummary();
     this.props.uiStore.clearErrors();
+  }
+
+  componentWillUnmount() {
+    this.props.bankAccountStore.setBankListing();
+    this.props.bankAccountStore.resetFormData('formBankSearch');
   }
 
   setBankSummary = () => {
@@ -115,7 +116,11 @@ export default class Plaid extends Component {
                         as="a"
                         className="bank-link"
                         to={this.props.match.url}
-                        onClick={() => bankAccountActions.bankSelect(bankData.institution_id)}
+                        onClick={() => bankAccountActions.bankSelect(
+                          bankData.institution_id,
+                          action,
+                        )
+                        }
                       >
                         <span>
                           {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}

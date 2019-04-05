@@ -132,10 +132,9 @@ export class TransactionStore {
 
   @action
   transact = (amount, operation, includeInFlight = true) => {
-    if (includeInFlight) {
-      this.cash = operation ? money.add(`${this.cash}`, money.format('USD', money.floatToAmount(`${(operation === 'add' ? amount : -amount)}`))) : amount;
-      this.cash = this.cash ? money.format('USD', this.cash.replace(/,/g, '')) : 0.00;
-    } else {
+    this.cash = operation ? money.add(`${this.cash}`, money.format('USD', money.floatToAmount(`${(operation === 'add' ? amount : -amount)}`))) : amount;
+    this.cash = this.cash ? money.format('USD', this.cash.replace(/,/g, '')) : 0.00;
+    if (!includeInFlight) {
       this.availableWithdrawCash = amount ? money.format('USD', amount.replace(/,/g, '')) : 0.00;
     }
   }
@@ -387,7 +386,7 @@ export class TransactionStore {
     });
   }
   @action
-  getInvestorAvailableCash = (includeInFlight = false) => {
+  getInvestorAvailableCash = (includeInFlight = true) => {
     const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
