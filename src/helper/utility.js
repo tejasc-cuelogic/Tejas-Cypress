@@ -39,6 +39,8 @@ export class Utility {
     regex => (window.location.href.match(new RegExp(regex)) !== null),
   )
 
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+
   guid = () => {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
