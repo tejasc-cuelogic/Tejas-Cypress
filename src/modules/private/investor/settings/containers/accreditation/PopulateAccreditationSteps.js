@@ -27,7 +27,7 @@ const StepsMetaData = {
     isDirty: true,
   },
   FILLING_STATUS_FORM: {
-    name: 'Evidence',
+    name: '',
     component: <FillingStatus />,
     formName: 'FILLING_STATUS_FORM',
     isDirty: true,
