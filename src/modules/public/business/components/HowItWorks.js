@@ -57,9 +57,9 @@ class HowItWorks extends Component {
           description: 'The Native raised $396,500 to open a boutique hostel and bar.',
         },
         {
-          title: 'Health & Wellness',
-          image: 'business/img-5.png',
-          description: 'Healing Waters raised $110,000 to open a new floatation spa.',
+          title: 'More',
+          image: 'business/more-img.png',
+          description: 'New industries are on the way.',
         },
       ],
     ];
