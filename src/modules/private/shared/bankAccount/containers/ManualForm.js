@@ -42,7 +42,7 @@ export default class ManualForm extends Component {
         // }
         this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
         this.props.bankAccountStore.setLinkBankSummary();
-      });
+      }).catch(console.log(e));
     }
   }
 
