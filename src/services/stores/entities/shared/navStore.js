@@ -47,7 +47,8 @@ export class NavStore {
         ...userDetailsStore.signupStatus.processingAccounts,
         ...userDetailsStore.signupStatus.frozenAccounts];
     }
-    if (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0]) {
+    if (userDetailsStore.userFirstLoad !== true &&
+      (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
       return [];
     }
     const routes = _.filter(
