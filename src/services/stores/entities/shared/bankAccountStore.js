@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isEmpty, map, uniqWith, isEqual, find, get } from 'lodash';
+import { isEmpty, map, uniqWith, isEqual, find, get, filter } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
@@ -46,6 +46,22 @@ export class BankAccountStore {
     search: {
     },
   };
+  @observable loadingRequestIds = [];
+
+  @action
+  addLoadingRequestId = (requestId) => {
+    this.loadingRequestIds.push(requestId);
+  }
+
+  @action
+  removeLoadingRequestId = (requestId, isSuccess = true) => {
+    this.loadingRequestIds = filter(this.loadingRequestIds, loadingId => loadingId !== requestId);
+    if (isSuccess) {
+      this.setDb(filter(this.changeRequests, changeRequest => changeRequest.userId !== requestId));
+      const linkedBankList = filter(get(this.data, 'data.listLinkedBankUsers.linkedBankList'), changeRequest => changeRequest.userId !== requestId);
+      this.data.data.listLinkedBankUsers.linkedBankList = linkedBankList || [];
+    }
+  }
 
   @action
   setDb = (data) => {
@@ -640,7 +656,7 @@ export class BankAccountStore {
 
   @action
   updateAccountChangeAction = (accountId, userId, isDeny = false) => {
-    uiStore.setProgress(`${accountId}_${isDeny ? 'deny' : 'approve'}`);
+    this.addLoadingRequestId(userId);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -649,10 +665,9 @@ export class BankAccountStore {
             accountId,
             userId,
           },
-          refetchQueries: [{ query: getlistLinkedBankUsers, variables: { page: 1, limit: 100 } }],
         })
         .then((res) => {
-          uiStore.setProgress(false);
+          this.removeLoadingRequestId(userId);
           Helper.toast(isDeny ? (res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
           resolve();
         })
@@ -661,7 +676,7 @@ export class BankAccountStore {
             Helper.toast(error.message, 'error');
             uiStore.setErrors(error.message);
             reject();
-            uiStore.setProgress(false);
+            this.removeLoadingRequestId(userId, true);
           }
         });
     });

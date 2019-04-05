@@ -79,6 +79,7 @@ export default class AddFunds extends Component {
       formAddFunds,
       addFundChange,
       formEntityAddFunds,
+      isAccountPresent,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
     const isValid = this.props.accountStore.investmentAccType === 'entity' ? (!formEntityAddFunds.meta.isValid || !formEntityAddFunds.fields.value.value) : (!formAddFunds.meta.isValid || !formAddFunds.fields.value.value);
@@ -110,7 +111,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" className="relaxed" content="Confirm" disabled={isValid} />
           </Form>
           {this.props.accountStore.investmentAccType !== 'entity' &&
-            <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+            <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
           }
         </div>
       </Aux>

@@ -173,9 +173,13 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       return (
-        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
-          {this.props.steps[i].name}
-        </li>
+        <Aux>
+          {this.props.steps[i].name &&
+            <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
+              {this.props.steps[i].name}
+            </li>
+          }
+        </Aux>
       );
     });
   }
