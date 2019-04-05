@@ -16,6 +16,7 @@ import { validationActions } from '../../../../services/actions';
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
   @observable plaidAccDetails = {};
+  @observable routingNum = null;
   @observable plaidBankDetails = {};
   @observable bankListing = undefined;
   @observable depositMoneyNow = true;
@@ -223,7 +224,7 @@ export class BankAccountStore {
         plaidBankDetails.linkedBank = {
           accountNumber,
           routingNumber,
-          accountType: accountType.toUpperCase(),
+          accountType: accountType && accountType.toUpperCase(),
         };
       }
       accountAttributes = { ...plaidBankDetails };
@@ -592,7 +593,7 @@ export class BankAccountStore {
 
   @action
   setLoaderForAccountBlank = () => {
-    uiStore.setProgress(!this.isAccountPresent);
+    uiStore.setProgress(!this.isAccountPresent || isEmpty(this.routingNum));
   }
 
   @action
@@ -683,6 +684,20 @@ export class BankAccountStore {
   }
 
   @action
+  fetchRoutingNumber = (requestType = 'LINKED_BANK') => {
+    const { getAccountIdByType } = accountStore;
+    const { currentUserId } = userDetailsStore;
+    const accountId = getAccountIdByType();
+    uiStore.setProgress();
+    if (currentUserId && accountId && this.isAccountPresent) {
+      this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
+        .then(action((res) => {
+          this.routingNum = res;
+          uiStore.setProgress(false);
+        }));
+    }
+  }
+  @action
   getDecryptedRoutingNum = (accountId, userId, requestType = 'CHANGE_REQUEST') => new Promise((resolve, reject) => {
     client
       .mutate({
@@ -696,6 +711,7 @@ export class BankAccountStore {
       .then(res => resolve(res.data.getDecryptedRoutingNumber))
       .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
         reject();
       });
   });
