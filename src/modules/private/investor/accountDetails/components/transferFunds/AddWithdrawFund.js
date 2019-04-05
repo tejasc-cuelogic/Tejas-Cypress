@@ -18,8 +18,10 @@ import Helper from '../../../../../../helper/utility';
 export default class AddWithdrawFund extends Component {
   state = { isActivebutton: true };
   componentWillMount() {
-    const { setInitialLinkValue, setInitialFundValue } = this.props.transactionStore;
-    this.props.transactionStore.getInvestorAvailableCash(this.props.match.params.action === 'add');
+    const { setInitialLinkValue, setInitialFundValue, cash } = this.props.transactionStore;
+    if (!cash) {
+      this.props.transactionStore.getInvestorAvailableCash(false);
+    }
     setInitialLinkValue(false);
     setInitialFundValue();
   }
@@ -64,7 +66,7 @@ export default class AddWithdrawFund extends Component {
     const { match, transactionStore } = this.props;
     const {
       TRANSFER_FRM, TransferChange, showConfirmPreview, getValidWithdrawAmt,
-      availableWithdrawCash, cashAvailable,
+      cash, cashAvailable,
     } = transactionStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
     const linkBankDetials = (get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') && get(currentActiveAccountDetails, 'details.linkedBank.pendingUpdate')) ? get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') : get(currentActiveAccountDetails, 'details.linkedBank') || null;
@@ -95,7 +97,7 @@ export default class AddWithdrawFund extends Component {
                       name="maountInvested"
                       containerclassname="fund-amount"
                       currency
-                      fielddata={{ value: availableWithdrawCash }}
+                      fielddata={{ value: cash }}
                     />
                   </div>
                 }

@@ -131,12 +131,14 @@ export class TransactionStore {
   }
 
   @action
-  transact = (amount, operation, includeInFlight = true) => {
-    this.cash = operation ? money.add(`${this.cash}`, money.format('USD', money.floatToAmount(`${(operation === 'add' ? amount : -amount)}`))) : amount;
-    this.cash = this.cash ? money.format('USD', this.cash.replace(/,/g, '')) : 0.00;
-    if (!includeInFlight) {
-      this.availableWithdrawCash = amount ? money.format('USD', amount.replace(/,/g, '')) : 0.00;
-    }
+  transact = (amount) => {
+    this.cash = amount ? money.format('USD', amount.replace(/,/g, '')) : 0.00;
+    // this.cash = operation ? money.add(`${this.cash}`, money.format('USD', money.floatToAmount
+    // (`${(operation === 'add' ? amount : -amount)}`))) : amount;
+    // this.cash = this.cash ? money.format('USD', this.cash.replace(/,/g, '')) : 0.00;
+    // if (!includeInFlight) {
+    //   this.availableWithdrawCash = amount ? money.format('USD', amount.replace(/,/g, '')) : 0.00;
+    // }
   }
 
   @action
@@ -177,7 +179,9 @@ export class TransactionStore {
       }
     }
     if (checkWithdrawAmt && values.floatValue !== undefined) {
-      this.validWithdrawAmt = money.cmp(this.availableWithdrawCash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
+      // this.validWithdrawAmt = money.cmp(this.availableWithdrawCash, money.format
+      // ('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
+      this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
     }
   };
 
@@ -203,7 +207,7 @@ export class TransactionStore {
         })
         .then(() => {
           this.setInitialLinkValue(true);
-          this.transact(amount, 'add');
+          // this.transact(amount, 'add');
           resolve();
         })
         .catch((error) => {
@@ -367,7 +371,7 @@ export class TransactionStore {
         })
         .then(() => {
           this.setInitialLinkValue(true);
-          this.transact(amount, 'withdraw');
+          // this.transact(amount, 'withdraw');
           resolve();
         })
         .catch((error) => {
@@ -400,7 +404,8 @@ export class TransactionStore {
         },
         onFetch: (data) => {
           if (data && !this.cashAvailable.loading) {
-            this.transact(data.getInvestorAvailableCash, null, includeInFlight);
+            this.transact(data.getInvestorAvailableCash);
+            // this.transact(data.getInvestorAvailableCash, null, includeInFlight);
             resolve(data);
           }
         },
