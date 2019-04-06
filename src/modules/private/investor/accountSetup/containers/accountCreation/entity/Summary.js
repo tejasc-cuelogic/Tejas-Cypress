@@ -22,7 +22,9 @@ export default class Summary extends Component {
     if (!alreadySet) {
       getLegalDocsFileIds();
     }
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
+
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
   }
@@ -67,6 +69,7 @@ export default class Summary extends Component {
       plaidAccDetails, formLinkBankManually,
       accountAttributes,
       isAccountPresent,
+      routingNum,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -131,6 +134,14 @@ export default class Summary extends Component {
                   <Table.Cell>Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
+                { !isEmpty(routingNum) &&
+                  <Table.Row>
+                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell>
+                      { routingNum || '' }
+                    </Table.Cell>
+                  </Table.Row>
+                }
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
