@@ -21,7 +21,9 @@ export default class Summary extends React.Component {
     if (!alreadySet) {
       getLegalDocsFileIds();
     }
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
+
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     const { userDetails } = this.props.userDetailsStore;
@@ -74,7 +76,7 @@ export default class Summary extends React.Component {
       formAddFunds,
       plaidAccDetails,
       formLinkBankManually,
-      isEncrypted,
+      routingNum,
       isAccountPresent,
       accountAttributes,
     } = this.props.bankAccountStore;
@@ -103,12 +105,11 @@ export default class Summary extends React.Component {
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {(formLinkBankManually.fields.routingNumber.value &&
-                  !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
+                { !isEmpty(routingNum) &&
                   <Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
-                      {formLinkBankManually.fields.routingNumber.value}
+                      { routingNum || '' }
                     </Table.Cell>
                   </Table.Row>
                 }
