@@ -196,7 +196,8 @@ export default class ConfirmEmailAddress extends Component {
                 type="number"
                 filterChars
                 className="otp-field"
-                pattern="[0-9]"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
