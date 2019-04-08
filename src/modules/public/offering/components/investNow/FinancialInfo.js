@@ -51,12 +51,6 @@ class FinancialInfo extends Component {
     const currentInvestedAmount = getCurrentInvestNowHealthCheck &&
       getCurrentInvestNowHealthCheck.previousAmountInvested ?
       getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
-    // const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
-    //   getInvestorAccountById.offering.keyTerms &&
-    //   getInvestorAccountById.offering.keyTerms.shorthandBusinessName ?
-    // getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails &&
-    //  offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ?
-    //  offeringDetails.keyTerms.shorthandBusinessName : '-';
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const offeringId = get(this.props, 'match.params.offeringId') ? get(this.props, 'match.params.offeringId') : get(getInvestorAccountById, 'offering.id') ? get(getInvestorAccountById, 'offering.id') : offeringDetails && offeringDetails.id;
     const { currentInvestmentStatus, userDetails } = this.props.accreditationStore;
@@ -65,8 +59,6 @@ class FinancialInfo extends Component {
     const campaignRegulation = get(campaign, 'keyTerms.regulation');
     const accreditationStatus = get(userDetails, 'accreditation.status');
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
-    // const showLimitComponent = offeringReuglation === 'BD_CF_506C' ?
-    //  !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus) : true;
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     if (!getCurrentInvestNowHealthCheck) {
       return <Spinner loaderMessage="Loading.." />;

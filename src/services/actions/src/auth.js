@@ -169,7 +169,9 @@ export class Auth {
           localStorage.removeItem('defaultNavExpanded');
           if (result.action && result.action === 'newPassword') {
             authStore.setEmail(result.data.email);
-            authStore.setCognitoUserSession(this.cognitoUser.Session);
+            if (this.cognitoUser && this.cognitoUser.Session) {
+              authStore.setCognitoUserSession(this.cognitoUser.Session);
+            }
             authStore.setNewPasswordRequired(true);
           } else {
             // Extract JWT from token
@@ -200,7 +202,9 @@ export class Auth {
         newPasswordRequired: (result) => {
           // authStore.setEmail(result.email);
           authStore.setUserLoggedIn(true);
-          authStore.setCognitoUserSession(this.cognitoUser.Session);
+          if (this.cognitoUser && this.cognitoUser.Session) {
+            authStore.setCognitoUserSession(this.cognitoUser.Session);
+          }
           authStore.setNewPasswordRequired(true);
           res({ data: result, action: 'newPassword' });
         },

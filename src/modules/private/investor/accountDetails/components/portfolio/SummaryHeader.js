@@ -38,7 +38,7 @@ const SummaryHeader = props => (
       {props.details.title !== false && !props.details.businessName &&
         <SummaryTitle {...props} />
       }
-      <Grid doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
+      <Grid stackable doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
         {
           props.details.summary.map(row => (
             <Grid.Column key={snakeCase(row.title)}>

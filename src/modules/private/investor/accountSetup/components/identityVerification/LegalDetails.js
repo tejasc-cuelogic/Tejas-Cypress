@@ -23,8 +23,8 @@ const LegalDetails = observer(({
     </Modal.Header>
     <Modal.Content className="signup-content">
       <Dimmer className="fullscreen" active={inProgress}>
-        <Loader active={inProgress} >
-        Please wait...<br /><br /> We are verifying your identity. This can take up to a minute.
+        <Loader active={inProgress}>
+        Please wait...<br /><br />We are verifying your identity.<br />This can take up to a minute.
         </Loader>
       </Dimmer>
       <Form error onSubmit={onSubmit}>
@@ -95,7 +95,7 @@ const LegalDetails = observer(({
             name="phoneNumber"
             type="tel"
             fielddata={form.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             changed={maskChange}
             phoneNumber
             showerror

@@ -144,7 +144,9 @@ export class BankAccountStore {
 
   @action
   resetAddFundsForm() {
-    Validator.resetFormData(this.formAddFunds);
+    // eslint-disable-next-line no-unused-expressions
+    Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? Validator.resetFormData(this.formEntityAddFunds) :
+      Validator.resetFormData(this.formAddFunds);
   }
 
   @action
@@ -613,8 +615,6 @@ export class BankAccountStore {
       }
     }
     return new Promise((resolve, reject) => {
-      console.log('this.depositMoneyNow :', this.depositMoneyNow);
-      console.log('this.shouldValidateAmount :', this.shouldValidateAmount);
       if (!this.depositMoneyNow || !this.shouldValidateAmount) {
         resolve();
       } else {
@@ -688,8 +688,8 @@ export class BankAccountStore {
     const { getAccountIdByType } = accountStore;
     const { currentUserId } = userDetailsStore;
     const accountId = getAccountIdByType();
-    uiStore.setProgress();
     if (currentUserId && accountId && this.isAccountPresent) {
+      uiStore.setProgress();
       this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
         .then(action((res) => {
           this.routingNum = res;

@@ -53,7 +53,7 @@ export default class OfferingDetails extends Component {
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
     );
     if (this.props.match.params.stage === 'live' && isDev) {
-      navItems = navItems.filter(n => (n.title !== 'Bonus Rewards' && n.title !== 'Investors'));
+      navItems = navItems.filter(n => (n.title !== 'Bonus Rewards'));
     }
     if (this.props.match.params.stage === 'engagement' && isDev) {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));
@@ -98,7 +98,7 @@ export default class OfferingDetails extends Component {
             </Card>
           </Modal.Content>
         </Modal>
-        <Route path={`${match.url}/editPoc`} render={props => <EditPoc refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/editPoc`} render={props => <EditPoc stage={offer.stage} refLink={match.url} {...props} />} />
         <Route path={`${match.url}/editOffering`} render={props => <EditOffering refLink={match.url} {...props} />} />
       </Aux>
     );

@@ -1529,6 +1529,10 @@ div.login-form {
 			text-align:center;
 			padding-right:@30px;
 		}
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-right:0;
+			line-height: @32px;
+		}
 		a.back-link{
 			position:absolute;
 			left:-30px;
@@ -2923,4 +2927,10 @@ input[type='range']::-webkit-slider-thumb {
 .field .pac-container {
 	left: 0 !important;
 	top: 63px !important;
+}
+.plaid-link-iframe {
+	@media only screen and (max-width : @largestMobileScreen){
+		position: absolute;
+		z-index: 9999;
+	}
 }

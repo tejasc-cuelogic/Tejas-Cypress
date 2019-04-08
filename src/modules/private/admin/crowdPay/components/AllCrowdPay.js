@@ -40,7 +40,7 @@ export default class AllCrowdPay extends Component {
   render() {
     const { crowdpayStore, uiStore } = this.props;
     const {
-      accounts, count, requestState, crowdPayCtaHandler,
+      accounts, count, requestState, crowdPayCtaHandler, loadingCrowdPayIds,
     } = crowdpayStore;
     const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
     if (count === 0) {
@@ -85,7 +85,7 @@ export default class AllCrowdPay extends Component {
                 </Table.Row>
                 ) :
                 accounts.map(account => (
-                  <Table.Row key={account.accountId} className={account.accountId === inProgress ? 'disabled' : ''}>
+                  <Table.Row key={account.accountId} className={loadingCrowdPayIds.includes(account.accountId) ? 'disabled' : ''}>
                     <Table.Cell>
                       <p>
                         <Link to={`/app/users/${account.userId}/profile-data`}>

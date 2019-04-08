@@ -48,5 +48,6 @@ export { default as accreditationStore } from './entities/user/settings/accredit
 export { default as offeringsStore } from './entities/shared/offerings/offeringsStore';
 export { default as offeringCreationStore } from './entities/shared/offerings/offeringCreationStore';
 export { default as referralsStore } from './entities/user/referralsStore';
+export { default as offeringInvestorStore } from './entities/shared/offerings/offeringInvestorStore';
 // dev stores
 export { default as elasticSearchStore } from './entities/dev/elasticSearchStore';

@@ -73,6 +73,7 @@ class ChangeInvestmentLimit extends Component {
                   prefix="$ "
                   value={fields[field].value}
                   fielddata={fields[field]}
+                  allowNegative={false}
                   // changed={maskingFieldChange}
                   changed={(values, name) => this.change(values, name)}
                 // onblur={investmentCalculate}
