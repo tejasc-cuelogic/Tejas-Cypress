@@ -44,7 +44,7 @@ export default class TransferFunds extends Component {
     });
     return (
       <div>
-        { !isEmpty(linkedBank) || accountType !== 'ira' ?
+        { !isEmpty(linkedBank) && accountType !== 'ira' ?
           <Aux>
             <Header as="h4">Transfer funds</Header>
             <Grid>

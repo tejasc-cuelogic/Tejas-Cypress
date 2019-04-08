@@ -62,7 +62,7 @@ export default class BankAccount extends Component {
           render={props =>
             <ConfirmBankLinking refLink={this.props.match.url} {...props} />}
         />
-        { (accountType === 'ira' && isCheckedIra) || (accountType !== 'ira') ?
+        {accountType !== 'ira' ?
           <Aux>
             <Header as="h4">Bank Account</Header>
             <Grid>
