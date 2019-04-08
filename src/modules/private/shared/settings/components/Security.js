@@ -81,7 +81,7 @@ export default class Security extends Component {
                         <Button
                           disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
                           as={Link}
-                          to={userDetails.phone ? `${match.url}/${section.action[0]}` : '/app/profile-settings/security/new-phone-number'}
+                          to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/profile-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
                           inverted
                           color="green"
                           content={section.action[1]}

@@ -90,7 +90,7 @@ class AccountType extends Component {
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin
-        sendAdminEmailOfFrozenAccount('INVESTMENT');
+        sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
       }
     }
     if (!this.props.accreditationStore.accreditationData.ira) {
@@ -229,6 +229,7 @@ class AccountType extends Component {
     const { getCurrentInvestNowHealthCheck, investNowError } = this.props.investmentLimitStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
+    const offeringId = get(campaign, 'id');
     const offeringDetailObj = this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
     const offeringTitle = get(offeringDetailObj, 'keyTerms.shorthandBusinessName');
@@ -282,8 +283,8 @@ class AccountType extends Component {
     const { currentUser } = this.props.userStore;
     let redirectURL = '';
     if (!showAccountList || investAccTypes.values.length <= 1) {
-      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
-        `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && isRegulationCheck && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
+      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') && userProfileFullStatus !== 'FULL' ?
+        `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     if ((isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) || this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
@@ -298,7 +299,7 @@ class AccountType extends Component {
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin:
-        sendAdminEmailOfFrozenAccount('INVESTMENT');
+        sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
       }
     }
     if (headerSubheaderObj.header === '' || this.props.inProgress) {
@@ -337,26 +338,6 @@ class AccountType extends Component {
                         <p className="center-align">{headerSubheaderObj.subHeader}</p>
                         {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' ?
                           offeringReuglation && offeringReuglation === 'BD_CF_506C' ?
-                            // <Aux>
-                            //   <Divider hidden section />
-                            //   <Header as="h3">Investing under Regulation D
-                            //    has its benefits</Header>
-                            //   <p className="cneter-align">For a limited time, if you <span
-                            // className="highlight-text"><b><Link to={redirectURL}>verify your
-                            // accredited investor status</Link></b></span>,{' '}
-                            //     we’ll add a <span className="highlight-text"><b><Link
-                            // to={redirectURL}>$100 bonus</Link></b></span> to your account.
-                            // See rules for details.
-                            //   </p>
-                            //   <Divider hidden section />
-                            //   <p>
-                            //     <b>Would you like to verify your accredited investor status?</b>
-                            //   </p>
-                            //   <Button as={Link} to={redirectURL} primary className="relaxed"
-                            // content="Yes, verify status" />
-                            //   <Button basic className="relaxed" content="No, thanks"
-                            // onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
-                            // </Aux>
                             <Card.Group itemsPerRow={2}>
                               <Card>
                                 <Card.Content>

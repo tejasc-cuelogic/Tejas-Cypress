@@ -25,6 +25,7 @@ export default class EditOffering extends React.Component {
     });
   }
   render() {
+    const { stage } = this.props;
     const {
       POC_DETAILS_FRM,
       formChange,
@@ -40,7 +41,7 @@ export default class EditOffering extends React.Component {
             <InlineLoader />
             :
             <Form error onSubmit={() => this.handleSubmitForm()}>
-              {['issuerId', 'id'].map(field => (
+              {['issuerId', 'id'].map(field => (field === 'issuerId' || (stage === 'CREATION' && field === 'id')) && (
                 <FormDropDown
                   search
                   name={field}
@@ -53,12 +54,14 @@ export default class EditOffering extends React.Component {
                   options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
                 />
               ))}
+              {stage === 'CREATION' &&
               <MaskedInput
                 name="targetDate"
                 fielddata={POC_DETAILS_FRM.fields.targetDate}
                 changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
                 dateOfBirth
               />
+              }
               {errors &&
                 <Message error textAlign="left" className="mt-30">
                   <ListErrors errors={errors.message ? [errors.message] : [errors]} />
