@@ -672,7 +672,9 @@
             }
         }
         .ui.error.form {
-            padding: 0 @14px;
+            @media only screen and (max-width:@largestMobileScreen){
+                padding: 0 @14px;
+            }
         }
     }
 }
