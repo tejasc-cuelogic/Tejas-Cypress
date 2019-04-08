@@ -1116,16 +1116,18 @@ export class OfferingCreationStore {
         payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'editPocForm') {
-        payloadData.offering = {};
-        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
-        payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
-        payloadData.offering = mergeWith(
-          toJS(getOfferingById.offering),
-          payloadData.offering,
-          this.mergeCustomize,
-        );
-        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
-        payloadData.offering = cleanDeep(payloadData.offering);
+        if (get(getOfferingById, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
+          payloadData.offering = {};
+          payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+          payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
+          payloadData.offering = mergeWith(
+            toJS(getOfferingById.offering),
+            payloadData.offering,
+            this.mergeCustomize,
+          );
+          payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
+          payloadData.offering = cleanDeep(payloadData.offering);
+        }
       } else if (keyName === 'BonusRewardTier') {
         const rewardsTiersData = getOfferingById.rewardsTiers || [];
         const isEarlyBirds = fields.isEarlyBirds.value;
