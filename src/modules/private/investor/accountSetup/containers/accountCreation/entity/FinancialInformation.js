@@ -36,6 +36,7 @@ export default class FinancialInformation extends Component {
                 changed={values => maskedFinInfoChange(values, field)}
                 currency
                 prefix="$"
+                allowNegative={false}
                 showerror
               />
             ))}

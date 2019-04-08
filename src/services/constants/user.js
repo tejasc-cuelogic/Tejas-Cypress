@@ -18,13 +18,13 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    return moment(value, 'MM/DD/YYYY').isAfter('12/31/1909');
+    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909'));
   },
   'Invalid Date',
 );
 Validator.register(
   'leastAge', (value, attribute) => {
-    return moment().diff(value, 'years') >= 18;
+    return moment().diff(new Date(value), 'years') >= 18;
   },
   'Investor must be at least 18 years old in order to proceed',
 );
