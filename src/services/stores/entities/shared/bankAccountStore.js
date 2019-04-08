@@ -615,8 +615,6 @@ export class BankAccountStore {
       }
     }
     return new Promise((resolve, reject) => {
-      console.log('this.depositMoneyNow :', this.depositMoneyNow);
-      console.log('this.shouldValidateAmount :', this.shouldValidateAmount);
       if (!this.depositMoneyNow || !this.shouldValidateAmount) {
         resolve();
       } else {

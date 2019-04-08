@@ -140,7 +140,8 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
   phoneNumberFormatter = (phoneNumber) => {

@@ -998,7 +998,7 @@ export const LEADERSHIP = {
       label: 'Phone Number',
       error: undefined,
       rule: 'numeric',
-      placeHolder: '555-123-8888',
+      placeHolder: '(123) 456-7890',
       objRef: 'phone',
       objRefOutput2: 'phone',
       customErrors: {

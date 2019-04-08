@@ -56,7 +56,7 @@ export default class NewPhoneNumber extends Component {
               name="phoneNumber"
               type="tel"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              format="###-###-####"
+              format="(###) ###-####"
               changed={personalInfoMaskedChange}
               phoneNumber
             />
