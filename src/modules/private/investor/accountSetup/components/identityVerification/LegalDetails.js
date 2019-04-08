@@ -95,7 +95,7 @@ const LegalDetails = observer(({
             name="phoneNumber"
             type="tel"
             fielddata={form.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             changed={maskChange}
             phoneNumber
             showerror
