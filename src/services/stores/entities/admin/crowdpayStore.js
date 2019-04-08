@@ -226,13 +226,17 @@ export class CrowdpayStore {
           } else if (ctaAction === 'CREATEACCOUNT' && this.requestState.type === 'individual' && data.data.submitInvestorAccount !== 'The account is Processing') {
             individualAccountStore.createIndividualGoldStarInvestor(accountId, userId)
               .then((res) => {
-                if (res.data.createIndividualGoldStarInvestor) {
-                  Helper.toast(sMsg, 'success');
-                } else {
-                  Helper.toast(data.data.submitInvestorAccount, 'success');
-                }
                 this.requestState.oldType = this.requestState.type;
-                this.removeLoadingCrowdPayId(accountId, CROWDPAY_ACCOUNTS_STATUS.FULL);
+                if (res.data.createIndividualGoldStarInvestor) {
+                  Helper.toast(res.data.createIndividualGoldStarInvestor, 'error');
+                  this.removeLoadingCrowdPayId(
+                    accountId,
+                    CROWDPAY_ACCOUNTS_STATUS.ACCOUNT_PROCESSING,
+                  );
+                } else {
+                  Helper.toast(sMsg, 'success');
+                  this.removeLoadingCrowdPayId(accountId, CROWDPAY_ACCOUNTS_STATUS.FULL);
+                }
                 resolve();
               })
               .catch(() => {
@@ -243,7 +247,7 @@ export class CrowdpayStore {
           } else if (ctaAction === 'CREATEACCOUNT' && data.data.submitInvestorAccount) {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(data.data.submitInvestorAccount, 'success');
-            this.removeLoadingCrowdPayId(accountId, CROWDPAY_ACCOUNTS_STATUS.NS_PROCESSING);
+            this.removeLoadingCrowdPayId(accountId, CROWDPAY_ACCOUNTS_STATUS.ACCOUNT_PROCESSING);
             resolve();
           } else {
             this.requestState.oldType = this.requestState.type;
