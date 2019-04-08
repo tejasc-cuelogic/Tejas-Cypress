@@ -688,8 +688,8 @@ export class BankAccountStore {
     const { getAccountIdByType } = accountStore;
     const { currentUserId } = userDetailsStore;
     const accountId = getAccountIdByType();
-    uiStore.setProgress();
     if (currentUserId && accountId && this.isAccountPresent) {
+      uiStore.setProgress();
       this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
         .then(action((res) => {
           this.routingNum = res;
