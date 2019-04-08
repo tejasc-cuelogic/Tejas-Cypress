@@ -43,10 +43,17 @@ class CustomValidations extends Component {
       const amount = parseFloat(value) || 0;
       return amount >= 100 && amount % 100 === 0;
     }, 'Investment amount should be in multiples of 100');
-    Validator.register('alphaCustom', (value) => {
+
+    // TODO need to otimize alphaBrokerage and alphaPublicCompanyRel validators
+    Validator.register('alphaBrokerage', (value) => {
       const regex = /^[a-zA-Z ]*$/;
       return regex.test(value);
-    }, 'Only alphabetic characters are allowed');
+    }, 'Invalid firm name, please verify and enter again.');
+
+    Validator.register('alphaPublicCompanyRel', (value) => {
+      const regex = /^[a-zA-Z ]*$/;
+      return regex.test(value);
+    }, 'Invalid ticker symbol, please verify and enter again.');
   }
 }
 
