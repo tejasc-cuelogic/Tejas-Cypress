@@ -357,6 +357,7 @@
         }
     }
     p.field-error{
+        margin-top:@2px;
         font-size:@12px;
         line-height:@14px;
         color:@highlight-primary;
