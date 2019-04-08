@@ -41,7 +41,7 @@ export default class Admin extends Component {
             fielddata={USER_BASIC.fields.number}
             changed={(values, name) => formChange(values, formName, name)}
             phoneNumber
-            format="###-###-####"
+            format="(###) ###-####"
             displayMode={displayMode}
           />
           <FormInput

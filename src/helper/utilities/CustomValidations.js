@@ -43,6 +43,10 @@ class CustomValidations extends Component {
       const amount = parseFloat(value) || 0;
       return amount >= 100 && amount % 100 === 0;
     }, 'Investment amount should be in multiples of 100');
+    Validator.register('alphaCustom', (value) => {
+      const regex = /^[a-zA-Z ]*$/;
+      return regex.test(value);
+    }, 'Only alphabetic characters are allowed');
   }
 }
 

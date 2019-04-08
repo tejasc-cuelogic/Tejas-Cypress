@@ -114,7 +114,14 @@ export default class FinancialInfo extends Component {
                             />
                           </Statistic.Label>
                           <Statistic.Value>
-                            {Helper.MoneyMathDisplayCurrency(account.name === 'entity' ? entityCurrentLimit : individualIRACurrentLimit)}
+                            {account.name === 'entity' ?
+                            typeof entityCurrentLimit === 'string' ?
+                            Helper.MoneyMathDisplayCurrency(entityCurrentLimit) :
+                            Helper.CurrencyFormat(entityCurrentLimit) :
+                            typeof individualIRACurrentLimit === 'string' ?
+                            Helper.MoneyMathDisplayCurrency(individualIRACurrentLimit) :
+                            Helper.CurrencyFormat(individualIRACurrentLimit)
+                            }
                           </Statistic.Value>
                         </Statistic>
                         <Divider clearing hidden />
