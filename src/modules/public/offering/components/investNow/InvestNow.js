@@ -148,9 +148,10 @@ export default class InvestNow extends React.Component {
       const {
         changeShowAccountListFlag,
         userAccredetiationState,
+        selectedAccountStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
+      if (selectedAccountStatus !== 'FROZEN' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {

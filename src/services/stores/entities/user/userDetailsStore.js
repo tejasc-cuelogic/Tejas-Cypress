@@ -14,7 +14,6 @@ import {
   entityAccountStore,
   investorProfileStore,
   authStore,
-  campaignStore,
   uiStore,
 } from '../../index';
 import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
@@ -565,11 +564,14 @@ export class UserDetailsStore {
   @action setUserStatus = (status) => {
     this.userStatus = status || this.userStatus;
   }
-  @action sendAdminEmailOfFrozenAccount = (activity) => {
+  @action sendAdminEmailOfFrozenAccount = (activity, offeringId) => {
     const selectedAccount = this.currentActiveAccountDetails;
-    const forzenAccountId =
-      selectedAccount && selectedAccount.details && selectedAccount.details.accountId ? selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
-    const payLoad = { userId: this.currentUserId, accountId: forzenAccountId, activity };
+    const forzenAccountId = get(selectedAccount, 'details.accountId');
+    // selectedAccount && selectedAccount.details && selectedAccount.details.accountId ?
+    //  selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
+    const payLoad = {
+      userId: this.currentUserId, accountId: forzenAccountId, activity, offeringId,
+    };
     client
       .mutate({
         mutation: frozenEmailToAdmin,
@@ -577,7 +579,7 @@ export class UserDetailsStore {
       })
       .then((res) => {
         if (res.data.notifyAdminFrozenAccountActivity) {
-          const offeringId = campaignStore.campaign && campaignStore.campaign.id;
+          // const offeringId = campaignStore.campaign && campaignStore.campaign.id;
           const offeringDetailObj = { offeringId, isEmailSent: true };
           cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
         }
