@@ -103,7 +103,7 @@ export default class General extends Component {
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 zipCode={field === 'businessZip'}
                 phoneNumber={field === 'number'}
-                format={field === 'number' ? '###-###-####' : '#####'}
+                format={field === 'number' ? '(###) ###-####' : '#####'}
               />
             ))}
           </Form.Group >
