@@ -98,6 +98,9 @@
 			@media only screen and (max-width : @largestMobileScreen){
 				min-width:130px;
 			}
+			@media only screen and (max-width : 320px){
+				min-width: 100px;
+			}
 		}
 		input[type="radio"], input[type="checkbox"]{
 			width:100%;
