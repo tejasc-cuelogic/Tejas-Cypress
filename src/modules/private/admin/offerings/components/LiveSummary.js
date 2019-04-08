@@ -46,7 +46,10 @@ const LiveSummary = ({ offer, refLink }) => (
       </Grid.Column>
       <Grid.Column>
         <Card fluid className="ba-info-card">
-          <Card.Header>Primary POC</Card.Header>
+          <Card.Header>
+            Primary POC
+            <small className="pull-right"><Link to={`${refLink}/editPoc`}><Icon className="ns-pencil" />Edit</Link></small>
+          </Card.Header>
           <Card.Content>
             <Grid columns={3}>
               { rightSummary(offer).map(item => (

@@ -54,6 +54,8 @@ export default class ResetPassword extends Component {
                 filterChars
                 name="code"
                 className="otp-field mt-10"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={RESET_PASS_FRM.fields.code}
                 onChange={resetPassChange}
               />

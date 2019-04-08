@@ -6,6 +6,7 @@ import { Form, Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const overrideContainerClass = ['account-details/:accountType/transactions'];
 @inject('uiStore', 'navStore', 'userDetailsStore')
 @observer
@@ -35,7 +36,7 @@ class PrivateLayout extends Component {
                   <span className="unread-count">3</span> */}
                 </span>
                 ) : (
-                  <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
+                  <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
                 )
               }
             </Grid.Row>

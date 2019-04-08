@@ -106,8 +106,7 @@ export default class ManualForm extends Component {
           </div>
           {errors &&
             <Message error className="mb-30">
-              <HtmlEditor readOnly content={errors.message} />
-              {/* <ListErrors errors={[errors.message]} /> */}
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
             </Message>
           }
           <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />

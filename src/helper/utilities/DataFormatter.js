@@ -67,12 +67,12 @@ class DataFormatter {
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
     let formatedDate = moment(this.formatedDate(date)).utc();
-    formatedDate = dayType === 'startDate' ? moment(formatedDate).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(formatedDate).add(1, 'day').endOf('day') : formatedDate;
-    return iso ? moment(formatedDate).toISOString() :
-      isUnix ? moment(formatedDate).unix() : formatedDate;
+    formatedDate = dayType === 'startDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(new Date(formatedDate)).add(1, 'day').endOf('day') : formatedDate;
+    return iso ? moment(new Date(formatedDate)).toISOString() :
+      isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
   }
 
-  formatedDate = date => moment(date).format('MM/DD/YYYY');
+  formatedDate = date => moment(new Date(date)).format('MM/DD/YYYY');
 
   mapDatesToType = (data, keys, dateType = 'iso') => data.map((d) => {
     const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));

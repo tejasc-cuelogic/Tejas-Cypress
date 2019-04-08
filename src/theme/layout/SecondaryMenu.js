@@ -133,7 +133,7 @@ class SecondaryMenu extends Component {
               className="legal-menu"
             />
             :
-            <Dropdown fluid selection options={mobNavItems} />
+            <Dropdown className="private-secondary-menu" fluid selection options={mobNavItems} />
           }
         </Responsive>
       </Aux>
