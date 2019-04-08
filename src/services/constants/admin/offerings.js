@@ -2558,7 +2558,7 @@ export const POC_DETAILS = {
     value: '',
     label: 'POC',
     error: undefined,
-    objRef: 'leadDetails',
+    // objRef: 'leadDetails',
     rule: 'string|required',
   },
   id: {
