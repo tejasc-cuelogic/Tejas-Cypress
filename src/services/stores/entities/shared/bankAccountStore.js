@@ -144,7 +144,9 @@ export class BankAccountStore {
 
   @action
   resetAddFundsForm() {
-    Validator.resetFormData(this.formAddFunds);
+    // eslint-disable-next-line no-unused-expressions
+    Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? Validator.resetFormData(this.formEntityAddFunds) :
+      Validator.resetFormData(this.formAddFunds);
   }
 
   @action
