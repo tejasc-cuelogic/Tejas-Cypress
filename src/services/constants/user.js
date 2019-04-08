@@ -157,7 +157,7 @@ export const USER_IDENTITY = {
     key: 'phoneNumber',
     value: '',
     label: 'Phone Number',
-    placeHolder: '123-456-7890',
+    placeHolder: '(123) 456-7890',
     error: undefined,
     rule: 'required|maskedPhoneNumber',
     customErrors: {
