@@ -6,6 +6,7 @@ import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
+import Helper from '../../../../../helper/utility';
 
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
@@ -25,6 +26,7 @@ export default class AddFunds extends Component {
     // this.props.bankAccountStore.resetAddFundsForm();
   }
   doNotDepositMoneyNow = () => {
+    this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setDepositMoneyNow(false);
     this.renderStep();
   }
@@ -82,7 +84,7 @@ export default class AddFunds extends Component {
       isAccountPresent,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
-    const isValid = this.props.accountStore.investmentAccType === 'entity' ? (!formEntityAddFunds.meta.isValid || !formEntityAddFunds.fields.value.value) : (!formAddFunds.meta.isValid || !formAddFunds.fields.value.value);
+    const isInValid = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? !formEntityAddFunds.meta.isValid : !formAddFunds.meta.isValid;
     return (
       <Aux>
         <div className="center-align">
@@ -95,7 +97,7 @@ export default class AddFunds extends Component {
                 type="tel"
                 currency
                 placeholder="$ 15,000"
-                fielddata={this.props.accountStore.investmentAccType === 'entity' ? formEntityAddFunds.fields.value : formAddFunds.fields.value}
+                fielddata={Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? formEntityAddFunds.fields.value : formAddFunds.fields.value}
                 changed={values => addFundChange(values, 'value', this.props.accountStore.investmentAccType)}
                 maxLength={formAddFunds.fields.value.maxLength}
                 prefix="$ "
@@ -108,9 +110,9 @@ export default class AddFunds extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="relaxed" content="Confirm" disabled={isValid} />
+            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid} />
           </Form>
-          {this.props.accountStore.investmentAccType !== 'entity' &&
+          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) &&
             <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
           }
         </div>
