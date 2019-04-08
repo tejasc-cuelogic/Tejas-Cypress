@@ -76,6 +76,8 @@ export default class ConfirmVerificationCode extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />

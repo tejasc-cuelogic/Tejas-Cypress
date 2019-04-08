@@ -77,6 +77,8 @@ export default class ConfirmOTPModal extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={OTPVerifyMeta.fields.code}
                 onChange={VerificationChange}
               />
