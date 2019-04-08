@@ -1529,6 +1529,10 @@ div.login-form {
 			text-align:center;
 			padding-right:@30px;
 		}
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-right:0;
+			line-height: @32px;
+		}
 		a.back-link{
 			position:absolute;
 			left:-30px;

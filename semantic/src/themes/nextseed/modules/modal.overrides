@@ -671,6 +671,9 @@
                 font-weight:@normal;
             }
         }
+        .ui.error.form {
+            padding: 0 @14px;
+        }
     }
 }
 .field-wrap{
