@@ -29,6 +29,7 @@ export default class Actions extends Component {
     const {
       accountId, accountStatus, approved, userId,
     } = account;
+    const { loadingCrowdPayIds } = this.props.crowdpayStore;
     const isGsProcess = accountStatus === CROWDPAY_ACCOUNTS_STATUS.GS_PROCESSING;
     const isAccProcess = accountStatus === CROWDPAY_ACCOUNTS_STATUS.ACCOUNT_PROCESSING;
     const declined = accountStatus === CROWDPAY_ACCOUNTS_STATUS.DECLINED;
@@ -47,7 +48,7 @@ export default class Actions extends Component {
                 }
                 {!isAccProcess &&
                   <Button
-                    disabled={inProgress === accountId}
+                    disabled={loadingCrowdPayIds.includes(accountId)}
                     onClick={
                       e => this.openModal(e, userId, accountId, 'DECLINE', 'Crowdpay account is declined successfully.')
                     }
@@ -65,7 +66,7 @@ export default class Actions extends Component {
                   <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
                 }
                 {type !== 'review' && isGsProcess &&
-                  <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
+                  <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
                 }
               </Aux> :
               <Aux>
