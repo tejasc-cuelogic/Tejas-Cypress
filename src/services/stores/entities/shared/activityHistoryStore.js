@@ -17,7 +17,11 @@ export class ActivityHistoryStore {
   @observable activityTypes = [];
 
   @action
-  initRequest = (resourceId) => {
+  initRequest = (resourceId, defaultFilter = false) => {
+    if (defaultFilter) {
+      this.requestState.filters.startDate = DataFormatter.getDate(moment().subtract(2, 'day').format('MM-DD-YYYY'), true, 'startDate', true);
+      this.requestState.filters.endDate = DataFormatter.getDate(moment().format('MM-DD-YYYY'), true, 'endDate', true);
+    }
     const {
       activityType, activityUserType, startDate, endDate, subType,
     } = this.requestState.filters;
@@ -45,7 +49,8 @@ export class ActivityHistoryStore {
   setInitiateSrch = (name, value, resourceId) => {
     if (name === 'startDate' || name === 'endDate') {
       this.requestState.filters[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, true, name, true) : undefined;
-      if (this.requestState.filters.startDate && this.requestState.filters.endDate) {
+      if ((this.requestState.filters.startDate && this.requestState.filters.endDate) ||
+      (!this.requestState.filters.startDate && !this.requestState.filters.endDate)) {
         this.initRequest(resourceId);
       }
     } else {

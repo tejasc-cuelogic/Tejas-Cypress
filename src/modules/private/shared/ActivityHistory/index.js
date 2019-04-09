@@ -11,8 +11,11 @@ import ActivityFeed from './components/ActivityFeed';
 @inject('activityHistoryStore')
 @observer
 export default class ActivityHistory extends Component {
+  state = { defaultFilter: true }
   componentWillMount() {
-    this.props.activityHistoryStore.initRequest(this.props.resourceId);
+    this.props.activityHistoryStore.reset();
+    this.props.activityHistoryStore.initRequest(this.props.resourceId, this.state.defaultFilter);
+    this.setState({ defaultFilter: false });
   }
   componentWillUnmount() {
     this.props.activityHistoryStore.setFieldValue('activityTypes', []);
@@ -22,7 +25,7 @@ export default class ActivityHistory extends Component {
     this.props.activityHistoryStore.setInitiateSrch(name, value, this.props.resourceId);
   logActivity = () => this.props.activityHistoryStore.send(this.props.resourceId);
   change = (date, field) => {
-    if (date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+    if ((date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) || !date.formattedValue) {
       this.props.activityHistoryStore.setInitiateSrch(field, date, this.props.resourceId);
     }
   }
@@ -48,7 +51,7 @@ export default class ActivityHistory extends Component {
               }
               {showFilters && showFilters.includes('ActivityDate') &&
                 <Grid.Column>
-                  <DateRangeFilter filters={requestState.search} label="Activity Date" change={this.change} />
+                  <DateRangeFilter startDate={requestState.filters.startDate ? moment(requestState.filters.startDate).subtract(1, 'day').format('MM-DD-YYYY') : ''} endDate={requestState.filters.endDate ? moment(requestState.filters.endDate).subtract(1, 'day').format('MM-DD-YYYY') : ''} label="Activity Date" change={this.change} />
                 </Grid.Column>
               }
               {showFilters && showFilters.includes('subType') &&
