@@ -64,7 +64,7 @@ export default class ConfirmPhoneNumber extends Component {
   }
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.startPhoneVerification();
+    this.props.identityStore.startPhoneVerification('', undefined, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
