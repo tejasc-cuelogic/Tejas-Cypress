@@ -200,9 +200,9 @@ export const USER_IDENTITY = {
 };
 
 export const USER_TITLE = [
-  { key: 'Mr', value: 'Mr', text: 'Mr' },
-  { key: 'Ms', value: 'Ms', text: 'Ms' },
-  { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
+  { key: 'Mr', value: 'Mr', text: 'Mr.' },
+  { key: 'Ms', value: 'Ms', text: 'Ms.' },
+  { key: 'Mrs', value: 'Mrs', text: 'Mrs.' },
 ];
 
 export const IDENTITY_DOCUMENTS = {
