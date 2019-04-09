@@ -228,6 +228,9 @@
                 padding-left: 0 !important;
             }
         }
+        &.no-border td {
+            border-top: none;
+        }
     }
     // &:not(.unstackable) tr>td {
     // }

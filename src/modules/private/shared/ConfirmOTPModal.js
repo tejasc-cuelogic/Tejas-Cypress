@@ -9,6 +9,8 @@ import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { FormInput } from '../../../theme/form';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore')
 @withRouter
 @observer
@@ -77,6 +79,7 @@ export default class ConfirmOTPModal extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
+                autoFocus={!isMobile}
                 pattern="[0-9]*"
                 inputmode="numeric"
                 fielddata={OTPVerifyMeta.fields.code}

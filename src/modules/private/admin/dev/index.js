@@ -13,6 +13,12 @@ const getModule = component => Loadable({
   },
 });
 export default class Dev extends Component {
+  componentWillMount() {
+    const { match } = this.props;
+    if (match.isExact) {
+      this.props.history.push(`${match.url}/elasticsearch`);
+    }
+  }
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], false).subNavigations;

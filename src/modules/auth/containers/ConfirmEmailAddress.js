@@ -12,6 +12,8 @@ import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore')
 @withRouter
 @observer
@@ -26,7 +28,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
       && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
-      this.props.identityStore.startPhoneVerification('EMAIL');
+      this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
     }
   }
   componentDidMount() {
@@ -67,7 +69,7 @@ export default class ConfirmEmailAddress extends Component {
         });
       } else {
         this.props.identityStore.verifyOTPWrapper().then(() => {
-          authActions.register()
+          authActions.register(isMobile)
             .then(() => {
               uiStore.setProgress(false);
               const { roles } = this.props.userStore.currentUser;
@@ -119,7 +121,7 @@ export default class ConfirmEmailAddress extends Component {
       })
         .catch(() => { });
     } else {
-      this.props.identityStore.requestOtpWrapper();
+      this.props.identityStore.requestOtpWrapper(isMobile);
       this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
       this.props.uiStore.clearErrors();
     }
@@ -194,6 +196,7 @@ export default class ConfirmEmailAddress extends Component {
               <ReactCodeInput
                 fields={6}
                 type="number"
+                autoFocus={!isMobile}
                 filterChars
                 className="otp-field"
                 pattern="[0-9]*"

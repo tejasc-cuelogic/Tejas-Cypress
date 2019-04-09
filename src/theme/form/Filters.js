@@ -24,7 +24,7 @@ export const DropdownFilter = props => (
       clearable
       options={props.options}
     />
-    <div className="dropdown-effect">{props.name}</div>
+    <div className="dropdown-effect">{props.label || props.name}</div>
   </Form.Field>
 );
 
@@ -62,6 +62,7 @@ export const DateRangeFilter = props => (
     <Form.Group widths="equal" className="range">
       <Form.Field>
         <NumberFormat
+          value={props.startDate}
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
@@ -70,6 +71,7 @@ export const DateRangeFilter = props => (
       </Form.Field>
       <Form.Field>
         <NumberFormat
+          value={props.endDate}
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"

@@ -66,7 +66,13 @@ export class CrowdpayStore {
       this.data.data.listCrowdPayUsers.crowdPayList = crowdpayList;
       this.setDb(this.getCrowdPayData);
       this.initiateFilters(false);
+    } else {
+      const crowdpayList = lodashFilter(get(this.data, 'data.listCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
+      this.data.data.listCrowdPayUsers.crowdPayList = crowdpayList;
+      this.setDb(this.getCrowdPayData);
+      this.initiateFilters(false);
     }
+    this.setCrowdpayAccountsSummary();
     this.loadingCrowdPayIds =
     lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
@@ -139,7 +145,10 @@ export class CrowdpayStore {
   @action
   initiateFilters = () => {
     this.setAccountTypes(this.requestState.type, false);
-    this.initialFilters(!this.requestState.search.accountStatus);
+    const selected = this.FILTER_FRM.fields[this.requestState.type].value;
+    if (selected.length) {
+      this.initialFilters(!this.requestState.search.accountStatus);
+    }
     const {
       keyword, startDate, endDate, accountStatus,
     } = this.requestState.search;

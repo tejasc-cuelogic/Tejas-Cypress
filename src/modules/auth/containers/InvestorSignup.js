@@ -7,6 +7,8 @@ import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
@@ -35,7 +37,7 @@ class InvestorSignup extends Component {
           givenName: givenName.value,
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-          this.props.identityStore.requestOtpWrapper().then(() => {
+          this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
             this.props.history.push('/auth/confirm-email');
           });
         }

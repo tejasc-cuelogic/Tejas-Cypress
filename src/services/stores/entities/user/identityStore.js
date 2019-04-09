@@ -1,5 +1,5 @@
 import graphql from 'mobx-apollo';
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, omit, get } from 'lodash';
 import Validator from 'validatorjs';
@@ -273,10 +273,12 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId ||
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
             this.updateUserInfo().then(() => {
+              this.setFieldValue('signUpLoading', false);
               resolve();
             }).catch(() => {
               this.setFieldValue('signUpLoading', false);
@@ -376,7 +378,7 @@ export class IdentityStore {
     });
   }
 
-  startPhoneVerification = (type, address = undefined) => {
+  startPhoneVerification = (type, address = undefined, isMobile = false) => {
     const { user } = userDetailsStore.currentUser.data;
     const phoneNumber = address || get(user, 'phone.number');
     const emailAddress = get(user, 'email.address');
@@ -402,13 +404,15 @@ export class IdentityStore {
             this.setSendOtpToMigratedUser('PHONE');
           }
           this.setRequestOtpResponse(result.data.requestOtp);
-          Helper.toast(`Verification ${requestMode}.`, 'success');
+          if (!isMobile) {
+            Helper.toast(`Verification ${requestMode}.`, 'success');
+          }
           resolve();
         })
         .catch((err) => {
           // uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
           this.setFieldValue('signUpLoading', false);
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
           reject(err);
         })
         .finally(() => {
@@ -830,7 +834,7 @@ export class IdentityStore {
     }
   }
 
-  requestOtpWrapper = () => {
+  requestOtpWrapper = (isMobile = false) => {
     uiStore.setProgress();
     const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
@@ -846,7 +850,9 @@ export class IdentityStore {
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          if (!isMobile) {
+            Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          }
           resolve();
         })
         .catch((err) => {

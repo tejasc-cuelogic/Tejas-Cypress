@@ -37,6 +37,7 @@ export class TransactionsStore {
     },
   };
   @observable btnLoader = [];
+  pageReload = true;
 
   @action
   setDataValue = (key, value) => {
@@ -194,7 +195,6 @@ export class TransactionsStore {
         .then(() => {
           this.removeLoadingRequestId(requestID);
           Helper.toast(`Transaction ${actionName} successfully.`, 'success');
-          this.initRequest(this.transactionStatus);
           resolve();
         })
         .catch(() => {
