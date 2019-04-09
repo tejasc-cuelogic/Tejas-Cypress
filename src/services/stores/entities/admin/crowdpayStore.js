@@ -72,6 +72,7 @@ export class CrowdpayStore {
       this.setDb(this.getCrowdPayData);
       this.initiateFilters(false);
     }
+    this.setCrowdpayAccountsSummary();
     this.loadingCrowdPayIds =
     lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
