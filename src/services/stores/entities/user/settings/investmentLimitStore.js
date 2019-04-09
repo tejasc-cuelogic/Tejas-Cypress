@@ -106,25 +106,31 @@ export class InvestmentLimitStore {
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
   getInvestmentLimit = (data, investedAmount = false) => {
     const investedAmtFloat = parseFloat(investedAmount ? investedAmount.replace(/,/g, '') : this.investedAmount);
-    let limit = 2200;
+    const limitFloor = 2200;
     const maxLimit = 107000;
-    const annualIncomeOrNetWorth = data.annualIncome > data.netWorth ?
-      data.netWorth : data.annualIncome;
-    if (data.annualIncome >= 30000 && data.netWorth >= 80000) {
-      if ((data.annualIncome >= maxLimit) && (data.netWorth >= maxLimit)) {
-        const calculatedLimit = (annualIncomeOrNetWorth * 10) / 100;
-        limit = (maxLimit > calculatedLimit) ? calculatedLimit : maxLimit;
-      } else if ((data.annualIncome < maxLimit) || (data.netWorth < maxLimit)) {
-        const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
-        limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
-      }
+    const limitLowPCT = 0.05;
+    let limit = Math.floor(0.10 * Math.min(data.annualIncome, data.netWorth));
+    // const annualIncomeOrNetWorth = data.annualIncome > data.netWorth ?
+    // data.netWorth : data.annualIncome;
+    // if (data.annualIncome >= 30000 && data.netWorth >= 80000) {
+    //   if ((data.annualIncome >= maxLimit) && (data.netWorth >= maxLimit)) {
+    //     const calculatedLimit = (annualIncomeOrNetWorth * 10) / 100;
+    //     limit = (maxLimit > calculatedLimit) ? calculatedLimit : maxLimit;
+    //   } else
+    if ((data.annualIncome < maxLimit) || (data.netWorth < maxLimit)) {
+      // const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
+      // limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
+      limit = Math
+        .max(limitFloor, Math.floor(limitLowPCT * Math.min(data.annualIncome, data.netWorth)));
     }
+    // }
+    limit = Math.min(limit, maxLimit);
     const remainingAmount = limit - ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments) >= maxLimit) {
       remaining = 0;
     }
-    remaining -= remaining % 100;
+    // remaining -= remaining % 100;
     return remaining;
   }
 
@@ -276,15 +282,17 @@ export class InvestmentLimitStore {
   @action
   getInvestedAmount = () => {
     const { accountList, isIndAccExist } = this.getActiveAccountList;
-    const dateFilterStart = moment().subtract(1, 'y').toISOString();
-    const dateFilterStop = moment().toISOString();
+    // const dateFilterStart = moment().subtract(1, 'y').toISOString();
+    // const dateFilterStop = moment().toISOString();
+    const closeDateFilter = moment().subtract(1, 'y').toISOString();
 
     accountList.forEach((account) => {
       if (account.name === this.currentAccountType) {
         this.getInvestorAmountInvested(
           account.details.accountId,
-          dateFilterStart,
-          dateFilterStop,
+          // dateFilterStart,
+          // dateFilterStop,
+          closeDateFilter,
         ).then((data) => {
           this.setFieldValue('investedAmount', parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0));
         });
@@ -294,8 +302,9 @@ export class InvestmentLimitStore {
       const individualAccount = find(this.activeAccounts, acc => acc.name === 'individual');
       this.getInvestorAmountInvested(
         individualAccount.details.accountId,
-        dateFilterStart,
-        dateFilterStop,
+        // dateFilterStart,
+        // dateFilterStop,
+        closeDateFilter,
       ).then((data) => {
         const investedAmount = parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0) +
           this.investedAmount;
@@ -304,19 +313,22 @@ export class InvestmentLimitStore {
     }
   }
 
+  @action
   getInvestorAmountInvested =
-    (accountId, dateFilterStart = moment().subtract(1, 'y').toISOString(), dateFilterStop = moment().toISOString()) => new Promise((resolve) => {
+    (accountId, closeDateFilter = moment().subtract(1, 'y').toISOString()) => new Promise((resolve) => {
       this.investorInvestmentLimit = graphql({
         client,
         query: getInvestorAmountInvested,
         variables: {
           userId: userDetailsStore.currentUserId,
           accountId,
-          dateFilterStart,
-          dateFilterStop,
+          // dateFilterStart,
+          // dateFilterStop,
+          closeDateFilter,
+          includeTx: false,
         },
         onFetch: (data) => {
-          if (data && !this.investorInvestmentLimit.loading) {
+          if (data && data.getInvestorAmountInvested) {
             resolve(data);
           }
         },
