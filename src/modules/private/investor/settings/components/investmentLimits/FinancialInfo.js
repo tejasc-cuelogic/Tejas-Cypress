@@ -133,7 +133,7 @@ export default class FinancialInfo extends Component {
                       accreditationData[account.name].status ?
                         <Card.Content>
                           <Header as="h4">
-                            Accreditation
+                            Accredited Investor Status
                             {/* <Link as={Button} to="/" className="link" onClick={e =>
                              this.handleVerifyAccreditation
                             (e, account.name, account.details.accountId)}><small>Update
