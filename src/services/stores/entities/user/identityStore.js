@@ -1,5 +1,5 @@
 import graphql from 'mobx-apollo';
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, omit, get } from 'lodash';
 import Validator from 'validatorjs';
@@ -410,7 +410,7 @@ export class IdentityStore {
         .catch((err) => {
           // uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
           this.setFieldValue('signUpLoading', false);
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
           reject(err);
         })
         .finally(() => {
