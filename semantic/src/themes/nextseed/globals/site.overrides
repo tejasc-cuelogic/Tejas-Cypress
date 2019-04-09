@@ -173,6 +173,14 @@ h6{
 	text-align:center !important;
 	justify-content:center;
 }
+.intro-text{
+	color:@neutral-middark !important;
+	font-size: @13px;
+}
+.note{
+	color:@neutral-middark !important;
+	font-size: @12px;
+}
 .justify-text {
 	text-align: justify;
 }
@@ -206,10 +214,6 @@ h6{
 .warning-text{
   color:@highlight-secondary !important;
 }
-.intro-text, .note{
-	color:@neutral-middark !important;
-	font-size: @12px;
-}
 .primary-two-text{
 	color: @primary-two !important;
 }
@@ -238,6 +242,9 @@ h6{
 }
 .more-info {
 	font-size: 12px;
+}
+.underline-text {
+	text-decoration: underline !important;
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){

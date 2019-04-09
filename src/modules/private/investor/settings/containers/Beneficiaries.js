@@ -44,7 +44,7 @@ export default class Beneficiaries extends Component {
     return (
       <div>
         <Header as="h4">Beneficiaries</Header>
-        <p className="intro-text">
+        <p className="note">
           Designate beneficiaries for each of your investment accounts.
           If you have multiple accounts, each can be adjusted separately.
         </p>

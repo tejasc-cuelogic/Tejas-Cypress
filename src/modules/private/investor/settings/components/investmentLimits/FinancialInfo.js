@@ -141,7 +141,7 @@ export default class FinancialInfo extends Component {
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <b><dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd></b>
+                            <dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}><b>{this.getStatus(accreditationData[account.name])}</b></dd>
                             {accreditationData[account.name].status === 'INVALID' ?
                               <Aux>
                                 <dt>Message :</dt>
@@ -162,9 +162,7 @@ export default class FinancialInfo extends Component {
                         <Card.Content>
                           <Header as="h4">Accredited Investor Status</Header>
                           <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
-                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor">
-                            &nbsp;What is an accredited investor?
-                          </Link>
+                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor" className="intro-text highlight-text">What is an accredited investor?</Link>
                           <Divider hidden />
                           <Card.Description>
                             <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Status" />

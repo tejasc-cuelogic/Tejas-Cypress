@@ -66,7 +66,7 @@ const MySidebar = observer(props => (
               <Logo
                 className="logo"
                 dataSrc={((props.layoutState.leftPanel) ?
-                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoGreenGrey') :
                   'LogoSmall')}
               />
             </Link>
