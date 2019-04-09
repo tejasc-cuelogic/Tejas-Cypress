@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Header, Form, Divider, Button } from 'semantic-ui-react';
+import { Modal, Header, Form, Divider, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../theme/form';
-
+import { ListErrors } from '../../../theme/shared';
 @inject('identityStore', 'uiStore')
 @withRouter
 @observer
@@ -31,6 +31,7 @@ export default class MigratedUserPhoneNumber extends Component {
   }
   render() {
     const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
+    const { errors } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -59,6 +60,11 @@ export default class MigratedUserPhoneNumber extends Component {
             <Divider hidden />
             <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary size="large" className="very relaxed" content="Confirm" loading={this.props.uiStore.inProgress} />
           </Form>
+          { errors &&
+            <Message error textAlign="left" className="mb-30">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
+          }
         </Modal.Content>
       </Modal>
     );
