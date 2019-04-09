@@ -45,9 +45,6 @@
             }
         }
     }
-    .sticky-sidebar &{
-        max-height:58vh;
-    }
 }
 
 @keyframes feed-animate {

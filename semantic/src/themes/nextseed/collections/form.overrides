@@ -225,20 +225,15 @@
         &.inline .field{
             margin:0 !important;
         }
-        &.range{
-            .field{
-                margin-bottom:0 !important;
-            }
-            .field:not(:last-child):after{
-                width:6px;
-                content:"-";
-                color:@neutral;
-                font-weight:@fontMedium;
-                line-height:@inputLineHeight;
-                position:absolute;
-                right:-3px;
-                top:@inputVerticalPadding;
-            }
+        &.range .field:not(:last-child):after{
+            width:6px;
+            content:"-";
+            color:@neutral;
+            font-weight:@fontMedium;
+            line-height:@inputLineHeight;
+            position:absolute;
+            right:-3px;
+            top:@inputVerticalPadding;
         }
     }
     .button-radio .fields.vertical{
