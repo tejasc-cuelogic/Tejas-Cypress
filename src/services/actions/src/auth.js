@@ -224,7 +224,7 @@ export class Auth {
    * @desc Registers new user. Fetches required data from authStore.
    * @return null.
    */
-  register() {
+  register(isMobile = false) {
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Signing you up');
@@ -264,10 +264,12 @@ export class Auth {
     })
       .then(() => {
         const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
-        if (signUpRole === 'investor') {
-          Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
-        } else if (signUpRole === 'issuer') {
-          Helper.toast('Congrats, you have been PreQualified on NextSeed.', 'success');
+        if (!isMobile) {
+          if (signUpRole === 'investor') {
+            Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
+          } else if (signUpRole === 'issuer') {
+            Helper.toast('Congrats, you have been PreQualified on NextSeed.', 'success');
+          }
         }
         if (signUpRole === 'investor') {
           if (!userStore.currentUser) {
