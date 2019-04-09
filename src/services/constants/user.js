@@ -1,5 +1,8 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
+import Aux from 'react-aux';
+import React from 'react';
+import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -49,8 +52,19 @@ export const securitySections = [
   //   action: ['social-connect'],
   // },
   {
-    title: 'Multi-factor Authentication',
-    description: 'You can choose your Active MFA Factor.',
+    title: 'Multi-Factor Authentication',
+    description:
+      (
+        <Aux>Select Your{' '}
+          <Popup position="top center" trigger={<span className="underline-text" >Active MFA</span>}>
+            <Popup.Header className="grey-header">Active MFA</Popup.Header>
+            <Popup.Content>
+              Manage your MFA contact preferences. All major actions in your account will
+              require additional confirmation with a code sent to your phone or email address.
+            </Popup.Content>
+          </Popup>
+        </Aux>
+      ),
     descriptionNotAvailable: '',
     action: ['mfa', 'Manage multi-factor autentication'],
   },
@@ -200,9 +214,9 @@ export const USER_IDENTITY = {
 };
 
 export const USER_TITLE = [
-  { key: 'Mr', value: 'Mr', text: 'Mr' },
-  { key: 'Ms', value: 'Ms', text: 'Ms' },
-  { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
+  { key: 'Mr', value: 'Mr', text: 'Mr.' },
+  { key: 'Ms', value: 'Ms', text: 'Ms.' },
+  { key: 'Mrs', value: 'Mrs', text: 'Mrs.' },
 ];
 
 export const IDENTITY_DOCUMENTS = {

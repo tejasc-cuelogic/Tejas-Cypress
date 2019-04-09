@@ -273,10 +273,12 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId ||
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
             this.updateUserInfo().then(() => {
+              this.setFieldValue('signUpLoading', false);
               resolve();
             }).catch(() => {
               this.setFieldValue('signUpLoading', false);
@@ -830,7 +832,7 @@ export class IdentityStore {
     }
   }
 
-  requestOtpWrapper = () => {
+  requestOtpWrapper = (isMobile = false) => {
     uiStore.setProgress();
     const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
@@ -846,7 +848,9 @@ export class IdentityStore {
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          if (!isMobile) {
+            Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          }
           resolve();
         })
         .catch((err) => {

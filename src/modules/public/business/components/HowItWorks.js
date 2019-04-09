@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 // Embed
 import { inject, observer } from 'mobx-react';
 // import { get } from 'lodash';
@@ -11,10 +11,15 @@ import NSImage from '../../../shared/NSImage';
 // import Helper from '../../../../helper/utility';
 
 @inject('offeringsStore')
+@withRouter
 @observer
 class HowItWorks extends Component {
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
+  }
+  handleFundingOptBtn = () => {
+    this.props.history.push('/business/funding-options/term-notes');
+    window.scrollTo(0, 0);
   }
   render() {
     // const amount = this.props.offeringsStore.totalAmountRaised;
@@ -303,7 +308,7 @@ class HowItWorks extends Component {
             <Divider />
             <List className="learn-more-list">
               <List.Item>
-                <List.Content as={Link} to="/business/funding-options/term-notes" className="text-uppercase" floated="right">
+                <List.Content onClick={this.handleFundingOptBtn} style={{ cursor: 'pointer' }} className="text-uppercase" floated="right">
                   <b>Funding options</b>
                   <List.Icon className="ns-arrow-right" color="green" />
                 </List.Content>
