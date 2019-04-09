@@ -9,6 +9,8 @@ import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -161,6 +163,7 @@ export default class ConfirmPhoneNumber extends Component {
               <ReactCodeInput
                 name="code"
                 fields={6}
+                autoFocus={!isMobile}
                 type="number"
                 className="otp-field"
                 pattern="[0-9]*"

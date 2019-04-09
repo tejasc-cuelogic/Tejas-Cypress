@@ -8,6 +8,8 @@ import Helper from '../../../helper/utility';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('authStore', 'uiStore')
 @observer
 export default class ResetPassword extends Component {
@@ -53,6 +55,7 @@ export default class ResetPassword extends Component {
                 type="number"
                 filterChars
                 name="code"
+                autoFocus={!isMobile}
                 className="otp-field mt-10"
                 pattern="[0-9]*"
                 inputmode="numeric"

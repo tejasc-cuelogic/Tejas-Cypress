@@ -196,6 +196,7 @@ export default class ConfirmEmailAddress extends Component {
               <ReactCodeInput
                 fields={6}
                 type="number"
+                autoFocus={!isMobile}
                 filterChars
                 className="otp-field"
                 pattern="[0-9]*"
