@@ -527,7 +527,7 @@ export const BROKERAGE_EMPLOYMENT = {
     value: '',
     label: 'Member Firm Name',
     error: undefined,
-    rule: 'alpha|required_if:brokerageEmployment,yes',
+    rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
     placeHolder: 'Enter here',
     customErrors: {
       required_if: 'required',
@@ -557,7 +557,7 @@ export const PUBLIC_COMPANY_REL = {
     value: '',
     label: 'Ticker symbol',
     error: undefined,
-    rule: 'alpha|required_if:publicCompanyRel,yes',
+    rule: 'alphaPublicCompanyRel|required_if:publicCompanyRel,yes',
     placeHolder: 'E.g. GOOG',
     customErrors: {
       required_if: 'required',

@@ -241,6 +241,10 @@ class IraAccountStore {
       case 'Funding':
         isValidCurrentStep = this.FUNDING_FRM.meta.isValid;
         accountAttributes.fundingType = this.fundingOption ? this.fundingOption.rawValue : '';
+        if (accountAttributes.fundingType !== 'check') {
+          bankAccountStore.setPlaidAccDetails({});
+          bankAccountStore.resetRoutingNum();
+        }
         if (isValidCurrentStep) {
           this.submitForm(currentStep, accountAttributes).then(() => {
             res();

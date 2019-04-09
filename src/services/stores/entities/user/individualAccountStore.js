@@ -61,7 +61,7 @@ class IndividualAccountStore {
           if (res1.data.submitInvestorAccount !== 'The account is Processing') {
             this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
               uiStore.setProgress(false);
-              if (!res.data.createIndividualGoldStarInvestor) {
+              if (res.data.createIndividualGoldStarInvestor) {
                 this.setFieldValue('showProcessingModal', true);
                 Helper.toast('Individual account submitted successfully.', 'success');
               } else {

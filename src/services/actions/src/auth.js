@@ -169,7 +169,9 @@ export class Auth {
           localStorage.removeItem('defaultNavExpanded');
           if (result.action && result.action === 'newPassword') {
             authStore.setEmail(result.data.email);
-            authStore.setCognitoUserSession(this.cognitoUser.Session);
+            if (this.cognitoUser && this.cognitoUser.Session) {
+              authStore.setCognitoUserSession(this.cognitoUser.Session);
+            }
             authStore.setNewPasswordRequired(true);
           } else {
             // Extract JWT from token
@@ -200,7 +202,9 @@ export class Auth {
         newPasswordRequired: (result) => {
           // authStore.setEmail(result.email);
           authStore.setUserLoggedIn(true);
-          authStore.setCognitoUserSession(this.cognitoUser.Session);
+          if (this.cognitoUser && this.cognitoUser.Session) {
+            authStore.setCognitoUserSession(this.cognitoUser.Session);
+          }
           authStore.setNewPasswordRequired(true);
           res({ data: result, action: 'newPassword' });
         },
@@ -220,7 +224,7 @@ export class Auth {
    * @desc Registers new user. Fetches required data from authStore.
    * @return null.
    */
-  register() {
+  register(isMobile = false) {
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Signing you up');
@@ -260,10 +264,12 @@ export class Auth {
     })
       .then(() => {
         const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
-        if (signUpRole === 'investor') {
-          Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
-        } else if (signUpRole === 'issuer') {
-          Helper.toast('Congrats, you have been PreQualified on NextSeed.', 'success');
+        if (!isMobile) {
+          if (signUpRole === 'investor') {
+            Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
+          } else if (signUpRole === 'issuer') {
+            Helper.toast('Congrats, you have been PreQualified on NextSeed.', 'success');
+          }
         }
         if (signUpRole === 'investor') {
           if (!userStore.currentUser) {

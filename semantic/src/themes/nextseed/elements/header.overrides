@@ -73,6 +73,9 @@
         margin-left:@10px;
         >small{
             font-size:@13px;
+            >i.icon{
+                margin-right:@4px;
+            }
         }
     }
 }

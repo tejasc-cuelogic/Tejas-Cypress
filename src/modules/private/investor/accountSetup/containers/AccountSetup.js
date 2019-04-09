@@ -18,6 +18,7 @@ import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHead
 import CashMovement from '../../summary/components/CashMovement';
 import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
 }) => {
@@ -85,7 +86,7 @@ export default class AccountSetup extends Component {
             userDetailsStore={this.props.userDetailsStore}
           /> : <InlineLoader /> : ''}
       >
-        <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
+        <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading ?
           <ProgressCard
             {...this.props}

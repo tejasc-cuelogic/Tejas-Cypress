@@ -85,6 +85,7 @@ section{
             }
         }
         &.resources-banner {
+            height: 465px;
             background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat;  
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -95,9 +96,14 @@ section{
             }
         }
         &.edu-center-business-banner {
+            height: 363px;
             background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat;
+            @media only screen and (max-width : @computerBreakpoint) {
+                height:260px;
+            }
         }
         &.edu-center-investor-banner {
+            height: 363px;
             background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;

@@ -118,6 +118,8 @@ export default class InvestNow extends React.Component {
 
   multiClickHandler = (step) => {
     const { inprogressAccounts } = this.props.userDetailsStore.signupStatus;
+    const { userDetails } = this.props.userDetailsStore;
+    const userStatus = userDetails && userDetails.status;
     if (step.name === 'Financial Info') {
       this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
         this.setState({ submitLoading: response.isValid });
@@ -148,13 +150,14 @@ export default class InvestNow extends React.Component {
       const {
         changeShowAccountListFlag,
         userAccredetiationState,
+        selectedAccountStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
+      if (selectedAccountStatus !== 'FROZEN' && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
-            const isDocumentUpload = get(resp, 'investNowHealthCheck.availibityForNPAInOffering');
+            const isDocumentUpload = get(resp, 'investNowHealthCheck.availabilityForNPAInOffering');
             if (!isDocumentUpload) {
               this.handleStepChangeForPartialAccounts(0);
             } else {

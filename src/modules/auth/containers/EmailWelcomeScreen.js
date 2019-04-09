@@ -24,9 +24,9 @@ export default class EmailWelcomeScreen extends Component {
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Content className="center-align neutral-text">
-          <Header as="h3" className="mt-80">Welcome</Header>
+          <Header as="h3" className="mt-80">Welcome!</Header>
           <p className="mt-80">
-            Hi {`${get(userDetails, 'info.firstName') || ''}`}<br />
+            Hi {`${get(userDetails, 'info.firstName') || ''}`},<br />
             We're excited to show you what's new on NextSeed!
           </p>
           <p className="mt-20">

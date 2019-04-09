@@ -66,12 +66,12 @@ const MySidebar = observer(props => (
               <Logo
                 className="logo"
                 dataSrc={((props.layoutState.leftPanel) ?
-                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoGreenGrey') :
                   'LogoSmall')}
               />
             </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
-            <div className="user-picture">
+            <div className="user-picture center-align">
               {props.UserInfo.avatarUrl ?
                 <Image64
                   avatar

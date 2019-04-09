@@ -13,7 +13,7 @@ export default class LinkbankSummary extends React.Component {
   componentWillMount() {
     this.props.bankAccountStore.fetchRoutingNumber();
   }
-  componentDidMount() {
+  componentDidUpdate() {
     const {
       setLoaderForAccountBlank,
     } = this.props.bankAccountStore;
@@ -48,7 +48,7 @@ export default class LinkbankSummary extends React.Component {
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                { routingNum !== null &&
+                { !isEmpty(routingNum) &&
                   <Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>

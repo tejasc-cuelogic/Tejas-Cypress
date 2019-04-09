@@ -222,3 +222,7 @@
 @veryRelaxedHeaderMargin: 0.5rem;
 @veryRelaxedHorizontalPadding: 1.5rem;
 
+/*-----------------------------
+        Custom variables
+-------------------------------*/
+@primaryHeaderHeight:72px;
