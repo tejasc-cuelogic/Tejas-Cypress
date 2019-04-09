@@ -24,7 +24,7 @@ export const DropdownFilter = props => (
       clearable
       options={props.options}
     />
-    <div className="dropdown-effect">{props.name}</div>
+    <div className="dropdown-effect">{props.label || props.name}</div>
   </Form.Field>
 );
 
