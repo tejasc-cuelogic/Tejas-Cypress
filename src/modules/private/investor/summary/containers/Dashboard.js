@@ -80,7 +80,7 @@ export default class Dashboard extends Component {
           {
               cashMovementData && cashMovementData.length ?
                 <Aux>
-                  <Card fluid={isMobile}>
+                  <Card fluid>
                     <Card.Content>
                       <Header as="h4">Cash Movement from Inception</Header>
                       <CashMovement data={cashMovementData} />
