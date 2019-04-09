@@ -42,7 +42,7 @@ class CustomValidations extends Component {
     Validator.register('hundreds', (value) => {
       const amount = parseFloat(value) || 0;
       return amount >= 100 && amount % 100 === 0;
-    }, 'Investment amount should be in multiples of 100');
+    }, 'Investments must be in increments of $100');
 
     // TODO need to otimize alphaBrokerage and alphaPublicCompanyRel validators
     Validator.register('alphaBrokerage', (value) => {

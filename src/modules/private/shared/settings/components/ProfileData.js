@@ -131,12 +131,12 @@ export default class ProfileData extends Component {
                   onplaceselected={setAddressFieldsForProfile}
                   changed={profileInfoChange}
                 />
+                <FormInput
+                  name="streetTwo"
+                  fielddata={ID_PROFILE_INFO.fields.streetTwo}
+                  changed={profileInfoChange}
+                />
                 <Form.Group widths={3}>
-                  <FormInput
-                    name="streetTwo"
-                    fielddata={ID_PROFILE_INFO.fields.streetTwo}
-                    changed={profileInfoChange}
-                  />
                   <FormInput
                     name="city"
                     fielddata={ID_PROFILE_INFO.fields.city}

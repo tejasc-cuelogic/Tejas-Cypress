@@ -32,13 +32,15 @@ class AccountType extends Component {
       setPartialInvestmenSession,
       sendAdminEmailOfFrozenAccount,
     } = this.props.userDetailsStore;
+    const userInfoDetails = this.props.userDetailsStore.userDetails;
+    const userStatus = userInfoDetails && userInfoDetails.status;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     const { campaign } = this.props.campaignStore;
     const offeringId = campaign && campaign.id ? campaign.id : this.props.match.params.offeringId;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
-    let isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+    let isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const {
       userAccredetiationState,
       resetAccreditationExpirayForm,
@@ -57,7 +59,7 @@ class AccountType extends Component {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
-            isDocumentUpload = get(resp, 'investNowHealthCheck.availibityForNPAInOffering');
+            isDocumentUpload = get(resp, 'investNowHealthCheck.availabilityForNPAInOffering');
           });
       }
     }
@@ -68,7 +70,7 @@ class AccountType extends Component {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
-          if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId) {
+          if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId && userStatus === 'FULL') {
             setStepToBeRendered(1);
           }
         });
@@ -80,7 +82,7 @@ class AccountType extends Component {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
           if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId &&
-            !isParallelOfferingModelToShow) {
+            !isParallelOfferingModelToShow && userStatus === 'FULL') {
             setStepToBeRendered(1);
           }
         });
@@ -120,6 +122,8 @@ class AccountType extends Component {
     //   this.props.history.push(this.props.refLink);
     // }
     const { activeAccounts, inprogressAccounts } = this.props.userDetailsStore.signupStatus;
+    const userInfoDetails = this.props.userDetailsStore.userDetails;
+    const userStatus = userInfoDetails && userInfoDetails.status;
     const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
       [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
         activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
@@ -128,7 +132,7 @@ class AccountType extends Component {
     const { campaign } = this.props.campaignStore;
     const offeringDetailObj = this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
-    const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+    const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
@@ -145,7 +149,7 @@ class AccountType extends Component {
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
           }
-        } else {
+        } else if (userStatus === 'FULL') {
           setFieldValue('disableNextbtn', false);
           setStepToBeRendered(1);
         }
@@ -165,9 +169,11 @@ class AccountType extends Component {
       userDetails,
     } = this.props.accreditationStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const userInfoDetails = this.props.userDetailsStore.userDetails;
+    const userStatus = userInfoDetails && userInfoDetails.status;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
-    const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+    const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     if (!byDefaultRender) {
@@ -183,7 +189,7 @@ class AccountType extends Component {
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
           }
-        } else {
+        } else if (userStatus === 'FULL') {
           setFieldValue('disableNextbtn', false);
           setStepToBeRendered(1);
         }
@@ -237,7 +243,7 @@ class AccountType extends Component {
     const offeringRegulationDMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmount506C');
     const OfferingRegulationCFMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmountCF');
     const OfferingRegulationCFMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmountCF');
-    const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availibityForNPAInOffering');
+    const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const offeringDetailsObj = {
       offeringTitle,
       offeringRegulationDMinAmount,
@@ -276,6 +282,7 @@ class AccountType extends Component {
     }
     if ((isRegulationCheck && (!accreditationData.ira)) || (!selectedAccountStatus) ||
       (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0) ||
+      (showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length === 1) ||
       this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
     }

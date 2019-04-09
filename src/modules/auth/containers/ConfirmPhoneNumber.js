@@ -9,6 +9,8 @@ import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -70,7 +72,7 @@ export default class ConfirmPhoneNumber extends Component {
     const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
     const phoneNumberValue = phoneNumber.value;
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue);
+    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -161,6 +163,7 @@ export default class ConfirmPhoneNumber extends Component {
               <ReactCodeInput
                 name="code"
                 fields={6}
+                autoFocus={!isMobile}
                 type="number"
                 className="otp-field"
                 pattern="[0-9]*"

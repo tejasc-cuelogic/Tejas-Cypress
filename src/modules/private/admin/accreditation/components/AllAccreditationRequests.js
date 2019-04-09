@@ -58,7 +58,7 @@ export default class AllAccreditationRequests extends Component {
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('MM/DD/YYYY') : <p className="intro-text">N/A</p>}
+                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('MM/DD/YYYY') : <p className="note">N/A</p>}
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
@@ -84,7 +84,7 @@ export default class AllAccreditationRequests extends Component {
                         accreditation.assetsUpload[0].fileInfo &&
                         accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
                           <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >Uploads</a>
-                        : <p className="intro-text">N/A</p>
+                        : <p className="note">N/A</p>
                         : 'Verifier'}
                         {accreditation.verifier &&
                           <Aux>
