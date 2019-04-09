@@ -109,7 +109,7 @@ export class InvestmentLimitStore {
     const limitFloor = 2200;
     const maxLimit = 107000;
     const limitLowPCT = 0.05;
-    let limit = Math.floor(0.10 * Math.min(data.annualIncome, data.netWorth));
+    let limit = Math.floor(0.10 * Math.min(data.annualIncome || 0, data.netWorth || 0));
     // const annualIncomeOrNetWorth = data.annualIncome > data.netWorth ?
     // data.netWorth : data.annualIncome;
     // if (data.annualIncome >= 30000 && data.netWorth >= 80000) {
@@ -117,17 +117,18 @@ export class InvestmentLimitStore {
     //     const calculatedLimit = (annualIncomeOrNetWorth * 10) / 100;
     //     limit = (maxLimit > calculatedLimit) ? calculatedLimit : maxLimit;
     //   } else
-    if ((data.annualIncome < maxLimit) || (data.netWorth < maxLimit)) {
+    if (((data.annualIncome || 0) < maxLimit) || ((data.netWorth || 0) < maxLimit)) {
       // const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
       // limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
       limit = Math
-        .max(limitFloor, Math.floor(limitLowPCT * Math.min(data.annualIncome, data.netWorth)));
+        .max(limitFloor, Math.floor(limitLowPCT *
+          Math.min((data.annualIncome || 0), data.netWorth || 0)));
     }
     // }
     limit = Math.min(limit, maxLimit);
     const remainingAmount = limit - ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
-    if ((investedAmtFloat + data.cfInvestments) >= maxLimit) {
+    if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
     }
     // remaining -= remaining % 100;
