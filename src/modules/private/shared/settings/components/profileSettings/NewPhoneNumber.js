@@ -6,6 +6,8 @@ import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -30,7 +32,7 @@ export default class NewPhoneNumber extends Component {
     const { phoneNumber, mfaMethod } = ID_VERIFICATION_FRM.fields;
     const phoneNumberValue = phoneNumber.value;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue).then(() => {
+    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile).then(() => {
       this.props.identityStore.setIsOptConfirmed(false);
       this.props.uiStore.clearErrors();
       this.props.history.push(`${this.props.refLink}/confirm`);

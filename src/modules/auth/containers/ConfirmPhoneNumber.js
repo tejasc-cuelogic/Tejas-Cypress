@@ -72,7 +72,7 @@ export default class ConfirmPhoneNumber extends Component {
     const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
     const phoneNumberValue = phoneNumber.value;
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue);
+    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }

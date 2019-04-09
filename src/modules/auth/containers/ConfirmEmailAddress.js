@@ -28,7 +28,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
       && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
-      this.props.identityStore.startPhoneVerification('EMAIL');
+      this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
     }
   }
   componentDidMount() {

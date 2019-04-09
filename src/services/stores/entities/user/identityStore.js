@@ -378,7 +378,7 @@ export class IdentityStore {
     });
   }
 
-  startPhoneVerification = (type, address = undefined) => {
+  startPhoneVerification = (type, address = undefined, isMobile = false) => {
     const { user } = userDetailsStore.currentUser.data;
     const phoneNumber = address || get(user, 'phone.number');
     const emailAddress = get(user, 'email.address');
@@ -404,7 +404,9 @@ export class IdentityStore {
             this.setSendOtpToMigratedUser('PHONE');
           }
           this.setRequestOtpResponse(result.data.requestOtp);
-          Helper.toast(`Verification ${requestMode}.`, 'success');
+          if (!isMobile) {
+            Helper.toast(`Verification ${requestMode}.`, 'success');
+          }
           resolve();
         })
         .catch((err) => {
