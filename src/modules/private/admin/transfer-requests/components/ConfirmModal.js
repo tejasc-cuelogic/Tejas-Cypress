@@ -15,13 +15,14 @@ export default class ConfirmModal extends Component {
     const {
       statusType,
     } = this.props.match.params;
+    this.props.transactionsStore.pageReload = false;
     this.props.history.push(`${this.props.refLink}/${statusType}`);
   }
   handleConfirm = () => {
     const {
       requestId, statusType,
     } = this.props.match.params;
-
+    this.props.transactionsStore.pageReload = false;
     this.props.transactionsStore
       .failTransaction(
         parseInt(requestId, 10),

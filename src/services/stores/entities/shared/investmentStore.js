@@ -94,7 +94,10 @@ export class InvestmentStore {
   @computed get getTransferRequestAmount() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
-    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
+    const getrewardBalanceAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
+    const getPreviousCreditAvailable = (userAmountDetails && userAmountDetails.previousInvestmentCredit) || '0';
+    const getCurrCreditAvailable =
+      money.add(getrewardBalanceAvailable, getPreviousCreditAvailable);
     const cashAndCreditBalance = money.add(getCurrCashAvailable, getCurrCreditAvailable);
     const getPreviousInvestedAmount =
       (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
@@ -302,15 +305,15 @@ export class InvestmentStore {
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
-        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser than invested amount';
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'The campaign is currently within the last 48 hours of closing. Your investment cannot be reduced or canceled at this time.';
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
       } else if (!this.isValidMultipleAmount(this.investmentAmount)) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
-        this.setFieldValue('investmentFlowErrorMessage', 'Investment amount should be in multiples of 100');
-        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment amount should be in multiples of 100';
+        this.setFieldValue('investmentFlowErrorMessage', 'Investments must be in increments of $100');
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investments must be in increments of $100';
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();

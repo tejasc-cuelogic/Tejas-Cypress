@@ -16,8 +16,11 @@ export default class AllTransactions extends Component {
   componentWillMount() {
     const { statusType } = this.props.match.params;
     const transStatus = STATUS_MAPPING[statusType].status;
-    this.props.transactionsStore.resetData();
-    this.props.transactionsStore.initRequest(transStatus, statusType); // load data
+    if (this.props.match.isExact && this.props.transactionsStore.pageReload) {
+      this.props.transactionsStore.resetData();
+      this.props.transactionsStore.initRequest(transStatus, statusType); // load data
+    }
+    this.props.transactionsStore.pageReload = true;
   }
 
   getUserName = (info, userId) => (

@@ -143,6 +143,11 @@ export class BankAccountStore {
   }
 
   @action
+  resetRoutingNum() {
+    this.routingNum = null;
+  }
+
+  @action
   resetAddFundsForm() {
     // eslint-disable-next-line no-unused-expressions
     Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? Validator.resetFormData(this.formEntityAddFunds) :
@@ -558,6 +563,7 @@ export class BankAccountStore {
     this.resetFormData('formAddFunds');
     this.resetFormData('formEntityAddFunds');
     this.resetFormData('formLinkBankManually');
+    this.resetRoutingNum();
     this.bankLinkInterface = 'list';
     this.plaidAccDetails = {};
     this.plaidBankDetails = {};

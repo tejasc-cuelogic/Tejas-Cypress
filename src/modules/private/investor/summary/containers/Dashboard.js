@@ -82,7 +82,7 @@ export default class Dashboard extends Component {
                 <Aux>
                   <Card fluid>
                     <Card.Content>
-                      <Header as="h4">Cash Movement from Inception</Header>
+                      <Header as="h4">Investments and Payments</Header>
                       <CashMovement data={cashMovementData} />
                     </Card.Content>
                   </Card>
