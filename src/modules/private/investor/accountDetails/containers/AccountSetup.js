@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { includes, capitalize } from 'lodash';
 import Aux from 'react-aux';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -29,7 +30,7 @@ export default class AccountSetup extends Component {
           <Aux>
             <Header as="h4">{currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Investment Account</Header>
             <p>{msg}</p>
-            <Card>
+            <Card fluid={isMobile}>
               <Card.Content className="mt-10 mb-10">
                 <p><b>Account Setup</b></p>
                 <Button fluid color="green" content="Continue" onClick={() => this.renderAccType()} />

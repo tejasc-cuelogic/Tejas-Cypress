@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
-import { isEmpty, includes, get } from 'lodash';
+import { isEmpty, includes } from 'lodash';
 import Aux from 'react-aux';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
 import ConfirmBankLinking from '../components/bankaccount/ConfirmBankLinking';
@@ -25,17 +25,17 @@ export default class BankAccount extends Component {
     const NO_PERMISSION_MSG = `Please contact
   <a href="mailto:support@nextseed.com">support@nextseed.com</a>
   to request a transfer of your IRA funds.`;
-    const { userDetails } = this.props.userDetailsStore;
+    // const { userDetails } = this.props.userDetailsStore;
     const pendingAccoungDetails = plaidAccDetails && plaidAccDetails.changeRequest &&
       plaidAccDetails.changeRequest.status !== 'REQUEST_CANCELLATION' ? plaidAccDetails.changeRequest : null;
-    let isCheckedIra = false;
+    // let isCheckedIra = false;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    get(userDetails, 'roles').map((role) => {
-      if (get(role, 'details.fundingType') === 'check' && accountType === 'ira') {
-        isCheckedIra = true;
-      }
-      return null;
-    });
+    // get(userDetails, 'roles').map((role) => {
+    //   if (get(role, 'details.fundingType') === 'check' && accountType === 'ira') {
+    //     isCheckedIra = true;
+    //   }
+    //   return null;
+    // });
     return (
       <div>
         <Switch>
@@ -62,7 +62,7 @@ export default class BankAccount extends Component {
           render={props =>
             <ConfirmBankLinking refLink={this.props.match.url} {...props} />}
         />
-        { (accountType === 'ira' && isCheckedIra) || (accountType !== 'ira') ?
+        {accountType !== 'ira' ?
           <Aux>
             <Header as="h4">Bank Account</Header>
             <Grid>

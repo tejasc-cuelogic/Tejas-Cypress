@@ -243,10 +243,16 @@
 		.user-picture{
 			text-align:left;
 			padding:@10px;
+			@media only screen and (max-width:@largestMobileScreen){
+				text-align: center;
+			}
 			>img, .sb-avatar{
 				float:left;
 				max-width:42px;
 				margin:-@7px @10px 0 0;
+				@media only screen and (max-width:@largestMobileScreen){
+					float: none;
+				}
 			}
 			.sb-avatar{
 				height:42px;

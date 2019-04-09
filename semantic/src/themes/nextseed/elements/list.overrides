@@ -16,8 +16,8 @@
     }
 }
 .menu-secondary-fixed .ui.list.horizontal{
-    height:58px;
-    padding:@20px @16px;
+    height:@primaryHeaderHeight;
+    padding:@27px @16px;
     &.bulleted>.item:before{
         content:"|";
         margin-left:-@13px;

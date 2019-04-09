@@ -13,6 +13,7 @@ import IdentityVerification from './../../accountSetup/containers/identityVerifi
 import EstablishProfile from './../../accountSetup/containers/establishProfile';
 import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
 }) => {
@@ -88,7 +89,7 @@ export default class Dashboard extends Component {
                 </Aux>
               :
                 <Aux>
-                  <Card>
+                  <Card fluid={isMobile}>
                     <Card.Content>
                       <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
                       <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
