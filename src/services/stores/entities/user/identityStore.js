@@ -273,10 +273,12 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId ||
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
             this.updateUserInfo().then(() => {
+              this.setFieldValue('signUpLoading', false);
               resolve();
             }).catch(() => {
               this.setFieldValue('signUpLoading', false);
