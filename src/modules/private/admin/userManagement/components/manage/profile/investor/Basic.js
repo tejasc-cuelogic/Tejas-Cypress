@@ -111,7 +111,7 @@ export default class Basic extends Component {
         </Form.Group>
         <Divider />
         <Header as="h6">Mailing Address</Header>
-        <Form.Group widths={4}>
+        <Form.Group widths={3}>
           <AutoComplete
             readOnly={displayMode}
             displayMode={displayMode}
@@ -133,7 +133,7 @@ export default class Basic extends Component {
           }
         </Form.Group>
         <Header as="h6">Legal Address</Header>
-        <Form.Group widths={4}>
+        <Form.Group widths={3}>
           <AutoComplete
             readOnly={displayMode}
             displayMode={displayMode}

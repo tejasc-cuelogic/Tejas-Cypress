@@ -49,7 +49,7 @@ const userVerifiedDetails = ({
         <dt>ZIP Code</dt>
         <dd>{legalDetails.legalAddress.zipCode}</dd> */}
       </dl>
-      <p className="intro-text">
+      <p className="note">
         If any of this information needs to be updated, please contact support at{' '}
         <a href="mailto:support@nextseed.com">Support@Nextseed.com</a>.
       </p>
