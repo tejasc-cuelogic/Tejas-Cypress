@@ -91,7 +91,7 @@ export default class FinancialInfo extends Component {
                   <Grid.Row>
                     <Grid.Column width={8}>
                       <Card.Content>
-                        <Header as="h4">Regulation Crowdfunding Limits</Header>
+                        <Header as="h5">Regulation Crowdfunding Limits</Header>
                         <p className="intro-text">
                           {account.name === 'entity' ? `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on the
@@ -132,7 +132,7 @@ export default class FinancialInfo extends Component {
                       {accreditationData[account.name] &&
                       accreditationData[account.name].status ?
                         <Card.Content>
-                          <Header as="h4">
+                          <Header as="h5">
                             Accredited Investor Status
                             {/* <Link as={Button} to="/" className="link" onClick={e =>
                              this.handleVerifyAccreditation
