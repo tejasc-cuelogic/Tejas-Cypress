@@ -53,7 +53,7 @@ export class BankAccount {
           resolve();
         })
         .catch(() => {
-          bankAccountStore.changeLoadingState('loadingState', false);
+          bankAccountStore.setFieldValue('loadingState', false);
           reject();
         })
         .finally(() => { });
