@@ -830,7 +830,7 @@ export class IdentityStore {
     }
   }
 
-  requestOtpWrapper = () => {
+  requestOtpWrapper = (isMobile = false) => {
     uiStore.setProgress();
     const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
@@ -846,7 +846,9 @@ export class IdentityStore {
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          if (!isMobile) {
+            Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          }
           resolve();
         })
         .catch((err) => {
