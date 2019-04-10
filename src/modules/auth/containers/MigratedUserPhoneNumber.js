@@ -61,6 +61,13 @@ export default class MigratedUserPhoneNumber extends Component {
               showerror
             />
             <Divider hidden />
+            <p className="note center-align">
+              By selecting <b>Confirm</b>, you agree NextSeed may deliver verification codes
+              to you using the phone number you have provided. Codes may be sent using text
+              messages, an autodialer, or artificial or prerecorded voice messages to such
+              phone number. Your mobile carrier’s messaging and data fees may apply.
+            </p>
+            <Divider hidden />
             <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary size="large" className="very relaxed" content="Confirm" loading={this.props.uiStore.inProgress} />
           </Form>
           { errors &&

@@ -100,15 +100,19 @@ export class NavItems extends Component {
               `}
             >
               {item.subNavigations.map(sn => (
-                <Dropdown.Item
-                  key={sn.to}
-                  className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
-                  as={NavLink}
-                  onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
-                  to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
-                >
-                  {sn.title}
-                </Dropdown.Item>
+                sn.external ? (
+                  <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                ) : (
+                  <Dropdown.Item
+                    key={sn.to}
+                    className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
+                    as={NavLink}
+                    onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
+                    to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                  >
+                    {sn.title}
+                  </Dropdown.Item>
+                )
               ))}
             </Dropdown.Menu>
           </Dropdown>

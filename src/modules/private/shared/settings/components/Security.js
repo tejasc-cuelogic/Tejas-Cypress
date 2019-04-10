@@ -57,7 +57,7 @@ export default class Security extends Component {
                     <Divider hidden />
                     <Card.Description>
                       {(section.action[0] === 'mfa' && getUserMfaMode) ? (
-                        <Table basic="very" className="no-border mb-20">
+                        <Table compact="very" basic="very" className="no-border mb-20">
                           <Table.Body>
                             <Table.Row>
                               <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
