@@ -780,9 +780,9 @@ export class AccreditationStore {
   }
   @action
   setUserSelectedAccountStatus = (intialAccountStatus) => {
-    const { userDetails } = userDetailsStore;
+    const { userDetails, signupStatus } = userDetailsStore;
     const userCurrentStatus = userDetails && userDetails.status;
-    this.selectedAccountStatus = userCurrentStatus && userCurrentStatus === 'FULL' ? intialAccountStatus : 'PARTIAL';
+    this.selectedAccountStatus = signupStatus.isMigratedUser && userCurrentStatus && userCurrentStatus !== 'FULL' ? 'PARTIAL' : intialAccountStatus;
   }
   userSelectedAccountStatus = (selectedAccount) => {
     const {
