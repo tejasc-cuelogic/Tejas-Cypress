@@ -15,6 +15,7 @@ import {
   investorProfileStore,
   authStore,
   uiStore,
+  investmentStore,
 } from '../../index';
 import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
@@ -411,6 +412,9 @@ export class UserDetailsStore {
   @computed
   get pendingStep() {
     let routingUrl = '/app/summary';
+    const selectedAccountType = investmentStore &&
+      investmentStore.investAccTypes && investmentStore.investAccTypes.value;
+    const investorAccountCreatedList = map(filter(this.signupStatus.roles, a => a.name !== 'investor'), 'name');
     if (this.signupStatus.isMigratedUser) {
       if (this.userDetails.email &&
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
@@ -433,20 +437,24 @@ export class UserDetailsStore {
       routingUrl = '/app/summary/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = '/app/summary/establish-profile';
-    } else if (isEmpty(this.signupStatus.roles)) {
+    } else if (isEmpty(investorAccountCreatedList)) {
       routingUrl = '/app/summary/account-creation';
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.partialAccounts.length > 0) {
       // const accValue =
       //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       // accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.partialAccounts[0];
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.inActiveAccounts.length > 0) {
       // const accValue =
       //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       // accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.inActiveAccounts[0];
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else {
       routingUrl = '/app/summary';
     }
@@ -588,16 +596,22 @@ export class UserDetailsStore {
   @computed
   get pendingStepForPartialAndProcessingAccount() {
     let routingUrl = '/app/summary';
+    const selectedAccountType = investmentStore &&
+      investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     if (this.signupStatus.partialAccounts.length > 0) {
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.partialAccounts[0];
       const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else if (this.signupStatus.inActiveAccounts.length > 0) {
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.inActiveAccounts[0];
       const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else {
       routingUrl = '/app/summary';
     }
