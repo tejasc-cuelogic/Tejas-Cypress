@@ -76,6 +76,7 @@ export default class AccountSetup extends Component {
       getStepStatus,
       isBasicVerDoneForMigratedFullUser,
     } = this.props.userDetailsStore;
+    const activeAccLength = signupStatus.activeAccounts.length;
     const { summaryLoading, summary } = this.props.portfolioStore;
     return (
       <PrivateLayout
@@ -103,7 +104,7 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
         {
-         signupStatus.investorProfileCompleted ?
+          activeAccLength !== 0 ?
             summaryLoading ?
               <InlineLoader /> :
               <Aux>
