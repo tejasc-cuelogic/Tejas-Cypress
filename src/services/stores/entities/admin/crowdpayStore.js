@@ -62,6 +62,9 @@ export class CrowdpayStore {
       const index = findIndex(crowdpayList, crowdPayAccount => crowdPayAccount.accountId === id);
       const crowdPayAccount = find(crowdpayList, account => account.accountId === id);
       crowdPayAccount.accountStatus = accountStatus;
+      if (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN) {
+        crowdPayAccount.declined = { by: 'ADMIN' };
+      }
       crowdpayList[index] = crowdPayAccount;
       this.data.data.getCrowdPayUsers.crowdPayList = crowdpayList;
       this.setDb(this.getCrowdPayData);
@@ -72,7 +75,6 @@ export class CrowdpayStore {
       this.setDb(this.getCrowdPayData);
       this.initiateFilters(false);
     }
-    this.setCrowdpayAccountsSummary();
     this.loadingCrowdPayIds =
     lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
@@ -235,7 +237,7 @@ export class CrowdpayStore {
       variables.accountType = types[this.requestState.type];
     }
     const accountStatuses = {
-      DECLINE: CROWDPAY_ACCOUNTS_STATUS.DECLINED,
+      DECLINE: CROWDPAY_ACCOUNTS_STATUS.FROZEN,
       GSPROCESS: CROWDPAY_ACCOUNTS_STATUS.GS_PROCESSING,
       CREATEACCOUNT: CROWDPAY_ACCOUNTS_STATUS.NS_PROCESSING,
       VALIDATE: CROWDPAY_ACCOUNTS_STATUS.FULL,
