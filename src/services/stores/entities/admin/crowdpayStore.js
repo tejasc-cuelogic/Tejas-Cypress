@@ -57,7 +57,7 @@ export class CrowdpayStore {
 
   @action
   removeLoadingCrowdPayId = (id, accountStatus) => {
-    if (accountStatus) {
+    if (accountStatus && accountStatus !== 'APPROVE') {
       const crowdpayList = get(this.data, 'data.listCrowdPayUsers.crowdPayList');
       const index = findIndex(crowdpayList, crowdPayAccount => crowdPayAccount.accountId === id);
       const crowdPayAccount = find(crowdpayList, account => account.accountId === id);
@@ -66,7 +66,7 @@ export class CrowdpayStore {
       this.data.data.listCrowdPayUsers.crowdPayList = crowdpayList;
       this.setDb(this.getCrowdPayData);
       this.initiateFilters(false);
-    } else {
+    } else if (accountStatus === 'APPROVE') {
       const crowdpayList = lodashFilter(get(this.data, 'data.listCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
       this.data.data.listCrowdPayUsers.crowdPayList = crowdpayList;
       this.setDb(this.getCrowdPayData);
@@ -261,7 +261,7 @@ export class CrowdpayStore {
           } else {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(sMsg, 'success');
-            this.removeLoadingCrowdPayId(accountId, accountStatuses[ctaAction]);
+            this.removeLoadingCrowdPayId(accountId, accountStatuses[ctaAction] || 'APPROVE');
             resolve();
           }
         }))
