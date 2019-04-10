@@ -12,12 +12,12 @@ const Security = () => (
         <Grid padded="vertically">
           <Grid.Row>
             <Grid.Column floated="right" computer={11} tablet={16} mobile={16} className="side-section">
-              <Header as="h2" className="mb-30">Invest with peace of mind.</Header>
+              <Header as="h2" className="mb-30">Your security is our top priority.</Header>
               <Grid columns={2} doubling stackable>
                 <Grid.Column>
-                  <Header as="h5">Your security is our top priority.</Header>
+                  <Header as="h5">Your funds stay safe and sound.</Header>
                   <p>
-                    The uninvested cash in your account <sup>1</sup> is FDIC-insured up
+                    The uninvested cash  in your account <sup>1</sup> is FDIC-insured up
                     to $250,000.
                   </p>
                   <Header as="h5">Keep your information protected.</Header>
