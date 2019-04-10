@@ -8,9 +8,10 @@ import { NavItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
+import NSImage from '../../modules/shared/NSImage';
 
 const hasFooter = ['/'];
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoGreenGrey');
+const getLogo = path => (path.includes('/lendio') ? 'nextseed_and_lendio.svg' : 'logo.svg');
 @inject('uiStore')
 @observer
 export default class NavBarMobile extends Component {
@@ -46,25 +47,36 @@ export default class NavBarMobile extends Component {
           {hasHeader && (
             <Aux>
               <div
-                className={`${visible ? 'visible-logo' : (location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
+                className={`${(location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
                 onClick={!visible ? onToggle : false}
                 onKeyPress={!visible ? onToggle : false}
                 role="button"
                 tabIndex="0"
               >
-                <Logo
+                {/* <Logo
                   alt="NextSeed.com"
                   dataSrc={visible ? 'LogoWhite' : getLogo(location.pathname)}
                   as={visible ? Link : Logo}
                   to="/"
-                />
+                /> */}
+                <NSImage
+                  path={(location.pathname.startsWith('/offerings')) ? getLogo(location.pathname) : 'hamburger.svg'}
+                  role="button"
+                  tabIndex="0"
+                />;
               </div>
               <div
                 className={`public-header-section ${visible ? 'active' : ''}
                 ${navStatus === 'sub' ? 'slide-up' : ''}`}
               >
                 {/* <Icon className="ns-nextseed-icon hamburger" /> */}
-                <Header as="h5">{navTitle}</Header>
+                {navTitle === 'Home' ?
+                  <Logo
+                    dataSrc="LogoGreenGrey"
+                    className="mobile-header-logo"
+                  /> :
+                  <Header as="h5">{navTitle}</Header>
+                }
                 {!currentUser ? (
                   <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in">
                     {stepInRoute.title}
@@ -95,6 +107,12 @@ export default class NavBarMobile extends Component {
             visible={visible}
             className="public-sidebar"
           >
+            <Logo
+              alt="NextSeed.com"
+              dataSrc="LogoWhite"
+              as={visible ? Link : Logo}
+              to="/"
+            />
             <Icon onClick={onToggle} className="ns-close-light" />
             <div className="public-mobile-nav">
               <div className="mobile-nav-inner-container">

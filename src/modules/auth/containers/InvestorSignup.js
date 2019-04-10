@@ -30,7 +30,9 @@ class InvestorSignup extends Component {
       this.props.history.push('/auth/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
+      this.props.uiStore.setProgress();
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
+        this.props.uiStore.setProgress(false);
         this.props.authStore.setCredentials({
           email: email.value,
           password: password.value,

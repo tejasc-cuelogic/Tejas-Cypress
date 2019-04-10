@@ -101,12 +101,18 @@ section{
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
             }
+            @media only screen and (max-width : @largestMobileScreen){
+                display: none;    
+            }
         }
         &.edu-center-investor-banner {
             height: 363px;
             background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                display: none;    
             }
         }
         &.account-types {

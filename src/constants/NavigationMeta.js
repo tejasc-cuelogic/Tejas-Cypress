@@ -587,6 +587,7 @@ export const PUBLIC_NAV = [
       { title: 'Team & Culture', to: 'about/team' },
       { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'resources/insights' },
+      { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
     ],
   },
 ];

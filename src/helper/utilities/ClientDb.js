@@ -86,6 +86,12 @@ class ClientDb {
     this.initiateDb(resultArray, true);
   }
 
+  filterByObjExist = (key) => {
+    const data = this.getDatabase();
+    const filterData = data.filter(e => e[key]);
+    this.initiateDb(filterData, true);
+  }
+
   filterByDate = (sDate, eDate, key = 'date', subkey = null) => {
     const data = this.getDatabase();
     const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)

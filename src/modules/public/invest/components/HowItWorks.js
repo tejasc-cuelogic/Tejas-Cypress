@@ -46,13 +46,20 @@ export default class HowItWorks extends Component {
           <Container className="mb-80 mt-80" textAlign={isMobile ? 'left' : 'center'}>
             <Header as="h2">Choose how you want to invest.</Header>
             <p className={isMobile ? 'mb-50' : 'mb-80'}>Understand and choose the right opportunities with the right payment terms for you.</p>
-            <Grid doubling columns={3} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
+            <Grid stackable doubling columns={3} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
               <Grid.Column>
                 <div className="flex-content">
-                  <Header as="h3">
-                    <NSImage path="icons/termnotes.svg" />
-                    <span>Term Notes</span>
-                  </Header>
+                  {!isMobile ?
+                    <Header as="h3">
+                      <NSImage path="icons/termnotes.svg" />
+                      <span>Term Notes</span>
+                    </Header>
+                    :
+                    <Aux>
+                      <NSImage path="icons/termnotes.svg" />
+                      <Header as="h2">Term Notes</Header>
+                    </Aux>
+                  }
                   <Item.Group relaxed="very">
                     <Item>
                       <Item.Content>
@@ -85,10 +92,21 @@ export default class HowItWorks extends Component {
               </Grid.Column>
               <Grid.Column>
                 <div className="flex-content">
-                  <Header as="h3">
+                  {!isMobile ?
+                    <Header as="h3">
+                      <NSImage path="icons/applied.svg" />
+                      <span>Revenue Sharing Notes</span>
+                    </Header>
+                    :
+                    <Aux>
+                      <NSImage path="icons/applied.svg" />
+                      <Header as="h2">Revenue Sharing Notes</Header>
+                    </Aux>
+                  }
+                  {/* <Header as="h3">
                     <NSImage path="icons/applied.svg" />
                     <span>Revenue Sharing Notes</span>
-                  </Header>
+                  </Header> */}
                   <Item.Group relaxed="very" className="question-list">
                     <Item>
                       <Item.Content>
@@ -123,10 +141,21 @@ export default class HowItWorks extends Component {
               </Grid.Column>
               <Grid.Column>
                 <div className="flex-content">
-                  <Header as="h3">
+                  {!isMobile ?
+                    <Header as="h3">
+                      <NSImage path="icons/equity.svg" />
+                      <span>Preferred Equity</span>
+                    </Header>
+                    :
+                    <Aux>
+                      <NSImage path="icons/equity.svg" />
+                      <Header as="h2">Preferred Equity</Header>
+                    </Aux>
+                  }
+                  {/* <Header as="h3">
                     <NSImage path="icons/equity.svg" />
                     <span>Preferred Equity</span>
-                  </Header>
+                  </Header> */}
                   <Item.Group relaxed="very" className="question-list">
                     <Item>
                       <Item.Content>
