@@ -22,8 +22,11 @@ const highlights = [
   {
     title: 'Pre-vetted opportunities',
     icon: 'icons/prevetted.svg',
-    meta: `Only the top 3% of businesses meet our
-    proprietary financial criteria.`,
+    meta: (
+      <Aux>
+      Only the top 3% of businesses meet our
+    proprietary financial criteria.<sup>1</sup>
+      </Aux>),
   },
   {
     title: 'Flexible amounts',
