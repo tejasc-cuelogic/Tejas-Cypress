@@ -38,6 +38,7 @@ export const COMMON = {
     key: 'verify',
     customErrors: {
       required: '* required field.',
+      same: 'The Password and Verify Password fields must match.',
     },
   },
 };
@@ -112,6 +113,9 @@ export const CHANGE_PASS = {
     label: 'Confirm New Password',
     error: undefined,
     rule: 'required|same:newPasswd',
+    customErrors: {
+      same: 'The Confirm New Password and new Password fields must match.',
+    },
   },
 };
 

@@ -221,22 +221,27 @@ export class UserDetailsStore {
     });
   }
 
-  getUserStorageDetails = userId => new Promise((resolve) => {
-    graphql({
-      client,
-      query: userDetailsQueryForBoxFolder,
-      variables: { userId },
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if (data) {
-          resolve(get(data, 'user.storageDetails.rootFolder.id'));
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again in sometime', 'error');
-      },
+  getUserStorageDetails = (userId) => {
+    uiStore.setProgress();
+    return new Promise((resolve) => {
+      graphql({
+        client,
+        query: userDetailsQueryForBoxFolder,
+        variables: { userId },
+        fetchPolicy: 'network-only',
+        onFetch: (data) => {
+          if (data) {
+            uiStore.setProgress(false);
+            resolve(get(data, 'user.storageDetails.rootFolder.id'));
+          }
+        },
+        onError: () => {
+          uiStore.setProgress(false);
+          Helper.toast('Something went wrong, please try again in sometime', 'error');
+        },
+      });
     });
-  });
+  }
 
   @computed get getDetailsOfUserLoading() {
     return this.detailsOfUser.loading;
