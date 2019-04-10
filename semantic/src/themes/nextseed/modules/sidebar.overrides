@@ -279,7 +279,7 @@
 		&.public-sidebar {
 			padding-bottom: 0;
 			.ns-close-light {
-				top: 20px;
+				top: 16px;
 				z-index: 1;			
 			}
 		}
