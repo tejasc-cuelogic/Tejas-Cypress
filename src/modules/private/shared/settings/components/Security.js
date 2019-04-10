@@ -34,7 +34,7 @@ export default class Security extends Component {
           render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
         />
         <Header as="h4">Security</Header>
-        <p className="note">
+        <p>
           Manage your security settings and contact information.
           It&apos;s important to update your password regularly and utilize the security features
           that apply to you.
