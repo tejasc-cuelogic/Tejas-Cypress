@@ -49,8 +49,8 @@ export default class ConfirmBankLinking extends Component {
     e.preventDefault();
     this.props.transactionStore.setReSendVerificationCode(true);
     this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+      this.props.uiStore.clearErrors();
       this.props.transactionStore.setReSendVerificationCode(false);
-      Helper.toast('The OTP is sent to your number!', 'success');
     });
   }
 

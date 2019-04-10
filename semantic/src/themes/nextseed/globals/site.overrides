@@ -1005,6 +1005,9 @@ footer{
 			padding: 0 !important;
 			&:last-child {
 				padding: @70px @20px !important;
+				@media only screen and (max-width : @largestSmallMonitor){
+					padding: @56px 0 !important;
+				}
 				a {
 					text-decoration: none;
 					.icon {
@@ -1393,7 +1396,7 @@ a.icon-link {
 		top: 108px;
 	}
 	&.offering-side-menu,&.team{
-		top:136px;
+		top:150px;
 		@media only screen and (max-width : @largestTabletScreen){
 			top: 0;
 		}

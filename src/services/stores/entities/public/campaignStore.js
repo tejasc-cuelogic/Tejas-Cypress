@@ -9,6 +9,7 @@ import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsFor
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
+import uiStore from '../shared/uiStore';
 
 export class CampaignStore {
   @observable data = [];
@@ -145,6 +146,7 @@ export class CampaignStore {
   @action
   isEarlyBirdExist(accountType) {
     const offeringId = this.getOfferingId;
+    uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const account = userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
@@ -153,6 +155,14 @@ export class CampaignStore {
       client,
       query: checkIfEarlyBirdExist,
       variables: { offeringId, accountId },
+      onFetch: (data) => {
+        if (data && !this.earlyBirdCheck.loading) {
+          uiStore.setProgress(false);
+        }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
+      },
     });
   }
 

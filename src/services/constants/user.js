@@ -55,9 +55,9 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <Aux>Select Your{' '}
-          <Popup position="top center" trigger={<span className="underline-text" >Active MFA</span>}>
-            <Popup.Header className="grey-header">Active MFA</Popup.Header>
+        <Aux>Yo can choose your{' '}
+          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA Factor</span>}>
+            <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
               Manage your MFA contact preferences. All major actions in your account will
               require additional confirmation with a code sent to your phone or email address.
@@ -66,7 +66,7 @@ export const securitySections = [
         </Aux>
       ),
     descriptionNotAvailable: '',
-    action: ['mfa', 'Manage multi-factor autentication'],
+    action: ['mfa', 'Select Your Active MFA'],
   },
 ];
 
