@@ -47,15 +47,13 @@ export default class Summary extends React.Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
       this.props.individualAccountStore.submitAccount().then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
         if (partialInvestNowSessionURL) {
           this.props.history.push(partialInvestNowSessionURL);
           setPartialInvestmenSession();
-        } else {
-          this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-          if (!this.props.individualAccountStore.showProcessingModal) {
-            this.props.history.push('/app/summary');
-            this.props.uiStore.resetcreateAccountMessage();
-          }
+        } else if (!this.props.individualAccountStore.showProcessingModal) {
+          this.props.history.push('/app/summary');
+          this.props.uiStore.resetcreateAccountMessage();
         }
       }).catch(() => { });
     }
@@ -105,11 +103,11 @@ export default class Summary extends React.Component {
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                { !isEmpty(routingNum) &&
+                {!isEmpty(routingNum) &&
                   <Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
-                      { routingNum || '' }
+                      {routingNum || ''}
                     </Table.Cell>
                   </Table.Row>
                 }
@@ -117,8 +115,8 @@ export default class Summary extends React.Component {
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
                     {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
-                    Helper.CurrencyFormat(0) :
-                    Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                      Helper.CurrencyFormat(0) :
+                      Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
