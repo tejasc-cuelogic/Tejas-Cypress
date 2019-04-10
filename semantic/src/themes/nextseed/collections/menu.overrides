@@ -659,7 +659,7 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: 58px 0 0;
+    padding: @14px 0 0;
     height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
@@ -670,13 +670,16 @@ footer{
 }
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
+    z-index: 103;
     .ui.divider {
         margin-left: @24px;
         margin-right: @24px;
     }
     &.overlay .ui.image.logo {
-        margin-left: @24px;
-        margin-bottom: @20px;
+        // margin-left: @24px;
+        // margin-bottom: @20px;
+        margin: @14px 0 0 @14px;
+        width: 150px;
     }
     .social-media {
         text-align: center;

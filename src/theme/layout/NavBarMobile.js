@@ -47,7 +47,7 @@ export default class NavBarMobile extends Component {
           {hasHeader && (
             <Aux>
               <div
-                className={`${visible ? 'visible-logo' : (location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
+                className={`${(location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
                 onClick={!visible ? onToggle : false}
                 onKeyPress={!visible ? onToggle : false}
                 role="button"
@@ -60,7 +60,7 @@ export default class NavBarMobile extends Component {
                   to="/"
                 /> */}
                 <NSImage
-                  path={visible ? 'logo-white.svg' : (location.pathname.startsWith('/offerings')) ? getLogo(location.pathname) : 'hamburger.svg'}
+                  path={(location.pathname.startsWith('/offerings')) ? getLogo(location.pathname) : 'hamburger.svg'}
                   role="button"
                   tabIndex="0"
                 />;
@@ -107,6 +107,12 @@ export default class NavBarMobile extends Component {
             visible={visible}
             className="public-sidebar"
           >
+            <Logo
+              alt="NextSeed.com"
+              dataSrc="LogoWhite"
+              as={visible ? Link : Logo}
+              to="/"
+            />
             <Icon onClick={onToggle} className="ns-close-light" />
             <div className="public-mobile-nav">
               <div className="mobile-nav-inner-container">

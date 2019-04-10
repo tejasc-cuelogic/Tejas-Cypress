@@ -26,8 +26,7 @@ export default class Summary extends Component {
   }
 
   componentDidUpdate() {
-    const { isValidIraForm } = this.props.iraAccountStore;
-    this.props.uiStore.setProgress(!isValidIraForm);
+    this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
