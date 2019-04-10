@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Form, Button, Message } from 'semantic-ui-react';
+import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { validationActions } from '../../../../../services/actions';
@@ -52,7 +52,7 @@ export default class ManualForm extends Component {
   }
 
   render() {
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const {
       showAddFunds,
       isEncrypted,
@@ -67,6 +67,14 @@ export default class ManualForm extends Component {
     }
     if (this.props.action !== 'change' && linkbankSummary) {
       return <LinkbankSummary />;
+    }
+    if (this.props.action === 'change' && inProgress) {
+      return (
+        <Dimmer className="fullscreen" active={inProgress}>
+          <Loader active={inProgress}>
+          Please wait...
+          </Loader>
+        </Dimmer>);
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (

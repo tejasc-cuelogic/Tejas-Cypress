@@ -588,13 +588,13 @@ class EntityAccountStore {
             this.setEntityAttributes('Formation doc');
           }
           bankAccountStore.validateAddFunds();
-          const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+          // const { isValid } = bankAccountStore.formEntityAddFunds.meta;
           if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
             bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-            if (isValid) {
-              bankAccountStore.formEntityAddFunds.fields.value.value =
-              account.details.initialDepositAmount;
-            }
+            // if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+            // }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
@@ -608,10 +608,10 @@ class EntityAccountStore {
             account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
-            if (isValid) {
-              bankAccountStore.formEntityAddFunds.fields.value.value =
-              account.details.initialDepositAmount;
-            }
+            // if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+            // }
           }
           bankAccountStore.validateAddFunds();
           // bankAccountStore.validateAddfundsAmount();
