@@ -244,6 +244,7 @@ class IraAccountStore {
         if (accountAttributes.fundingType !== 'check') {
           bankAccountStore.setPlaidAccDetails({});
           bankAccountStore.resetRoutingNum();
+          bankAccountStore.setLinkBankSummary(false);
         }
         if (isValidCurrentStep) {
           this.submitForm(currentStep, accountAttributes).then(() => {
