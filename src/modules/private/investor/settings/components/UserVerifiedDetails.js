@@ -14,7 +14,7 @@ const userVerifiedDetails = ({
     }
     return false;
   };
-  const isUserVerified = () => (signupStatus.isMigratedFullAccount ? setupComplete() :
+  const isUserVerified = () => (signupStatus.isWpUser ? setupComplete() :
     isIdentityVerified(legalDetails.status));
 
   if (legalDetails === null || !isUserVerified()) {

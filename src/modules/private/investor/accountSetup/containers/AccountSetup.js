@@ -104,7 +104,7 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
         {
-          activeAccLength !== 0 ?
+          activeAccLength !== 0 && false ?
             summaryLoading ?
               <InlineLoader /> :
               <Aux>
