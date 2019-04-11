@@ -612,7 +612,6 @@ export class InvestmentStore {
 
   @computed get changedInvestmentLimit() {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
-    console.log(investmentLimitStore.getInvestorAmountInvestedValue);
     return investmentLimitStore
       .getInvestmentLimit(data, investmentLimitStore.getInvestorAmountInvestedValue);
   }

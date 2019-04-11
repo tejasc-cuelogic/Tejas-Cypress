@@ -14,6 +14,8 @@ export default class FinancialInformation extends React.Component {
     if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netWorth.value !== '' && FIN_INFO_FRM.fields.income.value !== ''))) && !(FIN_INFO_FRM.fields.netWorth.value === '' && FIN_INFO_FRM.fields.income.value === '')) {
       finInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netWorth.value }, name: 'netWorth' });
     }
+    this.props.investmentLimitStore.setFieldValue('pendingInvestments', '');
+    this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
   }
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
