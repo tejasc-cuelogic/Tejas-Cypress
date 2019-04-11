@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-@inject('offeringsStore')
+@inject('offeringsStore', 'authStore', 'userStore')
+@withRouter
 @observer
 class Banner extends Component {
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
   }
-
+  redirectTo = (action = '') => {
+    if (this.props.authStore.isUserLoggedIn && !this.props.userStore.isIssuer) {
+      this.props.history.push(`${this.props.match.url}/confirm-login`);
+      return;
+    }
+    if (action === 'business') {
+      this.props.history.push('/business-application/business');
+    } else if (action === 'cre') {
+      this.props.history.push('/business-application/commercial-real-estate');
+    }
+  }
   render() {
     const { clientWidth } = document.documentElement;
     const isTablet = clientWidth >= 768 && clientWidth < 992;
@@ -25,8 +36,8 @@ class Banner extends Component {
                 power of the crowd.
               </Header>
               <Button.Group className={!isTablet && 'mt-30'}>
-                <Button secondary content="Business Application" as={Link} to="/business-application/business" />
-                <Button secondary content="CRE Application" as={Link} to="/business-application/commercial-real-estate" />
+                <Button secondary content="Business Application" onClick={() => this.redirectTo('business')} />
+                <Button secondary content="CRE Application" onClick={() => this.redirectTo('cre')} />
               </Button.Group>
             </div>
           </Responsive>
