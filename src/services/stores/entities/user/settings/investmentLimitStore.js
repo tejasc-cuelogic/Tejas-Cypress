@@ -6,7 +6,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorAmountInvested } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorAmountInvested, getInvestorPendingInvestments } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
@@ -23,6 +23,8 @@ export class InvestmentLimitStore {
   @observable investedAmount = 0;
   @observable investNowHealthCheckDetails = null;
   @observable investNowError = false;
+  @observable investorPendingInvestments = {};
+  @observable pendingInvestments = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -106,6 +108,7 @@ export class InvestmentLimitStore {
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
   getInvestmentLimit = (data, investedAmount = false) => {
     const investedAmtFloat = parseFloat(investedAmount ? investedAmount.replace(/,/g, '') : this.investedAmount);
+    const pendingInvestments = this.pendingInvestments || 0;
     const limitFloor = 2200;
     const maxLimit = 107000;
     const limitLowPCT = 0.05;
@@ -126,7 +129,8 @@ export class InvestmentLimitStore {
     }
     // }
     limit = Math.min(limit, maxLimit);
-    const remainingAmount = limit - ((data.cfInvestments || 0) + investedAmtFloat);
+    const remainingAmount = limit -
+    ((data.cfInvestments || 0) + investedAmtFloat + pendingInvestments);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
@@ -297,6 +301,9 @@ export class InvestmentLimitStore {
         ).then((data) => {
           this.setFieldValue('investedAmount', parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0));
         });
+        this.getInvestorPendingInvestments(account.details.accountId).then((data) => {
+          this.setFieldValue('pendingInvestments', parseFloat(data.getInvestorPendingInvestments.replace(/,/g, '') || 0));
+        });
       }
     });
     if (isIndAccExist && this.currentAccountType === 'ira') {
@@ -310,6 +317,9 @@ export class InvestmentLimitStore {
         const investedAmount = parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0) +
           this.investedAmount;
         this.setFieldValue('investedAmount', investedAmount);
+      });
+      this.getInvestorPendingInvestments(individualAccount.details.accountId).then((data) => {
+        this.setFieldValue('pendingInvestments', parseFloat(data.getInvestorPendingInvestments.replace(/,/g, '') || 0));
       });
     }
   }
@@ -328,8 +338,29 @@ export class InvestmentLimitStore {
           closeDateFilter,
           includeTx: false,
         },
+        fetchPolicy: 'network-only',
         onFetch: (data) => {
           if (data && data.getInvestorAmountInvested) {
+            resolve(data);
+          }
+        },
+      });
+    });
+    @action
+    getInvestorPendingInvestments = accountId => new Promise((resolve) => {
+      this.investorPendingInvestments = graphql({
+        client,
+        query: getInvestorPendingInvestments,
+        variables: {
+          userId: userDetailsStore.currentUserId,
+          accountId,
+          // dateFilterStart,
+          // dateFilterStop,
+          includeTx: false,
+        },
+        fetchPolicy: 'network-only',
+        onFetch: (data) => {
+          if (data && data.getInvestorPendingInvestments) {
             resolve(data);
           }
         },

@@ -8,6 +8,7 @@ import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, linkB
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
+  IRA_ADD_FUND,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
@@ -24,6 +25,7 @@ export class BankAccountStore {
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
   @observable formEntityAddFunds = Validator.prepareFormObject(ENTITY_ADD_FUND);
+  @observable formIraAddFunds = Validator.prepareFormObject(IRA_ADD_FUND);
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable filters = false;
@@ -113,14 +115,9 @@ export class BankAccountStore {
   };
 
   @action
-  addFundChange = (values, field, accType = '') => {
-    if (accType === 'entity') {
-      this.formEntityAddFunds =
-      Validator.onChange(this.formEntityAddFunds, { name: field, value: values.floatValue });
-    } else {
-      this.formAddFunds =
-        Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
-    }
+  addFundChange = (values, field) => {
+    this[this.addFundsByAccType] =
+    Validator.onChange(this.addFundsByAccType, { name: field, value: values.floatValue });
   };
 
   @action
@@ -150,8 +147,10 @@ export class BankAccountStore {
   @action
   resetAddFundsForm() {
     // eslint-disable-next-line no-unused-expressions
-    Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? Validator.resetFormData(this.formEntityAddFunds) :
-      Validator.resetFormData(this.formAddFunds);
+    // Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ?
+    // Validator.resetFormData(this.formEntityAddFunds) :
+    //   Validator.resetFormData(this.formAddFunds);
+    Validator.resetFormData(this.addFundsByAccType);
   }
 
   @action
@@ -161,15 +160,19 @@ export class BankAccountStore {
 
   @action
   validateAddfundsAmount = () => {
-    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
-      if (parseFloat(this.formEntityAddFunds.fields.value.value, 0) === -1) {
-        this.shouldValidateAmount = true;
-        this.resetEntityAddFundsForm();
-      }
-    } else if (parseFloat(
-      this.formAddFunds.fields.value.value
-      , 0,
-    ) === -1) {
+    // if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
+    //   if (parseFloat(this.formEntityAddFunds.fields.value.value, 0) === -1) {
+    //     this.shouldValidateAmount = true;
+    //     this.resetEntityAddFundsForm();
+    //   }
+    // } else if (parseFloat(
+    //   this.formAddFunds.fields.value.value
+    //   , 0,
+    // ) === -1) {
+    //   this.shouldValidateAmount = true;
+    //   this.resetAddFundsForm();
+    // }
+    if (parseFloat(this.addFundsByAccType.fields.value.value, 0) === -1) {
       this.shouldValidateAmount = true;
       this.resetAddFundsForm();
     }
@@ -244,8 +247,12 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-    const { value } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.fields.value : this.formAddFunds.fields.value;
-    const { isValid } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta : this.formAddFunds.meta;
+    // eslint-disable-next-line max-len
+    // const { value } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.fields.value : this.formAddFunds.fields.value;
+    // eslint-disable-next-line max-len
+    // const { isValid } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta : this.formAddFunds.meta;
+    const { value } = this.addFundsByAccType.fields.value;
+    const { isValid } = this.addFundsByAccType.meta;
     accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid ?
       value : !isValid ? '' : -1;
     return accountAttributes;
@@ -379,52 +386,69 @@ export class BankAccountStore {
     this.requestState.skip = skip;
   }
 
+  @computed get addFundsByAccType() {
+    return (Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds : Helper.matchRegexWithUrl([/\bira(?![-])\b/]) ? this.formIraAddFunds : this.formAddFunds);
+  }
   @action
   validateAddFunds = () => {
-    if (!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
-      // TODO optiimize map function in if and else
-      map(this.formAddFunds.fields, (value) => {
-        const { key } = value;
-        const fundValue = value;
-        fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
-         // eslint-disable-next-line no-restricted-globals
-         isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
-        const { errors } = validationService.validate(fundValue);
-        Validator.setFormError(
-          this.formAddFunds,
-          key,
-          errors && errors[key][0],
-        );
-      });
-      this.validateForm('formAddFunds');
-    } else {
-      map(this.formEntityAddFunds.fields, (value) => {
-        const { key } = value;
-        const fundValue = value;
-        fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
-          // eslint-disable-next-line no-restricted-globals
-          isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
-        const { errors } = validationService.validate(value);
-        Validator.setFormError(
-          this.formEntityAddFunds,
-          key,
-          errors && errors[key][0],
-        );
-      });
-      this.validateForm('formEntityAddFunds');
-    }
+    // if (!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
+    //   // TODO optiimize map function in if and else
+    //   map(this.formAddFunds.fields, (value) => {
+    //     const { key } = value;
+    //     const fundValue = value;
+    //     fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+    //      // eslint-disable-next-line no-restricted-globals
+    //      isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+    //     const { errors } = validationService.validate(fundValue);
+    //     Validator.setFormError(
+    //       this.formAddFunds,
+    //       key,
+    //       errors && errors[key][0],
+    //     );
+    //   });
+    //   this.validateForm('formAddFunds');
+    // } else {
+    //   map(this.formEntityAddFunds.fields, (value) => {
+    //     const { key } = value;
+    //     const fundValue = value;
+    //     fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+    //       // eslint-disable-next-line no-restricted-globals
+    //       isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+    //     const { errors } = validationService.validate(value);
+    //     Validator.setFormError(
+    //       this.formEntityAddFunds,
+    //       key,
+    //       errors && errors[key][0],
+    //     );
+    //   });
+    //   this.validateForm('formEntityAddFunds');
+    // }
+    map(this.addFundsByAccType.fields, (value) => {
+      const { key } = value;
+      const fundValue = value;
+      fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+        // eslint-disable-next-line no-restricted-globals
+        isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+      const { errors } = validationService.validate(value);
+      Validator.setFormError(
+        this.addFundsByAccType,
+        key,
+        errors && errors[key][0],
+      );
+    });
+    this.validateForm(this.addFundsByAccType);
   }
 
   @action
   validateForm = (form) => {
-    Validator.validateForm(this[form], false);
+    Validator.validateForm(form, false);
   }
 
   @computed get count() {
     return (this.changeRequests && this.changeRequests.length) || 0;
   }
   @computed get isLinkbankInComplete() {
-    const isAddFundsDirty = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta.isDirty : this.formAddFunds.meta.isDirty;
+    const isAddFundsDirty = this.addFundsByAccType.meta.isDirty;
     return this.manualLinkBankSubmitted ||
     isAddFundsDirty ||
     this.formLinkBankManually.meta.isDirty ||

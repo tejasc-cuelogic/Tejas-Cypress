@@ -34,6 +34,18 @@ export const getInvestorAmountInvested = gql`
   }
 `;
 
+export const getInvestorPendingInvestments = gql`
+  query getInvestorPendingInvestments($userId: String, $accountId: String, $dateFilterStart: String, $dateFilterStop: String, $includeTx: Boolean) {
+    getInvestorPendingInvestments(
+      userId: $userId
+      accountId: $accountId
+      dateFilterStart: $dateFilterStart
+      dateFilterStop: $dateFilterStop
+      includeTx: $includeTx
+    )
+  }
+`;
+
 export const getInvestNowHealthCheck = gql`
   query investNowHealthCheck($userId: String!, $accountId: String!, $offeringId: String!) {
     investNowHealthCheck(userId: $userId, accountId: $accountId, offeringId: $offeringId)
@@ -46,6 +58,8 @@ export const getInvestNowHealthCheck = gql`
       availabilityForNPAInOffering
       previousInvestmentCredit
       currentInflightLimit
+      committedInvestments
+      pendingInvestments
     }
   }
 `;
