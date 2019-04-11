@@ -9,6 +9,7 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
+import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -82,6 +83,7 @@ class Business extends Component {
                 />
               ))
             }
+            <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
           </Switch>
         </div>
       </Aux>
