@@ -16,7 +16,7 @@ class IndividualAccountStore {
   @observable individualAccId = null;
   @observable showProcessingModal = false;
   @observable isFormSubmitted = false;
-  retry = true;
+  retry = 0;
   @action
   setIsManualLinkBankSubmitted = (status) => {
     this.isManualLinkBankSubmitted = status;
@@ -96,6 +96,7 @@ class IndividualAccountStore {
       resolve();
     }).catch((err) => {
       uiStore.setErrors(DataFormatter.getSimpleErr(err));
+      console.log('Error', err);
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, DataFormatter.getSimpleErr(err).message)) {
         if (this.retry <= 2) {
           this.retry += 1;
@@ -225,6 +226,7 @@ class IndividualAccountStore {
     this.stepToBeRendered = 0;
     this.submited = false;
     this.individualAccId = null;
+    this.retry = 0;
   }
 }
 export default new IndividualAccountStore();
