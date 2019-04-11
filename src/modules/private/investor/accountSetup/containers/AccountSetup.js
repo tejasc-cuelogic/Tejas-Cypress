@@ -42,7 +42,7 @@ const summaryDetails = ({
     ],
   };
 };
-@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore')
+@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore')
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
@@ -55,6 +55,7 @@ export default class AccountSetup extends Component {
     if (!Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
       this.props.portfolioStore.getSummary();
     }
+    this.props.uiStore.clearErrors();
   }
 
   navToAccTypes = (step) => {
@@ -104,7 +105,7 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
         {
-          activeAccLength !== 0 && false ?
+          activeAccLength !== 0 && signupStatus.investorProfileCompleted ?
             summaryLoading ?
               <InlineLoader /> :
               <Aux>
