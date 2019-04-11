@@ -40,7 +40,7 @@ export default class Overview extends Component {
         </Form.Group>
         <Divider />
         <Header as="h6">Summary</Header>
-        <div className="field-wrap">
+        <div className="bg-offwhite">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               {get(account, 'name') === 'individual' ?
