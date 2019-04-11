@@ -58,11 +58,12 @@ export default class FinancialInfo extends Component {
   render() {
     const {
       getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
-      getInvestorAmountInvestedLoading,
+      getInvestorAmountInvestedLoading, investorPendingInvestments,
     } = this.props.investmentLimitStore;
     const { accreditationData, loading } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    if (currentUser.loading || getInvestorAmountInvestedLoading || loading) {
+    if (currentUser.loading || getInvestorAmountInvestedLoading ||
+      loading || investorPendingInvestments.loading) {
       return <InlineLoader />;
     }
     return (
