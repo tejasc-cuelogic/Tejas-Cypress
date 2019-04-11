@@ -13,9 +13,9 @@ const actions = {
 export default class Actions extends Component {
   actionUrl = (action) => {
     const {
-      match, accountId, accountType, userId,
+      match, accountId, accountType, userId, requestDate,
     } = this.props;
-    return `${match.url}/${action}/${userId}${accountId ? `/${accountId}/${accountType}` : ''}`;
+    return `${match.url}/${action}/${userId}/${requestDate}${accountId ? `/${accountId}/${accountType}` : ''}`;
   }
   render() {
     return (

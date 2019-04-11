@@ -102,6 +102,7 @@ export default class AllAccreditationRequests extends Component {
                           accountType={get(accreditation, 'accountType[0]')}
                           emailVerifier={emailVerifier}
                           accreditation={accreditation}
+                          requestDate={accreditation.requestDate}
                           {...this.props}
                         />
                       </Aux> :
@@ -114,7 +115,7 @@ export default class AllAccreditationRequests extends Component {
               }
             </Table.Body>
           </Table>
-          <Route path={`${match.url}/:action/:userId/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
+          <Route path={`${match.url}/:action/:userId/:requestDate/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
         </div>
         {totalRecords > 0 &&
           <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
