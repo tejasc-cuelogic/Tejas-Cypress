@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link, withRouter } from 'react-router-dom';
-import { Card, Grid, Header, Divider, Label, Button } from 'semantic-ui-react';
+import { Card, Grid, Header, Divider, Label, Button, Table } from 'semantic-ui-react';
 import ChangePassword from '../../../../auth/containers/ChangePassword';
 import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
@@ -34,9 +34,9 @@ export default class Security extends Component {
           render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
         />
         <Header as="h4">Security</Header>
-        <p className="intro-text">
-          Manage your security settings and contact information.<br />
-          Its important to update your password regularly and utilize the security features
+        <p>
+          Manage your security settings and contact information.
+          It&apos;s important to update your password regularly and utilize the security features
           that apply to you.
         </p>
         <Grid>
@@ -57,12 +57,35 @@ export default class Security extends Component {
                     <Divider hidden />
                     <Card.Description>
                       {(section.action[0] === 'mfa' && getUserMfaMode) ? (
-                        <dl className="dl-horizontal">
-                          <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                          <dd>{userDetails.email && userDetails.email.address} <Link className="link pull-right" to="/app/profile-settings/security/new-email-address">Update Email</Link></dd>
-                          <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                          <dd>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'} <Link className="link pull-right" to="/app/profile-settings/security/new-phone-number">Update Phone</Link></dd>
-                        </dl>
+                        <Table compact="very" basic="very" className="no-border mb-20">
+                          <Table.Body>
+                            <Table.Row>
+                              <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
+                              <Table.Cell collapsing>
+                                {userDetails.email && userDetails.email.address}
+                              </Table.Cell>
+                              <Table.Cell><Link className="link" to="/app/profile-settings/security/new-email-address">Update Email</Link></Table.Cell>
+                            </Table.Row>
+                            <Table.Row>
+                              <Table.Cell collapsing><b>Phone</b> {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
+                              <Table.Cell collapsing>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}</Table.Cell>
+                              <Table.Cell><Link className="link" to="/app/profile-settings/security/new-phone-number">Update Phone</Link></Table.Cell>
+                            </Table.Row>
+                          </Table.Body>
+                        </Table>
+                        // <dl className="dl-horizontal">
+                        //   <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL'
+                        // && <Label color="green" size="mini">Active MFA</Label> }</dt>
+                        //   <dd>{userDetails.email && userDetails.email.address}
+                        // <Link className="link pull-right" to="/app/profile-settings/
+                        // security/new-email-address">Update Email</Link></dd>
+                        //   <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL
+                        // && <Label color="green" size="mini">Active MFA</Label> }</dt>
+                        // <dd>{userDetails.phone && userDetails.phone.number ?
+                        // Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}
+                        // <Link className="link pull-right" to="/app/profile-settings/
+                        // security/new-phone-number">Update Phone</Link></dd>
+                        // </dl>
                       ) : null}
                       {section.action[0] === 'social-connect' ? (
                         <Button.Group>
@@ -81,7 +104,7 @@ export default class Security extends Component {
                         <Button
                           disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
                           as={Link}
-                          to={userDetails.phone ? `${match.url}/${section.action[0]}` : '/app/profile-settings/security/new-phone-number'}
+                          to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/profile-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
                           inverted
                           color="green"
                           content={section.action[1]}

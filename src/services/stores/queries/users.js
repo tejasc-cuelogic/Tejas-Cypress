@@ -399,11 +399,12 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
  }`;
 
 export const frozenEmailToAdmin = gql`
-mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!) {
+mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
   notifyAdminFrozenAccountActivity(
      userId: $userId
      accountId: $accountId
      activity: $activity
+     offeringId: $offeringId
    )
  }`;
 

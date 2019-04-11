@@ -22,10 +22,11 @@ export default class Summary extends Component {
     if (!alreadySet) {
       getLegalDocsFileIds();
     }
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
+
   componentDidUpdate() {
-    const { isValidIraForm } = this.props.iraAccountStore;
-    this.props.uiStore.setProgress(!isValidIraForm);
+    this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
@@ -73,7 +74,7 @@ export default class Summary extends Component {
     );
     const {
       plaidAccDetails, formLinkBankManually,
-      accountAttributes,
+      accountAttributes, routingNum,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -123,6 +124,15 @@ export default class Summary extends Component {
                   <Table.Row>
                     <Table.Cell>Bank Account:</Table.Cell>
                     <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
+                  </Table.Row>
+                }
+
+                { !isEmpty(routingNum) &&
+                  <Table.Row>
+                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell>
+                      { routingNum || '' }
+                    </Table.Cell>
                   </Table.Row>
                 }
                 <Table.Row>

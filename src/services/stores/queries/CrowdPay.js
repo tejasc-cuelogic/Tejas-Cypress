@@ -80,6 +80,86 @@ query listCrowdPayUsers($limit: Int) {
 }
 `;
 
+export const getCrowdPayUsers = gql`
+query getCrowdPayUsers($limit: Int, $page: Int, $accountType: InvestorAccountTypeEnum, $accountStatus: [InvestorAccountStatusEnum]) {
+  getCrowdPayUsers(limit: $limit,page: $page, accountType: $accountType, accountStatus: $accountStatus) {
+        resultCount
+        crowdPayList {
+          userId
+          accountId
+          firstName
+          lastName
+          email
+          accountStatus
+          accountType
+          phone
+          status
+          cip {
+            failType
+            failReason {
+              key
+              message
+            }
+          }
+          legalDetails {
+            verificationStartDate
+            verificationDocs {
+              idProof {
+                fileName
+                fileHandle {
+                  boxFolderId
+                  boxFileId
+                }
+              }
+              addressProof {
+                 fileName
+                fileHandle {
+                  boxFolderId
+                  boxFileId
+                }
+              }
+            }
+          }
+          created {
+            by
+            date
+          }
+          updated {
+            by
+            date
+          }
+          approved {
+            by
+            date
+          }
+          declined {
+            by
+            date
+          }
+          deleted {
+            by
+            date
+          }
+          storageDetails
+          frozen {
+            by
+            date
+          }
+          processing {
+            gs {
+              date
+              by
+            }
+          }
+          investorProfileData {
+            brokerageFirmName
+            publicCompanyTicker
+          }
+      }
+  }
+}
+`;
+
 export const crowdPayAccountReview = gql`
 mutation _crowdPayAccountReview($userId: String!, $accountId: String!, $action: ActionTypeEnum!, $comment: String!) {
   crowdPayAccountReview(

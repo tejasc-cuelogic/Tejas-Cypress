@@ -14,8 +14,8 @@ import {
   entityAccountStore,
   investorProfileStore,
   authStore,
-  campaignStore,
   uiStore,
+  investmentStore,
 } from '../../index';
 import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
@@ -221,22 +221,27 @@ export class UserDetailsStore {
     });
   }
 
-  getUserStorageDetails = userId => new Promise((resolve) => {
-    graphql({
-      client,
-      query: userDetailsQueryForBoxFolder,
-      variables: { userId },
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if (data) {
-          resolve(get(data, 'user.storageDetails.rootFolder.id'));
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again in sometime', 'error');
-      },
+  getUserStorageDetails = (userId) => {
+    uiStore.setProgress();
+    return new Promise((resolve) => {
+      graphql({
+        client,
+        query: userDetailsQueryForBoxFolder,
+        variables: { userId },
+        fetchPolicy: 'network-only',
+        onFetch: (data) => {
+          if (data) {
+            uiStore.setProgress(false);
+            resolve(get(data, 'user.storageDetails.rootFolder.id'));
+          }
+        },
+        onError: () => {
+          uiStore.setProgress(false);
+          Helper.toast('Something went wrong, please try again in sometime', 'error');
+        },
+      });
     });
-  });
+  }
 
   @computed get getDetailsOfUserLoading() {
     return this.detailsOfUser.loading;
@@ -412,6 +417,9 @@ export class UserDetailsStore {
   @computed
   get pendingStep() {
     let routingUrl = '/app/summary';
+    const selectedAccountType = investmentStore &&
+      investmentStore.investAccTypes && investmentStore.investAccTypes.value;
+    const investorAccountCreatedList = map(filter(this.signupStatus.roles, a => a.name !== 'investor'), 'name');
     if (this.signupStatus.isMigratedUser) {
       if (this.userDetails.email &&
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
@@ -434,20 +442,24 @@ export class UserDetailsStore {
       routingUrl = '/app/summary/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = '/app/summary/establish-profile';
-    } else if (isEmpty(this.signupStatus.roles)) {
+    } else if (isEmpty(investorAccountCreatedList)) {
       routingUrl = '/app/summary/account-creation';
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.partialAccounts.length > 0) {
       // const accValue =
       //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       // accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.partialAccounts[0];
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.inActiveAccounts.length > 0) {
       // const accValue =
       //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       // accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.inActiveAccounts[0];
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else {
       routingUrl = '/app/summary';
     }
@@ -565,11 +577,14 @@ export class UserDetailsStore {
   @action setUserStatus = (status) => {
     this.userStatus = status || this.userStatus;
   }
-  @action sendAdminEmailOfFrozenAccount = (activity) => {
+  @action sendAdminEmailOfFrozenAccount = (activity, offeringId) => {
     const selectedAccount = this.currentActiveAccountDetails;
-    const forzenAccountId =
-      selectedAccount && selectedAccount.details && selectedAccount.details.accountId ? selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
-    const payLoad = { userId: this.currentUserId, accountId: forzenAccountId, activity };
+    const forzenAccountId = get(selectedAccount, 'details.accountId');
+    // selectedAccount && selectedAccount.details && selectedAccount.details.accountId ?
+    //  selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
+    const payLoad = {
+      userId: this.currentUserId, accountId: forzenAccountId, activity, offeringId,
+    };
     client
       .mutate({
         mutation: frozenEmailToAdmin,
@@ -577,7 +592,7 @@ export class UserDetailsStore {
       })
       .then((res) => {
         if (res.data.notifyAdminFrozenAccountActivity) {
-          const offeringId = campaignStore.campaign && campaignStore.campaign.id;
+          // const offeringId = campaignStore.campaign && campaignStore.campaign.id;
           const offeringDetailObj = { offeringId, isEmailSent: true };
           cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
         }
@@ -586,16 +601,22 @@ export class UserDetailsStore {
   @computed
   get pendingStepForPartialAndProcessingAccount() {
     let routingUrl = '/app/summary';
+    const selectedAccountType = investmentStore &&
+      investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     if (this.signupStatus.partialAccounts.length > 0) {
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.partialAccounts[0];
       const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else if (this.signupStatus.inActiveAccounts.length > 0) {
+      const redirectAccount =
+        selectedAccountType || this.signupStatus.inActiveAccounts[0];
       const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else {
       routingUrl = '/app/summary';
     }

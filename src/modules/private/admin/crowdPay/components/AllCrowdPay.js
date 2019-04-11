@@ -24,27 +24,29 @@ const statusDetails = {
   ACCOUNT_PROCESSING: 'Account Processing',
 };
 
-@inject('crowdpayStore', 'uiStore')
+@inject('crowdpayStore')
 @withRouter
 @observer
 export default class AllCrowdPay extends Component {
   componentWillMount() {
-    const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
-    this.props.crowdpayStore.setAccountTypes(type);
-    this.props.crowdpayStore.reset();
-    this.props.uiStore.setProgress(false);
+    const { type } = this.props.match.params;
+    if (this.props.match.isExact && type && this.props.crowdpayStore.isApiHit !== type) {
+      this.props.crowdpayStore.setData('isApiHit', type);
+      // this.props.crowdpayStore.setAccountTypes(type);
+      // this.props.crowdpayStore.reset();
+      this.props.crowdpayStore.initRequest(type);
+    }
   }
   paginate = params => this.props.crowdpayStore.pageRequest(params);
   render() {
-    const { crowdpayStore, uiStore } = this.props;
+    const { crowdpayStore } = this.props;
     const {
-      accounts, count, requestState, crowdPayCtaHandler,
+      accounts, count, requestState, crowdPayCtaHandler, loadingCrowdPayIds,
     } = crowdpayStore;
-    const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
+    const { type } = this.props.match.params;
     if (count === 0) {
       return <InlineLoader text="No data found." />;
     }
-    const { inProgress } = uiStore;
     const totalRecords = count || 0;
     return (
       <Card fluid>
@@ -83,7 +85,7 @@ export default class AllCrowdPay extends Component {
                 </Table.Row>
                 ) :
                 accounts.map(account => (
-                  <Table.Row key={account.accountId} className={account.accountId === inProgress ? 'disabled' : ''}>
+                  <Table.Row key={account.accountId} className={loadingCrowdPayIds.includes(account.accountId) ? 'disabled' : ''}>
                     <Table.Cell>
                       <p>
                         <Link to={`/app/users/${account.userId}/profile-data`}>
@@ -165,7 +167,6 @@ export default class AllCrowdPay extends Component {
                         </Table.Cell> : null
                     }
                     <Actions
-                      inProgress={inProgress}
                       crowdPayCtaHandler={crowdPayCtaHandler}
                       refLink={this.props.match.url}
                       type={type}

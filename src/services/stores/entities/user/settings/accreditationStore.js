@@ -50,6 +50,17 @@ export class AccreditationStore {
   @observable accType = '';
   @observable currentInvestmentStatus = '';
   @observable showLoader = false;
+  @observable inProgress = [];
+
+  @action
+  addLoadingUserId = (requestId) => {
+    this.inProgress.push(requestId);
+  }
+
+  @action
+  removeLoadingUserId = (requestId) => {
+    this.inProgress = filter(this.inProgress, request => request !== requestId);
+  }
 
   @action
   initRequest = (reqParams) => {
@@ -599,7 +610,7 @@ export class AccreditationStore {
 
   @action
   emailVerifier = (userId, accountId, accountType) => {
-    uiStore.setProgress(userId);
+    this.addLoadingUserId(userId);
     const payLoad = { userId, accountId, accountType };
     return new Promise((resolve, reject) => {
       client
@@ -622,7 +633,7 @@ export class AccreditationStore {
           uiStore.setErrors(error.message);
           reject();
         })
-        .finally(() => uiStore.setProgress(false));
+        .finally(() => this.removeLoadingUserId(userId));
     });
   }
 
@@ -769,7 +780,9 @@ export class AccreditationStore {
   }
   @action
   setUserSelectedAccountStatus = (intialAccountStatus) => {
-    this.selectedAccountStatus = intialAccountStatus;
+    const { userDetails, signupStatus } = userDetailsStore;
+    const userCurrentStatus = userDetails && userDetails.status;
+    this.selectedAccountStatus = signupStatus.isMigratedUser && userCurrentStatus && userCurrentStatus !== 'FULL' ? 'PARTIAL' : intialAccountStatus;
   }
   userSelectedAccountStatus = (selectedAccount) => {
     const {

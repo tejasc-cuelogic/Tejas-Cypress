@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
-import { filter, reject, map, mapKeys } from 'lodash';
+import { filter, reject } from 'lodash';
 import { MobileDropDownNav } from '../../theme/shared';
 
-const iMap = { to: 'key', title: 'text' };
+// const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
@@ -94,7 +94,7 @@ class SecondaryMenu extends Component {
       const subNavigationItemList = this.manageSubNavList(navItems, userCreatedAccounts);
       navItemList = subNavigationItemList;
     }
-    const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
+    // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
@@ -133,7 +133,13 @@ class SecondaryMenu extends Component {
               className="legal-menu"
             />
             :
-            <Dropdown fluid selection options={mobNavItems} />
+            <MobileDropDownNav
+              className="private-secondary-menu"
+              refMatch={match}
+              navItems={navItemList}
+              location={location}
+              // options={mobNavItems}
+            />
           }
         </Responsive>
       </Aux>

@@ -37,6 +37,7 @@ export default class FinancialInformation extends React.Component {
                   hoverable={field === 'netWorth'}
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   currency
+                  allowNegative={false}
                 />
               ))
             }

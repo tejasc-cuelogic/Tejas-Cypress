@@ -23,8 +23,8 @@ const LegalDetails = observer(({
     </Modal.Header>
     <Modal.Content className="signup-content">
       <Dimmer className="fullscreen" active={inProgress}>
-        <Loader active={inProgress} >
-        Please wait...<br /><br /> We are verifying your identity. This can take up to a minute.
+        <Loader active={inProgress}>
+        Please wait...<br /><br />We are verifying your identity.<br />This can take up to a minute.
         </Loader>
       </Dimmer>
       <Form error onSubmit={onSubmit}>
@@ -95,7 +95,7 @@ const LegalDetails = observer(({
             name="phoneNumber"
             type="tel"
             fielddata={form.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             changed={maskChange}
             phoneNumber
             showerror
@@ -116,6 +116,12 @@ const LegalDetails = observer(({
             showerror
           />
         </Form.Group>
+        <p className="note center-align">
+          By selecting <b>Verify my identity</b>, you agree NextSeed may deliver verification
+          codes to you using the phone number you have provided. Codes may be sent using text
+          messages, an autodialer, or artificial or prerecorded voice messages to such phone
+          number. Your mobile carrier’s messaging and data fees may apply.
+        </p>
         {errors &&
           <Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />

@@ -1,5 +1,8 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
+import Aux from 'react-aux';
+import React from 'react';
+import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -18,13 +21,13 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    return moment(value, 'MM/DD/YYYY').isAfter('12-31-1909');
+    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909'));
   },
   'Invalid Date',
 );
 Validator.register(
   'leastAge', (value, attribute) => {
-    return moment().diff(value, 'years') >= 18;
+    return moment().diff(new Date(value), 'years') >= 18;
   },
   'Investor must be at least 18 years old in order to proceed',
 );
@@ -49,10 +52,21 @@ export const securitySections = [
   //   action: ['social-connect'],
   // },
   {
-    title: 'Multi-factor Authentication',
-    description: 'You can choose your Active MFA Factor.',
+    title: 'Multi-Factor Authentication',
+    description:
+      (
+        <Aux>Yo can choose your{' '}
+          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA Factor</span>}>
+            <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
+            <Popup.Content>
+              Manage your MFA contact preferences. All major actions in your account will
+              require additional confirmation with a code sent to your phone or email address.
+            </Popup.Content>
+          </Popup>
+        </Aux>
+      ),
     descriptionNotAvailable: '',
-    action: ['mfa', 'Manage multi-factor autentication'],
+    action: ['mfa', 'Select Your Active MFA'],
   },
 ];
 
@@ -157,7 +171,7 @@ export const USER_IDENTITY = {
     key: 'phoneNumber',
     value: '',
     label: 'Phone Number',
-    placeHolder: '123-456-7890',
+    placeHolder: '(123) 456-7890',
     error: undefined,
     rule: 'required|maskedPhoneNumber',
     customErrors: {
@@ -200,9 +214,9 @@ export const USER_IDENTITY = {
 };
 
 export const USER_TITLE = [
-  { key: 'Mr', value: 'Mr', text: 'Mr' },
-  { key: 'Ms', value: 'Ms', text: 'Ms' },
-  { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
+  { key: 'Mr', value: 'Mr', text: 'Mr.' },
+  { key: 'Ms', value: 'Ms', text: 'Ms.' },
+  { key: 'Mrs', value: 'Mrs', text: 'Mrs.' },
 ];
 
 export const IDENTITY_DOCUMENTS = {

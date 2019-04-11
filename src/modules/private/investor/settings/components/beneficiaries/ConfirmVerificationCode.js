@@ -8,6 +8,8 @@ import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('beneficiaryStore', 'uiStore')
 @withRouter
 @observer
@@ -75,7 +77,10 @@ export default class ConfirmVerificationCode extends Component {
                 name="code"
                 fields={6}
                 type="number"
+                autoFocus={!isMobile}
                 className="otp-field"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />

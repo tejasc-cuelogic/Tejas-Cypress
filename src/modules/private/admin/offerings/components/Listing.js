@@ -108,11 +108,11 @@ export default class Listing extends Component {
                       }
                     </Table.Cell>
                     {stage === 'live' &&
-                      <Table.HeaderCell>
+                      <Table.Cell>
                         {offering.closureSummary && offering.closureSummary.processingDate ?
                         DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                         }
-                      </Table.HeaderCell>
+                      </Table.Cell>
                     }
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>

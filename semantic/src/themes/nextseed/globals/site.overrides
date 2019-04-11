@@ -173,6 +173,14 @@ h6{
 	text-align:center !important;
 	justify-content:center;
 }
+.intro-text{
+	color:@neutral-middark !important;
+	font-size: @13px;
+}
+.note{
+	color:@neutral-middark !important;
+	font-size: @12px;
+}
 .justify-text {
 	text-align: justify;
 }
@@ -206,10 +214,6 @@ h6{
 .warning-text{
   color:@highlight-secondary !important;
 }
-.intro-text, .note{
-	color:@neutral-middark !important;
-	font-size: @12px;
-}
 .primary-two-text{
 	color: @primary-two !important;
 }
@@ -238,6 +242,9 @@ h6{
 }
 .more-info {
 	font-size: 12px;
+}
+.underline-text {
+	text-decoration: underline !important;
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){
@@ -326,11 +333,11 @@ i.icon.right {
 	}
 	.wp-caption {
 		max-width: 100%;
-		height: 100%;
+		height: auto;
 	}
 	img {
 		max-width: 100%;
-		height: 100%;
+		height: auto;
 	}
 }
 //	Helper Classes Ends
@@ -998,6 +1005,9 @@ footer{
 			padding: 0 !important;
 			&:last-child {
 				padding: @70px @20px !important;
+				@media only screen and (max-width : @largestSmallMonitor){
+					padding: @56px 0 !important;
+				}
 				a {
 					text-decoration: none;
 					.icon {
@@ -1386,7 +1396,7 @@ a.icon-link {
 		top: 108px;
 	}
 	&.offering-side-menu,&.team{
-		top:136px;
+		top:150px;
 		@media only screen and (max-width : @largestTabletScreen){
 			top: 0;
 		}
@@ -1528,6 +1538,10 @@ div.login-form {
 			line-height:@22px;
 			text-align:center;
 			padding-right:@30px;
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-right:0;
+			line-height: @32px;
 		}
 		a.back-link{
 			position:absolute;
@@ -2072,6 +2086,7 @@ ol.progtrckr{
 			min-width:calc(100% / 7);
 			padding:0 1rem;
 			position:absolute;
+			top:15px;
 			left:0;
 			z-index:3;
 			transform:translate(-50%, 0%);
@@ -2091,7 +2106,7 @@ ol.progtrckr{
 				background-color:@link-color;
 				position:absolute;
 				left:50%;
-				bottom:-55px;
+				bottom:-40px;
 				transform:translate(-50%, -50%);
 				border:3px solid white;
 				box-shadow:0px 0px 4px 1px @link-color;
@@ -2527,6 +2542,13 @@ p.check-extra-info{
 	.ui.header {
 		margin-bottom: 0;
 	}
+	.ui.image.logo {
+		height: @25px;
+		width: auto;
+		&.offering-logo {
+			width: 200px;
+		}
+	}
 }
 .proven-result-section {
 	.ui.grid>* {
@@ -2534,17 +2556,16 @@ p.check-extra-info{
 	}
 }
 .full-logo {
-	width: 52px;
-    height: 30px;
+	width: 20px;
+    height: 16px;
     position: fixed;
-    left: 0;
-    top: 14px;
+    left: 14px;
+    top: 21px;
     z-index: 103;
     overflow: hidden;
-    transition: width 250ms ease-in-out;
+    // transition: width 250ms ease-in-out;
 	.ui.image {
 		height: 100%;
-		margin-left: 21px;
 		img {
 			max-width: none;
 			max-height: 100%;
@@ -2552,12 +2573,16 @@ p.check-extra-info{
 	}
 	&.visible-logo {
 		width: 200px;
-		transition: width 300ms ease-in-out;
+		// transition: width 300ms ease-in-out;
 		//transition-delay: 90ms;
 		position: absolute;
+		height: 30px;
+		top: 14px;
 	}
 	&.offering-logo {
 		width: 200px;
+		height: 30px;
+		top: 14px;
 	}
 }
 //	Public responsive end
@@ -2918,5 +2943,15 @@ input[type='range']::-webkit-slider-thumb {
 		@media only screen and (max-width : @largestMobileScreen){
 			height: auto;
 		}
+	}
+}
+.field .pac-container {
+	left: 0 !important;
+	top: 63px !important;
+}
+.plaid-link-iframe {
+	@media only screen and (max-width : @largestMobileScreen){
+		position: absolute;
+		z-index: 9999;
 	}
 }

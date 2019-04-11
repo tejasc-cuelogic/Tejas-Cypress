@@ -12,7 +12,7 @@ import UserInvestorDetails from '../../../../../investor/settings/components/Use
 import { NEXTSEED_BOX_URL } from '../../../../../../../constants/common';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('userDetailsStore', 'investmentLimitStore')
+@inject('userDetailsStore', 'investmentLimitStore', 'uiStore')
 @withRouter
 @observer
 export default class Investor extends Component {
@@ -37,6 +37,7 @@ export default class Investor extends Component {
   }
   render() {
     const { getActiveAccountList } = this.props.investmentLimitStore;
+    const { inProgress } = this.props.uiStore;
     const { match } = this.props;
     const navMeta = [
       { title: 'Basic', to: 'basic' },
@@ -50,7 +51,7 @@ export default class Investor extends Component {
         <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
           <SecondaryMenu secondary vertical match={match} navItems={navMeta} />
           <Divider hidden />
-          <Button color="blue" className="link-button" content="Users Box Account" onClick={this.getUserStorageDetails} />
+          <Button color="blue" className="link-button" content={inProgress ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>

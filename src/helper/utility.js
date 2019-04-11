@@ -39,6 +39,8 @@ export class Utility {
     regex => (window.location.href.match(new RegExp(regex)) !== null),
   )
 
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+
   guid = () => {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -138,7 +140,8 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
   phoneNumberFormatter = (phoneNumber) => {

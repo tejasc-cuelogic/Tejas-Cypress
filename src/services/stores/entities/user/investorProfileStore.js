@@ -102,6 +102,12 @@ class InvestorProfileStore {
   }
   @action
   employmentChange = (e, form, result) => {
+    if (['brokerageEmployment', 'publicCompanyRel'].includes(result.name)) {
+      const textInput = form === 'BROKERAGE_EMPLOYMENT_FORM' ? 'brokerageFirmName' : 'publicCompanyTicker';
+      this[form].fields[textInput].value = '';
+      this[form].fields[textInput].error = result.fielddata.value ? undefined :
+        this[form].fields[textInput].error;
+    }
     this.formChange(e, result, form);
   }
 
@@ -276,6 +282,7 @@ class InvestorProfileStore {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
             resolve();
           }
+          Helper.toast(`${currentStep.name} submitted successfully.`, 'success');
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));

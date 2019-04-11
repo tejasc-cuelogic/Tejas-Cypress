@@ -24,7 +24,7 @@ class UserAvatar extends Component {
     if (avatarProfile) {
       return (
         avatarProfile === 'leader-placeholder.jpg' ?
-          <NSImage path={avatarProfile} /> :
+          <NSImage path={avatarProfile} size={imgSize} avatar circular /> :
           <Image64
             srcUrl={avatarProfile}
             alt={UserInfo.firstName}

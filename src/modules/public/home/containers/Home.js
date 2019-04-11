@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Container, Divider, Header, Button, Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
@@ -19,6 +19,10 @@ class Home extends Component {
   }
   componentWillReceiveProps() {
     this.props.campaignStore.initRequest(['active']);
+  }
+  handleExploreBtn = () => {
+    this.props.history.push('/offerings');
+    window.scrollTo(0, 0);
   }
   render() {
     const {
@@ -57,7 +61,7 @@ class Home extends Component {
           }
         />
         <div className="center-align mb-50">
-          <Button secondary content="Explore Campaigns" as={Link} to="/offerings" />
+          <Button secondary content="Explore Campaigns" onClick={this.handleExploreBtn} />
         </div>
         <FeaturedOn />
         <section className="learn-more">

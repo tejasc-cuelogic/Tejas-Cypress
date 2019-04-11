@@ -12,7 +12,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore', 'uiStore')
+@inject('accreditationStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -27,7 +27,6 @@ export default class AllAccreditationRequests extends Component {
     const {
       accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
-    const { inProgress } = this.props.uiStore;
     if (loading) {
       return <InlineLoader />;
     }
@@ -59,7 +58,7 @@ export default class AllAccreditationRequests extends Component {
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('MM/DD/YYYY') : <p className="intro-text">N/A</p>}
+                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('MM/DD/YYYY') : <p className="note">N/A</p>}
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
@@ -85,7 +84,7 @@ export default class AllAccreditationRequests extends Component {
                         accreditation.assetsUpload[0].fileInfo &&
                         accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
                           <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >Uploads</a>
-                        : <p className="intro-text">N/A</p>
+                        : <p className="note">N/A</p>
                         : 'Verifier'}
                         {accreditation.verifier &&
                           <Aux>
@@ -103,7 +102,6 @@ export default class AllAccreditationRequests extends Component {
                           accountType={get(accreditation, 'accountType[0]')}
                           emailVerifier={emailVerifier}
                           accreditation={accreditation}
-                          inProgress={inProgress}
                           {...this.props}
                         />
                       </Aux> :

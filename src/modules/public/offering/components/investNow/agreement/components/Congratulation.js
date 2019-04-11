@@ -28,8 +28,10 @@ export default class Congratulation extends React.Component {
   }
   render() {
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const { investmentAmount } = this.props.investmentStore;
+    const { investmentAmount, investAccTypes } = this.props.investmentStore;
     const { campaign } = this.props.campaignStore;
+    const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
+    const accountRedirectURL = accountType && accountType !== '-' ? `/app/account-details/${accountType}/portfolio` : '/app/summary';
     setTimeout(() => {
       if (this.props.changeInvestment) {
         this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
@@ -62,7 +64,7 @@ export default class Congratulation extends React.Component {
               </Button>
             </div>
             <Divider hidden />
-            <Link to="/app/summary" className="text-link">
+            <Link to={accountRedirectURL} className="text-link">
               <Icon className="ns-arrow-right" color="green" />
               Go to My Accounts
             </Link>

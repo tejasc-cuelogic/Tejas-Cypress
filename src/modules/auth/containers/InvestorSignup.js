@@ -7,6 +7,8 @@ import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
@@ -28,14 +30,16 @@ class InvestorSignup extends Component {
       this.props.history.push('/auth/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
+      this.props.uiStore.setProgress();
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
+        this.props.uiStore.setProgress(false);
         this.props.authStore.setCredentials({
           email: email.value,
           password: password.value,
           givenName: givenName.value,
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-          this.props.identityStore.requestOtpWrapper().then(() => {
+          this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
             this.props.history.push('/auth/confirm-email');
           });
         }

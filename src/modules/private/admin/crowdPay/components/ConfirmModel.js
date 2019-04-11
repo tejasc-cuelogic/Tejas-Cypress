@@ -21,15 +21,15 @@ export default class ConfirmModel extends Component {
       const msg = `Crowdpay account is ${action === 'APPROVE' ? 'approved' : 'declined'} successfully.`;
       this.props.crowdpayStore.crowdPayCtaHandler(userId, accountId, action, msg).then(() => {
         this.props.history.push(`${this.props.refLink}`);
-      });
+      }).catch();
     } else {
       this.props.history.push(`${this.props.refLink}`);
     }
   }
   render() {
-    const { formChange, CONFIRM_CROWDPAY_FRM } = this.props.crowdpayStore;
+    const { formChange, CONFIRM_CROWDPAY_FRM, loadingCrowdPayIds } = this.props.crowdpayStore;
     const actionValue = this.props.match.params.action;
-    const { inProgress } = this.props.uiStore;
+    const { accountId } = this.props.match.params;
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Header className="signup-header">
@@ -44,7 +44,7 @@ export default class ConfirmModel extends Component {
               changed={(e, result) => formChange(e, result, 'CONFIRM_CROWDPAY_FRM')}
             />
             <div className="center-align mt-30">
-              <Button className={actionValue === 'APPROVE' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'APPROVE' ? 'Approve request' : 'Decline request'} loading={inProgress} disabled={!CONFIRM_CROWDPAY_FRM.meta.isValid} onClick={this.handleConfirm} />
+              <Button className={actionValue === 'APPROVE' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'APPROVE' ? 'Approve request' : 'Decline request'} loading={loadingCrowdPayIds.includes(accountId)} disabled={!CONFIRM_CROWDPAY_FRM.meta.isValid} onClick={this.handleConfirm} />
             </div>
           </Form>
         </Modal.Content>

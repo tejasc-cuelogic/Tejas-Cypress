@@ -15,6 +15,8 @@ class ChangeInvestmentLimit extends Component {
     this.props.investmentStore.setInvestmentLimitData();
   }
   changeInvestmentLimit = () => {
+    const { uiStore } = this.props;
+    uiStore.setProgress(true);
     const offeringId =
       this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
@@ -73,6 +75,7 @@ class ChangeInvestmentLimit extends Component {
                   prefix="$ "
                   value={fields[field].value}
                   fielddata={fields[field]}
+                  allowNegative={false}
                   // changed={maskingFieldChange}
                   changed={(values, name) => this.change(values, name)}
                 // onblur={investmentCalculate}

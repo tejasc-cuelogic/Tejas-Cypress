@@ -66,7 +66,7 @@ const MySidebar = observer(props => (
               <Logo
                 className="logo"
                 dataSrc={((props.layoutState.leftPanel) ?
-                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoGreenGrey') :
                   'LogoSmall')}
               />
             </Link>
@@ -81,7 +81,7 @@ const MySidebar = observer(props => (
                 /> :
                 <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
-              <h2>{props.UserInfo.fullname}</h2>
+              {props.UserInfo.fullname ? <h2>{props.UserInfo.fullname}</h2> : ''}
               {GetNavItem('profile-settings', props.UserInfo.roles)}
             </div>
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />

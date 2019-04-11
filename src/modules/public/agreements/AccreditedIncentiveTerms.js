@@ -39,10 +39,10 @@ export default class AccreditedIncentiveTerms extends Component {
               Investment Credits may only be redeemed on NextSeed. Investment Credits will
               automatically appear as Investment Credits on your account page. The Investment
               Credits will automatically be applied to your next investment. Your existing
-              investments or commitments will not be affected in any way.
+              investments or commitments will not be affected in any way.{' '}
               <b>
                 If unused within five years from the date the Investment Credits are awarded,
-                the Investment Credits will expire.
+                the Investment Credits will expire.{' '}
               </b>
               Investment Credits are coupons issued for promotional purposes
               only; they have no cash value and may not be transferred or exchanged for cash.

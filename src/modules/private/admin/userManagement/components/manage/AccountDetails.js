@@ -23,7 +23,7 @@ const navMeta = [
   { title: 'Activity', to: 'activity' },
 ];
 
-@inject('userDetailsStore')
+@inject('userDetailsStore', 'uiStore')
 @withRouter
 @observer
 export default class AccountDetails extends Component {
@@ -50,6 +50,7 @@ export default class AccountDetails extends Component {
   }
   render() {
     const { match } = this.props;
+    const { inProgress } = this.props.uiStore;
     const { currentActiveAccountDetailsOfSelectedUsers } = this.props.userDetailsStore;
     const account = currentActiveAccountDetailsOfSelectedUsers;
     return (
@@ -57,7 +58,7 @@ export default class AccountDetails extends Component {
         <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
           <SecondaryMenu secondary vertical match={match} navItems={navMeta} />
           <Divider hidden />
-          <Button color="blue" className="link-button" content="Users Box Account" onClick={this.getUserStorageDetails} />
+          <Button color="blue" className="link-button" content={inProgress ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>

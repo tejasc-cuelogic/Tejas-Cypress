@@ -33,12 +33,6 @@ export default class ProfileData extends Component {
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }
-  isVerified = (cipStatus) => {
-    if (cipStatus !== null) {
-      return this.props.userDetailsStore.validAccStatus.includes(cipStatus);
-    }
-    return false;
-  }
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
     const userRole = capitalize(this.props.userStore.currentUser.roles[0]);
@@ -51,6 +45,7 @@ export default class ProfileData extends Component {
     const {
       email, legalDetails, info, phone, investorProfileData, status,
     } = this.props.userDetailsStore.userDetails;
+    const { signupStatus, validAccStatus } = this.props.userDetailsStore;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
@@ -136,12 +131,12 @@ export default class ProfileData extends Component {
                   onplaceselected={setAddressFieldsForProfile}
                   changed={profileInfoChange}
                 />
+                <FormInput
+                  name="streetTwo"
+                  fielddata={ID_PROFILE_INFO.fields.streetTwo}
+                  changed={profileInfoChange}
+                />
                 <Form.Group widths={3}>
-                  <FormInput
-                    name="streetTwo"
-                    fielddata={ID_PROFILE_INFO.fields.streetTwo}
-                    changed={profileInfoChange}
-                  />
                   <FormInput
                     name="city"
                     fielddata={ID_PROFILE_INFO.fields.city}
@@ -177,6 +172,8 @@ export default class ProfileData extends Component {
                 email={email}
                 legalDetails={legalDetails}
                 status={status}
+                signupStatus={signupStatus}
+                validAccStatus={validAccStatus}
               />
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile &&

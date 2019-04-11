@@ -51,47 +51,48 @@ class IndividualAccountStore {
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
-      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
-        uiStore.setProgress();
-        client
-          .mutate({
-            mutation: submitinvestorAccount,
-            variables: payLoad,
-          })
-          .then((res1) => {
-            if (res1.data.submitInvestorAccount !== 'The account is Processing') {
-              this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
-                uiStore.setProgress(false);
-                if (!res.data.createIndividualGoldStarInvestor) {
-                  this.setFieldValue('showProcessingModal', true);
-                  Helper.toast('Individual account submitted successfully.', 'success');
-                } else {
-                  Helper.toast('Individual account created successfully.', 'success');
-                }
-                bankAccountStore.resetStoreData();
-                this.isFormSubmitted = true;
-                resolve();
-              }).catch((err) => {
-                uiStore.setErrors(DataFormatter.getSimpleErr(err));
-                uiStore.setProgress(false);
-                reject();
-              });
-            } else {
+      uiStore.setProgress();
+      client
+        .mutate({
+          mutation: submitinvestorAccount,
+          variables: payLoad,
+        })
+        .then((res1) => {
+          if (res1.data.submitInvestorAccount !== 'The account is Processing') {
+            this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
               uiStore.setProgress(false);
-              this.setFieldValue('showProcessingModal', true);
+              if (res.data.createIndividualGoldStarInvestor) {
+                this.setFieldValue('showProcessingModal', true);
+                Helper.toast('Individual account submitted successfully.', 'success');
+              } else {
+                Helper.toast('Individual account created successfully.', 'success');
+              }
               bankAccountStore.resetStoreData();
               this.isFormSubmitted = true;
-              Helper.toast('Individual account submitted successfully.', 'success');
               resolve();
-            }
-          }).catch((err) => {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            console.log('Error', err);
-            uiStore.resetcreateAccountMessage();
+            }).catch((err) => {
+              uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, DataFormatter.getSimpleErr(err).message)) {
+                this.setFieldValue('showProcessingModal', true);
+              }
+              uiStore.setProgress(false);
+              reject();
+            });
+          } else {
             uiStore.setProgress(false);
-            reject();
-          });
-      });
+            this.setFieldValue('showProcessingModal', true);
+            bankAccountStore.resetStoreData();
+            this.isFormSubmitted = true;
+            Helper.toast('Individual account submitted successfully.', 'success');
+            resolve();
+          }
+        }).catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          console.log('Error', err);
+          uiStore.resetcreateAccountMessage();
+          uiStore.setProgress(false);
+          reject();
+        });
     });
   }
   @action
@@ -177,12 +178,12 @@ class IndividualAccountStore {
     if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
       if (!isEmpty(userData) && !this.formStatus) {
         const account = find(userData.roles, { name: 'individual' });
-        const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+        // const { isValid } = bankAccountStore.formAddFunds.meta;
         if (account && account.details) {
-          if (isValid) {
-            bankAccountStore.formEntityAddFunds.fields.value.value =
-            account.details.initialDepositAmount;
-          }
+          // if (isValid) {
+          bankAccountStore.formAddFunds.fields.value.value =
+          account.details.initialDepositAmount;
+          // }
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
             bankAccountStore.setPlaidAccDetails(plaidAccDetails);

@@ -64,6 +64,7 @@ export default class AccountCreation extends React.Component {
         validForm: EMPLOYMENT_FORM.meta.isValid,
         form: 'EMPLOYMENT_FORM',
         stepToBeRendered: 2,
+        disableKeyDown: true,
       },
       {
         name: 'Brokerage Employment',
@@ -73,6 +74,7 @@ export default class AccountCreation extends React.Component {
         form: 'BROKERAGE_EMPLOYMENT_FORM',
         validForm: BROKERAGE_EMPLOYMENT_FORM.meta.isValid,
         stepToBeRendered: 3,
+        disableKeyDown: true,
       },
       {
         name: 'Public Company Relations',
@@ -82,6 +84,7 @@ export default class AccountCreation extends React.Component {
         form: 'PUBLIC_COMPANY_REL_FORM',
         validForm: PUBLIC_COMPANY_REL_FORM.meta.isValid,
         stepToBeRendered: 4,
+        disableKeyDown: true,
       },
       {
         name: 'Financial Information',
@@ -91,6 +94,7 @@ export default class AccountCreation extends React.Component {
         form: 'FINANCES_FORM',
         validForm: PUBLIC_COMPANY_REL_FORM.meta.isValid,
         stepToBeRendered: 5,
+        disableKeyDown: true,
       },
       {
         name: 'Investment Experience',
@@ -101,6 +105,7 @@ export default class AccountCreation extends React.Component {
         validForm: INVESTMENT_EXP_FORM.meta.isValid,
         stepToBeRendered: 6,
         disableNextButton: true,
+        disableKeyDown: true,
       },
     ];
 

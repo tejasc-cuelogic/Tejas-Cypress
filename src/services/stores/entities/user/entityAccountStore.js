@@ -123,28 +123,25 @@ class EntityAccountStore {
       accountType: 'ENTITY',
     };
     return new Promise((resolve, reject) => {
-      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
-        client
-          .mutate({
-            mutation: submitinvestorAccount,
-            variables: payLoad,
-          })
-          .then(() => {
-            this.setFieldValue('showProcessingModal', true);
-            bankAccountStore.resetStoreData();
-            this.isFormSubmitted = true;
-            Helper.toast('Entity account submitted successfully.', 'success');
-            resolve();
-          })
-          .catch((err) => {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.resetcreateAccountMessage();
-            uiStore.setProgress(false);
-            reject();
-          });
-      }).catch((e) => {
-        console.log(e);
-      });
+      client
+        .mutate({
+          mutation: submitinvestorAccount,
+          variables: payLoad,
+        })
+        .then(() => {
+          this.setFieldValue('showProcessingModal', true);
+          bankAccountStore.resetStoreData();
+          this.isFormSubmitted = true;
+          Helper.toast('Entity account submitted successfully.', 'success');
+          uiStore.setProgress(false);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          uiStore.resetcreateAccountMessage();
+          uiStore.setProgress(false);
+          reject();
+        });
     });
   }
 
@@ -591,13 +588,13 @@ class EntityAccountStore {
             this.setEntityAttributes('Formation doc');
           }
           bankAccountStore.validateAddFunds();
-          const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+          // const { isValid } = bankAccountStore.formEntityAddFunds.meta;
           if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
             bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-            if (isValid) {
-              bankAccountStore.formEntityAddFunds.fields.value.value =
-              account.details.initialDepositAmount;
-            }
+            // if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+            // }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
@@ -611,10 +608,10 @@ class EntityAccountStore {
             account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
-            if (isValid) {
-              bankAccountStore.formEntityAddFunds.fields.value.value =
-              account.details.initialDepositAmount;
-            }
+            // if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+            // }
           }
           bankAccountStore.validateAddFunds();
           // bankAccountStore.validateAddfundsAmount();

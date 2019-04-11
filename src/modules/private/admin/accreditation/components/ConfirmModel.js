@@ -68,7 +68,7 @@ export default class ConfirmModel extends Component {
               onremove={fieldName => removeUploadedData('CONFIRM_ACCREDITATION_FRM', fieldName)}
             />
             <div className="center-align mt-30">
-              <Button className={actionValue === 'CONFIRMED' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'CONFIRMED' ? 'Approve request' : 'Decline request'} loading={inProgress} disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid} onClick={this.handleConfirm} />
+              <Button className={actionValue === 'CONFIRMED' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'CONFIRMED' ? 'Approve request' : 'Decline request'} loading={inProgress} disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid || CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.showLoader} onClick={this.handleConfirm} />
             </div>
           </Form>
         </Modal.Content>

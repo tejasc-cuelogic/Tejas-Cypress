@@ -8,6 +8,8 @@ import { MaskedInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors, SuccessScreen } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userDetailsStore', 'multiFactorAuthStore')
 @withRouter
 @observer
@@ -62,7 +64,7 @@ export default class ConfirmPhoneNumber extends Component {
   }
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.startPhoneVerification();
+    this.props.identityStore.startPhoneVerification('', undefined, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -111,7 +113,7 @@ export default class ConfirmPhoneNumber extends Component {
             type="tel"
             name="phoneNumber"
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="(###)###-####"
+            format="(###) ###-####"
             readOnly={!editMode}
             displayMode={!editMode}
             changed={personalInfoMaskedChange}
@@ -131,6 +133,9 @@ export default class ConfirmPhoneNumber extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
+                autoFocus={!isMobile}
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />

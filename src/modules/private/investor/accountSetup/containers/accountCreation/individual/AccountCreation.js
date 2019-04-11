@@ -76,7 +76,7 @@ export default class AccountCreation extends React.Component {
           // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
           // : stepToBeRendered > 1 ? 'error' : '',
           validate: validateAddFunds,
-          isDirty: isPlaidDirty || !formAddFunds.meta.isValid,
+          isDirty: isPlaidDirty,
           validForm: formAddFunds.meta.isValid,
           disableNextButton: true,
           stepToBeRendered: 2,

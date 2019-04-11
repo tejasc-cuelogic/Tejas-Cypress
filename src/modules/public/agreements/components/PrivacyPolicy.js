@@ -336,7 +336,7 @@ const PrivacyPolicy = () => (
         </p>
         <Divider hidden />
         <Header as="h5">Appendix: NextSeed Service Providers</Header>
-        <p>Last updated:  March 2019</p>
+        <p>Last updated: April 8, 2019</p>
         <p>
           We employ service providers to perform tasks on our behalf and to assist us in
           providing the Service. For more information, please contact us at{' '}

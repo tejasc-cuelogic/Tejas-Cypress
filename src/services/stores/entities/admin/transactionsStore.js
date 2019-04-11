@@ -37,6 +37,7 @@ export class TransactionsStore {
     },
   };
   @observable btnLoader = [];
+  pageReload = true;
 
   @action
   setDataValue = (key, value) => {
@@ -54,14 +55,17 @@ export class TransactionsStore {
     if (isFailedProcess) {
       return;
     }
-    if (isApproved) {
-      this.db = filter(this.db, row => row.requestId !== requestId);
-    } else {
-      const index = findIndex(this.db, record => record.requestId === requestId);
-      const transaction = find(this.db, record => record.requestId === requestId);
+    const transactions = get(this.data, 'data.getTransactions.transactions');
+    if (isApproved && transactions) {
+      this.data.data.getTransactions.transactions =
+      filter(transactions, row => row.requestId !== requestId);
+    } else if (transactions) {
+      const index = findIndex(transactions, record => record.requestId === requestId);
+      const transaction = find(transactions, record => record.requestId === requestId);
       transaction.gsProcessId = true;
-      this.db[index] = transaction;
+      this.data.data.getTransactions.transactions[index] = transaction;
     }
+    this.setData(this.data.data || []);
   }
 
   @action
@@ -191,7 +195,6 @@ export class TransactionsStore {
         .then(() => {
           this.removeLoadingRequestId(requestID);
           Helper.toast(`Transaction ${actionName} successfully.`, 'success');
-          this.initRequest(this.transactionStatus);
           resolve();
         })
         .catch(() => {

@@ -10,8 +10,14 @@ import { isEmpty } from 'lodash';
 @withRouter
 @observer
 export default class LinkbankSummary extends React.Component {
-  componentDidMount() {
-    this.props.bankAccountStore.setLoaderForAccountBlank();
+  componentWillMount() {
+    this.props.bankAccountStore.fetchRoutingNumber();
+  }
+  componentDidUpdate() {
+    const {
+      setLoaderForAccountBlank,
+    } = this.props.bankAccountStore;
+    setLoaderForAccountBlank();
   }
 
   render() {
@@ -19,8 +25,8 @@ export default class LinkbankSummary extends React.Component {
     const {
       plaidAccDetails,
       formLinkBankManually,
-      isEncrypted,
       changeLinkbank,
+      routingNum,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -42,12 +48,11 @@ export default class LinkbankSummary extends React.Component {
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {(formLinkBankManually.fields.routingNumber.value &&
-                  !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
+                { !isEmpty(routingNum) &&
                   <Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
-                      {formLinkBankManually.fields.routingNumber.value}
+                      { routingNum || '' }
                     </Table.Cell>
                   </Table.Row>
                 }
