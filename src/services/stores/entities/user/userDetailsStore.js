@@ -369,7 +369,7 @@ export class UserDetailsStore {
       details.finalStatus = (details.activeAccounts.length > 2 &&
         this.validAccStatus.includes(details.idVerification) &&
         details.phoneVerification === 'DONE');
-
+      details.isWpUser = get(this.userDetails, 'wpUserId');
       return details;
     }
     return details;
