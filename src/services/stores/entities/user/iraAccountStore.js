@@ -181,13 +181,17 @@ class IraAccountStore {
         resolve();
       })
       .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        uiStore.resetcreateAccountMessage();
         if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
           if (this.retry <= 2) {
             this.retry += 1;
             this.submitAccount();
+          } else {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.setProgress(false);
           }
+        } else {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          uiStore.setProgress(false);
         }
         uiStore.setProgress(false);
         reject();
