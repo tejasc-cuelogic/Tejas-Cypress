@@ -17,7 +17,7 @@ export default class Summary extends Component {
         component={
            ((inActiveAccLength === 3 &&
             partialAccLength === 0 &&
-            activeAccLength === 0) ||
+            activeAccLength === 0) || activeAccLength === 0 ||
             (signupStatus.isMigratedFullAccount ||
             !isBasicVerDoneForMigratedFullUser ||
             !signupStatus.investorProfileCompleted))
