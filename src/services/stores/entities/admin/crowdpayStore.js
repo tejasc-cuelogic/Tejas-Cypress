@@ -4,7 +4,7 @@ import { isArray, get, filter as lodashFilter, findIndex, find } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
-import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount } from '../../queries/CrowdPay';
+import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
@@ -58,21 +58,23 @@ export class CrowdpayStore {
   @action
   removeLoadingCrowdPayId = (id, accountStatus) => {
     if (accountStatus && accountStatus !== 'APPROVE') {
-      const crowdpayList = get(this.data, 'data.listCrowdPayUsers.crowdPayList');
+      const crowdpayList = get(this.data, 'data.getCrowdPayUsers.crowdPayList');
       const index = findIndex(crowdpayList, crowdPayAccount => crowdPayAccount.accountId === id);
       const crowdPayAccount = find(crowdpayList, account => account.accountId === id);
       crowdPayAccount.accountStatus = accountStatus;
+      if (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN) {
+        crowdPayAccount.declined = { by: 'ADMIN' };
+      }
       crowdpayList[index] = crowdPayAccount;
-      this.data.data.listCrowdPayUsers.crowdPayList = crowdpayList;
+      this.data.data.getCrowdPayUsers.crowdPayList = crowdpayList;
       this.setDb(this.getCrowdPayData);
       this.initiateFilters(false);
     } else if (accountStatus === 'APPROVE') {
-      const crowdpayList = lodashFilter(get(this.data, 'data.listCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
-      this.data.data.listCrowdPayUsers.crowdPayList = crowdpayList;
+      const crowdpayList = lodashFilter(get(this.data, 'data.getCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
+      this.data.data.getCrowdPayUsers.crowdPayList = crowdpayList;
       this.setDb(this.getCrowdPayData);
       this.initiateFilters(false);
     }
-    this.setCrowdpayAccountsSummary();
     this.loadingCrowdPayIds =
     lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
@@ -107,19 +109,33 @@ export class CrowdpayStore {
   }
 
   @action
-  initRequest = () => {
+  initRequest = (type) => {
+    const params = {};
+    if (type !== 'review') {
+      params.accountStatus = CROWDPAY_FILTERS[type].initialStatus;
+    }
+    if (CROWDPAY_FILTERS[type].accountType.length) {
+      // eslint-disable-next-line prefer-destructuring
+      params.accountType = CROWDPAY_FILTERS[type].accountType[0];
+    }
+    this.setDb([]);
     this.data = graphql({
       client,
-      query: listCrowdPayUsers,
-      variables: { limit: 1000 },
+      query: getCrowdPayUsers,
+      variables: { ...params, limit: 1000, page: 1 },
       fetchPolicy: 'network-only',
       onFetch: () => {
         if (!this.data.loading) {
+          this.reset();
           this.requestState.page = 1;
           this.requestState.skip = 0;
-          this.setData('isApiHit', true);
+          // this.setData('isApiHit', true);
           this.setCrowdpayAccountsSummary();
+          this.setAccountTypes(type);
         }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
   }
@@ -154,7 +170,12 @@ export class CrowdpayStore {
     } = this.requestState.search;
     const accountStatus2 = this.requestState.type === 'review' && !accountStatus ? ['FULL'] : accountStatus;
     if (accountStatus2) {
-      ClientDb.filterData('accountStatus', accountStatus2, 'like');
+      if (this.requestState.type === 'review' && accountStatus2.includes(CROWDPAY_ACCOUNTS_STATUS.DECLINED)) {
+        ClientDb.filterData('accountStatus', [CROWDPAY_ACCOUNTS_STATUS.FROZEN], 'like');
+        ClientDb.filterByObjExist('declined');
+      } else {
+        ClientDb.filterData('accountStatus', accountStatus2, 'like');
+      }
     }
     if (!accountStatus) {
       delete this.requestState.search.accountStatus;
@@ -216,7 +237,7 @@ export class CrowdpayStore {
       variables.accountType = types[this.requestState.type];
     }
     const accountStatuses = {
-      DECLINE: CROWDPAY_ACCOUNTS_STATUS.DECLINED,
+      DECLINE: CROWDPAY_ACCOUNTS_STATUS.FROZEN,
       GSPROCESS: CROWDPAY_ACCOUNTS_STATUS.GS_PROCESSING,
       CREATEACCOUNT: CROWDPAY_ACCOUNTS_STATUS.NS_PROCESSING,
       VALIDATE: CROWDPAY_ACCOUNTS_STATUS.FULL,
@@ -293,8 +314,8 @@ export class CrowdpayStore {
   }
 
   @computed get getCrowdPayData() {
-    return (this.data.data && toJS(this.data.data.listCrowdPayUsers
-      && this.data.data.listCrowdPayUsers.crowdPayList)) || [];
+    return (this.data.data && toJS(this.data.data.getCrowdPayUsers
+      && this.data.data.getCrowdPayUsers.crowdPayList)) || [];
   }
 
   @computed get accounts() {

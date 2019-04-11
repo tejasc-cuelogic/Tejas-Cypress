@@ -287,7 +287,7 @@ export class TransactionStore {
           },
         })
         .then((result) => {
-          const requestMode = otpType === 'EMAIL' ? `code sent to ${address}` : (otpType === 'CALL' ? `call to ${number}` : `code texted to ${number}`);
+          const requestMode = otpType === 'EMAIL' ? `code sent to ${address}` : (otpType === 'CALL' ? `call to ${Helper.phoneNumberFormatter(number)}` : `code texted to ${Helper.phoneNumberFormatter(number)}`);
           this.transactionOtpRequestId = result.data.requestOtp;
           if (userDetails.mfaMode === 'PHONE') {
             this.setPhoneNumber(number);

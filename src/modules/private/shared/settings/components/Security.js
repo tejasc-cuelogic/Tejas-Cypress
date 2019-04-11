@@ -34,7 +34,7 @@ export default class Security extends Component {
           render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
         />
         <Header as="h4">Security</Header>
-        <p className="note">
+        <p>
           Manage your security settings and contact information.
           It&apos;s important to update your password regularly and utilize the security features
           that apply to you.
@@ -57,7 +57,7 @@ export default class Security extends Component {
                     <Divider hidden />
                     <Card.Description>
                       {(section.action[0] === 'mfa' && getUserMfaMode) ? (
-                        <Table basic="very" className="no-border mb-20">
+                        <Table compact="very" basic="very" className="no-border mb-20">
                           <Table.Body>
                             <Table.Row>
                               <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>

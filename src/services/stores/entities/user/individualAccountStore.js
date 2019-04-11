@@ -186,12 +186,12 @@ class IndividualAccountStore {
     if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
       if (!isEmpty(userData) && !this.formStatus) {
         const account = find(userData.roles, { name: 'individual' });
-        const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+        // const { isValid } = bankAccountStore.formAddFunds.meta;
         if (account && account.details) {
-          if (isValid) {
-            bankAccountStore.formEntityAddFunds.fields.value.value =
-            account.details.initialDepositAmount;
-          }
+          // if (isValid) {
+          bankAccountStore.formAddFunds.fields.value.value =
+          account.details.initialDepositAmount;
+          // }
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
             bankAccountStore.setPlaidAccDetails(plaidAccDetails);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { map } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Grid, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { FormSelect } from '../../../../../../theme/form';
@@ -61,6 +62,9 @@ const LegalIdentityQuestions = observer(({
         </div>
       </Form>
     </Modal.Content>
+    <Modal.Actions className="signup-actions">
+      <p><Link to="/app/summary" onClick={close}>I’ll finish this later</Link></p>
+    </Modal.Actions>
   </Modal>
 ));
 

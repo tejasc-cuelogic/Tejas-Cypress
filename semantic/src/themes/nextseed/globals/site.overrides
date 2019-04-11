@@ -1005,6 +1005,9 @@ footer{
 			padding: 0 !important;
 			&:last-child {
 				padding: @70px @20px !important;
+				@media only screen and (max-width : @largestSmallMonitor){
+					padding: @56px 0 !important;
+				}
 				a {
 					text-decoration: none;
 					.icon {
@@ -1393,7 +1396,7 @@ a.icon-link {
 		top: 108px;
 	}
 	&.offering-side-menu,&.team{
-		top:136px;
+		top:150px;
 		@media only screen and (max-width : @largestTabletScreen){
 			top: 0;
 		}
@@ -2539,6 +2542,13 @@ p.check-extra-info{
 	.ui.header {
 		margin-bottom: 0;
 	}
+	.ui.image.logo {
+		height: @25px;
+		width: auto;
+		&.offering-logo {
+			width: 200px;
+		}
+	}
 }
 .proven-result-section {
 	.ui.grid>* {
@@ -2546,17 +2556,16 @@ p.check-extra-info{
 	}
 }
 .full-logo {
-	width: 52px;
-    height: 30px;
+	width: 20px;
+    height: 16px;
     position: fixed;
-    left: 0;
-    top: 14px;
+    left: 14px;
+    top: 21px;
     z-index: 103;
     overflow: hidden;
-    transition: width 250ms ease-in-out;
+    // transition: width 250ms ease-in-out;
 	.ui.image {
 		height: 100%;
-		margin-left: 21px;
 		img {
 			max-width: none;
 			max-height: 100%;
@@ -2564,12 +2573,16 @@ p.check-extra-info{
 	}
 	&.visible-logo {
 		width: 200px;
-		transition: width 300ms ease-in-out;
+		// transition: width 300ms ease-in-out;
 		//transition-delay: 90ms;
 		position: absolute;
+		height: 30px;
+		top: 14px;
 	}
 	&.offering-logo {
 		width: 200px;
+		height: 30px;
+		top: 14px;
 	}
 }
 //	Public responsive end

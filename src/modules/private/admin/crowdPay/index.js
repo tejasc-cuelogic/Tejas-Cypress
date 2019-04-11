@@ -14,10 +14,10 @@ import Filters from './components/Filters';
 @observer
 export default class CrowdPay extends Component {
   componentWillMount() {
-    if (!this.props.crowdpayStore.isApiHit) {
-      this.props.crowdpayStore.reset();
-      this.props.crowdpayStore.initRequest();
-    }
+    // if (!this.props.crowdpayStore.isApiHit) {
+    // this.props.crowdpayStore.reset();
+    // this.props.crowdpayStore.initRequest();
+    // }
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/review`);
     }
@@ -40,7 +40,8 @@ export default class CrowdPay extends Component {
   render() {
     const { match, crowdpayStore } = this.props;
     const {
-      requestState, filters, FILTER_FRM, fChange, summary, loading,
+      requestState, filters, FILTER_FRM, fChange, loading,
+      // summary,
     } = crowdpayStore;
     if (loading) {
       return <InlineLoader />;
@@ -49,7 +50,7 @@ export default class CrowdPay extends Component {
       <PrivateLayout
         {...this.props}
         subNav
-        subNavAddon={{ data: this.representAddon(summary) }}
+        // subNavAddon={{ data: this.representAddon(summary) }}
         P1={
           <ByKeyword
             w={[8]}
@@ -72,7 +73,7 @@ export default class CrowdPay extends Component {
           />
         }
       >
-        <Route path={`${match.url}/:type?`} component={AllCrowdPay} />
+        <Route path={`${match.url}/:type`} component={AllCrowdPay} />
       </PrivateLayout>
     );
   }
