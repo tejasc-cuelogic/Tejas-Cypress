@@ -85,7 +85,6 @@ class IndividualAccountStore {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
           }
-
           reject();
         });
     });

@@ -193,7 +193,6 @@ class IraAccountStore {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
         }
-        uiStore.setProgress(false);
         reject();
       });
   });
