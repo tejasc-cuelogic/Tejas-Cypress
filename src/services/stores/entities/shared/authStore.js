@@ -370,6 +370,7 @@ export class AuthStore {
         },
         onError: (err) => {
           uiStore.setErrors(err);
+          uiStore.setProgress(false);
         },
         fetchPolicy: 'network-only',
       });

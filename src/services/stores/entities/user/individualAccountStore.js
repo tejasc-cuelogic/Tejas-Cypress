@@ -77,10 +77,15 @@ class IndividualAccountStore {
             if (this.retry <= 2) {
               this.retry += 1;
               this.submitAccount();
+            } else {
+              uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              uiStore.setProgress(false);
             }
+          } else {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.setProgress(false);
           }
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
+
           reject();
         });
     });
@@ -105,13 +110,17 @@ class IndividualAccountStore {
     }).catch((err) => {
       console.log('Error', err);
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
-        if (this.retryGoldStar <= 2) {
-          this.retryGoldStar += 1;
-          this.createGoldstarAccount(payLoad, resolve, reject);
+        if (this.retry <= 2) {
+          this.retry += 1;
+          this.submitAccount();
+        } else {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          uiStore.setProgress(false);
         }
+      } else {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        uiStore.setProgress(false);
       }
-      uiStore.setErrors(DataFormatter.getSimpleErr(err));
-      uiStore.setProgress(false);
       reject();
     });
   }
