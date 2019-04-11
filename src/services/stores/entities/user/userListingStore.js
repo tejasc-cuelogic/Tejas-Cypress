@@ -51,6 +51,7 @@ export class UserListingStore {
       client,
       query: allUsersQuery,
       variables: params,
+      fetchPolicy: 'network-only',
     });
   }
 
