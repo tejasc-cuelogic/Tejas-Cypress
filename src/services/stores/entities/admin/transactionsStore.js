@@ -170,7 +170,7 @@ export class TransactionsStore {
         Helper.toast(`Transaction ${actionName} successfully.`, 'success');
       })
       .catch((error) => {
-        if (direction === 'WITHDRAWAL' && transStatus[0] === 'PENDING') {
+        if ((direction === 'DEPOSIT' || direction === 'WITHDRAWAL') && transStatus[0] === 'PENDING') {
           Helper.toast(error.message, 'error');
         } else {
           Helper.toast('Something went wrong please try again after sometime.', 'error');
@@ -251,6 +251,7 @@ export class TransactionsStore {
 
   @action
   initiateFilters = () => {
+    this.resetPagination();
     this.setData(get(this.data, 'data') || []);
     const {
       keyword, minAmount, maxAmount,

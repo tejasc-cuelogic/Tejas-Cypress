@@ -121,6 +121,7 @@ export default class InvestNow extends React.Component {
     const { userDetails } = this.props.userDetailsStore;
     const userStatus = userDetails && userDetails.status;
     if (step.name === 'Financial Info') {
+      this.setState({ submitLoading: true });
       this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
         this.setState({ submitLoading: response.isValid });
         if (response.isValid) {
