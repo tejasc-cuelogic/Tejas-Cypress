@@ -30,7 +30,7 @@ export default class PersonalInformation extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Authorized Signatory Informaiton</Header>
+        <Header as="h3" textAlign="center">Authorized Signatory Information</Header>
         <p className="center-align">Please provide your title and a copy of your photo ID.</p>
         <Form error>
           <div className="field-wrap">

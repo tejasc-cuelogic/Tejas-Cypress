@@ -37,6 +37,9 @@ export default class AddFunds extends Component {
     this.renderStep();
   }
 
+
+  isValidFund = fundObj => !fundObj.meta.isValid || fundObj.fields.value.value === '';
+
   renderStep = () => {
     if (this.props.accountStore.investmentAccType === 'individual') {
       const individualSteps = AccCreationHelper.individualSteps();
@@ -76,15 +79,15 @@ export default class AddFunds extends Component {
     }
   }
 
+
   render() {
     const {
-      formAddFunds,
       addFundChange,
-      formEntityAddFunds,
       isAccountPresent,
+      addFundsByAccType,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
-    const isInValid = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? !formEntityAddFunds.meta.isValid || formEntityAddFunds.fields.value.value === '' : !formAddFunds.meta.isValid || formAddFunds.fields.value.value === '';
+    const isInValid = this.isValidFund(addFundsByAccType);
     return (
       <Aux>
         <div className="center-align">
@@ -97,9 +100,9 @@ export default class AddFunds extends Component {
                 type="tel"
                 currency
                 placeholder="$ 15,000"
-                fielddata={Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? formEntityAddFunds.fields.value : formAddFunds.fields.value}
-                changed={values => addFundChange(values, 'value', this.props.accountStore.investmentAccType)}
-                maxLength={formAddFunds.fields.value.maxLength}
+                fielddata={addFundsByAccType.fields.value}
+                changed={values => addFundChange(values, 'value')}
+                maxLength={addFundsByAccType.maxLength}
                 prefix="$ "
                 showerror
                 allowNegative={false}
