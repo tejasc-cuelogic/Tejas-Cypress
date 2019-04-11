@@ -16,6 +16,7 @@ import {
   authStore,
   uiStore,
   investmentStore,
+  userListingStore,
 } from '../../index';
 import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
@@ -276,6 +277,7 @@ export class UserDetailsStore {
 
   @action
   toggleState = (id, accountStatus) => {
+    uiStore.setProgress('lock');
     const params = { accountStatus, id };
     client
       .mutate({
@@ -284,9 +286,11 @@ export class UserDetailsStore {
       })
       .then(() => {
         this.updateUserStatus(params.accountStatus);
+        userListingStore.initRequest();
+        uiStore.setProgress(false);
         Helper.toast('User Account status updated successfully.', 'success');
       })
-      .catch(() => Helper.toast('Error while updating user', 'warn'));
+      .catch(() => { uiStore.setProgress(false); Helper.toast('Error while updating user', 'warn'); });
   }
 
   @action
