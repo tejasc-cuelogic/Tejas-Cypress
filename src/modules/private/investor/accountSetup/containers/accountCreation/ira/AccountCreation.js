@@ -65,7 +65,7 @@ export default class AccountCreation extends React.Component {
       isValidIraForm,
     } = this.props.iraAccountStore;
     const {
-      formAddFunds, isAccountPresent,
+      formIraAddFunds, isAccountPresent,
       formLinkBankManually, isPlaidDirty,
       linkbankSummary, bankSummarySubmit,
       stepbankSummary,
@@ -110,7 +110,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Link bank',
           component: <Plaid />,
-          isValid: (formAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 3 ? 'error' : '',
+          isValid: (formIraAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 3 ? 'error' : '',
           isDirty: isPlaidDirty,
           disableNextButton: !linkbankSummary,
           validate: validationActions.validateLinkBankForm,

@@ -6,7 +6,7 @@ import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
 
 export class FileUpload {
-  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '', targetUserId = '') =>
+  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '') =>
     new Promise((resolve, reject) => {
       client
         .mutate({
@@ -19,7 +19,6 @@ export class FileUpload {
             fileData,
             offeringId,
             tags,
-            targetUserId,
           },
         })
         .then((result) => {

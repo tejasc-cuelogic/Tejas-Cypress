@@ -17,6 +17,7 @@ class IndividualAccountStore {
   @observable showProcessingModal = false;
   @observable isFormSubmitted = false;
   retry = 0;
+  retryGoldStar = 0;
   @action
   setIsManualLinkBankSubmitted = (status) => {
     this.isManualLinkBankSubmitted = status;
@@ -65,13 +66,20 @@ class IndividualAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
+
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           }
         }).catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           console.log('Error', err);
           uiStore.resetcreateAccountMessage();
+          if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
+            if (this.retry <= 2) {
+              this.retry += 1;
+              this.submitAccount();
+            }
+          }
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
           reject();
         });
@@ -95,14 +103,14 @@ class IndividualAccountStore {
       this.isFormSubmitted = true;
       resolve();
     }).catch((err) => {
-      uiStore.setErrors(DataFormatter.getSimpleErr(err));
       console.log('Error', err);
-      if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, DataFormatter.getSimpleErr(err).message)) {
-        if (this.retry <= 2) {
-          this.retry += 1;
+      if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
+        if (this.retryGoldStar <= 2) {
+          this.retryGoldStar += 1;
           this.createGoldstarAccount(payLoad, resolve, reject);
         }
       }
+      uiStore.setErrors(DataFormatter.getSimpleErr(err));
       uiStore.setProgress(false);
       reject();
     });
@@ -227,6 +235,8 @@ class IndividualAccountStore {
     this.submited = false;
     this.individualAccId = null;
     this.retry = 0;
+    this.retryGoldStar = 0;
+    this.isFormSubmitted = false;
   }
 }
 export default new IndividualAccountStore();

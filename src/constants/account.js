@@ -230,6 +230,21 @@ export const ENTITY_ADD_FUND = {
   },
 };
 
+export const IRA_ADD_FUND = {
+  value: {
+    value: '',
+    key: 'value',
+    error: undefined,
+    rule: 'optional|numeric|min:5000|max:6000',
+    label: 'Deposit Amount',
+    maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least $5,000.',
+      max: 'The deposit amount should be less than $6,000.',
+    },
+  },
+};
+
 export const IND_BANK_ACC_SEARCH = {
   bankName: {
     value: '',
