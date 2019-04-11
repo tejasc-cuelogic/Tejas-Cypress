@@ -18,7 +18,6 @@ const LegalDocuments = observer(({
   confirmRemoveDoc,
   handleDelCancel,
   handleDelDoc,
-  submitVerificationsDocs,
   onSubmit,
 }) => (
   <Modal size="tiny" open closeIcon onClose={close} closeOnDimmerClick={false}>
@@ -32,7 +31,7 @@ const LegalDocuments = observer(({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      {inProgress && !submitVerificationsDocs &&
+      {inProgress &&
         <Dimmer active={inProgress}>
           <Loader active={inProgress} />
         </Dimmer>
@@ -83,7 +82,7 @@ const LegalDocuments = observer(({
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="very relaxed" content="Verify my identity" loading={submitVerificationsDocs && inProgress} disabled={!form.meta.isValid} />
+          <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={!form.meta.isValid} />
         </div>
       </Form>
       <Confirm

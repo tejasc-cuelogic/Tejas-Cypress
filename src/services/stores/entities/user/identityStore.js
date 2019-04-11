@@ -367,14 +367,15 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       this.updateUserInfo()
         .then(() => {
+          uiStore.setProgress(false);
           resolve();
         })
         .catch(() => {
-          reject();
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject();
         });
+      // .finally(() => {
+      // });
     });
   }
 
@@ -385,6 +386,7 @@ export class IdentityStore {
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
+    this.setFieldValue('signUpLoading', true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -407,6 +409,7 @@ export class IdentityStore {
           if (!isMobile) {
             Helper.toast(`Verification ${requestMode}.`, 'success');
           }
+          this.setFieldValue('signUpLoading', false);
           resolve();
         })
         .catch((err) => {
@@ -453,15 +456,17 @@ export class IdentityStore {
             this.setCipStatus('PASS');
             this.updateUserInfo();
           }
+          uiStore.setProgress(false);
           resolve(result);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject();
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject();
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 
