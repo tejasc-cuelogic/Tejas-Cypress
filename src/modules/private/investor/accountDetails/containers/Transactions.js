@@ -45,7 +45,7 @@ export default class Transactions extends Component {
         {this.props.isAdmin &&
           <AccountHeader module="Transactions" pathname={this.props.location.pathname} />
         }
-        <div className="more search-filters">
+        <div className="more search-filters bg-offwhite">
           <Form>
             <Grid stackable>
               <Grid.Row>
