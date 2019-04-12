@@ -76,13 +76,7 @@ export default class NavBarMobile extends Component {
                     dataSrc="LogoGreenGrey"
                     className="mobile-header-logo"
                   /> :
-                  <Aux>
-                    {/* <Logo
-                      dataSrc="LogoGreenGrey"
-                      className="mobile-header-logo"
-                    /> */}
-                    <Header as="h5">{navTitle}</Header>
-                  </Aux>
+                  <Header as="h5">{navTitle}</Header>
                 }
                 {!currentUser ? (
                   <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
