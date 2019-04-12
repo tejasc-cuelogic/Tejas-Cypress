@@ -1534,8 +1534,8 @@ div.login-form {
 		color:@white;
 		position:relative;
 		@media only screen and (max-width : @largestSmallMonitor){
-			font-size:@16px;
-			line-height:@22px;
+			font-size:@16px !important;
+			line-height:@22px !important;
 			text-align:center;
 			padding-right:@30px;
 		}
@@ -2512,15 +2512,15 @@ p.check-extra-info{
 			background-color:@neutral;
 		}
 	}
-	.icon.hamburger {
-		font-size: @30px;
-		line-height: 30px;
-		color: @white;
-		position: absolute;
-		top: 14px;
-		left: 18px;
-		z-index: 1;
-	}
+	// .icon.hamburger {
+	// 	font-size: @30px;
+	// 	line-height: 30px;
+	// 	color: @white;
+	// 	position: absolute;
+	// 	top: 14px;
+	// 	left: 18px;
+	// 	z-index: 1;
+	// }
 	.sign-in {
 		font-size: @14px;
 		color: @neutral;
@@ -2541,13 +2541,12 @@ p.check-extra-info{
 	}
 	.ui.header {
 		margin-bottom: 0;
+		margin-top: 0px !important;
+    	text-align: center;
 	}
 	.ui.image.logo {
 		height: @25px;
 		width: auto;
-		&.offering-logo {
-			width: 200px;
-		}
 	}
 }
 .proven-result-section {
@@ -2556,33 +2555,14 @@ p.check-extra-info{
 	}
 }
 .full-logo {
-	width: 20px;
-    height: 16px;
     position: fixed;
     left: 14px;
-    top: 21px;
+    top: 17px;
     z-index: 103;
     overflow: hidden;
-    // transition: width 250ms ease-in-out;
-	.ui.image {
-		height: 100%;
-		img {
-			max-width: none;
-			max-height: 100%;
-		}
-	}
-	&.visible-logo {
-		width: 200px;
-		// transition: width 300ms ease-in-out;
-		//transition-delay: 90ms;
-		position: absolute;
-		height: 30px;
-		top: 14px;
-	}
-	&.offering-logo {
-		width: 200px;
-		height: 30px;
-		top: 14px;
+	.icon.ns-hamburger {
+		font-size: @16px;
+		color: @neutral-middark;
 	}
 }
 //	Public responsive end

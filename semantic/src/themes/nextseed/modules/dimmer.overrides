@@ -13,3 +13,7 @@
     }
   }
 }
+.scrolling .ui.modals.active{
+  overflow:auto;
+  justify-content:flex-start;
+}

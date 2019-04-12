@@ -64,7 +64,7 @@ const FormRadioGroup = observer((props) => {
     }
     return (
       <Aux>
-        <Form.Group inline className={props.containerclassname || false}>
+        <Form.Group widths={props.widths} inline className={props.containerclassname || false}>
           {
             values.map(radio => (
               <Form.Radio

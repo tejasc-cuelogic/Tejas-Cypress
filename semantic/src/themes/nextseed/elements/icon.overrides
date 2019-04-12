@@ -1973,6 +1973,9 @@ i.icon[class*="ns-"]{
 .ns-fullscreen:before{
     content:@ns-fullscreen;
 }
+.ns-hamburger:before{
+    content:@ns-hamburger; 
+}
 .ns-help:before{
     content:@ns-help;
 }
