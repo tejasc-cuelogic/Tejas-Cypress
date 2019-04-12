@@ -113,7 +113,7 @@ export default class AddFunds extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid} />
+            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent} />
           </Form>
           {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) &&
             <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
