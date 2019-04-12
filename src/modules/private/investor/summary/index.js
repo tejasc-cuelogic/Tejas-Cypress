@@ -15,12 +15,8 @@ export default class Summary extends Component {
     return (
       <Route
         component={
-<<<<<<< HEAD
            ((processingAccLength === 0 &&
             partialAccLength >= 0 &&
-=======
-           ((partialAccLength >= 0 &&
->>>>>>> 91789048c4e91f00ee5fb329d72b719bb4a6324d
             activeAccLength === 0) ||
             (signupStatus.isMigratedFullAccount ||
             !isBasicVerDoneForMigratedFullUser ||
