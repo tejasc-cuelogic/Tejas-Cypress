@@ -14,7 +14,6 @@ export default class FinancialInformation extends Component {
     if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netAssets.value !== '' && FIN_INFO_FRM.fields.annualIncome.value !== ''))) && !(FIN_INFO_FRM.fields.netAssets.value === '' && FIN_INFO_FRM.fields.annualIncome.value === '')) {
       maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netAssets.value }, name: 'netAssets' });
     }
-    this.props.investmentLimitStore.setFieldValue('pendingInvestments', '');
     this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
   }
   render() {
