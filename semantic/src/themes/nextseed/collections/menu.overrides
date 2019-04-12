@@ -678,7 +678,7 @@ footer{
     &.overlay .ui.image.logo {
         // margin-left: @24px;
         // margin-bottom: @20px;
-        margin: @14px 0 0 @14px;
+        margin: @14px 0 0 @24px;
         width: 150px;
     }
     .social-media {
