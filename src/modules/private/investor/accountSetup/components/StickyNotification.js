@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Card, Statistic } from 'semantic-ui-react';
-import { isEmpty, includes } from 'lodash';
+import { isEmpty } from 'lodash';
 import AccCreationHelper from '../helper';
 import { DataFormatter } from '../../../../../helper';
 
@@ -23,8 +23,7 @@ const checkStatus = (signupStatus, userDetailsStore) => {
     stepinfo.title = 'Please verify your identity in order to proceed';
   } else if (!signupStatus.investorProfileCompleted) {
     stepinfo.title = 'Please establish your investor profile in order to proceed';
-  } else if (!isEmpty(signupStatus.roles) &&
-  (includes(signupStatus.roles, 'ira') || includes(signupStatus.roles, 'individual') || includes(signupStatus.roles, 'entity'))) {
+  } else if (!isEmpty(signupStatus.roles) && (signupStatus.inActiveAccounts.length <= 2)) {
     stepinfo.title = 'You can open your another NextSeed account!';
     stepinfo.group = 'Congratulations!';
     if (accCreation.length === 1) {
