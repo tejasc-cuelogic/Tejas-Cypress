@@ -740,7 +740,9 @@ export class BankAccountStore {
       })
       .then(res => resolve(res.data.getDecryptedRoutingNumber))
       .catch(() => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
+        if (requestType === 'CHANGE_REQUEST') {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        }
         uiStore.setProgress(false);
         reject();
       });

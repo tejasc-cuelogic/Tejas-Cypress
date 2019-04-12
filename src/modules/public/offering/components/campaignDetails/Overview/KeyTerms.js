@@ -112,7 +112,7 @@ class KeyTerms extends Component {
                   />
                 </Table.Cell>
                 <Table.Cell className="grey-header" >
-                  {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? `${get(campaign, 'keyTerms.revSharePercentage')}%` : '-'}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? `${get(campaign, 'keyTerms.revSharePercentage')}${get(campaign, 'keyTerms.revSharePercentage').includes('%') ? '' : '%'}` : '-'}
                 </Table.Cell>
               </Table.Row>
             </Aux>

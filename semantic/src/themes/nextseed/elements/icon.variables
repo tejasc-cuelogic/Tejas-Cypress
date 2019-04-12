@@ -190,6 +190,7 @@
 @ns-franchise: "\e95b";
 @ns-freeze: "\e98a";
 @ns-fullscreen: "\e991";
+@ns-hamburger: "\e99c";
 @ns-help: "\e949";
 @ns-help-circle: "\e926";
 @ns-home-line: "\e97e";
