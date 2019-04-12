@@ -22,7 +22,7 @@ const LegalDetails = observer(({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      <Dimmer page active={inProgress}>
+      <Dimmer className="fullscreen" active={inProgress}>
         <Loader active={inProgress}>
         Please wait...<br /><br />We are verifying your identity.<br />This can take up to a minute.
         </Loader>
