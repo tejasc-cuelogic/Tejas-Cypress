@@ -114,7 +114,7 @@ export const CHANGE_PASS = {
     error: undefined,
     rule: 'required|same:newPasswd',
     customErrors: {
-      same: 'The Confirm New Password and new Password fields must match.',
+      same: 'The Confirm New Password and New Password fields must match.',
     },
   },
 };
