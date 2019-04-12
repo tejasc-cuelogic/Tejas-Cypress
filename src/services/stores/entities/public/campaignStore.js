@@ -277,7 +277,7 @@ export class CampaignStore {
       loanTerm: parseFloat(get(this.campaign, 'keyTerms.maturity')) || 0,
     };
     const { totalPayment, schedule } = Calculator.calculate(data);
-    this.totalPayment = money.floatToAmount(totalPayment, 2);
+    this.totalPayment = money.floatToAmount(totalPayment || '', 2);
     const payChart = [];
     let totalPaid = 0;
     schedule.forEach((item, index) => {
