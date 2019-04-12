@@ -74,7 +74,7 @@ class IndividualAccountStore {
           console.log('Error', err);
           uiStore.resetcreateAccountMessage();
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
-            if (this.retry <= 2) {
+            if (this.retry < 1) {
               this.retry += 1;
               this.submitAccount();
             } else {
@@ -109,8 +109,8 @@ class IndividualAccountStore {
     }).catch((err) => {
       console.log('Error', err);
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
-        if (this.retry <= 2) {
-          this.retry += 1;
+        if (this.retryGoldStar < 1) {
+          this.retryGoldStar += 1;
           this.submitAccount();
         } else {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));

@@ -12,13 +12,11 @@ export class MultiFactorAuthStore {
   @action
   handleMfaModeTypeChanged = (e, { value }) => {
     Validator.onChange(this.MFA_MODE_TYPE_META, { name: 'mfaModeTypes', value });
-    // this.MFA_MODE_TYPE_META.fields.mfaModeTypes.value = value;
   }
 
   @action
   handleMfaModePhoneTypeChanged = (e, { value }) => {
     Validator.onChange(this.MFA_MODE_TYPE_META, { name: 'mfaPhoneModeTypes', value });
-    // this.MFA_MODE_TYPE_META.fields.mfaPhoneModeTypes.value = value;
   }
 
   @action
@@ -27,17 +25,9 @@ export class MultiFactorAuthStore {
     if (currentUser && currentUser.data && currentUser.data.user) {
       const { mfaMode, phone } = currentUser.data.user;
       const phoneType = phone.type && phone.type === 'TEXT' ? 'TEXT' : 'CALL';
-      if (mfaMode) {
-        switch (mfaMode) {
-          case 'EMAIL':
-            this.handleMfaModeTypeChanged(null, { value: 'EMAIL' });
-            break;
-          case 'PHONE':
-            this.handleMfaModeTypeChanged(null, { value: 'PHONE' });
-            this.handleMfaModePhoneTypeChanged(null, { value: phoneType });
-            break;
-          default: break;
-        }
+      const communicationType = mfaMode === 'EMAIL' ? 'EMAIL' : phoneType;
+      if (communicationType) {
+        this.handleMfaModeTypeChanged(null, { value: communicationType });
       }
     }
   }
@@ -46,7 +36,7 @@ export class MultiFactorAuthStore {
   updateMfaModeType = () => {
     uiStore.setProgress();
     const { fields } = this.MFA_MODE_TYPE_META;
-    const mfaModeType = fields.mfaModeTypes.value === 'EMAIL' ? fields.mfaModeTypes.value : fields.mfaPhoneModeTypes.value;
+    const mfaModeType = fields.mfaModeTypes.value;
     return new Promise((resolve, reject) => {
       client
         .mutate({

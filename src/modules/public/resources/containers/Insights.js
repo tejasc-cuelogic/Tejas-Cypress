@@ -116,7 +116,7 @@ export default class Insights extends Component {
             </Menu.Item>
           </Container>
         </Responsive>
-        <Responsive maxWidth={1199} as={Menu} className="mobile-dropdown-menu container">
+        <Responsive maxWidth={1199} as={Menu} className={`${sliderInsightFeaturedArticles.length === 0 ? 'mt-30' : ''} mobile-dropdown-menu container`}>
           <Dropdown item text={this.activeText()}>
             <Dropdown.Menu>
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>

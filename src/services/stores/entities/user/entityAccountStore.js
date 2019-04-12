@@ -28,6 +28,7 @@ class EntityAccountStore {
   @observable entityData = {};
   @observable stepToBeRendered = '';
   @observable entityAccountId = null;
+  @observable retry = 0;
   @observable showProcessingModal = false;
   @observable isFormSubmitted = false;
 
@@ -138,7 +139,7 @@ class EntityAccountStore {
         })
         .catch((err) => {
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
-            if (this.retry <= 2) {
+            if (this.retry < 1) {
               this.retry += 1;
               this.submitAccount();
             } else {
@@ -750,6 +751,7 @@ class EntityAccountStore {
     this.stepToBeRendered = '';
     this.entityAccountId = null;
     this.isFormSubmitted = false;
+    this.retry = 0;
   };
 }
 
