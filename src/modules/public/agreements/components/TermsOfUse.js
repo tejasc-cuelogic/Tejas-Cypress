@@ -4,11 +4,12 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Header, Divider, List } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 const TermsOfUse = () => (
   <Aux>
     <Header as="h2">Terms of Use</Header>
-    <p>Revision Date: April 8, 2019 <br />Questions or Comments: info@nextseed.com</p>
+    <p>Revision Date: April 10, 2019 <br />Questions or Comments: info@nextseed.com</p>
     <Divider section />
     <div className="justify-text legal-desc">
       <Header as="h5">INTRODUCTION</Header>
@@ -118,6 +119,13 @@ const TermsOfUse = () => (
         may have about you to fully cooperate with any law enforcement authorities or legal
         process, such as a subpoena or hold request.
       </p>
+      <p>
+        By providing your telephone number to NextSeed as part of the Account Information, you
+        agree that NextSeed may deliver verification codes to you using the telephone number
+        provided. Codes may be sent using text messages, an autodialer, or artificial or
+        prerecorded voice messages to such telephone number. You acknowledge that your mobile
+        carrier’s messaging and data fees may apply.
+      </p>
       <Header as="h5">FEES</Header>
       <p>
         Certain fees may be assessed to your Account. In addition to such fees as may be
@@ -164,8 +172,8 @@ const TermsOfUse = () => (
       </p>
       <Header as="h5">USER CONTENT</Header>
       <p>
-        From time, you may post certain information, such as text, pictures, videos, questions,
-        comments, suggestions, website addresses, and links to other website/articles
+        From time to time, you may post certain information, such as text, pictures, videos,
+        questions, comments, suggestions, website addresses, and links to other website/articles
         (collectively, <b>“User Content”</b>) on to the Website. By posting User Content to
         any part of the Site, you automatically grant, and you represent and warrant that you
         have the right to grant, to NextSeed an irrevocable, perpetual, non-exclusive,
@@ -224,13 +232,15 @@ const TermsOfUse = () => (
         /SIPC or (b) NextSeed Funding Portal, an affiliate of NextSeed and a registered
         Funding Portal member of FINRA. The provision of brokerage services offered by
         NextSeed Securities is governed by the Investor Agreements entered into between
-        NextSeed Securities and each User (as applicable), the form of which is linked here.
+        NextSeed Securities and each User (as applicable), the form of which is linked{' '}
+        <Link to="/agreements/legal/legal-documents/securities_investor_agreement " className="positive-text">here</Link>.
         Please note that, in addition to our Privacy Policy, the use of your information by
         NextSeed Securities (as applicable) is governed by the NextSeed Securities, LLC
-        Privacy Policy, a copy of which is linked here. The provision of Funding Portal
-        services offered by NextSeed Funding Portal is governed by the Membership Agreements
-        entered into between NextSeed Funding Portal and each User (as applicable), the form
-        of which is linked here . NextSeed Securities does not make investment recommendations
+        Privacy Policy, a copy of which is linked <Link to="/agreements/legal/legal-documents/securities_privacy_policy" className="positive-text">here</Link>.
+        The provision of Funding Portal services offered by NextSeed Funding Portal is
+        governed by the Membership Agreements entered into between NextSeed Funding Portal and
+        each User (as applicable), the form of which is linked <Link to="/agreements/legal/legal-documents/membership_agreement" className="positive-text">here</Link>.
+        NextSeed Securities does not make investment recommendations
         and no communication, through the Website or in any other medium should be construed
         as a recommendation for any security offered on or off the Website.
       </p>
@@ -466,8 +476,8 @@ const TermsOfUse = () => (
       <p>
         THE MAXIMUM AGGREGATE LIABILITY OF NEXTSEED AND ITS AFFILIATES AND THEIR RESPECTIVE
         EMPLOYEES, CONTRACTORS, DIRECTORS, SUPPLIERS, OWNERS, LICENSORS OR REPRESENTATIVES TO A
-        USER SHALL NOT EXCEED THE GREATER OF $100.000 OR THE FEES PAID OR PAYABLE BY THE USER FOR
-        THE USE OF THE WEBSITE.
+        USER SHALL NOT EXCEED THE GREATER OF ONE HUNDRED DOLLARS ($100.00) OR THE FEES PAID OR
+        PAYABLE BY THE USER FOR  THE USE OF THE WEBSITE.
       </p>
       <p>
         THE MAXIMUM AGGREGATE LIABILITY OF NEXTSEED AND ITS AFFILIATES AND THEIR RESPECTIVE
