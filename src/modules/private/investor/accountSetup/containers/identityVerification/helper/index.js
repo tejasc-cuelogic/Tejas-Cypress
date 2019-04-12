@@ -30,6 +30,7 @@ class Helper {
     } else if (key === 'id.failure' && questions) {
       details.alertMsg = 'User verification soft-failed!';
       details.route = '/app/summary/identity-verification/2';
+      details.display = false;
       details.msgType = 'error';
       details.key = key;
     } else if (key === 'id.success') {
