@@ -24,7 +24,7 @@ class IraAccountStore {
   @observable showProcessingModal = false;
   @observable isFormSubmitted = false;
 
-
+  @observable retry = 0;
   @observable stepToBeRendered = 0;
   @observable accountNotSet = '';
 
@@ -182,7 +182,7 @@ class IraAccountStore {
       })
       .catch((err) => {
         if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
-          if (this.retry <= 2) {
+          if (this.retry < 1) {
             this.retry += 1;
             this.submitAccount();
           } else {
@@ -577,6 +577,7 @@ class IraAccountStore {
     this.accountNotSet = '';
     this.iraAccountId = null;
     this.isFormSubmitted = false;
+    this.retry = 0;
   }
 }
 export default new IraAccountStore();

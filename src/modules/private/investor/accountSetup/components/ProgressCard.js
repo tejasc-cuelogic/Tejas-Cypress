@@ -1,5 +1,5 @@
 import React from 'react';
-import { isEmpty, upperCase, startCase } from 'lodash';
+import { isEmpty } from 'lodash';
 import { Card, Icon, Button } from 'semantic-ui-react';
 import Helper from '../helper';
 
@@ -58,9 +58,9 @@ const ProgressCard = props => (
       && Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
         const status = checkStatus(props.signupStatus, key, props.userDetailsStore);
-        if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
-          return null;
-        }
+        // if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
+        //   return null;
+        // }
         /*
         * Condition added for migrated-user
         */
@@ -109,9 +109,10 @@ const ProgressCard = props => (
         );
       })
     }
-    {props.signupStatus.partialAccounts.length > 0 &&
+    {/* {props.signupStatus.partialAccounts.length > 0 &&
       props.signupStatus.partialAccounts.map(accountType => (
-        <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+        <Card fluid className={props.getStepStatus('accounts') === 'disable'
+          ? 'verification disabled' : 'verification'}>
           <Card.Content>
             <Icon.Group size="huge">
               <Icon className="ns-bar-line-chart" />
@@ -120,7 +121,9 @@ const ProgressCard = props => (
             <Button.Group vertical>
               <Button
                 color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
-                content={`Continue ${accountType === 'ira' ? upperCase(accountType) : startCase(accountType)} Account Creation`}
+                // eslint-disable-next-line max-len
+                content={`Continue ${accountType === 'ira' ?
+                upperCase(accountType) : startCase(accountType)} Account Creation`}
                 disabled={props.getStepStatus('accounts') === 'disable'}
                 onClick={() => props.navToAccTypes(accountType)}
               />
@@ -138,7 +141,7 @@ const ProgressCard = props => (
           </Card.Content>
         </Card>
       ))
-    }
+    } */}
     {props.signupStatus.partialAccounts.length === 0 &&
     !isEmpty(props.signupStatus.roles) &&
     props.signupStatus.roles.length > 1 &&
