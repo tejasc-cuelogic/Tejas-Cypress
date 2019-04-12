@@ -19,6 +19,7 @@ export class PortfolioStore {
   @observable PayOffData = null;
   @observable currentAcccountType = null;
   @observable isAdmin = false;
+  @observable portfolioError = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -150,9 +151,18 @@ export class PortfolioStore {
       onFetch: (data) => {
         if (data && this.investmentLists && !this.investmentLists.loading) {
           this.calculateInvestmentType();
+          this.portfolioError = false;
         }
       },
+      onError: () => {
+        this.portfolioError = true;
+      },
     });
+  }
+
+  @action
+  setPortfolioError = (val) => {
+    this.portfolioError = val;
   }
 
   @computed get getInvestorAccounts() {
