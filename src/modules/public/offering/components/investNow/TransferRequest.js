@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
 @inject('investmentStore', 'userDetailsStore', 'rewardStore', 'investmentLimitStore')
@@ -123,14 +123,14 @@ class TransferRequest extends Component {
           </Message>
         }
         <Button.Group widths="2" className="inline mt-30">
-          <Button primary content="Confirm" onClick={this.props.confirm} />
           <Button content="Back" type="button" onClick={this.props.cancel} />
+          <Button primary content="Confirm" onClick={this.props.confirm} />
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from
-          my <Link to="/">{bankAndAccountName}</Link> to my NextSeed account in the
+          my {bankAndAccountName} to my NextSeed account in the
           amount equal to the Transfer Requested above. I understand this transfer will
-          be <Link to="/">initiated within 1 business day</Link>.
+          be initiated within 1 business day.
         </p>
       </div>
     );

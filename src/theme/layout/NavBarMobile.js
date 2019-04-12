@@ -63,7 +63,7 @@ export default class NavBarMobile extends Component {
                   path={(location.pathname.startsWith('/offerings')) ? getLogo(location.pathname) : 'hamburger.svg'}
                   role="button"
                   tabIndex="0"
-                />;
+                />
               </div>
               <div
                 className={`public-header-section ${visible ? 'active' : ''}

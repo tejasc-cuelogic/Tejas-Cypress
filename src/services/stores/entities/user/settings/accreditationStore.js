@@ -10,7 +10,7 @@ import { uiStore, userDetailsStore, investmentStore } from '../../../index';
 import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
-import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_APPROVE_DECLINE_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
+import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
@@ -174,14 +174,12 @@ export class AccreditationStore {
   getFileUploadEnum = (accountType, accreditationMethod) => {
     if (accreditationMethod === 'IncomeDoc') {
       return UPLOAD_ASSET_ENUMS[accountType];
-    } else if (accreditationMethod !== 'Admin') {
-      return ACCREDITATION_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
     }
-    return ACCREDITATION_APPROVE_DECLINE_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
+    return ACCREDITATION_FILE_UPLOAD_ENUMS[accountType.toLowerCase()];
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', targetUserId = '') => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', requestDate = '') => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -190,45 +188,55 @@ export class AccreditationStore {
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
-        if (accreditationMethod === 'Income') {
-          this.setFieldVal('showLoader', true);
-        } else {
-          this.setFormFileArray(form, field, 'showLoader', true);
-        }
-        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags, targetUserId).then((result) => {
-          const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
-            this.setFormFileArray(form, field, 'fileData', file);
-            this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
-            this.setFormFileArray(form, field, 'fileId', fileId);
-            this.setFormFileArray(form, field, 'value', fileData.fileName);
-            this.setFormFileArray(form, field, 'error', undefined);
-            this.checkFormValid(form, false, false);
-            if (accreditationMethod === 'Income') {
-              this.setFieldVal('showLoader', false);
-            } else {
-              this.setFormFileArray(form, field, 'showLoader', false);
-            }
+        this.setFormFileArray(form, field, 'showLoader', true, accreditationMethod);
+        // this.setFieldVal('showLoader', true);
+        if (accreditationMethod !== 'Admin') {
+          fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
+            const { fileId, preSignedUrl } = result.data.createUploadEntry;
+            this.putUploadedFileOnS3(
+              form, field, preSignedUrl, file, fileData, fileId,
+              accreditationMethod,
+            );
           }).catch((error) => {
-            if (accreditationMethod === 'Income') {
-              this.setFieldVal('showLoader', false);
-            } else {
-              this.setFormFileArray(form, field, 'showLoader', false);
-            }
+            this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+            // this.setFieldVal('showLoader', false);
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
           });
-        }).catch((error) => {
-          if (accreditationMethod === 'Income') {
-            this.setFieldVal('showLoader', false);
-          } else {
-            this.setFormFileArray(form, field, 'showLoader', false);
-          }
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        });
+        } else {
+          fileUpload.setAccreditationFileUploadData('INVESTOR', fileData, accountType.toUpperCase(), actionValue, targetUserId, requestDate).then((result) => {
+            const { fileId, preSignedUrl } = result.data.createUploadEntryAccreditationAdmin;
+            this.putUploadedFileOnS3(
+              form, field, preSignedUrl, file, fileData, fileId,
+              accreditationMethod,
+            );
+          }).catch((error) => {
+            this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+            // this.setFieldVal('showLoader', false);
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+          });
+        }
       });
     }
+  }
+
+  putUploadedFileOnS3 = (form, field, preSignedUrl, file, fileData, fileId, scope) => {
+    fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
+      this.setFormFileArray(form, field, 'fileData', file);
+      this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
+      this.setFormFileArray(form, field, 'fileId', fileId);
+      this.setFormFileArray(form, field, 'value', fileData.fileName);
+      this.setFormFileArray(form, field, 'error', undefined);
+      this.checkFormValid(form, false, false);
+      this.setFormFileArray(form, field, 'showLoader', false, scope);
+      // this.setFieldVal('showLoader', false);
+    }).catch((error) => {
+      this.setFormFileArray(form, field, 'showLoader', false, scope);
+      // this.setFieldVal('showLoader', false);
+      Helper.toast('Something went wrong, please try again later.', 'error');
+      uiStore.setErrors(error.message);
+    });
   }
 
   @action
@@ -257,8 +265,10 @@ export class AccreditationStore {
   }
 
   @action
-  setFormFileArray = (formName, field, getField, value) => {
-    if (formName === 'ASSETS_UPLOAD_DOC_FORM' && field === 'statementDoc' && getField !== 'showLoader' && getField !== 'error') {
+  setFormFileArray = (formName, field, getField, value, scope) => {
+    if (scope !== 'Admin' && getField === 'showLoader') {
+      this.setFieldVal('showLoader', value);
+    } else if (formName === 'ASSETS_UPLOAD_DOC_FORM' && field === 'statementDoc' && getField !== 'showLoader' && getField !== 'error') {
       this[formName].fields[field][getField].push(value);
     } else {
       this[formName].fields[field][getField] = value;

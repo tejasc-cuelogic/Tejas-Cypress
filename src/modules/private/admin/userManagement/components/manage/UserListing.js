@@ -69,7 +69,7 @@ class UserListing extends Component {
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</Link></span>
+                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link></span>
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const createUploadEntry = gql`
-  mutation createUploadEntry($applicationId:String, $applicationIssuerId:String, $stepName: stepsEnum!, $userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $offeringId: String, $tags: [String], $targetUserId: String) {
-    createUploadEntry(applicationId: $applicationId, applicationIssuerId: $applicationIssuerId, stepName: $stepName, userRole: $userRole, fileData: $fileData, offeringId: $offeringId, tags: $tags, targetUserId: $targetUserId) {
+  mutation createUploadEntry($applicationId:String, $applicationIssuerId:String, $stepName: stepsEnum!, $userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $offeringId: String, $tags: [String]) {
+    createUploadEntry(applicationId: $applicationId, applicationIssuerId: $applicationIssuerId, stepName: $stepName, userRole: $userRole, fileData: $fileData, offeringId: $offeringId, tags: $tags) {
       preSignedUrl
       fileId
     }
@@ -64,3 +64,11 @@ mutation sendAlertToAdminFromClient($emailContent: String!){
   )
 }
 `;
+
+export const createUploadEntryAccreditationAdmin = gql`
+  mutation _createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum, $action:AccreditationStatus!, $userId: String!, $requestDate: String!) {
+    createUploadEntryAccreditationAdmin(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId, requestDate: $requestDate) {
+      preSignedUrl
+      fileId
+    }
+  }`;

@@ -34,21 +34,21 @@ export default class AutoComplete extends Component {
         id="addressField"
       >
         <label>{(props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}</label>
-        {props.readOnly ?
+        <Autocomplete
+          {...props}
+          onPlaceSelected={(place) => {
+            props.onplaceselected(place);
+          }}
+          value={value}
+          placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder}
+          types={['address']}
+          componentRestrictions={{ country: 'us' }}
+          onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
+          onBlur={() => this.triggerError(true)}
+        />
+        {/* {props.readOnly ?
           <p className="address-line">{value}</p> :
-          <Autocomplete
-            {...props}
-            onPlaceSelected={(place) => {
-              props.onplaceselected(place);
-            }}
-            value={value}
-            placeholder={(displayMode || readOnly) ? '' : placeHolder}
-            types={['address']}
-            componentRestrictions={{ country: 'us' }}
-            onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
-            onBlur={() => this.triggerError(true)}
-          />
-        }
+        } */}
         {((error && this.state.showError) || (error && props.showerror)) &&
           <FieldError error={error} />
         }

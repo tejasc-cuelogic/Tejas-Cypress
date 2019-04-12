@@ -120,6 +120,7 @@
                 font-weight:@fontMedium;
                 text-overflow:ellipsis;
                 cursor:default;
+                pointer-events:none;
                 background:none !important;
             }
             p.commet-area{
@@ -177,6 +178,10 @@
         &.error .ui.dropdown .text:not(.default){
             color:@neutral;
         }
+        .pac-container {
+            left:0 !important;
+            top:100% !important;
+        }
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;
@@ -221,6 +226,9 @@
             padding-left:@gutterWidth;
             padding-right:@gutterWidth;
             margin-bottom:@14px;
+            .pac-container {
+                left:@gutterWidth !important;
+            }
         }
         &.inline .field{
             margin:0 !important;
