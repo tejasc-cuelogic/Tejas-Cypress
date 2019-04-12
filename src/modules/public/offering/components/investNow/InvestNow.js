@@ -181,7 +181,9 @@ export default class InvestNow extends React.Component {
     const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
     const { campaign } = this.props.campaignStore;
-    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const {
+      getCurrentInvestNowHealthCheck, investNowHealthCheckDetails,
+    } = this.props.investmentLimitStore;
     if (stepToBeRendered === 1 && !this.state.isInvestmentUpdate &&
       getCurrentInvestNowHealthCheck && getCurrentInvestNowHealthCheck.previousAmountInvested &&
       !money.isZero(getCurrentInvestNowHealthCheck.previousAmountInvested)) {
@@ -238,7 +240,8 @@ export default class InvestNow extends React.Component {
           <MultiStep
             loaderMsg={this.state.submitLoading ? `Please wait...<br /><br />
             We are generating your agreement. This can take up to a minute.` : ''}
-            inProgress={this.state.submitLoading || inProgress}
+            iinProgress={this.state.submitLoading ||
+              (inProgress && !investNowHealthCheckDetails.loading)}
             createAccount={this.multiClickHandler}
             setIsEnterPressed={setIsEnterPressed}
             disableNxtbtn={this.props.investmentStore.disableNextbtn}
