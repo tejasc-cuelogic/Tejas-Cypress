@@ -6,7 +6,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorAmountInvested, getInvestorPendingInvestments } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
@@ -23,8 +23,7 @@ export class InvestmentLimitStore {
   @observable investedAmount = 0;
   @observable investNowHealthCheckDetails = null;
   @observable investNowError = false;
-  @observable investorPendingInvestments = {};
-  @observable pendingInvestments = '';
+  @observable investorTotalAmountInvested = 0;
 
   @action
   setFieldValue = (field, value) => {
@@ -63,6 +62,7 @@ export class InvestmentLimitStore {
 
   @action
   getInvestNowHealthCheck = (accountId, offeringId) => new Promise((resolve, reject) => {
+    uiStore.setProgress();
     this.investNowHealthCheckDetails = graphql({
       client,
       query: getInvestNowHealthCheck,
@@ -73,6 +73,7 @@ export class InvestmentLimitStore {
       },
       onFetch: (data) => {
         if (data && this.investNowHealthCheckDetails && !this.investNowHealthCheckDetails.loading) {
+          uiStore.setProgress(false);
           resolve(data);
         }
       },
@@ -88,7 +89,7 @@ export class InvestmentLimitStore {
 
   @computed get getInvestorAmountInvestedValue() {
     return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
-      this.investorInvestmentLimit.data.getInvestorAmountInvested) || 0;
+      this.investorInvestmentLimit.data.getInvestorTotalAmountInvested) || 0;
   }
 
   @computed get getInvestorAmountInvestedLoading() {
@@ -108,7 +109,6 @@ export class InvestmentLimitStore {
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
   getInvestmentLimit = (data, investedAmount = false) => {
     const investedAmtFloat = parseFloat(investedAmount ? investedAmount.replace(/,/g, '') : this.investedAmount);
-    const pendingInvestments = this.pendingInvestments || 0;
     const limitFloor = 2200;
     const maxLimit = 107000;
     const limitLowPCT = 0.05;
@@ -130,7 +130,7 @@ export class InvestmentLimitStore {
     // }
     limit = Math.min(limit, maxLimit);
     const remainingAmount = limit -
-    ((data.cfInvestments || 0) + investedAmtFloat + pendingInvestments);
+    ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
@@ -293,43 +293,37 @@ export class InvestmentLimitStore {
 
     accountList.forEach((account) => {
       if (account.name === this.currentAccountType) {
-        this.getInvestorAmountInvested(
+        this.getInvestorTotalAmountInvested(
           account.details.accountId,
           // dateFilterStart,
           // dateFilterStop,
           closeDateFilter,
         ).then((data) => {
-          this.setFieldValue('investedAmount', parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0));
-        });
-        this.getInvestorPendingInvestments(account.details.accountId).then((data) => {
-          this.setFieldValue('pendingInvestments', parseFloat(data.getInvestorPendingInvestments.replace(/,/g, '') || 0));
+          this.setFieldValue('investedAmount', parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0));
         });
       }
     });
     if (isIndAccExist && this.currentAccountType === 'ira') {
       const individualAccount = find(this.activeAccounts, acc => acc.name === 'individual');
-      this.getInvestorAmountInvested(
+      this.getInvestorTotalAmountInvested(
         individualAccount.details.accountId,
         // dateFilterStart,
         // dateFilterStop,
         closeDateFilter,
       ).then((data) => {
-        const investedAmount = parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0) +
+        const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0) +
           this.investedAmount;
         this.setFieldValue('investedAmount', investedAmount);
-      });
-      this.getInvestorPendingInvestments(individualAccount.details.accountId).then((data) => {
-        this.setFieldValue('pendingInvestments', parseFloat(data.getInvestorPendingInvestments.replace(/,/g, '') || 0));
       });
     }
   }
 
   @action
-  getInvestorAmountInvested =
+  getInvestorTotalAmountInvested =
     (accountId, closeDateFilter = moment().subtract(1, 'y').toISOString()) => new Promise((resolve) => {
       this.investorInvestmentLimit = graphql({
         client,
-        query: getInvestorAmountInvested,
+        query: getInvestorTotalAmountInvested,
         variables: {
           userId: userDetailsStore.currentUserId,
           accountId,
@@ -340,27 +334,7 @@ export class InvestmentLimitStore {
         },
         fetchPolicy: 'network-only',
         onFetch: (data) => {
-          if (data && data.getInvestorAmountInvested) {
-            resolve(data);
-          }
-        },
-      });
-    });
-    @action
-    getInvestorPendingInvestments = accountId => new Promise((resolve) => {
-      this.investorPendingInvestments = graphql({
-        client,
-        query: getInvestorPendingInvestments,
-        variables: {
-          userId: userDetailsStore.currentUserId,
-          accountId,
-          // dateFilterStart,
-          // dateFilterStop,
-          includeTx: false,
-        },
-        fetchPolicy: 'network-only',
-        onFetch: (data) => {
-          if (data && data.getInvestorPendingInvestments) {
+          if (data && data.getInvestorTotalAmountInvested) {
             resolve(data);
           }
         },
