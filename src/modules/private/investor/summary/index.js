@@ -14,7 +14,7 @@ export default class Summary extends Component {
     return (
       <Route
         component={
-           ((partialAccLength > 0 &&
+           ((partialAccLength >= 0 &&
             activeAccLength === 0) ||
             (signupStatus.isMigratedFullAccount ||
             !isBasicVerDoneForMigratedFullUser ||
