@@ -383,6 +383,7 @@ export class IdentityStore {
     const { user } = userDetailsStore.currentUser.data;
     const phoneNumber = address || get(user, 'phone.number');
     const emailAddress = get(user, 'email.address');
+    const userAddress = type === 'EMAIL' ? emailAddress : phoneNumber;
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
@@ -394,7 +395,7 @@ export class IdentityStore {
           variables: {
             userId: userStore.currentUser.sub || authStore.userId,
             type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
-            address: phoneNumber,
+            address: userAddress || '',
           },
         })
         .then((result) => {

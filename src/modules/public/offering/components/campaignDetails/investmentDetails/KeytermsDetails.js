@@ -116,7 +116,7 @@ class KeyTermsDetails extends Component {
                 <Table.Cell width={5} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
                 <Table.Cell>
                   <p>
-                    {`${get(KeyTerms, 'revSharePercentage')}%` || ''}
+                    {`${get(KeyTerms, 'revSharePercentage')}${get(KeyTerms, 'revSharePercentage').includes('%') ? '' : '%'}` || ''}
                   </p>
                   <HtmlEditor
                     readOnly

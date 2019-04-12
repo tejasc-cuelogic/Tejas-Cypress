@@ -11,7 +11,7 @@ const LoadMoreBtn = ({ action, param }) => (
     <Button secondary content="Load More" onClick={() => action(param)} />
   </div>
 );
-
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 @observer
 class Offering extends Component {
@@ -30,17 +30,15 @@ class Offering extends Component {
       <Aux>
         <Banner />
         <Responsive maxWidth={767} as={Container}>
-          <section>
-            <Header as="h2">
+          <Header as="h2" className="mt-30">
             Invest in growing local<br /> businesses
-            </Header>
-          </section>
+          </Header>
         </Responsive>
         <CampaignList
           loading={loading}
           campaigns={active}
           filters
-          heading={<Header as="h2" textAlign="center" caption className="mb-50">Active Campaigns</Header>}
+          heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-30' : 'mb-50'}>Active Campaigns</Header>}
         />
         {activeList && activeList.length > RECORDS_TO_DISPLAY &&
         activeToDisplay < activeList.length &&

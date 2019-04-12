@@ -25,13 +25,13 @@ class FinancialInfo extends Component {
       }
     }
     if (this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
-      const pendingInvestment = get(this.props.investmentLimitStore.getCurrentInvestNowHealthCheck, 'pendingInvestments') || '0';
-      this.props.investmentLimitStore.setFieldValue('pendingInvestments', parseFloat(pendingInvestment.replace(/,/g, '')) || '');
+      const investorTotalAmountInvested = get(this.props.investmentLimitStore.getCurrentInvestNowHealthCheck, 'investorTotalAmountInvested') || '0';
+      this.props.investmentLimitStore.setFieldValue('investorTotalAmountInvested', investorTotalAmountInvested);
     }
-    if (this.props.match.isExact && this.props.investmentStore.getSelectedAccountTypeId) {
-      this.props.investmentLimitStore
-        .getInvestorAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
-    }
+    // if (this.props.match.isExact && this.props.investmentStore.getSelectedAccountTypeId) {
+    //   this.props.investmentLimitStore
+    //     .getInvestorTotalAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
+    // }
   }
   render() {
     const {
@@ -65,7 +65,8 @@ class FinancialInfo extends Component {
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
-    if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading) {
+    if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading ||
+      this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
 
