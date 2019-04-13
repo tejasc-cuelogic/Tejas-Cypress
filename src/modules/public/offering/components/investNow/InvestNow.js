@@ -7,7 +7,7 @@ import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
-import Helper from '../../../../../helper/utility';
+// import Helper from '../../../../../helper/utility';
 
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
