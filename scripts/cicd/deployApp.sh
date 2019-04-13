@@ -16,11 +16,11 @@ fi
 if [ "$env" = "prod" ] || [ "$env" = "prod-temp" ] ; then
 	# aws s3 sync ../../build/ s3://${bucketName}/ --exclude "*.map" --delete
 	aws s3 rm s3://${bucketName} --recursive && echo "S3 bucket ${bucketName} cleaned successfully." &&
-    aws s3 cp build/ s3://${bucketName}/ --recursive --exclude "*.map" && echo "New files deployed successfully to s3 bucket ${bucketName}."
+    aws s3 cp ../../build/ s3://${bucketName}/ --recursive --exclude "*.map" && echo "New files deployed successfully to s3 bucket ${bucketName}."
 else
     # aws s3 sync ../../build/ s3://${bucketName}/ --delete
     aws s3 rm s3://${bucketName} --recursive && echo "S3 bucket ${bucketName} cleaned successfully." &&
-    aws s3 cp build/ s3://${bucketName}/ --recursive && echo "New files deployed successfully to s3 bucket ${bucketName}."
+    aws s3 cp ../../build/ s3://${bucketName}/ --recursive && echo "New files deployed successfully to s3 bucket ${bucketName}."
 fi
 
 ## aws s3 sync ../../build/ s3://${bucketName}/ --delete
