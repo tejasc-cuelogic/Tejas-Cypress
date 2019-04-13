@@ -27,7 +27,7 @@ class AvailableCashTransfer extends Component {
                     />
                   </Statistic.Label>
                   <Statistic.Value>
-                    {props.cash ? Helper.MoneyMathDisplayCurrency(props.cash) : '$0.00'}
+                    {props.cash ? Helper.MoneyMathDisplayCurrency(Math.max(Number(props.cash), 0)) : '$0.00'}
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>
