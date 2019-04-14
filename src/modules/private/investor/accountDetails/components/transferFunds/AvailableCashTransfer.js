@@ -11,6 +11,12 @@ import TransferFundVerifyModal from './previewModel/TransferFundVerifyModal';
 class AvailableCashTransfer extends Component {
   render() {
     const { props } = this;
+    const cashMax = Math.max(Number(props.cash.replace(/[^0-9.-]+/g, '')), 0);
+    let cashDisp = '$0.00';
+    if (!Number.isNaN(cashMax)) {
+      cashDisp = Helper.CurrencyFormat(cashMax);
+    }
+
     return (
       <Aux>
         <Card fluid>
@@ -27,7 +33,7 @@ class AvailableCashTransfer extends Component {
                     />
                   </Statistic.Label>
                   <Statistic.Value>
-                    {props.cash ? Helper.MoneyMathDisplayCurrency(Math.max(Number(props.cash), 0)) : '$0.00'}
+                    {cashDisp}
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>
