@@ -36,8 +36,8 @@ export default class EmailWelcomeScreen extends Component {
           <p className="mt-20">
             <b>In the next couple of steps, we'll ask you to
             verify your email address and phone number.
-            </b>
-             This will be used to confirm your identity when
+            </b>&nbsp;
+            This will be used to confirm your identity when
             any future changes are being requested in your account.
           </p>
           <Button className="mt-80 mb-80 relaxed very" primary as={Link} to="/auth/confirm-email">Continue</Button>
