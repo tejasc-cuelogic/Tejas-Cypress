@@ -14,7 +14,7 @@ class AvailableCashTransfer extends Component {
     const cashMax = Math.max(Number(props.cash.replace(/[^0-9.-]+/g, '')), 0);
     let cashDisp = '$0.00';
     if (!Number.isNaN(cashMax)) {
-      cashDisp = Helper.MoneyMathDisplayCurrency(cashMax);
+      cashDisp = Helper.CurrencyFormat(cashMax);
     }
 
     return (
