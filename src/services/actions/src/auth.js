@@ -149,7 +149,7 @@ export class Auth {
     uiStore.reset();
     uiStore.setProgress();
     const { email, password } = Validator.ExtractValues(authStore.LOGIN_FRM.fields);
-    const lowerCasedEmail = email.value.toLowerCase();
+    const lowerCasedEmail = email.toLowerCase();
     client.cache.reset();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
       Username: lowerCasedEmail,
