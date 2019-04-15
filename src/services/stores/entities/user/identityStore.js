@@ -922,23 +922,21 @@ export class IdentityStore {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             resolve();
           } else {
             const error = {
               message: 'Please enter correct verification code.',
             };
+            uiStore.setProgress(false);
             uiStore.setErrors(error);
             reject();
           }
         })
         .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-          reject(err);
-        }))
-        .finally(() => {
           uiStore.setProgress(false);
-        });
+          reject(err);
+        }));
     });
   }
   @action
