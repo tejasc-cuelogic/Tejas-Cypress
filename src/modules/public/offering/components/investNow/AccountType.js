@@ -334,7 +334,11 @@ class AccountType extends Component {
                     <Aux>
                       <div className="center-align">
                         <Aux>
-                          <p>There is a technical issue with this offering.  The NextSeed team has been notified and will resolve it as soon as possible.  Please try back later.</p>
+                          <p>
+                            There is a technical issue with this offering. The NextSeed team has
+                            been notified and will resolve it as soon as possible.
+                            Please try back later.
+                          </p>
                           <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         </Aux>
                       </div>
