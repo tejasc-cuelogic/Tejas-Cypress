@@ -26,7 +26,7 @@ export default class AccList extends Component {
     return this.state.activeIndex === record.id || record.slug || ids.includes(currId);
   }
   render() {
-    const isDev = !['production', 'demo'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['localhosta', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     const {
       match, data, module,
       marketing,
