@@ -922,7 +922,6 @@ export class IdentityStore {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             resolve();
           } else {
             const error = {
