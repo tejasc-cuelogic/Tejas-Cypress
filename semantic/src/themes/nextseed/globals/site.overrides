@@ -1415,7 +1415,7 @@ a.icon-link {
 		height:40px;
 		background:linear-gradient(transparent, @white);
 		position:absolute;
-		top:-41px;
+		top:-40px;
 		pointer-events:none;
 	}
 	&:after{

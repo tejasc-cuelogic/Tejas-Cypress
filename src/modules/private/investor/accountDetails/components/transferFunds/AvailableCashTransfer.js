@@ -38,8 +38,10 @@ class AvailableCashTransfer extends Component {
                 </Statistic>
               </Grid.Column>
               <Grid.Column floated="right" verticalAlign="middle" className="right-align">
-                <Button as={Link} to={`${props.match.url}/withdraw`} className={props.isAccountFrozen ? 'disabled' : ''} inverted color="green" content="Withdraw funds" />
-                <Button as={Link} to={`${props.match.url}/add`} className={props.isAccountFrozen ? 'disabled' : ''} primary content="Add funds" />
+                <Button.Group widths="2">
+                  <Button as={Link} to={`${props.match.url}/withdraw`} className={props.isAccountFrozen ? 'disabled' : ''} inverted color="green" content="Withdraw funds" />
+                  <Button as={Link} to={`${props.match.url}/add`} className={props.isAccountFrozen ? 'disabled' : ''} primary content="Add funds" />
+                </Button.Group>
               </Grid.Column>
             </Grid>
           </Card.Content>
