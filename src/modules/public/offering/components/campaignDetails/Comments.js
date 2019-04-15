@@ -95,7 +95,7 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Comments
           <span className="anchor-scroll" />
         </Header>
@@ -176,9 +176,6 @@ class Comments extends Component {
                               onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
                             >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
                             </Link>}
-                            {/* <Aux>
-                              {this.state.readMoreInner !== c.id ? ' ...' : ' '}
-                            </Aux> */}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
                             <Aux>
@@ -246,9 +243,6 @@ class Comments extends Component {
                                     onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
                                   >{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
                                   </Link>}
-                                  {/* <Aux>
-                                    {this.state.readMoreInner !== tc.id ? ' ...' : ' '}
-                                  </Aux> */}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
                                   <Aux>
