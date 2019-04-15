@@ -432,7 +432,7 @@ class IraAccountStore {
           this.setFormData('IDENTITY_FRM', account.details);
           bankAccountStore.validateAddFunds();
           // const { isValid } = bankAccountStore.formIraAddFunds.meta;
-          if (get(account.details, 'linkedBank.routingNumber')) {
+          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
             bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
             // if (isValid) {
             bankAccountStore.formIraAddFunds.fields.value.value =
@@ -442,8 +442,7 @@ class IraAccountStore {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
               if (details.linkedBank && details.linkedBank[f] !== '') {
-                bankAccountStore.formLinkBankManually.fields[f].value =
-                details.linkedBank[f];
+                bankAccountStore.formLinkBankManually.fields[f].value = details.linkedBank[f];
                 return bankAccountStore.formLinkBankManually.fields[f];
               }
               return null;

@@ -17,8 +17,8 @@ export default class HowItWorks extends Component {
     return (
       <Aux>
         <section>
-          <Container className="mb-80 mt-80">
-            <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
+          <Container className={isMobile ? 'mt-40' : 'mb-80 mt-80'}>
+            <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
             <div className="how-it-works-steps">
               <Grid stackable centered columns={3}>
                 <Grid.Column>
@@ -43,12 +43,12 @@ export default class HowItWorks extends Component {
         </section>
         <Divider fitted as={Container} />
         <section>
-          <Container className="mb-80 mt-80" textAlign={isMobile ? 'left' : 'center'}>
+          <Container className={isMobile ? 'mt-40 mb-20' : 'mb-80 mt-80'} textAlign={isMobile ? 'left' : 'center'}>
             <Header as="h2">Choose how you want to invest.</Header>
             <p className={isMobile ? 'mb-50' : 'mb-80'}>Understand and choose the right opportunities with the right payment terms for you.</p>
             <Grid stackable doubling columns={3} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
               <Grid.Column>
-                <div className="flex-content">
+                <div className={`${isMobile ? 'mb-20' : ''} flex-content`}>
                   {!isMobile ?
                     <Header as="h3">
                       <NSImage path="icons/termnotes.svg" />
@@ -60,7 +60,7 @@ export default class HowItWorks extends Component {
                       <Header as="h2">Term Notes</Header>
                     </Aux>
                   }
-                  <Item.Group relaxed="very">
+                  <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
                     <Item>
                       <Item.Content>
                         <Header as="h5">How does it work?</Header>
@@ -80,18 +80,9 @@ export default class HowItWorks extends Component {
                     </Item>
                   </Item.Group>
                 </div>
-                {/* <List verticalAlign="top" horizontal
-            className={`learn-more-list ${isMobile ? 'mb-30' : 'mt-30'}`}>
-              <List.Item>
-                <List.Header>Learn more</List.Header>
-                <List.Content>
-                  See an example of a <a href="/">Term Note investment</a>
-                </List.Content>
-              </List.Item>
-            </List> */}
               </Grid.Column>
               <Grid.Column>
-                <div className="flex-content">
+                <div className={`${isMobile ? 'mb-20' : ''} flex-content`}>
                   {!isMobile ?
                     <Header as="h3">
                       <NSImage path="icons/applied.svg" />
@@ -103,11 +94,7 @@ export default class HowItWorks extends Component {
                       <Header as="h2">Revenue Sharing Notes</Header>
                     </Aux>
                   }
-                  {/* <Header as="h3">
-                    <NSImage path="icons/applied.svg" />
-                    <span>Revenue Sharing Notes</span>
-                  </Header> */}
-                  <Item.Group relaxed="very" className="question-list">
+                  <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
                     <Item>
                       <Item.Content>
                         <Header as="h5">How does it work?</Header>
@@ -129,15 +116,6 @@ export default class HowItWorks extends Component {
                     </Item>
                   </Item.Group>
                 </div>
-                {/* <List verticalAlign="top" horizontal
-            className={`learn-more-list ${isMobile ? '' : 'mt-30'}`}>
-              <List.Item>
-                <List.Header>Learn more</List.Header>
-                <List.Content>
-                  See an example of a <a href="/">Revenue Sharing Note investment</a>
-                </List.Content>
-              </List.Item>
-            </List> */}
               </Grid.Column>
               <Grid.Column>
                 <div className="flex-content">
@@ -152,11 +130,7 @@ export default class HowItWorks extends Component {
                       <Header as="h2">Preferred Equity</Header>
                     </Aux>
                   }
-                  {/* <Header as="h3">
-                    <NSImage path="icons/equity.svg" />
-                    <span>Preferred Equity</span>
-                  </Header> */}
-                  <Item.Group relaxed="very" className="question-list">
+                  <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
                     <Item>
                       <Item.Content>
                         <Header as="h5">How does it work?</Header>
@@ -185,9 +159,9 @@ export default class HowItWorks extends Component {
         </section>
         <section className="bg-offwhite">
           <Container>
-            <Grid relaxed={!isTablet && 'very'} stackable centered className="mt-80 mb-80">
+            <Grid relaxed={!isTablet && 'very'} stackable centered className={isMobile ? '' : 'mb-80 mt-80'}>
               <Grid.Row>
-                <Grid.Column width={10} textAlign="center">
+                <Grid.Column width={10} textAlign={isMobile ? 'left' : 'center'}>
                   <Header as="h2">Every investment comes with risk and opportunity.</Header>
                   <p>
                 Remember, returns and bonus rewards are not guaranteed. Investments can be lost
@@ -205,7 +179,7 @@ export default class HowItWorks extends Component {
             {!authStore.isUserLoggedIn &&
             <Aux>
               <Header as="h2" className="mb-30">Register for an account.</Header>
-              <Button.Group vertical={isMobile} className="mb-50">
+              <Button.Group vertical={isMobile} className={isMobile ? '' : 'mb-50'}>
                 <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
               <Divider section hidden />

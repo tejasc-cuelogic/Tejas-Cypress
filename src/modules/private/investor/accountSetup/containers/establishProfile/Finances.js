@@ -31,8 +31,7 @@ export default class Finances extends Component {
             fielddata={FINANCES_FORM.fields.investorProfileType}
             name="investorProfileType"
             changed={investorProfileChange}
-            containerclassname="button-radio center-align"
-            classname="center-align"
+            containerclassname="three wide button-radio center-align"
             showerror
           />
           <Divider hidden />

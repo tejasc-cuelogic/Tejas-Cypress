@@ -210,7 +210,7 @@ class HowItWorks extends Component {
                       <NSImage path={t.image} />
                     </div>
                     <Item.Content verticalAlign="middle">
-                      <Item.Header as="h2">{t.title}</Item.Header>
+                      <Item.Header as={isMobile ? 'h3' : 'h2'}>{t.title}</Item.Header>
                       <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                     “{t.description}”
                       </Item.Description>

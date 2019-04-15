@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import { Header, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
+
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('authStore')
 export default class TermNotes extends Component {
   render() {
@@ -23,7 +25,7 @@ export default class TermNotes extends Component {
         <Grid.Column>
           <Header as="h3">Term Notes</Header>
           {/* <Header as="h3" color="blue">Raise $50,000—$1 Million</Header> */}
-          <Item.Group relaxed="very" className="question-list">
+          <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
             <Item>
               <Item.Content>
                 <Header as="h5">
