@@ -168,17 +168,17 @@ class Comments extends Component {
                             <HtmlEditor
                               readOnly
                               content={this.state.readMore === c.id ?
-                                c.comment : `${c.comment.substr(0, readMoreLength)}`}
+                                c.comment : `${c.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== c.id && (c.comment.length > readMoreLength)) ? '...' : ' '}`}
                             />
                             {(c.comment.length > readMoreLength) &&
-                            <Aux>
+                            <Link
+                              to="/"
+                              onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
+                            >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
+                            </Link>}
+                            {/* <Aux>
                               {this.state.readMoreInner !== c.id ? ' ...' : ' '}
-                              <Link
-                                to="/"
-                                onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
-                              >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
-                              </Link>
-                            </Aux>}
+                            </Aux> */}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
                             <Aux>
@@ -238,10 +238,17 @@ class Comments extends Component {
                                   <HtmlEditor
                                     readOnly
                                     content={this.state.readMoreInner === tc.id ?
-                                      tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}` : tc.comment.substr(0, readMoreLength)}
+                                      tc.comment : `${tc.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== tc.id && (tc.comment.length > readMoreLength)) ? '...' : ' '}`}
                                   />
                                   {(tc.comment.length > readMoreLength) &&
-                                  <Aux>{this.state.readMoreInner !== tc.id ? ' ...' : ' '}<Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}</Link></Aux>}
+                                  <Link
+                                    to="/"
+                                    onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
+                                  >{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
+                                  </Link>}
+                                  {/* <Aux>
+                                    {this.state.readMoreInner !== tc.id ? ' ...' : ' '}
+                                  </Aux> */}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
                                   <Aux>
