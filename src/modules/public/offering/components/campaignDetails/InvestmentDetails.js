@@ -45,7 +45,7 @@ class InvestmentDetails extends Component {
     const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <Aux>
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
