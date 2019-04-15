@@ -1030,14 +1030,6 @@ footer{
 			margin-right: @5px;
 		}
 	}
-	// .ui.reveal>.visible.content {
-	// 	background-color: fade(@neutral-darkwhite, 50%);
-	// 	height: 100%;
-	// 	// img.ui.image {
-	// 	// 	top: 50%;
-	// 	// 	transform: translate(0, -50%);
-	// 	// }
-	// }
 }
 //	press page
 .press-news {
@@ -1238,7 +1230,7 @@ a.icon-link {
 			position: absolute;
 			width: 78px;
 			top: -60px;
-			left: -220px;
+			left: -162px;
 			right: auto;
 			padding: 0;
 			background: @white;
