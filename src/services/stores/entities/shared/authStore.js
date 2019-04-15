@@ -280,7 +280,7 @@ export class AuthStore {
         .mutate({
           mutation: requestEmailChnage,
           variables: {
-            newEmail: this.CONFIRM_FRM.fields.email.value,
+            newEmail: this.CONFIRM_FRM.fields.email.value.toLowerCase(),
           },
         })
         .then((result) => {
@@ -355,7 +355,7 @@ export class AuthStore {
         client: clientPublic,
         query: checkEmailExistsPresignup,
         variables: {
-          email,
+          email: email.toLowerCase(),
         },
         onFetch: (data) => {
           uiStore.clearErrors();
