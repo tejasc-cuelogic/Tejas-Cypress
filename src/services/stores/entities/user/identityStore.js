@@ -383,7 +383,7 @@ export class IdentityStore {
     const { user } = userDetailsStore.currentUser.data;
     const phoneNumber = address || get(user, 'phone.number');
     const emailAddress = get(user, 'email.address');
-    const userAddress = type === 'EMAIL' ? emailAddress : phoneNumber;
+    const userAddress = type === 'EMAIL' ? emailAddress.toLowerCase() : phoneNumber;
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
@@ -850,7 +850,7 @@ export class IdentityStore {
         .mutate({
           mutation: requestOtpWrapper,
           variables: {
-            address: email.value || emailInCookie,
+            address: (email.value || emailInCookie).toLowerCase(),
             firstName: givenName.value || firstNameInCookie,
           },
         })

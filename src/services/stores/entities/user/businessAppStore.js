@@ -744,7 +744,7 @@ export class BusinessAppStore {
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
       firstName: basicInfo.firstName,
       lastName: basicInfo.lastName,
-      email: basicInfo.email,
+      email: basicInfo.email.toLowerCase(),
       businessGeneralInfo: {
         businessName: data.businessName.value,
         address: {
@@ -869,6 +869,7 @@ export class BusinessAppStore {
       payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
       payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
     }
+    payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {
       clientPublic
         .mutate({
