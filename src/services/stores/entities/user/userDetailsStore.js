@@ -74,6 +74,14 @@ export class UserDetailsStore {
     return accDetails;
   }
 
+  @computed get getAccountList() {
+    let accDetails = [];
+    if (this.userDetails) {
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details);
+    }
+    return accDetails;
+  }
+
   @computed get getActiveAccountsOfSelectedUsers() {
     let accDetails;
     if (this.getDetailsOfUser) {
