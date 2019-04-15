@@ -124,7 +124,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Dont have an account?</b> <Link to="/auth/register">Sign up</Link></p>
+          <p><b>Don't have an account?</b> <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );
