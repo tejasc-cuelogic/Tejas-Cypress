@@ -58,12 +58,15 @@ export default class ConfirmEmailAddress extends Component {
       if (isMigratedUser) {
         this.props.identityStore.confirmEmailAddress().then(() => {
           const { roles } = this.props.userStore.currentUser;
+          console.log('roles', roles);
           if (roles.includes('investor')) {
+            console.log('Role is an investor');
             this.props.identityStore.setIsOptConfirmed(true);
           } else {
             const redirectUrl = !roles ? '/auth/login' :
               SIGNUP_REDIRECT_ROLEWISE.find(user =>
                 roles.includes(user.role)).path;
+            console.log('Role is not an investor redirect url', redirectUrl);
             this.props.history.replace(redirectUrl);
           }
         });
@@ -131,8 +134,10 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.history.push(this.props.refLink);
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
+      console.log('Pending step continue email', this.props.userDetailsStore.pendingStep);
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
+      console.log('Id verification continue email');
       this.props.history.replace('/app/summary/identity-verification/0');
     }
     this.props.identityStore.setIsOptConfirmed(false);
