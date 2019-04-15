@@ -429,8 +429,8 @@ export class UserDetailsStore {
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/auth/welcome-email';
-      } else if (this.signupStatus.isMigratedFullAccount &&
-        (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
+      } else if ((this.userDetails &&
+        this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
           routingUrl = '/app/summary/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {
