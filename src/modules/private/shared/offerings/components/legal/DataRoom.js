@@ -72,7 +72,10 @@ const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onF
 @observer
 export default class DataRoom extends Component {
   componentWillMount() {
-      this.props.offeringCreationStore.setFormData('DATA_ROOM_FRM', 'legal.dataroom');
+    const { setFormData } = this.props.offeringCreationStore;
+    setFormData('DATA_ROOM_FRM', 'legal.dataroom');
+    setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
   onFileDrop = (files, name, index) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DATA_ROOM_FRM', 'documents', name, files, 'DOCUMENTS_LEGAL_DATAROOM', index, true);

@@ -112,6 +112,8 @@ export default class Agreement extends React.Component {
       agreementDetails,
       investmentFlowErrorMessage,
     } = this.props.investmentStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
     const { uiStore, match } = this.props;
     const { inProgress } = uiStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
@@ -129,7 +131,7 @@ export default class Agreement extends React.Component {
           <Modal.Content className="center-align">
             <Header as="h3">Confirm cancellation</Header>
             {this.props.changeInvestment ?
-              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(investmentAmount)} in this offering will remain in place.`}</p>
+              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
               :
               <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
             }

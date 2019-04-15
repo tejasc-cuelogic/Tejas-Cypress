@@ -362,9 +362,11 @@ export class AuthStore {
           if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
             this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
             this.SIGNUP_FRM.meta.isValid = false;
+            uiStore.setProgress(false);
             rej();
           } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
             this.SIGNUP_FRM.fields.email.error = '';
+            uiStore.setProgress(false);
             res();
           }
         },
