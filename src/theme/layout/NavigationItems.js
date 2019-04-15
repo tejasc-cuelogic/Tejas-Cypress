@@ -10,7 +10,7 @@ import { SubmitButton } from '../../modules/shared/businessApplication/component
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore', 'uiStore')
+@inject('navStore', 'uiStore', 'userDetailsStore')
 @observer
 export class NavItems extends Component {
   state = { active: '', active2: '', byHideArrow: '' };
@@ -20,15 +20,18 @@ export class NavItems extends Component {
       const newState2 = name;
       this.setState({ active: newState, active2: newState2 });
     }
-    if (this.props.isApp && e.target.className === 'dropdown icon') {
-      const { active2 } = this.state;
-      if (active2 === name) {
-        this.setState({ byHideArrow: name });
+    if (!(this.props.userDetailsStore.getAccountList.length === 1
+      && name === this.props.uiStore.defaultNavExpanded)) {
+      if (this.props.isApp && e.target.className === 'dropdown icon') {
+        const { active2 } = this.state;
+        if (active2 === name) {
+          this.setState({ byHideArrow: name });
+        }
       }
-    }
 
-    const { setNavExpanded } = this.props.uiStore;
-    setNavExpanded(false); // reset defaultNavExpanded
+      const { setNavExpanded } = this.props.uiStore;
+      setNavExpanded(false); // reset defaultNavExpanded
+    }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
