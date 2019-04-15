@@ -131,13 +131,14 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleContinue = () => {
+    console.log('Migrated user continue email', this.props.userDetailsStore.signupStatus.isMigratedFullAccount);
     if (this.props.refLink) {
       this.props.history.push(this.props.refLink);
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       console.log('Pending step continue email', this.props.userDetailsStore.pendingStep);
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
-      console.log('Id verification continue email');
+      console.log('Id verification continue email', this.props.userDetailsStore.pendingStep);
       this.props.history.replace('/app/summary/identity-verification/0');
     }
     this.props.identityStore.setIsOptConfirmed(false);
