@@ -74,6 +74,7 @@ export default class ConfirmEmailAddress extends Component {
         this.props.identityStore.verifyOTPWrapper().then(() => {
           authActions.register(isMobile)
             .then(() => {
+              uiStore.setProgress(false);
               const { roles } = this.props.userStore.currentUser;
               if (roles.includes('investor')) {
                 if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
