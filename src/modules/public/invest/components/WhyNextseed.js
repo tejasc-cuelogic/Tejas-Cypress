@@ -130,7 +130,7 @@ export default class WhyNextseed extends Component {
             </Grid>
             <div className="center-align mb-50">
               { !authStore.isUserLoggedIn &&
-                <Button className={!isMobile ? 'mt-50' : ''} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
               }
             </div>
             <p className="note center-align mb-50">
