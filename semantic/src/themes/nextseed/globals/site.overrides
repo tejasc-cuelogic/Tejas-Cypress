@@ -1030,14 +1030,14 @@ footer{
 			margin-right: @5px;
 		}
 	}
-	.ui.reveal>.visible.content {
-		background-color: fade(@neutral-darkwhite, 50%);
-		height: 100%;
-		img.ui.image {
-			top: 50%;
-			transform: translate(0, -50%);
-		}
-	}
+	// .ui.reveal>.visible.content {
+	// 	background-color: fade(@neutral-darkwhite, 50%);
+	// 	height: 100%;
+	// 	// img.ui.image {
+	// 	// 	top: 50%;
+	// 	// 	transform: translate(0, -50%);
+	// 	// }
+	// }
 }
 //	press page
 .press-news {
