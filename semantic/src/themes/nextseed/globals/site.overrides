@@ -1213,6 +1213,7 @@ a.icon-link {
 	}
 	.vertical-timeline-element-icon {
 		left: 0;
+		top: 15px;
 		box-shadow: none;
 	}
 	.vertical-timeline-element {
@@ -1222,6 +1223,7 @@ a.icon-link {
 				height: @25px;
 				width: @25px;
 				left: -@13px;
+				top: 17.5px;
 				background-color: @neutral-darkwhite !important;
 				margin-left: 0;
 			}
