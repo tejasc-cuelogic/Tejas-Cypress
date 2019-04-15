@@ -30,7 +30,8 @@ class Login extends Component {
     e.preventDefault();
     this.props.uiStore.clearErrors();
     const { email, password } = this.props.authStore.LOGIN_FRM.fields;
-    const userCredentials = { email: email.value, password: password.value };
+    const lowerCasedEmail = email.value.toLowerCase();
+    const userCredentials = { email: lowerCasedEmail, password: password.value };
     this.props.authStore.checkMigrationByEmail(userCredentials).then((res) => {
       if (res) {
         authActions.login()
@@ -40,7 +41,7 @@ class Login extends Component {
               this.props.history.push('/auth/change-password');
             } else {
               const { roles } = this.props.userStore.currentUser;
-              this.props.authStore.setCredentials({ email: email.value, password: password.value });
+              this.props.authStore.setCredentials(userCredentials);
               this.props.authStore.resetForm('LOGIN_FRM');
               const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep :
                 '/app/dashboard';
@@ -123,7 +124,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Dont have an account?</b> <Link to="/auth/register">Sign up</Link></p>
+          <p><b>Don't have an account?</b> <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

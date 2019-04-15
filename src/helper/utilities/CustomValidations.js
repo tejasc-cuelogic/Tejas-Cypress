@@ -46,7 +46,7 @@ class CustomValidations extends Component {
 
     // TODO need to otimize alphaBrokerage and alphaPublicCompanyRel validators
     Validator.register('alphaBrokerage', (value) => {
-      const regex = /^[a-zA-Z ]*$/;
+      const regex = /^[a-zA-Z ,-]*$/;
       return regex.test(value);
     }, 'Invalid firm name, please verify and enter again.');
 

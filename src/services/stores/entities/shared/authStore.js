@@ -24,7 +24,7 @@ export class AuthStore {
   @observable capabilities = [];
   @observable userId = null;
   @observable devAuth = {
-    required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
+    required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
   @observable LOGIN_FRM = Validator.prepareFormObject(LOGIN);

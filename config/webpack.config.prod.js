@@ -271,6 +271,10 @@ module.exports = {
         to: 'assets/js/r.js',
       },
       {
+        from: 'src/assets/robots.txt',
+        to: 'robots.txt',
+      },
+      {
         from: 'src/assets/js/a.js',
         to: 'assets/js/a.js',
         transform: function (content, transformPath) {

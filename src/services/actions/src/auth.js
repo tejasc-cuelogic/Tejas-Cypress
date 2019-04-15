@@ -149,14 +149,15 @@ export class Auth {
     uiStore.reset();
     uiStore.setProgress();
     const { email, password } = Validator.ExtractValues(authStore.LOGIN_FRM.fields);
+    const lowerCasedEmail = email.toLowerCase();
     client.cache.reset();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: email,
+      Username: lowerCasedEmail,
       Password: password,
     });
 
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email,
+      Username: lowerCasedEmail,
       Pool: this.userPool,
     });
     authStore.setNewPasswordRequired(false);

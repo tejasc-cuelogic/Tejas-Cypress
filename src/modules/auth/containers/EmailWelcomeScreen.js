@@ -36,7 +36,7 @@ export default class EmailWelcomeScreen extends Component {
           <p className="mt-20">
             <b>In the next couple of steps, we'll ask you to
             verify your email address and phone number.
-            </b>
+            </b>&nbsp;
             This will be used to confirm your identity when
             any future changes are being requested in your account.
           </p>

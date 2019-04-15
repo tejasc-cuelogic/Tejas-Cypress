@@ -18,11 +18,11 @@ import { userIdleTime } from './constants/common';
  * Main App
  */
 const metaTagsData = [
-  { type: 'meta', name: 'description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US.' },
+  { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
   { type: 'ogTag', property: 'og:type', content: 'website' },
-  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding' },
-  { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US.' },
+  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Build an Investment Portfolio With Local Businesses' },
+  { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
   { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
@@ -30,8 +30,8 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:image:width', content: '1600' },
   { type: 'ogTag', property: 'og:image:height', content: '1067' },
   { type: 'meta', name: 'twitter:card', content: 'summary_large_image' },
-  { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of members on the 1st Regulation Crowdfunding portal in the US.' },
-  { type: 'meta', name: 'twitter:title', content: 'NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding' },
+  { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
+  { type: 'meta', name: 'twitter:title', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'meta', name: 'twitter:site', content: '@thenextseed' },
   { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
