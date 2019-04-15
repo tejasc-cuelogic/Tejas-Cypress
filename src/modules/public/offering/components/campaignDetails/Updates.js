@@ -4,7 +4,7 @@ import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import { Image64, InlineLoader } from '../../../../../theme/shared';
+import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('campaignStore')
@@ -49,12 +49,11 @@ class Updates extends Component {
                 >
                   <Item.Group>
                     <Item>
-                      <div className="ui image">
+                      <div className="ui image avatar-image">
                         {companyAvatarUrl && companyAvatarUrl.length ?
-                          <div className="avatar-image">
-                            <Image64 size="mini" srcUrl={companyAvatarUrl} />
-                          </div> : null
-                        }
+                          <Image64 srcUrl={companyAvatarUrl} circular />
+                         : <UserAvatar UserInfo={{}} />
+                      }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header" >{dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName} <br /><span>{moment(dataItem.updated.date).format('ll')}</span></Item.Content>
                     </Item>

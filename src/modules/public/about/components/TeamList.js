@@ -26,7 +26,7 @@ class teamList extends Component {
                 </Reveal.Content>
                 <Reveal.Content visible>
                   <LazyLoad height={100} >
-                    <Image64 srcUrl={member.avatar} alt={member.memberName} />
+                    <Image64 avatarPlaceholder srcUrl={member.avatar} alt={member.memberName} />
                   </LazyLoad>
                 </Reveal.Content>
               </Reveal>
