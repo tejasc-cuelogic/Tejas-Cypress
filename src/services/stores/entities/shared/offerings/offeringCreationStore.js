@@ -1223,7 +1223,7 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            toJS(getOfferingById[keyName]),
+            getOfferingById[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
