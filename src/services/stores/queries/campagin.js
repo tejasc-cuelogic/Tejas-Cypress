@@ -73,14 +73,14 @@ export const campaignDetailsQuery = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     stage
-    applicationId
-    issuerId
+    # applicationId
+    # issuerId
     offeringSlug
-    referralCode
+    # referralCode
     regulation
-    selectedOffer {
-      structure
-    }
+    # selectedOffer {
+    #   structure
+    # }
     created {
       id
     }
@@ -110,35 +110,35 @@ export const campaignDetailsQuery = gql`
       maxOfferingAmountCF
       minOfferingAmount506C
       maxOfferingAmount506C
-      industry
+      # industry
       minInvestAmt
-      appendixATitle
+      # appendixATitle
       revShareSummary
       investmentMultipleSummary
-      locationRiskFactors
-      isTX
+      # locationRiskFactors
+      # isTX
       state
       city
     }
     bonusRewards{
       id
-      offeringId
+      # offeringId
       title
       description
-      rewardStatus
-      expirationDate
+      # rewardStatus
+      # expirationDate
       earlyBirdQuantity
       tiers
-      created {
-        id
-        by
-        date
-      }
-      updated {
-        id
-        by
-        date
-      }
+      # created {
+      #   id
+      #   by
+      #   date
+      # }
+      # updated {
+      #   id
+      #   by
+      #   date
+      # }
     }
     rewardsTiers
     earlyBird {
@@ -160,18 +160,18 @@ export const campaignDetailsQuery = gql`
             url
           }
         }
-        googleMeta
-        issuerWebsite
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
+        # googleMeta
+        # issuerWebsite
+        # submitted {
+        #   id
+        #   by
+        #   date
+        # }
+        # approved {
+        #   id
+        #   by
+        #   date
+        # }
       }
       about {
         theCompany
@@ -181,34 +181,34 @@ export const campaignDetailsQuery = gql`
         }
         businessModel
         locationAnalysis
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
+        # submitted {
+        #   id
+        #   by
+        #   date
+        # }
+        # approved {
+        #   id
+        #   by
+        #   date
+        # }
       }
       launch {
-        targetDate
-        terminationDate
-        expectedOpsDate
-        issuerApprovedDate
+        # targetDate
+        # terminationDate
+        # expectedOpsDate
+        # issuerApprovedDate
         edgarLink
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
-        gsFees
+        # submitted {
+        #   id
+        #   by
+        #   date
+        # }
+        # approved {
+        #   id
+        #   by
+        #   date
+        # }
+        # gsFees
       }
       misc {
         additionalBonusRewardsContent
@@ -222,22 +222,22 @@ export const campaignDetailsQuery = gql`
       uploads {
         headshot {
           id
-          fileName
+          # fileName
           url
-          isPublic
+          # isPublic
         }
-        heroImage {
-          id
-          fileName
-          url
-          isPublic
-        }
-        license {
-          id
-          fileName
-          url
-          isPublic
-        }
+        # heroImage {
+        #   id
+        #   fileName
+        #   url
+        #   isPublic
+        # }
+        # license {
+        #   id
+        #   fileName
+        #   url
+        #   isPublic
+        # }
       }
       bio
       social {
@@ -246,77 +246,81 @@ export const campaignDetailsQuery = gql`
         facebook
         linkedin
       }
-      approved {
-        id
-        by
-        date
-      }
+      # approved {
+      #   id
+      #   by
+      #   date
+      # }
     }
     media {
       heroImage {
+        id
         url
         isPublic
       }
       heroBackground {
+        id
         url
         isPublic
       }
-      useOfProceeds{
-        url
-        isPublic
-      }
+      # useOfProceeds{
+      #   id
+      #   url
+      #   isPublic
+      # }
       heroVideo {
+        id
         url
         fileName
         isPublic
       }
-      tombstoneImage {
-        id
-        url
-        isPublic
-      }
-      locationHeroImage {
-        id
-        url
-        isPublic
-      }
-      location  {
-        id
-        url
-        isPublic
-      }
+      # tombstoneImage {
+      #   id
+      #   url
+      #   isPublic
+      # }
+      # locationHeroImage {
+      #   id
+      #   url
+      #   isPublic
+      # }
+      # location  {
+      #   id
+      #   url
+      #   isPublic
+      # }
       gallery  {
         id
         url
         isPublic
       }
-      logo  {
-        id
-        url
-        isPublic
-      }
+      # logo  {
+      #   id
+      #   url
+      #   isPublic
+      # }
       avatar  {
         id
         url
         isPublic
       }
-      businessModelImage {
-        id
-        url
-        isPublic
-      }
+      # businessModelImage {
+      #   id
+      #   url
+      #   isPublic
+      # }
     }
     legal {
       general {
-        websiteUrl
+        # websiteUrl
         useOfProceeds {
           offeringExpenseAmountDescription
         }
-        approved {
-          id
-          by
-          date
-        }
+        # approved {
+        #   id
+        #   by
+        #   date
+        # }
       }
       dataroom {
         documents {
@@ -343,26 +347,26 @@ export const campaignDetailsQuery = gql`
     }
     comments {
       id
-      offeringId
-      thread
+      # offeringId
+      # thread
       scope
       comment
       approved {
-        id
-        by
+        # id
+        # by
         date
       }
       updated {
-        by
+        # by
         date
       }
-      deleted {
-        id
-        by
-        date
-      }
+      # deleted {
+      #   id
+      #   by
+      #   date
+      # }
       created {
-        by
+        # by
         date
       }
       createdUserInfo {
@@ -370,99 +374,99 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
-          avatar {
-            url
-            name
-          }
+          # avatar {
+          #   url
+          #   name
+          # }
         }
-        roles {
-          name
-        }
+        # roles {
+        #   name
+        # }
       }
       threadComment {
         id
-        offeringId
-        thread
+        # offeringId
+        # thread
         scope
         comment
         approved {
-          id
-          by
+          # id
+          # by
           date
         }
         updated {
-          by
+          # by
           date
         }
         created {
-          by
+          # by
           date
         }
-        deleted {
-          by
-          date
-        }
+        # deleted {
+        #   by
+        #   date
+        # }
         createdUserInfo {
           id
           info {
             firstName
             lastName
-            avatar {
-              url
-              name
-            }
+            # avatar {
+            #   url
+            #   name
+            # }
           }
-          roles {
-            name
-          }
+          # roles {
+          #   name
+          # }
         }
       }
     }
-    updated {
-      id
-      by
-      date
-    }
-    deleted {
-      id
-      by
-      date
-    }
+    # updated {
+    #   id
+    #   by
+    #   date
+    # }
+    # deleted {
+    #   id
+    #   by
+    #   date
+    # }
     updates {
       id
-      offeringId
+      # offeringId
       title
       content
-      status
+      # status
       scope
-      tiers
-      isEarlyBirdOnly
-      notificationSent {
-        by
-        date
-        to
-      }
-      approved {
-        by
-        date
-      }
+      # tiers
+      # isEarlyBirdOnly
+      # notificationSent {
+      #   by
+      #   date
+      #   to
+      # }
+      # approved {
+      #   by
+      #   date
+      # }
       updated {
-        by
+        # by
         date
       }
-      deleted {
-        by
-        date
-      }
+      # deleted {
+      #   by
+      #   date
+      # }
       actingUserInfo {
         id
         info {
           firstName
           lastName
-          avatar {
-            url
-            name
-          }
+          # avatar {
+          #   url
+          #   name
+          # }
         }
       }
     }
