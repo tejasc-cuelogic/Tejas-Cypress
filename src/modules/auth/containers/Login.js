@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -124,7 +125,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Don't have an account?</b> <Link to="/auth/register">Sign up</Link></p>
+          <p><b>Don&#39;t have an account?</b> <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );
