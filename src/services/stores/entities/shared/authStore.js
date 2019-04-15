@@ -280,7 +280,7 @@ export class AuthStore {
         .mutate({
           mutation: requestEmailChnage,
           variables: {
-            newEmail: this.CONFIRM_FRM.fields.email.value,
+            newEmail: this.CONFIRM_FRM.fields.email.value.toLowerCase(),
           },
         })
         .then((result) => {
@@ -355,16 +355,18 @@ export class AuthStore {
         client: clientPublic,
         query: checkEmailExistsPresignup,
         variables: {
-          email,
+          email: email.toLowerCase(),
         },
         onFetch: (data) => {
           uiStore.clearErrors();
           if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
             this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
             this.SIGNUP_FRM.meta.isValid = false;
+            uiStore.setProgress(false);
             rej();
           } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
             this.SIGNUP_FRM.fields.email.error = '';
+            uiStore.setProgress(false);
             res();
           }
         },
