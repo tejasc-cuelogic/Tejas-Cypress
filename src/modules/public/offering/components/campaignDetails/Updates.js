@@ -49,13 +49,11 @@ class Updates extends Component {
                 >
                   <Item.Group>
                     <Item>
-                      <div className="ui image">
-                        {companyAvatarUrl && companyAvatarUrl.length ?
-                          <div className="avatar-image">
-                            <Image64 size="mini" srcUrl={companyAvatarUrl} />
-                          </div> : null
-                        }
-                      </div>
+                      {companyAvatarUrl && companyAvatarUrl.length ?
+                        <div className="avatar-image">
+                          <Image64 srcUrl={companyAvatarUrl} circular />
+                        </div> : null
+                      }
                       <Item.Content verticalAlign="middle" className="grey-header" >{dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName} <br /><span>{moment(dataItem.updated.date).format('ll')}</span></Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>
