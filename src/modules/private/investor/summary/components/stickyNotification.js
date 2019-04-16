@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Statistic, Button } from 'semantic-ui-react';
 import { get } from 'lodash';
 
-
+const isMobile = document.documentElement.clientWidth < 768;
 export default class StickyNotification extends Component {
   handleVerifyAccreditation = (e) => {
     e.preventDefault();
@@ -30,12 +30,11 @@ export default class StickyNotification extends Component {
         <div className="sticky-notification">
           <Card fluid raised>
             <Card.Content>
-              <Card.Meta>{get(props, 'notificationCard.congratulations')}</Card.Meta>
-              <Statistic size="mini" className="cta">
+              <Statistic size="mini" className="cta acc-verify-status">
                 <Statistic.Value className="mb-10">{get(props, 'notificationCard.header')}</Statistic.Value>
                 <Statistic.Label>{get(props, 'notificationCard.message')}</Statistic.Label>
               </Statistic>
-              <Button onClick={e => this.handleVerifyAccreditation(e)} floated="right" compact color="green">Verify</Button>
+              <Button onClick={e => this.handleVerifyAccreditation(e)} floated={!isMobile && 'right'} className={isMobile && 'mt-20'} compact color="green">Verify</Button>
             </Card.Content>
           </Card>
         </div>
