@@ -59,6 +59,34 @@ export class UserDetailsStore {
     return details;
   }
 
+  @computed
+  get userAccreditationStatus() {
+    let entityAccreditation = null;
+    this.currentUser && this.currentUser.data
+      && this.currentUser.data.user
+      && this.currentUser.data.user.roles.map((role) => {
+        if (role.name === 'entity') {
+          entityAccreditation = get(role, 'details.accreditation.status') || null;
+        }
+        return null;
+      });
+    const accreditation = get(this.currentUser, 'data.user.accreditation.status');
+    return (accreditation === null && entityAccreditation === null);
+  }
+
+  @computed get multipleUserAccounts() {
+    const activeAccounts = [];
+    activeAccounts.multipleAccounts = false;
+    if (this.getActiveAccounts.length === 1) {
+      activeAccounts.accountType = this.getActiveAccounts[0].name;
+      activeAccounts.accountId = this.getActiveAccounts[0].details.accountId;
+    } else {
+      activeAccounts.multipleAccounts = true;
+    }
+    activeAccounts.noAccounts = this.getActiveAccounts.length === 0;
+    return activeAccounts;
+  }
+
   @action
   setAddressFieldsForProfile = (place, form) => {
     Validator.setAddressFields(place, this[form]);
