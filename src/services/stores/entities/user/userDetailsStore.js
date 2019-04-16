@@ -62,15 +62,13 @@ export class UserDetailsStore {
   @computed
   get userAccreditationStatus() {
     let entityAccreditation = null;
-    this.currentUser && this.currentUser.data
-      && this.currentUser.data.user
-      && this.currentUser.data.user.roles.map((role) => {
-        if (role.name === 'entity') {
-          entityAccreditation = get(role, 'details.accreditation.status') || null;
-        }
-        return null;
-      });
-    const accreditation = get(this.currentUser, 'data.user.accreditation.status');
+    this.getActiveAccounts.map((role) => {
+      if (role.name === 'entity') {
+        entityAccreditation = get(role, 'details.accreditation.status') || null;
+      }
+      return null;
+    });
+    const accreditation = get(this.userDetails, 'accreditation.status');
     return (accreditation === null && entityAccreditation === null);
   }
 
