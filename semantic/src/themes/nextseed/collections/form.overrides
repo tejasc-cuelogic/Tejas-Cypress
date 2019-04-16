@@ -59,6 +59,11 @@
             margin-left:-@14px;
             margin-right:-@14px;
             padding:0 @14px;
+            .ui.selection.dropdown .menu>.item {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
         }
         >label{
             // display:inline-block;
