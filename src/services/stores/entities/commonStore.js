@@ -107,8 +107,7 @@ export class CommonStore {
           resolve(data.sharedLink);
         }
       },
-      onError: (e) => {
-        console.log(e);
+      onError: () => {
         this.setFieldValue('inProgress', false);
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
