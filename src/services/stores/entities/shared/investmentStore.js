@@ -249,7 +249,7 @@ export class InvestmentStore {
           loanTerm: loanTerm || 0,
         };
         const { totalPayment } = Calculator.calculate(data);
-        const finalAmtM = money.floatToAmount(totalPayment || '');
+        const finalAmtM = money.floatToAmount(Math.floor(totalPayment) || '');
 
         //
         //
@@ -260,7 +260,7 @@ export class InvestmentStore {
         //
         // const finalAmt_m = money.floatToAmount(finalAmt);
         const estReturnMIN =
-            Helper.CurrencyFormat(finalAmtM, 0);
+            Helper.CurrencyFormat(finalAmtM, 0, 0);
         this.estReturnVal = estReturnMIN;
         return this.estReturnVal;
       }
