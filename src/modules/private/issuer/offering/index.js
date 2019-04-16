@@ -35,13 +35,17 @@ export default class Offering extends Component {
         <Switch>
           <Route exact path={match.url} component={OfferingModule('overview')} />
           {
-            navItems.map(item => (
-              <Route
-                key={item.to}
-                path={`${match.url}/${item.to}`}
-                component={OfferingModule(item.to)}
-              />
-            ))
+            navItems.map((item) => {
+              const { id } = this.props.match.params;
+              const CurrentModule = OfferingModule(item.to);
+              return (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  render={props => <CurrentModule {...props} offeringId={id} />}
+                />
+              );
+            })
           }
         </Switch>
       </PrivateLayout>

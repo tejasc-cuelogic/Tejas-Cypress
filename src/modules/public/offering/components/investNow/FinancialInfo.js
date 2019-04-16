@@ -11,7 +11,7 @@ import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 
 @withRouter
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
+@inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
 class FinancialInfo extends Component {
   componentWillMount() {
