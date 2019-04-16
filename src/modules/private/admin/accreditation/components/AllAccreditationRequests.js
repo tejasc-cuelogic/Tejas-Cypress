@@ -12,7 +12,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore')
+@inject('accreditationStore', 'commonStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -21,9 +21,21 @@ export default class AllAccreditationRequests extends Component {
       this.props.accreditationStore.initRequest();
     }
   }
+  handleDocumentsLink = (e, folderId) => {
+    e.preventDefault();
+    const params = {
+      id: folderId,
+      accountType: 'SERVICES',
+      type: 'FOLDERS',
+    };
+    this.props.commonStore.getsharedLink(params).then((shareLink) => {
+      window.open(shareLink);
+    });
+  }
   paginate = params => this.props.accreditationStore.initRequest(params);
   render() {
-    const { match, accreditationStore } = this.props;
+    const { match, accreditationStore, commonStore } = this.props;
+    const { inProgress } = commonStore;
     const {
       accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
@@ -83,7 +95,7 @@ export default class AllAccreditationRequests extends Component {
                       <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
                         accreditation.assetsUpload[0].fileInfo &&
                         accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                          <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >Uploads</a>
+                          <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Uploads'}</a>
                         : <p className="note">N/A</p>
                         : 'Verifier'}
                         {accreditation.verifier &&
