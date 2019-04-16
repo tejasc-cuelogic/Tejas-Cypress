@@ -25,7 +25,7 @@ export default class AllAccreditationRequests extends Component {
     e.preventDefault();
     const params = {
       id: folderId,
-      accountType: 'SECURITIES',
+      accountType: 'SERVICES',
       type: 'FOLDERS',
     };
     this.props.commonStore.getsharedLink(params).then((shareLink) => {
