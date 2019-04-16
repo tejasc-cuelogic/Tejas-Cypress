@@ -16,7 +16,7 @@ class Updates extends Component {
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
   }
   componentDidMount() {
-    const sel = 'anchor-scroll';
+    const sel = 'anchor';
     document.querySelector(`.${sel}`).scrollIntoView(true);
   }
   handleClose = () => this.props.history.goBack();
@@ -28,9 +28,9 @@ class Updates extends Component {
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Updates
-          <span className="anchor-scroll" />
+          <span className="anchor" />
         </Header>
         {updates && updates.length ?
           <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
