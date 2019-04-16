@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Header, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('authStore')
 export default class RevenueSharingNotes extends Component {
   render() {
@@ -23,7 +24,7 @@ export default class RevenueSharingNotes extends Component {
         <Grid.Column>
           <Header as="h3">Revenue Sharing Notes</Header>
           {/* <Header as="h3" color="blue">Raise $100,000—$1 Million</Header> */}
-          <Item.Group relaxed="very" className="question-list">
+          <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
             <Item>
               <Item.Content>
                 <Header as="h5">

@@ -68,6 +68,7 @@ export default class IdentityVerification extends Component {
                       alertMsg,
                       msgType,
                       route,
+                      display,
                     } = this.props.identityStore.userVerficationStatus;
                     if (key === 'id.success') {
                       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
@@ -91,7 +92,9 @@ export default class IdentityVerification extends Component {
                           });
                       }
                     } else {
-                      Helper.toast(alertMsg, msgType);
+                      if (display !== false) {
+                        Helper.toast(alertMsg, msgType);
+                      }
                       if (key === 'id.failure') {
                         this.props.identityStore.setIdentityQuestions();
                       }

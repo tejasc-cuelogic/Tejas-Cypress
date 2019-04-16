@@ -149,14 +149,15 @@ export class Auth {
     uiStore.reset();
     uiStore.setProgress();
     const { email, password } = Validator.ExtractValues(authStore.LOGIN_FRM.fields);
+    const lowerCasedEmail = email.toLowerCase();
     client.cache.reset();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: email,
+      Username: lowerCasedEmail,
       Password: password,
     });
 
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email,
+      Username: lowerCasedEmail,
       Pool: this.userPool,
     });
     authStore.setNewPasswordRequired(false);
@@ -168,7 +169,7 @@ export class Auth {
           localStorage.removeItem('lastActiveTime');
           localStorage.removeItem('defaultNavExpanded');
           if (result.action && result.action === 'newPassword') {
-            authStore.setEmail(result.data.email);
+            authStore.setEmail(result.data.email.toLowerCase());
             if (this.cognitoUser && this.cognitoUser.Session) {
               authStore.setCognitoUserSession(this.cognitoUser.Session);
             }
@@ -248,7 +249,7 @@ export class Auth {
       attributeList.push(attributeFirstName);
       attributeList.push(attributeLastName);
       this.userPool.signUp(
-        fields.email.value || signupFields.email.value,
+        (fields.email.value || signupFields.email.value).toLowerCase(),
         fields.password.value || signupFields.password.value,
         attributeList,
         null,
@@ -275,10 +276,10 @@ export class Auth {
           if (!userStore.currentUser) {
             const { email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
             const authenticationDetails = new AWSCognito.AuthenticationDetails({
-              Username: email, Password: password,
+              Username: email.toLowerCase(), Password: password,
             });
             this.cognitoUser = new AWSCognito.CognitoUser({
-              Username: email, Pool: this.userPool,
+              Username: email.toLowerCase(), Pool: this.userPool,
             });
             return new Promise((res, rej) => {
               this.cognitoUser.authenticateUser(authenticationDetails, {
@@ -292,7 +293,7 @@ export class Auth {
               .then((result) => {
                 authStore.setUserLoggedIn(true);
                 if (result.action && result.action === 'newPassword') {
-                  authStore.setEmail(result.data.email);
+                  authStore.setEmail(result.data.email.toLowerCase());
                   authStore.setCognitoUserSession(this.cognitoUser.Session);
                   authStore.setNewPasswordRequired(true);
                 } else {
@@ -346,7 +347,10 @@ export class Auth {
     const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
 
     return new Promise((res, rej) => {
-      this.cognitoUser = new AWSCognito.CognitoUser({ Username: email, Pool: this.userPool });
+      this.cognitoUser = new AWSCognito.CognitoUser({
+        Username: email.toLowerCase(),
+        Pool: this.userPool,
+      });
       this.cognitoUser.forgotPassword({
         onSuccess: data => res(data), onFailure: err => rej(err),
       });
@@ -372,7 +376,9 @@ export class Auth {
     const { code, email, password } = Validator.ExtractValues(authStore.RESET_PASS_FRM.fields);
 
     return new Promise((res, rej) => {
-      this.cognitoUser = new AWSCognito.CognitoUser({ Username: email, Pool: this.userPool });
+      this.cognitoUser = new AWSCognito.CognitoUser({
+        Username: email.toLowerCase(), Pool: this.userPool,
+      });
       this.cognitoUser.confirmPassword(code, password, {
         onSuccess: data => res(data),
         onFailure: err => rej(err),
@@ -398,11 +404,11 @@ export class Auth {
     const loginData = mapValues(authStore.LOGIN_FRM.fields, f => f.value);
     const userEmail = userStore.getUserEmailAddress();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: loginData.email || userEmail,
+      Username: (loginData.email || userEmail).toLowerCase(),
       Password: loginData.password || passData.oldPasswd,
     });
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: loginData.email || userEmail,
+      Username: (loginData.email || userEmail).toLowerCase(),
       Pool: this.userPool,
     });
     return new Promise((res, rej) => {
@@ -441,11 +447,11 @@ export class Auth {
     const loginData = mapValues(authStore.LOGIN_FRM.fields, f => f.value);
     const userEmail = userStore.getUserEmailAddress();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: loginData.email || userEmail,
+      Username: (loginData.email || userEmail).toLowerCase(),
       Password: passData.oldPasswd,
     });
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: loginData.email || userEmail,
+      Username: (loginData.email || userEmail).toLowerCase(),
       Pool: this.userPool,
     });
     return new Promise((res, rej) => {
@@ -454,7 +460,7 @@ export class Auth {
         onSuccess: (result) => {
           authStore.setUserLoggedIn(true);
           if (result.action && result.action === 'newPassword') {
-            authStore.setEmail(result.data.email);
+            authStore.setEmail(result.data.email.toLowerCase());
             authStore.setCognitoUserSession(this.cognitoUser.Session);
             authStore.setNewPasswordRequired(true);
           } else {
@@ -511,14 +517,14 @@ export class Auth {
     uiStore.setProgress();
     const { email, password } = authStore.values;
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.value,
+      Username: email.value.toLowerCase(),
       Pool: this.userPool,
     });
     this.cognitoUser.Session = authStore.cognitoUserSession;
     return new Promise((res, rej) => {
       this.cognitoUser.completeNewPasswordChallenge(
         password.value,
-        { email: authStore.values.email.value },
+        { email: authStore.values.email.value.toLowerCase() },
         {
           onSuccess: data => res(data),
           onFailure: err => rej(err),
@@ -549,7 +555,7 @@ export class Auth {
     uiStore.setProgress();
     const { code, email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email, Pool: this.userPool,
+      Username: email.toLowerCase(), Pool: this.userPool,
     });
 
     return new Promise((res, rej) => {
@@ -563,11 +569,11 @@ export class Auth {
         Helper.toast('Successfully done confirmation', 'success');
 
         const authenticationDetails = new AWSCognito.AuthenticationDetails({
-          Username: email, Password: password,
+          Username: email.toLowerCase(), Password: password,
         });
 
         this.cognitoUser = new AWSCognito.CognitoUser({
-          Username: email, Pool: this.userPool,
+          Username: email.toLowerCase(), Pool: this.userPool,
         });
 
         return new Promise((res, rej) => {
@@ -582,7 +588,7 @@ export class Auth {
           .then((result) => {
             authStore.setUserLoggedIn(true);
             if (result.action && result.action === 'newPassword') {
-              authStore.setEmail(result.data.email);
+              authStore.setEmail(result.data.email.toLowerCase());
               authStore.setCognitoUserSession(this.cognitoUser.Session);
               authStore.setNewPasswordRequired(true);
             } else {
@@ -726,7 +732,7 @@ export class Auth {
     uiStore.setProgress();
     const { email } = authStore.CONFIRM_FRM.fields;
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.value,
+      Username: email.value.toLowerCase(),
       Pool: this.userPool,
     });
     return new Promise((res, rej) => {

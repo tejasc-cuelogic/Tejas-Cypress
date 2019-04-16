@@ -11,6 +11,12 @@ import TransferFundVerifyModal from './previewModel/TransferFundVerifyModal';
 class AvailableCashTransfer extends Component {
   render() {
     const { props } = this;
+    const cashMax = Math.max(Number(props.cash.replace(/[^0-9.-]+/g, '')), 0);
+    let cashDisp = '$0.00';
+    if (!Number.isNaN(cashMax)) {
+      cashDisp = Helper.CurrencyFormat(cashMax);
+    }
+
     return (
       <Aux>
         <Card fluid>
@@ -27,13 +33,15 @@ class AvailableCashTransfer extends Component {
                     />
                   </Statistic.Label>
                   <Statistic.Value>
-                    {props.cash ? Helper.MoneyMathDisplayCurrency(props.cash) : '$0.00'}
+                    {cashDisp}
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column floated="right" verticalAlign="middle" className="right-align">
-                <Button as={Link} to={`${props.match.url}/withdraw`} className={props.isAccountFrozen ? 'disabled' : ''} inverted color="green" content="Withdraw funds" />
-                <Button as={Link} to={`${props.match.url}/add`} className={props.isAccountFrozen ? 'disabled' : ''} primary content="Add funds" />
+                <Button.Group widths="2">
+                  <Button as={Link} to={`${props.match.url}/withdraw`} className={props.isAccountFrozen ? 'disabled' : ''} inverted color="green" content="Withdraw funds" />
+                  <Button as={Link} to={`${props.match.url}/add`} className={props.isAccountFrozen ? 'disabled' : ''} primary content="Add funds" />
+                </Button.Group>
               </Grid.Column>
             </Grid>
           </Card.Content>
