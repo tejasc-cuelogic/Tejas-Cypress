@@ -11,7 +11,7 @@ import { businessActions } from '../../../../../../services/actions';
 import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
 
 @withRouter
-@inject('businessStore', 'offeringCreationStore', 'uiStore')
+@inject('businessStore', 'offeringCreationStore', 'uiStore', 'commonStore', 'offeringsStore')
 @observer
 export default class EdgarFilingList extends Component {
   state = {
@@ -96,10 +96,22 @@ export default class EdgarFilingList extends Component {
         });
     }
   }
+  handleDocumentsLink = (e, { folderId }) => {
+    const { offer } = this.props.offeringsStore;
+    const params = {
+      id: folderId,
+      accountType: (get(offer, 'regulation') && get(offer, 'regulation').includes('BD')) ? 'SECURITIES' : 'SERVICES',
+      type: 'FOLDERS',
+    };
+    this.props.commonStore.getsharedLink(params).then((shareLink) => {
+      window.open(shareLink);
+    });
+  }
 
   render() {
     const offeringFilingList = this.props.offeringFilings;
     const offering = this.props.offeringDetails;
+    const { inProgress } = this.props.commonStore;
     const regulation = get(offering, 'regulation');
     const offeringRegulationArr = (regulation && regulation.split('_')) || '';
     const regulationType = get(offeringRegulationArr, '[0]');
@@ -125,14 +137,13 @@ export default class EdgarFilingList extends Component {
                       <Header as="h6">
                         {filing.filingFolderName}
                         <div className="actions pull-right">
-                          <a
-                            href={(`${BOX_URL_TO_CONSIDER}folder/${filing.folderId}`)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-link"
-                          >
-                            Documents
-                          </a>
+                          <Button
+                            content="Documents"
+                            className="link-button"
+                            loading={inProgress === filing.folderId}
+                            folderId={filing.folderId}
+                            onClick={this.handleDocumentsLink}
+                          />
                           <Button
                             color="red"
                             className="link-button"
