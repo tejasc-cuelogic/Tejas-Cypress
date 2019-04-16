@@ -116,9 +116,9 @@ mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $ci
   }`;
 
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($profileDetails: UserInfoInput!) {
+  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $targetUserId: String) {
   updateUserProfileData(
-  profileDetails: $profileDetails
+  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails
   ) {
       id
       info {
@@ -170,9 +170,9 @@ export const updateUserPhoneDetail = gql`
     }
   }`;
 
-export const isSsnExistQuery = gql`
-  query getSsnCollisionsample($ssn: String!) {
-    checkUserSSNCollision(ssn: $ssn) {
+export const isUniqueSSN = gql`
+  query isUniqueSSN($ssn: String!) {
+    isUniqueSSN(ssn: $ssn) {
       alreadyExists
     }
   }`;
@@ -205,9 +205,10 @@ export const verifyOtp = gql`
 `;
 
 export const requestOtpWrapper = gql`
-  mutation requestOTPWrapper($address: String!){
+  mutation requestOTPWrapper($address: String!, $firstName: String){
     requestOTPWrapper(
       address: $address
+      firstName: $firstName
     )
   }
 `;
@@ -232,12 +233,16 @@ export const checkMigrationByEmail = gql`
  }`;
 
 export const checkValidAddress = gql`
-  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!) {
+  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!, $streetTwo: String!) {
     checkValidInvestorAddress(
       street: $street,
       city: $city,
       state: $state,
-      zipCode: $zipCode
-    )
+      zipCode: $zipCode,
+      streetTwo: $streetTwo
+    ){
+      valid
+      message
+    }
   }
 `;

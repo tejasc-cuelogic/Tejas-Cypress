@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Accordion, Icon, List } from 'semantic-ui-react';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../../constants/common';
 
 @inject('educationStore')
 @observer
@@ -25,8 +26,10 @@ export default class AccList extends Component {
     return this.state.activeIndex === record.id || record.slug || ids.includes(currId);
   }
   render() {
+    const isDev = ['localhost', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     const {
-      match, data, module, marketing,
+      match, data, module,
+      marketing,
     } = this.props;
     const params = {
       subItems: module === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems',
@@ -69,7 +72,7 @@ export default class AccList extends Component {
             </Aux>
           ))
         }
-        {marketing &&
+        {isDev && marketing ?
           <Accordion.Title
             refItem="faq"
             onClick={this.toggleAction}
@@ -77,7 +80,7 @@ export default class AccList extends Component {
             to={`${match.url}/faq`}
           >
             FAQ
-          </Accordion.Title>
+          </Accordion.Title> : ''
         }
       </Accordion>
     );

@@ -1,7 +1,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { forEach } from 'lodash';
+import { forEach, sortBy, get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
@@ -18,6 +18,8 @@ export class PortfolioStore {
   @observable canceledInvestmentDetails = null;
   @observable PayOffData = null;
   @observable currentAcccountType = null;
+  @observable isAdmin = false;
+  @observable portfolioError = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -43,6 +45,7 @@ export class PortfolioStore {
         BREWERY_AND_BREWPUB: { name: 'Brewery and Brewpub', value: 0 },
         HEALTH_AND_WELLNESS: { name: 'Health and Wellness', value: 0 },
         FITNESS: { name: 'Fitness', value: 0 },
+        OFFICE: { name: 'Office', value: 0 },
         FASHION_AND_APPAREL: { name: 'Fashion and Apparel', value: 0 },
         COMMERCIAL_REAL_ESTATE: { name: 'Commercial Real Estate', value: 0 },
         OTHER: { name: 'Other', value: 0 },
@@ -58,6 +61,7 @@ export class PortfolioStore {
   getSummary = () => {
     this.accSummary = graphql({
       client,
+      fetchPolicy: 'network-only',
       query: getUserAccountSummary,
       variables: { userId: userStore.currentUser.sub },
     });
@@ -84,7 +88,7 @@ export class PortfolioStore {
     if (investmentData) {
       ['pending', 'active', 'completed'].forEach((field) => {
         investmentData.investments[field].forEach((ele) => {
-          if (ele.offering.keyTerms.securities && ele.offering.keyTerms.industry) {
+          if (get(ele, 'offering.keyTerms.securities') && get(ele, 'offering.keyTerms.industry')) {
             this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
             this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
           }
@@ -92,25 +96,29 @@ export class PortfolioStore {
       });
     }
     ['investmentType', 'industry'].forEach((field) => {
-      forEach(this.pieChartDataEval[field], (data) => {
+      forEach(this.pieChartDataEval[field], (data, key) => {
         if (data.value) {
-          this.pieChartData[field].push(data);
+          this.pieChartData[field].push({ ...data, key });
         }
       });
     });
   }
 
   @computed get summary() {
-    return (this.accSummary.data && toJS(this.accSummary.data.getUserAccountSummary)) || {};
+    const summary = get(this.accSummary, 'data.getUserAccountSummary');
+    return summary ? toJS(summary) : {};
   }
 
   getChartData = (type) => {
     const formattedData = [];
     const rawData = type === 'cashMovement' ? this.summary.cashMovement : (this.PayOffData.data && this.PayOffData.data.getMonthlyPaymentsToInvestorByOffering) || [];
     if (rawData) {
-      rawData.map((k) => {
+      sortBy(rawData, ['yearMonth']).map((k) => {
         formattedData.push({
-          name: moment(k.yearMonth).format('MMM YYYY'), Payment: k.payment, 'Paid to date': k.paidToDate,
+          name: moment(k.yearMonth).format('MMM YYYY'),
+          Payment: k.payment ? parseFloat(k.payment) : 0,
+          Invested: k.invested ? parseFloat(k.invested) : 0,
+          'Paid to date': k.paidToDate ? parseFloat(k.paidToDate) : 0,
         });
         return null;
       });
@@ -119,7 +127,7 @@ export class PortfolioStore {
   }
 
   @computed get summaryLoading() {
-    return this.accSummary.loading;
+    return get(this.accSummary, 'loading') || false;
   }
 
   @computed get getPieChartData() {
@@ -129,22 +137,32 @@ export class PortfolioStore {
   @action
   getInvestorAccountPortfolio = (accountType) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
+      userDetailsStore.currentActiveAccountDetails;
+    const { userDetails, getDetailsOfUser } = userDetailsStore;
     this.investmentLists = graphql({
       client,
       query: getInvestorAccountPortfolio,
       variables: {
-        userId: userDetails.id,
+        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
         accountId: (account && account.details) ? account.details.accountId : null,
       },
       // fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data) {
+        if (data && this.investmentLists && !this.investmentLists.loading) {
           this.calculateInvestmentType();
+          this.portfolioError = false;
         }
       },
+      onError: () => {
+        this.portfolioError = true;
+      },
     });
+  }
+
+  @action
+  setPortfolioError = (val) => {
+    this.portfolioError = val;
   }
 
   @computed get getInvestorAccounts() {
@@ -180,7 +198,9 @@ export class PortfolioStore {
         offeringId,
       },
       onFetch: () => {
-        resolve();
+        if (!this.investmentDetails.loading) {
+          resolve();
+        }
       },
       fetchPolicy: 'network-only',
     });
@@ -240,6 +260,10 @@ export class PortfolioStore {
   @action
   currentAccoutType = (type) => {
     this.currentAcccountType = type;
+  }
+  @action
+  resetPortfolioData = () => {
+    this.setFieldValue('investmentLists', null);
   }
 }
 

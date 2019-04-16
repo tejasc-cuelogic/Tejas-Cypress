@@ -3,47 +3,49 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
-import Firework from './FireworkAnimation';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @withRouter
 @observer
 export default class Congratulation extends React.Component {
-  state = {
-    showFireworks: false,
-  }
   componentWillMount() {
     if (this.props.changeInvestment) {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
     } else {
-      this.setState({ showFireworks: true });
+      this.props.campaignStore.setFieldValue('showFireworkAnimation', true);
     }
   }
   handleCloseModal = () => {
+    this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push('overview');
+  }
+  handleCloseModalWithRefferalLink = () => {
+    this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.history.push('/app/referrals');
   }
   render() {
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const { investmentAmount } = this.props.investmentStore;
+    const { investmentAmount, investAccTypes } = this.props.investmentStore;
     const { campaign } = this.props.campaignStore;
+    const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
+    const accountRedirectURL = accountType && accountType !== '-' ? `/app/account-details/${accountType}/portfolio` : '/app/summary';
     setTimeout(() => {
       if (this.props.changeInvestment) {
         this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
       } else {
-        this.setState({ showFireworks: false });
+        this.props.campaignStore.setFieldValue('showFireworkAnimation', false);
       }
     }, 8500);
     return (
       <Aux>
-        {this.state.showFireworks &&
-        <Firework />
-        }
         <Modal open closeIcon closeOnRootNodeClick={false} onClose={this.handleCloseModal}>
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>
             <Header as="h3">
-              You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount)}</span> in
+              You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span> in
               {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                     getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
             </Header>
@@ -57,12 +59,12 @@ export default class Congratulation extends React.Component {
             <div className="center-align">
               <Button
                 primary
-                onClick={this.handleCloseModal}
+                onClick={this.handleCloseModalWithRefferalLink}
               >Give $20 & Get $20
               </Button>
             </div>
             <Divider hidden />
-            <Link to="/app/summary" className="text-link">
+            <Link to={accountRedirectURL} className="text-link">
               <Icon className="ns-arrow-right" color="green" />
               Go to My Accounts
             </Link>

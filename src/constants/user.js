@@ -8,13 +8,13 @@ export const USER_ROLES = [
 
 export const USER_TYPES_META = [
   {
-    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue',
+    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Open an investment account', exclude: ['applynow'],
   },
   {
-    key: 'o', icon: 'ns-business', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business',
+    key: 'o', icon: 'ns-business', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business', exclude: [],
   },
   {
-    key: 'bo', icon: 'ns-appartment', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding',
+    key: 'bo', icon: 'ns-appartment', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding', exclude: [],
   },
 ];
 
@@ -38,6 +38,7 @@ export const FILTER_META = {
     { text: 'Entity', value: 'ENTITY' },
   ],
   accountStatus: [
+    { text: 'Select Status', key: '', value: '' },
     { text: 'Partial', value: 'PARTIAL' },
     { text: 'Basic', value: 'BASIC' },
     { text: 'Full', value: 'FULL' },
@@ -79,6 +80,8 @@ export const FILTER_META = {
       { label: 'Unstashed', value: 'UNSTASH', applicable: ['in-progress'] },
       { label: 'Stashed', value: 'STASH', applicable: ['in-progress'] },
       { label: 'Deleted', value: 'DELETED', applicable: ['prequal-failed', 'in-progress', 'completed'] },
+      { label: 'NS Declined', value: 'REVIEW_FAILED', applicable: ['completed'] },
+      { label: 'Issuer Declined', value: 'ISSUER_DECLINED', applicable: ['completed'] },
     ],
   },
   activityType: [
@@ -86,17 +89,33 @@ export const FILTER_META = {
     { text: 'Activity', value: ACTIVITY_HISTORY_TYPES.ACTIVITY },
     { text: 'Upload', value: ACTIVITY_HISTORY_TYPES.UPLOAD },
     { text: 'Rating', value: ACTIVITY_HISTORY_TYPES.RATING },
-    // { text: 'Cf limit', value: ACTIVITY_HISTORY_TYPES.CF_LIMIT },
-    // { text: 'Accreditation', value: ACTIVITY_HISTORY_TYPES.ACCREDITATION },
+    { text: 'Cf limit', value: ACTIVITY_HISTORY_TYPES.CF_LIMIT },
+    { text: 'Accreditation', value: ACTIVITY_HISTORY_TYPES.ACCREDITATION },
     { text: 'Access', value: ACTIVITY_HISTORY_TYPES.ACCESS },
     { text: 'Admin Activity', value: ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY },
     { text: 'MFA', value: ACTIVITY_HISTORY_TYPES.MFA },
-    { text: 'Profile Update', value: ACTIVITY_HISTORY_TYPES.PROFILE_UPDATE },
+    { text: 'Migration', value: ACTIVITY_HISTORY_TYPES.MIGRATION },
+    { text: 'Prequalication', value: ACTIVITY_HISTORY_TYPES.PREQUAL },
+    { text: 'Account', value: ACTIVITY_HISTORY_TYPES.ACCOUNT },
+    { text: 'Offer', value: ACTIVITY_HISTORY_TYPES.OFFER },
+    { text: 'Offering', value: ACTIVITY_HISTORY_TYPES.OFFERING },
+    { text: 'Creation', value: ACTIVITY_HISTORY_TYPES.CREATION },
+    { text: 'Live', value: ACTIVITY_HISTORY_TYPES.LIVE },
+    { text: 'Elastic Search Job Id', value: ACTIVITY_HISTORY_TYPES.ES_JOBID },
   ],
   activityUserType: [
-    { text: 'Admin', value: ACTIVITY_HISTORY_SCOPE.ADMIN },
-    // { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER },
-    { text: 'Investor', value: ACTIVITY_HISTORY_SCOPE.INVESTOR },
+    { text: 'None', value: null, applicable: [] },
+    { text: 'Admin', value: ACTIVITY_HISTORY_SCOPE.ADMIN, applicable: [] },
+    { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER, applicable: [] },
+    { text: 'Investor', value: ACTIVITY_HISTORY_SCOPE.INVESTOR, applicable: [] },
+    { text: 'Dev', value: ACTIVITY_HISTORY_SCOPE.DEV, applicable: [] },
+  ],
+  subType: [
+    { text: 'None', value: null },
+    { text: 'Users', value: 'USERS' },
+    { text: 'Linked Bank', value: 'LINKED_BANK' },
+    { text: 'Acceditation', value: 'ACCREDITATION' },
+    { text: 'CrowdPay', value: 'CROWDPAY' },
   ],
 };
 
@@ -125,7 +144,7 @@ export const NEW_USER = {
     value: '', label: 'Email address', error: undefined, rule: 'required|email',
   },
   TemporaryPassword: {
-    value: '', label: 'Temporary Password', error: undefined, rule: 'required|min:8|max:15',
+    value: '', label: 'Temporary Password', error: undefined, rule: 'required|min:8|max:40',
   },
   verifyPassword: {
     value: '', label: 'Verify Password', error: undefined, rule: 'required|same:TemporaryPassword',

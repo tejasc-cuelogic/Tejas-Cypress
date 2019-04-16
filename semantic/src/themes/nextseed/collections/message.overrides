@@ -19,7 +19,7 @@
         text-align:center;
         padding-top:@26px;
         padding-bottom:@26px;
-        margin:@40px -@42px -@20px;
+        margin:@40px -@28px -@20px;
         box-shadow:0 -3px 0 @highlight-primary inset;
     }
 }

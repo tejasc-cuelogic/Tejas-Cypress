@@ -4,8 +4,11 @@ import { inject, observer } from 'mobx-react';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
+import Helper from '../../../helper/utility';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('authStore', 'uiStore')
 @observer
@@ -13,6 +16,9 @@ export default class ResetPassword extends Component {
   componentWillMount() {
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
+  }
+  componentDidMount() {
+    Helper.otpShield();
   }
   componentWillUnmount() {
     this.props.authStore.resetForm('RESET_PASS_FRM');
@@ -49,7 +55,10 @@ export default class ResetPassword extends Component {
                 type="number"
                 filterChars
                 name="code"
+                autoFocus={!isMobile}
                 className="otp-field mt-10"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={RESET_PASS_FRM.fields.code}
                 onChange={resetPassChange}
               />

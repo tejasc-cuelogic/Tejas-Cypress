@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Table, Divider, Popup, Icon, Modal, Form, Header } from 'semantic-ui-react';
+// import { Button, Table, Popup, Icon, Modal, Form, Header } from 'semantic-ui-react';
+import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
+import { ListErrors } from '../../../../../theme/shared';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore')
+@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'uiStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
@@ -13,14 +15,19 @@ class ChangeInvestmentLimit extends Component {
     this.props.investmentStore.setInvestmentLimitData();
   }
   changeInvestmentLimit = () => {
-    this.props.investmentStore.updateInvestmentLimits().then(() => {
+    const { uiStore } = this.props;
+    uiStore.setProgress();
+    const offeringId =
+      this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
+    this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
       Helper.toast('Investment limit changed successfully.', 'success');
+      this.handleCloseModal();
     });
-    this.handleCloseModal();
   }
   handleCloseModal = () => {
     if (this.props.changeInvestment) {
-      this.props.history.push(`${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`);
+      const redirectPath = this.props.match.url.includes('agreement') ? `${this.props.refLink}/${this.props.match.params.offeringId}/agreement` : `${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`;
+      this.props.history.push(redirectPath);
     } else {
       this.props.history.push(this.props.refLink);
     }
@@ -32,95 +39,56 @@ class ChangeInvestmentLimit extends Component {
     this.forceUpdate();
   }
   render() {
+    const errors = false;
+    const { inProgress } = this.props.uiStore;
     const {
       INVESTMENT_LIMITS_FORM,
       changedInvestmentLimit,
     } = this.props.investmentStore;
+    const { fields } = INVESTMENT_LIMITS_FORM;
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal}>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h3">Update Investment limits</Header>
+          <Divider />
+          <p>
+            Ensure that your 12-month Investment Limit for Regulation Crowdfunding is up to date
+            by providing your most recent Annual Income and Net Worth.&nbsp;
+            <Link target="_blank" to="/app/resources/faq">See FAQ on how your investment limit is calculated</Link>
+          </p>
+        </Modal.Header>
         <Modal.Content>
-          <Header as="h3" textAlign="center">Update your investment limits</Header>
-          <Form>
-            <Table basic="very" className="confirm-transfer-table mt-30" compact>
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell>
-                    Net Worth
-                    <Popup
-                      wide
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="Includes your total assets minus your liabilities. Does not include the value of your primary residence"
-                      position="top center"
-                    />
-                  </Table.Cell>
-                  <Table.Cell width={5} textAlign="right">
-                    <MaskedInput
-                      name="netWorth"
-                      fielddata={INVESTMENT_LIMITS_FORM.fields.netWorth
-                        ? INVESTMENT_LIMITS_FORM.fields.netWorth : 0}
-                      changed={(values, name) => this.change(values, name)}
-                      prefix="$"
-                      currency
-                      hidelabel
-                    />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    Annual Income:
-                    <Popup
-                      wide
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="Includes your earned income, your spouse's income and ancillary sources of income (including from side jobs, rental income and capital gains)."
-                      position="top center"
-                    />
-                  </Table.Cell>
-                  <Table.Cell textAlign="right">
-                    <MaskedInput
-                      name="annualIncome"
-                      fielddata={INVESTMENT_LIMITS_FORM.fields.annualIncome
-                        ? INVESTMENT_LIMITS_FORM.fields.annualIncome : 0}
-                      changed={(values, name) => this.change(values, name)}
-                      prefix="$"
-                      currency
-                      hidelabel
-                    />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>Other Reg CF Investments:</Table.Cell>
-                  <Table.Cell textAlign="right">
-                    <MaskedInput
-                      name="cfInvestments"
-                      fielddata={INVESTMENT_LIMITS_FORM.fields.cfInvestments
-                        ? INVESTMENT_LIMITS_FORM.fields.cfInvestments : 0}
-                      changed={(values, name) => this.change(values, name)}
-                      prefix="$"
-                      currency
-                      hidelabel
-                    />
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-              <Table.Footer>
-                <Table.Row>
-                  <Table.HeaderCell>Your Investment Limit:</Table.HeaderCell>
-                  <Table.HeaderCell textAlign="right" className="positive-text">{Helper.CurrencyFormat(changedInvestmentLimit)}</Table.HeaderCell>
-                </Table.Row>
-              </Table.Footer>
-            </Table>
-            <Divider hidden />
-            <p className="center-align mb-40">
-              By clicking the “Confirm” button, I authorize the transfer from
-              my <Link to={this.props.match.url}>Banco do Brasil account (x-1923)</Link>
-              to my NextSeed account in the amount equal to the Transfer Requested above.
-              I understand this transfer will
-              be <Link to={this.props.match.url}>initiated within 1 business day</Link>.
-            </p>
-            <div className="center-align">
+          <Statistic size="tiny">
+            <Statistic.Label>Estimated investment limit</Statistic.Label>
+            <Statistic.Value>{Helper.CurrencyFormat(changedInvestmentLimit, 0)}</Statistic.Value>
+          </Statistic>
+          <Divider clearing hidden />
+          <Form error onSubmit={this.submit}>
+            {fields &&
+              ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
+                <MaskedInput
+                  key={field}
+                  name={field}
+                  currency
+                  prefix="$ "
+                  value={fields[field].value}
+                  fielddata={fields[field]}
+                  allowNegative={false}
+                  // changed={maskingFieldChange}
+                  changed={(values, name) => this.change(values, name)}
+                // onblur={investmentCalculate}
+                />
+              ))
+            }
+            {errors &&
+              <Message error className="mt-30">
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
+            <div className="center-align mt-30">
               <Button.Group>
-                <Button primary content="Update" onClick={this.changeInvestmentLimit} />
                 <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
+                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTMENT_LIMITS_FORM.meta.isValid} onClick={this.changeInvestmentLimit} />
               </Button.Group>
             </div>
           </Form>

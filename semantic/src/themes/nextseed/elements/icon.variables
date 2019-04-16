@@ -190,10 +190,12 @@
 @ns-franchise: "\e95b";
 @ns-freeze: "\e98a";
 @ns-fullscreen: "\e991";
+@ns-hamburger: "\e99c";
 @ns-help: "\e949";
 @ns-help-circle: "\e926";
 @ns-home-line: "\e97e";
 @ns-hospitality: "\e953";
+@ns-hospitality-2: "\e99a";
 @ns-image: "\e927";
 @ns-individual: "\e941";
 @ns-individual-line: "\e94e";
@@ -216,6 +218,7 @@
 @ns-no-view: "\e999";
 @ns-off-shoot-business: "\e960";
 @ns-offering: "\e92e";
+@ns-other: "\e99b";
 @ns-paper-plane: "\e961";
 @ns-partnership: "\e962";
 @ns-pdf: "\e92f";

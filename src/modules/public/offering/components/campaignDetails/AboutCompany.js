@@ -10,6 +10,7 @@ import CompanyHistory from './AboutCompany/CompanyHistory';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
+const topsAsPerWindowheight = window.innerHeight > 1000 ? 550 : 200;
 
 @inject('campaignStore', 'navStore')
 @observer
@@ -34,8 +35,12 @@ class AboutCompany extends Component {
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
-    ['company-description', 'business-model', 'location-analysis', 'team', 'history'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < 50) {
+    ['company-description', 'business-model', 'location-analysis', 'history', 'team'].forEach((item) => {
+      if (item === 'business-model' || item === 'company-description') {
+        console.log(item, document.getElementById(item).getBoundingClientRect().top);
+      }
+      if (document.getElementById(item).getBoundingClientRect().top <= topsAsPerWindowheight &&
+        document.getElementById(item).getBoundingClientRect().top >= -1) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
       }
     });
@@ -55,13 +60,13 @@ class AboutCompany extends Component {
           campaign={campaign}
         />
         <Divider hidden section />
+        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
+        <Divider hidden section />
         <MeetOurTeam
           campaign={campaign}
           emptyStatement={emptyStatement}
           meetOurTeamUrl={this.props.match.url}
         />
-        <Divider hidden section />
-        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
       </div>
     );
   }

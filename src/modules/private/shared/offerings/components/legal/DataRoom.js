@@ -1,15 +1,17 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Divider, Icon, Confirm } from 'semantic-ui-react';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
 
-const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName }) => {
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
+const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
   return (
     <div className="row-wrap">
       <div className="balance-half simple-drag-row-title">
+        <DragHandle />
         <FormInput
           displayMode={isReadonly}
           name="name"
@@ -32,10 +34,10 @@ const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, o
         />
       </div>
       <div className="action">
-        <Button icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
+        <Button disabled={isReadonly} icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
           <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => handleLockUnlock(docIndx)} />
         </Button>
-        <Button icon circular className="link-button">
+        <Button disabled={isReadonly || length === 1} icon circular className="link-button">
           <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
         </Button>
       </div>
@@ -58,6 +60,7 @@ const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onF
           handleLockUnlock={handleLockUnlock}
           toggleConfirmModal={toggleConfirmModal}
           formName={formName}
+          length={docs.length}
           index={index}
         />
       ))}
@@ -69,9 +72,10 @@ const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onF
 @observer
 export default class DataRoom extends Component {
   componentWillMount() {
-    if (!this.props.offeringCreationStore.initLoad.includes('DATA_ROOM_FRM')) {
-      this.props.offeringCreationStore.setFormData('DATA_ROOM_FRM', 'legal.dataroom');
-    }
+    const { setFormData } = this.props.offeringCreationStore;
+    setFormData('DATA_ROOM_FRM', 'legal.dataroom');
+    setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
   onFileDrop = (files, name, index) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DATA_ROOM_FRM', 'documents', name, files, 'DOCUMENTS_LEGAL_DATAROOM', index, true);
@@ -95,9 +99,11 @@ export default class DataRoom extends Component {
     const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
   }
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const docs = [...this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents];
-    this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex));
+  onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {
+    if (!isReadonly) {
+      const docs = [...this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents];
+      this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex));
+    }
   };
   render() {
     const { match } = this.props;
@@ -124,9 +130,11 @@ export default class DataRoom extends Component {
         <Form>
           <Header as="h4">
             Data Room Documents
-            <Button.Group size="mini" floated="right">
-              <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
-            </Button.Group>
+            {!isReadonly &&
+              <Button.Group size="mini" floated="right">
+                <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
+              </Button.Group>
+            }
           </Header>
           <Divider hidden />
           <div className="ui basic compact table form-table">
@@ -138,7 +146,7 @@ export default class DataRoom extends Component {
             <SortableList
               docs={docs}
               pressDelay={100}
-              onSortEnd={this.onSortEnd}
+              onSortEnd={(e) => this.onSortEnd(e, isReadonly)}
               formArrayChange={formArrayChange}
               isReadonly={isReadonly}
               onFileDrop={this.onFileDrop}
@@ -147,6 +155,7 @@ export default class DataRoom extends Component {
               toggleConfirmModal={this.toggleConfirmModal}
               formName={formName}
               lockAxis="y"
+              useDragHandle
             />
           </div>
           <Divider hidden />

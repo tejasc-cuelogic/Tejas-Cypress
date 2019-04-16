@@ -33,10 +33,25 @@ export const ACTIVITY_HISTORY_TYPES = {
   ADMIN_ACTIVITY: 'ADMIN_ACTIVITY',
   MFA: 'MFA',
   PROFILE_UPDATE: 'PROFILE_UPDATE',
+  MIGRATION: 'MIGRATION',
+  PREQUAL: 'PREQUAL',
+  ACCOUNT: 'ACCOUNT',
+  OFFER: 'OFFER',
+  OFFERING: 'OFFERING',
+  CREATION: 'CREATION',
+  LIVE: 'LIVE',
+  ES_JOBID: 'ES_JOBID',
 };
 
 export const ACTIVITY_HISTORY_SCOPE = {
   ADMIN: 'ADMIN',
   ISSUER: 'ISSUER',
   INVESTOR: 'INVESTOR',
+  DEV: 'DEV',
 };
+
+export const SAASQUATCH_TENANT_ALIAS = process.env.REACT_APP_SAASQUATCH_TENANT_ALIAS;
+
+export const FROALA_EDITOR_LICENSE = process.env.REACT_APP_FROALA_API_KEY_NEW;
+
+export const userIdleTime = ['production', 'prod', 'master'].includes(process.env.REACT_APP_DEPLOY_ENV) ? (1000 * 60 * 60 * 1) : (1000 * 60 * 60 * 12);

@@ -1,10 +1,15 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, reduce, get } from 'lodash';
+import { pickBy, get, filter } from 'lodash';
+import money from 'money-math';
+import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
+import { userDetailsStore } from '../../index';
+import uiStore from '../shared/uiStore';
 
 export class CampaignStore {
   @observable data = [];
@@ -18,6 +23,13 @@ export class CampaignStore {
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
   @observable gallarySelectedImageIndex = null;
   @observable docsWithBoxLink = [];
+  @observable investmentDetailsSubNavs = [];
+  @observable totalPayment = 0;
+  @observable principalAmt = 0;
+  @observable totalPaymentChart = [];
+  @observable showFireworkAnimation = false;
+  @observable earlyBirdCheck = null;
+  @observable isInvestBtnClicked = false;
 
 
   @action
@@ -39,7 +51,7 @@ export class CampaignStore {
           query: referralCode ? getOfferingsReferral : allOfferings,
           variables: { filters },
           onFetch: (data) => {
-            if (data) {
+            if (data && !this.data.loading) {
               const offering = data.getOfferingList.length && data.getOfferingList[0];
               resolve(offering);
             }
@@ -65,7 +77,7 @@ export class CampaignStore {
       query: getOfferingById,
       variables: { id },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.details.loading) {
           resolve(data.getOfferingDetailsBySlug);
         }
       },
@@ -75,6 +87,11 @@ export class CampaignStore {
 
   @computed get allData() {
     return this.data;
+  }
+
+  @computed get getEarlyBirdCheck() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.data &&
+    this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
   }
 
   @computed get OfferingList() {
@@ -124,6 +141,36 @@ export class CampaignStore {
 
   @computed get getOfferingId() {
     return (this.campaign && this.campaign.id);
+  }
+
+  @action
+  isEarlyBirdExist(accountType) {
+    const offeringId = this.getOfferingId;
+    uiStore.setProgress();
+    userDetailsStore.setFieldValue('currentActiveAccount', accountType);
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountId = get(account, 'details.accountId') || null;
+    this.earlyBirdCheck =
+    graphql({
+      client,
+      query: checkIfEarlyBirdExist,
+      variables: { offeringId, accountId },
+      onFetch: (data) => {
+        if (data && !this.earlyBirdCheck.loading) {
+          uiStore.setProgress(false);
+        }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
+      },
+    });
+  }
+
+  @computed
+  get earlyBirdRewards() {
+    const currentCampagin = this.campaign;
+    const rewards = get(currentCampagin, 'bonusRewards') || [];
+    return filter(rewards, br => br.earlyBirdQuantity);
   }
 
   @computed get loading() {
@@ -176,6 +223,15 @@ export class CampaignStore {
   @action
   updateDocs = ele => this.docsWithBoxLink.push(ele);
 
+   getIndexValue = vale => this.campaign.legal.dataroom.documents
+      && this.campaign.legal.dataroom.documents
+        .findIndex(x => x.upload.fileId === vale);
+
+  @computed get sortedDocswithBoxLink() {
+     return this.docsWithBoxLink.sort((a, b) =>
+       (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
+   }
+
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
@@ -186,27 +242,52 @@ export class CampaignStore {
   });
   @computed get navCountData() {
     const res = { updates: 0, comments: 0 };
+    let sum = 0;
     if (this.campaign) {
       const { updates, comments } = this.campaign;
       res.updates = updates && updates.length ? updates.length : 0;
       // eslint-disable-next-line arrow-body-style
-      res.comments = reduce(comments, (sum, c) => {
-        console.log('name', get(c, 'createdUserInfo.roles[0].name'));
-        return (c.scope === 'PUBLIC' && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved)) ? (sum + 1) : sum);
-      }, 0);
+      if (comments) {
+        comments.map((c) => {
+          if (c.scope === 'PUBLIC' &&
+          ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
+            (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+            sum = sum + 1 + (get(c, 'threadComment.length') || 0);
+          }
+          return null;
+        });
+      }
     }
+    res.comments = sum;
     return res;
   }
 
   @computed get offerStructure() {
-    const { selectedOffer, keyTerms } = this.campaign;
-    let offerStructure = '';
-    if (selectedOffer && selectedOffer.structure !== '') {
-      offerStructure = selectedOffer.structure;
-    } else {
-      offerStructure = keyTerms.securities;
-    }
-    return offerStructure;
+    return get(this.campaign, 'keyTerms.securities') || '';
+  }
+
+  @action
+  calculateTotalPaymentData = (amt = 0) => {
+    const ranges = [100, 500, 1000, 5000, 10000, 25000, 50000];
+    this.principalAmt = ranges[amt];
+    const data = {
+      method: 'mortgage',
+      apr: parseFloat(get(this.campaign, 'keyTerms.interestRate')) || 0,
+      balance: this.principalAmt || 0,
+      loanTerm: parseFloat(get(this.campaign, 'keyTerms.maturity')) || 0,
+    };
+    const { totalPayment, schedule } = Calculator.calculate(data);
+    this.totalPayment = money.floatToAmount(totalPayment || '', 2);
+    const payChart = [];
+    let totalPaid = 0;
+    schedule.forEach((item, index) => {
+      totalPaid = totalPaid + item.interest + item.principal;
+      payChart.push({
+        month: index + 1,
+        'Projected total payment': money.floatToAmount(totalPaid, 2),
+      });
+    });
+    this.totalPaymentChart = payChart;
   }
 }
 

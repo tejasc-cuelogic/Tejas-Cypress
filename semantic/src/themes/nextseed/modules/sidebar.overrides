@@ -28,6 +28,9 @@
 				min-height:auto;
 				height:auto;
 				background-color: transparent;
+				&.noheader{
+					padding-top: 0;
+				}
 			}
 			&.dimmed {
 				overflow: hidden;
@@ -165,6 +168,10 @@
 						.item{
 							padding:@8px @16px @8px @42px !important;
 							color:@tertiary-text !important;
+							font-weight: @normal !important;
+							&:hover, &:focus, &.active, &.active:hover{
+								font-weight: @fontMedium !important;
+							}
 						}
 					}
 				}
@@ -224,7 +231,7 @@
 		width:260px;
 		padding-bottom:@18px;
 		.ui.image.logo{
-			margin-left:0;
+			margin-left:@12px;
 		}
 		.ns-close-light{
 			position:absolute;
@@ -239,7 +246,7 @@
 			>img, .sb-avatar{
 				float:left;
 				max-width:42px;
-				margin:-@7px @10px 0 0;
+				margin:-@4px @10px 0 0;
 			}
 			.sb-avatar{
 				height:42px;
@@ -258,11 +265,11 @@
 		// 	margin-left:-@13px;
 		// 	margin-right:-@13px;
 		// }
-		~.pusher .icon.hamburger{
-			font-size:@20px;
+		~.pusher .icon.ns-hamburger{
+			font-size:@16px;
 			color:@white;
 			position:absolute;
-			top:20px;
+			top:18px;
 			left:18px;
 			z-index:1;
 			&:hover, &:active, &:focus{
@@ -272,7 +279,7 @@
 		&.public-sidebar {
 			padding-bottom: 0;
 			.ns-close-light {
-				top: 20px;
+				top: 16px;
 				z-index: 1;			
 			}
 		}
@@ -300,7 +307,7 @@
 		}
 		h3{
 			margin:@5px 0 0;
-			font-size:@14px;
+			font-size:@14px !important;
 			font-weight:@fontMedium;
 			color:@border-color;
 		}
@@ -322,9 +329,27 @@
 			text-overflow:ellipsis;
 		}
 	}
-	&.visible .user-picture{
-		&:hover{
+	&.visible {
+		.user-picture:hover{
 			background-color:@neutral-offwhite;
+		}
+		~ a.add-account{
+			@media only screen and (max-width : @largestSmallMonitor){
+				width: 260px;
+				visibility: visible;
+				transition: all .5s ease;
+				transform: translate3d(0,0,0);
+				> .icon{
+					display:block;
+					transition: all .5s ease;
+					transform: translate3d(0,0,0);
+				}
+				>span{
+					display:block;
+					transition: all .5s ease;
+					transform: translate3d(0,0,0);
+				}
+			}
 		}
 	}
 	~ a.add-account{
@@ -353,6 +378,17 @@
 			overflow:hidden;
 			white-space:nowrap;
 			text-overflow:ellipsis;
+		}
+		@media only screen and (max-width : @largestSmallMonitor){
+			width: 0;
+			bottom: @10px;
+			visibility: hidden;
+			> .icon{
+				display:none;
+			}
+			>span{
+				display:none;
+			}
 		}
 	}
 	~ .ui.button.collapseIcon{
@@ -390,10 +426,8 @@
 	.user-picture{
 		color:@white;
 	}
-	&.visible .user-picture{
-		&:hover{
-			background-color:@neutral;
-		}
+	&.visible .user-picture:hover{
+		background-color:@neutral;
 	}
 	.item{
 		&:hover, &:focus, &.active, &.active:hover{

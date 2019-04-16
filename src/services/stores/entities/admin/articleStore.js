@@ -9,8 +9,8 @@ import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES } from '../../../constants/admin/article';
-import { allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
-import { getCategoryList } from '../../queries/categoryArticle';
+import { allInsightArticles, getArticleDetails, getArticleDetailsBySlug, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
+import { getCategories } from '../../queries/category';
 
 export class ArticleStore {
     @observable data = [];
@@ -18,7 +18,7 @@ export class ArticleStore {
     @observable article = null;
     @observable ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
     @observable featuredData = [];
-    @observable featuredCategoryId = 'a25924d6-8136-4514-aee7-1ad8d78bb609';
+    @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
     @observable filters = false;
     @observable requestState = {
       search: {},
@@ -53,9 +53,14 @@ export class ArticleStore {
     }
 
     @action
-    requestAllArticles = (isPublic = true) => {
+    requestAllArticles = (isPublic = true, sortAsc = false, categoryId = null) => {
       const apiClient = isPublic ? clientPublic : client;
-      this.data = graphql({ client: apiClient, query: allInsightArticles });
+      this.data = graphql({
+        client: apiClient,
+        query: allInsightArticles,
+        fetchPolicy: 'network-only',
+        variables: { sortByCreationDateAsc: sortAsc, categoryId },
+      });
     }
 
     @action
@@ -72,7 +77,7 @@ export class ArticleStore {
         query,
         variables: { id },
         onFetch: (res) => {
-          if (!isPublic) {
+          if (!isPublic && res) {
             Object.keys(this.ARTICLE_FRM.fields).map((key) => {
               this.ARTICLE_FRM.fields[key].value = res.insightsArticle[key];
               return null;
@@ -94,20 +99,32 @@ export class ArticleStore {
             { ...{ payload: data }, id },
         });
     }
+
+    @action
     featuredRequestArticlesByCategoryId = () => {
       const id = this.featuredCategoryId;
       this.featuredData =
-        graphql({ client, query: getArticlesByCatId, variables: { id } });
+        graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
     }
 
     @action
     getArticle = (id) => {
-      this.article = graphql({ client, query: getArticleDetails, variables: { id } });
+      this.article = graphql({ client: clientPublic, query: getArticleDetails, variables: { id } });
+    }
+
+    @action
+    getArticleDetailsBySlug = (slug) => {
+      this.article = graphql({
+        client: clientPublic,
+        query: getArticleDetailsBySlug,
+        variables: { slug },
+      });
     }
 
     @computed get InsightArticles() {
       return (this.data.data && (toJS(this.data.data.insightsArticles)
-        || toJS(this.data.data.insightArticlesByCategoryId))) || [];
+        || toJS(this.data.data.insightArticlesByCategoryId)
+        || toJS(this.data.data.getInsightsArticles))) || [];
     }
     @computed get InsightFeaturedArticles() {
       return (this.featuredData.data && (toJS(this.featuredData.data.insightsArticles)
@@ -115,7 +132,7 @@ export class ArticleStore {
     }
 
     @computed get ArticlesDetails() {
-      return (this.article.data && toJS(this.article.data.insightsArticleById)) || null;
+      return (this.article.data && toJS(this.article.data.insightArticleBySlug)) || null;
     }
 
     @computed get articleLoading() {
@@ -123,11 +140,12 @@ export class ArticleStore {
     }
 
     @action
-    getCategoryList = () => {
+    getCategoryList = (isPublic = true) => {
+      const apiClient = isPublic ? clientPublic : client;
       this.Categories = graphql({
-        client: clientPublic,
-        query: getCategoryList,
-        variables: { categoryType: 'INSIGHTS' },
+        client: apiClient,
+        query: getCategories(isPublic),
+        variables: { types: ['INSIGHTS'] },
         fetchPolicy: 'network-only',
       });
     }
@@ -159,8 +177,8 @@ export class ArticleStore {
     @action
     maskChange = (values, field) => {
       if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
-          moment(values.formattedValue).add(1, 'day').toISOString();
+        const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString() :
+          moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
         this.setInitiateSrch(field, isoDate);
       } else {
         this.setInitiateSrch(field, values.value);

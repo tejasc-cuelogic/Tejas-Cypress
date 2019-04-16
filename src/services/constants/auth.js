@@ -13,7 +13,7 @@ export const COMMON = {
     value: '',
     label: 'Password',
     placeHolder: 'Type your password',
-    rule: 'required|min:8|max:15',
+    rule: 'required|min:8|max:40',
     error: undefined,
     customErrors: {
       required: '* required field.',
@@ -38,6 +38,7 @@ export const COMMON = {
     key: 'verify',
     customErrors: {
       required: '* required field.',
+      same: 'The Password and Verify Password fields must match.',
     },
   },
 };
@@ -51,6 +52,16 @@ export const CONFIRM = {
   email: { ...COMMON.email },
   password: { ...COMMON.password },
   code: { ...COMMON.code },
+  givenName: {
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    label: 'First Name',
+    placeHolder: 'First Name',
+    customErrors: {
+      required: '* required field.',
+    },
+  },
 };
 
 export const SIGNUP = {
@@ -90,18 +101,21 @@ export const CHANGE_PASS = {
     value: '',
     error: undefined,
     label: 'Old Password',
-    rule: 'required|min:8',
+    rule: 'required|min:8|max:40',
   },
   newPasswd: {
     value: '',
     label: 'New Password',
-    rule: 'required|min:8',
+    rule: 'required|min:8|max:40',
   },
   retypePasswd: {
     value: '',
     label: 'Confirm New Password',
     error: undefined,
     rule: 'required|same:newPasswd',
+    customErrors: {
+      same: 'The Confirm New Password and New Password fields must match.',
+    },
   },
 };
 
@@ -117,12 +131,12 @@ export const RESET_PASS = {
 };
 
 export const NEWSLETTER = {
-  name: {
+  subscriberName: {
     value: '',
     error: undefined,
     rule: 'required',
     label: 'Name',
     placeHolder: 'Name',
   },
-  email: { ...COMMON.email },
+  emailAddress: { ...COMMON.email },
 };

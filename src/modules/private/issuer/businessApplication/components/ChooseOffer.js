@@ -32,6 +32,7 @@ export default class ChooseOffer extends Component {
       this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
     });
   }
+  declineApplication = () => this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers/decline`);
   module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = () => {
     this.props.history.push('/app/dashboard');
@@ -47,8 +48,8 @@ export default class ChooseOffer extends Component {
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
-      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, selectedOfferIndex,
-      offerLoading, fetchBusinessApplicationOffers,
+      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex,
+      selectedOfferIndex, offerLoading, fetchBusinessApplicationOffers,
     } = businessAppReviewStore;
     const navItems = [
       { title: 'General Conditions', to: 'general-conditions' },
@@ -119,7 +120,10 @@ export default class ChooseOffer extends Component {
               </div>
               <Card.Content extra className="center-align">
                 { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? '' :
-                <Button primary loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign portal agreement" onClick={this.signPortalAgreement} />
+                <Button.Group>
+                  <Button color="red" loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
+                  <Button primary loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
+                </Button.Group>
                 }
               </Card.Content>
             </Card> : null

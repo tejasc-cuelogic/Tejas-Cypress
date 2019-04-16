@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
-import { Header, Card } from 'semantic-ui-react';
+import { Link, Route } from 'react-router-dom';
+import { Header, Card, Button, Divider } from 'semantic-ui-react';
 import Aux from 'react-aux';
+// import money from 'money-math';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
@@ -10,7 +11,9 @@ import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHead
 import AccountCreation from './../../accountSetup/containers/accountCreation';
 import IdentityVerification from './../../accountSetup/containers/identityVerification';
 import EstablishProfile from './../../accountSetup/containers/establishProfile';
+import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
 }) => {
@@ -20,17 +23,28 @@ const summaryDetails = ({
     title: false,
     summary: [
       {
-        title: 'Total Invested', content: totalInvested, type: 1, info: 'Includes all investments made in successfully closed offerings. Does not include reservations or commitments in live offerings.',
+        title: 'Total Invested', content: totalInvested || '', type: 1, info: 'Includes all investments made in successfully closed offerings. Does not include reservations or commitments in live offerings.',
       },
       {
-        title: 'Pending Investment', content: pendingInvestments, type: 1, info: 'Includes amounts reserved or committed in live offerings.',
+        title: 'Pending Investment', content: pendingInvestments || '', type: 1, info: 'Includes amounts reserved or committed in live offerings.',
       },
       {
-        title: 'Paid to Date', content: paidToDate, type: 1, info: 'Net payments received to date from all prior investments.',
+        title: 'Paid to Date', content: paidToDate || '', type: 1, info: 'Net payments received to date from all prior investments.',
       },
-      {
-        title: 'TNAR', content: `${tnar} %`, type: 0, info: 'Net Annualized Return ("NAR") measures the current financial return of each investment in your portfolio. Per investment, NAR is calculated as an annualized measure of the rate of return on the principal invested over the life of that investment, calculated based on actual cash payments received each month. We offer different types of debt investments, and NAR is calculated differently for each investment product to better reflect the underlying characteristics. Total Net Annualized Return ("TNAR") approximates the overall financial return on your investment portfolio. TNAR is a weighted average of NARS on all current investments in your portfolio. See Education Center to learn more about how NAR and TNAR are calculated.',
-      },
+      // {
+      //   title: 'TNAR', content: tnar && !money.isZero(tnar) ? `${tnar}%` : 'N/A',
+      // type: 0, info: <span>Net Annualized Return (&quot;NAR&quot;) measures the
+      // current financial return of each investment in your portfolio. Per investment,
+      // NAR is calculated as an annualized measure of the rate of return on the
+      // principal invested over the life of that investment, calculated based on actual
+      // cash payments received each month. We offer different types of debt investments,
+      // and NAR is calculated differently for each investment product to better reflect the
+      // underlying characteristics. Total Net Annualized Return (&quot;TNAR&quot;)
+      // approximates the overall financial return on your investment portfolio. TNAR is a
+      // weighted average of NARS on all current investments in your portfolio. See <Link
+      // to="/resources/education-center">Education Center</Link> to learn more about how NAR
+      // and TNAR are calculated.</span>,
+      // },
     ],
   };
 };
@@ -39,10 +53,14 @@ const summaryDetails = ({
 @observer
 export default class Dashboard extends Component {
   componentWillMount() {
-    this.props.portfolioStore.getSummary();
+    // TODO change to regex
+    if (!Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+      this.props.portfolioStore.getSummary();
+    }
   }
   render() {
     const { summaryLoading, summary, getChartData } = this.props.portfolioStore;
+    const cashMovementData = getChartData('cashMovement');
     if (summaryLoading) {
       return <InlineLoader />;
     }
@@ -53,15 +71,33 @@ export default class Dashboard extends Component {
         <Route path="/app/summary/establish-profile" component={EstablishProfile} />
         <PrivateLayout
           {...this.props}
+          P4={
+            <Button secondary as={Link} to="/offerings" content="Invest Now" />
+          }
         >
-          <Header as="h4">Values Performance</Header>
+          <Header as="h4">Portfolio Summary</Header>
           <SummaryHeader details={summaryDetails(summary)} />
-          <Card fluid>
-            <Card.Content>
-              <Header as="h4">Cash Movement, LTM</Header>
-              <CashMovement data={getChartData('cashMovement')} />
-            </Card.Content>
-          </Card>
+          {
+              cashMovementData && cashMovementData.length ?
+                <Aux>
+                  <Card fluid>
+                    <Card.Content>
+                      <Header as="h4">Investments and Payments</Header>
+                      <CashMovement data={cashMovementData} />
+                    </Card.Content>
+                  </Card>
+                </Aux>
+              :
+                <Aux>
+                  <Card fluid={isMobile}>
+                    <Card.Content>
+                      <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
+                      <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
+                      <Divider hidden />
+                    </Card.Content>
+                  </Card>
+                </Aux>
+            }
         </PrivateLayout>
       </Aux>
     );

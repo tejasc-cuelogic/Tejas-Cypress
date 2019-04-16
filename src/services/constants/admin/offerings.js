@@ -10,7 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
@@ -23,8 +23,8 @@ export const STAGES = {
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
   },
-  FAILED: { ref: 'live', accessKey: 4, label: 'Failed' },
-  TERMINATED: { ref: 'live', accessKey: 4, label: 'Terminated' },
+  FAILED: { ref: 'failed', accessKey: 4, label: 'Failed' },
+  TERMINATED: { ref: 'failed', accessKey: 4, label: 'Terminated' },
   STARTUP_PERIOD: {
     ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
   },
@@ -117,9 +117,10 @@ export const KEY_TERMS = {
   },
   offeringDisclaimer: {
     value: '',
-    label: 'Offering Disclaimer',
+    label: 'Issuer Statement',
     error: undefined,
     rule: 'string',
+    defaultValue: 'The information contained on this campaign page (the "Campaign Information") is furnished solely by the Issuer to prospective investors in the investment opportunity described herein. All Campaign Information is intended to be a summary of the terms and information contained in the Disclosure Statement and the Note Purchase Agreement, and is fully qualified by reference to those documents. In the event any Campaign Information conflicts with the terms of the Disclosure Statement or Note Purchase Agreement, the terms of those documents will control. The Issuer has provided the Campaign Information for inclusion on the website located at <a href="https://www.nextseed.com/" target="_blank">www.nextseed.com</a>, and in no way will the Campaign Information be deemed to have been created or provided by NextSeed Securities, LLC, NextSeed Services, LLC, or their affiliates. ',
     placeHolder: 'Enter here',
   },
   revSharePercentage: {
@@ -143,16 +144,30 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  minOfferingAmount: {
+  minOfferingAmountCF: {
     value: null,
-    label: 'Minimum Offering Amount',
+    label: 'Minimum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
-  maxOfferingAmount: {
+  maxOfferingAmountCF: {
     value: null,
-    label: 'Maximum Offering Amount',
+    label: 'Maximum Offering Amount CF',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  minOfferingAmount506C: {
+    value: null,
+    label: 'Minimum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  maxOfferingAmount506C: {
+    value: null,
+    label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
@@ -318,6 +333,64 @@ export const KEY_TERMS = {
     placeHolder: 'Enter here',
     defaultValue: 'Because the Issuer was formed recently, the Issuer’s current financial statements only reflect the startup costs incurred thus far. Please see Appendix A for the financial statements as well as the full review report by the Issuer’s accountant.',
   },
+  roundType: {
+    value: '',
+    label: 'Round type',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  unitPrice: {
+    value: null,
+    label: 'Unit Price',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  premoneyValuation: {
+    value: null,
+    label: 'Pre-Money Valuation',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  additionalKeyterms: [{
+    label: {
+      label: 'Label',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+    description: {
+      label: 'Description',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+  }],
+  totalProjectCost: {
+    value: null,
+    label: 'Total project cost',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  raisedThroughSaleOfEquity: {
+    value: null,
+    label: 'Raised through sale of Equity',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  nsFeePercentage: {
+    value: '',
+    label: 'NS Fee %',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Please select a value',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -342,6 +415,12 @@ export const SECURITIES_VALUES = [
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
 ];
 
+export const ROUND_TYPE_VALUES = [
+  { key: 'Seed', value: 'SEED', text: 'Seed' },
+  { key: 'Series A', value: 'SERIES_A', text: 'Series A' },
+  { key: 'Series B', value: 'SERIES_B', text: 'Series B' },
+];
+
 export const BUSINESS_TYPE_VALUES = [
   { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'Sole Proprietor' },
   { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
@@ -357,7 +436,19 @@ export const REGULATION_VALUES = [
   { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
   { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
 ];
-
+export const BD_REGULATION_VALUES = [
+  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
+  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
+  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
+];
+export const FP_REGULATION_VALUES = [
+  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
+  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+];
+export const NS_FEE_PERCENTAGE = [
+  { key: '1', value: '1.00', text: '1%' },
+  { key: '2', value: '2.00', text: '2%' },
+];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {
     value: '',
@@ -583,6 +674,17 @@ export const MISC = {
   },
 };
 
+export const CLOSURE_SUMMARY = {
+  processingDate: {
+    value: '',
+    label: 'Close Date',
+    error: undefined,
+    rule: 'date',
+    customErrors: { date: 'Close Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
+  },
+};
+
 export const COMPANY_LAUNCH = {
   targetDate: {
     value: '',
@@ -654,25 +756,28 @@ export const OFFER_CLOSE = {
     error: undefined,
     rule: 'array',
   },
-  disbursementDate: {
+  date: {
     value: '',
     label: 'Disbursement Date',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'date|required',
     placeHolder: 'MM-DD-YYYY',
   },
-  disbursementAmount: {
+  amount: {
     value: '',
     label: 'Disbursement Amount',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  totalRepayment: {
+  currentRepaidAmount: {
     value: '',
     label: 'Total Repayment',
     error: undefined,
     rule: 'numeric|required',
+    objRef: 'closureSummary.repayment',
     placeHolder: 'Enter here',
   },
   totalCommittedAmount: {
@@ -779,6 +884,9 @@ export const MEDIA = {
   heroImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
+  heroBackground: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Background Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
   tombstoneImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
@@ -801,7 +909,7 @@ export const MEDIA = {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   avatar: {
-    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Company Avatar', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 
@@ -890,7 +998,7 @@ export const LEADERSHIP = {
       label: 'Phone Number',
       error: undefined,
       rule: 'numeric',
-      placeHolder: '555-123-8888',
+      placeHolder: '(123) 456-7890',
       objRef: 'phone',
       objRefOutput2: 'phone',
       customErrors: {
@@ -1145,7 +1253,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'Month 20XX',
   },
   offeringDeadline: {
     label: 'Offering Deadline',
@@ -1245,7 +1353,7 @@ export const GENERAL = {
     error: undefined,
     rule: 'optional',
   },
-  // minOfferingExpenseAmount: {
+  // offeringExpenseAmount: {
   //   label: 'Minimum offering amount expense',
   //   value: '',
   //   error: undefined,
@@ -1255,7 +1363,7 @@ export const GENERAL = {
   //   placeHolder: 'Type amount here',
   //   objRefOutput: 'useOfProceeds',
   // },
-  minOfferingExpenseAmountDescription: {
+  offeringExpenseAmountDescription: {
     label: 'If minimum offering amount is reached:',
     value: '',
     error: undefined,
@@ -1275,16 +1383,6 @@ export const GENERAL = {
   //   placeHolder: 'Type amount here',
   //   objRefOutput: 'useOfProceeds',
   // },
-  maxOfferingExpenseAmountDescription: {
-    label: 'If maximum offering amount is reached:',
-    value: '',
-    error: undefined,
-    rule: 'optional',
-    objRef: 'legal.general.useOfProceeds',
-    objType: 'useOfProceeds',
-    placeHolder: 'Type your text here...',
-    objRefOutput: 'useOfProceeds',
-  },
   equityShareholderRights: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
@@ -1395,7 +1493,7 @@ export const GENERAL = {
       value: '',
       error: undefined,
       rule: 'date',
-      placeHolder: 'Select date',
+      placeHolder: 'mm/dd/yyyy',
       customErrors: {
         date: 'Maturity Date is not a valid date format.',
       },
@@ -1456,7 +1554,7 @@ export const NEW_OFFER = {
     value: '',
     label: 'Regulation',
     error: undefined,
-    rule: 'string',
+    rule: 'required',
     placeHolder: 'Choose here',
   },
 };
@@ -1846,6 +1944,8 @@ export const RISK_FACTORS = {
     refSelector: 'isRegulatoryRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [false],
     defaultValue: 'Products and services offered by us are subject to regulation. Regulatory action could substantially increase costs, damage reputation and materially affect operating results. Increased costs in complying with these requirements or failure to obtain required licenses or permits in a timely fashion may materially affect operations.   ""Regulations regarding climate change, energy usage and emissions controls may impact us directly through higher cost of goods. The potential impacts of climate change and climate change regulations are highly uncertain at this time, and we cannot anticipate or predict the material adverse effects on the business as a result of climate change or climate change regulation. For instance, changes in the prevailing climates may result in a reduction in, or increased prices of available goods, which may adversely affect our revenue and operating margins.  """"We are subject to various federal, state and local regulations, including regulations related to  zoning and building codes, land use and employee, health, sanitation and safety matters. We are also subject to the U.S. Fair Labor Standards Act, which governs such matters as working conditions, family leave mandates and other employment law matters. In recent years, there has been an increased legislative, regulatory and consumer focus. Compliance with additional regulations can become costly and affect operating results.',
   },
   isRegulatoryFoodRisks: {
@@ -2246,21 +2346,21 @@ export const ADD_NEW_BONUS_REWARD = {
     label: 'Name of new bonus reward',
     value: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'required',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   description: {
     label: 'Description',
     value: '',
     error: undefined,
-    rule: 'string',
+    rule: 'optional',
     placeHolder: 'Description',
   },
   expirationDate: {
     label: 'Expiration Date',
     value: '',
     error: undefined,
-    rule: 'date',
+    rule: 'optional|date',
     customErrors: {
       date: 'Expiration Date is not a valid date format.',
     },
@@ -2447,6 +2547,7 @@ export const DATA_ROOM = {
       label: '',
       value: false,
       error: undefined,
+      default: false,
       rule: 'required',
     },
   }],
@@ -2457,7 +2558,7 @@ export const POC_DETAILS = {
     value: '',
     label: 'POC',
     error: undefined,
-    objRef: 'leadDetails',
+    // objRef: 'leadDetails',
     rule: 'string|required',
   },
   id: {
@@ -2476,3 +2577,4 @@ export const POC_DETAILS = {
     placeHolder: 'MM/DD/YYYY',
   },
 };
+

@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
-    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page) {
+  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int) {
+    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit) {
       resultCount
       users {
         id
@@ -31,7 +31,7 @@ export const allUsersQuery = gql`
         roles {
           scope
           name
-          
+
         }
         lastLoginDate
         created {
@@ -42,11 +42,31 @@ export const allUsersQuery = gql`
   }
 `;
 
+export const userDetailsQueryForBoxFolder = gql`
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      storageDetails
+    }
+  }
+`;
+
 export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      wpUserId
       status
+      accreditation {
+        status
+      }
+      saasquatch {
+        signupCode
+        referredBy
+        userId
+        accountId
+      }
+      skipAddressVerifyCheck
       cip {
         expiration
         failType
@@ -65,6 +85,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         avatar {
           name
@@ -82,13 +103,16 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            accreditation {
+              status
+            }
             limits {
               income
               netWorth
               otherContributions
               limit
             }
-            taxStatements {
+            taxStatement {
               fileId
               fileName
               year
@@ -102,6 +126,7 @@ export const userDetailsQuery = gql`
               city
               state
               zipCode
+              streetTwo
             }
             isTrust
             trustDate
@@ -151,6 +176,7 @@ export const userDetailsQuery = gql`
               plaidAccessToken
               dateLinked
               pendingUpdate
+              accountType
               changeRequest {
                 accountNumber
                 bankName
@@ -193,6 +219,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         status
       }
@@ -233,9 +260,9 @@ export const userAccreditationQuery = gql`
             accreditation {
               status
               expiration
+              declinedMessage
               requestDate
               reviewed {
-                id
                 by
                 date
                 comment
@@ -253,6 +280,9 @@ export const userAccreditationQuery = gql`
                 fileInfo {
                   fileId
                   fileName
+                  fileHandle {
+                    boxFolderId
+                  }
                 }
               }
               verifier {
@@ -271,6 +301,7 @@ export const userAccreditationQuery = gql`
         status
         expiration
         requestDate
+        declinedMessage
         reviewed {
           id
           by
@@ -290,6 +321,9 @@ export const userAccreditationQuery = gql`
           fileInfo {
             fileId
             fileName
+            fileHandle {
+              boxFolderId
+            }
           }
         }
         verifier {
@@ -355,3 +389,31 @@ export const adminAddUser = gql`
       }
   }
 `;
+
+export const skipAddressValidation = gql`
+mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
+  skipAddressValidationCheck(
+     userId: $userId
+     shouldSkip: $shouldSkip
+   )
+ }`;
+
+export const frozenEmailToAdmin = gql`
+mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
+  notifyAdminFrozenAccountActivity(
+     userId: $userId
+     accountId: $accountId
+     activity: $activity
+     offeringId: $offeringId
+   )
+ }`;
+
+export const freezeAccount = gql`
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $message: String) {
+  freezeAccount(
+     userId: $userId
+     accountId: $accountId
+     freeze: $freeze
+     message: $message
+   )
+ }`;

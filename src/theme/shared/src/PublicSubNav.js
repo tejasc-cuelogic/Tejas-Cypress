@@ -17,8 +17,8 @@ export default class PublicSubNav extends Component {
     const { navStatus, subNavStatus } = navStore;
     return (
       <Aux>
-        <Responsive minWidth={768} as={Aux}>
-          <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
+        <Responsive minWidth={992} as={Aux}>
+          <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous>
             <Menu
               secondary
               className={`menu-secondary-fixed ${moreProps ? moreProps.class : ''} ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}

@@ -8,11 +8,10 @@ import { NavItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
+// import NSImage from '../../modules/shared/NSImage';
 
 const hasFooter = ['/'];
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
-));
+// const getLogo = path => (path.includes('/lendio') ? 'nextseed_and_lendio.svg' : 'logo.svg');
 @inject('uiStore')
 @observer
 export default class NavBarMobile extends Component {
@@ -24,6 +23,7 @@ export default class NavBarMobile extends Component {
       onPusherClick, onToggle, visible,
       publicContent, location, isMobile,
       navStatus, currentUser, stepInRoute,
+      hasHeader,
     } = this.props;
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
@@ -44,47 +44,62 @@ export default class NavBarMobile extends Component {
     return (
       <Aux>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
-          <div
-            className={`${visible ? 'visible-logo' : (location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
-            onClick={!visible ? onToggle : false}
-            onKeyPress={!visible ? onToggle : false}
-            role="button"
-            tabIndex="0"
-          >
-            <Logo
-              alt="NextSeed.com"
-              dataSrc={getLogo(location.pathname)}
-              as={visible ? Link : Logo}
-              to="/"
-            />
-          </div>
-          <div
-            className={`public-header-section ${visible ? 'active' : ''}
-            ${!location.pathname.includes('/offerings') ? 'inverted' : ''}
-            ${navStatus === 'sub' ? 'slide-up' : ''}`}
-          >
-            {/* <Icon className="ns-nextseed-icon hamburger" /> */}
-            <Header as="h5" inverted>{navTitle}</Header>
-            {!currentUser ? (
-              <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in">
-                {stepInRoute.title}
-              </Link>
-            ) : (
-              <Link
-                to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                className="sign-in"
+          {hasHeader && (
+            <Aux>
+              <div
+                className="full-logo"
+                onClick={!visible ? onToggle : false}
+                onKeyPress={!visible ? onToggle : false}
+                role="button"
+                tabIndex="0"
               >
-                Dashboard
-              </Link>
-            )
-            }
-            {/* {investBtn && (
-              <Button fluid={isMobile} as={Link}
-              to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
-                Invest Now
-              </Button>
-            )} */}
-          </div>
+                {/* <Logo
+                  alt="NextSeed.com"
+                  dataSrc={visible ? 'LogoWhite' : getLogo(location.pathname)}
+                  as={visible ? Link : Logo}
+                  to="/"
+                /> */}
+                {/* <NSImage
+                  path="hamburger.svg"
+                  role="button"
+                  tabIndex="0"
+                /> */}
+                <Icon className="ns-hamburger" role="button" tabIndex="0" />
+              </div>
+              <div
+                className={`public-header-section ${visible ? 'active' : ''}
+                ${navStatus === 'sub' ? 'slide-up' : ''}`}
+              >
+                {/* <Icon className="ns-nextseed-icon hamburger" /> */}
+                {navTitle === 'Home' || (location.pathname.startsWith('/offerings')) ?
+                  <Logo
+                    dataSrc="LogoGreenGrey"
+                    className="mobile-header-logo"
+                  /> :
+                  <Header as="h5">{navTitle}</Header>
+                }
+                {!currentUser ? (
+                  <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
+                    {stepInRoute.title}
+                  </Link>
+                ) : (
+                  <Link
+                    to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                    className="sign-in neutral-text"
+                  >
+                    Dashboard
+                  </Link>
+                )
+                }
+                {/* {investBtn && (
+                  <Button fluid={isMobile} as={Link}
+                  to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
+                    Invest Now
+                  </Button>
+                )} */}
+              </div>
+            </Aux>
+          )}
           <Sidebar
             as={Menu}
             animation="overlay"
@@ -93,6 +108,12 @@ export default class NavBarMobile extends Component {
             visible={visible}
             className="public-sidebar"
           >
+            <Logo
+              alt="NextSeed.com"
+              dataSrc="LogoWhite"
+              as={visible ? Link : Logo}
+              to="/"
+            />
             <Icon onClick={onToggle} className="ns-close-light" />
             <div className="public-mobile-nav">
               <div className="mobile-nav-inner-container">
@@ -129,7 +150,7 @@ export default class NavBarMobile extends Component {
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className="public-pusher"
+            className={`public-pusher ${!hasHeader && 'noheader'}`}
           >
             {publicContent}
             {(hasFooter.find(item => matchPath(location.pathname, { path: item }))) &&

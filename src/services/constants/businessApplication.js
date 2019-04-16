@@ -27,36 +27,75 @@ export const BUSINESS_APPLICATION_STATUS = {
   APPLICATION_SUCCESSFUL: 'APPLICATION_SUCCESSFUL',
   REVIEWED: 'REVIEWED',
   DECLINED: 'DECLINED',
+  APPLICATION_DECLINED: 'APPLICATION_DECLINED',
   APPLICATION_DELETED: 'APPLICATION_DELETED',
   LENDIO_PRE_QUALIFICATION_SUCCESSFUL: 'LENDIO_PRE_QUALIFICATION_SUCCESSFUL',
   LENDIO_PRE_QUALIFICATION_FAILED: 'LENDIO_PRE_QUALIFICATION_FAILED',
   LENDIO_SUCCESS: 'SUCCESS',
+  REVIEW_FAILED: 'REVIEW_FAILED',
+  ISSUER_DECLINED: 'ISSUER_DECLINED',
 };
 
 export const BUSINESS_APP_ADMIN_STATUS = [
   { status: 'NEW', color: 'gray', title: 'New' },
   { status: 'STASH', color: 'green', title: 'Stash' },
   { status: 'SIGNED', color: 'green', title: 'Signed' },
-  { status: 'DECLIENED', color: 'red', title: 'Decliened' },
+  { status: 'DECLINED', color: 'red', title: 'Declined' },
+  { status: 'NS_DECLINED', color: 'red', title: 'Ns Declined' },
+  { status: 'ISSUER_DECLINED', color: 'red', title: 'Issuer Declined' },
   { status: 'ACCEPTED', color: 'green', title: 'Accepted' },
   { status: 'OFFERED', color: 'blue', title: 'Offered' },
   { status: 'DELETED', color: 'red', title: 'Deleted' },
   { status: 'REMOVED', color: 'red', title: 'Removed' },
+  { status: 'APPLICATION_DECLINED', color: 'red', title: 'Admin Declined' },
 ];
 
 export const BUSINESS_APP_USER_STATUS = {
-  PRE_QUALIFICATION_FAILED: { status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange' },
-  PRE_QUALIFICATION_SUCCESSFUL: { status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange' },
-  PRE_QUALIFICATION_SUBMITTED: { status: 'In-progress', icon: 'ns-pencil-circle-line', color: '' },
-  PRE_QUALIFICATION_PROMOTED: { status: 'Promoted', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_SUBMITTED: { status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange' },
-  APPLICATION_OFFERED: { status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange' },
-  APPLICATION_REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_FAILED: { status: 'Failed', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_SUCCESSFUL: { status: 'Signed', icon: 'ns-check-circle-line', color: 'green' },
-  REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
-  DECLINED: { status: 'Declined Offer', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_DELETED: { status: 'Deleted', icon: 'ns-reload-circle-line', color: '' },
+  PRE_QUALIFICATION_FAILED: {
+    status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  PRE_QUALIFICATION_SUCCESSFUL: {
+    status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  PRE_QUALIFICATION_SUBMITTED: {
+    status: 'In-progress', icon: 'ns-pencil-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  PRE_QUALIFICATION_PROMOTED: {
+    status: 'Promoted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_SUBMITTED: {
+    status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Submitted Date', datePath: 'applicationSubmittedDate',
+  },
+  APPLICATION_OFFERED: {
+    status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Offer Date', datePath: 'offers.approved.date',
+  },
+  APPLICATION_REVIEWED: {
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_FAILED: {
+    status: 'Failed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_SUCCESSFUL: {
+    status: 'Signed', icon: 'ns-check-circle-line', color: 'green', dateTitle: 'Signed Date', datePath: 'envelopeStatusChangedDateTime',
+  },
+  REVIEWED: {
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_DELETED: {
+    status: 'Deleted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  ISSUER_DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Declined Date', datePath: 'updated.date',
+  },
+  REVIEW_FAILED: {
+    status: 'Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Reviewed Date',
+  },
 };
 
 export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
@@ -463,7 +502,7 @@ export const BUSINESS_DETAILS = {
       value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %', customErrors: { required: 'required' },
+      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
       value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
@@ -562,8 +601,8 @@ export const BUSINESS_DOC = {
   personalGuarantee: {
     value: '',
     values: [
-      { label: 'Yes', value: 'true' },
-      { label: 'No', value: 'false' },
+      { label: 'Yes', value: true },
+      { label: 'No', value: false },
     ],
     error: undefined,
     rule: 'required',
@@ -681,4 +720,66 @@ export const LENDIO = {
     1000000: 'AMT_500001_1M', // '$500,001 - $1M'
     1000001: 'GREATER_THAN_1M', // 'Over $1M'
   },
+};
+
+export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
+
+  applicationStatus: [
+    {
+      congratulations: '',
+      header: 'You have been pre-qualified for a NextSeed campaign',
+      message: <span>Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
+    },
+    {
+      congratulations: '',
+      header: 'You’re almost there',
+      message: <span>Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStage: 'IN_PROGRESS',
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'We’re reviewing your application',
+      message: <span>Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStatus: 'APPLICATION_SUBMITTED',
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'You’ve received an offer!',
+      message: <span>We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStatus: 'APPLICATION_OFFERED',
+    },
+  ],
+  offeringStage: [
+    {
+      congratulations: 'Congratulations!',
+      header: 'We’re looking forward to working with you on your campaign!',
+      message: 'You should expect a member of the NextSeed Operations team to reach out shortly to schedule your kickoff call.',
+      offeringStage: ['CREATION'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Your NextSeed campaign is live!',
+      message: 'Let’s get the word out. Remember to use your team’s personalized Share Link when communicating with your network. That will help us keep track of your referrals.',
+      offeringStage: ['LIVE'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Your campaign has successfully closed',
+      message: 'We’ll be reaching out to confirm closing contingencies and to ensure your funds are properly tracked and distributed.',
+      offeringStage: ['PROCESSING', 'LOCK'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Funds have been disbursed',
+      message: 'Congrats! Please check your account and confirm that you have received your funds.',
+      offeringStage: ['STARTUP_PERIOD'],
+    },
+    {
+      congratulations: '!',
+      header: 'How are things progressing?',
+      message: 'It’s time to provide your monthly update. Please go to your Updates section to share the latest with your investors.',
+      offeringStage: ['STARTUP_PERIOD', 'IN_REPAYMENT'],
+    },
+  ],
 };

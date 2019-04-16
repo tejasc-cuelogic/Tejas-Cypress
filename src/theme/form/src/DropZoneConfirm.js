@@ -55,7 +55,7 @@ export default class DropZone extends Component {
       <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label &&
           <label>
-            {label}
+            {(this.props.asterisk && this.props.asterisk === 'true' ? `${label}*` : label)}
             {this.props.tooltip &&
             <Popup
               trigger={<Icon className="ns-help-circle" />}
@@ -72,7 +72,7 @@ export default class DropZone extends Component {
             <Dimmer active={showLoader}>
               <Loader size={size} />
             </Dimmer>
-            <Dropzone {...this.props} onDrop={files => this.props.ondrop(files, this.props.name)} className="test" style={{}}>
+            <Dropzone {...this.props} multiple={this.props.multiple || false} onDrop={files => this.props.ondrop(files, this.props.name)} className="test" style={{}}>
               <Icon className="ns-upload" /> {this.props.uploadtitle ? <span>{this.props.uploadtitle}</span> : <span>Upload document{this.props.multiple ? 's' : ''}</span>}
             </Dropzone>
           </div> : null

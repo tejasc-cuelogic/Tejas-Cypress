@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -22,9 +22,15 @@ export default class Summary extends Component {
     if (!alreadySet) {
       getLegalDocsFileIds();
     }
+    this.props.bankAccountStore.fetchRoutingNumber();
+  }
+
+  componentDidUpdate() {
+    this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
@@ -34,8 +40,9 @@ export default class Summary extends Component {
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {
-      this.props.iraAccountStore.createAccount('Summary', 'FULL').then(() => {
-        this.props.history.push('/app/summary');
+      this.props.iraAccountStore.submitAccount().then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        // this.props.history.push('app/summary');
       });
     }
   }
@@ -65,7 +72,10 @@ export default class Summary extends Component {
       FUNDING_FRM.fields.fundingType.values,
       { value: FUNDING_FRM.fields.fundingType.value },
     );
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      plaidAccDetails, formLinkBankManually,
+      accountAttributes, routingNum,
+    } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
@@ -104,12 +114,35 @@ export default class Summary extends Component {
                       <span className="negative-text">Not Uploaded</span>}
                   </Table.Cell>
                 </Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
+                  <Table.Row>
+                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
+                }
                 {fundingOption && fundingOption.value === 0 &&
                   <Table.Row>
                     <Table.Cell>Bank Account:</Table.Cell>
                     <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                   </Table.Row>
                 }
+
+                { !isEmpty(routingNum) &&
+                  <Table.Row>
+                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell>
+                      { routingNum || '' }
+                    </Table.Cell>
+                  </Table.Row>
+                }
+                <Table.Row>
+                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell>
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
+                    Helper.CurrencyFormat(0) :
+                    Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                  </Table.Cell>
+                </Table.Row>
               </Table.Body>
             </Table>
           </div>

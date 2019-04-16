@@ -36,7 +36,7 @@ export default class FormPasswordStrength extends Component {
       >
         {!props.ishidelabel && label !== '' &&
           <label>
-            {props.label || label}
+            {props.label || label}{props.asterisk && props.asterisk === 'true' ? '*' : ''}
             {tooltip &&
               <Popup
                 hoverable={props.hoverable}
@@ -65,15 +65,20 @@ export default class FormPasswordStrength extends Component {
           tooShortWord={props.tooShortWord}
           scoreWords={props.scoreWords}
           inputProps={{ ...props.inputProps, type: pwdInputType }}
+          userInputs={props.userInputs || []}
           changeCallback={(e) => { props.changed(e); this.triggerError(false); }}
           onBlur={() => this.triggerError(true)}
           defaultValue={value}
+          showRequiredError={props.showRequiredError}
         />
         {props.iconDisplay ?
           <Icon {...togglePasswordType()} onClick={() => setPwdVisibilityStatus()} />
           :
           ''}
         {error && this.state.showError &&
+          <FieldError error={error} />
+        }
+        {error && props.showRequiredError &&
           <FieldError error={error} />
         }
       </Form.Field>

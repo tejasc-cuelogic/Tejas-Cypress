@@ -34,19 +34,19 @@ export default class FormInput extends Component {
       >
         {!props.ishidelabel && label !== '' &&
           <label>
-            {props.label || label}
+            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip &&
               <Popup
                 hoverable={props.hoverable}
                 trigger={<Icon className="ns-help-circle" />}
                 content={tooltip}
                 position="top center"
-                className="center-align"
+                className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
                 wide
               />
             }
             {props.removed &&
-              <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
                 <Icon className="ns-close-circle" color="grey" />
               </Link>
             }

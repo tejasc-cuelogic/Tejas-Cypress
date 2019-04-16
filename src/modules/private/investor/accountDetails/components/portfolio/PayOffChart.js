@@ -1,3 +1,5 @@
+/* eslint-disable react/no-multi-comp */
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
 import { includes } from 'lodash';
 import { withRouter } from 'react-router-dom';
@@ -33,8 +35,10 @@ export default class PayOffChart extends Component {
           <Legend />
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis axisLine={false} dataKey="name" interval={4} />
-          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="right" />
-          <Tooltip />
+          <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="right" />
+          <Tooltip
+            formatter={(value, name, props) => this.formatY(props.payload[name])}
+          />
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#84BCFC" stopOpacity={0.8} />

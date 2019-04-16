@@ -11,20 +11,22 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('articleStore')
 @observer
 export default class Insights extends Component {
+  state = {
+    sortAsc: false,
+  };
   componentWillMount() {
     if (this.props.match.params && this.props.match.params.id) {
-      this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
+      this.props.articleStore.requestAllArticles(true, false, this.props.match.params.id);
     } else {
-      this.props.articleStore.requestAllArticles();
+      this.props.articleStore.requestAllArticles(true, false);
     }
-    this.props.articleStore.getCategoryList();
+    this.props.articleStore.getCategoryList(true);
     this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
-      this.props.articleStore.requestArticlesByCategoryId(nextProps.match.params.id);
-    } else {
-      this.props.articleStore.requestAllArticles();
+      this.props.articleStore
+        .requestAllArticles(true, this.state.sortAsc, nextProps.match.params.id);
     }
   }
   activeText = () => {
@@ -39,6 +41,12 @@ export default class Insights extends Component {
       return active ? active.title : 'All';
     }
     return 'All';
+  }
+  requestAllArticles = (isPublic, sortBy) => {
+    this.setState({
+      sortAsc: sortBy,
+    });
+    this.props.articleStore.requestAllArticles(isPublic, this.state.sortAsc);
   }
   render() {
     const {
@@ -84,17 +92,31 @@ export default class Insights extends Component {
             </Menu.Menu>
             <Menu.Item position="right">
               SORT BY
-              <Dropdown item text="NEWEST">
+              <Dropdown item>
                 <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/">Newest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Oldest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item>
+                  <Dropdown.Item
+                    key="newest"
+                    as={Link}
+                    to="#"
+                    onClick={() => this.requestAllArticles(true, false)}
+                    className={this.state.sortAsc ? 'active' : ''}
+                  >Newest
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    key="oldest"
+                    as={Link}
+                    to="#"
+                    onClick={() => this.requestAllArticles(true, true)}
+                    className={this.state.sortAsc ? '' : 'active'}
+                  >Oldest
+                  </Dropdown.Item>
+                  {/* <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item> */}
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
           </Container>
         </Responsive>
-        <Responsive maxWidth={1199} as={Menu} className="mobile-dropdown-menu container">
+        <Responsive maxWidth={1199} as={Menu} className={`${sliderInsightFeaturedArticles.length === 0 ? 'mt-30' : ''} mobile-dropdown-menu container`}>
           <Dropdown item text={this.activeText()}>
             <Dropdown.Menu>
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>

@@ -88,6 +88,14 @@
                 border-radius:@4px;
                 border:@neutral-offdark 1px solid;
             }
+            input {
+                padding:@11px @14px;
+                border-radius:@4px;
+                border:@neutral-offdark 1px solid;
+            }
+            .ui.input.ReactPasswordStrength~i.icon.ns-view {
+                right: @7px;
+            }
         }
         &.display-only{
             >label{
@@ -112,6 +120,7 @@
                 font-weight:@fontMedium;
                 text-overflow:ellipsis;
                 cursor:default;
+                pointer-events:none;
                 background:none !important;
             }
             p.commet-area{
@@ -169,6 +178,10 @@
         &.error .ui.dropdown .text:not(.default){
             color:@neutral;
         }
+        .pac-container {
+            left:0 !important;
+            top:100% !important;
+        }
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;
@@ -180,6 +193,10 @@
         min-width:300px;
         margin-top:@28px;
         margin-bottom:@7px;
+        display: block !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            min-width:100%;
+        }
         label{
             font-size:@14px;
         }
@@ -209,19 +226,57 @@
             padding-left:@gutterWidth;
             padding-right:@gutterWidth;
             margin-bottom:@14px;
+            .pac-container{
+                left:@gutterWidth !important;
+            }
         }
         &.inline .field{
             margin:0 !important;
         }
-        &.range .field:not(:last-child):after{
-            width:6px;
-            content:"-";
-            color:@neutral;
-            font-weight:@fontMedium;
-            line-height:@inputLineHeight;
-            position:absolute;
-            right:-3px;
-            top:@inputVerticalPadding;
+        &.range{
+            .field{
+                margin-bottom:0 !important;
+            }
+            .field:not(:last-child):after{
+                width:6px;
+                content:"-";
+                color:@neutral;
+                font-weight:@fontMedium;
+                line-height:@inputLineHeight;
+                position:absolute;
+                right:-3px;
+                top:@inputVerticalPadding;
+            }
+        }
+        &.radio-basic {
+            .field{
+                padding:@30px 0 @10px 0;
+                border-right: 1px solid @border-light;
+                @media only screen and (max-width : @largestMobileScreen){
+                    border: none;
+                }
+                &:last-child {
+                    border-right: 0;
+                }
+            }
+            .ui.radio.checkbox label{
+                padding-left: 0;
+                &::before {
+                    width: 20px;
+                    height: 20px;
+                    top: -30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border-width: 1px;
+                }
+                &::after{
+                    width: 12px;
+                    height: 12px;
+                    top: -32px;
+                    left: 50%;
+                    transform: translate(-50%, 50%);
+                }
+            }
         }
     }
     .button-radio .fields.vertical{
@@ -348,6 +403,7 @@
         }
     }
     p.field-error{
+        margin-top:@2px;
         font-size:@12px;
         line-height:@14px;
         color:@highlight-primary;
@@ -518,7 +574,21 @@
 		&:last-child{
 			margin-bottom:0;
 		}
-	}
+    }
+    &.story-form{
+        height:100%;
+        display:flex;
+        flex-direction:column;
+        >.ui.header{
+            flex:0;
+        }
+        >.field{
+            flex:1;
+            textarea{
+                min-height:100%;
+            }
+        }
+    }
 }
 textarea{
 	font-family:@pageFont;
@@ -655,7 +725,7 @@ textarea{
         min-width:100%;
     }
     + .file-uploader-wrap{
-        margin-top:30px;
+        margin-top:@14px;
     }
     label{
         font-size:@13px;
@@ -746,6 +816,9 @@ textarea{
             color:@neutral-middark;
             font-weight:@normal;
             font-style:italic;
+        }
+        &.attached > a{
+            color:@primary-one !important;
         }
     }
 }

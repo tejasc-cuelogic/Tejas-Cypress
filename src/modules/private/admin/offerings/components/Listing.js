@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
@@ -11,25 +12,35 @@ import Helper from '../../../../../helper/utility';
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
   delete: { label: 'Delete', icon: 'trash' },
+  publish: { label: 'Publish', icon: 'view', icon1: 'no-view' },
 };
 
 @inject('uiStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Listing extends Component {
+  state = { isPublic: false };
   componentWillMount() {
     this.props.offeringsStore.resetInitLoad();
   }
-  handleAction = (action, offeringId) => {
+  handleAction = (action, offeringId, isPublished = false) => {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offeringId);
     } else if (action === 'Edit') {
       this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
+    } else if (action === 'Publish') {
+      this.setState({ isPublic: isPublished });
+      this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
     }
   }
   paginate = params => this.props.offeringsStore.pageRequest(params);
 
   handleDeleteCancel = () => {
+    this.props.uiStore.setConfirmBox('');
+  }
+  handlePublishOffering = () => {
+    const { offeringsStore, uiStore } = this.props;
+    offeringsStore.updateOfferingPublicaly(uiStore.confirmBox.refId, uiStore.confirmBox.subRefId);
     this.props.uiStore.setConfirmBox('');
   }
   handleDeleteOffering = () => {
@@ -40,7 +51,7 @@ export default class Listing extends Component {
 
   render() {
     const {
-      uiStore, offeringsStore,
+      uiStore, offeringsStore, stage,
     } = this.props;
     const {
       offerings,
@@ -62,7 +73,10 @@ export default class Listing extends Component {
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Created Date</Table.HeaderCell>
-                <Table.HeaderCell>Days till launch</Table.HeaderCell>
+                <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
+                {stage === 'live' &&
+                  <Table.HeaderCell>Days till close</Table.HeaderCell>
+                }
                 <Table.HeaderCell>Lead</Table.HeaderCell>
                 <Table.HeaderCell>POC</Table.HeaderCell>
                 <Table.HeaderCell textAlign="center" />
@@ -86,13 +100,20 @@ export default class Listing extends Component {
                         STAGES[offering.stage].label : '-'
                       }
                     </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
-                      offering.offering.launch.terminationDate ?
-                      `${DataFormatter.diffDays(offering.offering.launch.terminationDate)} days` : 'N/A'
+                      offering.offering.launch.targetDate ?
+                      DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
                       }
                     </Table.Cell>
+                    {stage === 'live' &&
+                      <Table.Cell>
+                        {offering.closureSummary && offering.closureSummary.processingDate ?
+                        DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
+                        }
+                      </Table.Cell>
+                    }
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
@@ -102,9 +123,9 @@ export default class Listing extends Component {
                               {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
                             </b>
                             <br />
-                            {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : ''}
+                            {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
                             <br />
-                            {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : ''}
+                            {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
                           </Aux> :
                           <b>N/A</b>
                         }
@@ -114,7 +135,7 @@ export default class Listing extends Component {
                       <Button.Group>
                         {Object.keys(actions).map(action => (
                           <Button icon className="link-button" >
-                            <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id)} />
+                            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
                           </Button>
                         ))}
                       </Button.Group>
@@ -130,10 +151,10 @@ export default class Listing extends Component {
         }
         <Confirm
           header="Confirm"
-          content="Are you sure you want to delete this offering?"
-          open={confirmBox.entity === 'Delete'}
+          content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
+          open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
           onCancel={this.handleDeleteCancel}
-          onConfirm={this.handleDeleteOffering}
+          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteOffering}
           size="mini"
           className="deletion"
         />

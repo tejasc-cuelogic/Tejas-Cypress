@@ -17,24 +17,24 @@ export default class ConfirmBankLinking extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    this.props.transactionStore.confirmAccountLinking().then(() => {
+    this.props.transactionStore.confirmAccountLinking(false).then(() => {
       const bankInterFace = this.props.bankAccountStore.bankLinkInterface;
       const {
         newPlaidAccDetails,
-        cancelBankChangeRequest,
+        linkBankRequestCancel,
         isLinkedBankCancelRequest,
       } = this.props.bankAccountStore;
       const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
       const redirectUrl = `/app/account-details/${accountType}/bank-accounts/link-bank-account/verify-update`;
 
       if (isLinkedBankCancelRequest) {
-        cancelBankChangeRequest().then(() => {
+        linkBankRequestCancel().then(() => {
           const redirectCancelUrl = `/app/account-details/${accountType}/bank-accounts`;
           Helper.toast('Cancel linked bank successfully.', 'success');
           this.props.history.push(redirectCancelUrl);
         });
       } else if (bankInterFace === 'form') {
-        this.props.bankAccountStore.changeBankManually().then(() => {
+        this.props.bankAccountStore.linkBankRequestManual().then(() => {
           this.props.history.push(redirectUrl);
         });
       } else {
@@ -49,8 +49,8 @@ export default class ConfirmBankLinking extends Component {
     e.preventDefault();
     this.props.transactionStore.setReSendVerificationCode(true);
     this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+      this.props.uiStore.clearErrors();
       this.props.transactionStore.setReSendVerificationCode(false);
-      Helper.toast('The OTP is sent to your number!', 'success');
     });
   }
 

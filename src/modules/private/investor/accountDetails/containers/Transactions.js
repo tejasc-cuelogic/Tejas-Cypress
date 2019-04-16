@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { includes } from 'lodash';
-import { Header, Card, Grid, Form } from 'semantic-ui-react';
+import { Header, Card, Grid, Form, Divider } from 'semantic-ui-react';
 import { FillTable } from '../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { NsPagination } from '../../../../../theme/shared';
 import { TRANSACTION_TYPES, DATE_RANGES } from '../../../../../services/constants/user';
+import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 
 const result = {
   columns: [
@@ -26,6 +27,7 @@ export default class Transactions extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.transactionStore.initRequest(10, 0);
   }
 
@@ -35,12 +37,15 @@ export default class Transactions extends Component {
 
   render() {
     const {
-      getAllTransactions, loading, error, totalRecords, requestState,
+      getAllTransactions, loading, error, hasError, totalRecords, requestState,
     } = this.props.transactionStore;
     result.rows = getAllTransactions.transactions;
     return (
       <Aux>
-        <div className="more search-filters">
+        {this.props.isAdmin &&
+          <AccountHeader module="Transactions" pathname={this.props.location.pathname} />
+        }
+        <div className="more search-filters bg-offwhite">
           <Form>
             <Grid stackable>
               <Grid.Row>
@@ -54,10 +59,15 @@ export default class Transactions extends Component {
             </Grid>
           </Form>
         </div>
-        <div className="content-spacer">
-          <Header as="h4">Transactions</Header>
+        {this.props.isAdmin &&
+          <Divider hidden />
+        }
+        <div className={this.props.isAdmin ? '' : 'content-spacer'}>
+          {!this.props.isAdmin &&
+            <Header as="h4">Transactions</Header>
+          }
           <Card fluid>
-            <FillTable loading={loading} error={error} result={result} />
+            <FillTable loading={loading} error={hasError || error} result={result} />
           </Card>
           {totalRecords > 0 &&
             <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />

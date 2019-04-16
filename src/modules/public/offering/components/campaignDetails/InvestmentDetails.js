@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { inject } from 'mobx-react';
 import { Header, Divider } from 'semantic-ui-react';
-import TermNoteDetails from './investmentDetails/TermNoteDetails';
-import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
-import { InlineLoader, Image64 } from '../../../../../theme/shared';
+import KeytermsDetails from './investmentDetails/KeytermsDetails';
+import { InlineLoader } from '../../../../../theme/shared';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
   componentWillMount() {
+    this.props.campaignStore.calculateTotalPaymentData();
     window.addEventListener('scroll', this.handleOnScroll);
   }
   componentDidMount() {
@@ -29,45 +30,32 @@ class InvestmentDetails extends Component {
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
-    ['use-of-proceeds', 'key-terms'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < 50) {
-        this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
+    const { investmentDetailsSubNavs } = this.props.campaignStore;
+    investmentDetailsSubNavs.forEach((item) => {
+      if (document.getElementById(item.to.slice(1)) &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 200 &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+        this.props.navStore.setFieldValue('currentActiveHash', item.to);
       }
     });
   }
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyContent = 'No data found.';
-    const minOfferingExpenseDesc = campaign && campaign.legal &&
-      campaign.legal.general && campaign.legal.general.useOfProceeds &&
-      campaign.legal.general.useOfProceeds.minOfferingExpenseAmountDescription ?
-      campaign.legal.general.useOfProceeds.minOfferingExpenseAmountDescription
-      :
-      null;
-    const maxOfferingExpenseDesc = campaign && campaign.legal &&
-      campaign.legal.general && campaign.legal.general.useOfProceeds &&
-      campaign.legal.general.useOfProceeds.maxOfferingExpenseAmountDescription ?
-      campaign.legal.general.useOfProceeds.maxOfferingExpenseAmountDescription
-      :
-      null;
+    const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <Aux>
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
         {campaign && campaign.legal &&
           campaign.legal.general && campaign.legal.general.useOfProceeds ?
-            <Aux>
-              <Header as="h6">If minimum offering amount is reached:</Header>
-              <p>{minOfferingExpenseDesc || emptyContent}</p>
-              <Header as="h6">If maximum offering amount is reached:</Header>
-              <p>{maxOfferingExpenseDesc || emptyContent}</p>
-            </Aux>
+            <HtmlEditor readOnly content={offeringExpenseAmountDescription || emptyContent} />
             :
             <InlineLoader text={emptyContent} className="bg-offwhite" />
         }
-        <Divider hidden />
+        {/* <Divider hidden />
         <Image64
           srcUrl={campaign && campaign.media &&
             campaign.media.useOfProceeds &&
@@ -76,27 +64,17 @@ class InvestmentDetails extends Component {
           }
           imgType="useOfProceeds"
           fluid
-        />
+        /> */}
         <Divider section hidden />
         <Header as="h3" className="mb-30 anchor-wrap">
           Key Terms
           <span className="anchor" id="key-terms" />
         </Header>
-        {campaign && campaign.keyTerms &&
-          campaign.keyTerms.securities &&
-          campaign.keyTerms.securities ===
-          CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
-            <RevenueSharingDetails
-              refLink={this.props.refLink}
-              KeyTerms={campaign && campaign.keyTerms}
-              {...this.props}
-            /> :
-            <TermNoteDetails
-              refLink={this.props.refLink}
-              KeyTerms={campaign && campaign.keyTerms}
-              {...this.props}
-            />
-        }
+        <KeytermsDetails
+          refLink={this.props.refLink}
+          KeyTerms={campaign && campaign.keyTerms}
+          {...this.props}
+        />
       </Aux>
     );
   }

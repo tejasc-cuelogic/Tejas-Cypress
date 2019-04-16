@@ -4,6 +4,7 @@
 import { toast } from 'react-toastify';
 import _ from 'lodash';
 import moment from 'moment';
+import money from 'money-math';
 import apiService from '../api/restApi';
 
 export class Utility {
@@ -33,6 +34,13 @@ export class Utility {
     maskedInput.split('-').join('')
   )
 
+  matchRegexWithUrl = regexList => _.find(
+    regexList,
+    regex => (window.location.href.match(new RegExp(regex)) !== null),
+  )
+
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+
   guid = () => {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -43,8 +51,10 @@ export class Utility {
   }
 
   getTotal = (from, key) => {
-    const total = 0;
-    return from.map(r => total + parseInt(r[key], 0)).reduce((sum, n) => sum + n);
+    const total = '0.00';
+    return from.map(f => money.floatToAmount(f[key]))
+      .map(r => money.add(total, r))
+      .reduce((sum, n) => money.add(sum, n));
   }
 
   gAddressClean = (place) => {
@@ -68,8 +78,16 @@ export class Utility {
     return result;
   }
 
-  MoneyMathDisplayCurrency = amount => `$${amount}`;
-  CurrencyFormat = (amount, fraction = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: fraction }).format(amount)
+  MoneyMathDisplayCurrency = (amount, fraction = true) => {
+    try {
+      return fraction ? `$${amount}` : `$${amount}`.split('.')[0];
+    } catch (e) {
+      return '$0.00';
+    }
+  }
+  CurrencyFormat = (amount, fraction = 2) => new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: 2,
+  }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;
@@ -89,6 +107,12 @@ export class Utility {
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
   }
+
+  replaceKeysDeep = (obj, keysMap) => _.transform(obj, (result, value, key) => {
+    const resultTmp = result;
+    const currentKey = keysMap[key] || key;
+    resultTmp[currentKey] = _.isObject(value) ? this.replaceKeysDeep(value, keysMap) : value;
+  });
 
   getFormattedFileData = (file) => {
     const fileData = {};
@@ -116,7 +140,8 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
   phoneNumberFormatter = (phoneNumber) => {
@@ -127,14 +152,31 @@ export class Utility {
     const d = new Date();
     let daysFromNow = d.setDate(d.getDate() + days);
     daysFromNow = new Date(daysFromNow).toISOString();
-    console.log(daysFromNow);
     return daysFromNow;
   }
   getLastThreeYearsLabel = () => {
     const currentYear = parseInt(moment().format('YYYY'), 10);
     return {
       annualIncomeCurrentYear: currentYear,
+      annualIncomePreviousYear: currentYear - 1,
     };
+  }
+
+  otpShield = () => {
+    try {
+      const OtpItems = document.getElementsByClassName('otp-field')[0] ?
+        document.getElementsByClassName('otp-field')[0]
+          .getElementsByTagName('input') : '';
+      for (let i = 0; i < OtpItems.length; i += 1) {
+        OtpItems[i].addEventListener('keydown', (e) => {
+          if ([16, 107, 110, 109, 69, 187, 188, 189, 190].includes(e.keyCode)) {
+            e.preventDefault();
+          }
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 

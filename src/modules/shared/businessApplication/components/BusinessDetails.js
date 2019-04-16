@@ -50,7 +50,7 @@ export default class BusinessDetails extends Component {
   handleLearnMore = () => {
     const { getBoxLink, setField, agreements } = this.props.agreementsStore;
     setField('docLoading', true);
-    getBoxLink(agreements[2].id, 'SECURITIES').then((res) => {
+    getBoxLink(agreements[2].id, 'SERVICES').then((res) => {
       setField('docLoading', false);
       window.open(res.data.getBoxEmbedLink, '_blank');
     });
@@ -94,6 +94,7 @@ export default class BusinessDetails extends Component {
               tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
               disabled={formReadOnlyMode}
               multiple
+              asterisk="true"
               name="businessPlan"
               fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
               ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
@@ -112,7 +113,7 @@ export default class BusinessDetails extends Component {
                   <div className="field-wrap">
                     <Header as={hideFields ? 'h6' : 'h5'} className="mb-20">Existing Debt {index + 1}
                       {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                        <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -166,7 +167,7 @@ export default class BusinessDetails extends Component {
             }
             <Divider hidden />
             {!hideFields &&
-              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+              <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
             }
           </FormElementWrap>
           <FormElementWrap
@@ -209,7 +210,7 @@ export default class BusinessDetails extends Component {
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                   <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
                     {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
-                      <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                      <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
                     }
@@ -223,6 +224,7 @@ export default class BusinessDetails extends Component {
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
                             type="text"
+                            asterisk="true"
                             name={field}
                             fielddata={owner[field]}
                             changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
@@ -237,6 +239,7 @@ export default class BusinessDetails extends Component {
                         number
                         type="text"
                         name="yearsOfExp"
+                        asterisk="true"
                         fielddata={owner.yearsOfExp}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
@@ -245,6 +248,7 @@ export default class BusinessDetails extends Component {
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
                         type="text"
+                        asterisk="true"
                         name="companyOwnerShip"
                         fielddata={owner.companyOwnerShip}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
@@ -256,6 +260,7 @@ export default class BusinessDetails extends Component {
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         fielddata={owner.dateOfService}
+                        asterisk="true"
                         format="##/##/####"
                         changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                         dateOfBirth
@@ -266,6 +271,7 @@ export default class BusinessDetails extends Component {
                         ssn
                         type="text"
                         name="ssn"
+                        asterisk="true"
                         fielddata={owner.ssn}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
@@ -298,7 +304,7 @@ export default class BusinessDetails extends Component {
             {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
               <Aux>
                 <Divider hidden />
-                <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+                <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               </Aux>
             }
           </FormElementWrap>
@@ -309,9 +315,9 @@ export default class BusinessDetails extends Component {
         </Form>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${this.state.currentForm}?`}
+          content={`Are you sure you want to remove this ${this.state.currentForm.slice(0, -1)}?`}
           open={this.state.showPartialSaveModal}
-          onCancel={this.toggleConfirm}
+          onCancel={() => this.toggleConfirm(this.state.currentForm, this.state.currentIndex)}
           onConfirm={e => this.removeForm(e)}
           size="mini"
           className="deletion"

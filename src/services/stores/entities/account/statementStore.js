@@ -1,5 +1,7 @@
 import moment from 'moment';
 import { observable, computed, action } from 'mobx';
+import { orderBy, find, get } from 'lodash';
+import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
 import { uiStore, userDetailsStore, transactionStore } from '../../index';
@@ -7,6 +9,7 @@ import { uiStore, userDetailsStore, transactionStore } from '../../index';
 export class StatementStore {
   @observable data = [];
   @observable tranStore = [];
+  @observable pdfLinkData = {};
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -14,30 +17,37 @@ export class StatementStore {
     displayTillIndex: 10,
     search: {},
   };
+  @observable taxFormsCount = 0;
+  @observable isAdmin = false;
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   handlePdfDownload = (fileId) => {
     console.log(fileId);
     return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: downloadFile,
-          variables: {
-            fileId,
-          },
-        })
-        .then((result) => {
-          if (result.data) {
-            const { preSignedUrl } = result.data.downloadFile;
-            resolve(preSignedUrl);
-          } else {
-            reject();
+      this.pdfLinkData = graphql({
+        client,
+        query: downloadFile,
+        variables: {
+          fileId,
+          accountType: 'SERVICES',
+        },
+        onFetch: (data) => {
+          if (data && !this.pdfLinkData.loading) {
+            if (data.getBoxDownloadLinkByFileId.preSignedUrl) {
+              resolve(data.getBoxDownloadLinkByFileId.preSignedUrl);
+            } else {
+              uiStore.setErrors('Unable to Fetch the File');
+              reject();
+            }
           }
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          reject(error);
-        });
+        },
+        onError: () => reject(),
+      });
     });
   }
 
@@ -45,8 +55,10 @@ export class StatementStore {
   generateMonthlyStatementsPdf = (timeStamp) => {
     const year = parseFloat(moment(timeStamp, 'MMM YYYY').format('YYYY'));
     const month = parseFloat(moment(timeStamp, 'MMM YYYY').format('MM'));
-    const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
+    const account = this.isAdmin ?
+      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
+      userDetailsStore.currentActiveAccountDetails;
+    const { userDetails, getDetailsOfUser } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -54,7 +66,7 @@ export class StatementStore {
           variables: {
             year,
             month,
-            userId: userDetails.id,
+            userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
             accountId: account.details.accountId,
           },
         })
@@ -85,26 +97,30 @@ export class StatementStore {
     const dateRange = this.getDateRange(statementObj);
     return dateRange.map(d => (
       {
-        [statementObj.field]: moment(d).format(statementObj.format),
+        [statementObj.field]: moment(new Date(d)).format(statementObj.format),
         description: statementObj.text,
-        fileId: moment(d).format(statementObj.format),
+        fileId: moment(new Date(d)).format(statementObj.format),
       }
     ));
   }
 
   getDateRange = (statementObj) => {
-    const dateStart = moment(statementObj.date);
-    const dateEnd = moment();
-    const timeValues = [];
-    while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(dateStart.format('MM/DD/YYYY'), 'month')) {
-      timeValues.push(dateStart.format('MM/DD/YYYY'));
-      dateStart.add(1, statementObj.rangeParam);
+    try {
+      const dateStart = statementObj.date ? moment(new Date(statementObj.date)) : '';
+      const dateEnd = moment();
+      const timeValues = [];
+      while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
+        timeValues.push(dateStart.format('MM/DD/YYYY'));
+        dateStart.add(1, statementObj.rangeParam);
+      }
+      const fifthDateOfMonth = moment().startOf('month').day(6);
+      if (fifthDateOfMonth > dateEnd) {
+        timeValues.pop();
+      }
+      return timeValues.reverse();
+    } catch (e) {
+      return [];
     }
-    const fifthDateOfMonth = moment().startOf('month').day(6);
-    if (fifthDateOfMonth > dateEnd) {
-      timeValues.pop();
-    }
-    return timeValues.reverse();
   }
 
   @action
@@ -122,9 +138,12 @@ export class StatementStore {
   }
 
   @computed get taxForms() {
-    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatements && taxStatements.length &&
-      taxStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    const { taxStatement } = this.isAdmin ?
+      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
+      userDetailsStore.currentActiveAccountDetails.details;
+    this.taxFormsCount = (taxStatement && taxStatement.length && orderBy(taxStatement, ['year'], ['desc'])
+      .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return this.taxFormsCount;
   }
 
   @computed get loading() {
@@ -136,13 +155,31 @@ export class StatementStore {
   }
 
   taxFormCount = () => {
-    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatements && taxStatements.length) || 0;
+    const { taxStatement } = this.isAdmin ?
+      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
+      userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatement && taxStatement.length) || 0;
   }
 
-  taxFormCount = () => {
-    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatements && taxStatements.length) || 0;
+  getTaxFormCountInNav = (accountType) => {
+    const accDetails = find(userDetailsStore.userDetails.roles, account =>
+      account.name === accountType &&
+      account.name !== 'investor' &&
+      account && account.details &&
+        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+    const taxStatement = get(accDetails, 'details.taxStatement');
+    return (taxStatement && taxStatement.length) || 0;
+  }
+
+  @action
+  resetPagination = () => {
+    this.requestState = {
+      skip: 0,
+      page: 1,
+      perPage: 10,
+      displayTillIndex: 10,
+      search: {},
+    };
   }
 }
 

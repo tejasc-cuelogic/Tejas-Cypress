@@ -83,14 +83,14 @@ export default class NsPagination extends Component {
           <Menu.Item
             icon
             onClick={() => this.goToPage(currentPageNo + 1)}
-            className={currentPageNo === totalPages && 'disabled'}
+            className={currentPageNo === totalPages ? 'disabled' : ''}
           >
             <Icon className="ns-chevron-right" color="green" />
           </Menu.Item>
           <Menu.Item
             icon
             onClick={() => this.goToPage(totalPages)}
-            className={currentPageNo === totalPages && 'disabled'}
+            className={currentPageNo === totalPages ? 'disabled' : ''}
           >
             <Icon className="ns-arrow-double-right" color="green" />
           </Menu.Item>

@@ -5,6 +5,7 @@ import Login from './containers/Login';
 import SignupInitial from './containers/SignupInitial';
 import InvestorSignup from './containers/InvestorSignup';
 import ConfirmEmailAddress from './containers/ConfirmEmailAddress';
+import EmailWelcomeScreen from './containers/EmailWelcomeScreen';
 import ChangePassword from './containers/ChangePassword';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
@@ -21,8 +22,9 @@ export default class Auth extends React.Component {
         <section className="modalbg-banner" />}
         <Switch>
           <Route path="/auth/login" component={Login} />
-          <Route path="/auth/register" component={SignupInitial} />
+          <Route path="/auth/register/:type?" component={SignupInitial} />
           <Route path="/auth/register-investor" component={InvestorSignup} />
+          <Route path="/auth/welcome-email" component={EmailWelcomeScreen} />
           <Route path="/auth/confirm-email" component={ConfirmEmailAddress} />
           <Route path="/auth/change-password" component={ChangePassword} />
           <Route path="/auth/reset-password" component={ResetPassword} />

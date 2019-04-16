@@ -1,28 +1,25 @@
 
-export const STATUS = {
-  'status-1': ['PENDING'],
-  'status-2': ['PROCESSING'],
-  'status-3': ['COMPLETE'],
-  'status-4': ['FAILED', 'VOIDED'],
-};
-
-
-export const TAB_WISE_STATUS = {
-  'status-1': 'PENDING',
-  'status-2': 'PROCESSING',
-  'status-3': 'COMPLETE',
-  'status-4': 'FAILED',
+export const STATUS_MAPPING = {
+  // eslint-disable-next-line max-len
+  // 'pre-pending': { status: ['PRE_PENDING'], affirmativeCta: { action: 'Approved', title: 'Approve' }, failedCta: { action: 'Declined', title: 'Decline' } },
+  pending: {
+    status: ['PENDING'], affirmativeCta: { action: 'Approved', title: 'Approve' }, failedCta: { action: 'Declined', title: 'Decline' }, syncCta: { action: 'Sync', title: 'Sync' },
+  },
+  processing: { status: ['PROCESSING'], affirmativeCta: { action: 'Verified', title: 'Verified' }, failedCta: { action: 'Failed', title: 'Failed' } },
+  complete: { status: ['COMPLETE'] },
+  failed: { status: ['FAILED', 'VOIDED'] },
 };
 
 export const COUNT_STATUS_MAPPING = {
-  pendingCount: 'status-1',
-  processingCount: 'status-2',
-  completedCount: 'status-3',
-  failedCount: 'status-4',
-  voidCount: 'status-4',
+  prePendingCount: 'pending',
+  pendingCount: 'pending',
+  processingCount: 'processing',
+  completedCount: 'complete',
+  failedCount: 'failed',
+  voidCount: 'failed',
 };
 
-export const STATUS_MAPPING = [
+export const STATUS_META = [
   {
     title: 'Request Date',
     field: 'startDate',
@@ -31,28 +28,28 @@ export const STATUS_MAPPING = [
   {
     title: 'User',
     field: 'userName',
+    fieldId: 'userInfo.id',
     fieldLocation: 'userInfo.info',
-    refStatus: ['PENDING', 'FAILED'],
-  },
-  {
-    title: 'User ID',
-    field: 'userId',
-    fieldLocation: 'userInfo.id',
-    refStatus: ['COMPLETE', 'PROCESSING'],
+    refStatus: ['PENDING', 'FAILED', 'COMPLETE', 'PROCESSING'],
   },
   {
     title: 'NS Transaction ID',
     field: 'requestId',
-    refStatus: ['PROCESSING', 'COMPLETE', 'FAILED'],
+    refStatus: ['COMPLETE', 'FAILED'],
+  },
+  {
+    title: 'Transfer ID',
+    field: 'requestId',
+    refStatus: ['PENDING', 'PROCESSING'],
   },
   {
     title: 'GS Transaction ID',
-    field: 'gsTransactionId',
-    refStatus: ['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'],
+    field: 'gstransactionId',
+    refStatus: ['PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {
     title: 'Type',
-    field: 'type',
+    field: 'direction',
     refStatus: ['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {
@@ -61,8 +58,8 @@ export const STATUS_MAPPING = [
     refStatus: ['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {
-    title: 'Account ID',
-    field: 'accountId',
+    title: 'Account Type',
+    field: 'accountType',
     refStatus: ['PENDING'],
   },
   {
@@ -77,9 +74,8 @@ export const STATUS_MAPPING = [
   },
   {
     title: 'Auto Draft',
-    field: 'agreements',
-    fieldLocation: 'agreement.agreementId',
-    refStatus: ['PROCESSING', 'COMPLETE'],
+    field: 'autodraft',
+    refStatus: ['PENDING', 'PROCESSING', 'COMPLETE'],
   },
   {
     title: 'GS Status',
@@ -103,8 +99,18 @@ export const TRANSACTION_FAILURE = {
     value: '',
     label: 'Justify your decision',
     error: undefined,
-    rule: 'required',
+    rule: 'required|max:250',
     placeHolder: 'Type your comment here...',
+    customErrors: {
+      max: 'Description cannot be greater than 250 characters.',
+    },
   },
 };
 
+export const FILTER_META = {
+  transactionType: [
+    { text: 'Select Type', key: '', value: '' },
+    { text: 'Withdrawal', key: 'Withdrawal', value: 'WITHDRAWAL' },
+    { text: 'Deposit', key: 'Deposit', value: 'DEPOSIT' },
+  ],
+};

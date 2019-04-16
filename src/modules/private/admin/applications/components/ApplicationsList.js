@@ -40,7 +40,6 @@ export default class ApplicationsList extends Component {
       getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
       totalRecords, businessApplicationsList, setKeyword,
     } = this.props.businessAppAdminStore;
-
     if (businessApplicationsList.loading) {
       return <InlineLoader />;
     }
@@ -70,9 +69,7 @@ export default class ApplicationsList extends Component {
                 />
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
-                {totalRecords > 0 &&
                 <NsPaginationType2 floated="right" initRequest={({ first, page }) => this.paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
-                }
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -92,61 +89,69 @@ export default class ApplicationsList extends Component {
                 {getBusinessApplication.length ?
                   getBusinessApplication.map(application => (
                     (application.applicationStatus || application.prequalStatus) !==
-                      BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED &&
-                      <Table.Row verticalAlign="top">
-                        <Table.Cell singleLine>
-                          <Header as="h6">
-                            <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
-                              {application.prequalDetails ?
+                    BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED &&
+                    <Table.Row verticalAlign="top">
+                      <Table.Cell singleLine>
+                        <Header as="h6">
+                          <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
+                            {application.prequalDetails ?
                               application.prequalDetails.businessGeneralInfo.businessName
-                                : application.businessGeneralInfo.businessName}
-                            </Link>
-                            <AppStatusLabel application={application} />
-                          </Header>
-                          <div className="table-info-wrap">
-                            <p>
-                              {application.primaryPOC ?
+                              : application.businessGeneralInfo.businessName}
+                          </Link>
+                          <AppStatusLabel application={application} />
+                        </Header>
+                        <div className="table-info-wrap">
+                          <p>
+                            {application.primaryPOC ?
                               `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}` :
                               `${application.firstName} ${application.lastName}`
-                              }
-                              <br />
-                              {application.primaryPOC && application.primaryPOC.email ?
-                                `${application.primaryPOC.email}` : `${application.email}`
-                              }
-                              <br />
-                              {application.primaryPOC && application.primaryPOC.phone ?
-                                `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
-                              }
-                            </p>
-                            <p>
-                              {/* <p>Sign-up Code <b>-</b><br /> */}
-                              Started <b>{application.created ? moment(application.created.date).format('MM/DD/YYYY') : '-'}</b><br />
-                              Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
-                            </p>
-                          </div>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <Item>
-                            <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
+                            }
+                            <br />
+                            {application.primaryPOC && application.primaryPOC.email ?
+                              `${application.primaryPOC.email}` : `${application.email}`
+                            }
+                            <br />
+                            {application.primaryPOC && application.primaryPOC.phone ?
+                              `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
+                            }
+                          </p>
+                          <p>
+                            Started
+                            <b>
+                              {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${application.created.date}` ? moment(` ${application.created.date}`).format('MM/DD/YYYY') : '-')}
+                            </b><br />
+                            Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
+                          </p>
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Item>
+                          <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
+                          {application.comments && application.comments.length &&
                             <Item.Content>
                               <Item.Description>
-                                {application.comments && application.comments.length ? application.comments[application.comments.length - 1].text : '-'}
+                                {application.comments[application.comments.length - 1].text}
                               </Item.Description>
                               <Item.Extra>
-                                <b>{application.comments && application.comments.length ? moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA') : '-'}</b>
-                                <b> {application.comments && application.comments.length ? application.comments[application.comments.length - 1].commentor.by : '-'}</b>
+                                <b>{moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA')}</b>
+                                <b>
+                                  {
+                                  application.comments[application.comments.length - 1].commentor.by
+                                  }
+                                </b>
                               </Item.Extra>
                             </Item.Content>
-                          </Item>
-                        </Table.Cell>
-                        <ApplicationListStepColumn
-                          application={application}
-                        />
-                        <ApplicationListButtons
-                          refLink={match.url}
-                          application={application}
-                        />
-                      </Table.Row>
+                          }
+                        </Item>
+                      </Table.Cell>
+                      <ApplicationListStepColumn
+                        application={application}
+                      />
+                      <ApplicationListButtons
+                        refLink={match.url}
+                        application={application}
+                      />
+                    </Table.Row>
                   )) :
                   <Table.Row>
                     <Table.Cell colSpan="6">

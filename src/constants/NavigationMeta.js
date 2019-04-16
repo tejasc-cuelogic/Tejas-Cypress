@@ -1,3 +1,4 @@
+
 const INVESTER_ACC_SUB_NAV_ITEMS = {
   subNavigations: [
     { title: 'Portfolio', to: 'portfolio', component: 'Portfolio' },
@@ -166,13 +167,14 @@ export const PRIVATE_NAV = [
   //   path: 'investor/rewardsWallet/containers/RewardsWallet',
   //   accessibleTo: ['ira', 'individual', 'entity'],
   // },
-  // {
-  //   icon: 'ns-comments-edit',
-  //   title: 'Referrals',
-  //   to: 'referrals',
-  //   path: 'investor/referrals/containers/Referrals',
-  //   accessibleTo: ['ira', 'individual', 'entity'],
-  // },
+  {
+    icon: 'ns-comments-edit',
+    title: 'Referrals',
+    to: 'referrals',
+    path: 'investor/referrals/containers/Referrals',
+    accessibleTo: ['ira', 'individual', 'entity'],
+    // accessibleTo: ['investor'],
+  },
   {
     icon: 'gift',
     title: 'Offering',
@@ -191,13 +193,18 @@ export const PRIVATE_NAV = [
       { title: 'Leadership', to: 'leadership', accessFor: [1] },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
       { title: 'Transactions', to: 'transactions', accessFor: [3, 4] },
-      { title: 'Comments', to: 'comments', accessFor: [2] },
+      { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
         title: 'Close', to: 'close', accessFor: [2], accessibleTo: ['admin', 'manager', 'support'],
       },
       { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
-      { title: 'Offering Creation', to: 'offering-creation', accessFor: [2] },
+      {
+        title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
+      {
+        title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
     ],
   },
   {
@@ -212,7 +219,9 @@ export const PRIVATE_NAV = [
         title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
       },
       { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
-      { title: 'FAQ', to: 'faq', component: 'Faq' },
+      {
+        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop'],
+      },
     ],
   },
   // {
@@ -239,17 +248,18 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Overview', to: 'overview' },
+      { title: 'Overview', to: 'overview', env: ['localhost', 'develop'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'Engagement', to: 'engagement' },
       { title: 'Completed', to: 'completed' },
+      { title: '¯\\_(ツ)_/¯', to: 'failed' },
     ],
   },
   {
-    icon: 'lightbulb outline',
+    icon: 'list layout',
     title: 'Categories',
-    capability: 'INSIGHTS_ANY',
+    capability: 'CATEGORIES_ANY',
     to: 'categories',
     path: 'admin/categories',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -335,7 +345,7 @@ export const PRIVATE_NAV = [
     subPanel: 0,
     subNavigations: [
       { title: 'Review', to: 'review', component: 'ApplicationsList' },
-      { title: 'CIP', to: 'cip', component: 'ApplicationsList' },
+      { title: 'Individual', to: 'individual', component: 'ApplicationsList' },
       { title: 'IRA', to: 'ira', component: 'ApplicationsList' },
       {
         title: 'Entity',
@@ -355,17 +365,18 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'credit card',
-    title: 'Transactions',
+    title: 'Transfer Requests',
     capability: 'TRANSACTIONS_ANY',
-    to: 'transactions',
-    path: 'admin/transactions',
+    to: 'transfer-requests',
+    path: 'admin/transfer-requests',
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Status 1', to: 'status-1', component: 'AllTransactions' },
-      { title: 'Status 2', to: 'status-2', component: 'AllTransactions' },
-      { title: 'Status 3', to: 'status-3', component: 'AllTransactions' },
-      { title: 'Status 4', to: 'status-4', component: 'AllTransactions' },
+      // { title: 'Pre-pending', to: 'pre-pending', component: 'AllTransactions' },
+      { title: 'Pending', to: 'pending', component: 'AllTransactions' },
+      { title: 'Processing', to: 'processing', component: 'AllTransactions' },
+      { title: 'Complete', to: 'complete', component: 'AllTransactions' },
+      { title: 'Failed', to: 'failed', component: 'AllTransactions' },
     ],
   },
   {
@@ -408,6 +419,18 @@ export const PRIVATE_NAV = [
     path: 'admin/accreditation',
     accessibleTo: ['admin', 'manager', 'support'],
   },
+  {
+    icon: 'ns-setting',
+    title: 'Dev',
+    capability: 'ELASTICSEARCH_ANY',
+    to: 'dev',
+    path: 'admin/dev',
+    accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
+    ],
+  },
 ];
 
 export const PUBLIC_NAV = [
@@ -435,7 +458,7 @@ export const PUBLIC_NAV = [
     subNavigations: [
       {
         defaultOpen: true,
-        title: 'Overview',
+        title: 'Summary',
         to: 'overview',
         component: 'Overview',
         subPanel: 1,
@@ -453,6 +476,9 @@ export const PUBLIC_NAV = [
           {
             title: 'Gallery', to: '#gallery', useRefLink: true,
           },
+          {
+            title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true,
+          },
         ],
       },
       {
@@ -463,7 +489,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Company Description', to: '#company-description', useRefLink: true, defaultActive: true,
+            title: 'Overview', to: '#company-description', useRefLink: true, defaultActive: true,
           },
           {
             title: 'Business Model', to: '#business-model', useRefLink: true,
@@ -472,10 +498,10 @@ export const PUBLIC_NAV = [
             title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
           },
           {
-            title: 'Team', to: '#team', useRefLink: true,
+            title: 'History', to: '#history', useRefLink: true,
           },
           {
-            title: 'History', to: '#history', useRefLink: true,
+            title: 'Team', to: '#team', useRefLink: true,
           },
         ],
       },
@@ -561,6 +587,7 @@ export const PUBLIC_NAV = [
       { title: 'Team & Culture', to: 'about/team' },
       { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'resources/insights' },
+      { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
     ],
   },
 ];

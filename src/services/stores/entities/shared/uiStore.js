@@ -1,5 +1,6 @@
-import { action, observable } from 'mobx';
-import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
+/* eslint-disable space-unary-ops */
+import { action, observable, computed } from 'mobx';
+import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
 export class UiStore {
   @observable
@@ -16,8 +17,9 @@ export class UiStore {
   @observable errors = undefined;
   @observable success = undefined;
   @observable redirectURL = undefined;
+  @observable passwordPreviewURL = null;
   @observable asyncCheckLoader = false;
-  @observable devBanner = !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
+  @observable devBanner = !['production', 'prod', 'master', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -36,6 +38,9 @@ export class UiStore {
   @observable isEnterPressed = false;
   @observable showFireworkAnimation = false;
   @observable authRef = '';
+  @observable htmlEditorImageLoading = false;
+  @observable createAccountMessage = null;
+  @observable defaultNavExpandedVal = + new Date();
 
   @action
   setFieldvalue = (field, value) => {
@@ -44,7 +49,7 @@ export class UiStore {
 
   @action
   setIsEnterPressed = (e) => {
-    if (e.charCode === 13 && e.target.name !== 'investmentAmount') {
+    if (e.charCode === 13 && e.target.name !== 'investmentAmount' && e.target.name !== 'bankName') {
       this.isEnterPressed = true;
     }
   }
@@ -52,6 +57,22 @@ export class UiStore {
   @action
   resetIsEnterPressed = () => {
     this.isEnterPressed = false;
+  }
+
+  @action
+  setNavExpanded = (value) => {
+    if (value === false) {
+      localStorage.removeItem('defaultNavExpanded');
+    } else {
+      localStorage.setItem('defaultNavExpanded', value);
+    }
+    this.defaultNavExpandedVal = + new Date();
+  }
+
+  doNothing = k => k;
+  @computed get defaultNavExpanded() {
+    this.doNothing(this.defaultNavExpandedVal);
+    return localStorage.getItem('defaultNavExpanded') || false;
   }
 
   @action
@@ -137,6 +158,15 @@ export class UiStore {
   toggleAsyncCheckLoader() {
     this.asyncCheckLoader = !this.asyncCheckLoader;
   }
+  @action
+  setcreateAccountMessage= () => {
+    this.createAccountMessage = 'Please wait...<br /><br /> We are finalizing your account. This can take up to a minute.';
+  }
+
+  @action
+  resetcreateAccountMessage = () => {
+    this.createAccountMessage = null;
+  }
 
   @action
   setConfirmBox = (entity, refId, subRefId, lockedStatus, isAnyFilingXmlLocked) => {
@@ -182,6 +212,20 @@ export class UiStore {
     this.loaderMessage = '';
     this.appLoader = false;
     this.submitButtonDisabled = false;
+    this.createAccountMessage = null;
+  }
+
+  @action
+  showErrorMessage = (message, override = false) => {
+    const setErrorMessage = (
+      `<span>
+        There was an issue with the information you submitted.
+        ${message}
+        If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href="mailto:${NS_SITE_EMAIL_SUPPORT}">${NS_SITE_EMAIL_SUPPORT}</a>
+      </span>`
+    );
+    this.setProgress(false);
+    this.setErrors(override ? (`<span>${message}<span>`) : setErrorMessage);
   }
 
   @action

@@ -105,7 +105,7 @@ export default class Leader extends Component {
     const index = leaderNumber || 0;
     const {
       LEADERSHIP_EXP_FRM, confirmModal, confirmModalName, removeIndex, LEADERSHIP_FRM,
-      formArrayChange, maskArrayChange, setAddressFields,
+      formArrayChange, maskArrayChange, setAddressFields, currentOfferingId,
     } = this.props.offeringCreationStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
@@ -120,14 +120,17 @@ export default class Leader extends Component {
       offer.leadership[index].issuerSubmitted) ? offer.leadership[index].issuerSubmitted : null;
     const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
       (isManager && approved && approved.status));
+    const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     return (
       <Aux>
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
-            <Button.Group size="mini" floated="right">
-              <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
-            </Button.Group>
+            {!isReadonly && leaderCount > 1 &&
+              <Button.Group size="mini" floated="right">
+                <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
+              </Button.Group>
+            }
           </Header>
           <FormCheckbox
             disabled={isReadonly}
@@ -153,7 +156,7 @@ export default class Leader extends Component {
               displayMode={isReadonly}
               name="number"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].number}
-              format="###-###-####"
+              format="(###) ###-####"
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               phoneNumber
             />
@@ -234,6 +237,7 @@ export default class Leader extends Component {
           </Form.Group>
           <HeaderWithTooltip header="Bio" tooltip="To be used on the public offering page" />
           <HtmlEditor
+            imageUploadPath={`offerings/${currentOfferingId}`}
             readOnly={isReadonly}
             changed={this.editorChange}
             index={index}
@@ -262,7 +266,9 @@ export default class Leader extends Component {
                   <label>Headshot image</label>
                   {LEADERSHIP_FRM.fields.leadership[index].headshot.value ? (
                     <div className="file-uploader attached">
-                      <Button onClick={() => this.handleDelDoc('headshot')} circular icon={{ className: 'ns-close-light' }} />
+                      {!isReadonly &&
+                        <Button onClick={() => this.handleDelDoc('headshot')} circular icon={{ className: 'ns-close-light' }} />
+                      }
                       <Image64
                         srcUrl={LEADERSHIP_FRM.fields.leadership[index].headshot.preSignedUrl}
                       />
@@ -292,7 +298,9 @@ export default class Leader extends Component {
                   <label>Hero image</label>
                   {LEADERSHIP_FRM.fields.leadership[index].heroImage.value ? (
                     <div className="file-uploader attached">
+                      {!isReadonly &&
                       <Button onClick={() => this.handleDelDoc('heroImage')} circular icon={{ className: 'ns-close-light' }} />
+                      }
                       <Image64
                         srcUrl={LEADERSHIP_FRM.fields.leadership[index].heroImage.preSignedUrl}
                       />

@@ -37,7 +37,9 @@ export class UserListingStore {
       accountType,
       accountStatus,
       page: reqParams ? reqParams.page : 1,
+      limit: this.requestState.perPage,
     };
+
     this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
@@ -49,14 +51,15 @@ export class UserListingStore {
       client,
       query: allUsersQuery,
       variables: params,
+      fetchPolicy: 'network-only',
     });
   }
 
   @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-      const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
-        moment(values.formattedValue).add(1, 'day').toISOString();
+      const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString() :
+        moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
       this.setInitiateSrch(field, isoDate);
     }
   }
@@ -184,10 +187,11 @@ export class UserListingStore {
       issuer: [],
     };
     this.users.map((user) => {
-      usersOptions[user.roles[0].scope].push({
-        text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
-        value: user.id,
-        icon:
+      if (user.roles[0] && user.roles[0].scope && usersOptions[user.roles[0].scope]) {
+        usersOptions[user.roles[0].scope].push({
+          text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
+          value: user.id,
+          icon:
   <UserAvatar
     UserInfo={{
       firstName: user.info ? user.info.firstName : '',
@@ -195,9 +199,10 @@ export class UserListingStore {
       avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
       roles: user.roles.map(r => r.scope),
     }}
+    base64url
   />,
-      // image: { avatar: user.info.avatar, src: (user.info.avatar && user.info.avatar.url) || '' },
-      });
+        });
+      }
       return false;
     });
     return usersOptions;

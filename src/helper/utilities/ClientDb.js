@@ -3,10 +3,13 @@ import { uniqWith, isEqual, isArray, map } from 'lodash';
 
 class ClientDb {
   database = null;
-  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId') => {
+  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId', addIdKey = false) => {
     let updatedData = data;
     if (isReplaceId) {
       updatedData = map(data, e => ({ [idReplaceKey]: e.id, ...e }));
+    }
+    if (addIdKey) {
+      updatedData = data.map((d, i) => ({ id: i, ...d }));
     }
     this.database = TAFFY(isUniqWith ? uniqWith(updatedData, isEqual) : updatedData);
     return this.getDatabase();
@@ -83,6 +86,12 @@ class ClientDb {
     this.initiateDb(resultArray, true);
   }
 
+  filterByObjExist = (key) => {
+    const data = this.getDatabase();
+    const filterData = data.filter(e => e[key]);
+    this.initiateDb(filterData, true);
+  }
+
   filterByDate = (sDate, eDate, key = 'date', subkey = null) => {
     const data = this.getDatabase();
     const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)
@@ -95,9 +104,7 @@ class ClientDb {
     const isInt = type === 'Integer';
     const filterData = data.filter(e => (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10))
     <= max && (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10)) >= min);
-    if (filterData.length > 0) {
-      this.initiateDb(filterData, true);
-    }
+    this.initiateDb(filterData, true);
   }
 }
 

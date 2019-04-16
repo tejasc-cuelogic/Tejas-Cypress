@@ -26,6 +26,7 @@ export default class AccountCreation extends React.Component {
   }
   handleStepChange = (step) => {
     this.props.investorProfileStore.setStepToBeRendered(step);
+    this.props.uiStore.clearErrors();
   }
   render() {
     const {
@@ -33,7 +34,6 @@ export default class AccountCreation extends React.Component {
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
-      errors,
     } = this.props.uiStore;
     const {
       INVESTMENT_EXP_FORM,
@@ -59,50 +59,60 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Employment Status',
         component: <Employment />,
-        isValid: (EMPLOYMENT_FORM.meta.isValid && !errors) ? '' : stepToBeRendered > 1 ? 'error' : '',
+        isValid: EMPLOYMENT_FORM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
         isDirty: EMPLOYMENT_FORM.meta.isDirty,
+        validForm: EMPLOYMENT_FORM.meta.isValid,
         form: 'EMPLOYMENT_FORM',
         stepToBeRendered: 2,
+        disableKeyDown: true,
       },
       {
         name: 'Brokerage Employment',
         component: <BrokerageEmployment />,
-        isValid: (BROKERAGE_EMPLOYMENT_FORM.meta.isValid && !errors) ? '' : stepToBeRendered > 2 ? 'error' : '',
+        isValid: BROKERAGE_EMPLOYMENT_FORM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
         isDirty: BROKERAGE_EMPLOYMENT_FORM.meta.isDirty,
         form: 'BROKERAGE_EMPLOYMENT_FORM',
+        validForm: BROKERAGE_EMPLOYMENT_FORM.meta.isValid,
         stepToBeRendered: 3,
+        disableKeyDown: true,
       },
       {
         name: 'Public Company Relations',
         component: <PublicCompanyRelations />,
-        isValid: (PUBLIC_COMPANY_REL_FORM.meta.isValid && !errors) ? '' : stepToBeRendered > 3 ? 'error' : '',
+        isValid: PUBLIC_COMPANY_REL_FORM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
         isDirty: PUBLIC_COMPANY_REL_FORM.meta.isDirty,
         form: 'PUBLIC_COMPANY_REL_FORM',
+        validForm: PUBLIC_COMPANY_REL_FORM.meta.isValid,
         stepToBeRendered: 4,
+        disableKeyDown: true,
       },
       {
         name: 'Financial Information',
         component: <Finances />,
-        isValid: (FINANCES_FORM.meta.isValid && !errors) ? '' : stepToBeRendered > 4 ? 'error' : '',
+        isValid: FINANCES_FORM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
         isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
+        validForm: PUBLIC_COMPANY_REL_FORM.meta.isValid,
         stepToBeRendered: 5,
+        disableKeyDown: true,
       },
       {
         name: 'Investment Experience',
         component: <Experience />,
-        isValid: (INVESTMENT_EXP_FORM.meta.isValid && !errors) ? '' : stepToBeRendered > 5 ? 'error' : '',
+        isValid: INVESTMENT_EXP_FORM.meta.isValid ? '' : stepToBeRendered > 5 ? 'error' : '',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 5,
+        validForm: INVESTMENT_EXP_FORM.meta.isValid,
+        stepToBeRendered: 6,
         disableNextButton: true,
+        disableKeyDown: true,
       },
     ];
 
     return (
 
       <div className="step-progress">
-        <MultiStep setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

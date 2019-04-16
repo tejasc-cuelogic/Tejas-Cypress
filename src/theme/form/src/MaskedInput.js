@@ -38,7 +38,7 @@ export default class MaskedInput extends Component {
       >
         {!props.hidelabel &&
           <label>
-            {props.label || label}
+            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip &&
               <Popup
                 hoverable={props.hoverable}
@@ -81,9 +81,9 @@ export default class MaskedInput extends Component {
               {props.actionlabel}
             </Button>
           </div>) : props.currency ? (
-            <NumberFormatWrapped readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} onKeyUp={props.onkeyup ? () => { props.onkeyup(); this.triggerError(true); } : null} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+            <NumberFormatWrapped readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} onKeyUp={props.onkeyup ? () => { props.onkeyup(); this.triggerError(props.showerror || false); } : null} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" decimalScale={props.disableDecimal ? 0 : 2} />
           ) : props.number ? (
-            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" decimalScale={0} />
           ) : props.percentage ? (
             <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 6} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
           ) : props.phoneNumber ? (

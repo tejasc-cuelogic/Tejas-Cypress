@@ -5,8 +5,8 @@ const Banner = () => (
   <section fluid className="banner mission-banner">
     <Responsive minWidth={768} as={Container}>
       <div className="banner-caption">
-        <Header as="h1">
-        Everyone thrives<br />when we invest in<br />each other.
+        <Header as="h2">
+        Invest in each other.<br /> Grow together.
         </Header>
       </div>
     </Responsive>

@@ -1,8 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Grid, Popup, Icon } from 'semantic-ui-react';
-import { ENTITY_ACCREDITATION_METHODS_META } from './../../../../../../../services/constants/investmentLimit';
+import { Header, Grid, Form } from 'semantic-ui-react';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
@@ -11,49 +11,39 @@ export default class VerifyEntityAccreditation extends Component {
   componentWillMount() {
     const { accountType } = this.props.match.params;
     this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
-    this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
   }
   render() {
-    const accreditationMethods = ENTITY_ACCREDITATION_METHODS_META.slice();
     const {
-      NET_WORTH_FORM,
-      accreditationMethodChange,
+      ENTITY_ACCREDITATION_FORM,
       ACCREDITATION_FORM,
+      accreditationMethodChange,
     } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3" className="center-align">How are you accredited?</Header>
+        <Header as="h3" className="center-align">Is your entity an accredited investor?</Header>
         <p className="center-align">
-        To invest in Regulation D 506(c) offerings via an entity, the entity itself must be
-        verified as an accredited investor.
+        To invest in Reg D offerings on the NextSeed platform, we are required to verify your
+        entity's status as an accredited investor.
         </p>
-        <p className="center-align">Please confirm which of the following is applicable for your entity.</p>
-        <Grid stackable textAlign="center" columns={2}>
-          {accreditationMethods.map(method => (
-            <Grid.Column
-              onClick={(e) => { accreditationMethodChange(e, 'NET_WORTH_FORM', { name: 'netWorth', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? method.value : 'NONE' }); accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? 'ASSETS' : method.value }); }}
-            >
-              <div className={`user-type ${((NET_WORTH_FORM.fields.netWorth.value === method.value || ACCREDITATION_FORM.fields.method.value === method.value) ? 'active' : '')}`}>
-                {method.header &&
-                  <Header as="h4">{method.header}</Header>
-                }
-                <p>
-                  {method.desc}
-                  {method.tooltip &&
-                    <Popup
-                      hoverable
-                      trigger={<Icon color="green" name="help circle" />}
-                      content={method.tooltip}
-                      position="top center"
-                      className="center-align"
-                      wide
-                    />
-                  }
-                </p>
-              </div>
-            </Grid.Column>
-          ))}
-        </Grid>
+        <p className="center-align"><b>Please confirm which of the following is applicable to your entity.</b></p>
+        <Form error className="account-type-tab">
+          <Grid columns={1}>
+            {ENTITY_ACCREDITATION_FORM.fields.method.values.map(method => (
+              <Grid.Column
+                onClick={(e) => {
+                  accreditationMethodChange(e, 'ENTITY_ACCREDITATION_FORM', { name: 'method', value: method.value });
+                  accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: method.value });
+                }}
+              >
+                <div className={`user-type ${((ENTITY_ACCREDITATION_FORM.fields.method.value === method.value || ACCREDITATION_FORM.fields.method.value === method.value) ? 'active' : '')}`}>
+                  <p>
+                    {method.label}
+                  </p>
+                </div>
+              </Grid.Column>
+            ))}
+          </Grid>
+        </Form>
       </div>
     );
   }

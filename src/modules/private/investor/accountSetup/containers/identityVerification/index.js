@@ -8,6 +8,8 @@ import LegalIdentityQuestions from '../../components/identityVerification/LegalI
 import ConfirmPhoneNumber from '../../../../../auth/containers/ConfirmPhoneNumber';
 import { DataFormatter } from '../../../../../../helper';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -47,25 +49,26 @@ export default class IdentityVerification extends Component {
     this.props.identityStore.setFormError();
     if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
       this.props.identityStore.checkValidAddress()
-        .then((isAddressValid) => {
-          if (isAddressValid) {
+        .then((res) => {
+          if (res.valid) {
             const ssnValue = this.props.identityStore.ID_VERIFICATION_FRM.fields.ssn.value;
             this.props.identityStore.isSsnExist(ssnValue)
               .then((isSSNPresent) => {
                 if (isSSNPresent) {
                   // set error
-                  this.props.identityStore.showErrorMessage('The SSN entered is already in use.');
+                  this.props.identityStore.setFieldValue('signUpLoading', false);
+                  this.props.uiStore.showErrorMessage('The SSN entered is already in use.');
                   throw new Error('Stop the execution');
                 }
                 this.props.uiStore.setErrors(null);
                 this.props.identityStore.verifyUserIdentity()
                   .then(() => {
-                    this.props.uiStore.setProgress(false);
                     const {
                       key,
                       alertMsg,
                       msgType,
                       route,
+                      display,
                     } = this.props.identityStore.userVerficationStatus;
                     if (key === 'id.success') {
                       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
@@ -81,25 +84,29 @@ export default class IdentityVerification extends Component {
                           this.props.history.push(route);
                         }
                       } else {
-                        this.props.identityStore.startPhoneVerification().then(() => {
+                        this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
                           this.props.history.push('/app/summary/identity-verification/3');
                         })
                           .catch((err) => {
-                            this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+                            this.props.uiStore.showErrorMessage(err.graphQLErrors[0].message);
                           });
                       }
                     } else {
-                      Helper.toast(alertMsg, msgType);
+                      if (display !== false) {
+                        Helper.toast(alertMsg, msgType);
+                      }
                       if (key === 'id.failure') {
                         this.props.identityStore.setIdentityQuestions();
                       }
                       this.props.history.push(route);
                     }
-                  });
+                  }).catch(() => { });
               })
               .catch(() => { });
           } else {
-            this.props.identityStore.showErrorMessage('Please enter a valid residential address.');
+            const defaultMsg = 'Please enter a valid residential address.';
+            this.props.uiStore.showErrorMessage(res.message || defaultMsg, true);
+            this.props.identityStore.setFieldValue('signUpLoading', false);
           }
         });
     }
@@ -118,7 +125,7 @@ export default class IdentityVerification extends Component {
           this.props.history.push('/app/summary');
         }
       } else {
-        this.props.identityStore.startPhoneVerification().then(() => {
+        this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
           this.props.history.push('/app/summary/identity-verification/3');
         })
           .catch((err) => {
@@ -144,7 +151,7 @@ export default class IdentityVerification extends Component {
             this.props.history.push('/app/summary');
           }
         } else {
-          this.props.identityStore.startPhoneVerification().then(() => {
+          this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
             this.props.history.push('/app/summary/identity-verification/3');
           })
             .catch((err) => {
@@ -168,6 +175,7 @@ export default class IdentityVerification extends Component {
       personalInfoMaskedChange,
       identityQuestionAnswerChange,
       setAddressFieldsForUserVerification,
+      signUpLoading,
     } = this.props.identityStore;
     const { errors, confirmBox, inProgress } = this.props.uiStore;
     const { givenName } = this.props.userStore.currentUser;
@@ -178,7 +186,7 @@ export default class IdentityVerification extends Component {
           <LegalDetails
             form={ID_VERIFICATION_FRM}
             name={givenName}
-            inProgress={inProgress}
+            inProgress={signUpLoading}
             close={this.handleCloseModal}
             change={personalInfoChange}
             maskChange={personalInfoMaskedChange}

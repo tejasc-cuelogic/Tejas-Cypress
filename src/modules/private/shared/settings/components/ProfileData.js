@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import { isEmpty, find } from 'lodash';
+import { isEmpty, find, capitalize } from 'lodash';
 import { Grid, Form, Card, Header, Button, Table } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../theme/form';
 import { US_STATES_FOR_INVESTOR } from '../../../../../constants/account';
@@ -14,7 +14,7 @@ import NewEmailAddress from './profileSettings/NewEmailAddress';
 import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
-import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
+import { InlineLoader, UserAvatar, Image64 } from '../../../../../theme/shared';
 import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
 import EstablishProfile from '../../../investor/accountSetup/containers/establishProfile';
 
@@ -28,27 +28,24 @@ export default class ProfileData extends Component {
     if (selectedState) {
       setStateValue(selectedState.value);
     }
+    this.props.uiStore.setProgress(false);
   }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }
-  isVerified = (cipStatus) => {
-    if (cipStatus !== null) {
-      return this.props.userDetailsStore.validAccStatus.includes(cipStatus);
-    }
-    return false;
-  }
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
+    const userRole = capitalize(this.props.userStore.currentUser.roles[0]);
     this.props.identityStore.updateUserProfileData().then(() => {
-      Helper.toast('Investor profile has been updated.', 'success');
+      Helper.toast(`${userRole} profile has been updated.`, 'success');
     })
       .catch(() => { });
   }
   render() {
     const {
-      email, legalDetails, info, phone, investorProfileData,
+      email, legalDetails, info, phone, investorProfileData, status,
     } = this.props.userDetailsStore.userDetails;
+    const { signupStatus, validAccStatus } = this.props.userDetailsStore;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
@@ -66,13 +63,13 @@ export default class ProfileData extends Component {
     }
     return (
       <Grid>
-        <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
+        <Route path={`${this.props.match.url}/new-phone-number`} render={() => <NewPhoneNumber refLink={this.props.match.url} />} />
         <Route
           path={`${this.props.match.url}/confirm`}
           render={props =>
             <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
         />
-        <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
+        <Route path={`${this.props.match.url}/new-email-address`} render={() => <NewEmailAddress refLink={this.props.match.url} />} />
         <Route
           path={`${this.props.match.url}/confirm-email-address`}
           render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
@@ -90,12 +87,20 @@ export default class ProfileData extends Component {
                   <Table.Row>
                     <Table.Cell rowSpan="2">
                       <div className="profile-pic-wrapper">
-                        <UserAvatar UserInfo={userAvatar} />
+                        {userAvatar.avatarUrl ?
+                          <Image64
+                            avatar
+                            circular
+                            size=""
+                            srcUrl={userAvatar.avatarUrl}
+                          /> :
+                          <UserAvatar UserInfo={userAvatar} />
+                        }
                         <Button as={Link} to={`${this.props.match.url}/update-profile-photo`} circular icon={{ className: 'ns-pencil' }} className="change-profile-icon" color="green" />
                       </div>
                     </Table.Cell>
                     <Table.Cell><b>Phone number</b></Table.Cell>
-                    <Table.Cell>{phone && phone.number ? phone.number : 'N/A'}</Table.Cell>
+                    <Table.Cell>{phone && phone.number ? Helper.phoneNumberFormatter(phone.number) : 'N/A'}</Table.Cell>
                     <Table.Cell><Link to={`${this.props.match.url}/new-phone-number`}>Change Phone</Link></Table.Cell>
                   </Table.Row>
                   <Table.Row>
@@ -126,6 +131,11 @@ export default class ProfileData extends Component {
                   onplaceselected={setAddressFieldsForProfile}
                   changed={profileInfoChange}
                 />
+                <FormInput
+                  name="streetTwo"
+                  fielddata={ID_PROFILE_INFO.fields.streetTwo}
+                  changed={profileInfoChange}
+                />
                 <Form.Group widths={3}>
                   <FormInput
                     name="city"
@@ -138,6 +148,7 @@ export default class ProfileData extends Component {
                     options={US_STATES_FOR_INVESTOR}
                     search
                     selection
+                    defaultValue=""
                     placeholder="NY"
                     onChange={profileInfoChange}
                   />
@@ -160,7 +171,9 @@ export default class ProfileData extends Component {
                 {...this.props}
                 email={email}
                 legalDetails={legalDetails}
-                isUserVerified={this.isVerified}
+                status={status}
+                signupStatus={signupStatus}
+                validAccStatus={validAccStatus}
               />
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile &&

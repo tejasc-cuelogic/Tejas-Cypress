@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Parser from 'html-react-parser';
 import { inject, observer } from 'mobx-react';
 import { Header, Container, Grid, Breadcrumb } from 'semantic-ui-react';
 import { InlineLoader, Image64 } from '../../../../theme/shared';
+import HtmlEditor from '../../../shared/HtmlEditor';
 
 @inject('articleStore')
 @observer
 export default class InsightsDetails extends Component {
   componentWillMount() {
-    this.props.articleStore.getArticle(this.props.match.params.id);
+    this.props.articleStore.getArticleDetailsBySlug(this.props.match.params.slug);
   }
   render() {
     const { ArticlesDetails, articleLoading } = this.props.articleStore;
@@ -35,8 +35,11 @@ export default class InsightsDetails extends Component {
                 srcUrl={ArticlesDetails.featuredImage}
                 className="mb-30 mt-30"
               />
-              <pre className="migrated-content">
-                {Parser(ArticlesDetails.content || '')}
+              <pre className="migrated-content justify-text">
+                <HtmlEditor
+                  readOnly
+                  content={(ArticlesDetails.content || '')}
+                />
               </pre>
             </Grid.Column>
           </Grid>

@@ -8,7 +8,7 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
       accountId
       firstName
       lastName
-      email
+      accountType
       linkedBank {
         changeRequest {
           accountNumber
@@ -25,22 +25,30 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
   }
 `;
 
-export const checkOpeningDepositAmount = gql`
-  mutation checkOpeningDepositAmount($accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum! $accountId: String) {
-    checkOpeningDepositAmount(
+export const isValidOpeningDepositAmount = gql`
+  query isValidOpeningDepositAmount($accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum! $accountId: String) {
+    isValidOpeningDepositAmount(
       accountAttributes: $accountAttributes
       accountType: $accountType,
       accountId: $accountId
     )
   }`;
 
-export const updateLinkedAccount = gql`
-mutation _verifyLinkedBank($accountId: String!, $userId: String!) {
-  verifyLinkedBank(
+export const linkBankRequestApprove = gql`
+mutation linkBankRequestApprove($accountId: String!, $userId: String!) {
+  linkBankRequestApprove(
     userId: $userId
     accountId: $accountId
   ){
     verified
     message
   }
+}`;
+
+export const linkBankRequestDeny = gql`
+mutation linkBankRequestDeny($accountId: String!, $userId: String!) {
+  linkBankRequestDeny(
+    userId: $userId
+    accountId: $accountId
+  )
 }`;

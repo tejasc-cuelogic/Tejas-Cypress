@@ -1,31 +1,33 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
-import cookie from 'react-cookies';
 import { withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
     this.props.authStore.requestEmailChange().then(() => {
       this.props.uiStore.clearErrors();
+      this.props.identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
-      const userCredentials = { email: email.value, password: btoa(password.value) };
-      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-      this.props.history.push('/app/profile-settings/profile-data/confirm-email-address');
+      this.props.authStore.setCredentials({
+        email: email.value.toLowerCase(), password: password.value,
+      });
+      this.props.history.push(`${this.props.refLink}/confirm-email-address`);
     })
       .catch(() => {});
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('CONFIRM_FRM');
-    this.props.history.push('/app/profile-settings/profile-data');
+    this.props.history.push(this.props.refLink);
   }
   render() {
     const { CONFIRM_FRM, confirmFormChange } = this.props.authStore;

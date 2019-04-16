@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateLayout';
 
 @inject('helloWorldStore')
 @withRouter
 @observer
-export default class CatergoriesDetails extends Component {
+export default class TransactionDetails extends Component {
   render() {
     const { currentRecord } = this.props.helloWorldStore;
     return (
@@ -16,7 +16,7 @@ export default class CatergoriesDetails extends Component {
           <Card fluid>
             <Card.Content>
               <div style={{ fontSize: '24px', color: '#666', textAlign: 'center' }}>
-                {currentRecord || 'hello'}
+                {currentRecord}
               </div>
             </Card.Content>
           </Card>

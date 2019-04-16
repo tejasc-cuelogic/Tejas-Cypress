@@ -1,15 +1,17 @@
 /* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
-import Banklogo from '../../../../../../assets/images/banks/default.png';
 import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
+import NSImage from '../../../../../shared/NSImage';
 
-@inject('bankAccountStore', 'transactionStore')
+@inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class AccountDetailsView extends Component {
@@ -19,7 +21,10 @@ export default class AccountDetailsView extends Component {
       accountDetails.plaidInstitutionId : null;
 
     if (activeBankInstutationId) {
-      bankAccountActions.getById(activeBankInstutationId, accountType);
+      this.props.bankAccountStore.setFieldValue('loadingState', true);
+      bankAccountActions.getById(activeBankInstutationId, accountType).then(() => {
+        this.props.bankAccountStore.setFieldValue('loadingState', false);
+      });
     } else if (accountType === 'active') {
       this.props.bankAccountStore.setActiveBankPlaidLogo(null);
     } else if (accountType === 'pending') {
@@ -36,19 +41,21 @@ export default class AccountDetailsView extends Component {
   }
   render() {
     const {
-      accountDetails,
-      click,
-      match,
-      accountType,
-      pendingAccoungDetails,
+      accountDetails, click, match, accountType, pendingAccoungDetails, uiStore,
+      userDetailsStore,
     } = this.props;
-    const { activeBankPladLogo, pendingBankPladLogo } = this.props.bankAccountStore;
-    const pladidLogo = accountType === 'pending' ? pendingBankPladLogo : activeBankPladLogo;
+    const { activeBankPladLogo, pendingBankPladLogo, loadingState } = this.props.bankAccountStore;
+    const pladidLogo = accountType === 'pending' ?
+      pendingBankPladLogo : activeBankPladLogo;
     let currentStaus = '';
     if (accountType === 'active') {
-      currentStaus = pendingAccoungDetails ? 'Pending Removal' : 'Active';
+      currentStaus = (pendingAccoungDetails && pendingAccoungDetails.status !== 'APPROVED') ? 'Inactive (Pending Removal)' : 'Active';
     } else {
-      currentStaus = accountDetails.status ? LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+      currentStaus = accountDetails.status ?
+        LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+    }
+    if (loadingState) {
+      return <InlineLoader />;
     }
     return (
       <Card.Content>
@@ -59,7 +66,9 @@ export default class AccountDetailsView extends Component {
                 {pladidLogo ?
                   <Item.Image size="tiny" src={`data:image/png;base64,${pladidLogo}`} />
                   :
-                  <Item.Image size="tiny" src={Banklogo} />
+                  <div className="ui tiny image">
+                    <NSImage path="banks/default.png" />
+                  </div>
                 }
               </Item>
             </Grid.Column>
@@ -79,41 +88,35 @@ export default class AccountDetailsView extends Component {
               <Item>
                 <Item.Content>
                   <Item.Extra>
-                    {accountDetails && pendingAccoungDetails ? 'Date linked' : 'Date Requested'
+                    {accountDetails && accountDetails.dateLinked ? 'Date linked' : 'Date Requested'
                     }
                   </Item.Extra>
                   <Item.Header>
-                  {accountDetails && pendingAccoungDetails && accountDetails.changeRequest &&
-                      accountDetails.changeRequest.dateRequested ?
-                      moment(accountDetails.changeRequest.dateRequested).format('MM/DD/YYYY') :
-                      moment(accountDetails.dateLinked).format('MM/DD/YYYY')
+                    {
+                      moment(accountDetails.dateLinked || accountDetails.dateRequested).format('MM/DD/YYYY')
                     }
                   </Item.Header>
                 </Item.Content>
               </Item>
             </Grid.Column>
-            <Grid.Column>
-              <Item>
-                <Item.Content>
-                  <Item.Extra>Status</Item.Extra>
-                  {accountType === 'pending' ?
-                    <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
-                      {currentStaus}
-                    </Item.Header>
-                    :
-                    <Item.Header>
-                      {currentStaus}
-                    </Item.Header>
-                  }
-                </Item.Content>
-              </Item>
-            </Grid.Column>
+              <Grid.Column>
+                <Item>
+                  <Item.Content>
+                    <Aux>
+                      <Item.Extra>Status</Item.Extra>
+                        <Item.Header>
+                          {currentStaus}
+                        </Item.Header>
+                    </Aux>
+                  </Item.Content>
+                </Item>
+              </Grid.Column>
             <Grid.Column width={3} textAlign="right" verticalAlign="middle">
               {accountType === 'active' ?
-                accountDetails && !pendingAccoungDetails &&
-                <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
+                accountDetails && !accountDetails.pendingUpdate &&
+                <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} color="green" content="Change Linked Bank" />
                 :
-                <Button inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
+                <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }
             </Grid.Column>
           </Grid.Row>

@@ -1973,6 +1973,9 @@ i.icon[class*="ns-"]{
 .ns-fullscreen:before{
     content:@ns-fullscreen;
 }
+.ns-hamburger:before{
+    content:@ns-hamburger; 
+}
 .ns-help:before{
     content:@ns-help;
 }
@@ -1984,6 +1987,9 @@ i.icon[class*="ns-"]{
 }
 .ns-hospitality:before{
     content:@ns-hospitality;
+}
+.ns-hospitality-2:before {
+    content:@ns-hospitality-2; 
 }
 .ns-image:before{
     content:@ns-image;
@@ -2050,6 +2056,9 @@ i.icon[class*="ns-"]{
 }
 .ns-offering:before{
     content:@ns-offering;
+}
+.ns-other:before {
+    content:@ns-other; 
 }
 .ns-paper-plane:before{
     content:@ns-paper-plane;

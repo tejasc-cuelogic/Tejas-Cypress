@@ -7,7 +7,7 @@ import TeamModal from '../components/TeamModal';
 import { InlineLoader } from '../../../../theme/shared';
 import TeamList from '../components/TeamList';
 
-const isTablet = document.documentElement.clientWidth < 992;
+// const isTablet = document.documentElement.clientWidth < 992;
 @inject('teamStore')
 @observer
 class team extends Component {
@@ -19,22 +19,26 @@ class team extends Component {
     const teamInfo = (
       <Grid doubling columns={2} className="team-list">
         <Grid.Column>
-          <Grid centered>
-            <Grid.Column largeScreen={8} computer={9} tablet={8} mobile={14} className={isTablet ? 'mt-30 mb-30' : 'team-column'}>
+          <div className="sticky-sidebar">
+            <div className="team">
               <Header as="h2">Meet our team.</Header>
               <p>
                 We&apos;re a team of entrepreneurs with backgrounds in business, finance,
                 law, marketing and technology. We&apos;re here to empower business owners
                 and everyday people to invest in one another.
               </p>
-            </Grid.Column>
-          </Grid>
+            </div>
+            {/* <Grid centered>
+              <Grid.Column centered largeScreen={8} computer={9} tablet={8} mobile={14}
+              className={`${isTablet && 'mt-30 mb-30'}`}>
+              </Grid.Column>
+            </Grid> */}
+          </div>
         </Grid.Column>
         <TeamList
           columns={3}
           className="team-gallery"
           match={this.props.match}
-          members={teamMembers}
           joinColumn
         />
         <Route

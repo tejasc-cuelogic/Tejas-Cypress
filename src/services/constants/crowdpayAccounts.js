@@ -1,7 +1,7 @@
 export const CROWDPAY_FILTERS = {
-  review: { initialStatus: ['FULL', 'DECLINED'], initialFilters: ['FULL'], accountType: [] },
-  cip: { initialStatus: ['GS_PROCESSING', 'DECLINED'], initialFilters: ['GS_PROCESSING'], accountType: ['INDIVIDUAL'] },
-  ira: { initialStatus: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'], initialFilters: ['NS_PROCESSING'], accountType: ['IRA'] },
+  review: { initialStatus: ['FULL', 'DECLINED', 'FROZEN'], initialFilters: ['FULL'], accountType: [] },
+  individual: { initialStatus: ['CIP_PROCESSING', 'DECLINED', 'ACCOUNT_PROCESSING'], initialFilters: ['ACCOUNT_PROCESSING'], accountType: ['INDIVIDUAL'] },
+  ira: { initialStatus: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED', 'ACCOUNT_PROCESSING'], initialFilters: ['NS_PROCESSING'], accountType: ['IRA'] },
   entity: { initialStatus: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'], initialFilters: ['NS_PROCESSING'], accountType: ['ENTITY'] },
 };
 
@@ -14,11 +14,12 @@ export const FILTER_META = {
     error: undefined,
     rule: 'array',
   },
-  cip: {
-    value: ['GS_PROCESSING'],
+  individual: {
+    value: ['ACCOUNT_PROCESSING'],
     values: [
-      { label: 'GS Processing', value: 'GS_PROCESSING' },
+      { label: 'CIP Processing', value: 'CIP_PROCESSING' },
       { label: 'Declined', value: 'DECLINED' },
+      { label: 'Account Processing', value: 'ACCOUNT_PROCESSING' },
     ],
     error: undefined,
     rule: 'array',
@@ -28,6 +29,7 @@ export const FILTER_META = {
     values: [
       { label: 'NS Processing', value: 'NS_PROCESSING' },
       { label: 'GS Processing', value: 'GS_PROCESSING' },
+      { label: 'Account Processing', value: 'ACCOUNT_PROCESSING' },
       { label: 'Declined', value: 'DECLINED' },
     ],
     error: undefined,
@@ -54,4 +56,15 @@ export const CROWDPAY_ACCOUNTS_STATUS = {
   GS_PROCESSING: 'GS_PROCESSING',
   DECLINED: 'DECLINED',
   DELETED: 'DELETED',
+  ACCOUNT_PROCESSING: 'ACCOUNT_PROCESSING',
+};
+
+export const CONFIRM_CROWDPAY = {
+  justifyDescription: {
+    value: '',
+    label: 'Justify your decision',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your comment here...',
+  },
 };

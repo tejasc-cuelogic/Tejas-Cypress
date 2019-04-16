@@ -21,21 +21,24 @@ export const DropdownFilter = props => (
       fluid
       multiple={props.isMultiple}
       selection
+      clearable
       options={props.options}
     />
-    <div className="dropdown-effect">{props.name}</div>
+    <div className="dropdown-effect">{props.label || props.name}</div>
   </Form.Field>
 );
 
 export const ByKeyword = ({
-  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon, more, change,
+  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon,
+  more, enableSearch, change,
 }) => (
   <Aux>
     <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
       <Form>
         <Form.Field inverted>
           {fLabel && <label className="invisible">{placeholder}</label>}
-          <Input fluid onChange={change} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
+          {!enableSearch &&
+          <Input fluid onChange={change} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />}
         </Form.Field>
       </Form>
     </Grid.Column>
@@ -59,18 +62,20 @@ export const DateRangeFilter = props => (
     <Form.Group widths="equal" className="range">
       <Form.Field>
         <NumberFormat
+          value={props.startDate}
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
-          onValueChange={values => props.change(values, 'startDate')}
+          onValueChange={values => props.change(values, props.nameStart || 'startDate')}
         />
       </Form.Field>
       <Form.Field>
         <NumberFormat
+          value={props.endDate}
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
-          onValueChange={values => props.change(values, 'endDate')}
+          onValueChange={values => props.change(values, props.nameEnd || 'endDate')}
         />
       </Form.Field>
     </Form.Group>
@@ -88,7 +93,7 @@ export const AmountRangeFilter = props => (
           thousandSeparator
           placeholder={props.placeHolderMin || 'Min Amount'}
           currency
-          onValueChange={values => props.change(values, 'min')}
+          onValueChange={values => props.change(values, props.nameMin || 'min')}
         />
       </Form.Field>
       <Form.Field>
@@ -98,7 +103,7 @@ export const AmountRangeFilter = props => (
           thousandSeparator
           placeholder={props.placeHolderMax || 'Max Amount'}
           currency
-          onValueChange={values => props.change(values, 'max')}
+          onValueChange={values => props.change(values, props.nameMax || 'max')}
         />
       </Form.Field>
     </Form.Group>

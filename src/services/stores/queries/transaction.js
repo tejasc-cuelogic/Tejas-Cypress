@@ -81,83 +81,117 @@ export const paymentHistory = gql`
   }
 `;
 
-export const investmentsByOfferingId = gql`
-  query _getInvestmentsByOfferingId($offeringId: String!) {
-    getInvestmentsByOfferingId(offeringId: $offeringId) {
+export const getInvestmentsByUserIdAndOfferingId = gql`
+  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String!) {
+    getInvestmentsByUserIdAndOfferingId(offeringId: $offeringId, userId: $userId) {
       investmentId
       accountId
       status
       amount
+      agreement {
+        agreementId
+      }
     }
   }
 `;
 
 export const getTransactions = gql`
-  query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $limit: Int){
-    getTransactions(
-      status: $status
-      offset: $offset
-      limit: $limit
+query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
+  getTransactions(
+    status: $status, 
+    offset: $offset, 
+    direction: $direction,
+    limit: $limit, 
+    maxAmount: $maxAmount, 
+    minAmount: $minAmount, 
+    dateFilterStart: $dateFilterStart, 
+    dateFilterStop: $dateFilterStop 
     ) {
-      transactions {
-        requestId
-        status
-        startDate
-        amount
-        accountId
-        gsTransactionId
-        type
-        userInfo{
-          id
-          info {
-            firstName
-            lastName
-          }
-        }
-        direction
-        estDateAvailable
-        agreement {
-          agreementId
-        }
-        failDate
-        failDesc
+    transactions {
+      requestId
+      status
+      startDate
+      amount
+      accountId
+      gsTransactionId
+      gsProcessId
+      type
+      investorAccountInfo {
+        accountType
       }
-     transactionCount {
+      userInfo {
+        id
+        info {
+          firstName
+          lastName
+        }
+      }
+      direction
+      estDateAvailable
+      agreement {
+        agreementId
+      }
+      failDate
+      failDesc
+      autodraft
+    }
+    transactionCount {
       pendingCount
       processingCount
       completedCount
       failedCount
       voidCount
+      searchCount
     }
   }
-}`;
+}
+`;
 
 
-export const approveTransactions = gql`
-  mutation _transactionApprove($id: Int!){
-    transactionApprove(
+export const transferRequestAdminApprove = gql`
+  mutation transferRequestAdminApprove($id: Int!){
+    transferRequestAdminApprove(
     id: $id
     )
   }`;
 
-export const declineTransactions = gql`
-  mutation _transactionDecline($id: Int!){
-    transactionDecline(
+export const transferRequestAdminDecline = gql`
+  mutation transferRequestAdminDecline($id: Int!, $reason: String){
+    transferRequestAdminDecline(
+    id: $id
+    reason: $reason
+    )
+  }`;
+
+export const transferRequestAdminVerified = gql`
+  mutation transferRequestAdminVerified($id: Int!){
+    transferRequestAdminVerified(
     id: $id
     )
   }`;
 
-export const verifiedTransactions = gql`
-  mutation _transactionVerified($id: Int!){
-    transactionVerified(
-    id: $id
-    )
-  }`;
-
-export const failedTransactions = gql`
-  mutation _transactionFailed($id: Int!, $reason: String!){
+export const transactionFailed = gql`
+  mutation transactionFailed($id: Int!, $reason: String){
     transactionFailed(
     id: $id
     reason: $reason
     )
   }`;
+
+export const transferRequestAdminSync = gql`
+mutation transferRequestAdminSync($id: Int!){
+  transferRequestAdminSync(
+  id: $id
+  )
+}`;
+
+export const viewLoanAgreement = gql`
+  query viewLoanAgreement($agreementId: Int!, $callbackUrl: String) {
+    viewLoanAgreement(agreementId: $agreementId, callbackUrl: $callbackUrl) {
+      agreementId
+      envelopeId
+      docuSignViewURL
+      npaViewUrl
+    }
+  }
+`;

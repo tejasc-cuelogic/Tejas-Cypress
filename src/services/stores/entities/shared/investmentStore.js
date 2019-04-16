@@ -1,17 +1,19 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
+import { capitalize, orderBy, mapValues, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
-  validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
+  validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment,
+  investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
+import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
@@ -26,7 +28,7 @@ export class InvestmentStore {
   @observable offeringMetaData = {
     campaignType: 0,
     rate: 5,
-    rateMin: campaignStore.minInvestAmt,
+    rateMin: 1.5,
     annualReturn: 1000,
     targetTerm: 5000,
   }
@@ -36,6 +38,7 @@ export class InvestmentStore {
   @observable byDefaultRender = true;
   @observable showTransferRequestErr = false;
   @observable investmentFlowErrorMessage = null;
+  @observable isGetTransferRequestCall = false;
 
   @action
   setShowTransferRequestErr = (status) => {
@@ -58,10 +61,22 @@ export class InvestmentStore {
   }
 
   @computed get getDiffInvestmentLimitAmount() {
-    const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
-      portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
-    const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
-    return currentLimit - oldLimit;
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    if (userAmountDetails && !money.isZero(this.investmentAmount)) {
+      const getPreviousInvestedAmount =
+        (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
+      const differenceResult = money.subtract(
+        this.investmentAmount,
+        getPreviousInvestedAmount,
+      );
+      return differenceResult;
+    }
+    return 0;
+    // const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
+    //   portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
+    // const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
+
+    // return currentLimit - oldLimit;
   }
 
   @computed get getSelectedAccountTypeId() {
@@ -77,18 +92,38 @@ export class InvestmentStore {
       || 0;
   }
   @computed get getTransferRequestAmount() {
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
+    const getrewardBalanceAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
+    const getPreviousCreditAvailable = (userAmountDetails && userAmountDetails.previousInvestmentCredit) || '0';
+    const getCurrCreditAvailable =
+      money.add(getrewardBalanceAvailable, getPreviousCreditAvailable);
+    const cashAndCreditBalance = money.add(getCurrCashAvailable, getCurrCreditAvailable);
+    const getPreviousInvestedAmount =
+      (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
     const transferAmount = money.subtract(
       this.investmentAmount,
-      money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
+      // money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
+      money.add(cashAndCreditBalance, getPreviousInvestedAmount),
     );
-    return transferAmount < 0 ? 0 : transferAmount;
+    return money.isNegative(transferAmount) || money.isZero(transferAmount) ? '0' : transferAmount;
+    // return transferAmount < '0' ? '0' : transferAmount;
   }
   @computed get getSpendCreditValue() {
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
     let spendAmount = 0;
-    if (this.getCurrCashAvailable < this.investmentAmount) {
-      const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
-      if (rewardStore.getCurrCreditAvailable < lowValue) {
-        spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
+    // if (this.getCurrCashAvailable < this.investmentAmount) {
+    //   const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
+    //   if (rewardStore.getCurrCreditAvailable < lowValue) {
+    //     spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
+    //   }
+    // }
+    if (getCurrCashAvailable < this.investmentAmount) {
+      const lowValue = money.subtract(this.investmentAmount, getCurrCashAvailable);
+      if (getCurrCreditAvailable < lowValue) {
+        spendAmount = money.subtract(lowValue, getCurrCreditAvailable);
       }
     }
     return parseFloat(spendAmount, 2);
@@ -129,6 +164,11 @@ export class InvestmentStore {
     this.investAccTypes.value = res.value;
     resolve(res.value);
   });
+
+  @action
+  resetAccTypeChanged = () => {
+    this.investAccTypes = { ...INVEST_ACCOUNT_TYPES };
+  }
 
   @action
   prepareAccountTypes = (UserAccounts) => {
@@ -181,22 +221,37 @@ export class InvestmentStore {
 
   @action
   calculateEstimatedReturn = () => {
-    const {
-      rateMin,
-      campaignType,
-    } = this.offeringMetaData;
+    const { campaign } = campaignStore;
+    const { getInvestorAccountById } = portfolioStore;
+    let offeringSecurityType = '';
+    let interestRate = '';
+    let investmentMultiple = '';
+    if (campaign && campaign.keyTerms) {
+      offeringSecurityType = get(campaign, 'keyTerms.securities');
+      interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
+      investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+    } else {
+      offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
+      interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
+      investmentMultiple = get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') && get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') !== null ? get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') : '0';
+    }
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
-      if (campaignType === 0) {
-        const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt));
+      if (offeringSecurityType === 'TERM_NOTE') {
+        const formatedIntrestRate = money.floatToAmount(interestRate);
+        const calculatedIntrestAmount = money.percent(investAmt, formatedIntrestRate);
+        const estReturnMIN =
+          Helper.CurrencyFormat(money.add(investAmt, calculatedIntrestAmount), 0);
         this.estReturnVal = estReturnMIN;
         return this.estReturnVal;
-      } else if (campaignType === 1) {
-        this.estReturnVal = `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan))}`;
-        return this.estReturnVal;
       }
-    } else {
-      this.estReturnVal = '-';
+      const formatedInvestmentMultiple = money.floatToAmount(investmentMultiple);
+      const estReturnMIN =
+        Helper.CurrencyFormat(money.mul(formatedInvestmentMultiple, investAmt), 0);
+      this.estReturnVal = estReturnMIN;
+      return this.estReturnVal;
+    } else if (investAmt <= 100) {
+      this.setFieldValue('estReturnVal', '-');
       return this.estReturnVal;
     }
     return this.estReturnVal;
@@ -230,7 +285,7 @@ export class InvestmentStore {
         includeInFlight: true,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.cashAvailable.loading) {
           rewardStore.getUserRewardBalance().then(() => {
             resolve(data);
           });
@@ -244,32 +299,89 @@ export class InvestmentStore {
   });
 
   @action
-  validateInvestmentAmountInOffering = () => {
+  validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
+    uiStore.setProgress();
     if (this.investmentAmount) {
-      this.details = graphql({
-        client,
-        query: validateInvestmentAmountInOffering,
-        variables: {
-          investmentAmount: this.investmentAmount,
-          offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-          userId: userDetailsStore.currentUserId,
-          accountId: this.getSelectedAccountTypeId,
-        },
-        onFetch: (res) => {
-          const { status, message } = res.validateInvestmentAmountInOffering;
-          this.setFieldValue('isValidInvestAmtInOffering', status);
-          this.setFieldValue('disableNextbtn', status);
-          this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
-          this.INVESTMONEY_FORM.meta.isValid = status;
-        },
-        onError: () => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-        fetchPolicy: 'network-only',
-      });
+      if (this.checkLockinPeriod()) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'The campaign is currently within the last 48 hours of closing. Your investment cannot be reduced or canceled at this time.';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+        uiStore.setProgress(false);
+        resolve();
+      } else if (!this.isValidMultipleAmount(this.investmentAmount)) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.setFieldValue('investmentFlowErrorMessage', 'Investments must be in increments of $100');
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investments must be in increments of $100';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+        uiStore.setProgress(false);
+        resolve();
+      } else {
+        client
+          .mutate({
+            mutation: investNowGeneratePurchaseAgreement,
+            variables: {
+              investmentAmount: this.investmentAmount.toString(),
+              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+              transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
+              // creditToSpend: this.getSpendCreditValue,
+              callbackUrl: `${window.location.origin}/secure-gateway`,
+            },
+          })
+          .then(action((resp) => {
+            const { status, message, flag } = resp.data.investNowGeneratePurchaseAgreement;
+            this.setFieldValue('isValidInvestAmtInOffering', status);
+            this.setFieldValue('disableNextbtn', status);
+            if (flag !== 1) {
+              this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
+              this.INVESTMONEY_FORM.meta.isValid = status;
+            }
+            // Validated investment amount fields:
+            if (flag === 1) {
+              this.isGetTransferRequestCall = true;
+            } else {
+              const errorMessage = !status ? message : null;
+              this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            }
+            if (!resp.data.investNowGeneratePurchaseAgreement) {
+              this.setShowTransferRequestErr(true);
+            }
+            this.setFieldValue('agreementDetails', resp.data.investNowGeneratePurchaseAgreement);
+            resolve({ isValid: status, flag });
+          }))
+          .catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            this.setShowTransferRequestErr(true);
+            uiStore.setErrors(error.message);
+            reject();
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      }
+    } else {
+      resolve();
     }
-  }
+  });
 
+  checkLockinPeriod = () => {
+    let resultToReturn = false;
+    const offeringDetails = portfolioStore.getInvestorAccountById;
+    if (offeringDetails) {
+      const isLokcinPeriod = DataFormatter.diffDays(offeringDetails && offeringDetails.offering &&
+        offeringDetails.offering.closureSummary &&
+        offeringDetails.offering.closureSummary.processingDate ?
+        offeringDetails.offering.closureSummary.processingDate : null) <= 2;
+      if (isLokcinPeriod) {
+        const alreadyInvestedAmount = offeringDetails.investedAmount;
+        resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
+      }
+    }
+    return resultToReturn;
+  }
   @action
   validateInvestmentAmount = () => new Promise((resolve, reject) => {
     graphql({
@@ -355,26 +467,42 @@ export class InvestmentStore {
 
   @action
   finishInvestment = () => {
-    if (this.agreementDetails) {
+    const offeringIdToUpdate = campaignStore.getOfferingId ?
+      campaignStore.getOfferingId : portfolioStore.currentOfferingId;
+    if (this.agreementDetails && offeringIdToUpdate) {
+      const varObj = {
+        userId: userDetailsStore.currentUserId,
+        accountId: this.getSelectedAccountTypeId,
+        offeringId: offeringIdToUpdate,
+        investmentAmount: this.investmentAmount.toString(),
+        agreementId: this.agreementDetails.agreementId,
+        // transferAmount: this.getTransferRequestAmount,
+        transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
+      };
       uiStore.setProgress();
       return new Promise((resolve) => {
         client
           .mutate({
             mutation: finishInvestment,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-              accountId: this.getSelectedAccountTypeId,
-              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-              investmentAmount: this.investmentAmount,
-              agreementId: this.agreementDetails.agreementId,
-              transferAmount: this.getTransferRequestAmount,
-            },
+            variables: varObj,
+            refetchQueries: [{
+              query: getInvestorAccountPortfolio,
+              variables: {
+                userId: userDetailsStore.currentUserId,
+                accountId: this.getSelectedAccountTypeId,
+              },
+            }],
           })
           .then((data) => {
             // resolve(data.data.finishInvestment);
-            const { status, message } = data.data.finishInvestment;
-            const errorMessage = !status ? message : null;
-            this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            const { status, message, flag } = data.data.investNowSubmit;
+
+            if (flag === 1) {
+              this.isGetTransferRequestCall = true;
+            } else {
+              const errorMessage = !status ? message : null;
+              this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            }
             resolve(status);
           })
           .catch((error) => {
@@ -421,11 +549,12 @@ export class InvestmentStore {
     let matchedTierAmount = 0;
     if (campaign && campaign.bonusRewards && campaign.bonusRewards.length) {
       campaign.bonusRewards.map((reward) => {
-        const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
+        // const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
+        const tiersArray = orderBy(reward.tiers);
         tiersArray.map((tier) => {
-          if (this.investmentAmount >= tier.amount &&
-            (matchedTierAmount === 0 || tier.amount === matchedTierAmount)) {
-            matchedTierAmount = tier.amount;
+          if (this.investmentAmount >= tier &&
+            (matchedTierAmount === 0 || tier === matchedTierAmount)) {
+            matchedTierAmount = tier;
             bonusRewards.push(reward);
           }
           return null;
@@ -437,11 +566,30 @@ export class InvestmentStore {
     return bonusRewards;
   }
 
+  investmentBonusRewards = (investedAmount) => {
+    const { campaign } = campaignStore;
+    const offeringInvestedAmount = investedAmount || 0;
+    let rewardsTiers = [];
+    campaign.bonusRewards.map((reward) => {
+      rewardsTiers = reward.tiers.concat(rewardsTiers);
+      return false;
+    });
+    rewardsTiers = [...new Set(toJS(rewardsTiers))].sort((a, b) => b - a);
+    const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
+    let bonusRewards = [];
+    bonusRewards = campaign && campaign.bonusRewards
+      .filter(reward => reward.tiers.includes(matchTier));
+    return bonusRewards;
+  }
+
   @action
-  updateInvestmentLimits = () => new Promise((resolve) => {
+  updateInvestmentLimits = offeringId => new Promise((resolve) => {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
-      .updateInvestmentLimits(data, this.getSelectedAccountTypeId, userDetailsStore.currentUserId)
+      .updateInvestmentLimits(
+        data, this.getSelectedAccountTypeId,
+        userDetailsStore.currentUserId, true, offeringId,
+      )
       .then(() => resolve());
   })
 
@@ -450,6 +598,11 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    this.setByDefaultRender(true);
+    investmentLimitStore.setInvestNowErrorStatus(false);
+    // accreditationStore.resetAccreditationObject();
+    this.setFieldValue('isGetTransferRequestCall', false);
+    this.setFieldValue('estReturnVal', '-');
   }
 
   @action
@@ -458,27 +611,9 @@ export class InvestmentStore {
   }
 
   @computed get changedInvestmentLimit() {
-    const { fields } = this.INVESTMENT_LIMITS_FORM;
-    const annualIncome = fields.annualIncome.value;
-    const netWorth = fields.netWorth.value;
-    const annualInvestmentLimitFloor = 2200;
-    const annualInvestmentLimit = 107000;
-    const annualIncomeLimitHighPct = 0.10;
-    let annualInvestmentLimitLowPct = 0;
-    let limit = null;
-
-    if (this.INVESTMENT_LIMITS_FORM.meta.isValid) {
-      annualInvestmentLimitLowPct = 0.05;
-
-      limit = floor(annualIncomeLimitHighPct * min([annualIncome, netWorth]));
-      if (annualIncome < annualInvestmentLimit || netWorth < annualInvestmentLimit) {
-        limit = max([
-          annualInvestmentLimitFloor,
-          floor(annualInvestmentLimitLowPct * min([annualIncome, netWorth]))]);
-      }
-      limit = min([limit, annualInvestmentLimit]);
-    }
-    return limit;
+    const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
+    return investmentLimitStore
+      .getInvestmentLimit(data, investmentLimitStore.investorTotalAmountInvested);
   }
   @action
   setInvestmentLimitData = () => {
@@ -491,6 +626,26 @@ export class InvestmentStore {
     this.INVESTMENT_LIMITS_FORM = Validator
       .setFormData(this.INVESTMENT_LIMITS_FORM, investments);
     this.INVESTMENT_LIMITS_FORM.meta.isValid = true;
+  }
+  @action
+  validateMaskedInputForAmount = () => {
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount) &&
+      this.isValidMultipleAmount(this.investmentAmount)) {
+      this.setFieldValue('disableNextbtn', true);
+    } else {
+      this.setFieldValue('disableNextbtn', false);
+    }
+  }
+
+  @action
+  resetFormErrors = (form) => {
+    this[form].fields.investmentAmount.error = undefined;
+    this[form].meta.isValid = true;
+    this.setFieldValue('investmentFlowErrorMessage', undefined);
+  }
+  isValidMultipleAmount = (amount) => {
+    const formatedAmount = parseFloat(amount) || 0;
+    return formatedAmount >= 100 && formatedAmount % 100 === 0;
   }
 }
 

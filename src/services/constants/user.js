@@ -1,5 +1,8 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
+import Aux from 'react-aux';
+import React from 'react';
+import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -15,6 +18,18 @@ Validator.register(
     return moment(value, 'MM/DD/YYYY').isBefore(moment());
   },
   "The :attribute should be less than today's date.",
+);
+Validator.register(
+  'afterDate', (value, attribute) => {
+    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909'));
+  },
+  'Invalid Date',
+);
+Validator.register(
+  'leastAge', (value, attribute) => {
+    return moment().diff(new Date(value), 'years') >= 18;
+  },
+  'Investor must be at least 18 years old in order to proceed',
 );
 
 Validator.register(
@@ -37,10 +52,21 @@ export const securitySections = [
   //   action: ['social-connect'],
   // },
   {
-    title: 'Multi-factor Authentication',
-    description: 'You can choose your Active MFA Factor.',
+    title: 'Multi-Factor Authentication',
+    description:
+      (
+        <Aux>You can choose your{' '}
+          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA Factor</span>}>
+            <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
+            <Popup.Content>
+              Manage your MFA contact preferences. All major actions in your account will
+              require additional confirmation with a code sent to your phone or email address.
+            </Popup.Content>
+          </Popup>
+        </Aux>
+      ),
     descriptionNotAvailable: '',
-    action: ['mfa', 'Manage multi-factor autentication'],
+    action: ['mfa', 'Select Your Active MFA'],
   },
 ];
 
@@ -62,7 +88,7 @@ export const USER_IDENTITY = {
     label: 'First Name (Legal)',
     placeHolder: 'John',
     error: undefined,
-    rule: 'required',
+    rule: 'required|alpha',
     customErrors: {
       required: '* required.',
     },
@@ -74,7 +100,7 @@ export const USER_IDENTITY = {
     label: 'Last Name (Legal)',
     placeHolder: 'Smith',
     error: undefined,
-    rule: 'required',
+    rule: 'required|alpha',
     customErrors: {
       required: '* required.',
     },
@@ -87,6 +113,18 @@ export const USER_IDENTITY = {
     placeHolder: 'Street Address, City, State, Zip',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+    objRef: 'legalDetails.legalAddress',
+  },
+  streetTwo: {
+    key: 'streetTwo',
+    value: '',
+    label: 'Address Line 2',
+    placeHolder: 'Address Line 2',
+    error: undefined,
+    rule: 'optional',
     customErrors: {
       required: '* required.',
     },
@@ -133,11 +171,12 @@ export const USER_IDENTITY = {
     key: 'phoneNumber',
     value: '',
     label: 'Phone Number',
-    placeHolder: '123-456-7890',
+    placeHolder: '(123) 456-7890',
     error: undefined,
     rule: 'required|maskedPhoneNumber',
     customErrors: {
       required: '* required.',
+      maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
     },
   },
   dateOfBirth: {
@@ -146,7 +185,7 @@ export const USER_IDENTITY = {
     label: 'Date of Birth',
     placeHolder: 'mm/dd/yyyy',
     error: undefined,
-    rule: 'required|date|dob',
+    rule: 'required|date|dob|leastAge|afterDate',
     customErrors: {
       required: '* required.',
     },
@@ -168,16 +207,16 @@ export const USER_IDENTITY = {
     key: 'mfaMethod',
     value: 'TEXT',
     values: [{ label: 'Text', value: 'TEXT' }, { label: 'Call', value: 'CALL' }],
-    label: 'How would you want to receive the MFA Code ?',
+    label: 'How would you like to receive the MFA Code ?',
     error: undefined,
     rule: 'optional',
   },
 };
 
 export const USER_TITLE = [
-  { key: 'Mr', value: 'Mr', text: 'Mr' },
-  { key: 'Ms', value: 'Ms', text: 'Ms' },
-  { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
+  { key: 'Mr', value: 'Mr', text: 'Mr.' },
+  { key: 'Ms', value: 'Ms', text: 'Ms.' },
+  { key: 'Mrs', value: 'Mrs', text: 'Mrs.' },
 ];
 
 export const IDENTITY_DOCUMENTS = {
@@ -252,6 +291,13 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'string',
     placeHolder: 'Residential Street',
   },
+  streetTwo: {
+    value: '',
+    label: 'Address Line 2',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Address Line 2',
+  },
   city: {
     value: '',
     label: 'City',
@@ -278,10 +324,53 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     fileName: '',
     rule: '',
+    meta: '',
     label: '',
     src: '',
     base64String: '',
     responseUrl: '',
+  },
+};
+
+export const USER_PROFILE_ADDRESS_ADMIN = {
+  street: {
+    value: '',
+    label: 'Residential Street',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Residential Street',
+    objRef: 'info.mailingAddress',
+  },
+  streetTwo: {
+    value: '',
+    label: 'Address Line 2',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Address Line 2',
+    objRef: 'info.mailingAddress',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'City',
+    objRef: 'info.mailingAddress',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'string',
+    objRef: 'info.mailingAddress',
+  },
+  zipCode: {
+    value: '',
+    label: 'ZIP Code',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'ZIP Code',
+    objRef: 'info.mailingAddress',
   },
 };
 

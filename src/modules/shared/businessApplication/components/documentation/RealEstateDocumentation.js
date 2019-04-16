@@ -24,7 +24,7 @@ export default class RealEstateDocumentation extends Component {
       <Aux>
         <FormElementWrap
           hideFields={hideFields}
-          header="Upload Your Due Dilligence Documents"
+          header="Upload Your Due Dilligence Documents*"
           subHeader="Title commitment, survey, environmental reports, previous inspections, previous appraisals, etc"
         >
           <Grid stackable columns="equal">
@@ -46,7 +46,7 @@ export default class RealEstateDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           noDivider={hideFields || formReadOnlyMode}
-          header="Upload Your Legal Documents"
+          header="Upload Your Legal Documents*"
           subHeader="For all related entities - filing docs, governing docs"
         >
           <Grid stackable columns="equal">

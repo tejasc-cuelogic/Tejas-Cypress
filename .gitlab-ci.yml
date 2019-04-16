@@ -1,4 +1,8 @@
-image: awscli:custom
+image: nextseed/v2-builder:master
+
+services:
+  - docker:dind
+
 
 variables:
   CI: "false"
@@ -10,23 +14,27 @@ stages:
   - deploy
   - cleanup
 
-# force usage of AWS role
+# force usage of AWS role, note runner is in old AWS account so need to to assume xaccount role
 before_script:
   - unset AWS_ACCESS_KEY_ID
   - unset AWS_SECRET_ACCESS_KEY
+  - creds_json=$(aws sts assume-role --role-arn arn:aws:iam::084905338078:role/CIBuilderRole --role-session-name tempSession)
+  - export AWS_ACCESS_KEY_ID=$(echo "$creds_json" | jq .Credentials.AccessKeyId |tr -d '"')
+  - export AWS_SECRET_ACCESS_KEY=$(echo "$creds_json" | jq .Credentials.SecretAccessKey| tr -d '"')
+  - export AWS_SESSION_TOKEN=$(echo "$creds_json" | jq .Credentials.SessionToken|tr -d '"')
 #---------------------------------Anchors--------------------------------------
 .build_template: &build_definition
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: build
   artifacts:
     paths:
-    - build/
+      - build/
     expire_in: 1 day
 
 .deploy_template: &deploy_defination
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: deploy
 
 .review_template: &review_defination
@@ -38,12 +46,12 @@ before_script:
     - develop
     - qa
     - demo
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
 
-.before_script_template: &before_script_defination
-  before_script:
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
+#.before_script_template: &before_script_defination
+#  before_script:
+#    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
     
     
 #---------------------------------Review----------------------------------------  
@@ -55,12 +63,12 @@ build:review:
     key: $CI_COMMIT_REF_SLUG
     paths:
     - node_modules/
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
     - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
-    - sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build 
   
@@ -74,7 +82,7 @@ deploy:review:
     on_stop: delete:review
   script: 
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $CI_COMMIT_REF_SLUG
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $CI_COMMIT_REF_SLUG && cd ../.. # - sh deployApp.sh $CI_COMMIT_REF_SLUG
   dependencies:
     - build:review
 
@@ -100,9 +108,20 @@ build:dev:
   only:
     refs:
       - develop
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+build:predev:
+  <<: *build_definition
+  only:
+    refs:
+      - develop
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build
 
@@ -111,8 +130,8 @@ version:dev:
   only:
     refs:
       - develop
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: version
   script: 
     # Make a folder for the changelog utility
@@ -134,6 +153,7 @@ version:dev:
     - git commit -m "Updated CHANGELOG.md [skip ci]"
     # Push the changes back to the develop branch
     - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
+  allow_failure: true
   dependencies:
     - build:dev
 
@@ -147,11 +167,26 @@ deploy:dev:
     name: dev
     url: http://$DEV_URL
   script: 
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $DEV_URL
+    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
+    - aws cloudfront create-invalidation --distribution-id $DEV_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:dev
 
+deploy:predev:
+  <<: *deploy_defination
+  only:
+    refs:
+      - develop
+  environment:
+    name: dev
+    url: http://$PREDEV_URL
+  script:
+    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $PREDEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
+    - aws cloudfront create-invalidation --distribution-id $PREDEV_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:predev
 
 
 #---------------------------------Qa--------------------------------------------
@@ -162,9 +197,9 @@ build:qa:
   only:
     refs:
       - qa
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build  
 
@@ -178,8 +213,8 @@ deploy:qa:
     name: qa
     url: http://$QA_URL
   script: 
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $QA_URL
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../.. #- sh deployApp.sh $QA_URL
   dependencies:
     - build:qa
 
@@ -191,9 +226,9 @@ build:demo:
   only:
     refs:
       - demo
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build  
 
@@ -207,28 +242,29 @@ deploy:demo:
     name: demo
     url: http://$DEMO_URL
   script: 
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $DEMO_URL
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
+    - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:demo
 
 #---------------------------------Production------------------------------------
 
 #Building code
-build:prod:
-  <<: *build_definition
-  only:
-    refs:
-      - master
-  <<: *before_script_defination
-  script: 
-    - sh ./scripts/cicd/setEnvironmentVariables.sh $REGION prod $CI_COMMIT_REF_NAME
-    - npm install
-    - npm run build
+#build:prod:
+#  <<: *build_definition
+#  only:
+#    refs:
+#      - master
+#  <<: *before_script_defination
+#  script:
+#    - sh ./scripts/cicd/setEnvironmentVariables.sh $REGION prod $CI_COMMIT_REF_NAME
+#    - npm install
+#    - npm run build
 
 package:prod:
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: package
   only:
     refs:
@@ -240,24 +276,23 @@ package:prod:
     - export AWS_ACCESS_KEY_ID=$(echo "$creds_json" | jq .Credentials.AccessKeyId |tr -d '"')
     - export AWS_SECRET_ACCESS_KEY=$(echo "$creds_json" | jq .Credentials.SecretAccessKey| tr -d '"')
     - export AWS_SESSION_TOKEN=$(echo "$creds_json" | jq .Credentials.SessionToken|tr -d '"')
-    - aws s3 cp /tmp/$CI_COMMIT_REF_NAME.zip s3://$AWS_DEPLOYMENT_BUCKET/deployments/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME.zip --metadata CommitHash=$CI_COMMIT_SHA,CIPipelineID=$CI_PIPELINE_ID
-    # - aws s3 cp /tmp/$CI_COMMIT_REF_NAME.zip s3://$AWS_DEPLOYMENT_BUCKET_BACKUP/deployments/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME.zip --metadata CommitHash=$CI_COMMIT_SHA,CIPipelineID=$CI_PIPELINE_ID
+    - aws s3 cp /tmp/$CI_COMMIT_REF_NAME.zip s3://$AWS_DEPLOYMENT_BUCKET/deployments/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME.zip --metadata CommitHash=$CI_COMMIT_SHA,CIPipelineID=$CI_PIPELINE_ID,CICommitRefName=$CI_COMMIT_REF_NAME,CommitShortHash=$CI_COMMIT_SHORT_SHA,RepoUrl=$CI_PROJECT_URL
     - rm -rf /tmp/$CI_COMMIT_REF_NAME.zip  # clean up
     - rm -rf ~/.aws/cli/cache
 
 
 #Deploying code to s3 bucket
-deploy:prod:
-  <<: *deploy_defination
-  only:
-    refs:
-      - master
-  environment:
-    name: prod
-    url: http://$PROD_URL_QA
-  script: 
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh ns-client-prod
-  when: manual
-  dependencies:
-    - build:prod
+#deploy:prod:
+#  <<: *deploy_defination
+#  only:
+#    refs:
+#      - master
+#  environment:
+#    name: prod
+#    url: http://$PROD_URL_QA
+#  script:
+#    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+#    - sh deployApp.sh ns-client-prod
+#  when: manual
+#  dependencies:
+#    - build:prod

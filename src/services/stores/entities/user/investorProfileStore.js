@@ -102,6 +102,12 @@ class InvestorProfileStore {
   }
   @action
   employmentChange = (e, form, result) => {
+    if (['brokerageEmployment', 'publicCompanyRel'].includes(result.name)) {
+      const textInput = form === 'BROKERAGE_EMPLOYMENT_FORM' ? 'brokerageFirmName' : 'publicCompanyTicker';
+      this[form].fields[textInput].value = '';
+      this[form].fields[textInput].error = result.fielddata.value ? undefined :
+        this[form].fields[textInput].error;
+    }
     this.formChange(e, result, form);
   }
 
@@ -264,21 +270,28 @@ class InvestorProfileStore {
           mutation: updateInvestorProfileData,
           variables: formPayload,
         })
-        .then(action(() => {
-          Helper.toast('Investor profile updated successfully.', 'success');
+        .then(action((data) => {
           FormValidator.setIsDirty(this[currentStep.form], false);
-          this.setStepToBeRendered(currentStep.stepToBeRendered);
-          if (this.isValidInvestorProfileForm) {
+          if (currentStep.form === 'INVESTMENT_EXP_FORM') {
+            if (data.data.createInvestorProfile && data.data.createInvestorProfile.status) {
+              userDetailsStore.setUserStatus(data.data.createInvestorProfile.status);
+            }
             userDetailsStore.getUser(userStore.currentUser.sub);
+            resolve();
+          } else {
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
+            resolve();
           }
-          resolve();
+          Helper.toast(`${currentStep.name} submitted successfully.`, 'success');
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
         .finally(() => {
-          uiStore.setProgress(false);
+          if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
+            uiStore.setProgress(false);
+          }
         });
     });
   }
@@ -291,7 +304,7 @@ class InvestorProfileStore {
         variables: formPayload,
       })
       .then(action(() => {
-        Helper.toast('Investor profile updated successfully.', 'success');
+        // Helper.toast('Investor profile updated successfully.', 'success');
         userDetailsStore.getUser(userStore.currentUser.sub);
         resolve();
       }))
@@ -413,7 +426,7 @@ class InvestorProfileStore {
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '');
+    FormValidator.onChange(this[form], '', '', false);
   }
 
   @action

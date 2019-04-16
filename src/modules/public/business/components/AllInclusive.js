@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { Header, Grid, Container, Item } from 'semantic-ui-react';
-import { ASSETS_URL } from '../../../../constants/aws';
+import NSImage from '../../../shared/NSImage';
 
 // const isMobile = document.documentElement.clientWidth < 768;
 
@@ -20,56 +20,72 @@ const AllInclusive = () => (
               </p>
               <Item.Group className="horizontal-items">
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/marketing.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/marketing.svg" />
+                  </div>
                   <Item.Content>
                     <Item.Header as="h5">Marketing</Item.Header>
                     <Item.Meta>Expert advertising, marketing and PR resources.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/escrow.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/escrow.svg" />
+                  </div>
                   <Item.Content>
                     <Item.Header as="h5">Escrow</Item.Header>
                     <Item.Meta>Handling all banking, escrow and processing fees.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/campaign.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/campaign.svg" />
+                  </div>
                   <Item.Content>
                     <Item.Header as="h5">Campaign Development</Item.Header>
                     <Item.Meta>Design and content creation services.</Item.Meta>
                   </Item .Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/payment.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/payment.svg" />
+                  </div>
                   <Item.Content>
-                    <Item.Header as="h5">Payment Processing</Item.Header>
+                    <Item.Header as="h5">Investment Processing</Item.Header>
                     <Item.Meta>Collecting commitments and distributing funds.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/questions.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/questions.svg" />
+                  </div>
                   <Item.Content>
                     <Item.Header as="h5">Q&A</Item.Header>
                     <Item.Meta>Facilitating investor questions during the offering.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/preparation.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/preparation.svg" />
+                  </div>
                   <Item.Content>
                     <Item.Header as="h5">Disclosure Preparation</Item.Header>
                     <Item.Meta>Legal templates and Regulatory filing assistance.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/services.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/services.svg" />
+                  </div>
                   <Item.Content>
                     <Item.Header as="h5">Investor Services</Item.Header>
                     <Item.Meta>Servicing payments to investors.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/tax.svg`} />
+                  <div className="ui mini image">
+                    <NSImage path="business/tax.svg" />
+                  </div>
                   <Item.Content>
                     <Item.Header as="h5">Tax Form Preparation</Item.Header>
                     <Item.Meta>Distributing year-end documents to investors.</Item.Meta>

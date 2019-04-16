@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import cookie from 'react-cookies';
 import { FormInput, FormPasswordStrength } from '../../../../theme/form';
 import { ListErrors } from '../../../../theme/shared';
 import { authActions } from '../../../../services/actions';
@@ -31,8 +30,7 @@ class Success extends Component {
         authActions.register()
           .then(() => {
             const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-            const userCredentials = { email: email.value, password: btoa(password.value) };
-            cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+            this.props.authStore.setCredentials({ email: email.value, password: password.value });
             this.props.authStore.setUserLoginDetails(email.value, password.value);
             this.props.authStore.portPrequalDataToApplication(applicationId)
               .then((appId) => {
@@ -110,6 +108,7 @@ class Success extends Component {
                             key="password"
                             name="password"
                             type="password"
+                            userInputs={[fields.email.value]}
                             iconDisplay
                             minLength={8}
                             minScore={4}

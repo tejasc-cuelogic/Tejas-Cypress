@@ -1,13 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
+import Helper from '../../helper/utility';
 
-const getNavStates = (indx, length) => {
+
+const hasData = compState => compState.validForm;
+const getNavStates = (indx, length, steps) => {
   const styles = [];
   /* eslint-disable no-plusplus */
+  // eslint-disable-next-line max-len
+  // const isAccountCreation = window.location.href.includes('account-creation') || window.location.href.includes('establish-profile');
+  const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
   for (let i = 0; i < length; i++) {
-    if (i < indx) {
+    if ((isAccountCreation && hasData(steps[i]) && i !== indx) || i < indx) {
       styles.push('done');
     } else if (i === indx) {
       styles.push('doing');
@@ -17,7 +24,6 @@ const getNavStates = (indx, length) => {
   }
   return { current: indx, styles };
 };
-
 export default class MultiStep extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +31,10 @@ export default class MultiStep extends React.Component {
       showPreviousBtn: false,
       showNextBtn: true,
       compState: this.props.stepToBeRendered || 0,
-      navState: getNavStates((this.props.stepToBeRendered || 0), this.props.steps.length),
+      navState: getNavStates(
+        (this.props.stepToBeRendered || 0), this.props.steps.length,
+        this.props.steps,
+      ),
     };
     this.hidden = {
       display: 'none',
@@ -64,7 +73,12 @@ export default class MultiStep extends React.Component {
   }
 
   setNavState(next) {
-    this.setState({ navState: getNavStates(next, this.props.steps.length) });
+    this.setState({
+      navState: getNavStates(
+        next, this.props.steps.length,
+        this.props.steps,
+      ),
+    });
     if (next < this.props.steps.length) {
       this.setState({ compState: next });
     }
@@ -79,7 +93,7 @@ export default class MultiStep extends React.Component {
       });
     } else if (currentStep === 0) {
       this.setState({
-        showPreviousBtn: false,
+        showPreviousBtn: !this.props.disablePrevBtn,
         showNextBtn: true,
       });
     } else {
@@ -91,21 +105,23 @@ export default class MultiStep extends React.Component {
   }
 
   handleKeyDown(evt) {
-    if (evt.which === 13 && (evt.target.name !== 'bankName' && evt.target.name !== 'investmentAmount')) {
+    if ((evt.which === 13 && (evt.target.name !== 'bankName') &&
+      (!this.props.steps[this.state.compState].disableNextButton) &&
+      !this.props.steps[this.state.compState].disableKeyDown)) {
       this.next();
     }
   }
 
   handleOnClick(evt) {
-    // const isAnyStepInvalid = _.find(this.props.steps, { isValid: 'error' });
-    if (!this.props.steps[this.state.compState].onlyDisableNextButton) {
+    if (!this.props.steps[this.state.compState].onlyDisableNextButton &&
+      !this.props.formHeaderClick) {
       if (this.props.setStepTobeRendered) {
         this.props.setStepTobeRendered(evt.currentTarget.value);
         if (evt.currentTarget.value === (this.props.steps.length - 1) &&
           this.state.compState === (this.props.steps.length - 1)) {
           this.setNavState(this.props.steps.length);
         } else if (evt.currentTarget.value !== 0 &&
-        this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+          this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
           this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
           if (evt.currentTarget.value === (this.props.steps.length - 1)) {
             this.setNavState(evt.currentTarget.value);
@@ -122,10 +138,17 @@ export default class MultiStep extends React.Component {
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
+      if (this.props.bankSummary &&
+        this.props.bankSummary(this.props.steps[this.state.compState])) {
+        this.props.bankSummarySubmit();
+      } else {
+        this.props.setStepTobeRendered(this.state.compState + 1);
+      }
     } else {
       this.props.createAccount(this.props.steps[this.state.compState]);
       if (!this.props.steps[this.state.compState].isDirty) {
         this.setNavState(this.state.compState + 1);
+        this.props.setStepTobeRendered(this.state.compState + 1);
       }
     }
   }
@@ -134,6 +157,9 @@ export default class MultiStep extends React.Component {
     if (this.state.compState > 0) {
       this.setNavState(this.state.compState - 1);
       this.props.setStepTobeRendered(this.state.compState - 1);
+    } else if (this.state.compState === 0 && this.props.setStepTobeRenderedForAlert) {
+      this.setNavState(0);
+      this.props.setStepTobeRenderedForAlert();
     }
   }
 
@@ -147,61 +173,79 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       return (
-        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
-          {this.props.steps[i].name}
-        </li>
+        <Aux>
+          {this.props.steps[i].name &&
+            <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
+              {this.props.steps[i].name}
+            </li>
+          }
+        </Aux>
       );
     });
   }
 
   render() {
-    if (this.props.isEnterPressed) {
+    if (this.props.isEnterPressed &&
+      !this.props.steps[this.state.compState].disableNextButton) {
       this.props.resetEnterPressed();
       this.next();
     }
+    const closeDimmerClickAction =
+      this.props.closeOnDimmerClick ? this.props.closeOnDimmerClick : false;
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
-      <div onKeyDown={this.handleKeyDown} >
+      <div onKeyDown={!this.props.steps[this.state.compState].disableNextButton ?
+        this.handleKeyDown : false}
+      >
         <Modal
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
           closeIcon
-          className="multistep-modal"
-          closeOnDimmerClick={false}
+          className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
+          closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
         >
           {!this.props.hideHeader &&
-          <Aux>
-            <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
-            <ol className="progtrckr">
-              {!this.props.steps[this.state.compState].isHideLabel &&
-                this.renderSteps()
-              }
-            </ol>
-          </Aux>
+            <Aux>
+              <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
+              <ol className="progtrckr">
+                {!this.props.steps[this.state.compState].isHideLabel &&
+                  this.renderSteps()
+                }
+              </ol>
+            </Aux>
           }
+          <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
+            <Loader active={this.props.inProgress} >
+              {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
+            </Loader>
+          </Dimmer>
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
-            <Dimmer active={this.props.inProgress}>
-              <Loader active={this.props.inProgress} />
-            </Dimmer>
             {!this.props.steps[this.state.compState].disablePrevButton &&
-            <Button
-              circular
-              icon={{ className: 'ns-arrow-left' }}
-              className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
-              onClick={this.previous}
-            />
+              <Button
+                circular
+                icon={{ className: 'ns-arrow-left' }}
+                className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
+                onClick={this.previous}
+              />
             }
-            {!this.props.steps[this.state.compState].disableNextButton &&
-            <Button
-              type="submit"
-              circular
-              icon={{ className: 'ns-arrow-right' }}
-              className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
-              onClick={this.next}
-            />
+            {this.props.isStepButtonsVisible === undefined || this.state.compState !== 0 ||
+              (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true) ?
+                <Aux>
+                  {!this.props.steps[this.state.compState].disableNextButton &&
+                    <Button
+                      type="submit"
+                      circular
+                      icon={{ className: 'ns-arrow-right' }}
+                      className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
+                      onClick={this.next}
+                    />
+                  }
+                </Aux>
+              :
+              null
             }
           </Modal.Content>
         </Modal>

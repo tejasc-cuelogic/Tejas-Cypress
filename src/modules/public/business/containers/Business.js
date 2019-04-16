@@ -9,6 +9,7 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
+import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -60,7 +61,7 @@ class Business extends Component {
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {location.pathname === '/business/how-it-works' ||
           location.pathname === '/business' ? <Banner /> :
-          <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
+          <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <PublicSubNav
@@ -82,6 +83,7 @@ class Business extends Component {
                 />
               ))
             }
+            <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
           </Switch>
         </div>
       </Aux>

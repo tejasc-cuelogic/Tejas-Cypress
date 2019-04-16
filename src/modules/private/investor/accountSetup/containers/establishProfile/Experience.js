@@ -10,6 +10,7 @@ import { ListErrors } from '../../../../../../theme/shared';
 @withRouter
 @observer
 export default class Experience extends Component {
+  state = { errorMessage: '' };
   handleSubmitInvestmentExperience = () => {
     const {
       validateInvestmentExperience,
@@ -23,22 +24,23 @@ export default class Experience extends Component {
       if (isValidInvestorProfileForm) {
         this.props.uiStore.setErrors(undefined);
         const currentStep = {
+          name: 'Investment Experience',
           form: 'INVESTMENT_EXP_FORM',
-          stepToBeRendered: 5,
+          stepToBeRendered: 6,
         };
         updateInvestorProfileData(currentStep).then(() => {
-          const { signupStatus } = this.props.userDetailsStore;
-          if (signupStatus.isMigratedFullAccount) {
+          const { signupStatus, userStatus } = this.props.userDetailsStore;
+          if (signupStatus.isMigratedFullAccount ||
+            (userStatus && userStatus.includes('FULL'))) {
             this.props.history.push('/app/summary');
+            setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
             this.props.history.push('/app/summary/account-creation');
           }
         });
       } else {
-        const errors = {
-          message: 'Investor Profile is not valid! Please complete all the steps.',
-        };
-        this.props.uiStore.setErrors(errors);
+        const errorMessage = 'Investor Profile is not valid! Please complete all the steps.';
+        this.setState({ errorMessage });
       }
     }
   }
@@ -47,8 +49,9 @@ export default class Experience extends Component {
       INVESTMENT_EXP_FORM,
       isInvestmentExperienceValid,
       experiencesChange,
+      isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
-    const { errors } = this.props.uiStore;
+    const { errorMessage } = this.state;
     return (
       <Aux>
         <Header as="h3" textAlign="center">Investment Experience</Header>
@@ -56,7 +59,7 @@ export default class Experience extends Component {
           Confirm your experience and understanding of the investment risks on NextSeed.
           Select the box that best describes your investment experience to date:
         </p>
-        <Form error onSubmit={this.handleSubmitInvestmentExperience}>
+        <Form error={!isInvestmentExperienceValid} onSubmit={this.handleSubmitInvestmentExperience}>
           <FormRadioGroup
             fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
             name="experienceLevel"
@@ -78,9 +81,9 @@ export default class Experience extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          {errors &&
+          {errorMessage &&
           <Message error className="mt-20">
-            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
           </Message>
           }
           <div className="center-align mt-20">
@@ -91,10 +94,10 @@ export default class Experience extends Component {
                 profile in order to proceed.
               </p>
             }
-            <Button primary className="relaxed" content="Continue to Account" disabled={!(INVESTMENT_EXP_FORM.meta.isValid && isInvestmentExperienceValid)} />
+            <Button primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} />
             {!isInvestmentExperienceValid &&
               <p className="negative-text mt-20">
-                Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center</Link> to
+                Otherwise, please reference our <Link to="/resources/education-center">Education Center</Link> to
                 learn more about investing on NextSeed.
               </p>
             }

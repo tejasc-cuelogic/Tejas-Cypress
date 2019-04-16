@@ -12,8 +12,9 @@ import Auth from '../auth';
 import NotFound from '../shared/NotFound';
 import Referral from '../shared/Referral';
 import Helper from '../../helper/utility';
+import Firework from '../public/offering/components/investNow/agreement/components/FireworkAnimation';
 
-@inject('uiStore', 'navStore', 'userStore', 'businessAppStore')
+@inject('uiStore', 'navStore', 'userStore', 'businessAppStore', 'campaignStore')
 @observer
 export default class Public extends React.Component {
   state = {
@@ -68,26 +69,32 @@ export default class Public extends React.Component {
     const NoFooter = [
       '/offerings/:id/:section?', '/business-application', '/auth/:section',
     ];
+    const NoHeader = ['/invest/get-started'];
+    const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
     return (
       <Aux>
-        <Responsive minWidth={768} as={Aux}>
-          <Header
-            location={location}
-            navStatus={this.props.navStore.navStatus}
-            stepInRoute={this.props.navStore.stepInRoute}
-            currentUser={this.props.userStore.currentUser}
-            handleLogOut={this.handleLogOut}
-            canSubmitApp={isValid}
-            isPrequalQulify={isPrequalQulify}
-            preQualSubmit={this.preQualSubmit}
-            loading={inProgress}
-          />
+        {this.props.campaignStore.showFireworkAnimation &&
+          <Firework />
+        }
+        <Responsive minWidth={992} as={Aux}>
+          {hasHeader && (
+            <Header
+              location={location}
+              stepInRoute={this.props.navStore.stepInRoute}
+              currentUser={this.props.userStore.currentUser}
+              handleLogOut={this.handleLogOut}
+              canSubmitApp={isValid}
+              isPrequalQulify={isPrequalQulify}
+              preQualSubmit={this.preQualSubmit}
+              loading={inProgress}
+            />
+          )}
           {this.getRoutes()}
           {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
           <Footer path={location.pathname} />}
         </Responsive>
-        <Responsive maxWidth={767} as={Aux}>
+        <Responsive maxWidth={991} as={Aux}>
           <NavBarMobile
             onPusherClick={this.handlePusher}
             onToggle={this.handleToggle}
@@ -95,10 +102,10 @@ export default class Public extends React.Component {
             location={location}
             match={match}
             isMobile
-            navStatus={this.props.navStore.navStatus}
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             publicContent={this.getRoutes()}
+            hasHeader={hasHeader}
           />
         </Responsive>
       </Aux>

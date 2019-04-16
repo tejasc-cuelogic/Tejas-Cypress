@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { DateTimeFormat, UserAvatar, NsPagination } from './../../../../../../theme/shared';
+import moment from 'moment';
+import { UserAvatar, NsPagination } from './../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import UserTypeIcon from './UserTypeIcon';
 
@@ -61,30 +62,31 @@ class UserListing extends Component {
                             avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
                             roles: user.roles.map(r => r.scope),
                           }}
+                          base64url
                           size="mini"
                         />
                       </div>
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</Link></span>
+                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link></span>
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>
                     {get(user, 'info.mailingAddress.zipCode')
                     }
                   </Table.Cell>
-                  <Table.Cell>{Helper.phoneNumberFormatter(user.phone ? user.phone.number : '')}</Table.Cell>
+                  <Table.Cell>{Helper.phoneNumberFormatter(get(user, 'phone.number') ? get(user, 'phone.number') : '')}</Table.Cell>
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created ?
-                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={user.created.date} /> :
+                      moment.unix(user.created.date).format('MM/DD/YYYY') :
                       'N/A'
                     }
                   </Table.Cell>
                   <Table.Cell>
                     {user.lastLoginDate ?
-                      <DateTimeFormat unix fromNow datetime={user.lastLoginDate} /> :
+                      moment.unix(user.lastLoginDate).format('MM/DD/YYYY') :
                       'N/A'
                     }
                   </Table.Cell>

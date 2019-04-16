@@ -3,40 +3,46 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Route, Link } from 'react-router-dom';
 import { get } from 'lodash';
-import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
+import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import share from '../campaignDetails/Share';
-import { ASSETS_URL } from '../../../../../constants/aws';
+// import { ASSETS_URL } from '../../../../../constants/aws';
+import { Image64 } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 
-const nsvideos = {
-  embed: '218642510',
-};
+// const nsvideos = {
+//   embed: '218642510',
+// };
 const isMobile = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore')
 @withRouter
 @observer
 export default class CampaignSideBar extends Component {
+  handleInvestNowClick = () => {
+    this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
+    this.props.history.push(`${this.props.match.url}/invest-now`);
+  }
   render() {
     const { className, campaignStore } = this.props;
     const { campaign, navCountData } = campaignStore;
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const minOffering = campaign && campaign.keyTerms &&
-      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
+    const percentBefore = (minOffering / maxOffering) * 100;
     const percent = (collected / maxOffering) * 100;
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-      && campaign.offering.launch.terminationDate;
+    const processingDate = campaign && campaign.closureSummary &&
+    campaign.closureSummary.processingDate;
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const diff = DataFormatter.diffDays(terminationDate);
+    const diff = DataFormatter.diffDays(processingDate);
     const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     const { offerStructure } = campaign;
     const isClosed = campaign.stage !== 'LIVE';
     return (
@@ -48,12 +54,25 @@ export default class CampaignSideBar extends Component {
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                 <Header.Subheader>{address}</Header.Subheader>
               </Header>
-              <Embed
-                id={nsvideos.embed}
-                placeholder={`${ASSETS_URL}images/636206632.jpg`}
-                source="vimeo"
-                icon="ns-play"
-              />
+              <div className="video-wrapper campaign">
+                {campaign && campaign.media &&
+                  campaign.media.heroVideo && campaign.media.heroVideo.url ?
+                    <Link to={`${this.props.match.url}/overview/herovideo`}>
+                      <Image64
+                        bg
+                        srcUrl={get(campaign, 'media.heroImage.url')}
+                        imgType="heroImage"
+                      />
+                      <Icon className="ns-play play-icon" />
+                    </Link>
+                    :
+                    <Image64
+                      bg
+                      srcUrl={get(campaign, 'media.heroImage.url')}
+                      imgType="heroImage"
+                    />
+                }
+              </div>
               <Statistic inverted size="tiny" className="basic mb-0">
                 <Statistic.Value>
                   <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
@@ -64,7 +83,10 @@ export default class CampaignSideBar extends Component {
                   </Statistic.Label>
                 }
               </Statistic>
-              <Progress className="mb-0" inverted percent={percent} size="tiny" color="green" />
+              {!isClosed ?
+                <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                <Progress percent="100" size="tiny" color="green" />
+              }
               <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
@@ -108,22 +130,24 @@ export default class CampaignSideBar extends Component {
               Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
               </p>
               <p className="mt-half">
-                Maturity: {get(campaign, 'keyTerms.maturity')} Months
+                Maturity: {get(campaign, 'keyTerms.maturity')} months
               </p>
               <Divider hidden />
-              {!isClosed &&
-                <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+              {(!isClosed && diff > 0) &&
+                <Aux>
+                  <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+                  <p>
+                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+                      || 0} min investment
+                  </p>
+                </Aux>
               }
-              <p>
-                ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                  || 0} min investment
-              </p>
             </div>
           </Responsive>
           {!isMobile &&
             <Aux>
               <Menu vertical>
-                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
+                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} isBonusReward={isBonusReward} />
               </Menu>
             </Aux>
           }

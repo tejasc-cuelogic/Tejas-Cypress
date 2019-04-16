@@ -1,13 +1,15 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
-import { Card, Table, Button } from 'semantic-ui-react';
-import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
+import moment from 'moment';
+import { get, lowerCase } from 'lodash';
+import { Card, Table, Button, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import Actions from './Actions';
 
-@inject('bankAccountStore')
+@inject('bankAccountStore', 'uiStore')
 @observer
 export default class AllRequests extends Component {
   state = {
@@ -16,15 +18,22 @@ export default class AllRequests extends Component {
   componentWillMount() {
     this.props.bankAccountStore.initRequest();
   }
-  setRoutingNumber = (e, accNum) => {
+  getRoutingNumber = (e, accountId, userId) => {
     e.stopPropagation();
     const oldObj = this.state.routingNums;
-    oldObj[accNum] = true;
+    oldObj[accountId] = {};
+    oldObj[accountId].loading = true;
     this.setState({ routingNums: oldObj });
+    this.props.bankAccountStore.getDecryptedRoutingNum(accountId, userId).then((res) => {
+      oldObj[accountId].decryptedRoutingNumber = res;
+      oldObj[accountId].loading = false;
+      this.setState({ routingNums: oldObj });
+    });
   }
   paginate = params => this.props.bankAccountStore.pageRequest(params);
   render() {
-    const { bankAccountStore } = this.props;
+    const { bankAccountStore, uiStore } = this.props;
+    const { inProgress } = uiStore;
     const {
       changeRequests, loading, count, requestState,
     } = bankAccountStore;
@@ -40,6 +49,7 @@ export default class AllRequests extends Component {
               <Table.Row>
                 <Table.HeaderCell>Investor</Table.HeaderCell>
                 <Table.HeaderCell>Requested Date</Table.HeaderCell>
+                <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
                 <Table.HeaderCell>GS Transaction #</Table.HeaderCell>
                 <Table.HeaderCell>Account</Table.HeaderCell>
@@ -56,10 +66,15 @@ export default class AllRequests extends Component {
                 changeRequests.map((req, index) => (
                   <Table.Row key={`${req.userId}_${index}`}>
                     <Table.Cell>
-                      <p><b>{req.firstName} {req.lastName}</b></p>
+                      <Link to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      <DateTimeFormat datetime={req.dateRequested} />
+                      {get(req, 'linkedBank.changeRequest.dateRequested') ? moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')).format('MM/DD/YYYY') : 'N/A'}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {req.accountType ?
+                        <Icon size="large" className={`ns-${lowerCase(req.accountType)}-line`} color="green" /> : 'N/A'
+                      }
                     </Table.Cell>
                     <Table.Cell>
                       <p>{req.linkedBank && req.linkedBank.changeRequest &&
@@ -73,11 +88,13 @@ export default class AllRequests extends Component {
                       {(req.linkedBank && req.linkedBank.changeRequest
                         && req.linkedBank.changeRequest.accountNumber && Helper.encryptNumberWithX(req.linkedBank.changeRequest.accountNumber)) || 'N/A'}
                       <br />
-                      {this.state.routingNums[get(req, 'accountId')] ? get(req, 'linkedBank.changeRequest.routingNumber') :
-                      <Button color="blue" onClick={e => this.setRoutingNumber(e, get(req, 'accountId'))} className="link-button"> Click for Routing # </Button>
+                      {this.state.routingNums[get(req, 'accountId')] && this.state.routingNums[get(req, 'accountId')].decryptedRoutingNumber ? this.state.routingNums[get(req, 'accountId')].decryptedRoutingNumber :
+                      this.state.routingNums[get(req, 'accountId')] && this.state.routingNums[get(req, 'accountId')].loading ? <p>Loading...</p> :
+                      <Button color="blue" onClick={e => this.getRoutingNumber(e, get(req, 'accountId'), get(req, 'userId'))} className="link-button"> Click for Routing # </Button>
                       }
                     </Table.Cell>
                     <Actions
+                      inProgress={inProgress}
                       userId={req.userId}
                       accountId={req.accountId}
                       updateAccountChangeAction={bankAccountStore.updateAccountChangeAction}

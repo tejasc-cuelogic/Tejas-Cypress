@@ -61,8 +61,7 @@ export default class Close extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer } = this.props.offeringsStore;
-    const closeDate = offer.offering && offer.offering.launch &&
-    offer.offering.launch.terminationDate;
+    const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
       <Form>
@@ -148,15 +147,15 @@ export default class Close extends Component {
                   <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
                   <Form>
                     <Form.Group widths={3}>
-                      {['disbursementDate', 'disbursementAmount', 'totalRepayment', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
+                      {['date', 'amount', 'currentRepaidAmount', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
                         <MaskedInput
                           name={field}
                           fielddata={OFFERING_CLOSE_FRM.fields[field]}
                           changed={(values, name) => maskChange(values, formName, name)}
-                          dateOfBirth={field === 'disbursementDate'}
+                          dateOfBirth={field === 'date'}
                           number={field === 'totalInvestorCount'}
-                          currency={field !== 'totalInvestorCount' && field !== 'disbursementDate'}
-                          prefix={field !== 'totalInvestorCount' && field !== 'disbursementDate' ? '$' : false}
+                          currency={field !== 'totalInvestorCount' && field !== 'date'}
+                          prefix={field !== 'totalInvestorCount' && field !== 'date' ? '$' : false}
                         />
                       ))
                       }

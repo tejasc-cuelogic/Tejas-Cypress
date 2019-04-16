@@ -38,7 +38,7 @@ export default class PreQualification extends Component {
         });
     } else {
       this.props.businessAppStore.setPrequalBasicDetails();
-      this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
+      this.props.businessAppStore.businessPreQualificationBasicFormSumbit(false)
         .then(() => {
           this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
           this.props.businessAppStore.businessPreQualificationFormSumbit()
@@ -106,6 +106,7 @@ export default class PreQualification extends Component {
                       containerclassname={isPrequalQulify ? 'display-only' : ''}
                       key={field}
                       type="text"
+                      asterisk="true"
                       name={field}
                       fielddata={BUSINESS_APP_FRM_BASIC.fields[field]}
                       changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_FRM_BASIC')}
@@ -143,7 +144,8 @@ export default class PreQualification extends Component {
             {!preQualFormDisabled ?
               <Button
                 loading={this.props.uiStore.inProgress}
-                disabled={!BUSINESS_APP_FRM.meta.isValid}
+                disabled={!BUSINESS_APP_FRM.meta.isValid ||
+                  (BUSINESS_APP_FRM.meta.isValid && this.props.uiStore.inProgress)}
                 size="large"
                 color="green"
                 className={`${isMobile && 'mb-50'} very relaxed`}

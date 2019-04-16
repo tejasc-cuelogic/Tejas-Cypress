@@ -47,12 +47,18 @@
 		flex-wrap:wrap;
 		.field{
 			padding-top:@relative14px;
-			@media only screen and (max-width : @largestMobileScreen){
-				width: 50%;
+			// @media only screen and (max-width : @largestMobileScreen){
+			// 	width: 50%;
+			// 	padding-right: 0;
+			// }
+			@media only screen and (min-width : @largestMobileScreen){
+				&:last-child{
+					padding-right: 0;
+				}
 			}
 		}
 		&.wide{
-			margin:0 -@relative14px;
+			margin:0 -@relative14px @relative14px;
 			.field{
 				padding-left:@relative14px;
 				padding-right:@relative14px;
@@ -94,6 +100,11 @@
 				line-height: @18px;
 				color: @neutral-offdark;
 			}
+			// @media only screen and (max-width : @largestMobileScreen){
+			// 	min-width:100px;
+			// 	padding:@10px @15px;
+			// 	height: auto;
+			// }
 		}
 		input[type="radio"], input[type="checkbox"]{
 			width:100%;

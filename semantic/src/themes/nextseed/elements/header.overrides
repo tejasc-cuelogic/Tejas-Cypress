@@ -3,7 +3,7 @@
 *******************************/
 
 .header-wrap{
-    height:58px;
+    height:72px;
     &.large{
         height:80px;
     }
@@ -73,6 +73,9 @@
         margin-left:@10px;
         >small{
             font-size:@13px;
+            >i.icon{
+                margin-right:@4px;
+            }
         }
     }
 }
@@ -114,4 +117,9 @@ h6.ui.header{
 
 .campaign-details-banner .ui.header .sub.header{
     margin-top:@7px;
+}
+.signup-header h3.ui.header.greeting {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

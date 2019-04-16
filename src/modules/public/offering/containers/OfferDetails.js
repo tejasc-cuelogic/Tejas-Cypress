@@ -2,24 +2,26 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter, Link } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid, Button, Visibility, List } from 'semantic-ui-react';
+import { Responsive, Container, Grid } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
+
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
+import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
-import { DataFormatter } from '../../../../helper';
 import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
-import Helper from '../../../../helper/utility';
+import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -69,23 +71,36 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
-  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   handleViewGallery = (e) => {
     e.preventDefault();
     this.props.history.push(`${this.props.match.url}/photogallery`);
   }
-  addDataRoomSubnavs = (oldNav, dataRoomDocs) => {
-    if (!dataRoomDocs) {
-      return oldNav;
+  addRemoveUpdatesSubnav = (oldNav, updates) => {
+    const tempNav = [...oldNav];
+    if (updates && updates.length === 0 && tempNav[0].subNavigations.length === 5) {
+      tempNav[0].subNavigations.splice(2, 1);
+    } else if (updates && updates.length !== 0 && tempNav[0].subNavigations.length !== 5) {
+      tempNav[0].subNavigations.splice(2, 0, { title: 'Updates', to: '#updates', useRefLink: true });
     }
-    const tempNav = [];
+    return tempNav;
+  }
+  addDataRoomSubnavs = (oldNav, dataRoomDocs) => {
+    let tempNav = [];
+    if (!dataRoomDocs) {
+      tempNav = [...oldNav];
+      if (has(tempNav[4], 'subNavigations')) {
+        delete tempNav[4].subNavigations;
+        delete tempNav[4].subPanel;
+      }
+      return tempNav;
+    }
     oldNav.forEach((item) => {
       const tempItem = item;
       if (item.title === 'Data Room') {
         const tempSubNav = [];
         dataRoomDocs.forEach((subItem, index) => {
           tempSubNav.push({
-            title: subItem.name, to: `#doc-${index}`, useRefLink: true, defaultActive: index === 0,
+            title: subItem.name, to: `#${index + 1}`, useRefLink: true, defaultActive: index === 0,
           });
         });
         tempItem.subNavigations = tempSubNav;
@@ -107,15 +122,14 @@ class offerDetails extends Component {
     });
     return newNavData;
   }
-  modifyInvestmentDetailsSubNav = (navList, campaign) => {
+  modifyInvestmentDetailsSubNav = (navList, offeringStage) => {
     const newNavList = [];
-    const offeringSecurityType =
-      (campaign && campaign.keyTerms && campaign.keyTerms.securities) || null;
+    const offeringSecurityType = this.props.campaignStore.offerStructure;
     navList.forEach((item) => {
       const tempItem = item;
       if (has(item, 'subNavigations') && item.title === 'Investment Details') {
         const temNavList = item.subNavigations;
-        if (offeringSecurityType === 'REVENUE_SHARING_NOTE') {
+        if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
           const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
           if (existanceResult.length) {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
@@ -123,7 +137,7 @@ class offerDetails extends Component {
           temNavList.push({
             title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
           });
-        } else if (offeringSecurityType === 'TERM_NOTE') {
+        } else if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
           const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
           if (existanceResult.length) {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
@@ -137,15 +151,22 @@ class offerDetails extends Component {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
           }
         }
+        this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
         tempItem.subNavigations = uniqWith(temNavList, isEqual);
       }
-      newNavList.push(tempItem);
+      if (tempItem.to === 'data-room') {
+        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+          newNavList.push(tempItem);
+        }
+      } else {
+        newNavList.push(tempItem);
+      }
     });
     return newNavList;
   }
   render() {
     const {
-      match, campaignStore, location, navStore,
+      match, campaignStore, location,
     } = this.props;
     if (this.state.showPassDialog) {
       return (<DevPassProtected
@@ -155,7 +176,7 @@ class offerDetails extends Component {
       />);
     }
     if (!campaignStore.details || campaignStore.details.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner page loaderMessage="Loading.." />;
     }
     const {
       details, campaignSideBarShow, campaign, navCountData,
@@ -167,22 +188,16 @@ class offerDetails extends Component {
       navItems =
         this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
           .subNavigations, get(campaign, 'legal.dataroom.documents'));
+      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
+    const offeringStage = get(campaign, 'stage');
     navItems =
-      this.modifyInvestmentDetailsSubNav(navItems, campaign);
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-      && campaign.offering.launch.terminationDate;
-    const diff = DataFormatter.diffDays(terminationDate);
-    const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+      this.modifyInvestmentDetailsSubNav(navItems, offeringStage);
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;
     }
-    const { navStatus, subNavStatus } = navStore;
-    const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
-    const isClosed = campaign.stage !== 'LIVE';
+    const offeringId = get(campaign, 'id');
     return (
       <Aux>
         {campaign &&
@@ -191,35 +206,11 @@ class offerDetails extends Component {
         {!isMobile &&
           <CampaignHeader {...this.props} />
         }
+        {/* {campaignStore && campaignStore.showFireworkAnimation &&
+        <Firework />
+        } */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
-          <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
-            <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus}`}>
-              <Container fluid={!isMobile}>
-                <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
-                  {!isMobile &&
-                    <Aux>
-                      <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                      <List.Item>{diff} days left</List.Item>
-                    </Aux>
-                  }
-                  {!isClosed &&
-                    <Button compact secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
-                  }
-                </List>
-                <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
-                  <List.Item>
-                    <List.Header>{get(campaign, 'keyTerms.shorthandBusinessName')}</List.Header>
-                  </List.Item>
-                  <List.Item>
-                    <List.Header><span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised</List.Header>
-                  </List.Item>
-                  {!isMobile &&
-                    <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
-                  }
-                </List>
-              </Container>
-            </div>
-          </Visibility>
+          <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
             <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
             <MobileDropDownNav
@@ -253,6 +244,7 @@ class offerDetails extends Component {
                     <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
                     <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
                     <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                    <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                     <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
                     <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                     <Route component={NotFound} />

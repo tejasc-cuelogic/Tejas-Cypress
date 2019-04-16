@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { findKey } from 'lodash';
+import { findKey, isEmpty } from 'lodash';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
@@ -16,7 +16,9 @@ import {
 } from '../../../../../constants/account';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import CashMovement from '../../summary/components/CashMovement';
+import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
 }) => {
@@ -40,7 +42,7 @@ const summaryDetails = ({
     ],
   };
 };
-@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore')
+@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore')
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
@@ -49,7 +51,11 @@ export default class AccountSetup extends Component {
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
-    this.props.portfolioStore.getSummary();
+    // TODO change to regex
+    if (!Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+      this.props.portfolioStore.getSummary();
+    }
+    this.props.uiStore.clearErrors();
   }
 
   navToAccTypes = (step) => {
@@ -71,7 +77,7 @@ export default class AccountSetup extends Component {
       getStepStatus,
       isBasicVerDoneForMigratedFullUser,
     } = this.props.userDetailsStore;
-    const { finishInvestorProfileLater } = this.props.investorProfileStore;
+    const activeAccLength = signupStatus.activeAccounts.length;
     const { summaryLoading, summary } = this.props.portfolioStore;
     return (
       <PrivateLayout
@@ -82,7 +88,7 @@ export default class AccountSetup extends Component {
             userDetailsStore={this.props.userDetailsStore}
           /> : <InlineLoader /> : ''}
       >
-        <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
+        <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading ?
           <ProgressCard
             {...this.props}
@@ -99,19 +105,20 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
         {
-          signupStatus.isMigratedFullAccount
-          && finishInvestorProfileLater ?
+          activeAccLength !== 0 && signupStatus.investorProfileCompleted ?
             summaryLoading ?
               <InlineLoader /> :
               <Aux>
                 <Header as="h4">Values Performance</Header>
                 <SummaryHeader details={summaryDetails(summary)} />
-                <Card fluid>
-                  <Card.Content>
-                    <Header as="h4">Cash Movement, LTM</Header>
-                    <CashMovement data={summary.cashMovement} />
-                  </Card.Content>
-                </Card>
+                { !isEmpty(summary.cashMovement) &&
+                  <Card fluid>
+                    <Card.Content>
+                      <Header as="h4">Cash Movement from Inception</Header>
+                      <CashMovement data={summary.cashMovement} />
+                    </Card.Content>
+                  </Card>
+                }
               </Aux>
           : null
         }

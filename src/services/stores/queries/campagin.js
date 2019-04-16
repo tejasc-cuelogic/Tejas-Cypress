@@ -8,6 +8,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       stage
       media {
         tombstoneImage {
+          id
           url
           isPublic
           fileName
@@ -18,8 +19,13 @@ query getOfferingList($filters: OfferingFilterInputType){
         about {
           theCompany
         }
+        overview {
+          tombstoneDescription
+        }
       }
       closureSummary {
+        processingDate
+        hardCloseDate
         totalInvestmentAmount
         totalInvestorCount
       }
@@ -33,9 +39,15 @@ query getOfferingList($filters: OfferingFilterInputType){
         state
         city
       }
+      regulation
     }
   }
 `;
+
+export const checkIfEarlyBirdExist = gql`
+query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accountId: String!) {
+  checkEarlyBirdByInvestorAccountAndOfferingId(offeringId: $offeringId, accountId: $accountId)
+}`;
 
 export const getOfferingsReferral = gql`
 query getOfferingList($filters: OfferingFilterInputType){
@@ -61,15 +73,19 @@ export const campaignDetailsQuery = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     stage
-    applicationId
-    issuerId
     offeringSlug
-    referralCode
     regulation
-    selectedOffer {
-      structure
+    created {
+      id
     }
     keyTerms {
+      unitPrice
+      roundType
+      premoneyValuation
+      additionalKeyterms {
+        label
+        description
+      }
       regulation
       startupPeriod
       offeringDisclaimer
@@ -82,43 +98,30 @@ export const campaignDetailsQuery = gql`
       securitiesOwnershipPercentage
       investmentMultiple
       revSharePercentage
+      revSharePercentageDescription
       interestRate
-      minOfferingAmount
-      maxOfferingAmount
-      industry
+      minOfferingAmountCF
+      maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       minInvestAmt
-      appendixATitle
       revShareSummary
       investmentMultipleSummary
-      locationRiskFactors
-      isTX
       state
       city
     }
     bonusRewards{
       id
-      offeringId
       title
       description
-      rewardStatus
-      expirationDate
       earlyBirdQuantity
       tiers
-      created {
-        id
-        by
-        date
-      }
-      updated {
-        id
-        by
-        date
-      }
     }
     rewardsTiers
     earlyBird {
       quantity
       amount
+      available
     }
     offering {
       overview {
@@ -134,18 +137,6 @@ export const campaignDetailsQuery = gql`
             url
           }
         }
-        googleMeta
-        issuerWebsite
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
       }
       about {
         theCompany
@@ -155,34 +146,9 @@ export const campaignDetailsQuery = gql`
         }
         businessModel
         locationAnalysis
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
       }
       launch {
-        targetDate
-        terminationDate
-        expectedOpsDate
-        issuerApprovedDate
         edgarLink
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
-        gsFees
       }
       misc {
         additionalBonusRewardsContent
@@ -196,21 +162,7 @@ export const campaignDetailsQuery = gql`
       uploads {
         headshot {
           id
-          fileName
           url
-          isPublic
-        }
-        heroImage {
-          id
-          fileName
-          url
-          isPublic
-        }
-        license {
-          id
-          fileName
-          url
-          isPublic
         }
       }
       bio
@@ -220,46 +172,25 @@ export const campaignDetailsQuery = gql`
         facebook
         linkedin
       }
-      approved {
-        id
-        by
-        date
-      }
     }
     media {
       heroImage {
+        id
         url
         isPublic
       }
-      useOfProceeds{
+      heroBackground {
+        id
         url
         isPublic
       }
       heroVideo {
-        url
-        isPublic
-      }
-      tombstoneImage {
         id
         url
-        isPublic
-      }
-      locationHeroImage {
-        id
-        url
-        isPublic
-      }
-      location  {
-        id
-        url
+        fileName
         isPublic
       }
       gallery  {
-        id
-        url
-        isPublic
-      }
-      logo  {
         id
         url
         isPublic
@@ -269,25 +200,11 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
-      businessModelImage {
-        id
-        url
-        isPublic
-      }
     }
     legal {
       general {
-        websiteUrl
         useOfProceeds {
-          minOfferingExpenseAmount
-          minOfferingExpenseAmountDescription
-          maxOfferingExpenseAmount
-          maxOfferingExpenseAmountDescription
-        }
-        approved {
-          id
-          by
-          date
+          offeringExpenseAmountDescription
         }
       }
       dataroom {
@@ -305,31 +222,25 @@ export const campaignDetailsQuery = gql`
       }
     }
     closureSummary {
+      processingDate
+      hardCloseDate
       totalInvestmentAmount
       totalInvestorCount
+      repayment {
+        count
+      }
     }
     comments {
       id
-      offeringId
-      thread
       scope
       comment
       approved {
-        id
-        by
         date
       }
       updated {
-        by
-        date
-      }
-      deleted {
-        id
-        by
         date
       }
       created {
-        by
         date
       }
       createdUserInfo {
@@ -337,10 +248,6 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
-          avatar {
-            url
-            name
-          }
         }
         roles {
           name
@@ -348,25 +255,15 @@ export const campaignDetailsQuery = gql`
       }
       threadComment {
         id
-        offeringId
-        thread
         scope
         comment
         approved {
-          id
-          by
           date
         }
         updated {
-          by
           date
         }
         created {
-          by
-          date
-        }
-        deleted {
-          by
           date
         }
         createdUserInfo {
@@ -374,10 +271,6 @@ export const campaignDetailsQuery = gql`
           info {
             firstName
             lastName
-            avatar {
-              url
-              name
-            }
           }
           roles {
             name
@@ -385,40 +278,12 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
-    updated {
-      id
-      by
-      date
-    }
-    deleted {
-      id
-      by
-      date
-    }
     updates {
       id
-      offeringId
       title
       content
-      status
       scope
-      tiers
-      isEarlyBirdOnly
-      notificationSent {
-        by
-        date
-        to
-      }
-      approved {
-        by
-        date
-      }
       updated {
-        by
-        date
-      }
-      deleted {
-        by
         date
       }
       actingUserInfo {
@@ -426,10 +291,6 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
-          avatar {
-            url
-            name
-          }
         }
       }
     }
@@ -442,8 +303,21 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
+    isAvailablePublicly
+    stage
     closureSummary {
+      processingDate
+      hardCloseDate
       totalInvestmentAmount
+      repayment {
+        completeDate
+      }
+      keyTerms {
+        multiple
+        revSharePercentage
+        interestRate
+        businessOpenDate
+      }
     }
     keyTerms {
       regulation
@@ -459,8 +333,10 @@ query getOfferingById($id: ID) {
       investmentMultiple
       revSharePercentage
       interestRate
-      minOfferingAmount
-      maxOfferingAmount
+      minOfferingAmountCF
+      maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       industry
       minInvestAmt
       revShareSummary
@@ -473,6 +349,8 @@ query getOfferingById($id: ID) {
     offering {
       launch {
         targetDate
+        edgarLink
+        terminationDate
       }
     }
     selectedOffer {
