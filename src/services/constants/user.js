@@ -56,7 +56,7 @@ export const securitySections = [
     description:
       (
         <Aux>You can choose your{' '}
-          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA Factor</span>}>
+          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
               Manage your MFA contact preferences. All major actions in your account will
