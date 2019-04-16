@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { capitalize, orderBy, mapValues, get } from 'lodash';
+import { Calculator } from 'amortizejs';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
@@ -14,7 +15,7 @@ import {
   investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
-import {Calculator} from "amortizejs";
+
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
