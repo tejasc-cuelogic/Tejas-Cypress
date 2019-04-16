@@ -127,7 +127,7 @@ export default class CampaignHeader extends Component {
                   </Header>
                   <Statistic inverted size="tiny" className="basic mb-0">
                     <Statistic.Value>
-                      <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
+                      <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                     </Statistic.Value>
                     {minFlagStatus &&
                       <Statistic.Label className="flag-status">
