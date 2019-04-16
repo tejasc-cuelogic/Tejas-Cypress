@@ -944,7 +944,7 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = '';
             break;
           case 'USER-PARTIAL':
-            headerSubheaderTextObj.header = 'This investment is only available verified investors.';
+            headerSubheaderTextObj.header = 'Finish setting up your account to begin investing.';
             headerSubheaderTextObj.subHeader = '';
             break;
           case 'FROZEN':

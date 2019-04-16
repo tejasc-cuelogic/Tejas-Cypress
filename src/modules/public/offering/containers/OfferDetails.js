@@ -58,6 +58,9 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
   componentWillUnmount() {
     this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
   }
@@ -198,6 +201,8 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     return (
       <Aux>
         {campaign &&
@@ -217,8 +222,11 @@ class offerDetails extends Component {
               inverted
               refMatch={match}
               navCountData={navCountData}
+              isBonusReward={isBonusReward}
+              bonusRewards={bonusRewards}
               navItems={navItems}
               location={location}
+              slideUpNot
             />
           </Responsive>
           <Container>

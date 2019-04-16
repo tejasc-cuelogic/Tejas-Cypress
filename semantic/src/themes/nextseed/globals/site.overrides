@@ -521,6 +521,9 @@ footer{
 // 	min-height:~"calc(100vh - 58px)";
 // }
 .offering-side-menu {
+	@media only screen and (min-width : @largestTabletScreen){
+		padding-top:@20px;
+	}
 	@media only screen and (max-width : @largestTabletScreen){
 		background:url(../../assets/images/banners/campaign-details.png) top center no-repeat / cover;
 		background-color: @neutral;
@@ -1242,6 +1245,9 @@ a.icon-link {
 			color: @neutral-middark;
 			text-transform: uppercase;
 			opacity: 1;
+			@media only screen and (max-width : @largestTabletScreen){
+				left: -70px;
+			}
 		}
 		.ui.list .item {
 			border: 1px solid @neutral-darkwhite;
@@ -1256,7 +1262,7 @@ a.icon-link {
 	left: 121px;
 	@media only screen and (max-width : @largestTabletScreen){
 		left: 0;
-		margin-left: @30px;
+		// margin-left: @30px;
 		width: auto;
 	}
 	&::before {
@@ -1270,9 +1276,9 @@ a.icon-link {
 			.avatar-image {
 				border-radius: 50%;
 				height: 60px;
-				width: 60px;
+				width: 60px !important;
 			}
-			.content {
+			>.image+.content {
 				margin-left: @15px;
 				padding: 0;
 				text-transform: capitalize;
@@ -1392,6 +1398,9 @@ a.icon-link {
 		@media only screen and (max-width : @largestTabletScreen){
 			top: 0;
 		}
+	}
+	&.offering-side-menu{
+		top:130px;
 	}
 }
 .sticky-actions{
@@ -2866,7 +2875,7 @@ input[type='range']::-webkit-slider-thumb {
 		top:-140px;
 	}
 	>.anchor-scroll{
-		top:-60px;
+		top:-70px;
 	}
 }
 .recharts-tooltip-wrapper {

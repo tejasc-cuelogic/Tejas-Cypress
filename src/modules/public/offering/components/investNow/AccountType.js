@@ -455,7 +455,7 @@ class AccountType extends Component {
               {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
                 ?
                   <Aux>
-                    Please confirm your investor profile to invest in this offering.
+                    Please answer a few basic questions to complete your Investor Profile.
                     {/* <Link to={redirectURL} className="text-link">
                         <Icon className="ns-arrow-right" color="green" />
                         Please finish your account setup.
@@ -470,7 +470,7 @@ class AccountType extends Component {
                           content="Confirm Status"
                           />
                     </div> */}
-                    <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Confirm Status" /></div>
+                    <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
                   </Aux>
                 :
                 null}

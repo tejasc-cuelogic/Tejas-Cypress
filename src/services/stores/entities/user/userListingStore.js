@@ -26,7 +26,7 @@ export class UserListingStore {
   };
 
   @action
-  initRequest = (reqParams) => {
+  initRequest = (reqParams, getAllUsers = false) => {
     const {
       keyword, accountType, accountStatus, startDate, endDate,
     } = this.requestState.search;
@@ -37,7 +37,7 @@ export class UserListingStore {
       accountType,
       accountStatus,
       page: reqParams ? reqParams.page : 1,
-      limit: this.requestState.perPage,
+      limit: getAllUsers ? 100 : this.requestState.perPage,
     };
 
     this.requestState.page = params.page;
@@ -116,9 +116,9 @@ export class UserListingStore {
   }
 
   @action
-  initiateSearch = (srchParams) => {
+  initiateSearch = (srchParams, getAllUsers = false) => {
     this.requestState.search = srchParams;
-    this.initRequest();
+    this.initRequest(null, getAllUsers);
   }
 
   @action
