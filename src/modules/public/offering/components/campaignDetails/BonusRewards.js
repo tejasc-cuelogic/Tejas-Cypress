@@ -17,7 +17,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 @observer
 class BonusRewards extends Component {
   componentDidMount() {
-    const sel = 'anchor-scroll';
+    const sel = 'anchor';
     document.querySelector(`.${sel}`).scrollIntoView(true);
   }
   render() {
@@ -33,8 +33,8 @@ class BonusRewards extends Component {
       campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
-          <span className="anchor-scroll" />
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+          <span className="anchor" />
           Bonus Rewards
         </Header>
         {rewardsTiers && rewardsTiers.length ?

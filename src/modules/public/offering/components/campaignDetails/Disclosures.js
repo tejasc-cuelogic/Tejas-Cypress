@@ -23,11 +23,17 @@ export default class TermsOfUse extends Component {
       this.props.accreditationStore.getUserAccreditation();
     }
   }
+  componentDidMount() {
+    const sel = 'anchor';
+    document.querySelector(`.${sel}`).scrollIntoView(true);
+  }
   module = name => DataFormatter.upperCamelCase(name);
-  dataRoomHeader = (<Header as="h3" className="mb-30 anchor-wrap">
-                      Data Room
-    <span className="anchor-scroll" />
-                    </Header>)
+  dataRoomHeader = (
+    <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      Data Room
+      <span className="anchor" />
+    </Header>
+  )
   render() {
     const { campaign } = this.props.campaignStore;
     const campaignCreatedBy = get(campaign, 'created.id') || null;
@@ -40,7 +46,11 @@ export default class TermsOfUse extends Component {
         </div>);
     }
     if (dataRoomDocs.length !== sortedDocswithBoxLink.length) {
-      return <InlineLoader />;
+      return (
+        <div className="campaign-content-wrapper">
+          {this.dataRoomHeader}
+          <InlineLoader />
+        </div>);
     }
     const index = (this.props.location.hash || '#1').substr(1);
     return (
