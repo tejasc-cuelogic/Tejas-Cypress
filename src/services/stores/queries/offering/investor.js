@@ -12,6 +12,7 @@ export const getInvestorListForOffering = gql`
       investmentDate
       referralCode
       avatar
+      investmentsCount
     }
   }
 `;

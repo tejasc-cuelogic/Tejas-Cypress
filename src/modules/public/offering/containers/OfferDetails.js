@@ -201,6 +201,8 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     return (
       <Aux>
         {campaign &&
@@ -220,6 +222,8 @@ class offerDetails extends Component {
               inverted
               refMatch={match}
               navCountData={navCountData}
+              isBonusReward={isBonusReward}
+              bonusRewards={bonusRewards}
               navItems={navItems}
               location={location}
               slideUpNot
