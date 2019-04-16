@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
 import { get } from 'lodash';
+import Parser from 'html-react-parser';
 import { Link } from 'react-router-dom';
 import { Label, Item, Header, Icon } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../../theme/shared';
@@ -53,7 +54,7 @@ const Body = props => (
                 <UserAvatar size="mini" UserInfo={userInfo} />
                 <MsgContent
                   classes={classes}
-                  body={msg.comment}
+                  body={Parser(msg.comment)}
                   extra={
                     <Aux>
                       <Header as="h6">{userFirstName}</Header>
@@ -93,7 +94,7 @@ const Body = props => (
               <Item className="sent">
                 <MsgContent
                   classes={classes}
-                  body={msg.comment}
+                  body={Parser(msg.comment)}
                   extra={
                     <Aux>
                       <Header as="h6">{userFirstName}</Header>
