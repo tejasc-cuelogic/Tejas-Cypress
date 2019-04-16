@@ -53,7 +53,7 @@ export default class TransferFunds extends Component {
                   <AvailableCashTransfer
                     match={this.props.match}
                     isAccountFrozen={isAccountFrozen}
-                    cash={cash}
+                    cash={cash || '0.00'}
                   />
                 </Grid.Column>
               </Grid.Row>
