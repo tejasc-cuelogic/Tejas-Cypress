@@ -1232,7 +1232,7 @@ a.icon-link {
 			position: absolute;
 			width: 78px;
 			top: -60px;
-			left: -162px;
+			left: -220px;
 			right: auto;
 			padding: 0;
 			background: @white;
@@ -1242,6 +1242,9 @@ a.icon-link {
 			color: @neutral-middark;
 			text-transform: uppercase;
 			opacity: 1;
+			@media only screen and (max-width : @largestTabletScreen){
+				left: -70px;
+			}
 		}
 		.ui.list .item {
 			border: 1px solid @neutral-darkwhite;
@@ -1270,9 +1273,9 @@ a.icon-link {
 			.avatar-image {
 				border-radius: 50%;
 				height: 60px;
-				width: 60px;
+				width: 60px !important;
 			}
-			.content {
+			>.image+.content {
 				margin-left: @15px;
 				padding: 0;
 				text-transform: capitalize;
