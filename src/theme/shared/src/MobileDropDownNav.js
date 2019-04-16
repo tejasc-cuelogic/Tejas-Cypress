@@ -31,7 +31,7 @@ export default class MobileDropDownNav extends React.Component {
           <Menu inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${navStatus === 'sub' && !slideUpNot ? 'active' : ''}`}>
             <Dropdown item text={this.activeText()}>
               <Dropdown.Menu>
-                <NavItems sub refLoc="public" location={location} navItems={navItems} />
+                <NavItems sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />
               </Dropdown.Menu>
             </Dropdown>
             {location.pathname.startsWith('/offerings/') &&

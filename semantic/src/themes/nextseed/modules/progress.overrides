@@ -31,6 +31,7 @@
 // .offer-details
 .campaign-banner .ui.progress {
     margin-bottom: @15px;
+    background:fade(@white,20%);
     >.label {
         top: 0;
     }
@@ -45,6 +46,7 @@
     }
 }
 .offering-intro .ui.progress {
+    background:fade(@white,20%);
     >.label {
         top: 0;
     }

@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 // TODO: Improve the component
 
-const catchErrorBoundry = !['localhost', 'dev'].includes(REACT_APP_DEPLOY_ENV);
+const catchErrorBoundry = !['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
 
 @inject('authStore')
 @withRouter

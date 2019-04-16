@@ -23,7 +23,7 @@ class Comments extends Component {
     this.props.messageStore.resetMessageForm();
   }
   componentDidMount() {
-    const sel = 'anchor-scroll';
+    const sel = 'anchor';
     document.querySelector(`.${sel}`).scrollIntoView(true);
   }
   postNewComment = () => {
@@ -97,7 +97,7 @@ class Comments extends Component {
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Comments
-          <span className="anchor-scroll" />
+          <span className="anchor" />
         </Header>
         <p>
           Note that both NextSeed and issuers are notified of all comments immediately,

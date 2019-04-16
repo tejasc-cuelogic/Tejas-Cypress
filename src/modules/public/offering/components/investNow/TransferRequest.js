@@ -4,7 +4,7 @@ import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'investmentLimitStore')
+@inject('investmentStore', 'investmentLimitStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
@@ -51,7 +51,6 @@ class TransferRequest extends Component {
       investmentAmount,
       investmentFlowErrorMessage,
     } = investmentStore;
-    // const { getCurrCreditAvailable } = rewardStore;
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
     const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
