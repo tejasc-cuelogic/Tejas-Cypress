@@ -111,7 +111,7 @@ export default class EdgarFilingList extends Component {
   render() {
     const offeringFilingList = this.props.offeringFilings;
     const offering = this.props.offeringDetails;
-    const { loadingLinkId } = this.props.commonStore;
+    const { inProgress } = this.props.commonStore;
     const regulation = get(offering, 'regulation');
     const offeringRegulationArr = (regulation && regulation.split('_')) || '';
     const regulationType = get(offeringRegulationArr, '[0]');
@@ -140,7 +140,7 @@ export default class EdgarFilingList extends Component {
                           <Button
                             content="Documents"
                             className="link-button"
-                            loading={loadingLinkId === filing.folderId}
+                            loading={inProgress === filing.folderId}
                             folderId={filing.folderId}
                             onClick={this.handleDocumentsLink}
                           />

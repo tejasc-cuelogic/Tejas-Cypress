@@ -8,7 +8,7 @@ export class CommonStore {
   @observable appName = 'NextSeed';
   @observable token = window.localStorage.getItem('jwt');
   @observable appLoaded = false;
-  @observable loadingLinkId = '';
+  @observable inProgress = false;
 
   constructor() {
     reaction(
@@ -88,8 +88,13 @@ export class CommonStore {
   }
 
   @action
+  setFieldValue(key, val) {
+    this[key] = val;
+  }
+
+  @action
   getsharedLink = params => new Promise((resolve) => {
-    this.loadingLinkId = params.id;
+    this.setFieldValue('inProgress', params.id);
     graphql({
       client,
       query: getsharedLink,
@@ -98,11 +103,14 @@ export class CommonStore {
       },
       onFetch: action((data) => {
         if (data) {
-          this.loadingLinkId = '';
+          this.setFieldValue('inProgress', false);
           resolve(data.sharedLink);
         }
       }),
-      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+      onError: action(() => {
+        this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      }),
     });
   });
 }
