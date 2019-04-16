@@ -14,6 +14,7 @@ import {
   investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
+import {Calculator} from "amortizejs";
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
@@ -226,10 +227,12 @@ export class InvestmentStore {
     let offeringSecurityType = '';
     let interestRate = '';
     let investmentMultiple = '';
+    let loanTerm = '';
     if (campaign && campaign.keyTerms) {
       offeringSecurityType = get(campaign, 'keyTerms.securities');
       interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
       investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+      loanTerm = parseFloat(get(campaign, 'keyTerms.maturity'));
     } else {
       offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
       interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
@@ -238,10 +241,25 @@ export class InvestmentStore {
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
       if (offeringSecurityType === 'TERM_NOTE') {
-        const formatedIntrestRate = money.floatToAmount(interestRate);
-        const calculatedIntrestAmount = money.percent(investAmt, formatedIntrestRate);
+        const data = {
+          method: 'mortgage',
+          apr: parseFloat(interestRate) || 0,
+          balance: parseFloat(investAmt) || 0,
+          loanTerm: loanTerm || 0,
+        };
+        const { totalPayment } = Calculator.calculate(data);
+        const finalAmtM = money.floatToAmount(totalPayment || '');
+
+        //
+        //
+        // const interestRate_f = parseFloat(interestRate);
+        // const num = (interestRate_f / 100.0) / 12 * parseFloat(investAmt);
+        // const denom = 1 - Math.pow((1 + (interestRate_f / 100.0) / 12), (-1 * targetTerm)));
+        // const finalAmt = (num/denom)*;
+        //
+        // const finalAmt_m = money.floatToAmount(finalAmt);
         const estReturnMIN =
-          Helper.CurrencyFormat(money.add(investAmt, calculatedIntrestAmount), 0);
+            Helper.CurrencyFormat(finalAmtM, 0);
         this.estReturnVal = estReturnMIN;
         return this.estReturnVal;
       }
