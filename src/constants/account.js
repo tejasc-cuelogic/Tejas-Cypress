@@ -293,6 +293,7 @@ export const IND_BANK_LIST = [
 
 export const IRA_ACC_TYPES = {
   iraAccountType: {
+    key: 'iraAccountType',
     value: '',
     values: [
       {
@@ -316,6 +317,7 @@ export const IRA_ACC_TYPES = {
 export const IRA_FUNDING = {
   fundingType: {
     value: '',
+    key: 'fundingType',
     values: [
       {
         label: 'Check',

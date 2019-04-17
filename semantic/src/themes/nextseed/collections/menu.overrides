@@ -220,12 +220,16 @@
     @media only screen and (max-width : @largestTabletScreen){
         top: auto;
         bottom: -58px;
+        height: auto;
+        padding: 10px 0;
+        .ui.list {
+            margin: 0;
+        }
     }
     &.active{
         top:@primaryHeaderHeight;
         @media only screen and (max-width : @largestTabletScreen){
             top: auto;
-            bottom: 0;
         }
         &.animate{
             top:0;
@@ -564,6 +568,9 @@ footer{
             width:100%;
             top:58px;
             z-index:9;
+            &.campaign-mobile-dropdown+.animate-placeholder {
+                height: @40px;
+            }
         }
         &.inverted {
             background: fade(@neutral, 90%);
@@ -596,6 +603,10 @@ footer{
             top: 8px;
             left: 18px;
             color: @white;
+        }
+        &.campaign-mobile-dropdown+.animate-placeholder {
+            height: 0;
+            width: 100%;
         }
 	}
 	//Public Mobile View End

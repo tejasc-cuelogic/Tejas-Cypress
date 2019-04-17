@@ -78,7 +78,7 @@ export default class AccountCreation extends React.Component {
           component: <FinancialInformation />,
           isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
           isDirty: FIN_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateIRAFinancialInfo,
+          validate: validationActions.validateIRAForm,
           form: 'FIN_INFO_FRM',
           validForm: FIN_INFO_FRM.meta.isValid,
           stepToBeRendered: 1,
@@ -89,6 +89,7 @@ export default class AccountCreation extends React.Component {
           name: 'Account type',
           component: <AccountType />,
           isValid: ACC_TYPES_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
+          validate: validationActions.validateIRAForm,
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
           stepToBeRendered: 2,
@@ -99,6 +100,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Funding',
           component: <Funding />,
+          validate: validationActions.validateIRAForm,
           isValid: FUNDING_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
@@ -124,7 +126,7 @@ export default class AccountCreation extends React.Component {
           component: <Identity />,
           isValid: IDENTITY_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
           isDirty: IDENTITY_FRM.meta.isDirty && isPlaidDirty,
-          validate: validationActions.validateIRAIdentityInfo,
+          validate: validationActions.validateIRAForm,
           form: 'IDENTITY_FRM',
           disableKeyDown: true,
           validForm: IDENTITY_FRM.meta.isValid,
@@ -146,7 +148,7 @@ export default class AccountCreation extends React.Component {
           component: <FinancialInformation />,
           isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
           isDirty: FIN_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateIRAFinancialInfo,
+          validate: validationActions.validateIRAForm,
           form: 'FIN_INFO_FRM',
           stepToBeRendered: 1,
           disableKeyDown: true,
@@ -156,6 +158,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Account type',
           component: <AccountType />,
+          validate: validationActions.validateIRAForm,
           isValid: ACC_TYPES_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
@@ -167,6 +170,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Funding',
           component: <Funding />,
+          validate: validationActions.validateIRAForm,
           isValid: FUNDING_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
@@ -180,7 +184,7 @@ export default class AccountCreation extends React.Component {
           component: <Identity />,
           isValid: IDENTITY_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
           isDirty: IDENTITY_FRM.meta.isDirty,
-          validate: validationActions.validateIRAIdentityInfo,
+          validate: validationActions.validateIRAForm,
           form: 'IDENTITY_FRM',
           stepToBeRendered: 4,
           disableKeyDown: true,
@@ -201,7 +205,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress">
-        <MultiStep loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }
