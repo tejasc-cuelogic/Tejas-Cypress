@@ -40,9 +40,9 @@ const Body = props => (
         props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
           const msgDate = moment(date).format('ll');
-          const userFirstName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
+          const userFullName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
           const userInfo = {
-            firstName: userFirstName,
+            firstName: get(msg, 'createdUserInfo.info.firstName'),
             lastName: get(msg, 'createdUserInfo.info.lastName'),
             avatarUrl: get(msg, 'createdUserInfo.info.avatar.url') || null,
             roles: [get(msg, 'createdUserInfo.roles[0].name')],
@@ -57,7 +57,7 @@ const Body = props => (
                   body={Parser(msg.comment)}
                   extra={
                     <Aux>
-                      <Header as="h6">{userFirstName}</Header>
+                      <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="from"
                         showApproval={!props.isIssuer &&
@@ -97,7 +97,7 @@ const Body = props => (
                   body={Parser(msg.comment)}
                   extra={
                     <Aux>
-                      <Header as="h6">{userFirstName}</Header>
+                      <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="to"
                         showApproval={props.isIssuer}
