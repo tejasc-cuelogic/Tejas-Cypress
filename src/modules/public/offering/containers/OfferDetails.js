@@ -202,6 +202,8 @@ class offerDetails extends Component {
     }
     const offeringId = get(campaign, 'id');
     const { campaignHeaderStatus } = this.props.navStore;
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     return (
       <Aux>
         {campaign &&
@@ -224,6 +226,8 @@ class offerDetails extends Component {
                 navCountData={navCountData}
                 navItems={navItems}
                 location={location}
+                isBonusReward={isBonusReward}
+                bonusRewards={bonusRewards}
                 isActive={campaignHeaderStatus}
                 useIsActive
               />
