@@ -347,12 +347,13 @@ ol.ui.list.step-list{
         margin:0;
         padding-right:@14px;
     }
-    .item:not(:first-child) {
-        @media only screen and (max-width : @largeMonitorBreakpoint){
-            padding-left: 0 !important;
-            margin-left: 0;
-        }
-    }
+    //below code comment as campaign secondary header list get disturb on tablet view
+    // .item:not(:first-child) {
+    //     @media only screen and (max-width : @largeMonitorBreakpoint){
+    //         padding-left: 0 !important;
+    //         margin-left: 0;
+    //     }
+    // }
 }
 .ui.form.gallery-img{
     .ui.horizontal.list{

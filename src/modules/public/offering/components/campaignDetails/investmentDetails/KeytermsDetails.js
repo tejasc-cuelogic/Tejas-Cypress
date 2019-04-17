@@ -59,7 +59,7 @@ class KeyTermsDetails extends Component {
             <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
           </Grid.Column>
         </Grid>
-        <Divider />
+        {!isMobile ? <Divider /> : null}
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
@@ -269,7 +269,7 @@ class KeyTermsDetails extends Component {
               </Table.Row>}
           </Table.Body>
         </Table>
-        <Divider section hidden />
+        <Divider section={!isMobile} hidden />
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
           <Aux>
             <Header as="h3" className="mb-30 anchor-wrap">
@@ -295,7 +295,7 @@ class KeyTermsDetails extends Component {
                   <Statistic.Value className={`${isMobile && 'center-align'} highlight-text mb-10`}>
                     {Helper.CurrencyFormat(principalAmt)}
                   </Statistic.Value>
-                  <div className="slider-container">
+                  <div className={`${isMobile && 'mb-20'} slider-container`}>
                     <p style={{ width: `${this.state.offeringAmt}%` }} />
                     <input
                       type="range"

@@ -37,15 +37,18 @@ export default class Overview extends Component {
               ['offeringSlug', 'previewPassword', 'referralCode'].map(field => (
                 <FormInput
                   name={field}
+                  disabled={isIssuer}
                   fielddata={OFFERING_DETAILS_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'OFFERING_DETAILS_FRM')}
                 />
               ))
             }
           </Form.Group>
+          { isIssuer ? '' :
           <div className="clearfix">
             <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
           </div>
+          }
           <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
         </Form>
