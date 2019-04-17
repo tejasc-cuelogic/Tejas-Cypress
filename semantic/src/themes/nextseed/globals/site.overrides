@@ -388,6 +388,9 @@ footer{
 				display: block;
 				margin-left: 0;
 			}
+			@media only screen and (min-width : @computerBreakpoint) and (max-width : @largestSmallMonitor){
+				margin-left: 0;
+			}
 		}
 	}
 	@media only screen and (max-width : @largestMobileScreen){
@@ -410,15 +413,18 @@ footer{
 			}
 		}
 	}
-	&.offering-footer .footer-social p{
-		display: block;
-		margin-top: @14px;
-		margin-left: 0;
-	}
 }
 .public-pusher footer {
 	@media only screen and (max-width : @computerBreakpoint){
 		padding-bottom: @42px;
+	}
+	@media only screen and (max-width : @largestTabletScreen){
+		.footer-left-nav div>.ui.image {
+			margin: auto;
+		}
+		&.offering-footer{
+			padding-bottom: 60px;
+		}
 	}
 }
 /** campaign filter **/

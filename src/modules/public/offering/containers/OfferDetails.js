@@ -18,7 +18,7 @@ import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
-import Footer from './../../../../theme/layout/Footer';
+// import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
@@ -29,7 +29,7 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
-const isMobile = document.documentElement.clientWidth < 991;
+const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu sticky-sidebar')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
@@ -262,9 +262,9 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
-        <Responsive minWidth={768} as={Aux}>
+        {/* <Responsive minWidth={768} as={Aux}>
           <Footer path={location.pathname} campaign={campaign} />
-        </Responsive>
+        </Responsive> */}
       </Aux>
     );
   }
