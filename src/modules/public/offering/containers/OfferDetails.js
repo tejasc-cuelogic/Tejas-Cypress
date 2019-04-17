@@ -58,6 +58,9 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
   componentWillUnmount() {
     this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
   }

@@ -40,7 +40,7 @@ export default class CampaignSideBar extends Component {
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(processingDate);
-    const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    // const rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const { offerStructure } = campaign;
@@ -147,7 +147,7 @@ export default class CampaignSideBar extends Component {
           {!isMobile &&
             <Aux>
               <Menu vertical>
-                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} isBonusReward={isBonusReward} />
+                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
               </Menu>
             </Aux>
           }

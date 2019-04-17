@@ -37,7 +37,7 @@ class BonusRewards extends Component {
           <span className="anchor" />
           Bonus Rewards
         </Header>
-        {rewardsTiers && rewardsTiers.length ?
+        {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) ?
           <Aux>
             {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&
             bonusRewards ?
