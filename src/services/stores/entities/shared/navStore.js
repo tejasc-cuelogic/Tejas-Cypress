@@ -17,6 +17,7 @@ export class NavStore {
   @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
   @observable currentActiveHash = null;
+  @observable campaignHeaderStatus = false;
 
   constructor() {
     if (userStore.currentUser) {
@@ -193,6 +194,16 @@ export class NavStore {
       } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
         this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
       }
+    }
+  }
+  @action
+  setMobileNavStatus(calculations) {
+    const {
+      topVisible, bottomPassed,
+    } = calculations;
+    if (typeof topVisible === 'boolean') {
+      // this.subNavStatus = 'main';
+      this.campaignHeaderStatus = bottomPassed;
     }
   }
 }

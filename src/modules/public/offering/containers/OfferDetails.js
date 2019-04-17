@@ -4,7 +4,7 @@ import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Visibility } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -18,7 +18,7 @@ import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
-import Footer from './../../../../theme/layout/Footer';
+// import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
@@ -29,8 +29,8 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
-const isMobile = document.documentElement.clientWidth < 991;
-
+const isMobile = document.documentElement.clientWidth < 992;
+const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu sticky-sidebar')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
 @observer
@@ -167,6 +167,9 @@ class offerDetails extends Component {
     });
     return newNavList;
   }
+  handleUpdate = (e, { calculations }) => {
+    this.props.navStore.setMobileNavStatus(calculations);
+  }
   render() {
     const {
       match, campaignStore, location,
@@ -201,6 +204,7 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
+    const { campaignHeaderStatus } = this.props.navStore;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     return (
@@ -217,17 +221,21 @@ class offerDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
-            <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
-            <MobileDropDownNav
-              inverted
-              refMatch={match}
-              navCountData={navCountData}
-              isBonusReward={isBonusReward}
-              bonusRewards={bonusRewards}
-              navItems={navItems}
-              location={location}
-              slideUpNot
-            />
+            <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous className="visi-one">
+              <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
+              <MobileDropDownNav
+                inverted
+                refMatch={match}
+                navCountData={navCountData}
+                navItems={navItems}
+                location={location}
+                isBonusReward={isBonusReward}
+                bonusRewards={bonusRewards}
+                isActive={campaignHeaderStatus}
+                useIsActive
+                className="campaign-mobile-dropdown"
+              />
+            </Visibility>
           </Responsive>
           <Container>
             <section>
@@ -262,9 +270,9 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
-        <Responsive minWidth={768} as={Aux}>
+        {/* <Responsive minWidth={768} as={Aux}>
           <Footer path={location.pathname} campaign={campaign} />
-        </Responsive>
+        </Responsive> */}
       </Aux>
     );
   }
