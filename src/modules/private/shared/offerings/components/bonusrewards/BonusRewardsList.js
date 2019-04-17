@@ -25,12 +25,12 @@ export default class BonusRewardsList extends Component {
             (this.props.isEarlyBird && reward.earlyBirdQuantity > 0)) {
               return (
                 <div className="reward-wrap">
-                  {!isReadOnly &&
-                    <Button size="mini" floated="right" inverted color="blue" content="Edit" as={Link} to={`${refLink}/edit-bonus-reward/${reward.id}/${tier}`} />
-                  }
                   <Header as="h5">
                     {reward.title}
                     {reward.expirationDate && <small className="note">  - Exp Date: {moment(reward.expirationDate).format('MMM D, YYYY')}</small>}
+                    {!isReadOnly &&
+                      <Button size="mini" compact floated="right" inverted color="blue" content="Edit" as={Link} to={`${refLink}/edit-bonus-reward/${reward.id}/${tier}`} />
+                    }
                   </Header>
                   {reward.description && <p>{reward.description}</p>}
                 </div>
