@@ -36,10 +36,8 @@ export default class CampaignHeader extends Component {
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const isClosed = campaign.stage !== 'LIVE';
     const isCreation = campaign.stage === 'CREATION';
-    let rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const earlyBird = get(campaign, 'earlyBird') || null;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
-    rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
     const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     return (
       <Aux>
@@ -92,8 +90,7 @@ export default class CampaignHeader extends Component {
                             <Statistic.Label>Payments made</Statistic.Label>
                           </Statistic>
                         }
-                        {((rewardsTiers && rewardsTiers.length) ||
-                        (earlyBird && earlyBird.available > 0)) &&
+                        {earlyBird && earlyBird.available > 0 &&
                         isEarlyBirdRewards && !isClosed &&
                           bonusRewards ?
                             <Statistic size="mini" className="basic">
