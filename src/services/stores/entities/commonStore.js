@@ -101,16 +101,16 @@ export class CommonStore {
       variables: {
         ...params,
       },
-      onFetch: action((data) => {
+      onFetch: (data) => {
         if (data) {
           this.setFieldValue('inProgress', false);
           resolve(data.sharedLink);
         }
-      }),
-      onError: action(() => {
+      },
+      onError: () => {
         this.setFieldValue('inProgress', false);
         Helper.toast('Something went wrong, please try again later.', 'error');
-      }),
+      },
     });
   });
 }
