@@ -28,8 +28,7 @@ export default class BrokerageEmployment extends Component {
             fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
             name="brokerageEmployment"
             changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
-            containerclassname="button-radio center-align"
-            classname="center-align"
+            containerclassname="three wide button-radio center-align"
             showerror
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes' &&

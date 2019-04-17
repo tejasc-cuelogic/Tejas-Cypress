@@ -11,10 +11,12 @@ export default class Summary extends Component {
     const { signupStatus, isBasicVerDoneForMigratedFullUser } = this.props.userDetailsStore;
     const partialAccLength = signupStatus.partialAccounts.length;
     const activeAccLength = signupStatus.activeAccounts.length;
+    const processingAccLength = signupStatus.processingAccounts.length;
     return (
       <Route
         component={
-           ((partialAccLength > 0 &&
+           ((processingAccLength === 0 &&
+            partialAccLength >= 0 &&
             activeAccLength === 0) ||
             (signupStatus.isMigratedFullAccount ||
             !isBasicVerDoneForMigratedFullUser ||

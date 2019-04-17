@@ -7,7 +7,7 @@ import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
-import Helper from '../../../../../helper/utility';
+// import Helper from '../../../../../helper/utility';
 
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
@@ -104,7 +104,7 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
       if (response.isValid) {
         this.props.investmentStore.setByDefaultRender(true);
-        Helper.toast('Transfer request is in process!', 'success');
+        // Helper.toast('Transfer request is in process!', 'success');
         this.props.investmentStore.setStepToBeRendered(0);
         this.setState({ submitLoading: false });
         this.props.history.push('agreement');
@@ -240,7 +240,7 @@ export default class InvestNow extends React.Component {
           <MultiStep
             loaderMsg={this.state.submitLoading ? `Please wait...<br /><br />
             We are generating your agreement. This can take up to a minute.` : ''}
-            iinProgress={this.state.submitLoading ||
+            inProgress={this.state.submitLoading ||
               (inProgress && !investNowHealthCheckDetails.loading)}
             createAccount={this.multiClickHandler}
             setIsEnterPressed={setIsEnterPressed}

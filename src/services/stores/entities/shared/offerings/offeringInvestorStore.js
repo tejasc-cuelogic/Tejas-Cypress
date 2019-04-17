@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
+import { orderBy } from 'lodash';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { getInvestorListForOffering } from '../../../queries/offering/investor';
 import { ClientDb } from '../../../../../helper';
@@ -17,6 +19,10 @@ export class OfferingInvestorStore {
     search: {},
   };
   @observable db;
+  @observable sortOrder = {
+    column: null,
+    direction: 'asc',
+  }
 
   @action
   setData = (key, value) => {
@@ -25,7 +31,7 @@ export class OfferingInvestorStore {
 
   @action
   setDb = (data) => {
-    this.db = ClientDb.initiateDb(data);
+    this.db = ClientDb.initiateDb(data, null, null, null, true);
   }
 
   @action
@@ -74,8 +80,22 @@ export class OfferingInvestorStore {
   }
 
   @computed get investorLists() {
-    return (this.db && this.db.length &&
-      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    if (this.sortOrder.column && this.sortOrder.direction && this.db) {
+      return orderBy(
+        this.db,
+        [user => (this.sortOrder.column === 'investmentDate' ? moment(user[this.sortOrder.column]).unix() : this.sortOrder.column === 'amount' ? user[this.sortOrder.column] : user[this.sortOrder.column].toString().toLowerCase())],
+        [this.sortOrder.direction],
+      );
+    }
+    return this.db || [];
+    // return (this.db && this.db.length &&
+    //   this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+  }
+  @action
+  setSortingOrder = (column = null, direction = null) => {
+    this.sortOrder.column = column;
+    // this.sortOrder.listData = listData;
+    this.sortOrder.direction = direction;
   }
 
   @action

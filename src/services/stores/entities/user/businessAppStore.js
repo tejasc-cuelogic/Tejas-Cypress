@@ -744,7 +744,7 @@ export class BusinessAppStore {
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
       firstName: basicInfo.firstName,
       lastName: basicInfo.lastName,
-      email: basicInfo.email,
+      email: basicInfo.email.toLowerCase(),
       businessGeneralInfo: {
         businessName: data.businessName.value,
         address: {
@@ -869,6 +869,7 @@ export class BusinessAppStore {
       payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
       payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
     }
+    payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {
       clientPublic
         .mutate({
@@ -1265,11 +1266,15 @@ export class BusinessAppStore {
   };
 
   @computed get notificationCard() {
-    return find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e =>
+    const card = find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e =>
       find(this.fetchBusinessApplication, a => (a.applicationStatus === e.applicationStatus ||
         (a.applicationStage && a.applicationStage === e.applicationStage)))) ||
       find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e =>
         find(get(offeringsStore, 'data.data.getOfferings') || [], a => e.offeringStage.includes(a.stage)));
+    if (!card) {
+      return BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus.find(a => a.applicationStage === 'IN_PROGRESS');
+    }
+    return card;
   }
 }
 

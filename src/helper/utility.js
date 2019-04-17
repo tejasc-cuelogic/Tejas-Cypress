@@ -85,8 +85,8 @@ export class Utility {
       return '$0.00';
     }
   }
-  CurrencyFormat = (amount, fraction = 2) => new Intl.NumberFormat('en-US', {
-    style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: 2,
+  CurrencyFormat = (amount, fraction = 2, maxFraction = 2) => new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: maxFraction,
   }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {

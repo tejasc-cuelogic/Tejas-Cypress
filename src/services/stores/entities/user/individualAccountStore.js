@@ -208,13 +208,18 @@ class IndividualAccountStore {
           bankAccountStore.formAddFunds.fields.value.value =
           account.details.initialDepositAmount;
           // }
-          if (account.details.linkedBank) {
+          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
             const plaidAccDetails = account.details.linkedBank;
             bankAccountStore.setPlaidAccDetails(plaidAccDetails);
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-              bankAccountStore.formLinkBankManually.fields[f].value = account.details.linkedBank[f];
-              return bankAccountStore.formLinkBankManually.fields[f];
+              const { details } = account;
+              if (details.linkedBank && details.linkedBank[f] !== '') {
+                bankAccountStore.formLinkBankManually.fields[f].value =
+                details.linkedBank[f];
+                return bankAccountStore.formLinkBankManually.fields[f];
+              }
+              return null;
             });
             bankAccountStore.linkBankFormChange();
           }

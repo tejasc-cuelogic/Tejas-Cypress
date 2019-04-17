@@ -383,7 +383,7 @@ export class IdentityStore {
     const { user } = userDetailsStore.currentUser.data;
     const phoneNumber = address || get(user, 'phone.number');
     const emailAddress = get(user, 'email.address');
-    const userAddress = type === 'EMAIL' ? emailAddress : phoneNumber;
+    const userAddress = type === 'EMAIL' ? emailAddress.toLowerCase() : phoneNumber;
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
@@ -850,7 +850,7 @@ export class IdentityStore {
         .mutate({
           mutation: requestOtpWrapper,
           variables: {
-            address: email.value || emailInCookie,
+            address: (email.value || emailInCookie).toLowerCase(),
             firstName: givenName.value || firstNameInCookie,
           },
         })
@@ -873,11 +873,12 @@ export class IdentityStore {
 
   verifyOTPWrapper = () => {
     uiStore.setProgress();
-    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
     const verifyOTPData = {
       resourceId: this.requestOtpResponse,
       confirmationCode: code,
       address: email,
+      firstName: givenName,
     };
     return new Promise((resolve, reject) => {
       publicClient
@@ -921,23 +922,21 @@ export class IdentityStore {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             resolve();
           } else {
             const error = {
               message: 'Please enter correct verification code.',
             };
+            uiStore.setProgress(false);
             uiStore.setErrors(error);
             reject();
           }
         })
         .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-          reject(err);
-        }))
-        .finally(() => {
           uiStore.setProgress(false);
-        });
+          reject(err);
+        }));
     });
   }
   @action

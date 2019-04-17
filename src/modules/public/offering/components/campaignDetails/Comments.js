@@ -23,7 +23,7 @@ class Comments extends Component {
     this.props.messageStore.resetMessageForm();
   }
   componentDidMount() {
-    const sel = 'anchor-scroll';
+    const sel = 'anchor';
     document.querySelector(`.${sel}`).scrollIntoView(true);
   }
   postNewComment = () => {
@@ -95,9 +95,9 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Comments
-          <span className="anchor-scroll" />
+          <span className="anchor" />
         </Header>
         <p>
           Note that both NextSeed and issuers are notified of all comments immediately,
@@ -168,17 +168,14 @@ class Comments extends Component {
                             <HtmlEditor
                               readOnly
                               content={this.state.readMore === c.id ?
-                                c.comment : `${c.comment.substr(0, readMoreLength)}`}
+                                c.comment : `${c.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== c.id && (c.comment.length > readMoreLength)) ? '...' : ' '}`}
                             />
                             {(c.comment.length > readMoreLength) &&
-                            <Aux>
-                              {this.state.readMoreInner !== c.id ? ' ...' : ' '}
-                              <Link
-                                to="/"
-                                onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
-                              >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
-                              </Link>
-                            </Aux>}
+                            <Link
+                              to="/"
+                              onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
+                            >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
+                            </Link>}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
                             <Aux>
@@ -238,10 +235,14 @@ class Comments extends Component {
                                   <HtmlEditor
                                     readOnly
                                     content={this.state.readMoreInner === tc.id ?
-                                      tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}` : tc.comment.substr(0, readMoreLength)}
+                                      tc.comment : `${tc.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== tc.id && (tc.comment.length > readMoreLength)) ? '...' : ' '}`}
                                   />
                                   {(tc.comment.length > readMoreLength) &&
-                                  <Aux>{this.state.readMoreInner !== tc.id ? ' ...' : ' '}<Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}</Link></Aux>}
+                                  <Link
+                                    to="/"
+                                    onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
+                                  >{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
+                                  </Link>}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
                                   <Aux>

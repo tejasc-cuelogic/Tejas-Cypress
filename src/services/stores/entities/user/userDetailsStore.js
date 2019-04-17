@@ -59,6 +59,32 @@ export class UserDetailsStore {
     return details;
   }
 
+  @computed
+  get userAccreditationStatus() {
+    let entityAccreditation = null;
+    this.getActiveAccounts.map((role) => {
+      if (role.name === 'entity') {
+        entityAccreditation = get(role, 'details.accreditation.status') || null;
+      }
+      return null;
+    });
+    const accreditation = get(this.userDetails, 'accreditation.status');
+    return (accreditation === null && entityAccreditation === null);
+  }
+
+  @computed get multipleUserAccounts() {
+    const activeAccounts = [];
+    activeAccounts.multipleAccounts = false;
+    if (this.getActiveAccounts.length === 1) {
+      activeAccounts.accountType = this.getActiveAccounts[0].name;
+      activeAccounts.accountId = this.getActiveAccounts[0].details.accountId;
+    } else {
+      activeAccounts.multipleAccounts = true;
+    }
+    activeAccounts.noAccounts = this.getActiveAccounts.length === 0;
+    return activeAccounts;
+  }
+
   @action
   setAddressFieldsForProfile = (place, form) => {
     Validator.setAddressFields(place, this[form]);
@@ -70,6 +96,14 @@ export class UserDetailsStore {
       accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' &&
         account.details &&
         (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+    }
+    return accDetails;
+  }
+
+  @computed get getAccountList() {
+    let accDetails = [];
+    if (this.userDetails) {
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details);
     }
     return accDetails;
   }
@@ -429,8 +463,8 @@ export class UserDetailsStore {
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/auth/welcome-email';
-      } else if (this.signupStatus.isMigratedFullAccount &&
-        (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
+      } else if ((this.userDetails &&
+        this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
           routingUrl = '/app/summary/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {

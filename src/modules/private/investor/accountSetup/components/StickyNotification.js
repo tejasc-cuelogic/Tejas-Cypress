@@ -23,7 +23,7 @@ const checkStatus = (signupStatus, userDetailsStore) => {
     stepinfo.title = 'Please verify your identity in order to proceed';
   } else if (!signupStatus.investorProfileCompleted) {
     stepinfo.title = 'Please establish your investor profile in order to proceed';
-  } else if (!isEmpty(signupStatus.roles)) {
+  } else if (!isEmpty(signupStatus.roles) && (signupStatus.inActiveAccounts.length <= 2)) {
     stepinfo.title = 'You can open your another NextSeed account!';
     stepinfo.group = 'Congratulations!';
     if (accCreation.length === 1) {

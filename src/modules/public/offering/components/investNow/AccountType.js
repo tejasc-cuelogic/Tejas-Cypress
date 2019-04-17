@@ -334,7 +334,12 @@ class AccountType extends Component {
                     <Aux>
                       <div className="center-align">
                         <Aux>
-                          <p>There is a problem with this offering, please upload the NPA.</p>
+                          <p>
+                            There is a technical issue with this offering.
+                            The NextSeed team has been notified and will
+                            resolve it as soon as possible.
+                            Please try back later.
+                          </p>
                           <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         </Aux>
                       </div>
@@ -450,7 +455,7 @@ class AccountType extends Component {
               {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
                 ?
                   <Aux>
-                    Please confirm your investor profile to invest in this offering.
+                    Please answer a few basic questions to complete your Investor Profile.
                     {/* <Link to={redirectURL} className="text-link">
                         <Icon className="ns-arrow-right" color="green" />
                         Please finish your account setup.
@@ -465,7 +470,7 @@ class AccountType extends Component {
                           content="Confirm Status"
                           />
                     </div> */}
-                    <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Confirm Status" /></div>
+                    <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
                   </Aux>
                 :
                 null}

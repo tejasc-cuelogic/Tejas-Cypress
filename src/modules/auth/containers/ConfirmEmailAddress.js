@@ -57,15 +57,18 @@ export default class ConfirmEmailAddress extends Component {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
         this.props.identityStore.confirmEmailAddress().then(() => {
-          const { roles } = this.props.userStore.currentUser;
-          if (roles.includes('investor')) {
-            this.props.identityStore.setIsOptConfirmed(true);
-          } else {
-            const redirectUrl = !roles ? '/auth/login' :
-              SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                roles.includes(user.role)).path;
-            this.props.history.replace(redirectUrl);
-          }
+          this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub).then(() => {
+            uiStore.setProgress(false);
+            const { roles } = this.props.userStore.currentUser;
+            if (roles.includes('investor')) {
+              this.props.identityStore.setIsOptConfirmed(true);
+            } else {
+              const redirectUrl = !roles ? '/auth/login' :
+                SIGNUP_REDIRECT_ROLEWISE.find(user =>
+                  roles.includes(user.role)).path;
+              this.props.history.replace(redirectUrl);
+            }
+          });
         });
       } else {
         this.props.identityStore.verifyOTPWrapper().then(() => {
