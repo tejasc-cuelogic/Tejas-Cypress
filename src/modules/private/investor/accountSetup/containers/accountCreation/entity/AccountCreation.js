@@ -78,7 +78,7 @@ export default class AccountCreation extends React.Component {
           component: <FinancialInformation />,
           isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
           isDirty: FIN_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityFinancialInfo,
+          validate: validationActions.validateEntityForm,
           form: 'FIN_INFO_FRM',
           stepToBeRendered: 1,
           validForm: FIN_INFO_FRM.meta.isValid,
@@ -90,7 +90,7 @@ export default class AccountCreation extends React.Component {
           component: <General />,
           isValid: GEN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
           isDirty: GEN_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityGeneralInformation,
+          validate: validationActions.validateEntityForm,
           form: 'GEN_INFO_FRM',
           stepToBeRendered: 2,
           disableKeyDown: true,
@@ -102,7 +102,7 @@ export default class AccountCreation extends React.Component {
           component: <FinancilInfo />,
           isValid: TRUST_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
           isDirty: TRUST_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityInfo,
+          validate: validationActions.validateEntityForm,
           form: 'TRUST_INFO_FRM',
           stepToBeRendered: 3,
           disableKeyDown: true,
@@ -114,7 +114,7 @@ export default class AccountCreation extends React.Component {
           component: <PersonalInformation />,
           isValid: PERSONAL_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
           isDirty: PERSONAL_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityPersonalInfo,
+          validate: validationActions.validateEntityForm,
           form: 'PERSONAL_INFO_FRM',
           validForm: PERSONAL_INFO_FRM.meta.isValid,
           disableKeyDown: true,
@@ -126,7 +126,7 @@ export default class AccountCreation extends React.Component {
           component: <FormationDocuments />,
           isValid: FORM_DOCS_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
           isDirty: FORM_DOCS_FRM.meta.isDirty,
-          validate: validationActions.validateEntityFormationDoc,
+          validate: validationActions.validateEntityForm,
           form: 'FORM_DOCS_FRM',
           validForm: FORM_DOCS_FRM.meta.isValid,
           stepToBeRendered: 5,
@@ -158,7 +158,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress" >
-        <MultiStep loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

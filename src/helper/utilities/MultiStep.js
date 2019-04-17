@@ -7,12 +7,12 @@ import Helper from '../../helper/utility';
 
 
 const hasData = compState => compState.validForm;
+const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
+
 const getNavStates = (indx, length, steps) => {
   const styles = [];
   /* eslint-disable no-plusplus */
   // eslint-disable-next-line max-len
-  // const isAccountCreation = window.location.href.includes('account-creation') || window.location.href.includes('establish-profile');
-  const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
   for (let i = 0; i < length; i++) {
     if ((isAccountCreation && hasData(steps[i]) && i !== indx) || i < indx) {
       styles.push('done');
@@ -137,11 +137,14 @@ export default class MultiStep extends React.Component {
 
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
-      this.setNavState(this.state.compState + 1);
       if (this.props.bankSummary &&
         this.props.bankSummary(this.props.steps[this.state.compState])) {
+        this.setNavState(this.state.compState + 1);
         this.props.bankSummarySubmit();
+      } else if (this.props.isAccountCreation) {
+        this.props.createAccount(this.props.steps[this.state.compState]);
       } else {
+        this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
       }
     } else {
