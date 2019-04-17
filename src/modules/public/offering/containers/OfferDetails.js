@@ -4,7 +4,7 @@ import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Visibility } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -30,7 +30,7 @@ const getModule = component => Loadable({
   },
 });
 const isMobile = document.documentElement.clientWidth < 991;
-
+const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu sticky-sidebar')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
 @observer
@@ -164,6 +164,9 @@ class offerDetails extends Component {
     });
     return newNavList;
   }
+  handleUpdate = (e, { calculations }) => {
+    this.props.navStore.setMobileNavStatus(calculations);
+  }
   render() {
     const {
       match, campaignStore, location,
@@ -198,6 +201,7 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
+    const { campaignHeaderStatus } = this.props.navStore;
     return (
       <Aux>
         {campaign &&
@@ -212,14 +216,18 @@ class offerDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
-            <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
-            <MobileDropDownNav
-              inverted
-              refMatch={match}
-              navCountData={navCountData}
-              navItems={navItems}
-              location={location}
-            />
+            <Visibility offset={[offsetValue, 0]} onUpdate={this.handleUpdate} continuous className="visi-one">
+              <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
+              <MobileDropDownNav
+                inverted
+                refMatch={match}
+                navCountData={navCountData}
+                navItems={navItems}
+                location={location}
+                isActive={campaignHeaderStatus}
+                useIsActive
+              />
+            </Visibility>
           </Responsive>
           <Container>
             <section>

@@ -47,7 +47,7 @@ export default class CampaignSideBar extends Component {
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
-        <div className={`${className} offering-side-menu sticky-sidebar`}>
+        <div className={`${className} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
           <Responsive maxWidth={991} as={Aux}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>
