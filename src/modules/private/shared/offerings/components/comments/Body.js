@@ -40,12 +40,12 @@ const Body = props => (
         props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
           const msgDate = moment(date).format('ll');
-          const userFirstName = get(msg, 'createdUserInfo.info.firstName');
+          const userFirstName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
           const userInfo = {
             firstName: userFirstName,
             lastName: get(msg, 'createdUserInfo.info.lastName'),
             avatarUrl: get(msg, 'createdUserInfo.info.avatar.url') || null,
-            roles: [get(msg, 'createdUserInfo.roles.name')],
+            roles: [get(msg, 'createdUserInfo.roles[0].name')],
           };
           const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
           return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : get(msg, 'createdUserInfo.id') !== props.currentUserId ? (

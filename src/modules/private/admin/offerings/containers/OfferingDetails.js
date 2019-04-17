@@ -55,6 +55,9 @@ export default class OfferingDetails extends Component {
     if (this.props.match.params.stage === 'live' && !isDev) {
       navItems = navItems.filter(n => (!['Bonus Rewards', 'Close'].includes(n.title)));
     }
+    if (this.props.match.params.stage !== 'creation' && !isDev) {
+      navItems = navItems.filter(n => (!['Bonus Rewards'].includes(n.title)));
+    }
     if (this.props.match.params.stage === 'engagement' && !isDev) {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));
     }
