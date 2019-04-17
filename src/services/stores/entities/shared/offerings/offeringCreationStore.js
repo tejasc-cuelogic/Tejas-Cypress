@@ -1607,7 +1607,8 @@ export class OfferingCreationStore {
           map(fields, (f) => {
             if (f.earlyBirdQuantity > 0 && reward.earlyBirdQuantity > 0) {
               f.value.push('EARLY_BIRDS');
-            } else if (reward.tiers.includes(f.key)) {
+            }
+            if (reward.tiers.includes(f.key)) {
               f.value.push(f.key);
             }
             return false;
