@@ -18,6 +18,7 @@ export default class MobileDropDownNav extends React.Component {
   }
   toggleCampaignSideBar = () => {
     this.props.campaignStore.setFieldValue('campaignSideBarShow', !this.props.campaignStore.campaignSideBarShow);
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
@@ -38,6 +39,7 @@ export default class MobileDropDownNav extends React.Component {
               <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
             }
           </Menu>
+          <div className="animate-placeholder" />
         </Visibility>
       </Responsive>
     );

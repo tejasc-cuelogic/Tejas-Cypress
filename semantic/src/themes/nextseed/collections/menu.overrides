@@ -568,6 +568,9 @@ footer{
             width:100%;
             top:58px;
             z-index:9;
+            &.campaign-mobile-dropdown+.animate-placeholder {
+                height: @40px;
+            }
         }
         &.inverted {
             background: fade(@neutral, 90%);
@@ -600,6 +603,10 @@ footer{
             top: 8px;
             left: 18px;
             color: @white;
+        }
+        &.campaign-mobile-dropdown+.animate-placeholder {
+            height: 0;
+            width: 100%;
         }
 	}
 	//Public Mobile View End
