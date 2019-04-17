@@ -2029,6 +2029,7 @@ ol.progtrckr{
 		}
 		&.progtrckr-todo{
 			color:@neutral-middark;
+			pointer-events: none;
 			&:after{
 				background:@neutral-middark;
 			}
