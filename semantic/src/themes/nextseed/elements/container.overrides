@@ -21,7 +21,7 @@ section{
             display: flex;
             height: 100%;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-end;
             .banner-caption {
                 flex-grow: 1;
                 display: flex;
@@ -193,6 +193,9 @@ section{
         top: 0;
         bottom: 0;
         right: 0;
+        >.ui.container {
+            justify-content: center;
+            }
         color:  @white;
         // @media only screen and (min-width : @monitorBreakpoint) and (max-width: @largestSmallMonitor){
         //     padding-top: @50px;
