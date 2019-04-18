@@ -43,13 +43,14 @@ const FormData = observer(({
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class RiskFactors extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
-    this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
-    if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
-      this.props.offeringCreationStore.setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
-    }
-  }
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
+  //   this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+  //   if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
+  //     this.props.offeringCreationStore.setFormData('DOCUMENTATION_FRM',
+  //  'legal.documentation.issuer');
+  //   }
+  // }
   handleFormSubmit = (isApproved = null) => {
     const {
       RISK_FACTORS_FRM,

@@ -80,17 +80,9 @@ export class Validation {
   }
 
   /**
-  * @desc Validates IRA - financial info after clicking next/submit button
+  * @desc Validates IRA - Identity after clicking next/submit button
   * @return null
   */
-  //  validateIRAFinancialInfo = () => {
-  //    map(iraAccountStore.FIN_INFO_FRM.fields, (value) => {
-  //      const { key } = value;
-  //      const { errors } = validationService.validate(value);
-  //      // Store errors to store if any or else `undefined` will get set to it
-  //      FormValidator.setFormError(iraAccountStore.FIN_INFO_FRM, key, errors && errors[key][0]);
-  //    });
-  //  }
 
  validateIRAForm = (form) => {
    map(iraAccountStore[form].fields, (value) => {
@@ -101,6 +93,10 @@ export class Validation {
    });
  }
 
+  /**
+  * @desc Validates Entity - Formation Docs on next/submit button
+  */
+
  validateEntityForm = (form) => {
    map(entityAccountStore[form].fields, (value) => {
      const { key } = value;
@@ -109,90 +105,6 @@ export class Validation {
      FormValidator.setFormError(entityAccountStore[form], key, errors && errors[key][0]);
    });
  }
-
-  /**
-  * @desc Validates IRA - Identity after clicking next/submit button
-  * @return null
-  */
-  //  validateIRAIdentityInfo = () => {
-  //    const { errors } =
-  //   validationService.validate(iraAccountStore.IDENTITY_FRM.fields.identityDoc);
-  //    // Store errors to store if any or else `undefined` will get set to it
-  //    FormValidator.setFormError(iraAccountStore.IDENTITY_FRM,
-  // 'identityDoc', errors && errors.identityDoc[0]);
-  //  }
-
- /**
-  * @desc Validates Entity - Financial Information on next/submit button
-  */
-  //  validateEntityFinancialInfo = () => {
-  //    map(entityAccountStore.FIN_INFO_FRM.fields, (value) => {
-  //      const { key } = value;
-  //      const { errors } = validationService.validate(value);
-  //      // Store errors to store if any or else `undefined` will get set to it
-  //      FormValidator.setFormError(entityAccountStore.FIN_INFO_FRM,
-  // key, errors && errors[key][0]);
-  //    });
-  //  }
-
-  //  /**
-  //   * @desc Validates Entity - General Information on next/submit button
-  //   */
-  //  validateEntityGeneralInformation = () => {
-  //    map(entityAccountStore.GEN_INFO_FRM.fields, (value) => {
-  //      const { key } = value;
-  //      const { errors } = validationService.validate(value);
-  //      // Store errors to store if any or else `undefined` will get set to it
-  //      FormValidator.setFormError(entityAccountStore.GEN_INFO_FRM,
-  // key, errors && errors[key][0]);
-  //    });
-  //  }
-
-  //  /**
-  //   * @desc Validates Entity - Info on next/submit button
-  //   */
-  //  validateEntityInfo = () => {
-  //    map(entityAccountStore.TRUST_INFO_FRM.fields, (value) => {
-  //      const { key } = value;
-  //      const { errors } = validationService.validate(value);
-  //      // Store errors to store if any or else `undefined` will get set to it
-  //      FormValidator.setFormError(entityAccountStore.TRUST_INFO_FRM,
-  // key, errors && errors[key][0]);
-  //    });
-  //  }
-
-  //  /**
-  //   * @desc Validates Entity - Personal Info on next/submit button
-  //   */
-  //  validateEntityPersonalInfo = () => {
-  //    map(entityAccountStore.PERSONAL_INFO_FRM.fields, (value) => {
-  //      const { key } = value;
-  //      const { errors } = validationService.validate(value);
-  //      // Store errors to store if any or else `undefined` will get set to it
-  //      FormValidator.setFormError(
-  //        entityAccountStore.PERSONAL_INFO_FRM,
-  //        key,
-  //        errors && errors[key][0],
-  //      );
-  //    });
-  //  }
-
-  //  /**
-  //   * @desc Validates Entity - Formation Docs on next/submit button
-  //   */
-  //  validateEntityFormationDoc = () => {
-  //    map(entityAccountStore.FORM_DOCS_FRM.fields, (value) => {
-  //      const { key } = value;
-  //      const { errors } = validationService.validate(value);
-  //      // Store errors to store if any or else `undefined` will get set to it
-  //      FormValidator.setFormError(entityAccountStore.FORM_DOCS_FRM,
-  // key, errors && errors[key][0]);
-  //    });
-  //  }
-
-  /**
-  * @desc Validates Entity - Formation Docs on next/submit button
-  */
  validateLinkBankForm = () => {
    map(bankAccountStore.formLinkBankManually.fields, (value) => {
      const { key } = value;
@@ -205,8 +117,6 @@ export class Validation {
      );
    });
  }
-
-
   // Private Methods ends here
 }
 

@@ -76,5 +76,8 @@ export const GetNavMeta = (item, roles, nonprivate) => {
         _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
     }
   }
+  if (!navMeta) {
+    return { subNavigations: [] };
+  }
   return navMeta;
 };

@@ -13,13 +13,13 @@ export default class GenerateDocs extends Component {
     const {
       currentOfferingId,
       getOfferingFilingList,
-      setFormData,
+      // setFormData,
     } = this.props.offeringCreationStore;
     getOfferingFilingList(currentOfferingId);
-    setFormData('GENERAL_FRM', 'legal.general');
-    setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
-    setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
-    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
+    // setFormData('GENERAL_FRM', 'legal.general');
+    // setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+    // setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    // setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
   onFileDrop = (files, field, stepName) => {
     this.props.offeringCreationStore.setFileUploadData('ADMIN_DOCUMENTATION_FRM', field, files, '', null, stepName, true);

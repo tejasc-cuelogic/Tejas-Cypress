@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isArray, get, forOwn, intersection, filter, find, findIndex } from 'lodash';
+import { isArray, get, forOwn, filter, find, findIndex, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminDecline, transferRequestAdminVerified, transactionFailed } from '../../queries/transaction';
@@ -86,14 +86,10 @@ export class TransactionsStore {
   @action
   initRequest = (transStatus) => {
     this.transactionStatus = transStatus;
-    this.isNonTerminatedStatus = intersection(
-      this.nonTerminatedStatuses,
-      this.transactionStatus,
-    ).length > 0;
     const payLoad = {
       status: transStatus,
       offset: this.requestState.page,
-      limit: this.statusWiseLimt(),
+      limit: 10,
       ...this.requestState.search,
     };
     this.data = graphql({
@@ -214,86 +210,63 @@ export class TransactionsStore {
   }
 
   @action
-  pageRequest = ({ skip, page }) => {
+  pageRequest = ({ page }) => {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    if (this.isNonTerminatedStatus) {
-      this.requestState.skip = (skip === pageWiseCount) ?
-        pageWiseCount - this.requestState.perPage : skip;
-    } else {
-      this.initRequest(this.transactionStatus);
-    }
+    this.initRequest(this.transactionStatus);
   }
 
   @computed get allRecords() {
-    const transactions = this.db || [];
-    if (this.isNonTerminatedStatus) {
-      return transactions.slice(
-        this.requestState.skip,
-        this.requestState.displayTillIndex,
-      );
-    }
-    return transactions || [];
+    return this.db || [];
   }
 
   @computed get transactionCount() {
-    return this.isNonTerminatedStatus ?
-      this.db.length
-      : this.searchCount;
+    return this.searchCount;
   }
 
   @computed get loading() {
     return this.data.loading;
   }
 
-  statusWiseLimt = () => (this.isNonTerminatedStatus ? 100 : 10)
-
-  @action
-  initiateFilters = () => {
-    this.resetPagination();
-    this.setData(get(this.data, 'data') || []);
-    const {
-      keyword, minAmount, maxAmount,
-      dateFilterStart, dateFilterStop,
-      direction,
-    } = this.requestState.search;
-    if (keyword) {
-      ClientDb.filterFromNestedObjs(['gsTransactionId', 'requestId', 'accountId', 'userInfo.info.firstName', 'userInfo.info.lastName'], keyword);
+  modifySearchParams = (valueObj, name) => {
+    const searchparams = { ...this.requestState.search };
+    const { value } = valueObj;
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      searchparams[name] = value;
+    } else {
+      delete searchparams[name];
     }
-    if (direction) {
-      ClientDb.filterData('direction', direction);
-    }
-
-    if (dateFilterStart || dateFilterStop) {
-      ClientDb.filterByDate(dateFilterStart, dateFilterStop || moment().unix(), 'startDate');
-    }
-
-    if (minAmount && maxAmount) {
-      ClientDb.filterByNumber(minAmount, maxAmount, 'amount', 'f');
-    }
-    this.db = ClientDb.getDatabase();
+    return searchparams;
   }
 
+  triggervalidSearch = (minKey, maxKey) => {
+    const isValidSearch = has(this.requestState.search, minKey) &&
+    has(this.requestState.search, maxKey);
+    if (isValidSearch) {
+      this.initRequest(this.transactionStatus);
+    }
+  }
   @action
   setInitiateSrch = (valueObj, name) => {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
-      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonTerminatedStatus, name, this.isNonTerminatedStatus) : '';
+      if (moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+        searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+        this.requestState.search = searchparams;
+        this.triggervalidSearch('dateFilterStart', 'dateFilterStop', searchparams);
+      }
       if (this.requestState.search.dateFilterStart === '' && this.requestState.search.dateFilterStop === '') {
         delete searchparams[name];
       }
+    } else if (name === 'minAmount' || name === 'maxAmount') {
+      this.requestState.search = this.modifySearchParams(valueObj, name);
+      this.triggervalidSearch('minAmount', 'maxAmount', searchparams);
     } else {
-      const { value } = valueObj;
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-        searchparams[name] = value;
-      } else {
-        delete searchparams[name];
-      }
+      this.requestState.search = this.modifySearchParams(valueObj, name);
+      this.initRequest(this.transactionStatus);
     }
-    this.requestState.search = searchparams;
-    return this.isNonTerminatedStatus ? this.initiateFilters()
-      : this.initRequest(this.transactionStatus);
+    return null;
   }
 }
 
