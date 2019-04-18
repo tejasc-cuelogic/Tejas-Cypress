@@ -117,7 +117,7 @@ export default class CampaignHeader extends Component {
                     </Link>
                   </div>
                 </Grid.Column>
-                <Grid.Column width={6} verticalAlign="middle">
+                <Grid.Column width={6}>
                   <Header as="h3" inverted>
                     {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                     <Header.Subheader>{address}</Header.Subheader>

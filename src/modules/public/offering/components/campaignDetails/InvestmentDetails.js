@@ -7,6 +7,7 @@ import KeytermsDetails from './investmentDetails/KeytermsDetails';
 import { InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
   componentWillMount() {
@@ -45,7 +46,7 @@ class InvestmentDetails extends Component {
     const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <Aux>
-        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+        <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} mt-20 anchor-wrap`}>
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
