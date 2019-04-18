@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
+import { InlineLoader } from '../../../../../../../theme/shared';
 import ButtonGroupType2 from '../../ButtonGroupType2';
 
 @inject('offeringCreationStore', 'userStore')
@@ -23,7 +24,9 @@ export default class Issuer extends Component {
     createOrUpdateOfferingBac('ISSUER', ISSUER_FRM.fields, undefined, undefined, undefined, isApproved);
   }
   render() {
-    const { ISSUER_FRM, formChange, issuerOfferingBacData } = this.props.offeringCreationStore;
+    const {
+      ISSUER_FRM, formChange, issuerOfferingBacData, issuerOfferingBac,
+    } = this.props.offeringCreationStore;
     const formName = 'ISSUER_FRM';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
@@ -34,6 +37,11 @@ export default class Issuer extends Component {
     const approved = (issuerOfferingBacData && issuerOfferingBacData.length &&
       issuerOfferingBacData[0].approved) ? issuerOfferingBacData[0].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
+
+    if (issuerOfferingBac && issuerOfferingBac.loading) {
+      return <InlineLoader />;
+    }
+
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>

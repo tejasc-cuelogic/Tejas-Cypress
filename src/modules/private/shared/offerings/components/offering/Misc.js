@@ -7,9 +7,9 @@ import ButtonGroupType2 from '../ButtonGroupType2';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Misc extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_MISC_FRM', 'offering.misc');
-  }
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('OFFERING_MISC_FRM', 'offering.misc');
+  // }
   handleFormSubmit = (isApproved = null) => {
     const {
       OFFERING_MISC_FRM,

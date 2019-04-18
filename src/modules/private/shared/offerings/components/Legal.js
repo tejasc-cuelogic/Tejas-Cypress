@@ -21,11 +21,11 @@ export default class Legal extends Component {
     const { setFormData } = this.props.offeringCreationStore;
     setFormData('GENERAL_FRM', 'legal.general');
     setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
-    // if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
-    // setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
-    // }
+    if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
+      setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    }
     setFormData('DATA_ROOM_FRM', 'legal.dataroom');
-    // setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
+    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/general`);
     }

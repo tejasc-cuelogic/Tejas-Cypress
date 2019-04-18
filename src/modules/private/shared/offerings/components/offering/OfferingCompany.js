@@ -10,13 +10,13 @@ import ButtonGroup from '../ButtonGroup';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingCompany extends Component {
-  componentWillMount() {
-    if (!this.props.offeringCreationStore.initLoad.includes('OFFERING_COMPANY_FRM')) {
-      this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
-    }
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
-    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
-  }
+  // componentWillMount() {
+  //   if (!this.props.offeringCreationStore.initLoad.includes('OFFERING_COMPANY_FRM')) {
+  //     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+  //   }
+  //   this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+  //   this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  // }
   addNewMileStone = (e, formName, arrayName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
