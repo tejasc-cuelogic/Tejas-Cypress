@@ -23,20 +23,24 @@ const navItems = [
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
 ];
-@inject('portfolioStore', 'campaignStore', 'offeringCreationStore')
+@inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore')
 @observer
 class InvestmentDetails extends Component {
   componentWillMount() {
+    const { portfolioStore, uiStore } = this.props;
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     if (this.props.offeringCreationStore.currentOfferingId !== this.props.match.params.id ||
-      this.props.portfolioStore.currentAcccountType !== accountType) {
-      this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
+      portfolioStore.currentAcccountType !== accountType) {
+      if (uiStore.inProgress !== 'portfolio') {
+        this.props.uiStore.setProgress('portfolioDirect');
+      }
+      portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
       this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
-      this.props.portfolioStore.currentAccoutType(accountType);
+      portfolioStore.currentAccoutType(accountType);
     }
   }
   handleCloseModal = (e) => {
@@ -46,7 +50,7 @@ class InvestmentDetails extends Component {
   };
 
   render() {
-    const { match, portfolioStore } = this.props;
+    const { match, portfolioStore, uiStore } = this.props;
     const { getInvestor } = portfolioStore;
     const { campaign, details } = this.props.campaignStore;
     // const netAnnualizedReturn = get(getInvestor, 'netAnnualizedReturn');
@@ -77,7 +81,7 @@ class InvestmentDetails extends Component {
         // },
       ],
     };
-    if (!details || details.loading) {
+    if (!details || details.loading || uiStore.inProgress === 'portfolioDirect') {
       return <InlineLoader />;
     }
     if (details && details.data && !details.data.getOfferingDetailsById) {
