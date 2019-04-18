@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Responsive, Button } from 'semantic-ui-react';
+import { Header, Container, Responsive, Button, Dimmer, Loader } from 'semantic-ui-react';
 
 const { clientWidth } = document.documentElement;
 const isTablet = clientWidth >= 768 && clientWidth < 992;
@@ -45,6 +45,11 @@ class Banner extends Component {
             </p>
           </div>
         </Container>
+        {this.props.withDimmer && (
+          <Dimmer active className="fullscreen">
+            <Loader active >Loading..</Loader>
+          </Dimmer>
+        )}
       </section>
     );
   }
