@@ -10,6 +10,7 @@ const elasticSearchModules = [
   { module: 'crowdPay', title: 'CrowdPay Index' },
   { module: 'accreditation', title: 'Accreditation Index' },
   { module: 'linkedBank', title: 'LinkedBank Index' },
+  { module: 'offerings', title: 'Offerings Index' },
 ];
 
 @inject('elasticSearchStore')
