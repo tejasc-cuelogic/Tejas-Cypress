@@ -59,3 +59,18 @@ export const accreditationPopulateIndex = gql`
   mutation accreditationPopulateIndex {
     accreditationPopulateIndex
   }`;
+
+export const offeringsCreateIndices = gql`
+mutation offeringCreateIndices {
+  offeringCreateIndices
+}`;
+
+export const offeringsDeleteIndices = gql`
+  mutation offeringDeleteIndices {
+    offeringDeleteIndices
+  }`;
+
+export const offeringsPopulateIndex = gql`
+  mutation offeringPopulateIndices {
+    offeringPopulateIndices
+  }`;
