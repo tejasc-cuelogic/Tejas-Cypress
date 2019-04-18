@@ -10,11 +10,11 @@ import ButtonGroupType2 from '../ButtonGroupType2';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingLaunch extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
-    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
-  }
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+  //   this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+  //   this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  // }
   handleFormSubmit = (isApproved = null) => {
     const {
       COMPANY_LAUNCH_FRM,

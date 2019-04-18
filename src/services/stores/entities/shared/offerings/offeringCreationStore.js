@@ -1264,7 +1264,8 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading) {
+          this.initLoad.splice(this.initLoad.indexOf('ISSUER_FRM'), 1);
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
@@ -1334,7 +1335,7 @@ export class OfferingCreationStore {
     const offeringBacDetails = Validator.evaluateFormData(fields);
     offeringBacDetails.offeringId = getOfferingById.id;
     offeringBacDetails.bacType = bacType;
-    let mutation = createBac;
+    let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
       offeringBacDetails,
     };
