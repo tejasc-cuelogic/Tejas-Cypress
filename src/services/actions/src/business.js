@@ -1,10 +1,9 @@
 import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
-import graphql from 'graphql';
+import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
-  listOfferings,
   getXmlDetails,
   filerInformationMutation,
   issuerInformationMutation,
@@ -176,14 +175,6 @@ export class Business {
   * @desc Lists offerings submitted and which needs to be converted to XML for final submission
   *       Fetches list of offerings from DynamoDB
   */
-  listOfferings = () => {
-    graphql({ client, query: listOfferings })
-      .then(data => this.setOfferings(data.body.data.offeringFilings))
-      .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.toggleDropdownLoader();
-      });
-  }
 
   /**
    * @desc List all businesses that were filled to nextseed
@@ -332,6 +323,7 @@ export class Business {
    */
   fetchEdgarDetails = (businessId, filingId) => {
     uiStore.setActionLoader('Fetching Edgar data');
+    uiStore.addMoreInProgressArray('fetchEdgarDetails');
     const payload = {
       query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
         `filingId: "${filingId}") { filingPayload } }`,
@@ -340,6 +332,7 @@ export class Business {
       .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
       .catch(err => console.log(err))
       .finally(() => {
+        uiStore.removeOneFromProgressArray('fetchEdgarDetails');
         uiStore.clearActionLoader();
       });
   }
@@ -392,18 +385,24 @@ export class Business {
    * @desc This method fetches XML
    */
   fetchXmlDetails = ({ filingId, xmlId }) => {
-    uiStore.setProgress();
+    uiStore.addMoreInProgressArray('fetchXmlDetails');
     uiStore.setLoaderMessage('Fetching XML Data');
-    const payload = {
+    graphql({
+      client,
       query: getXmlDetails,
       variables: {
         filingId,
         xmlSubmissionId: xmlId,
       },
-    };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission))
-      .catch(err => console.log(err));
+      onFetch: (data) => {
+        uiStore.removeOneFromProgressArray('fetchXmlDetails');
+        this.setXmlPayload(data.businessFilingSubmission);
+      },
+      onError: (err) => {
+        uiStore.removeOneFromProgressArray('fetchXmlDetails');
+        console.log('ERROR: ', err);
+      },
+    });
   }
 
   /**
@@ -411,6 +410,7 @@ export class Business {
    */
   fetchAttachedFiles = (folderId, accountType) => {
     uiStore.setProgress();
+    uiStore.addMoreInProgressArray('fetchAttachedFiles');
     uiStore.setLoaderMessage('Fetching available files');
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
@@ -430,6 +430,7 @@ export class Business {
           reject(err);
         })
         .finally(() => {
+          uiStore.removeOneFromProgressArray('fetchAttachedFiles');
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
         });
