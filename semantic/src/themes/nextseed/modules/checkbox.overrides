@@ -124,6 +124,35 @@
 		border-color:@highlight-primary;
 	}
 }
+.ui.form .fields.radio-basic{
+	.field{
+		padding:@30px 0 @10px 0;
+		border-right:1px solid @border-light;
+		@media only screen and (max-width : @largestMobileScreen){
+			border:none;
+		}
+		&:last-child{
+			border-right:0;
+		}
+	}
+	.ui.radio.checkbox label{
+		padding-left:0;
+		&:before{
+			width:20px;
+			height:20px;
+			top:-30px;
+			left:50%;
+			transform:translateX(-50%);
+		}
+		&:after{
+			width:12px;
+			height:12px;
+			top:-32px;
+			left:50%;
+			transform:translate(-50%, 50%);
+		}
+	}
+}
 
 .iconic-checkbox, .iconic-radio{
 	width:~"calc(100% + 14px)";

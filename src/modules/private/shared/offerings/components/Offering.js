@@ -13,11 +13,15 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('userStore', 'uiStore')
+@inject('userStore', 'uiStore', 'offeringCreationStore')
 @withRouter
 @observer
 export default class Offering extends Component {
   componentWillMount() {
+    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+    this.props.offeringCreationStore.setFormData('OFFERING_MISC_FRM', 'offering.misc');
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }

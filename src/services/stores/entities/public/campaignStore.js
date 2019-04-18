@@ -56,6 +56,9 @@ export class CampaignStore {
               resolve(offering);
             }
           },
+          onError: (err) => {
+            console.log(err);
+          },
         });
     });
   }
