@@ -8,7 +8,7 @@ import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('campaignStore', 'accreditationStore', 'navStore')
+@inject('campaignStore', 'accreditationStore')
 @withRouter
 @observer
 export default class TermsOfUse extends Component {

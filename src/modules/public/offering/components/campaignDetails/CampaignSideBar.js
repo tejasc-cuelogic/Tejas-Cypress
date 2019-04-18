@@ -43,7 +43,7 @@ export default class CampaignSideBar extends Component {
     // const rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
-    const { offerStructure } = campaign;
+    const { offerStructure } = campaignStore;
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
@@ -75,7 +75,7 @@ export default class CampaignSideBar extends Component {
               </div>
               <Statistic inverted size="tiny" className={`${isMobile && 'mt-30'} basic mb-0`}>
                 <Statistic.Value>
-                  <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
+                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                 </Statistic.Value>
                 {minFlagStatus &&
                   <Statistic.Label className="flag-status">
@@ -121,7 +121,7 @@ export default class CampaignSideBar extends Component {
                 <Popup
                   hoverable
                   trigger={<Icon name="help circle" color="green" />}
-                  content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
+                  content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
                   position="top center"
                 />
               </p>

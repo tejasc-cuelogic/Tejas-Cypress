@@ -42,18 +42,22 @@ class MeetOurTeam extends Component {
                           }
                         </div>
                         <div className="avatar-details team-details">
-                          <Item.Header>{`${data.firstName} ${data.lastName}`}</Item.Header>
-                          <Item.Meta className="text-uppercase"><b>{data.companyPosition}</b></Item.Meta>
-                          <Item.Extra>
-                            <div>
-                              {data && data.social && Object.keys(data.social).map(key => (
-                                data.social[key] &&
-                                  <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
-                                    <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
-                                  </a>
-                              ))}
-                            </div>
-                          </Item.Extra>
+                          <Item.Header>{`${data.firstName || ''} ${data.lastName || ''}`}</Item.Header>
+                          {data.companyPosition &&
+                            <Item.Meta className="text-uppercase"><b>{data.companyPosition}</b></Item.Meta>
+                          }
+                          {data && data.social &&
+                            <Item.Extra>
+                                <div>
+                                  {data && data.social && Object.keys(data.social).map(key => (
+                                    data.social[key] &&
+                                      <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+                                        <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
+                                      </a>
+                                  ))}
+                                </div>
+                            </Item.Extra>
+                          }
                         </div>
                       </div>
                       {data.bio &&
