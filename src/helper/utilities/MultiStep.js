@@ -147,12 +147,16 @@ export default class MultiStep extends React.Component {
         this.props.setStepTobeRendered(this.state.compState + 1);
       }
     } else {
-      this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
-        const modalDoc = document.getElementsByClassName('ui page modals dimmer transition visible active');
-        if (modalDoc && isMobile) {
-          setTimeout(() => modalDoc[0].scrollTo(0, 0), 100);
-        }
-      });
+      if (this.props.isAccountCreation && isMobile) {
+        this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
+          const modalDoc = document.getElementsByClassName('ui page modals dimmer transition visible active');
+          if (modalDoc && isMobile) {
+            setTimeout(() => modalDoc[0].scrollTo(0, 0), 100);
+          }
+        });
+      } else {
+        this.props.createAccount(this.props.steps[this.state.compState]);
+      }
       if (!this.props.steps[this.state.compState].isDirty) {
         this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
