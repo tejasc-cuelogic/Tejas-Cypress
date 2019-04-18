@@ -63,7 +63,10 @@ export class OfferingsStore {
       },
     });
   }
-
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
   @action
   updateOfferingPublicaly = (id, isAvailablePublicly) => {
     const variables = {

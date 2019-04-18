@@ -30,7 +30,7 @@ const getModule = component => Loadable({
   },
 });
 const isMobile = document.documentElement.clientWidth < 992;
-const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu sticky-sidebar')[0].offsetHeight;
+const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
 @observer

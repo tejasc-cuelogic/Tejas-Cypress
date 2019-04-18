@@ -137,7 +137,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'New product line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
       { label: 'Restructure debt', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
-      { label: 'Other Industry Type', value: 'OTHER' },
+      { label: 'Other use of funds', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',

@@ -34,7 +34,6 @@ export default class ManageTransactions extends Component {
     const { match } = this.props;
     const {
       filters, requestState, setInitiateSrch, summary,
-      isNonterminatedStatus,
     } = this.props.transactionsStore;
     return (
       <PrivateLayout
@@ -49,7 +48,7 @@ export default class ManageTransactions extends Component {
           requestState={requestState}
           placeholder="Search by User / Transaction ID / CP Account  Account ID"
           toggleSearch={this.toggleSearch}
-          enableSearch={!isNonterminatedStatus}
+          enableSearch
         />}
         P2={
           <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>

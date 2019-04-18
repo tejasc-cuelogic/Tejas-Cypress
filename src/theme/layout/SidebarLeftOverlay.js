@@ -9,6 +9,8 @@ import { SidebarNav, GetNavItem } from './SidebarNav';
 import { UserAvatar, Logo, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
+const progressMap = ['viewLoanAgreement', 'portfolio'];
+
 @inject('uiStore')
 @observer
 class SidebarLeftPush extends Component {
@@ -21,7 +23,7 @@ class SidebarLeftPush extends Component {
         {showFireworkAnimation &&
         <FireworksAnimation />
         }
-        {this.props.uiStore.inProgress === 'viewLoanAgreement' &&
+        {progressMap.includes(this.props.uiStore.inProgress) &&
           <Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
             <Loader active={this.props.uiStore.inProgress} />
           </Dimmer>

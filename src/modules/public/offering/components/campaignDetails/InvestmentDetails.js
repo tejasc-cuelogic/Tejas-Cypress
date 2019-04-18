@@ -7,6 +7,8 @@ import KeytermsDetails from './investmentDetails/KeytermsDetails';
 import { InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
   componentWillMount() {
@@ -20,7 +22,7 @@ class InvestmentDetails extends Component {
         block: 'start',
         behavior: 'smooth',
       });
-    } else {
+    } else if (!isMobile) {
       const sel = 'use-of-proceeds';
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
