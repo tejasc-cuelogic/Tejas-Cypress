@@ -67,7 +67,7 @@ export default class Dashboard extends Component {
     const notificationCard = {
       message:
   <span>
-        Are you accredited investor? Go through the steps to verify your status
+        Are you an accredited investor? Go through the steps to verify your status
         today, and for a limited time, we will add a $100 credit to your account.
     <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
   </span>,
