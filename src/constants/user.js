@@ -116,6 +116,7 @@ export const FILTER_META = {
     { text: 'Linked Bank', value: 'LINKED_BANK' },
     { text: 'Acceditation', value: 'ACCREDITATION' },
     { text: 'CrowdPay', value: 'CROWDPAY' },
+    { text: 'Offering', value: 'OFFERING' },
   ],
 };
 
