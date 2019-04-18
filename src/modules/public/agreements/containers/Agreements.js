@@ -27,7 +27,9 @@ export default class TermsOfUse extends Component {
     this.props.navStore.setFieldValue('navStatus', 'main');
     if (this.props.match.isExact) {
       const navItems = GetNavMeta(this.props.match.url, [], true).subNavigations;
-      this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);
+      if (navItems[0]) {
+        this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);
+      }
     }
   }
   module = name => DataFormatter.upperCamelCase(name);
@@ -57,11 +59,13 @@ export default class TermsOfUse extends Component {
               }
               <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
                 <Switch>
-                  <Route
-                    exact
-                    path={match.url}
-                    component={getModule(this.module(navItems[0].title))}
-                  />
+                  {navItems[0] && (
+                    <Route
+                      exact
+                      path={match.url}
+                      component={getModule(this.module(navItems[0].title))}
+                    />
+                  )}
                   {
                   navItems.map(item => (
                     <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />

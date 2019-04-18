@@ -38,7 +38,7 @@ export const FILTER_META = {
     { text: 'Entity', value: 'ENTITY' },
   ],
   accountStatus: [
-    { text: 'Select Status', key: '', value: '' },
+    { text: 'Select Filter', key: '', value: '' },
     { text: 'Partial', value: 'PARTIAL' },
     { text: 'Basic', value: 'BASIC' },
     { text: 'Full', value: 'FULL' },

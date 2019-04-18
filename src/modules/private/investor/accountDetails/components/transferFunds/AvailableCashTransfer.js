@@ -21,8 +21,8 @@ class AvailableCashTransfer extends Component {
       <Aux>
         <Card fluid>
           <Card.Content>
-            <Grid columns="equal">
-              <Grid.Column floated="left">
+            <Grid>
+              <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Statistic size="tiny">
                   <Statistic.Label>Available cash
                     <Popup
@@ -37,7 +37,7 @@ class AvailableCashTransfer extends Component {
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>
-              <Grid.Column floated="right" verticalAlign="middle" className="right-align">
+              <Grid.Column mobile={16} tablet={10} computer={10} verticalAlign="middle" className="right-align">
                 <Button.Group widths="2">
                   <Button as={Link} to={`${props.match.url}/withdraw`} className={props.isAccountFrozen ? 'disabled' : ''} inverted color="green" content="Withdraw funds" />
                   <Button as={Link} to={`${props.match.url}/add`} className={props.isAccountFrozen ? 'disabled' : ''} primary content="Add funds" />
