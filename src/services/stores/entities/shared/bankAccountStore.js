@@ -625,7 +625,7 @@ export class BankAccountStore {
 
   @action
   setLoaderForAccountBlank = () => {
-    uiStore.setProgress(!this.isAccountPresent || isEmpty(this.routingNum));
+    uiStore.setProgress(!this.isAccountPresent);
   }
 
   @action
@@ -718,7 +718,8 @@ export class BankAccountStore {
     const { getAccountIdByType } = accountStore;
     const { currentUserId } = userDetailsStore;
     const accountId = getAccountIdByType();
-    if (currentUserId && accountId && this.isAccountPresent) {
+    if (currentUserId && accountId && this.isAccountPresent
+      && isEmpty(this.routingNum)) {
       uiStore.setProgress();
       this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
         .then(action((res) => {

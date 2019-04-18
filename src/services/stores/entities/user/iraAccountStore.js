@@ -9,7 +9,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, userStore, accountStore } from '../../index';
+import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, accountStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -389,7 +389,7 @@ class IraAccountStore {
           this.iraAccountId = result.data.upsertInvestorAccount.accountId;
           accountStore.accountToastMessage(currentStep, actionPerformed, 'formIraAddFunds');
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
+            // userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formIraAddFunds, false);
@@ -425,7 +425,7 @@ class IraAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bira(?![-])\b/])) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'ira' });
         if (account) {

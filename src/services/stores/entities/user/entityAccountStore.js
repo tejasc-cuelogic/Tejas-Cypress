@@ -483,7 +483,7 @@ class EntityAccountStore {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
           accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
+            // userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
@@ -577,7 +577,7 @@ class EntityAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'entity' });
         if (account) {

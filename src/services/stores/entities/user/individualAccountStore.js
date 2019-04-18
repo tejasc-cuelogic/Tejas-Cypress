@@ -159,7 +159,7 @@ class IndividualAccountStore {
             variables,
           })
           .then(action((result) => {
-            userDetailsStore.getUser(userStore.currentUser.sub);
+            // userDetailsStore.getUser(userStore.currentUser.sub);
             if (result.data.upsertInvestorAccount) {
               this.individualAccId = result.data.upsertInvestorAccount.accountId;
               const { linkedBank } = result.data.upsertInvestorAccount;
@@ -199,7 +199,7 @@ class IndividualAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bindividual(?![-])\b/])) {
       if (!isEmpty(userData) && !this.formStatus) {
         const account = find(userData.roles, { name: 'individual' });
         // const { isValid } = bankAccountStore.formAddFunds.meta;

@@ -79,6 +79,7 @@ export class BankAccount {
           .setStepToBeRendered(renderStep);
       },
       onSuccess: (publicToken, metadata) => {
+        bankAccountStore.resetRoutingNum();
         bankAccountStore.setPlaidAccDetails(metadata);
         bankAccountStore.setNewPlaidBankDetails(metadata);
         if (action === 'change') {
