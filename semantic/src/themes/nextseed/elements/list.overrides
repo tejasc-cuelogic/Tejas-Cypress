@@ -405,6 +405,11 @@ ul.ui.list li{
         &::after {
             display: none;
         }
+        .header {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 }
 

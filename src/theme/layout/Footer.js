@@ -65,7 +65,7 @@ class Footer extends Component {
                 } */}
                 <Menu
                   text
-                  vertical={!isTablet}
+                  vertical
                   // || (!OfferFooter.find(item => matchPath(path, { path: item })))
                   // className={isTablet && (OfferFooter.find(item => matchPath(path,
                   // { path: item }))) ? 'center-align' : ''}
@@ -82,15 +82,15 @@ class Footer extends Component {
                 </Menu>
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
                 <Aux path={path}>
-                  <div className={isTablet && 'mb-30 center-align'}>
+                  <div className={isTablet && 'mt-20 center-align'}>
                     <NSImage path="secure-horizontal-1.jpg" />
                   </div>
                 </Aux>
                 {/* } */}
               </div>
-              <div className={`${isMobile && 'mb-20'} footer-social`}>
+              <div className="footer-social">
                 <SocialLinks />
-                <p className={isMobile && 'mt-10'}>© 2019 NextSeed Technologies LLC</p>
+                <p className={isMobile && 'mt-20'}>© 2019 NextSeed Technologies LLC</p>
               </div>
             </Grid.Column>
             <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">

@@ -10,6 +10,7 @@ import PaymentCalculator from './PaymentCalculator';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore')
 @observer
@@ -272,7 +273,7 @@ class KeyTermsDetails extends Component {
         <Divider section={!isMobile} hidden />
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
           <Aux>
-            <Header as="h3" className="mb-30 anchor-wrap">
+            <Header as="h3" className={`${isTablet && 'mt-40'} mb-30 anchor-wrap`}>
               Total Payment Calculator
               <span className="anchor" id="total-payment-calculator" />
             </Header>

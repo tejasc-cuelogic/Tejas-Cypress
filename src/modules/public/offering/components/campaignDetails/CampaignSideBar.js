@@ -15,7 +15,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering'
 // const nsvideos = {
 //   embed: '218642510',
 // };
-const isMobile = document.documentElement.clientWidth < 991;
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore')
 @withRouter
@@ -73,7 +73,7 @@ export default class CampaignSideBar extends Component {
                     />
                 }
               </div>
-              <Statistic inverted size="tiny" className="basic mb-0">
+              <Statistic inverted size="tiny" className={`${isMobile && 'mt-30'} basic mb-0`}>
                 <Statistic.Value>
                   <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
                 </Statistic.Value>

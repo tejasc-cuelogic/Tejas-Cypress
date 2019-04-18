@@ -8,6 +8,7 @@ import BonusRewardsList from './BonusRewardsList';
 import Helper from '../../../../../helper/utility';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 992;
 const isTablet = document.documentElement.clientWidth >= 768
   && document.documentElement.clientWidth < 992;
 const isTabletLand = document.documentElement.clientWidth >= 992
@@ -46,7 +47,7 @@ class BonusRewards extends Component {
                   <Grid.Column>
                     <Segment padded className="reward-block">
                       <Aux>
-                        <Header textAlign="left" as="h6" className="text-uppercase mb-40">Early Bird Reward
+                        <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>Early Bird Reward
                           <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
                         </Header>
                         <Header as="h5" className="note">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
@@ -63,7 +64,7 @@ class BonusRewards extends Component {
                   <Grid.Column>
                     <Segment padded className="reward-block">
                       <Aux>
-                        <Header as="h6" className="text-uppercase">Invest</Header>
+                        <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
                         <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
                       </Aux>
                       <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />

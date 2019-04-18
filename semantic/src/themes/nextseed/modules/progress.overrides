@@ -30,7 +30,7 @@
 }
 // .offer-details
 .campaign-banner .ui.progress {
-    margin-bottom: @15px;
+    margin-bottom: @12px;
     background:fade(@white,20%);
     >.label {
         top: 0;
