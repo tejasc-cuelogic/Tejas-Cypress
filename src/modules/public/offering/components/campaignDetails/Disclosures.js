@@ -8,6 +8,8 @@ import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore', 'accreditationStore', 'navStore')
 @withRouter
 @observer
@@ -24,8 +26,10 @@ export default class TermsOfUse extends Component {
     }
   }
   componentDidMount() {
-    const sel = 'anchor';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   module = name => DataFormatter.upperCamelCase(name);
   dataRoomHeader = (

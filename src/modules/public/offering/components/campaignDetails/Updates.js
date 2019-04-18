@@ -7,6 +7,8 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore')
 @observer
 class Updates extends Component {
@@ -16,8 +18,10 @@ class Updates extends Component {
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
   }
   componentDidMount() {
-    const sel = 'anchor';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   handleClose = () => this.props.history.goBack();
   render() {

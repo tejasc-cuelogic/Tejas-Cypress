@@ -193,16 +193,16 @@ section{
         top: 0;
         bottom: 0;
         right: 0;
-        >.ui.container {
-            justify-content: center;
-            }
         color:  @white;
         // @media only screen and (min-width : @monitorBreakpoint) and (max-width: @largestSmallMonitor){
-        //     padding-top: @50px;
-        // }
+            //     padding-top: @50px;
+            // }
         @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor){
             padding-top: @50px;
             padding-bottom: @50px;
+        }
+        >.ui.container {
+            justify-content: center;
         }
     }
 }
