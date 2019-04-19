@@ -8,6 +8,9 @@ import { FormInput } from '../../../../../theme/form';
 @withRouter
 @observer
 export default class Data extends Component {
+  componentWillMount() {
+    this.props.elasticSearchStore.setFieldValue('boxMsg', '');
+  }
   onSubmit = (e) => {
     e.preventDefault();
     const { uiStore, elasticSearchStore } = this.props;
@@ -17,7 +20,7 @@ export default class Data extends Component {
 
   render() {
     const { elasticSearchStore, uiStore } = this.props;
-    const { STORAGE_DETAILS_SYNC_FRM, storageDetailsChange } = elasticSearchStore;
+    const { STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, boxMsg } = elasticSearchStore;
     const { inProgress } = uiStore;
 
     return (
@@ -42,6 +45,9 @@ export default class Data extends Component {
                     </Form.Field>
                   </Form.Group>
                 </Form>
+                {boxMsg ?
+                  <p className="highlight-text">{boxMsg === 'True' ? 'Box folder details not found, creation has been initiated, please check after some time.' : boxMsg}</p> : ''
+                }
                 <Button primary className="mt-30" content="Sync All Investors" />
               </Card.Description>
             </Card.Content>
