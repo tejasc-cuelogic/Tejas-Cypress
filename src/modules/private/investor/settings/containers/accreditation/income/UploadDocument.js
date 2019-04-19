@@ -9,8 +9,12 @@ import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../
 @observer
 export default class UploadDocument extends Component {
   componentWillMount() {
-    const { changeRuleAsPerFilingStatus, FILLING_STATUS_FORM } = this.props.accreditationStore;
-    changeRuleAsPerFilingStatus(FILLING_STATUS_FORM.fields.method.value);
+    const {
+      changeRuleAsPerFilingStatus, FILLING_STATUS_FORM, filingStatus,
+    } = this.props.accreditationStore;
+    if (FILLING_STATUS_FORM.fields.method.value !== filingStatus) {
+      changeRuleAsPerFilingStatus(FILLING_STATUS_FORM.fields.method.value);
+    }
   }
   onFileDrop = (files, field) => {
     this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income');

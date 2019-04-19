@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { startCase } from 'lodash';
+import { startCase, get } from 'lodash';
 import moment from 'moment';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
@@ -146,7 +146,7 @@ export default class FinancialInfo extends Component {
                             {accreditationData[account.name].status === 'INVALID' ?
                               <Aux>
                                 <dt>Message :</dt>
-                                <dd>{accreditationData[account.name].declinedMessage || 'N/A'}</dd>
+                                <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
                               </Aux> : ''
                             }
                             <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
