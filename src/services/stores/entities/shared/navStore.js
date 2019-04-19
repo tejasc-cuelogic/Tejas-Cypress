@@ -37,29 +37,52 @@ export class NavStore {
   }
 
   @computed get myRoutes() {
-    let permitted = [];
-    if (userDetailsStore.signupStatus.isMigratedFullAccount
-      && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
-      permitted = [...this.params.roles];
-    } else {
-      permitted = [...this.params.roles,
-        ...userDetailsStore.signupStatus.partialAccounts,
-        ...userDetailsStore.signupStatus.activeAccounts,
-        ...userDetailsStore.signupStatus.processingAccounts,
-        ...userDetailsStore.signupStatus.frozenAccounts];
-    }
-    if (userDetailsStore.userFirstLoad !== true &&
-      (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
+    try {
+      let permitted = [];
+      const { roles } = this.params;
+      if (userDetailsStore.signupStatus.isMigratedFullAccount
+        && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
+        permitted = [...roles];
+      } else {
+        permitted = [...roles,
+          ...userDetailsStore.signupStatus.partialAccounts,
+          ...userDetailsStore.signupStatus.activeAccounts,
+          ...userDetailsStore.signupStatus.processingAccounts,
+          ...userDetailsStore.signupStatus.frozenAccounts];
+      }
+      if (permitted && permitted.length > 1 && permitted.includes('investor')) {
+        const pInvestorInfo = {
+          roles,
+          signupStatus: userDetailsStore.signupStatus,
+          permitted,
+        };
+        localStorage.setItem(`${userStore.currentUser.sub}_pInfo`, JSON.stringify(pInvestorInfo));
+      }
+      const pInvestorInfo = localStorage.getItem(`${userStore.currentUser.sub}_pInfo`);
+      if (userDetailsStore.userFirstLoad !== true &&
+        (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
+        if (pInvestorInfo) {
+          permitted = JSON.parse(pInvestorInfo).permitted || permitted;
+        } else {
+          return [];
+        }
+      }
+      if (pInvestorInfo && permitted.includes('investor')) {
+        permitted = JSON.parse(pInvestorInfo).permitted || permitted;
+      }
+      const routes = _.filter(
+        this.NAV_ITEMS,
+        n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
+          _.intersection(n.accessibleTo, permitted).length > 0) &&
+        (!n.env || n.env.length === 0 ||
+          _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0) &&
+          (!n.capability || this.canAccessBasedOnCapability(n.capability))),
+      );
+      return routes;
+    } catch (err) {
+      console.log(err);
       return [];
     }
-    const routes = _.filter(
-      this.NAV_ITEMS,
-      n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
-        _.intersection(n.accessibleTo, permitted).length > 0) &&
-      (!n.env || n.env.length === 0 || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0) &&
-        (!n.capability || this.canAccessBasedOnCapability(n.capability))),
-    );
-    return routes;
   }
 
   @action
