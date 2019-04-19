@@ -43,13 +43,25 @@ export default class ManageKnowledgeBase extends Component {
             addon={
               <Grid.Column width={3} textAlign="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
-                Add new article
+                  Add new article
                 </Button>
               </Grid.Column>
             }
             change={this.setSearchParam}
             toggleSearch={this.toggleSearch}
             filters={filters}
+          />
+          <ByKeyword
+            change={this.executeSearch}
+            w={[11]}
+            placeholder="Search by keyword or phrase"
+            requestState={requestState}
+            more="no"
+            addon={
+              <Grid.Column width={5} textAlign="right">
+                <Button color="green" onClick={this.handleAddNewMember} floated="right" > + Add new team member</Button>
+              </Grid.Column>
+            }
           />
         }
         P2={
