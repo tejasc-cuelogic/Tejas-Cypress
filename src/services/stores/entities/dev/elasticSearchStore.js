@@ -36,6 +36,7 @@ export class ElasticSearchStore {
           res(result);
         })
         .catch((error) => {
+          this.STORAGE_DETAILS_SYNC_FRM.fields.userId.error = error.message;
           Helper.toast('Something went wrong, please try again later.', 'error');
           rej(error);
         });
