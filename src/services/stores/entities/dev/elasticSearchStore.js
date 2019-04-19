@@ -10,6 +10,7 @@ import { STORAGE_DETAILS_SYNC } from '../../../constants/admin/data';
 export class ElasticSearchStore {
   @observable STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
   @observable inProgress = {};
+  @observable boxMsg = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -23,6 +24,7 @@ export class ElasticSearchStore {
 
   @action
   submitStorageDetails = () => {
+    this.setFieldValue('boxMsg', '');
     const userId = get(this.STORAGE_DETAILS_SYNC_FRM, 'fields.userId.value') || null;
     return new Promise((res, rej) => {
       client
@@ -31,11 +33,13 @@ export class ElasticSearchStore {
           variables: { userId },
         })
         .then((result) => {
+          this.setFieldValue('boxMsg', result.data.generateInvestorFolderStructure);
           Helper.toast('Your request is processed successfully.', 'success');
           this.resetForm();
           res(result);
         })
         .catch((error) => {
+          this.setFieldValue('boxMsg', '');
           Helper.toast('Something went wrong, please try again later.', 'error');
           rej(error);
         });
