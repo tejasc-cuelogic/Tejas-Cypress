@@ -17,6 +17,11 @@ export class ElasticSearchStore {
   }
 
   @action
+  resetForm = () => {
+    Validator.resetFormData(this.STORAGE_DETAILS_SYNC_FRM);
+  }
+
+  @action
   submitStorageDetails = () => {
     const userId = get(this.STORAGE_DETAILS_SYNC_FRM, 'fields.userId.value') || null;
     return new Promise((res, rej) => {
@@ -27,13 +32,12 @@ export class ElasticSearchStore {
         })
         .then((result) => {
           Helper.toast('Your request is processed successfully.', 'success');
+          this.resetForm();
           res(result);
-          this.setFieldValue('inProgress', false);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           rej(error);
-          this.setFieldValue('inProgress', false);
         });
     });
   }

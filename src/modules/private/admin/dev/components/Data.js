@@ -1,45 +1,25 @@
 import React, { Component } from 'react';
-import { Grid, Card, Button, Confirm, Form } from 'semantic-ui-react';
+import { Grid, Card, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { FormInput } from '../../../../../theme/form';
-// import ActivityHistory from '../../../shared/ActivityHistory';
-// import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
-// const elasticSearchModules = [
-//   { module: 'user', title: 'Users Index' },
-//   { module: 'crowdPay', title: 'CrowdPay Index' },
-//   { module: 'accreditation', title: 'Accreditation Index' },
-//   { module: 'linkedBank', title: 'LinkedBank Index' },
-//   { module: 'offerings', title: 'Offerings Index' },
-// ];
-
-@inject('elasticSearchStore')
+@inject('elasticSearchStore', 'uiStore')
 @withRouter
 @observer
 export default class Data extends Component {
-  state = { confirmModal: false, title: '', mutation: null };
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.elasticSearchStore.submitStorageDetails();
-  }
-  elasticSearchHandler = (mutation) => {
-    this.cancelConfirmModal();
-    this.props.elasticSearchStore.elasticSearchHandler(mutation);
-  }
-  toggleConfirmModal = (mutation, title) => {
-    this.setState({ confirmModal: true, mutation, title });
-  }
-  cancelConfirmModal = () => {
-    this.setState({ confirmModal: false, mutation: null, title: '' });
+    const { uiStore, elasticSearchStore } = this.props;
+    uiStore.setProgress();
+    elasticSearchStore.submitStorageDetails().finally(uiStore.setProgress(false));
   }
 
   render() {
-    const { elasticSearchStore } = this.props;
+    const { elasticSearchStore, uiStore } = this.props;
     const { STORAGE_DETAILS_SYNC_FRM, storageDetailsChange } = elasticSearchStore;
-    // const navItems = [
-    //   { title: 'Activity History', to: '' },
-    // ];
+    const { inProgress } = uiStore;
+
     return (
       <Grid>
         <Grid.Column>
@@ -58,7 +38,7 @@ export default class Data extends Component {
                       changed={(e, result) => storageDetailsChange(e, result)}
                     />
                     <Form.Field width={4}>
-                      <Button primary fluid content="Sycn Storage Details" />
+                      <Button primary fluid content="Sycn Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid} loading={inProgress} />
                     </Form.Field>
                   </Form.Group>
                 </Form>
@@ -67,17 +47,6 @@ export default class Data extends Component {
             </Card.Content>
           </Card>
         </Grid.Column>
-        <Confirm
-          header="Confirm"
-          cancelButton="No"
-          confirmButton="Yes"
-          content={`Are you sure to proceed with ${this.state.title}.`}
-          open={this.state.confirmModal}
-          onCancel={this.cancelConfirmModal}
-          onConfirm={() => this.elasticSearchHandler(this.state.mutation)}
-          size="mini"
-          className="deletion"
-        />
       </Grid>
     );
   }
