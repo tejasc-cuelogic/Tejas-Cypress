@@ -236,8 +236,21 @@ export class TransactionsStore {
       searchparams[name] = value;
     } else {
       delete searchparams[name];
+<<<<<<< HEAD
     }
     return searchparams;
+=======
+    }
+    return searchparams;
+  }
+
+  triggervalidSearch = (minKey, maxKey) => {
+    const isValidSearch = has(this.requestState.search, minKey) &&
+    has(this.requestState.search, maxKey);
+    if (isValidSearch) {
+      this.initRequest(this.transactionStatus);
+    }
+>>>>>>> demo
   }
   @action
   setInitiateSrch = (valueObj, name) => {
@@ -246,6 +259,7 @@ export class TransactionsStore {
       if (moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid()) {
         searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
         this.requestState.search = searchparams;
+<<<<<<< HEAD
         this.initRequest(this.transactionStatus);
       } else {
         delete searchparams[name];
@@ -254,6 +268,16 @@ export class TransactionsStore {
           this.initRequest(this.transactionStatus);
         }
       }
+=======
+        this.triggervalidSearch('dateFilterStart', 'dateFilterStop', searchparams);
+      }
+      if (this.requestState.search.dateFilterStart === '' && this.requestState.search.dateFilterStop === '') {
+        delete searchparams[name];
+      }
+    } else if (name === 'minAmount' || name === 'maxAmount') {
+      this.requestState.search = this.modifySearchParams(valueObj, name);
+      this.triggervalidSearch('minAmount', 'maxAmount', searchparams);
+>>>>>>> demo
     } else {
       this.requestState.search = this.modifySearchParams(valueObj, name);
       this.initRequest(this.transactionStatus);
