@@ -66,12 +66,18 @@ export default class Transactions extends Component {
           {!this.props.isAdmin &&
             <Header as="h4">Transactions</Header>
           }
-          <Card fluid>
-            <FillTable loading={loading} error={hasError || error} result={result} />
-          </Card>
-          {totalRecords > 0 &&
-            <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-          }
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <Card fluid>
+                  <FillTable loading={loading} error={hasError || error} result={result} />
+                </Card>
+                {totalRecords > 0 &&
+                  <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+                }
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </div>
       </Aux>
     );

@@ -189,6 +189,9 @@ export class PortfolioStore {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
+    if (uiStore.inProgress !== 'portfolioDirect') {
+      uiStore.setProgress('portfolio');
+    }
     this.investmentDetails = graphql({
       client,
       query: getInvestorDetailsById,
@@ -199,8 +202,12 @@ export class PortfolioStore {
       },
       onFetch: () => {
         if (!this.investmentDetails.loading) {
+          uiStore.setProgress(false);
           resolve();
         }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
       },
       fetchPolicy: 'network-only',
     });

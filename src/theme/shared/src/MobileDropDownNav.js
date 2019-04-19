@@ -8,13 +8,21 @@ import { NavItems } from '../../../theme/layout/NavigationItems';
 @inject('campaignStore', 'navStore')
 @observer
 export default class MobileDropDownNav extends React.Component {
+  state = {
+    title: '',
+  }
   activeText = () => {
     const { navItems, location, refMatch } = this.props;
     const active = navItems.find((i) => {
       const path = `${refMatch.url}/${i.to}`;
       return matchPath(location.pathname, { path });
     });
-    return active ? active.title : this.props.navItems[0].title;
+    const title = active ? active.title : this.props.navItems[0].title;
+    if (title !== this.state.title) {
+      window.scrollTo(0, 0);
+      this.setState({ title });
+    }
+    return title;
   }
   toggleCampaignSideBar = () => {
     this.props.campaignStore.setFieldValue('campaignSideBarShow', !this.props.campaignStore.campaignSideBarShow);

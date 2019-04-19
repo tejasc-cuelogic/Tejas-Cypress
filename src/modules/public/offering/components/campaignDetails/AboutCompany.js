@@ -11,6 +11,7 @@ import CompanyHistory from './AboutCompany/CompanyHistory';
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 550 : 200;
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
 @observer
@@ -25,7 +26,7 @@ class AboutCompany extends Component {
         block: 'start',
         behavior: 'smooth',
       });
-    } else {
+    } else if (!isMobile) {
       const sel = 'company-description';
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
