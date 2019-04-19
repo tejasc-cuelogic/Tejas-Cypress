@@ -48,12 +48,12 @@ export default class Data extends Component {
             <Card.Content>
               <Card.Description>
                 <Form error onSubmit={this.onSubmit}>
-                  <Form.Group>
+                  <Form.Group className="bottom-aligned">
                     <FormInput
                       key="userId"
                       type="text"
                       name="userId"
-                      width="12"
+                      containerwidth="12"
                       fielddata={STORAGE_DETAILS_SYNC_FRM.fields.userId}
                       changed={(e, result) => storageDetailsChange(e, result)}
                     />
