@@ -11,6 +11,7 @@ import PopulateAccreditationSteps from './PopulateAccreditationSteps';
 export default class VerifyTrustEntityAccreditation extends React.Component {
   componentWillMount() {
     const { accountType } = this.props.match.params;
+    this.props.accreditationStore.setFieldVal('docsToUpload', []);
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.setFormData('TRUST_ENTITY_ACCREDITATION_FRM', 'accreditation', accountType);
       this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
@@ -22,6 +23,9 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         this.props.accreditationStore.setFieldVal('firstInit', true);
       }
     });
+  }
+  componentWillUpdate() {
+    this.props.accreditationStore.setFieldVal('docsToUpload', []);
   }
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);

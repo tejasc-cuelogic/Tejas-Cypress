@@ -9,7 +9,6 @@ import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../
 @observer
 export default class UploadDocument extends Component {
   componentWillMount() {
-    this.props.accreditationStore.setFieldVal('docsToUpload', []);
     if (this.props.isEntity) {
       this.props.accreditationStore.setDefaultCheckboxVal();
     }

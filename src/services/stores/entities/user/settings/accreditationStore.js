@@ -537,7 +537,7 @@ export class AccreditationStore {
       fileName: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.value,
     }];
     return new Promise((resolve, reject) => {
-      this.uploadAllDocs(true).then(() => {
+      this.uploadAllDocs(false).then(() => {
         client
           .mutate({
             mutation: approveOrDeclineForAccreditationRequest,
