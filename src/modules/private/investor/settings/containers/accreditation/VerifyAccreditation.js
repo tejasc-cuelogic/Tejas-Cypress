@@ -27,9 +27,6 @@ export default class Accreditation extends React.Component {
       }
     });
   }
-  componentWillUpdate() {
-    this.props.accreditationStore.setFieldVal('docsToUpload', []);
-  }
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
