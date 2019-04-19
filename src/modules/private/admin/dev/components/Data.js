@@ -38,7 +38,7 @@ export default class Data extends Component {
                       changed={(e, result) => storageDetailsChange(e, result)}
                     />
                     <Form.Field width={4}>
-                      <Button primary fluid content="Sycn Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid} loading={inProgress} />
+                      <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid} loading={inProgress} />
                     </Form.Field>
                   </Form.Group>
                 </Form>
