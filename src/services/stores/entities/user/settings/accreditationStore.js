@@ -239,10 +239,12 @@ export class AccreditationStore {
   @action
   uploadAllDocs = isFinalStep => new Promise((resolve, reject) => {
     if (this.docsToUpload && isFinalStep) {
+      const uploadedArr = [];
       this.docsToUpload.forEach((item, index) => {
         fileUpload.putUploadedFileOnS3(item).then(() => {
-          this.docsToUpload.splice((this.docsToUpload.length > 1) ? index : 0, 1);
-          if (this.docsToUpload.length === 0) {
+          // this.docsToUpload.splice((this.docsToUpload.length > 1) ? index : 0, 1);
+          uploadedArr.push(index);
+          if (this.docsToUpload.length === uploadedArr.length) {
             resolve();
           }
         }).catch((error) => {
