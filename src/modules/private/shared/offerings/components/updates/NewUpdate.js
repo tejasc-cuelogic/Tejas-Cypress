@@ -40,6 +40,7 @@ export default class NewUpdate extends Component {
     this.props.updateStore.deleteOfferingUpdates(this.props.id);
     this.props.history.push(this.props.refLink);
   }
+
   save = (status) => {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
@@ -58,7 +59,8 @@ export default class NewUpdate extends Component {
   }
   render() {
     const {
-      PBUILDER_FRM, UpdateChange, FChange, loadingCurrentUpdate,
+      PBUILDER_FRM, UpdateChange, FChange,
+      loadingCurrentUpdate, sendTestEmail,
     } = this.props.updateStore;
     const isNew = this.props.id === 'new';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -130,7 +132,7 @@ export default class NewUpdate extends Component {
                       </Modal>
                     </List.Item>
                     <List.Item>
-                      <Link to="/"><Icon className="ns-envelope" />Send test email to me</Link>
+                      <Button color="green" className="link-button" disabled={isNew} content="Send test email to me" onClick={() => sendTestEmail(this.props.id)} />
                     </List.Item>
                   </List>
                 </Card.Content>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+
 import Aux from 'react-aux';
 import Helper from '../../helper/utility';
 
