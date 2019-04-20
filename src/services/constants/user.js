@@ -404,7 +404,7 @@ export const COUNTRY_CODES = {
 export const TRANSACTION_TYPES = [
   { text: 'Deposit', value: 'DEPOSIT' },
   { text: 'Withdrawal', value: 'WITHDRAWAL' },
-  { text: 'Payment', value: 'REPAYMENT' },
+  { text: 'Payment', value: 'PAYMENT' },
   { text: 'Interest', value: 'INTEREST' },
   { text: 'Investment', value: 'INVESTMENT' },
   { text: 'Referral credits', value: 'REFERRAL_CREDITS' },
