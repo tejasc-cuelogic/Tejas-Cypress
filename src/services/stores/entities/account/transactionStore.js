@@ -154,7 +154,7 @@ export class TransactionStore {
     if (transactionType) {
       this.db = ClientDb.initiateDb(filter(
         transactions,
-        trans => transactionType.includes(trans.type.toUpperCase()),
+        trans => transactionType.includes(trans.type),
       ));
     }
     this.db = ClientDb.getDatabase();
