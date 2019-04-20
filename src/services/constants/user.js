@@ -402,13 +402,13 @@ export const COUNTRY_CODES = {
 };
 
 export const TRANSACTION_TYPES = [
-  { text: 'Deposit', value: 'DEPOSIT' },
-  { text: 'Withdrawal', value: 'WITHDRAWAL' },
-  { text: 'Payment', value: 'PAYMENT' },
-  { text: 'Interest', value: 'INTEREST' },
-  { text: 'Investment', value: 'INVESTMENT' },
-  { text: 'Referral credits', value: 'REFERRAL_CREDITS' },
-  { text: 'Late fee', value: 'LATE_FEE' },
+  { text: 'Deposit', value: 'Deposit' },
+  { text: 'Withdrawal', value: 'Withdrawal' },
+  { text: 'Payment', value: 'Payment' },
+  { text: 'Interest', value: 'Interest' },
+  { text: 'Investment', value: 'Investment' },
+  { text: 'Referral credits', value: 'Credit' },
+  { text: 'Late fee', value: 'Late Fee' },
 ];
 
 export const DATE_RANGES = [
