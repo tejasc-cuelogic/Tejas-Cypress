@@ -53,7 +53,7 @@ export class TransactionStore {
 
   @action
   initRequest = (props) => {
-    this.db = [];
+    this.resetData();
     const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
       userDetailsStore.currentActiveAccountDetails;
     const { userDetails, getDetailsOfUser } = userDetailsStore;
@@ -134,7 +134,7 @@ export class TransactionStore {
   @action
   setData = (data) => {
     if (get(data, 'getAccountTransactions')) {
-      this.setDb(data.getAccountTransactions.transactions);
+      this.setDb(this.sortBydate(data.getAccountTransactions.transactions));
     } else {
       this.resetData();
     }
@@ -145,10 +145,12 @@ export class TransactionStore {
     this.db = ClientDb.initiateDb(data);
   }
 
+  sortBydate = data => orderBy(data, o => (o.date ? moment(new Date(o.date)).unix() : ''), ['desc'])
+
   @action
   initiateFilters = () => {
     this.resetPagination();
-    const transactions = get(this.data, 'data.getAccountTransactions.transactions') || [];
+    const transactions = this.sortBydate(get(this.data, 'data.getAccountTransactions.transactions')) || [];
     this.setData(get(this.data, 'data') || []);
     const { transactionType } = this.requestState.search;
     if (transactionType) {
