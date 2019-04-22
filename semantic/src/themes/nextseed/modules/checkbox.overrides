@@ -236,6 +236,6 @@
 	}
 }
 
-.error .ui.checkbox label:before{
+.error .ui.checkbox:not(.radio) label:before{
 	border-color:@highlight-primary;
 }

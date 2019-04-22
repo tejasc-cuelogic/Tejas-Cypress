@@ -60,7 +60,7 @@ export const verifyCIPAnswers = gql`
           }
         }
       }
-    
+
       ... on UserCIPHardFail{
         hardFailId: id
         key
@@ -70,7 +70,7 @@ export const verifyCIPAnswers = gql`
           message
         }
       }
-    
+
       ... on UserCIPPass {
         passId: id
         key
@@ -122,7 +122,6 @@ export const updateUserProfileData = gql`
   ) {
       id
       info {
-        salutation
         firstName
         lastName
         mailingAddress {
