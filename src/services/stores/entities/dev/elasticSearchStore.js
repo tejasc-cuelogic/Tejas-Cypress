@@ -25,6 +25,7 @@ export class ElasticSearchStore {
 
   @action
   submitStorageDetails = () => {
+    uiStore.setProgress();
     this.setFieldValue('boxMsg', '');
     const userId = get(this.STORAGE_DETAILS_SYNC_FRM, 'fields.userId.value') || null;
     return new Promise((res, rej) => {

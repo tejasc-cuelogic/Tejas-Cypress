@@ -14,11 +14,7 @@ export default class Data extends Component {
   }
 
   onSubmit = () => {
-    const { uiStore, elasticSearchStore } = this.props;
-    uiStore.setProgress();
-    elasticSearchStore.submitStorageDetails().then(() => {
-      // document.getElementsByName('userId')[0].value = '';
-    }).catch(e => console.log(e));
+    this.props.elasticSearchStore.submitStorageDetails();
   }
 
   render() {
@@ -42,9 +38,10 @@ export default class Data extends Component {
                       containerwidth="12"
                       fielddata={STORAGE_DETAILS_SYNC_FRM.fields.userId}
                       changed={(e, result) => storageDetailsChange(e, result)}
+                      disabled={inProgress}
                     />
                     <Form.Field width={4}>
-                      <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid} loading={inProgress} />
+                      <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress} loading={inProgress} />
                     </Form.Field>
                     { boxMsg &&
                     <FieldError error={boxMsg === 'True' ? '' : boxMsg} />
