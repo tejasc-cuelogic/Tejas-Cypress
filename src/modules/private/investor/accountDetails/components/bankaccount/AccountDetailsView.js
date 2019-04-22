@@ -11,6 +11,7 @@ import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
 import NSImage from '../../../../../shared/NSImage';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -99,19 +100,19 @@ export default class AccountDetailsView extends Component {
                 </Item.Content>
               </Item>
             </Grid.Column>
-              <Grid.Column>
-                <Item>
-                  <Item.Content>
-                    <Aux>
-                      <Item.Extra>Status</Item.Extra>
-                        <Item.Header>
-                          {currentStaus}
-                        </Item.Header>
-                    </Aux>
-                  </Item.Content>
-                </Item>
-              </Grid.Column>
-            <Grid.Column width={3} textAlign="right" verticalAlign="middle">
+            <Grid.Column>
+              <Item>
+                <Item.Content>
+                  <Aux>
+                    <Item.Extra>Status</Item.Extra>
+                      <Item.Header>
+                        {currentStaus}
+                      </Item.Header>
+                  </Aux>
+                </Item.Content>
+              </Item>
+            </Grid.Column>
+            <Grid.Column width={3} textAlign={!isMobile ? 'right' : ''} verticalAlign="middle">
               {accountType === 'active' ?
                 accountDetails && !accountDetails.pendingUpdate &&
                 <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} color="green" content="Change Linked Bank" />
