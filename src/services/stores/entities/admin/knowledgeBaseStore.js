@@ -209,6 +209,13 @@ export class KnowledgeBaseStore {
     );
   };
   @action
+  userTypeChange = (e, result) => {
+    this.ARTICLE_FRM = Validator.onChange(
+      this.ARTICLE_FRM,
+      Validator.pullValues(e, result),
+    );
+  }
+  @action
   deleteKBById = (id) => {
     client
       .mutate({

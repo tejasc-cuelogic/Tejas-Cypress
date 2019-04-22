@@ -43,20 +43,15 @@ export default class EditKnowledgeBaseItem extends Component {
       articleChange,
       htmlContentChange,
       categoriesDropdown,
+      userTypeChange,
     } = this.props.knowledgeBaseStore;
-    // console.log('ARTICLE_FRM',ARTICLE_FRM);
-    // const isNew = this.props.match.params.id === 'new';
-    // const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    // const isManager = access.asManager;
-    // const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
-    // const isReadonly = !isManager &&
-    // (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
+    const isNew = this.props.match.params.id === 'new';
     return (
       <Modal dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
-              Instead of Selling Equity
+              {isNew ? 'Create' : 'Edit'} Article
               <Actions save={this.save} meta={ARTICLE_FRM.meta} />
             </Header>
           </div>
@@ -92,12 +87,15 @@ export default class EditKnowledgeBaseItem extends Component {
                       Tip settings
                     </Header>
                     <Form>
-                      {/* <FormRadioGroup
-                        fielddata={ARTICLE_FRM.fields.itemStatus}
-                        name="itemStatus"
-                        changed={(e, result) => personalInfoChange(e, result)}
-                        containerclassname="button-radio center-align"
-                      /> */}
+                      {/* <div className="field">
+                        <FormRadioGroup
+                          fielddata={USER_TYPE_LIST}
+                          name="userType"
+                          changed={userTypeChange}
+                          containerclassname="button-radio center-align"
+                          value={ARTICLE_FRM.fields.userType.value}
+                        />
+                      </div> */}
                       <div className="field">
                         <FormDropDown
                           fielddata={ARTICLE_FRM.fields.userType}

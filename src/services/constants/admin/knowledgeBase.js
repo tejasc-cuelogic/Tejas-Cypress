@@ -54,6 +54,15 @@ export const GLOBAL_ACTIONS = [
 ];
 
 export const USER_TYPES = [
-  { key: 'INVESTOR', value: 'INVESTOR', text: 'INVESTOR' },
-  { key: 'ISSUER', value: 'ISSUER', text: 'ISSUER' },
+  { key: 'INVESTOR', value: 'INVESTOR', label: 'INVESTOR' },
+  { key: 'ISSUER', value: 'ISSUER', label: 'ISSUER' },
 ];
+
+export const USER_TYPE_LIST = {
+  key: 'userType',
+  value: 'TEXT',
+  values: [{ label: 'INVESTOR', value: 'INVESTOR' }, { label: 'ISSUER', value: 'ISSUER' }],
+  label: 'User Type',
+  error: undefined,
+  rule: 'optional',
+};
