@@ -5,8 +5,8 @@ import { includes } from 'lodash';
 import { Header, Card, Grid, Form, Divider } from 'semantic-ui-react';
 import { FillTable } from '../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
-import { NsPagination } from '../../../../../theme/shared';
-import { TRANSACTION_TYPES } from '../../../../../services/constants/user';
+import { NsPagination, InlineLoader } from '../../../../../theme/shared';
+import { TRANSACTION_TYPES, DATE_RANGES } from '../../../../../services/constants/user';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 
 const result = {
@@ -43,6 +43,9 @@ export default class Transactions extends Component {
       getAllTransactions, loading, error, hasError, totalRecords, requestState,
     } = this.props.transactionStore;
     result.rows = getAllTransactions;
+    if (loading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         {this.props.isAdmin &&
@@ -52,12 +55,16 @@ export default class Transactions extends Component {
           <Form>
             <Grid stackable>
               <Grid.Row>
-                {/* <Grid.Column width={4}>
-                  <DropdownFilter placeHolder="Last 30 days"
-                  value={this.props.transactionStore.requestState.search.dateRange}
-                  change={this.setSearchParam} options={DATE_RANGES}
-                  label="Date Range" name="dateRange" />
-                </Grid.Column> */}
+                <Grid.Column width={4}>
+                  <DropdownFilter
+                    placeHolder="Last 30 days"
+                    value={this.props.transactionStore.requestState.search.dateRange}
+                    change={this.setSearchParam}
+                    options={DATE_RANGES}
+                    label="Date Range"
+                    name="dateRange"
+                  />
+                </Grid.Column>
                 <Grid.Column width={3}>
                   <DropdownFilter placeHolder="All" value={this.props.transactionStore.requestState.search.transactionType} keyname="transactionType" change={this.setSearchParam} options={TRANSACTION_TYPES} label="Transaction Type" name="transactionType" isMultiple />
                 </Grid.Column>
