@@ -6,6 +6,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { STORAGE_DETAILS_SYNC } from '../../../constants/admin/data';
+import uiStore from '../../../stores/entities/shared/uiStore';
 
 export class ElasticSearchStore {
   @observable STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
@@ -19,11 +20,12 @@ export class ElasticSearchStore {
 
   @action
   resetForm = () => {
-    Validator.resetFormData(this.STORAGE_DETAILS_SYNC_FRM);
+    this.STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
   }
 
   @action
   submitStorageDetails = () => {
+    uiStore.setProgress();
     this.setFieldValue('boxMsg', '');
     const userId = get(this.STORAGE_DETAILS_SYNC_FRM, 'fields.userId.value') || null;
     return new Promise((res, rej) => {
@@ -33,14 +35,19 @@ export class ElasticSearchStore {
           variables: { userId },
         })
         .then((result) => {
-          this.setFieldValue('boxMsg', result.data.generateInvestorFolderStructure);
-          Helper.toast('Your request is processed successfully.', 'success');
+          if (result.data.generateInvestorFolderStructure.includes('True')) {
+            Helper.toast('Box folder details not found, creation has been initiated, please check after some time.', 'success');
+            document.getElementsByName('userId')[0].value = '';
+          } else {
+            this.setFieldValue('boxMsg', result.data.generateInvestorFolderStructure);
+          }
           this.resetForm();
+          uiStore.setProgress(false);
           res(result);
         })
         .catch((error) => {
-          this.setFieldValue('boxMsg', '');
           Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setProgress(false);
           rej(error);
         });
     });
@@ -50,6 +57,7 @@ export class ElasticSearchStore {
   storageDetailsChange = (e, res) => {
     this.STORAGE_DETAILS_SYNC_FRM =
     Validator.onChange(this.STORAGE_DETAILS_SYNC_FRM, Validator.pullValues(e, res));
+    this.setFieldValue('boxMsg', '');
   };
 
   @action
