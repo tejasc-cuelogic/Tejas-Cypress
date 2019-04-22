@@ -52,7 +52,7 @@ export class AccreditationStore {
   @observable showLoader = false;
   @observable inProgress = [];
   @observable docsToUpload = [];
-  @observable filingStatus = false;
+  @observable filingStatus = null;
 
   @action
   addLoadingUserId = (requestId) => {
