@@ -2,17 +2,12 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
 import map from 'lodash/map';
-import isEqual from 'lodash/isEqual';
-import uniqWith from 'lodash/uniqWith';
-// import isArray from 'lodash/isArray';
-import mapKeys from 'lodash/mapKeys';
-import mapValues from 'lodash/mapValues';
+import { isArray } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
-// import { uniqWith, isEqual, map } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES, ARTICLE_STATUS_VALUES } from '../../../constants/admin/knowledgeBase';
-import { getArticleDetails, getArticleDetailsBySlug, getArticlesByCatId, getArticleById, createKnowledgeBase, updateKnowledgeBase, getAllKnowledgeBase, deleteKBById } from '../../queries/knowledgeBase';
+import { getArticleDetails, getArticleById, createKnowledgeBase, updateKnowledgeBase, getAllKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 
@@ -25,9 +20,6 @@ export class KnowledgeBaseStore {
   @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
   @observable filters = false;
   @observable ID_VERIFICATION_FRM = Validator.prepareFormObject(ARTICLE_STATUS_VALUES);
-  @observable requestState = {
-    search: {},
-  };
   @observable globalAction = '';
   @observable confirmBox = {
     entity: '',
@@ -36,11 +28,9 @@ export class KnowledgeBaseStore {
   @observable requestState = {
     skip: 0,
     page: 1,
-    perPage: 50,
-    displayTillIndex: 50,
-    filters: false,
-    search: {
-    },
+    perPage: 10,
+    displayTillIndex: 10,
+    search: {},
   };
 
   @action
@@ -54,26 +44,37 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  setInitiateSrch = (keyword, value) => {
-    this.requestState.search[keyword] = value;
-    this.initiateFilters();
+  resetData = () => {
+    this.requestState.search = {};
   }
   @action
-  initiateFilters = () => {
-    const { keyword } = this.requestState.search;
-    let resultArray = [];
-    if (keyword) {
-      resultArray = ClientDb.filterData('memberName', keyword, 'likenocase');
-      this.setDb(uniqWith(resultArray, isEqual));
-      this.requestState.page = 1;
-      this.requestState.skip = 0;
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
+  @action
+  removeFilter = (name) => {
+    delete this.requestState.search[name];
+    this.initRequest();
+  }
+  @action
+  setInitiateSrch = (name, value) => {
+    const srchParams = { ...this.requestState.search };
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      srchParams[name] = value;
     } else {
-      this.setDb(this.data.data.knowledgeBaseItems);
+      delete srchParams[name];
     }
+    this.initiateSearch(srchParams);
+  }
+  @action
+  initiateSearch = (srchParams, getAllUsers = false) => {
+    this.requestState.search = srchParams;
+    this.initRequest(null, getAllUsers);
   }
 
   @action
   requestAllArticles = (isPublic = true, sortAsc = false, categoryId = null) => {
+    this.resetData();
     const apiClient = isPublic ? clientPublic : client;
     this.data = graphql({
       client: apiClient,
@@ -84,12 +85,9 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  requestArticlesByCategoryId = (id) => {
-    this.data = graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
-  }
-
-  @action
   getArticle = (id, isPublic = true) => {
+    this.resetData();
+    this.toggleSearch();
     const query = isPublic ? getArticleDetails : getArticleById;
     const apiClient = isPublic ? clientPublic : client;
     this.article = graphql({
@@ -124,37 +122,34 @@ export class KnowledgeBaseStore {
       .catch(res => Helper.toast(`${res} Error`, 'error'));
   }
 
-  @action
-  featuredRequestArticlesByCategoryId = () => {
-    const id = this.featuredCategoryId;
-    this.featuredData =
-      graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
-  }
-
-  @action
-  getArticleDetailsBySlug = (slug) => {
-    this.article = graphql({
-      client: clientPublic,
-      query: getArticleDetailsBySlug,
-      variables: { slug },
-    });
-  }
-
-  @computed get InsightArticles() {
+  @computed get AllKnowledgeBase() {
     return (this.data.data && (toJS(this.data.data.knowledgeBaseByFilters)
-    || toJS(this.data.data.knowledgeBaseItems))) || [];
-  }
-  @computed get InsightFeaturedArticles() {
-    return (this.data.data && (toJS(this.data.data.knowledgeBaseByFilters)
-    || toJS(this.data.data.knowledgeBaseItems))) || [];
-  }
-
-  @computed get ArticlesDetails() {
-    return (this.article.data && toJS(this.article.data.insightArticleBySlug)) || null;
+      || toJS(this.data.data.knowledgeBaseItems))) || [];
   }
 
   @computed get articleLoading() {
     return this.article.loading;
+  }
+
+  @computed get count() {
+    return (this.db && this.db.length) || 0;
+  }
+
+  @computed get totalRecords() {
+    return (this.data.data && this.data.data.knowledgeBaseItems &&
+      this.data.data.knowledgeBaseItems.length) || 0;
+  }
+
+  @action
+  pageRequest = ({ skip, page }) => {
+    this.requestState.displayTillIndex = this.requestState.perPage * page;
+    this.requestState.page = page;
+    this.requestState.skip = skip;
+  }
+
+  @computed get knowledgeBase() {
+    return (this.db && this.db.length &&
+      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @action
@@ -163,17 +158,9 @@ export class KnowledgeBaseStore {
     this.Categories = graphql({
       client: apiClient,
       query: getCategories(isPublic),
-      variables: { types: ['INSIGHTS'] },
+      variables: { types: ['INVESTOR_KB', 'ISSUER_KB'] },
       fetchPolicy: 'network-only',
     });
-  }
-
-  @computed get InsightCategories() {
-    const iMap = { categoryName: 'title', id: 'to' };
-    const categories = (this.Categories.data && toJS(this.Categories.data.categories)) || [];
-    const categoryRoutes = map(categories, i => mapKeys(i, (v, k) => iMap[k] || k));
-    const categoryRoutesModified = map(categoryRoutes, c => mapValues(c, (v, k) => (k === 'to' ? `category/${v}` : v)));
-    return categoryRoutesModified;
   }
 
   @computed get loading() {
@@ -246,6 +233,33 @@ export class KnowledgeBaseStore {
       return de;
     });
     this.db = ClientDb.initiateDb(d, true);
+  }
+
+  @action
+  initRequest = (reqParams, getAllUsers = false) => {
+    const {
+      keyword,
+      categoryId,
+      itemStatus,
+      authorId,
+    } = this.requestState.search;
+    // const filters = toJS({ ...this.requestState.search });
+    const params = {
+      title: keyword,
+      categoryId,
+      itemStatus,
+      authorId,
+      page: reqParams ? reqParams.page : 1,
+      limit: getAllUsers ? 100 : this.requestState.perPage,
+    };
+
+    this.requestState.page = params.page;
+    this.data = graphql({
+      client,
+      query: getAllKnowledgeBaseByFilters,
+      variables: params,
+      fetchPolicy: 'network-only',
+    });
   }
 }
 

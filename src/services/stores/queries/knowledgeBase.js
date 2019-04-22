@@ -108,17 +108,6 @@ query knowledgeBaseById ($id: ID!) {
   }
 `;
 
-export const getArticleDetailsBySlug = gql`
-query insightArticleBySlug($slug:String ) {
-  insightArticleBySlug(slug: $slug){
-    id
-    title
-    featuredImage
-    content
-  }
-}
-`;
-
 export const createArticle = gql`
 mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
   createArticle(articleDetailsInput: $payload, isPartialData: $isPartial) {

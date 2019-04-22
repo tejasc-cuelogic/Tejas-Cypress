@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
 import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/article';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
-import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -36,16 +36,25 @@ export default class AllKnowledgeBaseItems extends Component {
   handleDeleteCancel = () => {
     this.props.knowledgeBaseStore.setConfirmBox('');
   }
+
+  paginate = params => this.props.knowledgeBaseStore.pageRequest(params);
+
   render() {
     const { knowledgeBaseStore } = this.props;
     const {
-      InsightArticles,
+      AllKnowledgeBase,
       loading,
       globalAction,
       confirmBox,
+      count,
+      requestState,
     } = knowledgeBaseStore;
+    const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
+    }
+    if (AllKnowledgeBase.length === 0) {
+      return <InlineLoader text="No data found." />;
     }
     return (
       <Aux>
@@ -79,7 +88,7 @@ export default class AllKnowledgeBaseItems extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  InsightArticles.map(record => (
+                  AllKnowledgeBase.map(record => (
                     <Table.Row key={record.id}>
                       <Table.Cell><Checkbox /></Table.Cell>
                       <Table.Cell>{record.title}</Table.Cell>
@@ -109,6 +118,9 @@ export default class AllKnowledgeBaseItems extends Component {
             </Table>
           </div>
         </Card>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        }
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this item?"
