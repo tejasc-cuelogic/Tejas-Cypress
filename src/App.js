@@ -36,6 +36,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
+const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
 @inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
@@ -72,6 +73,9 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (isMobile) {
+      document.activeElement.blur();
+    }
     if (this.props.authStore.isUserLoggedIn) {
       authActions.getUserSession().then((session) => {
         if (!session.isValid()) {

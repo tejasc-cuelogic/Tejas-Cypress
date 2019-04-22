@@ -26,6 +26,13 @@
             }
         }
     }
+    &[class*="internally celled"]{
+        @media only screen and (max-width:@largestMobileScreen){
+            >.row>.column{
+                box-shadow:@verticallyDividedBorder;
+            }
+        }
+    }
     >.column{
         &.update-list, &.update-details{
             padding-top:@28px;
@@ -68,7 +75,11 @@
         box-shadow:none;
         margin:0;
         >.column:not(.row){
-            box-shadow:1px 0 0 0 @celledBorderColor, 0 1px 0 0 @celledBorderColor;
+            box-shadow:1px 0 0 0 @celledBorderColor, 0 1px 0 0 @celledBorderColor !important;
+            @media only screen and (max-width:@largestMobileScreen){
+                border:none;
+                padding:@consecutiveGridDistance !important;
+            }
         }
     }
     &.flex-column {
