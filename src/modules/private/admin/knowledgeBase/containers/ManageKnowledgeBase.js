@@ -51,18 +51,6 @@ export default class ManageKnowledgeBase extends Component {
             toggleSearch={this.toggleSearch}
             filters={filters}
           />
-          <ByKeyword
-            change={this.executeSearch}
-            w={[11]}
-            placeholder="Search by keyword or phrase"
-            requestState={requestState}
-            more="no"
-            addon={
-              <Grid.Column width={5} textAlign="right">
-                <Button color="green" onClick={this.handleAddNewMember} floated="right" > + Add new team member</Button>
-              </Grid.Column>
-            }
-          />
         }
         P2={
           <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
