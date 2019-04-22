@@ -34,6 +34,7 @@ export default class OfferingDetails extends Component {
     e.stopPropagation();
     this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
+    this.props.offeringCreationStore.resetAffiliatedIssuerForm();
     this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
     window.onpopstate = null;
   };

@@ -246,7 +246,18 @@ export class OfferingCreationStore {
       },
     };
   }
-
+  @action
+  resetAffiliatedIssuerForm = () => {
+    this.AFFILIATED_ISSUER_FRM =
+      Validator.prepareFormObject(
+        AFFILIATED_ISSUER,
+        false,
+        true,
+        false,
+        { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+      );
+    this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+  }
   @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
