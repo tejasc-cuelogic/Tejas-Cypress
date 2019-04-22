@@ -86,6 +86,7 @@ export class ReferralStore {
           resolve(data);
         }
       },
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   });
 

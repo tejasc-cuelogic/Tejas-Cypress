@@ -38,7 +38,9 @@ export default class NsPagination extends Component {
     }
   }
   goToPage = (currentPageNo) => {
-    const skip = (currentPageNo * this.state.first) - this.state.first;
+    const skip = (currentPageNo === this.state.totalPages) ?
+      this.props.meta.totalRecords - (this.props.meta.totalRecords % this.state.first) :
+      (currentPageNo * this.state.first) - this.state.first;
     this.setState({ skip, currentPageNo });
     this.props.initRequest({ first: this.state.first, skip, page: currentPageNo });
   }

@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
 
-@inject('userDetailsStore', 'uiStore')
+@inject('userDetailsStore')
 @withRouter
 @observer
 export default class Basic extends Component {
@@ -18,8 +18,6 @@ export default class Basic extends Component {
   }
   updateMode = (e, val) => {
     e.preventDefault();
-    this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true);
-    this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
   }
   updateUserData = (e) => {
@@ -34,12 +32,11 @@ export default class Basic extends Component {
       detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, setAddressFieldsForProfile,
       formChange, maskChange, isAddressSkip, toggleAddressVerification,
     } = this.props.userDetailsStore;
-    const { inProgress } = this.props.uiStore;
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
     const { displayMode } = this.state;
     return (
-      <Form loading={inProgress}>
+      <Form>
         <Header as="h4">
           Basic Profile Info
           <Button.Group floated="right">
@@ -47,9 +44,7 @@ export default class Basic extends Component {
               <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link> :
               <Aux>
                 <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
-                {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid &&
-                  <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
-                }
+                <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
               </Aux>
             }
             <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
@@ -126,7 +121,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
           />
           {
-          ['streetTwo', 'city', 'state'].map(field => (
+          ['streetTwo', 'city', 'state', 'zipCode'].map(field => (
             <FormInput
               key={field}
               name={field}
@@ -136,14 +131,6 @@ export default class Basic extends Component {
             />
             ))
           }
-          <MaskedInput
-            displayMode={displayMode}
-            name="zipCode"
-            fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields.zipCode}
-            changed={(values, field) => maskChange(values, 'USER_PROFILE_ADD_ADMIN_FRM', field)}
-            maxlength="5"
-            number
-          />
         </Form.Group>
         <Header as="h6">Legal Address</Header>
         <Form.Group widths={3}>
@@ -156,7 +143,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_BASIC')}
           />
           {
-          ['streetTwo', 'city', 'state'].map(field => (
+          ['streetTwo', 'city', 'state', 'zipCode'].map(field => (
             <FormInput
               key={field}
               name={field}
@@ -166,14 +153,6 @@ export default class Basic extends Component {
             />
             ))
           }
-          <MaskedInput
-            displayMode={displayMode}
-            name="zipCode"
-            fielddata={USER_BASIC.fields.zipCode}
-            changed={(values, field) => maskChange(values, formName, field)}
-            maxlength="5"
-            number
-          />
         </Form.Group>
         <Divider />
         <Header as="h6">MFA</Header>

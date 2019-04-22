@@ -15,8 +15,7 @@ const isMobile = document.documentElement.clientWidth < 992;
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
-    const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
-    if (docsWithBoxLink.length === 0 && !isFetchedError) {
+    if (this.props.campaignStore.docsWithBoxLink.length === 0) {
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');
       const offeringRegulationArr = (regulation && regulation.split('_')) || '';
@@ -32,10 +31,6 @@ export default class TermsOfUse extends Component {
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }
   }
-  componentWillUnmount() {
-    const { setFieldValue } = this.props.campaignStore;
-    setFieldValue('isFetchedError', false);
-  }
   module = name => DataFormatter.upperCamelCase(name);
   dataRoomHeader = (
     <Header as="h3" className="mt-20 mb-30 anchor-wrap">
@@ -47,7 +42,7 @@ export default class TermsOfUse extends Component {
     const { campaign } = this.props.campaignStore;
     const campaignCreatedBy = get(campaign, 'created.id') || null;
     const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
-    if (!dataRoomDocs.length || !sortedDocswithBoxLink.length) {
+    if (!dataRoomDocs.length) {
       return (
         <div className="campaign-content-wrapper">
         {this.dataRoomHeader}

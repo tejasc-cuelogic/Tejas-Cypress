@@ -1,6 +1,5 @@
 import TAFFY from 'taffy';
 import { uniqWith, isEqual, isArray, map } from 'lodash';
-import moment from 'moment';
 
 class ClientDb {
   database = null;
@@ -93,16 +92,10 @@ class ClientDb {
     this.initiateDb(filterData, true);
   }
 
-  filterByDate = (sDate, eDate, key = 'date', subkey = null, isUnix = false) => {
+  filterByDate = (sDate, eDate, key = 'date', subkey = null) => {
     const data = this.getDatabase();
-    const startDate = isUnix ? moment(sDate).unix() : sDate;
-    const endDate = isUnix ? moment(eDate).unix() : eDate;
-    const filterData = data.filter(e => parseInt(isUnix ? moment(subkey ? e[key][subkey] :
-      e[key]).unix() : subkey ? e[key][subkey] :
-      e[key], 10)
-    <= endDate && parseInt(isUnix ? moment(subkey ? e[key][subkey] :
-        e[key]).unix() : subkey ? e[key][subkey] :
-        e[key], 10) >= startDate);
+    const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)
+      <= eDate && parseInt((subkey ? e[key][subkey] : e[key]), 10) >= sDate);
     this.initiateDb(filterData, true);
   }
 

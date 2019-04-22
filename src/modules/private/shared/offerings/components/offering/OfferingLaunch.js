@@ -80,12 +80,12 @@ export default class OfferingLaunch extends Component {
         <Form.Group widths={3}>
           {
             ['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'disclosure', 'securityAgreement', 'personalGuarantee'].map(document => (
-              <div className="field">
+              <div className="field display-only" >
                 <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
                 {legalDocs && legalDocs[document] && legalDocs[document].fileName ?
                   <Aux>
                     <div className="display-only">
-                      <Link to={this.props.match.url} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
+                      <Link to={this.props.match.url}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
                     <p>uploaded on{' '}
                       {

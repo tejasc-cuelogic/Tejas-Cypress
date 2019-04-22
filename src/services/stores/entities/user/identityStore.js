@@ -215,7 +215,6 @@ export class IdentityStore {
     const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       legalName: {
-        salutation: fields.title.value,
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
@@ -649,6 +648,7 @@ export class IdentityStore {
     const { fields } = this.ID_PROFILE_INFO;
     const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
     const profileDetails = {
+      salutation: fields.firstName.value,
       firstName: fields.firstName.value,
       lastName: fields.lastName.value,
       mailingAddress: {
