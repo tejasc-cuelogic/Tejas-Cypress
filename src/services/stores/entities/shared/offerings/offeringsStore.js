@@ -202,7 +202,13 @@ export class OfferingsStore {
     this.requestState.page = page;
     this.requestState.skip = skip;
   }
-
+  @action
+  resetPagination = () => {
+    this.requestState.skip = 0;
+    this.requestState.page = 1;
+    this.requestState.perPage = 10;
+    this.requestState.displayTillIndex = 10;
+  }
   @computed get count() {
     return (this.db && this.db.length) || 0;
   }
