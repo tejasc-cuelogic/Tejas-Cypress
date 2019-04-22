@@ -209,6 +209,7 @@ export const userDetailsQuery = gql`
       }
       legalDetails {
         legalName {
+          salutation
           firstLegalName
           lastLegalName
         }
