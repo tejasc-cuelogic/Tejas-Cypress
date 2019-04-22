@@ -47,13 +47,13 @@ export default class NewPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick>
+      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Enter new phone number</Header>
           <p>We will send you a verification code to the phone number you provide.</p>
         </Modal.Header>
         <Modal.Content>
-          <Form onSubmit={this.handleChangePhoneNumber}>
+          <Form error onSubmit={this.handleChangePhoneNumber}>
             <MaskedInput
               name="phoneNumber"
               type="tel"

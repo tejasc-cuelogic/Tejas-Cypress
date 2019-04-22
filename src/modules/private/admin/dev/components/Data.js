@@ -3,6 +3,7 @@ import { Grid, Card, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { FormInput } from '../../../../../theme/form';
+import { FieldError } from '../../../../../theme/shared';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -11,11 +12,9 @@ export default class Data extends Component {
   componentWillMount() {
     this.props.elasticSearchStore.setFieldValue('boxMsg', '');
   }
-  onSubmit = (e) => {
-    e.preventDefault();
-    const { uiStore, elasticSearchStore } = this.props;
-    uiStore.setProgress();
-    elasticSearchStore.submitStorageDetails().finally(uiStore.setProgress(false));
+
+  onSubmit = () => {
+    this.props.elasticSearchStore.submitStorageDetails();
   }
 
   render() {
@@ -39,16 +38,17 @@ export default class Data extends Component {
                       containerwidth="12"
                       fielddata={STORAGE_DETAILS_SYNC_FRM.fields.userId}
                       changed={(e, result) => storageDetailsChange(e, result)}
+                      disabled={inProgress}
                     />
                     <Form.Field width={4}>
-                      <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid} loading={inProgress} />
+                      <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress} loading={inProgress} />
                     </Form.Field>
+                    { boxMsg &&
+                    <FieldError error={boxMsg === 'True' ? '' : boxMsg} />
+                    }
                   </Form.Group>
                 </Form>
-                {boxMsg ?
-                  <p className="highlight-text">{boxMsg === 'True' ? 'Box folder details not found, creation has been initiated, please check after some time.' : boxMsg}</p> : ''
-                }
-                <Button primary className="mt-30" content="Sync All Investors" />
+                <Button disabled primary className="mt-30" content="Sync All Investors" />
               </Card.Description>
             </Card.Content>
           </Card>

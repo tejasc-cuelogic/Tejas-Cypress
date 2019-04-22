@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
 import { Divider, Sidebar, Menu, Icon, Header } from 'semantic-ui-react';
 import { Logo, SocialLinks } from '../shared';
-import { NavItems } from './NavigationItems';
+import { NavItems, NavigationItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
@@ -12,7 +12,7 @@ import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
 const hasFooter = ['/'];
 // const getLogo = path => (path.includes('/lendio') ? 'nextseed_and_lendio.svg' : 'logo.svg');
-@inject('uiStore')
+@inject('uiStore', 'businessAppStore')
 @observer
 export default class NavBarMobile extends Component {
   setAuthRef = () => {
@@ -29,7 +29,7 @@ export default class NavBarMobile extends Component {
     let navTitle = nav ? nav.title : '';
     if (location.pathname.startsWith('/invest')) {
       navTitle = 'Investing';
-    } else if (location.pathname.startsWith('/business')) {
+    } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
       navTitle = 'Fundraising';
     } else if (location.pathname.startsWith('/resources/education-center')) {
       navTitle = 'Education Center';
@@ -47,7 +47,7 @@ export default class NavBarMobile extends Component {
           {hasHeader && (
             <Aux>
               <div
-                className="full-logo"
+                className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo`}
                 onClick={!visible ? onToggle : false}
                 onKeyPress={!visible ? onToggle : false}
                 role="button"
@@ -66,38 +66,45 @@ export default class NavBarMobile extends Component {
                 /> */}
                 <Icon className="ns-hamburger" role="button" tabIndex="0" />
               </div>
-              <div
-                className={`public-header-section ${visible ? 'active' : ''}
-                ${navStatus === 'sub' ? 'slide-up' : ''}`}
-              >
-                {/* <Icon className="ns-nextseed-icon hamburger" /> */}
-                {navTitle === 'Home' || (location.pathname.startsWith('/offerings')) ?
-                  <Logo
-                    dataSrc="LogoGreenGrey"
-                    className="mobile-header-logo"
-                  /> :
-                  <Header as="h5">{navTitle}</Header>
-                }
-                {!currentUser ? (
-                  <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
-                    {stepInRoute.title}
-                  </Link>
-                ) : (
-                  <Link
-                    to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                    className="sign-in neutral-text"
-                  >
-                    Dashboard
-                  </Link>
-                )
-                }
-                {/* {investBtn && (
-                  <Button fluid={isMobile} as={Link}
-                  to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
-                    Invest Now
-                  </Button>
-                )} */}
-              </div>
+              {location.pathname.startsWith('/business-application/') ?
+                <NavigationItems
+                  {...this.props}
+                  isMobBussinessApp
+                  isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
+                /> :
+                <div
+                  className={`public-header-section ${visible ? 'active' : ''}
+                  ${navStatus === 'sub' ? 'slide-up' : ''}`}
+                >
+                  {/* <Icon className="ns-nextseed-icon hamburger" /> */}
+                  {navTitle === 'Home' || (location.pathname.startsWith('/offerings')) ?
+                    <Logo
+                      dataSrc="LogoGreenGrey"
+                      className="mobile-header-logo"
+                    /> :
+                    <Header as="h5">{navTitle}</Header>
+                  }
+                  {!currentUser ? (
+                    <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
+                      {stepInRoute.title}
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                      className="sign-in neutral-text"
+                    >
+                      Dashboard
+                    </Link>
+                  )
+                  }
+                  {/* {investBtn && (
+                    <Button fluid={isMobile} as={Link}
+                    to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
+                      Invest Now
+                    </Button>
+                  )} */}
+                </div>
+              }
             </Aux>
           )}
           <Sidebar

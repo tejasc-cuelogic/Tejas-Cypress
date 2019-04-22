@@ -10,6 +10,7 @@ import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
 import uiStore from '../shared/uiStore';
+import Helper from '../../../../helper/utility';
 
 export class CampaignStore {
   @observable data = [];
@@ -30,6 +31,7 @@ export class CampaignStore {
   @observable showFireworkAnimation = false;
   @observable earlyBirdCheck = null;
   @observable isInvestBtnClicked = false;
+  @observable isFetchedError = false;
 
 
   @action
@@ -218,8 +220,12 @@ export class CampaignStore {
     this.docsWithBoxLink = [];
     this.dataRoomDocs.forEach(async (ele) => {
       const tempEle = { ...ele };
-      tempEle.BoxUrl = await this.getBoxLink(get(ele, 'upload.fileHandle.boxFileId'), accountType);
-      this.updateDocs(tempEle);
+      if (get(ele, 'upload.fileHandle.boxFileId')) {
+        tempEle.BoxUrl = await this.getBoxLink(get(ele, 'upload.fileHandle.boxFileId'), accountType);
+        if (!filter(this.docsWithBoxLink, e => get(e, 'upload.fileId') === get(ele, 'upload.fileId')).length) {
+          this.updateDocs(tempEle);
+        }
+      }
     });
   }
 
@@ -241,7 +247,7 @@ export class CampaignStore {
       variables: { fileId, accountType },
     }).then((res) => {
       resolve(res.data.getBoxEmbedLink);
-    });
+    }).catch(() => { this.setFieldValue('isFetchedError', true); Helper.toast('Something went wrong. Please try again in some time.', 'error'); });
   });
   @computed get navCountData() {
     const res = { updates: 0, comments: 0 };
