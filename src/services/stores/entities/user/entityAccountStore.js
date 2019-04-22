@@ -138,6 +138,7 @@ class EntityAccountStore {
           resolve();
         })
         .catch((err) => {
+          uiStore.resetcreateAccountMessage();
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
@@ -359,7 +360,7 @@ class EntityAccountStore {
     const array1 = ['Financial info', 'General', 'Trust Status'];
     const array2 = ['Personal info', 'Formation doc'];
     if (array1.includes(currentStep.name)) {
-      currentStep.validate();
+      currentStep.validate(currentStep.form);
       isValidCurrentStep = this[currentStep.form].meta.isValid;
       if (isValidCurrentStep) {
         uiStore.setProgress();
@@ -397,7 +398,7 @@ class EntityAccountStore {
         this.submitForm(currentStep, accountAttributes, removeUploadedData)
           .then(() => res()).catch(() => rej());
       } else {
-        currentStep.validate();
+        currentStep.validate(currentStep.form);
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes = this.setEntityAttributes(currentStep.name);
@@ -494,9 +495,9 @@ class EntityAccountStore {
           if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
             if (removeUploadedData) {
               if (currentStep.name === 'Personal info') {
-                validationActions.validateEntityPersonalInfo();
+                validationActions.validateEntityForm('PERSONAL_INFO_FRM');
               } else {
-                validationActions.validateEntityFormationDoc();
+                validationActions.validateEntityForm('FORM_DOCS_FRM');
               }
             } else {
               FormValidator.setIsDirty(this[currentStep.form], false);
@@ -676,13 +677,13 @@ class EntityAccountStore {
                 name: 'Personal info',
                 form: 'PERSONAL_INFO_FRM',
                 stepToBeRendered: 4,
-                validate: validationActions.validateEntityPersonalInfo,
+                validate: validationActions.validateEntityForm,
               } :
               {
                 name: 'Formation doc',
                 form: 'FORM_DOCS_FRM',
                 stepToBeRendered: 5,
-                validate: validationActions.validateEntityFormationDoc,
+                validate: validationActions.validateEntityForm,
               };
             if (isPersonalForm || this.formationDocUploadCount() >= 3) {
               this.createAccount(currentStep, false).then(() => {

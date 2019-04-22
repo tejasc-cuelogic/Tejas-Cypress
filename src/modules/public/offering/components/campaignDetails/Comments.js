@@ -23,8 +23,10 @@ class Comments extends Component {
     this.props.messageStore.resetMessageForm();
   }
   componentDidMount() {
-    const sel = 'anchor';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   postNewComment = () => {
     const { isUserLoggedIn } = this.props.authStore;
@@ -150,7 +152,7 @@ class Comments extends Component {
                   && c.approved) ||
                   (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC' && (
                     <Comment.Group minimal>
-                      <Comment key={c.id} className={`${c.createdUserInfo && c.createdUserInfo.id === issuerId ? 'issuer-comm ent' : ''}`}>
+                      <Comment key={c.id} className={`${c.createdUserInfo && c.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
                         <Comment.Content>
                           <Comment.Author>
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.info.firstName')}

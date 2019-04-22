@@ -22,6 +22,7 @@ import {
   portfolioStore,
   investmentStore,
   accreditationStore,
+  transactionStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -301,13 +302,13 @@ export class Auth {
                   // Extract JWT from token
                   commonStore.setToken(data.idToken.jwtToken);
                   userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-                  if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
-                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
-                      cookie.remove('ISSUER_REFERRAL_CODE');
-                    });
-                  }
-                  // userPartialSignupWithReferralCode
-                  userDetailsStore.getUser(userStore.currentUser.sub);
+                  userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+                    if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+                      commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
+                        cookie.remove('ISSUER_REFERRAL_CODE');
+                      });
+                    }
+                  });
                   AWS.config.region = AWS_REGION;
                   if (userStore.isCurrentUserWithRole('admin')) {
                     this.setAWSAdminAccess(data.idToken.jwtToken);
@@ -667,6 +668,7 @@ export class Auth {
     userDetailsStore.setPartialInvestmenSession();
     investmentStore.resetData();
     investmentStore.resetAccTypeChanged();
+    transactionStore.resetData();
     accreditationStore.resetUserAccreditatedStatus();
     uiStore.clearErrors();
   }

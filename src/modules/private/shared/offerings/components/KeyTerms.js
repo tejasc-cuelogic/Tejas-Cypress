@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { startsWith } from 'lodash';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, ROUND_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import ButtonGroupType2 from './ButtonGroupType2';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -157,15 +157,19 @@ export default class KeyTerms extends Component {
               changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
             />
-            {['revSharePercentage', 'interestRate'].map(field => (
-              <MaskedInput
-                displayMode={isReadonly}
-                name={field}
-                fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(values, name) => maskArrayChange(values, formName, name)}
-                percentage
-              />
-            ))}
+            <FormInput
+              displayMode={isReadonly}
+              name="revSharePercentage"
+              fielddata={KEY_TERMS_FRM.fields.revSharePercentage}
+              changed={(e, result) => formArrayChange(e, result, formName)}
+            />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="interestRate"
+              fielddata={KEY_TERMS_FRM.fields.interestRate}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              percentage
+            />
             <MaskedInput
               displayMode={isReadonly}
               name="minInvestAmt"
@@ -193,7 +197,7 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}
               changed={(e, result) => formArrayChange(e, result, formName)}
             />
-            <FormDropDown
+            {/* <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
@@ -204,17 +208,15 @@ export default class KeyTerms extends Component {
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={ROUND_TYPE_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
+            /> */}
+            <MaskedInput
+              displayMode={isReadonly}
+              name="unitPrice"
+              fielddata={KEY_TERMS_FRM.fields.unitPrice}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
             />
-            {['unitPrice', 'premoneyValuation'].map(field => (
-              <MaskedInput
-                displayMode={isReadonly}
-                name={field}
-                fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(values, name) => maskArrayChange(values, formName, name)}
-                currency
-                prefix="$"
-              />
-            ))}
           </Form.Group>
           <Form.Group widths={2}>
             {['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (

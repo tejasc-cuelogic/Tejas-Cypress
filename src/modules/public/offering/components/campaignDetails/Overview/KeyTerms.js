@@ -142,17 +142,19 @@ class KeyTerms extends Component {
                     NA
                   </Table.Cell>
                 </Table.Row> */}
-                {get(campaign, 'keyTerms.premoneyValuation') &&
+                {/* {get(campaign, 'keyTerms.premoneyValuation') &&
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : ' NA'}
+                      {get(campaign, 'keyTerms.premoneyValuation') ?
+                      Helper.CurrencyFormat(get(campaign,
+                        'keyTerms.premoneyValuation')) : ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>
-                }
+                } */}
                 {get(campaign, 'keyTerms.unitPrice') &&
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>

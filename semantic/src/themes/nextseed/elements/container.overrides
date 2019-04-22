@@ -194,6 +194,16 @@ section{
         bottom: 0;
         right: 0;
         color:  @white;
+        // @media only screen and (min-width : @monitorBreakpoint) and (max-width: @largestSmallMonitor){
+            //     padding-top: @50px;
+            // }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor){
+            padding-top: @50px;
+            padding-bottom: @50px;
+        }
+        >.ui.container {
+            justify-content: center;
+        }
     }
 }
 // business and invest pages

@@ -95,8 +95,11 @@ export default class AllAccreditationRequests extends Component {
                       <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
                         accreditation.assetsUpload[0].fileInfo &&
                         accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                          <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Uploads'}</a>
-                        : <p className="note">N/A</p>
+                        (inProgress === accreditation.assetsUpload[0]
+                          .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p> :
+                          <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
+                          )
+                          : <p className="note">N/A</p>
                         : 'Verifier'}
                         {accreditation.verifier &&
                           <Aux>

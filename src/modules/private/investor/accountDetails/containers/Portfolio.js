@@ -64,6 +64,7 @@ export default class Portfolio extends Component {
   }
   handleViewInvestment = (id) => {
     if (id) {
+      this.props.uiStore.setProgress('portfolio');
       const redirectURL = `${this.props.match.url}/investment-details/${id}`;
       this.props.history.push(redirectURL);
     }

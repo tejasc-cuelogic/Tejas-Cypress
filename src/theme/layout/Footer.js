@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style  */
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { SocialLinks } from '../shared';
@@ -28,8 +28,8 @@ class Footer extends Component {
 
   render() {
     const { path } = this.props;
-    // const OfferFooter = ['/offerings/:id/:section?'];
-    // const isCampaign = matchPath(path, { path: OfferFooter }) != null;
+    const OfferFooter = ['/offerings/:id/:section?'];
+    const isCampaign = matchPath(path, { path: OfferFooter }) != null;
     // const offeirngDisclaimer = campaign && campaign.keyTerms &&
     //   campaign.keyTerms.offeringDisclaimer ?
     //   campaign.keyTerms.offeringDisclaimer : null;
@@ -37,8 +37,7 @@ class Footer extends Component {
     //   campaign.keyTerms.shorthandBusinessName ?
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
-      // <footer className={isCampaign ? 'offering-footer' : ''}>
-      <footer>
+      <footer className={isCampaign ? 'offering-footer' : ''}>
         <Container>
           {/* {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
