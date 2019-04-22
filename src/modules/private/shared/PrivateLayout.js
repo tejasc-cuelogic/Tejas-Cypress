@@ -36,7 +36,7 @@ class PrivateLayout extends Component {
                   <span className="unread-count">3</span> */}
                 </span>
                 ) : (
-                  <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
+                  <Grid.Column only="large screen" width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
                 )
               }
             </Grid.Row>
