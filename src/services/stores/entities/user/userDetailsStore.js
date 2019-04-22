@@ -521,15 +521,12 @@ export class UserDetailsStore {
   }
 
   @action
-  setFormData = (form, ref, keepAtLeastOne, validateForm = false) => {
+  setFormData = (form, ref, keepAtLeastOne) => {
     const details = toJS({ ...this.detailsOfUser.data.user });
     if (!details) {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
-    if (validateForm) {
-      this[form] = Validator.validateForm(this[form]);
-    }
     if (form === 'USER_INVESTOR_PROFILE') {
       if (details.investorProfileData && details.investorProfileData.annualIncome) {
         ['annualIncomeCurrentYear'].map((item, index) => {
@@ -683,10 +680,6 @@ export class UserDetailsStore {
         city: infoAdd.city,
         state: infoAdd.state,
         zipCode: infoAdd.zipCode,
-      },
-      avatar: {
-        name: this.detailsOfUser.data.user.info.avatar.name,
-        url: this.detailsOfUser.data.user.info.avatar.url,
       },
     };
     const legalDetails = {

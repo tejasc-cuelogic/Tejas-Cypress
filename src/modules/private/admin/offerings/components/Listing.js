@@ -22,7 +22,6 @@ export default class Listing extends Component {
   state = { isPublic: false };
   componentWillMount() {
     this.props.offeringsStore.resetInitLoad();
-    this.props.offeringsStore.resetPagination();
   }
   handleAction = (action, offeringId, isPublished = false) => {
     if (action === 'Delete') {

@@ -782,7 +782,7 @@ export class BusinessAppReviewStore {
       money.add(
         money.floatToAmount(data.schedule[0].interest),
         money.floatToAmount(data.schedule[0].principal),
-      ) : '0.00';
+      ) : 0;
     const returnedAmount =
     money.floatToAmount(money.mul(amortizationAmount, money.floatToAmount(maturity)));
     this.OFFERS_FRM.fields.offer[index].totalCapital.value = returnedAmount;

@@ -31,7 +31,7 @@ const MessagesList = props => (
                   firstName: get(msg, 'createdUserInfo.info.firstName'),
                   lastName: get(msg, 'createdUserInfo.info.lastName'),
                   avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-                  roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
+                  roles: [get(msg, 'createdUserInfo.roles.name')],
                 }}
               />
             }
@@ -43,19 +43,19 @@ const MessagesList = props => (
                   firstName: get(u, 'createdUserInfo.info.firstName'),
                   lastName: get(u, 'createdUserInfo.info.lastName'),
                   avatarUrl: (get(u, 'createdUserInfo.info.avatar.url') || null),
-                  roles: get(u, 'createdUserInfo.roles') ? get(u, 'createdUserInfo.roles').map(r => r.scope) : [],
+                  roles: [get(u, 'createdUserInfo.roles.name')],
                 }}
               />
             )) :
-                  <UserAvatar
-                    size="mini"
-                    UserInfo={{
-                      firstName: get(msg, 'createdUserInfo.info.firstName'),
-                      lastName: get(msg, 'createdUserInfo.info.lastName'),
-                      avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-                      roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
-                    }}
-                  />
+            <UserAvatar
+              size="mini"
+              UserInfo={{
+                firstName: get(msg, 'createdUserInfo.info.firstName'),
+                lastName: get(msg, 'createdUserInfo.info.lastName'),
+                avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
+                roles: [get(msg, 'createdUserInfo.roles.name')],
+              }}
+            />
           }
           </div>
           <List.Content>

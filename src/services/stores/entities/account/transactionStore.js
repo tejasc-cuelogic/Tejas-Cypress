@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { observable, computed, action, toJS } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import money from 'money-math';
-import { get, includes, orderBy, isArray } from 'lodash';
+import { get, includes, orderBy, isArray, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
@@ -72,7 +72,7 @@ export class TransactionStore {
           this.setFirstTransaction(data);
           this.hasError = false;
         } else if (!this.data.loading) {
-          this.setData();
+          this.setData(data);
         }
       },
       onError: () => {
@@ -111,12 +111,6 @@ export class TransactionStore {
     return (this.data && this.data.error && this.data.error.message) || null;
   }
 
-  @computed get accountTransactions() {
-    const transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
-      && this.data.data.getAccountTransactions.transactions)) || [];
-    return this.sortBydate(transactions);
-  }
-
   @computed get getValidWithdrawAmt() {
     return this.validWithdrawAmt;
   }
@@ -138,13 +132,17 @@ export class TransactionStore {
     this.initiateFilters();
   }
   @action
-  setData = () => {
-    this.setDb(this.accountTransactions);
+  setData = (data) => {
+    if (get(data, 'getAccountTransactions')) {
+      this.setDb(this.sortBydate(data.getAccountTransactions.transactions));
+    } else {
+      this.resetData();
+    }
   }
 
   @action
   setDb = (data) => {
-    this.db = ClientDb.initiateDb(data, false, false, 'refId', true);
+    this.db = ClientDb.initiateDb(data);
   }
 
   sortBydate = data => orderBy(data, o => (o.date ? moment(new Date(o.date)).unix() : ''), ['desc'])
@@ -152,17 +150,17 @@ export class TransactionStore {
   @action
   initiateFilters = () => {
     this.resetPagination();
-    this.setData();
-    const { transactionType, dateRange } = this.requestState.search;
+    const transactions = this.sortBydate(get(this.data, 'data.getAccountTransactions.transactions')) || [];
+    this.setData(get(this.data, 'data') || []);
+    const { transactionType } = this.requestState.search;
     if (transactionType) {
-      ClientDb.filterData('type', transactionType);
-    }
-    if (dateRange && dateRange !== 'all') {
-      const sDate = moment(new Date()).subtract(dateRange, 'days');
-      const eDate = moment(new Date());
-      ClientDb.filterByDate(sDate, eDate, 'date', null, true);
+      this.db = ClientDb.initiateDb(filter(
+        transactions,
+        trans => transactionType.includes(trans.type),
+      ));
     }
     this.db = ClientDb.getDatabase();
+    return null;
   }
 
   @action

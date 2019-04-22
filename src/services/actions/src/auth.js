@@ -183,7 +183,7 @@ export class Auth {
               if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
                 cookie.remove('ISSUER_REFERRAL_CODE');
               }
-              if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
+              if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
                 cookie.remove('SAASQUATCH_REFERRAL_CODE');
               }
               if (window.analytics) { // && false

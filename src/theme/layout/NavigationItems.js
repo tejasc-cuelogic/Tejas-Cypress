@@ -174,28 +174,26 @@ export class NavigationItems extends Component {
   }
   render() {
     const {
-      stepInRoute, location, currentUser, loading, isMobBussinessApp,
+      stepInRoute, location, currentUser, loading,
       isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     return (
       <Menu
-        stackable={!isMobBussinessApp}
+        stackable
         borderless
         fixed="top"
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
       >
         <Container fluid>
-          {!isMobBussinessApp &&
-            <Menu.Item as={Link} to="/" header>
-              <Logo
-                alt="NextSeed.com"
-                dataSrc={getLogo(location.pathname)}
-                style={getLogoStyle(location.pathname)}
-                size={isTablet && 'small'}
-              />
-            </Menu.Item>
-          }
+          <Menu.Item as={Link} to="/" header>
+            <Logo
+              alt="NextSeed.com"
+              dataSrc={getLogo(location.pathname)}
+              style={getLogoStyle(location.pathname)}
+              size={isTablet && 'small'}
+            />
+          </Menu.Item>
           <Menu.Menu position="right">
             {!location.pathname.includes('/business-application') &&
               <NavItems
@@ -207,7 +205,7 @@ export class NavigationItems extends Component {
             }
           </Menu.Menu>
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
-            <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
+            <Menu.Item>
               <Button.Group>
                 <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
                 {isPrequalQulify &&

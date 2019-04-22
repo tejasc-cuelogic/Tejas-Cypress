@@ -102,30 +102,25 @@ export default class ApplicationsList extends Component {
                         </Header>
                         <div className="table-info-wrap">
                           <p>
-                            <span>{application.primaryPOC ?
+                            {application.primaryPOC ?
                               `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}` :
                               `${application.firstName} ${application.lastName}`
-                              }
-                            </span>
-                            <span>
-                              {application.primaryPOC && application.primaryPOC.email ?
-                                `${application.primaryPOC.email}` : `${application.email}`
-                              }
-                            </span>
-                            <span>
-                              {application.primaryPOC && application.primaryPOC.phone ?
-                                `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
-                              }
-                            </span>
+                            }
+                            <br />
+                            {application.primaryPOC && application.primaryPOC.email ?
+                              `${application.primaryPOC.email}` : `${application.email}`
+                            }
+                            <br />
+                            {application.primaryPOC && application.primaryPOC.phone ?
+                              `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
+                            }
                           </p>
                           <p>
-                            <span>
-                              Started{' '}
-                              <b>
-                                {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${application.created.date}` ? moment(` ${application.created.date}`).format('MM/DD/YYYY') : '-')}
-                              </b>
-                            </span>
-                            <span>Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b></span>
+                            Started
+                            <b>
+                              {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${application.created.date}` ? moment(` ${application.created.date}`).format('MM/DD/YYYY') : '-')}
+                            </b><br />
+                            Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
                           </p>
                         </div>
                       </Table.Cell>

@@ -3,7 +3,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach } from 'lodash';
+import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -126,10 +126,6 @@ class FormValidator {
         } else {
           currentForm.fields[key].error = err;
         }
-      });
-    } else if (!showErrors && !isMultiForm) {
-      forEach(currentForm.fields, (field, key) => {
-        currentForm.fields[key].error = undefined;
       });
     }
     return currentForm;
