@@ -429,6 +429,7 @@ export const PRIVATE_NAV = [
     subPanel: 1,
     subNavigations: [
       { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
+      { title: 'Data', to: 'data', component: 'Data' },
     ],
   },
 ];
