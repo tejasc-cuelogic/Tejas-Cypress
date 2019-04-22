@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter } from 'lodash';
+import { pickBy, get, filter, orderBy } from 'lodash';
 import money from 'money-math';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
@@ -110,7 +110,8 @@ export class CampaignStore {
   }
 
   @computed get activeList() {
-    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    return orderBy(activeListArr, o => get(o, 'keyTerms.shorthandBusinessName').toLowerCase(), ['desc']);
   }
 
   @computed get completed() {
