@@ -1286,7 +1286,7 @@ export class OfferingCreationStore {
       variables: { offeringId, bacType },
       onFetch: (res) => {
         if (res && res.getOfferingBac) {
-          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {}, false);
+          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {});
         }
       },
     });
