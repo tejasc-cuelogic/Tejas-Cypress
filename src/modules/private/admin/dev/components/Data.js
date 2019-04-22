@@ -51,7 +51,7 @@ export default class Data extends Component {
                     }
                   </Form.Group>
                 </Form>
-                <Button primary className="mt-30" content="Sync All Investors" />
+                <Button disabled primary className="mt-30" content="Sync All Investors" />
               </Card.Description>
             </Card.Content>
           </Card>
