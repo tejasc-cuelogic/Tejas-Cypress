@@ -19,7 +19,14 @@ export default class MobileDropDownNav extends React.Component {
     });
     const title = active ? active.title : this.props.navItems[0].title;
     if (title !== this.state.title) {
-      window.scrollTo(0, 0);
+      if (document.querySelector('.anchor')) {
+        document.querySelector('.anchor').scrollIntoView({
+          block: 'start',
+          behavior: 'smooth',
+        });
+      } else {
+        window.scrollTo(0, 0);
+      }
       this.setState({ title });
     }
     return title;
@@ -31,13 +38,13 @@ export default class MobileDropDownNav extends React.Component {
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
     const {
-      navItems, location, className, navStore, slideUpNot, isActive, useIsActive,
+      navItems, location, className, navStore, slideUpNot, useIsActive, id,
     } = this.props;
-    const { navStatus } = navStore;
+    const { navStatus, campaignHeaderStatus } = navStore;
     return (
       <Responsive maxWidth={location.pathname.startsWith('/offerings/') ? 991 : 991} as={Aux}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="visi-two">
-          <Menu inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${isActive ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
+          <Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
             <Dropdown item text={this.activeText()}>
               <Dropdown.Menu>
                 <NavItems sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />
