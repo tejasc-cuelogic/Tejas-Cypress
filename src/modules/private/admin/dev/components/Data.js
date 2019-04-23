@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Grid, Card, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { FormInput } from '../../../../../theme/form';
+import { get } from 'lodash';
+import Aux from 'react-aux';
+import { FormInput, MaskedInput } from '../../../../../theme/form';
 import { FieldError } from '../../../../../theme/shared';
 
 @inject('elasticSearchStore', 'uiStore')
@@ -16,11 +18,17 @@ export default class Data extends Component {
   onSubmit = () => {
     this.props.elasticSearchStore.submitStorageDetails();
   }
+  bulkFormOnSubmit = () => {
+    this.props.elasticSearchStore.submitStorageDetailsinBulk();
+  }
 
   render() {
     const { elasticSearchStore, uiStore } = this.props;
-    const { STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, boxMsg } = elasticSearchStore;
-    const { inProgress } = uiStore;
+    const {
+      STORAGE_DETAILS_SYNC_FRM, bulkStorageDetailsChange,
+      BULK_STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, boxMsg, countValues, bulkSyncLoader,
+    } = elasticSearchStore;
+    const { inProgress, errors } = uiStore;
 
     return (
       <Grid>
@@ -48,7 +56,34 @@ export default class Data extends Component {
                     }
                   </Form.Group>
                 </Form>
-                <Button disabled primary className="mt-30" content="Sync All Investors" />
+
+                <Form error onSubmit={this.bulkFormOnSubmit}>
+                  <Form.Group className="bottom-aligned">
+                    <MaskedInput
+                      key="limit"
+                      name="limit"
+                      allowNegative={false}
+                      label={BULK_STORAGE_DETAILS_SYNC_FRM.fields.limit.label}
+                      number
+                      containerwidth="12"
+                      fielddata={BULK_STORAGE_DETAILS_SYNC_FRM.fields.limit}
+                      changed={(e, result) => bulkStorageDetailsChange(e, result, 'BULK_STORAGE_DETAILS_SYNC_FRM', 'mask')}
+                      disabled={bulkSyncLoader}
+                    />
+                    <Form.Field width={4}>
+                      <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || bulkSyncLoader} loading={bulkSyncLoader} />
+                    </Form.Field>
+                    { errors &&
+                    <FieldError error={errors || ''} />
+                    }
+                  </Form.Group>
+                </Form>
+                { countValues && countValues.storageDetailsForInvestor &&
+                <Aux>
+                  <p className="hightlight-text" ><b>{get(countValues, 'storageDetailsForInvestor.count') || 0}</b> Users does not have folder structure created.</p>
+                  <p className="hightlight-text" ><b>{get(countValues, 'storageDetailsForInvestor.createdCount') || 0}</b> User folders are created in current run.</p>
+                </Aux>
+                }
               </Card.Description>
             </Card.Content>
           </Card>

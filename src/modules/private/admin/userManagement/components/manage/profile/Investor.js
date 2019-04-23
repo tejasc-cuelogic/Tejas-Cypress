@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Switch, Route } from 'react-router-dom';
 import { Grid, Divider, Button } from 'semantic-ui-react';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Basic from './investor/Basic';
 // import InvestorProfile from './investor/InvestorProfile';
@@ -27,17 +27,19 @@ export default class Investor extends Component {
     const userId = get(this.props.userDetailsStore.getDetailsOfUser, 'id');
     if (userId) {
       this.props.userDetailsStore.getUserStorageDetails(userId).then((folderId) => {
+        this.props.uiStore.removeOneFromProgressArray('getStorageDetails');
         if (folderId) {
           window.open(`${NEXTSEED_BOX_URL}folder/${folderId}`, '_blank');
         } else {
           Helper.toast('Box folder is not created for this user', 'error');
         }
-      });
+      })
+        .catch(() => this.props.uiStore.removeOneFromProgressArray('getStorageDetails'));
     }
   }
   render() {
     const { getActiveAccountList } = this.props.investmentLimitStore;
-    const { inProgress } = this.props.uiStore;
+    const { inProgressArray } = this.props.uiStore;
     const { match } = this.props;
     const navMeta = [
       { title: 'Basic', to: 'basic' },
@@ -51,7 +53,7 @@ export default class Investor extends Component {
         <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
           <SecondaryMenu secondary vertical match={match} navItems={navMeta} />
           <Divider hidden />
-          <Button color="blue" className="link-button" content={inProgress ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
+          <Button color="blue" className="link-button" content={!isEmpty(inProgressArray) ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
