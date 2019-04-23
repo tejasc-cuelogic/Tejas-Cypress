@@ -1,9 +1,2 @@
 User-agent: *
-Allow: /$
-Allow: /index.html
-Allow: /offerings*
-Allow: /business*
-Allow: /invest*
-Allow: /resources*
-Allow: /about*
 Disallow: /
