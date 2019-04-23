@@ -17,7 +17,7 @@ export class CampaignStore {
   @observable data = [];
   @observable details = {};
   @observable option = false;
-  @observable campaignSideBarShow = false;
+  @observable campaignSideBarShow = true;
   @observable selectedReadMore = {};
   @observable selectedReadLess = {};
   @observable RECORDS_TO_DISPLAY = 12;

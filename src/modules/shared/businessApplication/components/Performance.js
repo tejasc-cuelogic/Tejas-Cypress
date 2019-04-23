@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Grid, Form, Header } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Grid, Form, Header, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'commonStore')
 @observer
 export default class Performance extends Component {
   componentWillMount() {
@@ -16,7 +17,7 @@ export default class Performance extends Component {
     const {
       BUSINESS_PERF_FRM, formReadOnlyMode, currentApplicationType,
       businessPerfMaskingChange, getBusinessTypeCondtion, getOwnPropertyCondtion,
-      businessAppUploadFiles, businessAppRemoveFiles,
+      businessAppUploadFiles, businessAppRemoveFiles, sharedLink,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { fields } = BUSINESS_PERF_FRM;
@@ -37,25 +38,41 @@ export default class Performance extends Component {
             header={`${currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}`}
             subHeader={`${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
           >
-            <Grid stackable columns="equal">
-              {
-                statmentConst.map(field => (
-                  <Grid.Column key={field}>
-                    <DropZone
-                      hideFields={hideFields}
-                      disabled={formReadOnlyMode}
-                      multiple
-                      key={field}
-                      name={field}
-                      asterisk="true"
-                      fielddata={fields[field]}
-                      ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
-                      onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
+            {!formReadOnlyMode ?
+              <Grid stackable columns="equal">
+                {
+                  statmentConst.map(field => (
+                    <Grid.Column key={field}>
+                      <DropZone
+                        hideFields={hideFields}
+                        disabled={formReadOnlyMode}
+                        multiple
+                        key={field}
+                        name={field}
+                        asterisk="true"
+                        fielddata={fields[field]}
+                        ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
+                        onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
+                      />
+                    </Grid.Column>
+                  ))
+                }
+              </Grid>
+              :
+              statmentConst.map(field => (
+                fields[field].value.map((doc, key) => (
+                  <Aux>
+                    <Button
+                      key
+                      className={`link-button ${fields[field].fileId[key] === this.props.commonStore.inProgress ? '' : 'green'}`}
+                      onClick={() => sharedLink(fields[field].fileId[key])}
+                      content={fields[field].fileId[key] === this.props.commonStore.inProgress ? 'Loading...' : doc}
                     />
-                  </Grid.Column>
+                    <br />
+                  </Aux>
                 ))
-              }
-            </Grid>
+              ))
+            }
           </FormElementWrap>
           {currentApplicationType === 'business' &&
             <FormElementWrap
