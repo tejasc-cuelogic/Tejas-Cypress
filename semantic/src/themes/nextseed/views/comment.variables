@@ -8,7 +8,7 @@
 --------------------*/
 
 @maxWidth: 100%;
-@margin: 1.5em 0em;
+@margin: 0em 0em;
 
 /*-------------------
       Elements

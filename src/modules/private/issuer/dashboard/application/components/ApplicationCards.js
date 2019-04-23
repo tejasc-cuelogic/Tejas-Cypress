@@ -9,6 +9,10 @@ import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../
 import ApplicationTypeModal from './ApplicationTypeModal';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../../constants/common';
 import DateTimeFormat from '../../../../../../theme/shared/src/DateTimeFormat';
+
+const { clientWidth } = document.documentElement;
+const isTablet = clientWidth >= 768 && clientWidth < 1300;
+const isMobile = clientWidth < 768;
 @inject('businessAppStore', 'activityHistoryStore')
 @withRouter
 @observer
@@ -40,11 +44,13 @@ export default class ApplicationCards extends Component {
 
     return (
       <Aux>
-        <Header as="h3">Applications</Header>
-        <Card.Group stackable itemsPerRow={3} className="application-cards">
+        <Header as="h3" className={isMobile ? 'mb-30' : ''}>Applications</Header>
+        <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
           <Card fluid>
             <Card.Content>
               <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
+            </Card.Content>
+            <Card.Content>
               <p>Want to launch a new campaign?<br />
                 Let&#39;s get started with an application for your project.
               </p>

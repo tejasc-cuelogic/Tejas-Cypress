@@ -13,6 +13,7 @@ export class UiStore {
   };
   @observable submitButtonDisabled = false;
   @observable inProgress = false;
+  @observable inProgressArray = [];
   @observable loaderMessage = '';
   @observable errors = undefined;
   @observable success = undefined;
@@ -46,7 +47,14 @@ export class UiStore {
   setFieldvalue = (field, value) => {
     this[field] = value;
   }
-
+  @action
+  addMoreInProgressArray = (val) => {
+    this.inProgressArray.push(val);
+  }
+  @action
+  removeOneFromProgressArray = (val) => {
+    this.inProgressArray.splice(this.inProgressArray.indexOf(val), 1);
+  }
   @action
   setIsEnterPressed = (e) => {
     if (e.charCode === 13 && e.target.name !== 'investmentAmount' && e.target.name !== 'bankName') {

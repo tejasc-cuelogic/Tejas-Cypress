@@ -67,7 +67,7 @@
 ---------------*/
 
 @stackableRowSpacing: @rowSpacing;
-@stackableGutter: @gutterWidth;
+@stackableGutter: 0;
 @stackableMobileBorder: 1px solid @borderColor;
 @stackableInvertedMobileBorder: 1px solid @whiteBorderColor;
 

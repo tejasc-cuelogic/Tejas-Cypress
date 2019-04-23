@@ -93,7 +93,7 @@ export const AmountRangeFilter = props => (
           thousandSeparator
           placeholder={props.placeHolderMin || 'Min Amount'}
           currency
-          onValueChange={values => props.change(values, props.nameMin || 'min')}
+          onBlur={e => props.change(e, props.nameMin || 'min')}
         />
       </Form.Field>
       <Form.Field>
@@ -103,7 +103,7 @@ export const AmountRangeFilter = props => (
           thousandSeparator
           placeholder={props.placeHolderMax || 'Max Amount'}
           currency
-          onValueChange={values => props.change(values, props.nameMax || 'max')}
+          onBlur={e => props.change(e, props.nameMax || 'max')}
         />
       </Form.Field>
     </Form.Group>

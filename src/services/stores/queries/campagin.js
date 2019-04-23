@@ -74,6 +74,7 @@ export const campaignDetailsQuery = gql`
     id
     stage
     offeringSlug
+    issuerId
     regulation
     created {
       id
