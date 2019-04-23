@@ -15,7 +15,15 @@ export const ARTICLES = {
     value: '', label: 'description', error: undefined, rule: 'required',
   },
   userType: {
-    value: '', label: 'User Type', error: undefined, rule: 'required',
+    key: 'userType',
+    value: 'INVESTOR',
+    values: [
+      { label: 'Investor', name: 'Investor', value: 'INVESTOR' },
+      { label: 'Issuer', name: 'Issuer', value: 'ISSUER' },
+    ],
+    label: 'User Type',
+    error: undefined,
+    rule: 'optional',
   },
 };
 
@@ -44,6 +52,12 @@ export const ARTICLE_STATUS_VALUES = [
   { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN_REVIEW' },
 ];
 
+export const ITEM_STATUS_VALUES = [
+  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
+  { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
+  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN_REVIEW' },
+];
+
 export const AUTHORS = [
   { key: 'All', value: 'All', text: 'All' },
   { key: 'John Smith', value: 'John Smith', text: 'John Smith' },
@@ -57,12 +71,3 @@ export const USER_TYPES = [
   { key: 'INVESTOR', value: 'INVESTOR', label: 'INVESTOR' },
   { key: 'ISSUER', value: 'ISSUER', label: 'ISSUER' },
 ];
-
-export const USER_TYPE_LIST = {
-  key: 'userType',
-  value: 'TEXT',
-  values: [{ label: 'INVESTOR', value: 'INVESTOR' }, { label: 'ISSUER', value: 'ISSUER' }],
-  label: 'User Type',
-  error: undefined,
-  rule: 'optional',
-};

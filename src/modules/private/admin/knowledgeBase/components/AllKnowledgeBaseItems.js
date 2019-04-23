@@ -17,7 +17,8 @@ const actions = {
 @observer
 export default class AllKnowledgeBaseItems extends Component {
   componentWillMount() {
-    this.props.knowledgeBaseStore.requestAllArticles(false); // load data
+    this.props.knowledgeBaseStore.initRequest(null, false); // load data
+    this.props.knowledgeBaseStore.resetPagination();
   }
   globalActionChange = (e, { name, value }) =>
     this.props.knowledgeBaseStore.setGlobalAction(name, value);
@@ -61,7 +62,7 @@ export default class AllKnowledgeBaseItems extends Component {
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
-              <Grid.Column>Selected 15 items</Grid.Column>
+              {/* <Grid.Column>Selected 15 items</Grid.Column> */}
               <Grid.Column width={3} floated="right">
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
@@ -93,9 +94,9 @@ export default class AllKnowledgeBaseItems extends Component {
                       <Table.Cell><Checkbox /></Table.Cell>
                       <Table.Cell>{record.title}</Table.Cell>
                       <Table.Cell>{record.userType}</Table.Cell>
-                      <Table.Cell>{record.category}</Table.Cell>
+                      <Table.Cell>{record.category || 'N/A'}</Table.Cell>
                       <Table.Cell>
-                        {record.author && record.author.info && record.author.info.firstName}
+                        {(record.author && record.author.info && record.author.info.firstName) || 'N/A'}
                         {record.author && record.author.info && record.author.info.lastName}
                       </Table.Cell>
                       <Table.Cell><Label color={`${record.itemStatus === 'PUBLISHED' ? 'green' : record.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>

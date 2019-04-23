@@ -32,6 +32,7 @@ export class KnowledgeBaseStore {
     displayTillIndex: 10,
     search: {},
   };
+  @observable db;
 
   @action
   setGlobalAction = (name, globalAction) => {
@@ -123,21 +124,13 @@ export class KnowledgeBaseStore {
   }
 
   @computed get AllKnowledgeBase() {
-    return (this.data.data && (toJS(this.data.data.knowledgeBaseByFilters)
-      || toJS(this.data.data.knowledgeBaseItems))) || [];
-  }
-
-  @computed get articleLoading() {
-    return this.article.loading;
+    return (this.db && this.db.length &&
+      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get count() {
-    return (this.db && this.db.length) || 0;
-  }
-
-  @computed get totalRecords() {
-    return (this.data.data && this.data.data.knowledgeBaseItems &&
-      this.data.data.knowledgeBaseItems.length) || 0;
+    return (this.data.data && this.data.data.knowledgeBaseByFilters &&
+      this.data.data.knowledgeBaseByFilters.length) || 0;
   }
 
   @action
@@ -145,6 +138,13 @@ export class KnowledgeBaseStore {
     this.requestState.displayTillIndex = this.requestState.perPage * page;
     this.requestState.page = page;
     this.requestState.skip = skip;
+  }
+  @action
+  resetPagination = () => {
+    this.requestState.skip = 0;
+    this.requestState.page = 1;
+    this.requestState.perPage = 10;
+    this.requestState.displayTillIndex = 10;
   }
 
   @computed get knowledgeBase() {
@@ -190,7 +190,6 @@ export class KnowledgeBaseStore {
     }
   }
   @computed get categoriesDropdown() {
-    console.log(this.Categories);
     const categoriesArray = [];
     if (this.Categories.data && this.Categories.data.categories) {
       this.Categories.data.categories.map((ele) => {
@@ -202,18 +201,17 @@ export class KnowledgeBaseStore {
     return null;
   }
   @action
-  personalInfoChange = (e, result) => {
-    this.ARTICLE_FRM = Validator.onChange(
-      this.ARTICLE_FRM,
-      Validator.pullValues(e, result),
-    );
-  };
-  @action
   userTypeChange = (e, result) => {
     this.ARTICLE_FRM = Validator.onChange(
       this.ARTICLE_FRM,
       Validator.pullValues(e, result),
     );
+  }
+
+  @action
+  resetFormData = (form) => {
+    const resettedForm = Validator.resetFormData(this[form]);
+    this[form] = resettedForm;
   }
   @action
   deleteKBById = (id) => {
@@ -225,7 +223,7 @@ export class KnowledgeBaseStore {
         },
         refetchQueries: [{ query: getAllKnowledgeBase }],
       })
-      .then(() => Helper.toast('Knowledge base deleted successfully.', 'success'))
+      .then(() => Helper.toast('Knowledge base item deleted successfully.', 'success'))
       .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'));
   }
   @action
@@ -244,13 +242,15 @@ export class KnowledgeBaseStore {
 
   @action
   initRequest = (reqParams, getAllUsers = false) => {
+    this.data.loading = true;
     const {
       keyword,
       categoryId,
       itemStatus,
       authorId,
     } = this.requestState.search;
-    // const filters = toJS({ ...this.requestState.search });
+    const filters = toJS({ ...this.requestState.search });
+    delete filters.keyword;
     const params = {
       title: keyword,
       categoryId,
@@ -260,12 +260,27 @@ export class KnowledgeBaseStore {
       limit: getAllUsers ? 100 : this.requestState.perPage,
     };
 
-    this.requestState.page = params.page;
+    if (itemStatus && itemStatus === 'All') {
+      delete (params.itemStatus);
+    }
+
+    if (authorId && authorId === 'All') {
+      delete (params.authorId);
+    }
+
+    this.requestState.page = params.page || 1;
     this.data = graphql({
       client,
       query: getAllKnowledgeBaseByFilters,
       variables: params,
       fetchPolicy: 'network-only',
+      onFetch: (res) => {
+        if (res && !this.data.loading) {
+          this.requestState.page = params.page || 1;
+          this.requestState.skip = params.skip || 0;
+          this.setDb(res.knowledgeBaseByFilters);
+        }
+      },
     });
   }
 }

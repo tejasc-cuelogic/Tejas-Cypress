@@ -52,6 +52,7 @@ export default class ManageKnowledgeBase extends Component {
             filters={filters}
             setSearchParam={this.setSearchParam}
             removeFilter={this.removeFilter}
+            requestState={requestState}
           />
         }
         P2={
