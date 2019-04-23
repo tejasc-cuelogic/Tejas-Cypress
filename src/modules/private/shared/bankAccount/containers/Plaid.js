@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
-import { Header, Button, Image, Grid, Form, Input, Message } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Input, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
@@ -17,13 +17,14 @@ import NSImage from '../../../../shared/NSImage';
 export default class Plaid extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
-    // this.props.bankAccountStore.setBankLinkInterface('list');
-    // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-    // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
-    // const { manualLinkBankSubmitted } = this.props.bankAccountStore;
     this.props.bankAccountStore.setShouldValidateAmount();
     this.setBankSummary();
     this.props.uiStore.clearErrors();
+  }
+
+  componentWillUnmount() {
+    this.props.bankAccountStore.setBankListing();
+    this.props.bankAccountStore.resetFormData('formBankSearch');
   }
 
   setBankSummary = () => {
@@ -57,7 +58,7 @@ export default class Plaid extends Component {
       linkbankSummary,
       isAccountPresent,
     } = this.props.bankAccountStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const { action, refLink } = this.props;
     const headerText = 'Link bank account';
     const subHeaderText = action && action === 'change' ?
@@ -79,6 +80,14 @@ export default class Plaid extends Component {
     }
     if (bankLinkInterface === 'form') {
       return <ManualForm action={action} refLink={refLink} />;
+    }
+    if (action === 'change' && inProgress) {
+      return (
+        <Dimmer className="fullscreen" active={inProgress}>
+          <Loader active={inProgress}>
+          Please wait...
+          </Loader>
+        </Dimmer>);
     }
     return (
       <Aux>
@@ -115,7 +124,11 @@ export default class Plaid extends Component {
                         as="a"
                         className="bank-link"
                         to={this.props.match.url}
-                        onClick={() => bankAccountActions.bankSelect(bankData.institution_id)}
+                        onClick={() => bankAccountActions.bankSelect(
+                          bankData.institution_id,
+                          action,
+                        )
+                        }
                       >
                         <span>
                           {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
@@ -157,7 +170,7 @@ export default class Plaid extends Component {
         <div className="center-align mt-30">
           {
             (isAccountPresent && action !== 'change') &&
-            <Button color="green" className="link-button" content="I dont want to change bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
+            <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
           }
         </div>
       </Aux>

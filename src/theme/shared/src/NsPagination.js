@@ -38,9 +38,7 @@ export default class NsPagination extends Component {
     }
   }
   goToPage = (currentPageNo) => {
-    const skip = (currentPageNo === this.state.totalPages) ?
-      this.props.meta.totalRecords - (this.props.meta.totalRecords % this.state.first) :
-      (currentPageNo * this.state.first) - this.state.first;
+    const skip = (currentPageNo * this.state.first) - this.state.first;
     this.setState({ skip, currentPageNo });
     this.props.initRequest({ first: this.state.first, skip, page: currentPageNo });
   }
@@ -83,14 +81,14 @@ export default class NsPagination extends Component {
           <Menu.Item
             icon
             onClick={() => this.goToPage(currentPageNo + 1)}
-            className={currentPageNo === totalPages && 'disabled'}
+            className={currentPageNo === totalPages ? 'disabled' : ''}
           >
             <Icon className="ns-chevron-right" color="green" />
           </Menu.Item>
           <Menu.Item
             icon
             onClick={() => this.goToPage(totalPages)}
-            className={currentPageNo === totalPages && 'disabled'}
+            className={currentPageNo === totalPages ? 'disabled' : ''}
           >
             <Icon className="ns-arrow-double-right" color="green" />
           </Menu.Item>

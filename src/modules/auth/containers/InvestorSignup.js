@@ -7,6 +7,8 @@ import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
@@ -28,14 +30,16 @@ class InvestorSignup extends Component {
       this.props.history.push('/auth/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
+      this.props.uiStore.setProgress();
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
+        this.props.uiStore.setProgress(false);
         this.props.authStore.setCredentials({
           email: email.value,
           password: password.value,
           givenName: givenName.value,
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-          this.props.identityStore.requestOtpWrapper().then(() => {
+          this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
             this.props.history.push('/auth/confirm-email');
           });
         }
@@ -47,6 +51,7 @@ class InvestorSignup extends Component {
       SIGNUP_FRM, signupChange, pwdInputType, currentScore,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore;
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
@@ -104,7 +109,8 @@ class InvestorSignup extends Component {
               minScore={4}
               iconDisplay
               tooShortWord="Weak"
-              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
               inputProps={{
                 name: 'password', autoComplete: 'off', placeholder: 'Password',
               }}
@@ -129,7 +135,7 @@ class InvestorSignup extends Component {
               </Message>
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled} />
             </div>
           </Form>
         </Modal.Content>

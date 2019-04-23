@@ -156,7 +156,7 @@ export default class Leader extends Component {
               displayMode={isReadonly}
               name="number"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].number}
-              format="###-###-####"
+              format="(###) ###-####"
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               phoneNumber
             />

@@ -3,7 +3,7 @@ import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -59,11 +59,11 @@ class KeyTermsDetails extends Component {
             <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
           </Grid.Column>
         </Grid>
-        <Divider />
+        {!isMobile ? <Divider /> : null}
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
-              <Aux>
+              <Aux key={type.key}>
                 {get(KeyTerms, type.key) ?
                   <Table.Row verticalAlign="top">
                     <Table.Cell width={5} className="neutral-text"><b>{type.label}{' '}</b>
@@ -116,7 +116,8 @@ class KeyTermsDetails extends Component {
                 <Table.Cell width={5} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
                 <Table.Cell>
                   <p>
-                    {`${get(KeyTerms, 'revSharePercentage')}%` || ''}
+                    {get(KeyTerms, 'revSharePercentage') < 10 ? 'Up to ' : ''}
+                    {`${get(KeyTerms, 'revSharePercentage')}${get(KeyTerms, 'revSharePercentage').includes('%') ? '' : '%'}` || ''}
                   </p>
                   <HtmlEditor
                     readOnly
@@ -186,7 +187,7 @@ class KeyTermsDetails extends Component {
                 <Table.Cell>
                   {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
                     <p>
-                      <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
+                      {KeyTerms.securitiesOwnershipPercentage}% {' '}
                       Investors will not receive any equity interests in the Issuer or
                       any voting or management rights with respect to the Issuer as a result of
                       an investment in Securities.
@@ -211,7 +212,7 @@ class KeyTermsDetails extends Component {
                 </Table.Cell>
               </Table.Row>
             }
-            {get(KeyTerms, 'roundType') &&
+            {/* {get(KeyTerms, 'roundType') &&
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Round Type{' '}</b>
                 </Table.Cell>
@@ -221,7 +222,7 @@ class KeyTermsDetails extends Component {
                   </p>
                 </Table.Cell>
               </Table.Row>
-            }
+            } */}
             {get(KeyTerms, 'unitPrice') &&
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
@@ -268,7 +269,7 @@ class KeyTermsDetails extends Component {
               </Table.Row>}
           </Table.Body>
         </Table>
-        <Divider section hidden />
+        <Divider section={!isMobile} hidden />
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
           <Aux>
             <Header as="h3" className="mb-30 anchor-wrap">
@@ -294,7 +295,7 @@ class KeyTermsDetails extends Component {
                   <Statistic.Value className={`${isMobile && 'center-align'} highlight-text mb-10`}>
                     {Helper.CurrencyFormat(principalAmt)}
                   </Statistic.Value>
-                  <div className="slider-container">
+                  <div className={`${isMobile && 'mb-20'} slider-container`}>
                     <p style={{ width: `${this.state.offeringAmt}%` }} />
                     <input
                       type="range"
@@ -339,18 +340,16 @@ class KeyTermsDetails extends Component {
           : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
             <Aux>
               <Header as="h3" className="mb-30 anchor-wrap">
-                Revenue Sharing Summary*
+                Revenue Sharing Summary
                 <span className="anchor" id="revenue-sharing-summary" />
               </Header>
-              <p>
-                {revenueShareSummary ?
-                  <p className="detail-section">
-                    <HtmlEditor readOnly content={revenueShareSummary} />
-                  </p>
-                  :
-                  <InlineLoader text="No data available" className="bg-offwhite" />
-                }
-              </p>
+              {revenueShareSummary ?
+                <p className="detail-section">
+                  <HtmlEditor readOnly content={revenueShareSummary} />
+                </p>
+                :
+                <InlineLoader text="No data available" className="bg-offwhite" />
+              }
             </Aux>
             :
             null

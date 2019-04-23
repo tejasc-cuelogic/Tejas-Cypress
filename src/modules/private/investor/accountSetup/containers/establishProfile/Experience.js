@@ -29,10 +29,11 @@ export default class Experience extends Component {
           stepToBeRendered: 6,
         };
         updateInvestorProfileData(currentStep).then(() => {
-          const { signupStatus } = this.props.userDetailsStore;
+          const { signupStatus, userStatus } = this.props.userDetailsStore;
           if (signupStatus.isMigratedFullAccount ||
-            (signupStatus.accStatus && signupStatus.accStatus.includes('FULL'))) {
+            (userStatus && userStatus.includes('FULL'))) {
             this.props.history.push('/app/summary');
+            setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
             this.props.history.push('/app/summary/account-creation');
           }
@@ -48,6 +49,7 @@ export default class Experience extends Component {
       INVESTMENT_EXP_FORM,
       isInvestmentExperienceValid,
       experiencesChange,
+      isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
     const { errorMessage } = this.state;
     return (
@@ -92,7 +94,7 @@ export default class Experience extends Component {
                 profile in order to proceed.
               </p>
             }
-            <Button primary className="relaxed" content="Continue to Account" disabled={!(INVESTMENT_EXP_FORM.meta.isValid && isInvestmentExperienceValid)} />
+            <Button primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} />
             {!isInvestmentExperienceValid &&
               <p className="negative-text mt-20">
                 Otherwise, please reference our <Link to="/resources/education-center">Education Center</Link> to

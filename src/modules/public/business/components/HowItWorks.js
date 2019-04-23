@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 // Embed
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
+// import { get } from 'lodash';
 import { Header, Grid, Button, Container, List, Statistic, Divider, Responsive, Item, Icon } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import VideoModal from './VideoModal';
 import NSImage from '../../../shared/NSImage';
-import Helper from '../../../../helper/utility';
+// import Helper from '../../../../helper/utility';
 
 @inject('offeringsStore')
+@withRouter
 @observer
 class HowItWorks extends Component {
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
   }
+  handleFundingOptBtn = () => {
+    this.props.history.push('/business/funding-options/term-notes');
+    window.scrollTo(0, 0);
+  }
   render() {
-    const amount = this.props.offeringsStore.totalAmountRaised;
+    // const amount = this.props.offeringsStore.totalAmountRaised;
     const nsvideos = {
       embed: '247714163',
     };
@@ -32,7 +37,7 @@ class HowItWorks extends Component {
         {
           title: 'Breweries & Distilleries',
           image: 'business/img-2.png',
-          description: 'Wichita Falls Brewery raised $125,000 to build out a new taproom',
+          description: 'Buffbrew Taproom raised $1,000,000 to build out a new taproom.',
         },
         {
           title: 'Restaurants & Bars',
@@ -40,26 +45,26 @@ class HowItWorks extends Component {
           description: 'PORTERS raised $500,000 to open a new steakhouse.',
         },
         {
-          title: 'Fitness Studios',
+          title: 'Health & Wellness',
           image: 'business/img-1.png',
           description: 'Alkalign Studios raised $100,000 to expand franchising opportunities.',
         },
       ],
       [
         {
-          title: 'Health & Wellness',
-          image: 'business/img-5.png',
-          description: 'Healing Waters raised $110,000 to open a new floatation spa.',
+          title: 'Office',
+          image: 'business/img-4.png',
+          description: 'The Annex HTX raised $230,500 to build a co-working and retail space.',
         },
         {
-          title: 'Hospitality',
+          title: 'Lodging',
           image: 'business/img-3.png',
           description: 'The Native raised $396,500 to open a boutique hostel and bar.',
         },
         {
-          title: 'Office',
-          image: 'business/img-4.png',
-          description: 'The Annex HTX raised $230,500 to build a co-working and retail space.',
+          title: 'More',
+          image: 'business/more-img.png',
+          description: 'New industries are on the way.',
         },
       ],
     ];
@@ -97,8 +102,8 @@ class HowItWorks extends Component {
               <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
               <div className={`${isMobile ? 'left-align' : 'center-align'}`}>
                 <Button.Group size={isMobile && 'tiny'}>
-                  <Button as={Link} to="business-application/business" secondary content="Business Application" />
-                  <Button as={Link} to="business-application/commercial-real-estate" secondary content="CRE Application" />
+                  <Button as={Link} to="/business-application/business" secondary content="Business Application" />
+                  <Button as={Link} to="/business-application/commercial-real-estate" secondary content="CRE Application" />
                 </Button.Group>
               </div>
               <Divider section />
@@ -205,7 +210,7 @@ class HowItWorks extends Component {
                       <NSImage path={t.image} />
                     </div>
                     <Item.Content verticalAlign="middle">
-                      <Item.Header as="h2">{t.title}</Item.Header>
+                      <Item.Header as={isMobile ? 'h3' : 'h2'}>{t.title}</Item.Header>
                       <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                     “{t.description}”
                       </Item.Description>
@@ -264,11 +269,18 @@ class HowItWorks extends Component {
                   </Grid.Row>
                 </Grid>
                 <Divider hidden />
-                <p>
+                {/* <p>
                   The above figures include the total amount raised in offerings completed through
-                  NextSeed US, LLC ( {Helper.MoneyMathDisplayCurrency((get(amount, 'amountRaisedUS') || 0), false)}) and
+                  NextSeed US, LLC ( {Helper.MoneyMathDisplayCurrency((get(amount,
+                  'amountRaisedUS') || 0), false)}) and
                   NextSeed TX, LLC ($1,303,500). Historical figures only. Past performance of one
                   business is not a guarantee of future results of another business.
+                </p> */}
+                <p>
+                  The above figures include the total amount raised in offerings completed through
+                  today by NextSeed Securities, LLC, NextSeed US LLC and NextSeed TX LLC. Historical
+                  figures only. Past performance of one business is not a guarantee of future
+                  results of another business.
                 </p>
               </Grid.Column>
               <Grid.Column>
@@ -296,7 +308,7 @@ class HowItWorks extends Component {
             <Divider />
             <List className="learn-more-list">
               <List.Item>
-                <List.Content as={Link} to="/business/funding-options/term-notes" className="text-uppercase" floated="right">
+                <List.Content onClick={this.handleFundingOptBtn} style={{ cursor: 'pointer' }} className="text-uppercase" floated="right">
                   <b>Funding options</b>
                   <List.Icon className="ns-arrow-right" color="green" />
                 </List.Content>

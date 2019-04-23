@@ -22,11 +22,14 @@ export default class Summary extends Component {
     if (!alreadySet) {
       getLegalDocsFileIds();
     }
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
+
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
   }
   handleCreateAccount = () => {
+    this.props.uiStore.setcreateAccountMessage();
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
@@ -64,8 +67,9 @@ export default class Summary extends Component {
     const { errors } = this.props.uiStore;
     const {
       plaidAccDetails, formLinkBankManually,
-      depositMoneyNow, formEntityAddFunds,
+      accountAttributes,
       isAccountPresent,
+      routingNum,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -120,17 +124,30 @@ export default class Summary extends Component {
                   <Table.Cell>Title With the Entity</Table.Cell>
                   <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
                 </Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
+                  <Table.Row>
+                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
+                }
                 <Table.Row>
                   <Table.Cell>Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
+                { !isEmpty(routingNum) &&
+                  <Table.Row>
+                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell>
+                      { routingNum || '' }
+                    </Table.Cell>
+                  </Table.Row>
+                }
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {!depositMoneyNow ?
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
                     Helper.CurrencyFormat(0) :
-                    formEntityAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formEntityAddFunds.fields.value.value)}` :
-                    Helper.CurrencyFormat(0)}
+                    Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -143,7 +160,7 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm && !isAccountPresent} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
         </div>
         <p className="center-align grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}

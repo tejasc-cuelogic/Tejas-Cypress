@@ -8,6 +8,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       stage
       media {
         tombstoneImage {
+          id
           url
           isPublic
           fileName
@@ -17,6 +18,9 @@ query getOfferingList($filters: OfferingFilterInputType){
       offering {
         about {
           theCompany
+        }
+        overview {
+          tombstoneDescription
         }
       }
       closureSummary {
@@ -69,14 +73,9 @@ export const campaignDetailsQuery = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     stage
-    applicationId
-    issuerId
     offeringSlug
-    referralCode
+    issuerId
     regulation
-    selectedOffer {
-      structure
-    }
     created {
       id
     }
@@ -104,35 +103,20 @@ export const campaignDetailsQuery = gql`
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
-      industry
+      minOfferingAmount506C
+      maxOfferingAmount506C
       minInvestAmt
-      appendixATitle
       revShareSummary
       investmentMultipleSummary
-      locationRiskFactors
-      isTX
       state
       city
     }
     bonusRewards{
       id
-      offeringId
       title
       description
-      rewardStatus
-      expirationDate
       earlyBirdQuantity
       tiers
-      created {
-        id
-        by
-        date
-      }
-      updated {
-        id
-        by
-        date
-      }
     }
     rewardsTiers
     earlyBird {
@@ -154,18 +138,6 @@ export const campaignDetailsQuery = gql`
             url
           }
         }
-        googleMeta
-        issuerWebsite
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
       }
       about {
         theCompany
@@ -175,34 +147,9 @@ export const campaignDetailsQuery = gql`
         }
         businessModel
         locationAnalysis
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
       }
       launch {
-        targetDate
-        terminationDate
-        expectedOpsDate
-        issuerApprovedDate
         edgarLink
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
-        gsFees
       }
       misc {
         additionalBonusRewardsContent
@@ -216,21 +163,7 @@ export const campaignDetailsQuery = gql`
       uploads {
         headshot {
           id
-          fileName
           url
-          isPublic
-        }
-        heroImage {
-          id
-          fileName
-          url
-          isPublic
-        }
-        license {
-          id
-          fileName
-          url
-          isPublic
         }
       }
       bio
@@ -240,51 +173,25 @@ export const campaignDetailsQuery = gql`
         facebook
         linkedin
       }
-      approved {
-        id
-        by
-        date
-      }
     }
     media {
       heroImage {
+        id
         url
         isPublic
       }
       heroBackground {
-        url
-        isPublic
-      }
-      useOfProceeds{
+        id
         url
         isPublic
       }
       heroVideo {
+        id
         url
         fileName
         isPublic
       }
-      tombstoneImage {
-        id
-        url
-        isPublic
-      }
-      locationHeroImage {
-        id
-        url
-        isPublic
-      }
-      location  {
-        id
-        url
-        isPublic
-      }
       gallery  {
-        id
-        url
-        isPublic
-      }
-      logo  {
         id
         url
         isPublic
@@ -294,22 +201,11 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
-      businessModelImage {
-        id
-        url
-        isPublic
-      }
     }
     legal {
       general {
-        websiteUrl
         useOfProceeds {
           offeringExpenseAmountDescription
-        }
-        approved {
-          id
-          by
-          date
         }
       }
       dataroom {
@@ -337,26 +233,15 @@ export const campaignDetailsQuery = gql`
     }
     comments {
       id
-      offeringId
-      thread
       scope
       comment
       approved {
-        id
-        by
         date
       }
       updated {
-        by
-        date
-      }
-      deleted {
-        id
-        by
         date
       }
       created {
-        by
         date
       }
       createdUserInfo {
@@ -364,10 +249,6 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
-          avatar {
-            url
-            name
-          }
         }
         roles {
           name
@@ -375,25 +256,15 @@ export const campaignDetailsQuery = gql`
       }
       threadComment {
         id
-        offeringId
-        thread
         scope
         comment
         approved {
-          id
-          by
           date
         }
         updated {
-          by
           date
         }
         created {
-          by
-          date
-        }
-        deleted {
-          by
           date
         }
         createdUserInfo {
@@ -401,10 +272,6 @@ export const campaignDetailsQuery = gql`
           info {
             firstName
             lastName
-            avatar {
-              url
-              name
-            }
           }
           roles {
             name
@@ -412,40 +279,12 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
-    updated {
-      id
-      by
-      date
-    }
-    deleted {
-      id
-      by
-      date
-    }
     updates {
       id
-      offeringId
       title
       content
-      status
       scope
-      tiers
-      isEarlyBirdOnly
-      notificationSent {
-        by
-        date
-        to
-      }
-      approved {
-        by
-        date
-      }
       updated {
-        by
-        date
-      }
-      deleted {
-        by
         date
       }
       actingUserInfo {
@@ -453,10 +292,6 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
-          avatar {
-            url
-            name
-          }
         }
       }
     }
@@ -501,6 +336,8 @@ query getOfferingById($id: ID) {
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       industry
       minInvestAmt
       revShareSummary

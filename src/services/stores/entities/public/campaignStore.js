@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter } from 'lodash';
+import { pickBy, get, filter, orderBy } from 'lodash';
 import money from 'money-math';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
@@ -9,6 +9,8 @@ import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsFor
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
+import uiStore from '../shared/uiStore';
+import Helper from '../../../../helper/utility';
 
 export class CampaignStore {
   @observable data = [];
@@ -29,6 +31,7 @@ export class CampaignStore {
   @observable showFireworkAnimation = false;
   @observable earlyBirdCheck = null;
   @observable isInvestBtnClicked = false;
+  @observable isFetchedError = false;
 
 
   @action
@@ -54,6 +57,9 @@ export class CampaignStore {
               const offering = data.getOfferingList.length && data.getOfferingList[0];
               resolve(offering);
             }
+          },
+          onError: (err) => {
+            console.log(err);
           },
         });
     });
@@ -88,6 +94,11 @@ export class CampaignStore {
     return this.data;
   }
 
+  @computed get getEarlyBirdCheck() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.data &&
+    this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
+  }
+
   @computed get OfferingList() {
     return (this.allData.data && this.allData.data.getOfferingList &&
       toJS(this.allData.data.getOfferingList)) || [];
@@ -99,9 +110,14 @@ export class CampaignStore {
   }
 
   @computed get activeList() {
+<<<<<<< HEAD
     // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     // return orderBy(activeListArr, o => get(o, 'keyTerms.shorthandBusinessName').toLowerCase(), ['desc']);
     return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+=======
+    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    return orderBy(activeListArr, o => get(o, 'keyTerms.shorthandBusinessName').toLowerCase(), ['desc']);
+>>>>>>> 68ff70395440e735ffec90544eccfd3b5dbc8b6f
   }
 
   @computed get completed() {
@@ -140,15 +156,25 @@ export class CampaignStore {
   }
 
   @action
-  isEarlyBirdExist() {
+  isEarlyBirdExist(accountType) {
     const offeringId = this.getOfferingId;
-    const { userDetails } = userDetailsStore;
-    const accountId = get(userDetails, 'id') || null;
+    uiStore.setProgress();
+    userDetailsStore.setFieldValue('currentActiveAccount', accountType);
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountId = get(account, 'details.accountId') || null;
     this.earlyBirdCheck =
     graphql({
       client,
       query: checkIfEarlyBirdExist,
       variables: { offeringId, accountId },
+      onFetch: (data) => {
+        if (data && !this.earlyBirdCheck.loading) {
+          uiStore.setProgress(false);
+        }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
+      },
     });
   }
 
@@ -201,8 +227,12 @@ export class CampaignStore {
     this.docsWithBoxLink = [];
     this.dataRoomDocs.forEach(async (ele) => {
       const tempEle = { ...ele };
-      tempEle.BoxUrl = await this.getBoxLink(get(ele, 'upload.fileHandle.boxFileId'), accountType);
-      this.updateDocs(tempEle);
+      if (get(ele, 'upload.fileHandle.boxFileId')) {
+        tempEle.BoxUrl = await this.getBoxLink(get(ele, 'upload.fileHandle.boxFileId'), accountType);
+        if (!filter(this.docsWithBoxLink, e => get(e, 'upload.fileId') === get(ele, 'upload.fileId')).length) {
+          this.updateDocs(tempEle);
+        }
+      }
     });
   }
 
@@ -224,7 +254,7 @@ export class CampaignStore {
       variables: { fileId, accountType },
     }).then((res) => {
       resolve(res.data.getBoxEmbedLink);
-    });
+    }).catch(() => { this.setFieldValue('isFetchedError', true); Helper.toast('Something went wrong. Please try again in some time.', 'error'); });
   });
   @computed get navCountData() {
     const res = { updates: 0, comments: 0 };
@@ -263,7 +293,7 @@ export class CampaignStore {
       loanTerm: parseFloat(get(this.campaign, 'keyTerms.maturity')) || 0,
     };
     const { totalPayment, schedule } = Calculator.calculate(data);
-    this.totalPayment = money.floatToAmount(totalPayment, 2);
+    this.totalPayment = money.floatToAmount(totalPayment || '', 2);
     const payChart = [];
     let totalPaid = 0;
     schedule.forEach((item, index) => {

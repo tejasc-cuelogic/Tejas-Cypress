@@ -18,11 +18,15 @@ const result = {
 @inject('statementStore', 'educationStore', 'transactionStore', 'userDetailsStore')
 @observer
 export default class MonthlyStatements extends Component {
+  state = {
+    pdfLoading: false,
+  }
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
   }
 
@@ -30,17 +34,20 @@ export default class MonthlyStatements extends Component {
 
   downloadhandler = (e, fileId) => {
     e.preventDefault();
+    this.setState({ pdfLoading: true });
     this.props.statementStore.generateMonthlyStatementsPdf(fileId).then((pdfUrl) => {
+      this.setState({ pdfLoading: false });
       Helper.toast('File downloaded successfully!', 'success');
       window.open(pdfUrl);
     }).catch(() => {
+      this.setState({ pdfLoading: false });
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
   }
 
   render() {
     const { loading, error } = this.props.transactionStore;
-    if (loading) {
+    if (loading || this.state.pdfLoading) {
       return <InlineLoader />;
     }
     const {
@@ -61,7 +68,7 @@ export default class MonthlyStatements extends Component {
                   result={result}
                 />
               </Card>
-              {totalRecords > 0 &&
+              {totalRecords > 0 && totalRecords > requestState.perPage &&
               <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>

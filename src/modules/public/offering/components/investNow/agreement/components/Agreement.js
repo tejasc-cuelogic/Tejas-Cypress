@@ -9,7 +9,7 @@ import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
 // import ChangeInvestmentLimit from '../../ChangeInvestmentLimit';
 
-@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'agreementsStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'agreementsStore', 'investmentLimitStore')
 @withRouter
 @observer
 export default class Agreement extends React.Component {
@@ -40,6 +40,9 @@ export default class Agreement extends React.Component {
     }
     setFieldValue('investmentFlowErrorMessage', null);
   }
+  componentWillUnmount() {
+    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+  }
   handleCloseModal = (e) => {
     if (!this.state.showDocuSign && !this.state.showAgreementPdf) {
       this.props.investmentStore.resetData();
@@ -58,6 +61,8 @@ export default class Agreement extends React.Component {
   }
   submit = () => {
     if (this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
+      this.setState({ showError: false });
+      this.props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
       this.props.investmentStore.finishInvestment().then((investmentStatus) => {
         if (investmentStatus) {
           console.log(this.props);
@@ -107,19 +112,26 @@ export default class Agreement extends React.Component {
       agreementDetails,
       investmentFlowErrorMessage,
     } = this.props.investmentStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
     const { uiStore, match } = this.props;
     const { inProgress } = uiStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
+    const { currentInvestmentStatus } = this.props.accreditationStore;
+    const investmentRegulation = get(getInvestorAccountById, 'regulation');
+    const regulationCheck = this.props.changeInvestment && investmentRegulation ?
+      investmentRegulation : currentInvestmentStatus;
+    const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : 'Regulation Crowdfunding';
     return (
       <Aux>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
           <Modal.Content className="center-align">
             <Header as="h3">Confirm cancellation</Header>
             {this.props.changeInvestment ?
-              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(investmentAmount)} in this offering will remain in place.`}</p>
+              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
               :
               <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
             }
@@ -161,13 +173,14 @@ export default class Agreement extends React.Component {
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
                 Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in
+                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in
                 {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                   getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
               </Header>
               <Form
-                error={this.state.showError &&
-                  !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid}
+                error={(this.state.showError &&
+                  !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) ||
+                   investmentFlowErrorMessage}
               >
                 <Grid stackable>
                   <Grid.Row>
@@ -211,24 +224,43 @@ export default class Agreement extends React.Component {
                               </Aux>
                           )}
                           customUpdateLimitLabel={(
+                            regulationCheck && regulationCheck === 'D506C' ?
+                              <Aux>
+                                I hereby certify that I have a reasonable expectation that I will
+                                 continue to meet or exceed the requirements to be considered an
+                                  accredited investor.
+                              </Aux>
+                              :
+                              <Aux>
+                                I confirm that I am complying with my <b>annual investment limit</b> {' '}
+                                {regulationCheck && regulationCheck !== 'BD_506C' && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
+                              </Aux>
+                          )}
+                          customRegulationLabel={(
                             <Aux>
-                              I confirm that I am complying with my <b>annual investment limit</b> (<Link to={`${match.url}/change-investment-limit`}>update</Link>)
+                              I understand that investing in securities sold in reliance on {' '}
+                              {regualtionTypeStatement} involves risks and I should not invest
+                                any funds unless I can afford to lose the entire amount.
                             </Aux>
                           )}
+                          tooltipHardDisable={(regulationCheck && regulationCheck === 'D506C')}
+                          currentInvestmentStatus={regulationCheck}
                         />
                       </Grid.Column>
                     ))}
                   </Grid.Row>
                 </Grid>
-                {investmentFlowErrorMessage &&
-                  <Message error className="mt-30">
+                <div className="center-align mt-30">
+                  <Button.Group widths="2" className="inline">
+                    <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
+                    <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
+                  </Button.Group>
+                </div>
+                {!this.state.showError && investmentFlowErrorMessage &&
+                  <Message error className="mt-30 bottom-error">
                     {investmentFlowErrorMessage}
                   </Message>
                 }
-                <div className="center-align mt-30">
-                  <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
-                  <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
-                </div>
                 {this.state.showError &&
                   !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid &&
                   <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>

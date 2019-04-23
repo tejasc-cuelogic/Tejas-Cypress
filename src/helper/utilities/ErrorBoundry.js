@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 // TODO: Improve the component
 
-const catchErrorBoundry = ['production', 'demo'].includes(REACT_APP_DEPLOY_ENV);
+const catchErrorBoundry = !['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
 
 @inject('authStore')
 @withRouter
@@ -20,19 +20,26 @@ class ErrorBoundary extends React.Component {
     // Display fallback UI
     this.setState({ hasError: true });
     // You can also log the error to an error reporting service
-    console.log('Error payload:: ', error);
-    console.log('Error info:: ', info);
+    const redirectToHome = () => {
+      window.location = window.location.origin;
+    };
+
     if (catchErrorBoundry) {
       try {
         const params = {
-          subject: 'Application error occured',
-          body: JSON.stringify(error),
+          emailContent: error.stack.toString(),
         };
-        this.props.authStore.notifyApplicationError(params);
+        this.props.authStore.notifyApplicationError(params).then(() => {
+          redirectToHome();
+        }).catch(() => {
+          redirectToHome();
+        });
       } catch (e) {
-        console.log(e);
+        redirectToHome();
       }
-      window.location = window.location.origin;
+    } else {
+      console.log('Error payload:: ', error, typeof error);
+      console.log('Error info:: ', info);
     }
   }
 

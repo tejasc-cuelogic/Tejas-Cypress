@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import moment from 'moment';
-import { includes, orderBy, get } from 'lodash';
+import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
+// import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
@@ -16,6 +17,8 @@ import InvestNow from '../../../../public/offering/components/investNow/InvestNo
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
+import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
+import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
 @observer
@@ -27,9 +30,13 @@ export default class Portfolio extends Component {
   };
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    const { setFieldValue } = this.props.userDetailsStore;
+    setFieldValue('currentActiveAccount', accountType);
+    this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     this.props.portfolioStore.calculateInvestmentType();
     window.addEventListener('message', this.docuSignListener);
+    this.props.portfolioStore.setPortfolioError(false);
   }
   docuSignListener = (e) => {
     if (e.data === 'viewing_complete') {
@@ -55,69 +62,22 @@ export default class Portfolio extends Component {
       [...inActiveItems, of];
     this.setState({ inActiveItems: updatedList });
   }
+  handleViewInvestment = (id) => {
+    if (id) {
+      this.props.uiStore.setProgress('portfolio');
+      const redirectURL = `${this.props.match.url}/investment-details/${id}`;
+      this.props.history.push(redirectURL);
+    }
+  }
   handleInvestNowOnChangeClick = (e, id) => {
     const redirectURL = `${this.props.match.url}/${id}/invest-now`;
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(redirectURL);
   }
-  render() {
-    const { match, portfolioStore, userDetailsStore } = this.props;
-    const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
-    if (portfolioStore.loading) {
-      return <InlineLoader />;
-    }
-    const { getInvestorAccounts, getPieChartData } = portfolioStore;
-    const summaryDetails = {
-      isAccountFrozen: isUserAccountFrozen,
-      accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
-      className: 'investment-summary',
-      summary: [
-        {
-          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits but excludes pending investments.',
-        },
-        {
-          title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
-        },
-        {
-          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
-        },
-        {
-          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the <Link to="/resources/education-center">Education Center</Link> for a full explanation of how TNAR is calculated.</span>,
-        },
-      ],
-    };
-    const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
-    const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
-    const completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
+  routesList = () => {
+    const { match } = this.props;
     return (
       <Aux>
-        <SummaryHeader details={summaryDetails} />
-        {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
-          <PortfolioAllocations pieChart={getPieChartData} /> : ''
-        }
-        <Header as="h4">My Investments</Header>
-        {pendingSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
-        }
-        {activeSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
-        }
-        {completedSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
-        }
-        {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
-        !getInvestorAccounts.investments.active.length &&
-        !getInvestorAccounts.investments.completed.length ?
-          <Aux>
-            <p>No investments or reservations pending.</p>
-            <Card>
-              <Card.Content>
-                <Header as="h4">Browse the latest investment opportunities.</Header>
-                <Button as={Link} to="/offerings" className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
-              </Card.Content>
-            </Card>
-          </Aux> : null
-        }
         <Route
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
@@ -133,6 +93,95 @@ export default class Portfolio extends Component {
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
         />
+      </Aux>
+    );
+  }
+  render() {
+    const { match, portfolioStore, userDetailsStore } = this.props;
+    const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
+    if (portfolioStore.loading) {
+      return (
+        <Aux>
+          <InlineLoader />
+          {this.routesList()}
+        </Aux>
+      );
+    }
+    const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
+    const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
+      Please check back again later, and contact us at
+      <a href="mailto:support@nextseed.com">support@nextseed.com</a> with any questions.`;
+
+    if (portfolioError) {
+      return (
+        <div>
+          <section className="center-align">
+            <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={ERROR_MSG} /></h4>
+          </section>
+        </div>
+      );
+    }
+    // const tnarValue = get(getInvestorAccounts, 'tnar');
+    const summaryDetails = {
+      isAccountFrozen: isUserAccountFrozen,
+      accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
+      className: 'investment-summary',
+      summary: [
+        {
+          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Total Balance includes funds that are immediately available for investment. This includes pending incoming deposits, but excludes investment credits and pending investments.',
+        },
+        {
+          title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
+        },
+        {
+          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
+        },
+        // {
+        //   title: 'TNAR', content: tnarValue && !money.isZero(tnarValue) ? tnarValue :
+        // 'N/A', type: 1, info: <span>The Total Net Annualized Return (TNAR) approximates
+        // the overall financial return on your investment portfolio. See the <Link
+        // target="_blank" to="/resources/education-center">Education Center</Link> for a
+        // full explanation of how TNAR is calculated.</span>,
+        // },
+      ],
+    };
+    const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
+    const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
+    let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
+    completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
+    return (
+      <Aux>
+        {this.props.isAdmin &&
+          <AccountHeader module="Investments" pathname={this.props.location.pathname} />
+        }
+        <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
+        {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
+          <PortfolioAllocations pieChart={getPieChartData} /> : ''
+        }
+        <Header as="h4">My Investments</Header>
+        {pendingSorted.length ?
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
+        }
+        {activeSorted.length ?
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={activeSorted.length} match={match} /> : null
+        }
+        {completedSorted.length ?
+          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
+        }
+        {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
+        !getInvestorAccounts.investments.active.length &&
+        !getInvestorAccounts.investments.completed.length ?
+          <Aux>
+            <p>No investments or reservations pending.</p>
+            <Card>
+              <Card.Content>
+                <Header as="h4">Browse the latest investment opportunities.</Header>
+                <Button as={Link} target="_blank" to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+              </Card.Content>
+            </Card>
+          </Aux> : null
+        }
+        {this.routesList()}
         <IframeModal
           open={this.state.open}
           close={this.closeModal}

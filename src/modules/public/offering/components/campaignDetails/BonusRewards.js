@@ -13,12 +13,16 @@ const isTablet = document.documentElement.clientWidth >= 768
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 
+const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore')
 @observer
 class BonusRewards extends Component {
   componentDidMount() {
-    const sel = 'anchor-scroll';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   render() {
     const { campaign } = this.props.campaignStore;
@@ -33,11 +37,11 @@ class BonusRewards extends Component {
       campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
-          <span className="anchor-scroll" />
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+          <span className="anchor" />
           Bonus Rewards
         </Header>
-        {rewardsTiers && rewardsTiers.length ?
+        {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) ?
           <Aux>
             {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&
             bonusRewards ?
@@ -49,7 +53,7 @@ class BonusRewards extends Component {
                         <Header textAlign="left" as="h6" className="text-uppercase mb-40">Early Bird Reward
                           <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
                         </Header>
-                        <Header as="h5" className="intro-text">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
+                        <Header as="h5" className="note">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
                       </Aux>
                       <BonusRewardsList
                         earlyBird
@@ -64,7 +68,7 @@ class BonusRewards extends Component {
                     <Segment padded className="reward-block">
                       <Aux>
                         <Header as="h6" className="text-uppercase">Invest</Header>
-                        <Header as="h3" className="highlight-text">${tier}+</Header>
+                        <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
                       </Aux>
                       <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
                     </Segment>

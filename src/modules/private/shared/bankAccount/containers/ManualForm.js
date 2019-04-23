@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Form, Button, Message } from 'semantic-ui-react';
+import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
-import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
+import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
@@ -26,9 +26,12 @@ export default class ManualForm extends Component {
     const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
     const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
     if (this.props.action === 'change') {
-      this.props.transactionStore.requestOtpForManageTransactions().then(() => {
-        const confirmUrl = `${this.props.refLink}/confirm`;
-        this.props.history.push(confirmUrl);
+      this.props.uiStore.setProgress();
+      this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
+        this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+          const confirmUrl = `${this.props.refLink}/confirm`;
+          this.props.history.push(confirmUrl);
+        });
       });
     } else {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
@@ -49,7 +52,7 @@ export default class ManualForm extends Component {
   }
 
   render() {
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const {
       showAddFunds,
       isEncrypted,
@@ -64,6 +67,14 @@ export default class ManualForm extends Component {
     }
     if (this.props.action !== 'change' && linkbankSummary) {
       return <LinkbankSummary />;
+    }
+    if (this.props.action === 'change' && inProgress) {
+      return (
+        <Dimmer className="fullscreen" active={inProgress}>
+          <Loader active={inProgress}>
+          Please wait...
+          </Loader>
+        </Dimmer>);
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
@@ -103,7 +114,7 @@ export default class ManualForm extends Component {
           </div>
           {errors &&
             <Message error className="mb-30">
-              <ListErrors errors={[errors.message]} />
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
             </Message>
           }
           <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />

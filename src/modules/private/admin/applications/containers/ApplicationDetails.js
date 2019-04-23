@@ -224,6 +224,8 @@ export default class ApplicationDetails extends Component {
                       path={`${match.url}/${item.to}`}
                       render={props =>
                         (<CurrentComponent
+                          module={item.title === 'Activity History' ? 'applicationDetails' : false}
+                          showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
                           resourceId={params.appId}
                           appType={params.id}
                           {...props}

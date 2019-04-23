@@ -7,7 +7,7 @@ import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'investmentLimitStore', 'uiStore')
+@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'uiStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
@@ -15,6 +15,8 @@ class ChangeInvestmentLimit extends Component {
     this.props.investmentStore.setInvestmentLimitData();
   }
   changeInvestmentLimit = () => {
+    const { uiStore } = this.props;
+    uiStore.setProgress();
     const offeringId =
       this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
@@ -23,8 +25,6 @@ class ChangeInvestmentLimit extends Component {
     });
   }
   handleCloseModal = () => {
-    console.log(this.props);
-    console.log(this.props.refLink);
     if (this.props.changeInvestment) {
       const redirectPath = this.props.match.url.includes('agreement') ? `${this.props.refLink}/${this.props.match.params.offeringId}/agreement` : `${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`;
       this.props.history.push(redirectPath);
@@ -73,6 +73,7 @@ class ChangeInvestmentLimit extends Component {
                   prefix="$ "
                   value={fields[field].value}
                   fielddata={fields[field]}
+                  allowNegative={false}
                   // changed={maskingFieldChange}
                   changed={(values, name) => this.change(values, name)}
                 // onblur={investmentCalculate}

@@ -14,7 +14,7 @@ class ListErrors extends React.Component {
     if (errors) {
       return (
         errors.length === 1 ? (
-          <p>{Parser(cleanMsg(errors[0]) || '')}</p>
+          <p>{Parser(cleanMsg(typeof errors[0] !== 'string' ? errors[0].message : errors[0]) || '')}</p>
         ) : (
           <ul className="error-messages">
             {Object.keys(errors).map(key => <li key={key}>{cleanMsg(errors[key])}</li>)}

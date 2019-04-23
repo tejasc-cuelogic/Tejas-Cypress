@@ -11,6 +11,7 @@ import CreationSummary from '../components/CreationSummary';
 import OfferingModule from '../../../shared/offerings/components';
 import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore')
 @observer
@@ -31,6 +32,7 @@ export default class OfferingDetails extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.offeringCreationStore.resetAffiliatedIssuerForm();
     this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
     this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
@@ -46,10 +48,20 @@ export default class OfferingDetails extends Component {
     if (offerLoading || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
+    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
     navItems = navStore.filterByAccess(
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
     );
+    if (this.props.match.params.stage === 'live' && !isDev) {
+      navItems = navItems.filter(n => (!['Bonus Rewards', 'Close'].includes(n.title)));
+    }
+    if (this.props.match.params.stage !== 'creation' && !isDev) {
+      navItems = navItems.filter(n => (!['Bonus Rewards'].includes(n.title)));
+    }
+    if (this.props.match.params.stage === 'engagement' && !isDev) {
+      navItems = navItems.filter(n => (n.title !== 'Transactions'));
+    }
     return (
       <Aux>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -77,16 +89,20 @@ export default class OfferingDetails extends Component {
                   navItems.map((item) => {
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
-                    return (
-                      <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule {...props} resourceId={offeringid} offeringId={offeringid} />} />
-                    );
+                      return (
+                        <Route
+                          key={item.to}
+                          path={`${match.url}/${item.to}`}
+                          render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
+                        />
+                      );
                   })
                 }
               </Switch>
             </Card>
           </Modal.Content>
         </Modal>
-        <Route path={`${match.url}/editPoc`} render={props => <EditPoc refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/editPoc`} render={props => <EditPoc stage={offer.stage} refLink={match.url} {...props} />} />
         <Route path={`${match.url}/editOffering`} render={props => <EditOffering refLink={match.url} {...props} />} />
       </Aux>
     );

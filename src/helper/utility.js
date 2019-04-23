@@ -34,6 +34,13 @@ export class Utility {
     maskedInput.split('-').join('')
   )
 
+  matchRegexWithUrl = regexList => _.find(
+    regexList,
+    regex => (window.location.href.match(new RegExp(regex)) !== null),
+  )
+
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+
   guid = () => {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -45,7 +52,8 @@ export class Utility {
 
   getTotal = (from, key) => {
     const total = '0.00';
-    return from.map(r => money.add(total, r[key]))
+    return from.map(f => money.floatToAmount(f[key]))
+      .map(r => money.add(total, r))
       .reduce((sum, n) => money.add(sum, n));
   }
 
@@ -77,8 +85,8 @@ export class Utility {
       return '$0.00';
     }
   }
-  CurrencyFormat = (amount, fraction = 2) => new Intl.NumberFormat('en-US', {
-    style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: 2,
+  CurrencyFormat = (amount, fraction = 2, maxFraction = 2) => new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: maxFraction,
   }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {
@@ -132,7 +140,8 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
   phoneNumberFormatter = (phoneNumber) => {
@@ -155,8 +164,9 @@ export class Utility {
 
   otpShield = () => {
     try {
-      const OtpItems = document.getElementsByClassName('otp-field')[0]
-        .getElementsByTagName('input');
+      const OtpItems = document.getElementsByClassName('otp-field')[0] ?
+        document.getElementsByClassName('otp-field')[0]
+          .getElementsByTagName('input') : '';
       for (let i = 0; i < OtpItems.length; i += 1) {
         OtpItems[i].addEventListener('keydown', (e) => {
           if ([16, 107, 110, 109, 69, 187, 188, 189, 190].includes(e.keyCode)) {

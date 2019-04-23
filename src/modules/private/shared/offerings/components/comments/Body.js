@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
 import { get } from 'lodash';
+import Parser from 'html-react-parser';
 import { Link } from 'react-router-dom';
 import { Label, Item, Header, Icon } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../../theme/shared';
@@ -39,28 +40,28 @@ const Body = props => (
         props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
           const msgDate = moment(date).format('ll');
-          const userFirstName = get(msg, 'createdUserInfo.info.firstName');
+          const userFullName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
           const userInfo = {
-            firstName: userFirstName,
+            firstName: get(msg, 'createdUserInfo.info.firstName'),
             lastName: get(msg, 'createdUserInfo.info.lastName'),
             avatarUrl: get(msg, 'createdUserInfo.info.avatar.url') || null,
-            roles: [get(msg, 'createdUserInfo.roles.name')],
+            roles: [get(msg, 'createdUserInfo.roles[0].name')],
           };
-          const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
-          return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : msg.createdUserInfo.id !== props.currentUserId ? (
+          const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
+          return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : get(msg, 'createdUserInfo.id') !== props.currentUserId ? (
             <Aux>
               <Item className="in">
                 <UserAvatar size="mini" UserInfo={userInfo} />
                 <MsgContent
                   classes={classes}
-                  body={msg.comment}
+                  body={Parser(msg.comment)}
                   extra={
                     <Aux>
-                      <Header as="h6">{userFirstName}</Header>
+                      <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="from"
                         showApproval={!props.isIssuer &&
-                          msg.createdUserInfo.id === props.currentOfferingIssuerId}
+                          get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId}
                         approved={msg.approved}
                         isIssuer={props.isIssuer}
                         date={msgDate}
@@ -70,12 +71,12 @@ const Body = props => (
                   }
                   edit={
                     <div className="comment-actions">
-                      {msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && !msg.approved ?
+                      {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved ?
                         <Aux>
                           <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
                           <Link to="/" className="link" loading={props.buttonLoader === msg.id} onClick={e => props.approveComment(e, msg.id)}>Approve</Link>{' | '}
                         </Aux>
-                      : msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && msg.approved &&
+                      : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved &&
                       <Aux>
                         <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
                       </Aux>
@@ -93,10 +94,10 @@ const Body = props => (
               <Item className="sent">
                 <MsgContent
                   classes={classes}
-                  body={msg.comment}
+                  body={Parser(msg.comment)}
                   extra={
                     <Aux>
-                      <Header as="h6">{userFirstName}</Header>
+                      <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="to"
                         showApproval={props.isIssuer}

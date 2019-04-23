@@ -8,7 +8,9 @@ import { MaskedInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors, SuccessScreen } from '../../../../../../theme/shared';
 
-@inject('uiStore', 'identityStore', 'userDetailsStore')
+const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('uiStore', 'identityStore', 'userDetailsStore', 'multiFactorAuthStore')
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
@@ -32,9 +34,13 @@ export default class ConfirmPhoneNumber extends Component {
   }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
+    const setMfaMode = !this.props.userDetailsStore.userDetails.phone;
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
+        if (setMfaMode) {
+          this.props.multiFactorAuthStore.updateMfaModeType();
+        }
         Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
         this.props.uiStore.clearErrors();
@@ -58,7 +64,7 @@ export default class ConfirmPhoneNumber extends Component {
   }
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.startPhoneVerification();
+    this.props.identityStore.startPhoneVerification('', undefined, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -98,7 +104,7 @@ export default class ConfirmPhoneNumber extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code in the text message sent to your phone</p>
+          <p>Please confirm the 6-digit verification code sent to your phone</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <MaskedInput
@@ -107,7 +113,7 @@ export default class ConfirmPhoneNumber extends Component {
             type="tel"
             name="phoneNumber"
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             readOnly={!editMode}
             displayMode={!editMode}
             changed={personalInfoMaskedChange}
@@ -127,6 +133,9 @@ export default class ConfirmPhoneNumber extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
+                autoFocus={!isMobile}
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />

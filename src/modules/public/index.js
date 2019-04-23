@@ -66,9 +66,9 @@ export default class Public extends React.Component {
     const { BUSINESS_APP_FRM, isPrequalQulify } = this.props.businessAppStore;
     const { isValid } = BUSINESS_APP_FRM.meta;
     const { inProgress } = this.props.uiStore;
-    const NoFooter = [
-      '/offerings/:id/:section?', '/business-application', '/auth/:section',
-    ];
+    // const NoFooter = [
+    //   '/offerings/:id/:section?', '/business-application', '/auth/:section',
+    // ];
     const NoHeader = ['/invest/get-started'];
     const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
@@ -77,7 +77,7 @@ export default class Public extends React.Component {
         {this.props.campaignStore.showFireworkAnimation &&
           <Firework />
         }
-        <Responsive minWidth={768} as={Aux}>
+        <Responsive minWidth={992} as={Aux}>
           {hasHeader && (
             <Header
               location={location}
@@ -91,10 +91,9 @@ export default class Public extends React.Component {
             />
           )}
           {this.getRoutes()}
-          {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
-          <Footer path={location.pathname} />}
+          <Footer path={location.pathname} />
         </Responsive>
-        <Responsive maxWidth={767} as={Aux}>
+        <Responsive maxWidth={991} as={Aux}>
           <NavBarMobile
             onPusherClick={this.handlePusher}
             onToggle={this.handleToggle}

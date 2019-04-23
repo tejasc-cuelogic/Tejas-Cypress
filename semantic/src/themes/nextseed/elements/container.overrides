@@ -6,12 +6,12 @@ section{
         height:568px;
         background-size: cover;
         @media only screen and (max-width : @computerBreakpoint) {
-            height:400px;
+            height:380px;
             padding-top: 80px;
             padding-bottom: @30px;
         }
         @media only screen and (max-width : @largestMobileScreen){
-            height:380px;
+            height:311px;
             margin-top:0px;
             padding: 0;
         }
@@ -68,7 +68,7 @@ section{
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat;
             height: 300px;
             @media only screen and (max-width : @largestMobileScreen){
-                height:226px;
+                height:215px;
                 background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat;
             }
         }
@@ -85,22 +85,31 @@ section{
             }
         }
         &.resources-banner {
+            height: 465px;
             background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat;  
-            @media only screen and (max-width : @computerBreakpoint) {
-                height:260px;
-            }
             @media only screen and (max-width : @largestMobileScreen){
-                height: 380px; 
+                height: 311px; 
                 background:url(../../assets/images/banners/resources-banner-mobile.jpg) center center no-repeat;
             }
         }
         &.edu-center-business-banner {
+            height: 363px;
             background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat;
+            @media only screen and (max-width : @computerBreakpoint) {
+                height:260px;
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                display: none;    
+            }
         }
         &.edu-center-investor-banner {
+            height: 363px;
             background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                display: none;    
             }
         }
         &.account-types {
@@ -143,13 +152,18 @@ section{
 }
 .public-pusher>section.banner{
     @media only screen and (max-width : @largestMobileScreen){
-        margin-top:-58px;
+        // margin-top:-58px; 
         &.funding-options, &.how-it-works, &.track {
             height: auto;
             margin-top: 0;
         }
         &.track{
             background: none;
+        }
+    }
+    @media only screen and (max-width : @largestTabletScreen){
+        &.funding-options {
+            display: none;
         }
     }
 }
@@ -180,6 +194,16 @@ section{
         bottom: 0;
         right: 0;
         color:  @white;
+        // @media only screen and (min-width : @monitorBreakpoint) and (max-width: @largestSmallMonitor){
+            //     padding-top: @50px;
+            // }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor){
+            padding-top: @50px;
+            padding-bottom: @50px;
+        }
+        >.ui.container {
+            justify-content: center;
+        }
     }
 }
 // business and invest pages
@@ -187,41 +211,105 @@ section{
 	&.process{
         background:url(../../assets/images/business/process.png) 0% center no-repeat;
         background-size:auto 120%;
-        @media only screen and (max-width : @largestMobileScreen){
+        @media only screen and (max-width : @largestTabletScreen){
             background:none;
+        }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
+            background:url(../../assets/images/business/process-full.png) 0% center no-repeat;
+            background-size: auto 66%;
+        }
+        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
+            background:url(../../assets/images/business/process-full.png) 0% center no-repeat;
+            background-size: auto 80%;
+        }
+        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
+            background:url(../../assets/images/business/process-full.png) 0% center no-repeat;
+            background-size: auto 95%;
+        }
+        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
+            background-size: auto 103%;
         }
 	}
 	&.all-inclusive{
         background:url(../../assets/images/business/inclusive.png) 100% center no-repeat;
         background-size:auto 93%;
-        @media only screen and (max-width : @largestMobileScreen){
+        @media only screen and (max-width : @largestTabletScreen){
             background:none;
+        }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
+            background-size: auto 46%;
+        }
+        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
+            background-size: auto 64%;
+        }
+        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
+            background-size: auto 75%;
+        }
+        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
+            background-size: auto 80%;
         }
     }
     &.account-types {
         background:url(../../assets/images/investors/account_types.png) 100% center no-repeat;
-        @media only screen and (max-width : @largestMobileScreen){
+        @media only screen and (max-width : @largestTabletScreen){
             background:none;
+        }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
+            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
+            background-size: auto 62%;
+        }
+        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
+            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
+            background-size: auto 78%;
+        }
+        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
+            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
+            background-size: auto 95%;
+        }
+        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
+            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
+            background-size: auto 100%;
         }
     } 
     &.security{
         background:url(../../assets/images/investors/security.png) 0% center no-repeat;
         background-size:auto 90%;
-        @media only screen and (max-width : @largestMobileScreen){
+        @media only screen and (max-width : @largestTabletScreen){
             background:none;
+        }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
+            background-size: auto 46%;
+        }
+        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
+            background-size: auto 58%;
+        }
+        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
+            background-size: auto 70%;
+        }
+        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
+            background-size: auto 75%;
         }
     } 
     &.track{
         background:url(../../assets/images/investors/laptop.png) 100% center no-repeat;
-        @media only screen and (min-width: @monitorBreakpoint) and (max-width: @largestLargeMonitor ) {
-            background-size: 50%;
-            background-position: right;
-        }
-        @media only screen and (min-width: @tabletBreakpoint) and (max-width: @largestTabletScreen ) {
-            background-size: contain;
-        }
-        @media only screen and (max-width : @largestMobileScreen){
+        @media only screen and (max-width : @largestTabletScreen){
             background:none;
+        }
+        // @media only screen and (min-width: @monitorBreakpoint) and (max-width: @largestLargeMonitor ) {
+        //     background-size: 50%;
+        //     background-position: right;
+        // }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
+            background-size: auto 46%;
+        }
+        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
+            background-size: auto 55%;
+        }
+        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
+            background-size: auto 62%;
+        }
+        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
+            background-size: auto 66%;
         }
     } 
 }

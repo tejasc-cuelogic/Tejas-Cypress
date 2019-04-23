@@ -7,7 +7,7 @@ import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
-import Helper from '../../../../../helper/utility';
+// import Helper from '../../../../../helper/utility';
 
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
@@ -47,8 +47,11 @@ export default class InvestNow extends React.Component {
     const reflectedURL = this.props.history.location.pathname;
     if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
       this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
-      this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
       this.props.accreditationStore.resetAccreditationObject();
+      this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
+      if (!reflectedURL.includes('agreement')) {
+        this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+      }
     }
   }
   handleIframeTask = (e) => {
@@ -101,7 +104,7 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
       if (response.isValid) {
         this.props.investmentStore.setByDefaultRender(true);
-        Helper.toast('Transfer request is in process!', 'success');
+        // Helper.toast('Transfer request is in process!', 'success');
         this.props.investmentStore.setStepToBeRendered(0);
         this.setState({ submitLoading: false });
         this.props.history.push('agreement');
@@ -115,7 +118,10 @@ export default class InvestNow extends React.Component {
 
   multiClickHandler = (step) => {
     const { inprogressAccounts } = this.props.userDetailsStore.signupStatus;
+    const { userDetails } = this.props.userDetailsStore;
+    const userStatus = userDetails && userDetails.status;
     if (step.name === 'Financial Info') {
+      this.setState({ submitLoading: true });
       this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
         this.setState({ submitLoading: response.isValid });
         if (response.isValid) {
@@ -145,13 +151,14 @@ export default class InvestNow extends React.Component {
       const {
         changeShowAccountListFlag,
         userAccredetiationState,
+        selectedAccountStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
+      if (selectedAccountStatus !== 'FROZEN' && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
-            const isDocumentUpload = get(resp, 'investNowHealthCheck.availibityForNPAInOffering');
+            const isDocumentUpload = get(resp, 'investNowHealthCheck.availabilityForNPAInOffering');
             if (!isDocumentUpload) {
               this.handleStepChangeForPartialAccounts(0);
             } else {
@@ -174,7 +181,9 @@ export default class InvestNow extends React.Component {
     const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
     const { campaign } = this.props.campaignStore;
-    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const {
+      getCurrentInvestNowHealthCheck, investNowHealthCheckDetails,
+    } = this.props.investmentLimitStore;
     if (stepToBeRendered === 1 && !this.state.isInvestmentUpdate &&
       getCurrentInvestNowHealthCheck && getCurrentInvestNowHealthCheck.previousAmountInvested &&
       !money.isZero(getCurrentInvestNowHealthCheck.previousAmountInvested)) {
@@ -193,7 +202,8 @@ export default class InvestNow extends React.Component {
           component: <AccountType
             refLink={this.props.refLink}
             changeInvest={changeInvest}
-            cancel={this.handleCancel}
+            cancel={this.handleMultiStepModalclose}
+            inProgress={inProgress}
           />,
           isValid: '',
           stepToBeRendered: 1,
@@ -230,7 +240,8 @@ export default class InvestNow extends React.Component {
           <MultiStep
             loaderMsg={this.state.submitLoading ? `Please wait...<br /><br />
             We are generating your agreement. This can take up to a minute.` : ''}
-            inProgress={this.state.submitLoading || inProgress}
+            inProgress={this.state.submitLoading ||
+              (inProgress && !investNowHealthCheckDetails.loading)}
             createAccount={this.multiClickHandler}
             setIsEnterPressed={setIsEnterPressed}
             disableNxtbtn={this.props.investmentStore.disableNextbtn}

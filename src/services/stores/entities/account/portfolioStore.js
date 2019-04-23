@@ -1,7 +1,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { forEach, sortBy } from 'lodash';
+import { forEach, sortBy, get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
@@ -18,6 +18,8 @@ export class PortfolioStore {
   @observable canceledInvestmentDetails = null;
   @observable PayOffData = null;
   @observable currentAcccountType = null;
+  @observable isAdmin = false;
+  @observable portfolioError = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -86,7 +88,7 @@ export class PortfolioStore {
     if (investmentData) {
       ['pending', 'active', 'completed'].forEach((field) => {
         investmentData.investments[field].forEach((ele) => {
-          if (ele.offering.keyTerms.securities && ele.offering.keyTerms.industry) {
+          if (get(ele, 'offering.keyTerms.securities') && get(ele, 'offering.keyTerms.industry')) {
             this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
             this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
           }
@@ -103,7 +105,8 @@ export class PortfolioStore {
   }
 
   @computed get summary() {
-    return (this.accSummary.data && toJS(this.accSummary.data.getUserAccountSummary)) || {};
+    const summary = get(this.accSummary, 'data.getUserAccountSummary');
+    return summary ? toJS(summary) : {};
   }
 
   getChartData = (type) => {
@@ -124,7 +127,7 @@ export class PortfolioStore {
   }
 
   @computed get summaryLoading() {
-    return this.accSummary.loading;
+    return get(this.accSummary, 'loading') || false;
   }
 
   @computed get getPieChartData() {
@@ -134,22 +137,32 @@ export class PortfolioStore {
   @action
   getInvestorAccountPortfolio = (accountType) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
+      userDetailsStore.currentActiveAccountDetails;
+    const { userDetails, getDetailsOfUser } = userDetailsStore;
     this.investmentLists = graphql({
       client,
       query: getInvestorAccountPortfolio,
       variables: {
-        userId: userDetails.id,
+        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
         accountId: (account && account.details) ? account.details.accountId : null,
       },
       // fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && !this.investmentLists.loading) {
+        if (data && this.investmentLists && !this.investmentLists.loading) {
           this.calculateInvestmentType();
+          this.portfolioError = false;
         }
       },
+      onError: () => {
+        this.portfolioError = true;
+      },
     });
+  }
+
+  @action
+  setPortfolioError = (val) => {
+    this.portfolioError = val;
   }
 
   @computed get getInvestorAccounts() {
@@ -176,6 +189,9 @@ export class PortfolioStore {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
+    if (uiStore.inProgress !== 'portfolioDirect') {
+      uiStore.setProgress('portfolio');
+    }
     this.investmentDetails = graphql({
       client,
       query: getInvestorDetailsById,
@@ -186,8 +202,12 @@ export class PortfolioStore {
       },
       onFetch: () => {
         if (!this.investmentDetails.loading) {
+          uiStore.setProgress(false);
           resolve();
         }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
       },
       fetchPolicy: 'network-only',
     });
@@ -247,6 +267,10 @@ export class PortfolioStore {
   @action
   currentAccoutType = (type) => {
     this.currentAcccountType = type;
+  }
+  @action
+  resetPortfolioData = () => {
+    this.setFieldValue('investmentLists', null);
   }
 }
 

@@ -2,18 +2,13 @@ import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import apiService from '../../../api/restApi';
-import { bankAccountStore, accountStore, uiStore, individualAccountStore, iraAccountStore, entityAccountStore } from '../../stores';
+import { bankAccountStore, accountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
 import { validationActions } from '../../../services/actions';
 
 
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
 const sharedPublicPayload = { public_key: PLAID_PUBLIC_KEY };
-const ACC_LINK_BANK_MAPPING = {
-  0: { store: individualAccountStore, location: 1 },
-  1: { store: iraAccountStore, location: 3 },
-  2: { store: entityAccountStore, location: 5 },
-};
 
 export class BankAccount {
   bankSearch = (e) => {
@@ -55,8 +50,12 @@ export class BankAccount {
           } else {
             bankAccountStore.setActiveBankPlaidLogo(data.body.institution.logo);
           }
+          resolve();
         })
-        .catch(() => reject())
+        .catch(() => {
+          bankAccountStore.setFieldValue('loadingState', false);
+          reject();
+        })
         .finally(() => { });
     });
   }
@@ -66,15 +65,17 @@ export class BankAccount {
     const linkHandler = Plaid.create({
       env: PLAID_ENV,
       clientName: 'NS',
+      apiVersion: 'v2',
       ...sharedPayload,
-      product: ['auth, transactions'],
+      product: ['auth'],
       onLoad: () => {
         // The Link module finished loading.
         bankAccountStore.setLinkBankSummary(false);
         uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        const renderStep = accountValue !== 0 ? ACC_LINK_BANK_MAPPING[accountValue].location : 0;
-        ACC_LINK_BANK_MAPPING[accountValue].store
+        const renderStep = accountValue !== 0 ?
+          accountStore.ACC_TYPE_MAPPING[accountValue].location : 0;
+        accountStore.ACC_TYPE_MAPPING[accountValue].store
           .setStepToBeRendered(renderStep);
       },
       onSuccess: (publicToken, metadata) => {
@@ -89,13 +90,13 @@ export class BankAccount {
           const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
           const currentStep = {
             name: 'Link bank',
-            stepToBeRendered: ACC_LINK_BANK_MAPPING[accountValue].location,
+            stepToBeRendered: accountStore.ACC_TYPE_MAPPING[accountValue].location,
             validate: validationActions.validateLinkBankForm,
           };
           bankAccountStore.resetAddFundsForm();
-          ACC_LINK_BANK_MAPPING[accountValue].store.createAccount(currentStep);
-          ACC_LINK_BANK_MAPPING[accountValue].store
-            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
+          accountStore.ACC_TYPE_MAPPING[accountValue].store.createAccount(currentStep);
+          accountStore.ACC_TYPE_MAPPING[accountValue].store
+            .setStepToBeRendered(accountStore.ACC_TYPE_MAPPING[accountValue].location);
         }
         bankAccountStore.setLinkBankSummary();
       },

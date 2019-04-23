@@ -31,7 +31,7 @@ const Body = props => (
         props.thread.map((msg, index) => {
           const d2 = moment(msg.updatedAt).format(D_FORMAT);
           const d1 = index ? moment(props.thread[index - 1].updatedAt).format(D_FORMAT) :
-          moment(msg.updatedAt).subtract(1, 'day');
+          (msg.updatedAt ? moment(new Date(msg.updatedAt)).subtract(1, 'day') : '');
           const diff = moment(d2, D_FORMAT).diff(moment(d1, D_FORMAT), 'days');
           const time = moment(msg.updatedAt).format('h:mm A');
           return (msg.messageDetails.from !== props.current ? (

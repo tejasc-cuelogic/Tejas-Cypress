@@ -9,7 +9,7 @@ import {
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
-import { subscribeToNewsLetter } from '../../queries/common';
+import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
@@ -24,7 +24,7 @@ export class AuthStore {
   @observable capabilities = [];
   @observable userId = null;
   @observable devAuth = {
-    required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
+    required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
   @observable LOGIN_FRM = Validator.prepareFormObject(LOGIN);
@@ -280,20 +280,22 @@ export class AuthStore {
         .mutate({
           mutation: requestEmailChnage,
           variables: {
-            newEmail: this.CONFIRM_FRM.fields.email.value,
+            newEmail: this.CONFIRM_FRM.fields.email.value.toLowerCase(),
           },
         })
         .then((result) => {
           identityStore.setRequestOtpResponse(result.data.requestEmailChange);
+          uiStore.setProgress(false);
           resolve();
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject(err);
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 
@@ -353,21 +355,24 @@ export class AuthStore {
         client: clientPublic,
         query: checkEmailExistsPresignup,
         variables: {
-          email,
+          email: email.toLowerCase(),
         },
         onFetch: (data) => {
           uiStore.clearErrors();
           if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
             this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
             this.SIGNUP_FRM.meta.isValid = false;
+            uiStore.setProgress(false);
             rej();
           } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
             this.SIGNUP_FRM.fields.email.error = '';
+            uiStore.setProgress(false);
             res();
           }
         },
         onError: (err) => {
           uiStore.setErrors(err);
+          uiStore.setProgress(false);
         },
         fetchPolicy: 'network-only',
       });
@@ -405,17 +410,24 @@ export class AuthStore {
   });
 
   @action
+  notifyApplicationError = params => new Promise((res, rej) => {
+    clientPublic.mutate({
+      mutation: notifyAdmins,
+      variables: { ...params },
+    })
+      .then((data) => {
+        res(data);
+      })
+      .catch((err) => {
+        rej(err);
+      })
+      .finally(() => { });
+  });
+
+  @action
   setUserRole = (userData) => {
     this.SIGNUP_FRM.fields.role.value = userData;
   }
-
-  @action
-  notifyApplicationError = (params) => {
-    clientPublic.mutate({
-      mutation: subscribeToNewsLetter,
-      variables: { ...params },
-    });
-  };
 
   @action
   subscribeToNewsletter = () => new Promise((res, rej) => {

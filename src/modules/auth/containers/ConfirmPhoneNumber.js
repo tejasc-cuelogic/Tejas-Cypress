@@ -9,6 +9,8 @@ import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -70,7 +72,7 @@ export default class ConfirmPhoneNumber extends Component {
     const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
     const phoneNumberValue = phoneNumber.value;
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue);
+    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -130,7 +132,7 @@ export default class ConfirmPhoneNumber extends Component {
           </p>
           <Divider section />
           <p>
-            {editMode ? 'Please your update your number for MFA' : 'Please confirm the 6-digit verification code in the text message sent to your phone'
+            {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
             }
           </p>
         </Modal.Header>
@@ -141,7 +143,7 @@ export default class ConfirmPhoneNumber extends Component {
             type="tel"
             name="phoneNumber"
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             readOnly={!editMode}
             displayMode={!editMode}
             changed={personalInfoMaskedChange}
@@ -161,8 +163,11 @@ export default class ConfirmPhoneNumber extends Component {
               <ReactCodeInput
                 name="code"
                 fields={6}
+                autoFocus={!isMobile}
                 type="number"
                 className="otp-field"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
@@ -186,7 +191,7 @@ export default class ConfirmPhoneNumber extends Component {
               </Message>
             }
             {!editMode ?
-              <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || (errors && errors.message)} />
+              <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message))} />
               :
               <Button.Group widths="2" className="inline">
                 <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />

@@ -3,12 +3,18 @@ import _ from 'lodash';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
+import Helper from '../../helper/utility';
 
-const getNavStates = (indx, length) => {
+const isMobile = document.documentElement.clientWidth < 768;
+const hasData = compState => compState.validForm;
+const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
+
+const getNavStates = (indx, length, steps) => {
   const styles = [];
   /* eslint-disable no-plusplus */
+  // eslint-disable-next-line max-len
   for (let i = 0; i < length; i++) {
-    if (i < indx) {
+    if ((isAccountCreation && hasData(steps[i]) && i !== indx) || i < indx) {
       styles.push('done');
     } else if (i === indx) {
       styles.push('doing');
@@ -25,7 +31,10 @@ export default class MultiStep extends React.Component {
       showPreviousBtn: false,
       showNextBtn: true,
       compState: this.props.stepToBeRendered || 0,
-      navState: getNavStates((this.props.stepToBeRendered || 0), this.props.steps.length),
+      navState: getNavStates(
+        (this.props.stepToBeRendered || 0), this.props.steps.length,
+        this.props.steps,
+      ),
     };
     this.hidden = {
       display: 'none',
@@ -54,7 +63,6 @@ export default class MultiStep extends React.Component {
       this.setState({ showNextBtn: nextProps.disableNxtbtn });
     }
   }
-
   getClassName(className, i) {
     let currentStatus = this.state.navState.styles[i];
     if (!this.state.navState.styles[i]) {
@@ -64,7 +72,12 @@ export default class MultiStep extends React.Component {
   }
 
   setNavState(next) {
-    this.setState({ navState: getNavStates(next, this.props.steps.length) });
+    this.setState({
+      navState: getNavStates(
+        next, this.props.steps.length,
+        this.props.steps,
+      ),
+    });
     if (next < this.props.steps.length) {
       this.setState({ compState: next });
     }
@@ -92,7 +105,8 @@ export default class MultiStep extends React.Component {
 
   handleKeyDown(evt) {
     if ((evt.which === 13 && (evt.target.name !== 'bankName') &&
-      (!this.props.steps[this.state.compState].disableNextButton))) {
+      (!this.props.steps[this.state.compState].disableNextButton) &&
+      !this.props.steps[this.state.compState].disableKeyDown)) {
       this.next();
     }
   }
@@ -122,14 +136,27 @@ export default class MultiStep extends React.Component {
 
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
-      this.setNavState(this.state.compState + 1);
-      if (this.props.bankSummary(this.props.steps[this.state.compState])) {
+      if (this.props.bankSummary &&
+        this.props.bankSummary(this.props.steps[this.state.compState])) {
+        this.setNavState(this.state.compState + 1);
         this.props.bankSummarySubmit();
+      } else if (this.props.isAccountCreation) {
+        this.props.createAccount(this.props.steps[this.state.compState]);
       } else {
+        this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
       }
     } else {
-      this.props.createAccount(this.props.steps[this.state.compState]);
+      if (this.props.isAccountCreation && isMobile) {
+        this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
+          const modalDoc = document.getElementsByClassName('ui page modals dimmer transition visible active');
+          if (modalDoc && isMobile) {
+            setTimeout(() => modalDoc[0].scrollTo(0, 0), 100);
+          }
+        });
+      } else {
+        this.props.createAccount(this.props.steps[this.state.compState]);
+      }
       if (!this.props.steps[this.state.compState].isDirty) {
         this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
@@ -157,9 +184,13 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       return (
-        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
-          {this.props.steps[i].name}
-        </li>
+        <Aux>
+          {this.props.steps[i].name &&
+            <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
+              {this.props.steps[i].name}
+            </li>
+          }
+        </Aux>
       );
     });
   }
@@ -196,7 +227,7 @@ export default class MultiStep extends React.Component {
               </ol>
             </Aux>
           }
-          <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen'}>
+          <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
             <Loader active={this.props.inProgress} >
               {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
             </Loader>

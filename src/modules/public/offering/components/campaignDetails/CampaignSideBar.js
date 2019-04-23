@@ -35,17 +35,19 @@ export default class CampaignSideBar extends Component {
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
     const percent = (collected / maxOffering) * 100;
-    const terminationDate = campaign && campaign.closureSummary &&
+    const processingDate = campaign && campaign.closureSummary &&
     campaign.closureSummary.processingDate;
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const diff = DataFormatter.diffDays(terminationDate);
-    const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const diff = DataFormatter.diffDays(processingDate);
+    // const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     const { offerStructure } = campaign;
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
-        <div className={`${className} offering-side-menu sticky-sidebar`}>
+        <div className={`${className} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
           <Responsive maxWidth={991} as={Aux}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>
@@ -81,7 +83,10 @@ export default class CampaignSideBar extends Component {
                   </Statistic.Label>
                 }
               </Statistic>
-              <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
+              {!isClosed ?
+                <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                <Progress percent="100" size="tiny" color="green" />
+              }
               <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
@@ -125,22 +130,24 @@ export default class CampaignSideBar extends Component {
               Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
               </p>
               <p className="mt-half">
-                Maturity: {get(campaign, 'keyTerms.maturity')} Months
+                Maturity: {get(campaign, 'keyTerms.maturity')} months
               </p>
               <Divider hidden />
-              {!isClosed &&
-                <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+              {(!isClosed && diff > 0) &&
+                <Aux>
+                  <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+                  <p>
+                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+                      || 0} min investment
+                  </p>
+                </Aux>
               }
-              <p>
-                ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                  || 0} min investment
-              </p>
             </div>
           </Responsive>
           {!isMobile &&
             <Aux>
               <Menu vertical>
-                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
+                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
               </Menu>
             </Aux>
           }

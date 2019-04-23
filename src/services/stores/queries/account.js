@@ -57,6 +57,7 @@ export const updateInvestorProfileData = gql`
       isPartialProfile: $isPartialProfile
     ) {
       id
+      status
     }
   }`;
 

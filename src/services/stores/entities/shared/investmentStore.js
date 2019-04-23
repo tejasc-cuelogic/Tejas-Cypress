@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { capitalize, orderBy, mapValues, get } from 'lodash';
+import { Calculator } from 'amortizejs';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
@@ -14,6 +15,7 @@ import {
   investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
+
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
@@ -94,7 +96,10 @@ export class InvestmentStore {
   @computed get getTransferRequestAmount() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
-    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
+    const getrewardBalanceAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
+    const getPreviousCreditAvailable = (userAmountDetails && userAmountDetails.previousInvestmentCredit) || '0';
+    const getCurrCreditAvailable =
+      money.add(getrewardBalanceAvailable, getPreviousCreditAvailable);
     const cashAndCreditBalance = money.add(getCurrCashAvailable, getCurrCreditAvailable);
     const getPreviousInvestedAmount =
       (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
@@ -223,10 +228,12 @@ export class InvestmentStore {
     let offeringSecurityType = '';
     let interestRate = '';
     let investmentMultiple = '';
+    let loanTerm = '';
     if (campaign && campaign.keyTerms) {
       offeringSecurityType = get(campaign, 'keyTerms.securities');
       interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
       investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+      loanTerm = parseFloat(get(campaign, 'keyTerms.maturity'));
     } else {
       offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
       interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
@@ -235,10 +242,25 @@ export class InvestmentStore {
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
       if (offeringSecurityType === 'TERM_NOTE') {
-        const formatedIntrestRate = money.floatToAmount(interestRate);
-        const calculatedIntrestAmount = money.percent(investAmt, formatedIntrestRate);
+        const data = {
+          method: 'mortgage',
+          apr: parseFloat(interestRate) || 0,
+          balance: parseFloat(investAmt) || 0,
+          loanTerm: loanTerm || 0,
+        };
+        const { totalPayment } = Calculator.calculate(data);
+        const finalAmtM = money.floatToAmount(Math.floor(totalPayment) || '');
+
+        //
+        //
+        // const interestRate_f = parseFloat(interestRate);
+        // const num = (interestRate_f / 100.0) / 12 * parseFloat(investAmt);
+        // const denom = 1 - Math.pow((1 + (interestRate_f / 100.0) / 12), (-1 * targetTerm)));
+        // const finalAmt = (num/denom)*;
+        //
+        // const finalAmt_m = money.floatToAmount(finalAmt);
         const estReturnMIN =
-          Helper.CurrencyFormat(money.add(investAmt, calculatedIntrestAmount), 0);
+            Helper.CurrencyFormat(finalAmtM, 0, 0);
         this.estReturnVal = estReturnMIN;
         return this.estReturnVal;
       }
@@ -302,7 +324,15 @@ export class InvestmentStore {
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
-        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'The campaign is currently within the last 48 hours of closing. Your investment cannot be reduced or canceled at this time.';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+        uiStore.setProgress(false);
+        resolve();
+      } else if (!this.isValidMultipleAmount(this.investmentAmount)) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.setFieldValue('investmentFlowErrorMessage', 'Investments must be in increments of $100');
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investments must be in increments of $100';
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
@@ -371,7 +401,6 @@ export class InvestmentStore {
     }
     return resultToReturn;
   }
-
   @action
   validateInvestmentAmount = () => new Promise((resolve, reject) => {
     graphql({
@@ -589,7 +618,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
     this.setByDefaultRender(true);
-    // investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+    investmentLimitStore.setInvestNowErrorStatus(false);
     // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
     this.setFieldValue('estReturnVal', '-');
@@ -602,9 +631,8 @@ export class InvestmentStore {
 
   @computed get changedInvestmentLimit() {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
-    console.log(investmentLimitStore.getInvestorAmountInvestedValue);
     return investmentLimitStore
-      .getInvestmentLimit(data, investmentLimitStore.getInvestorAmountInvestedValue);
+      .getInvestmentLimit(data, investmentLimitStore.investorTotalAmountInvested);
   }
   @action
   setInvestmentLimitData = () => {

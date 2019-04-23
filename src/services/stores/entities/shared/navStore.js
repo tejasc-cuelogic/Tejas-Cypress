@@ -3,7 +3,8 @@ import { matchPath } from 'react-router-dom';
 import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
-import { userStore, userDetailsStore, offeringsStore } from '../../index';
+import { userStore, userDetailsStore, offeringsStore, statementStore } from '../../index';
+import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class NavStore {
   @observable NAV_ITEMS = [...PRIVATE_NAV];
@@ -16,6 +17,7 @@ export class NavStore {
   @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
   @observable currentActiveHash = null;
+  @observable campaignHeaderStatus = false;
 
   constructor() {
     if (userStore.currentUser) {
@@ -35,23 +37,52 @@ export class NavStore {
   }
 
   @computed get myRoutes() {
-    let permitted = [];
-    if (userDetailsStore.signupStatus.isMigratedFullAccount
-      && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
-      permitted = [...this.params.roles];
-    } else {
-      permitted = [...this.params.roles,
-        ...userDetailsStore.signupStatus.partialAccounts,
-        ...userDetailsStore.signupStatus.activeAccounts,
-        ...userDetailsStore.signupStatus.processingAccounts,
-        ...userDetailsStore.signupStatus.frozenAccounts];
+    try {
+      let permitted = [];
+      const { roles } = this.params;
+      if (userDetailsStore.signupStatus.isMigratedFullAccount
+        && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
+        permitted = [...roles];
+      } else {
+        permitted = [...roles,
+          ...userDetailsStore.signupStatus.partialAccounts,
+          ...userDetailsStore.signupStatus.activeAccounts,
+          ...userDetailsStore.signupStatus.processingAccounts,
+          ...userDetailsStore.signupStatus.frozenAccounts];
+      }
+      if (permitted && permitted.length > 1 && permitted.includes('investor')) {
+        const pInvestorInfo = {
+          roles,
+          signupStatus: userDetailsStore.signupStatus,
+          permitted,
+        };
+        localStorage.setItem(`${userStore.currentUser.sub}_pInfo`, JSON.stringify(pInvestorInfo));
+      }
+      const pInvestorInfo = localStorage.getItem(`${userStore.currentUser.sub}_pInfo`);
+      if (userDetailsStore.userFirstLoad !== true &&
+        (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
+        if (pInvestorInfo) {
+          permitted = JSON.parse(pInvestorInfo).permitted || permitted;
+        } else {
+          return [];
+        }
+      }
+      if (pInvestorInfo && permitted.includes('investor')) {
+        permitted = JSON.parse(pInvestorInfo).permitted || permitted;
+      }
+      const routes = _.filter(
+        this.NAV_ITEMS,
+        n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
+          _.intersection(n.accessibleTo, permitted).length > 0) &&
+        (!n.env || n.env.length === 0 ||
+          _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0) &&
+          (!n.capability || this.canAccessBasedOnCapability(n.capability))),
+      );
+      return routes;
+    } catch (err) {
+      console.log(err);
+      return [];
     }
-    const routes = _.filter(
-      this.NAV_ITEMS,
-      n => ((n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0) &&
-        (!n.capability || this.canAccessBasedOnCapability(n.capability))),
-    );
-    return routes;
   }
 
   @action
@@ -74,10 +105,20 @@ export class NavStore {
     navItems.forEach((navitem) => {
       const nItem = toJS(navitem);
       if (nItem.subNavigations) {
-        const newSubNav = nItem.subNavigations.filter(n => !n.accessibleTo ||
+        const newSubNav = nItem.subNavigations.filter(n => ((!n.accessibleTo ||
           n.accessibleTo.length === 0 ||
-          _.intersection(n.accessibleTo, this.params.roles).length > 0);
+          _.intersection(n.accessibleTo, this.params.roles).length > 0)) && (!n.env ||
+            n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
         nItem.subNavigations = [...newSubNav];
+        if (userStore.isInvestor && ['Individual', 'IRA', 'Entity'].includes(nItem.title)) {
+          if (statementStore.getTaxFormCountInNav(nItem.title.toLocaleLowerCase()) === 0) {
+            nItem.subNavigations = _.filter(
+              nItem.subNavigations,
+              subNavigation => subNavigation.component !== 'Statements',
+            );
+          }
+        }
       }
       filteredNavs.push(nItem);
     });
@@ -123,8 +164,10 @@ export class NavStore {
       nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
+          (!n.env || n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
       }
     }
     return nav;
@@ -138,13 +181,27 @@ export class NavStore {
       const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
+          (!n.env || n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
         if (nav.title === 'Application' && key === 'appStatus') {
           nav.subNavigations = this.filterByAccess(nav.subNavigations, appStatus);
         }
       }
       this.navMeta = nav;
+    }
+    const acctiveAccountList = userDetailsStore.getActiveAccounts;
+    if (this.navMeta && this.navMeta.subNavigations &&
+        acctiveAccountList && acctiveAccountList.length === 0) {
+      this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
+    }
+    if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations &&
+      statementStore.getTaxFormCountInNav(this.navMeta.title.toLocaleLowerCase()) === 0) {
+      this.navMeta.subNavigations = _.filter(
+        this.navMeta.subNavigations,
+        subNavigation => subNavigation.component !== 'Statements',
+      );
     }
   }
 
@@ -160,6 +217,16 @@ export class NavStore {
       } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
         this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
       }
+    }
+  }
+  @action
+  setMobileNavStatus(calculations) {
+    const {
+      topVisible, bottomPassed,
+    } = calculations;
+    if (typeof topVisible === 'boolean') {
+      // this.subNavStatus = 'main';
+      this.campaignHeaderStatus = bottomPassed;
     }
   }
 }

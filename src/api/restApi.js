@@ -1,6 +1,5 @@
 import request from 'superagent';
 import { API_ROOT } from '../constants/common';
-import { commonStore } from '../services/stores';
 
 /**
  * @desc Service to make asynchronous API calls from system
@@ -11,7 +10,7 @@ export class Api {
       request
         .get(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -27,7 +26,7 @@ export class Api {
       request
         .post(url.includes('https://') ? url : `${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -58,7 +57,7 @@ export class Api {
       request
         .delete(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -74,7 +73,7 @@ export class Api {
       request
         .put(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {

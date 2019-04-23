@@ -177,7 +177,7 @@
 }
 .menu-secondary-fixed{
     // border:none;
-    height:@58px;
+    height:@primaryHeaderHeight;
     margin:0 !important;
     // border-radius:0;
     // box-shadow:none;
@@ -204,7 +204,7 @@
             }
         }
         + .animate-placeholder{
-            height:@58px;
+            height:@primaryHeaderHeight;
         }
     }
 }
@@ -220,12 +220,16 @@
     @media only screen and (max-width : @largestTabletScreen){
         top: auto;
         bottom: -58px;
+        height: auto;
+        padding: 10px 0;
+        .ui.list {
+            margin: 0;
+        }
     }
     &.active{
         top:@primaryHeaderHeight;
         @media only screen and (max-width : @largestTabletScreen){
             top: auto;
-            bottom: 0;
         }
         &.animate{
             top:0;
@@ -564,6 +568,9 @@ footer{
             width:100%;
             top:58px;
             z-index:9;
+            &.campaign-mobile-dropdown+.animate-placeholder {
+                height: @40px;
+            }
         }
         &.inverted {
             background: fade(@neutral, 90%);
@@ -596,6 +603,10 @@ footer{
             top: 8px;
             left: 18px;
             color: @white;
+        }
+        &.campaign-mobile-dropdown+.animate-placeholder {
+            height: 0;
+            width: 100%;
         }
 	}
 	//Public Mobile View End
@@ -659,7 +670,7 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: 58px 0 0;
+    padding: @14px 0 0;
     height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
@@ -670,13 +681,16 @@ footer{
 }
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
+    z-index: 103;
     .ui.divider {
         margin-left: @24px;
         margin-right: @24px;
     }
     &.overlay .ui.image.logo {
-        margin-left: @24px;
-        margin-bottom: @20px;
+        // margin-left: @24px;
+        // margin-bottom: @20px;
+        margin: @14px 0 0 @24px;
+        width: 150px;
     }
     .social-media {
         text-align: center;

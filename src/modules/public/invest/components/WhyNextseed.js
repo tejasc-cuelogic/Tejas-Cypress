@@ -22,8 +22,11 @@ const highlights = [
   {
     title: 'Pre-vetted opportunities',
     icon: 'icons/prevetted.svg',
-    meta: `Every business must meet our proprietary financial
-    criteria in addition to federal regulatory requirements. `,
+    meta: (
+      <Aux>
+      Only the top 3% of businesses meet our
+    proprietary financial criteria.<sup>1</sup>
+      </Aux>),
   },
   {
     title: 'Flexible amounts',
@@ -54,17 +57,17 @@ const businesses = [
     {
       title: 'Houston, TX',
       image: 'investors/img-2.png',
-      description: 'The Sugar Refinery raised $273,800 from 213 investors',
+      description: 'Bravery Chef Hall raised $1,000,000 from 539 investors ',
     },
     {
-      title: 'San Francisco, CA',
+      title: 'Seattle, WA',
       image: 'investors/img.png',
-      description: 'Rambler raised $150,000 from 131 investors',
+      description: 'Fair Isle Brewing raised $327,800 from 292 investors',
     },
     {
       title: 'Austin, TX',
       image: 'investors/img-1.png',
-      description: 'The Brewer’s Table raised $3000,000 from 190 investors',
+      description: 'The Brewer’s Table raised $300,000 from 190 investors',
     },
   ],
   [
@@ -76,7 +79,7 @@ const businesses = [
     {
       title: 'Brooklyn, NY',
       image: 'investors/img-3.png',
-      description: 'California 88 raised $124,900 from 180 investors',
+      description: 'Oxalis raised $141,500 from 214 investors',
     },
     {
       title: 'Salt Lake City, UT',
@@ -127,11 +130,14 @@ export default class WhyNextseed extends Component {
             </Grid>
             <div className="center-align mb-50">
               { !authStore.isUserLoggedIn &&
-              <Button.Group vertical={isMobile} className={!isMobile ? 'mt-50' : ''}>
-                <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
-              </Button.Group>
-            }
+                <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+              }
             </div>
+            <p className="note center-align mb-50">
+              <sup>1</sup>This represents the percent of businesses that began the application
+              process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering
+              on the platform since NextSeed&apos;s inception.
+            </p>
             {/* <Grid className="business-learn-more mb-30">
             <Grid.Row>
               <Grid.Column className="center-align">

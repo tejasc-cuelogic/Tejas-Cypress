@@ -4,8 +4,10 @@ import { get } from 'lodash';
 import { inject } from 'mobx-react';
 import { Header, Divider } from 'semantic-ui-react';
 import KeytermsDetails from './investmentDetails/KeytermsDetails';
-import { InlineLoader, Image64 } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
@@ -20,7 +22,7 @@ class InvestmentDetails extends Component {
         block: 'start',
         behavior: 'smooth',
       });
-    } else {
+    } else if (!isMobile) {
       const sel = 'use-of-proceeds';
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
@@ -45,7 +47,7 @@ class InvestmentDetails extends Component {
     const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <Aux>
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
@@ -55,7 +57,7 @@ class InvestmentDetails extends Component {
             :
             <InlineLoader text={emptyContent} className="bg-offwhite" />
         }
-        <Divider hidden />
+        {/* <Divider hidden />
         <Image64
           srcUrl={campaign && campaign.media &&
             campaign.media.useOfProceeds &&
@@ -64,7 +66,7 @@ class InvestmentDetails extends Component {
           }
           imgType="useOfProceeds"
           fluid
-        />
+        /> */}
         <Divider section hidden />
         <Header as="h3" className="mb-30 anchor-wrap">
           Key Terms

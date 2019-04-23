@@ -42,6 +42,15 @@ export const allUsersQuery = gql`
   }
 `;
 
+export const userDetailsQueryForBoxFolder = gql`
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      storageDetails
+    }
+  }
+`;
+
 export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
@@ -76,6 +85,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         avatar {
           name
@@ -116,6 +126,7 @@ export const userDetailsQuery = gql`
               city
               state
               zipCode
+              streetTwo
             }
             isTrust
             trustDate
@@ -208,6 +219,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         status
       }
@@ -250,10 +262,10 @@ export const userAccreditationQuery = gql`
               expiration
               requestDate
               reviewed {
-                id
                 by
                 date
-                comment
+                justification
+                message
               }
               update {
                 id
@@ -268,6 +280,9 @@ export const userAccreditationQuery = gql`
                 fileInfo {
                   fileId
                   fileName
+                  fileHandle {
+                    boxFolderId
+                  }
                 }
               }
               verifier {
@@ -290,7 +305,8 @@ export const userAccreditationQuery = gql`
           id
           by
           date
-          comment
+          justification
+          message
         }
         update {
           id
@@ -305,6 +321,9 @@ export const userAccreditationQuery = gql`
           fileInfo {
             fileId
             fileName
+            fileHandle {
+              boxFolderId
+            }
           }
         }
         verifier {
@@ -380,10 +399,21 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
  }`;
 
 export const frozenEmailToAdmin = gql`
-mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!) {
+mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
   notifyAdminFrozenAccountActivity(
      userId: $userId
      accountId: $accountId
      activity: $activity
+     offeringId: $offeringId
+   )
+ }`;
+
+export const freezeAccount = gql`
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $message: String) {
+  freezeAccount(
+     userId: $userId
+     accountId: $accountId
+     freeze: $freeze
+     message: $message
    )
  }`;

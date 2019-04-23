@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
@@ -9,6 +8,7 @@ import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/manage/${component}`),
@@ -19,43 +19,46 @@ const getModule = component => Loadable({
 
 const navMeta = [
   {
-    title: 'Profile Data', to: 'profile-data', component: 'ProfileData', accessibleTo: [],
+    title: 'Profile Data', to: 'profile-data', component: 'ProfileData',
   },
   {
-    title: 'Individual', to: 'individual', component: 'AccountDetails', accessibleTo: ['INDIVIDUAL'],
+    title: 'Individual', to: 'individual', component: 'AccountDetails', accessibleTo: ['individual'],
   },
   {
-    title: 'IRA', to: 'ira', component: 'AccountDetails', accessibleTo: ['IRA'],
+    title: 'IRA', to: 'ira', component: 'AccountDetails', accessibleTo: ['ira'],
   },
   {
-    title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['ENTITY'],
+    title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
   },
   {
-    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'],
+    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
   },
   {
-    title: 'Activity', to: 'activity', component: ActivityHistory, load: false, accessibleTo: [],
+    title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
   },
 ];
 
-@inject('userStore', 'userDetailsStore')
+@inject('userStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class AccountDetails extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
+    if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
+      this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
+    }
   }
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);
   }
-  handleCloseModal = () => this.props.history.goBack();
+  handleCloseModal = () => this.props.history.push(this.props.refLink);
 
   render() {
     const { match } = this.props;
-    const { detailsOfUser } = this.props.userDetailsStore;
-    if (detailsOfUser.loading) {
+    const { inProgress } = this.props.uiStore;
+    const { getDetailsOfUserLoading, getDetailsOfUser } = this.props.userDetailsStore;
+    if (getDetailsOfUserLoading) {
       return <InlineLoader text="Loading User Details..." />;
     }
-    const details = toJS({ ...detailsOfUser.data.user });
+    const details = getDetailsOfUser;
     if (isEmpty(details)) {
       return <InlineLoader text="No Data Found" />;
     }
@@ -65,7 +68,9 @@ export default class AccountDetails extends Component {
       roles = [...roles, ...details.roles.map(r => r.name)];
     }
     const navItems = navMeta.filter(n =>
-      n.accessibleTo.length === 0 || intersection(n.accessibleTo, roles).length > 0);
+      ((!n.accessibleTo || n.accessibleTo.length === 0 ||
+        intersection(n.accessibleTo, roles).length > 0)) &&
+      (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
@@ -86,8 +91,8 @@ export default class AccountDetails extends Component {
                 </Header>
                 <Button.Group floated="right">
                   <Button inverted color="red" content="Delete Profile" />
-                  <Button onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
-                    <Icon className="ns-lock" /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
+                  <Button loading={inProgress === 'lock'} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
+                    <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                   </Button>
                 </Button.Group>
               </Item.Content>
@@ -102,7 +107,18 @@ export default class AccountDetails extends Component {
                     const CurrentModule = item.load === false ?
                       item.component : getModule(item.component);
                     return (
-                      <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule {...props} resourceId={details.id} />} />
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => (
+                          <CurrentModule
+                            module={item.title === 'Activity' ? 'userDetails' : false}
+                            showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
+                            {...props}
+                            resourceId={details.id}
+                          />)
+                              }
+                      />
                     );
                   })
                 }

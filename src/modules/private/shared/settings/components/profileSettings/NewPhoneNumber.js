@@ -6,6 +6,8 @@ import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -30,7 +32,7 @@ export default class NewPhoneNumber extends Component {
     const { phoneNumber, mfaMethod } = ID_VERIFICATION_FRM.fields;
     const phoneNumberValue = phoneNumber.value;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue).then(() => {
+    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile).then(() => {
       this.props.identityStore.setIsOptConfirmed(false);
       this.props.uiStore.clearErrors();
       this.props.history.push(`${this.props.refLink}/confirm`);
@@ -45,7 +47,7 @@ export default class NewPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick>
+      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Enter new phone number</Header>
           <p>We will send you a verification code to the phone number you provide.</p>
@@ -56,20 +58,19 @@ export default class NewPhoneNumber extends Component {
               name="phoneNumber"
               type="tel"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              format="###-###-####"
+              format="(###) ###-####"
               changed={personalInfoMaskedChange}
               phoneNumber
             />
             <div className="field center-align">
               <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
-              <Form.Group className="center-align" inline>
-                <FormRadioGroup
-                  fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
-                  name="mfaMethod"
-                  containerclassname="button-radio center-align"
-                  changed={(e, result) => personalInfoChange(e, result)}
-                />
-              </Form.Group>
+              <FormRadioGroup
+                fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
+                name="mfaMethod"
+                containerclassname="mt-30 radio-basic center-align"
+                widths="equal"
+                changed={(e, result) => personalInfoChange(e, result)}
+              />
             </div>
             {errors &&
               <Message error className="mt-20">

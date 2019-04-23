@@ -20,7 +20,7 @@ class KeyTerms extends Component {
   render() {
     const { campaign } = this.props;
     const { offerStructure } = this.props.campaignStore;
-    const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity}months` : 'N/A';
+    const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
       <Aux>
@@ -107,12 +107,12 @@ class KeyTerms extends Component {
                   <Popup
                     hoverable
                     trigger={<Icon name="help circle" color="green" />}
-                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
+                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center/investor/how-revenue-sharing-notes-work">Education Center</Link>.</span>)}
                     position="top center"
                   />
                 </Table.Cell>
                 <Table.Cell className="grey-header" >
-                  {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? campaign.keyTerms.revSharePercentage : '-'}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? `${get(campaign, 'keyTerms.revSharePercentage')}${get(campaign, 'keyTerms.revSharePercentage').includes('%') ? '' : '%'}` : '-'}
                 </Table.Cell>
               </Table.Row>
             </Aux>
@@ -142,17 +142,19 @@ class KeyTerms extends Component {
                     NA
                   </Table.Cell>
                 </Table.Row> */}
-                {get(campaign, 'keyTerms.premoneyValuation') &&
+                {/* {get(campaign, 'keyTerms.premoneyValuation') &&
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : ' NA'}
+                      {get(campaign, 'keyTerms.premoneyValuation') ?
+                      Helper.CurrencyFormat(get(campaign,
+                        'keyTerms.premoneyValuation')) : ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>
-                }
+                } */}
                 {get(campaign, 'keyTerms.unitPrice') &&
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>

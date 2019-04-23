@@ -7,6 +7,17 @@ import { Form, Header, Grid } from 'semantic-ui-react';
 @inject('accreditationStore')
 @observer
 export default class IncomeQualificationCheck extends Component {
+  componentWillMount() {
+    this.props.accreditationStore.setFieldVal('docsToUpload', []);
+  }
+  componentWillUpdate() {
+    const {
+      INCOME_UPLOAD_DOC_FORM, ASSETS_UPLOAD_DOC_FORM,
+    } = this.props.accreditationStore;
+    this.props.accreditationStore.setFieldVal('docsToUpload', []);
+    this.props.accreditationStore.resetAccreditation(INCOME_UPLOAD_DOC_FORM);
+    this.props.accreditationStore.resetAccreditation(ASSETS_UPLOAD_DOC_FORM);
+  }
   render() {
     // const incomeQualChecks = INCOME_QUALIFICATION_CHECK_META.slice();
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
@@ -22,6 +33,7 @@ export default class IncomeQualificationCheck extends Component {
           <Grid columns={1}>
             {ACCREDITATION_FORM.fields.method.values.map(method => (
               <Grid.Column
+                key={method.value}
                 onClick={e => accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: method.value })}
               >
                 <div className={`user-type ${(ACCREDITATION_FORM.fields.method.value === method.value ? 'active' : '')}`}>

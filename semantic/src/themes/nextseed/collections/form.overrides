@@ -59,6 +59,11 @@
             margin-left:-@14px;
             margin-right:-@14px;
             padding:0 @14px;
+            .ui.selection.dropdown .menu>.item {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
         }
         >label{
             // display:inline-block;
@@ -120,6 +125,7 @@
                 font-weight:@fontMedium;
                 text-overflow:ellipsis;
                 cursor:default;
+                pointer-events:none;
                 background:none !important;
             }
             p.commet-area{
@@ -177,6 +183,16 @@
         &.error .ui.dropdown .text:not(.default){
             color:@neutral;
         }
+        .pac-container {
+            left:0 !important;
+            top:100% !important;
+        }
+        .display-only > a{
+            display:block;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;
@@ -189,6 +205,9 @@
         margin-top:@28px;
         margin-bottom:@7px;
         display: block !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            min-width:100%;
+        }
         label{
             font-size:@14px;
         }
@@ -200,6 +219,10 @@
             text-align:center;
             border-width:2px !important;
             background-color:@neutral-offwhite !important;
+            &[type=number]{
+                -webkit-appearance:none;
+                -moz-appearance:textfield;
+            }
         }
     }
     .fields{
@@ -218,20 +241,57 @@
             padding-left:@gutterWidth;
             padding-right:@gutterWidth;
             margin-bottom:@14px;
+            .pac-container{
+                left:@gutterWidth !important;
+            }
         }
         &.inline .field{
             margin:0 !important;
         }
-        &.range .field:not(:last-child):after{
-            width:6px;
-            content:"-";
-            color:@neutral;
-            font-weight:@fontMedium;
-            line-height:@inputLineHeight;
-            position:absolute;
-            right:-3px;
-            top:@inputVerticalPadding;
+        &.range{
+            .field{
+                margin-bottom:0 !important;
+            }
+            .field:not(:last-child):after{
+                width:6px;
+                content:"-";
+                color:@neutral;
+                font-weight:@fontMedium;
+                line-height:@inputLineHeight;
+                position:absolute;
+                right:-3px;
+                top:@inputVerticalPadding;
+            }
         }
+        // &.radio-basic {
+        //     .field{
+        //         padding:@30px 0 @10px 0;
+        //         border-right: 1px solid @border-light;
+        //         @media only screen and (max-width : @largestMobileScreen){
+        //             border: none;
+        //         }
+        //         &:last-child {
+        //             border-right: 0;
+        //         }
+        //     }
+        //     .ui.radio.checkbox label{
+        //         padding-left: 0;
+        //         &::before {
+        //             width: 20px;
+        //             height: 20px;
+        //             top: -30px;
+        //             left: 50%;
+        //             transform: translateX(-50%);
+        //         }
+        //         &::after{
+        //             width: 12px;
+        //             height: 12px;
+        //             top: -32px;
+        //             left: 50%;
+        //             transform: translate(-50%, 50%);
+        //         }
+        //     }
+        // }
     }
     .button-radio .fields.vertical{
         flex-direction:column;
@@ -357,6 +417,7 @@
         }
     }
     p.field-error{
+        margin-top:@2px;
         font-size:@12px;
         line-height:@14px;
         color:@highlight-primary;
@@ -769,6 +830,9 @@ textarea{
             color:@neutral-middark;
             font-weight:@normal;
             font-style:italic;
+        }
+        &.attached > a{
+            color:@primary-one !important;
         }
     }
 }

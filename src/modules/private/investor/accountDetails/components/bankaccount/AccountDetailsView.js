@@ -5,11 +5,13 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
 import NSImage from '../../../../../shared/NSImage';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -20,7 +22,10 @@ export default class AccountDetailsView extends Component {
       accountDetails.plaidInstitutionId : null;
 
     if (activeBankInstutationId) {
-      bankAccountActions.getById(activeBankInstutationId, accountType);
+      this.props.bankAccountStore.setFieldValue('loadingState', true);
+      bankAccountActions.getById(activeBankInstutationId, accountType).then(() => {
+        this.props.bankAccountStore.setFieldValue('loadingState', false);
+      });
     } else if (accountType === 'active') {
       this.props.bankAccountStore.setActiveBankPlaidLogo(null);
     } else if (accountType === 'pending') {
@@ -40,13 +45,18 @@ export default class AccountDetailsView extends Component {
       accountDetails, click, match, accountType, pendingAccoungDetails, uiStore,
       userDetailsStore,
     } = this.props;
-    const { activeBankPladLogo, pendingBankPladLogo } = this.props.bankAccountStore;
-    const pladidLogo = accountType === 'pending' ? pendingBankPladLogo : activeBankPladLogo;
+    const { activeBankPladLogo, pendingBankPladLogo, loadingState } = this.props.bankAccountStore;
+    const pladidLogo = accountType === 'pending' ?
+      pendingBankPladLogo : activeBankPladLogo;
     let currentStaus = '';
     if (accountType === 'active') {
-      currentStaus = pendingAccoungDetails ? 'Pending Removal' : 'Active';
+      currentStaus = (pendingAccoungDetails && pendingAccoungDetails.status !== 'APPROVED') ? 'Inactive (Pending Removal)' : 'Active';
     } else {
-      currentStaus = accountDetails.status ? LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+      currentStaus = accountDetails.status ?
+        LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+    }
+    if (loadingState) {
+      return <InlineLoader />;
     }
     return (
       <Card.Content>
@@ -90,27 +100,19 @@ export default class AccountDetailsView extends Component {
                 </Item.Content>
               </Item>
             </Grid.Column>
-              <Grid.Column>
-                <Item>
-                  <Item.Content>
-                    {accountDetails.pendingUpdate &&
-                      <Aux>
-                        <Item.Extra>Status</Item.Extra>
-                        {accountType === 'pending' ?
-                          <Item.Header as={Link} to={`${match.url}/link-bank-account/verify-update`}>
-                            {currentStaus}
-                          </Item.Header>
-                          :
-                          <Item.Header>
-                            {currentStaus}
-                          </Item.Header>
-                        }
-                      </Aux>
-                    }
-                  </Item.Content>
-                </Item>
-              </Grid.Column>
-            <Grid.Column width={3} textAlign="right" verticalAlign="middle">
+            <Grid.Column>
+              <Item>
+                <Item.Content>
+                  <Aux>
+                    <Item.Extra>Status</Item.Extra>
+                      <Item.Header>
+                        {currentStaus}
+                      </Item.Header>
+                  </Aux>
+                </Item.Content>
+              </Item>
+            </Grid.Column>
+            <Grid.Column width={3} textAlign={!isMobile ? 'right' : ''} verticalAlign="middle">
               {accountType === 'active' ?
                 accountDetails && !accountDetails.pendingUpdate &&
                 <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} color="green" content="Change Linked Bank" />

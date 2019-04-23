@@ -12,7 +12,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore')
+@inject('accreditationStore', 'commonStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -21,11 +21,23 @@ export default class AllAccreditationRequests extends Component {
       this.props.accreditationStore.initRequest();
     }
   }
+  handleDocumentsLink = (e, folderId) => {
+    e.preventDefault();
+    const params = {
+      id: folderId,
+      accountType: 'SERVICES',
+      type: 'FOLDERS',
+    };
+    this.props.commonStore.getsharedLink(params).then((shareLink) => {
+      window.open(shareLink);
+    });
+  }
   paginate = params => this.props.accreditationStore.initRequest(params);
   render() {
-    const { match, accreditationStore } = this.props;
+    const { match, accreditationStore, commonStore } = this.props;
+    const { inProgress } = commonStore;
     const {
-      accreditations, loading, count, requestState,
+      accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
     if (loading) {
       return <InlineLoader />;
@@ -58,7 +70,7 @@ export default class AllAccreditationRequests extends Component {
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('mm-dd-yyyy') : <p className="intro-text">N/A</p>}
+                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('MM/DD/YYYY') : <p className="note">N/A</p>}
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
@@ -83,8 +95,11 @@ export default class AllAccreditationRequests extends Component {
                       <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
                         accreditation.assetsUpload[0].fileInfo &&
                         accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                          <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >Uploads</a>
-                        : <p className="intro-text">N/A</p>
+                        (inProgress === accreditation.assetsUpload[0]
+                          .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p> :
+                          <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
+                          )
+                          : <p className="note">N/A</p>
                         : 'Verifier'}
                         {accreditation.verifier &&
                           <Aux>
@@ -95,12 +110,17 @@ export default class AllAccreditationRequests extends Component {
                       </p>
                     </Table.Cell>
                     {accreditation.accreditationStatus === 'REQUESTED' ?
-                      <Actions
-                        accountId={accreditation.accountId}
-                        userId={accreditation.userId}
-                        accountType={get(accreditation, 'accountType[0]')}
-                        {...this.props}
-                      /> :
+                      <Aux>
+                        <Actions
+                          accountId={accreditation.accountId}
+                          userId={accreditation.userId}
+                          accountType={get(accreditation, 'accountType[0]')}
+                          emailVerifier={emailVerifier}
+                          accreditation={accreditation}
+                          requestDate={accreditation.requestDate}
+                          {...this.props}
+                        />
+                      </Aux> :
                       <Table.Cell>
                         <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
                       </Table.Cell>
@@ -110,7 +130,7 @@ export default class AllAccreditationRequests extends Component {
               }
             </Table.Body>
           </Table>
-          <Route path={`${match.url}/:action/:userId/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
+          <Route path={`${match.url}/:action/:userId/:requestDate/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
         </div>
         {totalRecords > 0 &&
           <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />

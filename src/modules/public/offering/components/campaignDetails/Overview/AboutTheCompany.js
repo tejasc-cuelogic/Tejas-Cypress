@@ -17,7 +17,7 @@ class AboutTheCompany extends Component {
     const { campaign } = this.props;
     return (
       <Aux>
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Top Things to Know
           <span className="anchor" id="top-things-to-know" />
         </Header>

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { get, capitalize, has } from 'lodash';
-import { Card, Table, Button } from 'semantic-ui-react';
+import { get, capitalize, has, lowerCase } from 'lodash';
+import { Card, Table, Button, Icon } from 'semantic-ui-react';
 import { InlineLoader, DateTimeFormat, NsPagination } from '../../../../../theme/shared';
 import { STATUS_MAPPING, STATUS_META } from '../../../../../services/constants/admin/transactions';
 import { NoR } from '../../../../../theme/table/NSTable';
@@ -16,8 +16,11 @@ export default class AllTransactions extends Component {
   componentWillMount() {
     const { statusType } = this.props.match.params;
     const transStatus = STATUS_MAPPING[statusType].status;
-    this.props.transactionsStore.resetData();
-    this.props.transactionsStore.initRequest(transStatus, statusType); // load data
+    if (this.props.match.isExact && this.props.transactionsStore.pageReload) {
+      this.props.transactionsStore.resetData();
+      this.props.transactionsStore.initRequest(transStatus, statusType); // load data
+    }
+    this.props.transactionsStore.pageReload = true;
   }
 
   getUserName = (info, userId) => (
@@ -75,34 +78,44 @@ export default class AllTransactions extends Component {
                       {
                         columns.map(col => (
                           <Table.Cell key={col.field} textAlign={col.textAlign} collapsing={col.field === 'userName'}>
-                            {
+                            {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) :
                               ['startDate', 'failDate', 'estDateAvailable'].includes(col.field) ?
                                 row[col.field] !== null ? <DateTimeFormat unix format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
                                 this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation) :
                                 col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field]) :
-                                col.field === 'direction' ? capitalize(row[col.field]) :
+                                col.field === 'direction' ? capitalize(row[col.field]) : col.field === 'accountType' ?
+                                  <Aux>
+                                    {get(row, 'investorAccountInfo.accountType') ?
+                                      <Icon size="large" className={`ns-${lowerCase(get(row, 'investorAccountInfo.accountType'))}-line`} color="green" /> : 'N/A'
+                                    }
+                                  </Aux> :
                                 get(row, col.field) === undefined ? 'N/A' : row[col.field]
                             }
                           </Table.Cell>
                         ))
                       }
-                      <Table.Cell>
-                        <Button.Group vertical compact size="mini">
-                          {(has(STATUS_MAPPING[statusType], 'syncCta') && row.gsProcessId && !row.gsTransactionId) ?
-                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].syncCta.action, row.direction)}>
-                              {STATUS_MAPPING[statusType].syncCta.title}
-                            </Button> :
-                            has(STATUS_MAPPING[statusType], 'affirmativeCta') &&
-                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
-                              {STATUS_MAPPING[statusType].affirmativeCta.title}
-                            </Button>
-                          }
-                          { has(STATUS_MAPPING[statusType], 'failedCta') &&
-                            <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">
-                              {STATUS_MAPPING[statusType].failedCta.title}
-                            </Button>
-                          }
-                        </Button.Group>
+                      <Table.Cell width={row.failDesc ? '2' : ''}>
+                        {row.failDesc ?
+                          <Button disabled>
+                            Pending Bank Change
+                          </Button> :
+                          <Button.Group vertical compact size="mini">
+                            {(has(STATUS_MAPPING[statusType], 'syncCta') && row.gsProcessId && !row.gsTransactionId) ?
+                              <Button loading={btnLoader.includes(row.requestId)} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].syncCta.action, row.direction)}>
+                                {STATUS_MAPPING[statusType].syncCta.title}
+                              </Button> :
+                              has(STATUS_MAPPING[statusType], 'affirmativeCta') &&
+                              <Button loading={btnLoader.includes(row.requestId)} color="blue" disabled={row.failDesc} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
+                                {STATUS_MAPPING[statusType].affirmativeCta.title}
+                              </Button>
+                            }
+                            { has(STATUS_MAPPING[statusType], 'failedCta') &&
+                              <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">
+                                {STATUS_MAPPING[statusType].failedCta.title}
+                              </Button>
+                            }
+                          </Button.Group>
+                        }
                       </Table.Cell>
                     </Table.Row>
                   ))

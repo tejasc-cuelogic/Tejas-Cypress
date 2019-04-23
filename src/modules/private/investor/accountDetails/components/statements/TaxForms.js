@@ -25,6 +25,7 @@ export default class TaxForms extends Component {
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    this.props.statementStore.setFieldValue('isAdmin', this.props.isAdmin);
     const {
       getLegalDocsFileIds, alreadySet,
     } = this.props.agreementsStore;
@@ -70,7 +71,7 @@ export default class TaxForms extends Component {
                   instructions={instructions}
                 />
               </Card>
-              {totalRecords > 0 &&
+              {totalRecords > 0 && totalRecords > requestState.perPage &&
               <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>

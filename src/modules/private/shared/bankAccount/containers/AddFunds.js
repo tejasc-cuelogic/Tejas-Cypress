@@ -6,24 +6,29 @@ import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
+import Helper from '../../../../../helper/utility';
 
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
   componentWillMount() {
-    this.props.bankAccountStore.validateAddfundsAmount(this.props.accountStore.investmentAccType);
+    // this.props.bankAccountStore.validateAddFunds();
+    // eslint-disable-next-line max-len
+    // this.props.bankAccountStore.validateAddfundsAmount(this.props.accountStore.investmentAccType);
+    this.props.bankAccountStore.setDepositMoneyNow(true);
   }
   componentDidMount() {
     // this.props.bankAccountStore.validateForm('formAddFunds');
   }
   componentWillUnmount() {
     this.props.bankAccountStore.resetShowAddFunds();
+    // this.props.bankAccountStore.resetEntityAddFundsForm();
+    // this.props.bankAccountStore.resetAddFundsForm();
   }
   doNotDepositMoneyNow = () => {
+    this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setDepositMoneyNow(false);
-    if (!this.props.bankAccountStore.formAddFunds.fields.value.error) {
-      this.renderStep();
-    }
+    this.renderStep();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -31,6 +36,9 @@ export default class AddFunds extends Component {
     this.props.bankAccountStore.setShouldValidateAmount(true);
     this.renderStep();
   }
+
+
+  isValidFund = fundObj => !fundObj.meta.isValid || fundObj.fields.value.value === '';
 
   renderStep = () => {
     if (this.props.accountStore.investmentAccType === 'individual') {
@@ -71,14 +79,15 @@ export default class AddFunds extends Component {
     }
   }
 
+
   render() {
     const {
-      formAddFunds,
       addFundChange,
-      formEntityAddFunds,
+      isAccountPresent,
+      addFundsByAccType,
     } = this.props.bankAccountStore;
     const { errors } = this.props.uiStore;
-    const isValid = this.props.accountStore.investmentAccType === 'entity' ? (!formEntityAddFunds.meta.isValid || !formEntityAddFunds.fields.value.value) : (!formAddFunds.meta.isValid || !formAddFunds.fields.value.value);
+    const isInValid = this.isValidFund(addFundsByAccType);
     return (
       <Aux>
         <div className="center-align">
@@ -91,9 +100,9 @@ export default class AddFunds extends Component {
                 type="tel"
                 currency
                 placeholder="$ 15,000"
-                fielddata={this.props.accountStore.investmentAccType === 'entity' ? formEntityAddFunds.fields.value : formAddFunds.fields.value}
-                changed={values => addFundChange(values, 'value', this.props.accountStore.investmentAccType)}
-                maxLength={formAddFunds.fields.value.maxLength}
+                fielddata={addFundsByAccType.fields.value}
+                changed={values => addFundChange(values, 'value')}
+                maxLength={addFundsByAccType.maxLength}
                 prefix="$ "
                 showerror
                 allowNegative={false}
@@ -104,11 +113,10 @@ export default class AddFunds extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="relaxed" content="Confirm" disabled={isValid} />
+            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent} />
           </Form>
-          {this.props.accountStore.investmentAccType !== 'entity' ?
-            <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-            : ''
+          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) &&
+            <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
           }
         </div>
       </Aux>

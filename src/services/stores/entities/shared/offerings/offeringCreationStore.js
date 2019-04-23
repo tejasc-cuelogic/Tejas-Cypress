@@ -8,7 +8,7 @@ import cleanDeep from 'clean-deep';
 import {
   DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
 } from '../../../../constants/admin/offerings';
@@ -31,6 +31,7 @@ export class OfferingCreationStore {
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+  @observable CLOSURE_SUMMARY_FRM = Validator.prepareFormObject(CLOSURE_SUMMARY);
   @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
@@ -77,6 +78,7 @@ export class OfferingCreationStore {
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
   @observable offeringFilingList = {};
+  @observable filingListApiRes = {};
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
@@ -184,7 +186,7 @@ export class OfferingCreationStore {
 
   @action
   resetAllForms = () => {
-    const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
     });
@@ -244,7 +246,18 @@ export class OfferingCreationStore {
       },
     };
   }
-
+  @action
+  resetAffiliatedIssuerForm = () => {
+    this.AFFILIATED_ISSUER_FRM =
+      Validator.prepareFormObject(
+        AFFILIATED_ISSUER,
+        false,
+        true,
+        false,
+        { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+      );
+    this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+  }
   @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
@@ -480,7 +493,7 @@ export class OfferingCreationStore {
   @action
   maskChange = (values, form, field) => {
     const fieldValue =
-      (field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (field === 'processingDate' || field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -831,6 +844,7 @@ export class OfferingCreationStore {
       OFFERING_COMPANY_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },
       COMPANY_LAUNCH_FRM: { isMultiForm: false },
+      CLOSURE_SUMMARY_FRM: { isMultiForm: false },
       LAUNCH_CONTITNGENCIES_FRM: { isMultiForm: true },
       CLOSING_CONTITNGENCIES_FRM: { isMultiForm: true },
       OFFERING_DETAILS_FRM: { isMultiForm: false },
@@ -1059,14 +1073,20 @@ export class OfferingCreationStore {
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData.closureSummary = get(payloadData[keyName].launch, 'terminationDate') ? { ...getOfferingById.closureSummary, processingDate: get(payloadData[keyName].launch, 'terminationDate') } : null;
-        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
-          Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
+        payloadData.closureSummary = mergeWith(
+          toJS(getOfferingById.closureSummary),
+          payloadData.closureSummary,
+          this.mergeCustomize,
+        );
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       } else if (keyName === 'leadership') {
@@ -1080,6 +1100,7 @@ export class OfferingCreationStore {
       } else if (keyName === 'editForm') {
         payloadData.offering = {};
         payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.closureSummary = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
         payloadData = {
           ...payloadData,
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
@@ -1094,21 +1115,30 @@ export class OfferingCreationStore {
           payloadData.offering,
           this.mergeCustomize,
         );
-        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
-        payloadData.offering = cleanDeep(payloadData.offering);
-        payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
-        payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
-      } else if (keyName === 'editPocForm') {
-        payloadData.offering = {};
-        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
-        payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
-        payloadData.offering = mergeWith(
-          toJS(getOfferingById.offering),
-          payloadData.offering,
+        payloadData.closureSummary = mergeWith(
+          toJS(getOfferingById.closureSummary),
+          payloadData.closureSummary,
           this.mergeCustomize,
         );
         payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
         payloadData.offering = cleanDeep(payloadData.offering);
+        payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
+        payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+      } else if (keyName === 'editPocForm') {
+        if (get(getOfferingById, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
+          payloadData.offering = {};
+          payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+          payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
+          payloadData.offering = mergeWith(
+            toJS(getOfferingById.offering),
+            payloadData.offering,
+            this.mergeCustomize,
+          );
+          payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
+          payloadData.offering = cleanDeep(payloadData.offering);
+        }
       } else if (keyName === 'BonusRewardTier') {
         const rewardsTiersData = getOfferingById.rewardsTiers || [];
         const isEarlyBirds = fields.isEarlyBirds.value;
@@ -1204,7 +1234,7 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            toJS(getOfferingById[keyName]),
+            getOfferingById[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
@@ -1245,7 +1275,8 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading) {
+          this.initLoad.splice(this.initLoad.indexOf('ISSUER_FRM'), 1);
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
@@ -1266,7 +1297,7 @@ export class OfferingCreationStore {
       variables: { offeringId, bacType },
       onFetch: (res) => {
         if (res && res.getOfferingBac) {
-          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {}, false);
+          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {});
         }
       },
     });
@@ -1315,7 +1346,7 @@ export class OfferingCreationStore {
     const offeringBacDetails = Validator.evaluateFormData(fields);
     offeringBacDetails.offeringId = getOfferingById.id;
     offeringBacDetails.bacType = bacType;
-    let mutation = createBac;
+    let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
       offeringBacDetails,
     };
@@ -1588,7 +1619,8 @@ export class OfferingCreationStore {
           map(fields, (f) => {
             if (f.earlyBirdQuantity > 0 && reward.earlyBirdQuantity > 0) {
               f.value.push('EARLY_BIRDS');
-            } else if (reward.tiers.includes(f.key)) {
+            }
+            if (reward.tiers.includes(f.key)) {
               f.value.push(f.key);
             }
             return false;
@@ -1617,7 +1649,7 @@ export class OfferingCreationStore {
         rewardStatus: 'In Review',
         earlyBirdQuantity: fields.isEarlyBirds.value.length ?
           earlyBirdQty : 0,
-        expirationDate: moment(fields.expirationDate.value).toISOString(),
+        expirationDate: fields.expirationDate.value ? moment(new Date(fields.expirationDate.value)).toISOString() : '',
         tiers,
       },
     };
@@ -1658,7 +1690,7 @@ export class OfferingCreationStore {
   @action
   getOfferingFilingList = (offeringId) => {
     const params = { field: 'created', sort: 'asc' };
-    graphql({
+    this.filingListApiRes = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingFilingList,

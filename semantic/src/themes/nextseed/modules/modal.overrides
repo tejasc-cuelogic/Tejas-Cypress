@@ -260,13 +260,11 @@
         }
     }
 }
-.ui.modal.deletion{
-    .actions{
-        .ui.primary.button{
-            background-color:@highlight-primary;
-            &:hover, &:focus, &:active{
-                background-color:darken(desaturate(spin(@highlight-primary, 0.0997), 7.0155), 4.9020);
-            }
+.ui.modal.deletion .actions{
+    .ui.primary.button{
+        background-color:@highlight-primary;
+        &:hover, &:focus, &:active{
+            background-color:darken(desaturate(spin(@highlight-primary, 0.0997), 7.0155), 4.9020);
         }
     }
 }
@@ -431,6 +429,9 @@
             padding:@14px 0;
             line-height:@22px;
             text-align:center;
+            @media only screen and (max-width : @largestMobileScreen){
+				padding:@14px;
+			}
         }
     }
     i.icons{
@@ -522,7 +523,8 @@
     padding:@10px;
     margin:0;
     font-size:@12px;
-    background:@neutral-midwhite;
+    color:@neutral-offwhite;
+    background:@neutral-middark;
     border-radius:100%;
     position:fixed;
     top:10px;
@@ -592,6 +594,7 @@
         position:fixed;
         top:1rem;
         right:1rem;
+        opacity:1;
         @media only screen and (max-width:@largestTabletScreen){
             color:@neutral-middark;
         }
@@ -603,7 +606,10 @@
         background:@white;
         border-radius:@10px;
         position:relative;
-        padding:@50px @70px;
+        padding:@50px @64px;
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @30px !important;
+        }
         .field-wrap{
             h6{
                 font-weight:@fontMedium;
@@ -667,6 +673,11 @@
             }
             .sub.header{
                 font-weight:@normal;
+            }
+        }
+        .ui.error.form {
+            @media only screen and (max-width:@largestMobileScreen){
+                padding: 0 @14px;
             }
         }
     }

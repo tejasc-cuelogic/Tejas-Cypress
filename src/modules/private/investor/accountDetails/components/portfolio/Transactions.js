@@ -83,9 +83,11 @@ export default class Transactions extends Component {
         <Form className="inner-content-spacer">
           <Grid>
             <Grid.Row verticalAlign="middle">
-              <Grid.Column width={4}>
-                <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select investment" options={investmentOptions} />
-              </Grid.Column>
+              {investmentOptions.length > 1 &&
+                <Grid.Column width={4}>
+                  <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select Investment" options={investmentOptions} />
+                </Grid.Column>
+              }
               {aggrementId &&
                 <Grid.Column floated="right" align="right" width={4}>
                   <Button onClick={this.handleViewLoanAgreement} className="link-button highlight-text">View Loan Agreement</Button>

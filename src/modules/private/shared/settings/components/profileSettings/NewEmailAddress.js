@@ -6,16 +6,19 @@ import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
     this.props.authStore.requestEmailChange().then(() => {
       this.props.uiStore.clearErrors();
+      this.props.identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
-      this.props.authStore.setCredentials({ email: email.value, password: password.value });
+      this.props.authStore.setCredentials({
+        email: email.value.toLowerCase(), password: password.value,
+      });
       this.props.history.push(`${this.props.refLink}/confirm-email-address`);
     })
       .catch(() => {});

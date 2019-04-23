@@ -67,7 +67,7 @@ export const CAMPAIGN_KEYTERMS_REGULATION = {
   FP_CF: 'Reg CF - US',
   BD_CF: 'Reg CF Offering',
   BD_506C: 'Reg D Offering',
-  BD_CF_506C: 'Parallel Offering',
+  BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
 };
 export const CAMPAIGN_REGULATION_DETAILED = {
   REGULATION: {
@@ -75,7 +75,7 @@ export const CAMPAIGN_REGULATION_DETAILED = {
     FP_CF: 'Regulation Crowdfunding',
     BD_CF: 'Regulation Crowdfunding',
     BD_506C: 'Regulation D 506(c)',
-    BD_CF_506C: 'Parallel Offering',
+    BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
   },
   TOOLTIP: {
     FP_TX: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,

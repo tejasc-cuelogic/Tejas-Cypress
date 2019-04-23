@@ -21,11 +21,13 @@ export default class Summary extends React.Component {
     if (!alreadySet) {
       getLegalDocsFileIds();
     }
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
+
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     const { userDetails } = this.props.userDetailsStore;
-    this.props.uiStore.setProgress(!get(userDetails, 'info.firstName'));
+    this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
   handleCreateAccount = () => {
     const {
@@ -34,6 +36,7 @@ export default class Summary extends React.Component {
       partialInvestNowSessionURL,
       setPartialInvestmenSession,
     } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
@@ -44,14 +47,13 @@ export default class Summary extends React.Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
       this.props.individualAccountStore.submitAccount().then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
         if (partialInvestNowSessionURL) {
           this.props.history.push(partialInvestNowSessionURL);
           setPartialInvestmenSession();
-        } else {
-          this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-          if (!this.props.individualAccountStore.showProcessingModal) {
-            this.props.history.replace('app/summary');
-          }
+        } else if (!this.props.individualAccountStore.showProcessingModal) {
+          this.props.history.push('/app/summary');
+          this.props.uiStore.resetcreateAccountMessage();
         }
       }).catch(() => { });
     }
@@ -72,9 +74,9 @@ export default class Summary extends React.Component {
       formAddFunds,
       plaidAccDetails,
       formLinkBankManually,
-      depositMoneyNow,
-      isEncrypted,
-      shouldValidateAmount,
+      routingNum,
+      isAccountPresent,
+      accountAttributes,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
@@ -101,23 +103,20 @@ export default class Summary extends React.Component {
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {(formLinkBankManually.fields.routingNumber.value &&
-                  !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
+                {!isEmpty(routingNum) &&
                   <Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
-                      {formLinkBankManually.fields.routingNumber.value}
+                      {routingNum || ''}
                     </Table.Cell>
                   </Table.Row>
                 }
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {!depositMoneyNow ?
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
                       Helper.CurrencyFormat(0) :
-                      formAddFunds.fields.value.value !== '' && shouldValidateAmount
-                       ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value || 0)}` :
-                        Helper.CurrencyFormat(0)}
+                      Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -143,7 +142,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !bankAccountNumber} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
         </div>
       </Aux>
     );

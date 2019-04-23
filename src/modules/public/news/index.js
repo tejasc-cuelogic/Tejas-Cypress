@@ -80,7 +80,7 @@ class News extends Component {
           givenName: givenName.value,
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-          this.props.identityStore.requestOtpWrapper().then(() => {
+          this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
             this.props.history.push('/auth/confirm-email');
           });
         }
@@ -159,7 +159,8 @@ class News extends Component {
                         minScore={4}
                         iconDisplay
                         tooShortWord="Weak"
-                        scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                        // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                        scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
                         inputProps={{
                           name: 'password', autoComplete: 'off', placeholder: 'Password',
                         }}

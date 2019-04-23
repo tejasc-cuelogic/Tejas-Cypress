@@ -10,7 +10,7 @@ import { SubmitButton } from '../../modules/shared/businessApplication/component
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore')
+@inject('navStore', 'uiStore', 'userDetailsStore')
 @observer
 export class NavItems extends Component {
   state = { active: '', active2: '', byHideArrow: '' };
@@ -20,17 +20,24 @@ export class NavItems extends Component {
       const newState2 = name;
       this.setState({ active: newState, active2: newState2 });
     }
-    if (this.props.isApp && e.target.className === 'dropdown icon') {
-      const { active2 } = this.state;
-      if (active2 === name) {
-        this.setState({ byHideArrow: name });
+    if (!(this.props.userDetailsStore.getAccountList.length === 1
+      && name === this.props.uiStore.defaultNavExpanded)) {
+      if (this.props.isApp && e.target.className === 'dropdown icon') {
+        const { active2 } = this.state;
+        if (active2 === name) {
+          this.setState({ byHideArrow: name });
+        }
       }
+
+      const { setNavExpanded } = this.props.uiStore;
+      setNavExpanded(false); // reset defaultNavExpanded
     }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
   };
   isActive = (to, location, app, subNavigations) => {
+    const { defaultNavExpanded } = this.props.uiStore;
     if (to === '' && subNavigations) {
       return subNavigations.find(s => location.pathname.startsWith(`/${s.to}`));
     }
@@ -39,7 +46,7 @@ export class NavItems extends Component {
       return false;
     }
     return ((to !== '' && active === to) ||
-      ((this.props.refLoc !== 'public' && (location.pathname.startsWith(`/${app}/${to}`))) ||
+      ((this.props.refLoc !== 'public' && (location.pathname.startsWith(`/${app}/${to}`) || defaultNavExpanded === to)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
   isActiveSubMenu = (to, location, hashCheck = false) => (hashCheck ? (this.props.navStore.currentActiveHash === null && location.hash === '') : this.props.navStore.currentActiveHash === null ? location.hash === to : this.props.navStore.currentActiveHash === to);
@@ -96,22 +103,29 @@ export class NavItems extends Component {
               `}
             >
               {item.subNavigations.map(sn => (
-                <Dropdown.Item
-                  key={sn.to}
-                  className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
-                  as={NavLink}
-                  onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
-                  to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
-                >
-                  {sn.title}
-                </Dropdown.Item>
+                sn.external ? (
+                  <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                ) : (
+                  <Dropdown.Item
+                    key={sn.to}
+                    className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
+                    as={NavLink}
+                    onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
+                    to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                  >
+                    {sn.title}
+                  </Dropdown.Item>
+                )
               ))}
             </Dropdown.Menu>
           </Dropdown>
         ) :
           item.title === 'Bonus Rewards' && !this.props.bonusRewards ?
             null
-            : (
+            : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to]) ||
+            (item.to !== 'updates') ?
+            (item.title === 'Bonus Rewards' && this.props.isBonusReward) ||
+            (item.title !== 'Bonus Rewards') ? (
               <Menu.Item
                 key={item.to}
                 name={item.to}
@@ -126,11 +140,17 @@ export class NavItems extends Component {
                 {item.to === 'messages' &&
                   <Label circular color="red" size="mini" horizontal>3</Label>
                 }
-                <span>{item.title}</span>
+                {
+                    item.title !== 'Updates' ?
+                      <span>{item.title}</span> :
+                    (item.title === 'Updates' && item.to === 'updates' && this.props.countData ?
+                      <span>{item.title}</span> : ''
+                    )
+                }
                 {(item.to === 'updates' || item.to === 'comments') && this.props.countData ?
                   <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
                 }
-              </Menu.Item>
+              </Menu.Item>) : '' : ''
             )}
       </Aux>
     ));
@@ -154,26 +174,28 @@ export class NavigationItems extends Component {
   }
   render() {
     const {
-      stepInRoute, location, currentUser, loading,
+      stepInRoute, location, currentUser, loading, isMobBussinessApp,
       isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     return (
       <Menu
-        stackable
+        stackable={!isMobBussinessApp}
         borderless
         fixed="top"
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
       >
         <Container fluid>
-          <Menu.Item as={Link} to="/" header>
-            <Logo
-              alt="NextSeed.com"
-              dataSrc={getLogo(location.pathname)}
-              style={getLogoStyle(location.pathname)}
-              size={isTablet && 'small'}
-            />
-          </Menu.Item>
+          {!isMobBussinessApp &&
+            <Menu.Item as={Link} to="/" header>
+              <Logo
+                alt="NextSeed.com"
+                dataSrc={getLogo(location.pathname)}
+                style={getLogoStyle(location.pathname)}
+                size={isTablet && 'small'}
+              />
+            </Menu.Item>
+          }
           <Menu.Menu position="right">
             {!location.pathname.includes('/business-application') &&
               <NavItems
@@ -185,7 +207,7 @@ export class NavigationItems extends Component {
             }
           </Menu.Menu>
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
-            <Menu.Item>
+            <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
               <Button.Group>
                 <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
                 {isPrequalQulify &&

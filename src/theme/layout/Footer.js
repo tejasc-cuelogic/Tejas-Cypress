@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style  */
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { SocialLinks } from '../shared';
@@ -28,8 +28,8 @@ class Footer extends Component {
 
   render() {
     const { path } = this.props;
-    // const OfferFooter = ['/offerings/:id/:section?'];
-    // const isCampaign = matchPath(path, { path: OfferFooter }) != null;
+    const OfferFooter = ['/offerings/:id/:section?'];
+    const isCampaign = matchPath(path, { path: OfferFooter }) != null;
     // const offeirngDisclaimer = campaign && campaign.keyTerms &&
     //   campaign.keyTerms.offeringDisclaimer ?
     //   campaign.keyTerms.offeringDisclaimer : null;
@@ -37,8 +37,7 @@ class Footer extends Component {
     //   campaign.keyTerms.shorthandBusinessName ?
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
-      // <footer className={isCampaign ? 'offering-footer' : ''}>
-      <footer>
+      <footer className={isCampaign ? 'offering-footer' : ''}>
         <Container>
           {/* {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
@@ -83,7 +82,7 @@ class Footer extends Component {
                 </Menu>
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
                 <Aux path={path}>
-                  <div className={isMobile && 'mb-30'}>
+                  <div className={isTablet && 'mb-30 center-align'}>
                     <NSImage path="secure-horizontal-1.jpg" />
                   </div>
                 </Aux>
@@ -102,9 +101,11 @@ class Footer extends Component {
               <p>
                 All securities-related activity is conducted by regulated affiliates of
                 NextSeed: NextSeed Securities, LLC, a registered broker dealer and member
-                of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a> (check out
-                the background of our broker-dealer on <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>) or NextSeed US LLC, a
-                registered funding portal and member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
+                of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>{' '}
+                <b>(check out the background of our broker-dealer on{' '}
+                  <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>)
+                </b>{' '}
+                or NextSeed US LLC, a registered funding portal and member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
               </p>
               <p>
                 Any securities offered on this website have not been recommended or approved
@@ -115,6 +116,11 @@ class Footer extends Component {
                 on this site is the responsibility of, the applicable issuer of such securities.
                 In making an investment decision, investors must rely on their own examination of
                 the issuer and the terms of the offering, including the merits and risks involved.
+                Investments on NextSeed are speculative, illiquid and involve a high degree of
+                risk, including the possible loss of your entire investment.{' '}
+                <b>See general risk factors{' '}
+                  <a href="https://nextseed.com/agreements/legal/general-risk-factors" target="_blank" rel="noopener noreferrer">here</a>
+                </b>.
                 NextSeed does not verify the adequacy, accuracy or completeness of any
                 information. Neither NextSeed nor any of its officers, directors, agents and
                 employees makes any warranty, express or implied, of any kind whatsoever related

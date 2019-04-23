@@ -1,5 +1,5 @@
 import graphql from 'mobx-apollo';
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, omit, get } from 'lodash';
 import Validator from 'validatorjs';
@@ -165,6 +165,7 @@ export class IdentityStore {
         city: fields.city.value,
         state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
+        streetTwo: fields.zipCode.value,
       },
     };
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
@@ -214,6 +215,7 @@ export class IdentityStore {
     const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       legalName: {
+        salutation: fields.title.value,
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
@@ -225,6 +227,7 @@ export class IdentityStore {
         city: fields.city.value,
         state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
+        streetTwo: fields.streetTwo.value,
       },
     };
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
@@ -271,10 +274,12 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId ||
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
             this.updateUserInfo().then(() => {
+              this.setFieldValue('signUpLoading', false);
               resolve();
             }).catch(() => {
               this.setFieldValue('signUpLoading', false);
@@ -363,32 +368,35 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       this.updateUserInfo()
         .then(() => {
+          uiStore.setProgress(false);
           resolve();
         })
         .catch(() => {
-          reject();
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject();
         });
+      // .finally(() => {
+      // });
     });
   }
 
-  startPhoneVerification = (type, address = undefined) => {
+  startPhoneVerification = (type, address = undefined, isMobile = false) => {
     const { user } = userDetailsStore.currentUser.data;
     const phoneNumber = address || get(user, 'phone.number');
     const emailAddress = get(user, 'email.address');
+    const userAddress = type === 'EMAIL' ? emailAddress.toLowerCase() : phoneNumber;
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
+    this.setFieldValue('signUpLoading', true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: requestOtp,
           variables: {
             userId: userStore.currentUser.sub || authStore.userId,
-            type: type || (mfaMethod.value !== '' ? mfaMethod.value : null),
-            address,
+            type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
+            address: userAddress || '',
           },
         })
         .then((result) => {
@@ -396,16 +404,20 @@ export class IdentityStore {
           if (type === 'EMAIL') {
             this.setSendOtpToMigratedUser('EMAIL');
           } else {
+            this.setConfirmMigratedUserPhoneNumber(true);
             this.setSendOtpToMigratedUser('PHONE');
           }
           this.setRequestOtpResponse(result.data.requestOtp);
-          Helper.toast(`Verification ${requestMode}.`, 'success');
+          if (!isMobile) {
+            Helper.toast(`Verification ${requestMode}.`, 'success');
+          }
+          this.setFieldValue('signUpLoading', false);
           resolve();
         })
         .catch((err) => {
           // uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
           this.setFieldValue('signUpLoading', false);
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
           reject(err);
         })
         .finally(() => {
@@ -446,15 +458,17 @@ export class IdentityStore {
             this.setCipStatus('PASS');
             this.updateUserInfo();
           }
+          uiStore.setProgress(false);
           resolve(result);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject();
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject();
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 
@@ -635,7 +649,6 @@ export class IdentityStore {
     const { fields } = this.ID_PROFILE_INFO;
     const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
     const profileDetails = {
-      salutation: fields.firstName.value,
       firstName: fields.firstName.value,
       lastName: fields.lastName.value,
       mailingAddress: {
@@ -643,6 +656,7 @@ export class IdentityStore {
         city: fields.city.value,
         state: selectedState ? selectedState.key : '',
         zipCode: fields.zipCode.value,
+        streetTwo: fields.streetTwo.value,
       },
       avatar: {
         name: fields.profilePhoto.value,
@@ -708,14 +722,14 @@ export class IdentityStore {
       this.setProfileInfoField('phoneNumber', phone.number);
     }
     if (info && info.mailingAddress === null) {
-      const addressFields = ['street', 'city', 'state', 'zipCode'];
+      const addressFields = ['street', 'city', 'state', 'zipCode', 'streetTwo'];
       if (legalDetails && legalDetails.legalAddress !== null) {
         addressFields.forEach((val) => {
           this.setProfileInfoField(val, legalDetails.legalAddress[val]);
         });
       }
     } else if (info && info.mailingAddress) {
-      const mailingAddressFields = ['street', 'city', 'state', 'zipCode'];
+      const mailingAddressFields = ['street', 'city', 'state', 'zipCode', 'streetTwo'];
       mailingAddressFields.forEach((val) => {
         if (info.mailingAddress[val] !== null) {
           this.setProfileInfoField(val, info.mailingAddress[val]);
@@ -755,13 +769,14 @@ export class IdentityStore {
   @action
   checkValidAddress = () => new Promise((resolve) => {
     const {
-      residentalStreet, state, city, zipCode,
+      residentalStreet, state, city, zipCode, streetTwo,
     } = this.ID_VERIFICATION_FRM.fields;
     const payLoad = {
       street: residentalStreet.value,
       city: city.value,
       state: state.value,
       zipCode: zipCode.value,
+      streetTwo: streetTwo.value,
     };
     this.setFieldValue('signUpLoading', true);
     const result = graphql({
@@ -777,6 +792,10 @@ export class IdentityStore {
           resolve(res.checkValidInvestorAddress);
         }
       },
+      onError: (err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        this.setFieldValue('signUpLoading', false);
+      },
     });
   })
 
@@ -786,6 +805,8 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
+    this.confirmMigratedUserPhoneNumber = false;
+    this.signUpLoading = false;
   }
 
   @action
@@ -819,7 +840,7 @@ export class IdentityStore {
     }
   }
 
-  requestOtpWrapper = () => {
+  requestOtpWrapper = (isMobile = false) => {
     uiStore.setProgress();
     const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
@@ -829,13 +850,15 @@ export class IdentityStore {
         .mutate({
           mutation: requestOtpWrapper,
           variables: {
-            address: email.value || emailInCookie,
+            address: (email.value || emailInCookie).toLowerCase(),
             firstName: givenName.value || firstNameInCookie,
           },
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          if (!isMobile) {
+            Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+          }
           resolve();
         })
         .catch((err) => {
@@ -850,11 +873,12 @@ export class IdentityStore {
 
   verifyOTPWrapper = () => {
     uiStore.setProgress();
-    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
     const verifyOTPData = {
       resourceId: this.requestOtpResponse,
       confirmationCode: code,
       address: email,
+      firstName: givenName,
     };
     return new Promise((resolve, reject) => {
       publicClient
@@ -898,23 +922,21 @@ export class IdentityStore {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             resolve();
           } else {
             const error = {
               message: 'Please enter correct verification code.',
             };
+            uiStore.setProgress(false);
             uiStore.setErrors(error);
             reject();
           }
         })
         .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-          reject(err);
-        }))
-        .finally(() => {
           uiStore.setProgress(false);
-        });
+          reject(err);
+        }));
     });
   }
   @action

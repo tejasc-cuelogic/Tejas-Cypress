@@ -20,9 +20,11 @@ export default class CampaignHeader extends Component {
   render() {
     const { campaignStore } = this.props;
     const { campaign, offerStructure } = campaignStore;
-    const terminationDate = campaign && campaign.closureSummary
+    const processingDate = campaign && campaign.closureSummary
     && campaign.closureSummary.processingDate;
-    const diff = DataFormatter.diffDays(terminationDate);
+    const diff = DataFormatter.diffDays(processingDate);
+    const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
+    const isInProcessing = diffForProcessing === 0 && !get(campaign, 'closureSummary.hardCloseDate');
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
@@ -33,10 +35,9 @@ export default class CampaignHeader extends Component {
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const isClosed = campaign.stage !== 'LIVE';
-    let rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const isCreation = campaign.stage === 'CREATION';
     const earlyBird = get(campaign, 'earlyBird') || null;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
-    rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
     const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     return (
       <Aux>
@@ -81,8 +82,16 @@ export default class CampaignHeader extends Component {
                           </Statistic.Value>
                           <Statistic.Label>Investors</Statistic.Label>
                         </Statistic>
-                        {((rewardsTiers && rewardsTiers.length) ||
-                        (earlyBird && earlyBird.quantity > 0)) && isEarlyBirdRewards &&
+                        {isClosed && get(campaign, 'closureSummary.repayment.count') > 0 &&
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'closureSummary.repayment.count') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Payments made</Statistic.Label>
+                          </Statistic>
+                        }
+                        {earlyBird && earlyBird.available > 0 &&
+                        isEarlyBirdRewards && !isClosed &&
                           bonusRewards ?
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
@@ -97,7 +106,7 @@ export default class CampaignHeader extends Component {
                   <div className="clearfix social-links mt-10">
                     {campaign && get(campaign, 'offering.overview.social') ?
                       campaign.offering.overview.social.map(site => (
-                        <Aux>
+                        <Aux key={site.type}>
                           {site.url &&
                             <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
                           }
@@ -115,7 +124,7 @@ export default class CampaignHeader extends Component {
                   </Header>
                   <Statistic inverted size="tiny" className="basic mb-0">
                     <Statistic.Value>
-                      <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
+                      <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                     </Statistic.Value>
                     {minFlagStatus &&
                       <Statistic.Label className="flag-status">
@@ -123,8 +132,11 @@ export default class CampaignHeader extends Component {
                       </Statistic.Label>
                     }
                   </Statistic>
-                  <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
-                  <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+                  {!isClosed ?
+                    <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                    <Progress percent="100" size="tiny" color="green" />
+                  }
+                  <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
@@ -156,7 +168,7 @@ export default class CampaignHeader extends Component {
                   }
                   {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
                     <p className="mb-0">
-                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
+                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                     </p> :
                     <Aux>
                       <p className="mb-0">
@@ -168,13 +180,19 @@ export default class CampaignHeader extends Component {
                     </Aux>
                   }
                   <div className="center-align mt-20">
-                    {!isClosed &&
-                      <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} onClick={this.handleInvestNowClick} />
+                    {isCreation ?
+                      <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
+                    : ''
                     }
-                    <small>
-                      ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                        || 0} min investment
-                    </small>
+                    {(!isClosed && diffForProcessing >= 0) &&
+                      <Aux>
+                        <Button fluid secondary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
+                        <small>
+                          ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+                            || 0} min investment
+                        </small>
+                      </Aux>
+                    }
                   </div>
                 </Grid.Column>
               </Grid>

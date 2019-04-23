@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isArray, get, forOwn, intersection } from 'lodash';
+import { isArray, get, forOwn, filter, find, findIndex, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminDecline, transferRequestAdminVerified, transactionFailed } from '../../queries/transaction';
@@ -36,11 +36,36 @@ export class TransactionsStore {
     search: {
     },
   };
-  @observable btnLoader = null;
+  @observable btnLoader = [];
+  pageReload = true;
 
   @action
   setDataValue = (key, value) => {
     this[key] = value;
+  }
+
+  @action
+  addLoadingRequestId = (requestId) => {
+    this.btnLoader.push(requestId);
+  }
+
+  @action
+  removeLoadingRequestId = (requestId, isFailedProcess = false, isApproved = true) => {
+    this.btnLoader = filter(this.btnLoader, btnId => btnId !== requestId);
+    if (isFailedProcess) {
+      return;
+    }
+    const transactions = get(this.data, 'data.getTransactions.transactions');
+    if (isApproved && transactions) {
+      this.data.data.getTransactions.transactions =
+      filter(transactions, row => row.requestId !== requestId);
+    } else if (transactions) {
+      const index = findIndex(transactions, record => record.requestId === requestId);
+      const transaction = find(transactions, record => record.requestId === requestId);
+      transaction.gsProcessId = true;
+      this.data.data.getTransactions.transactions[index] = transaction;
+    }
+    this.setData(this.data.data || []);
   }
 
   @action
@@ -61,14 +86,10 @@ export class TransactionsStore {
   @action
   initRequest = (transStatus) => {
     this.transactionStatus = transStatus;
-    this.isNonTerminatedStatus = intersection(
-      this.nonTerminatedStatuses,
-      this.transactionStatus,
-    ).length > 0;
     const payLoad = {
       status: transStatus,
       offset: this.requestState.page,
-      limit: this.statusWiseLimt(),
+      limit: 10,
       ...this.requestState.search,
     };
     this.data = graphql({
@@ -130,31 +151,34 @@ export class TransactionsStore {
 
   @action
   transactionChange = (requestID, transStatus, actionName, direction = '') => {
-    this.setDataValue('btnLoader', requestID);
+    this.addLoadingRequestId(requestID);
     client
       .mutate({
         mutation: this.ctHandler[actionName],
         variables: { id: requestID },
       })
-      .then(() => {
-        this.setDataValue('btnLoader', false);
-        this.initRequest(transStatus);
+      .then((data) => {
+        if (actionName === 'Approved') {
+          this.removeLoadingRequestId(requestID, false, data && get(data, 'data.transferRequestAdminApprove'));
+        } else {
+          this.removeLoadingRequestId(requestID);
+        }
         Helper.toast(`Transaction ${actionName} successfully.`, 'success');
       })
       .catch((error) => {
-        if (direction === 'WITHDRAWAL' && transStatus[0] === 'PENDING') {
+        if ((direction === 'DEPOSIT' || direction === 'WITHDRAWAL') && transStatus[0] === 'PENDING') {
           Helper.toast(error.message, 'error');
         } else {
           Helper.toast('Something went wrong please try again after sometime.', 'error');
         }
-        this.setDataValue('btnLoader', false);
+        this.removeLoadingRequestId(requestID, true);
       });
   };
 
   @action
   failTransaction = (requestID, actionName) => {
     const reason = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
-    this.setDataValue('btnLoader', requestID);
+    this.addLoadingRequestId(requestID);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -165,13 +189,12 @@ export class TransactionsStore {
           },
         })
         .then(() => {
-          this.setDataValue('btnLoader', false);
+          this.removeLoadingRequestId(requestID);
           Helper.toast(`Transaction ${actionName} successfully.`, 'success');
-          this.initRequest(this.transactionStatus);
           resolve();
         })
         .catch(() => {
-          this.setDataValue('btnLoader', false);
+          this.removeLoadingRequestId(requestID, true);
           Helper.toast('Something went wrong please try again after sometime.', 'error');
           reject();
         });
@@ -187,85 +210,55 @@ export class TransactionsStore {
   }
 
   @action
-  pageRequest = ({ skip, page }) => {
+  pageRequest = ({ page }) => {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    if (this.isNonTerminatedStatus) {
-      this.requestState.skip = (skip === pageWiseCount) ?
-        pageWiseCount - this.requestState.perPage : skip;
-    } else {
-      this.initRequest(this.transactionStatus);
-    }
+    this.initRequest(this.transactionStatus);
   }
 
   @computed get allRecords() {
-    const transactions = this.db || [];
-    if (this.isNonTerminatedStatus) {
-      return transactions.slice(
-        this.requestState.skip,
-        this.requestState.displayTillIndex,
-      );
-    }
-    return transactions || [];
+    return this.db || [];
   }
 
   @computed get transactionCount() {
-    return this.isNonTerminatedStatus ?
-      this.db.length
-      : this.searchCount;
+    return this.searchCount;
   }
 
   @computed get loading() {
     return this.data.loading;
   }
 
-  statusWiseLimt = () => (this.isNonTerminatedStatus ? 100 : 10)
-
-  @action
-  initiateFilters = () => {
-    this.setData(get(this.data, 'data') || []);
-    const {
-      keyword, minAmount, maxAmount,
-      dateFilterStart, dateFilterStop,
-      direction,
-    } = this.requestState.search;
-    if (keyword) {
-      ClientDb.filterFromNestedObjs(['gsTransactionId', 'requestId', 'accountId', 'userInfo.info.firstName', 'userInfo.info.lastName'], keyword);
+  modifySearchParams = (valueObj, name) => {
+    const searchparams = { ...this.requestState.search };
+    const { value } = valueObj;
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      searchparams[name] = value;
+    } else {
+      delete searchparams[name];
     }
-    if (direction) {
-      ClientDb.filterData('direction', direction);
-    }
-
-    if (dateFilterStart || dateFilterStop) {
-      ClientDb.filterByDate(dateFilterStart, dateFilterStop || moment().unix(), 'startDate');
-    }
-
-    if (minAmount && maxAmount) {
-      ClientDb.filterByNumber(minAmount, maxAmount, 'amount', 'f');
-    }
-    this.db = ClientDb.getDatabase();
+    return searchparams;
   }
-
   @action
   setInitiateSrch = (valueObj, name) => {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
-      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonTerminatedStatus, name, this.isNonTerminatedStatus) : '';
-      if (this.requestState.search.dateFilterStart === '' && this.requestState.search.dateFilterStop === '') {
-        delete searchparams[name];
-      }
-    } else {
-      const { value } = valueObj;
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-        searchparams[name] = value;
+      if (moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+        searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+        this.requestState.search = searchparams;
+        this.initRequest(this.transactionStatus);
       } else {
         delete searchparams[name];
+        this.requestState.search = searchparams;
+        if (!has(this.requestState.search, 'dateFilterStart') && !has(this.requestState.search, 'dateFilterStop')) {
+          this.initRequest(this.transactionStatus);
+        }
       }
+    } else {
+      this.requestState.search = this.modifySearchParams(valueObj, name);
+      this.initRequest(this.transactionStatus);
     }
-    this.requestState.search = searchparams;
-    return this.isNonTerminatedStatus ? this.initiateFilters()
-      : this.initRequest(this.transactionStatus);
+    return null;
   }
 }
 

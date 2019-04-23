@@ -2,10 +2,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('beneficiaryStore', 'uiStore')
 @withRouter
@@ -53,6 +56,7 @@ export default class ConfirmVerificationCode extends Component {
       verifyVerificationCodeChange,
     } = this.props.beneficiaryStore;
     const { errors } = this.props.uiStore;
+    const formattedPhoneNumber = get(this.props, 'beneficiaryStore.beneficiaryDisplayPhoneNumber') ? Helper.phoneNumberFormatter(this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber) : '';
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -64,7 +68,7 @@ export default class ConfirmVerificationCode extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          <p className="display-only">{this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber}</p>
+          <p className="display-only">{formattedPhoneNumber}</p>
           <p><Link to="/app/profile-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
           <Form error onSubmit={this.submit}>
             <Form.Field className="otp-wrap">
@@ -73,7 +77,10 @@ export default class ConfirmVerificationCode extends Component {
                 name="code"
                 fields={6}
                 type="number"
+                autoFocus={!isMobile}
                 className="otp-field"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />

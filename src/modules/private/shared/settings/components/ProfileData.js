@@ -33,12 +33,6 @@ export default class ProfileData extends Component {
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }
-  isVerified = (cipStatus) => {
-    if (cipStatus !== null) {
-      return this.props.userDetailsStore.validAccStatus.includes(cipStatus);
-    }
-    return false;
-  }
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
     const userRole = capitalize(this.props.userStore.currentUser.roles[0]);
@@ -51,6 +45,7 @@ export default class ProfileData extends Component {
     const {
       email, legalDetails, info, phone, investorProfileData, status,
     } = this.props.userDetailsStore.userDetails;
+    const { signupStatus, validAccStatus } = this.props.userDetailsStore;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
@@ -104,14 +99,14 @@ export default class ProfileData extends Component {
                         <Button as={Link} to={`${this.props.match.url}/update-profile-photo`} circular icon={{ className: 'ns-pencil' }} className="change-profile-icon" color="green" />
                       </div>
                     </Table.Cell>
-                    <Table.Cell><b>Phone number</b></Table.Cell>
-                    <Table.Cell>{phone && phone.number ? phone.number : 'N/A'}</Table.Cell>
-                    <Table.Cell><Link to={`${this.props.match.url}/new-phone-number`}>Change Phone</Link></Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
                     <Table.Cell><b>E-mail Address</b></Table.Cell>
                     <Table.Cell>{email && email.address ? email.address : 'N/A'}</Table.Cell>
                     <Table.Cell><Link to={`${this.props.match.url}/new-email-address`}>Change Email</Link></Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell><b>Phone number</b></Table.Cell>
+                    <Table.Cell>{phone && phone.number ? Helper.phoneNumberFormatter(phone.number) : 'N/A'}</Table.Cell>
+                    <Table.Cell><Link to={`${this.props.match.url}/new-phone-number`}>Change Phone</Link></Table.Cell>
                   </Table.Row>
                 </Table.Body>
               </Table>
@@ -134,6 +129,11 @@ export default class ProfileData extends Component {
                   name="street"
                   fielddata={ID_PROFILE_INFO.fields.street}
                   onplaceselected={setAddressFieldsForProfile}
+                  changed={profileInfoChange}
+                />
+                <FormInput
+                  name="streetTwo"
+                  fielddata={ID_PROFILE_INFO.fields.streetTwo}
                   changed={profileInfoChange}
                 />
                 <Form.Group widths={3}>
@@ -171,8 +171,9 @@ export default class ProfileData extends Component {
                 {...this.props}
                 email={email}
                 legalDetails={legalDetails}
-                isUserVerified={this.isVerified}
                 status={status}
+                signupStatus={signupStatus}
+                validAccStatus={validAccStatus}
               />
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile &&

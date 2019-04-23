@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { capitalize } from 'lodash';
+import { capitalize, get } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { AccTypeTitle, ListErrors } from '../../../../../../theme/shared';
@@ -18,8 +18,10 @@ import Helper from '../../../../../../helper/utility';
 export default class AddWithdrawFund extends Component {
   state = { isActivebutton: true };
   componentWillMount() {
-    const { setInitialLinkValue, setInitialFundValue } = this.props.transactionStore;
-    this.props.transactionStore.getInvestorAvailableCash(this.props.match.params.action === 'add');
+    const { setInitialLinkValue, setInitialFundValue, cash } = this.props.transactionStore;
+    if (!cash) {
+      this.props.transactionStore.getInvestorAvailableCash(false);
+    }
     setInitialLinkValue(false);
     setInitialFundValue();
   }
@@ -64,12 +66,10 @@ export default class AddWithdrawFund extends Component {
     const { match, transactionStore } = this.props;
     const {
       TRANSFER_FRM, TransferChange, showConfirmPreview, getValidWithdrawAmt,
-      availableWithdrawCash, cashAvailable,
+      cash, cashAvailable,
     } = transactionStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
-    const linkBankDetials = currentActiveAccountDetails && currentActiveAccountDetails.details &&
-      currentActiveAccountDetails.details.linkedBank ?
-      currentActiveAccountDetails.details.linkedBank : null;
+    const linkBankDetials = (get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') && get(currentActiveAccountDetails, 'details.linkedBank.pendingUpdate')) ? get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') : get(currentActiveAccountDetails, 'details.linkedBank') || null;
     const accountType =
     linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
     const { errors } = this.props.uiStore;
@@ -89,7 +89,7 @@ export default class AddWithdrawFund extends Component {
                 {!showConfirmPreview && match.params.action === 'withdraw' &&
                   <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
                     <MaskedInput
-                      readonly="readonly"
+                      readOnly="readonly"
                       hoverable
                       label="Total available for withdrawal:"
                       key="amount"
@@ -97,13 +97,13 @@ export default class AddWithdrawFund extends Component {
                       name="maountInvested"
                       containerclassname="fund-amount"
                       currency
-                      fielddata={{ value: availableWithdrawCash }}
+                      fielddata={{ value: cash }}
                     />
                   </div>
                 }
                 {!showConfirmPreview &&
                   <MaskedInput
-                    readonly={showConfirmPreview ? 'readonly' : false}
+                    readOnly={showConfirmPreview ? 'readonly' : false}
                     hoverable
                     label={match.params.action === 'add' ? '' : labelForWithdrawInput}
                     key="amount"
@@ -111,6 +111,7 @@ export default class AddWithdrawFund extends Component {
                     name="amount"
                     containerclassname="fund-amount"
                     currency
+                    allowNegative={false}
                     fielddata={TRANSFER_FRM.fields.amount}
                     changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
                   />
@@ -122,7 +123,7 @@ export default class AddWithdrawFund extends Component {
                         <label>Withdrawal amount</label>
                         : ''
                       }
-                      <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
+                      <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
                         <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
                       </Header>
                     </div>

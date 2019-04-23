@@ -209,8 +209,8 @@ export const IND_ADD_FUND = {
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
-      min: 'The deposit amount should be at least 100.',
-      max: 'The deposit amount should be at less than 25000.',
+      min: 'The deposit amount should be at least $100.',
+      max: 'The deposit amount should not be more than $25,000.',
     },
   },
 };
@@ -224,8 +224,23 @@ export const ENTITY_ADD_FUND = {
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
-      min: 'The deposit amount should be at least 5000.',
-      max: 'The deposit amount should be at less than 25000.',
+      min: 'The deposit amount should be at least $5,000.',
+      max: 'The deposit amount should not be more than $25,000.',
+    },
+  },
+};
+
+export const IRA_ADD_FUND = {
+  value: {
+    value: '',
+    key: 'value',
+    error: undefined,
+    rule: 'optional|numeric|min:5000|max:6000',
+    label: 'Deposit Amount',
+    maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least $5,000.',
+      max: 'The deposit amount should not be more than $6,000.',
     },
   },
 };
@@ -278,6 +293,7 @@ export const IND_BANK_LIST = [
 
 export const IRA_ACC_TYPES = {
   iraAccountType: {
+    key: 'iraAccountType',
     value: '',
     values: [
       {
@@ -301,6 +317,7 @@ export const IRA_ACC_TYPES = {
 export const IRA_FUNDING = {
   fundingType: {
     value: '',
+    key: 'fundingType',
     values: [
       {
         label: 'Check',
@@ -335,7 +352,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: ' Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the SEC`s Investor Bulletin for the latest information',
+    tooltip: (<span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</span>),
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
@@ -417,6 +434,9 @@ export const ENTITY_GEN_INFO = {
   },
   zipCode: {
     key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|maskedField:5', customErrors: { required: '* required', maskedField: 'The ZIP Code should be at least 5 digits' },
+  },
+  streetTwo: {
+    key: 'streetTwo', value: '', label: 'Address Line 2', placeHolder: 'Enter Here', error: undefined, rule: 'optional', customErrors: { required: '* required' },
   },
 };
 
@@ -524,7 +544,7 @@ export const BROKERAGE_EMPLOYMENT = {
     value: '',
     label: 'Member Firm Name',
     error: undefined,
-    rule: 'required_if:brokerageEmployment,yes',
+    rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
     placeHolder: 'Enter here',
     customErrors: {
       required_if: 'required',
@@ -554,7 +574,7 @@ export const PUBLIC_COMPANY_REL = {
     value: '',
     label: 'Ticker symbol',
     error: undefined,
-    rule: 'required_if:publicCompanyRel,yes',
+    rule: 'alphaPublicCompanyRel|required_if:publicCompanyRel,yes',
     placeHolder: 'E.g. GOOG',
     customErrors: {
       required_if: 'required',
@@ -645,12 +665,11 @@ export const FINANCES = {
     value: '',
     label: 'Net Worth',
     error: undefined,
-    rule: 'required|min:1|max:2147483647',
+    rule: 'required|min:1',
     placeHolder: 'Enter here',
     customErrors: {
       required: 'required',
       min: 'Please enter a valid amount to deposit',
-      max: 'Please enter a valid amount to deposit',
     },
   },
   annualIncomeCurrentYear: {
@@ -801,7 +820,7 @@ export const FILTER_META = {
 
 export const LINKED_ACCOUND_STATUS = {
   REQUEST_CANCELLATION: 'Canceled',
-  REQUESTED: 'Pending Approval',
+  REQUESTED: 'Active (Pending Verification)',
   DENIED: 'Declined',
   APPROVED: 'Approved',
 };

@@ -85,7 +85,7 @@ class Overview extends Component {
                         </Table.Cell>
                       </Table.Row> : ''
                     }
-                    { get(campaign, 'closureSummary.keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.investmentMultiple') ?
+                    { get(campaign, 'closureSummary.keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple') ?
                       <Table.Row verticalAlign="top">
                         <Table.Cell>
                           {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
@@ -96,7 +96,7 @@ class Overview extends Component {
                         </Table.Cell>
                         {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                           <Table.Cell>
-                            {campaign && get(campaign, 'closureSummary.keyTerms.investmentMultiple') ? `Up to ${get(campaign, 'closureSummary.keyTerms.multiple')}x` : 'N/A'}{' '}
+                            {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? `Up to ${get(campaign, 'closureSummary.keyTerms.multiple')}x` : 'N/A'}{' '}
                             <HtmlEditor
                               readOnly
                               content={(keyTerms && keyTerms.investmentMultipleSummary ?
@@ -112,7 +112,7 @@ class Overview extends Component {
                         }
                       </Table.Row> : ''
                     }
-                    { keyTerms && keyTerms.frequencyOfPayments ?
+                    {keyTerms && keyTerms.frequencyOfPayments ?
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Payments</Table.Cell>
                         <Table.Cell>
@@ -228,7 +228,7 @@ class Overview extends Component {
           <Aux>
             <Divider />
             <div className="inner-content-spacer payoff-chart">
-              <Header as="h4">Pay Off Chart</Header>
+              <Header as="h4">Payments</Header>
               <PayOffChart />
             </div>
           </Aux>

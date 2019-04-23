@@ -10,12 +10,15 @@ import { isEmpty } from 'lodash';
 @withRouter
 @observer
 export default class LinkbankSummary extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
-
-  handleSubmit = () => {
-
+  componentDidUpdate() {
+    const {
+      setLoaderForAccountBlank,
+    } = this.props.bankAccountStore;
+    setLoaderForAccountBlank();
   }
 
   render() {
@@ -23,14 +26,15 @@ export default class LinkbankSummary extends React.Component {
     const {
       plaidAccDetails,
       formLinkBankManually,
-      isEncrypted,
       changeLinkbank,
+      routingNum,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
       <Aux>
         <Header as="h3" textAlign="center">Linked Bank</Header>
+        <p className="center-align mb-50">The bank account you have currently linked to this account is</p>
         <div className="field-wrap">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
@@ -45,12 +49,11 @@ export default class LinkbankSummary extends React.Component {
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {(formLinkBankManually.fields.routingNumber.value &&
-                  !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
+                { !isEmpty(routingNum) &&
                   <Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
-                      {formLinkBankManually.fields.routingNumber.value}
+                      { routingNum || '' }
                     </Table.Cell>
                   </Table.Row>
                 }

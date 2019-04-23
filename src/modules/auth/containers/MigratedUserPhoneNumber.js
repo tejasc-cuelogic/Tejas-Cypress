@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Header, Form, Divider, Button } from 'semantic-ui-react';
+import { Modal, Header, Form, Divider, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../theme/form';
+import { ListErrors } from '../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('identityStore', 'uiStore')
 @withRouter
@@ -19,10 +22,10 @@ export default class MigratedUserPhoneNumber extends Component {
   }
   handlePhoneNumberConfirmation = () => {
     const { ID_VERIFICATION_FRM } = this.props.identityStore;
-    this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
+    // this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
     const { phoneNumber } = ID_VERIFICATION_FRM.fields;
     const phoneNumberValue = phoneNumber.value;
-    this.props.identityStore.startPhoneVerification('NEW', phoneNumberValue);
+    this.props.identityStore.startPhoneVerification('NEW', phoneNumberValue, isMobile);
   }
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
@@ -31,6 +34,7 @@ export default class MigratedUserPhoneNumber extends Component {
   }
   render() {
     const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
+    const { errors } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -50,15 +54,27 @@ export default class MigratedUserPhoneNumber extends Component {
               type="tel"
               name="phoneNumber"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              format="###-###-####"
+              format="(###) ###-####"
               changed={personalInfoMaskedChange}
               className="display-only"
               phoneNumberDisplayMode
               showerror
             />
             <Divider hidden />
+            <p className="note center-align">
+              By selecting <b>Confirm</b>, you agree NextSeed may deliver verification codes
+              to you using the phone number you have provided. Codes may be sent using text
+              messages, an autodialer, or artificial or prerecorded voice messages to such
+              phone number. Your mobile carrier’s messaging and data fees may apply.
+            </p>
+            <Divider hidden />
             <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary size="large" className="very relaxed" content="Confirm" loading={this.props.uiStore.inProgress} />
           </Form>
+          { errors &&
+            <Message error textAlign="left" className="mb-30">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
+          }
         </Modal.Content>
       </Modal>
     );

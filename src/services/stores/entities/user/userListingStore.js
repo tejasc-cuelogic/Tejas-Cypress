@@ -26,7 +26,7 @@ export class UserListingStore {
   };
 
   @action
-  initRequest = (reqParams) => {
+  initRequest = (reqParams, getAllUsers = false) => {
     const {
       keyword, accountType, accountStatus, startDate, endDate,
     } = this.requestState.search;
@@ -37,7 +37,7 @@ export class UserListingStore {
       accountType,
       accountStatus,
       page: reqParams ? reqParams.page : 1,
-      limit: this.requestState.perPage,
+      limit: getAllUsers ? 100 : this.requestState.perPage,
     };
 
     this.requestState.page = params.page;
@@ -51,14 +51,15 @@ export class UserListingStore {
       client,
       query: allUsersQuery,
       variables: params,
+      fetchPolicy: 'network-only',
     });
   }
 
   @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-      const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
-        moment(values.formattedValue).add(1, 'day').toISOString();
+      const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString() :
+        moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
       this.setInitiateSrch(field, isoDate);
     }
   }
@@ -115,9 +116,9 @@ export class UserListingStore {
   }
 
   @action
-  initiateSearch = (srchParams) => {
+  initiateSearch = (srchParams, getAllUsers = false) => {
     this.requestState.search = srchParams;
-    this.initRequest();
+    this.initRequest(null, getAllUsers);
   }
 
   @action

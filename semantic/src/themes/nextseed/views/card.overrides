@@ -18,6 +18,8 @@
             .campaign-card-image{
                 position:relative;
                 padding-top:66.66%;
+                border-radius:@6px @6px 0 0;
+                overflow:hidden;
                 >div{
                     background-size:cover;
                     background-repeat:no-repeat;
@@ -547,5 +549,15 @@
     &.done{
         // background-color:@neutral-offwhite;
         box-shadow:none;
+    }
+}
+
+.ui.form.account-type-tab .ui.card{
+    box-shadow:none;
+    .content{
+        padding:@21px;
+        p.accredetaion-intro{
+            min-height:84px;
+        }
     }
 }

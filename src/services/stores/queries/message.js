@@ -33,6 +33,7 @@ export const offeringCommentsByOfferId = gql`
       }
       roles {
         name
+        scope
       }
     }
     threadComments {
@@ -64,6 +65,7 @@ export const offeringCommentsByOfferId = gql`
       }
       roles {
         name
+        scope
       }
     }
   }

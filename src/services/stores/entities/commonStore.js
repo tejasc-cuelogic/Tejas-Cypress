@@ -1,6 +1,6 @@
 import { observable, action, reaction } from 'mobx';
 import graphql from 'mobx-apollo';
-import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File } from '../queries/common';
+import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File, getsharedLink } from '../queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import Helper from '../../../helper/utility';
 
@@ -8,6 +8,7 @@ export class CommonStore {
   @observable appName = 'NextSeed';
   @observable token = window.localStorage.getItem('jwt');
   @observable appLoaded = false;
+  @observable inProgress = false;
 
   constructor() {
     reaction(
@@ -85,6 +86,33 @@ export class CommonStore {
   setAppLoaded() {
     this.appLoaded = true;
   }
+
+  @action
+  setFieldValue(key, val) {
+    this[key] = val;
+  }
+
+  @action
+  getsharedLink = params => new Promise((resolve) => {
+    this.setFieldValue('inProgress', params.id);
+    graphql({
+      client,
+      query: getsharedLink,
+      variables: {
+        ...params,
+      },
+      onFetch: (data) => {
+        if (data) {
+          this.setFieldValue('inProgress', false);
+          resolve(data.sharedLink);
+        }
+      },
+      onError: () => {
+        this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  });
 }
 
 export default new CommonStore();

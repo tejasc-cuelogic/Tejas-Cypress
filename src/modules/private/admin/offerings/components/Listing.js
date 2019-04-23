@@ -22,6 +22,7 @@ export default class Listing extends Component {
   state = { isPublic: false };
   componentWillMount() {
     this.props.offeringsStore.resetInitLoad();
+    this.props.offeringsStore.resetPagination();
   }
   handleAction = (action, offeringId, isPublished = false) => {
     if (action === 'Delete') {
@@ -100,7 +101,7 @@ export default class Listing extends Component {
                         STAGES[offering.stage].label : '-'
                       }
                     </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
                       offering.offering.launch.targetDate ?
@@ -108,11 +109,11 @@ export default class Listing extends Component {
                       }
                     </Table.Cell>
                     {stage === 'live' &&
-                      <Table.HeaderCell>
+                      <Table.Cell>
                         {offering.closureSummary && offering.closureSummary.processingDate ?
                         DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                         }
-                      </Table.HeaderCell>
+                      </Table.Cell>
                     }
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>

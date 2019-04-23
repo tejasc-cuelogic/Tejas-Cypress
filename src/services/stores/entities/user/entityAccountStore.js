@@ -28,6 +28,7 @@ class EntityAccountStore {
   @observable entityData = {};
   @observable stepToBeRendered = '';
   @observable entityAccountId = null;
+  @observable retry = 0;
   @observable showProcessingModal = false;
   @observable isFormSubmitted = false;
 
@@ -107,6 +108,7 @@ class EntityAccountStore {
     return this.FIN_INFO_FRM.meta.isValid && this.GEN_INFO_FRM.meta.isValid
       && this.TRUST_INFO_FRM.meta.isValid &&
       this.PERSONAL_INFO_FRM.meta.isValid && this.FORM_DOCS_FRM.meta.isValid &&
+      bankAccountStore.formEntityAddFunds.meta.isValid &&
       (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isAccountPresent);
   }
 
@@ -122,25 +124,35 @@ class EntityAccountStore {
       accountType: 'ENTITY',
     };
     return new Promise((resolve, reject) => {
-      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
-        client
-          .mutate({
-            mutation: submitinvestorAccount,
-            variables: payLoad,
-          })
-          .then(() => {
-            this.setFieldValue('showProcessingModal', true);
-            bankAccountStore.resetStoreData();
-            this.isFormSubmitted = true;
-            Helper.toast('Entity account submitted successfully.', 'success');
-            resolve();
-          })
-          .catch((err) => {
+      client
+        .mutate({
+          mutation: submitinvestorAccount,
+          variables: payLoad,
+        })
+        .then(() => {
+          this.setFieldValue('showProcessingModal', true);
+          bankAccountStore.resetStoreData();
+          this.isFormSubmitted = true;
+          Helper.toast('Entity account submitted successfully.', 'success');
+          uiStore.setProgress(false);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.resetcreateAccountMessage();
+          if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
+            if (this.retry < 1) {
+              this.retry += 1;
+              this.submitAccount();
+            } else {
+              uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              uiStore.setProgress(false);
+            }
+          } else {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
-            reject();
-          });
-      });
+          }
+          reject();
+        });
     });
   }
 
@@ -156,6 +168,8 @@ class EntityAccountStore {
   ) => new Promise((resolve) => {
     this.validateAndSubmitStep(currentStep, removeUploadedData, field).then(() => {
       resolve();
+    }).catch(() => {
+      uiStore.setProgress(false);
     });
   })
 
@@ -172,6 +186,7 @@ class EntityAccountStore {
           city: this.GEN_INFO_FRM.fields.city.value,
           state: selectedState ? selectedState.key : '',
           zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+          streetTwo: this.GEN_INFO_FRM.fields.streetTwo.value,
         };
         this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
         break;
@@ -345,7 +360,7 @@ class EntityAccountStore {
     const array1 = ['Financial info', 'General', 'Trust Status'];
     const array2 = ['Personal info', 'Formation doc'];
     if (array1.includes(currentStep.name)) {
-      currentStep.validate();
+      currentStep.validate(currentStep.form);
       isValidCurrentStep = this[currentStep.form].meta.isValid;
       if (isValidCurrentStep) {
         uiStore.setProgress();
@@ -366,6 +381,8 @@ class EntityAccountStore {
               this.submitForm(currentStep, accountAttributes)
                 .then(() => res()).catch(() => rej());
             }
+          }).catch((e) => {
+            console.log(e);
           });
         } else {
           this.submitForm(currentStep, accountAttributes)
@@ -381,7 +398,7 @@ class EntityAccountStore {
         this.submitForm(currentStep, accountAttributes, removeUploadedData)
           .then(() => res()).catch(() => rej());
       } else {
-        currentStep.validate();
+        currentStep.validate(currentStep.form);
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes = this.setEntityAttributes(currentStep.name);
@@ -399,9 +416,9 @@ class EntityAccountStore {
         currentStep.validate();
       }
       // const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
-      isValidCurrentStep = bankAccountStore.isAccountPresent ||
-      bankAccountStore.formLinkBankManually.meta.isValid ||
-      bankAccountStore.formEntityAddFunds.meta.isValid;
+      isValidCurrentStep = bankAccountStore.formEntityAddFunds.meta.isValid ||
+      bankAccountStore.isAccountPresent ||
+      bankAccountStore.formLinkBankManually.meta.isValid;
       if (isValidCurrentStep) {
         uiStore.setProgress();
         // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
@@ -430,9 +447,10 @@ class EntityAccountStore {
           .catch(() => {
             rej();
           });
-      } else {
-        rej();
       }
+      // } else {
+      //   rej();
+      // }
     }
     return true;
   })
@@ -463,11 +481,13 @@ class EntityAccountStore {
         })
         .then(action((result) => {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
+          accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
+            FormValidator.setIsDirty(bankAccountStore.formLinkBankManually, false);
             // if (bankAccountStore.ManualLinkBankSubmitted) {
             //   FormValidator.resetFormData(bankAccountStore.formAddFunds);
             // }
@@ -475,9 +495,9 @@ class EntityAccountStore {
           if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
             if (removeUploadedData) {
               if (currentStep.name === 'Personal info') {
-                validationActions.validateEntityPersonalInfo();
+                validationActions.validateEntityForm('PERSONAL_INFO_FRM');
               } else {
-                validationActions.validateEntityFormationDoc();
+                validationActions.validateEntityForm('FORM_DOCS_FRM');
               }
             } else {
               FormValidator.setIsDirty(this[currentStep.form], false);
@@ -486,7 +506,6 @@ class EntityAccountStore {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          accountStore.accountToastMessage(currentStep, actionPerformed);
           uiStore.setErrors(null);
           uiStore.setProgress(false);
           resolve(result);
@@ -558,48 +577,57 @@ class EntityAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!isEmpty(userData)) {
-      const account = find(userData.roles, { name: 'entity' });
-      if (account) {
-        this.setFormData('FIN_INFO_FRM', account.details);
-        this.setFormData('GEN_INFO_FRM', account.details);
-        if (account.details && account.details.address) {
-          this.setEntityAttributes('General');
-        }
-        this.setFormData('TRUST_INFO_FRM', account.details);
-        if (account.details && account.details.isTrust) {
-          this.setEntityAttributes('Trust Status');
-        }
-        this.setFormData('PERSONAL_INFO_FRM', account.details);
-        if (account.details && account.details.legalInfo) {
-          this.setEntityAttributes('Personal info');
-        }
-        this.setFormData('FORM_DOCS_FRM', account.details);
-
-        if (account.details && account.details.legalDocs) {
-          this.setEntityAttributes('Formation doc');
-        }
-        if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
-          bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          bankAccountStore.formEntityAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
-        } else {
-          Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            const { details } = account;
-            if (details.linkedBank && details.linkedBank[f] !== '') {
-              bankAccountStore.formLinkBankManually.fields[f].value = details.linkedBank[f];
-              return bankAccountStore.formLinkBankManually.fields[f];
-            }
-            return null;
-          });
-          if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
-          account.details.linkedBank.accountNumber !== '') {
-            bankAccountStore.linkBankFormChange();
+    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+      if (!isEmpty(userData)) {
+        const account = find(userData.roles, { name: 'entity' });
+        if (account) {
+          this.setFormData('FIN_INFO_FRM', account.details);
+          this.setFormData('GEN_INFO_FRM', account.details);
+          if (account.details && account.details.address) {
+            this.setEntityAttributes('General');
           }
-          bankAccountStore.formEntityAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
+          this.setFormData('TRUST_INFO_FRM', account.details);
+          if (account.details && account.details.isTrust) {
+            this.setEntityAttributes('Trust Status');
+          }
+          this.setFormData('PERSONAL_INFO_FRM', account.details);
+          if (account.details && account.details.legalInfo) {
+            this.setEntityAttributes('Personal info');
+          }
+          this.setFormData('FORM_DOCS_FRM', account.details);
+          if (account.details && account.details.legalDocs) {
+            this.setEntityAttributes('Formation doc');
+          }
+          bankAccountStore.validateAddFunds();
+          // const { isValid } = bankAccountStore.formEntityAddFunds.meta;
+          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+            bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+            // if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+            // }
+          } else {
+            Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
+              const { details } = account;
+              if (details.linkedBank && details.linkedBank[f] !== '') {
+                bankAccountStore.formLinkBankManually.fields[f].value = details.linkedBank[f];
+                return bankAccountStore.formLinkBankManually.fields[f];
+              }
+              return null;
+            });
+            if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+            account.details.linkedBank.accountNumber !== '') {
+              bankAccountStore.linkBankFormChange();
+            }
+            // if (isValid) {
+            bankAccountStore.formEntityAddFunds.fields.value.value =
+            account.details.initialDepositAmount;
+            // }
+          }
+          bankAccountStore.validateAddFunds();
+          // bankAccountStore.validateAddfundsAmount();
+          this.renderAfterPopulate();
         }
-        this.renderAfterPopulate();
       }
     }
     uiStore.setProgress(false);
@@ -617,9 +645,7 @@ class EntityAccountStore {
       this.setStepToBeRendered(getEntityStep.PERSONAL_INFO_FRM);
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
-    } else if (bankAccountStore.manualLinkBankSubmitted ||
-      bankAccountStore.isPlaidDirty ||
-      bankAccountStore.linkbankSummary) {
+    } else if (bankAccountStore.isLinkbankInComplete) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);
@@ -651,20 +677,28 @@ class EntityAccountStore {
                 name: 'Personal info',
                 form: 'PERSONAL_INFO_FRM',
                 stepToBeRendered: 4,
-                validate: validationActions.validateEntityPersonalInfo,
+                validate: validationActions.validateEntityForm,
               } :
               {
                 name: 'Formation doc',
                 form: 'FORM_DOCS_FRM',
                 stepToBeRendered: 5,
-                validate: validationActions.validateEntityFormationDoc,
+                validate: validationActions.validateEntityForm,
               };
             if (isPersonalForm || this.formationDocUploadCount() >= 3) {
-              this.createAccount(currentStep, false);
+              this.createAccount(currentStep, false).then(() => {
+                console.log();
+                uiStore.setProgress(false);
+              }).catch((e) => {
+                console.log(e);
+              });
+            } else {
+              uiStore.setProgress(false);
             }
+          } else {
+            uiStore.setProgress(false);
           }
           // eslint-disable-next-line no-undef
-          uiStore.setProgress(false);
         })
         .catch((err) => {
           uiStore.setProgress(false);
@@ -717,6 +751,8 @@ class EntityAccountStore {
     this.entityData = {};
     this.stepToBeRendered = '';
     this.entityAccountId = null;
+    this.isFormSubmitted = false;
+    this.retry = 0;
   };
 }
 

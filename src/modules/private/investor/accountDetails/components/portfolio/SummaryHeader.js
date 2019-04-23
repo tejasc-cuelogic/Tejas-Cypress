@@ -13,14 +13,14 @@ import Helper from '../../../../../../helper/utility';
 */
 
 const showValue = props => ((props.type === 1) && (props.title !== 'TNAR') ?
-  (Helper.MoneyMathDisplayCurrency(props.content, props.fraction)) : (props.type === 1) && (props.title === 'TNAR') ? `${props.content} %` :
+  (Helper.MoneyMathDisplayCurrency(props.content, props.fraction)) : (props.type === 1) && (props.title === 'TNAR') ? (props.content !== 'N/A') ? `${props.content} %` : `${props.content}` :
     (((props.type === 2) ? `date ${props.content}` : props.content)));
 
 const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h3">
     {props.details.businessName}
   </Header>
-) : (
+) : !props.isAdmin && (
   <Aux>
     <Card.Content>
       <Card.Header className="with-icon"><AccTypeTitle /></Card.Header>
@@ -38,7 +38,7 @@ const SummaryHeader = props => (
       {props.details.title !== false && !props.details.businessName &&
         <SummaryTitle {...props} />
       }
-      <Grid doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
+      <Grid stackable doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
         {
           props.details.summary.map(row => (
             <Grid.Column key={snakeCase(row.title)}>

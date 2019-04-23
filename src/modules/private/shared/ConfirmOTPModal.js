@@ -3,10 +3,13 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
+import { get } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { FormInput } from '../../../theme/form';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('uiStore')
 @withRouter
@@ -39,6 +42,7 @@ export default class ConfirmOTPModal extends Component {
     } = props;
     const { errors } = this.props.uiStore;
     const headerMessageToShow = actionToPerform;
+    const formattedPhoneNumber = get(this.props, 'maskedPhoneNumber') ? Helper.phoneNumberFormatter(this.props.maskedPhoneNumber) : '';
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -51,7 +55,7 @@ export default class ConfirmOTPModal extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {mfaMode && mfaMode === 'PHONE' ?
-            <p className="display-only">{this.props.maskedPhoneNumber}</p>
+            <p className="display-only">{formattedPhoneNumber}</p>
             :
             <FormInput
               ishidelabel
@@ -75,6 +79,9 @@ export default class ConfirmOTPModal extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
+                autoFocus={!isMobile}
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={OTPVerifyMeta.fields.code}
                 onChange={VerificationChange}
               />

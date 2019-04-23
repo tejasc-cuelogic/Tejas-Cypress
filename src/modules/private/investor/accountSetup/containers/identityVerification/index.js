@@ -8,6 +8,8 @@ import LegalIdentityQuestions from '../../components/identityVerification/LegalI
 import ConfirmPhoneNumber from '../../../../../auth/containers/ConfirmPhoneNumber';
 import { DataFormatter } from '../../../../../../helper';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'identityStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -66,6 +68,7 @@ export default class IdentityVerification extends Component {
                       alertMsg,
                       msgType,
                       route,
+                      display,
                     } = this.props.identityStore.userVerficationStatus;
                     if (key === 'id.success') {
                       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
@@ -81,7 +84,7 @@ export default class IdentityVerification extends Component {
                           this.props.history.push(route);
                         }
                       } else {
-                        this.props.identityStore.startPhoneVerification().then(() => {
+                        this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
                           this.props.history.push('/app/summary/identity-verification/3');
                         })
                           .catch((err) => {
@@ -89,7 +92,9 @@ export default class IdentityVerification extends Component {
                           });
                       }
                     } else {
-                      Helper.toast(alertMsg, msgType);
+                      if (display !== false) {
+                        Helper.toast(alertMsg, msgType);
+                      }
                       if (key === 'id.failure') {
                         this.props.identityStore.setIdentityQuestions();
                       }
@@ -120,7 +125,7 @@ export default class IdentityVerification extends Component {
           this.props.history.push('/app/summary');
         }
       } else {
-        this.props.identityStore.startPhoneVerification().then(() => {
+        this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
           this.props.history.push('/app/summary/identity-verification/3');
         })
           .catch((err) => {
@@ -146,7 +151,7 @@ export default class IdentityVerification extends Component {
             this.props.history.push('/app/summary');
           }
         } else {
-          this.props.identityStore.startPhoneVerification().then(() => {
+          this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
             this.props.history.push('/app/summary/identity-verification/3');
           })
             .catch((err) => {
