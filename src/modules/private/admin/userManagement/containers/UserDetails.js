@@ -53,7 +53,7 @@ export default class AccountDetails extends Component {
 
   render() {
     const { match } = this.props;
-    const { inProgress } = this.props.uiStore;
+    const { inProgressArray } = this.props.uiStore;
     const { getDetailsOfUserLoading, getDetailsOfUser } = this.props.userDetailsStore;
     if (getDetailsOfUserLoading) {
       return <InlineLoader text="Loading User Details..." />;
@@ -91,7 +91,7 @@ export default class AccountDetails extends Component {
                 </Header>
                 <Button.Group floated="right">
                   <Button inverted color="red" content="Delete Profile" />
-                  <Button loading={inProgress === 'lock'} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
+                  <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
                     <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                   </Button>
                 </Button.Group>

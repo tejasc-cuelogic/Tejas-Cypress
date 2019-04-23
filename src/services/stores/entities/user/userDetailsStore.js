@@ -258,7 +258,7 @@ export class UserDetailsStore {
 
   getUserStorageDetails = (userId) => {
     uiStore.setProgress();
-    return new Promise((resolve) => {
+    return new Promise((resolve, rej) => {
       graphql({
         client,
         query: userDetailsQueryForBoxFolder,
@@ -273,6 +273,7 @@ export class UserDetailsStore {
         onError: () => {
           uiStore.setProgress(false);
           Helper.toast('Something went wrong, please try again in sometime', 'error');
+          rej();
         },
       });
     });
@@ -311,7 +312,7 @@ export class UserDetailsStore {
 
   @action
   toggleState = (id, accountStatus) => {
-    uiStore.setProgress('lock');
+    uiStore.addMoreInProgressArray('lock');
     const params = { accountStatus, id };
     client
       .mutate({
@@ -321,10 +322,13 @@ export class UserDetailsStore {
       .then(() => {
         this.updateUserStatus(params.accountStatus);
         userListingStore.initRequest();
-        uiStore.setProgress(false);
+        uiStore.removeOneFromProgressArray('lock');
         Helper.toast('User Account status updated successfully.', 'success');
       })
-      .catch(() => { uiStore.setProgress(false); Helper.toast('Error while updating user', 'warn'); });
+      .catch(() => {
+        uiStore.removeOneFromProgressArray('lock');
+        Helper.toast('Error while updating user', 'warn');
+      });
   }
 
   @action
