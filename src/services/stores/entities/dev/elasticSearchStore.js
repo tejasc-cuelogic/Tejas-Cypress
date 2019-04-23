@@ -13,6 +13,7 @@ export class ElasticSearchStore {
   @observable BULK_STORAGE_DETAILS_SYNC_FRM =
   Validator.prepareFormObject(BULK_STORAGE_DETAILS_SYNC);
   @observable inProgress = {};
+  @observable bulkSyncLoader = false;
   @observable boxMsg = '';
   @observable countValues = [];
 
@@ -22,8 +23,8 @@ export class ElasticSearchStore {
   }
 
   @action
-  resetForm = () => {
-    this.STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
+  resetForm = (form) => {
+    this[form] = Validator.resetFormData(this[form]);
   }
 
   @action
@@ -44,7 +45,7 @@ export class ElasticSearchStore {
           } else {
             this.setFieldValue('boxMsg', result.data.generateInvestorFolderStructure);
           }
-          this.resetForm();
+          this.resetForm('STORAGE_DETAILS_SYNC_FRM');
           uiStore.setProgress(false);
           res(result);
         })
@@ -65,11 +66,18 @@ export class ElasticSearchStore {
 
   @action
   bulkStorageDetailsChange = (values, field, formName, fieldType) => {
+    uiStore.clearErrors();
     if (fieldType === 'mask') {
-      this[formName] = Validator.onChange(
-        this[formName],
-        { name: field, value: values.floatValue },
-      );
+      if (values.floatValue < 500) {
+        this[formName] = Validator.onChange(
+          this[formName],
+          { name: field, value: values.floatValue },
+        );
+        this.setFieldValue('countValues', '');
+      } else {
+        this.resetForm(formName);
+        uiStore.setErrors('The number of users should be within 0 - 500.');
+      }
     } else {
       this[formName] =
       Validator.onChange(this[formName], Validator.pullValues(field, values));
@@ -78,8 +86,9 @@ export class ElasticSearchStore {
 
   @action
   submitStorageDetailsinBulk = () => {
-    uiStore.setProgress();
+    this.bulkSyncLoader = true;
     this.setFieldValue('countValues', '');
+    uiStore.clearErrors();
     const limit = get(this.BULK_STORAGE_DETAILS_SYNC_FRM, 'fields.limit.value') || null;
     return new Promise((res, rej) => {
       client
@@ -91,15 +100,15 @@ export class ElasticSearchStore {
           if (result.data.storageDetailsForInvestor) {
             Helper.toast('Box folder Creation has been initiated, please check after some time.', 'success');
             document.getElementsByName('limit')[0].value = '';
-            this.setFieldValue('countValues', get(result.data, 'storageDetailsForInvestor'));
+            this.setFieldValue('countValues', get(result, 'data'));
           }
-          this.resetForm();
-          uiStore.setProgress(false);
+          this.resetForm('BULK_STORAGE_DETAILS_SYNC_FRM');
+          this.setFieldValue('bulkSyncLoader', false);
           res(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setProgress(false);
+          this.setFieldValue('bulkSyncLoader', false);
           rej(error);
         });
     });

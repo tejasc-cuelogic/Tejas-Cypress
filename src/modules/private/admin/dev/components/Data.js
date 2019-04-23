@@ -26,9 +26,9 @@ export default class Data extends Component {
     const { elasticSearchStore, uiStore } = this.props;
     const {
       STORAGE_DETAILS_SYNC_FRM, bulkStorageDetailsChange,
-      BULK_STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, boxMsg, countValues,
+      BULK_STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, boxMsg, countValues, bulkSyncLoader,
     } = elasticSearchStore;
-    const { inProgress } = uiStore;
+    const { inProgress, errors } = uiStore;
 
     return (
       <Grid>
@@ -68,25 +68,22 @@ export default class Data extends Component {
                       containerwidth="12"
                       fielddata={BULK_STORAGE_DETAILS_SYNC_FRM.fields.limit}
                       changed={(e, result) => bulkStorageDetailsChange(e, result, 'BULK_STORAGE_DETAILS_SYNC_FRM', 'mask')}
-                      disabled={inProgress}
+                      disabled={bulkSyncLoader}
                     />
                     <Form.Field width={4}>
-                      <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress} loading={inProgress} />
+                      <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || bulkSyncLoader} loading={bulkSyncLoader} />
                     </Form.Field>
+                    { errors &&
+                    <FieldError error={errors || ''} />
+                    }
                   </Form.Group>
                 </Form>
-                { countValues &&
+                { countValues && countValues.storageDetailsForInvestor &&
                 <Aux>
-                  {get(countValues, 'count') ?
-                    <p className="hightlight-text" > count: {get(countValues, 'count')} </p> : ''
-                  }
-                  {get(countValues, 'createdCount') ?
-                    <p className="hightlight-text" > countValues: {get(countValues, 'createdCount')} </p> : ''
-                  }
+                  <p className="hightlight-text" ><b>{get(countValues, 'count') || 0}</b> Users does not have folder structure created.</p>
+                  <p className="hightlight-text" ><b>{get(countValues, 'createdCount') || 0}</b> User folders are created in current run.</p>
                 </Aux>
                 }
-
-                {/* <Button disabled primary className="mt-30" content="Sync All Investors" /> */}
               </Card.Description>
             </Card.Content>
           </Card>
