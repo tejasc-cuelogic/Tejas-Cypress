@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -77,8 +78,13 @@ class KeyTermsDetails extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <p>
-                        {get(KeyTerms, type.key) ?
-                          Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
+                        {get(KeyTerms, 'regulation') === 'BD_CF_506C' && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key) ?
+                          type.key === 'minOfferingAmountCF' ?
+                            Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'minOfferingAmount506C')), 0)
+                          : type.key === 'maxOfferingAmountCF' &&
+                            Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'maxOfferingAmount506C')), 0)
+                          : get(KeyTerms, type.key) ?
+                            Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
                           :
                           'NA'}
                       </p>
