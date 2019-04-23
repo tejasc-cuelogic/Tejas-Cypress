@@ -54,10 +54,11 @@ export default class CampaignList extends Component {
                             />
                           </div>
                         </div>
-                        {/* <Label color="green">NEW</Label>  apply attribute basic for
-                        successful campaigns */}
-                        {/* <Icon name="heart" />  change name to "heart outline" for
-                        unliked campaigns */}
+                        {/* <Label.Group size="small">
+                          <Label color="blue">2 days left</Label>
+                          <Label color="green">260% Funded</Label>
+                        </Label.Group> */}
+                        {/* <Icon name="heart" /> "heart outline" for unliked campaigns */}
                         <Aux>
                           <Card.Content>
                             <div className="tags mb-10">
