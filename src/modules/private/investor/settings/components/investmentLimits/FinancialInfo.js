@@ -88,21 +88,19 @@ export default class FinancialInfo extends Component {
                   </Card.Header>
                 </Card.Content>
                 <Divider horizontal className="only-border" />
-                <Grid celled="internally" padded="horizontally" stackable>
+                <Grid celled="internally" padded="horizontally">
                   <Grid.Row>
-                    <Grid.Column width={8}>
+                    <Grid.Column computer={8} tablet={8} mobile={16}>
                       <Card.Content>
                         <Header as="h5">Regulation Crowdfunding Limits</Header>
                         <p className="intro-text">
                           {account.name === 'entity' ? `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on the
-                            entity's annual revenue and net assets.` : `The total amount you can invest in Regulation
+                            entity's annual revenue and net assets. ` : `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on your income
-                            and net worth.`
+                            and net worth. `
                           }
-                          <Link target="_blank" to="/app/resources/faq">
-                            &nbsp;See FAQ on investment limits
-                          </Link>
+                          <Link target="_blank" to="/app/resources/faq">See FAQ on investment limits</Link>
                         </p>
                         <Statistic size="tiny">
                           <Statistic.Label>
@@ -129,7 +127,7 @@ export default class FinancialInfo extends Component {
                         <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name, account.details.accountId)} inverted color="green" content="Update investment limits" />
                       </Card.Content>
                     </Grid.Column>
-                    <Grid.Column width={8}>
+                    <Grid.Column computer={8} tablet={8} mobile={16}>
                       {accreditationData[account.name] &&
                       accreditationData[account.name].status ?
                         <Card.Content>
