@@ -110,9 +110,8 @@ export class CampaignStore {
   }
 
   @computed get activeList() {
-    // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    // return orderBy(activeListArr, o => get(o, 'keyTerms.shorthandBusinessName').toLowerCase(), ['desc']);
-    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    return orderBy(activeListArr, o => get(o, 'keyTerms.shorthandBusinessName').toLowerCase(), ['desc']);
   }
 
   @computed get completed() {
