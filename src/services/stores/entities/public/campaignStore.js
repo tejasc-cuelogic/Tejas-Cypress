@@ -16,7 +16,7 @@ export class CampaignStore {
   @observable data = [];
   @observable details = {};
   @observable option = false;
-  @observable campaignSideBarShow = false;
+  @observable campaignSideBarShow = true;
   @observable selectedReadMore = {};
   @observable selectedReadLess = {};
   @observable RECORDS_TO_DISPLAY = 12;
@@ -111,7 +111,7 @@ export class CampaignStore {
 
   @computed get activeList() {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    return orderBy(activeListArr, o => get(o, 'keyTerms.shorthandBusinessName').toLowerCase(), ['desc']);
+    return orderBy(activeListArr, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
   }
 
   @computed get completed() {
