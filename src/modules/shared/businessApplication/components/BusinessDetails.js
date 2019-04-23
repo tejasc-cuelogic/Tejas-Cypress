@@ -320,10 +320,9 @@ export default class BusinessDetails extends Component {
                             <label>{owner.resume.label}</label>
                             <Button
                               key
-                              loading={this.props.commonStore.inProgress === owner.resume.fileId}
-                              className="link-button green"
+                              className={`link-button ${this.props.commonStore.inProgress === owner.resume.fileId ? '' : 'green'}`}
                               onClick={() => sharedLink(owner.resume.fileId)}
-                              content={owner.resume.value}
+                              content={this.props.commonStore.inProgress === owner.resume.fileId ? 'Loading...' : owner.resume.value}
                             />
                           </Aux>
                         }
