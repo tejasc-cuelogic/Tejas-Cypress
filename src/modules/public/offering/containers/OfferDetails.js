@@ -204,7 +204,6 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
-    const { campaignHeaderStatus } = this.props.navStore;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     return (
@@ -231,7 +230,6 @@ class offerDetails extends Component {
                 location={location}
                 isBonusReward={isBonusReward}
                 bonusRewards={bonusRewards}
-                isActive={campaignHeaderStatus}
                 useIsActive
                 className="campaign-mobile-dropdown"
               />
