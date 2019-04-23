@@ -72,18 +72,15 @@ class IndividualAccountStore {
           }
         }).catch((err) => {
           console.log('Error', err);
-          uiStore.resetcreateAccountMessage();
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
               this.submitAccount();
             } else {
-              uiStore.setErrors(DataFormatter.getSimpleErr(err));
-              uiStore.setProgress(false);
+              uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
             }
           } else {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.setProgress(false);
+            uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           }
           reject();
         });
@@ -159,7 +156,6 @@ class IndividualAccountStore {
             variables,
           })
           .then(action((result) => {
-            // userDetailsStore.getUser(userStore.currentUser.sub);
             if (result.data.upsertInvestorAccount) {
               this.individualAccId = result.data.upsertInvestorAccount.accountId;
               const { linkedBank } = result.data.upsertInvestorAccount;
@@ -167,16 +163,10 @@ class IndividualAccountStore {
             }
             const { isValid } = bankAccountStore.formAddFunds.meta;
             if (currentStep) {
-              // FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
-              if (!bankAccountStore.depositMoneyNow) {
-                // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-              } else if (currentStep.name === 'Add funds' && isValid) {
+              if (currentStep.name === 'Add funds' && isValid) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
-            } else {
-              // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
             }
-            // this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);
@@ -186,9 +176,6 @@ class IndividualAccountStore {
             uiStore.setProgress(false);
             reject();
           }));
-        // .finally(() => {
-        //   uiStore.setProgress(false);
-        // });
       })
         .catch(() => {
           uiStore.setProgress(false);

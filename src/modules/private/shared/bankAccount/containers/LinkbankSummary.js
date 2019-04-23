@@ -12,6 +12,7 @@ import { isEmpty } from 'lodash';
 export default class LinkbankSummary extends React.Component {
   componentWillMount() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();

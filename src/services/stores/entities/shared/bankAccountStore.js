@@ -391,38 +391,6 @@ export class BankAccountStore {
   }
   @action
   validateAddFunds = () => {
-    // if (!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
-    //   // TODO optiimize map function in if and else
-    //   map(this.formAddFunds.fields, (value) => {
-    //     const { key } = value;
-    //     const fundValue = value;
-    //     fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
-    //      // eslint-disable-next-line no-restricted-globals
-    //      isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
-    //     const { errors } = validationService.validate(fundValue);
-    //     Validator.setFormError(
-    //       this.formAddFunds,
-    //       key,
-    //       errors && errors[key][0],
-    //     );
-    //   });
-    //   this.validateForm('formAddFunds');
-    // } else {
-    //   map(this.formEntityAddFunds.fields, (value) => {
-    //     const { key } = value;
-    //     const fundValue = value;
-    //     fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
-    //       // eslint-disable-next-line no-restricted-globals
-    //       isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
-    //     const { errors } = validationService.validate(value);
-    //     Validator.setFormError(
-    //       this.formEntityAddFunds,
-    //       key,
-    //       errors && errors[key][0],
-    //     );
-    //   });
-    //   this.validateForm('formEntityAddFunds');
-    // }
     map(this.addFundsByAccType.fields, (value) => {
       const { key } = value;
       const fundValue = value;
@@ -625,7 +593,7 @@ export class BankAccountStore {
 
   @action
   setLoaderForAccountBlank = () => {
-    uiStore.setProgress(!this.isAccountPresent);
+    uiStore.setProgress(!get(this.plaidAccDetails, 'accountNumber') || isEmpty(this.routingNum));
   }
 
   @action
@@ -718,12 +686,13 @@ export class BankAccountStore {
     const { getAccountIdByType } = accountStore;
     const { currentUserId } = userDetailsStore;
     const accountId = getAccountIdByType();
-    if (currentUserId && accountId && this.isAccountPresent
-      && isEmpty(this.routingNum)) {
+    if (currentUserId && accountId && get(this.plaidAccDetails, 'accountNumber')) {
       uiStore.setProgress();
       this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
         .then(action((res) => {
-          this.routingNum = res;
+          if (this.routingNum !== res) {
+            this.routingNum = res;
+          }
           uiStore.setProgress(false);
         }));
     }
