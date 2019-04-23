@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
-import { Container, Card, List, Grid, Message } from 'semantic-ui-react';
+import { Container, Card, List, Grid, Message, Label } from 'semantic-ui-react';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
@@ -24,6 +24,26 @@ export default class CampaignList extends Component {
   toggleFilters = () => {
     const { filters } = this.state;
     this.setState({ filters: filters === false });
+  }
+  renderBaners = (offering) => {
+    const { generateBanner } = this.props.campaignStore;
+    const bnnerResult = generateBanner(offering);
+    const resultFound = get(bnnerResult, 'isBannerShow');
+    if (resultFound) {
+      const bannerFirst = get(bnnerResult, 'bannerFirstText');
+      const bannerSecond = get(bnnerResult, 'bannerSecondText');
+      return (
+        <Label.Group size="small">
+          {bannerFirst &&
+          <Label color="blue">{bannerFirst}</Label>
+          }
+          {bannerSecond &&
+          <Label color="green">{bannerSecond}</Label>
+          }
+        </Label.Group>
+      );
+    }
+    return null;
   }
   render() {
     const { campaigns, loading } = this.props;
@@ -54,10 +74,7 @@ export default class CampaignList extends Component {
                             />
                           </div>
                         </div>
-                        {/* <Label.Group size="small">
-                          <Label color="blue">2 days left</Label>
-                          <Label color="green">260% Funded</Label>
-                        </Label.Group> */}
+                        {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
                         {/* <Icon name="heart" /> "heart outline" for unliked campaigns */}
                         <Aux>
                           <Card.Content>
@@ -83,9 +100,9 @@ export default class CampaignList extends Component {
                               <HtmlEditor
                                 readOnly
                                 content={(offering && offering.offering &&
-                                offering.offering.overview &&
-                                offering.offering.overview.tombstoneDescription ?
-                                offering.offering.overview.tombstoneDescription : '')}
+                                  offering.offering.overview &&
+                                  offering.offering.overview.tombstoneDescription ?
+                                  offering.offering.overview.tombstoneDescription : '')}
                               />
                             </Card.Description>
                           </Card.Content>
@@ -101,10 +118,10 @@ export default class CampaignList extends Component {
                             </List>
                           </Card.Content>
                           <Message attached="bottom" color="teal">
-                          Offered by NextSeed {offering && offering.regulation ?
-                            (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.regulation] ||
-                            CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.keyTerms.regulation])
-                            : 'US'} LLC
+                            Offered by NextSeed {offering && offering.regulation ?
+                              (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.regulation] ||
+                     CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.keyTerms.regulation])
+                              : 'US'} LLC
                           </Message>
                         </Aux>
                         {offering.stage === 'LOCK' && (
