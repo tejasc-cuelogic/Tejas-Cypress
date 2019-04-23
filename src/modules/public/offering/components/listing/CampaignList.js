@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
 import { Container, Card, List, Grid, Message } from 'semantic-ui-react';
-// import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
