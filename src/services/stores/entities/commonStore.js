@@ -94,7 +94,7 @@ export class CommonStore {
 
   @action
   getsharedLink = params => new Promise((resolve) => {
-    this.setFieldValue('inProgress', params.id);
+    this.setFieldValue('inProgress', params.id || params.uploadId);
     graphql({
       client,
       query: getsharedLink,
