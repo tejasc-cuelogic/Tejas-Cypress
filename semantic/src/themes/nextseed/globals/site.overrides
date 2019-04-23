@@ -2365,9 +2365,18 @@ p.display-only{
 	>p{
 		flex-grow:1;
 		margin:0;
+		width:70%;
 		padding-right:15px;
 		&:last-child{
+			width:30%;
+			min-width:150px;
 			padding-right:0;
+		}
+		>span{
+			display:block;
+			text-overflow:ellipsis;
+			overflow:hidden;
+			white-space:nowrap;
 		}
 	}
 }
@@ -2574,7 +2583,10 @@ p.check-extra-info{
     left: 14px;
     top: 17px;
     z-index: 103;
-    overflow: hidden;
+	overflow: hidden;
+	&.business-hamburger {
+		top: 22px;
+	}
 	.icon.ns-hamburger {
 		font-size: @16px;
 		color: @neutral-middark;
