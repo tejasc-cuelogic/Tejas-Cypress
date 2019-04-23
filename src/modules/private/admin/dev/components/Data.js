@@ -80,8 +80,8 @@ export default class Data extends Component {
                 </Form>
                 { countValues && countValues.storageDetailsForInvestor &&
                 <Aux>
-                  <p className="hightlight-text" ><b>{get(countValues, 'count') || 0}</b> Users does not have folder structure created.</p>
-                  <p className="hightlight-text" ><b>{get(countValues, 'createdCount') || 0}</b> User folders are created in current run.</p>
+                  <p className="hightlight-text" ><b>{get(countValues, 'storageDetailsForInvestor.count') || 0}</b> Users does not have folder structure created.</p>
+                  <p className="hightlight-text" ><b>{get(countValues, 'storageDetailsForInvestor.createdCount') || 0}</b> User folders are created in current run.</p>
                 </Aux>
                 }
               </Card.Description>
