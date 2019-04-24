@@ -74,7 +74,7 @@ function getClientEnvironment(publicUrl) {
         // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
         SEGMENT_WRITE_KEY: process.env.REACT_APP_SEGMENT_WRITE_KEY,
-      }
+      },
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = {
