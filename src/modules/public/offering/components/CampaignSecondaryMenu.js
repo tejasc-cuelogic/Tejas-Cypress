@@ -59,7 +59,7 @@ export default class CampaignSecondaryMenu extends Component {
               </List.Item>
               <List.Item>
                 <List.Header>
-                  <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span>
+                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span>
                   {!isClosed && (get(campaign, 'keyTerms.securities') === 'TERM_NOTE' || maxFlagStatus || get(campaign, 'stage') === 'LIVE' || get(campaign, 'stage') === 'PROCESSING' || get(campaign, 'stage') === 'LOCK') ? ' raised' : ' invested'}
                 </List.Header>
               </List.Item>
