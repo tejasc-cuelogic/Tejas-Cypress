@@ -14,7 +14,9 @@ export default class ActivityHistory extends Component {
   state = { defaultFilter: true }
   componentWillMount() {
     this.props.activityHistoryStore.reset();
-    this.props.activityHistoryStore.initRequest(this.props.resourceId, this.state.defaultFilter);
+    if (this.props.resourceId) {
+      this.props.activityHistoryStore.initRequest(this.props.resourceId, this.state.defaultFilter);
+    }
     this.setState({ defaultFilter: false });
   }
   componentWillUnmount() {

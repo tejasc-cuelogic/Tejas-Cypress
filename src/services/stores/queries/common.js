@@ -74,8 +74,8 @@ export const createUploadEntryAccreditationAdmin = gql`
   }`;
 
 export const getsharedLink = gql`
-query getsharedLink($id: ID!, $type: ShareLinkTypeEnum!, $accountType: BoxAccountTypeEnum!, $expiration: String ){
-  sharedLink(id: $id, type: $type, accountType: $accountType, expiration: $expiration)
+query getsharedLink($id: ID, $uploadId: ID, $type: ShareLinkTypeEnum!, $accountType: BoxAccountTypeEnum!, $expiration: String ){
+  sharedLink(id: $id, uploadId: $uploadId, type: $type, accountType: $accountType, expiration: $expiration)
   }
 `;
 
