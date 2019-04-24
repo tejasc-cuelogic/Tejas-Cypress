@@ -19,7 +19,7 @@ export default class EditKnowledgeBaseItem extends Component {
   }
   initiateFlow = (id) => {
     if (id !== 'new') {
-      this.props.knowledgeBaseStore.getArticle(id, false);
+      this.props.knowledgeBaseStore.getKnowledgeBase(id, false);
     } else {
       this.props.knowledgeBaseStore.reset();
     }
@@ -27,7 +27,7 @@ export default class EditKnowledgeBaseItem extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.replace(this.props.refLink);
-    this.props.knowledgeBaseStore.resetFormData('ARTICLE_FRM');
+    this.props.knowledgeBaseStore.resetFormData('KNOWLEDGE_BASE_FRM');
   };
 
   save = (status) => {
@@ -41,7 +41,7 @@ export default class EditKnowledgeBaseItem extends Component {
   }
   render() {
     const {
-      ARTICLE_FRM,
+      KNOWLEDGE_BASE_FRM,
       articleChange,
       htmlContentChange,
       categoriesDropdown,
@@ -55,7 +55,7 @@ export default class EditKnowledgeBaseItem extends Component {
           <div>
             <Header as="h3">
               {isNew ? 'Create' : 'Edit'} Article
-              <Actions save={this.save} meta={ARTICLE_FRM.meta} />
+              <Actions save={this.save} meta={KNOWLEDGE_BASE_FRM.meta} />
             </Header>
           </div>
           <Divider hidden />
@@ -73,13 +73,13 @@ export default class EditKnowledgeBaseItem extends Component {
                         fluid
                         type="text"
                         name="title"
-                        fielddata={ARTICLE_FRM.fields.title}
+                        fielddata={KNOWLEDGE_BASE_FRM.fields.title}
                         changed={articleChange}
                       />
                       <HtmlEditor
                         changed={htmlContentChange}
                         name="content"
-                        content={ARTICLE_FRM.fields.content.value}
+                        content={KNOWLEDGE_BASE_FRM.fields.content.value}
                       />
                     </Form>
                   </Grid.Column>
@@ -91,23 +91,23 @@ export default class EditKnowledgeBaseItem extends Component {
                         </Header>
                         <Form>
                           <div className="field">
-                            <Header as="label">{ARTICLE_FRM.fields.userType.label}</Header>
+                            <Header as="label">{KNOWLEDGE_BASE_FRM.fields.userType.label}</Header>
                             <FormRadioGroup
-                              fielddata={ARTICLE_FRM.fields.userType}
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
                               name="userType"
                               changed={(e, result) => userTypeChange(e, result)}
                               readOnly={false}
                               containerclassname="mt-30 radio-basic center-align"
                               widths="equal"
-                              value={ARTICLE_FRM.fields.userType.value}
+                              value={KNOWLEDGE_BASE_FRM.fields.userType.value}
                             />
                           </div>
                           {/* <div className="field">
                             <FormDropDown
-                              fielddata={ARTICLE_FRM.fields.userType}
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
                               selection
                               containerclassname="dropdown-field"
-                              value={ARTICLE_FRM.fields.userType.value}
+                              value={KNOWLEDGE_BASE_FRM.fields.userType.value}
                               placeholder="Choose here"
                               name="userType"
                               options={USER_TYPES}
@@ -116,10 +116,10 @@ export default class EditKnowledgeBaseItem extends Component {
                           </div> */}
                           <div className="field">
                             <FormDropDown
-                              fielddata={ARTICLE_FRM.fields.categoryId}
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.categoryId}
                               selection
                               containerclassname="dropdown-field"
-                              value={ARTICLE_FRM.fields.categoryId.value}
+                              value={KNOWLEDGE_BASE_FRM.fields.categoryId.value}
                               placeholder="Choose here"
                               name="categoryId"
                               options={categoriesDropdown}
@@ -128,10 +128,10 @@ export default class EditKnowledgeBaseItem extends Component {
                           </div>
                           <div className="field">
                             <FormDropDown
-                              fielddata={ARTICLE_FRM.fields.itemStatus}
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.itemStatus}
                               selection
                               containerclassname="dropdown-field"
-                              value={ARTICLE_FRM.fields.itemStatus.value}
+                              value={KNOWLEDGE_BASE_FRM.fields.itemStatus.value}
                               placeholder="Choose here"
                               name="itemStatus"
                               options={ITEM_STATUS_VALUES}
@@ -141,7 +141,7 @@ export default class EditKnowledgeBaseItem extends Component {
                           <FormInput
                             type="text"
                             name="authorId"
-                            fielddata={ARTICLE_FRM.fields.authorId}
+                            fielddata={KNOWLEDGE_BASE_FRM.fields.authorId}
                             changed={articleChange}
                           />
                         </Form>

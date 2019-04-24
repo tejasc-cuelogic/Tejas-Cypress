@@ -2,12 +2,12 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
 import map from 'lodash/map';
-import { isArray } from 'lodash';
+import { isArray, orderBy } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { ARTICLES, ARTICLE_STATUS_VALUES } from '../../../constants/admin/knowledgeBase';
-import { getArticleDetails, getArticleById, createKnowledgeBase, updateKnowledgeBase, getAllKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters } from '../../queries/knowledgeBase';
+import { KNOWLEDGE_BASE, KB_STATUS_VALUES } from '../../../constants/admin/knowledgeBase';
+import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 
@@ -15,12 +15,13 @@ export class KnowledgeBaseStore {
   @observable data = [];
   @observable Categories = [];
   @observable article = null;
-  @observable ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
+  @observable KNOWLEDGE_BASE_FRM = Validator.prepareFormObject(KNOWLEDGE_BASE);
   @observable featuredData = [];
   @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
   @observable filters = false;
-  @observable ID_VERIFICATION_FRM = Validator.prepareFormObject(ARTICLE_STATUS_VALUES);
+  @observable ID_VERIFICATION_FRM = Validator.prepareFormObject(KB_STATUS_VALUES);
   @observable globalAction = '';
+  @observable LOADING = false;
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -74,43 +75,38 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  requestAllArticles = (isPublic = true, sortAsc = false, categoryId = null) => {
-    this.resetData();
-    const apiClient = isPublic ? clientPublic : client;
-    this.data = graphql({
-      client: apiClient,
-      query: getAllKnowledgeBase,
-      fetchPolicy: 'network-only',
-      variables: { sortByCreationDateAsc: sortAsc, categoryId },
-    });
-  }
-
-  @action
-  getArticle = (id, isPublic = true) => {
+  getKnowledgeBase = (id, isPublic = true) => {
+    this.LOADING = true;
     this.resetData();
     this.toggleSearch();
-    const query = isPublic ? getArticleDetails : getArticleById;
+    const query = isPublic ? getKnowledgeBaseDetails : getKnowledgeBaseById;
     const apiClient = isPublic ? clientPublic : client;
     this.article = graphql({
       client: apiClient,
       query,
       variables: { id },
       onFetch: (res) => {
-        if (!isPublic && res) {
-          Object.keys(this.ARTICLE_FRM.fields).map((key) => {
-            this.ARTICLE_FRM.fields[key].value = res.knowledgeBaseById[key];
+        this.LOADING = false;
+        if (res && res.knowledgeBaseById && res.knowledgeBaseById !== null) {
+          Object.keys(this.KNOWLEDGE_BASE_FRM.fields).map((key) => {
+            this.KNOWLEDGE_BASE_FRM.fields[key].value = res.knowledgeBaseById[key];
             return null;
           });
-          Validator.validateForm(this.ARTICLE_FRM);
+          Validator.validateForm(this.KNOWLEDGE_BASE_FRM);
+        } else {
+          Helper.toast('Invalid article id', 'error');
         }
       },
-
+      onError: (err) => {
+        this.LOADING = false;
+        Helper.toast(`${err} Error`, 'error');
+      },
     });
   }
 
   @action
   save = (id) => {
-    const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
+    const data = Validator.ExtractValues(this.KNOWLEDGE_BASE_FRM.fields);
     client
       .mutate({
         mutation: id === 'new' ? createKnowledgeBase : updateKnowledgeBase,
@@ -124,9 +120,12 @@ export class KnowledgeBaseStore {
   }
 
   @computed get AllKnowledgeBase() {
-    return (this.db && this.db.length &&
+    const list = (this.db && this.db.length &&
       this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return this.sortBydate(list);
   }
+
+  sortBydate = data => orderBy(data, o => (o.updated.date ? moment(new Date(o.updated.date)).unix() : ''), ['desc'])
 
   @computed get count() {
     return (this.data.data && this.data.data.knowledgeBaseByFilters &&
@@ -148,8 +147,9 @@ export class KnowledgeBaseStore {
   }
 
   @computed get knowledgeBase() {
-    return (this.db && this.db.length &&
+    const list = (this.db && this.db.length &&
       this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return this.sortBydate(list);
   }
 
   @action
@@ -164,20 +164,23 @@ export class KnowledgeBaseStore {
   }
 
   @computed get loading() {
-    return this.data.loading;
+    return this.LOADING;
   }
   @action
   reset = () => {
-    this.ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
+    this.KNOWLEDGE_BASE_FRM = Validator.prepareFormObject(KNOWLEDGE_BASE);
   }
   @action
   htmlContentChange = (field, value) => {
-    this.ARTICLE_FRM.fields[field].value = value;
-    Validator.validateForm(this.ARTICLE_FRM);
+    this.KNOWLEDGE_BASE_FRM.fields[field].value = value;
+    Validator.validateForm(this.KNOWLEDGE_BASE_FRM);
   }
   @action
   articleChange = (e, result) => {
-    this.ARTICLE_FRM = Validator.onChange(this.ARTICLE_FRM, Validator.pullValues(e, result));
+    this.KNOWLEDGE_BASE_FRM = Validator.onChange(
+      this.KNOWLEDGE_BASE_FRM,
+      Validator.pullValues(e, result),
+    );
   };
   @action
   maskChange = (values, field) => {
@@ -202,8 +205,8 @@ export class KnowledgeBaseStore {
   }
   @action
   userTypeChange = (e, result) => {
-    this.ARTICLE_FRM = Validator.onChange(
-      this.ARTICLE_FRM,
+    this.KNOWLEDGE_BASE_FRM = Validator.onChange(
+      this.KNOWLEDGE_BASE_FRM,
       Validator.pullValues(e, result),
     );
   }
@@ -221,7 +224,7 @@ export class KnowledgeBaseStore {
         variables: {
           id,
         },
-        refetchQueries: [{ query: getAllKnowledgeBase }],
+        refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
       .then(() => Helper.toast('Knowledge base item deleted successfully.', 'success'))
       .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'));
@@ -242,7 +245,7 @@ export class KnowledgeBaseStore {
 
   @action
   initRequest = (reqParams, getAllUsers = false) => {
-    this.data.loading = true;
+    this.LOADING = true;
     const {
       keyword,
       categoryId,
@@ -275,7 +278,8 @@ export class KnowledgeBaseStore {
       variables: params,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        if (res && !this.data.loading) {
+        this.LOADING = false;
+        if (res && !this.LOADING) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
           this.setDb(res.knowledgeBaseByFilters);

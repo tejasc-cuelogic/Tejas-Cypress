@@ -82,7 +82,7 @@ query _getArticleByCategoryId($id:ID! ) {
   }
 }
 `;
-export const getArticleById = gql`
+export const getKnowledgeBaseById = gql`
 query knowledgeBaseById($id: ID!) {
   knowledgeBaseById(id: $id) {
       id
@@ -95,7 +95,7 @@ query knowledgeBaseById($id: ID!) {
 }
 `;
 
-export const getArticleDetails = gql`
+export const getKnowledgeBaseDetails = gql`
 query knowledgeBaseById ($id: ID!) {
     knowledgeBaseById (id: $id) {
       id

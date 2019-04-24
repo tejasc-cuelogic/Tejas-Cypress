@@ -1,4 +1,4 @@
-export const ARTICLES = {
+export const KNOWLEDGE_BASE = {
   title: {
     value: '', label: 'Title', error: undefined, rule: 'required', placeholder: 'Click to edit article name',
   },
@@ -45,7 +45,7 @@ export const TAGS = [
   { key: 'Brewery', value: 'brewery', text: 'Brewery' },
 ];
 
-export const ARTICLE_STATUS_VALUES = [
+export const KB_STATUS_VALUES = [
   { key: 'All', value: 'All', text: 'All' },
   { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
   { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
