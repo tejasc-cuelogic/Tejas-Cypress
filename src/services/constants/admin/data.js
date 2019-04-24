@@ -11,3 +11,16 @@ export const STORAGE_DETAILS_SYNC = {
     },
   },
 };
+
+export const BULK_STORAGE_DETAILS_SYNC = {
+  limit: {
+    value: '',
+    label: 'Number of Users',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'This field is required',
+    },
+  },
+};
