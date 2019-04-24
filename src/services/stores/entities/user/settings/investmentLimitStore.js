@@ -21,7 +21,7 @@ export class InvestmentLimitStore {
   @observable entityCurrentLimit = 0;
   @observable individualIRACurrentLimit = 0;
   @observable investedAmount = 0;
-  @observable investNowHealthCheckDetails = null;
+  @observable investNowHealthCheckDetails = {};
   @observable investNowError = false;
   @observable investorTotalAmountInvested = 0;
 
