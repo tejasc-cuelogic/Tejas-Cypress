@@ -9,7 +9,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, userStore, accountStore } from '../../index';
+import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, accountStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -181,18 +181,15 @@ class IraAccountStore {
         resolve();
       })
       .catch((err) => {
-        uiStore.resetcreateAccountMessage();
         if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
           if (this.retry < 1) {
             this.retry += 1;
             this.submitAccount();
           } else {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.setProgress(false);
+            uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           }
         } else {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
+          uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
         }
         reject();
       });
@@ -284,24 +281,6 @@ class IraAccountStore {
           bankAccountStore.formIraAddFunds.meta.isValid;
         if (isValidCurrentStep) {
           uiStore.setProgress();
-          // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
-          // !bankAccountStore.manualLinkBankSubmitted) {
-          //   const { public_token, account_id } = bankAccountStore.plaidAccDetails;
-          //   accountAttributes.linkedBank = {};
-          //   accountAttributes.linkedBank.plaidPublicToken = public_token;
-          //   accountAttributes.linkedBank.plaidAccountId = account_id;
-          // } else {
-          //   const { accountNumber, routingNumber } =
-          // bankAccountStore.formLinkBankManually.fields;
-          //   if (accountNumber && routingNumber) {
-          //     const plaidBankDetails = {
-          //       accountNumber: accountNumber.value,
-          //       routingNumber: routingNumber.value,
-          //       accountType: accountType.value,
-          //     };
-          //     accountAttributes.linkedBank = plaidBankDetails;
-          //   }
-          // }
           accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
           accountAttributes.initialDepositAmount =
             bankAccountStore.accountAttributes.initialDepositAmount;
@@ -389,7 +368,6 @@ class IraAccountStore {
           this.iraAccountId = result.data.upsertInvestorAccount.accountId;
           accountStore.accountToastMessage(currentStep, actionPerformed, 'formIraAddFunds');
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formIraAddFunds, false);
@@ -417,15 +395,12 @@ class IraAccountStore {
           uiStore.setProgress(false);
           reject(err);
         });
-      // .finally(() => {
-      //   uiStore.setProgress(false);
-      // });
     });
   }
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bira(?![-])\b/])) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'ira' });
         if (account) {
