@@ -251,8 +251,6 @@ export class InvestmentStore {
         };
         const { totalPayment } = Calculator.calculate(data);
         const finalAmtM = money.floatToAmount(Math.floor(totalPayment) || '');
-
-        //
         //
         // const interestRate_f = parseFloat(interestRate);
         // const num = (interestRate_f / 100.0) / 12 * parseFloat(investAmt);
