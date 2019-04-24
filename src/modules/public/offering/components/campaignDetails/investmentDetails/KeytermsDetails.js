@@ -54,7 +54,22 @@ class KeyTermsDetails extends Component {
             <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Offering</b><br />{get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}</p>
+            <p>
+              <b>Type of Offering</b>
+              { get(campaign, 'regulation') &&
+                    CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content={
+                          CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
+                        }
+                        hoverable
+                        position="top center"
+                      /> : ''
+                  }
+              <br />
+              {get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
+            </p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
