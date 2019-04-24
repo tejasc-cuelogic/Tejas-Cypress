@@ -362,7 +362,7 @@ class AccountType extends Component {
                                   <p className="note mt-20">
                                     For a limited time, accredited investors can earn a $100 bonus
                                     by verifying your status on NextSeed.<br />
-                                    <a href="#">See rules for details.</a>
+                                    <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See rules for details.</a>
                                   </p>
                                 </Card.Content>
                               </Card>
