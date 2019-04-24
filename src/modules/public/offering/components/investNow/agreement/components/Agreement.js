@@ -41,7 +41,7 @@ export default class Agreement extends React.Component {
     setFieldValue('investmentFlowErrorMessage', null);
   }
   componentWillUnmount() {
-    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
   }
   handleCloseModal = (e) => {
     if (!this.state.showDocuSign && !this.state.showAgreementPdf) {

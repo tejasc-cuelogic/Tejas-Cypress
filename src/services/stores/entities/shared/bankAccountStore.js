@@ -146,10 +146,6 @@ export class BankAccountStore {
 
   @action
   resetAddFundsForm() {
-    // eslint-disable-next-line no-unused-expressions
-    // Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ?
-    // Validator.resetFormData(this.formEntityAddFunds) :
-    //   Validator.resetFormData(this.formAddFunds);
     Validator.resetFormData(this.addFundsByAccType);
   }
 
@@ -160,18 +156,6 @@ export class BankAccountStore {
 
   @action
   validateAddfundsAmount = () => {
-    // if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
-    //   if (parseFloat(this.formEntityAddFunds.fields.value.value, 0) === -1) {
-    //     this.shouldValidateAmount = true;
-    //     this.resetEntityAddFundsForm();
-    //   }
-    // } else if (parseFloat(
-    //   this.formAddFunds.fields.value.value
-    //   , 0,
-    // ) === -1) {
-    //   this.shouldValidateAmount = true;
-    //   this.resetAddFundsForm();
-    // }
     if (parseFloat(this.addFundsByAccType.fields.value.value, 0) === -1) {
       this.shouldValidateAmount = true;
       this.resetAddFundsForm();
@@ -247,14 +231,10 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
-    // eslint-disable-next-line max-len
-    // const { value } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.fields.value : this.formAddFunds.fields.value;
-    // eslint-disable-next-line max-len
-    // const { isValid } = Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds.meta : this.formAddFunds.meta;
     const { value } = this.addFundsByAccType.fields.value;
     const { isValid } = this.addFundsByAccType.meta;
     accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid ?
-      value : !isValid ? '' : -1;
+      value : -1;
     return accountAttributes;
   }
 
@@ -262,21 +242,12 @@ export class BankAccountStore {
   get isValidLinkBank() {
     return !isEmpty(this.plaidAccDetails);
   }
-  // TODO optimize method isPlaidDirty and isEntityPlaidDirty
+
   @computed
   get isPlaidDirty() {
     return (this.isAccountPresent &&
     this.formLinkBankManually.meta.isDirty &&
-    this.formAddFunds.meta.isDirty &&
-    !this.linkbankSummary) ||
-    this.showAddFunds;
-  }
-
-  @computed
-  get isEntityPlaidDirty() {
-    return (this.isAccountPresent &&
-    this.formLinkBankManually.meta.isDirty &&
-    this.formEntityAddFunds.meta.isDirty &&
+    this.addFundsByAccType.meta.isDirty &&
     !this.linkbankSummary) ||
     this.showAddFunds;
   }
@@ -391,38 +362,6 @@ export class BankAccountStore {
   }
   @action
   validateAddFunds = () => {
-    // if (!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
-    //   // TODO optiimize map function in if and else
-    //   map(this.formAddFunds.fields, (value) => {
-    //     const { key } = value;
-    //     const fundValue = value;
-    //     fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
-    //      // eslint-disable-next-line no-restricted-globals
-    //      isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
-    //     const { errors } = validationService.validate(fundValue);
-    //     Validator.setFormError(
-    //       this.formAddFunds,
-    //       key,
-    //       errors && errors[key][0],
-    //     );
-    //   });
-    //   this.validateForm('formAddFunds');
-    // } else {
-    //   map(this.formEntityAddFunds.fields, (value) => {
-    //     const { key } = value;
-    //     const fundValue = value;
-    //     fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
-    //       // eslint-disable-next-line no-restricted-globals
-    //       isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
-    //     const { errors } = validationService.validate(value);
-    //     Validator.setFormError(
-    //       this.formEntityAddFunds,
-    //       key,
-    //       errors && errors[key][0],
-    //     );
-    //   });
-    //   this.validateForm('formEntityAddFunds');
-    // }
     map(this.addFundsByAccType.fields, (value) => {
       const { key } = value;
       const fundValue = value;
@@ -625,7 +564,7 @@ export class BankAccountStore {
 
   @action
   setLoaderForAccountBlank = () => {
-    uiStore.setProgress(!this.isAccountPresent || isEmpty(this.routingNum));
+    uiStore.setProgress(!get(this.plaidAccDetails, 'accountNumber') || isEmpty(this.routingNum));
   }
 
   @action
@@ -718,11 +657,13 @@ export class BankAccountStore {
     const { getAccountIdByType } = accountStore;
     const { currentUserId } = userDetailsStore;
     const accountId = getAccountIdByType();
-    if (currentUserId && accountId && this.isAccountPresent) {
+    if (currentUserId && accountId && get(this.plaidAccDetails, 'accountNumber')) {
       uiStore.setProgress();
       this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
         .then(action((res) => {
-          this.routingNum = res;
+          if (this.routingNum !== res) {
+            this.routingNum = res;
+          }
           uiStore.setProgress(false);
         }));
     }
