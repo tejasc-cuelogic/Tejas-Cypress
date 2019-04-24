@@ -73,7 +73,7 @@
 		transition:all .5s ease;
 		.ns-scrollbar{
 			.view{
-				padding:@18px @13px 0;
+				padding:@18px 0 0;
 			}
 			.track-vertical{
 				width:4px !important;
@@ -96,11 +96,13 @@
 			text-align: left;
 			overflow:hidden;
 			padding:@8px @9px;
-			border-radius:@4px !important;
-			margin-bottom:@3px;
+			// border-radius:@4px !important;
+			margin-bottom:@1px !important;
 			font-weight:400;
+			color:@neutral;
 			&.ui.dropdown>.text{
 				max-width:142px;
+				float:left;
 			}
 			// &:first-of-type{
 			// 	margin-bottom:@30px;
@@ -130,49 +132,49 @@
 				}
 			}
 		}
-		&.visible{
-			.item{
-				padding:@8px @12px;
-				span{
-					opacity:1;
-					margin-left:@30px;
-					max-width:153px;
+		&.visible .item{
+			padding:@9px @12px;
+			span{
+				opacity:1;
+				margin-left:@30px;
+				max-width:153px;
+			}
+			&.dropdown{
+				// .menu>.item:first-of-type{
+				// 	margin-bottom:@3px;
+				// }
+				.icon.dropdown{
+					float:none;
+					font-family:'Nextseed';
+					height:22px;
+					line-height:22px;
+					vertical-align:top;
+					&:before{
+						content:"\e90d";
+					}
 				}
-				&.dropdown{
-					.menu>.item:first-of-type{
-						margin-bottom:@3px;
-					}
-					.icon.dropdown{
-						font-family:'Nextseed';
-						height:24px;
-						line-height:24px;
-						color:@primary-one;
-						&:before{
-							content:"\e914";
-						}
-					}
-					&.active .icon.dropdown{
-						transform:rotate(180deg);
-					}
-					&:hover, &:focus, &.active, &.active:hover{
-						background-color:transparent;
-						color:@tertiary-text;
-					}
-					.menu.transition{
-						position:relative;
-						left:0;
-						margin:@8px -@12px -@8px;
-						border:none;
-						box-shadow:none;
-						background:transparent;
-						.item{
-							padding:@8px @16px @8px @42px !important;
-							color:@tertiary-text !important;
-							font-weight: @normal !important;
-							&:hover, &:focus, &.active, &.active:hover{
-								font-weight: @fontMedium !important;
-							}
-						}
+				&.active .icon.dropdown{
+					transform:scaleY(-1);
+				}
+				&:hover, &:focus, &.active, &.active:hover{
+					background-color:transparent;
+					color:@tertiary-text;
+				}
+				.menu.transition{
+					position:relative;
+					left:0;
+					padding-top:@1px;
+					margin:@9px -@12px -@9px;
+					border:none;
+					box-shadow:none;
+					background:@white;
+					.item{
+						padding:@8px @16px @8px @42px !important;
+						color:@tertiary-text !important;
+						font-weight: @normal !important;
+						// &:hover, &:focus, &.active, &.active:hover{
+						// 	font-weight: @fontMedium !important;
+						// }
 					}
 				}
 			}
@@ -187,7 +189,7 @@
 				max-width:30px;
 				margin:0 auto;
 			}
-			h2, h3{
+			p, h3{
 				font-size:0;
 				line-height:0;
 				margin:0;
@@ -285,25 +287,23 @@
 		}
 	}
 	.ui.image.logo{
-		height:30px;
-		max-height:30px;
+		height:36px;
+		max-height:36px;
 		margin:0 auto;
 	}
 	.user-picture{
-		margin:@14px 0;
-		padding:@10px 0;
+		margin:@28px 0;
+		padding:@10px @12px @30px;
 		text-align:center;
 		color:@neutral-middark;
-		border-radius:@4px;
+		border-bottom:@neutral-midwhite 1px solid;
 		> img{
 			max-width:58px;
 			margin:0 auto 10px;
 			border:1px solid @trackBackground;
 		}
-		h2{
-			font-size:@16px;
-			font-weight:900;
-			margin:0 0 @5px;
+		p{
+			font-weight:@normal;
 		}
 		h3{
 			margin:@5px 0 0;
@@ -322,7 +322,7 @@
 				line-height:58px;
 			}
 		}
-		> img, h2, h3, .sb-avatar, .sb-avatar__text{
+		> img, p, h3, .sb-avatar, .sb-avatar__text{
 			transition:all .5s ease;
 			white-space:nowrap;
 			overflow:hidden;

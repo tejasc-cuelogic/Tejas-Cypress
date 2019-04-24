@@ -46,8 +46,7 @@ const MessagesList = props => (
                   roles: get(u, 'createdUserInfo.roles') ? get(u, 'createdUserInfo.roles').map(r => r.scope) : [],
                 }}
               />
-            )) :
-            <UserAvatar
+            )) : <UserAvatar
               size="mini"
               UserInfo={{
                 firstName: get(msg, 'createdUserInfo.info.firstName'),
@@ -55,8 +54,7 @@ const MessagesList = props => (
                 avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
                 roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
               }}
-            />
-          }
+            />}
           </div>
           <List.Content>
             <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? `${props.threadUsersList(msg.threadComments).length === 1 && (get(msg, 'createdUserInfo.id') !== get(props.threadUsersList(msg.threadComments), '[0].createdUserInfo.id')) ? `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')} ,` : ''} ${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`}</List.Header>

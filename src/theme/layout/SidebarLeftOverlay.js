@@ -83,7 +83,7 @@ const MySidebar = observer(props => (
                 /> :
                 <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
-              {props.UserInfo.fullname ? <h2>{props.UserInfo.fullname}</h2> : ''}
+              <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
               {GetNavItem('profile-settings', props.UserInfo.roles)}
             </div>
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
