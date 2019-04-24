@@ -16,8 +16,8 @@ const isMobile = document.documentElement.clientWidth < 992;
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
-    const { dataRoomDocs, docsWithBoxLink, isFetchedError } = this.props.campaignStore;
-    if (dataRoomDocs.length && docsWithBoxLink.length === 0 && !isFetchedError) {
+    const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
+    if (docsWithBoxLink.length === 0 && !isFetchedError) {
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');
       const offeringRegulationArr = (regulation && regulation.split('_')) || '';
