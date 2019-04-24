@@ -81,6 +81,7 @@ export class BankAccount {
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
         bankAccountStore.setNewPlaidBankDetails(metadata);
+        bankAccountStore.resetRoutingNum();
         if (action === 'change') {
           // bankAccountStore.changeBankPlaid();
           bankAccountStore.setPlaidBankVerificationStatus(true);

@@ -112,7 +112,7 @@ class App extends Component {
       this.props.uiStore.clearRedirectURL();
       this.props.authStore.setUserLoggedIn(false);
     }
-    if ((!this.checkPathRestictedForScrollTop(restictedScrollToTopPathArr, currentLocation)) || ((!this.props.location.hash || this.props.location.hash === '') && !isMobile && currentLocation.includes('overview'))) {
+    if ((!this.checkPathRestictedForScrollTop(restictedScrollToTopPathArr, currentLocation)) || ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview'))) {
       window.scrollTo(0, 0);
     }
     if (currentLocation === '/') {
