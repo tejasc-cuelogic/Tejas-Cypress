@@ -15,30 +15,6 @@ subPanel => 0: none, 1: subnavigation, 2: has search panel
 */
 
 export const PRIVATE_NAV = [
-  {
-    title: 'Settings',
-    to: 'profile-settings',
-    heading: 'Profile Settings',
-    subPanel: 1,
-    accessibleTo: [],
-    path: 'shared/settings/containers/ProfileSettings',
-    subNavigations: [
-      { title: 'Profile Data', to: 'profile-data', component: 'ProfileData' },
-      {
-        title: 'Investment limits', to: 'investment-limits', component: 'InvestmentLimits', accessibleTo: ['investor'],
-      },
-      { title: 'Security', to: 'security', component: 'Security' },
-      // {
-      //   title: 'Beneficiaries',
-      //   to: 'beneficiaries',
-      //   component: 'Beneficiaries',
-      //   accessibleTo: ['investor'],
-      // },
-      {
-        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
-      },
-    ],
-  },
   // {
   //   icon: 'ns-envelope',
   //   title: 'Messages',
@@ -430,6 +406,32 @@ export const PRIVATE_NAV = [
     subNavigations: [
       { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
       { title: 'Data', to: 'data', component: 'Data' },
+    ],
+  },
+  {
+    title: 'Settings',
+    icon: 'ns-setting',
+    to: 'profile-settings',
+    heading: 'Profile Settings',
+    subPanel: 1,
+    hideSubOnSideBar: true,
+    accessibleTo: [],
+    path: 'shared/settings/containers/ProfileSettings',
+    subNavigations: [
+      { title: 'Profile Data', to: 'profile-data', component: 'ProfileData' },
+      {
+        title: 'Investment limits', to: 'investment-limits', component: 'InvestmentLimits', accessibleTo: ['investor'],
+      },
+      { title: 'Security', to: 'security', component: 'Security' },
+      // {
+      //   title: 'Beneficiaries',
+      //   to: 'beneficiaries',
+      //   component: 'Beneficiaries',
+      //   accessibleTo: ['investor'],
+      // },
+      {
+        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
+      },
     ],
   },
 ];

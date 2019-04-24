@@ -5,7 +5,7 @@ import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Button, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
-import { SidebarNav, GetNavItem } from './SidebarNav';
+import { SidebarNav } from './SidebarNav';
 import { UserAvatar, Logo, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
@@ -84,20 +84,10 @@ const MySidebar = observer(props => (
                 <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
               <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
-              {GetNavItem('profile-settings', props.UserInfo.roles)}
             </div>
-            <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
+            <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
         </Sidebar>
-        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
-          props.signupStatus &&
-          !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
-           props.signupStatus.investorProfileCompleted &&
-           <Link className="add-account" to="/app/summary/account-creation">
-             <Icon name="add circle" />
-             <span>Add New Account</span>
-           </Link>
-        }
         {props.desktop &&
           <Button onClick={props.toggle} className="item collapseIcon">
             <i className={`angle ${(props.layoutState.leftPanel) ? 'left' : 'right'} icon`} />

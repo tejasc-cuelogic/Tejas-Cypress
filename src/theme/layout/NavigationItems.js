@@ -75,7 +75,7 @@ export class NavItems extends Component {
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
     return myNavItems.map(item => (
       <Aux>
-        {(item.subPanel === 1 && item.subNavigations) ? (
+        {(item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar) ? (
           <Dropdown
             open={item.clickable && this.isOpen(item.to, location, item.subNavigations)}
             item
