@@ -14,7 +14,7 @@ import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore', 'authStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -22,7 +22,14 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
-    if (!this.props.authStore.CONFIRM_FRM.fields.email.value) {
+    if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
+      const { password } = this.props.authStore.CONFIRM_FRM.fields;
+      const { address } = this.props.userDetailsStore.userDetails.email;
+      const userCredentials = { email: address, password: password.value };
+      this.props.authStore.setCredentials(userCredentials);
+    }
+    if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
+      !this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
     }
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
