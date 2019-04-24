@@ -138,18 +138,15 @@ class EntityAccountStore {
           resolve();
         })
         .catch((err) => {
-          uiStore.resetcreateAccountMessage();
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
               this.submitAccount();
             } else {
-              uiStore.setErrors(DataFormatter.getSimpleErr(err));
-              uiStore.setProgress(false);
+              uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
             }
           } else {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.setProgress(false);
+            uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           }
           reject();
         });
@@ -415,28 +412,11 @@ class EntityAccountStore {
       if (bankAccountStore.manualLinkBankSubmitted) {
         currentStep.validate();
       }
-      // const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
       isValidCurrentStep = bankAccountStore.formEntityAddFunds.meta.isValid ||
       bankAccountStore.isAccountPresent ||
       bankAccountStore.formLinkBankManually.meta.isValid;
       if (isValidCurrentStep) {
         uiStore.setProgress();
-        // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
-        //   !bankAccountStore.manualLinkBankSubmitted) {
-        //   const plaidBankDetails = {};
-        //   plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
-        //   plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
-        //   accountAttributes.linkedBank = plaidBankDetails;
-        // } else {
-        //   const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
-        //   if (accountNumber && routingNumber) {
-        //     const plaidBankDetails = {
-        //       accountNumber: accountNumber.value,
-        //       routingNumber: routingNumber.value,
-        //     };
-        //     accountAttributes.linkedBank = plaidBankDetails;
-        //   }
-        // }
         accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
         accountAttributes.initialDepositAmount =
           bankAccountStore.accountAttributes.initialDepositAmount;
@@ -448,9 +428,6 @@ class EntityAccountStore {
             rej();
           });
       }
-      // } else {
-      //   rej();
-      // }
     }
     return true;
   })
@@ -483,14 +460,10 @@ class EntityAccountStore {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
           accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
             FormValidator.setIsDirty(bankAccountStore.formLinkBankManually, false);
-            // if (bankAccountStore.ManualLinkBankSubmitted) {
-            //   FormValidator.resetFormData(bankAccountStore.formAddFunds);
-            // }
           }
           if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
             if (removeUploadedData) {
@@ -577,7 +550,7 @@ class EntityAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'entity' });
         if (account) {
