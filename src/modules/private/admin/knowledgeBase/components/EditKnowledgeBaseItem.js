@@ -42,7 +42,7 @@ export default class EditKnowledgeBaseItem extends Component {
   render() {
     const {
       KNOWLEDGE_BASE_FRM,
-      articleChange,
+      knowledgeBaseChange,
       htmlContentChange,
       categoriesDropdown,
       loading,
@@ -74,7 +74,7 @@ export default class EditKnowledgeBaseItem extends Component {
                         type="text"
                         name="title"
                         fielddata={KNOWLEDGE_BASE_FRM.fields.title}
-                        changed={articleChange}
+                        changed={knowledgeBaseChange}
                       />
                       <HtmlEditor
                         changed={htmlContentChange}
@@ -111,7 +111,7 @@ export default class EditKnowledgeBaseItem extends Component {
                               placeholder="Choose here"
                               name="userType"
                               options={USER_TYPES}
-                              onChange={(e, result) => articleChange(e, result)}
+                              onChange={(e, result) => knowledgeBaseChange(e, result)}
                             />
                           </div> */}
                           <div className="field">
@@ -123,7 +123,7 @@ export default class EditKnowledgeBaseItem extends Component {
                               placeholder="Choose here"
                               name="categoryId"
                               options={categoriesDropdown}
-                              onChange={(e, result) => articleChange(e, result)}
+                              onChange={(e, result) => knowledgeBaseChange(e, result)}
                             />
                           </div>
                           <div className="field">
@@ -135,14 +135,14 @@ export default class EditKnowledgeBaseItem extends Component {
                               placeholder="Choose here"
                               name="itemStatus"
                               options={ITEM_STATUS_VALUES}
-                              onChange={(e, result) => articleChange(e, result)}
+                              onChange={(e, result) => knowledgeBaseChange(e, result)}
                             />
                           </div>
                           <FormInput
                             type="text"
                             name="authorId"
                             fielddata={KNOWLEDGE_BASE_FRM.fields.authorId}
-                            changed={articleChange}
+                            changed={knowledgeBaseChange}
                           />
                         </Form>
                       </Card.Content>

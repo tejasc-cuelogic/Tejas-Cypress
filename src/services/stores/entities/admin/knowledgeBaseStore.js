@@ -6,7 +6,7 @@ import { isArray, orderBy } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { KNOWLEDGE_BASE, KB_STATUS_VALUES } from '../../../constants/admin/knowledgeBase';
+import { KNOWLEDGE_BASE } from '../../../constants/admin/knowledgeBase';
 import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
@@ -19,7 +19,6 @@ export class KnowledgeBaseStore {
   @observable featuredData = [];
   @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
   @observable filters = false;
-  @observable ID_VERIFICATION_FRM = Validator.prepareFormObject(KB_STATUS_VALUES);
   @observable globalAction = '';
   @observable LOADING = false;
   @observable confirmBox = {
@@ -86,7 +85,6 @@ export class KnowledgeBaseStore {
       query,
       variables: { id },
       onFetch: (res) => {
-        this.LOADING = false;
         if (res && res.knowledgeBaseById && res.knowledgeBaseById !== null) {
           Object.keys(this.KNOWLEDGE_BASE_FRM.fields).map((key) => {
             this.KNOWLEDGE_BASE_FRM.fields[key].value = res.knowledgeBaseById[key];
@@ -96,6 +94,7 @@ export class KnowledgeBaseStore {
         } else {
           Helper.toast('Invalid article id', 'error');
         }
+        this.LOADING = false;
       },
       onError: (err) => {
         this.LOADING = false;
@@ -120,12 +119,12 @@ export class KnowledgeBaseStore {
   }
 
   @computed get AllKnowledgeBase() {
-    const list = (this.db && this.db.length &&
+    return (this.db && this.db.length &&
       this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
-    return this.sortBydate(list);
+    // return this.sortBydate(list);
   }
 
-  sortBydate = data => orderBy(data, o => (o.updated.date ? moment(new Date(o.updated.date)).unix() : ''), ['desc'])
+  sortBydate = data => orderBy(data, o => (o.updated.date ? moment(new Date(o.updated.date)) : ''), ['desc'])
 
   @computed get count() {
     return (this.data.data && this.data.data.knowledgeBaseByFilters &&
@@ -147,9 +146,8 @@ export class KnowledgeBaseStore {
   }
 
   @computed get knowledgeBase() {
-    const list = (this.db && this.db.length &&
+    return (this.db && this.db.length &&
       this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
-    return this.sortBydate(list);
   }
 
   @action
@@ -176,7 +174,7 @@ export class KnowledgeBaseStore {
     Validator.validateForm(this.KNOWLEDGE_BASE_FRM);
   }
   @action
-  articleChange = (e, result) => {
+  knowledgeBaseChange = (e, result) => {
     this.KNOWLEDGE_BASE_FRM = Validator.onChange(
       this.KNOWLEDGE_BASE_FRM,
       Validator.pullValues(e, result),
@@ -282,7 +280,7 @@ export class KnowledgeBaseStore {
         if (res && !this.LOADING) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
-          this.setDb(res.knowledgeBaseByFilters);
+          this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
         }
       },
     });
