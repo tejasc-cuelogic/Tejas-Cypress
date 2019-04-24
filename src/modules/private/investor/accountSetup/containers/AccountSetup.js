@@ -50,10 +50,7 @@ export default class AccountSetup extends Component {
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
-    // TODO change to regex
-    const activeAccLength = signupStatus.activeAccounts.length;
-
-    if (activeAccLength !== 0 &&
+    if (signupStatus.activeAccounts.length !== 0 &&
       signupStatus.investorProfileCompleted) {
       this.props.portfolioStore.getSummary();
     }

@@ -189,12 +189,9 @@ class IndividualAccountStore {
     if (Helper.matchRegexWithUrl([/\bindividual(?![-])\b/])) {
       if (!isEmpty(userData) && !this.formStatus) {
         const account = find(userData.roles, { name: 'individual' });
-        // const { isValid } = bankAccountStore.formAddFunds.meta;
         if (account && account.details) {
-          // if (isValid) {
           bankAccountStore.formAddFunds.fields.value.value =
           account.details.initialDepositAmount;
-          // }
           if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
             const plaidAccDetails = account.details.linkedBank;
             bankAccountStore.setPlaidAccDetails(plaidAccDetails);
@@ -215,14 +212,6 @@ class IndividualAccountStore {
           const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0)
             ? 2 : this.stepToBeRendered;
           this.setStepToBeRendered(renderStep);
-          // uiStore.setProgress(false);
-          // if (!this.isManualLinkBankSubmitted && (
-          //   bankAccountStore.formLinkBankManually.meta.isValid ||
-          //   !isEmpty(bankAccountStore.plaidAccDetails))) {
-          //   const getIndividualStep = AccCreationHelper.individualSteps();
-          //   this.setStepToBeRendered(getIndividualStep.summary);
-          //   this.setIsManualLinkBankSubmitted(false);
-          // }
         }
       }
     }
