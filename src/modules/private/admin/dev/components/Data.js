@@ -26,7 +26,7 @@ export default class Data extends Component {
     const { elasticSearchStore, uiStore } = this.props;
     const {
       STORAGE_DETAILS_SYNC_FRM, bulkStorageDetailsChange,
-      BULK_STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, boxMsg, countValues, bulkSyncLoader,
+      BULK_STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, countValues, bulkSyncLoader,
     } = elasticSearchStore;
     const { inProgress, errors } = uiStore;
 
@@ -44,6 +44,7 @@ export default class Data extends Component {
                       type="text"
                       name="userId"
                       containerwidth="12"
+                      showerror
                       fielddata={STORAGE_DETAILS_SYNC_FRM.fields.userId}
                       changed={(e, result) => storageDetailsChange(e, result)}
                       disabled={inProgress}
@@ -51,9 +52,6 @@ export default class Data extends Component {
                     <Form.Field width={4}>
                       <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress} loading={inProgress} />
                     </Form.Field>
-                    { boxMsg &&
-                    <FieldError error={boxMsg === 'True' ? '' : boxMsg} />
-                    }
                   </Form.Group>
                 </Form>
 
@@ -66,6 +64,7 @@ export default class Data extends Component {
                       label={BULK_STORAGE_DETAILS_SYNC_FRM.fields.limit.label}
                       number
                       containerwidth="12"
+                      showerror
                       fielddata={BULK_STORAGE_DETAILS_SYNC_FRM.fields.limit}
                       changed={(e, result) => bulkStorageDetailsChange(e, result, 'BULK_STORAGE_DETAILS_SYNC_FRM', 'mask')}
                       disabled={bulkSyncLoader}
