@@ -152,6 +152,7 @@
 					// display:block;
 					// margin-right:@13px;
 					// height:auto;
+					float:none;
 					transform:scale(1);
 				}
 				>span{
@@ -231,25 +232,26 @@
 		width:64px;
 		transform:translate3D(0,0,0);
 		.user-picture{
-			margin:@24px 0 @7px;
+			margin:@28px 0;
+			padding:0 @14px @30px;
 			> img{
-				max-width:30px;
+				width:36px;
 				margin:0 auto;
 			}
-			p, h3{
+			p{
 				font-size:0;
 				line-height:0;
 				margin:0;
 			}
 			.sb-avatar{
-				width:30px;
-				height:30px;
-				margin-bottom:@10px;
+				width:36px;
+				height:36px;
+				// margin-bottom:@10px;
 				.sb-avatar__text{
-					width:30px;
-					height:30px;
+					width:36px;
+					height:36px;
 					font-size:@14px;
-					line-height:30px;
+					line-height:36px;
 				}
 			}
 		}
@@ -262,8 +264,17 @@
 				top:-5px;
 				right:-5px;
 			}
+			&.dropdown.active{
+				background-color:transparent;
+			}
 			.icon.dropdown{
 				display:none;
+			}
+			&.add-account{
+				margin:@12px @10px;
+				>span{
+					display:none;
+				}
 			}
 		}
 		~ .ui.button.collapseIcon, ~ a.add-account{
@@ -280,7 +291,7 @@
 		width:260px;
 		padding-bottom:@18px;
 		.ui.image.logo{
-			margin-left:@12px;
+			margin-left:@20px;
 		}
 		.ns-close-light{
 			position:absolute;
@@ -291,24 +302,27 @@
 		}
 		.user-picture{
 			text-align:left;
-			padding:@10px;
+			padding:@10px @20px @30px;
 			>img, .sb-avatar{
 				float:left;
-				max-width:42px;
-				margin:-@4px @10px 0 0;
+				max-width:36px;
+				margin:-@7px @10px 0 0;
 			}
 			.sb-avatar{
-				height:42px;
+				height:36px;
 				.sb-avatar__text{
-					width:42px;
-					height:42px;
+					width:36px;
+					height:36px;
 					font-size:@16px;
-					line-height:42px;
+					line-height:36px;
 				}
 			}
-			h3{
-				margin-bottom:@5px;
+			p{
+				margin:0;
 			}
+			// h3{
+			// 	margin-bottom:@5px;
+			// }
 		}
 		// .ui.divider{
 		// 	margin-left:-@13px;
@@ -340,28 +354,29 @@
 	}
 	.user-picture{
 		margin:@28px 0;
-		padding:@10px @20px @30px;
+		padding:0 @20px @30px;
 		text-align:center;
 		color:@neutral-middark;
-		border-bottom:@neutral-midwhite 1px solid;
+		border-bottom:@thumbBackground 1px solid;
 		> img{
 			max-width:58px;
-			margin:0 auto 10px;
-			border:1px solid @trackBackground;
+			margin:0 auto;
+			// border:1px solid @trackBackground;
 		}
 		p{
 			font-weight:@normal;
+			margin-top:@10px;
 		}
-		h3{
-			margin:@5px 0 0;
-			font-size:@14px !important;
-			font-weight:@fontMedium;
-			color:@border-color;
-		}
+		// h3{
+		// 	margin:@5px 0 0;
+		// 	font-size:@14px !important;
+		// 	font-weight:@fontMedium;
+		// 	color:@border-color;
+		// }
 		.sb-avatar{
 			width:58px;
 			height:58px;
-			margin-bottom:@10px;
+			// margin-bottom:@10px;
 			.sb-avatar__text{
 				width:58px;
 				height:58px;
@@ -369,36 +384,36 @@
 				line-height:58px;
 			}
 		}
-		> img, p, h3, .sb-avatar, .sb-avatar__text{
+		> img, p, .sb-avatar, .sb-avatar__text{
 			transition:all .5s ease;
 			white-space:nowrap;
 			overflow:hidden;
 			text-overflow:ellipsis;
 		}
 	}
-	&.visible {
-		.user-picture:hover{
-			background-color:@neutral-offwhite;
-		}
-		// ~ a.add-account{
-		// 	@media only screen and (max-width : @largestSmallMonitor){
-		// 		width: 260px;
-		// 		visibility: visible;
-		// 		transition: all .5s ease;
-		// 		transform: translate3d(0,0,0);
-		// 		> .icon{
-		// 			display:block;
-		// 			transition: all .5s ease;
-		// 			transform: translate3d(0,0,0);
-		// 		}
-		// 		>span{
-		// 			display:block;
-		// 			transition: all .5s ease;
-		// 			transform: translate3d(0,0,0);
-		// 		}
-		// 	}
-		// }
-	}
+	// &.visible {
+	// 	.user-picture:hover{
+	// 		background-color:@neutral-offwhite;
+	// 	}
+	// 	// ~ a.add-account{
+	// 	// 	@media only screen and (max-width : @largestSmallMonitor){
+	// 	// 		width: 260px;
+	// 	// 		visibility: visible;
+	// 	// 		transition: all .5s ease;
+	// 	// 		transform: translate3d(0,0,0);
+	// 	// 		> .icon{
+	// 	// 			display:block;
+	// 	// 			transition: all .5s ease;
+	// 	// 			transform: translate3d(0,0,0);
+	// 	// 		}
+	// 	// 		>span{
+	// 	// 			display:block;
+	// 	// 			transition: all .5s ease;
+	// 	// 			transform: translate3d(0,0,0);
+	// 	// 		}
+	// 	// 	}
+	// 	// }
+	// }
 	// ~ a.add-account{
 	// 	width:220px;
 	// 	padding:@10px @25px;
@@ -473,9 +488,9 @@
 	.user-picture{
 		color:@white;
 	}
-	&.visible .user-picture:hover{
-		background-color:@neutral;
-	}
+	// &.visible .user-picture:hover{
+	// 	background-color:@neutral;
+	// }
 	.item{
 		&:hover, &:focus, &.active, &.active:hover{
 			background-color:@neutral;

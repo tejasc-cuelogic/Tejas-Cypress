@@ -54,7 +54,7 @@ export class SidebarNav extends Component {
           props.signupStatus.investorProfileCompleted &&
             // <Button as={Link} to="/app/summary/account-creation">Add New Account</Button>
             <Menu.Item as={Link} className="add-account" to="/app/summary/account-creation">
-              <Icon name="add circle" />
+              <Icon name="add" />
               <span>Add New Account</span>
             </Menu.Item>
         }
