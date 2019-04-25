@@ -322,7 +322,7 @@ export class CampaignStore {
     const closeDaysToRemains = DataFormatter.diffDays(closingDate || null);
 
     if (launchDaysToRemains < closeDaysToRemains &&
-       launchDaysToRemains > 0 && launchDaysToRemains < 2) {
+       launchDaysToRemains >= 0 && launchDaysToRemains < 2) {
       labelBannerFirst = 'NEW';
     } else if (closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
       labelBannerFirst = `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left`;

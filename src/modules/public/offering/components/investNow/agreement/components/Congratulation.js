@@ -2,6 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 
@@ -15,6 +16,9 @@ export default class Congratulation extends React.Component {
     } else {
       this.props.campaignStore.setFieldValue('showFireworkAnimation', true);
     }
+  }
+  componentWillUnmount() {
+    this.props.accreditationStore.resetUserAccreditatedStatus();
   }
   handleCloseModal = () => {
     this.props.investmentStore.resetData();
@@ -33,6 +37,8 @@ export default class Congratulation extends React.Component {
     const { campaign } = this.props.campaignStore;
     const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
     const accountRedirectURL = accountType && accountType !== '-' ? `/app/account-details/${accountType}/portfolio` : '/app/summary';
+    const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
+    const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     setTimeout(() => {
       if (this.props.changeInvestment) {
         this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
@@ -47,8 +53,7 @@ export default class Congratulation extends React.Component {
             <Header as="h2">Congratulations!</Header>
             <Header as="h3">
               You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span> in
-              {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
-                    getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
+              {businessName}.
             </Header>
           </Modal.Header>
           <Modal.Content className="signup-content center-align">
