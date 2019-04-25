@@ -38,7 +38,6 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   componentDidUpdate() {
-    this.props.uiStore.setProgress(!this.props.userDetailsStore.signupStatus.isMigratedUser);
     if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
       const { password } = this.props.authStore.CONFIRM_FRM.fields;
       const { address } = this.props.userDetailsStore.userDetails.email;
@@ -226,7 +225,7 @@ export default class ConfirmEmailAddress extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail)) || (errors && errors.message)} />
+            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail)) || (errors && errors.message) || inProgress} />
           </Form>
         </Modal.Content>
       </Modal>
