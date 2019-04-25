@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 import React, { Component } from 'react';
 import { Table, Popup, Icon } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
@@ -89,7 +90,7 @@ export default class Listing extends Component {
                   <Table.Cell>{data.city}</Table.Cell>
                   <Table.Cell>{data.state}</Table.Cell>
                   <Table.Cell>
-                    {data.accountType && <Icon size="large" className={`${data.accountType.includes('ENTITY')} ? 'ns-entity-line' : ${data.accountType.includes('IRA')} ? 'ns-ira-line' : 'ns-individual-line' `} color="green" />}
+                    {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                   </Table.Cell>
                   {(isIssuer && hardClosedDate) || (isAdmin) ?
                     <Table.Cell>
@@ -103,8 +104,8 @@ export default class Listing extends Component {
                         trigger={<Icon name="help circle" color="green" />}
                         content={
                           <span>
-                            {data.credit && 'Credit: {data.credit}'} <br />
-                            {data.autoDraftAmount && `Auto Draft: ${data.autoDraftAmount}`} <br />
+                            {data.credit ? `Credit: ${data.credit}` : ''} <br />
+                            {data.autoDraftAmount ? `Auto Draft: ${data.autoDraftAmount}` : ''} <br />
                           </span>}
                         hoverable
                         position="top center"
