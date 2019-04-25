@@ -64,6 +64,9 @@
             @media only screen and (max-width : @largestMobileScreen){
                 padding:@20px @22px;
             }
+            >.header:not(.ui) {
+                clear: both;
+            }
             .tags{
                 font-size:@13px;
                 font-weight:@fontMedium;
