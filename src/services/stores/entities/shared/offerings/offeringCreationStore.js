@@ -1072,10 +1072,6 @@ export class OfferingCreationStore {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
-        const closureSummary = { ...getOfferingById.closureSummary };
-        closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
-        closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
-        payloadData.closureSummary = closureSummary;
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
         Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
@@ -1083,13 +1079,19 @@ export class OfferingCreationStore {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
-        payloadData.closureSummary = mergeWith(
-          toJS(getOfferingById.closureSummary),
-          payloadData.closureSummary,
-          this.mergeCustomize,
-        );
-        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
-        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        if (subKey === 'launch') {
+          const closureSummary = { ...getOfferingById.closureSummary };
+          closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
+          closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
+          payloadData.closureSummary = closureSummary;
+          payloadData.closureSummary = mergeWith(
+            toJS(getOfferingById.closureSummary),
+            payloadData.closureSummary,
+            this.mergeCustomize,
+          );
+          payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+          payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       } else if (keyName === 'leadership') {
