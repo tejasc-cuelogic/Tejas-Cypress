@@ -33,7 +33,8 @@ export default class CampaignHeader extends Component {
     const minFlagStatus = collected >= minOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
-    const percent = (collected / maxOffering) * 100;
+    const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
+    const percent = (collected / minMaxOffering) * 100;
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const isClosed = campaign.stage !== 'LIVE';
@@ -135,7 +136,7 @@ export default class CampaignHeader extends Component {
                     }
                   </Statistic>
                   {!isClosed ?
-                    <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green" className={percent < 100 ? 'no-border-radius' : ''}><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                    <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
                     <Progress percent="100" size="tiny" color="green" />
                   }
                   <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
