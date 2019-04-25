@@ -200,6 +200,9 @@
         }
     }
 }
+.campaign-list-wrapper .ui.grid .column:not(.row){
+    display: flex;
+}
 .legal-section.ui.grid {
     @media only screen and (max-width: @largestTabletScreen) {
         padding: 0;
