@@ -107,12 +107,21 @@ export class CampaignStore {
 
   @computed get active() {
     const offeringList = this.activeList.slice();
+    const offeringList1 = this.orderedActiveList.slice();
+    console.log(offeringList1);
     return offeringList.splice(0, this.activeToDisplay);
   }
 
   @computed get activeList() {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     return orderBy(activeListArr, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
+  }
+
+  @computed get orderedActiveList() {
+    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    const orderedActiveListArr =
+      activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
+    return orderBy(orderedActiveListArr, o => (get(o, 'order')), ['asc']);
   }
 
   @computed get completed() {
@@ -301,7 +310,7 @@ export class CampaignStore {
     this.totalPaymentChart = payChart;
   }
 
-  generateBanner = (offeringDetails) => {
+  generateBanner = (offeringDetails, addObjectProps = false) => {
     const offeringLaunchDetails = get(offeringDetails, 'offering.launch');
     const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
     const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
@@ -317,15 +326,20 @@ export class CampaignStore {
     let labelBannerFirst = null;
     let labelBannerSecond = null;
     let bannerToShowFlag = false;
-    const resultObject = {};
+    const resultObject = !addObjectProps ? { ...offeringDetails } : {};
     const launchDaysToRemains = DataFormatter.diffDays(launchDate || null);
     const closeDaysToRemains = DataFormatter.diffDays(closingDate || null);
+    let order = null;
 
     if (launchDaysToRemains < closeDaysToRemains &&
        launchDaysToRemains > 0 && launchDaysToRemains < 2) {
       labelBannerFirst = 'NEW';
+      order = 0;
     } else if (closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
       labelBannerFirst = `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left`;
+      order = closeDaysToRemains;
+    } else if (closeDaysToRemains > 7) {
+      order = closeDaysToRemains;
     }
     const percentageCompairResult = money.cmp(percent, '50.00').toString();
     const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
@@ -334,12 +348,16 @@ export class CampaignStore {
     if (money.isNegative(amountCompairResult) &&
       !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
+      order = order || 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
+      // if offer reached max setting highest 32 bit integer
+      order = 2147483647;
     }
     if (labelBannerFirst || labelBannerSecond) {
       bannerToShowFlag = true;
     }
+    resultObject.order = order;
     resultObject.isBannerShow = bannerToShowFlag;
     resultObject.bannerFirstText = labelBannerFirst;
     resultObject.bannerSecondText = labelBannerSecond;
