@@ -7,7 +7,7 @@ import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { KNOWLEDGE_BASE } from '../../../constants/admin/knowledgeBase';
-import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters } from '../../queries/knowledgeBase';
+import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters, updateKnowledgeBaseItem, deleteKnowledgeBaseItem } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 
@@ -20,6 +20,7 @@ export class KnowledgeBaseStore {
   @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
   @observable filters = false;
   @observable globalAction = '';
+  @observable selectedRecords = [];
   @observable LOADING = false;
   @observable confirmBox = {
     entity: '',
@@ -216,6 +217,7 @@ export class KnowledgeBaseStore {
   }
   @action
   deleteKBById = (id) => {
+    this.LOADING = true;
     client
       .mutate({
         mutation: deleteKBById,
@@ -224,8 +226,14 @@ export class KnowledgeBaseStore {
         },
         refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
-      .then(() => Helper.toast('Knowledge base item deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'));
+      .then(() => {
+        this.LOADING = true;
+        Helper.toast('Knowledge base item deleted successfully.', 'success');
+      })
+      .catch(() => {
+        this.LOADING = true;
+        Helper.toast('Error while deleting knowledge base ', 'error');
+      });
   }
   @action
   setConfirmBox = (entity, refId) => {
@@ -283,6 +291,53 @@ export class KnowledgeBaseStore {
           this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
         }
       },
+    });
+  }
+
+  @action
+  addSelectedRecords = (id) => {
+    this.selectedRecords.push(id);
+  }
+
+  @action
+  applyGlobalAction = () => {
+    this.LOADING = true;
+    const idArr = this.selectedRecords;
+    const status = this.globalAction;
+
+    if (status === 'delete') {
+      this.deleteRecords(idArr);
+    } else {
+      this.updateRecordStatus(idArr, status);
+    }
+  }
+
+  updateRecordStatus = (id, status) => {
+    client.mutate({
+      mutation: updateKnowledgeBaseItem,
+      variables: {
+        id,
+        status,
+      },
+      refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
+    }).then(() => {
+      Helper.toast('Status updated successfully.', 'success');
+    }).catch(() => {
+      Helper.toast('Error while updating status.', 'error');
+    });
+  }
+
+  deleteRecords = (id) => {
+    client.mutate({
+      mutation: deleteKnowledgeBaseItem,
+      variables: {
+        id,
+      },
+      refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
+    }).then(() => {
+      Helper.toast('Records deleted successfully.', 'success');
+    }).catch(() => {
+      Helper.toast('Error while deleting records.', 'error');
     });
   }
 }

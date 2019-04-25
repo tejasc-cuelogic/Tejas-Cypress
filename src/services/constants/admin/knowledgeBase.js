@@ -65,6 +65,9 @@ export const AUTHORS = [
 
 export const GLOBAL_ACTIONS = [
   { key: 'Delete', value: 'delete', text: 'Delete' },
+  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'Save to approve' },
+  { key: 'DRAFT', value: 'DRAFT', text: 'Save to draft' },
+  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'Save to review' },
 ];
 
 export const USER_TYPES = [

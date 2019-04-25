@@ -151,3 +151,13 @@ export const deleteKBById = gql`
   }
 `;
 
+export const updateKnowledgeBaseItem = gql`mutation updateKnowledgeBaseStatus($id: [ID], $status:ArticleStatusEnum!){
+  updateKnowledgeBaseStatus(id: $id, status:$status)
+}  
+`;
+
+export const deleteKnowledgeBaseItem = gql`mutation deleteKnowledgeBaseItems($id: [ID]){
+  deleteKnowledgeBaseItems(id: $id)
+}  
+`;
+

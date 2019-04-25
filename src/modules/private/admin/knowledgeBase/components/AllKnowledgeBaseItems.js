@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
-import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/article';
+import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/knowledgeBase';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
 
@@ -40,6 +40,12 @@ export default class AllKnowledgeBaseItems extends Component {
 
   paginate = params => this.props.knowledgeBaseStore.pageRequest(params);
 
+  checkedRecords = (e, result) => {
+    if (result && result.type === 'checkbox' && result.checked) {
+      this.props.knowledgeBaseStore.addSelectedRecords(result.value);
+    }
+  }
+
   render() {
     const { knowledgeBaseStore } = this.props;
     const {
@@ -49,6 +55,7 @@ export default class AllKnowledgeBaseItems extends Component {
       confirmBox,
       count,
       requestState,
+      applyGlobalAction,
     } = knowledgeBaseStore;
     const totalRecords = count || 0;
     if (loading) {
@@ -67,7 +74,7 @@ export default class AllKnowledgeBaseItems extends Component {
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
               <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" />
+                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -91,7 +98,13 @@ export default class AllKnowledgeBaseItems extends Component {
                 {
                   AllKnowledgeBase.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell><Checkbox /></Table.Cell>
+                      <Table.Cell>
+                        <Checkbox
+                          name={record.id}
+                          value={record.id}
+                          onChange={(e, result) => this.checkedRecords(e, result)}
+                        />
+                      </Table.Cell>
                       <Table.Cell>{record.title}</Table.Cell>
                       <Table.Cell>{record.userType}</Table.Cell>
                       <Table.Cell>{record.category || 'N/A'}</Table.Cell>
