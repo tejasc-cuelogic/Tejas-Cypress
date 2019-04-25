@@ -409,13 +409,10 @@ class IraAccountStore {
           this.setFormData('ACC_TYPES_FRM', account.details);
           this.setFormData('IDENTITY_FRM', account.details);
           bankAccountStore.validateAddFunds();
-          // const { isValid } = bankAccountStore.formIraAddFunds.meta;
           if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
             bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-            // if (isValid) {
             bankAccountStore.formIraAddFunds.fields.value.value =
             account.details.initialDepositAmount;
-            // }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
@@ -429,16 +426,13 @@ class IraAccountStore {
             account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
-            // if (isValid) {
             bankAccountStore.formIraAddFunds.fields.value.value =
             account.details.initialDepositAmount;
-            // }
           }
           bankAccountStore.validateAddFunds();
           if (bankAccountStore.isAccountPresent && isNull(account.details.initialDepositAmount)) {
-            bankAccountStore.setLinkBankSummary();
+            bankAccountStore.setShowAddFunds();
           }
-          // bankAccountStore.validateAddfundsAmount();
           const getIraStep = AccCreationHelper.iraSteps();
           if (!this.FIN_INFO_FRM.meta.isValid) {
             this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);

@@ -22,12 +22,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
-    if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
-      const { password } = this.props.authStore.CONFIRM_FRM.fields;
-      const { address } = this.props.userDetailsStore.userDetails.email;
-      const userCredentials = { email: address, password: password.value };
-      this.props.authStore.setCredentials(userCredentials);
-    }
+
     if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
       !this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
@@ -40,6 +35,16 @@ export default class ConfirmEmailAddress extends Component {
   }
   componentDidMount() {
     Helper.otpShield();
+  }
+
+  componentDidUpdate() {
+    this.props.uiStore.setProgress(!this.props.userDetailsStore.signupStatus.isMigratedUser);
+    if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
+      const { password } = this.props.authStore.CONFIRM_FRM.fields;
+      const { address } = this.props.userDetailsStore.userDetails.email;
+      const userCredentials = { email: address, password: password.value };
+      this.props.authStore.setCredentials(userCredentials);
+    }
   }
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
