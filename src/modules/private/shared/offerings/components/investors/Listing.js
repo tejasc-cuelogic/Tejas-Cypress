@@ -98,12 +98,18 @@ export default class Listing extends Component {
                         <span> ({`${data.investmentsCount} Investments`})</span>
                       :
                       null}
+                      {(data.credit || data.autoDraftAmount) &&
                       <Popup
                         trigger={<Icon name="help circle" color="green" />}
-                        content={<span>Credit: {data.credit} <br />Auto Draft: <br /></span>}
+                        content={
+                          <span>
+                            {data.credit && 'Credit: {data.credit}'} <br />
+                            {data.autoDraftAmount && `Auto Draft: ${data.autoDraftAmount}`} <br />
+                          </span>}
                         hoverable
                         position="top center"
                       />
+                      }
                     </Table.Cell>
                   :
                   null
