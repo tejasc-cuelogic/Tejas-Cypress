@@ -171,8 +171,17 @@ export default class MultiStep extends React.Component {
 
   previous() {
     if (this.state.compState > 0) {
-      if (this.props.isAddFundsScreen) {
-        this.props.setLinkbankSummary();
+      if (this.props.isAccountCreation) {
+        if (this.props.steps[this.state.compState].addFunds) {
+          this.props.setLinkbankSummary();
+          this.setNavState(this.state.compState - 1);
+          this.props.setStepTobeRendered(this.state.compState - 1);
+        } else if (this.props.isAddFundsScreen) {
+          this.props.setLinkbankSummary();
+        } else {
+          this.setNavState(this.state.compState - 1);
+          this.props.setStepTobeRendered(this.state.compState - 1);
+        }
       } else {
         this.setNavState(this.state.compState - 1);
         this.props.setStepTobeRendered(this.state.compState - 1);

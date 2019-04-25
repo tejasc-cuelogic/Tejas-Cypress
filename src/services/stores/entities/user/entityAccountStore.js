@@ -572,7 +572,7 @@ class EntityAccountStore {
             this.setEntityAttributes('Formation doc');
           }
           bankAccountStore.validateAddFunds();
-          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+          if (account.details.linkedBank) {
             bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
             bankAccountStore.formEntityAddFunds.fields.value.value =
             account.details.initialDepositAmount;
@@ -585,7 +585,7 @@ class EntityAccountStore {
               }
               return null;
             });
-            if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+            if (account.details.linkedBank.routingNumber !== '' &&
             account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
