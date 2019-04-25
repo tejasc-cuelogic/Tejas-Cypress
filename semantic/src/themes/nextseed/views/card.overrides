@@ -11,9 +11,6 @@
     &.campaign{ 
         box-shadow:none;
         height: 100%;
-        @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-            height: auto;
-        }
         &:hover, &:focus {
             text-decoration: none;
         }
@@ -64,10 +61,6 @@
         >.content{
             padding:@21px @28px;
             // line-height:@24px;
-            @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-                min-height: 240px;
-                max-height: 240px;
-            }
             @media only screen and (max-width : @largestMobileScreen){
                 padding:@20px @22px;
             }
