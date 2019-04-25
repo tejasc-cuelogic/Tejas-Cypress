@@ -671,6 +671,7 @@ export class Auth {
     transactionStore.resetData();
     accreditationStore.resetUserAccreditatedStatus();
     uiStore.clearErrors();
+    uiStore.clearRedirectURL();
   }
   simpleErr = err => ({
     statusCode: err.statusCode,
