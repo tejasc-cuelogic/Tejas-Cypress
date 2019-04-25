@@ -134,7 +134,7 @@ class AccountType extends Component {
     // this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
     let offeringDetailObj = {};
     if (this.props.changeInvest) {
-      offeringDetailObj = campaign || get(getInvestorAccountById, 'offering');
+      offeringDetailObj = campaign && campaign.keyTerms ? campaign : get(getInvestorAccountById, 'offering');
     } else {
       offeringDetailObj = campaign;
     }
@@ -151,7 +151,7 @@ class AccountType extends Component {
           // const { getInvestorAccountById } = this.props.portfolioStore;
           // const offeringRegulation = get(getInvestorAccountById, 'offering.keyTerms.regulation');
           const accreditationStatus = get(userDetails, 'accreditation.status');
-          const isParallelOfferingModelToShow = !!(offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
+          const isParallelOfferingModelToShow = !!(offeringReuglation && offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
           if (!isParallelOfferingModelToShow) {
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
@@ -190,7 +190,7 @@ class AccountType extends Component {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         if (this.props.changeInvest) {
           const { getInvestorAccountById } = this.props.portfolioStore;
-          const offeringRegulation = campaign ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
+          const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
           const accreditationStatus = get(userDetails, 'accreditation.status');
           const isParallelOfferingModelToShow = !!(offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
           if (!isParallelOfferingModelToShow) {
@@ -248,7 +248,7 @@ class AccountType extends Component {
     //  this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
     let offeringDetailObj = {};
     if (this.props.changeInvest) {
-      offeringDetailObj = campaign || get(getInvestorAccountById, 'offering');
+      offeringDetailObj = campaign && campaign.keyTerms ? campaign : get(getInvestorAccountById, 'offering');
     } else {
       offeringDetailObj = campaign;
     }
