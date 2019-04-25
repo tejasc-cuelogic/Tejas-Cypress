@@ -414,7 +414,6 @@ export const PRIVATE_NAV = [
     to: 'profile-settings',
     heading: 'Profile Settings',
     subPanel: 1,
-    hideSubOnSideBar: true,
     accessibleTo: [],
     path: 'shared/settings/containers/ProfileSettings',
     subNavigations: [

@@ -3,7 +3,7 @@ import { Link, withRouter, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import Aux from 'react-aux';
-import { Menu, Icon, Button } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
@@ -52,7 +52,11 @@ export class SidebarNav extends Component {
           props.signupStatus &&
           !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
           props.signupStatus.investorProfileCompleted &&
-            <Button as={Link} to="/app/summary/account-creation">Add New Account</Button>
+            // <Button as={Link} to="/app/summary/account-creation">Add New Account</Button>
+            <Menu.Item as={Link} className="add-account" to="/app/summary/account-creation">
+              <Icon name="add circle" />
+              <span>Add New Account</span>
+            </Menu.Item>
         }
       </Aux>
     );

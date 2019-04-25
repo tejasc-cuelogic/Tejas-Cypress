@@ -95,13 +95,12 @@
 			min-width: auto;
 			text-align: left;
 			overflow:hidden;
-			padding:@8px @9px;
+			padding:@9px @22px;
 			// border-radius:@4px !important;
 			margin-bottom:@1px !important;
 			font-weight:400;
 			&.ui.dropdown>.text{
 				max-width:142px;
-				float:left;
 			}
 			// &:first-of-type{
 			// 	margin-bottom:@30px;
@@ -130,9 +129,55 @@
 					color:@primary-one;
 				}
 			}
+			&.add-account{
+				// width:220px;
+				padding:@10px 0;
+				// font-weight:@fontMedium;
+				// color:@primary-two;
+				// text-decoration:none;
+				// position:absolute;
+				// left:0;
+				// bottom:44px;
+				// z-index:999;
+				// background-color:@white;
+				// cursor:pointer;
+				// transition:all .5s ease;
+				margin:@12px @20px;
+				border-radius:@4px !important;
+				border:@neutral-darkwhite 1px solid;
+				text-align:center;
+				overflow:hidden;
+				> .icon{
+					// float:left;
+					// display:block;
+					// margin-right:@13px;
+					// height:auto;
+					transform:scale(1);
+				}
+				>span{
+					margin:0 !important;
+					max-width:none !important;
+					// display:block;
+					// margin-left:@30px;
+					// overflow:hidden;
+					// white-space:nowrap;
+					// text-overflow:ellipsis;
+				}
+				// @media only screen and (max-width : @largestSmallMonitor){
+				// 	width: 0;
+				// 	bottom: @10px;
+				// 	visibility: hidden;
+				// 	> .icon{
+				// 		display:none;
+				// 	}
+				// 	>span{
+				// 		display:none;
+				// 	}
+				// }
+			}
 		}
 		&.visible .item{
-			padding:@9px @12px;
+			padding:@9px @20px;
 			span{
 				opacity:1;
 				margin-left:@30px;
@@ -162,11 +207,10 @@
 				.menu.transition{
 					position:relative;
 					left:0;
-					padding-top:@1px;
 					margin:@9px -@12px -@9px;
 					border:none;
 					box-shadow:none;
-					background:@white;
+					background:transparent;
 					.item{
 						padding:@8px @16px @8px @42px !important;
 						color:@tertiary-text !important;
@@ -176,6 +220,10 @@
 						// }
 					}
 				}
+			}
+			&.add-account>.icon{
+				display:none;
+				transform:scale(0);
 			}
 		}
 	}
@@ -292,7 +340,7 @@
 	}
 	.user-picture{
 		margin:@28px 0;
-		padding:@10px @12px @30px;
+		padding:@10px @20px @30px;
 		text-align:center;
 		color:@neutral-middark;
 		border-bottom:@neutral-midwhite 1px solid;
@@ -332,64 +380,64 @@
 		.user-picture:hover{
 			background-color:@neutral-offwhite;
 		}
-		~ a.add-account{
-			@media only screen and (max-width : @largestSmallMonitor){
-				width: 260px;
-				visibility: visible;
-				transition: all .5s ease;
-				transform: translate3d(0,0,0);
-				> .icon{
-					display:block;
-					transition: all .5s ease;
-					transform: translate3d(0,0,0);
-				}
-				>span{
-					display:block;
-					transition: all .5s ease;
-					transform: translate3d(0,0,0);
-				}
-			}
-		}
+		// ~ a.add-account{
+		// 	@media only screen and (max-width : @largestSmallMonitor){
+		// 		width: 260px;
+		// 		visibility: visible;
+		// 		transition: all .5s ease;
+		// 		transform: translate3d(0,0,0);
+		// 		> .icon{
+		// 			display:block;
+		// 			transition: all .5s ease;
+		// 			transform: translate3d(0,0,0);
+		// 		}
+		// 		>span{
+		// 			display:block;
+		// 			transition: all .5s ease;
+		// 			transform: translate3d(0,0,0);
+		// 		}
+		// 	}
+		// }
 	}
-	~ a.add-account{
-		width:220px;
-		padding:@10px @25px;
-		font-weight:@fontMedium;
-		color:@primary-two;
-		text-decoration:none;
-		position:absolute;
-		left:0;
-		bottom:44px;
-		z-index:999;
-		background-color:@white;
-		cursor:pointer;
-		transition:all .5s ease;
-		overflow:hidden;
-		> .icon{
-			float:left;
-			display:block;
-			margin-right:@13px;
-			height:auto;
-		}
-		>span{
-			display:block;
-			margin-left:@30px;
-			overflow:hidden;
-			white-space:nowrap;
-			text-overflow:ellipsis;
-		}
-		@media only screen and (max-width : @largestSmallMonitor){
-			width: 0;
-			bottom: @10px;
-			visibility: hidden;
-			> .icon{
-				display:none;
-			}
-			>span{
-				display:none;
-			}
-		}
-	}
+	// ~ a.add-account{
+	// 	width:220px;
+	// 	padding:@10px @25px;
+	// 	font-weight:@fontMedium;
+	// 	color:@primary-two;
+	// 	text-decoration:none;
+	// 	position:absolute;
+	// 	left:0;
+	// 	bottom:44px;
+	// 	z-index:999;
+	// 	background-color:@white;
+	// 	cursor:pointer;
+	// 	transition:all .5s ease;
+	// 	overflow:hidden;
+	// 	> .icon{
+	// 		float:left;
+	// 		display:block;
+	// 		margin-right:@13px;
+	// 		height:auto;
+	// 	}
+	// 	>span{
+	// 		display:block;
+	// 		margin-left:@30px;
+	// 		overflow:hidden;
+	// 		white-space:nowrap;
+	// 		text-overflow:ellipsis;
+	// 	}
+	// 	@media only screen and (max-width : @largestSmallMonitor){
+	// 		width: 0;
+	// 		bottom: @10px;
+	// 		visibility: hidden;
+	// 		> .icon{
+	// 			display:none;
+	// 		}
+	// 		>span{
+	// 			display:none;
+	// 		}
+	// 	}
+	// }
 	~ .ui.button.collapseIcon{
 		width:219px;
 		margin:0;
