@@ -88,7 +88,9 @@ export default class Listing extends Component {
                   </Table.Cell>
                   <Table.Cell>{data.city}</Table.Cell>
                   <Table.Cell>{data.state}</Table.Cell>
-                  <Table.Cell>{data.accountType || 'Account Type'}</Table.Cell>
+                  <Table.Cell>
+                    {data.accountType && <Icon size="large" className={`${data.accountType.includes('ENTITY')} ? 'ns-entity-line' : ${data.accountType.includes('IRA')} ? 'ns-ira-line' : 'ns-individual-line' `} color="green" />}
+                  </Table.Cell>
                   {(isIssuer && hardClosedDate) || (isAdmin) ?
                     <Table.Cell>
                       {Helper.CurrencyFormat(data.amount, 0)}
@@ -98,7 +100,7 @@ export default class Listing extends Component {
                       null}
                       <Popup
                         trigger={<Icon name="help circle" color="green" />}
-                        content={<span>Credit: <br />Auto Draft: <br /></span>}
+                        content={<span>Credit: {data.credit} <br />Auto Draft: <br /></span>}
                         hoverable
                         position="top center"
                       />
