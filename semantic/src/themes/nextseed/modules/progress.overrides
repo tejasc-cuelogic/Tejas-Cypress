@@ -32,17 +32,28 @@
 .campaign-banner .ui.progress {
     margin-bottom: @15px;
     background:fade(@white,20%);
+    &.no-border-radius .bar {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .bar {
+        min-width: 0;
+    }
     >.label {
         top: 0;
+        margin-top: 0;
+        height: 6px;
+        border-radius: 4px;
     }
     .sub-progress {
         background: @primary-one-darken;
         display: block;
-        position: absolute;
-        top: -2px;
-        left: 0;
         height: 6px;
         border-radius: 4px;
+        &.no-border-radius{
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
     }
 }
 .offering-intro .ui.progress {
