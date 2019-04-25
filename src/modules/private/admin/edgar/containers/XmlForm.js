@@ -393,7 +393,8 @@ export default class XmlForm extends React.Component {
       xmlSubmissionId,
       xmlSubmissionStatus,
     } = this.props.businessStore;
-    if (this.props.uiStore.inProgress) {
+    const { inProgressArray, inProgress } = this.props.uiStore;
+    if (inProgress || inProgressArray.includes('fetchEdgarDetails') || inProgressArray.includes('fetchXmlDetails') || inProgressArray.includes('fetchAttachedFiles')) {
       return (
         <div>
           <Spinner loaderMessage={this.props.uiStore.loaderMessage} />

@@ -30,7 +30,9 @@ export default class StickyNotification extends Component {
         <div className="sticky-notification">
           <Card fluid raised>
             <Card.Content>
-              <Card.Meta>{get(props, 'notificationCard.congratulations')}</Card.Meta>
+              {get(props, 'notificationCard.congratulations') ?
+                <Card.Meta>{get(props, 'notificationCard.congratulations')}</Card.Meta> : ''
+              }
               <Statistic size="mini" className="cta acc-verify-status">
                 <Statistic.Value className="mb-10">{get(props, 'notificationCard.header')}</Statistic.Value>
                 <Statistic.Label>{get(props, 'notificationCard.message')}</Statistic.Label>

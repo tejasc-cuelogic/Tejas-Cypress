@@ -38,7 +38,7 @@ export const FILTER_META = {
     { text: 'Entity', value: 'ENTITY' },
   ],
   accountStatus: [
-    { text: 'Select Status', key: '', value: '' },
+    { text: 'Select Filter', key: '', value: '' },
     { text: 'Partial', value: 'PARTIAL' },
     { text: 'Basic', value: 'BASIC' },
     { text: 'Full', value: 'FULL' },
@@ -116,6 +116,7 @@ export const FILTER_META = {
     { text: 'Linked Bank', value: 'LINKED_BANK' },
     { text: 'Acceditation', value: 'ACCREDITATION' },
     { text: 'CrowdPay', value: 'CROWDPAY' },
+    { text: 'Offering', value: 'OFFERING' },
   ],
 };
 

@@ -50,7 +50,7 @@ export default class InvestNow extends React.Component {
       this.props.accreditationStore.resetAccreditationObject();
       this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
       if (!reflectedURL.includes('agreement')) {
-        this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+        this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
       }
     }
   }

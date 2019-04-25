@@ -8,12 +8,15 @@ import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore', 'accreditationStore')
 @withRouter
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
-    if (this.props.campaignStore.docsWithBoxLink.length === 0) {
+    const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
+    if (docsWithBoxLink.length === 0 && !isFetchedError) {
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');
       const offeringRegulationArr = (regulation && regulation.split('_')) || '';
@@ -24,8 +27,14 @@ export default class TermsOfUse extends Component {
     }
   }
   componentDidMount() {
-    const sel = 'anchor';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
+  }
+  componentWillUnmount() {
+    const { setFieldValue } = this.props.campaignStore;
+    setFieldValue('isFetchedError', false);
   }
   module = name => DataFormatter.upperCamelCase(name);
   dataRoomHeader = (
@@ -38,7 +47,7 @@ export default class TermsOfUse extends Component {
     const { campaign } = this.props.campaignStore;
     const campaignCreatedBy = get(campaign, 'created.id') || null;
     const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
-    if (!dataRoomDocs.length) {
+    if (!dataRoomDocs.length || !sortedDocswithBoxLink.length) {
       return (
         <div className="campaign-content-wrapper">
         {this.dataRoomHeader}

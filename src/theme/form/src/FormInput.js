@@ -11,6 +11,11 @@ export default class FormInput extends Component {
   triggerError = (val) => {
     this.setState({ showError: val });
   }
+  change = (e) => {
+    const { dataid } = this.props;
+    const value = this.props.fielddata.rule.includes('email') ? e.target.value.trim() : e.target.value;
+    this.props.changed(e, { name: e.target.name, value, dataid });
+  }
   render() {
     const { props } = this;
     const {
@@ -24,7 +29,7 @@ export default class FormInput extends Component {
     const maxlength = props.fielddata.maxLength ? props.fielddata.maxLength : (
       props.maxLength ? props.maxLength : false
     );
-    const { displayMode, readOnly, dataid } = props;
+    const { displayMode, readOnly } = props;
     const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
     return (
       <Form.Field
@@ -64,7 +69,7 @@ export default class FormInput extends Component {
           defaultValue={defaultValue}
           onChange={
             (e) => {
-              props.changed(e, { name: e.target.name, value: e.target.value, dataid });
+              this.change(e);
               this.triggerError(props.showerror || false);
             }}
           onBlur={

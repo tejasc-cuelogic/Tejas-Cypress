@@ -258,7 +258,7 @@ export class UserDetailsStore {
 
   getUserStorageDetails = (userId) => {
     uiStore.setProgress();
-    return new Promise((resolve) => {
+    return new Promise((resolve, rej) => {
       graphql({
         client,
         query: userDetailsQueryForBoxFolder,
@@ -273,6 +273,7 @@ export class UserDetailsStore {
         onError: () => {
           uiStore.setProgress(false);
           Helper.toast('Something went wrong, please try again in sometime', 'error');
+          rej();
         },
       });
     });
@@ -311,7 +312,7 @@ export class UserDetailsStore {
 
   @action
   toggleState = (id, accountStatus) => {
-    uiStore.setProgress('lock');
+    uiStore.addMoreInProgressArray('lock');
     const params = { accountStatus, id };
     client
       .mutate({
@@ -321,10 +322,13 @@ export class UserDetailsStore {
       .then(() => {
         this.updateUserStatus(params.accountStatus);
         userListingStore.initRequest();
-        uiStore.setProgress(false);
+        uiStore.removeOneFromProgressArray('lock');
         Helper.toast('User Account status updated successfully.', 'success');
       })
-      .catch(() => { uiStore.setProgress(false); Helper.toast('Error while updating user', 'warn'); });
+      .catch(() => {
+        uiStore.removeOneFromProgressArray('lock');
+        Helper.toast('Error while updating user', 'warn');
+      });
   }
 
   @action
@@ -521,12 +525,15 @@ export class UserDetailsStore {
   }
 
   @action
-  setFormData = (form, ref, keepAtLeastOne) => {
+  setFormData = (form, ref, keepAtLeastOne, validateForm = false) => {
     const details = toJS({ ...this.detailsOfUser.data.user });
     if (!details) {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    if (validateForm) {
+      this[form] = Validator.validateForm(this[form]);
+    }
     if (form === 'USER_INVESTOR_PROFILE') {
       if (details.investorProfileData && details.investorProfileData.annualIncome) {
         ['annualIncomeCurrentYear'].map((item, index) => {
@@ -680,6 +687,10 @@ export class UserDetailsStore {
         city: infoAdd.city,
         state: infoAdd.state,
         zipCode: infoAdd.zipCode,
+      },
+      avatar: {
+        name: this.detailsOfUser.data.user.info.avatar.name,
+        url: this.detailsOfUser.data.user.info.avatar.url,
       },
     };
     const legalDetails = {

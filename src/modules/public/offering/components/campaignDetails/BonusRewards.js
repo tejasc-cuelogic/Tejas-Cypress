@@ -14,12 +14,16 @@ const isTablet = document.documentElement.clientWidth >= 768
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 
+const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore')
 @observer
 class BonusRewards extends Component {
   componentDidMount() {
-    const sel = 'anchor';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   render() {
     const { campaign } = this.props.campaignStore;

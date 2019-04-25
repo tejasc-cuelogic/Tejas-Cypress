@@ -47,7 +47,7 @@ export default class NewPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick>
+      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Enter new phone number</Header>
           <p>We will send you a verification code to the phone number you provide.</p>
@@ -64,14 +64,13 @@ export default class NewPhoneNumber extends Component {
             />
             <div className="field center-align">
               <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
-              <Form.Group className="center-align" inline>
-                <FormRadioGroup
-                  fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
-                  name="mfaMethod"
-                  containerclassname="button-radio center-align"
-                  changed={(e, result) => personalInfoChange(e, result)}
-                />
-              </Form.Group>
+              <FormRadioGroup
+                fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
+                name="mfaMethod"
+                containerclassname="mt-30 radio-basic center-align"
+                widths="equal"
+                changed={(e, result) => personalInfoChange(e, result)}
+              />
             </div>
             {errors &&
               <Message error className="mt-20">

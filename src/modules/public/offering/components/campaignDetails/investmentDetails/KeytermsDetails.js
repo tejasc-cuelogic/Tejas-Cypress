@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -54,7 +55,22 @@ class KeyTermsDetails extends Component {
             <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Offering</b><br />{get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}</p>
+            <p>
+              <b>Type of Offering</b>
+              { get(campaign, 'regulation') &&
+                    CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content={
+                          CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
+                        }
+                        hoverable
+                        position="top center"
+                      /> : ''
+                  }
+              <br />
+              {get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
+            </p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
@@ -78,8 +94,13 @@ class KeyTermsDetails extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <p>
-                        {get(KeyTerms, type.key) ?
-                          Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
+                        {get(KeyTerms, 'regulation') === 'BD_CF_506C' && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key) ?
+                          type.key === 'minOfferingAmountCF' ?
+                            Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'minOfferingAmount506C')), 0)
+                          : type.key === 'maxOfferingAmountCF' &&
+                            Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'maxOfferingAmount506C')), 0)
+                          : get(KeyTerms, type.key) ?
+                            Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
                           :
                           'NA'}
                       </p>
@@ -213,7 +234,7 @@ class KeyTermsDetails extends Component {
                 </Table.Cell>
               </Table.Row>
             }
-            {get(KeyTerms, 'roundType') &&
+            {/* {get(KeyTerms, 'roundType') &&
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Round Type{' '}</b>
                 </Table.Cell>
@@ -223,7 +244,7 @@ class KeyTermsDetails extends Component {
                   </p>
                 </Table.Cell>
               </Table.Row>
-            }
+            } */}
             {get(KeyTerms, 'unitPrice') &&
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>

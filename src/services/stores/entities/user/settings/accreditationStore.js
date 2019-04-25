@@ -51,6 +51,8 @@ export class AccreditationStore {
   @observable currentInvestmentStatus = '';
   @observable showLoader = false;
   @observable inProgress = [];
+  @observable docsToUpload = [];
+  @observable filingStatus = null;
 
   @action
   addLoadingUserId = (requestId) => {
@@ -221,24 +223,40 @@ export class AccreditationStore {
     }
   }
 
+  @action
   putUploadedFileOnS3 = (form, field, preSignedUrl, file, fileData, fileId, scope) => {
-    fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
-      this.setFormFileArray(form, field, 'fileData', file);
-      this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
-      this.setFormFileArray(form, field, 'fileId', fileId);
-      this.setFormFileArray(form, field, 'value', fileData.fileName);
-      this.setFormFileArray(form, field, 'error', undefined);
-      this.checkFormValid(form, false, false);
-      this.setFormFileArray(form, field, 'showLoader', false, scope);
-      // this.setFieldVal('showLoader', false);
-    }).catch((error) => {
-      this.setFormFileArray(form, field, 'showLoader', false, scope);
-      // this.setFieldVal('showLoader', false);
-      Helper.toast('Something went wrong, please try again later.', 'error');
-      uiStore.setErrors(error.message);
+    this.docsToUpload.push({
+      preSignedUrl, fileData: file, fileType: fileData.fileType, field,
     });
+    this.setFormFileArray(form, field, 'fileData', file);
+    this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
+    this.setFormFileArray(form, field, 'fileId', fileId);
+    this.setFormFileArray(form, field, 'value', fileData.fileName);
+    this.setFormFileArray(form, field, 'error', undefined);
+    this.checkFormValid(form, false, false);
+    this.setFormFileArray(form, field, 'showLoader', false, scope);
   }
-
+  @action
+  uploadAllDocs = isFinalStep => new Promise((resolve, reject) => {
+    if (this.docsToUpload && isFinalStep) {
+      const uploadedArr = [];
+      this.docsToUpload.forEach((item, index) => {
+        fileUpload.putUploadedFileOnS3(item).then(() => {
+          // this.docsToUpload.splice((this.docsToUpload.length > 1) ? index : 0, 1);
+          uploadedArr.push(index);
+          if (this.docsToUpload.length === uploadedArr.length) {
+            resolve();
+          }
+        }).catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        });
+      });
+    } else {
+      resolve();
+    }
+  });
   @action
   removeUploadedData = (form, field, index = null) => {
     let removeFileIds = '';
@@ -301,6 +319,7 @@ export class AccreditationStore {
       Validator.resetFormData(this[formName]);
     });
     this.setStepToBeRendered(0);
+    this.docsToUpload = [];
     this.firstInit = '';
   }
 
@@ -465,9 +484,11 @@ export class AccreditationStore {
       this.ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
       hasVerifier = true;
     }
-    if (formType) {
+    if (formType && (form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM' || form === 'VERIFICATION_REQUEST_FORM')) {
       userAccreditationDetails.isPartialProfile =
         !this.isAllFormValidCheck(this.formType(formType));
+    } else {
+      userAccreditationDetails.isPartialProfile = true;
     }
     const payLoad = {
       id: userDetailsStore.currentUserId,
@@ -479,24 +500,31 @@ export class AccreditationStore {
       payLoad.hasVerifier = hasVerifier;
     }
     return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: updateAccreditation,
-          variables: payLoad,
-          refetchQueries: [{
-            query: userAccreditationQuery,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-            },
-          }],
-        })
-        .then(() => resolve())
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-          reject();
-        })
-        .finally(() => uiStore.setProgress(false));
+      this.uploadAllDocs(form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM').then(() => {
+        client
+          .mutate({
+            mutation: updateAccreditation,
+            variables: payLoad,
+            refetchQueries: [{
+              query: userAccreditationQuery,
+              variables: {
+                userId: userDetailsStore.currentUserId,
+              },
+            }],
+          })
+          .then(() => resolve())
+          .catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+            reject();
+          })
+          .finally(() => uiStore.setProgress(false));
+      }).catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setErrors(error.message);
+        uiStore.setProgress(false);
+        reject();
+      });
     });
   }
 
@@ -509,28 +537,35 @@ export class AccreditationStore {
       fileName: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.value,
     }];
     return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: approveOrDeclineForAccreditationRequest,
-          variables: {
-            action: accreditationAction,
-            accountId,
-            userId,
-            accountType,
-            comment: data.justifyDescription,
-            expiration: data.expiration,
-            declinedMessage: data.declinedMessage,
-            adminJustificationDocs: fileData,
-          },
-          refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
-        })
-        .then(() => resolve())
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-          reject();
-          uiStore.setProgress(false);
-        });
+      this.uploadAllDocs(false).then(() => {
+        client
+          .mutate({
+            mutation: approveOrDeclineForAccreditationRequest,
+            variables: {
+              action: accreditationAction,
+              accountId,
+              userId,
+              accountType,
+              justification: data.justifyDescription,
+              expiration: data.expiration,
+              message: data.declinedMessage,
+              adminJustificationDocs: fileData,
+            },
+            refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
+          })
+          .then(() => resolve())
+          .catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+            reject();
+            uiStore.setProgress(false);
+          });
+      }).catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setErrors(error.message);
+        reject();
+        uiStore.setProgress(false);
+      });
     });
   }
 
@@ -602,6 +637,7 @@ export class AccreditationStore {
 
   @action
   getUserAccreditation = (userId = false) => new Promise((res) => {
+    uiStore.setProgress();
     if (userId || userDetailsStore.currentUserId) {
       this.userData = graphql({
         client,
@@ -610,10 +646,14 @@ export class AccreditationStore {
         variables: { userId: userId || userDetailsStore.currentUserId },
         onFetch: () => {
           if (!this.userData.loading) {
+            uiStore.setProgress(false);
             res();
           }
         },
-        onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); },
+        onError: () => {
+          uiStore.setProgress(false);
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        },
       });
     }
   })
@@ -970,6 +1010,7 @@ export class AccreditationStore {
   }
   @action
   changeRuleAsPerFilingStatus = (isFilingTrue) => {
+    this.filingStatus = isFilingTrue;
     this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
     this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = isFilingTrue ? 'required' : 'optional';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
@@ -979,6 +1020,10 @@ export class AccreditationStore {
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value = !isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value;
     this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocThirdLastYear');
+    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocSecondLastYear');
+    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocLastYear');
+    this.docsToUpload = [];
   }
   @action
   setDefaultCheckboxVal = () => {
