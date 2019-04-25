@@ -47,6 +47,7 @@ const MessagesList = props => (
                 }}
               />
             )) :
+                  // eslint-disable-next-line react/jsx-indent
                   <UserAvatar
                     size="mini"
                     UserInfo={{

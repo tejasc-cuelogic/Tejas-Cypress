@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, omit, get } from 'lodash';
+import { isEmpty, find, omit, get, isNull } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -435,6 +435,9 @@ class IraAccountStore {
             // }
           }
           bankAccountStore.validateAddFunds();
+          if (bankAccountStore.isAccountPresent && isNull(account.details.initialDepositAmount)) {
+            bankAccountStore.setLinkBankSummary();
+          }
           // bankAccountStore.validateAddfundsAmount();
           const getIraStep = AccCreationHelper.iraSteps();
           if (!this.FIN_INFO_FRM.meta.isValid) {

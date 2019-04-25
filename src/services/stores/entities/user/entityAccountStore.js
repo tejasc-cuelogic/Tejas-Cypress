@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, get, map } from 'lodash';
+import { isEmpty, find, get, map, isNull } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import {
@@ -598,6 +598,9 @@ class EntityAccountStore {
             // }
           }
           bankAccountStore.validateAddFunds();
+          if (bankAccountStore.isAccountPresent && isNull(account.details.initialDepositAmount)) {
+            bankAccountStore.setLinkBankSummary();
+          }
           // bankAccountStore.validateAddfundsAmount();
           this.renderAfterPopulate();
         }

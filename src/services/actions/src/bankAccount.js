@@ -99,7 +99,7 @@ export class BankAccount {
           accountStore.ACC_TYPE_MAPPING[accountValue].store
             .setStepToBeRendered(accountStore.ACC_TYPE_MAPPING[accountValue].location);
         }
-        bankAccountStore.setLinkBankSummary();
+        bankAccountStore.setShowAddFunds();
       },
       onExit: (err) => {
         // The user exited the Link flow.

@@ -264,6 +264,9 @@ export class BankAccountStore {
 
   @action
   setLinkBankSummary = (showbank = true) => {
+    if (showbank) {
+      this.resetShowAddFunds();
+    }
     this.linkbankSummary = showbank;
   }
 
