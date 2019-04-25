@@ -45,6 +45,7 @@ export default class AllTransactions extends Component {
       return <InlineLoader />;
     }
     const totalRecords = transactionCount;
+    const now = new Date();
     const transStatus = STATUS_MAPPING[statusType].status;
     const columns = STATUS_META.filter(trans =>
       trans.refStatus.includes(transStatus[0]));
@@ -105,7 +106,7 @@ export default class AllTransactions extends Component {
                                 {STATUS_MAPPING[statusType].syncCta.title}
                               </Button> :
                               has(STATUS_MAPPING[statusType], 'affirmativeCta') &&
-                              <Button loading={btnLoader.includes(row.requestId)} color="blue" disabled={row.failDesc} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
+                              <Button loading={btnLoader.includes(row.requestId)} color="blue" disabled={row.failDesc || now < new Date(row.estDateAvailable * 1000)} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
                                 {STATUS_MAPPING[statusType].affirmativeCta.title}
                               </Button>
                             }
