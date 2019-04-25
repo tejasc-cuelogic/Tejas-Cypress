@@ -39,37 +39,6 @@
             padding-bottom:@28px;
         }
     }
-    &.divided:not([class*="vertically divided"])
-    &.agreement-details {
-        margin: @30px 0;
-        >.column:not(.row) {
-            padding: 0 @14px;
-            &:not(:last-child){
-                box-shadow:@dividedBorder;
-            }
-            &:first-child{
-                box-shadow:none;
-            }
-            &:last-child {
-                padding: @28px @14px;
-                background-color: @neutral-offwhite;
-                position: relative;
-                box-shadow: none !important;
-                font-size: @14px;
-                &:before {
-                    content: '';
-                    height: 14px;
-                    width: 14px;
-                    background: @neutral-offwhite;
-                    position: absolute;
-                    left: -7px;
-                    top: 50%;
-                    margin-top: -@7px;
-                    transform: rotate(45deg);
-                }
-            }
-        }
-    }
     &.celled.custom-divided{
         overflow:hidden;
         box-shadow:none;

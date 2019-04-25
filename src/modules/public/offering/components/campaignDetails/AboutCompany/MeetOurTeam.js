@@ -48,14 +48,14 @@ class MeetOurTeam extends Component {
                           }
                           {data && data.social &&
                             <Item.Extra>
-                                <div>
-                                  {data && data.social && Object.keys(data.social).map(key => (
-                                    data.social[key] &&
-                                      <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
-                                        <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
-                                      </a>
-                                  ))}
-                                </div>
+                              <div>
+                                {data && data.social && Object.keys(data.social).map(key => (
+                                  data.social[key] &&
+                                    <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+                                      <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
+                                    </a>
+                                ))}
+                              </div>
                             </Item.Extra>
                           }
                         </div>

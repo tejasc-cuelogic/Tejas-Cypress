@@ -26,11 +26,6 @@
                     background-color:transparent;
                     text-decoration: none !important;
                 }
-                &.active > span{
-                    padding-bottom:@2px;
-                    // border-bottom:1px solid @primary-one;
-                    margin-bottom: 4px;
-                }
                 button {
                     font-weight: @fontMedium;
                 }

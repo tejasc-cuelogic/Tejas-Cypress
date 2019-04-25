@@ -220,7 +220,7 @@ class offerDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
-            <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous className="visi-one">
+            <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
               <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
               <MobileDropDownNav
                 inverted

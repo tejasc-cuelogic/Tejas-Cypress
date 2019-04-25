@@ -242,7 +242,14 @@ export class CampaignStore {
     return this.docsWithBoxLink.sort((a, b) =>
       (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
   }
-
+  @computed get commentsMainThreadCount() {
+    const comments = get(this.campaign, 'comments') || [];
+    const issuerId = this.campaign && this.campaign.issuerId;
+    const filtered = comments.filter(c => ((c.createdUserInfo && c.createdUserInfo.id === issuerId
+      && c.approved) ||
+      (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC');
+    return filtered.length;
+  }
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
