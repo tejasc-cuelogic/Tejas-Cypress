@@ -84,7 +84,7 @@ export default class CampaignSideBar extends Component {
                 }
               </Statistic>
               {!isClosed ?
-                <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                <Progress className={`${percent < 100 ? 'no-border-radius' : ''} mb-0`} percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className={`${percentBefore < 100 || percent < 100 ? 'no-border-radius' : ''} sub-progress`} style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
                 <Progress percent="100" size="tiny" color="green" />
               }
               <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}

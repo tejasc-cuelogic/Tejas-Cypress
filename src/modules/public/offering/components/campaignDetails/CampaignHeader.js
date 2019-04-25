@@ -135,7 +135,7 @@ export default class CampaignHeader extends Component {
                     }
                   </Statistic>
                   {!isClosed ?
-                    <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green" className={percent < 100 ? 'no-border-radius' : ''}><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                    <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green" className={percent < 100 ? 'no-border-radius' : ''}><span className={`${percentBefore < 100 || percent < 100 ? 'no-border-radius' : ''} sub-progress`} style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
                     <Progress percent="100" size="tiny" color="green" />
                   }
                   <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
