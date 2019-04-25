@@ -45,7 +45,7 @@ export default class OfferingDetails extends Component {
     const { offerLoading, offerOld } = offeringsStore;
     let { offer } = offeringsStore;
     offer = !offerLoading && offerOld.stage ? offerOld : offer;
-    if (offerLoading || (offerLoading && offer && !offer.stage)) {
+    if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
     const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
