@@ -2,6 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, get, filter, orderBy } from 'lodash';
 import money from 'money-math';
+import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -119,7 +120,7 @@ export class CampaignStore {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     const orderedActiveListArr =
       activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
-    return orderBy(orderedActiveListArr, ['order', 'businessName'], ['asc', 'asc']);
+    return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
   }
 
   @computed get completed() {
@@ -309,13 +310,11 @@ export class CampaignStore {
   }
 
   generateBanner = (offeringDetails, addObjectProps = false) => {
-    // const offeringLaunchDetails = get(offeringDetails, 'offering.launch');
     const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
     const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
     const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
     const regulation = get(offeringKeyTermDetails, 'regulation');
     const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
-    // const launchDate = get(offeringLaunchDetails, 'targetDate');
     const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
     const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
     const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
@@ -334,28 +333,30 @@ export class CampaignStore {
       labelBannerFirst = 'NEW';
       order = 0;
     } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
-      labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Closing Today';
+      labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
       order = closeDaysToRemains + 1;
     } else if (closeDaysToRemains > 7) {
-      order = closeDaysToRemains + 1;
+      if (launchDaysToRemains !== null) {
+        order = 2047483647 + launchDaysToRemains;
+      } else {
+        order = 2057483647 + 1;
+      }
     }
     const percentageCompairResult = money.cmp(percent, '50.00').toString();
     const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
     if (money.isNegative(amountCompairResult) &&
       !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
-      order = order || 2147483645;
+      order = order !== null ? order : 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
-      // if offer reached max setting highest order (32 bit integer)
       order = 2147483647;
     }
     if (labelBannerFirst || labelBannerSecond) {
       bannerToShowFlag = true;
     }
     resultObject.order = order !== null ? order : 2147483646;
-    resultObject.businessName = offeringDetails.keyTerms.shorthandBusinessName &&
-      offeringDetails.keyTerms.shorthandBusinessName.toLowerCase();
+    resultObject.launchDate = moment(launchDate).unix() || null;
     resultObject.isBannerShow = bannerToShowFlag;
     resultObject.bannerFirstText = labelBannerFirst;
     resultObject.bannerSecondText = labelBannerSecond;
