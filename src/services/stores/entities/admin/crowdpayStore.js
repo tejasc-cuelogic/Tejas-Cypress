@@ -4,7 +4,7 @@ import { isArray, get, filter as lodashFilter, findIndex, find } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
-import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount } from '../../queries/CrowdPay';
+import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
@@ -351,6 +351,23 @@ export class CrowdpayStore {
   @computed get loading() {
     return this.data.loading;
   }
+
+  @action
+  getDecryptedRoutingNum = (accountId, userId) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: getDecryptedGoldstarAccountNumber,
+        variables: {
+          userId,
+          accountId,
+        },
+      })
+      .then(res => resolve(res.data.getDecryptedGoldstarAccountNumber))
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      });
+  });
 }
 
 export default new CrowdpayStore();

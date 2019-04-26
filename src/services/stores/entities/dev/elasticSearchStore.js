@@ -38,17 +38,20 @@ export class ElasticSearchStore {
           mutation: generateInvestorFolderStructure,
           variables: { userId },
         })
-        .then((result) => {
+        .then(action((result) => {
           if (result.data.generateInvestorFolderStructure.includes('True')) {
             Helper.toast('Box folder details not found, creation has been initiated, please check after some time.', 'success');
+            this.resetForm('STORAGE_DETAILS_SYNC_FRM');
             document.getElementsByName('userId')[0].value = '';
           } else {
-            this.setFieldValue('boxMsg', result.data.generateInvestorFolderStructure);
+            const tempobj = { ...this.STORAGE_DETAILS_SYNC_FRM };
+            tempobj.fields.userId.value = '';
+            tempobj.fields.userId.error = result.data.generateInvestorFolderStructure;
+            this.setFieldValue('STORAGE_DETAILS_SYNC_FRM', tempobj);
           }
-          this.resetForm('STORAGE_DETAILS_SYNC_FRM');
           uiStore.setProgress(false);
           res(result);
-        })
+        }))
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setProgress(false);
@@ -75,8 +78,10 @@ export class ElasticSearchStore {
         );
         this.setFieldValue('countValues', '');
       } else {
-        this.resetForm(formName);
-        uiStore.setErrors('The number of users should be within 0 - 500.');
+        const tempobj = { ...this.BULK_STORAGE_DETAILS_SYNC_FRM };
+        tempobj.fields.limit.value = '';
+        tempobj.fields.limit.error = 'The number of users should be within 0 - 500.';
+        this.setFieldValue('BULK_STORAGE_DETAILS_SYNC_FRM', tempobj);
       }
     } else {
       this[formName] =

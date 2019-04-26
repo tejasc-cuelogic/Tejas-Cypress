@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
@@ -117,6 +117,7 @@ export default class ConfirmPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
+    const dataLoading = !reSendVerificationCode && this.props.uiStore.inProgress;
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
       return <MigratedUserPhoneNumber />;
     } else if (isOptConfirmed) {
@@ -137,6 +138,11 @@ export default class ConfirmPhoneNumber extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
+          {dataLoading &&
+            <Dimmer active={dataLoading}>
+              <Loader active={dataLoading} />
+            </Dimmer>
+           }
           <MaskedInput
             hidelabel
             value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
@@ -191,7 +197,7 @@ export default class ConfirmPhoneNumber extends Component {
               </Message>
             }
             {!editMode ?
-              <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message))} />
+              <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message))} />
               :
               <Button.Group widths="2" className="inline">
                 <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />

@@ -26,8 +26,8 @@ export default class CampaignSideBar extends Component {
     this.props.history.push(`${this.props.match.url}/invest-now`);
   }
   render() {
-    const { className, campaignStore } = this.props;
-    const { campaign, navCountData } = campaignStore;
+    const { campaignStore } = this.props;
+    const { campaign, navCountData, campaignSideBarShow } = campaignStore;
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
@@ -47,7 +47,7 @@ export default class CampaignSideBar extends Component {
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
-        <div className={`${className} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
+        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
           <Responsive maxWidth={991} as={Aux}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>
@@ -75,7 +75,7 @@ export default class CampaignSideBar extends Component {
               </div>
               <Statistic inverted size="tiny" className="basic mb-0">
                 <Statistic.Value>
-                  <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
+                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                 </Statistic.Value>
                 {minFlagStatus &&
                   <Statistic.Label className="flag-status">
@@ -87,7 +87,7 @@ export default class CampaignSideBar extends Component {
                 <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
                 <Progress percent="100" size="tiny" color="green" />
               }
-              <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+              <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
@@ -108,7 +108,7 @@ export default class CampaignSideBar extends Component {
                   </Statistic>
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
-                      {get(campaign, 'keyTerms.earlyBirdsCount')
+                      {get(campaign, 'earlyBird.available')
                         || 0}
                     </Statistic.Value>
                     <Statistic.Label>Early Bird Rewards</Statistic.Label>
@@ -127,7 +127,7 @@ export default class CampaignSideBar extends Component {
               </p>
               }
               <p className="mb-half mt-half">
-              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
+              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? `Up to ${get(campaign, 'keyTerms.investmentMultiple')}x` : '-'}
               </p>
               <p className="mt-half">
                 Maturity: {get(campaign, 'keyTerms.maturity')} months
