@@ -231,6 +231,7 @@ export const campaignDetailsQuery = gql`
     closureSummary {
       processingDate
       hardCloseDate
+      launchDate
       totalInvestmentAmount
       totalInvestorCount
       repayment {
