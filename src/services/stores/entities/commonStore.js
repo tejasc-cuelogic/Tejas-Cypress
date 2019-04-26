@@ -24,16 +24,23 @@ export class CommonStore {
   }
 
   getBoxFileDetails = fileId => new Promise((resolve) => {
+    this.setFieldValue('inProgress', fileId);
     graphql({
       client,
       query: getBoxFileDetails,
       variables: {
         fileId,
       },
+      fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {
+          this.setFieldValue('inProgress', false);
           resolve(data);
         }
+      },
+      onError: () => {
+        this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
   });
@@ -55,6 +62,7 @@ export class CommonStore {
       .mutate({
         mutation: createCdnSignedUrl,
         variables: { key },
+        fetchPolicy: 'network-only',
       })
       .then(res => resolve(res))
       .catch(() => {
@@ -98,6 +106,7 @@ export class CommonStore {
     graphql({
       client,
       query: getsharedLink,
+      fetchPolicy: 'network-only',
       variables: {
         ...params,
       },
