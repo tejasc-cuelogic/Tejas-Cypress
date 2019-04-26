@@ -43,6 +43,7 @@ export default class Listing extends Component {
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
+    const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
     // const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
@@ -86,7 +87,7 @@ export default class Listing extends Component {
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    {isAdmin ?
+                    {get(isUsersCapablities, 'level') ?
                       <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link> :
                       `${data.firstName} ${data.lastName}`
                     }
