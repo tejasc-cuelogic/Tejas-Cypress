@@ -210,7 +210,7 @@ export const IND_ADD_FUND = {
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $100.',
-      max: 'The deposit amount should be less than $25,000.',
+      max: 'The deposit amount should not be more than $25,000.',
     },
   },
 };
@@ -225,7 +225,22 @@ export const ENTITY_ADD_FUND = {
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $5,000.',
-      max: 'The deposit amount should be less than $25,000.',
+      max: 'The deposit amount should not be more than $25,000.',
+    },
+  },
+};
+
+export const IRA_ADD_FUND = {
+  value: {
+    value: '',
+    key: 'value',
+    error: undefined,
+    rule: 'optional|numeric|min:5000|max:6000',
+    label: 'Deposit Amount',
+    maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least $5,000.',
+      max: 'The deposit amount should not be more than $6,000.',
     },
   },
 };
@@ -278,6 +293,7 @@ export const IND_BANK_LIST = [
 
 export const IRA_ACC_TYPES = {
   iraAccountType: {
+    key: 'iraAccountType',
     value: '',
     values: [
       {
@@ -301,6 +317,7 @@ export const IRA_ACC_TYPES = {
 export const IRA_FUNDING = {
   fundingType: {
     value: '',
+    key: 'fundingType',
     values: [
       {
         label: 'Check',

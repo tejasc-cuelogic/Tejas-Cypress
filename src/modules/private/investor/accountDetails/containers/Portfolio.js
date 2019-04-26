@@ -18,6 +18,7 @@ import Agreement from '../../../../public/offering/components/investNow/agreemen
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
+import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
 @observer
@@ -35,6 +36,7 @@ export default class Portfolio extends Component {
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     this.props.portfolioStore.calculateInvestmentType();
     window.addEventListener('message', this.docuSignListener);
+    this.props.portfolioStore.setPortfolioError(false);
   }
   docuSignListener = (e) => {
     if (e.data === 'viewing_complete') {
@@ -62,6 +64,7 @@ export default class Portfolio extends Component {
   }
   handleViewInvestment = (id) => {
     if (id) {
+      this.props.uiStore.setProgress('portfolio');
       const redirectURL = `${this.props.match.url}/investment-details/${id}`;
       this.props.history.push(redirectURL);
     }
@@ -104,7 +107,20 @@ export default class Portfolio extends Component {
         </Aux>
       );
     }
-    const { getInvestorAccounts, getPieChartData } = portfolioStore;
+    const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
+    const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
+      Please check back again later, and contact us at
+      <a href="mailto:support@nextseed.com">support@nextseed.com</a> with any questions.`;
+
+    if (portfolioError) {
+      return (
+        <div>
+          <section className="center-align">
+            <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={ERROR_MSG} /></h4>
+          </section>
+        </div>
+      );
+    }
     // const tnarValue = get(getInvestorAccounts, 'tnar');
     const summaryDetails = {
       isAccountFrozen: isUserAccountFrozen,

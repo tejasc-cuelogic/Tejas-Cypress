@@ -5,7 +5,7 @@ import moment from 'moment';
 import money from 'money-math';
 import { get, includes, orderBy, isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, DataFormatter } from '../../../../helper';
+import { ClientDb, FormValidator as Validator } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
@@ -24,6 +24,7 @@ export class TransactionStore {
     page: 1,
     perPage: 25,
     skip: 0,
+    displayTillIndex: 25,
   };
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
@@ -43,6 +44,7 @@ export class TransactionStore {
   @observable aggrementId = '';
   @observable loanAgreementData = {};
   @observable isAdmin = false;
+  @observable db = [];
 
   @action
   setFieldValue = (field, value) => {
@@ -51,26 +53,7 @@ export class TransactionStore {
 
   @action
   initRequest = (props) => {
-    const {
-      first, skip, page,
-    } = {
-      first: (props && props.first) || this.requestState.perPage,
-      skip: (props && props.skip) || this.requestState.skip,
-      page: (props && props.page) || this.requestState.page,
-    };
-    const filters = toJS({ ...this.requestState.search });
-    const params = {};
-    if (filters.transactionType && filters.transactionType.length > 0) {
-      params.transactionDirection = toJS(filters.transactionType);
-    }
-    if (filters.dateRange && filters.dateRange !== 'all') {
-      const todayDate = new Date().toISOString();
-      params.dateFilterStart = DataFormatter.getDateFromNow(filters.dateRange);
-      params.dateFilterStop = todayDate;
-    }
-    this.requestState.page = page || this.requestState.page;
-    this.requestState.perPage = first || this.requestState.perPage;
-    this.requestState.skip = skip || this.requestState.skip;
+    this.resetData();
     const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
       userDetailsStore.currentActiveAccountDetails;
     const { userDetails, getDetailsOfUser } = userDetailsStore;
@@ -79,18 +62,17 @@ export class TransactionStore {
       client,
       query: allTransactions,
       variables: {
-        ...params,
-        offset: page || 1,
         accountId: account.details.accountId,
         userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
         orderBy: (props && props.order) || 'DESC',
-        limit: (props && props.limitData) || 25,
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (props && props.statement && !this.data.loading) {
           this.setFirstTransaction(data);
           this.hasError = false;
+        } else if (!this.data.loading) {
+          this.setData();
         }
       },
       onError: () => {
@@ -105,12 +87,15 @@ export class TransactionStore {
   }
 
   @computed get getAllTransactions() {
-    return (this.data && this.data.data && this.data.data.getAccountTransactions &&
-      toJS(this.data.data.getAccountTransactions)) || [];
+    const transactions = this.db || [];
+    return transactions.slice(
+      this.requestState.skip,
+      this.requestState.displayTillIndex,
+    );
   }
 
   @computed get totalRecords() {
-    return this.getAllTransactions.totalCount || 0;
+    return this.db.length;
   }
   @computed get allPaymentHistoryData() {
     return this.paymentHistoryData.data &&
@@ -124,6 +109,12 @@ export class TransactionStore {
 
   @computed get error() {
     return (this.data && this.data.error && this.data.error.message) || null;
+  }
+
+  @computed get accountTransactions() {
+    const transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
+      && this.data.data.getAccountTransactions.transactions)) || [];
+    return this.sortBydate(transactions);
   }
 
   @computed get getValidWithdrawAmt() {
@@ -144,8 +135,62 @@ export class TransactionStore {
   @action
   initiateSearch = (srchParams) => {
     this.requestState.search = srchParams;
-    this.initRequest();
+    this.initiateFilters();
   }
+  @action
+  setData = () => {
+    this.setDb(this.accountTransactions);
+  }
+
+  @action
+  setDb = (data) => {
+    this.db = ClientDb.initiateDb(data, false, false, 'refId', true);
+  }
+
+  sortBydate = data => orderBy(data, o => (o.date ? moment(new Date(o.date)).unix() : ''), ['desc'])
+
+  @action
+  initiateFilters = () => {
+    this.resetPagination();
+    this.setData();
+    const { transactionType, dateRange } = this.requestState.search;
+    if (transactionType) {
+      ClientDb.filterData('type', transactionType);
+    }
+    if (dateRange && dateRange !== 'all') {
+      const sDate = moment(new Date()).subtract(dateRange, 'days');
+      const eDate = moment(new Date());
+      ClientDb.filterByDate(sDate, eDate, 'date', null, true);
+    }
+    this.db = ClientDb.getDatabase();
+  }
+
+  @action
+  resetPagination = () => {
+    this.requestState.skip = 0;
+    this.requestState.page = 1;
+    this.requestState.perPage = 25;
+    this.requestState.displayTillIndex = 25;
+  }
+
+  @action
+  resetData = () => {
+    this.requestState.search = {};
+    this.resetPagination();
+    this.data = [];
+    this.db = [];
+    this.setDb([]);
+  }
+
+  @action
+  pageRequest = ({ skip, page }) => {
+    const pageWiseCount = this.requestState.perPage * page;
+    this.requestState.displayTillIndex = pageWiseCount;
+    this.requestState.page = page;
+    this.requestState.skip = (skip === pageWiseCount) ?
+      pageWiseCount - this.requestState.perPage : skip;
+  }
+
 
   @action
   setInitiateSrch = (name, value) => {

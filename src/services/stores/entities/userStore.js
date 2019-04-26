@@ -81,6 +81,10 @@ export class UserStore {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('issuer');
   }
+  @computed get isAdmin() {
+    const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
+    return roles.includes('admin');
+  }
   getUserEmailAddress() {
     const emailDetails = (this.currentUser && toJS(this.currentUser.email)) || null;
     return emailDetails;

@@ -29,7 +29,7 @@ export default class ConfirmModel extends Component {
       formChange, maskChange, CONFIRM_ACCREDITATION_FRM,
       setFileUploadData, removeUploadedData,
     } = this.props.accreditationStore;
-    const { accountType, userId } = this.props.match.params;
+    const { accountType, userId, requestDate } = this.props.match.params;
     const actionValue = this.props.match.params.action;
     const { inProgress } = this.props.uiStore;
     return (
@@ -64,7 +64,7 @@ export default class ConfirmModel extends Component {
             <DropZone
               name="adminJustificationDocs"
               fielddata={CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs}
-              ondrop={(files, fieldName) => setFileUploadData('CONFIRM_ACCREDITATION_FRM', fieldName, files, accountType || 'individual', 'Admin', userId)}
+              ondrop={(files, fieldName) => setFileUploadData('CONFIRM_ACCREDITATION_FRM', fieldName, files, accountType || 'individual', 'Admin', actionValue, userId, requestDate)}
               onremove={fieldName => removeUploadedData('CONFIRM_ACCREDITATION_FRM', fieldName)}
             />
             <div className="center-align mt-30">

@@ -11,7 +11,7 @@ import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 
 @withRouter
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
+@inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
 class FinancialInfo extends Component {
   componentWillMount() {
@@ -24,10 +24,14 @@ class FinancialInfo extends Component {
         getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
       }
     }
-    if (this.props.investmentStore.getSelectedAccountTypeId) {
-      this.props.investmentLimitStore
-        .getInvestorAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
+    if (this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
+      const investorTotalAmountInvested = get(this.props.investmentLimitStore.getCurrentInvestNowHealthCheck, 'investorTotalAmountInvested') || '0';
+      this.props.investmentLimitStore.setFieldValue('investorTotalAmountInvested', investorTotalAmountInvested);
     }
+    // if (this.props.match.isExact && this.props.investmentStore.getSelectedAccountTypeId) {
+    //   this.props.investmentLimitStore
+    //     .getInvestorTotalAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
+    // }
   }
   render() {
     const {
@@ -60,13 +64,15 @@ class FinancialInfo extends Component {
     const accreditationStatus = get(userDetails, 'accreditation.status');
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
-    if (!getCurrentInvestNowHealthCheck) {
+    const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
+    if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading ||
+      this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
 
     return (
       <Aux>
-        <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
+        <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest &&
           <Aux>

@@ -9,6 +9,7 @@ import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 991;
@@ -23,8 +24,10 @@ class Comments extends Component {
     this.props.messageStore.resetMessageForm();
   }
   componentDidMount() {
-    const sel = 'anchor-scroll';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   postNewComment = () => {
     const { isUserLoggedIn } = this.props.authStore;
@@ -77,14 +80,15 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
-    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const { idVerification, activeAccounts } = this.props.userDetailsStore.signupStatus;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
-    const accountStatusFull = activeAccounts && activeAccounts.length;
-    const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && activeAccounts && activeAccounts.length);
+    const accountStatusFull = idVerification === 'PASS' || activeAccounts.length;
+    const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && accountStatusFull);
     const readMoreLength = 250;
     const { campaign } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
-    const disablePostComment = !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage);
+    const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) < 0;
+    const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
     const comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
@@ -95,9 +99,9 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Comments
-          <span className="anchor-scroll" />
+          <span className="anchor" />
         </Header>
         <p>
           Note that both NextSeed and issuers are notified of all comments immediately,
@@ -150,7 +154,7 @@ class Comments extends Component {
                   && c.approved) ||
                   (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC' && (
                     <Comment.Group minimal>
-                      <Comment key={c.id} className={`${c.createdUserInfo && c.createdUserInfo.id === issuerId ? 'issuer-comm ent' : ''}`}>
+                      <Comment key={c.id} className={`${c.createdUserInfo && c.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
                         <Comment.Content>
                           <Comment.Author>
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.info.firstName')}
@@ -168,17 +172,14 @@ class Comments extends Component {
                             <HtmlEditor
                               readOnly
                               content={this.state.readMore === c.id ?
-                                c.comment : `${c.comment.substr(0, readMoreLength)}`}
+                                c.comment : `${c.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== c.id && (c.comment.length > readMoreLength)) ? '...' : ' '}`}
                             />
                             {(c.comment.length > readMoreLength) &&
-                            <Aux>
-                              {this.state.readMoreInner !== c.id ? ' ...' : ' '}
-                              <Link
-                                to="/"
-                                onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
-                              >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
-                              </Link>
-                            </Aux>}
+                            <Link
+                              to="/"
+                              onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
+                            >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
+                            </Link>}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
                             <Aux>
@@ -238,10 +239,14 @@ class Comments extends Component {
                                   <HtmlEditor
                                     readOnly
                                     content={this.state.readMoreInner === tc.id ?
-                                      tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}` : tc.comment.substr(0, readMoreLength)}
+                                      tc.comment : `${tc.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== tc.id && (tc.comment.length > readMoreLength)) ? '...' : ' '}`}
                                   />
                                   {(tc.comment.length > readMoreLength) &&
-                                  <Aux>{this.state.readMoreInner !== tc.id ? ' ...' : ' '}<Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}</Link></Aux>}
+                                  <Link
+                                    to="/"
+                                    onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
+                                  >{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
+                                  </Link>}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
                                   <Aux>

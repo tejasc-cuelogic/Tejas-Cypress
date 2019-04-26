@@ -9,6 +9,8 @@ import { SidebarNav, GetNavItem } from './SidebarNav';
 import { UserAvatar, Logo, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
+const progressMap = ['viewLoanAgreement', 'portfolio'];
+
 @inject('uiStore')
 @observer
 class SidebarLeftPush extends Component {
@@ -21,7 +23,7 @@ class SidebarLeftPush extends Component {
         {showFireworkAnimation &&
         <FireworksAnimation />
         }
-        {this.props.uiStore.inProgress === 'viewLoanAgreement' &&
+        {progressMap.includes(this.props.uiStore.inProgress) &&
           <Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
             <Loader active={this.props.uiStore.inProgress} />
           </Dimmer>
@@ -109,7 +111,7 @@ const MySidebar = observer(props => (
       className={`${props.match.url.includes('/business-application') ?
         'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
     >
-      {props.mobile && <Icon onClick={props.toggle} className="hamburger content" />}
+      {props.mobile && <Icon onClick={props.toggle} className="ns-hamburger" />}
       {props.children}
     </Sidebar.Pusher>
     <NotificationPanel status={props.layoutState.notificationPanel} />

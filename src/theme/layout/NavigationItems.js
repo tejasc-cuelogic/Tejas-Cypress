@@ -10,7 +10,7 @@ import { SubmitButton } from '../../modules/shared/businessApplication/component
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore', 'uiStore')
+@inject('navStore', 'uiStore', 'userDetailsStore')
 @observer
 export class NavItems extends Component {
   state = { active: '', active2: '', byHideArrow: '' };
@@ -20,15 +20,18 @@ export class NavItems extends Component {
       const newState2 = name;
       this.setState({ active: newState, active2: newState2 });
     }
-    if (this.props.isApp && e.target.className === 'dropdown icon') {
-      const { active2 } = this.state;
-      if (active2 === name) {
-        this.setState({ byHideArrow: name });
+    if (!(this.props.userDetailsStore.getAccountList.length === 1
+      && name === this.props.uiStore.defaultNavExpanded)) {
+      if (this.props.isApp && e.target.className === 'dropdown icon') {
+        const { active2 } = this.state;
+        if (active2 === name) {
+          this.setState({ byHideArrow: name });
+        }
       }
-    }
 
-    const { setNavExpanded } = this.props.uiStore;
-    setNavExpanded(false); // reset defaultNavExpanded
+      const { setNavExpanded } = this.props.uiStore;
+      setNavExpanded(false); // reset defaultNavExpanded
+    }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
@@ -171,26 +174,28 @@ export class NavigationItems extends Component {
   }
   render() {
     const {
-      stepInRoute, location, currentUser, loading,
+      stepInRoute, location, currentUser, loading, isMobBussinessApp,
       isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     return (
       <Menu
-        stackable
+        stackable={!isMobBussinessApp}
         borderless
         fixed="top"
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
       >
         <Container fluid>
-          <Menu.Item as={Link} to="/" header>
-            <Logo
-              alt="NextSeed.com"
-              dataSrc={getLogo(location.pathname)}
-              style={getLogoStyle(location.pathname)}
-              size={isTablet && 'small'}
-            />
-          </Menu.Item>
+          {!isMobBussinessApp &&
+            <Menu.Item as={Link} to="/" header>
+              <Logo
+                alt="NextSeed.com"
+                dataSrc={getLogo(location.pathname)}
+                style={getLogoStyle(location.pathname)}
+                size={isTablet && 'small'}
+              />
+            </Menu.Item>
+          }
           <Menu.Menu position="right">
             {!location.pathname.includes('/business-application') &&
               <NavItems
@@ -202,7 +207,7 @@ export class NavigationItems extends Component {
             }
           </Menu.Menu>
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
-            <Menu.Item>
+            <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
               <Button.Group>
                 <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
                 {isPrequalQulify &&

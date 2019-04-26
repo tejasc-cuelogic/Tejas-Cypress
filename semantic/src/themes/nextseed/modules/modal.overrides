@@ -260,13 +260,11 @@
         }
     }
 }
-.ui.modal.deletion{
-    .actions{
-        .ui.primary.button{
-            background-color:@highlight-primary;
-            &:hover, &:focus, &:active{
-                background-color:darken(desaturate(spin(@highlight-primary, 0.0997), 7.0155), 4.9020);
-            }
+.ui.modal.deletion .actions{
+    .ui.primary.button{
+        background-color:@highlight-primary;
+        &:hover, &:focus, &:active{
+            background-color:darken(desaturate(spin(@highlight-primary, 0.0997), 7.0155), 4.9020);
         }
     }
 }

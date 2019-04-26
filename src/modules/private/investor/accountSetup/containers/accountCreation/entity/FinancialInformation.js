@@ -6,7 +6,7 @@ import { Header, Form, Message, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore')
+@inject('entityAccountStore', 'investmentLimitStore')
 @observer
 export default class FinancialInformation extends Component {
   componentWillMount() {
@@ -14,14 +14,15 @@ export default class FinancialInformation extends Component {
     if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netAssets.value !== '' && FIN_INFO_FRM.fields.annualIncome.value !== ''))) && !(FIN_INFO_FRM.fields.netAssets.value === '' && FIN_INFO_FRM.fields.annualIncome.value === '')) {
       maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netAssets.value }, name: 'netAssets' });
     }
+    this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
   }
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Calculating your investment limit</Header>
+        <Header as="h3" textAlign="center">Calculate your investment limit</Header>
         <p className="center-align">
-          Your net worth and annual income are used to determine your 12-month investment limit.{' '}
+          Your net assets and annual revenue are used to determine your 12-month investment limit.{' '}
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
         </p>
         <Form error>

@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
+import money from 'money-math';
 import { DataFormatter } from '../../../../../helper';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { Image64 } from '../../../../../theme/shared';
@@ -26,7 +27,8 @@ export default class CampaignHeader extends Component {
     const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
     const isInProcessing = diffForProcessing === 0 && !get(campaign, 'closureSummary.hardCloseDate');
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    let minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
@@ -36,10 +38,8 @@ export default class CampaignHeader extends Component {
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const isClosed = campaign.stage !== 'LIVE';
     const isCreation = campaign.stage === 'CREATION';
-    let rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const earlyBird = get(campaign, 'earlyBird') || null;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
-    rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
     const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     return (
       <Aux>
@@ -92,8 +92,7 @@ export default class CampaignHeader extends Component {
                             <Statistic.Label>Payments made</Statistic.Label>
                           </Statistic>
                         }
-                        {((rewardsTiers && rewardsTiers.length) ||
-                        (earlyBird && earlyBird.available > 0)) &&
+                        {earlyBird && earlyBird.available > 0 &&
                         isEarlyBirdRewards && !isClosed &&
                           bonusRewards ?
                             <Statistic size="mini" className="basic">
@@ -127,7 +126,7 @@ export default class CampaignHeader extends Component {
                   </Header>
                   <Statistic inverted size="tiny" className="basic mb-0">
                     <Statistic.Value>
-                      <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
+                      <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                     </Statistic.Value>
                     {minFlagStatus &&
                       <Statistic.Label className="flag-status">

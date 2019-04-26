@@ -55,8 +55,8 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <Aux>Yo can choose your{' '}
-          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA Factor</span>}>
+        <Aux>You can choose your{' '}
+          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
               Manage your MFA contact preferences. All major actions in your account will
@@ -379,8 +379,15 @@ export const USER_PROFILE_FOR_ADMIN = {
   lastName: { ...UPDATE_PROFILE_INFO.lastName },
   number: { ...UPDATE_PROFILE_INFO.phoneNumber },
   address: { ...UPDATE_PROFILE_INFO.email },
-  ...USER_IDENTITY,
+  firstLegalName: { ...USER_IDENTITY.firstLegalName },
+  lastLegalName: { ...USER_IDENTITY.lastLegalName },
+  ssn: { ...USER_IDENTITY.ssn },
+  dateOfBirth: { ...USER_IDENTITY.dateOfBirth },
   street: { ...USER_IDENTITY.residentalStreet },
+  streetTwo: { ...USER_IDENTITY.streetTwo },
+  city: { ...USER_IDENTITY.city },
+  state: { ...USER_IDENTITY.state },
+  zipCode: { ...USER_IDENTITY.zipCode },
   capabilities: {
     value: [],
     key: 'capabilities',
@@ -402,13 +409,13 @@ export const COUNTRY_CODES = {
 };
 
 export const TRANSACTION_TYPES = [
-  { text: 'Deposit', value: 'DEPOSIT' },
-  { text: 'Withdrawal', value: 'WITHDRAWAL' },
-  { text: 'Payment', value: 'REPAYMENT' },
-  { text: 'Interest', value: 'INTEREST' },
-  { text: 'Investment', value: 'INVESTMENT' },
-  { text: 'Referral credits', value: 'REFERRAL_CREDITS' },
-  { text: 'Late fee', value: 'LATE_FEE' },
+  { text: 'Deposit', value: 'Deposit' },
+  { text: 'Withdrawal', value: 'Withdrawal' },
+  { text: 'Payment', value: 'Payment' },
+  { text: 'Interest', value: 'Interest' },
+  { text: 'Investment', value: 'Investment' },
+  { text: 'Referral credits', value: 'Credit' },
+  { text: 'Late fee', value: 'Late Fee' },
 ];
 
 export const DATE_RANGES = [

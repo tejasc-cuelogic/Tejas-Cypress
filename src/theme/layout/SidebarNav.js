@@ -8,7 +8,9 @@ import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationM
 import { NavItems } from './NavigationItems';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 
-@inject('navStore', 'offeringsStore')
+const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('navStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export class SidebarNav extends Component {
@@ -22,6 +24,8 @@ export class SidebarNav extends Component {
   componentWillReceiveProps(nextProps) {
     this.props.navStore.setAccessParams('currentNav', nextProps.match.url);
   }
+  toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
+
   render() {
     const {
       roles, location, isVerified, createdAccount, navStore, onlyMount,
@@ -36,6 +40,8 @@ export class SidebarNav extends Component {
           isUserVerified={isVerified}
           createdAccount={createdAccount}
           isApp
+          onToggle={this.toggleMobile}
+          isMobile={isMobile}
         />
         <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
           <Icon name="sign out" />
@@ -69,6 +75,9 @@ export const GetNavMeta = (item, roles, nonprivate) => {
         ((!n.env || n.env.length === 0 ||
         _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
     }
+  }
+  if (!navMeta) {
+    return { subNavigations: [] };
   }
   return navMeta;
 };

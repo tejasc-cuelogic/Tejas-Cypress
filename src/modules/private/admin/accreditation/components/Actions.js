@@ -13,9 +13,9 @@ const actions = {
 export default class Actions extends Component {
   actionUrl = (action) => {
     const {
-      match, accountId, accountType, userId,
+      match, accountId, accountType, userId, requestDate,
     } = this.props;
-    return `${match.url}/${action}/${userId}${accountId ? `/${accountId}/${accountType}` : ''}`;
+    return `${match.url}/${action}/${userId}/${requestDate}${accountId ? `/${accountId}/${accountType}` : ''}`;
   }
   render() {
     return (
@@ -23,7 +23,7 @@ export default class Actions extends Component {
         <Button.Group vertical compact size="mini">
           {this.props.accreditation.verifier &&
             this.props.accreditation.verifier.email &&
-            <Button loading={this.props.accreditationStore.inProgress.includes(this.props.userId)} onClick={() => this.props.emailVerifier(this.props.userId, this.props.accountId, this.props.accountType)} className="green" >Email Verifier </Button>
+            <Button loading={this.props.accreditationStore.inProgress.includes(this.props.userId)} onClick={() => this.props.emailVerifier(this.props.userId, this.props.accountId, this.props.accountType)} className="green" >Resend Verifier Email </Button>
           }
           {Object.keys(actions).map(action => (
             <Button

@@ -11,7 +11,7 @@ section{
             padding-bottom: @30px;
         }
         @media only screen and (max-width : @largestMobileScreen){
-            height:380px;
+            height:311px;
             margin-top:0px;
             padding: 0;
         }
@@ -68,7 +68,7 @@ section{
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat;
             height: 300px;
             @media only screen and (max-width : @largestMobileScreen){
-                height:226px;
+                height:215px;
                 background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat;
             }
         }
@@ -87,11 +87,8 @@ section{
         &.resources-banner {
             height: 465px;
             background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat;  
-            @media only screen and (max-width : @computerBreakpoint) {
-                height:260px;
-            }
             @media only screen and (max-width : @largestMobileScreen){
-                height: 380px; 
+                height: 311px; 
                 background:url(../../assets/images/banners/resources-banner-mobile.jpg) center center no-repeat;
             }
         }
@@ -155,7 +152,7 @@ section{
 }
 .public-pusher>section.banner{
     @media only screen and (max-width : @largestMobileScreen){
-        margin-top:-58px;
+        // margin-top:-58px; 
         &.funding-options, &.how-it-works, &.track {
             height: auto;
             margin-top: 0;
@@ -197,6 +194,16 @@ section{
         bottom: 0;
         right: 0;
         color:  @white;
+        // @media only screen and (min-width : @monitorBreakpoint) and (max-width: @largestSmallMonitor){
+            //     padding-top: @50px;
+            // }
+        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor){
+            padding-top: @50px;
+            padding-bottom: @50px;
+        }
+        >.ui.container {
+            justify-content: center;
+        }
     }
 }
 // business and invest pages

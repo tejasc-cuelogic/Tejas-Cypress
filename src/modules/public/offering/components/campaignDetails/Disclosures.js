@@ -3,17 +3,21 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
+import Aux from 'react-aux';
 import { get } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'accreditationStore', 'navStore')
 @withRouter
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
-    if (this.props.campaignStore.docsWithBoxLink.length === 0) {
+    const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
+    if (docsWithBoxLink.length === 0 && !isFetchedError) {
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');
       const offeringRegulationArr = (regulation && regulation.split('_')) || '';
@@ -23,16 +27,28 @@ export default class TermsOfUse extends Component {
       this.props.accreditationStore.getUserAccreditation();
     }
   }
+  componentDidMount() {
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
+  }
+  componentWillUnmount() {
+    const { setFieldValue } = this.props.campaignStore;
+    setFieldValue('isFetchedError', false);
+  }
   module = name => DataFormatter.upperCamelCase(name);
-  dataRoomHeader = (<Header as="h3" className="mb-30 anchor-wrap">
-                      Data Room
-    <span className="anchor-scroll" />
-                    </Header>)
+  dataRoomHeader = (
+    <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      Data Room
+      <span className="anchor" />
+    </Header>
+  )
   render() {
     const { campaign } = this.props.campaignStore;
     const campaignCreatedBy = get(campaign, 'created.id') || null;
     const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
-    if (!dataRoomDocs.length) {
+    if (!dataRoomDocs.length || !sortedDocswithBoxLink.length) {
       return (
         <div className="campaign-content-wrapper">
         {this.dataRoomHeader}
@@ -40,14 +56,32 @@ export default class TermsOfUse extends Component {
         </div>);
     }
     if (dataRoomDocs.length !== sortedDocswithBoxLink.length) {
-      return <InlineLoader />;
+      return (
+        <div className="campaign-content-wrapper">
+          {this.dataRoomHeader}
+          <InlineLoader />
+        </div>);
     }
     const index = (this.props.location.hash || '#1').substr(1);
     return (
       <div className="campaign-content-wrapper">
         {this.dataRoomHeader}
-        <Header as="h4" className="mb-20 grey-header">{sortedDocswithBoxLink[index - 1].name}</Header>
-        <Disclosure campaignCreatedBy={campaignCreatedBy} doc={sortedDocswithBoxLink[index - 1]} />
+        {isMobile ?
+        sortedDocswithBoxLink.map(doc => (
+          <Aux>
+            <Header as="h4" className="mb-20 grey-header">{doc.name}</Header>
+            <Disclosure campaignCreatedBy={campaignCreatedBy} doc={doc} />
+          </Aux>
+        ))
+        :
+        <Aux>
+          <Header as="h4" className="mb-20 grey-header">{sortedDocswithBoxLink[index - 1].name}</Header>
+          <Disclosure
+            campaignCreatedBy={campaignCreatedBy}
+            doc={sortedDocswithBoxLink[index - 1]}
+          />
+        </Aux>
+        }
       </div>
     );
   }

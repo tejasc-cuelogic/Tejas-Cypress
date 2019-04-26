@@ -6,7 +6,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorAmountInvested } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
@@ -21,8 +21,9 @@ export class InvestmentLimitStore {
   @observable entityCurrentLimit = 0;
   @observable individualIRACurrentLimit = 0;
   @observable investedAmount = 0;
-  @observable investNowHealthCheckDetails = null;
+  @observable investNowHealthCheckDetails = {};
   @observable investNowError = false;
+  @observable investorTotalAmountInvested = 0;
 
   @action
   setFieldValue = (field, value) => {
@@ -61,6 +62,7 @@ export class InvestmentLimitStore {
 
   @action
   getInvestNowHealthCheck = (accountId, offeringId) => new Promise((resolve, reject) => {
+    uiStore.setProgress();
     this.investNowHealthCheckDetails = graphql({
       client,
       query: getInvestNowHealthCheck,
@@ -71,6 +73,7 @@ export class InvestmentLimitStore {
       },
       onFetch: (data) => {
         if (data && this.investNowHealthCheckDetails && !this.investNowHealthCheckDetails.loading) {
+          uiStore.setProgress(false);
           resolve(data);
         }
       },
@@ -86,7 +89,7 @@ export class InvestmentLimitStore {
 
   @computed get getInvestorAmountInvestedValue() {
     return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
-      this.investorInvestmentLimit.data.getInvestorAmountInvested) || 0;
+      this.investorInvestmentLimit.data.getInvestorTotalAmountInvested) || 0;
   }
 
   @computed get getInvestorAmountInvestedLoading() {
@@ -126,7 +129,8 @@ export class InvestmentLimitStore {
     }
     // }
     limit = Math.min(limit, maxLimit);
-    const remainingAmount = limit - ((data.cfInvestments || 0) + investedAmtFloat);
+    const remainingAmount = limit -
+    ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
@@ -289,25 +293,25 @@ export class InvestmentLimitStore {
 
     accountList.forEach((account) => {
       if (account.name === this.currentAccountType) {
-        this.getInvestorAmountInvested(
+        this.getInvestorTotalAmountInvested(
           account.details.accountId,
           // dateFilterStart,
           // dateFilterStop,
           closeDateFilter,
         ).then((data) => {
-          this.setFieldValue('investedAmount', parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0));
+          this.setFieldValue('investedAmount', parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0));
         });
       }
     });
     if (isIndAccExist && this.currentAccountType === 'ira') {
       const individualAccount = find(this.activeAccounts, acc => acc.name === 'individual');
-      this.getInvestorAmountInvested(
+      this.getInvestorTotalAmountInvested(
         individualAccount.details.accountId,
         // dateFilterStart,
         // dateFilterStop,
         closeDateFilter,
       ).then((data) => {
-        const investedAmount = parseFloat(data.getInvestorAmountInvested.replace(/,/g, '') || 0) +
+        const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0) +
           this.investedAmount;
         this.setFieldValue('investedAmount', investedAmount);
       });
@@ -315,11 +319,11 @@ export class InvestmentLimitStore {
   }
 
   @action
-  getInvestorAmountInvested =
+  getInvestorTotalAmountInvested =
     (accountId, closeDateFilter = moment().subtract(1, 'y').toISOString()) => new Promise((resolve) => {
       this.investorInvestmentLimit = graphql({
         client,
-        query: getInvestorAmountInvested,
+        query: getInvestorTotalAmountInvested,
         variables: {
           userId: userDetailsStore.currentUserId,
           accountId,
@@ -328,8 +332,9 @@ export class InvestmentLimitStore {
           closeDateFilter,
           includeTx: false,
         },
+        fetchPolicy: 'network-only',
         onFetch: (data) => {
-          if (data && data.getInvestorAmountInvested) {
+          if (data && data.getInvestorTotalAmountInvested) {
             resolve(data);
           }
         },

@@ -51,14 +51,14 @@
 			// 	width: 50%;
 			// 	padding-right: 0;
 			// }
-			@media only screen and (max-width : @largestMobileScreen){
+			@media only screen and (min-width : @largestMobileScreen){
 				&:last-child{
 					padding-right: 0;
 				}
 			}
 		}
 		&.wide{
-			margin:0 -@relative14px;
+			margin:0 -@relative14px @relative14px;
 			.field{
 				padding-left:@relative14px;
 				padding-right:@relative14px;
@@ -100,11 +100,11 @@
 				line-height: @18px;
 				color: @neutral-offdark;
 			}
-			@media only screen and (max-width : @largestMobileScreen){
-				min-width:100px;
-				padding:@10px @15px;
-				height: auto;
-			}
+			// @media only screen and (max-width : @largestMobileScreen){
+			// 	min-width:100px;
+			// 	padding:@10px @15px;
+			// 	height: auto;
+			// }
 		}
 		input[type="radio"], input[type="checkbox"]{
 			width:100%;
@@ -122,6 +122,35 @@
 	.field.error .ui.radio.checkbox label, .field.error .ui.checkbox label{
 		color:@neutral !important;
 		border-color:@highlight-primary;
+	}
+}
+.ui.form .fields.radio-basic{
+	.field{
+		padding:@30px 0 @10px 0;
+		border-right:1px solid @border-light;
+		@media only screen and (max-width : @largestMobileScreen){
+			border:none;
+		}
+		&:last-child{
+			border-right:0;
+		}
+	}
+	.ui.radio.checkbox label{
+		padding-left:0;
+		&:before{
+			width:20px;
+			height:20px;
+			top:-30px;
+			left:50%;
+			transform:translateX(-50%);
+		}
+		&:after{
+			width:12px;
+			height:12px;
+			top:-32px;
+			left:50%;
+			transform:translate(-50%, 50%);
+		}
 	}
 }
 
@@ -207,6 +236,6 @@
 	}
 }
 
-.error .ui.checkbox label:before{
+.error .ui.checkbox:not(.radio) label:before{
 	border-color:@highlight-primary;
 }

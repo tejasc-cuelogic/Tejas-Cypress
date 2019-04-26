@@ -9,8 +9,8 @@ import ButtonGroup from '../ButtonGroup';
 export default class Documentation extends Component {
   componentWillMount() {
     const { setFormData } = this.props.offeringCreationStore;
-    setFormData('GENERAL_FRM', 'legal.general');
-    setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+    // setFormData('GENERAL_FRM', 'legal.general');
+    // setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
     setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
     setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }

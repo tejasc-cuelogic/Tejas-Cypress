@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { capitalize, orderBy, mapValues, get } from 'lodash';
+import { Calculator } from 'amortizejs';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
@@ -14,6 +15,7 @@ import {
   investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
+
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
@@ -226,10 +228,12 @@ export class InvestmentStore {
     let offeringSecurityType = '';
     let interestRate = '';
     let investmentMultiple = '';
+    let loanTerm = '';
     if (campaign && campaign.keyTerms) {
       offeringSecurityType = get(campaign, 'keyTerms.securities');
       interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
       investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+      loanTerm = parseFloat(get(campaign, 'keyTerms.maturity'));
     } else {
       offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
       interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
@@ -238,10 +242,25 @@ export class InvestmentStore {
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
       if (offeringSecurityType === 'TERM_NOTE') {
-        const formatedIntrestRate = money.floatToAmount(interestRate);
-        const calculatedIntrestAmount = money.percent(investAmt, formatedIntrestRate);
+        const data = {
+          method: 'mortgage',
+          apr: parseFloat(interestRate) || 0,
+          balance: parseFloat(investAmt) || 0,
+          loanTerm: loanTerm || 0,
+        };
+        const { totalPayment } = Calculator.calculate(data);
+        const finalAmtM = money.floatToAmount(Math.floor(totalPayment) || '');
+
+        //
+        //
+        // const interestRate_f = parseFloat(interestRate);
+        // const num = (interestRate_f / 100.0) / 12 * parseFloat(investAmt);
+        // const denom = 1 - Math.pow((1 + (interestRate_f / 100.0) / 12), (-1 * targetTerm)));
+        // const finalAmt = (num/denom)*;
+        //
+        // const finalAmt_m = money.floatToAmount(finalAmt);
         const estReturnMIN =
-          Helper.CurrencyFormat(money.add(investAmt, calculatedIntrestAmount), 0);
+            Helper.CurrencyFormat(finalAmtM, 0, 0);
         this.estReturnVal = estReturnMIN;
         return this.estReturnVal;
       }
@@ -612,9 +631,8 @@ export class InvestmentStore {
 
   @computed get changedInvestmentLimit() {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
-    console.log(investmentLimitStore.getInvestorAmountInvestedValue);
     return investmentLimitStore
-      .getInvestmentLimit(data, investmentLimitStore.getInvestorAmountInvestedValue);
+      .getInvestmentLimit(data, investmentLimitStore.investorTotalAmountInvested);
   }
   @action
   setInvestmentLimitData = () => {

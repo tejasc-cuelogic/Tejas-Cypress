@@ -32,3 +32,132 @@ export const allFaqQuery = gql`query getListOfFAQsAndKnowledgeBase($categoryType
   }
 }
 `;
+
+export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($title: String, $categoryId: String, $itemStatus: ArticleStatusEnum, $authorId: String){
+    knowledgeBaseByFilters(title: $title, categoryId: $categoryId, itemStatus: $itemStatus, authorId: $authorId){
+      title
+      id
+      userType
+      itemStatus
+      slug      
+      updated{
+        date
+      }
+    }
+  }  
+`;
+
+export const getAllKnowledgeBase = gql`query{
+  knowledgeBaseItems{
+    title
+    id
+    userType
+    itemStatus
+    slug      
+    updated{
+      date
+    }
+  }
+}
+`;
+
+export const getArticlesByCatId = gql`
+query _getArticleByCategoryId($id:ID! ) {
+  insightArticlesByCategoryId (
+    id: $id
+  ) {
+    id
+    content
+    featuredImage
+    minuteRead
+    title
+    authorId
+    updated {
+      date
+    }
+    created {
+      date
+    }
+    banner
+  }
+}
+`;
+export const getKnowledgeBaseById = gql`
+query knowledgeBaseById($id: ID!) {
+  knowledgeBaseById(id: $id) {
+      id
+      title
+      content
+      userType
+      itemStatus
+      categoryName
+  }
+}
+`;
+
+export const getKnowledgeBaseDetails = gql`
+query knowledgeBaseById ($id: ID!) {
+    knowledgeBaseById (id: $id) {
+      id
+      title
+      content
+      userType
+      itemStatus
+      categoryName
+    }
+  }
+`;
+
+export const createArticle = gql`
+mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
+  createArticle(articleDetailsInput: $payload, isPartialData: $isPartial) {
+    id
+    title
+    articleStatus
+    category
+  }
+}
+`;
+
+export const createKnowledgeBase = gql`
+mutation createKnowledgeBaseItem($payload:  KnowledgeBaseItem!, $isPartial: Boolean) {
+  createKnowledgeBaseItem(knowledgeBaseDetailsInput: $payload, isPartialData: $isPartial) {
+    id
+    title
+    content
+    itemStatus,
+    categoryName
+    userType
+  }
+}
+`;
+
+export const updateKnowledgeBase = gql`
+mutation updateKnowledgeBaseItem($id:ID!,$payload:  KnowledgeBaseItem!, $isPartial: Boolean) {
+  updateKnowledgeBaseItem(id:$id,knowledgeBaseDetailsInput: $payload, isPartialData: $isPartial) {
+    id
+    title
+    content
+    itemStatus
+    categoryName
+    userType
+  }
+}
+`;
+
+export const deleteKBById = gql`
+  mutation deleteKnowledgeBaseItems($id: [ID]){
+    deleteKnowledgeBaseItems(id: $id)
+  }
+`;
+
+export const updateKnowledgeBaseItem = gql`mutation updateKnowledgeBaseStatus($id: [ID], $status:ArticleStatusEnum!){
+  updateKnowledgeBaseStatus(id: $id, status:$status)
+}  
+`;
+
+export const deleteKnowledgeBaseItem = gql`mutation deleteKnowledgeBaseItems($id: [ID]){
+  deleteKnowledgeBaseItems(id: $id)
+}  
+`;
+

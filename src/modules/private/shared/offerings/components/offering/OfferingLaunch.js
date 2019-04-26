@@ -10,11 +10,11 @@ import ButtonGroupType2 from '../ButtonGroupType2';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingLaunch extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
-    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
-  }
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+  //   this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+  //   this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  // }
   handleFormSubmit = (isApproved = null) => {
     const {
       COMPANY_LAUNCH_FRM,
@@ -80,12 +80,12 @@ export default class OfferingLaunch extends Component {
         <Form.Group widths={3}>
           {
             ['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'disclosure', 'securityAgreement', 'personalGuarantee'].map(document => (
-              <div className="field display-only" >
+              <div className="field">
                 <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
                 {legalDocs && legalDocs[document] && legalDocs[document].fileName ?
                   <Aux>
                     <div className="display-only">
-                      <Link to={this.props.match.url}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
+                      <Link to={this.props.match.url} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
                     <p>uploaded on{' '}
                       {

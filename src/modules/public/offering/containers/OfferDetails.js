@@ -4,7 +4,7 @@ import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Visibility } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -18,7 +18,7 @@ import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
-import Footer from './../../../../theme/layout/Footer';
+// import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
@@ -29,8 +29,8 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
-const isMobile = document.documentElement.clientWidth < 991;
-
+const isMobile = document.documentElement.clientWidth < 992;
+const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
 @observer
@@ -57,6 +57,9 @@ class offerDetails extends Component {
       this.setState({ showPassDialog: false });
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
+  }
+  componentDidMount() {
+    window.scrollTo(0, 0);
   }
   componentWillUnmount() {
     this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
@@ -164,6 +167,9 @@ class offerDetails extends Component {
     });
     return newNavList;
   }
+  handleUpdate = (e, { calculations }) => {
+    this.props.navStore.setMobileNavStatus(calculations);
+  }
   render() {
     const {
       match, campaignStore, location,
@@ -179,7 +185,7 @@ class offerDetails extends Component {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaignSideBarShow, campaign, navCountData,
+      details, campaign, navCountData,
     } = campaignStore;
     let navItems = [];
     if (isMobile) {
@@ -198,6 +204,8 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     return (
       <Aux>
         {campaign &&
@@ -212,14 +220,20 @@ class offerDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
-            <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
-            <MobileDropDownNav
-              inverted
-              refMatch={match}
-              navCountData={navCountData}
-              navItems={navItems}
-              location={location}
-            />
+            <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous className="visi-one">
+              <CampaignSideBar navItems={navItems} />
+              <MobileDropDownNav
+                inverted
+                refMatch={match}
+                navCountData={navCountData}
+                navItems={navItems}
+                location={location}
+                isBonusReward={isBonusReward}
+                bonusRewards={bonusRewards}
+                useIsActive
+                className="campaign-mobile-dropdown"
+              />
+            </Visibility>
           </Responsive>
           <Container>
             <section>
@@ -254,9 +268,9 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
-        <Responsive minWidth={768} as={Aux}>
+        {/* <Responsive minWidth={768} as={Aux}>
           <Footer path={location.pathname} campaign={campaign} />
-        </Responsive>
+        </Responsive> */}
       </Aux>
     );
   }

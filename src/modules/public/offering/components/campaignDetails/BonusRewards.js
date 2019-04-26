@@ -13,12 +13,16 @@ const isTablet = document.documentElement.clientWidth >= 768
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 
+const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore')
 @observer
 class BonusRewards extends Component {
   componentDidMount() {
-    const sel = 'anchor-scroll';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   render() {
     const { campaign } = this.props.campaignStore;
@@ -33,11 +37,11 @@ class BonusRewards extends Component {
       campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
-          <span className="anchor-scroll" />
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+          <span className="anchor" />
           Bonus Rewards
         </Header>
-        {rewardsTiers && rewardsTiers.length ?
+        {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) ?
           <Aux>
             {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&
             bonusRewards ?

@@ -5,14 +5,14 @@ import Parser from 'html-react-parser';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 import Helper from '../../helper/utility';
 
-
+const isMobile = document.documentElement.clientWidth < 768;
 const hasData = compState => compState.validForm;
+const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
+
 const getNavStates = (indx, length, steps) => {
   const styles = [];
   /* eslint-disable no-plusplus */
   // eslint-disable-next-line max-len
-  // const isAccountCreation = window.location.href.includes('account-creation') || window.location.href.includes('establish-profile');
-  const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
   for (let i = 0; i < length; i++) {
     if ((isAccountCreation && hasData(steps[i]) && i !== indx) || i < indx) {
       styles.push('done');
@@ -63,7 +63,6 @@ export default class MultiStep extends React.Component {
       this.setState({ showNextBtn: nextProps.disableNxtbtn });
     }
   }
-
   getClassName(className, i) {
     let currentStatus = this.state.navState.styles[i];
     if (!this.state.navState.styles[i]) {
@@ -137,15 +136,27 @@ export default class MultiStep extends React.Component {
 
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
-      this.setNavState(this.state.compState + 1);
       if (this.props.bankSummary &&
         this.props.bankSummary(this.props.steps[this.state.compState])) {
+        this.setNavState(this.state.compState + 1);
         this.props.bankSummarySubmit();
+      } else if (this.props.isAccountCreation) {
+        this.props.createAccount(this.props.steps[this.state.compState]);
       } else {
+        this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
       }
     } else {
-      this.props.createAccount(this.props.steps[this.state.compState]);
+      if (this.props.isAccountCreation && isMobile) {
+        this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
+          const modalDoc = document.getElementsByClassName('ui page modals dimmer transition visible active');
+          if (modalDoc && isMobile) {
+            setTimeout(() => modalDoc[0].scrollTo(0, 0), 100);
+          }
+        });
+      } else {
+        this.props.createAccount(this.props.steps[this.state.compState]);
+      }
       if (!this.props.steps[this.state.compState].isDirty) {
         this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);

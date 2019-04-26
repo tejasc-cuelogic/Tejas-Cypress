@@ -246,7 +246,18 @@ export class OfferingCreationStore {
       },
     };
   }
-
+  @action
+  resetAffiliatedIssuerForm = () => {
+    this.AFFILIATED_ISSUER_FRM =
+      Validator.prepareFormObject(
+        AFFILIATED_ISSUER,
+        false,
+        true,
+        false,
+        { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+      );
+    this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+  }
   @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
@@ -1223,7 +1234,7 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            toJS(getOfferingById[keyName]),
+            getOfferingById[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
@@ -1264,7 +1275,8 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading) {
+          this.initLoad.splice(this.initLoad.indexOf('ISSUER_FRM'), 1);
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
@@ -1285,7 +1297,7 @@ export class OfferingCreationStore {
       variables: { offeringId, bacType },
       onFetch: (res) => {
         if (res && res.getOfferingBac) {
-          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {}, false);
+          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {});
         }
       },
     });
@@ -1334,7 +1346,7 @@ export class OfferingCreationStore {
     const offeringBacDetails = Validator.evaluateFormData(fields);
     offeringBacDetails.offeringId = getOfferingById.id;
     offeringBacDetails.bacType = bacType;
-    let mutation = createBac;
+    let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
       offeringBacDetails,
     };
@@ -1607,7 +1619,8 @@ export class OfferingCreationStore {
           map(fields, (f) => {
             if (f.earlyBirdQuantity > 0 && reward.earlyBirdQuantity > 0) {
               f.value.push('EARLY_BIRDS');
-            } else if (reward.tiers.includes(f.key)) {
+            }
+            if (reward.tiers.includes(f.key)) {
               f.value.push(f.key);
             }
             return false;

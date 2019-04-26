@@ -41,7 +41,7 @@ export default class Agreement extends React.Component {
     setFieldValue('investmentFlowErrorMessage', null);
   }
   componentWillUnmount() {
-    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', null);
+    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
   }
   handleCloseModal = (e) => {
     if (!this.state.showDocuSign && !this.state.showAgreementPdf) {
@@ -112,6 +112,8 @@ export default class Agreement extends React.Component {
       agreementDetails,
       investmentFlowErrorMessage,
     } = this.props.investmentStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
     const { uiStore, match } = this.props;
     const { inProgress } = uiStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
@@ -129,7 +131,7 @@ export default class Agreement extends React.Component {
           <Modal.Content className="center-align">
             <Header as="h3">Confirm cancellation</Header>
             {this.props.changeInvestment ?
-              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(investmentAmount)} in this offering will remain in place.`}</p>
+              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
               :
               <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
             }
@@ -249,8 +251,10 @@ export default class Agreement extends React.Component {
                   </Grid.Row>
                 </Grid>
                 <div className="center-align mt-30">
-                  <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
-                  <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
+                  <Button.Group widths="2" className="inline">
+                    <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
+                    <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
+                  </Button.Group>
                 </div>
                 {!this.state.showError && investmentFlowErrorMessage &&
                   <Message error className="mt-30 bottom-error">

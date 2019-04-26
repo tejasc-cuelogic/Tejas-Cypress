@@ -21,9 +21,9 @@ export const getInvestorInvestmentLimit = gql`
   }
 `;
 
-export const getInvestorAmountInvested = gql`
-  query getInvestorAmountInvested($userId: String, $accountId: String, $dateFilterStart: String, $dateFilterStop: String, $closeDateFilter: String, $includeTx: Boolean) {
-    getInvestorAmountInvested(
+export const getInvestorTotalAmountInvested = gql`
+  query getInvestorTotalAmountInvested($userId: String, $accountId: String, $dateFilterStart: String, $dateFilterStop: String, $closeDateFilter: String, $includeTx: Boolean) {
+    getInvestorTotalAmountInvested(
       userId: $userId
       accountId: $accountId
       dateFilterStart: $dateFilterStart
@@ -46,6 +46,7 @@ export const getInvestNowHealthCheck = gql`
       availabilityForNPAInOffering
       previousInvestmentCredit
       currentInflightLimit
+      investorTotalAmountInvested
     }
   }
 `;

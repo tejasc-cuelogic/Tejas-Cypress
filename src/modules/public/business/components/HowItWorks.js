@@ -102,8 +102,8 @@ class HowItWorks extends Component {
               <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
               <div className={`${isMobile ? 'left-align' : 'center-align'}`}>
                 <Button.Group size={isMobile && 'tiny'}>
-                  <Button as={Link} to="business-application/business" secondary content="Business Application" />
-                  <Button as={Link} to="business-application/commercial-real-estate" secondary content="CRE Application" />
+                  <Button as={Link} to="/business-application/business" secondary content="Business Application" />
+                  <Button as={Link} to="/business-application/commercial-real-estate" secondary content="CRE Application" />
                 </Button.Group>
               </div>
               <Divider section />
@@ -210,7 +210,7 @@ class HowItWorks extends Component {
                       <NSImage path={t.image} />
                     </div>
                     <Item.Content verticalAlign="middle">
-                      <Item.Header as="h2">{t.title}</Item.Header>
+                      <Item.Header as={isMobile ? 'h3' : 'h2'}>{t.title}</Item.Header>
                       <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                     “{t.description}”
                       </Item.Description>
