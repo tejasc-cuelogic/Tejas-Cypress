@@ -50,7 +50,7 @@ export default class AllCrowdPay extends Component {
       oldObj[accountId].decGsAccNumber = res;
       oldObj[accountId].loading = false;
       this.setState({ GsAccountNum: oldObj });
-    }).catch(oldObj[accountId].loading = false);
+    }).catch(() => { oldObj[accountId].loading = false; });
   }
   paginate = params => this.props.crowdpayStore.pageRequest(params);
   render() {
