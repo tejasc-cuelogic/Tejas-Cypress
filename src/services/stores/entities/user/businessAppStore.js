@@ -37,7 +37,7 @@ import {
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore, commonStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -1275,16 +1275,6 @@ export class BusinessAppStore {
       return BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus.find(a => a.applicationStage === 'IN_PROGRESS');
     }
     return card;
-  }
-  sharedLink = (fileId) => {
-    const params = {
-      uploadId: fileId,
-      accountType: 'SERVICES',
-      type: 'FILES',
-    };
-    commonStore.getsharedLink(params).then((shareLink) => {
-      window.open(shareLink, '_blank');
-    });
   }
 }
 
