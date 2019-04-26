@@ -15,7 +15,7 @@ const meta = [
   { label: 'Investor\'s Name', value: 'firstName' },
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
-  { label: 'Account Type', value: 'state' },
+  { label: 'Account Type', value: 'accountType' },
   { label: 'Investment Amount', value: 'amount' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
@@ -39,7 +39,8 @@ export default class Listing extends Component {
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
     const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
-    const computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, [{ label: 'Investment Amount', value: 'amount' }, { label: 'Account Type', value: 'state' }]);
+    let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     // const totalRecords = count || 0;
@@ -89,9 +90,11 @@ export default class Listing extends Component {
                   </Table.Cell>
                   <Table.Cell>{data.city}</Table.Cell>
                   <Table.Cell>{data.state}</Table.Cell>
-                  <Table.Cell>
-                    {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
-                  </Table.Cell>
+                  {isAdmin &&
+                    <Table.Cell>
+                      {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
+                    </Table.Cell>
+                  }
                   {(isIssuer && hardClosedDate) || (isAdmin) ?
                     <Table.Cell>
                       {Helper.CurrencyFormat(data.amount, 0)}
@@ -104,8 +107,8 @@ export default class Listing extends Component {
                         trigger={<Icon name="help circle" color="green" />}
                         content={
                           <span>
-                            {data.credit ? `Credit: ${data.credit}` : ''} <br />
-                            {data.autoDraftAmount ? `Auto Draft: ${data.autoDraftAmount}` : ''} <br />
+                            {data.credit ? `Credit: ${data.credit}` : ''}
+                            {data.autoDraftAmount ? `${data.credit ? <br /> : ''}Auto Draft: ${data.autoDraftAmount}` : ''}
                           </span>}
                         hoverable
                         position="top center"
