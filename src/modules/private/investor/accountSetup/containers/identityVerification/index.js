@@ -16,6 +16,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class IdentityVerification extends Component {
   componentWillMount() {
     this.props.identityStore.setCipDetails();
+    this.props.uiStore.setErrors(null);
   }
   onPhotoIdDrop = (files) => {
     this.props.identityStore.setFileUploadData('photoId', files);
@@ -139,6 +140,7 @@ export default class IdentityVerification extends Component {
   handleSubmitIdentityQuestions = (e) => {
     e.preventDefault();
     const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+    this.props.identityStore.setFieldValue('signUpLoading', true);
     this.props.identityStore.submitConfirmIdentityQuestions().then((result) => {
       /* eslint-disable no-underscore-dangle */
       if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
@@ -150,12 +152,15 @@ export default class IdentityVerification extends Component {
           } else {
             this.props.history.push('/app/summary');
           }
+          this.props.identityStore.setFieldValue('signUpLoading', false);
         } else {
           this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
+            this.props.identityStore.setFieldValue('signUpLoading', false);
             this.props.history.push('/app/summary/identity-verification/3');
           })
             .catch((err) => {
               this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+              this.props.identityStore.setFieldValue('signUpLoading', false);
             });
         }
       } else {
@@ -199,7 +204,7 @@ export default class IdentityVerification extends Component {
             <LegalDocuments
               form={ID_VERIFICATION_DOCS_FRM}
               confirmBox={confirmBox}
-              inProgress={inProgress}
+              inProgress={inProgress || signUpLoading}
               close={this.handleCloseModal}
               onPhotoIdDrop={this.onPhotoIdDrop}
               onProofOfResidenceDrop={this.onProofOfResidenceDrop}

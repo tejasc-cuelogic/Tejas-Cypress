@@ -36,6 +36,8 @@ export class AccreditationStore {
   @observable userData = {};
   @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
+    skip: 0,
+    perPage: 10,
     filters: false,
     search: {
     },

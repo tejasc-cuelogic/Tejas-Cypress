@@ -13,6 +13,9 @@ export const getInvestorListForOffering = gql`
       referralCode
       avatar
       investmentsCount
+      accountType
+      credit
+      autoDraftAmount
     }
   }
 `;
