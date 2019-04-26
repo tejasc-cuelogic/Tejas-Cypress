@@ -238,6 +238,7 @@ export class InvestmentStore {
       offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
       interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
       investmentMultiple = get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') && get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') !== null ? get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') : '0';
+      loanTerm = parseFloat(get(getInvestorAccountById, 'offering.keyTerms.maturity'));
     }
     const investAmt = this.investmentAmount;
     if (investAmt >= 100) {
@@ -250,8 +251,6 @@ export class InvestmentStore {
         };
         const { totalPayment } = Calculator.calculate(data);
         const finalAmtM = money.floatToAmount(Math.floor(totalPayment) || '');
-
-        //
         //
         // const interestRate_f = parseFloat(interestRate);
         // const num = (interestRate_f / 100.0) / 12 * parseFloat(investAmt);

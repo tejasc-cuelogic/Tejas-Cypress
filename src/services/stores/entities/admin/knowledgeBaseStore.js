@@ -47,7 +47,11 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  resetData = () => {
+  resetSearch = () => {
+    // this.requestState.search.keyword = '';
+    // this.requestState.search.categoryId = '';
+    // this.requestState.search.itemStatus = '';
+    // this.requestState.search.authorId = '';
     this.requestState.search = {};
   }
   @action
@@ -72,13 +76,12 @@ export class KnowledgeBaseStore {
   @action
   initiateSearch = (srchParams, getAllUsers = false) => {
     this.requestState.search = srchParams;
-    this.initRequest(null, getAllUsers);
+    this.applyFilter(null, getAllUsers);
   }
 
   @action
   getKnowledgeBase = (id, isPublic = true) => {
-    // this.LOADING = true;
-    this.resetData();
+    this.resetSearch();
     this.toggleSearch();
     const query = isPublic ? getKnowledgeBaseDetails : getKnowledgeBaseById;
     const apiClient = isPublic ? clientPublic : client;
@@ -96,10 +99,8 @@ export class KnowledgeBaseStore {
         } else {
           Helper.toast('Invalid article id', 'error');
         }
-        // this.LOADING = false;
       },
       onError: (err) => {
-        // this.LOADING = false;
         Helper.toast(`${err} Error`, 'error');
       },
     });
@@ -223,7 +224,6 @@ export class KnowledgeBaseStore {
   }
   @action
   deleteKBById = (id) => {
-    // this.LOADING = true;
     client
       .mutate({
         mutation: deleteKBById,
@@ -232,14 +232,8 @@ export class KnowledgeBaseStore {
         },
         refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
-      .then(() => {
-        // this.LOADING = true;
-        Helper.toast('Knowledge base item deleted successfully.', 'success');
-      })
-      .catch(() => {
-        // this.LOADING = true;
-        Helper.toast('Error while deleting knowledge base ', 'error');
-      });
+      .then(() => Helper.toast('Knowledge base item deleted successfully.', 'success'))
+      .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'));
   }
   @action
   setConfirmBox = (entity, refId) => {
@@ -256,8 +250,25 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  initRequest = (reqParams, getAllUsers = false) => {
-    // this.LOADING = true;
+  initRequest = () => {
+    this.resetSearch();
+    this.toggleSearch();
+    this.data = graphql({
+      client,
+      query: getAllKnowledgeBaseByFilters,
+      fetchPolicy: 'network-only',
+      onFetch: (res) => {
+        if (res && !this.data.loading) {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
+          this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
+        }
+      },
+    });
+  }
+
+  @action
+  applyFilter = (reqParams, getAllUsers = false) => {
     const {
       keyword,
       categoryId,
@@ -290,7 +301,6 @@ export class KnowledgeBaseStore {
       variables: params,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        // this.LOADING = false;
         if (res && !this.data.loading) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
@@ -308,10 +318,9 @@ export class KnowledgeBaseStore {
 
   @action
   applyGlobalAction = () => {
-    // this.LOADING = true;
     const idArr = this.selectedRecords;
     const status = this.globalAction;
-
+    this.data.loading = true;
     if (status === 'delete') {
       this.deleteRecords(idArr);
     } else {
@@ -322,6 +331,7 @@ export class KnowledgeBaseStore {
   @action
   resetSelectedRecords = () => {
     this.selectedRecords = [];
+    this.isReadOnly = true;
   }
 
   updateRecordStatus = (id, status) => {
