@@ -731,14 +731,6 @@ export class UserDetailsStore {
         });
     });
   }
-
-  @computed get getUserCreatedAccounts() {
-    let accDetails;
-    if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor');
-    }
-    return accDetails;
-  }
 }
 
 export default new UserDetailsStore();
