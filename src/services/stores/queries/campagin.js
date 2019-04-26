@@ -28,6 +28,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       }
       closureSummary {
         processingDate
+        launchDate
         hardCloseDate
         totalInvestmentAmount
         totalInvestorCount

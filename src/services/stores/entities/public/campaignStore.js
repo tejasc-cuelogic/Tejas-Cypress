@@ -302,14 +302,15 @@ export class CampaignStore {
   }
 
   generateBanner = (offeringDetails) => {
-    const offeringLaunchDetails = get(offeringDetails, 'offering.launch');
+    // const offeringLaunchDetails = get(offeringDetails, 'offering.launch');
     const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
     const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
     const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
     const regulation = get(offeringKeyTermDetails, 'regulation');
     const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
-    const launchDate = get(offeringLaunchDetails, 'targetDate');
-    const closingDate = get(offeringDetails, 'closureSummary.processingDate');
+    // const launchDate = get(offeringLaunchDetails, 'targetDate');
+    const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
+    const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
     const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
     const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
     const divResult = money.div(raisedAmount, minimumOfferingAmount);
@@ -318,19 +319,16 @@ export class CampaignStore {
     let labelBannerSecond = null;
     let bannerToShowFlag = false;
     const resultObject = {};
-    const launchDaysToRemains = DataFormatter.diffDays(launchDate || null);
+    const launchDaysToRemains = DataFormatter.diffDays(launchDate || null, false, true);
     const closeDaysToRemains = DataFormatter.diffDays(closingDate || null);
-
-    if (launchDaysToRemains < closeDaysToRemains &&
-       launchDaysToRemains > 0 && launchDaysToRemains < 2) {
+    if (launchDate && launchDaysToRemains < closeDaysToRemains &&
+       launchDaysToRemains >= 0 && launchDaysToRemains < 2) {
       labelBannerFirst = 'NEW';
-    } else if (closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
+    } else if (closingDate && closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
       labelBannerFirst = `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left`;
     }
     const percentageCompairResult = money.cmp(percent, '50.00').toString();
     const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
-    // if (raisedAmount < maxOfferingAmount &&
-    // else if (raisedAmount >= maxOfferingAmount) {
     if (money.isNegative(amountCompairResult) &&
       !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;

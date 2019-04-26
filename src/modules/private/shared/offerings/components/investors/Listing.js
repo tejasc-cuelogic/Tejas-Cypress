@@ -1,6 +1,7 @@
+/* eslint-disable no-constant-condition */
 import React, { Component } from 'react';
-import { Table } from 'semantic-ui-react';
-import { withRouter } from 'react-router-dom';
+import { Table, Popup, Icon } from 'semantic-ui-react';
+import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { reject, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
@@ -10,10 +11,13 @@ import Helper from '../../../../../../helper/utility';
 // const meta = ['Investor\'s Name', 'Residence City',
 // 'Investment Amount', 'Investment Time', 'Referral Code'];
 const meta = [
+  { label: '', value: 'avatar' },
   { label: 'Investor\'s Name', value: 'firstName' },
   { label: 'Residence City', value: 'city' },
+  { label: 'State', value: 'state' },
+  { label: 'Account Type', value: 'accountType' },
   { label: 'Investment Amount', value: 'amount' },
-  { label: 'Investment Time', value: 'investmentDate' },
+  { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
 ];
 
@@ -22,6 +26,9 @@ const meta = [
 @observer
 export default class Listing extends Component {
   handleSort = clickedColumn => () => {
+    if (clickedColumn === 'avatar') {
+      return;
+    }
     const { setSortingOrder, sortOrder } = this.props.offeringInvestorStore;
     setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
@@ -32,9 +39,11 @@ export default class Listing extends Component {
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
     const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
-    const computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
+    const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
     // const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
@@ -76,21 +85,44 @@ export default class Listing extends Component {
                         roles: [],
                       }}
                     />
-                    <span className="ml-10">{`${data.firstName} ${data.lastName}`}</span>
                   </Table.Cell>
-                  <Table.Cell>{`${data.city}, ${data.state}`}</Table.Cell>
+                  <Table.Cell>
+                    {get(isUsersCapablities, 'level') ?
+                      <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link> :
+                      `${data.firstName} ${data.lastName}`
+                    }
+                  </Table.Cell>
+                  <Table.Cell>{data.city}</Table.Cell>
+                  <Table.Cell>{data.state}</Table.Cell>
+                  {isAdmin &&
+                    <Table.Cell>
+                      {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
+                    </Table.Cell>
+                  }
                   {(isIssuer && hardClosedDate) || (isAdmin) ?
                     <Table.Cell>
-                      {Helper.CurrencyFormat(data.amount)}
+                      {Helper.CurrencyFormat(data.amount, 0)}
                       {parseInt(data.investmentsCount, 10) > 1 ?
                         <span> ({`${data.investmentsCount} Investments`})</span>
                       :
                       null}
+                      {(data.credit || data.autoDraftAmount) &&
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content={
+                          <span>
+                            {data.credit ? `Credit: ${data.credit}` : ''}
+                            {data.autoDraftAmount ? `${data.credit ? <br /> : ''}Auto Draft: ${data.autoDraftAmount}` : ''}
+                          </span>}
+                        hoverable
+                        position="top center"
+                      />
+                      }
                     </Table.Cell>
                   :
                   null
                   }
-                  <Table.Cell>{data.investmentDate ? <DateTimeFormat format="MM-DD-YYYY  h:mmA" datetime={data.investmentDate} /> : 'N/A'}</Table.Cell>
+                  <Table.Cell>{data.investmentDate ? <DateTimeFormat format="MM/DD/YYYY  h:mma" datetime={data.investmentDate} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{data.referralCode || null}</Table.Cell>
                 </Table.Row>
               ))
