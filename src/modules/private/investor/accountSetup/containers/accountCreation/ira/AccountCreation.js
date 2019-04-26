@@ -68,7 +68,8 @@ export default class AccountCreation extends React.Component {
       formIraAddFunds, isAccountPresent,
       formLinkBankManually, isPlaidDirty,
       linkbankSummary, bankSummarySubmit,
-      stepbankSummary,
+      stepbankSummary, showAddFunds,
+      setLinkBankSummary,
     } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps =
@@ -205,7 +206,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

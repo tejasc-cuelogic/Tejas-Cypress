@@ -46,9 +46,11 @@ const MessagesList = props => (
                   roles: get(u, 'createdUserInfo.roles') ? get(u, 'createdUserInfo.roles').map(r => r.scope) : [],
                 }}
               />
-            )) : <UserAvatar
-              size="mini"
-              UserInfo={{
+            )) :
+                  // eslint-disable-next-line react/jsx-indent
+                  <UserAvatar
+                    size="mini"
+                    UserInfo={{
                 firstName: get(msg, 'createdUserInfo.info.firstName'),
                 lastName: get(msg, 'createdUserInfo.info.lastName'),
                 avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),

@@ -192,7 +192,7 @@ class IndividualAccountStore {
         if (account && account.details) {
           bankAccountStore.formAddFunds.fields.value.value =
           account.details.initialDepositAmount;
-          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+          if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
             bankAccountStore.setPlaidAccDetails(plaidAccDetails);
           } else {

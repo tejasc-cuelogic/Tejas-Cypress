@@ -98,8 +98,10 @@ export class BankAccount {
           accountStore.ACC_TYPE_MAPPING[accountValue].store.createAccount(currentStep);
           accountStore.ACC_TYPE_MAPPING[accountValue].store
             .setStepToBeRendered(accountStore.ACC_TYPE_MAPPING[accountValue].location);
+          if (accountStore.ACC_TYPE_MAPPING[accountValue].name !== 'individual') {
+            bankAccountStore.setShowAddFunds();
+          }
         }
-        bankAccountStore.setLinkBankSummary();
       },
       onExit: (err) => {
         // The user exited the Link flow.
