@@ -321,16 +321,14 @@ export class CampaignStore {
     const resultObject = {};
     const launchDaysToRemains = DataFormatter.diffDays(launchDate || null, false, true);
     const closeDaysToRemains = DataFormatter.diffDays(closingDate || null);
-    if (launchDaysToRemains && launchDaysToRemains < closeDaysToRemains &&
+    if (launchDate && launchDaysToRemains < closeDaysToRemains &&
        launchDaysToRemains >= 0 && launchDaysToRemains < 2) {
       labelBannerFirst = 'NEW';
-    } else if (closeDaysToRemains && closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
+    } else if (closingDate && closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
       labelBannerFirst = `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left`;
     }
     const percentageCompairResult = money.cmp(percent, '50.00').toString();
     const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
-    // if (raisedAmount < maxOfferingAmount &&
-    // else if (raisedAmount >= maxOfferingAmount) {
     if (money.isNegative(amountCompairResult) &&
       !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
