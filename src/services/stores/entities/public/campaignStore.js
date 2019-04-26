@@ -106,9 +106,7 @@ export class CampaignStore {
   }
 
   @computed get active() {
-    const offeringList = this.activeList.slice();
-    const offeringList1 = this.orderedActiveList.slice();
-    console.log(offeringList1);
+    const offeringList = this.orderedActiveList.slice();
     return offeringList.splice(0, this.activeToDisplay);
   }
 
@@ -121,7 +119,7 @@ export class CampaignStore {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     const orderedActiveListArr =
       activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
-    return orderBy(orderedActiveListArr, o => (get(o, 'order')), ['asc']);
+    return orderBy(orderedActiveListArr, ['order', 'businessName'], ['asc', 'asc']);
   }
 
   @computed get completed() {
@@ -327,20 +325,19 @@ export class CampaignStore {
     let labelBannerFirst = null;
     let labelBannerSecond = null;
     let bannerToShowFlag = false;
-    const resultObject = !addObjectProps ? { ...offeringDetails } : {};
+    const resultObject = addObjectProps ? { ...offeringDetails } : {};
     const launchDaysToRemains = DataFormatter.diffDays(launchDate || null, false, true);
-    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null);
+    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
     let order = null;
-
     if (launchDate && launchDaysToRemains < closeDaysToRemains &&
-       launchDaysToRemains >= 0 && launchDaysToRemains < 2) {
+      launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
       labelBannerFirst = 'NEW';
       order = 0;
-    } else if (closingDate && closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
-      labelBannerFirst = `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left`;
-      order = closeDaysToRemains;
+    } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+      labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Closing Today';
+      order = closeDaysToRemains + 1;
     } else if (closeDaysToRemains > 7) {
-      order = closeDaysToRemains;
+      order = closeDaysToRemains + 1;
     }
     const percentageCompairResult = money.cmp(percent, '50.00').toString();
     const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
@@ -350,13 +347,15 @@ export class CampaignStore {
       order = order || 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
-      // if offer reached max setting highest 32 bit integer
+      // if offer reached max setting highest order (32 bit integer)
       order = 2147483647;
     }
     if (labelBannerFirst || labelBannerSecond) {
       bannerToShowFlag = true;
     }
-    resultObject.order = order;
+    resultObject.order = order !== null ? order : 2147483646;
+    resultObject.businessName = offeringDetails.keyTerms.shorthandBusinessName &&
+      offeringDetails.keyTerms.shorthandBusinessName.toLowerCase();
     resultObject.isBannerShow = bannerToShowFlag;
     resultObject.bannerFirstText = labelBannerFirst;
     resultObject.bannerSecondText = labelBannerSecond;
