@@ -6,6 +6,7 @@ import { Grid, Input, Dropdown, Form, Label, Icon, List, Button } from 'semantic
 import moment from 'moment';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
+import _ from 'lodash';
 import NumberFormat from 'react-number-format';
 
 
@@ -24,6 +25,49 @@ export const DropdownFilter = props => (
       clearable
       options={props.options}
     />
+    <div className="dropdown-effect">{props.label || props.name}</div>
+  </Form.Field>
+);
+
+export const DropdownFilterWithHeader = props => (
+  <Form.Field className="dropdown-field">
+    <label>{props.label || props.name}</label>
+    {
+      props.options && props.options !== null ?
+        <Dropdown
+          text={props.value || 'Select Filter'}
+          floating
+          labeled
+          className={props.className}
+          name={props.keyName || camelCase(props.name)}
+          onChange={props.change}
+          value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
+          placeholder={props.placeHolder || 'Select Filter'}
+          selection
+        >
+          <Dropdown.Menu>
+            {_.map(props.options, (rec, index) => (
+              <Aux>
+                <Dropdown.Header content={index} key={index} />
+                <Dropdown.Divider />
+                {
+                  rec.map(el => (
+                    <Dropdown.Item
+                      key={el.value}
+                      name={props.keyName || camelCase(props.name)}
+                      onClick={e => props.change(e, { name: props.keyName, value: el.value })}
+                      value={el.value}
+                      active={el.value === props.value}
+                    >{el.text}
+                    </Dropdown.Item>
+                  ))
+                }
+              </Aux>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown> : null
+    }
+
     <div className="dropdown-effect">{props.label || props.name}</div>
   </Form.Field>
 );

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Grid, Button, Form } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import PrivateLayout from '../../../shared/PrivateLayout';
-import { ByKeyword as Search, DropdownFilter } from '../../../../../theme/form/Filters';
+import { ByKeyword as Search, DropdownFilter, DropdownFilterWithHeader } from '../../../../../theme/form/Filters';
 
 import { KB_STATUS_VALUES, AUTHORS } from '../../../../../services/constants/admin/knowledgeBase';
 
@@ -31,6 +31,7 @@ export default class ManageKnowledgeBase extends Component {
       filters,
       requestState,
       categoriesDropdown,
+      knowledgeBaseOptionText,
     } = this.props.knowledgeBaseStore;
     return (
       <PrivateLayout
@@ -61,7 +62,7 @@ export default class ManageKnowledgeBase extends Component {
               <Grid stackable columns="equal">
                 <Grid.Row>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.categoryId} change={this.setSearchParam} name="Category" keyName="categoryId" options={categoriesDropdown} isMultiple />
+                    <DropdownFilterWithHeader value={knowledgeBaseOptionText && knowledgeBaseOptionText.text ? knowledgeBaseOptionText.text : 'Select Filter'} change={this.setSearchParam} name="Category" keyName="categoryId" options={categoriesDropdown} />
                   </Grid.Column>
                   <Grid.Column>
                     <DropdownFilter value={requestState.search.itemStatus} change={this.setSearchParam} name="Status" keyName="itemStatus" options={KB_STATUS_VALUES} />

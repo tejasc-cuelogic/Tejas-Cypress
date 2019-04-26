@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
 import map from 'lodash/map';
-import { isArray, orderBy } from 'lodash';
+import { isArray, orderBy, find } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
@@ -153,6 +153,12 @@ export class KnowledgeBaseStore {
       this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
+  @computed get knowledgeBaseOptionText() {
+    return find(find(this.categoriesDropdown, c => find(c, e =>
+      e.value === this.requestState.search.categoryId)), d =>
+      d.value === this.requestState.search.categoryId);
+  }
+
   @action
   getCategoryList = (isPublic = true) => {
     const apiClient = isPublic ? clientPublic : client;
@@ -166,6 +172,10 @@ export class KnowledgeBaseStore {
 
   @computed get loading() {
     return this.data.loading;
+  }
+
+  @computed get categoryLoading() {
+    return this.Categories.loading;
   }
 
   @computed get disableApply() {
@@ -199,10 +209,20 @@ export class KnowledgeBaseStore {
     }
   }
   @computed get categoriesDropdown() {
-    const categoriesArray = [];
+    const categoriesArray = {};
     if (this.Categories.data && this.Categories.data.categories) {
       this.Categories.data.categories.map((ele) => {
-        categoriesArray.push({ key: ele.categoryName, value: ele.id, text: ele.categoryName });
+        if (!categoriesArray[ele.categoryType]) {
+          categoriesArray[ele.categoryType] = [];
+        }
+
+        categoriesArray[ele.categoryType].push({
+          key: ele.categoryName,
+          value: ele.id,
+          text: ele.categoryName,
+          header: ele.categoryType,
+        });
+
         return categoriesArray;
       });
       return categoriesArray;

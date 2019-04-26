@@ -58,9 +58,10 @@ export default class AllKnowledgeBaseItems extends Component {
       requestState,
       applyGlobalAction,
       disableApply,
+      categoryLoading,
     } = knowledgeBaseStore;
     const totalRecords = count || 0;
-    if (loading) {
+    if (loading || categoryLoading) {
       return <InlineLoader />;
     }
     if (AllKnowledgeBase.length === 0) {
