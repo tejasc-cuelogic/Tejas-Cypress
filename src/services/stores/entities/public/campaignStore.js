@@ -325,10 +325,15 @@ export class CampaignStore {
     let labelBannerSecond = null;
     let bannerToShowFlag = false;
     const resultObject = addObjectProps ? { ...offeringDetails } : {};
-    const launchDaysToRemains = DataFormatter.diffDays(launchDate || null, false, true);
+    const customDateObj = {
+      number: 48,
+      format: 'Hours',
+    };
+    const launchDaysToRemains =
+    DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
     const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
     let order = null;
-    if (launchDate && launchDaysToRemains < closeDaysToRemains &&
+    if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
       launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
       labelBannerFirst = 'NEW';
       order = 0;
@@ -341,6 +346,8 @@ export class CampaignStore {
       } else {
         order = 2057483647 + 1;
       }
+    } else if (closeDaysToRemains === null) {
+      order = 2057483647 + 1;
     }
     const percentageCompairResult = money.cmp(percent, '50.00').toString();
     const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
