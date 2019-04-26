@@ -86,7 +86,10 @@ export default class Listing extends Component {
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
+                    {isAdmin ?
+                      <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link> :
+                      `${data.firstName} ${data.lastName}`
+                    }
                   </Table.Cell>
                   <Table.Cell>{data.city}</Table.Cell>
                   <Table.Cell>{data.state}</Table.Cell>
