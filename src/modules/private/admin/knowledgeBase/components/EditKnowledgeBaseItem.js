@@ -52,57 +52,58 @@ export default class EditKnowledgeBaseItem extends Component {
     return (
       <Modal dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
-          <div>
-            <Header as="h3">
-              {isNew ? 'Create' : 'Edit'} Article
-              <Actions save={this.save} meta={KNOWLEDGE_BASE_FRM.meta} />
-            </Header>
-          </div>
-          <Divider hidden />
           {
             loading ?
               <InlineLoader />
               :
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column width={12}>
-                    <small>Article Title</small>
-                    <Form>
-                      <FormInput
-                        ishidelabel
-                        fluid
-                        type="text"
-                        name="title"
-                        fielddata={KNOWLEDGE_BASE_FRM.fields.title}
-                        changed={knowledgeBaseChange}
-                      />
-                      <HtmlEditor
-                        changed={htmlContentChange}
-                        name="content"
-                        content={KNOWLEDGE_BASE_FRM.fields.content.value}
-                      />
-                    </Form>
-                  </Grid.Column>
-                  <Grid.Column width={4}>
-                    <Card fluid>
-                      <Card.Content>
-                        <Header as="h4">
-                          Tip settings
-                        </Header>
-                        <Form>
-                          <div className="field">
-                            <Header as="label">{KNOWLEDGE_BASE_FRM.fields.userType.label}</Header>
-                            <FormRadioGroup
-                              fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
-                              name="userType"
-                              changed={(e, result) => userTypeChange(e, result)}
-                              readOnly={false}
-                              containerclassname="mt-30 radio-basic center-align"
-                              widths="equal"
-                              value={KNOWLEDGE_BASE_FRM.fields.userType.value}
-                            />
-                          </div>
-                          {/* <div className="field">
+              <div>
+                <div>
+                  <Header as="h3">
+                    {isNew ? 'Create' : 'Edit'} Article
+                    <Actions save={this.save} meta={KNOWLEDGE_BASE_FRM.meta} />
+                  </Header>
+                </div>
+                <Divider hidden />
+                <Grid>
+                  <Grid.Row>
+                    <Grid.Column width={12}>
+                      <small>Article Title</small>
+                      <Form>
+                        <FormInput
+                          ishidelabel
+                          fluid
+                          type="text"
+                          name="title"
+                          fielddata={KNOWLEDGE_BASE_FRM.fields.title}
+                          changed={knowledgeBaseChange}
+                        />
+                        <HtmlEditor
+                          changed={htmlContentChange}
+                          name="content"
+                          content={KNOWLEDGE_BASE_FRM.fields.content.value}
+                        />
+                      </Form>
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                      <Card fluid>
+                        <Card.Content>
+                          <Header as="h4">
+                            Tip settings
+                          </Header>
+                          <Form>
+                            <div className="field">
+                              <Header as="label">{KNOWLEDGE_BASE_FRM.fields.userType.label}</Header>
+                              <FormRadioGroup
+                                fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
+                                name="userType"
+                                changed={(e, result) => userTypeChange(e, result)}
+                                readOnly={false}
+                                containerclassname="mt-30 radio-basic center-align"
+                                widths="equal"
+                                value={KNOWLEDGE_BASE_FRM.fields.userType.value}
+                              />
+                            </div>
+                            {/* <div className="field">
                             <FormDropDown
                               fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
                               selection
@@ -114,44 +115,44 @@ export default class EditKnowledgeBaseItem extends Component {
                               onChange={(e, result) => knowledgeBaseChange(e, result)}
                             />
                           </div> */}
-                          <div className="field">
-                            <FormDropDown
-                              fielddata={KNOWLEDGE_BASE_FRM.fields.categoryId}
-                              selection
-                              containerclassname="dropdown-field"
-                              value={KNOWLEDGE_BASE_FRM.fields.categoryId.value}
-                              placeholder="Choose here"
-                              name="categoryId"
-                              options={categoriesDropdown}
-                              onChange={(e, result) => knowledgeBaseChange(e, result)}
+                            <div className="field">
+                              <FormDropDown
+                                fielddata={KNOWLEDGE_BASE_FRM.fields.categoryId}
+                                selection
+                                containerclassname="dropdown-field"
+                                value={KNOWLEDGE_BASE_FRM.fields.categoryId.value}
+                                placeholder="Choose here"
+                                name="categoryId"
+                                options={categoriesDropdown}
+                                onChange={(e, result) => knowledgeBaseChange(e, result)}
+                              />
+                            </div>
+                            <div className="field">
+                              <FormDropDown
+                                fielddata={KNOWLEDGE_BASE_FRM.fields.itemStatus}
+                                selection
+                                containerclassname="dropdown-field"
+                                value={KNOWLEDGE_BASE_FRM.fields.itemStatus.value}
+                                placeholder="Choose here"
+                                name="itemStatus"
+                                options={ITEM_STATUS_VALUES}
+                                onChange={(e, result) => knowledgeBaseChange(e, result)}
+                              />
+                            </div>
+                            <FormInput
+                              type="text"
+                              name="authorId"
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.authorId}
+                              changed={knowledgeBaseChange}
                             />
-                          </div>
-                          <div className="field">
-                            <FormDropDown
-                              fielddata={KNOWLEDGE_BASE_FRM.fields.itemStatus}
-                              selection
-                              containerclassname="dropdown-field"
-                              value={KNOWLEDGE_BASE_FRM.fields.itemStatus.value}
-                              placeholder="Choose here"
-                              name="itemStatus"
-                              options={ITEM_STATUS_VALUES}
-                              onChange={(e, result) => knowledgeBaseChange(e, result)}
-                            />
-                          </div>
-                          <FormInput
-                            type="text"
-                            name="authorId"
-                            fielddata={KNOWLEDGE_BASE_FRM.fields.authorId}
-                            changed={knowledgeBaseChange}
-                          />
-                        </Form>
-                      </Card.Content>
-                    </Card>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+                          </Form>
+                        </Card.Content>
+                      </Card>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
           }
-
         </Modal.Content>
       </Modal>
     );

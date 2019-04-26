@@ -22,6 +22,7 @@ export class KnowledgeBaseStore {
   @observable globalAction = '';
   @observable selectedRecords = [];
   @observable LOADING = false;
+  @observable isReadOnly = true;
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -76,12 +77,12 @@ export class KnowledgeBaseStore {
 
   @action
   getKnowledgeBase = (id, isPublic = true) => {
-    this.LOADING = true;
+    // this.LOADING = true;
     this.resetData();
     this.toggleSearch();
     const query = isPublic ? getKnowledgeBaseDetails : getKnowledgeBaseById;
     const apiClient = isPublic ? clientPublic : client;
-    this.article = graphql({
+    this.data = graphql({
       client: apiClient,
       query,
       variables: { id },
@@ -95,10 +96,10 @@ export class KnowledgeBaseStore {
         } else {
           Helper.toast('Invalid article id', 'error');
         }
-        this.LOADING = false;
+        // this.LOADING = false;
       },
       onError: (err) => {
-        this.LOADING = false;
+        // this.LOADING = false;
         Helper.toast(`${err} Error`, 'error');
       },
     });
@@ -163,8 +164,13 @@ export class KnowledgeBaseStore {
   }
 
   @computed get loading() {
-    return this.LOADING;
+    return this.data.loading;
   }
+
+  @computed get disableApply() {
+    return this.isReadOnly;
+  }
+
   @action
   reset = () => {
     this.KNOWLEDGE_BASE_FRM = Validator.prepareFormObject(KNOWLEDGE_BASE);
@@ -217,7 +223,7 @@ export class KnowledgeBaseStore {
   }
   @action
   deleteKBById = (id) => {
-    this.LOADING = true;
+    // this.LOADING = true;
     client
       .mutate({
         mutation: deleteKBById,
@@ -227,11 +233,11 @@ export class KnowledgeBaseStore {
         refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
       .then(() => {
-        this.LOADING = true;
+        // this.LOADING = true;
         Helper.toast('Knowledge base item deleted successfully.', 'success');
       })
       .catch(() => {
-        this.LOADING = true;
+        // this.LOADING = true;
         Helper.toast('Error while deleting knowledge base ', 'error');
       });
   }
@@ -251,7 +257,7 @@ export class KnowledgeBaseStore {
 
   @action
   initRequest = (reqParams, getAllUsers = false) => {
-    this.LOADING = true;
+    // this.LOADING = true;
     const {
       keyword,
       categoryId,
@@ -284,8 +290,8 @@ export class KnowledgeBaseStore {
       variables: params,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        this.LOADING = false;
-        if (res && !this.LOADING) {
+        // this.LOADING = false;
+        if (res && !this.data.loading) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
           this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
@@ -296,12 +302,13 @@ export class KnowledgeBaseStore {
 
   @action
   addSelectedRecords = (id) => {
+    this.isReadOnly = false;
     this.selectedRecords.push(id);
   }
 
   @action
   applyGlobalAction = () => {
-    this.LOADING = true;
+    // this.LOADING = true;
     const idArr = this.selectedRecords;
     const status = this.globalAction;
 
@@ -310,6 +317,11 @@ export class KnowledgeBaseStore {
     } else {
       this.updateRecordStatus(idArr, status);
     }
+  }
+
+  @action
+  resetSelectedRecords = () => {
+    this.selectedRecords = [];
   }
 
   updateRecordStatus = (id, status) => {
@@ -321,8 +333,10 @@ export class KnowledgeBaseStore {
       },
       refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
     }).then(() => {
+      this.resetSelectedRecords();
       Helper.toast('Status updated successfully.', 'success');
     }).catch(() => {
+      this.resetSelectedRecords();
       Helper.toast('Error while updating status.', 'error');
     });
   }
@@ -335,8 +349,10 @@ export class KnowledgeBaseStore {
       },
       refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
     }).then(() => {
+      this.resetSelectedRecords();
       Helper.toast('Records deleted successfully.', 'success');
     }).catch(() => {
+      this.resetSelectedRecords();
       Helper.toast('Error while deleting records.', 'error');
     });
   }

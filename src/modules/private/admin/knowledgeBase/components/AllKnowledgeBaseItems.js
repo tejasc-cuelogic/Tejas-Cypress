@@ -56,6 +56,7 @@ export default class AllKnowledgeBaseItems extends Component {
       count,
       requestState,
       applyGlobalAction,
+      disableApply,
     } = knowledgeBaseStore;
     const totalRecords = count || 0;
     if (loading) {
@@ -74,7 +75,7 @@ export default class AllKnowledgeBaseItems extends Component {
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
               <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} />
+                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
