@@ -29,48 +29,19 @@
     }
 }
 // .offer-details
-.campaign-banner .ui.progress {
-    margin-bottom: @15px;
-    background:fade(@white,20%);
-    overflow: hidden;
-    .bar {
-        min-width: 0;
-        border-radius: 0;
-    }
-    >.label {
-        top: 0;
-        margin-top: 0;
-        height: 6px;
-    }
-    .sub-progress {
-        background: @primary-one-darken;
-        display: block;
-        height: 6px;
-    }
-}
-.offering-intro .ui.progress {
-    background:fade(@white,20%);
-    &.no-border-radius .bar {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    .bar {
-        min-width: 0;
-    }
-    >.label {
-        top: 0;
-        margin-top: 0;
-        height: 6px;
-        border-radius: 4px;
-    }
-    .sub-progress {
-        background: @primary-one-darken;
-        display: block;
-        height: 6px;
-        border-radius: 4px;
-        &.no-border-radius{
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+.campaign-banner, .offering-intro{
+    .ui.progress {
+        margin-bottom: @15px;
+        background:fade(@white,20%);
+        overflow: hidden;
+        >.label {
+            top: 0;
+            margin-top: 0;
+        }
+        .sub-progress {
+            background: @primary-one-darken;
+            display: block;
+            height: 6px;
         }
     }
 }
