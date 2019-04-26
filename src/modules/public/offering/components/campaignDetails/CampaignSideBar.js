@@ -34,7 +34,8 @@ export default class CampaignSideBar extends Component {
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
-    const percent = (collected / maxOffering) * 100;
+    const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
+    const percent = (collected / minMaxOffering) * 100;
     const processingDate = campaign && campaign.closureSummary &&
     campaign.closureSummary.processingDate;
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
