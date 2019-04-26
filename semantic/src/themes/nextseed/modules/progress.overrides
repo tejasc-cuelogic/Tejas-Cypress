@@ -29,34 +29,19 @@
     }
 }
 // .offer-details
-.campaign-banner .ui.progress {
-    margin-bottom: @15px;
-    background:fade(@white,20%);
-    >.label {
-        top: 0;
-    }
-    .sub-progress {
-        background: @primary-one-darken;
-        display: block;
-        position: absolute;
-        top: -2px;
-        left: 0;
-        height: 6px;
-        border-radius: 4px;
-    }
-}
-.offering-intro .ui.progress {
-    background:fade(@white,20%);
-    >.label {
-        top: 0;
-    }
-    .sub-progress {
-        background: @primary-one-darken;
-        display: block;
-        position: absolute;
-        top: -2px;
-        left: 0;
-        height: 6px;
-        border-radius: 4px;
+.campaign-banner, .offering-intro{
+    .ui.progress {
+        margin-bottom: @15px;
+        background:fade(@white,20%);
+        overflow: hidden;
+        >.label {
+            top: 0;
+            margin-top: 0;
+        }
+        .sub-progress {
+            background: @primary-one-darken;
+            display: block;
+            height: 6px;
+        }
     }
 }

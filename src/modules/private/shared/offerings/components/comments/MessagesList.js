@@ -56,7 +56,8 @@ const MessagesList = props => (
                 avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
                 roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
               }}
-                  />
+              // eslint-disable-next-line react/jsx-closing-bracket-location
+              />
           }
           </div>
           <List.Content>

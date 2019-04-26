@@ -192,8 +192,9 @@ export class NavStore {
       this.navMeta = nav;
     }
     const acctiveAccountList = userDetailsStore.getActiveAccounts;
+    const { accStatus } = userDetailsStore.signupStatus;
     if (this.navMeta && this.navMeta.subNavigations &&
-        acctiveAccountList && acctiveAccountList.length === 0) {
+        ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
       this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
     }
     if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations &&
