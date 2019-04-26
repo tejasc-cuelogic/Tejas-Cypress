@@ -47,6 +47,7 @@ const MessagesList = props => (
                 }}
               />
             )) :
+                  // eslint-disable-next-line react/jsx-indent
                   <UserAvatar
                     size="mini"
                     UserInfo={{
@@ -55,7 +56,7 @@ const MessagesList = props => (
                 avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
                 roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
               }}
-                  />
+            />
           }
           </div>
           <List.Content>

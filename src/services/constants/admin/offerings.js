@@ -679,8 +679,16 @@ export const CLOSURE_SUMMARY = {
     value: '',
     label: 'Close Date',
     error: undefined,
-    rule: 'date',
+    rule: 'optional|date',
     customErrors: { date: 'Close Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
+  },
+  launchDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    rule: 'optional|date',
+    customErrors: { date: 'Launch Date is not a valid date format.' },
     placeHolder: '4/3/2018',
   },
 };

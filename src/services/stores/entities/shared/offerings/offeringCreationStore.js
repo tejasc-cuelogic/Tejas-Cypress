@@ -493,7 +493,7 @@ export class OfferingCreationStore {
   @action
   maskChange = (values, form, field) => {
     const fieldValue =
-      (field === 'processingDate' || field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (field === 'launchDate' || field === 'processingDate' || field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -1072,7 +1072,6 @@ export class OfferingCreationStore {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
-        payloadData.closureSummary = get(payloadData[keyName].launch, 'terminationDate') ? { ...getOfferingById.closureSummary, processingDate: get(payloadData[keyName].launch, 'terminationDate') } : null;
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
         Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
@@ -1080,13 +1079,19 @@ export class OfferingCreationStore {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
-        payloadData.closureSummary = mergeWith(
-          toJS(getOfferingById.closureSummary),
-          payloadData.closureSummary,
-          this.mergeCustomize,
-        );
-        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
-        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        if (subKey === 'launch') {
+          const closureSummary = { ...getOfferingById.closureSummary };
+          closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
+          closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
+          payloadData.closureSummary = closureSummary;
+          payloadData.closureSummary = mergeWith(
+            toJS(getOfferingById.closureSummary),
+            payloadData.closureSummary,
+            this.mergeCustomize,
+          );
+          payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+          payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       } else if (keyName === 'leadership') {
@@ -1098,8 +1103,6 @@ export class OfferingCreationStore {
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
       } else if (keyName === 'editForm') {
-        payloadData.offering = {};
-        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData.closureSummary = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
         payloadData = {
           ...payloadData,
@@ -1110,34 +1113,26 @@ export class OfferingCreationStore {
           payloadData.keyTerms,
           this.mergeCustomize,
         );
-        payloadData.offering = mergeWith(
-          toJS(getOfferingById.offering),
-          payloadData.offering,
-          this.mergeCustomize,
-        );
         payloadData.closureSummary = mergeWith(
           toJS(getOfferingById.closureSummary),
           payloadData.closureSummary,
           this.mergeCustomize,
         );
-        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
-        payloadData.offering = cleanDeep(payloadData.offering);
         payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
         payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
         payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'editPocForm') {
         if (get(getOfferingById, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
-          payloadData.offering = {};
-          payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
-          payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
-          payloadData.offering = mergeWith(
-            toJS(getOfferingById.offering),
-            payloadData.offering,
+          payloadData.closureSummary = {};
+          payloadData.closureSummary.launchDate = this.POC_DETAILS_FRM.fields.targetDate.value;
+          payloadData.closureSummary = mergeWith(
+            toJS(getOfferingById.closureSummary),
+            payloadData.closureSummary,
             this.mergeCustomize,
           );
-          payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
-          payloadData.offering = cleanDeep(payloadData.offering);
+          payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+          payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
         }
       } else if (keyName === 'BonusRewardTier') {
         const rewardsTiersData = getOfferingById.rewardsTiers || [];
