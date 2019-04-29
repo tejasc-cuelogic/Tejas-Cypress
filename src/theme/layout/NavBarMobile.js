@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Divider, Sidebar, Menu, Icon, Header } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Header } from 'semantic-ui-react';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems, NavigationItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
@@ -110,17 +110,16 @@ export default class NavBarMobile extends Component {
           <Sidebar
             as={Menu}
             animation="overlay"
-            inverted
             vertical
             visible={visible}
             className="public-sidebar"
           >
-            <Logo
+            {/* <Logo
               alt="NextSeed.com"
               dataSrc="LogoWhite"
               as={visible ? Link : Logo}
               to="/"
-            />
+            /> */}
             <Icon onClick={onToggle} className="ns-close-light" />
             <div className="public-mobile-nav">
               <div className="mobile-nav-inner-container">
@@ -134,9 +133,6 @@ export default class NavBarMobile extends Component {
                     onToggle={onToggle}
                     navItems={PUBLIC_NAV}
                   />
-                </div>
-                <Divider />
-                <div className="public-footer-nav">
                   <NavItems
                     refLoc="public"
                     currentUser={currentUser}
@@ -147,7 +143,6 @@ export default class NavBarMobile extends Component {
                     navItems={FOOTER_NAV}
                   />
                 </div>
-                <Divider />
                 <div className="social-media">
                   <SocialLinks />
                 </div>

@@ -12,7 +12,7 @@
         border-radius:0;
         transition: all .3s ease-in-out;
         .menu{
-            margin:@11px 0;
+            margin:@11px @30px @11px 0;
             .item{
                 color:@neutral;
                 padding:@3px @27px;
@@ -39,6 +39,7 @@
         .item{
             font-weight:@fontMedium;
             text-transform:uppercase;
+            padding: 0 @7px;
             > span{
                 padding:0.5em 0;
             }
@@ -677,6 +678,12 @@ footer{
         height: 100%;
         overflow: auto;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        .public-header-nav{
+            padding-top: 46px;
+            flex-grow: 1;
+        }
     }
 }
 .ui.sidebar.menu.public-sidebar {
@@ -694,12 +701,15 @@ footer{
     }
     .social-media {
         text-align: center;
-        background: @neutral;
+        // background: @neutral;
         padding: 0 0 @14px;
         .item {
             margin-bottom: 0;
             padding: 0 @8px !important;
             display: inline-block;
+            color: @neutral-middark;
+            margin: 0 !important;
+            border: 0 !important;
             i.icon {
                 margin: 0;
             }
@@ -707,21 +717,45 @@ footer{
     }
     &.visible.vertical .item {
         border-radius: 0 !important;
-        padding: @8px @24px;
+        padding: @8px 0;
+        margin: 0 @24px;
+        font-weight: @fontMedium;
+        border-bottom: 1px solid @neutral-darkwhite;
         span {
             margin-left: 0;
             max-width: 100%;
         }
+        &.active, &:focus, &:hover {
+            background: transparent;
+        }
+        &:last-child {
+            border-bottom: 0;
+        }
         &.dropdown {
             .icon.dropdown {
-                color: @white;
+                color: @neutral !important;
+            }
+            &.active {
+                color: @neutral !important;
             }
             .menu.transition {
-                margin: @8px 0 0; 
+                margin-left: 0;
+                margin-right: 0;
+                margin-bottom: @3px;
                 .item {
-                    padding: @8px @14px !important;
+                    padding: @8px 0px !important;
+                    margin: 0;
+                    border-bottom: 0;
+                    color: @neutral;
+                    &.active, &:hover,&focus{
+                        background: transparent !important;
+                    }
                 }
             }
+        }
+        .social-media .item {
+            margin: 0;
+            border: 0;
         }
     }
     &.left.inverted {
