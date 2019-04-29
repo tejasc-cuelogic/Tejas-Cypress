@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { DataFormatter } from '../../../../../helper';
 
-@inject('businessAppReviewStore', 'uiStore', 'offeringsStore')
+@inject('uiStore', 'offeringsStore')
 @withRouter
 @observer
 export default class GettingStarted extends Component {
@@ -12,14 +12,8 @@ export default class GettingStarted extends Component {
     this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
   }
   handleCloseModal = () => {
+    this.props.offeringsStore.initRequest({ stage: 'active' });
     this.props.history.push('/app/dashboard');
-  }
-  createOffer = () => {
-    const { match, businessAppReviewStore } = this.props;
-    businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
-      this.props.offeringsStore.initRequest({ stage: 'active' });
-      this.props.history.push('/app/dashboard');
-    });
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
@@ -27,7 +21,7 @@ export default class GettingStarted extends Component {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
     }, 8500);
     return (
-      <Modal open closeIcon onClose={this.createOffer} size="mini" closeOnDimmerClick={false}>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Congratulations!</Header>
         </Modal.Header>
@@ -37,7 +31,7 @@ export default class GettingStarted extends Component {
             <Button
               loading={this.props.uiStore.inProgress}
               primary
-              onClick={this.createOffer}
+              onClick={this.handleCloseModal}
             >Get Started
             </Button>
           </div>

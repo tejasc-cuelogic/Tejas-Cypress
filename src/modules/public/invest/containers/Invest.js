@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import cookie from 'react-cookies';
 import Loadable from 'react-loadable';
 import { Visibility, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
@@ -49,7 +48,7 @@ class Invest extends Component {
     const rsCode = get(urlParameter, 'rsCode') || null;
     if (utmCampaign === 'saasquatch' && rsCode) {
       this.props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
-        cookie.save('SAASQUATCH_REFERRAL_CODE', rsCode, { maxAge: 86400000 });
+        window.localStorage.setItem('SAASQUATCH_REFERRAL_CODE', rsCode);
       });
     }
     if (this.props.match.isExact) {
