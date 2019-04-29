@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import cookie from 'react-cookies';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider, Dimmer, Loader } from 'semantic-ui-react';
@@ -88,12 +87,12 @@ export default class ConfirmEmailAddress extends Component {
               uiStore.setProgress(false);
               const { roles } = this.props.userStore.currentUser;
               if (roles.includes('investor')) {
-                if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
-                  const referralCode = cookie.load('SAASQUATCH_REFERRAL_CODE');
+                if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
+                  const referralCode = window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE');
                   this.props.referralsStore.userPartialFullSignupWithReferralCode(referralCode)
                     .then((data) => {
                       if (data) {
-                        cookie.remove('SAASQUATCH_REFERRAL_CODE');
+                        window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
                       }
                     });
                 }

@@ -23,11 +23,11 @@ export default class AllKnowledgeBaseItems extends Component {
   }
   globalActionChange = (e, { name, value }) =>
     this.props.knowledgeBaseStore.setGlobalAction(name, value);
-  handleAction = (action, articleId) => {
+  handleAction = (action, articleId, status) => {
     if (action === 'Delete') {
       this.props.knowledgeBaseStore.setConfirmBox(action, articleId);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/${articleId}`);
+      this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
     }
   }
   deleteTeamMember = () => {
@@ -123,7 +123,7 @@ export default class AllKnowledgeBaseItems extends Component {
                         <Button.Group>
                           {Object.keys(actions).map(action => (
                             <Button className="link-button" >
-                              <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id)} />
+                              <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id, record.itemStatus)} />
                             </Button>
                           ))}
                         </Button.Group>

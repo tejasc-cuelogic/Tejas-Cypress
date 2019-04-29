@@ -104,7 +104,8 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  save = (id) => {
+  save = (id, status) => {
+    this.KNOWLEDGE_BASE_FRM.fields.itemStatus.value = status;
     const data = Validator.ExtractValues(this.KNOWLEDGE_BASE_FRM.fields);
     client
       .mutate({

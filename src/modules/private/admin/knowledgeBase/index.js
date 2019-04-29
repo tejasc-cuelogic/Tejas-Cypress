@@ -18,7 +18,7 @@ export default class KnowledgeBase extends Component {
     return (
       <Switch>
         <Route exact path={`${match.url}`} component={ManageKnowledgeBase} />
-        <Route exact path={`${match.url}/:id`} render={() => <EditKnowledgeBaseItem refLink={match.url} {...this.props} />} />
+        <Route exact path={`${match.url}/:id/:status`} render={() => <EditKnowledgeBaseItem refLink={match.url} {...this.props} />} />
       </Switch>
     );
   }

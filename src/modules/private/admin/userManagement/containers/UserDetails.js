@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty } from 'lodash';
@@ -41,6 +42,7 @@ const navMeta = [
 @inject('userStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class AccountDetails extends Component {
+  // state = { isActivity: false };
   componentWillMount() {
     if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
@@ -49,6 +51,9 @@ export default class AccountDetails extends Component {
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);
   }
+  // activityState = (state) => {
+  //   this.setState({ isActivity: state });
+  // }
   handleCloseModal = () => this.props.history.push(this.props.refLink);
 
   render() {
@@ -100,30 +105,34 @@ export default class AccountDetails extends Component {
           </Item.Group>
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <div className="inner-content-spacer">
+            {/* <div className={this.state.isActivity ? '' : 'inner-content-spacer'} > */}
+            <Aux>
               <Switch>
                 {
                   navItems.map((item) => {
+                    // if (item.to === 'activity') { this.activityState(true); }
                     const CurrentModule = item.load === false ?
                       item.component : getModule(item.component);
                     return (
-                      <Route
-                        key={item.to}
-                        path={`${match.url}/${item.to}`}
-                        render={props => (
-                          <CurrentModule
-                            module={item.title === 'Activity' ? 'userDetails' : false}
-                            showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
-                            {...props}
-                            resourceId={details.id}
-                          />)
-                              }
-                      />
+                      <div className={item.to === 'activity' ? '' : 'inner-content-spacer'} >
+                        <Route
+                          key={item.to}
+                          path={`${match.url}/${item.to}`}
+                          render={props => (
+                            <CurrentModule
+                              module={item.title === 'Activity' ? 'userDetails' : false}
+                              showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
+                              {...props}
+                              resourceId={details.id}
+                            />)
+                                }
+                        />
+                      </div>
                     );
                   })
                 }
               </Switch>
-            </div>
+            </Aux>
           </Card>
         </Modal.Content>
       </Modal>
