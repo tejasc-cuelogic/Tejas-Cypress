@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
 import map from 'lodash/map';
-import { isArray, orderBy } from 'lodash';
+import { isArray, orderBy, find } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
@@ -47,7 +47,11 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  resetData = () => {
+  resetSearch = () => {
+    // this.requestState.search.keyword = '';
+    // this.requestState.search.categoryId = '';
+    // this.requestState.search.itemStatus = '';
+    // this.requestState.search.authorId = '';
     this.requestState.search = {};
   }
   @action
@@ -72,13 +76,12 @@ export class KnowledgeBaseStore {
   @action
   initiateSearch = (srchParams, getAllUsers = false) => {
     this.requestState.search = srchParams;
-    this.initRequest(null, getAllUsers);
+    this.applyFilter(null, getAllUsers);
   }
 
   @action
   getKnowledgeBase = (id, isPublic = true) => {
-    // this.LOADING = true;
-    this.resetData();
+    this.resetSearch();
     this.toggleSearch();
     const query = isPublic ? getKnowledgeBaseDetails : getKnowledgeBaseById;
     const apiClient = isPublic ? clientPublic : client;
@@ -96,10 +99,8 @@ export class KnowledgeBaseStore {
         } else {
           Helper.toast('Invalid article id', 'error');
         }
-        // this.LOADING = false;
       },
       onError: (err) => {
-        // this.LOADING = false;
         Helper.toast(`${err} Error`, 'error');
       },
     });
@@ -153,6 +154,12 @@ export class KnowledgeBaseStore {
       this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
+  @computed get knowledgeBaseOptionText() {
+    return find(find(this.categoriesDropdown, c => find(c, e =>
+      e.value === this.requestState.search.categoryId)), d =>
+      d.value === this.requestState.search.categoryId);
+  }
+
   @action
   getCategoryList = (isPublic = true) => {
     const apiClient = isPublic ? clientPublic : client;
@@ -166,6 +173,10 @@ export class KnowledgeBaseStore {
 
   @computed get loading() {
     return this.data.loading;
+  }
+
+  @computed get categoryLoading() {
+    return this.Categories.loading;
   }
 
   @computed get disableApply() {
@@ -199,10 +210,20 @@ export class KnowledgeBaseStore {
     }
   }
   @computed get categoriesDropdown() {
-    const categoriesArray = [];
+    const categoriesArray = {};
     if (this.Categories.data && this.Categories.data.categories) {
       this.Categories.data.categories.map((ele) => {
-        categoriesArray.push({ key: ele.categoryName, value: ele.id, text: ele.categoryName });
+        if (!categoriesArray[ele.categoryType]) {
+          categoriesArray[ele.categoryType] = [];
+        }
+
+        categoriesArray[ele.categoryType].push({
+          key: ele.categoryName,
+          value: ele.id,
+          text: ele.categoryName,
+          header: ele.categoryType,
+        });
+
         return categoriesArray;
       });
       return categoriesArray;
@@ -224,7 +245,6 @@ export class KnowledgeBaseStore {
   }
   @action
   deleteKBById = (id) => {
-    // this.LOADING = true;
     client
       .mutate({
         mutation: deleteKBById,
@@ -233,14 +253,8 @@ export class KnowledgeBaseStore {
         },
         refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
-      .then(() => {
-        // this.LOADING = true;
-        Helper.toast('Knowledge base item deleted successfully.', 'success');
-      })
-      .catch(() => {
-        // this.LOADING = true;
-        Helper.toast('Error while deleting knowledge base ', 'error');
-      });
+      .then(() => Helper.toast('Knowledge base item deleted successfully.', 'success'))
+      .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'));
   }
   @action
   setConfirmBox = (entity, refId) => {
@@ -257,8 +271,25 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  initRequest = (reqParams, getAllUsers = false) => {
-    // this.LOADING = true;
+  initRequest = () => {
+    this.resetSearch();
+    this.toggleSearch();
+    this.data = graphql({
+      client,
+      query: getAllKnowledgeBaseByFilters,
+      fetchPolicy: 'network-only',
+      onFetch: (res) => {
+        if (res && !this.data.loading) {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
+          this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
+        }
+      },
+    });
+  }
+
+  @action
+  applyFilter = (reqParams, getAllUsers = false) => {
     const {
       keyword,
       categoryId,
@@ -291,7 +322,6 @@ export class KnowledgeBaseStore {
       variables: params,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        // this.LOADING = false;
         if (res && !this.data.loading) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
@@ -309,10 +339,9 @@ export class KnowledgeBaseStore {
 
   @action
   applyGlobalAction = () => {
-    // this.LOADING = true;
     const idArr = this.selectedRecords;
     const status = this.globalAction;
-
+    this.data.loading = true;
     if (status === 'delete') {
       this.deleteRecords(idArr);
     } else {
@@ -323,6 +352,7 @@ export class KnowledgeBaseStore {
   @action
   resetSelectedRecords = () => {
     this.selectedRecords = [];
+    this.isReadOnly = true;
   }
 
   updateRecordStatus = (id, status) => {

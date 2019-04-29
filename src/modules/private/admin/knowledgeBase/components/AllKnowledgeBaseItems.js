@@ -17,8 +17,9 @@ const actions = {
 @observer
 export default class AllKnowledgeBaseItems extends Component {
   componentWillMount() {
-    this.props.knowledgeBaseStore.initRequest(null, false); // load data
+    this.props.knowledgeBaseStore.initRequest(); // load data
     this.props.knowledgeBaseStore.resetPagination();
+    this.props.knowledgeBaseStore.resetSearch();
   }
   globalActionChange = (e, { name, value }) =>
     this.props.knowledgeBaseStore.setGlobalAction(name, value);
@@ -57,9 +58,10 @@ export default class AllKnowledgeBaseItems extends Component {
       requestState,
       applyGlobalAction,
       disableApply,
+      categoryLoading,
     } = knowledgeBaseStore;
     const totalRecords = count || 0;
-    if (loading) {
+    if (loading || categoryLoading) {
       return <InlineLoader />;
     }
     if (AllKnowledgeBase.length === 0) {
