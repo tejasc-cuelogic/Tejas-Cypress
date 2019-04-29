@@ -46,12 +46,12 @@ export const DropdownFilterWithHeader = props => (
           selection
         >
           <Dropdown.Menu>
-            {_.map(props.options, (rec, index) => (
+            {_.map(props.options, rec => (
               <Aux>
-                <Dropdown.Header content={index} key={index} />
+                <Dropdown.Header content={rec.title} key={rec.title} />
                 <Dropdown.Divider />
                 {
-                  rec.map(el => (
+                  rec.options.map(el => (
                     <Dropdown.Item
                       key={el.value}
                       name={props.keyName || camelCase(props.name)}

@@ -74,3 +74,8 @@ export const USER_TYPES = [
   { key: 'INVESTOR', value: 'INVESTOR', label: 'INVESTOR' },
   { key: 'ISSUER', value: 'ISSUER', label: 'ISSUER' },
 ];
+
+export const CATEGORY_TYPES = {
+  ISSUER_KB: 'Issuer Knowledge Base',
+  INVESTOR_KB: 'Investor Knowledge Base',
+};

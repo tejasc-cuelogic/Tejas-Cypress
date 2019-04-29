@@ -30,13 +30,8 @@ export default class EditKnowledgeBaseItem extends Component {
     this.props.knowledgeBaseStore.resetFormData('KNOWLEDGE_BASE_FRM');
   };
 
-  save = (status) => {
-    console.log(status);
+  save = () => {
     this.props.knowledgeBaseStore.save(this.props.match.params.id);
-    // const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    // const isManager = access.asManager;
-    // this.props.knowledgeBaseStore.save(this.props.match.params.id,
-    // status, isManager, this.props.status === 'PUBLISHED');
     this.props.history.push(this.props.refLink);
   }
   render() {
@@ -44,9 +39,9 @@ export default class EditKnowledgeBaseItem extends Component {
       KNOWLEDGE_BASE_FRM,
       knowledgeBaseChange,
       htmlContentChange,
-      categoriesDropdown,
       loading,
       userTypeChange,
+      getCategories,
     } = this.props.knowledgeBaseStore;
     const isNew = this.props.match.params.id === 'new';
     return (
@@ -123,7 +118,7 @@ export default class EditKnowledgeBaseItem extends Component {
                                 value={KNOWLEDGE_BASE_FRM.fields.categoryId.value}
                                 placeholder="Choose here"
                                 name="categoryId"
-                                options={categoriesDropdown}
+                                options={getCategories}
                                 onChange={(e, result) => knowledgeBaseChange(e, result)}
                               />
                             </div>

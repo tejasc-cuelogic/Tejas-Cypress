@@ -12,9 +12,6 @@ import AllKnowledgeBaseItems from './../components/AllKnowledgeBaseItems';
 @inject('knowledgeBaseStore')
 @observer
 export default class ManageKnowledgeBase extends Component {
-  componentWillMount() {
-    this.props.knowledgeBaseStore.getCategoryList(false);
-  }
   setSearchParam = (e, { name, value }) => {
     this.props.knowledgeBaseStore.setInitiateSrch(name, value);
   }

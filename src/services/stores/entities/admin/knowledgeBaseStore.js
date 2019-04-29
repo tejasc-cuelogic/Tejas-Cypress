@@ -1,12 +1,11 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import map from 'lodash/map';
-import { isArray, orderBy, find } from 'lodash';
+import { isArray, orderBy, find, map, filter, get } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { KNOWLEDGE_BASE } from '../../../constants/admin/knowledgeBase';
+import { KNOWLEDGE_BASE, CATEGORY_TYPES } from '../../../constants/admin/knowledgeBase';
 import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters, updateKnowledgeBaseItem, deleteKnowledgeBaseItem } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
@@ -14,15 +13,16 @@ import Helper from '../../../../helper/utility';
 export class KnowledgeBaseStore {
   @observable data = [];
   @observable Categories = [];
+  @observable CategoryList = [];
   @observable article = null;
   @observable KNOWLEDGE_BASE_FRM = Validator.prepareFormObject(KNOWLEDGE_BASE);
-  @observable featuredData = [];
-  @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
+  @observable categoryDDList = Validator.prepareFormObject(CATEGORY_TYPES);
   @observable filters = false;
   @observable globalAction = '';
   @observable selectedRecords = [];
   @observable LOADING = false;
   @observable isReadOnly = true;
+  @observable defaultUserType = 'ISSUER_KB';
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -35,6 +35,7 @@ export class KnowledgeBaseStore {
     search: {},
   };
   @observable db;
+  @observable categoriesLoaded = false;
 
   @action
   setGlobalAction = (name, globalAction) => {
@@ -48,10 +49,6 @@ export class KnowledgeBaseStore {
 
   @action
   resetSearch = () => {
-    // this.requestState.search.keyword = '';
-    // this.requestState.search.categoryId = '';
-    // this.requestState.search.itemStatus = '';
-    // this.requestState.search.authorId = '';
     this.requestState.search = {};
   }
   @action
@@ -97,7 +94,7 @@ export class KnowledgeBaseStore {
           });
           Validator.validateForm(this.KNOWLEDGE_BASE_FRM);
         } else {
-          Helper.toast('Invalid article id', 'error');
+          Helper.toast('Invalid knowledge base id', 'error');
         }
       },
       onError: (err) => {
@@ -154,9 +151,13 @@ export class KnowledgeBaseStore {
   }
 
   @computed get knowledgeBaseOptionText() {
-    return find(find(this.categoriesDropdown, c => find(c, e =>
-      e.value === this.requestState.search.categoryId)), d =>
+    const res = find(this.categoriesDropdown, c => find(c.options, e =>
+      e.value === this.requestState.search.categoryId));
+    return find(get(res, 'options') || [], d =>
       d.value === this.requestState.search.categoryId);
+    // return find(find(this.categoriesDropdown, c => find(c.options, e =>
+    //   e.value === this.requestState.search.categoryId)), d =>
+    //   d.value === this.requestState.search.categoryId);
   }
 
   @action
@@ -167,6 +168,11 @@ export class KnowledgeBaseStore {
       query: getCategories(isPublic),
       variables: { types: ['INVESTOR_KB', 'ISSUER_KB'] },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && !this.Categories.loading) {
+          this.setGlobalAction('categoriesLoaded', true);
+        }
+      },
     });
   }
 
@@ -208,6 +214,18 @@ export class KnowledgeBaseStore {
       this.setInitiateSrch(field, values.value);
     }
   }
+
+  @computed get categoriesList() {
+    return (this.Categories.data && this.Categories.data.categories &&
+      toJS(this.Categories.data.categories)) || [];
+  }
+
+  @computed get getCategories() {
+    return filter(map(this.categoriesList, c =>
+      ((c.categoryType === `${this.KNOWLEDGE_BASE_FRM.fields.userType.value}_KB`) ?
+        { key: c.categoryName, value: c.id, text: c.categoryName } : false)), d => d);
+  }
+
   @computed get categoriesDropdown() {
     const categoriesArray = {};
     if (this.Categories.data && this.Categories.data.categories) {
@@ -225,7 +243,7 @@ export class KnowledgeBaseStore {
 
         return categoriesArray;
       });
-      return categoriesArray;
+      return map(categoriesArray, (c, k) => ({ title: CATEGORY_TYPES[k], options: c }));
     }
     return null;
   }
