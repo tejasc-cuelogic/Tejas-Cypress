@@ -36,6 +36,8 @@ export class AccreditationStore {
   @observable userData = {};
   @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
+    skip: 0,
+    perPage: 10,
     filters: false,
     search: {
     },
@@ -799,7 +801,7 @@ export class AccreditationStore {
         currentAcitveObject =
           find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
-      investmentType = regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'D506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : 'CF';
+      investmentType = regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : 'CF';
       const validAccreditationStatus = ['REQUESTED', 'INVALID'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)

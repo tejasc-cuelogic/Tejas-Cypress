@@ -2,6 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, get, filter, orderBy } from 'lodash';
 import money from 'money-math';
+import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -106,13 +107,20 @@ export class CampaignStore {
   }
 
   @computed get active() {
-    const offeringList = this.activeList.slice();
+    const offeringList = this.orderedActiveList.slice();
     return offeringList.splice(0, this.activeToDisplay);
   }
 
   @computed get activeList() {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     return orderBy(activeListArr, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
+  }
+
+  @computed get orderedActiveList() {
+    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    const orderedActiveListArr =
+      activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
+    return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
   }
 
   @computed get completed() {
@@ -301,15 +309,14 @@ export class CampaignStore {
     this.totalPaymentChart = payChart;
   }
 
-  generateBanner = (offeringDetails) => {
-    const offeringLaunchDetails = get(offeringDetails, 'offering.launch');
+  generateBanner = (offeringDetails, addObjectProps = false) => {
     const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
     const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
     const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
     const regulation = get(offeringKeyTermDetails, 'regulation');
     const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
-    const launchDate = get(offeringLaunchDetails, 'targetDate');
-    const closingDate = get(offeringDetails, 'closureSummary.processingDate');
+    const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
+    const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
     const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
     const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
     const divResult = money.div(raisedAmount, minimumOfferingAmount);
@@ -317,29 +324,46 @@ export class CampaignStore {
     let labelBannerFirst = null;
     let labelBannerSecond = null;
     let bannerToShowFlag = false;
-    const resultObject = {};
-    const launchDaysToRemains = DataFormatter.diffDays(launchDate || null);
-    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null);
-
-    if (launchDaysToRemains < closeDaysToRemains &&
-       launchDaysToRemains > 0 && launchDaysToRemains < 2) {
+    const resultObject = addObjectProps ? { ...offeringDetails } : {};
+    const customDateObj = {
+      number: 48,
+      format: 'Hours',
+    };
+    const launchDaysToRemains =
+    DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
+    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+    let order = null;
+    if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
+      launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
       labelBannerFirst = 'NEW';
-    } else if (closeDaysToRemains > 0 && closeDaysToRemains <= 7) {
-      labelBannerFirst = `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left`;
+      order = 0;
+    } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+      labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
+      order = closeDaysToRemains + 1;
+    } else if (closeDaysToRemains > 7) {
+      if (launchDaysToRemains !== null) {
+        order = 2047483647 + launchDaysToRemains;
+      } else {
+        order = 2057483647 + 1;
+      }
+    } else if (closeDaysToRemains === null) {
+      order = 2057483647 + 1;
     }
     const percentageCompairResult = money.cmp(percent, '50.00').toString();
     const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
-    // if (raisedAmount < maxOfferingAmount &&
-    // else if (raisedAmount >= maxOfferingAmount) {
     if (money.isNegative(amountCompairResult) &&
       !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
+      order = order !== null ? order : 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
+      order = 2147483647;
     }
     if (labelBannerFirst || labelBannerSecond) {
       bannerToShowFlag = true;
     }
+    resultObject.order = order !== null ? order : 2147483646;
+    resultObject.launchDate = moment(launchDate).unix() || null;
     resultObject.isBannerShow = bannerToShowFlag;
     resultObject.bannerFirstText = labelBannerFirst;
     resultObject.bannerSecondText = labelBannerSecond;

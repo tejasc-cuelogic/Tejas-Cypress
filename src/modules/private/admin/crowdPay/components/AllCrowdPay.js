@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import moment from 'moment';
 import { lowerCase, get } from 'lodash';
 import { withRouter, Route, Link } from 'react-router-dom';
-import { Card, Table, Icon } from 'semantic-ui-react';
+import { Card, Table, Icon, Button } from 'semantic-ui-react';
 import ConfirmModel from './ConfirmModel';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader, NsPagination } from './../../../../../theme/shared';
@@ -28,6 +28,9 @@ const statusDetails = {
 @withRouter
 @observer
 export default class AllCrowdPay extends Component {
+  state = {
+    GsAccountNum: {},
+  }
   componentWillMount() {
     const { type } = this.props.match.params;
     if (this.props.match.isExact && type && this.props.crowdpayStore.isApiHit !== type) {
@@ -36,6 +39,18 @@ export default class AllCrowdPay extends Component {
       // this.props.crowdpayStore.reset();
       this.props.crowdpayStore.initRequest(type);
     }
+  }
+  getGsAccountNumber = (e, accountId, userId) => {
+    e.stopPropagation();
+    const oldObj = this.state.GsAccountNum;
+    oldObj[accountId] = {};
+    oldObj[accountId].loading = true;
+    this.setState({ GsAccountNum: oldObj });
+    this.props.crowdpayStore.getDecryptedRoutingNum(accountId, userId).then((res) => {
+      oldObj[accountId].decGsAccNumber = res;
+      oldObj[accountId].loading = false;
+      this.setState({ GsAccountNum: oldObj });
+    }).catch(() => { oldObj[accountId].loading = false; });
   }
   paginate = params => this.props.crowdpayStore.pageRequest(params);
   render() {
@@ -73,6 +88,9 @@ export default class AllCrowdPay extends Component {
                 }
                 {type !== 'entity' &&
                 <Table.HeaderCell>{ type === 'individual' ? 'CIP Uploads' : 'Documents'}</Table.HeaderCell>
+                }
+                {type !== 'review' &&
+                <Table.HeaderCell>GS Account #</Table.HeaderCell>
                 }
                 <Table.HeaderCell textAlign="center" />
               </Table.Row>
@@ -165,6 +183,20 @@ export default class AllCrowdPay extends Component {
 
                           }
                         </Table.Cell> : null
+                    }
+                    {(type !== 'review') &&
+                    <Table.Cell>
+                      { get(account, 'processing.gs.id') ?
+                      (this.state.GsAccountNum[get(account, 'accountId')] && this.state.GsAccountNum[get(account, 'accountId')].decGsAccNumber ?
+                      this.state.GsAccountNum[get(account, 'accountId')].decGsAccNumber :
+                      this.state.GsAccountNum[get(account, 'accountId')] && this.state.GsAccountNum[get(account, 'accountId')].loading ?
+                        <p>Loading...</p> :
+                        <Button color="blue" onClick={e => this.getGsAccountNumber(e, get(account, 'accountId'), get(account, 'userId'))} className="link-button">
+                          Click for GS Account #
+                        </Button>
+                      ) : 'N/A'
+                      }
+                    </Table.Cell>
                     }
                     <Actions
                       crowdPayCtaHandler={crowdPayCtaHandler}

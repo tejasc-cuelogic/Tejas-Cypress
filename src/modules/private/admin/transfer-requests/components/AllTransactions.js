@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
@@ -105,7 +106,7 @@ export default class AllTransactions extends Component {
                                 {STATUS_MAPPING[statusType].syncCta.title}
                               </Button> :
                               has(STATUS_MAPPING[statusType], 'affirmativeCta') &&
-                              <Button loading={btnLoader.includes(row.requestId)} color="blue" disabled={row.failDesc} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
+                              <Button loading={btnLoader.includes(row.requestId)} color="blue" disabled={row.failDesc || moment().isBefore(moment(row.estDateAvailable * 1000))} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
                                 {STATUS_MAPPING[statusType].affirmativeCta.title}
                               </Button>
                             }

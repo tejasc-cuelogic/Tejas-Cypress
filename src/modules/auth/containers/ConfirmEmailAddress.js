@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import cookie from 'react-cookies';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider, Dimmer, Loader } from 'semantic-ui-react';
@@ -22,12 +21,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
-    if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
-      const { password } = this.props.authStore.CONFIRM_FRM.fields;
-      const { address } = this.props.userDetailsStore.userDetails.email;
-      const userCredentials = { email: address, password: password.value };
-      this.props.authStore.setCredentials(userCredentials);
-    }
+
     if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
       !this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
@@ -40,6 +34,15 @@ export default class ConfirmEmailAddress extends Component {
   }
   componentDidMount() {
     Helper.otpShield();
+  }
+
+  componentDidUpdate() {
+    if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
+      const { password } = this.props.authStore.CONFIRM_FRM.fields;
+      const { address } = this.props.userDetailsStore.userDetails.email;
+      const userCredentials = { email: address, password: password.value };
+      this.props.authStore.setCredentials(userCredentials);
+    }
   }
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
@@ -84,12 +87,12 @@ export default class ConfirmEmailAddress extends Component {
               uiStore.setProgress(false);
               const { roles } = this.props.userStore.currentUser;
               if (roles.includes('investor')) {
-                if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
-                  const referralCode = cookie.load('SAASQUATCH_REFERRAL_CODE');
+                if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
+                  const referralCode = window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE');
                   this.props.referralsStore.userPartialFullSignupWithReferralCode(referralCode)
                     .then((data) => {
                       if (data) {
-                        cookie.remove('SAASQUATCH_REFERRAL_CODE');
+                        window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
                       }
                     });
                 }
@@ -221,7 +224,7 @@ export default class ConfirmEmailAddress extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail)) || (errors && errors.message)} />
+            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail)) || (errors && errors.message) || inProgress} />
           </Form>
         </Modal.Content>
       </Modal>

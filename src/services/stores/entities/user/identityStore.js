@@ -813,30 +813,30 @@ export class IdentityStore {
   setCipDetails = () => {
     const { legalDetails, phone } = userDetailsStore.userDetails;
     const { fields } = this.ID_VERIFICATION_FRM;
-    if (userDetailsStore.isCipExpired) {
-      if (legalDetails && legalDetails.legalName) {
-        fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
-        fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
+    if (legalDetails && legalDetails.legalName) {
+      fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
+      fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
+    }
+    if (legalDetails && legalDetails.legalAddress) {
+      fields.city.value = legalDetails.legalAddress.city;
+      const selectedState =
+        find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
+      if (selectedState) {
+        fields.state.value = selectedState.value;
       }
-      if (legalDetails && legalDetails.legalAddress) {
-        fields.city.value = legalDetails.legalAddress.city;
-        const selectedState =
-          find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
-        if (selectedState) {
-          fields.state.value = selectedState.value;
-        }
-        fields.residentalStreet.value = legalDetails.legalAddress.street;
-        fields.zipCode.value = legalDetails.legalAddress.zipCode;
-      }
-      if (legalDetails && legalDetails.dateOfBirth) {
-        fields.dateOfBirth.value = legalDetails.dateOfBirth;
-      }
-      if (legalDetails && legalDetails.ssn) {
+      fields.residentalStreet.value = legalDetails.legalAddress.street;
+      fields.zipCode.value = legalDetails.legalAddress.zipCode;
+    }
+    if (legalDetails && legalDetails.dateOfBirth) {
+      fields.dateOfBirth.value = legalDetails.dateOfBirth;
+    }
+    if (legalDetails && legalDetails.ssn) {
+      if (!legalDetails.ssn.includes('X')) {
         fields.ssn.value = legalDetails.ssn;
       }
-      if (legalDetails && phone && phone.number) {
-        fields.phoneNumber.value = phone.number;
-      }
+    }
+    if (legalDetails && phone && phone.number) {
+      fields.phoneNumber.value = phone.number;
     }
   }
 

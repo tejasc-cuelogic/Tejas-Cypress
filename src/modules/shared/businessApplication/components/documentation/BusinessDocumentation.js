@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Grid, Popup, Icon, List, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'userStore')
 @observer
 export default class BusinessDocumentation extends Component {
   componentWillMount() {
@@ -23,6 +24,7 @@ export default class BusinessDocumentation extends Component {
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
+    const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
     return (
@@ -52,6 +54,8 @@ export default class BusinessDocumentation extends Component {
               statementFileList.map(field => (
                 <Grid.Column key={field}>
                   <DropZone
+                    sharableLink
+                    blockDownload={get(userAccess, 'asSupport')}
                     hideFields={hideFields}
                     disabled={formReadOnlyMode}
                     multiple
@@ -90,6 +94,8 @@ export default class BusinessDocumentation extends Component {
             {
               taxFileList.map(field => (
                 <DropZone
+                  sharableLink
+                  blockDownload={get(userAccess, 'asSupport')}
                   hideFields={hideFields}
                   disabled={formReadOnlyMode}
                   multiple
@@ -139,6 +145,8 @@ export default class BusinessDocumentation extends Component {
               </p>
               }
               <DropZone
+                sharableLink
+                blockDownload={get(userAccess, 'asSupport')}
                 hideFields={hideFields}
                 disabled={formReadOnlyMode}
                 asterisk="true"
