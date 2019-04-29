@@ -702,7 +702,7 @@ footer{
     .social-media {
         text-align: center;
         // background: @neutral;
-        padding: 0 0 @14px;
+        padding: @14px 0;
         .item {
             margin-bottom: 0;
             padding: 0 @8px !important;
@@ -715,47 +715,52 @@ footer{
             }
         }
     }
-    &.visible.vertical .item {
-        border-radius: 0 !important;
-        padding: @8px 0;
-        margin: 0 @24px;
-        font-weight: @fontMedium;
-        border-bottom: 1px solid @neutral-darkwhite;
-        span {
-            margin-left: 0;
-            max-width: 100%;
-        }
-        &.active, &:focus, &:hover {
-            background: transparent;
-        }
-        &:last-child {
-            border-bottom: 0;
-        }
-        &.dropdown {
-            .icon.dropdown {
-                color: @neutral !important;
-            }
-            &.active {
-                color: @neutral !important;
-            }
-            .menu.transition {
+    &.visible.vertical {
+        .item {
+            border-radius: 0 !important;
+            padding: @8px 0;
+            margin: 0 @24px;
+            font-weight: @fontMedium;
+            border-bottom: 1px solid @neutral-darkwhite;
+            span {
                 margin-left: 0;
-                margin-right: 0;
-                margin-bottom: @3px;
-                .item {
-                    padding: @8px 0px !important;
-                    margin: 0;
-                    border-bottom: 0;
-                    color: @neutral;
-                    &.active, &:hover,&focus{
-                        background: transparent !important;
+                max-width: 100%;
+            }
+            &.active, &:focus, &:hover {
+                background: transparent;
+            }
+            &:nth-last-child(2) {
+                border-bottom: 0;
+            }
+            &.dropdown {
+                .icon.dropdown {
+                    color: @neutral !important;
+                }
+                &.active {
+                    color: @neutral !important;
+                }
+                .menu.transition {
+                    margin-left: 0;
+                    margin-right: 0;
+                    margin-bottom: @3px;
+                    .item {
+                        padding: @8px 0px !important;
+                        margin: 0;
+                        border-bottom: 0;
+                        color: @neutral;
+                        &.active, &:hover,&focus{
+                            background: transparent !important;
+                        }
                     }
                 }
             }
+            .social-media .item {
+                margin: 0;
+                border: 0;
+            }
         }
-        .social-media .item {
-            margin: 0;
-            border: 0;
+        .public-action-nav .item {
+            border-bottom: 0;
         }
     }
     &.left.inverted {

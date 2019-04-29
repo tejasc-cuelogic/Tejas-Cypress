@@ -10,7 +10,11 @@ export const getInvestorListForOffering = gql`
       state
       amount
       investmentDate
-      referralCode
+      userEmail
+      referralCode {
+        code
+        isValid
+      }
       avatar
       investmentsCount
       accountType
