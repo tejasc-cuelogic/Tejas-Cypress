@@ -31,12 +31,7 @@ export default class EditKnowledgeBaseItem extends Component {
   };
 
   save = (status) => {
-    console.log(status);
-    this.props.knowledgeBaseStore.save(this.props.match.params.id);
-    // const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    // const isManager = access.asManager;
-    // this.props.knowledgeBaseStore.save(this.props.match.params.id,
-    // status, isManager, this.props.status === 'PUBLISHED');
+    this.props.knowledgeBaseStore.save(this.props.match.params.id, status);
     this.props.history.push(this.props.refLink);
   }
   render() {
@@ -49,8 +44,9 @@ export default class EditKnowledgeBaseItem extends Component {
       userTypeChange,
     } = this.props.knowledgeBaseStore;
     const isNew = this.props.match.params.id === 'new';
+    const itemStatus = this.props.match.params.status;
     return (
-      <Modal dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
+      <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           {
             loading ?
@@ -60,7 +56,12 @@ export default class EditKnowledgeBaseItem extends Component {
                 <div>
                   <Header as="h3">
                     {isNew ? 'Create' : 'Edit'} Article
-                    <Actions save={this.save} meta={KNOWLEDGE_BASE_FRM.meta} />
+                    <Actions
+                      save={this.save}
+                      meta={KNOWLEDGE_BASE_FRM.meta}
+                      isPublished={itemStatus === 'PUBLISHED'}
+                      isReview={itemStatus === 'IN_REVIEW'}
+                    />
                   </Header>
                 </div>
                 <Divider hidden />

@@ -55,7 +55,7 @@ export const KB_STATUS_VALUES = [
 export const ITEM_STATUS_VALUES = [
   { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
   { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
-  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN_REVIEW' },
+  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN REVIEW' },
 ];
 
 export const AUTHORS = [

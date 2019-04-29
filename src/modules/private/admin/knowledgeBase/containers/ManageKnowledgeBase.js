@@ -42,7 +42,7 @@ export default class ManageKnowledgeBase extends Component {
             placeholder="Search by keyword or phrase"
             addon={
               <Grid.Column width={3} textAlign="right">
-                <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
+                <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
                   Add new article
                 </Button>
               </Grid.Column>
