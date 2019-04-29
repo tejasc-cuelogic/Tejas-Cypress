@@ -277,7 +277,7 @@
 			}
 		}
 		&.public-sidebar {
-			padding-bottom: @51px;
+			padding-bottom: 0;
 			.ns-close-light {
 				top: 16px;
 				z-index: 1;			
