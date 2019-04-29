@@ -124,7 +124,7 @@ export default class Agreement extends React.Component {
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const regulationCheck = this.props.changeInvestment && investmentRegulation ?
       investmentRegulation : currentInvestmentStatus;
-    const regualtionTypeStatement = regulationCheck && regulationCheck === 'D506C' ? 'Regulation D 506C' : 'Regulation Crowdfunding';
+    const regualtionTypeStatement = regulationCheck && (regulationCheck === 'D506C' || regulationCheck === 'BD_506C') ? 'Regulation D 506C' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     return (
@@ -224,7 +224,7 @@ export default class Agreement extends React.Component {
                               </Aux>
                           )}
                           customUpdateLimitLabel={(
-                            regulationCheck && regulationCheck === 'D506C' ?
+                            regulationCheck && (regulationCheck === 'D506C' || regulationCheck === 'BD_506C') ?
                               <Aux>
                                 I hereby certify that I have a reasonable expectation that I will
                                  continue to meet or exceed the requirements to be considered an
