@@ -103,7 +103,7 @@ class FinancialInfo extends Component {
             }
           </Aux>
         }
-        {!this.props.changeInvest && currentInvestmentStatus !== 'BD_506C' && currentInvestmentStatus !== 'D506C' &&
+        {!this.props.changeInvest && currentInvestmentStatus !== 'BD_506C' &&
           <InvestmentLimit
             changeInvest={this.props.changeInvest}
             match={this.props.match}

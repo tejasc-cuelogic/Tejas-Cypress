@@ -1,6 +1,5 @@
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
-import cookie from 'react-cookies';
 import { map, mapValues, camelCase, get } from 'lodash';
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
@@ -180,11 +179,13 @@ export class Auth {
             commonStore.setToken(result.idToken.jwtToken);
             userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
             userDetailsStore.getUser(userStore.currentUser.sub).then((data) => {
-              if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
-                cookie.remove('ISSUER_REFERRAL_CODE');
+              if (window.localStorage.getItem('ISSUER_REFERRAL_CODE') && window.localStorage.getItem('ISSUER_REFERRAL_CODE') !== undefined) {
+                commonStore.updateUserReferralCode(userStore.currentUser.sub, window.localStorage.getItem('ISSUER_REFERRAL_CODE')).then(() => {
+                  window.localStorage.removeItem('ISSUER_REFERRAL_CODE');
+                });
               }
-              if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
-                cookie.remove('SAASQUATCH_REFERRAL_CODE');
+              if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
+                window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
               }
               if (window.analytics) { // && false
                 window.analytics.identify(userStore.currentUser.sub, {
@@ -303,9 +304,9 @@ export class Auth {
                   commonStore.setToken(data.idToken.jwtToken);
                   userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
                   userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-                    if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
-                      commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
-                        cookie.remove('ISSUER_REFERRAL_CODE');
+                    if (window.localStorage.getItem('ISSUER_REFERRAL_CODE') && window.localStorage.getItem('ISSUER_REFERRAL_CODE') !== undefined) {
+                      commonStore.updateUserReferralCode(userStore.currentUser.sub, window.localStorage.getItem('ISSUER_REFERRAL_CODE')).then(() => {
+                        window.localStorage.removeItem('ISSUER_REFERRAL_CODE');
                       });
                     }
                   });
