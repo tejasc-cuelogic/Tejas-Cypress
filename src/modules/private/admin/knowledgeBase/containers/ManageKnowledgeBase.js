@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import { ByKeyword as Search, DropdownFilter, DropdownFilterWithHeader } from '../../../../../theme/form/Filters';
 
-import { KB_STATUS_VALUES, AUTHORS } from '../../../../../services/constants/admin/knowledgeBase';
+import { KB_STATUS_VALUES } from '../../../../../services/constants/admin/knowledgeBase';
 
 import AllKnowledgeBaseItems from './../components/AllKnowledgeBaseItems';
 
@@ -65,7 +65,18 @@ export default class ManageKnowledgeBase extends Component {
                     <DropdownFilter value={requestState.search.itemStatus} change={this.setSearchParam} name="Status" keyName="itemStatus" options={KB_STATUS_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.authorId} change={this.setSearchParam} name="Author" keyName="authorId" options={AUTHORS} />
+                    {/* <DropdownFilter value={requestState.search.authorId}
+                  change={this.setSearchParam} name="Author" keyName="authorId"
+                  options={AUTHORS} /> */}
+                    <Search
+                      name="Author"
+                      keyName="authorId"
+                      {...this.props}
+                      w={[5]}
+                      more="no"
+                      addLabel="Author"
+                      placeholder="Enter keyword"
+                    />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
