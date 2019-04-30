@@ -76,6 +76,7 @@ export const USER_TYPES = [
 ];
 
 export const CATEGORY_TYPES = {
+  ALL: 'All',
   ISSUER_KB: 'Issuer Knowledge Base',
   INVESTOR_KB: 'Investor Knowledge Base',
   ALL: '',
