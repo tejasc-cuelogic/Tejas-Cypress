@@ -59,6 +59,12 @@ export const PRIVATE_NAV = [
     subPanel: 0,
   },
   {
+    title: 'INVESTMENT ACCOUNTS',
+    accessibleTo: ['ira', 'individual', 'entity'],
+    isMenuHeader: true,
+    subPanel: 0,
+  },
+  {
     icon: 'ns-article',
     title: 'Application',
     to: 'business-application/:applicationType/:applicationId',
@@ -409,7 +415,7 @@ export const PRIVATE_NAV = [
     ],
   },
   {
-    title: 'Settings',
+    title: 'Account Settings',
     icon: 'ns-setting',
     to: 'profile-settings',
     heading: 'Profile Settings',

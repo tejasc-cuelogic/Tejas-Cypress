@@ -119,7 +119,10 @@ export class NavItems extends Component {
               ))}
             </Dropdown.Menu>
           </Dropdown>
-        ) :
+        ) : item.isMenuHeader ?
+          <Menu.Item className="menu-header">
+            <Menu.Header>{item.title}</Menu.Header>
+          </Menu.Item> :
           item.title === 'Bonus Rewards' && !this.props.bonusRewards ?
             null
             : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to]) ||
