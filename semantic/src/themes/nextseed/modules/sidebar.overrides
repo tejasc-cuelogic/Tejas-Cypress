@@ -124,10 +124,12 @@
 				white-space: nowrap;
 				overflow: hidden;
 			}
-			&:hover, &:focus, &.active{
-				background:@neutral-offwhite;
-				.icon:not(.dropdown){
-					color:@primary-one;
+			&:not(:last-child){
+				&:hover, &:focus, &.active{
+					background:@neutral-offwhite;
+					.icon:not(.dropdown){
+						color:@primary-one;
+					}
 				}
 			}
 			&.add-account{
