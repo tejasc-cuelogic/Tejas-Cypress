@@ -2,7 +2,7 @@
 import fetch from 'isomorphic-fetch';
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import { REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, REACT_APP_DEPLOY_ENV } from '../constants/common';
+import { REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY } from '../constants/common';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
 
 global.fetch = fetch;
@@ -24,5 +24,5 @@ export const GqlClient = new ApolloClient({
     });
   },
   cache: new InMemoryCache({ fragmentMatcher }),
-  connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
+  // connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
 });

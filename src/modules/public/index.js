@@ -45,7 +45,7 @@ export default class Public extends React.Component {
     </Switch>
   );
   handleLogOut = () => {
-    authActions.logout()
+    authActions.logout('user')
       .then(() => {
         this.props.history.push('/');
       });

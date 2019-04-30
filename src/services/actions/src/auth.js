@@ -620,7 +620,24 @@ export class Auth {
       });
   }
 
-  forceLogout = () => (
+  segmentTrackLogout = (logoutType) => {
+    if (window.analytics) {
+      window.analytics.track('Logged Out', { logoutType });
+      this.shutdownIntercom();
+      window.analytics.reset();
+    }
+  }
+  shutdownIntercom = () => {
+    try {
+      window.Intercom('shutdown');
+      console.log('Intercom Shutdown');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+
+  forceLogout = logoutType => (
     new Promise((res) => {
       commonStore.setToken(undefined);
       localStorage.removeItem('lastActiveTime');
@@ -628,6 +645,7 @@ export class Auth {
       authStore.setUserLoggedIn(false);
       userStore.forgetUser();
       this.clearMobxStore();
+      this.segmentTrackLogout(logoutType);
       res();
     })
     // Clear all AWS credentials
@@ -637,7 +655,7 @@ export class Auth {
    * @desc Logs out user and clears all tokens stored in browser's local storage
    * @return null
    */
-  logout = () => (
+  logout = logoutType => (
     new Promise((res) => {
       commonStore.setToken(undefined);
       authStore.setUserLoggedIn(false);
@@ -651,6 +669,7 @@ export class Auth {
       localStorage.removeItem('defaultNavExpanded');
       AWS.config.clear();
       this.clearMobxStore();
+      this.segmentTrackLogout(logoutType);
       res();
     })
     // Clear all AWS credentials

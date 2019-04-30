@@ -38,6 +38,7 @@ export class NavStore {
 
   @computed get myRoutes() {
     try {
+      const uKey = _.get(userStore, 'currentUser.sub') || 'public';
       let permitted = [];
       const { roles } = this.params;
       if (userDetailsStore.signupStatus.isMigratedFullAccount
@@ -56,9 +57,9 @@ export class NavStore {
           signupStatus: userDetailsStore.signupStatus,
           permitted,
         };
-        localStorage.setItem(`${userStore.currentUser.sub}_pInfo`, JSON.stringify(pInvestorInfo));
+        localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
-      const pInvestorInfo = localStorage.getItem(`${userStore.currentUser.sub}_pInfo`);
+      const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
       if (userDetailsStore.userFirstLoad !== true &&
         (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {

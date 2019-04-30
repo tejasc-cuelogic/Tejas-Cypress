@@ -15,7 +15,7 @@ export default class ConfirmLoginModal extends React.Component {
       const isInvestNow = this.props.history.location.pathname.includes('invest');
       this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}/${isInvestNow ? 'invest-now' : ''}` });
       this.props.uiStore.setAuthRef(`${this.props.refLink}/${isInvestNow ? 'invest-now' : ''}`);
-      authActions.logout().then(() => {
+      authActions.logout('user').then(() => {
         this.props.history.push('/auth/login');
       });
     }
