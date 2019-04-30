@@ -718,19 +718,11 @@ footer{
     &.visible.vertical {
         .item {
             border-radius: 0 !important;
-            padding: @8px 0;
-            margin: 0 @24px;
+            padding: @8px @24px;
             font-weight: @fontMedium;
-            border-bottom: 1px solid @neutral-darkwhite;
             span {
                 margin-left: 0;
                 max-width: 100%;
-            }
-            &.active, &:focus, &:hover {
-                background: transparent;
-            }
-            &:nth-last-child(2) {
-                border-bottom: 0;
             }
             &.dropdown {
                 .icon.dropdown {
@@ -740,18 +732,18 @@ footer{
                     color: @neutral !important;
                 }
                 .menu.transition {
-                    margin-left: 0;
-                    margin-right: 0;
+                    margin-left: -@24px;
+                    margin-right: -@24px;
                     margin-bottom: @3px;
                     .item {
-                        padding: @8px 0px !important;
+                        padding: @8px @24px !important;
                         margin: 0;
                         border-bottom: 0;
                         color: @neutral;
-                        &.active, &:hover,&focus{
-                            background: transparent !important;
-                        }
                     }
+                }
+                >.text {
+                    max-width: 100%;
                 }
             }
             .social-media .item {
@@ -763,46 +755,32 @@ footer{
             border-bottom: 0;
         }
     }
-    &.left.inverted {
+    &.left {
         .item {
             text-transform: uppercase;
             &:hover,&:focus,&.active{
-                background-color: @primary-one !important;
-                color: @white !important;
+                color: @primary-one !important;
             }
             &.active.no-active{
                 background-color: transparent !important;
-                color: @white !important;
+                color: @neutral !important;
             }
             &.dropdown {
                 &.active,&:focus,&:hover {
-                    background-color: transparent !important;
-                    color: @white !important;
+                    color: @primary-one !important;
                 }
                 &.really{
-                    background-color: @primary-one !important;
-                    color: @white !important;
+                    background-color: transparent !important;
                 }
                 .menu.transition .item {
                     &.active, &:hover, &:focus {
-                        background-color: @primary-one-darken!important;
-                        color: @white !important;
+                        color: @primary-one !important;
                     }
                 }
                 &.disabled {
                     pointer-events: auto;
                     opacity: 1;
                     color: @white !important;
-                }
-                &.really{
-                    background-color: @primary-one !important;
-                    color: @white !important;
-                }
-                .menu.transition .item {
-                    &.active, &:hover, &:focus {
-                        background-color: @primary-one-darken!important;
-                        color: @white !important;
-                    }
                 }
             }
         }
