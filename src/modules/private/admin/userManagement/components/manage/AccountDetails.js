@@ -7,6 +7,7 @@ import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import Overview from './accountDetails/Overview';
 import Transactions from '../../../../investor/accountDetails/containers/Transactions';
 import Portfolio from '../../../../investor/accountDetails/containers/Portfolio';
+import InvestmentDetails from '../../../../investor/accountDetails/containers/InvestmentDetails';
 import ActivityHistory from '../../../../shared/ActivityHistory';
 // import Statements from '../../../../investor/accountDetails/containers/Statements';
 import MonthlyStatements from '../../../../investor/accountDetails/components/statements/MonthlyStatements';
@@ -66,6 +67,7 @@ export default class AccountDetails extends Component {
             <Route exact path={`${match.url}/statements`} render={props => <MonthlyStatements isAdmin {...props} />} />
             <Route exact path={`${match.url}/tax-forms`} render={props => <TaxForms isAdmin {...props} />} />
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio isAdmin {...props} />} />
+            <Route exact path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
             <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />
           </Switch>

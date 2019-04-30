@@ -160,13 +160,13 @@ export default class Portfolio extends Component {
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
+          <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
         }
         {activeSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={activeSorted.length} match={match} /> : null
+          <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={activeSorted.length} match={match} /> : null
         }
         {completedSorted.length ?
-          <InvestmentList handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
+          <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&

@@ -18,6 +18,7 @@ export default class AccountHeader extends Component {
   }
   render() {
     const { inProgress } = this.props.uiStore;
+    const loadingVal = Boolean(inProgress);
     const {
       currentActiveAccountDetailsOfSelectedUsers, getDetailsOfUser,
     } = this.props.userDetailsStore;
@@ -35,7 +36,7 @@ export default class AccountHeader extends Component {
           </span>
           <span className="pull-right">
             <Button.Group compact size="tiny">
-              <Button loading={inProgress} secondary onClick={e => this.toggleConfirmModal(e, true)}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
+              <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, true)}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
             </Button.Group>
           </span>
         </div>
