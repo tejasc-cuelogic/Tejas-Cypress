@@ -672,10 +672,10 @@ footer{
 .public-mobile-nav {
     position: relative;
     padding: 0;
-    height: 100vh;
+    height: ~"calc(100vh - 98px)";
     overflow: hidden;
     .mobile-nav-inner-container {
-        height: 100vh;
+        height: ~"calc(100vh - 98px)";
         overflow: auto;
         position: relative;
         display: flex;
