@@ -46,7 +46,7 @@ export const TAGS = [
 ];
 
 export const KB_STATUS_VALUES = [
-  { key: 'All', value: 'All', text: 'All' },
+  { key: 'All', value: null, text: 'All' },
   { key: 'PUBLISHED', value: 'PUBLISHED', text: 'Published' },
   { key: 'DRAFT', value: 'DRAFT', text: 'Draft' },
   { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'In review' },
@@ -76,7 +76,6 @@ export const USER_TYPES = [
 ];
 
 export const CATEGORY_TYPES = {
-  ALL: 'All',
   ISSUER_KB: 'Issuer Knowledge Base',
   INVESTOR_KB: 'Investor Knowledge Base',
   ALL: '',

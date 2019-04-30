@@ -20,6 +20,11 @@ export default class ManageKnowledgeBase extends Component {
       this.props.knowledgeBaseStore.setInitiateSrch('keyword', e.target.value);
     }
   }
+  searchByAuthor = (e) => {
+    if (e.charCode === 13) {
+      this.props.knowledgeBaseStore.setInitiateSrch('authorName', e.target.value);
+    }
+  }
   removeFilter = name => this.props.userListingStore.removeFilter(name);
   toggleSearch = () => this.props.knowledgeBaseStore.toggleSearch();
   render() {
@@ -61,7 +66,7 @@ export default class ManageKnowledgeBase extends Component {
                   <Grid.Column>
                     <DropdownFilterWithHeader value={knowledgeBaseOptionText && knowledgeBaseOptionText.text ? knowledgeBaseOptionText.text : 'Select Filter'} change={this.setSearchParam} name="Category" keyName="categoryId" options={categoriesDropdown} />
                   </Grid.Column>
-                  <Grid.Column>
+                  <Grid.Column> { console.log('status====', requestState.search.itemStatus)}
                     <DropdownFilter value={requestState.search.itemStatus} change={this.setSearchParam} name="Status" keyName="itemStatus" options={KB_STATUS_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
@@ -69,13 +74,16 @@ export default class ManageKnowledgeBase extends Component {
                   change={this.setSearchParam} name="Author" keyName="authorId"
                   options={AUTHORS} /> */}
                     <Search
-                      name="Author"
-                      keyName="authorId"
+                      name="authorName"
+                      keyName="authorName"
                       {...this.props}
                       w={[5]}
                       more="no"
                       addLabel="Author"
                       placeholder="Enter keyword"
+                      executeSearch={this.searchByAuthor}
+                      toggleSearch={this.toggleSearch}
+                      requestState={requestState}
                     />
                   </Grid.Column>
                 </Grid.Row>

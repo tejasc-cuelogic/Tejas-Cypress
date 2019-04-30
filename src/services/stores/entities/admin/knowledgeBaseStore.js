@@ -231,7 +231,7 @@ export class KnowledgeBaseStore {
     const categoriesArray = {};
     const defaultOption = {
       key: 'all',
-      value: 'All',
+      value: null,
       text: 'All',
     };
     if (this.Categories.data && this.Categories.data.categories) {
@@ -320,7 +320,7 @@ export class KnowledgeBaseStore {
       keyword,
       categoryId,
       itemStatus,
-      authorId,
+      authorName,
     } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
@@ -328,22 +328,10 @@ export class KnowledgeBaseStore {
       title: keyword,
       categoryId,
       itemStatus,
-      authorId,
+      authorName,
       page: reqParams ? reqParams.page : 1,
       limit: getAllUsers ? 100 : this.requestState.perPage,
     };
-
-    if (itemStatus && itemStatus === 'All') {
-      delete (params.itemStatus);
-    }
-
-    if (authorId && authorId === 'All') {
-      delete (params.authorId);
-    }
-
-    if (categoryId && categoryId === 'All') {
-      delete (params.categoryId);
-    }
 
     this.requestState.page = params.page || 1;
     this.data = graphql({
@@ -352,7 +340,7 @@ export class KnowledgeBaseStore {
       variables: params,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        this.resetSearch();
+        // this.resetSearch();
         if (res && !this.data.loading) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
