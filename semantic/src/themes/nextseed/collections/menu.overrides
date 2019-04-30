@@ -672,17 +672,17 @@ footer{
 .public-mobile-nav {
     position: relative;
     padding: 0;
-    height: ~"calc(100vh - 98px)";
+    height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
-        height: ~"calc(100vh - 98px)";
+        height: 100%;
         overflow: auto;
         position: relative;
-        display: flex;
-        flex-direction: column;
+        // display: flex;
+        // flex-direction: column;
         .public-header-nav{
             padding-top: 46px;
-            flex-grow: 1;
+            // flex-grow: 1;
             background: @white;
         }
     }
@@ -700,22 +700,26 @@ footer{
         margin: @14px 0 0 @24px;
         width: 150px;
     }
-    .social-media {
-        text-align: center;
-        // background: @neutral;
-        padding: @14px 0;
-        .item {
-            margin-bottom: 0;
-            padding: 0 @8px !important;
-            display: inline-block;
-            color: @neutral-middark;
-            margin: 0 !important;
-            border: 0 !important;
-            i.icon {
-                margin: 0;
-            }
-        }
-    }
+    // .social-media {
+    //     text-align: center;
+    //     // background: @neutral;
+    //     padding: @14px 0;
+    //     position: absolute;
+    //     bottom: 0;
+    //     left: 50%;
+    //     transform: translate(-50%,0);
+    //     .item {
+    //         margin-bottom: 0;
+    //         padding: 0 @8px !important;
+    //         display: inline-block;
+    //         color: @neutral-middark;
+    //         margin: 0 !important;
+    //         border: 0 !important;
+    //         i.icon {
+    //             margin: 0;
+    //         }
+    //     }
+    // }
     &.visible.vertical {
         .item {
             border-radius: 0 !important;
@@ -747,10 +751,10 @@ footer{
                     max-width: 100%;
                 }
             }
-            .social-media .item {
-                margin: 0;
-                border: 0;
-            }
+            // .social-media .item {
+            //     margin: 0;
+            //     border: 0;
+            // }
         }
         .public-action-nav .item {
             border-bottom: 0;
@@ -798,4 +802,26 @@ footer{
 .slide-down .ui.secondary.menu {
     max-width: 1680px;
     margin: auto !important;
+}
+.social-media {
+    left: 0;
+    z-index: 104;
+    position: absolute;
+    bottom: 0;
+    width: 260px;
+    text-align: center;
+    padding: 14px 0;
+    .ui.menu{
+        justify-content: center;
+        align-items: center;
+        .item {
+            color: @neutral-middark;
+            i.icon {
+                margin: 0;
+            }
+            &::before{
+                display: none;
+            }
+        }
+    }
 }

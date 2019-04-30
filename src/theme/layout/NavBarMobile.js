@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
 import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems, NavigationItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
@@ -124,46 +125,57 @@ export default class NavBarMobile extends Component {
               as={visible ? Link : Logo}
               to="/"
             /> */}
-            <Icon onClick={onToggle} className="ns-close-light" />
-            <div className="public-mobile-nav">
-              <div className="mobile-nav-inner-container">
-                <div className="public-header-nav">
-                  <NavItems
-                    refLoc="public"
-                    currentUser={currentUser}
-                    location={location}
-                    isMobile={isMobile}
-                    navStatus={navStatus}
-                    onToggle={onToggle}
-                    navItems={PUBLIC_NAV}
-                  />
-                  <NavItems
-                    refLoc="public"
-                    currentUser={currentUser}
-                    location={location}
-                    isMobile={isMobile}
-                    navStatus={navStatus}
-                    onToggle={onToggle}
-                    navItems={FOOTER_NAV}
-                  />
-                  <div className="public-action-nav mt-30">
-                    {!currentUser ? logInSignUp.map(route => (
+            <Scrollbars
+              className="ns-scrollbar"
+              renderTrackVertical={p => <div {...p} className="track-vertical" />}
+              renderThumbVertical={p => <div {...p} className="thumb-vertical" />}
+              renderTrackHorizontal={p => <div {...p} className="track-horizontal" />}
+              renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
+              renderView={p => <div {...p} className="view" />}
+            >
+              <Icon onClick={onToggle} className="ns-close-light" />
+              <div className="public-mobile-nav">
+                <div className="mobile-nav-inner-container">
+                  <div className="public-header-nav">
+                    <NavItems
+                      refLoc="public"
+                      currentUser={currentUser}
+                      location={location}
+                      isMobile={isMobile}
+                      navStatus={navStatus}
+                      onToggle={onToggle}
+                      navItems={PUBLIC_NAV}
+                    />
+                    <NavItems
+                      refLoc="public"
+                      currentUser={currentUser}
+                      location={location}
+                      isMobile={isMobile}
+                      navStatus={navStatus}
+                      onToggle={onToggle}
+                      navItems={FOOTER_NAV}
+                    />
+                    <div className="public-action-nav mt-30">
+                      {!currentUser ? logInSignUp.map(route => (
+                        <Menu.Item>
+                          <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
+                        </Menu.Item>
+                      )) :
                       <Menu.Item>
-                        <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
+                        <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" className="basic" compact>Logout</Button>
                       </Menu.Item>
-                    )) :
-                    <Menu.Item>
-                      <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" className="basic" compact>Logout</Button>
-                    </Menu.Item>
-                    }
+                      }
+                    </div>
                   </div>
                 </div>
-                <div className="social-media">
-                  <SocialLinks />
-                </div>
               </div>
-            </div>
+            </Scrollbars>
           </Sidebar>
+          <div className="social-media">
+            <Menu>
+              <SocialLinks />
+            </Menu>
+          </div>
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}

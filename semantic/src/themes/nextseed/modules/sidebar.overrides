@@ -282,6 +282,9 @@
 				top: 16px;
 				z-index: 1;			
 			}
+			.ns-scrollbar .view{
+				padding: 0;
+			}
 		}
 	}
 	.ui.image.logo{
