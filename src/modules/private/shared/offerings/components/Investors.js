@@ -30,7 +30,7 @@ export default class BonusRewards extends Component {
   }
   render() {
     const { requestState, investorLists } = this.props.offeringInvestorStore;
-    const { isIssuer } = this.props.userStore;
+    const { isIssuer, isAdmin } = this.props.userStore;
     return (
       <Aux>
         <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
@@ -45,6 +45,7 @@ export default class BonusRewards extends Component {
                 // addon={
                 // }
               />
+              {isAdmin &&
               <Grid.Column floated="right" width={3} className="right-align">
                 <Button
                   primary
@@ -55,6 +56,7 @@ export default class BonusRewards extends Component {
                   disabled={!investorLists.length}
                 />
               </Grid.Column>
+              }
             </Grid.Row>
           </Grid>
         </Form>
