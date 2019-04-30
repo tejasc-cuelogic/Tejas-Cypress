@@ -354,6 +354,17 @@
 				}
 			}
 		}
+		~ .social-media {
+			width: 260px;
+			visibility: visible;
+			transition: all .5s ease;
+			transform: translate3d(0,0,0);
+			> .icon{
+				display:block;
+				transition: all .5s ease;
+				transform: translate3d(0,0,0);
+			}
+		}
 	}
 	~ a.add-account{
 		width:220px;

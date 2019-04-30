@@ -690,6 +690,7 @@ footer{
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
     z-index: 103;
+    padding-bottom: @40px;
     .ui.divider {
         margin-left: @24px;
         margin-right: @24px;
@@ -808,12 +809,12 @@ footer{
     z-index: 104;
     position: absolute;
     bottom: 0;
-    width: 260px;
+    width: 0;
     text-align: center;
-    padding: 14px 0;
     .ui.menu{
         justify-content: center;
         align-items: center;
+        box-shadow: none;
         .item {
             color: @neutral-middark;
             i.icon {
