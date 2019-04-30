@@ -5,6 +5,7 @@
   "description": "NS-Client",
   "devDependencies": {
     "copy-webpack-plugin": "^4.6.0",
+    "cypress": "^3.2.0",
     "eslint": "4.13.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-react-app": "^2.0.0",
@@ -148,6 +149,7 @@
     "build:prod": "npm-run-all build-assets build-js:prod",
     "test": "node scripts/test.js --env=jsdom",
     "predeploy": "npm run build",
+    "cypress:open": "cypress open",
     "deploy": "gh-pages -d build"
   },
   "jest": {
