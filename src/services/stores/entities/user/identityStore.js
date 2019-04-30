@@ -721,7 +721,6 @@ export class IdentityStore {
     if (info) {
       this.setProfileInfoField('lastName', info.lastName);
     } else if (legalDetails && legalDetails.legalName !== null) {
-      this.setProfileInfoField('firstName', legalDetails.legalName.salutation);
       this.setProfileInfoField('firstName', legalDetails.legalName.firstLegalName);
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
