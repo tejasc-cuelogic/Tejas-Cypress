@@ -45,6 +45,7 @@ export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($ti
       },
       categoryId,
       authorName,
+      categoryName,
     }
   }  
 `;

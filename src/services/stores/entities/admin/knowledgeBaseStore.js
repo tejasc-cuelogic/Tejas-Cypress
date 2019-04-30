@@ -70,6 +70,12 @@ export class KnowledgeBaseStore {
     }
     this.initiateSearch(srchParams);
   }
+
+  @action
+  setSearchFilters = (name, value) => {
+    const srchParams = { ...this.requestState.search };
+    srchParams[name] = value;
+  }
   @action
   initiateSearch = (srchParams, getAllUsers = false) => {
     this.requestState.search = srchParams;

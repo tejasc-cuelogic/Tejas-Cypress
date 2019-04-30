@@ -12,6 +12,10 @@ import AllKnowledgeBaseItems from './../components/AllKnowledgeBaseItems';
 @inject('knowledgeBaseStore')
 @observer
 export default class ManageKnowledgeBase extends Component {
+  onAuthorChange = (e, { name, value }) => {
+    this.props.knowledgeBaseStore.setSearchFilters(name, value);
+  }
+
   setSearchParam = (e, { name, value }) => {
     this.props.knowledgeBaseStore.setInitiateSrch(name, value);
   }
@@ -25,6 +29,7 @@ export default class ManageKnowledgeBase extends Component {
       this.props.knowledgeBaseStore.setInitiateSrch('authorName', e.target.value);
     }
   }
+
   removeFilter = name => this.props.userListingStore.removeFilter(name);
   toggleSearch = () => this.props.knowledgeBaseStore.toggleSearch();
   render() {
@@ -64,9 +69,15 @@ export default class ManageKnowledgeBase extends Component {
               <Grid stackable columns="equal">
                 <Grid.Row>
                   <Grid.Column>
-                    <DropdownFilterWithHeader value={knowledgeBaseOptionText && knowledgeBaseOptionText.text ? knowledgeBaseOptionText.text : 'Select Filter'} change={this.setSearchParam} name="Category" keyName="categoryId" options={categoriesDropdown} />
+                    <DropdownFilterWithHeader
+                      value={knowledgeBaseOptionText && knowledgeBaseOptionText.text ? knowledgeBaseOptionText.text : 'Select Filter'}
+                      change={this.setSearchParam}
+                      name="Category"
+                      keyName="categoryId"
+                      options={categoriesDropdown}
+                    />
                   </Grid.Column>
-                  <Grid.Column> { console.log('status====', requestState.search.itemStatus)}
+                  <Grid.Column>
                     <DropdownFilter value={requestState.search.itemStatus} change={this.setSearchParam} name="Status" keyName="itemStatus" options={KB_STATUS_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
@@ -84,6 +95,10 @@ export default class ManageKnowledgeBase extends Component {
                       executeSearch={this.searchByAuthor}
                       toggleSearch={this.toggleSearch}
                       requestState={requestState}
+                      change={e => this.onAuthorChange(e, {
+                        name: 'authorName',
+                      value: requestState.search.authorName,
+                    })}
                     />
                   </Grid.Column>
                 </Grid.Row>
