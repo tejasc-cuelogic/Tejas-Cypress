@@ -99,6 +99,9 @@
 			// border-radius:@4px !important;
 			margin-bottom:@1px !important;
 			font-weight:400;
+			&.menu-header .header:not(.ui){
+				margin:0.5em 0 0;
+			}
 			&.ui.dropdown>.text{
 				max-width:~"calc(100% - 27px)";
 			}
@@ -124,7 +127,7 @@
 				white-space: nowrap;
 				overflow: hidden;
 			}
-			&:not(:last-child){
+			&:not(:last-child), &:not(.menu-header){
 				&:hover, &:focus, &.active{
 					background:@neutral-offwhite;
 					.icon:not(.dropdown){
@@ -186,6 +189,9 @@
 				opacity:1;
 				margin-left:@30px;
 				// max-width:153px;
+			}
+			&.menu-header{
+				padding-bottom:0;
 			}
 			&.dropdown{
 				// .menu>.item:first-of-type{
