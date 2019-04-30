@@ -68,14 +68,17 @@ export class PortfolioStore {
   }
 
   @action
-  getPayOffData = (accountType) => {
+  getPayOffData = (accountType, isAdmin = false) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const investorUserDetails = userDetailsStore.getDetailsOfUser;
+    const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
+    const userDetailsId = isAdmin ? investorUserDetails.id : userStore.currentUser.sub;
     this.PayOffData = graphql({
       client,
       query: getMonthlyPaymentsToInvestorByOffering,
       variables: {
-        userId: userStore.currentUser.sub,
+        userId: userDetailsId,
         accountId: account.details.accountId,
         offeringId: offeringCreationStore.currentOfferingId,
       },
@@ -185,10 +188,13 @@ export class PortfolioStore {
     return this.investmentLists.loading;
   }
   @action
-  getInvestorDetails = (accountType, offeringId) => new Promise((resolve) => {
+  getInvestorDetails = (accountType, offeringId, isAdmin = false) => new Promise((resolve) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
+    const investorAccountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const investorDetails = userDetailsStore.getDetailsOfUser;
+    const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
+    const investorUserId = isAdmin ? investorDetails.id : userDetails.id;
     if (uiStore.inProgress !== 'portfolioDirect') {
       uiStore.setProgress('portfolio');
     }
@@ -196,7 +202,8 @@ export class PortfolioStore {
       client,
       query: getInvestorDetailsById,
       variables: {
-        userId: userDetails.id,
+        // userId: userDetails.id,
+        userId: investorUserId,
         accountId: account.details.accountId,
         offeringId,
       },
