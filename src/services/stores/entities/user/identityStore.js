@@ -129,7 +129,9 @@ export class IdentityStore {
 
   @action
   setVerifyIdentityResponse = (response) => {
-    this.ID_VERIFICATION_FRM.response = response;
+    const IDENTITY_FORM = this.ID_VERIFICATION_FRM;
+    IDENTITY_FORM.response = response;
+    this.ID_VERIFICATION_FRM = { ...IDENTITY_FORM };
   }
 
   @action
@@ -154,6 +156,7 @@ export class IdentityStore {
     const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       legalName: {
+        salutation: fields.title.value,
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
@@ -197,6 +200,9 @@ export class IdentityStore {
     } else if (response.message === 'PASS' || (response.summary && response.summary === 'pass')) {
       cip.expiration = Helper.getDaysfromNow(21);
       cip.requestId = response.passId;
+      if (response.message === 'All answers correct') {
+        cip.failReason = [{ key: response.key, message: response.message }];
+      }
     } else if (response.message === 'FAIL' && response.questions) {
       cip.expiration = Helper.getDaysfromNow(21);
       cip.requestId = response.softFailId;
@@ -455,15 +461,18 @@ export class IdentityStore {
         .then((result) => {
           /* eslint-disable no-underscore-dangle */
           if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
+            this.setVerifyIdentityResponse(result.data.verifyCIPAnswers);
             this.setCipStatus('PASS');
             this.updateUserInfo();
           }
           uiStore.setProgress(false);
+          this.setFieldValue('signUpLoading', false);
           resolve(result);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
+          this.setFieldValue('signUpLoading', false);
           reject();
         });
       // .finally(() => {
@@ -712,6 +721,7 @@ export class IdentityStore {
     if (info) {
       this.setProfileInfoField('lastName', info.lastName);
     } else if (legalDetails && legalDetails.legalName !== null) {
+      this.setProfileInfoField('firstName', legalDetails.legalName.salutation);
       this.setProfileInfoField('firstName', legalDetails.legalName.firstLegalName);
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
@@ -814,6 +824,7 @@ export class IdentityStore {
     const { legalDetails, phone } = userDetailsStore.userDetails;
     const { fields } = this.ID_VERIFICATION_FRM;
     if (legalDetails && legalDetails.legalName) {
+      fields.title.value = legalDetails.legalName.salutation;
       fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
       fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
     }
