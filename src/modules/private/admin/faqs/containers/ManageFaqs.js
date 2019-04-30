@@ -13,6 +13,8 @@ export default class ManageFaqs extends Component {
   componentWillMount() {
     this.props.articleStore.getCategoryList(false);
   }
+  setSearchParam = (e, { name, value }) =>
+    this.props.articleStore.setInitiateSrch(name, value);
   search = (e) => {
     if (e.charCode === 13 && false) {
       // search goes here..
@@ -20,11 +22,8 @@ export default class ManageFaqs extends Component {
   }
   toggleSearch = () => this.props.articleStore.toggleSearch();
   render() {
-    const {
-      match,
-      filters,
-    } = this.props;
-    const { categoriesDropdown } = this.props.articleStore;
+    const { match } = this.props;
+    const { categoriesDropdown, filters, requestState } = this.props.articleStore;
     return (
       <PrivateLayout
         {...this.props}
@@ -49,18 +48,18 @@ export default class ManageFaqs extends Component {
             filters={filters}
           />}
         P2={
-          <div className="more search-filters">
+          <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
             <Form>
               <Grid stackable columns="equal">
                 <Grid.Row>
                   <Grid.Column>
-                    <DropdownFilter width={1} change={this.setSearchParam} name="Type" keyName="type" options={FAQ_TYPES_VALUES} />
+                    <DropdownFilter value={requestState.search.type} width={1} change={this.setSearchParam} name="Type" keyName="type" options={FAQ_TYPES_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
-                    <DropdownFilter width={1} change={this.setSearchParam} name="Category" keyName="categoryName" options={categoriesDropdown} />
+                    <DropdownFilter value={requestState.search.category} width={1} change={this.setSearchParam} name="Category" keyName="categoryName" options={categoriesDropdown} />
                   </Grid.Column>
                   <Grid.Column>
-                    <DropdownFilter width={1} change={this.setSearchParam} name="Status" keyName="status" options={FAQ_STATUS_VALUES} />
+                    <DropdownFilter value={requestState.search.status} width={1} change={this.setSearchParam} name="Status" keyName="status" options={FAQ_STATUS_VALUES} />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
