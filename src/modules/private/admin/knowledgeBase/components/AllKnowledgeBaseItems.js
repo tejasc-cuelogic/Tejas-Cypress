@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import _ from 'lodash';
+import { withRouter, Link } from 'react-router-dom';
 import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
 import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/knowledgeBase';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
@@ -108,12 +109,13 @@ export default class AllKnowledgeBaseItems extends Component {
                           onChange={(e, result) => this.checkedRecords(e, result)}
                         />
                       </Table.Cell>
-                      <Table.Cell>{record.title}</Table.Cell>
-                      <Table.Cell>{record.userType}</Table.Cell>
-                      <Table.Cell>{record.category || 'N/A'}</Table.Cell>
                       <Table.Cell>
-                        {(record.author && record.author.info && record.author.info.firstName) || 'N/A'}
-                        {record.author && record.author.info && record.author.info.lastName}
+                        <span className="user-name"><Link to={`/app/knowledge-base/${record.id}/${record.itemStatus}`}><b>{_.capitalize(record.title)}</b></Link></span>
+                      </Table.Cell>
+                      <Table.Cell>{_.capitalize(record.userType)}</Table.Cell>
+                      <Table.Cell>{_.capitalize(record.categoryName) || 'N/A'}</Table.Cell>
+                      <Table.Cell>
+                        {_.capitalize(record.authorName) || 'N/A'}
                       </Table.Cell>
                       <Table.Cell><Label color={`${record.itemStatus === 'PUBLISHED' ? 'green' : record.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
                       <Table.Cell>

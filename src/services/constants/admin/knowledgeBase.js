@@ -5,7 +5,7 @@ export const KNOWLEDGE_BASE = {
   itemStatus: {
     value: '', label: 'Status', error: undefined, rule: 'required',
   },
-  authorId: {
+  authorName: {
     value: '', label: 'Author', error: undefined, rule: 'required',
   },
   categoryId: {
@@ -47,15 +47,15 @@ export const TAGS = [
 
 export const KB_STATUS_VALUES = [
   { key: 'All', value: 'All', text: 'All' },
-  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
-  { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
-  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN_REVIEW' },
+  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'Published' },
+  { key: 'DRAFT', value: 'DRAFT', text: 'Draft' },
+  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'In review' },
 ];
 
 export const ITEM_STATUS_VALUES = [
-  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
-  { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
-  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN REVIEW' },
+  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'Published' },
+  { key: 'DRAFT', value: 'DRAFT', text: 'Draft' },
+  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'In review' },
 ];
 
 export const AUTHORS = [
@@ -78,4 +78,5 @@ export const USER_TYPES = [
 export const CATEGORY_TYPES = {
   ISSUER_KB: 'Issuer Knowledge Base',
   INVESTOR_KB: 'Investor Knowledge Base',
+  ALL: '',
 };

@@ -33,8 +33,8 @@ export const allFaqQuery = gql`query getListOfFAQsAndKnowledgeBase($categoryType
 }
 `;
 
-export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($title: String, $categoryId: String, $itemStatus: ArticleStatusEnum, $authorId: String){
-    knowledgeBaseByFilters(title: $title, categoryId: $categoryId, itemStatus: $itemStatus, authorId: $authorId){
+export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($title: String, $categoryId: String, $itemStatus: ArticleStatusEnum, $authorName: String){
+    knowledgeBaseByFilters(title: $title, categoryId: $categoryId, itemStatus: $itemStatus, authorName: $authorName){
       title
       id
       userType
@@ -42,7 +42,9 @@ export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($ti
       slug      
       updated{
         date
-      }
+      },
+      categoryId,
+      authorName,
     }
   }  
 `;
@@ -90,7 +92,9 @@ query knowledgeBaseById($id: ID!) {
       content
       userType
       itemStatus
-      categoryName
+      categoryName,
+      categoryId,
+      authorName
   }
 }
 `;

@@ -48,8 +48,11 @@ export const DropdownFilterWithHeader = props => (
           <Dropdown.Menu>
             {_.map(props.options, rec => (
               <Aux>
-                <Dropdown.Header content={rec.title} key={rec.title} />
-                <Dropdown.Divider />
+                {rec.title ?
+                  <Aux>
+                    <Dropdown.Header content={rec.title} key={rec.title} />
+                    <Dropdown.Divider />
+                  </Aux> : ''}
                 {
                   rec.options.map(el => (
                     <Dropdown.Item

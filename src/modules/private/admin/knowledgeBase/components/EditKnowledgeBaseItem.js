@@ -99,7 +99,7 @@ export default class EditKnowledgeBaseItem extends Component {
                                 name="userType"
                                 changed={(e, result) => userTypeChange(e, result)}
                                 readOnly={false}
-                                containerclassname="mt-30 radio-basic center-align"
+                                containerclassname="center-align"
                                 widths="equal"
                                 value={KNOWLEDGE_BASE_FRM.fields.userType.value}
                               />
@@ -142,8 +142,8 @@ export default class EditKnowledgeBaseItem extends Component {
                             </div>
                             <FormInput
                               type="text"
-                              name="authorId"
-                              fielddata={KNOWLEDGE_BASE_FRM.fields.authorId}
+                              name="authorName"
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.authorName}
                               changed={knowledgeBaseChange}
                             />
                           </Form>

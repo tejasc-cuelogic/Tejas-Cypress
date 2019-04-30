@@ -229,8 +229,16 @@ export class KnowledgeBaseStore {
 
   @computed get categoriesDropdown() {
     const categoriesArray = {};
+    const defaultOption = {
+      key: 'all',
+      value: 'All',
+      text: 'All',
+    };
     if (this.Categories.data && this.Categories.data.categories) {
       this.Categories.data.categories.map((ele) => {
+        categoriesArray.ALL = [];
+        categoriesArray.ALL.push(defaultOption);
+
         if (!categoriesArray[ele.categoryType]) {
           categoriesArray[ele.categoryType] = [];
         }
@@ -333,6 +341,10 @@ export class KnowledgeBaseStore {
       delete (params.authorId);
     }
 
+    if (categoryId && categoryId === 'All') {
+      delete (params.categoryId);
+    }
+
     this.requestState.page = params.page || 1;
     this.data = graphql({
       client,
@@ -340,6 +352,7 @@ export class KnowledgeBaseStore {
       variables: params,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
+        this.resetSearch();
         if (res && !this.data.loading) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
@@ -371,6 +384,7 @@ export class KnowledgeBaseStore {
   resetSelectedRecords = () => {
     this.selectedRecords = [];
     this.isReadOnly = true;
+    this.globalAction = '';
   }
 
   updateRecordStatus = (id, status) => {
