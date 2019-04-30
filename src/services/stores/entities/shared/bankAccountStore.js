@@ -234,7 +234,7 @@ export class BankAccountStore {
     const { value } = this.addFundsByAccType.fields.value;
     const { isValid } = this.addFundsByAccType.meta;
     accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid ?
-      value : -1;
+      value : this.depositMoneyNow ? '' : -1;
     return accountAttributes;
   }
 

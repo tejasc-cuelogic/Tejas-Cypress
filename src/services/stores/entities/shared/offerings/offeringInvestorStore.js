@@ -83,7 +83,8 @@ export class OfferingInvestorStore {
     if (this.sortOrder.column && this.sortOrder.direction && this.db) {
       return orderBy(
         this.db,
-        [user => (this.sortOrder.column === 'investmentDate' ? moment(user[this.sortOrder.column]).unix() : this.sortOrder.column === 'amount' ? user[this.sortOrder.column] : user[this.sortOrder.column].toString().toLowerCase())],
+        [user => (this.sortOrder.column === 'investmentDate' ? moment(user[this.sortOrder.column]).unix() : this.sortOrder.column === 'amount' ? user[this.sortOrder.column] :
+          user[this.sortOrder.column] && user[this.sortOrder.column].toString().toLowerCase())],
         [this.sortOrder.direction],
       );
     }
