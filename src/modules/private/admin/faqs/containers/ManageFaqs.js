@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import { ByKeyword as Search, DropdownFilter } from '../../../../../theme/form/Filters';
 import AllFaqs from '../components/AllFaqs';
-import { FAQ_STATUS_VALUES, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/article';
+import { FAQ_STATUS_VALUES, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/faqs';
 
 @inject('faqStore', 'articleStore')
 @observer

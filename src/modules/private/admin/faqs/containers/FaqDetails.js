@@ -5,7 +5,7 @@ import { Modal, Header, Grid, Card, Form, Divider, Button } from 'semantic-ui-re
 import { InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { FormInput, FormDropDown } from '../../../../../theme/form';
-import { FAQ_STATUS_VALUES, AUTHORS, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/article';
+import { FAQ_STATUS_VALUES, AUTHORS, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/faqs';
 
 @inject('faqStore', 'uiStore', 'articleStore')
 @withRouter
