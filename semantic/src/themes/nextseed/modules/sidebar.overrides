@@ -234,11 +234,12 @@
 			margin-left:@12px;
 		}
 		.ns-close-light{
-			position:absolute;
+			position: relative;;
 			top:12px;
 			right:10px;
 			font-size:@12px;
 			height:auto;
+			float: right;
 		}
 		.user-picture{
 			text-align:left;

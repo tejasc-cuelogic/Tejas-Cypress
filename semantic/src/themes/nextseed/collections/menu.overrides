@@ -674,6 +674,8 @@ footer{
     padding: 0;
     height: ~"calc(100vh - 98px)";
     overflow: hidden;
+    padding-top: @34px;
+    width: 100%;
     .mobile-nav-inner-container {
         height: ~"calc(100vh - 98px)";
         overflow: auto;
@@ -681,7 +683,7 @@ footer{
         display: flex;
         flex-direction: column;
         .public-header-nav{
-            padding-top: 46px;
+            // padding-top: 46px;
             flex-grow: 1;
             background: @white;
         }
