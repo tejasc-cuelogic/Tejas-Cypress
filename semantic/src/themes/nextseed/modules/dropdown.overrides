@@ -173,6 +173,16 @@
             padding-bottom:@4px;
         }
     }
+    &.private-secondary-menu {
+        padding: @10px;
+        >.dropdown.icon {
+            padding: @10px;
+        }
+        &.active .menu {
+            padding: 0 @24px;
+            max-height: 150px;
+        }
+    }
 }
 dl.dl-horizontal dd .ui.selection.dropdown.display-only{
     font-weight:@normal;

@@ -5,18 +5,23 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
+import { capitalize, get } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { AccTypeTitle, ListErrors } from '../../../../../../theme/shared';
-import { DataFormatter } from '../../../../../../helper';
+// import { DataFormatter } from '../../../../../../helper';
 import Helper from '../../../../../../helper/utility';
 
 @inject('transactionStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
 export default class AddWithdrawFund extends Component {
+  state = { isActivebutton: true };
   componentWillMount() {
-    const { setInitialLinkValue, setInitialFundValue } = this.props.transactionStore;
+    const { setInitialLinkValue, setInitialFundValue, cash } = this.props.transactionStore;
+    if (!cash) {
+      this.props.transactionStore.getInvestorAvailableCash(false);
+    }
     setInitialLinkValue(false);
     setInitialFundValue();
   }
@@ -26,6 +31,7 @@ export default class AddWithdrawFund extends Component {
     const { showConfirmPreview, setInitialLinkValue } = this.props.transactionStore;
     const actionValue = this.props.match.params.action;
     if (showConfirmPreview) {
+      this.setState({ isActivebutton: false });
       const transferAmount = this.props.transactionStore.TRANSFER_FRM.fields.amount.value;
       const transferDescription = actionValue === 'add' ? 'Add fund' : 'Withdraw fund';
       const toasterMessage = 'Transaction successful!';
@@ -44,130 +50,133 @@ export default class AddWithdrawFund extends Component {
   }
   transactionAddFund = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.addFunds(transferAmount, transferDescription).then(() => {
+      this.setState({ isActivebutton: true });
       Helper.toast(toasterMessage, 'success');
       this.props.history.replace(this.props.refLink);
     });
   }
   transactionWithdrawFunds = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.withdrawFunds(transferAmount, transferDescription).then(() => {
+      this.setState({ isActivebutton: true });
       Helper.toast(toasterMessage, 'success');
       this.props.history.replace(this.props.refLink);
     });
   }
   render() {
+    const { match, transactionStore } = this.props;
     const {
-      match, transactionStore,
-    } = this.props;
-    const {
-      TRANSFER_FRM,
-      TransferChange,
-      showConfirmPreview,
-      cash,
+      TRANSFER_FRM, TransferChange, showConfirmPreview, getValidWithdrawAmt,
+      cash, cashAvailable,
     } = transactionStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
-    const linkBankDetials = currentActiveAccountDetails && currentActiveAccountDetails.details &&
-      currentActiveAccountDetails.details.linkedBank ?
-      currentActiveAccountDetails.details.linkedBank : null;
+    const linkBankDetials = (get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') && get(currentActiveAccountDetails, 'details.linkedBank.pendingUpdate')) ? get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') : get(currentActiveAccountDetails, 'details.linkedBank') || null;
+    const accountType =
+    linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
     const { errors } = this.props.uiStore;
     const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
     return (
       <Aux>
-        <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
-          <Modal.Header className="signup-header">
-            <Header as="h3"><AccTypeTitle noText />
-              {headingTitle}
-            </Header>
-          </Modal.Header>
-          <Modal.Content>
-            <Form error onSubmit={this.transfer} size="massive">
-              {!showConfirmPreview && match.params.action === 'withdraw' &&
-                <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
+        {!cashAvailable.loading &&
+          <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
+            <Modal.Header className="signup-header">
+              <Header as="h3"><AccTypeTitle noText />
+                {headingTitle}
+              </Header>
+            </Modal.Header>
+            <Modal.Content>
+              <Form error onSubmit={this.transfer} size="massive">
+                {!showConfirmPreview && match.params.action === 'withdraw' &&
+                  <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
+                    <MaskedInput
+                      readOnly="readonly"
+                      hoverable
+                      label="Total available for withdrawal:"
+                      key="amount"
+                      prefix="$ "
+                      name="maountInvested"
+                      containerclassname="fund-amount"
+                      currency
+                      fielddata={{ value: cash }}
+                    />
+                  </div>
+                }
+                {!showConfirmPreview &&
                   <MaskedInput
-                    readonly="readonly"
+                    readOnly={showConfirmPreview ? 'readonly' : false}
                     hoverable
-                    label="Total available for withdrawal:"
+                    label={match.params.action === 'add' ? '' : labelForWithdrawInput}
                     key="amount"
                     prefix="$ "
-                    name="maountInvested"
+                    name="amount"
                     containerclassname="fund-amount"
                     currency
-                    fielddata={{ value: cash }}
+                    allowNegative={false}
+                    fielddata={TRANSFER_FRM.fields.amount}
+                    changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
                   />
-                </div>
-              }
-              {!showConfirmPreview &&
-                <MaskedInput
-                  // disabled={showConfirmPreview ? 'disabled' : ''}
-                  readonly={showConfirmPreview ? 'readonly' : false}
-                  hoverable
-                  label={match.params.action === 'add' ? 'Deposit amount' : labelForWithdrawInput}
-                  key="amount"
-                  prefix="$ "
-                  name="amount"
-                  containerclassname="fund-amount"
-                  currency
-                  fielddata={TRANSFER_FRM.fields.amount}
-                  changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
-                />
-              }
-              {showConfirmPreview ?
-                <Aux>
-                  <div className="field fund-amount">
-                    {match.params.action === 'withdraw' ?
-                      <label>Withdrawal amount</label>
-                      :
-                      <label>Deposit amount</label>
-                    }
-                    <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
-                      <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
-                    </Header>
-                  </div>
-                  <Statistic className="mt-10 mb-10">
-                    <Header as="h5" className="text-capitalize">
+                }
+                {showConfirmPreview ?
+                  <Aux>
+                    <div className="field fund-amount">
                       {match.params.action === 'withdraw' ?
-                        <Aux>
-                          <Header.Subheader>From</Header.Subheader>
-                          NextSeed {currentActiveAccountDetails &&
-                          currentActiveAccountDetails.name ?
-                            currentActiveAccountDetails.name : null} Investment Account
-                          <Divider hidden />
-                          <Header.Subheader>To</Header.Subheader>
-                          {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
-                        </Aux> :
-                        <Aux>
-                          <Header.Subheader>From</Header.Subheader>
-                          {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
-                          <Divider hidden />
-                          <Header.Subheader>To</Header.Subheader>
-                          NextSeed {currentActiveAccountDetails &&
-                          currentActiveAccountDetails.name ?
-                            currentActiveAccountDetails.name : null} Investment Account
-                        </Aux>}
-                    </Header>
-                  </Statistic>
-                </Aux>
-                :
-                null
-              }
-              {!showConfirmPreview ? errors &&
-                <Message error className="mt-30">
-                  <ListErrors errors={[errors]} />
-                </Message>
-                :
-                null
-              }
-              <div className="center-align mt-30">
-                <Button.Group>
-                  {showConfirmPreview ?
-                    <Button onClick={this.cancelTransfer} content="Cancel" /> : null
-                  }
-                  <Button primary disabled={!TRANSFER_FRM.meta.isValid} content="Confirm" />
-                </Button.Group>
-              </div>
-            </Form>
-          </Modal.Content>
-        </Modal>
+                        <label>Withdrawal amount</label>
+                        : ''
+                      }
+                      <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
+                        <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
+                      </Header>
+                    </div>
+                    <Statistic className="mt-10 mb-10">
+                      <Header as="h5" className="text-capitalize">
+                        {match.params.action === 'withdraw' ?
+                          <Aux>
+                            <Header.Subheader>From</Header.Subheader>
+                            {currentActiveAccountDetails &&
+                            currentActiveAccountDetails.name ?
+                              currentActiveAccountDetails.name : null} Account
+                            <Divider hidden />
+                            <Header.Subheader>To</Header.Subheader>
+                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
+                          </Aux> :
+                          <Aux>
+                            <Header.Subheader>From</Header.Subheader>
+                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
+                            <Divider hidden />
+                            <Header.Subheader>To</Header.Subheader>
+                            {currentActiveAccountDetails &&
+                            currentActiveAccountDetails.name ?
+                              currentActiveAccountDetails.name : null} Account
+                          </Aux>}
+                      </Header>
+                    </Statistic>
+                  </Aux>
+                  :
+                  null
+                }
+                {!showConfirmPreview ? errors &&
+                  <Message error className="mt-30">
+                    <ListErrors errors={[errors]} />
+                  </Message>
+                  :
+                  null
+                }
+                <div className="center-align mt-30">
+                  <Button.Group>
+                    {showConfirmPreview ?
+                      <Button onClick={this.cancelTransfer} content="Cancel" /> : null
+                    }
+                    <Button
+                      primary
+                      disabled={!((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton}
+                      content="Confirm"
+                    />
+                  </Button.Group>
+                </div>
+              </Form>
+            </Modal.Content>
+          </Modal>
+        }
       </Aux>
     );
   }

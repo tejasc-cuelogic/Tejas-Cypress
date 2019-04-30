@@ -27,6 +27,7 @@ export const BUSINESS_APPLICATION_STATUS = {
   APPLICATION_SUCCESSFUL: 'APPLICATION_SUCCESSFUL',
   REVIEWED: 'REVIEWED',
   DECLINED: 'DECLINED',
+  APPLICATION_DECLINED: 'APPLICATION_DECLINED',
   APPLICATION_DELETED: 'APPLICATION_DELETED',
   LENDIO_PRE_QUALIFICATION_SUCCESSFUL: 'LENDIO_PRE_QUALIFICATION_SUCCESSFUL',
   LENDIO_PRE_QUALIFICATION_FAILED: 'LENDIO_PRE_QUALIFICATION_FAILED',
@@ -46,6 +47,7 @@ export const BUSINESS_APP_ADMIN_STATUS = [
   { status: 'OFFERED', color: 'blue', title: 'Offered' },
   { status: 'DELETED', color: 'red', title: 'Deleted' },
   { status: 'REMOVED', color: 'red', title: 'Removed' },
+  { status: 'APPLICATION_DECLINED', color: 'red', title: 'Admin Declined' },
 ];
 
 export const BUSINESS_APP_USER_STATUS = {
@@ -80,6 +82,9 @@ export const BUSINESS_APP_USER_STATUS = {
     status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_DECLINED: {
     status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_DELETED: {
@@ -307,7 +312,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
       { label: 'Restructure Debt', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
-      { label: 'Other Industry Type', value: 'OTHER' },
+      { label: 'Other use of fund', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -497,7 +502,7 @@ export const BUSINESS_DETAILS = {
       value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %', customErrors: { required: 'required' },
+      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
       value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
@@ -723,25 +728,25 @@ export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
     {
       congratulations: '',
       header: 'You have been pre-qualified for a NextSeed campaign',
-      message: 'Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at apply@nextseedsecurities.com.',
+      message: <span>Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
     },
     {
       congratulations: '',
       header: 'You’re almost there',
-      message: 'Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at apply@nextseedsecurities.com.',
+      message: <span>Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStage: 'IN_PROGRESS',
     },
     {
       congratulations: 'Congratulations!',
       header: 'We’re reviewing your application',
-      message: 'Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at apply@nextseedsecurities.com.',
+      message: <span>Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStatus: 'APPLICATION_SUBMITTED',
     },
     {
       congratulations: 'Congratulations!',
       header: 'You’ve received an offer!',
-      message: 'We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at apply@nextseedsecurities.com.',
+      message: <span>We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStatus: 'APPLICATION_OFFERED',
     },
   ],
@@ -768,13 +773,13 @@ export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
       congratulations: 'Congratulations!',
       header: 'Funds have been disbursed',
       message: 'Congrats! Please check your account and confirm that you have received your funds.',
-      offeringStage: ['STARTUP_PREIOD'],
+      offeringStage: ['STARTUP_PERIOD'],
     },
     {
       congratulations: '!',
       header: 'How are things progressing?',
       message: 'It’s time to provide your monthly update. Please go to your Updates section to share the latest with your investors.',
-      offeringStage: ['STARTUP_PREIOD', 'IN_REPAYMENT'],
+      offeringStage: ['STARTUP_PERIOD', 'IN_REPAYMENT'],
     },
   ],
 };

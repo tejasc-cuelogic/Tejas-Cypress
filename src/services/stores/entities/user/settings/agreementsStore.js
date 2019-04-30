@@ -1,8 +1,10 @@
 import { toJS, observable, computed, action } from 'mobx';
 import { forEach } from 'lodash';
 import graphql from 'mobx-apollo';
+import { uiStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
 import { getBoxEmbedLink, getLegalDocsFileIds } from '../../../queries/agreements';
+import Helper from '../../../../../helper/utility';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
@@ -36,6 +38,16 @@ export class AgreementsStore {
       key: 'bDIAgreemnt',
       title: 'NextSeed Broker-Dealer Investor Agreement',
       refEnum: 'SECURITIES_INVESTOR_AGREEMENT',
+    },
+    {
+      key: 'instruction2017',
+      title: 'Instruction 2017',
+      refEnum: 'INSTRUCTIONS_1099_2017',
+    },
+    {
+      key: 'instruction2018',
+      title: 'Instruction 2018',
+      refEnum: 'INSTRUCTIONS_1099_2018',
     },
   ];
   @observable embedUrl = null;
@@ -86,7 +98,7 @@ export class AgreementsStore {
     const agreementsList = this.getAgreementsList;
     const navList = [];
     forEach(agreementsList, (ele) => {
-      if (ele.key !== 'welcomeKit' && ele.key !== 'businessPan') {
+      if (!['welcomeKit', 'businessPan'].includes(ele.key) && !ele.key.includes('instruction')) {
         navList.push({ title: ele.title, to: ele.key, id: ele.id });
       }
     });
@@ -103,7 +115,7 @@ export class AgreementsStore {
     });
   })
 
-  getLegalDocsFileIds = () => new Promise((resolve) => {
+  getLegalDocsFileIds = () => new Promise((resolve, reject) => {
     this.setField('docIdsLoading', true);
     graphql({
       client,
@@ -113,11 +125,21 @@ export class AgreementsStore {
           this.setNavItemsIds(data.getLegalDocsFileIds);
           this.setField('alreadySet', true);
           this.setField('docIdsLoading', false);
+          uiStore.setProgress(false);
           resolve(data);
         }
       },
+      onError: () => {
+        uiStore.setProgress(false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
     });
   });
+
+  @computed get legalDocs() {
+    return toJS(this.legalDocsList);
+  }
 
   @action
   setFileIdsData = (meta, data) => {

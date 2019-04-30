@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Icon } from 'semantic-ui-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend, Sector } from 'recharts';
+import { get } from 'lodash';
 // import Helper from '../../../../../helper/utility';
 
 /*
@@ -8,12 +10,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend, Sector } from 
 */
 const renderActiveShape = (props) => {
   const {
-    cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, percent,
+    cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, value,
   } = props;
 
   return (
     <g>
-      <text x={cx} y={cy + 20} dy={13} textAnchor="middle" className="datavalue">{(percent * 100).toFixed(2)}%</text>
+      <text x={cx} y={cy + 20} dy={13} textAnchor="middle" className="datavalue">{value}</text>
       <Sector
         cx={cx}
         cy={cy}
@@ -53,12 +55,22 @@ export default class ChartPie extends Component {
 
   renderLegend = (props) => {
     const { payload } = props;
+    const hasIcons = !!this.props.icons;
     return (
       <ul className="chartLegends">
         {
-          payload.map(entry => (
-            <li style={{ color: entry.color }} key={`item-${entry.value}`}><span>{entry.icon} {entry.value}</span></li>
-          ))
+          payload.map((entry) => {
+            const icon = get(entry, 'payload.payload.key');
+            return (
+              <li style={{ color: entry.color }} key={`item-${entry.value}`}>
+                <span>
+                  {entry.icon}
+                  {hasIcons && <Icon className={this.props.icons[icon]} />}
+                  {entry.value}
+                </span>
+              </li>
+            );
+          })
         }
       </ul>
     );

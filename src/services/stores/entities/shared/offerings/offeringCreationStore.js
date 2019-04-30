@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { sortBy, get, has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -8,7 +8,7 @@ import cleanDeep from 'clean-deep';
 import {
   DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
 } from '../../../../constants/admin/offerings';
@@ -31,6 +31,7 @@ export class OfferingCreationStore {
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+  @observable CLOSURE_SUMMARY_FRM = Validator.prepareFormObject(CLOSURE_SUMMARY);
   @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
@@ -77,6 +78,7 @@ export class OfferingCreationStore {
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
   @observable offeringFilingList = {};
+  @observable filingListApiRes = {};
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
@@ -93,6 +95,7 @@ export class OfferingCreationStore {
   };
   @observable removeFileIdsList = [];
   @observable removeFileNamesList = [];
+  @observable isUploadingFile = false;
 
   @action
   resetBonusRewardForm = () => {
@@ -182,6 +185,15 @@ export class OfferingCreationStore {
   }
 
   @action
+  resetAllForms = () => {
+    const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    forms.forEach((f) => {
+      this[f] = Validator.resetFormData(this[f]);
+    });
+    this.initLoad = [];
+  }
+
+  @action
   resetFormField = (form, field, fileObj, RemoveIndex) => {
     if (fileObj && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.push(fileObj.location);
@@ -234,7 +246,18 @@ export class OfferingCreationStore {
       },
     };
   }
-
+  @action
+  resetAffiliatedIssuerForm = () => {
+    this.AFFILIATED_ISSUER_FRM =
+      Validator.prepareFormObject(
+        AFFILIATED_ISSUER,
+        false,
+        true,
+        false,
+        { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+      );
+    this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+  }
   @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
@@ -470,7 +493,7 @@ export class OfferingCreationStore {
   @action
   maskChange = (values, form, field) => {
     const fieldValue =
-      (field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (field === 'launchDate' || field === 'processingDate' || field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -479,7 +502,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = (field === 'maturityDate' || field === 'dob' || field === 'dateOfService') ? values.formattedValue : values.floatValue;
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod', 'interestRate'], field) ? Math.abs(values.floatValue) || '' : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,
@@ -520,10 +543,11 @@ export class OfferingCreationStore {
       if (typeof files !== 'undefined' && files.length) {
         forEach(files, (file) => {
           const fileData = Helper.getFormattedFileData(file);
+          this.isUploadingFile = true;
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
-            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => {
               this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
               this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
               this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
@@ -531,13 +555,16 @@ export class OfferingCreationStore {
               this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
               this.checkFormValid(form, multiForm);
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+              this.isUploadingFile = true;
             }).catch((error) => {
               Helper.toast('Something went wrong, please try again later.', 'error');
               uiStore.setErrors(error.message);
+              this.isUploadingFile = true;
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             });
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
+            this.isUploadingFile = true;
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             uiStore.setErrors(error.message);
           });
@@ -581,7 +608,7 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM'));
+    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM' || form === 'KEY_TERMS_FRM'));
   }
 
   @action
@@ -612,7 +639,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false, isMultiform = false) => {
     if (stepName) {
       uiStore.setProgress();
       const file = files[0];
@@ -625,7 +652,7 @@ export class OfferingCreationStore {
         this[form].fields[field].fileId = fileId;
         this[form].fields[field].preSignedUrl = preSignedUrl;
         this[form].fields[field].fileData = file;
-        if (index !== null) {
+        if (index !== null || isMultiform) {
           this[form] = Validator.onArrayFieldChange(
             this[form],
             { name: field, value: fileData.fileName }, subForm, index,
@@ -636,7 +663,7 @@ export class OfferingCreationStore {
             { name: field, value: fileData.fileName },
           );
         }
-        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
           .then(() => {
             if (updateOnUpload) {
               this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} uploaded successfully.`);
@@ -724,7 +751,9 @@ export class OfferingCreationStore {
   @action
   addMore = (form, key) => {
     this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, true);
-    if (form === 'LEADER_FRM') {
+    if (form === 'DATA_ROOM_FRM' && key === 'documents') {
+      this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
+    } else if (form === 'LEADER_FRM') {
       this.initLoad.push('LEADERS_ADDED');
     }
   }
@@ -815,6 +844,7 @@ export class OfferingCreationStore {
       OFFERING_COMPANY_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },
       COMPANY_LAUNCH_FRM: { isMultiForm: false },
+      CLOSURE_SUMMARY_FRM: { isMultiForm: false },
       LAUNCH_CONTITNGENCIES_FRM: { isMultiForm: true },
       CLOSING_CONTITNGENCIES_FRM: { isMultiForm: true },
       OFFERING_DETAILS_FRM: { isMultiForm: false },
@@ -947,9 +977,9 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj,
   ) => {
-    uiStore.setProgress();
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     const variables = {
       id,
       offeringDetails: payload,
@@ -1010,7 +1040,8 @@ export class OfferingCreationStore {
     approvedObj, fromS3 = false, leaderIndex,
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
+    let { getOfferingById } = offeringsStore.offerData.data;
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
@@ -1043,11 +1074,24 @@ export class OfferingCreationStore {
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
-          Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
+        if (subKey === 'launch') {
+          const closureSummary = { ...getOfferingById.closureSummary };
+          closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
+          closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
+          payloadData.closureSummary = closureSummary;
+          payloadData.closureSummary = mergeWith(
+            toJS(getOfferingById.closureSummary),
+            payloadData.closureSummary,
+            this.mergeCustomize,
+          );
+          payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+          payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       } else if (keyName === 'leadership') {
@@ -1059,8 +1103,7 @@ export class OfferingCreationStore {
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
       } else if (keyName === 'editForm') {
-        payloadData.offering = {};
-        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.closureSummary = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
         payloadData = {
           ...payloadData,
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
@@ -1070,26 +1113,27 @@ export class OfferingCreationStore {
           payloadData.keyTerms,
           this.mergeCustomize,
         );
-        payloadData.offering = mergeWith(
-          toJS(getOfferingById.offering),
-          payloadData.offering,
+        payloadData.closureSummary = mergeWith(
+          toJS(getOfferingById.closureSummary),
+          payloadData.closureSummary,
           this.mergeCustomize,
         );
-        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
-        payloadData.offering = cleanDeep(payloadData.offering);
         payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
         payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'editPocForm') {
-        payloadData.offering = {};
-        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
-        payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
-        payloadData.offering = mergeWith(
-          toJS(getOfferingById.offering),
-          payloadData.offering,
-          this.mergeCustomize,
-        );
-        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
-        payloadData.offering = cleanDeep(payloadData.offering);
+        if (get(getOfferingById, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
+          payloadData.closureSummary = {};
+          payloadData.closureSummary.launchDate = this.POC_DETAILS_FRM.fields.targetDate.value;
+          payloadData.closureSummary = mergeWith(
+            toJS(getOfferingById.closureSummary),
+            payloadData.closureSummary,
+            this.mergeCustomize,
+          );
+          payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+          payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
       } else if (keyName === 'BonusRewardTier') {
         const rewardsTiersData = getOfferingById.rewardsTiers || [];
         const isEarlyBirds = fields.isEarlyBirds.value;
@@ -1098,6 +1142,7 @@ export class OfferingCreationStore {
             payloadData.earlyBird = {
               amount: fields.amountForEarlyBird.value,
               quantity: fields.earlyBirdQuantity.value,
+              available: fields.earlyBirdQuantity.value,
             };
           } else {
             rewardsTiersData.push(fields.amountForThisTier.value);
@@ -1184,7 +1229,7 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            toJS(getOfferingById[keyName]),
+            getOfferingById[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
@@ -1214,7 +1259,7 @@ export class OfferingCreationStore {
     }
     this.updateOfferingMutation(
       id, payloadData, keyName, notify, successMsg,
-      fromS3, res, rej, msgType, isLaunchContingency,
+      fromS3, res, rej, msgType, isLaunchContingency, approvedObj,
     );
   });
 
@@ -1225,7 +1270,8 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading) {
+          this.initLoad.splice(this.initLoad.indexOf('ISSUER_FRM'), 1);
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
@@ -1246,7 +1292,7 @@ export class OfferingCreationStore {
       variables: { offeringId, bacType },
       onFetch: (res) => {
         if (res && res.getOfferingBac) {
-          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {}, false);
+          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {});
         }
       },
     });
@@ -1295,7 +1341,7 @@ export class OfferingCreationStore {
     const offeringBacDetails = Validator.evaluateFormData(fields);
     offeringBacDetails.offeringId = getOfferingById.id;
     offeringBacDetails.bacType = bacType;
-    let mutation = createBac;
+    let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
       offeringBacDetails,
     };
@@ -1372,7 +1418,7 @@ export class OfferingCreationStore {
       }
     }
     variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
-    uiStore.setProgress();
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     client
       .mutate({
         mutation,
@@ -1393,6 +1439,8 @@ export class OfferingCreationStore {
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+        offeringsStore.getOne(getOfferingById.id);
+
         // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })
@@ -1511,7 +1559,7 @@ export class OfferingCreationStore {
   @computed
   get allBonusRewards() {
     return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards &&
-    toJS(this.bonusRewards.data.getBonusRewards)) || [];
+      orderBy(toJS(this.bonusRewards.data.getBonusRewards), 'created.date', 'asc')) || [];
   }
 
   @computed
@@ -1520,7 +1568,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  deleteBonusReward = (id) => {
+  deleteBonusReward = id => new Promise((res, rej) => {
     uiStore.setProgress();
     client
       .mutate({
@@ -1539,31 +1587,35 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
+        res();
         Helper.toast('Bonus Reward has been deleted successfully.', 'success');
       })
       .catch(action((err) => {
+        rej();
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
       }))
       .finally(() => {
         uiStore.setProgress(false);
       });
-  }
+  });
 
   @action
   setUpdateBonusRewardsData = (rewardId) => {
+    this.resetBonusRewardForm();
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     const bonusRewards = this.allBonusRewards;
     if (bonusRewards && bonusRewards.length) {
       bonusRewards.map((reward) => {
         if (reward.id === rewardId) {
           fields.name.value = reward.title;
-          fields.description.value = reward.description;
-          fields.expirationDate.value = moment(reward.expirationDate).format('MM/DD/YYYY');
+          fields.description.value = reward.description ? reward.description : '';
+          fields.expirationDate.value = reward.expirationDate ? moment(reward.expirationDate).format('MM/DD/YYYY') : '';
           map(fields, (f) => {
             if (f.earlyBirdQuantity > 0 && reward.earlyBirdQuantity > 0) {
               f.value.push('EARLY_BIRDS');
-            } else if (reward.tiers.includes(f.key)) {
+            }
+            if (reward.tiers.includes(f.key)) {
               f.value.push(f.key);
             }
             return false;
@@ -1572,6 +1624,7 @@ export class OfferingCreationStore {
         return null;
       });
     }
+    Validator.validateForm(this.ADD_NEW_BONUS_REWARD_FRM);
   }
 
   createUpdateBonusReward = (earlyBirdQty, id = false) => {
@@ -1591,7 +1644,7 @@ export class OfferingCreationStore {
         rewardStatus: 'In Review',
         earlyBirdQuantity: fields.isEarlyBirds.value.length ?
           earlyBirdQty : 0,
-        expirationDate: moment(fields.expirationDate.value).toISOString(),
+        expirationDate: fields.expirationDate.value ? moment(new Date(fields.expirationDate.value)).toISOString() : '',
         tiers,
       },
     };
@@ -1632,7 +1685,7 @@ export class OfferingCreationStore {
   @action
   getOfferingFilingList = (offeringId) => {
     const params = { field: 'created', sort: 'asc' };
-    graphql({
+    this.filingListApiRes = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingFilingList,

@@ -15,7 +15,7 @@ export const getInvestorAvailableCash = gql`
     $userId: String!, $accountId: String!, $includeInFlight: Boolean,
     $includeInterest: Boolean, $dateFilterStart: String
     $dateFilterStop: String, $txOnly: Boolean,
-    ){ 
+    ){
     getInvestorAvailableCash(
       userId: $userId
       accountId: $accountId
@@ -93,8 +93,8 @@ export const generateAgreement = gql`
 `;
 
 export const finishInvestment = gql`
-  mutation _finishInvestment($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $agreementId: Int!, $transferAmount: Float){
-    finishInvestment(
+  mutation _investNowSubmit($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String){
+    investNowSubmit(
       userId: $userId
       accountId: $accountId
       offeringId: $offeringId
@@ -130,6 +130,33 @@ export const updateInvestmentLimits = gql`
     )
     {
       investmentLimit
+    }
+  }
+`;
+
+export const investNowGeneratePurchaseAgreement = gql`
+mutation investNowGeneratePurchaseAgreement($userId: String!,
+  $accountId: String!,
+  $offeringId: String!,
+  $investmentAmount: String!,
+  $transferAmount: String,
+  $callbackUrl: String
+) {
+  investNowGeneratePurchaseAgreement(
+    userId: $userId,
+    accountId: $accountId,
+    offeringId: $offeringId,
+    investmentAmount: $investmentAmount,
+    transferAmount: $transferAmount,
+    callbackUrl: $callbackUrl
+  ) {
+      agreementId
+      envelopeId
+      docuSignViewURL
+      npaViewUrl
+      status
+      message
+      flag
     }
   }
 `;

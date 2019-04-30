@@ -10,16 +10,20 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class OfferSigning extends Component {
   state = {
+    isCreateOffer: false,
     showConfirmModal: false,
   }
   componentDidMount() {
     window.addEventListener('message', this.docuSignListener);
   }
+  componentWillUnmount() {
+    // window.removeEventListener('message', this.docuSignListener);
+  }
   getPortalAgreementStatus = (funType = '') => {
-    const { match, businessAppReviewStore } = this.props;
+    const { businessAppReviewStore } = this.props;
     businessAppReviewStore.getPortalAgreementStatus().then((data) => {
       if (data.getPortalAgreementStatus === 'completed') {
-        this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
+        this.createOffer();
       } else if (funType === 'Button') {
         this.setState({ showConfirmModal: true });
       } else {
@@ -27,14 +31,20 @@ export default class OfferSigning extends Component {
       }
     }).finally(() => this.props.uiStore.setProgress(false));
   }
+  createOffer = () => {
+    this.setState({ isCreateOffer: true });
+    const { match, businessAppReviewStore } = this.props;
+    businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
+      this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
+    });
+  }
   docuSignListener = (e) => {
-    const { match } = this.props;
     setTimeout(() => {
-      if (e.data === 'signing_complete') {
+      if (e.data === 'signing_complete' || e.data === 'viewing_complete') {
         this.getPortalAgreementStatus('Button');
-      } else if (e.data === 'viewing_complete') {
-        this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
-      } else if (e && e.data && !e.data.includes('__fs')) {
+      // } else if (e.data === 'viewing_complete') {
+      //   this.createOffer();
+      } else if (e && e.data && !e.data.includes('setImmediate') && !e.data.includes('__fs') && !this.state.isCreateOffer) {
         this.props.history.push('/app/dashboard');
       }
     }, 2000);

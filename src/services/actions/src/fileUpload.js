@@ -1,12 +1,12 @@
-import { createUploadEntry, removeUploadedFile } from '../../stores/queries/common';
+import moment from 'moment';
+import { createUploadEntry, removeUploadedFile, createUploadEntryAccreditationAdmin } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
 import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
-import { UPLOADS_CONFIG } from '../../../constants/aws';
 
 export class FileUpload {
-  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags) =>
+  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '') =>
     new Promise((resolve, reject) => {
       client
         .mutate({
@@ -56,7 +56,7 @@ export class FileUpload {
   }
 
   putUploadedFileOnS3 = fileObj => new Promise((resolve, reject) => {
-    apiService.uploadOnS3(fileObj.preSignedUrl, fileObj.fileData).then(() => {
+    apiService.uploadOnS3(fileObj.preSignedUrl, fileObj.fileData, fileObj.fileType).then(() => {
       resolve();
     })
       .catch((err) => {
@@ -72,14 +72,37 @@ export class FileUpload {
   }
 
   uploadToS3 = (fileObj, dir) => new Promise((resolve, reject) => {
-    const key = `${dir}/${fileObj.name}`;
+    const key = `${dir}/${moment().unix()}_${fileObj.name}`;
     commonStore.getCdnSignedUrl(key).then((res) => {
-      apiService.uploadOnS3(res.data.createCdnSignedUrl, fileObj.obj).then(() => resolve(`https://${UPLOADS_CONFIG.bucket}/${key}`))
-        .catch((err) => {
-          reject(err);
-        });
-    });
+      apiService.uploadOnS3(res.data.createCdnSignedUrl, fileObj.obj, fileObj.type).then(() => resolve(`${key}`))
+        .catch(err => reject(err));
+    }).catch(err => reject(err));
   });
+
+  setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId, requestDate) =>
+    new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createUploadEntryAccreditationAdmin,
+          variables: {
+            userRole,
+            fileData,
+            accountType,
+            action,
+            userId,
+            requestDate,
+          },
+        })
+        .then((result) => {
+          resolve(result);
+          uiStore.setProgress(false);
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+          uiStore.setProgress(false);
+        });
+    })
 }
 
 export default new FileUpload();

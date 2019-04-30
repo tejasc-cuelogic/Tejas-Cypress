@@ -8,11 +8,13 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingOverview extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
-    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
-  }
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+  //   this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+  //   if (!this.props.offeringCreationStore.initLoad.includes('OFFERING_OVERVIEW_FRM')) {
+  //     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  //   }
+  // }
   onFileDrop = (files, name) => {
     this.props.offeringCreationStore.uploadFileToS3('OFFERING_OVERVIEW_FRM', name, files);
   }
@@ -37,11 +39,12 @@ export default class OfferingOverview extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview', true, undefined, isApproved);
   }
-  editorChange =
-  (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
+  editorChange = (field, value, form) =>
+    this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const {
       OFFERING_OVERVIEW_FRM, formArrayChange, confirmModal, confirmModalName, removeIndex,
+      currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     const { isIssuer } = this.props.userStore;
@@ -60,6 +63,7 @@ export default class OfferingOverview extends Component {
       <Form>
         <Header as="h4">Elevator pitch</Header>
         <HtmlEditor
+          imageUploadPath={`offerings/${currentOfferingId}`}
           readOnly={isReadonly}
           changed={this.editorChange}
           name="elevatorPitch"
@@ -92,7 +96,9 @@ export default class OfferingOverview extends Component {
             />
           ))
         }
-        <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
+        {!isReadonly &&
+          <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
+        }
         <Divider section />
         <Header as="h4">Social Media
           <Header.Subheader>

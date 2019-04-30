@@ -7,8 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { Header, Button, Checkbox, Confirm, Icon, Modal, Form } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
-@withRouter
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@withRouter
 @observer
 export default class Contingency extends Component {
   state = {
@@ -39,6 +39,16 @@ export default class Contingency extends Component {
   formArrayChange = (e, result, formName, dataKey, index) => {
     if (result) {
       this.props.formArrayChange(e, result, formName, dataKey, index);
+    }
+    if (result && result.name === 'status' && result.type === 'checkbox' && !result.checked) {
+      const {
+        updateOffering,
+        currentOfferingId,
+        LAUNCH_CONTITNGENCIES_FRM,
+        CLOSING_CONTITNGENCIES_FRM,
+      } = this.props.offeringCreationStore;
+      const fields = { ...LAUNCH_CONTITNGENCIES_FRM.fields, ...CLOSING_CONTITNGENCIES_FRM.fields };
+      updateOffering(currentOfferingId, fields, 'contingencies', '', true);
     }
   }
   handleSubmitForm = () => {

@@ -77,6 +77,9 @@
 			}
 		}
 	}
+	&.faq-acc .title:not(.ui) {
+		padding-right: 0;
+	}
 }
 
 /* Dropdown Icon */
@@ -316,7 +319,7 @@
 			border-top: 0;
 			color: @neutral-middark;
 			background: @neutral-offwhite;
-			&.active {
+			&.active, &:hover {
 				color: @primary-one;
 				font-weight: @bold;
 			}

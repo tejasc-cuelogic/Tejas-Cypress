@@ -12,8 +12,8 @@ const leftSummary = offer => [
         get(offer, 'keyTerms.legalBusinessName') ? get(offer, 'keyTerms.legalBusinessName') : 'N/A'
       )),
   },
-  { title: 'Launch Date', content: DataFormatter.formatedDate(get(offer, 'offering.launch.targetDate')) },
-  { title: DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'), true) <= 0 ? 'Close Date' : 'Days Till Close', content: (DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'), true) >= 0) ? `${DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'))} days` : get(offer, 'offering.launch.terminationDate') ? get(offer, 'offering.launch.terminationDate') : 'N/A' },
+  { title: 'Launch Date', content: get(offer, 'closureSummary.launchDate') ? DataFormatter.formatedDate(get(offer, 'closureSummary.launchDate')) : 'N/A' },
+  { title: DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0 ? 'Close Date' : `${DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.processingDate')).diffType} Till Close`, content: get(offer, 'closureSummary.processingDate') ? (DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0) ? get(offer, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.processingDate')).diffText : 'N/A' },
 ];
 
 const rightSummary = offer => [
@@ -46,7 +46,10 @@ const LiveSummary = ({ offer, refLink }) => (
       </Grid.Column>
       <Grid.Column>
         <Card fluid className="ba-info-card">
-          <Card.Header>Primary POC</Card.Header>
+          <Card.Header>
+            Primary POC
+            <small className="pull-right"><Link to={`${refLink}/editPoc`}><Icon className="ns-pencil" />Edit</Link></small>
+          </Card.Header>
           <Card.Content>
             <Grid columns={3}>
               { rightSummary(offer).map(item => (

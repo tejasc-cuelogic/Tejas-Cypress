@@ -29,6 +29,11 @@ export class NewMessage {
   }
 
   @action
+  resetCommentField = () => {
+    this.MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
+  }
+
+  @action
   setCommentForEdit = (id, comment, scope) => {
     this.editMessageId = id;
     this.editScope = scope;
@@ -96,14 +101,12 @@ export class NewMessage {
       .mutate({
         mutation: this.editMessageId ? updateOfferingCommentsInfo : createOfferingComments,
         variables: payload,
-        refetchQueries: [{
-          query: offeringCommentsByOfferId,
-          variables: { offerId: offeringCreationStore.currentOfferingId },
-        }],
       })
       .then(() => {
         if (!offeringCreationStore.currentOfferingId) {
           campaignStore.getCampaignDetails(campaignSlug, false);
+        } else {
+          this.initRequest();
         }
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import PrivateLayout from '../../shared/PrivateLayout';
@@ -13,11 +12,12 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
-@inject('accreditationStore')
-@observer
-export default class CrowdPay extends Component {
+export default class Dev extends Component {
   componentWillMount() {
-    this.props.accreditationStore.initRequest();
+    const { match } = this.props;
+    if (match.isExact) {
+      this.props.history.push(`${match.url}/elasticsearch`);
+    }
   }
   render() {
     const { match } = this.props;

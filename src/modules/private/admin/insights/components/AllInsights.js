@@ -62,10 +62,10 @@ export default class AllInsights extends Component {
             <Grid.Row>
               <Grid.Column>Selected 15 items</Grid.Column>
               <Grid.Column width={3} floated="right">
-                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" options={GLOBAL_ACTIONS} />
+                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
               <Grid.Column width={2}>
-                <Button inverted primary compact fluid content="Apply" />
+                <Button inverted color="green" compact fluid content="Apply" />
               </Grid.Column>
             </Grid.Row>
           </Grid>

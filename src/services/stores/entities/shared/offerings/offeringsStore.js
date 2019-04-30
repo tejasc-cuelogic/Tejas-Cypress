@@ -3,9 +3,11 @@ import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, mapValues, values, map } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
-  allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails,
+  allOfferings, allOfferingsCompact, updateOffering,
+  deleteOffering, getOfferingDetails, getTotalAmount,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore } from '../../../index';
 import { ClientDb } from '../../../../../helper';
@@ -34,6 +36,7 @@ export class OfferingsStore {
   @observable db;
   @observable currentId = '';
   @observable initLoad = [];
+  @observable totalRaisedAmount = [];
 
   @action
   initRequest = (props) => {
@@ -49,11 +52,49 @@ export class OfferingsStore {
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        this.requestState.page = 1;
-        this.requestState.skip = 0;
-        this.setDb(res.getOfferings);
+        if (res && !this.data.loading) {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
+          this.setDb(res.getOfferings);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
+  }
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
+  @action
+  updateOfferingPublicaly = (id, isAvailablePublicly) => {
+    const variables = {
+      id,
+      offeringDetails: { isAvailablePublicly },
+    };
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables,
+      }).then(() => {
+        this.initRequest(this.requestState);
+        Helper.toast('Offering updated successfully.', 'success');
+      }).catch(() => Helper.toast('Error while updating offering', 'error'));
+  }
+
+  @action
+  getTotalAmount = () => {
+    this.totalRaisedAmount = graphql({
+      client: clientPublic,
+      query: getTotalAmount,
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  @computed get totalAmountRaised() {
+    return (this.totalRaisedAmount.data &&
+      toJS(this.totalRaisedAmount.data.getNSOfferingAmountRaised)) || [];
   }
 
   @action
@@ -74,12 +115,13 @@ export class OfferingsStore {
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
     if (keyword) {
-      ClientDb.filterFromNestedObjs('keyTerms.legalBusinessName', keyword);
+      this.setDb(this.allOfferingsList);
+      ClientDb.filterFromNestedObjs(['keyTerms.legalBusinessName', 'keyTerms.shorthandBusinessName'], keyword);
       this.db = ClientDb.getDatabase();
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
-      this.setDb(this.data.data.getOfferings);
+      this.setDb(this.allOfferingsList);
     }
   }
   @action
@@ -118,7 +160,7 @@ export class OfferingsStore {
     this.offerData = graphql({
       client,
       query: getOfferingDetails,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: () => {
         this.currentId = id;
@@ -130,11 +172,19 @@ export class OfferingsStore {
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
         // offeringCreationStore.resetInitLoad();
       },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
     });
   }
 
   @computed get allPhases() {
     return values(mapValues(this.phases, s => s.ref.toUpperCase()));
+  }
+
+  @computed get allOfferingsList() {
+    return (this.data.data && this.data.data.getOfferings &&
+      toJS(this.data.data.getOfferings)) || [];
   }
 
   @computed get totalRecords() {
@@ -152,7 +202,13 @@ export class OfferingsStore {
     this.requestState.page = page;
     this.requestState.skip = skip;
   }
-
+  @action
+  resetPagination = () => {
+    this.requestState.skip = 0;
+    this.requestState.page = 1;
+    this.requestState.perPage = 10;
+    this.requestState.displayTillIndex = 10;
+  }
   @computed get count() {
     return (this.db && this.db.length) || 0;
   }

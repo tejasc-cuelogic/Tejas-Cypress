@@ -63,7 +63,6 @@ export default class EditArticle extends Component {
       htmlContentChange,
       categoriesDropdown,
     } = this.props.articleStore;
-    console.log(categoriesDropdown);
     const isNew = this.props.match.params.id === 'new';
     // const access = this.props.userStore.myAccessForModule('OFFERINGS');
     // const isManager = access.asManager;

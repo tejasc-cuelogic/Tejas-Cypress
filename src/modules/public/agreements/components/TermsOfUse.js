@@ -1,13 +1,15 @@
-/* eslint-disable react/jsx-indent */
+/* eslint-disable react/jsx-indent  */
 /* eslint-disable max-len */
+/* eslint-disable react/jsx-closing-tag-location */
 import React from 'react';
 import Aux from 'react-aux';
 import { Header, Divider, List } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 const TermsOfUse = () => (
   <Aux>
     <Header as="h2">Terms of Use</Header>
-    <p>Revision Date: 11/21/2018 <br />Questions or Comments: info@nextseed.com</p>
+    <p>Revision Date: April 10, 2019 <br />Questions or Comments: info@nextseed.com</p>
     <Divider section />
     <div className="justify-text legal-desc">
       <Header as="h5">INTRODUCTION</Header>
@@ -15,7 +17,7 @@ const TermsOfUse = () => (
         Welcome to the NextSeed financial platform. Except as otherwise indicated in these terms
         of use (these <b>“Terms”</b>) or elsewhere on the Website (as defined below), the
         NextSeed service and network (collectively, the <b>“Service”</b>) are operated by
-        NextSeed Services LLC, a Delaware limited liability company (<b>“NextSeed,” “we,”</b>
+        NextSeed Services LLC, a Delaware limited liability company (<b>“NextSeed,” “we,” </b>
         or <b>“us”</b>). Our Privacy Policy is incorporated by reference in these Terms. By
         accessing or using the web site at www.nextseed.com, including any subdomain thereof
         (the <b>“Website”</b>), you (the <b>“User”</b>) signify that you have read, understand
@@ -88,8 +90,9 @@ const TermsOfUse = () => (
         your Credentials. You agree to notify NextSeed immediately if you believe the
         confidentiality of your Credentials has been compromised or if you suspect unauthorized
         use of your account.
-        <b>You agree that NextSeed will not be liable for any loss or damage
-        arising from unauthorized use of your Credentials.
+        <b>
+          You agree that NextSeed will not be liable for any loss or damage arising from
+          unauthorized use of your Credentials.
         </b>
       </p>
       <p>
@@ -115,6 +118,13 @@ const TermsOfUse = () => (
         You agree that NextSeed may disclose your Account Information and other information it
         may have about you to fully cooperate with any law enforcement authorities or legal
         process, such as a subpoena or hold request.
+      </p>
+      <p>
+        By providing your telephone number to NextSeed as part of the Account Information, you
+        agree that NextSeed may deliver verification codes to you using the telephone number
+        provided. Codes may be sent using text messages, an autodialer, or artificial or
+        prerecorded voice messages to such telephone number. You acknowledge that your mobile
+        carrier’s messaging and data fees may apply.
       </p>
       <Header as="h5">FEES</Header>
       <p>
@@ -162,8 +172,8 @@ const TermsOfUse = () => (
       </p>
       <Header as="h5">USER CONTENT</Header>
       <p>
-        From time, you may post certain information, such as text, pictures, videos, questions,
-        comments, suggestions, website addresses, and links to other website/articles
+        From time to time, you may post certain information, such as text, pictures, videos,
+        questions, comments, suggestions, website addresses, and links to other website/articles
         (collectively, <b>“User Content”</b>) on to the Website. By posting User Content to
         any part of the Site, you automatically grant, and you represent and warrant that you
         have the right to grant, to NextSeed an irrevocable, perpetual, non-exclusive,
@@ -222,13 +232,15 @@ const TermsOfUse = () => (
         /SIPC or (b) NextSeed Funding Portal, an affiliate of NextSeed and a registered
         Funding Portal member of FINRA. The provision of brokerage services offered by
         NextSeed Securities is governed by the Investor Agreements entered into between
-        NextSeed Securities and each User (as applicable), the form of which is linked here.
+        NextSeed Securities and each User (as applicable), the form of which is linked{' '}
+        <Link to="/agreements/legal/legal-documents/securities_investor_agreement " className="positive-text">here</Link>.
         Please note that, in addition to our Privacy Policy, the use of your information by
         NextSeed Securities (as applicable) is governed by the NextSeed Securities, LLC
-        Privacy Policy, a copy of which is linked here. The provision of Funding Portal
-        services offered by NextSeed Funding Portal is governed by the Membership Agreements
-        entered into between NextSeed Funding Portal and each User (as applicable), the form
-        of which is linked here . NextSeed Securities does not make investment recommendations
+        Privacy Policy, a copy of which is linked <Link to="/agreements/legal/legal-documents/securities_privacy_policy" className="positive-text">here</Link>.
+        The provision of Funding Portal services offered by NextSeed Funding Portal is
+        governed by the Membership Agreements entered into between NextSeed Funding Portal and
+        each User (as applicable), the form of which is linked <Link to="/agreements/legal/legal-documents/membership_agreement" className="positive-text">here</Link>.
+        NextSeed Securities does not make investment recommendations
         and no communication, through the Website or in any other medium should be construed
         as a recommendation for any security offered on or off the Website.
       </p>
@@ -464,8 +476,8 @@ const TermsOfUse = () => (
       <p>
         THE MAXIMUM AGGREGATE LIABILITY OF NEXTSEED AND ITS AFFILIATES AND THEIR RESPECTIVE
         EMPLOYEES, CONTRACTORS, DIRECTORS, SUPPLIERS, OWNERS, LICENSORS OR REPRESENTATIVES TO A
-        USER SHALL NOT EXCEED THE GREATER OF $100.000 OR THE FEES PAID OR PAYABLE BY THE USER FOR
-        THE USE OF THE WEBSITE.
+        USER SHALL NOT EXCEED THE GREATER OF ONE HUNDRED DOLLARS ($100.00) OR THE FEES PAID OR
+        PAYABLE BY THE USER FOR  THE USE OF THE WEBSITE.
       </p>
       <p>
         THE MAXIMUM AGGREGATE LIABILITY OF NEXTSEED AND ITS AFFILIATES AND THEIR RESPECTIVE

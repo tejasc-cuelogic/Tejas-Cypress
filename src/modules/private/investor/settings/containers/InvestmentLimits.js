@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid } from 'semantic-ui-react';
 import FinancialInfo from '../components/investmentLimits/FinancialInfo';
 import VerifyAccreditation from './accreditation/VerifyAccreditation';
 import VerifyEntityAccreditation from './accreditation/VerifyEntityAccreditation';
@@ -10,7 +9,7 @@ import VerifyTrustEntityAccreditation from './accreditation/VerifyTrustEntityAcc
 import ThanksNote from '../components/investmentLimits/accreditation/ThanksNote';
 import FailedAccreditation from '../components/investmentLimits/accreditation/failedAccreditation';
 
-@inject('investmentLimitStore', 'accreditationStore')
+@inject('investmentLimitStore', 'accreditationStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class InvestmentLimits extends Component {
@@ -21,8 +20,17 @@ export default class InvestmentLimits extends Component {
   }
 
   closeModal = () => {
+    const {
+      partialInvestNowSessionURL,
+      setPartialInvestmenSession,
+    } = this.props.userDetailsStore;
     this.props.accreditationStore.resetAllForms();
-    this.props.history.push(this.props.match.url);
+    if (partialInvestNowSessionURL) {
+      this.props.history.push(partialInvestNowSessionURL);
+      setPartialInvestmenSession();
+    } else {
+      this.props.history.push(this.props.match.url);
+    }
   }
 
   render() {
@@ -34,9 +42,7 @@ export default class InvestmentLimits extends Component {
         <Route exact path={`${this.props.match.url}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/falied`} render={() => <FailedAccreditation closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
-        <Grid columns={1} stackable>
-          <FinancialInfo />
-        </Grid>
+        <FinancialInfo />
       </div>
     );
   }

@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import { Header, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
+
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('authStore')
 export default class TermNotes extends Component {
   render() {
     const { isUserLoggedIn } = this.props.authStore;
-    const link = '/auth/register';
+    const link = '/auth/register/applynow';
 
     return (
       <Grid reversed="computer" doubling columns={2} relaxed="very">
@@ -23,17 +25,16 @@ export default class TermNotes extends Component {
         <Grid.Column>
           <Header as="h3">Term Notes</Header>
           {/* <Header as="h3" color="blue">Raise $50,000—$1 Million</Header> */}
-          <Item.Group relaxed="very" className="question-list">
+          <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
             <Item>
               <Item.Content>
                 <Header as="h5">
                   How does it work?
                 </Header>
                 <Item.Description>
-                  Term notes offer fixed monthly payments at a set interest rate.
-                  Each month, your payments are steady and predictable. Plus,
-                  with no prepayment penalty, you can pay off the entire balance
-                  early without incurring a fee.
+                  Term notes have fixed payments at a set interest rate, allowing
+                  you to reliably forecast your cashflow. Plus, with no prepayment
+                  penalty, you can pay off the entire balance early without incurring a fee.
                 </Item.Description>
               </Item.Content>
             </Item>

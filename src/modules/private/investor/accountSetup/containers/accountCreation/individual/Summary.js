@@ -4,10 +4,10 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -21,13 +21,22 @@ export default class Summary extends React.Component {
     if (!alreadySet) {
       getLegalDocsFileIds();
     }
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
-  componentDidMount() {
-    const { plaidAccDetails } = this.props.bankAccountStore;
-    this.props.uiStore.setProgress(isEmpty(plaidAccDetails));
+
+  componentDidUpdate() {
+    this.props.bankAccountStore.setLoaderForAccountBlank();
+    const { userDetails } = this.props.userDetailsStore;
+    this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
   handleCreateAccount = () => {
-    const { isCipExpired, signupStatus } = this.props.userDetailsStore;
+    const {
+      isCipExpired,
+      signupStatus,
+      partialInvestNowSessionURL,
+      setPartialInvestmenSession,
+    } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
@@ -37,10 +46,16 @@ export default class Summary extends React.Component {
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.props.individualAccountStore.createAccount('Summary', 'FULL').then(() => {
-        this.props.history.push('summary');
-      })
-        .catch(() => {});
+      this.props.individualAccountStore.submitAccount().then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        if (partialInvestNowSessionURL) {
+          this.props.history.push(partialInvestNowSessionURL);
+          setPartialInvestmenSession();
+        } else if (!this.props.individualAccountStore.showProcessingModal) {
+          this.props.history.push('/app/summary');
+          this.props.uiStore.resetcreateAccountMessage();
+        }
+      }).catch(() => { });
     }
   }
   openModal = (type) => {
@@ -58,10 +73,10 @@ export default class Summary extends React.Component {
     const {
       formAddFunds,
       plaidAccDetails,
-      isValidLinkBank,
       formLinkBankManually,
-      depositMoneyNow,
-      isEncrypted,
+      routingNum,
+      isAccountPresent,
+      accountAttributes,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
@@ -76,34 +91,32 @@ export default class Summary extends React.Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Investor: </Table.Cell>
-                  <Table.Cell>{`${userDetails.info.firstName} ${userDetails.info.lastName}`}</Table.Cell>
+                  <Table.Cell>{`${get(userDetails, 'info.firstName') || ''} ${get(userDetails, 'info.lastName') || ''} `}</Table.Cell>
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
-                <Table.Row>
-                  <Table.Cell>Bank: </Table.Cell>
-                  <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
                 }
                 <Table.Row>
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {(formLinkBankManually.fields.routingNumber.value &&
-                !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
-                <Table.Row>
-                  <Table.Cell>Routing Number</Table.Cell>
-                  <Table.Cell>
-                    {formLinkBankManually.fields.routingNumber.value}
-                  </Table.Cell>
-                </Table.Row>
+                {!isEmpty(routingNum) &&
+                  <Table.Row>
+                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell>
+                      {routingNum || ''}
+                    </Table.Cell>
+                  </Table.Row>
                 }
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {!depositMoneyNow ?
-                    Helper.CurrencyFormat(0) :
-                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
-                    Helper.CurrencyFormat(0)}
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
+                      Helper.CurrencyFormat(0) :
+                      Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -118,8 +131,8 @@ export default class Summary extends React.Component {
         <p className="center-align grey-header mt-30">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed US LLC Member Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>.
           <IframeModal
             open={this.state.open}
@@ -129,7 +142,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
         </div>
       </Aux>
     );

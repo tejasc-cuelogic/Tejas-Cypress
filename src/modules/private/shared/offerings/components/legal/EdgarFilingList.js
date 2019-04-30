@@ -6,13 +6,17 @@ import { withRouter } from 'react-router-dom';
 import { Header, Table, Message, Button, Confirm } from 'semantic-ui-react';
 import XmlSubmission from '../../../../admin/edgar/components/XmlSubmission';
 import Helper from '../../../../../../helper/utility';
+import { InlineLoader } from '../../../../../../theme/shared';
 import { businessActions } from '../../../../../../services/actions';
 import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
 
 @withRouter
-@inject('businessStore', 'offeringCreationStore', 'uiStore')
+@inject('businessStore', 'offeringCreationStore', 'uiStore', 'commonStore', 'offeringsStore')
 @observer
 export default class EdgarFilingList extends Component {
+  state = {
+    showLoader: false,
+  }
   confirmDelete = (e, {
     entity, refid, subrefid, lockedstatus, submissions,
   }) => {
@@ -78,25 +82,43 @@ export default class EdgarFilingList extends Component {
       this.handleDeleteCancel();
       this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
     } else {
+      this.setState({ showLoader: true });
       const filingId = this.props.uiStore.confirmBox.subRefId;
+      this.handleDeleteCancel();
+      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
       businessActions.deleteFiling(currentOfferingId, filingId)
         .then(() => {
-          this.handleDeleteCancel();
-          this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+          this.setState({ showLoader: false });
           Helper.toast('Filing deleted successfully', 'success');
         }).catch(() => {
+          this.setState({ showLoader: false });
           Helper.toast('Something went wrong while deleting filing Please try again.', 'error', { position: 'top-center' });
         });
     }
+  }
+  handleDocumentsLink = (e, { folderId }) => {
+    const { offer } = this.props.offeringsStore;
+    const params = {
+      id: folderId,
+      accountType: (get(offer, 'regulation') && get(offer, 'regulation').includes('BD')) ? 'SECURITIES' : 'SERVICES',
+      type: 'FOLDERS',
+    };
+    this.props.commonStore.getsharedLink(params).then((shareLink) => {
+      window.open(shareLink);
+    });
   }
 
   render() {
     const offeringFilingList = this.props.offeringFilings;
     const offering = this.props.offeringDetails;
+    const { inProgress } = this.props.commonStore;
     const regulation = get(offering, 'regulation');
     const offeringRegulationArr = (regulation && regulation.split('_')) || '';
     const regulationType = get(offeringRegulationArr, '[0]');
     const BOX_URL_TO_CONSIDER = regulationType === 'BD' ? NEXTSEED_SECURITIES_BOX_URL : NEXTSEED_BOX_URL;
+    if (this.props.loading || this.state.showLoader) {
+      return <InlineLoader />;
+    }
     if (isEmpty(offeringFilingList)) {
       return (
         <Message className="center-align">No Generated Docs present in this offering.</Message>
@@ -115,14 +137,13 @@ export default class EdgarFilingList extends Component {
                       <Header as="h6">
                         {filing.filingFolderName}
                         <div className="actions pull-right">
-                          <a
-                            href={(`${BOX_URL_TO_CONSIDER}folder/${filing.folderId}`)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-link"
-                          >
-                            Documents
-                          </a>
+                          <Button
+                            content="Documents"
+                            className="link-button"
+                            loading={inProgress === filing.folderId}
+                            folderId={filing.folderId}
+                            onClick={this.handleDocumentsLink}
+                          />
                           <Button
                             color="red"
                             className="link-button"

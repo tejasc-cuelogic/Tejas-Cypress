@@ -22,7 +22,7 @@
 .ui{
     &.button, &.buttons .button{
         + .button{
-            margin-left:@10px !important;
+            margin-left:@10px;
         }
         &.link-button{
             padding:0;
@@ -56,6 +56,9 @@
                 color:@neutral;
                 &:hover, &:focus, &:active{
                     text-decoration: underline;
+                    .icon:not(.button) {
+                        text-decoration: none !important;
+                    }
                 }
             }
             &.grey{
@@ -151,21 +154,32 @@
 }
 
 .ui.buttons{
+    align-items:center;
     .ui.button{
         border-radius:6px;
     }
     &.inline:not(.vertical){
-        padding:0 @5px;
+        // padding:0 @5px;
         width:auto;
         .ui.button{
-            margin:0 @5px !important;
+            // margin:0 @5px !important;
             min-width:130px;
-            &:first-child{
-                margin-left:-@5px !important;
-            }
-            &:last-child{
-                margin-right:0 !important;
-            }
+            // &:first-child{
+            //     margin-left:-@5px !important;
+            // }
+            // &:last-child{
+            //     margin-right:0 !important;
+            // }
+        }
+    }
+    &.two:not(.vertical) > .ui.button{
+        margin:0 @5px;
+        width:~"calc(50% - "(@10px)~")";
+        &:first-child{
+            margin-left:0;
+        }
+        &:last-child{
+            margin-right:0;
         }
     }
     +.ui.buttons {

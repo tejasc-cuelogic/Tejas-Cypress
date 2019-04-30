@@ -3,7 +3,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes } from 'lodash';
+import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -127,6 +127,10 @@ class FormValidator {
           currentForm.fields[key].error = err;
         }
       });
+    } else if (!showErrors && !isMultiForm) {
+      forEach(currentForm.fields, (field, key) => {
+        currentForm.fields[key].error = undefined;
+      });
     }
     return currentForm;
   }
@@ -197,6 +201,31 @@ class FormValidator {
           currentForm.fields[field].fileData = [];
           currentForm.fields[field].preSignedUrl = [];
         }
+      } else if (Array.isArray(toJS(currentForm.fields[field]))) {
+        const arr = toJS(currentForm.fields[field]);
+        arr.map((item, index) => {
+          const fieldKeys = Object.keys(currentForm.fields[field][index]);
+          fieldKeys.map((f) => {
+            if (Array.isArray(toJS(currentForm.fields[field][index][f].value))) {
+              currentForm.fields[field][index][f].value = [];
+              if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
+                currentForm.fields[field][index][f].fileId = [];
+                currentForm.fields[field][index][f].fileData = [];
+                currentForm.fields[field][index][f].preSignedUrl = [];
+              }
+            } else {
+              currentForm.fields[field][index][f].value = '';
+              if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
+                currentForm.fields[field][index][f].fileId = '';
+                currentForm.fields[field][index][f].fileData = '';
+                currentForm.fields[field][index][f].preSignedUrl = '';
+              }
+            }
+            return true;
+          });
+          return true;
+        });
+        currentForm.fields[field].splice(1);
       } else {
         currentForm.fields[field].value = '';
         if (currentForm.fields[field].objType === 'FileObjectType') {
@@ -221,9 +250,9 @@ class FormValidator {
     } else {
       this.onChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet });
     }
-    this.onChange(currentForm, { name: 'state', value: data.state });
-    this.onChange(currentForm, { name: 'city', value: data.city });
-    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
+    this.onChange(currentForm, { name: 'state', value: data.state || '' });
+    this.onChange(currentForm, { name: 'city', value: data.city || '' });
+    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
   }
 
   setAddressFieldsIndex = (place, form, formName, subForm = 'data', index) => {

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const allInsightArticles = gql`
-query insights{
-  insightsArticles{
+query insights($sortByCreationDateAsc: Boolean!, $categoryId: String){
+  getInsightsArticles(sortByCreationDateAsc: $sortByCreationDateAsc, categoryId: $categoryId){
     id
     content
     category
@@ -11,6 +11,7 @@ query insights{
     articleStatus
     minuteRead
     title
+    slug
     updated {
       date
     }
@@ -18,6 +19,7 @@ query insights{
       date
     }
     banner
+    createdDate
   }
 }
 `;
@@ -107,6 +109,17 @@ query insight($id:ID! ) {
     content
     authorId
     category
+  }
+}
+`;
+
+export const getArticleDetailsBySlug = gql`
+query insightArticleBySlug($slug:String ) {
+  insightArticleBySlug(slug: $slug){
+    id
+    title
+    featuredImage
+    content
   }
 }
 `;

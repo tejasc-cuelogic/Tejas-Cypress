@@ -19,11 +19,11 @@ export default class Finances extends Component {
       <div className="center-align">
         <Header as="h3">Financial Information</Header>
         <p className="tertiary-text">
-          SEC rules and regulations require broker-dealers to collect this information to
-          determine investor suitability for private offerings.
+          SEC rules and regulations require broker-dealers to collect income and net
+          worth to determine investor suitability for private offerings.
         </p>
         <p className="tertiary-text">
-          Your information is encrypted and securely transmitted using SSL.
+          Select whether you are providing your information as an individual or as a couple.
         </p>
         <Divider hidden />
         <Form error>
@@ -31,8 +31,7 @@ export default class Finances extends Component {
             fielddata={FINANCES_FORM.fields.investorProfileType}
             name="investorProfileType"
             changed={investorProfileChange}
-            containerclassname="button-radio center-align"
-            classname="center-align"
+            containerclassname="three wide button-radio center-align"
             showerror
           />
           <Divider hidden />
@@ -40,14 +39,17 @@ export default class Finances extends Component {
             <Form.Group widths={2}>
               {['netWorth', 'annualIncomeCurrentYear'].map(field => (
                 <MaskedInput
-                  type="tel"
                   key={field}
                   name={field}
                   currency
                   fielddata={FINANCES_FORM.fields[field]}
                   changed={financesChange}
                   prefix="$ "
+                  number
                   showerror
+                  disableDecimal
+                  maxlength={13}
+                  allowNegative={false}
                 />
               ))}
             </Form.Group>

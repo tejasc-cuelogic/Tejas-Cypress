@@ -4,9 +4,20 @@ import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
-const userVerifiedDetails = ({ legalDetails, isUserVerified }) => {
-  if (legalDetails === null ||
-    (legalDetails !== null && !isUserVerified(legalDetails.status))) {
+const userVerifiedDetails = ({
+  legalDetails, status, signupStatus, validAccStatus,
+}) => {
+  const setupComplete = () => ['FULL', 'MIGRATION_FULL'].includes(status);
+  const isIdentityVerified = (cipStatus) => {
+    if (cipStatus !== null) {
+      return validAccStatus.includes(cipStatus);
+    }
+    return false;
+  };
+  const isUserVerified = () => (signupStatus.isWpUser ? setupComplete() :
+    isIdentityVerified(legalDetails.status));
+
+  if (legalDetails === null || !isUserVerified()) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
@@ -26,24 +37,19 @@ const userVerifiedDetails = ({ legalDetails, isUserVerified }) => {
         <dd>{Helper.formattedSSNNumber(legalDetails.ssn) || '-'}</dd>
         <dt>DOB</dt>
         <dd>{legalDetails.dateOfBirth ? moment(legalDetails.dateOfBirth, 'MM/DD/YYYY').format('MM-DD-YYYY') : '-'}</dd>
-        <dt>Street</dt>
+        { /* Commented due to change requested in #1483 */}
+        {/* <dt>Street</dt>
         <dd>{legalDetails.legalAddress.street}</dd>
+        <dt>Address Line 2</dt>
+        <dd>{legalDetails.legalAddress.streetTwo}</dd>
         <dt>City</dt>
         <dd>{legalDetails.legalAddress.city}</dd>
         <dt>State</dt>
         <dd>{legalDetails.legalAddress.state}</dd>
         <dt>ZIP Code</dt>
-        <dd>{legalDetails.legalAddress.zipCode}</dd>
-        {/* <dt>Legal Address</dt>
-        <dd>{legalDetails.legalAddress ? `${legalDetails.legalAddress.street},
-        ${legalDetails.legalAddress.city}, ${legalDetails.legalAddress.state},
-        ${legalDetails.legalAddress.zipCode}` : 'N/A'}
-        </dd>
-        <dt>Email Address</dt>
-        <dd>{email.address}</dd>
-        */}
+        <dd>{legalDetails.legalAddress.zipCode}</dd> */}
       </dl>
-      <p className="intro-text">
+      <p className="note">
         If any of this information needs to be updated, please contact support at{' '}
         <a href="mailto:support@nextseed.com">Support@Nextseed.com</a>.
       </p>

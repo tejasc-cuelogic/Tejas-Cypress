@@ -45,6 +45,37 @@ mutation _deleteCdnS3File($key: String!){
     key: $key
   )
 }
+`;
 
+export const subscribeToNewsLetter = gql`
+mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String!, $emailAddress: String!){ 
+  subscribeToNewsLetterNotifyAdmin(
+    subscriberName: $subscriberName
+    emailAddress: $emailAddress
+  )
+}
+`;
+
+export const notifyAdmins = gql`
+mutation sendAlertToAdminFromClient($emailContent: String!){ 
+  sendAlertToAdminFromClient(
+    type: BUG
+    emailContent: $emailContent
+  )
+}
+`;
+
+export const createUploadEntryAccreditationAdmin = gql`
+  mutation _createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum, $action:AccreditationStatus!, $userId: String!, $requestDate: String!) {
+    createUploadEntryAccreditationAdmin(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId, requestDate: $requestDate) {
+      preSignedUrl
+      fileId
+    }
+  }`;
+
+export const getsharedLink = gql`
+query getsharedLink($id: ID, $uploadId: ID, $type: ShareLinkTypeEnum!, $accountType: BoxAccountTypeEnum!, $expiration: String ){
+  sharedLink(id: $id, uploadId: $uploadId, type: $type, accountType: $accountType, expiration: $expiration)
+  }
 `;
 

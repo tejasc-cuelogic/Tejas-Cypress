@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -6,22 +7,32 @@ import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class Login extends Component {
   componentWillMount() {
+    if (this.props.authStore.isUserLoggedIn) {
+      const { authRef } = this.props.uiStore;
+      const { roles } = this.props.userStore.currentUser;
+      this.props.history.push(authRef || (roles && roles.includes('investor') ?
+        `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+    }
     this.props.uiStore.clearErrors();
+    this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
+    localStorage.removeItem('lastActiveTime');
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.uiStore.clearErrors();
     const { email, password } = this.props.authStore.LOGIN_FRM.fields;
-    const userCredentials = { email: email.value, password: password.value };
+    const lowerCasedEmail = email.value.toLowerCase();
+    const userCredentials = { email: lowerCasedEmail, password: password.value };
     this.props.authStore.checkMigrationByEmail(userCredentials).then((res) => {
       if (res) {
         authActions.login()
@@ -31,11 +42,21 @@ class Login extends Component {
               this.props.history.push('/auth/change-password');
             } else {
               const { roles } = this.props.userStore.currentUser;
-              this.props.authStore.setCredentials({ email: email.value, password: password.value });
+              this.props.authStore.setCredentials(userCredentials);
               this.props.authStore.resetForm('LOGIN_FRM');
+              const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep :
+                '/app/dashboard';
+              if (invLogsIn === '/app/summary') {
+                const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
+                if (hasExpanded) {
+                  this.props.uiStore.setNavExpanded(hasExpanded.to);
+                }
+              }
               this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
                 `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
             }
+          }).catch((err) => {
+            console.log(err);
           });
       }
     })
@@ -104,7 +125,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Dont have an account?</b> <Link to="/auth/register">Sign up</Link></p>
+          <p><b>Don&#39;t have an account?</b> <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

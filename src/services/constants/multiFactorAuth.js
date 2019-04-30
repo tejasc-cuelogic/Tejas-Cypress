@@ -1,13 +1,17 @@
 export const MFA_MODE_TYPES = {
   mfaModeTypes: {
-    value: '',
+    value: 'TEXT',
     values: [
       {
-        label: 'Phone number',
-        value: 'PHONE',
+        label: 'Text message',
+        value: 'TEXT',
       },
       {
-        label: 'E-mail address',
+        label: 'Phone call',
+        value: 'CALL',
+      },
+      {
+        label: 'Email',
         value: 'EMAIL',
       },
     ],
@@ -15,7 +19,7 @@ export const MFA_MODE_TYPES = {
     rule: 'required',
   },
   mfaPhoneModeTypes: {
-    value: '',
+    value: 'TEXT',
     values: [
       {
         label: 'Text',

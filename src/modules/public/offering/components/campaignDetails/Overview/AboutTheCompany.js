@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, List, Button, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import Parser from 'html-react-parser';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 const isTablet = document.documentElement.clientWidth < 991;
@@ -17,14 +17,14 @@ class AboutTheCompany extends Component {
     const { campaign } = this.props;
     return (
       <Aux>
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Top Things to Know
           <span className="anchor" id="top-things-to-know" />
         </Header>
         {campaign && campaign.offering && campaign.offering.overview &&
           campaign.offering.overview.elevatorPitch &&
           <div className="detail-section mt-10">
-            {Parser(campaign.offering.overview.elevatorPitch)}
+            <HtmlEditor readOnly content={campaign.offering.overview.elevatorPitch} />
           </div>
         }
         {campaign && campaign.offering && campaign.offering.overview &&

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Message, Divider } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Form, Header, Message, Divider, Responsive } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -15,7 +16,8 @@ export default class BrokerageEmployment extends Component {
         <Header as="h3">Brokerage employment</Header>
         <Divider hidden />
         <p>
-          Do you (or an immediate family member) work for a US-based securities brokerage firm?
+          Do you (or an immediate family member) work for a US-based{' '}
+          <Responsive as={Aux} minWidth={1200}><br /></Responsive>securities brokerage firm?
         </p>
         <Divider hidden />
         <p className="mb-40">
@@ -26,8 +28,7 @@ export default class BrokerageEmployment extends Component {
             fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
             name="brokerageEmployment"
             changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
-            containerclassname="button-radio center-align"
-            classname="center-align"
+            containerclassname="three wide button-radio center-align"
             showerror
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes' &&

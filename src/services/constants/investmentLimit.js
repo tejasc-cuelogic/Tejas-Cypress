@@ -1,7 +1,7 @@
 export const ACCREDITATION_STATUS_LABEL = {
   REQUESTED: 'Requested',
   CONFIRMED: 'Approved',
-  INVALID: 'Declined',
+  INVALID: 'Invalid',
 };
 
 export const INVESTEMENT_LIMIT = {
@@ -142,12 +142,12 @@ export const FILLING_STATUS = {
     values:
       [
         {
-          label: 'Yes',
-          value: true,
-        },
-        {
           label: 'No',
           value: false,
+        },
+        {
+          label: 'Yes',
+          value: true,
         },
       ],
     error: undefined,
@@ -194,6 +194,15 @@ export const INCOME_EVIDENCE = {
 };
 
 export const VERIFICATION_REQUEST = {
+  name: {
+    value: '',
+    error: undefined,
+    placeHolder: 'Name here',
+    rule: 'required',
+    label: 'Verifier Name',
+    objRefOutput: 'verifier',
+    objRef: 'verifier',
+  },
   role: {
     value: '',
     error: undefined,
@@ -326,6 +335,20 @@ export const NET_WORTH = {
           value: 'ZERO',
         },
       ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const ACCREDITATION_EXPIRY = {
+  financialStatus: {
+    value: [],
+    values: [
+      {
+        label: 'I hereby certify that I have a reasonable expectation that my income will meet or exceed the requirement to be considered an accredited investor in 2019.',
+        value: 'checked',
+      },
+    ],
     error: undefined,
     rule: 'required',
   },

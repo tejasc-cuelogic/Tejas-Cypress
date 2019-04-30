@@ -1,29 +1,31 @@
 import { observable, action, computed } from 'mobx';
-import { isArray, get, forOwn, intersection } from 'lodash';
+import { isArray, get, forOwn, filter, find, findIndex, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { getTransactions, approveTransactions, declineTransactions, verifiedTransactions, failedTransactions } from '../../queries/transaction';
+import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminDecline, transferRequestAdminVerified, transactionFailed } from '../../queries/transaction';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
 import DataFormatter from '../../../../../src/helper/utilities/DataFormatter';
-import { TRANSACTION_FAILURE, COUNT_STATUS_MAPPING, FAILED_STATUS } from '../../../constants/admin/transactions';
+import { TRANSACTION_FAILURE, COUNT_STATUS_MAPPING } from '../../../constants/admin/transactions';
 
 export class TransactionsStore {
+  nonTerminatedStatuses = ['PRE_PENDING', 'PENDING', 'PROCESSING']
   ctHandler = {
-    Approved: approveTransactions,
-    Declined: declineTransactions,
-    Verified: verifiedTransactions,
-    Failed: failedTransactions,
+    Approved: transferRequestAdminApprove,
+    Declined: transferRequestAdminDecline,
+    Verified: transferRequestAdminVerified,
+    Failed: transactionFailed,
+    Sync: transferRequestAdminSync,
   }
   @observable filters = false;
   @observable TRANSACTION_FAILURE = Validator.prepareFormObject(TRANSACTION_FAILURE);
   @observable data = [];
-  @observable isNonTerminatedState = false
+  @observable isNonTerminatedStatus = false
   @observable searchCount = null;
   @observable db = [];
   @observable summary = {
-    'status-1': 0, 'status-2': 0, 'status-3': 0, 'status-4': 0,
+    'pre-pending': 0, pending: 0, processing: 0, complete: 0, failed: 0,
   };
   @observable requestState = {
     page: 1,
@@ -34,6 +36,37 @@ export class TransactionsStore {
     search: {
     },
   };
+  @observable btnLoader = [];
+  pageReload = true;
+
+  @action
+  setDataValue = (key, value) => {
+    this[key] = value;
+  }
+
+  @action
+  addLoadingRequestId = (requestId) => {
+    this.btnLoader.push(requestId);
+  }
+
+  @action
+  removeLoadingRequestId = (requestId, isFailedProcess = false, isApproved = true) => {
+    this.btnLoader = filter(this.btnLoader, btnId => btnId !== requestId);
+    if (isFailedProcess) {
+      return;
+    }
+    const transactions = get(this.data, 'data.getTransactions.transactions');
+    if (isApproved && transactions) {
+      this.data.data.getTransactions.transactions =
+      filter(transactions, row => row.requestId !== requestId);
+    } else if (transactions) {
+      const index = findIndex(transactions, record => record.requestId === requestId);
+      const transaction = find(transactions, record => record.requestId === requestId);
+      transaction.gsProcessId = true;
+      this.data.data.getTransactions.transactions[index] = transaction;
+    }
+    this.setData(this.data.data || []);
+  }
 
   @action
   toggleSearch = () => {
@@ -53,11 +86,10 @@ export class TransactionsStore {
   @action
   initRequest = (transStatus) => {
     this.transactionStatus = transStatus;
-    this.isNonTerminatedState = intersection(['PENDING', 'PROCESSING'], this.transactionStatus).length > 0;
     const payLoad = {
       status: transStatus,
       offset: this.requestState.page,
-      limit: this.statusWiseLimt(),
+      limit: 10,
       ...this.requestState.search,
     };
     this.data = graphql({
@@ -66,9 +98,12 @@ export class TransactionsStore {
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        if (res) {
+        if (res && !this.data.loading) {
           this.setData(res);
         }
+      },
+      onError: () => {
+        this.resetData();
       },
     });
   }
@@ -79,7 +114,7 @@ export class TransactionsStore {
   @action
   setTabCount = (countObj) => {
     this.summary = {
-      'status-1': 0, 'status-2': 0, 'status-3': 0, 'status-4': 0,
+      'pre-pending': 0, pending: 0, processing: 0, complete: 0, failed: 0,
     };
     forOwn(countObj, (v, k) => {
       this.summary[COUNT_STATUS_MAPPING[k]] += v;
@@ -92,6 +127,8 @@ export class TransactionsStore {
       this.setDb(DataFormatter.mapDatesToType(data.getTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
       this.searchCount = data.getTransactions.transactionCount.searchCount;
       this.setTabCount(data.getTransactions.transactionCount);
+    } else {
+      this.resetData();
     }
   }
 
@@ -99,6 +136,9 @@ export class TransactionsStore {
   resetData = () => {
     this.requestState.search = {};
     this.resetPagination();
+    this.searchCount = null;
+    this.data = [];
+    this.setDb([]);
   }
 
   @action
@@ -110,38 +150,52 @@ export class TransactionsStore {
   }
 
   @action
-  transactionChange = (requestID, transStatus, actionName) => {
+  transactionChange = (requestID, transStatus, actionName, direction = '') => {
+    this.addLoadingRequestId(requestID);
     client
       .mutate({
         mutation: this.ctHandler[actionName],
         variables: { id: requestID },
       })
-      .then(() => {
-        this.initRequest(transStatus);
+      .then((data) => {
+        if (actionName === 'Approved') {
+          this.removeLoadingRequestId(requestID, false, data && get(data, 'data.transferRequestAdminApprove'));
+        } else {
+          this.removeLoadingRequestId(requestID);
+        }
         Helper.toast(`Transaction ${actionName} successfully.`, 'success');
       })
-      .catch(() => Helper.toast('OOPs something went work', 'error'));
+      .catch((error) => {
+        if ((direction === 'DEPOSIT' || direction === 'WITHDRAWAL') && transStatus[0] === 'PENDING') {
+          Helper.toast(error.message, 'error');
+        } else {
+          Helper.toast('Something went wrong please try again after sometime.', 'error');
+        }
+        this.removeLoadingRequestId(requestID, true);
+      });
   };
 
   @action
-  failTransaction = (requestID, transStatus) => {
+  failTransaction = (requestID, actionName) => {
     const reason = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
+    this.addLoadingRequestId(requestID);
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: this.ctHandler[FAILED_STATUS[transStatus]],
+          mutation: this.ctHandler[actionName],
           variables: {
             id: requestID,
             reason: reason.justifyDescription,
           },
         })
         .then(() => {
-          Helper.toast(`Transaction ${FAILED_STATUS[transStatus]} successfully.`, 'success');
-          this.initRequest(this.transactionStatus);
+          this.removeLoadingRequestId(requestID);
+          Helper.toast(`Transaction ${actionName} successfully.`, 'success');
           resolve();
         })
         .catch(() => {
-          Helper.toast('OOPs something went work', 'error');
+          this.removeLoadingRequestId(requestID, true);
+          Helper.toast('Something went wrong please try again after sometime.', 'error');
           reject();
         });
     });
@@ -156,86 +210,55 @@ export class TransactionsStore {
   }
 
   @action
-  pageRequest = ({ skip, page }) => {
+  pageRequest = ({ page }) => {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    if (this.isNonTerminatedState) {
-      this.requestState.skip = (skip === pageWiseCount) ?
-        pageWiseCount - this.requestState.perPage : skip;
-    } else {
-      this.initRequest(this.transactionStatus);
-    }
+    this.initRequest(this.transactionStatus);
   }
 
   @computed get allRecords() {
-    const transactions = this.db || [];
-    if (this.isNonTerminatedState) {
-      return transactions.slice(
-        this.requestState.skip,
-        this.requestState.displayTillIndex,
-      );
-    }
-    return transactions || [];
+    return this.db || [];
   }
 
   @computed get transactionCount() {
-    return this.isNonTerminatedState ?
-      this.db.length
-      : this.searchCount;
+    return this.searchCount;
   }
 
   @computed get loading() {
     return this.data.loading;
   }
 
-  statusWiseLimt = () => (this.isNonTerminatedState ? 100 : 10)
-
-  @action
-  initiateFilters = () => {
-    this.setData(get(this.data, 'data') || []);
-    const {
-      keyword, minAmount, maxAmount,
-      dateFilterStart, dateFilterStop,
-      direction,
-    } = this.requestState.search;
-    if (keyword) {
-      ClientDb.filterFromNestedObjs(['gsTransactionId', 'requestId', 'accountId', 'userInfo.info.firstName', 'userInfo.info.lastName'], keyword);
+  modifySearchParams = (valueObj, name) => {
+    const searchparams = { ...this.requestState.search };
+    const { value } = valueObj;
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      searchparams[name] = value;
+    } else {
+      delete searchparams[name];
     }
-    if (direction) {
-      ClientDb.filterData('direction', direction);
-    }
-
-    if (dateFilterStart && dateFilterStop) {
-      ClientDb.filterByDate(dateFilterStart, dateFilterStop, 'startDate');
-    }
-
-    if (minAmount && maxAmount) {
-      ClientDb.filterByNumber(minAmount, maxAmount, 'amount', 'f');
-    }
-    this.db = ClientDb.getDatabase();
+    return searchparams;
   }
-
   @action
   setInitiateSrch = (valueObj, name) => {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
-      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonTerminatedState, name, this.isNonTerminatedState) : '';
-      if (this.requestState.search.dateFilterStart === '' ||
-        this.requestState.search.dateFilterStop === '') {
-        delete searchparams[name];
-      }
-    } else {
-      const { value } = valueObj;
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-        searchparams[name] = value;
+      if (moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+        searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+        this.requestState.search = searchparams;
+        this.initRequest(this.transactionStatus);
       } else {
         delete searchparams[name];
+        this.requestState.search = searchparams;
+        if (!has(this.requestState.search, 'dateFilterStart') && !has(this.requestState.search, 'dateFilterStop')) {
+          this.initRequest(this.transactionStatus);
+        }
       }
+    } else {
+      this.requestState.search = this.modifySearchParams(valueObj, name);
+      this.initRequest(this.transactionStatus);
     }
-    this.requestState.search = searchparams;
-    return this.isNonTerminatedState ? this.initiateFilters()
-      : this.initRequest(this.transactionStatus);
+    return null;
   }
 }
 

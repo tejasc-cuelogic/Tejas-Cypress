@@ -9,8 +9,12 @@ import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../
 @observer
 export default class UploadDocument extends Component {
   componentWillMount() {
-    const { changeRuleAsPerFilingStatus, FILLING_STATUS_FORM } = this.props.accreditationStore;
-    changeRuleAsPerFilingStatus(FILLING_STATUS_FORM.fields.method.value);
+    const {
+      changeRuleAsPerFilingStatus, FILLING_STATUS_FORM, filingStatus,
+    } = this.props.accreditationStore;
+    if (FILLING_STATUS_FORM.fields.method.value !== filingStatus) {
+      changeRuleAsPerFilingStatus(FILLING_STATUS_FORM.fields.method.value);
+    }
   }
   onFileDrop = (files, field) => {
     this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income');
@@ -38,11 +42,11 @@ export default class UploadDocument extends Component {
         <Header as="h3" textAlign="center">Upload documents</Header>
         <p className="center-align">Upload your W2, 1040, or other IRS or foreign tax authority documents containing your salary for the past 2 years, or a letter from your lawyer, CPA, investment advisor or investment broker verifying your income.</p>
         <Divider hidden />
-        <Form error>
+        <Form>
           <Grid stackable columns="equal">
             {
               docsToUpload.map(field => (
-                <Grid.Column>
+                <Grid.Column key={field}>
                   <DropZone
                     name={field}
                     fielddata={INCOME_UPLOAD_DOC_FORM.fields[field]}
@@ -64,6 +68,11 @@ export default class UploadDocument extends Component {
             name={FILLING_STATUS_FORM.fields.method.value ? 'isAcceptedForfilling' : 'isAcceptedForUnfilling'}
             changed={(e, result) => formChange(e, result, 'INCOME_UPLOAD_DOC_FORM')}
             defaults
+            disabled={FILLING_STATUS_FORM.fields.method.value ?
+              (INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear.fileId === '' ||
+                INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '') :
+              (INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear.fileId === '' ||
+                INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.fileId === '')}
             containerclassname="ui relaxed list"
           />
           <div className="center-align">

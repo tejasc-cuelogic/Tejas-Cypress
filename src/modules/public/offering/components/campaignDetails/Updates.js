@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import Parser from 'html-react-parser';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import { UserAvatar, InlineLoader } from '../../../../../theme/shared';
+import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
+import HtmlEditor from '../../../../shared/HtmlEditor';
+
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore')
 @observer
@@ -16,8 +18,10 @@ class Updates extends Component {
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
   }
   componentDidMount() {
-    const sel = 'anchor-scroll';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   handleClose = () => this.props.history.goBack();
   render() {
@@ -25,11 +29,12 @@ class Updates extends Component {
     const updates = campaign && campaign.updates;
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
+    const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Updates
-          <span className="anchor-scroll" />
+          <span className="anchor" />
         </Header>
         {updates && updates.length ?
           <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
@@ -48,21 +53,11 @@ class Updates extends Component {
                 >
                   <Item.Group>
                     <Item>
-                      <div className="ui image">
-                        <UserAvatar
-                          UserInfo={dataItem.actingUserInfo && dataItem.actingUserInfo.info ? {
-                            firstName: dataItem.actingUserInfo.info.firstName,
-                            lastName: dataItem.actingUserInfo.info.lastName,
-                            roles: ['investor'],
-                            avatarUrl: dataItem.actingUserInfo.info.avatar ?
-                              dataItem.actingUserInfo.info.avatar.url : null,
-                          } : {
-                              firstName: 'T',
-                              lastName: 'T',
-                              roles: ['investor'],
-                              avatarUrl: null,
-                            }}
-                        />
+                      <div className="ui image avatar-image">
+                        {companyAvatarUrl && companyAvatarUrl.length ?
+                          <Image64 srcUrl={companyAvatarUrl} circular />
+                         : <UserAvatar UserInfo={{}} />
+                      }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header" >{dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName} <br /><span>{moment(dataItem.updated.date).format('ll')}</span></Item.Content>
                     </Item>
@@ -70,10 +65,11 @@ class Updates extends Component {
                     <div
                       style={readMoreStatus[index] ? { display: 'block' } : { display: 'none' }}
                     >
-                      <p>
-                        {Parser(dataItem.content.length <= 805 ?
-                          dataItem.content : dataItem.content.substring(1, 805))}
-                      </p>
+                      <HtmlEditor
+                        readOnly
+                        content={dataItem.content.length <= 805 ?
+                          dataItem.content : dataItem.content.substring(0, 805)}
+                      />
                       {dataItem.content.length > 805 ?
                         <a
                           href
@@ -89,9 +85,7 @@ class Updates extends Component {
                     <div
                       style={!readLessStatus[index] ? { display: 'block' } : { display: 'none' }}
                     >
-                      <p>
-                        {Parser(dataItem.content || '')}
-                      </p>
+                      <HtmlEditor readOnly content={dataItem.content || ''} />
                       <a
                         href
                         onClick={

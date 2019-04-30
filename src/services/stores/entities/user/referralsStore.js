@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { getJwtReferralEmbeddedWidget, getUserRewardBalance, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
+import { getJwtReferralEmbeddedWidget, getUserRewardBalance, getUserReferralDetails, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../index';
 
@@ -29,7 +29,11 @@ export class ReferralStore {
       query: getJwtReferralEmbeddedWidget,
       variables: payLoad,
       fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
       onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); reject(); },
     });
   });
@@ -42,8 +46,31 @@ export class ReferralStore {
       query: getUserRewardBalance,
       variables: { userId: userDetails.id },
       fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+    });
+  });
+
+  getUserReferralDetails = () => new Promise((resolve, reject) => {
+    const { userDetails } = userDetailsStore;
+    graphql({
+      client,
+      query: getUserReferralDetails,
+      variables: { userId: userDetails.id },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
     });
   });
 
@@ -54,22 +81,29 @@ export class ReferralStore {
       query: getReferralCreditsInformation,
       variables: { code },
       fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
-      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
     });
   });
 
-  @action
-  getReferralCreditsInformation = code => new Promise((resolve) => {
-    graphql({
-      client: clientPublic,
-      query: getReferralCreditsInformation,
-      variables: { code },
-      fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
-      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
-    });
-  });
+  // @action
+  // getReferralCreditsInformation = code => new Promise((resolve) => {
+  //   graphql({
+  //     client: clientPublic,
+  //     query: getReferralCreditsInformation,
+  //     variables: { code },
+  //     fetchPolicy: 'network-only',
+  //     onFetch: (data) => {
+  //       if (data) {
+  //         resolve(data);
+  //       }
+  //     },
+  //     onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+  //   });
+  // });
 
   @action
   userPartialFullSignupWithReferralCode = (val, type = 'partial') => {
@@ -80,14 +114,18 @@ export class ReferralStore {
           mutation,
           variables: type === 'partial' ? { code: val } : { userId: val },
         })
-        .then(result => resolve(result))
+        .then((result) => {
+          if (result) {
+            resolve(result);
+          }
+        })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
         });
     });
-  }
+  };
 
   @action
   upsertUserReferralCredits = userId => new Promise((resolve, reject) => {
@@ -96,7 +134,11 @@ export class ReferralStore {
         mutation: upsertUserReferralCredits,
         variables: { userId },
       })
-      .then(result => resolve(result))
+      .then((result) => {
+        if (result) {
+          resolve(result);
+        }
+      })
       .catch((error) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         uiStore.setErrors(error.message);

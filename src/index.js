@@ -34,12 +34,12 @@ promiseFinally.shim();
 useStrict(true);
 
 ReactDOM.render(
-  <ErrorBoundary >
-    <Provider {...stores}>
-      <BrowserRouter >
+  <Provider {...stores}>
+    <BrowserRouter >
+      <ErrorBoundary >
         <App />
-      </BrowserRouter>
-    </Provider>
-  </ErrorBoundary>,
+      </ErrorBoundary>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root'),
 );

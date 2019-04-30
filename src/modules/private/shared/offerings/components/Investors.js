@@ -1,65 +1,67 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Form, Grid } from 'semantic-ui-react';
+import { toJS } from 'mobx';
+import { get } from 'lodash';
+import { Form, Grid, Button } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
-import Filters from './investors/Filters';
 import Listing from './investors/Listing';
+import Helper from '../../../../../helper/utility';
 
-const investors = [
-  {
-    id: 1, name: 'Anna Maria Bach', city: 'Austin, TX', amount: 1200, investedDate: '12-23-2018', referral: 'g45345Xsa',
-  },
-  {
-    id: 2, name: 'Evelinne Cyclist', city: 'Los Angeles, CA', amount: 950, investedDate: '7-11-2018',
-  },
-  {
-    id: 3, name: 'Bob Brown', city: 'Chicago, IL', amount: 1040, investedDate: '12-22-2018', referral: 'jhg5kg5D',
-  },
-  {
-    id: 4, name: 'Marika Walters', city: 'Los Angeles, CA', amount: 950, investedDate: '7-11-2018',
-  },
-  {
-    id: 5, name: 'Stephen Smith', city: 'Chicago, IL', amount: 1040, investedDate: '12-22-2018', referral: 'jhg5kg5D',
-  },
-];
-
-@inject('offeringCreationStore', 'userStore')
+@inject('userStore', 'offeringInvestorStore', 'offeringsStore')
 @observer
 export default class BonusRewards extends Component {
-  setSearchParam = (e, { name, value }) => {
-    this.props.offeringCreationStore.setInitiateSrch(name, value);
+  componentWillMount() {
+    this.props.offeringInvestorStore.initRequest(this.props.offeringId);
   }
   executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.offeringCreationStore.setInitiateSrch('keyword', e.target.value);
-    }
+    this.props.offeringInvestorStore.setInitiateSrch('keyword', e.target.value);
+  }
+  populateCsvData = () => {
+    const { investorLists } = this.props.offeringInvestorStore;
+    const { offer } = this.props.offeringsStore;
+    const fields = ['firstName', 'lastName', 'userEmail', 'city', 'state', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode.code', 'referralCode.isValid'];
+    const params = {
+      fields,
+      data: toJS(investorLists),
+      fileName: `${get(offer, 'keyTerms.shorthandBusinessName')}-investors`,
+    };
+    Helper.downloadCSV(params);
   }
   render() {
-    const { requestState } = this.props.offeringCreationStore;
-    const { isIssuer } = this.props.userStore;
+    const { requestState, investorLists } = this.props.offeringInvestorStore;
+    const { isIssuer, isAdmin } = this.props.userStore;
     return (
       <Aux>
         <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
-                executeSearch={this.executeSearch}
+                change={this.executeSearch}
                 w={[4]}
-                placeholder="Search by name"
+                placeholder="Search by name, city"
                 more="no"
-                addon={
-                  <Filters
-                    requestState={requestState}
-                    setSearchParam={this.setSearchParam}
-                  />
-                }
+                requestState={requestState}
+                // addon={
+                // }
               />
+              {isAdmin &&
+              <Grid.Column floated="right" width={3} className="right-align">
+                <Button
+                  primary
+                  className="relaxed"
+                  content="Export"
+                  onClick={this.populateCsvData}
+                  // loading={inProgress}
+                  disabled={!investorLists.length}
+                />
+              </Grid.Column>
+              }
             </Grid.Row>
           </Grid>
         </Form>
         <div className={isIssuer ? 'ui card fluid' : ''}>
-          <Listing data={investors} />
+          <Listing />
         </div>
       </Aux>
     );

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { DataFormatter } from '../../../../../helper';
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('uiStore', 'offeringsStore')
 @withRouter
 @observer
 export default class GettingStarted extends Component {
@@ -12,13 +12,8 @@ export default class GettingStarted extends Component {
     this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
   }
   handleCloseModal = () => {
+    this.props.offeringsStore.initRequest({ stage: 'active' });
     this.props.history.push('/app/dashboard');
-  }
-  createOffer = () => {
-    const { match, businessAppReviewStore } = this.props;
-    businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
-      this.props.history.push('/app/dashboard');
-    });
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
@@ -36,7 +31,7 @@ export default class GettingStarted extends Component {
             <Button
               loading={this.props.uiStore.inProgress}
               primary
-              onClick={this.createOffer}
+              onClick={this.handleCloseModal}
             >Get Started
             </Button>
           </div>

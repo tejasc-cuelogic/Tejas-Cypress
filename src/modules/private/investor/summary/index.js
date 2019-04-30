@@ -9,15 +9,19 @@ import Dashboard from './containers/Dashboard';
 export default class Summary extends Component {
   render() {
     const { signupStatus, isBasicVerDoneForMigratedFullUser } = this.props.userDetailsStore;
+    const partialAccLength = signupStatus.partialAccounts.length;
     const activeAccLength = signupStatus.activeAccounts.length;
+    const processingAccLength = signupStatus.processingAccounts.length;
     return (
       <Route
-        component={(activeAccLength === 0
-          || (signupStatus.isMigratedFullAccount
-            && (!isBasicVerDoneForMigratedFullUser
-            || !signupStatus.investorProfileCompleted)
-            )) ?
-        AccountSetup : Dashboard}
+        component={
+           ((processingAccLength === 0 &&
+            partialAccLength >= 0 &&
+            activeAccLength === 0) ||
+            (signupStatus.isMigratedFullAccount ||
+            !isBasicVerDoneForMigratedFullUser ||
+            !signupStatus.investorProfileCompleted))
+          ? AccountSetup : Dashboard}
       />);
   }
 }

@@ -81,13 +81,16 @@ export const paymentHistory = gql`
   }
 `;
 
-export const investmentsByOfferingId = gql`
-  query _getInvestmentsByOfferingId($offeringId: String!) {
-    getInvestmentsByOfferingId(offeringId: $offeringId) {
+export const getInvestmentsByUserIdAndOfferingId = gql`
+  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String!) {
+    getInvestmentsByUserIdAndOfferingId(offeringId: $offeringId, userId: $userId) {
       investmentId
       accountId
       status
       amount
+      agreement {
+        agreementId
+      }
     }
   }
 `;
@@ -111,7 +114,11 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
       amount
       accountId
       gsTransactionId
+      gsProcessId
       type
+      investorAccountInfo {
+        accountType
+      }
       userInfo {
         id
         info {
@@ -126,6 +133,7 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
       }
       failDate
       failDesc
+      autodraft
     }
     transactionCount {
       pendingCount
@@ -140,32 +148,50 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
 `;
 
 
-export const approveTransactions = gql`
-  mutation _transactionApprove($id: Int!){
-    transactionApprove(
+export const transferRequestAdminApprove = gql`
+  mutation transferRequestAdminApprove($id: Int!){
+    transferRequestAdminApprove(
     id: $id
     )
   }`;
 
-export const declineTransactions = gql`
-  mutation _transactionDecline($id: Int!){
-    transactionDecline(
-    id: $id
-    )
-  }`;
-
-export const verifiedTransactions = gql`
-  mutation _transactionVerified($id: Int!){
-    transactionVerified(
+export const transferRequestAdminDecline = gql`
+  mutation transferRequestAdminDecline($id: Int!, $reason: String){
+    transferRequestAdminDecline(
     id: $id
     reason: $reason
     )
   }`;
 
-export const failedTransactions = gql`
-  mutation _transactionFailed($id: Int!, $reason: String!){
+export const transferRequestAdminVerified = gql`
+  mutation transferRequestAdminVerified($id: Int!){
+    transferRequestAdminVerified(
+    id: $id
+    )
+  }`;
+
+export const transactionFailed = gql`
+  mutation transactionFailed($id: Int!, $reason: String){
     transactionFailed(
     id: $id
     reason: $reason
     )
   }`;
+
+export const transferRequestAdminSync = gql`
+mutation transferRequestAdminSync($id: Int!){
+  transferRequestAdminSync(
+  id: $id
+  )
+}`;
+
+export const viewLoanAgreement = gql`
+  query viewLoanAgreement($agreementId: Int!, $callbackUrl: String) {
+    viewLoanAgreement(agreementId: $agreementId, callbackUrl: $callbackUrl) {
+      agreementId
+      envelopeId
+      docuSignViewURL
+      npaViewUrl
+    }
+  }
+`;

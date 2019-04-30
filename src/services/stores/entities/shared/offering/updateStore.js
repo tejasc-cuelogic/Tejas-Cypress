@@ -8,6 +8,7 @@ import { UPDATES } from '../../../../constants/offering';
 import { offeringCreationStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
+  sendOfferingUpdateTestEmail,
 } from '../../../queries/offering/Updates';
 
 export class UpdateStore {
@@ -66,6 +67,19 @@ export class UpdateStore {
     setInitiateSrch = (name, value) => {
       this.requestState.search[name] = value;
       this.initiateFilters();
+    }
+
+    @action
+    sendTestEmail = (offeringUpdateId) => {
+      client
+        .mutate({
+          mutation: sendOfferingUpdateTestEmail,
+          variables: {
+            offeringUpdateId,
+          },
+        })
+        .then(() => { Helper.toast('Email sent ', 'success'); })
+        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
     }
 
     @action

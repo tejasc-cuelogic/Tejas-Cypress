@@ -4,17 +4,19 @@ import { Link } from 'react-router-dom';
 import { Header, Grid, Item, Divider, Button, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('authStore')
 export default class PreferredEquity extends Component {
   render() {
     const { isUserLoggedIn } = this.props.authStore;
-    const link = '/auth/register';
+    const link = '/auth/register/applynow';
     return (
       <Aux>
         <Header as="h3">Preferred Equity</Header>
         <Grid doubling columns={2} relaxed="very">
           <Grid.Column>
-            <Item.Group className="question-list">
+            <Item.Group className={!isMobile && 'question-list'}>
               <Item>
                 <Item.Content>
                   <Header as="h5">

@@ -10,7 +10,7 @@ const OfferingInvestDetails = props => (
         <Grid.Row>
           <Grid.Column>
             <Statistic size="mini" className="basic">
-              <Statistic.Label>Current investment amount</Statistic.Label>
+              <Statistic.Label>Investment Amount</Statistic.Label>
               <Statistic.Value>
                 {Helper.MoneyMathDisplayCurrency((props.offering && props.offering.investedAmount)
                 || 0)}

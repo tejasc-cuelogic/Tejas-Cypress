@@ -5,7 +5,8 @@ import { Form, Input, Header, Icon, Divider, Button, List, Confirm, Grid, Label 
 import { ImageCropper } from '../../../../../theme/form';
 import { Image64 } from '../../../../../theme/shared';
 import {
-  PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
+  // PROFILE_PHOTO_BYTES,
+  PROFILE_PHOTO_EXTENSIONS,
 } from '../../../../../services/constants/user';
 import ButtonGroup from './ButtonGroup';
 
@@ -32,13 +33,13 @@ export default class Media extends Component {
     this.props.offeringCreationStore.removeMedia(name, index);
   }
 
-  handleVerifyFileSize = (fileSize, field) => {
-    if (fileSize > PROFILE_PHOTO_BYTES) {
-      const attr = 'error';
-      const errorMsg = 'File size cannot be more than 5 MB.';
-      this.props.offeringCreationStore.setProfilePhoto(attr, errorMsg, field);
-    }
-  }
+  // handleVerifyFileSize = (fileSize, field) => {
+  //   if (fileSize > PROFILE_PHOTO_BYTES) {
+  //     const attr = 'error';
+  //     const errorMsg = 'File size cannot be more than 5 MB.';
+  //     this.props.offeringCreationStore.setProfilePhoto(attr, errorMsg, field);
+  //   }
+  // }
 
   handleVerifyFileExtension = (fileExt) => {
     if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
@@ -103,7 +104,7 @@ export default class Media extends Component {
                     disabled={isReadonly}
                     fieldData={MEDIA_FRM.fields[field]}
                     setData={(attr, value) => this.setData(attr, value, field)}
-                    verifySize={this.handleVerifyFileSize}
+                    // verifySize={this.handleVerifyFileSize}
                     verifyExtension={this.handleVerifyFileExtension}
                     handelReset={() => this.handleresetProfilePhoto(field)}
                     verifyImageDimension={this.handelImageDeimension}
@@ -142,7 +143,9 @@ export default class Media extends Component {
         </Grid>
         <Divider section />
         <Grid columns={2} stackable>
-          {['tombstoneImage', 'locationHeroImage'].map(field => (
+          {['tombstoneImage',
+          // 'locationHeroImage'
+          ].map(field => (
             <Grid.Column>
               <Header as="h4">{MEDIA_FRM.fields[field].label}</Header>
               <Form className="cropper-wrap tombstone-img">
@@ -158,7 +161,7 @@ export default class Media extends Component {
                     disabled={isReadonly}
                     fieldData={MEDIA_FRM.fields[field]}
                     setData={(attr, value) => this.setData(attr, value, field)}
-                    verifySize={this.handleVerifyFileSize}
+                    // verifySize={this.handleVerifyFileSize}
                     verifyExtension={this.handleVerifyFileExtension}
                     handelReset={() => this.handleresetProfilePhoto(field)}
                     verifyImageDimension={this.handelImageDeimension}
@@ -174,15 +177,18 @@ export default class Media extends Component {
           }
         </Grid>
         <Divider section />
-        <Grid columns={2} stackable>
-          {['useOfProceeds', 'businessModelImage'].map(field => (
+        {/* <Grid columns={2} stackable>
+          {['useOfProceeds',
+          // 'businessModelImage'
+          ].map(field => (
             <Grid.Column>
               <Header as="h4">{MEDIA_FRM.fields[field].label}</Header>
               <Form className="cropper-wrap tombstone-img">
                 {MEDIA_FRM.fields[field].preSignedUrl ? (
                   <div className="file-uploader attached">
                     {!isReadonly &&
-                      <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
+                      <Button onClick={() => this.showConfirmModal(field)} circular
+                      icon={{ className: 'ns-close-light' }} />
                     }
                     <Image64 srcUrl={MEDIA_FRM.fields[field].preSignedUrl} />
                   </div>
@@ -191,7 +197,7 @@ export default class Media extends Component {
                     disabled={isReadonly}
                     fieldData={MEDIA_FRM.fields[field]}
                     setData={(attr, value) => this.setData(attr, value, field)}
-                    verifySize={this.handleVerifyFileSize}
+                    // verifySize={this.handleVerifyFileSize}
                     verifyExtension={this.handleVerifyFileExtension}
                     handelReset={() => this.handleresetProfilePhoto(field)}
                     verifyImageDimension={this.handelImageDeimension}
@@ -206,7 +212,7 @@ export default class Media extends Component {
             </Grid.Column>))
             }
         </Grid>
-        <Divider section />
+        <Divider section /> */}
         <Header as="h4">Gallery</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
@@ -222,12 +228,13 @@ export default class Media extends Component {
                   </div>
                 </List.Item>
               ))}
+            {!isReadonly &&
             <List.Item>
               <ImageCropper
                 disabled={isReadonly}
                 fieldData={MEDIA_FRM.fields.gallery}
                 setData={(attr, value) => this.setData(attr, value, 'gallery')}
-                verifySize={this.handleVerifyFileSize}
+                // verifySize={this.handleVerifyFileSize}
                 verifyExtension={this.handleVerifyFileExtension}
                 handelReset={() => this.handleresetProfilePhoto('gallery')}
                 verifyImageDimension={this.handelImageDeimension}
@@ -238,6 +245,7 @@ export default class Media extends Component {
                 aspect="none"
               />
             </List.Item>
+            }
           </List>
         </Form>
         <Divider section />
@@ -258,7 +266,7 @@ export default class Media extends Component {
                     disabled={isReadonly}
                     fieldData={MEDIA_FRM.fields[field]}
                     setData={(attr, value) => this.setData(attr, value, field)}
-                    verifySize={this.handleVerifyFileSize}
+                    // verifySize={this.handleVerifyFileSize}
                     verifyExtension={this.handleVerifyFileExtension}
                     handelReset={() => this.handleresetProfilePhoto(field)}
                     verifyImageDimension={this.handelImageDeimension}

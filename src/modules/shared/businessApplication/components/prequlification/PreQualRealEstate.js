@@ -32,7 +32,7 @@ export default class PreQualRealEstate extends Component {
           currentApplicationType={this.props.applicationType || currentApplicationType}
           setAddressFields={setAddressFields}
         />
-        <FormElementWrap hideFields={hideFields} header="Industries" subHeader="Please select all that apply.">
+        <FormElementWrap hideFields={hideFields} header="Industries*" subHeader="Please select all that apply.">
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.industryTypes}
@@ -41,7 +41,7 @@ export default class PreQualRealEstate extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="Investment Type" subHeader="Select your Investment Type.">
+        <FormElementWrap hideFields={hideFields} header="Investment Type*" subHeader="Select your Investment Type.">
           <FormRadioGroup
             containerclassname="button-radio"
             disabled={preQualFormDisabled}
@@ -55,7 +55,7 @@ export default class PreQualRealEstate extends Component {
             {getInvestmentTypeTooltip}
           </p>}
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="Real Estate Type" subHeader="Select all the Real Estate types that apply.">
+        <FormElementWrap hideFields={hideFields} header="Real Estate Type*" subHeader="Select all the Real Estate types that apply.">
           <FormCheckbox
             containerclassname="button-checkbox"
             disabled={preQualFormDisabled}
@@ -77,7 +77,7 @@ export default class PreQualRealEstate extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="What will the funds be used for?" subHeader="Please select all that apply.">
+        <FormElementWrap hideFields={hideFields} header="What will the funds be used for?*" subHeader="Please select all that apply.">
           <FormCheckbox
             containerclassname="button-checkbox"
             disabled={preQualFormDisabled}
@@ -86,7 +86,7 @@ export default class PreQualRealEstate extends Component {
             changed={businessAppEleChange}
           />
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="Do you currently own or operate this property?">
+        <FormElementWrap hideFields={hideFields} header="Do you currently own or operate this property?*">
           <FormRadioGroup
             disabled={preQualFormDisabled}
             fielddata={fields.ownOrOperateProperty}
@@ -107,6 +107,7 @@ export default class PreQualRealEstate extends Component {
                       key={field}
                       name={field}
                       percentage
+                      asterisk="true"
                       tooltip={fields[field].tooltip}
                       value={fields[field].value}
                       fielddata={fields[field]}
@@ -120,6 +121,7 @@ export default class PreQualRealEstate extends Component {
                   readOnly={preQualFormDisabled}
                   name="holdTimeInYears"
                   number
+                  asterisk="true"
                   value={fields.holdTimeInYears.value}
                   fielddata={fields.holdTimeInYears}
                   changed={businessAppEleMaskChange}

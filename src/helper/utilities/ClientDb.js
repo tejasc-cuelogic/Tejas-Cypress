@@ -1,12 +1,16 @@
 import TAFFY from 'taffy';
 import { uniqWith, isEqual, isArray, map } from 'lodash';
+import moment from 'moment';
 
 class ClientDb {
   database = null;
-  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId') => {
+  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId', addIdKey = false) => {
     let updatedData = data;
     if (isReplaceId) {
       updatedData = map(data, e => ({ [idReplaceKey]: e.id, ...e }));
+    }
+    if (addIdKey) {
+      updatedData = data.map((d, i) => ({ id: i, ...d }));
     }
     this.database = TAFFY(isUniqWith ? uniqWith(updatedData, isEqual) : updatedData);
     return this.getDatabase();
@@ -83,10 +87,22 @@ class ClientDb {
     this.initiateDb(resultArray, true);
   }
 
-  filterByDate = (sDate, eDate, key = 'date', subkey = null) => {
+  filterByObjExist = (key) => {
     const data = this.getDatabase();
-    const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)
-      <= eDate && parseInt((subkey ? e[key][subkey] : e[key]), 10) >= sDate);
+    const filterData = data.filter(e => e[key]);
+    this.initiateDb(filterData, true);
+  }
+
+  filterByDate = (sDate, eDate, key = 'date', subkey = null, isUnix = false) => {
+    const data = this.getDatabase();
+    const startDate = isUnix ? moment(sDate).unix() : sDate;
+    const endDate = isUnix ? moment(eDate).unix() : eDate;
+    const filterData = data.filter(e => parseInt(isUnix ? moment(subkey ? e[key][subkey] :
+      e[key]).unix() : subkey ? e[key][subkey] :
+      e[key], 10)
+    <= endDate && parseInt(isUnix ? moment(subkey ? e[key][subkey] :
+        e[key]).unix() : subkey ? e[key][subkey] :
+        e[key], 10) >= startDate);
     this.initiateDb(filterData, true);
   }
 
@@ -95,9 +111,7 @@ class ClientDb {
     const isInt = type === 'Integer';
     const filterData = data.filter(e => (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10))
     <= max && (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10)) >= min);
-    if (filterData.length > 0) {
-      this.initiateDb(filterData, true);
-    }
+    this.initiateDb(filterData, true);
   }
 }
 

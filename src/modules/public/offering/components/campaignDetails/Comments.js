@@ -8,6 +8,8 @@ import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
+import HtmlEditor from '../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 991;
@@ -16,14 +18,16 @@ const isTablet = document.documentElement.clientWidth < 991;
 @observer
 class Comments extends Component {
   state={
-    readMore: false, readMoreInner: false, visible: false, commentId: null,
+    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true,
   }
   componentWillMount() {
     this.props.messageStore.resetMessageForm();
   }
   componentDidMount() {
-    const sel = 'anchor-scroll';
-    document.querySelector(`.${sel}`).scrollIntoView(true);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
+    }
   }
   postNewComment = () => {
     const { isUserLoggedIn } = this.props.authStore;
@@ -51,28 +55,40 @@ class Comments extends Component {
     this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage);
   }
   toggleVisibility = (comment = null) => {
+    this.props.messageStore.resetCommentField();
     if (!this.state.visible) {
       this.setState({ visible: true });
+      this.setState({ visiblePost: false });
+    }
+    if (this.state.visiblePost) {
+      this.setState({ visiblePost: false });
     }
     this.setState({ commentId: comment });
   }
   closeTextBox = (commentId) => {
     if (this.state.visible && commentId === this.state.commentId) {
       this.setState({ visible: false });
+      this.props.messageStore.resetCommentField();
+    }
+    if (!this.state.visiblePost) {
+      this.setState({ visiblePost: true });
     }
   }
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
-    const { visible } = this.state;
+    const { visible, visiblePost } = this.state;
     const { isUserLoggedIn } = this.props.authStore;
     const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
-    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const { idVerification, activeAccounts } = this.props.userDetailsStore.signupStatus;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
-    const accountStatusFull = activeAccounts && activeAccounts.length;
-    const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && activeAccounts && activeAccounts.length);
-    const readMoreLength = 50;
+    const accountStatusFull = idVerification === 'PASS' || activeAccounts.length;
+    const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && accountStatusFull);
+    const readMoreLength = 250;
     const { campaign } = this.props.campaignStore;
+    const campaignStage = get(campaign, 'stage');
+    const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) < 0;
+    const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
     const comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
@@ -83,9 +99,9 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Comments
-          <span className="anchor-scroll" />
+          <span className="anchor" />
         </Header>
         <p>
           Note that both NextSeed and issuers are notified of all comments immediately,
@@ -115,18 +131,20 @@ class Comments extends Component {
                   }
             </Form>
           </section>
-              :
-          <Aux>
-            <Form className="public-form mt-30 clearfix" reply>
-              <FormTextarea
-                fielddata={MESSAGE_FRM.fields.comment}
-                name="comment"
-                changed={msgEleChange}
-                containerclassname="secondary"
-              />
-              <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
-            </Form>
-          </Aux>
+              : !disablePostComment &&
+              <Aux>
+                { visiblePost ?
+                  <Form className="public-form mt-30 clearfix" reply>
+                    <FormTextarea
+                      fielddata={MESSAGE_FRM.fields.comment}
+                      name="comment"
+                      changed={msgEleChange}
+                      containerclassname="secondary"
+                    />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                  </Form> : ''
+                }
+              </Aux>
         }
         {comments && comments.length ?
           <Aux>
@@ -136,14 +154,14 @@ class Comments extends Component {
                   && c.approved) ||
                   (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC' && (
                     <Comment.Group minimal>
-                      <Comment key={c.id} className={`${c.createdUserInfo && c.createdUserInfo.id === issuerId ? 'issuer-comm ent' : ''}`}>
+                      <Comment key={c.id} className={`${c.createdUserInfo && c.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
                         <Comment.Content>
                           <Comment.Author>
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.info.firstName')}
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                           </Comment.Author>
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
-                          {isUserLoggedIn &&
+                          {isUserLoggedIn && !disablePostComment &&
                           <Comment.Actions>
                             <Comment.Action onClick={() => this.toggleVisibility(c.id)}>
                               Reply
@@ -151,9 +169,17 @@ class Comments extends Component {
                           </Comment.Actions>
                           }
                           <Comment.Text className="mt-20">
-                            {this.state.readMore === c.id ?
-                            c.comment : c.comment.substr(0, readMoreLength)}
-                            {(c.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
+                            <HtmlEditor
+                              readOnly
+                              content={this.state.readMore === c.id ?
+                                c.comment : `${c.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== c.id && (c.comment.length > readMoreLength)) ? '...' : ' '}`}
+                            />
+                            {(c.comment.length > readMoreLength) &&
+                            <Link
+                              to="/"
+                              onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
+                            >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
+                            </Link>}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
                             <Aux>
@@ -199,7 +225,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
-                                {isUserLoggedIn &&
+                                {isUserLoggedIn && !disablePostComment &&
                                 <Comment.Actions>
                                   <Comment.Action
                                     onClick={() => this.toggleVisibility(tc.id)}
@@ -210,9 +236,17 @@ class Comments extends Component {
                                 </Comment.Actions>
                                 }
                                 <Comment.Text className="mt-20">
-                                  {this.state.readMoreInner === tc.id ?
-                                  tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}...` : tc.comment.substr(0, readMoreLength)}{' '}
-                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'read more' : 'read less'}</Link>}
+                                  <HtmlEditor
+                                    readOnly
+                                    content={this.state.readMoreInner === tc.id ?
+                                      tc.comment : `${tc.comment.substr(0, readMoreLength)} ${(this.state.readMoreInner !== tc.id && (tc.comment.length > readMoreLength)) ? '...' : ' '}`}
+                                  />
+                                  {(tc.comment.length > readMoreLength) &&
+                                  <Link
+                                    to="/"
+                                    onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
+                                  >{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
+                                  </Link>}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
                                   <Aux>

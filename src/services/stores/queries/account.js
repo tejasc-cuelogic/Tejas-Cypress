@@ -16,12 +16,11 @@ export const createAccount = gql`
     }
   }`;
 
-export const updateAccount = gql`
-  mutation _updateAccount($accountId: String! $accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: InvestorAccountTypeEnum!) {
-    updateInvestorAccount(
+export const upsertInvestorAccount = gql`
+  mutation _upsertInvestorAccount($accountId: String $accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum!) {
+    upsertInvestorAccount(
       accountId: $accountId
       accountAttributes: $accountAttributes
-      accountStatus: $accountStatus
       accountType: $accountType
     ) {
       accountId
@@ -29,9 +28,18 @@ export const updateAccount = gql`
         accountNumber
         routingNumber
         bankName
+        accountType
       }
       accountType
     }
+  }`;
+
+export const submitinvestorAccount = gql`
+  mutation _submitInvestorAccount($accountId: String!, $accountType: InvestorAccountTypeEnum!){
+    submitInvestorAccount(
+      accountId: $accountId,
+      accountType: $accountType
+    )
   }`;
 
 export const updateInvestorProfileData = gql`
@@ -49,12 +57,13 @@ export const updateInvestorProfileData = gql`
       isPartialProfile: $isPartialProfile
     ) {
       id
+      status
     }
   }`;
 
-export const checkEntityTaxIdCollision = gql`
-query checkEntityTaxIdCollision($taxId: String!) {
-  checkEntityTaxIdCollision(taxId: $taxId) {
+export const isUniqueTaxId = gql`
+query isUniqueTaxId($taxId: String!) {
+  isUniqueTaxId(taxId: $taxId) {
     alreadyExists
   }
 }`;
@@ -80,3 +89,11 @@ export const crowdPayAccountNotifyGs = gql`
       accountId: $accountId
     )
   }`;
+export const createIndividualGoldStarInvestor = gql`
+  mutation createIndividualGoldStarInvestor($userId: String!, $accountId: String!) {
+    createIndividualGoldStarInvestor(
+      userId: $userId
+      accountId: $accountId
+    )
+  }
+`;

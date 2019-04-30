@@ -1,16 +1,19 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
+import Helper from '../../../../helper/utility';
 import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
+import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
+
 
 export class AuthStore {
   @observable hasSession = false;
@@ -21,7 +24,7 @@ export class AuthStore {
   @observable capabilities = [];
   @observable userId = null;
   @observable devAuth = {
-    required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
+    required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
   @observable LOGIN_FRM = Validator.prepareFormObject(LOGIN);
@@ -34,10 +37,19 @@ export class AuthStore {
   @observable confirmProgress = false;
   @observable pwdInputType = 'password';
   @observable currentScore = 0;
+  @observable idleTimer = null;
+  @observable checkEmail = false;
 
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  resetIdelTimer = () => {
+    if (this.idleTimer) {
+      this.idleTimer.reset();
+    }
   }
 
   @action
@@ -108,6 +120,7 @@ export class AuthStore {
 
   @action
   ConfirmChange = (e) => {
+    uiStore.setErrors('');
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
       { name: 'code', value: e },
@@ -190,6 +203,12 @@ export class AuthStore {
       this.CONFIRM_FRM,
       { name: 'password', value: credentials.password },
     );
+    if (get(credentials, 'givenName')) {
+      this.CONFIRM_FRM = Validator.onChange(
+        this.CONFIRM_FRM,
+        { name: 'givenName', value: credentials.givenName },
+      );
+    }
   }
 
   @computed get devPasswdProtection() {
@@ -261,20 +280,22 @@ export class AuthStore {
         .mutate({
           mutation: requestEmailChnage,
           variables: {
-            newEmail: this.CONFIRM_FRM.fields.email.value,
+            newEmail: this.CONFIRM_FRM.fields.email.value.toLowerCase(),
           },
         })
         .then((result) => {
           identityStore.setRequestOtpResponse(result.data.requestEmailChange);
+          uiStore.setProgress(false);
           resolve();
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject(err);
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 
@@ -329,23 +350,33 @@ export class AuthStore {
 
   @action
   checkEmailExistsPresignup = email => new Promise((res, rej) => {
-    graphql({
-      client: clientPublic,
-      query: checkEmailExistsPresignup,
-      variables: {
-        email,
-      },
-      onFetch: (data) => {
-        if (data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
-          this.SIGNUP_FRM.meta.isValid = false;
-          rej();
-        } else {
-          res();
-        }
-      },
-      fetchPolicy: 'network-only',
-    });
+    if (DataFormatter.validateEmail(email)) {
+      this.checkEmail = graphql({
+        client: clientPublic,
+        query: checkEmailExistsPresignup,
+        variables: {
+          email: email.toLowerCase(),
+        },
+        onFetch: (data) => {
+          uiStore.clearErrors();
+          if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
+            this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
+            this.SIGNUP_FRM.meta.isValid = false;
+            uiStore.setProgress(false);
+            rej();
+          } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
+            this.SIGNUP_FRM.fields.email.error = '';
+            uiStore.setProgress(false);
+            res();
+          }
+        },
+        onError: (err) => {
+          uiStore.setErrors(err);
+          uiStore.setProgress(false);
+        },
+        fetchPolicy: 'network-only',
+      });
+    }
   });
 
   @action
@@ -359,6 +390,7 @@ export class AuthStore {
     })
       .then((data) => {
         if (!data.data.checkMigrationByEmail) {
+          uiStore.setProgress(false);
           uiStore.setErrors({
             message: 'There was a problem with authentication',
             code: 'checkMigrationByEmailFailed',
@@ -367,6 +399,7 @@ export class AuthStore {
         res(data.data.checkMigrationByEmail);
       })
       .catch((err) => {
+        uiStore.setProgress(false);
         uiStore.setErrors({
           message: 'There was a problem with authentication',
           code: 'checkMigrationByEmailFailed',
@@ -377,9 +410,50 @@ export class AuthStore {
   });
 
   @action
+  notifyApplicationError = params => new Promise((res, rej) => {
+    clientPublic.mutate({
+      mutation: notifyAdmins,
+      variables: { ...params },
+    })
+      .then((data) => {
+        res(data);
+      })
+      .catch((err) => {
+        rej(err);
+      })
+      .finally(() => { });
+  });
+
+  @action
   setUserRole = (userData) => {
     this.SIGNUP_FRM.fields.role.value = userData;
   }
+
+  @action
+  subscribeToNewsletter = () => new Promise((res, rej) => {
+    if (!this.NEWSLETTER_FRM.meta.isValid) {
+      this.resetForm('NEWSLETTER_FRM', null);
+      rej();
+    } else {
+      uiStore.setProgress();
+      const params = Validator.ExtractValues(this.NEWSLETTER_FRM.fields);
+      clientPublic.mutate({
+        mutation: subscribeToNewsLetter,
+        variables: { ...params },
+      })
+        .then(() => {
+          uiStore.setProgress(false);
+          res();
+        })
+        .catch((err) => {
+          Helper.toast('Error while subscribing to NewsLetter, please try again.', 'error');
+          rej(err);
+        })
+        .finally(() => {
+          this.resetForm('NEWSLETTER_FRM', null);
+        });
+    }
+  });
 }
 
 export default new AuthStore();

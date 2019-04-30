@@ -8,7 +8,9 @@ import { MaskedInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors, SuccessScreen } from '../../../../../../theme/shared';
 
-@inject('uiStore', 'identityStore', 'userDetailsStore')
+const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('uiStore', 'identityStore', 'userDetailsStore', 'multiFactorAuthStore')
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
@@ -27,12 +29,19 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
   }
+  componentDidMount() {
+    Helper.otpShield();
+  }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
+    const setMfaMode = !this.props.userDetailsStore.userDetails.phone;
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
-        Helper.toast('Phone number is confirmed.', 'success');
+        if (setMfaMode) {
+          this.props.multiFactorAuthStore.updateMfaModeType();
+        }
+        Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
         this.props.uiStore.clearErrors();
         this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
@@ -40,7 +49,7 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => { });
     } else {
       this.props.identityStore.confirmPhoneNumber().then(() => {
-        Helper.toast('Phone number is confirmed.', 'success');
+        Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.setDashboardWizardStep('InvestmentChooseType');
       })
         .catch(() => {});
@@ -55,7 +64,7 @@ export default class ConfirmPhoneNumber extends Component {
   }
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.startPhoneVerification();
+    this.props.identityStore.startPhoneVerification('', undefined, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -69,7 +78,9 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
   handleContinue = () => {
-    this.props.history.push('/app/profile-settings/profile-data');
+    if (this.props.refLink) {
+      this.props.history.push(this.props.refLink);
+    }
     this.props.identityStore.setIsOptConfirmed(false);
   }
   render() {
@@ -93,7 +104,7 @@ export default class ConfirmPhoneNumber extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code in the text message sent to your phone</p>
+          <p>Please confirm the 6-digit verification code sent to your phone</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <MaskedInput
@@ -102,7 +113,7 @@ export default class ConfirmPhoneNumber extends Component {
             type="tel"
             name="phoneNumber"
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             readOnly={!editMode}
             displayMode={!editMode}
             changed={personalInfoMaskedChange}
@@ -122,6 +133,9 @@ export default class ConfirmPhoneNumber extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
+                autoFocus={!isMobile}
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
@@ -131,7 +145,7 @@ export default class ConfirmPhoneNumber extends Component {
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || (errors && errors.message)} />
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">

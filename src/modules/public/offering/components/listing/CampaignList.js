@@ -4,18 +4,20 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
-import Parser from 'html-react-parser';
-import { Container, Card, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
-import Filters from './Filters';
+import { Container, Card, List, Grid, Message, Label } from 'semantic-ui-react';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
-@inject('campaignStore')
+@inject('campaignStore', 'accreditationStore')
 @observer
 export default class CampaignList extends Component {
   state = { filters: false };
+  componentWillMount() {
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+  }
   componentWillUnmount() {
     this.props.campaignStore.resetDisplayCounts();
   }
@@ -23,13 +25,31 @@ export default class CampaignList extends Component {
     const { filters } = this.state;
     this.setState({ filters: filters === false });
   }
+  renderBaners = (offering) => {
+    const resultFound = get(offering, 'isBannerShow');
+    if (resultFound) {
+      const bannerFirst = get(offering, 'bannerFirstText');
+      const bannerSecond = get(offering, 'bannerSecondText');
+      return (
+        <Label.Group size="small">
+          {bannerFirst &&
+          <Label color="blue">{bannerFirst}</Label>
+          }
+          {bannerSecond &&
+          <Label color="green">{bannerSecond}</Label>
+          }
+        </Label.Group>
+      );
+    }
+    return null;
+  }
   render() {
     const { campaigns, loading } = this.props;
     return (
       <Aux>
-        {this.props.filters &&
+        {/* {this.props.filters &&
           <Filters toggleFilters={this.toggleFilters} status={this.state.filters} />
-        }
+        } */}
         <section className="campaign-list-wrapper">
           <Container>
             {this.props.heading}
@@ -37,27 +57,29 @@ export default class CampaignList extends Component {
               campaigns && campaigns.length ?
                 <Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
-                    <Grid.Column>
+                    <Grid.Column key={offering.id}>
                       <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}/overview`}>
                         <div className="campaign-image-wrap">
-                          <Image64
-                            bg
-                            centered
-                            srcUrl={offering && offering.media && offering.media.tombstoneImage &&
-                              offering.media.tombstoneImage.url ?
-                              offering.media.tombstoneImage.url : null
-                            }
-                            alt={`${offering.keyTerms.shorthandBusinessName} poster`}
-                          />
+                          <div className="campaign-card-image">
+                            <Image64
+                              bg
+                              centered
+                              srcUrl={offering && offering.media && offering.media.tombstoneImage &&
+                                offering.media.tombstoneImage.url ?
+                                offering.media.tombstoneImage.url : null
+                              }
+                              alt={`${offering.keyTerms.shorthandBusinessName} poster`}
+                            />
+                          </div>
                         </div>
-                        <Label color="green">NEW</Label> {/* apply attribute basic for successful campaigns */}
-                        <Icon name="heart" /> {/* change name to "heart outline" for unliked campaigns */}
+                        {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
+                        {/* <Icon name="heart" /> "heart outline" for unliked campaigns */}
                         <Aux>
                           <Card.Content>
                             <div className="tags mb-10">
                               {offering && offering.keyTerms && offering.keyTerms.industry ? capitalize(offering.keyTerms.industry.split('_').join(' ')) : '-'}
                               <span className="pull-right">
-                                {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[offering.keyTerms.regulation] : '-'}
+                                {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_REGULATION_ABREVIATION[offering.keyTerms.regulation] : '-'}
                               </span>
                             </div>
                             <Card.Header>{offering && offering.keyTerms &&
@@ -72,17 +94,21 @@ export default class CampaignList extends Component {
                                 offering.keyTerms.state : '-'
                               }
                             </Card.Meta>
-                            <Card.Description
-                              {...Parser(offering && offering.offering &&
-                                offering.offering.about && offering.offering.about.theCompany ?
-                                offering.offering.about.theCompany : '')}
-                            />
+                            <Card.Description>
+                              <HtmlEditor
+                                readOnly
+                                content={(offering && offering.offering &&
+                                  offering.offering.overview &&
+                                  offering.offering.overview.tombstoneDescription ?
+                                  offering.offering.overview.tombstoneDescription : '')}
+                              />
+                            </Card.Description>
                           </Card.Content>
                           <Card.Content extra>
                             <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
                             <List divided horizontal>
                               <List.Item>
-                                Raised {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0)}
+                                Raised {Helper.CurrencyFormat((get(offering, 'closureSummary.totalInvestmentAmount') || 0), 0)}
                               </List.Item>
                               <List.Item>
                                 {get(offering, 'closureSummary.totalInvestorCount') || 0} investors
@@ -90,10 +116,10 @@ export default class CampaignList extends Component {
                             </List>
                           </Card.Content>
                           <Message attached="bottom" color="teal">
-                          Offered by NextSeed {offering && offering.regulation ?
-                            (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.regulation] ||
-                            CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.keyTerms.regulation])
-                            : 'US'} LLC
+                            Offered by NextSeed {offering && offering.regulation ?
+                              (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.regulation] ||
+                     CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.keyTerms.regulation])
+                              : 'US'} LLC
                           </Message>
                         </Aux>
                         {offering.stage === 'LOCK' && (

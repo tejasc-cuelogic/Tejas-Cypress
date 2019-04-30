@@ -12,6 +12,7 @@ export default class Accreditation extends React.Component {
   componentWillMount() {
     const { match } = this.props;
     const { accountType } = match.params;
+    this.props.accreditationStore.setFieldVal('docsToUpload', []);
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.changeFormObject('ACCREDITATION_FORM', INCOME_QAL);
       this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);

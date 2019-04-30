@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
@@ -22,6 +24,9 @@ export default class ConfirmPhoneNumber extends Component {
       const fieldValue = userDetailsStore.userDetails.phone.type;
       identityStore.phoneTypeChange(fieldValue);
     }
+  }
+  componentDidMount() {
+    Helper.otpShield();
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
@@ -39,7 +44,7 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
-        Helper.toast('Phone number is confirmed.', 'success');
+        Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.history.replace('/app/profile-settings/profile-data');
         this.props.uiStore.clearErrors();
         this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
@@ -47,7 +52,7 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => { });
     } else {
       this.props.identityStore.confirmPhoneNumber().then(() => {
-        Helper.toast('Phone number is confirmed.', 'success');
+        Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
       })
         .catch(() => { });
@@ -67,7 +72,7 @@ export default class ConfirmPhoneNumber extends Component {
     const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
     const phoneNumberValue = phoneNumber.value;
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue);
+    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -112,6 +117,7 @@ export default class ConfirmPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
+    const dataLoading = !reSendVerificationCode && this.props.uiStore.inProgress;
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
       return <MigratedUserPhoneNumber />;
     } else if (isOptConfirmed) {
@@ -127,18 +133,23 @@ export default class ConfirmPhoneNumber extends Component {
           </p>
           <Divider section />
           <p>
-            {editMode ? 'Please your update your number for MFA' : 'Please confirm the 6-digit verification code in the text message sent to your phone'
+            {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
             }
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
+          {dataLoading &&
+            <Dimmer active={dataLoading}>
+              <Loader active={dataLoading} />
+            </Dimmer>
+           }
           <MaskedInput
             hidelabel
             value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
             type="tel"
             name="phoneNumber"
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             readOnly={!editMode}
             displayMode={!editMode}
             changed={personalInfoMaskedChange}
@@ -158,8 +169,11 @@ export default class ConfirmPhoneNumber extends Component {
               <ReactCodeInput
                 name="code"
                 fields={6}
+                autoFocus={!isMobile}
                 type="number"
                 className="otp-field"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
@@ -183,7 +197,7 @@ export default class ConfirmPhoneNumber extends Component {
               </Message>
             }
             {!editMode ?
-              <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+              <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message))} />
               :
               <Button.Group widths="2" className="inline">
                 <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />

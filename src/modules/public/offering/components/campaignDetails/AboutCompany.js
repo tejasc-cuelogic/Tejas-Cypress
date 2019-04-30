@@ -10,6 +10,8 @@ import CompanyHistory from './AboutCompany/CompanyHistory';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
+const topsAsPerWindowheight = window.innerHeight > 1000 ? 550 : 200;
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
 @observer
@@ -20,11 +22,11 @@ class AboutCompany extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      }), 100);
-    } else {
+      });
+    } else if (!isMobile) {
       const sel = 'company-description';
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
@@ -34,9 +36,9 @@ class AboutCompany extends Component {
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
-    ['company-description', 'business-model', 'location-analysis', 'team', 'history'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top <= 200 &&
-      document.getElementById(item).getBoundingClientRect().top >= 0) {
+    ['company-description', 'business-model', 'location-analysis', 'history', 'team'].forEach((item) => {
+      if (document.getElementById(item).getBoundingClientRect().top <= topsAsPerWindowheight &&
+        document.getElementById(item).getBoundingClientRect().top >= -1) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
       }
     });
@@ -56,13 +58,13 @@ class AboutCompany extends Component {
           campaign={campaign}
         />
         <Divider hidden section />
+        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
+        <Divider hidden section />
         <MeetOurTeam
           campaign={campaign}
           emptyStatement={emptyStatement}
           meetOurTeamUrl={this.props.match.url}
         />
-        <Divider hidden section />
-        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
       </div>
     );
   }

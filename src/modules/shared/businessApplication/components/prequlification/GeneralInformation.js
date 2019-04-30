@@ -17,6 +17,7 @@ const GeneralInformation = props => (
                 key={field}
                 type="text"
                 name={field}
+                asterisk="true"
                 label={field === 'businessName' ? props.currentApplicationType === 'business' ? 'Business Name' : 'Entity Name' : 'Website'}
                 fielddata={props.fields[field]}
                 changed={props.businessAppEleChange}
@@ -27,6 +28,7 @@ const GeneralInformation = props => (
             containerclassname={props.preQualFormDisabled ? 'display-only' : 'cre-scroll'}
             readOnly={props.preQualFormDisabled}
             name="phoneNumber"
+            asterisk="true"
             fielddata={props.fields.phoneNumber}
             changed={props.businessAppEleMaskChange}
           />
@@ -51,6 +53,7 @@ const GeneralInformation = props => (
             containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
             readOnly={props.preQualFormDisabled}
             name="street"
+            asterisk="true"
             fielddata={props.fields.street}
             onplaceselected={props.setAddressFields}
             changed={props.businessAppEleChange}
@@ -64,6 +67,7 @@ const GeneralInformation = props => (
                   key={field}
                   type="text"
                   name={field}
+                  asterisk="true"
                   fielddata={props.fields[field]}
                   changed={props.businessAppEleChange}
                 />
@@ -74,6 +78,7 @@ const GeneralInformation = props => (
               containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
               readOnly={props.preQualFormDisabled}
               name="zipCode"
+              asterisk="true"
               fielddata={props.fields.zipCode}
               changed={props.businessAppEleMaskChange}
               showerror

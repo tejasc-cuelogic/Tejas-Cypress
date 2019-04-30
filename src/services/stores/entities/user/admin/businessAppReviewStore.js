@@ -167,7 +167,7 @@ export class BusinessAppReviewStore {
         this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
         fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', userId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
             this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
@@ -332,6 +332,11 @@ export class BusinessAppReviewStore {
   @action
   resetMe = (form, ref) => {
     this[form] = Validator.prepareFormObject(ref);
+  }
+
+  @action
+  resetForm = (form) => {
+    this[form] = Validator.resetFormData(this[form]);
   }
 
   @action
@@ -512,8 +517,10 @@ export class BusinessAppReviewStore {
       },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        uiStore.setAppLoader(false);
-        resolve();
+        if (!this.businessApplicationOffers.loading) {
+          uiStore.setAppLoader(false);
+          resolve();
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -753,6 +760,9 @@ export class BusinessAppReviewStore {
         }
       }
       this.calculateExpAnnualRevCount();
+      if (store === 'appReviewStore') {
+        this.showSingleOfferForSigned(get(appData, 'offers.offer'));
+      }
     }
     return false;
   }
@@ -769,10 +779,23 @@ export class BusinessAppReviewStore {
     };
     const data = Calculator.calculate(Formdata);
     const amortizationAmount = data && data.schedule.length ?
-      data.schedule[0].interest + data.schedule[0].principal : 0;
-    const returnedAmount = amortizationAmount * maturity;
-    this.OFFERS_FRM.fields.offer[index].totalCapital.value = ceil(returnedAmount);
-    this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = ceil(amortizationAmount);
+      money.add(
+        money.floatToAmount(data.schedule[0].interest),
+        money.floatToAmount(data.schedule[0].principal),
+      ) : '0.00';
+    const returnedAmount =
+    money.floatToAmount(money.mul(amortizationAmount, money.floatToAmount(maturity)));
+    this.OFFERS_FRM.fields.offer[index].totalCapital.value = returnedAmount;
+    this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = amortizationAmount;
+  }
+  @action
+  showSingleOfferForSigned = (data) => {
+    let offersToShow = null;
+    if (this.fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL') {
+      offersToShow =
+      data.find(obj => obj.isAccepted === true);
+      this.OFFERS_FRM = Validator.setFormData(this.OFFERS_FRM, { offer: [offersToShow] });
+    }
   }
 }
 export default new BusinessAppReviewStore();

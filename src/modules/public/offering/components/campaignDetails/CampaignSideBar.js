@@ -21,28 +21,34 @@ const isMobile = document.documentElement.clientWidth < 991;
 @withRouter
 @observer
 export default class CampaignSideBar extends Component {
+  handleInvestNowClick = () => {
+    this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
+    this.props.history.push(`${this.props.match.url}/invest-now`);
+  }
   render() {
-    const { className, campaignStore } = this.props;
-    const { campaign, navCountData } = campaignStore;
+    const { campaignStore } = this.props;
+    const { campaign, navCountData, campaignSideBarShow } = campaignStore;
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const minOffering = campaign && campaign.keyTerms &&
-      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
-    const percent = (collected / maxOffering) * 100;
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-      && campaign.offering.launch.terminationDate;
+    const percentBefore = (minOffering / maxOffering) * 100;
+    const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
+    const percent = (collected / minMaxOffering) * 100;
+    const processingDate = campaign && campaign.closureSummary &&
+    campaign.closureSummary.processingDate;
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const diff = DataFormatter.diffDays(terminationDate);
-    const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const diff = DataFormatter.diffDays(processingDate);
+    // const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const bonusRewards = get(campaign, 'bonusRewards') || [];
+    const isBonusReward = bonusRewards && bonusRewards.length;
     const { offerStructure } = campaign;
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
-        <div className={`${className} offering-side-menu sticky-sidebar`}>
+        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
           <Responsive maxWidth={991} as={Aux}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>
@@ -70,7 +76,7 @@ export default class CampaignSideBar extends Component {
               </div>
               <Statistic inverted size="tiny" className="basic mb-0">
                 <Statistic.Value>
-                  <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
+                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                 </Statistic.Value>
                 {minFlagStatus &&
                   <Statistic.Label className="flag-status">
@@ -78,8 +84,11 @@ export default class CampaignSideBar extends Component {
                   </Statistic.Label>
                 }
               </Statistic>
-              <Progress className="mb-0" inverted percent={percent} size="tiny" color="green" />
-              <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+              {!isClosed ?
+                <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress> :
+                <Progress percent="100" size="tiny" color="green" />
+              }
+              <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
@@ -100,7 +109,7 @@ export default class CampaignSideBar extends Component {
                   </Statistic>
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
-                      {get(campaign, 'keyTerms.earlyBirdsCount')
+                      {get(campaign, 'earlyBird.available')
                         || 0}
                     </Statistic.Value>
                     <Statistic.Label>Early Bird Rewards</Statistic.Label>
@@ -119,25 +128,27 @@ export default class CampaignSideBar extends Component {
               </p>
               }
               <p className="mb-half mt-half">
-              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
+              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? `Up to ${get(campaign, 'keyTerms.investmentMultiple')}x` : '-'}
               </p>
               <p className="mt-half">
-                Maturity: {get(campaign, 'keyTerms.maturity')} Months
+                Maturity: {get(campaign, 'keyTerms.maturity')} months
               </p>
               <Divider hidden />
-              {!isClosed &&
-                <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+              {(!isClosed && diff > 0) &&
+                <Aux>
+                  <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+                  <p>
+                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+                      || 0} min investment
+                  </p>
+                </Aux>
               }
-              <p>
-                ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                  || 0} min investment
-              </p>
             </div>
           </Responsive>
           {!isMobile &&
             <Aux>
               <Menu vertical>
-                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
+                <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
               </Menu>
             </Aux>
           }

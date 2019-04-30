@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Form, Header, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class General extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
-    this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
-    if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
-      this.props.offeringCreationStore.setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
-    }
-  }
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
+  //   this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+  //   if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
+  //     this.props.offeringCreationStore.setFormData('DOCUMENTATION_FRM',
+  //  'legal.documentation.issuer');
+  //   }
+  // }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
@@ -27,9 +30,12 @@ export default class General extends Component {
     const { GENERAL_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, GENERAL_FRM.fields, 'legal', 'general', true, undefined, isApproved);
   }
+  editorChange =
+  (field, value, form) =>
+    this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const {
-      GENERAL_FRM,
+      GENERAL_FRM, currentOfferingId,
       formArrayChange,
       maskArrayChange,
       removeData,
@@ -38,11 +44,11 @@ export default class General extends Component {
     } = this.props.offeringCreationStore;
     const { offer } = this.props.offeringsStore;
     const formName = 'GENERAL_FRM';
-    const {
-      shorthandBusinessName,
-      minOfferingAmount,
-      maxOfferingAmount,
-    } = offer.keyTerms;
+    const shorthandBusinessName = get(offer, 'keyTerms.shorthandBusinessName') || '';
+    const minOfferingAmount = get(offer, 'keyTerms.minOfferingAmountCF') || '';
+    const maxOfferingAmount = get(offer, 'keyTerms.maxOfferingAmountCF') || '';
+    const totalProjectCost = get(offer, 'keyTerms.totalProjectCost') || '';
+    const raisedThroughSaleOfEquity = get(offer, 'keyTerms.raisedThroughSaleOfEquity') || '';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -98,7 +104,7 @@ export default class General extends Component {
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 zipCode={field === 'businessZip'}
                 phoneNumber={field === 'number'}
-                format={field === 'number' ? '###-###-####' : '#####'}
+                format={field === 'number' ? '(###) ###-####' : '#####'}
               />
             ))}
           </Form.Group >
@@ -131,7 +137,7 @@ export default class General extends Component {
             fielddata={GENERAL_FRM.fields.businessCapitalization}
             changed={(e, result) => formArrayChange(e, result, formName)}
             containerclassname="secondary"
-            defaultValue={`Because ${shorthandBusinessName} was formed recently, the Issuer’s operations are limited and there are no historical results of operation to report.  The Issuer anticipates that the total cost of the project will be approximately $[X]. ${shorthandBusinessName} is seeking to crowdfund an amount between the minimum of $${minOfferingAmount} and maximum of $${maxOfferingAmount} through the Offering. ${shorthandBusinessName} has also raised $[x] through sale of equity interests. If ${shorthandBusinessName} is able to complete a successful Offering, the members of the Issuer have committed to provide or arrange for sufficient financing for the Issuer to cover the remaining balance of the project cost. Please also see Section V – “Financial Statements” and Appendix A for more information.`}
+            defaultValue={`Because ${shorthandBusinessName} was formed recently, the Issuer’s operations are limited and there are no historical results of operation to report.  The Issuer anticipates that the total cost of the project will be approximately ${totalProjectCost ? `$${totalProjectCost}` : ''}. ${shorthandBusinessName} is seeking to crowdfund an amount between the minimum of ${minOfferingAmount ? `$${minOfferingAmount}` : ''} and maximum of ${maxOfferingAmount ? `$${maxOfferingAmount}` : ''} through the Offering. ${shorthandBusinessName} has also raised ${raisedThroughSaleOfEquity ? `$${raisedThroughSaleOfEquity}` : ''} through sale of equity interests. If ${shorthandBusinessName} is able to complete a successful Offering, the members of the Issuer have committed to provide or arrange for sufficient financing for the Issuer to cover the remaining balance of the project cost. Please also see Section V – “Financial Statements” and Appendix A for more information.`}
             hidelabel
           />
           <Divider section />
@@ -145,33 +151,19 @@ export default class General extends Component {
             <Aux>
               {/* <MaskedInput
                 displayMode={isReadonly}
-                name="minOfferingExpenseAmount"
-                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmount}
+                name="offeringExpenseAmount"
+                fielddata={GENERAL_FRM.fields.offeringExpenseAmount}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
                 prefix="$"
               /> */}
-              <FormTextarea
+              <HtmlEditor
+                imageUploadPath={`offerings/${currentOfferingId}`}
                 readOnly={isReadonly}
-                name="minOfferingExpenseAmountDescription"
-                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmountDescription}
-                changed={(e, result) => formArrayChange(e, result, formName)}
-                containerclassname="secondary"
-              />
-              {/* <MaskedInput
-                displayMode={isReadonly}
-                name="maxOfferingExpenseAmount"
-                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmount}
-                changed={(values, name) => maskArrayChange(values, formName, name)}
-                currency
-                prefix="$"
-              /> */}
-              <FormTextarea
-                readOnly={isReadonly}
-                name="maxOfferingExpenseAmountDescription"
-                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmountDescription}
-                changed={(e, result) => formArrayChange(e, result, formName)}
-                containerclassname="secondary"
+                changed={this.editorChange}
+                name="offeringExpenseAmountDescription"
+                form={formName}
+                content={GENERAL_FRM.fields.offeringExpenseAmountDescription.value}
               />
             </Aux>
           }
@@ -196,7 +188,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.security.map((security, index) => (
             <Aux>
               <Header as="h6">{`Security ${index + 1}`}
-                {GENERAL_FRM.fields.security.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.security.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
@@ -236,7 +228,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
             <Aux>
               <Header as="h6">{`Other Exempt Offering ${index + 1}`}
-                {GENERAL_FRM.fields.exemptOfferings.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.exemptOfferings.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
@@ -284,7 +276,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
             <Aux>
               <Header as="h6">{`Term ${index + 1}`}
-                {GENERAL_FRM.fields.materialIndebtedness.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.materialIndebtedness.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
@@ -343,7 +335,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
             <Aux>
               <Header as="h6">{`Transaction ${index + 1}`}
-                {GENERAL_FRM.fields.affiliatedTransactions.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.affiliatedTransactions.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>

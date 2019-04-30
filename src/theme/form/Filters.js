@@ -21,9 +21,10 @@ export const DropdownFilter = props => (
       fluid
       multiple={props.isMultiple}
       selection
+      clearable
       options={props.options}
     />
-    <div className="dropdown-effect">{props.name}</div>
+    <div className="dropdown-effect">{props.label || props.name}</div>
   </Form.Field>
 );
 
@@ -61,6 +62,7 @@ export const DateRangeFilter = props => (
     <Form.Group widths="equal" className="range">
       <Form.Field>
         <NumberFormat
+          value={props.startDate}
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
@@ -69,6 +71,7 @@ export const DateRangeFilter = props => (
       </Form.Field>
       <Form.Field>
         <NumberFormat
+          value={props.endDate}
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
@@ -90,7 +93,7 @@ export const AmountRangeFilter = props => (
           thousandSeparator
           placeholder={props.placeHolderMin || 'Min Amount'}
           currency
-          onValueChange={values => props.change(values, props.nameMin || 'min')}
+          onBlur={e => props.change(e, props.nameMin || 'min')}
         />
       </Form.Field>
       <Form.Field>
@@ -100,7 +103,7 @@ export const AmountRangeFilter = props => (
           thousandSeparator
           placeholder={props.placeHolderMax || 'Max Amount'}
           currency
-          onValueChange={values => props.change(values, props.nameMax || 'max')}
+          onBlur={e => props.change(e, props.nameMax || 'max')}
         />
       </Form.Field>
     </Form.Group>

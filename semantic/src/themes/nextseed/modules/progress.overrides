@@ -29,11 +29,19 @@
     }
 }
 // .offer-details
-.campaign-details-banner .ui.progress {
-    margin-bottom: @15px;
-    ~ p{
-        color: @white;
-        font-size: @15px;
-        line-height: 18px;
+.campaign-banner, .offering-intro{
+    .ui.progress {
+        margin-bottom: @15px;
+        background:fade(@white,20%);
+        overflow: hidden;
+        >.label {
+            top: 0;
+            margin-top: 0;
+        }
+        .sub-progress {
+            background: @primary-one-darken;
+            display: block;
+            height: 6px;
+        }
     }
 }

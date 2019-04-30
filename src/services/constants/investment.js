@@ -13,7 +13,7 @@ export const INVESTMENT_INFO = {
     customErrors: {
       required: '* required.',
     },
-    rule: 'required',
+    rule: 'required|hundreds',
     placeHolder: '$ 0',
     maxLength: 15,
   },
@@ -71,7 +71,9 @@ export const AGREEMENT_DETAILS_INFO = {
         label: 'I understand that I may not be able to sell the securities I am acquiring in this offering.', value: '2',
       },
       {
-        label: 'I understand that investing in securities sold in reliance on Regulation Crowdfunding involves risks and I should not invest any funds unless I can afford to lose the entire amount.', value: '3',
+        label: 'I understand that investing in securities sold in reliance on Regulation Crowdfunding involves risks and I should not invest any funds unless I can afford to lose the entire amount.',
+        value: '3',
+        customRegulationLabel: true,
       },
       {
         tooltip: (
@@ -82,26 +84,27 @@ export const AGREEMENT_DETAILS_INFO = {
             </p>
             <List relaxed bulleted>
               <List.Item>
-              If either your annual income or net worth is less than $107,000, you can invest
-              5% of the lower figure. But anyone can invest at least $2,200.
+                If either your annual income or net worth is less than $107,000, you can invest
+                5% of the lower figure. But anyone can invest at least $2,200.
               </List.Item>
               <List.Item>
-              If both your annual income and net worth are greater than $107,000, you can
-              invest 10% of the lower figure. But no one can invest more than $107,000.
+                If both your annual income and net worth are greater than $107,000, you can
+                invest 10% of the lower figure. But no one can invest more than $107,000.
               </List.Item>
               <List.Item>
-              If you invest through an entity, the same rules apply based on the entity’s
-              revenue and net assets (as of its most recent fiscal year end).
+                If you invest through an entity, the same rules apply based on the entity’s
+                revenue and net assets (as of its most recent fiscal year end).
               </List.Item>
             </List>
           </Popup.Content>
         ),
         label: (
           <Aux>
-            I confirm that I am complying with my <b>annual investment limit</b> (<Link to="/offerings/newlaunch/invest-now/change-investment-limit">update</Link>)
+            I confirm that I am complying with my <b>annual investment limit</b> (<Link to="/offerings/live-test-new-vp/agreement/change-investment-limit">update</Link>)
           </Aux>
         ),
         value: '4',
+        customUpdateLimitLabel: true,
       },
     ],
     error: undefined,
@@ -127,10 +130,11 @@ export const AGREEMENT_DETAILS_INFO = {
             financial condition to bear the loss. I have read and agree to the terms of
             the <a href="/">CrowdPay Custodial Account Agreement</a>,
             the <a href="/">Substitute IRS Form W-9 Certification</a>,
-            and <a href="/">NextSeed Securities LLC Investor Agreement</a>.
+            and <a href="/">NextSeed Securities LLC Investor Agreement</a>
           </Aux>
         ),
         value: '6',
+        conditionalCustomLabel: true,
       },
     ],
     error: undefined,
@@ -144,17 +148,20 @@ export const INVESTMENT_LIMITS = {
     label: 'Net Worth',
     error: undefined,
     rule: 'numeric|required',
+    tooltip: 'Mention your Net Worth here',
   },
   annualIncome: {
     value: '',
     label: 'Annual Income',
     error: undefined,
     rule: 'numeric|required',
+    tooltip: 'Mention your Annual Income here',
   },
   cfInvestments: {
     value: '',
-    label: 'Other Reg CF Investments:',
+    label: 'Other Regulation Crowdfunding investments made in prior 12 months',
     error: undefined,
     rule: 'numeric|required',
+    tooltip: 'Other Crowdfunding investments',
   },
 };

@@ -1,6 +1,5 @@
 import request from 'superagent';
 import { API_ROOT } from '../constants/common';
-import { commonStore } from '../services/stores';
 
 /**
  * @desc Service to make asynchronous API calls from system
@@ -11,7 +10,7 @@ export class Api {
       request
         .get(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -27,7 +26,7 @@ export class Api {
       request
         .post(url.includes('https://') ? url : `${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -58,7 +57,7 @@ export class Api {
       request
         .delete(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -74,7 +73,7 @@ export class Api {
       request
         .put(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
-        .set('Authorization', commonStore.token)
+        .set('Authorization', window.localStorage.getItem('jwt'))
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -85,11 +84,12 @@ export class Api {
     })
   )
 
-  uploadOnS3 = (url, file) => (
+  uploadOnS3 = (url, file, type = 'text/plain') => (
     new Promise((resolve, reject) => {
       request
         .put(`${url}`)
-        .set('Content-Type', 'text/plain') // File upload (Binary Mode)
+        .set('Content-Type', type) // File upload (Binary Mode)
+        .set('x-amz-acl', 'bucket-owner-full-control')
         .send(file)
         .end((err, data) => {
           if (err) {

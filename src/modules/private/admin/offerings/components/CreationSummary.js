@@ -1,6 +1,7 @@
 import React from 'react';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { Card, Grid, Popup, Statistic, Icon } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 import { DataFormatter } from '../../../../../helper';
@@ -32,8 +33,8 @@ const summary = offer => [
     type: 0,
   },
   {
-    title: 'Days Till Launch',
-    content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
+    title: `${(offer.offering && offer.offering.launch) ? DataFormatter.diffInDaysHoursMin(offer.offering.launch.targetDate).diffType : 'Days'} Till Launch`,
+    content: get(offer, 'closureSummary.launchDate') ? DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.launchDate')).diffText : 'N/A',
     type: 0,
   },
 ];

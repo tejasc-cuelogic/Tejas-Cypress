@@ -1,20 +1,23 @@
+/* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Divider } from 'semantic-ui-react';
-import { get } from 'lodash';
+import { Header } from 'semantic-ui-react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'accreditationStore', 'navStore')
 @withRouter
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
-    window.addEventListener('scroll', this.handleOnScroll);
-    if (this.props.campaignStore.docsWithBoxLink.length === 0) {
+    const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
+    if (docsWithBoxLink.length === 0 && !isFetchedError) {
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');
       const offeringRegulationArr = (regulation && regulation.split('_')) || '';
@@ -25,50 +28,60 @@ export default class TermsOfUse extends Component {
     }
   }
   componentDidMount() {
-    if (this.props.location.hash && this.props.location.hash !== '') {
-      this.props.navStore.setFieldValue('currentActiveHash', null);
-      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
-        block: 'start',
-        behavior: 'smooth',
-      }), 100);
+    if (!isMobile) {
+      const sel = 'anchor';
+      document.querySelector(`.${sel}`).scrollIntoView(true);
     }
   }
   componentWillUnmount() {
-    this.props.navStore.setFieldValue('currentActiveHash', null);
-    window.removeEventListener('scroll', this.handleOnScroll);
-  }
-  handleOnScroll = () => {
-    const { docsWithBoxLink } = this.props.campaignStore;
-    docsWithBoxLink.map((item, index) => {
-      if (document.getElementById(`doc-${index}`) && document.getElementById(`doc-${index}`).getBoundingClientRect().top < 100 &&
-      document.getElementById(`doc-${index}`).getBoundingClientRect().top > 0) {
-        this.props.navStore.setFieldValue('currentActiveHash', `#doc-${index}`);
-      }
-      return null;
-    });
+    const { setFieldValue } = this.props.campaignStore;
+    setFieldValue('isFetchedError', false);
   }
   module = name => DataFormatter.upperCamelCase(name);
+  dataRoomHeader = (
+    <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      Data Room
+      <span className="anchor" />
+    </Header>
+  )
   render() {
-    const { docsWithBoxLink, dataRoomDocs } = this.props.campaignStore;
-    if (!dataRoomDocs.length) {
-      return <InlineLoader text="No Documents to Display" className="bg-offwhite" />;
+    const { campaign } = this.props.campaignStore;
+    const campaignCreatedBy = get(campaign, 'created.id') || null;
+    const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
+    if (!dataRoomDocs.length || !sortedDocswithBoxLink.length) {
+      return (
+        <div className="campaign-content-wrapper">
+        {this.dataRoomHeader}
+      <InlineLoader text="No Documents to Display" className="bg-offwhite" />
+        </div>);
     }
-    if (!docsWithBoxLink.length) {
-      return <InlineLoader />;
+    if (dataRoomDocs.length !== sortedDocswithBoxLink.length) {
+      return (
+        <div className="campaign-content-wrapper">
+          {this.dataRoomHeader}
+          <InlineLoader />
+        </div>);
     }
+    const index = (this.props.location.hash || '#1').substr(1);
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
-          Data Rooms
-          <span className="anchor-scroll" />
-        </Header>
-        {docsWithBoxLink && docsWithBoxLink.map((item, index) => (
+        {this.dataRoomHeader}
+        {isMobile ?
+        sortedDocswithBoxLink.map(doc => (
           <Aux>
-            <Header id={`doc-${index}`} as="h4" className="mb-20 grey-header">{item.name}</Header>
-            <Disclosure doc={item} />
-            <Divider section hidden />
+            <Header as="h4" className="mb-20 grey-header">{doc.name}</Header>
+            <Disclosure campaignCreatedBy={campaignCreatedBy} doc={doc} />
           </Aux>
-        ))}
+        ))
+        :
+        <Aux>
+          <Header as="h4" className="mb-20 grey-header">{sortedDocswithBoxLink[index - 1].name}</Header>
+          <Disclosure
+            campaignCreatedBy={campaignCreatedBy}
+            doc={sortedDocswithBoxLink[index - 1]}
+          />
+        </Aux>
+        }
       </div>
     );
   }

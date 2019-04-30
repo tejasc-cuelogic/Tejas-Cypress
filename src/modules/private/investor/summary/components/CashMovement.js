@@ -1,3 +1,5 @@
+/* eslint-disable react/no-multi-comp */
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
 import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -22,8 +24,10 @@ export default class CashMovement extends Component {
         >
           <Legend />
           <XAxis axisLine={false} dataKey="name" interval={4} />
-          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="left" />
-          <Tooltip />
+          <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
+          <Tooltip
+            formatter={(value, name, props) => this.formatY(props.payload[name])}
+          />
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#84BCFC" stopOpacity={0.8} />

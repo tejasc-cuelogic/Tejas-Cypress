@@ -2,11 +2,14 @@ import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import apiService from '../../../api/restApi';
-import { bankAccountStore, individualAccountStore, accountStore, uiStore } from '../../stores';
+import { bankAccountStore, accountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
+import { validationActions } from '../../../services/actions';
+
 
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
 const sharedPublicPayload = { public_key: PLAID_PUBLIC_KEY };
+
 export class BankAccount {
   bankSearch = (e) => {
     if (e.charCode === 13) {
@@ -47,8 +50,12 @@ export class BankAccount {
           } else {
             bankAccountStore.setActiveBankPlaidLogo(data.body.institution.logo);
           }
+          resolve();
         })
-        .catch(() => reject())
+        .catch(() => {
+          bankAccountStore.setFieldValue('loadingState', false);
+          reject();
+        })
         .finally(() => { });
     });
   }
@@ -58,23 +65,42 @@ export class BankAccount {
     const linkHandler = Plaid.create({
       env: PLAID_ENV,
       clientName: 'NS',
+      apiVersion: 'v2',
       ...sharedPayload,
-      product: ['auth, transactions'],
+      product: ['auth'],
       onLoad: () => {
         // The Link module finished loading.
+        bankAccountStore.setLinkBankSummary(false);
+        uiStore.setProgress(false);
+        const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
+        const renderStep = accountValue !== 0 ?
+          accountStore.ACC_TYPE_MAPPING[accountValue].location : 0;
+        accountStore.ACC_TYPE_MAPPING[accountValue].store
+          .setStepToBeRendered(renderStep);
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
         bankAccountStore.setNewPlaidBankDetails(metadata);
+        bankAccountStore.resetRoutingNum();
         if (action === 'change') {
           // bankAccountStore.changeBankPlaid();
           bankAccountStore.setPlaidBankVerificationStatus(true);
         } else {
-          Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
-          if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 0) {
-            individualAccountStore.setStepToBeRendered(1);
+          // Helper.toast(`Account with Bank ${metadata.institution.name}
+          // successfully linked.`, 'success');
+          const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
+          const currentStep = {
+            name: 'Link bank',
+            stepToBeRendered: accountStore.ACC_TYPE_MAPPING[accountValue].location,
+            validate: validationActions.validateLinkBankForm,
+          };
+          bankAccountStore.resetAddFundsForm();
+          accountStore.ACC_TYPE_MAPPING[accountValue].store.createAccount(currentStep);
+          accountStore.ACC_TYPE_MAPPING[accountValue].store
+            .setStepToBeRendered(accountStore.ACC_TYPE_MAPPING[accountValue].location);
+          if (accountStore.ACC_TYPE_MAPPING[accountValue].name !== 'individual') {
+            bankAccountStore.setShowAddFunds();
           }
-          bankAccountStore.setShowAddFunds();
         }
       },
       onExit: (err) => {

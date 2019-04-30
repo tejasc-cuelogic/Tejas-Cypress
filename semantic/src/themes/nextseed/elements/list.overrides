@@ -16,8 +16,8 @@
     }
 }
 .menu-secondary-fixed .ui.list.horizontal{
-    height:58px;
-    padding:@20px @16px;
+    height:@primaryHeaderHeight;
+    padding:@27px @16px;
     &.bulleted>.item:before{
         content:"|";
         margin-left:-@13px;
@@ -51,9 +51,13 @@
         }
         a {
             color: @neutral;
+            &:hover, &:focus {
+                text-decoration: underline!important;
+            }
         }
         .icon {
             margin-left: @5px !important;
+            text-decoration: none;
         }
         strong {
             color: @neutral;
@@ -146,8 +150,15 @@
             font-size:@13px;
             font-weight:700;
             line-height:@16px;
-            color:@neutral-middark;
+            color:@border-color;
             position:relative;
+            span {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                display: block;
+                color: @neutral;
+            }
             &:before{
                 content:"";
                 width:9px;
@@ -168,6 +179,9 @@
                 &:before{
                     background-color:@link-color;
                     box-shadow:0 0 4px 1px @link-color;
+                }
+                span {
+                    color:@primary-one;
                 }
             }
             &:first-child:after, &:last-child:after{
@@ -333,12 +347,13 @@ ol.ui.list.step-list{
         margin:0;
         padding-right:@14px;
     }
-    .item:not(:first-child) {
-        @media only screen and (max-width : @largeMonitorBreakpoint){
-            padding-left: 0 !important;
-            margin-left: 0;
-        }
-    }
+    //below code comment as campaign secondary header list get disturb on tablet view
+    // .item:not(:first-child) {
+    //     @media only screen and (max-width : @largeMonitorBreakpoint){
+    //         padding-left: 0 !important;
+    //         margin-left: 0;
+    //     }
+    // }
 }
 .ui.form.gallery-img{
     .ui.horizontal.list{
@@ -355,6 +370,18 @@ ol.ui.list.step-list{
     display:inline-block;
     padding-right:@14px;
     margin:@5px 0;
+}
+.bonus-tier-list {
+    column-count: 2;
+    .ui.list.rewards-tier{
+        width:auto;
+        display:block;
+        padding-right:@14px;
+        margin:@10px 0;
+        &:first-child{
+            margin-top: 0;
+        }
+    }
 }
 
 .ui.bulleted.list .list>.item,
@@ -379,4 +406,26 @@ ul.ui.list li{
             display: none;
         }
     }
+}
+
+.ui.celled.list.partners-list>.item {
+    padding: @30px 0 !important;
+    @media only screen and (max-width : @largestMobileScreen){
+        &:not(:first-child){
+            border-top-color: transparent;
+        }
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+    >.content {
+        line-height: 24px;
+        max-width: 80%;
+        @media only screen and (max-width : @largestMobileScreen){
+            max-width: 100%;
+        }
+    }
+}
+.privacy-policy ul.ui.list li {
+	line-height: 24px;
 }

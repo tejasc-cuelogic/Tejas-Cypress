@@ -3,8 +3,8 @@ import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import Parser from 'html-react-parser';
-import { Image64 } from '../../../../../../theme/shared';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
+import { Image64, UserAvatar } from '../../../../../../theme/shared';
 
 const isTablet = document.documentElement.clientWidth < 991;
 
@@ -30,11 +30,17 @@ class LatestUpdates extends Component {
           <Item>
             <Item.Content>
               <div className="campaign-avatar">
-                {companyAvatarUrl && companyAvatarUrl.length ?
+                <div className="ui image avatar-image">
+                  {companyAvatarUrl && companyAvatarUrl.length ?
+                    <Image64 srcUrl={companyAvatarUrl} circular />
+                    : <UserAvatar UserInfo={{}} />
+                }
+                </div>
+                {/* {companyAvatarUrl && companyAvatarUrl.length ?
                   <div className="avatar-image">
                     <Image64 size="mini" srcUrl={companyAvatarUrl} />
                   </div> : null
-                }
+                } */}
                 <div className="avatar-details">
                   <Item.Header>
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
@@ -49,7 +55,7 @@ class LatestUpdates extends Component {
                 <Aux>
                   <Item.Description className="avatar-description">
                     <Header as="h4" className="grey-header">{update.title}</Header>
-                    <p>{Parser(update.content || '')}</p>
+                    <HtmlEditor readOnly content={update.content || ''} />
                   </Item.Description>
                 </Aux>
                   :

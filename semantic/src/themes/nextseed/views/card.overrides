@@ -15,17 +15,21 @@
             text-decoration: none;
         }
         .campaign-image-wrap{
-            position:relative;
-            padding-top:66.66%;
-            >div{
-                background-size:cover;
-                background-repeat:no-repeat;
-                background-position:center center;
-                position:absolute;
-                top:0;
-                right:0;
-                bottom:0;
-                left:0;
+            .campaign-card-image{
+                position:relative;
+                padding-top:66.66%;
+                border-radius:@6px @6px 0 0;
+                overflow:hidden;
+                >div{
+                    background-size:cover;
+                    background-repeat:no-repeat;
+                    background-position:center center;
+                    position:absolute;
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    left:0;
+                }
             }
         }
         > .ui.image {
@@ -33,13 +37,15 @@
             // height: 200px;
             width: 100%;
         }
-        .ui.label{
-            border:none;
-            text-transform:uppercase;
-            box-shadow:@commonShadow;
+        .ui.labels{
             position:absolute;
             top:12px;
             left:12px;
+            .ui.label{
+                border:none;
+                text-transform:uppercase;
+                box-shadow:@commonShadow;
+            }
         }
         .icon.heart{
             font-size:@18px;
@@ -545,5 +551,15 @@
     &.done{
         // background-color:@neutral-offwhite;
         box-shadow:none;
+    }
+}
+
+.ui.form.account-type-tab .ui.card{
+    box-shadow:none;
+    .content{
+        padding:@21px;
+        p.accredetaion-intro{
+            min-height:84px;
+        }
     }
 }

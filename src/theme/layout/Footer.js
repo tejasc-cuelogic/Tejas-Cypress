@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import Parser from 'html-react-parser';
 import { SocialLinks } from '../shared';
 import NSImage from '../../modules/shared/NSImage';
 
@@ -28,24 +27,24 @@ class Footer extends Component {
   toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
-    const { path, campaign } = this.props;
+    const { path } = this.props;
     const OfferFooter = ['/offerings/:id/:section?'];
     const isCampaign = matchPath(path, { path: OfferFooter }) != null;
-    const offeirngDisclaimer = campaign && campaign.keyTerms &&
-      campaign.keyTerms.offeringDisclaimer ?
-      campaign.keyTerms.offeringDisclaimer : null;
-    const shorthandBusinessName = campaign && campaign.keyTerms &&
-      campaign.keyTerms.shorthandBusinessName ?
-      campaign.keyTerms.shorthandBusinessName : '';
+    // const offeirngDisclaimer = campaign && campaign.keyTerms &&
+    //   campaign.keyTerms.offeringDisclaimer ?
+    //   campaign.keyTerms.offeringDisclaimer : null;
+    // const shorthandBusinessName = campaign && campaign.keyTerms &&
+    //   campaign.keyTerms.shorthandBusinessName ?
+    //   campaign.keyTerms.shorthandBusinessName : '';
     return (
       <footer className={isCampaign ? 'offering-footer' : ''}>
         <Container>
-          {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
+          {/* {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
               <b>{`${shorthandBusinessName} Disclaimer: `}</b>
-              {Parser(offeirngDisclaimer)}
+              <HtmlEditor readOnly content={(offeirngDisclaimer)} />
             </p>
-          }
+          } */}
           <Grid stackable>
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
               <div className="footer-left-nav mb-30">
@@ -66,30 +65,32 @@ class Footer extends Component {
                 } */}
                 <Menu
                   text
-                  vertical={!isTablet
-                    || (!OfferFooter.find(item => matchPath(path, { path: item })))}
-                  className={isTablet && (OfferFooter.find(item => matchPath(path, { path: item }))) ? 'center-align' : ''}
+                  vertical={!isTablet}
+                  // || (!OfferFooter.find(item => matchPath(path, { path: item })))
+                  // className={isTablet && (OfferFooter.find(item => matchPath(path,
+                  // { path: item }))) ? 'center-align' : ''}
+                  className={isTablet ? 'center-align' : ''}
                 >
-                  {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                    <Menu.Item header>Legal</Menu.Item>
-                  }
+                  {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
+                  <Menu.Item header>Legal</Menu.Item>
+                  {/* } */}
                   <Menu.Item as={Link} to="/agreements/legal/terms-of-use">Terms of Use</Menu.Item>
                   <Menu.Item as={Link} to="/agreements/legal/privacy-policy">Privacy Policy</Menu.Item>
-                  {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                    <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
-                  }
+                  {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
+                  <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
+                  {/* } */}
                 </Menu>
-                {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                  <Aux path={path}>
-                    <div className={isMobile && 'mb-30'}>
-                      <NSImage path="secure-horizontal-1.jpg" />
-                    </div>
-                  </Aux>
-                }
+                {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
+                <Aux path={path}>
+                  <div className={isTablet && 'mb-30 center-align'}>
+                    <NSImage path="secure-horizontal-1.jpg" />
+                  </div>
+                </Aux>
+                {/* } */}
               </div>
               <div className={`${isMobile && 'mb-20'} footer-social`}>
                 <SocialLinks />
-                <p className={isMobile && 'mt-10'}>© 2019 NextSeed Services LLC</p>
+                <p className={isMobile && 'mt-10'}>© 2019 NextSeed Technologies LLC</p>
               </div>
             </Grid.Column>
             <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">
@@ -100,9 +101,11 @@ class Footer extends Component {
               <p>
                 All securities-related activity is conducted by regulated affiliates of
                 NextSeed: NextSeed Securities, LLC, a registered broker dealer and member
-                of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a> (check out
-                the background of our broker-dealer on <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>) or NextSeed US LLC, a
-                registered funding portal and member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
+                of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>{' '}
+                <b>(check out the background of our broker-dealer on{' '}
+                  <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>)
+                </b>{' '}
+                or NextSeed US LLC, a registered funding portal and member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
               </p>
               <p>
                 Any securities offered on this website have not been recommended or approved
@@ -113,6 +116,11 @@ class Footer extends Component {
                 on this site is the responsibility of, the applicable issuer of such securities.
                 In making an investment decision, investors must rely on their own examination of
                 the issuer and the terms of the offering, including the merits and risks involved.
+                Investments on NextSeed are speculative, illiquid and involve a high degree of
+                risk, including the possible loss of your entire investment.{' '}
+                <b>See general risk factors{' '}
+                  <a href="https://nextseed.com/agreements/legal/general-risk-factors" target="_blank" rel="noopener noreferrer">here</a>
+                </b>.
                 NextSeed does not verify the adequacy, accuracy or completeness of any
                 information. Neither NextSeed nor any of its officers, directors, agents and
                 employees makes any warranty, express or implied, of any kind whatsoever related

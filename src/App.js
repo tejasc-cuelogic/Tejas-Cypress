@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-// import Aux from 'react-aux';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import { get } from 'lodash';
+import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner } from './theme/shared';
@@ -12,15 +13,16 @@ import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
+import { userIdleTime } from './constants/common';
 /**
  * Main App
  */
 const metaTagsData = [
-  { type: 'meta', name: 'description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US.' },
+  { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
   { type: 'ogTag', property: 'og:type', content: 'website' },
-  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding' },
-  { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US.' },
+  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Build an Investment Portfolio With Local Businesses' },
+  { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
   { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
@@ -28,18 +30,20 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:image:width', content: '1600' },
   { type: 'ogTag', property: 'og:image:height', content: '1067' },
   { type: 'meta', name: 'twitter:card', content: 'summary_large_image' },
-  { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of members on the 1st Regulation Crowdfunding portal in the US.' },
-  { type: 'meta', name: 'twitter:title', content: 'NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding' },
+  { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
+  { type: 'meta', name: 'twitter:title', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'meta', name: 'twitter:site', content: '@thenextseed' },
   { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
-
+const isMobile = document.documentElement.clientWidth < 768;
+const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
 @inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class App extends Component {
   componentWillMount() {
+    this.checkUserIdleStatus();
     const { authStore, location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
@@ -62,9 +66,43 @@ class App extends Component {
     if (this.props.uiStore.devBanner) {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
     }
+
+    if (window.analytics) {
+      window.analytics.page();
+    }
   }
 
   componentDidUpdate(prevProps) {
+    if (isMobile) {
+      document.activeElement.blur();
+    }
+    if (this.props.authStore.isUserLoggedIn) {
+      authActions.getUserSession().then((session) => {
+        if (!session.isValid()) {
+          this.onIdle();
+        }
+      }).catch((err) => {
+        if (err && (get(err, 'code') === 'NotAuthorizedException' || get(err, 'code') === 'Refresh Token has been revoked' || get(err, 'code') === 'Access Token has been revoked')) {
+          this.onIdle();
+        }
+      });
+    } else {
+      localStorage.removeItem('lastActiveTime');
+    }
+    if (this.props.location !== prevProps.location) {
+      this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        // console.log('Browser tab is hidden');
+      } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
+        authActions.forceLogout().then(() => {
+          this.props.history.push('/auth/login');
+        });
+      }
+    });
+
+    this.checkUserIdleStatus();
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
     const currentLocation = this.props.location.pathname;
@@ -74,14 +112,50 @@ class App extends Component {
       this.props.uiStore.clearRedirectURL();
       this.props.authStore.setUserLoggedIn(false);
     }
-    if (!currentLocation.includes('offerings')) {
-      window.scrollTo(0, 0);
-    } else if ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview')) {
+    if ((!this.checkPathRestictedForScrollTop(restictedScrollToTopPathArr, currentLocation)) || ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview'))) {
       window.scrollTo(0, 0);
     }
+    if (currentLocation === '/') {
+      const calculations = {
+        topVisible: true,
+        direction: 'down',
+        bottomPassed: false,
+        isMoveTop: true,
+      };
+      this.props.navStore.setNavStatus(calculations, 'main');
+    }
+    // if (window.analytics) {
+    //   window.analytics.page();
+    // }
   }
-
+  onIdle = () => {
+    if (this.props.authStore.isUserLoggedIn) {
+      authActions.logout().then(() => {
+        this.props.history.push('/auth/login');
+      });
+    }
+  }
+  onRouteChanged = ({ oldLocation, newLocation }) => {
+    if (window.analytics) {
+      window.analytics.page(document.title, {
+        path: newLocation.pathname,
+        referrer: `https://${window.location.hostname}${oldLocation.pathname}`,
+      });
+    }
+  }
+  checkUserIdleStatus = () => {
+    if (this.props.authStore.isUserLoggedIn && localStorage.getItem('lastActiveTime')) {
+      const idleTime = (new Date().getTime() - localStorage.getItem('lastActiveTime'));
+      if (idleTime >= userIdleTime) {
+        this.onIdle();
+      }
+    } else if (this.props.authStore.isUserLoggedIn && !localStorage.getItem('lastActiveTime')) {
+      localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+    }
+  }
+  checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
+
   render() {
     const { location } = this.props;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
@@ -96,6 +170,22 @@ class App extends Component {
     }
     return (
       <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
+        {this.props.authStore.isUserLoggedIn &&
+        <IdleTimer
+          ref={(ref) => { this.props.authStore.idleTimer = ref; }}
+          element={document}
+          events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
+          onIdle={this.onIdle}
+          onAction={() => {
+            if (this.props.authStore.idleTimer) {
+              localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+            }
+          }}
+          debounce={250}
+          timeout={userIdleTime}
+          stopOnIdle
+        />
+        }
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection ?
           <Route exact path="/password-protected" component={DevPassProtected} /> : (

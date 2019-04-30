@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, Item, Label, Button } from 'semantic-ui-react';
 import { get } from 'lodash';
+import Parser from 'html-react-parser';
 import { DateTimeFormat, UserAvatar } from '../../../../../../theme/shared';
 
 const MessagesList = props => (
@@ -30,7 +31,7 @@ const MessagesList = props => (
                   firstName: get(msg, 'createdUserInfo.info.firstName'),
                   lastName: get(msg, 'createdUserInfo.info.lastName'),
                   avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-                  roles: [get(msg, 'createdUserInfo.roles.name')],
+                  roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
                 }}
               />
             }
@@ -42,27 +43,29 @@ const MessagesList = props => (
                   firstName: get(u, 'createdUserInfo.info.firstName'),
                   lastName: get(u, 'createdUserInfo.info.lastName'),
                   avatarUrl: (get(u, 'createdUserInfo.info.avatar.url') || null),
-                  roles: [get(u, 'createdUserInfo.roles.name')],
+                  roles: get(u, 'createdUserInfo.roles') ? get(u, 'createdUserInfo.roles').map(r => r.scope) : [],
                 }}
               />
             )) :
-            <UserAvatar
-              size="mini"
-              UserInfo={{
+                  // eslint-disable-next-line react/jsx-indent
+                  <UserAvatar
+                    size="mini"
+                    UserInfo={{
                 firstName: get(msg, 'createdUserInfo.info.firstName'),
                 lastName: get(msg, 'createdUserInfo.info.lastName'),
                 avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-                roles: [get(msg, 'createdUserInfo.roles.name')],
+                roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
               }}
-            />
+              // eslint-disable-next-line react/jsx-closing-bracket-location
+              />
           }
           </div>
           <List.Content>
-            <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? `${props.threadUsersList(msg.threadComments).length === 1 && (get(msg, 'createdUserInfo.id') !== get(props.threadUsersList(msg.threadComments), '[0].createdUserInfo.id')) ? `${get(msg, 'createdUserInfo.info.firstName')} ,` : ''} ${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')}`}</List.Header>
+            <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? `${props.threadUsersList(msg.threadComments).length === 1 && (get(msg, 'createdUserInfo.id') !== get(props.threadUsersList(msg.threadComments), '[0].createdUserInfo.id')) ? `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')} ,` : ''} ${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`}</List.Header>
           </List.Content>
           <List.Content>
             <List.Header><DateTimeFormat format="ll" datetime={msg.created.date} /></List.Header>
-            <List.Description>{msg.comment.substr(0, 40)}</List.Description>
+            <List.Description>{Parser(msg.comment.substr(0, 40))}</List.Description>
           </List.Content>
         </List.Item>
       ))

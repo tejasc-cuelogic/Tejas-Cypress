@@ -5,7 +5,7 @@ import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'commonStore')
 @observer
 export default class Performance extends Component {
   componentWillMount() {
@@ -42,11 +42,13 @@ export default class Performance extends Component {
                 statmentConst.map(field => (
                   <Grid.Column key={field}>
                     <DropZone
+                      sharableLink
                       hideFields={hideFields}
                       disabled={formReadOnlyMode}
                       multiple
                       key={field}
                       name={field}
+                      asterisk="true"
                       fielddata={fields[field]}
                       ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
                       onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
@@ -77,6 +79,7 @@ export default class Performance extends Component {
                             name={field}
                             prefix="$ "
                             currency
+                            asterisk="true"
                             value={fields[field].value}
                             fielddata={fields[field]}
                             changed={businessPerfMaskingChange}
@@ -98,6 +101,7 @@ export default class Performance extends Component {
                           name={field}
                           prefix="$ "
                           currency
+                          asterisk="true"
                           value={fields[field].value}
                           fielddata={fields[field]}
                           changed={businessPerfMaskingChange}

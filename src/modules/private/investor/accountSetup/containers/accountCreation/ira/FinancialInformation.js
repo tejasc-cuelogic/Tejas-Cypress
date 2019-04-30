@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Message, Divider } from 'semantic-ui-react';
+import { Header, Form, Divider, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -14,6 +14,7 @@ export default class FinancialInformation extends React.Component {
     if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netWorth.value !== '' && FIN_INFO_FRM.fields.income.value !== ''))) && !(FIN_INFO_FRM.fields.netWorth.value === '' && FIN_INFO_FRM.fields.income.value === '')) {
       finInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netWorth.value }, name: 'netWorth' });
     }
+    this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
   }
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
@@ -21,7 +22,7 @@ export default class FinancialInformation extends React.Component {
       <Aux>
         <Header as="h3" textAlign="center">Calculating your investment limit</Header>
         <p className="center-align">Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.{' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://www.nextseed.com/education-center/for-investors/investment-limits-explained/investment-limit-calcuator/" className="link">How is this calculated?</a>
+          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
         </p>
         <Form error>
           <div className="field-wrap">
@@ -34,8 +35,11 @@ export default class FinancialInformation extends React.Component {
                   name={field}
                   changed={values => finInfoChange(values, field)}
                   prefix="$ "
+                  hoverable={field === 'netWorth'}
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   currency
+                  showerror
+                  allowNegative={false}
                 />
               ))
             }
@@ -46,12 +50,13 @@ export default class FinancialInformation extends React.Component {
               </span>
             </p>
           </div>
-          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
-          <Message error className="center-align">
-            Based on your reported Net Worth and Annual Income, your 12-month investment limit
-            under Regulation Crowdfunding is below the $5,000 minimum opening
-            deposit for IRA accounts.
-          </Message>
+          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 &&
+            FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
+            <Message error className="center-align">
+              Based on your reported Net Worth and Annual Income, your 12-month investment limit
+              under Regulation Crowdfunding is below the $5,000 minimum opening
+              deposit for IRA accounts.
+            </Message>
           }
         </Form>
       </Aux>

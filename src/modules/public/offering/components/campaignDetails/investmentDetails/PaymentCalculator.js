@@ -10,7 +10,8 @@ class CustomTooltip extends Component {
     if (active) {
       return (
         <div className="custom-tooltip">
-          <p className="label">Projected total payment</p>
+          <p><b>{`${data.month} Month`}</b></p>
+          <p className="label" style={{ fontWeight: 'normal' }}>Projected total payment</p>
           <p className="highlight-text">{Helper.CurrencyFormat(data['Projected total payment'])}</p>
         </div>
       );
@@ -45,9 +46,10 @@ export default class PaymentCalculator extends Component {
             top: 5, right: 30, left: 20, bottom: 5,
           }}
         >
-          <XAxis dataKey="month" />
-          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="left" />
+          <XAxis interval={6} dataKey="month" />
+          <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
+            cursor={{ fill: 'none', fillOpacity: 0.00 }}
             content={<CustomTooltip data={this.props.data[this.state.activeIndex]} />}
           />
           <Legend />

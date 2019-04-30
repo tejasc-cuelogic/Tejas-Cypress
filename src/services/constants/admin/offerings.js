@@ -10,7 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
@@ -23,8 +23,8 @@ export const STAGES = {
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
   },
-  FAILED: { ref: 'live', accessKey: 4, label: 'Failed' },
-  TERMINATED: { ref: 'live', accessKey: 4, label: 'Terminated' },
+  FAILED: { ref: 'failed', accessKey: 4, label: 'Failed' },
+  TERMINATED: { ref: 'failed', accessKey: 4, label: 'Terminated' },
   STARTUP_PERIOD: {
     ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
   },
@@ -117,9 +117,10 @@ export const KEY_TERMS = {
   },
   offeringDisclaimer: {
     value: '',
-    label: 'Offering Disclaimer',
+    label: 'Issuer Statement',
     error: undefined,
     rule: 'string',
+    defaultValue: 'The information contained on this campaign page (the "Campaign Information") is furnished solely by the Issuer to prospective investors in the investment opportunity described herein. All Campaign Information is intended to be a summary of the terms and information contained in the Disclosure Statement and the Note Purchase Agreement, and is fully qualified by reference to those documents. In the event any Campaign Information conflicts with the terms of the Disclosure Statement or Note Purchase Agreement, the terms of those documents will control. The Issuer has provided the Campaign Information for inclusion on the website located at <a href="https://www.nextseed.com/" target="_blank">www.nextseed.com</a>, and in no way will the Campaign Information be deemed to have been created or provided by NextSeed Securities, LLC, NextSeed Services, LLC, or their affiliates. ',
     placeHolder: 'Enter here',
   },
   revSharePercentage: {
@@ -143,16 +144,30 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  minOfferingAmount: {
+  minOfferingAmountCF: {
     value: null,
-    label: 'Minimum Offering Amount',
+    label: 'Minimum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
-  maxOfferingAmount: {
+  maxOfferingAmountCF: {
     value: null,
-    label: 'Maximum Offering Amount',
+    label: 'Maximum Offering Amount CF',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  minOfferingAmount506C: {
+    value: null,
+    label: 'Minimum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  maxOfferingAmount506C: {
+    value: null,
+    label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
@@ -355,6 +370,27 @@ export const KEY_TERMS = {
       placeHolder: 'Type your text here...',
     },
   }],
+  totalProjectCost: {
+    value: null,
+    label: 'Total project cost',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  raisedThroughSaleOfEquity: {
+    value: null,
+    label: 'Raised through sale of Equity',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  nsFeePercentage: {
+    value: '',
+    label: 'NS Fee %',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Please select a value',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -408,6 +444,10 @@ export const BD_REGULATION_VALUES = [
 export const FP_REGULATION_VALUES = [
   { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
   { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+];
+export const NS_FEE_PERCENTAGE = [
+  { key: '1', value: '1.00', text: '1%' },
+  { key: '2', value: '2.00', text: '2%' },
 ];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {
@@ -631,6 +671,25 @@ export const MISC = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Tell us about why you started the company/why you`re expanding, what your vision is and walk us through your space.',
+  },
+};
+
+export const CLOSURE_SUMMARY = {
+  processingDate: {
+    value: '',
+    label: 'Close Date',
+    error: undefined,
+    rule: 'optional|date',
+    customErrors: { date: 'Close Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
+  },
+  launchDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    rule: 'optional|date',
+    customErrors: { date: 'Launch Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
   },
 };
 
@@ -947,7 +1006,7 @@ export const LEADERSHIP = {
       label: 'Phone Number',
       error: undefined,
       rule: 'numeric',
-      placeHolder: '555-123-8888',
+      placeHolder: '(123) 456-7890',
       objRef: 'phone',
       objRefOutput2: 'phone',
       customErrors: {
@@ -1202,7 +1261,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'Month 20XX',
   },
   offeringDeadline: {
     label: 'Offering Deadline',
@@ -1302,7 +1361,7 @@ export const GENERAL = {
     error: undefined,
     rule: 'optional',
   },
-  // minOfferingExpenseAmount: {
+  // offeringExpenseAmount: {
   //   label: 'Minimum offering amount expense',
   //   value: '',
   //   error: undefined,
@@ -1312,7 +1371,7 @@ export const GENERAL = {
   //   placeHolder: 'Type amount here',
   //   objRefOutput: 'useOfProceeds',
   // },
-  minOfferingExpenseAmountDescription: {
+  offeringExpenseAmountDescription: {
     label: 'If minimum offering amount is reached:',
     value: '',
     error: undefined,
@@ -1332,16 +1391,6 @@ export const GENERAL = {
   //   placeHolder: 'Type amount here',
   //   objRefOutput: 'useOfProceeds',
   // },
-  maxOfferingExpenseAmountDescription: {
-    label: 'If maximum offering amount is reached:',
-    value: '',
-    error: undefined,
-    rule: 'optional',
-    objRef: 'legal.general.useOfProceeds',
-    objType: 'useOfProceeds',
-    placeHolder: 'Type your text here...',
-    objRefOutput: 'useOfProceeds',
-  },
   equityShareholderRights: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
@@ -1452,7 +1501,7 @@ export const GENERAL = {
       value: '',
       error: undefined,
       rule: 'date',
-      placeHolder: 'Select date',
+      placeHolder: 'mm/dd/yyyy',
       customErrors: {
         date: 'Maturity Date is not a valid date format.',
       },
@@ -2305,21 +2354,21 @@ export const ADD_NEW_BONUS_REWARD = {
     label: 'Name of new bonus reward',
     value: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'required',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   description: {
     label: 'Description',
     value: '',
     error: undefined,
-    rule: 'string',
+    rule: 'optional',
     placeHolder: 'Description',
   },
   expirationDate: {
     label: 'Expiration Date',
     value: '',
     error: undefined,
-    rule: 'date',
+    rule: 'optional|date',
     customErrors: {
       date: 'Expiration Date is not a valid date format.',
     },
@@ -2517,7 +2566,7 @@ export const POC_DETAILS = {
     value: '',
     label: 'POC',
     error: undefined,
-    objRef: 'leadDetails',
+    // objRef: 'leadDetails',
     rule: 'string|required',
   },
   id: {
