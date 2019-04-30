@@ -96,7 +96,7 @@ class App extends Component {
       if (!document.hidden) {
         // console.log('Browser tab is hidden');
       } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
-        authActions.forceLogout().then(() => {
+        authActions.forceLogout('timeout').then(() => {
           this.props.history.push('/auth/login');
         });
       }
@@ -130,7 +130,7 @@ class App extends Component {
   }
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
-      authActions.logout().then(() => {
+      authActions.logout('timeout').then(() => {
         this.props.history.push('/auth/login');
       });
     }
