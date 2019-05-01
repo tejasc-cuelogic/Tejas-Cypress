@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-boost';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { get } from 'lodash';
 import { authStore } from '../services/stores';
-import { API_ROOT, REACT_APP_DEPLOY_ENV } from '../constants/common';
+import { API_ROOT } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
 import { authActions } from '../services/actions';
@@ -32,12 +32,12 @@ export const GqlClient = new ApolloClient({
   onError: (res) => {
     if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
       console.log(res);
-      authActions.logout().then(() => {
+      authActions.logout('timeout').then(() => {
         window.location = '/auth/login';
       });
     }
   },
   cache: new InMemoryCache({ fragmentMatcher }),
-  connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
+  // connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
   // defaultOptions,
 });

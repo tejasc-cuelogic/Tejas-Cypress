@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
+import Aux from 'react-aux';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty } from 'lodash';
 import Loadable from 'react-loadable';
@@ -8,6 +9,7 @@ import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
+// import InvestmentDetails from '../../../investor/accountDetails/containers/InvestmentDetails';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 const getModule = component => Loadable({
@@ -76,57 +78,61 @@ export default class AccountDetails extends Component {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
     };
     return (
-      <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-details">
-          <Item.Group>
-            <Item className="user-intro">
-              <div className="ui tiny circular image">
-                <UserAvatar size="mini" UserInfo={userAvatar} />
+      <Aux>
+        {/* <Route exact path={`${match.url}/individual/investments/investment-details/:id`}
+      render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} /> */}
+        <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+          <Modal.Content className="transaction-details">
+            <Item.Group>
+              <Item className="user-intro">
+                <div className="ui tiny circular image">
+                  <UserAvatar size="mini" UserInfo={userAvatar} />
+                </div>
+                <Item.Content verticalAlign="middle">
+                  <Header as="h3">
+                    {details.info && details.info.firstName} {details.info && details.info.lastName}
+                    <UserTypeIcon role={details.roles} />
+                    <Header.Subheader>{rolesRaw[0]}</Header.Subheader>
+                  </Header>
+                  <Button.Group floated="right">
+                    <Button inverted color="red" content="Delete Profile" />
+                    <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
+                      <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
+                    </Button>
+                  </Button.Group>
+                </Item.Content>
+              </Item>
+            </Item.Group>
+            <Card fluid>
+              <SecondaryMenu match={match} navItems={navItems} />
+              <div className="inner-content-spacer">
+                <Switch>
+                  {
+                    navItems.map((item) => {
+                      const CurrentModule = item.load === false ?
+                        item.component : getModule(item.component);
+                      return (
+                        <Route
+                          key={item.to}
+                          path={`${match.url}/${item.to}`}
+                          render={props => (
+                            <CurrentModule
+                              module={item.title === 'Activity' ? 'userDetails' : false}
+                              showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
+                              {...props}
+                              resourceId={details.id}
+                            />)
+                                }
+                        />
+                      );
+                    })
+                  }
+                </Switch>
               </div>
-              <Item.Content verticalAlign="middle">
-                <Header as="h3">
-                  {details.info && details.info.firstName} {details.info && details.info.lastName}
-                  <UserTypeIcon role={details.roles} />
-                  <Header.Subheader>{rolesRaw[0]}</Header.Subheader>
-                </Header>
-                <Button.Group floated="right">
-                  <Button inverted color="red" content="Delete Profile" />
-                  <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
-                    <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
-                  </Button>
-                </Button.Group>
-              </Item.Content>
-            </Item>
-          </Item.Group>
-          <Card fluid>
-            <SecondaryMenu match={match} navItems={navItems} />
-            <div className="inner-content-spacer">
-              <Switch>
-                {
-                  navItems.map((item) => {
-                    const CurrentModule = item.load === false ?
-                      item.component : getModule(item.component);
-                    return (
-                      <Route
-                        key={item.to}
-                        path={`${match.url}/${item.to}`}
-                        render={props => (
-                          <CurrentModule
-                            module={item.title === 'Activity' ? 'userDetails' : false}
-                            showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
-                            {...props}
-                            resourceId={details.id}
-                          />)
-                              }
-                      />
-                    );
-                  })
-                }
-              </Switch>
-            </div>
-          </Card>
-        </Modal.Content>
-      </Modal>
+            </Card>
+          </Modal.Content>
+        </Modal>
+      </Aux>
     );
   }
 }

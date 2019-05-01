@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { isEmpty, find, get } from 'lodash';
+import { isEmpty, find, get, isNull } from 'lodash';
 import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
@@ -209,9 +209,13 @@ class IndividualAccountStore {
           }
           bankAccountStore.validateAddFunds();
           bankAccountStore.validateAddfundsAmount();
-          const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0)
-            ? 2 : this.stepToBeRendered;
-          this.setStepToBeRendered(renderStep);
+          if (!bankAccountStore.isAccountPresent) {
+            this.setStepToBeRendered(0);
+          } else if (isNull(account.details.initialDepositAmount)) {
+            this.setStepToBeRendered(1);
+          } else {
+            this.setStepToBeRendered(2);
+          }
         }
       }
     }

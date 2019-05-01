@@ -39,7 +39,8 @@ export default class Transactions extends Component {
   };
   componentDidMount() {
     const { getInvestmentsByOfferingId } = this.props.transactionStore;
-    getInvestmentsByOfferingId();
+    const { isAdmin } = this.props;
+    getInvestmentsByOfferingId(isAdmin);
     window.addEventListener('message', this.docuSignListener);
   }
   setSearchParam = (e, { value }) => this.props.transactionStore.setInvestment(value);

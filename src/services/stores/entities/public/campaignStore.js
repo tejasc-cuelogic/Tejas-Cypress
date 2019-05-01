@@ -10,7 +10,7 @@ import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsFor
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
-import uiStore from '../shared/uiStore';
+// import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
 
@@ -101,6 +101,10 @@ export class CampaignStore {
       this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
   }
 
+  @computed get earlyBirdLoading() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.loading;
+  }
+
   @computed get OfferingList() {
     return (this.allData.data && this.allData.data.getOfferingList &&
       toJS(this.allData.data.getOfferingList)) || [];
@@ -159,25 +163,27 @@ export class CampaignStore {
   }
 
   @action
-  isEarlyBirdExist(accountType) {
+  isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
-    uiStore.setProgress();
+    // uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
     this.earlyBirdCheck =
       graphql({
         client,
         query: checkIfEarlyBirdExist,
         variables: { offeringId, accountId },
-        onFetch: (data) => {
-          if (data && !this.earlyBirdCheck.loading) {
-            uiStore.setProgress(false);
-          }
-        },
-        onError: () => {
-          uiStore.setProgress(false);
-        },
+        // onFetch: (data) => {
+        //   if (data && !this.earlyBirdCheck.loading) {
+        //     uiStore.setProgress(false);
+        //   }
+        // },
+        // onError: (err) => {
+        //   console.log(err);
+        //   uiStore.setProgress(false);
+        // },
       });
   }
 
