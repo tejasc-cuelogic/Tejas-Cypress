@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import _ from 'lodash';
 import moment from 'moment';
 import money from 'money-math';
+import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 
 export class Utility {
@@ -176,6 +177,23 @@ export class Utility {
       }
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  downloadCSV = (params) => {
+    try {
+      const parser = new Parser({ fields: params.fields, quote: '' });
+      const csv = parser.parse(params.data);
+      const uri = `data:text/csv;charset=utf-8,${escape(csv)}`;
+      const link = document.createElement('a');
+      link.href = uri;
+      link.style = 'visibility:hidden';
+      link.download = `${params.fileName || 'download'}_${moment(new Date()).format('DD-MM-YYYY')}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error(err);
     }
   }
 }

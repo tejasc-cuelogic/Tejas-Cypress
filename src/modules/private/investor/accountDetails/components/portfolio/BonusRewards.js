@@ -10,17 +10,19 @@ import RewardList from './Rewards/RewardList';
 import Redeem from '../../../rewardsWallet/components/Redeem';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-@inject('campaignStore', 'portfolioStore', 'investmentStore', 'uiStore')
+@inject('campaignStore', 'portfolioStore', 'investmentStore', 'uiStore', 'userDetailsStore')
 @observer
 class BonusRewards extends Component {
   componentWillMount(){
-    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    this.props.campaignStore.isEarlyBirdExist(accountType);
+    const { isAdmin } = this.props;
+    const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const accountType = isAdmin && get(accountDetails, 'name') ? get(accountDetails, 'name') : includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    this.props.campaignStore.isEarlyBirdExist(accountType, isAdmin);
   }
   render() {
     const { props } = this;
-    const { getEarlyBirdCheck, earlyBirdRewards } = props.campaignStore;
-    const { inProgress } = this.props.uiStore;
+    const { getEarlyBirdCheck, earlyBirdRewards, earlyBirdLoading } = props.campaignStore;
+    // const { inProgress } = this.props.uiStore;
     const { getInvestor } = props.portfolioStore;
     const { investmentBonusRewards } = props.investmentStore
     const investedAmount = get(getInvestor, 'myInvestment') ? get(getInvestor, 'myInvestment') : 0;
@@ -35,7 +37,7 @@ class BonusRewards extends Component {
         <p className="neutral-text mb-30">{metaTitle}</p>
           {getEarlyBirdCheck ?
             <RewardList earlyBird title="Your investment" match={props.match} list={earlyBirdRewards} />
-            : inProgress ? <InlineLoader /> : ''
+            : earlyBirdLoading ? <InlineLoader /> : ''
           }
         <RewardList title="Your investment" match={props.match} list={rewardList} />
         </Aux>

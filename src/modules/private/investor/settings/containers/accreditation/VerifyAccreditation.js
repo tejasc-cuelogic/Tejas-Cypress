@@ -36,7 +36,7 @@ export default class Accreditation extends React.Component {
       this.props.history.push(`${this.props.refLink}/falied`);
       return;
     }
-    if (!(step.formName === 'ACCREDITATION_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'ASSETS') && step.formName !== 'FILLING_STATUS_FORM' && !(step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
+    if (!(step.formName === 'ACCREDITATION_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'ASSETS') && !(step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
         .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 1)
         .then(() => {
@@ -55,7 +55,6 @@ export default class Accreditation extends React.Component {
     const formArray = (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') ? [
       { key: 'ACCREDITATION_FORM' },
       { key: 'INCOME_EVIDENCE_FORM' },
-      { key: 'FILLING_STATUS_FORM' },
       {
         key: 'VERIFICATION',
         component: <Verification step={3} refLink={this.props.refLink} type={1} />,

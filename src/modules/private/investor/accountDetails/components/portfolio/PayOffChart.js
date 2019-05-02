@@ -1,24 +1,15 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
-import { includes } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { inject, observer } from 'mobx-react';
 import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import Helper from '../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../theme/shared';
-
-@inject('portfolioStore')
 @withRouter
-@observer
 export default class PayOffChart extends Component {
-  componentWillMount() {
-    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    this.props.portfolioStore.getPayOffData(accountType);
-  }
   formatY = item => Helper.CurrencyFormat(item);
   render() {
-    const data = this.props.portfolioStore.getChartData();
+    const data = this.props.chartData;
     if (data.length === 0) {
       return <InlineLoader text="No Data to Display!" />;
     }

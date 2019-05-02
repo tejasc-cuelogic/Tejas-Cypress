@@ -62,7 +62,6 @@ export class CommonStore {
       .mutate({
         mutation: createCdnSignedUrl,
         variables: { key },
-        fetchPolicy: 'network-only',
       })
       .then(res => resolve(res))
       .catch(() => {

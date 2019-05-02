@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy } from 'lodash';
+import { pickBy, get, filter, orderBy, remove } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -10,7 +10,7 @@ import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsFor
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
-import uiStore from '../shared/uiStore';
+// import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
 
@@ -101,6 +101,10 @@ export class CampaignStore {
       this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
   }
 
+  @computed get earlyBirdLoading() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.loading;
+  }
+
   @computed get OfferingList() {
     return (this.allData.data && this.allData.data.getOfferingList &&
       toJS(this.allData.data.getOfferingList)) || [];
@@ -120,7 +124,9 @@ export class CampaignStore {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     const orderedActiveListArr =
       activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
-    return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
+    // return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
+    const partailResult = orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
+    return this.sortedOfferingList(partailResult);
   }
 
   @computed get completed() {
@@ -159,25 +165,27 @@ export class CampaignStore {
   }
 
   @action
-  isEarlyBirdExist(accountType) {
+  isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
-    uiStore.setProgress();
+    // uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
     this.earlyBirdCheck =
       graphql({
         client,
         query: checkIfEarlyBirdExist,
         variables: { offeringId, accountId },
-        onFetch: (data) => {
-          if (data && !this.earlyBirdCheck.loading) {
-            uiStore.setProgress(false);
-          }
-        },
-        onError: () => {
-          uiStore.setProgress(false);
-        },
+        // onFetch: (data) => {
+        //   if (data && !this.earlyBirdCheck.loading) {
+        //     uiStore.setProgress(false);
+        //   }
+        // },
+        // onError: (err) => {
+        //   console.log(err);
+        //   uiStore.setProgress(false);
+        // },
       });
   }
 
@@ -250,7 +258,14 @@ export class CampaignStore {
     return this.docsWithBoxLink.sort((a, b) =>
       (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
   }
-
+  @computed get commentsMainThreadCount() {
+    const comments = get(this.campaign, 'comments') || [];
+    const issuerId = this.campaign && this.campaign.issuerId;
+    const filtered = comments.filter(c => ((c.createdUserInfo && c.createdUserInfo.id === issuerId
+      && c.approved) ||
+      (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC');
+    return filtered.length;
+  }
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
@@ -330,9 +345,11 @@ export class CampaignStore {
       format: 'Hours',
     };
     const launchDaysToRemains =
-    DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
+      DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
     const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+    const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
     let order = null;
+    let isProcessing = false;
     if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
       launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
       labelBannerFirst = 'NEW';
@@ -357,17 +374,35 @@ export class CampaignStore {
       order = order !== null ? order : 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
-      order = 2147483647;
+      order = 2147483647 + 1;
     }
+    if (isInProcessing) {
+      labelBannerFirst = 'Processing';
+      order = 2247483647;
+      isProcessing = true;
+    }
+
     if (labelBannerFirst || labelBannerSecond) {
       bannerToShowFlag = true;
     }
     resultObject.order = order !== null ? order : 2147483646;
+    resultObject.isProcessing = isProcessing;
     resultObject.launchDate = moment(launchDate).unix() || null;
+    resultObject.processingDate = moment(closingDate).unix() || null;
     resultObject.isBannerShow = bannerToShowFlag;
     resultObject.bannerFirstText = labelBannerFirst;
     resultObject.bannerSecondText = labelBannerSecond;
     return resultObject;
+  }
+  sortedOfferingList = (offeringList) => {
+    if (offeringList.length > 0) {
+      const sortedList = offeringList;
+      const prossingOfferingList = remove(sortedList, o => o.isProcessing);
+      const orderedProcessingList = orderBy(prossingOfferingList, ['processingDate'], ['desc']);
+      const sortedResult = [...sortedList, ...orderedProcessingList];
+      return sortedResult;
+    }
+    return offeringList;
   }
 }
 
