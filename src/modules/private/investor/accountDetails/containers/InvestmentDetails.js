@@ -27,7 +27,7 @@ const navItems = [
 @observer
 class InvestmentDetails extends Component {
   componentWillMount() {
-    const { portfolioStore, uiStore } = this.props;
+    const { portfolioStore, uiStore, isAdmin } = this.props;
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
@@ -37,7 +37,8 @@ class InvestmentDetails extends Component {
       if (uiStore.inProgress !== 'portfolio') {
         this.props.uiStore.setProgress('portfolioDirect');
       }
-      portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
+      portfolioStore.getInvestorDetails(accountType, this.props.match.params.id, isAdmin).then(() =>
+        this.props.uiStore.setProgress(false));
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
       this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
       portfolioStore.currentAccoutType(accountType);
@@ -50,7 +51,7 @@ class InvestmentDetails extends Component {
   };
 
   render() {
-    const { match, portfolioStore, uiStore } = this.props;
+    const { match, portfolioStore } = this.props;
     const { getInvestor } = portfolioStore;
     const { campaign, details } = this.props.campaignStore;
     // const netAnnualizedReturn = get(getInvestor, 'netAnnualizedReturn');
@@ -81,9 +82,9 @@ class InvestmentDetails extends Component {
         // },
       ],
     };
-    if (!details || details.loading || uiStore.inProgress === 'portfolioDirect') {
-      return <InlineLoader />;
-    }
+    // if (!details || details.loading || uiStore.inProgress === 'portfolioDirect') {
+    //   return <InlineLoader />;
+    // }
     if (details && details.data && !details.data.getOfferingDetailsById) {
       return <NotFound />;
     }
@@ -100,13 +101,23 @@ class InvestmentDetails extends Component {
                 component={getModule(navItems[0].component)}
               />
               {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(item.component)}
-                  />
-                ))
+                navItems.map((item) => {
+                  const CurrentModule = item.load === false ?
+                    item.component : getModule(item.component);
+                  return (
+                    <Route
+                      key={item.to}
+                      path={`${match.url}/${item.to}`}
+                      // component={getModule(item.component)}
+                      render={props => (
+                        <CurrentModule
+                          isAdmin={this.props.isAdmin}
+                          {...props}
+                        />)
+                     }
+                    />
+                  );
+                })
               }
             </Switch>
           </Card>
