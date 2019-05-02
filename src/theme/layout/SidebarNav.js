@@ -45,7 +45,7 @@ export class SidebarNav extends Component {
           isMobile={isMobile}
         />
         <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
-          <Icon name="sign out" />
+          <Icon name="ns-logout" />
           <span>Logout</span>
         </Menu.Item>
         {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&

@@ -90,8 +90,8 @@ const MySidebar = observer(props => (
     ) : <SidebarNav roles={props.UserInfo.roles} onlyMount />
     }
     <Sidebar.Pusher
-      dimmed={props.layoutState.leftPanelMobile}
-      onClick={props.layoutState.leftPanelMobile ? props.toggle : undefined}
+      dimmed={props.mobile && props.layoutState.leftPanelMobile}
+      onClick={(props.mobile && props.layoutState.leftPanelMobile) ? props.toggle : undefined}
       className={`${props.match.url.includes('/business-application') ?
         'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
     >
