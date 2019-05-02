@@ -58,17 +58,6 @@ export default class NavBarMobile extends Component {
                 role="button"
                 tabIndex="0"
               >
-                {/* <Logo
-                  alt="NextSeed.com"
-                  dataSrc={visible ? 'LogoWhite' : getLogo(location.pathname)}
-                  as={visible ? Link : Logo}
-                  to="/"
-                /> */}
-                {/* <NSImage
-                  path="hamburger.svg"
-                  role="button"
-                  tabIndex="0"
-                /> */}
                 <Icon className="ns-hamburger" role="button" tabIndex="0" />
               </div>
               {location.pathname.startsWith('/business-application/') ?
@@ -81,7 +70,6 @@ export default class NavBarMobile extends Component {
                   className={`public-header-section ${visible ? 'active' : ''}
                   ${navStatus === 'sub' ? 'slide-up' : ''}`}
                 >
-                  {/* <Icon className="ns-nextseed-icon hamburger" /> */}
                   {navTitle === 'Home' || (location.pathname.startsWith('/offerings')) ?
                     <Logo
                       dataSrc="LogoGreenGrey"
@@ -102,12 +90,6 @@ export default class NavBarMobile extends Component {
                     </Link>
                   )
                   }
-                  {/* {investBtn && (
-                    <Button fluid={isMobile} as={Link}
-                    to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
-                      Invest Now
-                    </Button>
-                  )} */}
                 </div>
               }
             </Aux>
@@ -119,12 +101,6 @@ export default class NavBarMobile extends Component {
             visible={visible}
             className="public-sidebar"
           >
-            {/* <Logo
-              alt="NextSeed.com"
-              dataSrc="LogoWhite"
-              as={visible ? Link : Logo}
-              to="/"
-            /> */}
             <Scrollbars
               className="ns-scrollbar"
               renderTrackVertical={p => <div {...p} className="track-vertical" />}

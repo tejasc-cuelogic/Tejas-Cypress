@@ -86,12 +86,6 @@ const MySidebar = observer(props => (
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
         </Sidebar>
-        {/* {props.desktop &&
-          <Button onClick={props.toggle} className="item collapseIcon">
-            <i className={`angle ${(props.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
-            <span>Collapse</span>
-          </Button>
-        } */}
       </Aux>
     ) : <SidebarNav roles={props.UserInfo.roles} onlyMount />
     }

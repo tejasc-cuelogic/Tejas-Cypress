@@ -52,12 +52,7 @@ export class SidebarNav extends Component {
           props.signupStatus &&
           !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
           props.signupStatus.investorProfileCompleted &&
-            // <Button as={Link} to="/app/summary/account-creation">Add New Account</Button>
-            // <Menu.Item as={Link} className="add-account" to="/app/summary/account-creation">
-            //   <Icon name="add" />
-            //   <span>Add New Account</span>
-            // </Menu.Item>
-            <Menu.Item>
+            <Menu.Item className="mt-30">
               <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Open New Account" />
             </Menu.Item>
         }
