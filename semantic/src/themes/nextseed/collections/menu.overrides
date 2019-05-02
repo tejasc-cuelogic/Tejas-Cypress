@@ -771,6 +771,13 @@ footer{
         }
         .public-action-nav .item {
             border-bottom: 0;
+            .ui.button{
+                width: 212px;
+                &.basic {
+                    box-shadow: 0 0 0 1px @thumbInactiveBackground inset !important;
+                    border: none !important;
+                }
+            }
         }
     }
     &.left {
