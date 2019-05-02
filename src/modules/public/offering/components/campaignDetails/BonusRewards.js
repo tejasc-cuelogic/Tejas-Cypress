@@ -75,9 +75,13 @@ class BonusRewards extends Component {
               </Grid> : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
             }
             {offeringMISC &&
-              <Segment padded className="reward-block">
-                <HtmlEditor readOnly content={offeringMISC} />
-              </Segment>
+            <Grid columns="1">
+              <Grid.Column>
+                <Segment padded className="reward-block">
+                  <HtmlEditor readOnly content={offeringMISC} />
+                </Segment>
+              </Grid.Column>
+            </Grid>
             }
           </Aux>
           :
