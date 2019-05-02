@@ -34,7 +34,7 @@ query _getArticleByCategoryId($id:ID! ) {
     featuredImage
     minuteRead
     title
-    authorId
+    author
     updated {
       date
     }
@@ -107,7 +107,7 @@ query insight($id:ID! ) {
     title
     featuredImage
     content
-    authorId
+    author
     category
   }
 }
