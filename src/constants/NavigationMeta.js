@@ -61,6 +61,8 @@ export const PRIVATE_NAV = [
   {
     title: 'INVESTMENT ACCOUNTS',
     accessibleTo: ['ira', 'individual', 'entity'],
+    to: 'summary',
+    path: 'investor/summary',
     isMenuHeader: true,
     subPanel: 0,
   },

@@ -30,7 +30,6 @@
                 }
                 &.active > span{
                     padding-bottom:@2px;
-                    // border-bottom:1px solid @primary-one;
                     margin-bottom: 4px;
                 }
                 button {
@@ -129,13 +128,6 @@
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {
-    // border:none;
-    // height:58px;
-    // margin:0;
-    // border-radius:0;
-    // box-shadow:none;
-    // background-color:@white;
-    // transition: all .3s ease-in-out;
     @media only screen and (max-width : @largestLargeMonitor){
         background-color: fade(@white, 50%);
     }
@@ -189,12 +181,8 @@
     }
 }
 .menu-secondary-fixed{
-    // border:none;
     height:@primaryHeaderHeight;
     margin:0 !important;
-    // border-radius:0;
-    // box-shadow:none;
-    // background-color:@white;
     transition: all .3s ease-in-out;
     padding: 0 @12px;
     + .animate-placeholder{
@@ -304,11 +292,6 @@ footer{
             flex-wrap: wrap;
         }
         &.vertical {
-            // margin:0;
-            // padding:0 @15px 0 0;
-            // flex-direction:row;
-            // vertical-align: top;
-            // flex-wrap: wrap;
             flex: 1;
             width: 140px;
             @media only screen and (max-width : @largestMobileScreen){
@@ -323,10 +306,6 @@ footer{
                 }
                 &.header {
                     margin-top: 0;
-                    // ~a {
-                    //     display: inline-block;
-                    //     margin-right: @14px;
-                    // }
                 }
                 &:hover {
                     background-color: transparent;
@@ -370,7 +349,6 @@ footer{
         }
     }
 }
-// .offer-details
 .offering-side-menu .ui.vertical.menu {
     background-color: transparent;
     .item {
@@ -390,11 +368,6 @@ footer{
         }
         >i.icon.dropdown{
             display:none;
-            // float: left;
-            // margin-left: 0;
-            // margin-right: @14px;
-            // font-size: @20px;
-            // line-height: 20px;
         }
         >.label.circular {
             float: none;
@@ -452,7 +425,6 @@ footer{
         padding:@10px @5px;
         border-radius:@4px;
         background-color:@white;
-        // box-shadow:0 -1px 0px rgba(0,0,0,.1);
         box-shadow:0 0px 10px rgba(0,0,0,.1);
         .item{
             min-width:2em;
@@ -624,19 +596,14 @@ footer{
 	}
 	//Public Mobile View End
 }
-.transaction-details{
-    .ui.inverted.menu{
-        // background-color:@neutral-middark;
-        .item{
-            padding:@16px @25px;
-            &:before{
-                background-color:@neutral-middark;
-            }
-            &:hover, &:focus, &.active{
-                background-color:@white;
-                color:@link-color !important;
-            }
-        }
+.transaction-details .ui.inverted.menu .item{
+    padding:@16px @25px;
+    &:before{
+        background-color:@neutral-middark;
+    }
+    &:hover, &:focus, &.active{
+        background-color:@white;
+        color:@link-color !important;
     }
 }
 
@@ -690,11 +657,8 @@ footer{
         height: 100%;
         overflow: auto;
         position: relative;
-        // display: flex;
-        // flex-direction: column;
         .public-header-nav{
             padding: @50px 0;
-            // flex-grow: 1;
             background: @white;
         }
     }
@@ -708,31 +672,9 @@ footer{
         margin-right: @24px;
     }
     &.overlay .ui.image.logo {
-        // margin-left: @24px;
-        // margin-bottom: @20px;
         margin: @14px 0 0 @24px;
         width: 150px;
     }
-    // .social-media {
-    //     text-align: center;
-    //     // background: @neutral;
-    //     padding: @14px 0;
-    //     position: absolute;
-    //     bottom: 0;
-    //     left: 50%;
-    //     transform: translate(-50%,0);
-    //     .item {
-    //         margin-bottom: 0;
-    //         padding: 0 @8px !important;
-    //         display: inline-block;
-    //         color: @neutral-middark;
-    //         margin: 0 !important;
-    //         border: 0 !important;
-    //         i.icon {
-    //             margin: 0;
-    //         }
-    //     }
-    // }
     &.visible.vertical {
         .item {
             border-radius: 0 !important;
@@ -764,10 +706,6 @@ footer{
                     max-width: 100%;
                 }
             }
-            // .social-media .item {
-            //     margin: 0;
-            //     border: 0;
-            // }
         }
         .public-action-nav .item {
             border-bottom: 0;
