@@ -18,8 +18,8 @@ export class FaqStore {
   @observable requestState = {
     skip: 0,
     page: 1,
-    perPage: 1000,
-    displayTillIndex: 1000,
+    perPage: 10,
+    displayTillIndex: 10,
     filters: false,
     search: {
     },
