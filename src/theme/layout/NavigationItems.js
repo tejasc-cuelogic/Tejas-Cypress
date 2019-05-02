@@ -81,27 +81,18 @@ export class NavItems extends Component {
             item
             defaultOpen={item.defaultOpen}
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''}
-            ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
-            `}
+            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''} ${(item.title === 'Account Settings' && this.props.userDetailsStore.getAccountList.length) ? 'mt-10' : ''}`}
             name={item.to}
             // disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
-                {item.icon &&
-                  <Icon className={item.icon} />
-                }
-                <span>
-                  {typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
-                </span>
+                {item.icon && <Icon className={item.icon} />}
+                <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
               </Aux>
             }
           >
-            <Dropdown.Menu
-              className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
-              `}
-            >
+            <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}`}>
               {item.subNavigations.map(sn => (
                 sn.external ? (
                   <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
@@ -137,19 +128,9 @@ export class NavItems extends Component {
                 onClick={isMobile ? onToggle : this.doNothing}
                 to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
               >
-                {item.icon &&
-                  <Icon className={item.icon} />
-                }
-                {item.to === 'messages' &&
-                  <Label circular color="red" size="mini" horizontal>3</Label>
-                }
-                {
-                    item.title !== 'Updates' ?
-                      <span>{item.title}</span> :
-                    (item.title === 'Updates' && item.to === 'updates' && this.props.countData ?
-                      <span>{item.title}</span> : ''
-                    )
-                }
+                {item.icon && <Icon className={item.icon} />}
+                {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
+                {item.title !== 'Updates' ? <span>{item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
                 {(item.to === 'updates' || item.to === 'comments') && this.props.countData ?
                   <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
                 }
@@ -161,10 +142,6 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoGreenGrey');
-// const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-//   (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoGreenGrey' :
-//     (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoGreenGrey'))
-// ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
