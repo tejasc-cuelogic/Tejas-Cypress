@@ -67,6 +67,9 @@ section{
         &.campaign-list-banner{
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat;
             height: 300px;
+            @media only screen and (max-width : @computerBreakpoint) {
+                padding-top: @30px;
+            }
             @media only screen and (max-width : @largestMobileScreen){
                 height:215px;
                 background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat;
