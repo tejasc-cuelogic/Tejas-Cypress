@@ -34,7 +34,6 @@ query _getArticleByCategoryId($id:ID! ) {
     featuredImage
     minuteRead
     title
-    author
     updated {
       date
     }
@@ -163,16 +162,13 @@ query insightArticlesListByFilter($categoryId: String, $articleStatus: ArticleSt
     articleStatus
     minuteRead
     title
-    author {
-      info {
-        firstName
-        lastName
-      }
-    }
+    author
     updated {
+      id
       date
     }
     created {
+      id
       date
     }
     banner

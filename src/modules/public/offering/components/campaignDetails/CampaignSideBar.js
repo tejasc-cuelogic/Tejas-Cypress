@@ -128,7 +128,7 @@ export default class CampaignSideBar extends Component {
               </p>
               }
               <p className="mb-half mt-half">
-              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? `Up to ${get(campaign, 'keyTerms.investmentMultiple')}x` : '-'}
+              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
               </p>
               <p className="mt-half">
                 Maturity: {get(campaign, 'keyTerms.maturity')} months

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Grid, Button, Form } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormInput } from '../../../../../theme/form';
+// import { FormInput } from '../../../../../theme/form';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import { CATEGORY_VALUES, ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
-import { ByKeyword as Search, DropdownFilter, DateRangeFilter } from '../../../../../theme/form/Filters';
+import { ByKeyword as Search, DropdownFilter } from '../../../../../theme/form/Filters';
 import AllInsights from '../components/AllInsights';
 
 @inject('articleStore')
@@ -27,7 +27,7 @@ export default class ManageInsights extends Component {
     const {
       filters,
       requestState,
-      maskChange,
+      // maskChange,
     } = this.props.articleStore;
     return (
       <PrivateLayout
@@ -59,7 +59,8 @@ export default class ManageInsights extends Component {
                     <DropdownFilter value={requestState.search.categoryId} change={this.setSearchParam} name="Category" keyName="categoryName" options={CATEGORY_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
-                    <FormInput ishidelabel value={requestState.search.tags} change={this.setSearchParam} name="Tags" keyName="tags" />
+                    {/* <FormInput ishidelabel value={requestState.search.tags}
+                  change={this.setSearchParam} name="Tags" keyName="tags" /> */}
                     {/* <DropdownFilter value={requestState.search.tags}
                   change={this.setSearchParam} name="Tags" keyName="tags"
                   options={TAGS} isMultiple /> */}
@@ -68,7 +69,8 @@ export default class ManageInsights extends Component {
                     <DropdownFilter value={requestState.search.articleStatus} change={this.setSearchParam} name="Status" keyName="articleStatus" options={ARTICLE_STATUS_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
-                    <FormInput ishidelabel value={requestState.search.author} change={this.setSearchParam} name="Author" keyName="author" />
+                    {/* <FormInput ishidelabel value={requestState.search.author}\
+                  change={this.setSearchParam} name="Author" keyName="author" /> */}
                     {/* ishidelabel
                     fluid
                     type="text"
@@ -79,7 +81,8 @@ export default class ManageInsights extends Component {
                   options={AUTHORS} /> */}
                   </Grid.Column>
                   <Grid.Column width={4}>
-                    <DateRangeFilter change={maskChange} label="Date Range" name="dateRange" />
+                    {/* <DateRangeFilter change={maskChange} label="Date Range"
+                  name="dateRange" /> */}
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
