@@ -12,7 +12,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore', 'commonStore')
+@inject('accreditationStore', 'commonStore', 'userStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -39,6 +39,9 @@ export default class AllAccreditationRequests extends Component {
     const {
       accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
+
+    const access = this.props.userStore.myAccessForModule('ACCREDITATION');
+    const isManager = access.asManager;
     if (loading) {
       return <InlineLoader />;
     }
@@ -109,7 +112,7 @@ export default class AllAccreditationRequests extends Component {
                         }
                       </p>
                     </Table.Cell>
-                    {accreditation.accreditationStatus === 'REQUESTED' ?
+                    {accreditation.accreditationStatus === 'REQUESTED' && isManager ?
                       <Aux>
                         <Actions
                           accountId={accreditation.accountId}
