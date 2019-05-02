@@ -190,6 +190,8 @@ export class IdentityStore {
     return { userInfo, phoneDetails };
   }
 
+  checkIncorrectAns = res => res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete')
+
   @computed
   get formattedUserInfo() {
     const { fields, response } = this.ID_VERIFICATION_FRM;
@@ -200,7 +202,7 @@ export class IdentityStore {
     } else if (response.message === 'PASS' || (response.summary && response.summary === 'pass')) {
       cip.expiration = Helper.getDaysfromNow(21);
       cip.requestId = response.passId;
-      if (response.message === 'All answers correct') {
+      if (response.key && response.message) {
         cip.failReason = [{ key: response.key, message: response.message }];
       }
     } else if (response.message === 'FAIL' && response.questions) {
@@ -209,6 +211,11 @@ export class IdentityStore {
       cip.failType = 'FAIL_WITH_QUESTIONS';
       // omitDeep, cleanDeep
       cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+    } else if (this.checkIncorrectAns(response) && response.hardFailId) {
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.hardFailId;
+      cip.failType = 'FAIL_WITH_UPLOADS';
+      cip.failReason = [{ key: response.key, message: response.message }];
     } else {
       cip.expiration = Helper.getDaysfromNow(21);
       cip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
@@ -460,11 +467,11 @@ export class IdentityStore {
         })
         .then((result) => {
           /* eslint-disable no-underscore-dangle */
-          if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
-            this.setVerifyIdentityResponse(result.data.verifyCIPAnswers);
-            this.setCipStatus('PASS');
-            this.updateUserInfo();
-          }
+          this.setVerifyIdentityResponse(result.data.verifyCIPAnswers);
+          // eslint-disable-next-line no-unused-expressions
+          result.data.verifyCIPAnswers.__typename === 'UserCIPPass' ?
+            this.setCipStatus('PASS') : this.setCipStatus('HARD_FAIL');
+          this.updateUserInfo();
           uiStore.setProgress(false);
           this.setFieldValue('signUpLoading', false);
           resolve(result);

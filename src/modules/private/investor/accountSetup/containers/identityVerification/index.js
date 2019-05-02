@@ -117,6 +117,7 @@ export default class IdentityVerification extends Component {
     e.preventDefault();
     this.props.identityStore.setSubmitVerificationDocs(true);
     const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+    this.props.identityStore.setFieldValue('signUpLoading', true);
     this.props.identityStore.uploadAndUpdateCIPInfo().then(() => {
       if (phoneVerification === 'DONE') {
         const { accountForWhichCipExpired } = this.props.userDetailsStore;
@@ -125,8 +126,10 @@ export default class IdentityVerification extends Component {
         } else {
           this.props.history.push('/app/summary');
         }
+        this.props.identityStore.setFieldValue('signUpLoading', false);
       } else {
         this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
+          this.props.identityStore.setFieldValue('signUpLoading', false);
           this.props.history.push('/app/summary/identity-verification/3');
         })
           .catch((err) => {
