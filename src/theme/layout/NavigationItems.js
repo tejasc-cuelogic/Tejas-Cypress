@@ -227,17 +227,18 @@ export class NavigationItems extends Component {
               !currentUser ? (
                 <Aux>
                   {stepInRoute.map(route => (
-                    <Menu.Item>
-                      <Button as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
+                    <Menu.Item className="menu-button">
+                      <Button as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`}>{route.title}</Button>
                     </Menu.Item>
                   ))}
                 </Aux>
               ) : (
                 <Menu.Item
+                  className="menu-button"
                   as={Link}
                   to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
                 >
-                  <Button secondary compact>Dashboard</Button>
+                  <Button secondary>Dashboard</Button>
                 </Menu.Item>
                 ))}
         </Container>
