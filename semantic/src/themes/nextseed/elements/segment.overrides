@@ -3,7 +3,7 @@
 *******************************/
 //  Public page Starts
 .ui.padded.segment {
-    padding: 30px;
+    padding: @30px;
     display: flex;
     flex-direction: column; 
     h4.ui.header {
@@ -35,8 +35,11 @@
             font-weight: @bold;
             margin-bottom: 0;
             >img {
-                width: 50px;
+                width: @50px;
             }
+        }
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @20px;
         }
     }
     .segment-container {

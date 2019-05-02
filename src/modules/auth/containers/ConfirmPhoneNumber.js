@@ -197,7 +197,7 @@ export default class ConfirmPhoneNumber extends Component {
               </Message>
             }
             {!editMode ?
-              <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message))} />
+              <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} />
               :
               <Button.Group widths="2" className="inline">
                 <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />

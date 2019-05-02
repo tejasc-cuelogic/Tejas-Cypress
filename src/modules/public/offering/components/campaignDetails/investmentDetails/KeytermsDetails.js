@@ -11,6 +11,7 @@ import PaymentCalculator from './PaymentCalculator';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore')
 @observer
@@ -33,7 +34,7 @@ class KeyTermsDetails extends Component {
     const {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
-    const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
+    const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
     const investmentMultipleTooltip =
     isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
@@ -120,7 +121,7 @@ class KeyTermsDetails extends Component {
                 </Table.Cell>
                 <Table.Cell>
                   <p>
-                    {get(KeyTerms, 'investmentMultiple') ? `Up to ${get(KeyTerms, 'investmentMultiple')}x` : 'NA'}
+                    {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
                   </p>
                   <HtmlEditor
                     readOnly
@@ -293,7 +294,7 @@ class KeyTermsDetails extends Component {
         <Divider section={!isMobile} hidden />
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
           <Aux>
-            <Header as="h3" className="mb-30 anchor-wrap">
+            <Header as="h3" className={`${isTablet && 'mt-40'} mb-30 anchor-wrap`}>
               Total Payment Calculator
               <span className="anchor" id="total-payment-calculator" />
             </Header>
