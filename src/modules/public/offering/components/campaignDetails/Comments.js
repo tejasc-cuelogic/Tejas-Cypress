@@ -87,7 +87,7 @@ class Comments extends Component {
     const readMoreLength = 250;
     const { campaign } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
-    const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) < 0;
+    const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
     const comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
