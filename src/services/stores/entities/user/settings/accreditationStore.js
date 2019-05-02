@@ -1029,5 +1029,15 @@ export class AccreditationStore {
   setCurrentInvestmentStatus = (val) => {
     this.currentInvestmentStatus = val;
   }
+  @action
+  resetFilters = () => {
+    this.requestState = {
+      skip: 0,
+      perPage: 10,
+      filters: false,
+      search: {
+      },
+    };
+  }
 }
 export default new AccreditationStore();

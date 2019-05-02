@@ -12,6 +12,9 @@ export default class CrowdPay extends Component {
   componentWillMount() {
     this.props.accreditationStore.initRequest();
   }
+  componentWillUnmount() {
+    this.props.accreditationStore.resetFilters();
+  }
   setSearchParam = (e, { name, value }) =>
     this.props.accreditationStore.setInitiateSrch(name, value);
   toggleSearch = () => this.props.accreditationStore.toggleSearch();
