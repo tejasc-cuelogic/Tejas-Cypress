@@ -138,53 +138,53 @@
 			&.menu-header:hover{
 				background-color:transparent;
 			}
-			&.add-account{
-				// width:220px;
-				padding:@10px 0;
-				// font-weight:@fontMedium;
-				// color:@primary-two;
-				// text-decoration:none;
-				// position:absolute;
-				// left:0;
-				// bottom:44px;
-				// z-index:999;
-				// background-color:@white;
-				// cursor:pointer;
-				// transition:all .5s ease;
-				margin:@12px @26px;
-				border-radius:@4px !important;
-				border:@neutral-darkwhite 1px solid;
-				text-align:center;
-				overflow:hidden;
-				> .icon{
-					// float:left;
-					// display:block;
-					// margin-right:@13px;
-					// height:auto;
-					float:none;
-					transform:scale(1);
-				}
-				>span{
-					margin:0 !important;
-					max-width:none !important;
-					// display:block;
-					// margin-left:@30px;
-					// overflow:hidden;
-					// white-space:nowrap;
-					// text-overflow:ellipsis;
-				}
-				// @media only screen and (max-width : @largestSmallMonitor){
-				// 	width: 0;
-				// 	bottom: @10px;
-				// 	visibility: hidden;
-				// 	> .icon{
-				// 		display:none;
-				// 	}
-				// 	>span{
-				// 		display:none;
-				// 	}
-				// }
-			}
+			// &.add-account{
+			// 	// width:220px;
+			// 	padding:@10px 0;
+			// 	// font-weight:@fontMedium;
+			// 	// color:@primary-two;
+			// 	// text-decoration:none;
+			// 	// position:absolute;
+			// 	// left:0;
+			// 	// bottom:44px;
+			// 	// z-index:999;
+			// 	// background-color:@white;
+			// 	// cursor:pointer;
+			// 	// transition:all .5s ease;
+			// 	margin:@12px @26px;
+			// 	border-radius:@4px !important;
+			// 	border:@neutral-darkwhite 1px solid;
+			// 	text-align:center;
+			// 	overflow:hidden;
+			// 	> .icon{
+			// 		// float:left;
+			// 		// display:block;
+			// 		// margin-right:@13px;
+			// 		// height:auto;
+			// 		float:none;
+			// 		transform:scale(1);
+			// 	}
+			// 	>span{
+			// 		margin:0 !important;
+			// 		max-width:none !important;
+			// 		// display:block;
+			// 		// margin-left:@30px;
+			// 		// overflow:hidden;
+			// 		// white-space:nowrap;
+			// 		// text-overflow:ellipsis;
+			// 	}
+			// 	// @media only screen and (max-width : @largestSmallMonitor){
+			// 	// 	width: 0;
+			// 	// 	bottom: @10px;
+			// 	// 	visibility: hidden;
+			// 	// 	> .icon{
+			// 	// 		display:none;
+			// 	// 	}
+			// 	// 	>span{
+			// 	// 		display:none;
+			// 	// 	}
+			// 	// }
+			// }
 		}
 		&.visible .item{
 			padding:@9px @26px;
@@ -231,10 +231,10 @@
 					}
 				}
 			}
-			&.add-account>.icon{
-				display:none;
-				transform:scale(0);
-			}
+			// &.add-account>.icon{
+			// 	display:none;
+			// 	transform:scale(0);
+			// }
 		}
 	}
 	&.push:not(.visible){
@@ -279,12 +279,12 @@
 			.icon.dropdown{
 				display:none;
 			}
-			&.add-account{
-				margin:@12px @10px;
-				>span{
-					display:none;
-				}
-			}
+			// &.add-account{
+			// 	margin:@12px @10px;
+			// 	>span{
+			// 		display:none;
+			// 	}
+			// }
 		}
 		// ~ .ui.button.collapseIcon, ~ a.add-account{
 		// 	width:63px;
