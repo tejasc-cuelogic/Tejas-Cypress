@@ -70,7 +70,7 @@ export default class AllFaqs extends Component {
                       <Table.Cell><Link to={`${this.props.match.url}/${record.id}`}>{record.question}</Link></Table.Cell>
                       <Table.Cell>{FAQ_TYPE_ENUM[record.faqType]}</Table.Cell>
                       <Table.Cell>{record.categoryName}</Table.Cell>
-                      <Table.Cell>{`${get(record, 'author.info.firstName') && get(record, 'author.info.firstName')} ${get(record, 'author.info.lastName') && get(record, 'author.info.lastName')}` || 'Admin' }</Table.Cell>
+                      <Table.Cell>{`${get(record, 'author.info.firstName') !== 'undefined' && get(record, 'author.info.firstName')} ${get(record, 'author.info.lastName') !== 'undefined' && get(record, 'author.info.lastName')}` || 'Admin' }</Table.Cell>
                       <Table.Cell>{record.itemStatus}</Table.Cell>
                       <Table.Cell>{record.updated.date}</Table.Cell>
                       <Table.Cell textAlign="center">

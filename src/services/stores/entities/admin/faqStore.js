@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { forEach, uniqWith, isEqual, map } from 'lodash';
+import { forEach, map } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { faqs, getFaqById, upsertFaq } from '../../queries/faq';
+import { faqs, getFaqById, upsertFaq, faqsListByFilters } from '../../queries/faq';
 import { FAQ } from '../../../constants/faq';
 import { uiStore } from '../../index';
 
@@ -14,11 +14,12 @@ export class FaqStore {
   @observable db;
   @observable FAQ_FRM = Validator.prepareFormObject(FAQ);
   @observable editMode = false;
+  @observable filters = false;
   @observable requestState = {
     skip: 0,
     page: 1,
-    perPage: 50,
-    displayTillIndex: 50,
+    perPage: 1000,
+    displayTillIndex: 1000,
     filters: false,
     search: {
     },
@@ -114,9 +115,7 @@ export class FaqStore {
 
   @action
   formChange = (e, result) => {
-    if (result.name !== 'faqType') {
-      this.FAQ_FRM = Validator.onChange(this.FAQ_FRM, Validator.pullValues(e, result));
-    }
+    this.FAQ_FRM = Validator.onChange(this.FAQ_FRM, Validator.pullValues(e, result));
   }
 
   @action
@@ -124,6 +123,10 @@ export class FaqStore {
     this.USR_FRM = Validator.onChange(this.FAQ_FRM, Validator.pullValues(e, res), type);
   };
 
+  @action
+  toggleSearch = () => {
+    this.filters = !this.filters;
+  }
   @action
   FChange = (field, value) => {
     this.FAQ_FRM.fields[field].value = value;
@@ -145,19 +148,23 @@ export class FaqStore {
   }
 
   @action
-  save = id => new Promise((resolve, reject) => {
-    const data = this.getFaqFormData();
+  save = (id, isDraft = false) => new Promise((resolve, reject) => {
+    uiStore.setProgress();
+    let data = this.getFaqFormData();
+    data = id === 'new' ? data : { ...data, id };
     clientPrivate
       .mutate({
-        mutation: id === 'new' ? faqs : upsertFaq,
-        variables: id === 'new' ? { faqInput: data } : { id, faqInput: data },
+        mutation: upsertFaq,
+        variables: id === 'new' ? { faqInput: data } : { faqInput: data, isPartial: isDraft },
       })
       .then(() => {
         Helper.toast(id === 'new' ? 'FAQ added successfully.' : 'FAQ updated successfully.', 'success');
+        uiStore.setProgress(false);
         resolve();
       })
       .catch((res) => {
         Helper.toast(`${res} Error`, 'error');
+        uiStore.setProgress(false);
         reject();
       });
   });
@@ -172,13 +179,23 @@ export class FaqStore {
   }
 
   @action
-  filterTeamMembersByName = (teamMemberName) => {
-    const query = faqs;
-    const client = clientPrivate;
+  faqListByFilter = () => {
+    const data = this.requestState.search;
     this.data = graphql({
-      client,
-      query,
-      variables: { memberName: teamMemberName },
+      client: clientPrivate,
+      query: faqsListByFilters,
+      fetchPolicy: 'network-only',
+      variables: {
+        question: data.keyword,
+        faqType: data.type !== 'All' ? data.type : undefined,
+        categoryId: data.categoryName,
+        itemStatus: data.status !== 'All' ? data.status : undefined,
+      },
+      onFetch: (res) => {
+        if (res && res.faqsListByFilters) {
+          this.setDb(res.faqsListByFilters);
+        }
+      },
     });
   }
 
@@ -196,19 +213,9 @@ export class FaqStore {
   @action
   setInitiateSrch = (keyword, value) => {
     this.requestState.search[keyword] = value;
-    this.initiateFilters();
-  }
-  @action
-  initiateFilters = () => {
-    const { keyword } = this.requestState.search;
-    let resultArray = [];
-    if (keyword) {
-      resultArray = ClientDb.filterData('memberName', keyword, 'likenocase');
-      this.setDb(uniqWith(resultArray, isEqual));
-      this.requestState.page = 1;
-      this.requestState.skip = 0;
-    } else {
-      this.setDb(this.data.data.teamMembers);
+    this.requestState = { ...this.requestState };
+    if (keyword !== 'keyword') {
+      this.faqListByFilter();
     }
   }
 }

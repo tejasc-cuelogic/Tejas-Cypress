@@ -12,6 +12,7 @@ export const faqs = gql`
         }
       }
       question
+      categoryId
       categoryName
       answer
       faqType
@@ -78,42 +79,26 @@ export const upsertFaq = gql`
   }
 `;
 
-export const editTeamMember = gql`
-  mutation updateTeamMemberInfo ($id: ID!, $teamMemberDetailsInput: TeamMemberInput!) {
-    updateTeamMemberInfo (
-      id: $id,
-      teamMemberDetailsInput: $teamMemberDetailsInput
-    ) {
+export const faqsListByFilters = gql`
+  query faqsListByFilters ($question: String, $faqType: FaqTypesEnum, $categoryId: String, $itemStatus: ArticleStatusEnum){
+    faqsListByFilters (question: $question, faqType: $faqType, categoryId: $categoryId, itemStatus: $itemStatus){
       id
-      memberName
-      avatar
-      story
-      title
-      heroImage
-      social {
-        type
-        url
+      slug
+      author{
+        info{
+          firstName
+          lastName
+        }
       }
-      order
-      isPublished
-    }
-  }
-`;
-
-export const filteredTeamMembers = gql`
-  query filterTeamMemberByMemberName ($memberName: String){
-    filterTeamMemberByMemberName (memberName: $memberName){
-      id
-      memberName
-      avatar
-      story
-      title
-      heroImage
-      social {
-        type
-        url
+      question
+      categoryName
+      answer
+      faqType
+      itemStatus
+      updated{
+        by
+        date
       }
-      order
     }
   }
 `;

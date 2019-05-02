@@ -25,17 +25,19 @@ export const GLOBAL_ACTIONS = [
 ];
 
 export const FAQ_STATUS_VALUES = [
+  { key: 'All', text: 'All', value: 'All' },
   { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
   { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
   { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN_REVIEW' },
 ];
 
 export const FAQ_TYPES_VALUES = [
-  { key: 'ISSUER_FAQ', value: 'Issuer FAQ', text: 'ISSUER_FAQ' },
-  { key: 'INV_FAQ', value: 'Investor FAQ', text: 'INV_FAQ' },
-  { key: 'INV_TAX_FAQ', value: 'Investor Tax FAQ', text: 'INV_TAX_FAQ' },
-  { key: 'INV_STATEMETNS_FAQ', value: 'Investor Statements FAQ', text: 'INV_STATEMETNS_FAQ' },
-  { key: 'INV_LINKED_BANK_FAQ', value: 'Investor Linked Bank FAQ', text: 'INV_LINKED_BANK_FAQ' },
-  { key: 'INV_TRANSFER_FUNDS_FAQ', value: 'Investor Transfer Funds FAQ', text: 'INV_TRANSFER_FUNDS_FAQ' },
-  { key: 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ', value: 'Issuer Offering Creation Leadership FAQ', text: 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ' },
+  { key: 'All', text: 'All', value: 'All' },
+  { key: 'ISSUER_FAQ', text: 'Issuer FAQ', value: 'ISSUER_FAQ' },
+  { key: 'INV_FAQ', text: 'Investor FAQ', value: 'INV_FAQ' },
+  { key: 'INV_TAX_FAQ', text: 'Investor Tax FAQ', value: 'INV_TAX_FAQ' },
+  { key: 'INV_STATEMETNS_FAQ', text: 'Investor Statements FAQ', value: 'INV_STATEMETNS_FAQ' },
+  { key: 'INV_LINKED_BANK_FAQ', text: 'Investor Linked Bank FAQ', value: 'INV_LINKED_BANK_FAQ' },
+  { key: 'INV_TRANSFER_FUNDS_FAQ', text: 'Investor Transfer Funds FAQ', value: 'INV_TRANSFER_FUNDS_FAQ' },
+  { key: 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ', text: 'Issuer Offering Creation Leadership FAQ', value: 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ' },
 ];

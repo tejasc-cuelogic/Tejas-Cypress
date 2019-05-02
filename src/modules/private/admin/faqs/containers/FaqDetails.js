@@ -5,25 +5,26 @@ import { Modal, Header, Grid, Card, Form, Divider, Button } from 'semantic-ui-re
 import { InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { FormInput, FormDropDown } from '../../../../../theme/form';
-import { FAQ_STATUS_VALUES, AUTHORS, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/faqs';
+import { FAQ_STATUS_VALUES, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/faqs';
 
 @inject('faqStore', 'uiStore', 'articleStore')
 @withRouter
 @observer
 export default class FaqDetails extends Component {
   componentWillMount() {
-    const { match, faqStore } = this.props;
+    const { match } = this.props;
     const { id } = match.params;
-    const { editMode } = faqStore;
-    if (id !== 'new' && !editMode) {
+    if (id !== 'new') {
       this.props.faqStore.getOne(id);
+    } else {
+      this.props.faqStore.reset();
     }
   }
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   };
-  save = () => {
-    this.props.faqStore.save(this.props.match.params.id).then(() => {
+  save = (isDraft = false) => {
+    this.props.faqStore.save(this.props.match.params.id, isDraft).then(() => {
       this.props.history.push(this.props.refLink);
     });
   }
@@ -41,7 +42,7 @@ export default class FaqDetails extends Component {
       return <InlineLoader />;
     }
     return (
-      <Modal dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
+      <Modal dimmer="inverted" open closeOnDimmerClick={false} onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
@@ -49,14 +50,14 @@ export default class FaqDetails extends Component {
               <Button.Group compact floated="right">
                 <Button
                   inverted
-                  onClick={() => this.save('DRAFT')}
+                  onClick={() => this.save(true)}
                   color="green"
                   content="Save as draft"
                   disabled={!FAQ_FRM.meta.isValid}
                 />
                 <Button
                   primary
-                  onClick={() => this.save('PENDING')}
+                  onClick={() => this.save()}
                   content="Submit for Approval"
                   disabled={!FAQ_FRM.meta.isValid}
                 />
@@ -70,12 +71,10 @@ export default class FaqDetails extends Component {
                 <small>Article name</small>
                 <Form>
                   <FormInput
-                    // readOnly={(this.props.status === 'PUBLISHED' &&
-                    // isManager) ? !this.state.editForm : isReadonly}
                     ishidelabel
                     fluid
                     type="text"
-                    name="title"
+                    name="question"
                     fielddata={FAQ_FRM.fields.question}
                     changed={formChange}
                   />
@@ -108,15 +107,12 @@ export default class FaqDetails extends Component {
                         />
                       </div>
                       <div className="field">
-                        <FormDropDown
-                          fielddata={FAQ_FRM.fields.author}
-                          selection
-                          containerclassname="dropdown-field"
-                          value={FAQ_FRM.fields.author.value}
-                          placeholder="Choose here"
+                        <FormInput
+                          fluid
+                          type="text"
                           name="author"
-                          options={AUTHORS}
-                          onChange={(e, result) => formChange(e, result)}
+                          fielddata={FAQ_FRM.fields.author}
+                          changed={formChange}
                         />
                       </div>
                       <div className="field">
