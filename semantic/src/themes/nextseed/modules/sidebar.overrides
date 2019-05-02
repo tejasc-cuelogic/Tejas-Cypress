@@ -503,6 +503,7 @@
 	}
 	.user-picture{
 		color:@white;
+		border-color:@neutral-middark;
 	}
 	// &.visible .user-picture:hover{
 	// 	background-color:@neutral;
