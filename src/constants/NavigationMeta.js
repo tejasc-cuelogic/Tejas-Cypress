@@ -59,6 +59,12 @@ export const PRIVATE_NAV = [
     subPanel: 0,
   },
   {
+    title: 'INVESTMENT ACCOUNTS',
+    accessibleTo: ['ira', 'individual', 'entity'],
+    isMenuHeader: true,
+    subPanel: 0,
+  },
+  {
     icon: 'ns-article',
     title: 'Application',
     to: 'business-application/:applicationType/:applicationId',
@@ -143,6 +149,31 @@ export const PRIVATE_NAV = [
   //   path: 'investor/rewardsWallet/containers/RewardsWallet',
   //   accessibleTo: ['ira', 'individual', 'entity'],
   // },
+  {
+    title: 'Account Settings',
+    icon: 'ns-setting',
+    to: 'profile-settings',
+    heading: 'Profile Settings',
+    subPanel: 1,
+    accessibleTo: [],
+    path: 'shared/settings/containers/ProfileSettings',
+    subNavigations: [
+      { title: 'Profile Data', to: 'profile-data', component: 'ProfileData' },
+      {
+        title: 'Investment limits', to: 'investment-limits', component: 'InvestmentLimits', accessibleTo: ['investor'],
+      },
+      { title: 'Security', to: 'security', component: 'Security' },
+      // {
+      //   title: 'Beneficiaries',
+      //   to: 'beneficiaries',
+      //   component: 'Beneficiaries',
+      //   accessibleTo: ['investor'],
+      // },
+      {
+        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
+      },
+    ],
+  },
   {
     icon: 'ns-comments-edit',
     title: 'Referrals',
@@ -406,31 +437,6 @@ export const PRIVATE_NAV = [
     subNavigations: [
       { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
       { title: 'Data', to: 'data', component: 'Data' },
-    ],
-  },
-  {
-    title: 'Settings',
-    icon: 'ns-setting',
-    to: 'profile-settings',
-    heading: 'Profile Settings',
-    subPanel: 1,
-    accessibleTo: [],
-    path: 'shared/settings/containers/ProfileSettings',
-    subNavigations: [
-      { title: 'Profile Data', to: 'profile-data', component: 'ProfileData' },
-      {
-        title: 'Investment limits', to: 'investment-limits', component: 'InvestmentLimits', accessibleTo: ['investor'],
-      },
-      { title: 'Security', to: 'security', component: 'Security' },
-      // {
-      //   title: 'Beneficiaries',
-      //   to: 'beneficiaries',
-      //   component: 'Beneficiaries',
-      //   accessibleTo: ['investor'],
-      // },
-      {
-        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
-      },
     ],
   },
 ];
