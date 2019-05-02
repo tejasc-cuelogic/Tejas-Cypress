@@ -77,7 +77,7 @@ export const DropdownFilterWithHeader = props => (
 
 export const ByKeyword = ({
   w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon,
-  more, enableSearch, change, addLabel,
+  more, enableSearch, change, addLabel, name,
 }) => (
   <Aux>
     <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
@@ -86,7 +86,7 @@ export const ByKeyword = ({
           {addLabel ? <label>{addLabel || addLabel}</label> : ''}
           {fLabel && <label className="invisible">{placeholder}</label>}
           {!enableSearch &&
-          <Input fluid onChange={change} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />}
+          <Input fluid onChange={change} name={name} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />}
         </Form.Field>
       </Form>
     </Grid.Column>

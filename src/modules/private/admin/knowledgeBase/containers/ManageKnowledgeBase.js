@@ -12,8 +12,8 @@ import AllKnowledgeBaseItems from './../components/AllKnowledgeBaseItems';
 @inject('knowledgeBaseStore')
 @observer
 export default class ManageKnowledgeBase extends Component {
-  onAuthorChange = (e, { name, value }) => {
-    this.props.knowledgeBaseStore.setSearchFilters(name, value);
+  onFilterChange = (e) => {
+    this.props.knowledgeBaseStore.setSearchFilters(e.target.name, e.target.value);
   }
 
   setSearchParam = (e, { name, value }) => {
@@ -46,6 +46,7 @@ export default class ManageKnowledgeBase extends Component {
         P1={
           <Search
             {...this.props}
+            name="keyword"
             w={[10]}
             placeholder="Search by keyword or phrase"
             addon={
@@ -61,6 +62,7 @@ export default class ManageKnowledgeBase extends Component {
             setSearchParam={this.setSearchParam}
             removeFilter={this.removeFilter}
             requestState={requestState}
+            change={e => this.onFilterChange(e)}
           />
         }
         P2={
@@ -95,10 +97,7 @@ export default class ManageKnowledgeBase extends Component {
                       executeSearch={this.searchByAuthor}
                       toggleSearch={this.toggleSearch}
                       requestState={requestState}
-                      change={e => this.onAuthorChange(e, {
-                        name: 'authorName',
-                      value: requestState.search.authorName,
-                    })}
+                      change={e => this.onFilterChange(e)}
                     />
                   </Grid.Column>
                 </Grid.Row>

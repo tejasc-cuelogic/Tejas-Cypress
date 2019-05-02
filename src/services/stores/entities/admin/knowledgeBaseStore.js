@@ -73,8 +73,11 @@ export class KnowledgeBaseStore {
 
   @action
   setSearchFilters = (name, value) => {
-    const srchParams = { ...this.requestState.search };
-    srchParams[name] = value;
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      this.requestState.search[name] = value;
+    } else {
+      delete this.requestState.search[name];
+    }
   }
   @action
   initiateSearch = (srchParams, getAllUsers = false) => {
