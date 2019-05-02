@@ -31,7 +31,7 @@ class Offering extends Component {
         <Banner />
         <Responsive maxWidth={767} as={Container}>
           <Header as="h2" className="mt-30">
-            Invest in growing local<br /> businesses
+            Invest in growing local businesses
           </Header>
         </Responsive>
         <CampaignList

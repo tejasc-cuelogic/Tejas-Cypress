@@ -85,7 +85,7 @@ class Comments extends Component {
     const accountStatusFull = idVerification === 'PASS' || activeAccounts.length;
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && accountStatusFull);
     const readMoreLength = 250;
-    const { campaign } = this.props.campaignStore;
+    const { campaign, commentsMainThreadCount } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
     const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) < 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
@@ -146,7 +146,7 @@ class Comments extends Component {
                 }
               </Aux>
         }
-        {comments && comments.length ?
+        {comments && commentsMainThreadCount ?
           <Aux>
             <Segment color="green" className="mt-50 offering-comment">
               {comments &&
@@ -290,7 +290,7 @@ class Comments extends Component {
           </Aux>
           :
           <Segment color="green" className="mt-50 offering-comment">
-            <section className="center-align mt-80 mb-80">
+            <section className={`${isMobile ? 'mt-40 mb-40' : 'mt-80 mb-80'} center-align`}>
               <Header as="h3" className="grey-header">No Comments</Header>
             </section>
           </Segment>
