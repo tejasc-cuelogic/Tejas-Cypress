@@ -33,7 +33,7 @@ class KeyTermsDetails extends Component {
     const {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
-    const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
+    const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
     const investmentMultipleTooltip =
     isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
@@ -120,7 +120,7 @@ class KeyTermsDetails extends Component {
                 </Table.Cell>
                 <Table.Cell>
                   <p>
-                    {get(KeyTerms, 'investmentMultiple') ? `Up to ${get(KeyTerms, 'investmentMultiple')}x` : 'NA'}
+                    {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
                   </p>
                   <HtmlEditor
                     readOnly

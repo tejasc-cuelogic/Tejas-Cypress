@@ -14,6 +14,7 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 export default class KeyTerms extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
+    this.props.offeringCreationStore.setFormData('CLOSURE_SUMMARY_FRM', 'closureSummary.keyTerms');
   }
   onProFormasDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'KEY_TERMS_PROFORMAS', false, true);
@@ -38,7 +39,7 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
   render() {
     const {
-      KEY_TERMS_FRM, formArrayChange, maskArrayChange,
+      KEY_TERMS_FRM, CLOSURE_SUMMARY_FRM, formArrayChange, maskArrayChange,
       confirmModal, confirmModalName, removeData, currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
@@ -150,11 +151,17 @@ export default class KeyTerms extends Component {
               options={MODIFIED_REGULATION_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
-            <MaskedInput
+            <FormInput
               displayMode={isReadonly}
               name="investmentMultiple"
               fielddata={KEY_TERMS_FRM.fields.investmentMultiple}
-              changed={(values, name) => maskArrayChange(values, formName, name)}
+              changed={(e, result) => formArrayChange(e, result, formName)}
+            />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="multiple"
+              fielddata={CLOSURE_SUMMARY_FRM.fields.multiple}
+              changed={(values, name) => maskArrayChange(values, 'CLOSURE_SUMMARY_FRM', name)}
               currency
             />
             <FormInput
