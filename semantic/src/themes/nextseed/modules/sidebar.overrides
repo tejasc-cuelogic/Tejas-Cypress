@@ -100,10 +100,11 @@
 			margin-bottom:@1px !important;
 			font-weight:400;
 			&.menu-header .header:not(.ui){
-				margin:0.5em 0 0;
+				margin:@18px 0 0;
 			}
 			&.ui.dropdown>.text{
-				max-width:~"calc(100% - 27px)";
+				float:left;
+				width:~"calc(100% - 27px)";
 			}
 			// &:first-of-type{
 			// 	margin-bottom:@30px;
@@ -127,13 +128,16 @@
 				white-space: nowrap;
 				overflow: hidden;
 			}
-			&:not(:last-child), &:not(.menu-header){
+			&:not(:last-child){
 				&:hover, &:focus, &.active{
 					background:@neutral-offwhite;
 					.icon:not(.dropdown){
 						color:@primary-one;
 					}
 				}
+			}
+			&.menu-header:hover{
+				background-color:transparent;
 			}
 			&.add-account{
 				// width:220px;
@@ -190,21 +194,18 @@
 				margin-left:@30px;
 				// max-width:153px;
 			}
-			&.menu-header{
-				padding-bottom:0;
-			}
 			&.dropdown{
 				// .menu>.item:first-of-type{
 				// 	margin-bottom:@3px;
 				// }
 				.icon.dropdown{
-					float:none;
+					// float:none;
 					font-family:'Nextseed';
 					height:22px;
 					line-height:22px;
 					vertical-align:top;
 					&:before{
-						content:"\e90d";
+						content:"\e914";
 					}
 				}
 				&.active .icon.dropdown{
