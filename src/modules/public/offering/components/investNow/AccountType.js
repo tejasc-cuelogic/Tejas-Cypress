@@ -130,7 +130,14 @@ class AccountType extends Component {
     prepareAccountTypes(accountToConsider);
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
-    const offeringDetailObj = this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
+    // const offeringDetailObj =
+    // this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
+    let offeringDetailObj = {};
+    if (this.props.changeInvest) {
+      offeringDetailObj = campaign && campaign.keyTerms ? campaign : get(getInvestorAccountById, 'offering');
+    } else {
+      offeringDetailObj = campaign;
+    }
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
@@ -144,7 +151,7 @@ class AccountType extends Component {
           // const { getInvestorAccountById } = this.props.portfolioStore;
           // const offeringRegulation = get(getInvestorAccountById, 'offering.keyTerms.regulation');
           const accreditationStatus = get(userDetails, 'accreditation.status');
-          const isParallelOfferingModelToShow = !!(offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
+          const isParallelOfferingModelToShow = !!(offeringReuglation && offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
           if (!isParallelOfferingModelToShow) {
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
@@ -172,7 +179,8 @@ class AccountType extends Component {
     const userInfoDetails = this.props.userDetailsStore.userDetails;
     const userStatus = userInfoDetails && userInfoDetails.status;
     const { campaign } = this.props.campaignStore;
-    const offeringReuglation = campaign && campaign.regulation;
+    // const offeringReuglation = campaign && campaign.regulation;
+    const offeringReuglation = get(campaign, 'keyTerms.regulation');
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
@@ -182,7 +190,7 @@ class AccountType extends Component {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         if (this.props.changeInvest) {
           const { getInvestorAccountById } = this.props.portfolioStore;
-          const offeringRegulation = get(getInvestorAccountById, 'offering.keyTerms.regulation');
+          const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
           const accreditationStatus = get(userDetails, 'accreditation.status');
           const isParallelOfferingModelToShow = !!(offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
           if (!isParallelOfferingModelToShow) {
@@ -236,7 +244,14 @@ class AccountType extends Component {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
     const offeringId = get(campaign, 'id');
-    const offeringDetailObj = this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
+    // const offeringDetailObj =
+    //  this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
+    let offeringDetailObj = {};
+    if (this.props.changeInvest) {
+      offeringDetailObj = campaign && campaign.keyTerms ? campaign : get(getInvestorAccountById, 'offering');
+    } else {
+      offeringDetailObj = campaign;
+    }
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
     const offeringTitle = get(offeringDetailObj, 'keyTerms.shorthandBusinessName');
     const offeringRegulationDMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmount506C');

@@ -125,6 +125,8 @@ export default class Agreement extends React.Component {
     const regulationCheck = this.props.changeInvestment && investmentRegulation ?
       investmentRegulation : currentInvestmentStatus;
     const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : 'Regulation Crowdfunding';
+    const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
+    const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     return (
       <Aux>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -173,9 +175,7 @@ export default class Agreement extends React.Component {
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
                 Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in
-                {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
-                  getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
+                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
               </Header>
               <Form
                 error={(this.state.showError &&
@@ -224,7 +224,7 @@ export default class Agreement extends React.Component {
                               </Aux>
                           )}
                           customUpdateLimitLabel={(
-                            regulationCheck && regulationCheck === 'D506C' ?
+                            regulationCheck && regulationCheck === 'BD_506C' ?
                               <Aux>
                                 I hereby certify that I have a reasonable expectation that I will
                                  continue to meet or exceed the requirements to be considered an
@@ -243,7 +243,7 @@ export default class Agreement extends React.Component {
                                 any funds unless I can afford to lose the entire amount.
                             </Aux>
                           )}
-                          tooltipHardDisable={(regulationCheck && regulationCheck === 'D506C')}
+                          tooltipHardDisable={(regulationCheck && regulationCheck === 'BD_506C')}
                           currentInvestmentStatus={regulationCheck}
                         />
                       </Grid.Column>

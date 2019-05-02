@@ -26,12 +26,10 @@ export default class CampaignList extends Component {
     this.setState({ filters: filters === false });
   }
   renderBaners = (offering) => {
-    const { generateBanner } = this.props.campaignStore;
-    const bnnerResult = generateBanner(offering);
-    const resultFound = get(bnnerResult, 'isBannerShow');
+    const resultFound = get(offering, 'isBannerShow');
     if (resultFound) {
-      const bannerFirst = get(bnnerResult, 'bannerFirstText');
-      const bannerSecond = get(bnnerResult, 'bannerSecondText');
+      const bannerFirst = get(offering, 'bannerFirstText');
+      const bannerSecond = get(offering, 'bannerSecondText');
       return (
         <Label.Group size="small">
           {bannerFirst &&

@@ -35,7 +35,7 @@ export default class InvestNow extends React.Component {
     if (this.props.changeInvest) {
       const { offeringId } = this.props.match.params;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
-      this.props.campaignStore.getCampaignDetails(offeringId);
+      this.props.campaignStore.getCampaignDetails(offeringId, true);
     }
   }
   componentDidMount() {
@@ -45,8 +45,11 @@ export default class InvestNow extends React.Component {
     const { changeInvest } = this.props;
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
+    const matchURL = this.props.match.url;
     if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
-      this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+      if (!matchURL.includes('portfolio')) {
+        this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
+      }
       this.props.accreditationStore.resetAccreditationObject();
       this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
       if (!reflectedURL.includes('agreement')) {

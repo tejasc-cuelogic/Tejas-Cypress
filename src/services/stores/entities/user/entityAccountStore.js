@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, get, map } from 'lodash';
+import { isEmpty, find, get, map, isNull } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import {
@@ -572,13 +572,10 @@ class EntityAccountStore {
             this.setEntityAttributes('Formation doc');
           }
           bankAccountStore.validateAddFunds();
-          // const { isValid } = bankAccountStore.formEntityAddFunds.meta;
-          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+          if (account.details.linkedBank) {
             bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-            // if (isValid) {
             bankAccountStore.formEntityAddFunds.fields.value.value =
             account.details.initialDepositAmount;
-            // }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
@@ -588,17 +585,17 @@ class EntityAccountStore {
               }
               return null;
             });
-            if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+            if (account.details.linkedBank.routingNumber !== '' &&
             account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
-            // if (isValid) {
             bankAccountStore.formEntityAddFunds.fields.value.value =
             account.details.initialDepositAmount;
-            // }
           }
           bankAccountStore.validateAddFunds();
-          // bankAccountStore.validateAddfundsAmount();
+          if (bankAccountStore.isAccountPresent && isNull(account.details.initialDepositAmount)) {
+            bankAccountStore.setShowAddFunds();
+          }
           this.renderAfterPopulate();
         }
       }

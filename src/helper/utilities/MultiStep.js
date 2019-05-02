@@ -141,7 +141,12 @@ export default class MultiStep extends React.Component {
         this.setNavState(this.state.compState + 1);
         this.props.bankSummarySubmit();
       } else if (this.props.isAccountCreation) {
-        this.props.createAccount(this.props.steps[this.state.compState]);
+        if (this.props.steps[this.state.compState].validForm) {
+          this.setNavState(this.state.compState + 1);
+          this.props.setStepTobeRendered(this.state.compState + 1);
+        } else {
+          this.props.createAccount(this.props.steps[this.state.compState]);
+        }
       } else {
         this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
@@ -166,8 +171,21 @@ export default class MultiStep extends React.Component {
 
   previous() {
     if (this.state.compState > 0) {
-      this.setNavState(this.state.compState - 1);
-      this.props.setStepTobeRendered(this.state.compState - 1);
+      if (this.props.isAccountCreation) {
+        if (this.props.steps[this.state.compState].addFunds) {
+          this.props.setLinkbankSummary();
+          this.setNavState(this.state.compState - 1);
+          this.props.setStepTobeRendered(this.state.compState - 1);
+        } else if (this.props.isAddFundsScreen) {
+          this.props.setLinkbankSummary();
+        } else {
+          this.setNavState(this.state.compState - 1);
+          this.props.setStepTobeRendered(this.state.compState - 1);
+        }
+      } else {
+        this.setNavState(this.state.compState - 1);
+        this.props.setStepTobeRendered(this.state.compState - 1);
+      }
     } else if (this.state.compState === 0 && this.props.setStepTobeRenderedForAlert) {
       this.setNavState(0);
       this.props.setStepTobeRenderedForAlert();

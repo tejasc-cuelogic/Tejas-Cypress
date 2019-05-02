@@ -28,6 +28,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       }
       closureSummary {
         processingDate
+        launchDate
         hardCloseDate
         totalInvestmentAmount
         totalInvestorCount
@@ -231,6 +232,7 @@ export const campaignDetailsQuery = gql`
     closureSummary {
       processingDate
       hardCloseDate
+      launchDate
       totalInvestmentAmount
       totalInvestorCount
       repayment {

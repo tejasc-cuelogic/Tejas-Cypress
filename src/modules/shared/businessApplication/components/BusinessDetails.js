@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { toJS } from 'mobx';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../theme/shared';
@@ -63,7 +62,6 @@ export default class BusinessDetails extends Component {
       BUSINESS_DETAILS_FRM, businessDetailsChange, businessAppUploadFiles,
       businessAppRemoveFiles, addMoreForms, businessDetailsMaskingChange,
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
-      sharedLink,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { docLoading, docIdsLoading } = this.props.agreementsStore;
@@ -91,34 +89,19 @@ export default class BusinessDetails extends Component {
               </Aux>
             }
           >
-            {!formReadOnlyMode ?
-              <DropZone
-                toolTipClassName="left-align justify-text"
-                hideFields={hideFields}
-                tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
-                disabled={formReadOnlyMode}
-                multiple
-                asterisk="true"
-                name="businessPlan"
-                fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
-                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
-                onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
-              />
-              :
-              BUSINESS_DETAILS_FRM.fields.businessPlan.value.length !== 0 &&
-                toJS(BUSINESS_DETAILS_FRM.fields.businessPlan.value).map((element, key) => (
-                  <Aux>
-                    <Button
-                      key
-                      className={`link-button ${this.props.commonStore.inProgress === BUSINESS_DETAILS_FRM.fields.businessPlan.fileId[key] ? '' : 'green'}`}
-                      onClick={() =>
-                      sharedLink(BUSINESS_DETAILS_FRM.fields.businessPlan.fileId[key])}
-                      content={this.props.commonStore.inProgress === BUSINESS_DETAILS_FRM.fields.businessPlan.fileId[key] ? 'Loading...' : element}
-                    />
-                    <br />
-                  </Aux>
-                ))
-            }
+            <DropZone
+              sharableLink
+              toolTipClassName="left-align justify-text"
+              hideFields={hideFields}
+              tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
+              disabled={formReadOnlyMode}
+              multiple
+              asterisk="true"
+              name="businessPlan"
+              fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
+              ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
+              onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
+            />
           </FormElementWrap>
           <FormElementWrap
             hideFields={hideFields}
@@ -305,27 +288,15 @@ export default class BusinessDetails extends Component {
                         changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
                       />
                       <Form.Field>
-                        {!formReadOnlyMode ?
-                          <DropZone
-                            hideFields={hideFields}
-                            disabled={formReadOnlyMode}
-                            name="resume"
-                            fielddata={owner.resume}
-                            ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
-                            onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
-                          />
-                          :
-                          owner.resume.value && owner.resume.fileId &&
-                          <Aux>
-                            <label>{owner.resume.label}</label>
-                            <Button
-                              key
-                              className={`link-button ${this.props.commonStore.inProgress === owner.resume.fileId ? '' : 'green'}`}
-                              onClick={() => sharedLink(owner.resume.fileId)}
-                              content={this.props.commonStore.inProgress === owner.resume.fileId ? 'Loading...' : owner.resume.value}
-                            />
-                          </Aux>
-                        }
+                        <DropZone
+                          sharableLink
+                          hideFields={hideFields}
+                          disabled={formReadOnlyMode}
+                          name="resume"
+                          fielddata={owner.resume}
+                          ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                          onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                        />
                       </Form.Field>
                     </Form.Group>
                   </div>

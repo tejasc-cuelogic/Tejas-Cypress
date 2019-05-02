@@ -26,15 +26,16 @@ export default class CampaignSideBar extends Component {
     this.props.history.push(`${this.props.match.url}/invest-now`);
   }
   render() {
-    const { className, campaignStore } = this.props;
-    const { campaign, navCountData } = campaignStore;
+    const { campaignStore } = this.props;
+    const { campaign, navCountData, campaignSideBarShow } = campaignStore;
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
-    const percent = (collected / maxOffering) * 100;
+    const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
+    const percent = (collected / minMaxOffering) * 100;
     const processingDate = campaign && campaign.closureSummary &&
     campaign.closureSummary.processingDate;
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
@@ -47,7 +48,7 @@ export default class CampaignSideBar extends Component {
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
-        <div className={`${className} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
+        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
           <Responsive maxWidth={991} as={Aux}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>

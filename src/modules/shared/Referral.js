@@ -1,10 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import cookie from 'react-cookies';
 import Banner from '../public/home/components/Banner';
 import NotFound from './NotFound';
 
-@inject('campaignStore')
+@inject('campaignStore', 'authStore', 'commonStore', 'userStore')
 @observer
 export default class Referral extends React.Component {
   state = { found: 0 }; // 0: not started, 1: loading, 2: found, 3: not found
@@ -13,7 +12,12 @@ export default class Referral extends React.Component {
     this.props.campaignStore.initRequest(['active'], referralCode).then((data) => {
       if (data) {
         this.setState({ found: 2 });
-        cookie.save('ISSUER_REFERRAL_CODE', data.referralCode, { maxAge: 86400000 });
+        if (this.props.authStore.isUserLoggedIn) {
+          this.props.commonStore
+            .updateUserReferralCode(this.props.userStore.currentUser.sub, data.referralCode);
+        } else {
+          window.localStorage.setItem('ISSUER_REFERRAL_CODE', data.referralCode);
+        }
         this.props.history.push(`/offerings/${data.offeringSlug}/overview`);
       } else {
         this.setState({ found: 3 });
