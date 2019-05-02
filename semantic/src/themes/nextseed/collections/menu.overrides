@@ -823,6 +823,7 @@ footer{
     bottom: 0;
     width: 0;
     text-align: center;
+    visibility: hidden;
     .ui.menu{
         justify-content: center;
         align-items: center;
