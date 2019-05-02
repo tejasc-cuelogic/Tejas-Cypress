@@ -136,24 +136,6 @@ export const INCOME_QAL = {
     rule: 'required',
   },
 };
-export const FILLING_STATUS = {
-  method: {
-    value: '',
-    values:
-      [
-        {
-          label: 'No',
-          value: false,
-        },
-        {
-          label: 'Yes',
-          value: true,
-        },
-      ],
-    error: undefined,
-    rule: 'required',
-  },
-};
 export const NETWORTH_QAL = {
   method: {
     value: '',
@@ -224,24 +206,12 @@ export const VERIFICATION_REQUEST = {
 };
 
 export const INCOME_UPLOAD_DOCUMENTS = {
-  isAcceptedForfilling: {
+  isAccepted: {
     skipField: true,
     value: [],
     values: [
       {
         label: 'I hereby certify that I have a reasonable expectation that my income will meet or exceed the requirement to be considered an accredited investor in 2019.',
-        value: 'ACCEPTED',
-      },
-    ],
-    error: undefined,
-    rule: 'required',
-  },
-  isAcceptedForUnfilling: {
-    skipField: true,
-    value: [],
-    values: [
-      {
-        label: 'There are not yet tax returns, Form W-2s, or other IRS or foreign tax authority documents that evidence my income for 2018. I hereby certify that my income in 2018 met or exceeded the requirement to be considered an accredited investor, and I have a reasonable expectation that my income will meet or exceed such requirement in 2019. I acknowledge that I must provide appropriate documentation for 2018 once it becomes available.',
         value: 'ACCEPTED',
       },
     ],
@@ -264,20 +234,6 @@ export const INCOME_UPLOAD_DOCUMENTS = {
   },
   incomeDocLastYear: {
     label: '2018 Income Documentation',
-    value: '',
-    error: undefined,
-    rule: 'required',
-    showLoader: false,
-    preSignedUrl: '',
-    fileId: '',
-    fileData: '',
-    customErrors: { required: 'required' },
-    objRefOutput: 'assetsUpload',
-    objRef: 'assetsUpload',
-    objType: 'FileObjectType',
-  },
-  incomeDocThirdLastYear: {
-    label: '2016 Income Documentation',
     value: '',
     error: undefined,
     rule: 'required',

@@ -8,7 +8,6 @@ import IncomeEvidence from './shared/IncomeEvidence';
 import Verification from './shared/Verification';
 import IncomeQualCheck from './shared/IncomeQualCheck';
 import NetWorthCheck from './shared/NetWorthQualCheck';
-import FillingStatus from './shared/FillingStatus';
 import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMethod';
 
@@ -19,19 +18,13 @@ const StepsMetaData = {
     isHideLabel: true,
     formName: 'ACCREDITATION_FORM',
     isDirty: true,
+    disablePrevButton: true,
   },
   NETWORTH_QAL_FORM: {
     name: 'Net worth',
     component: <NetWorthCheck />,
     formName: 'NETWORTH_QAL_FORM',
     isDirty: true,
-  },
-  FILLING_STATUS_FORM: {
-    name: '',
-    component: <FillingStatus />,
-    formName: 'FILLING_STATUS_FORM',
-    isDirty: true,
-    isValid: true,
   },
   NET_WORTH_FORM: {
     name: 'Net worth',

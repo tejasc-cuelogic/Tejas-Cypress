@@ -133,7 +133,7 @@ const LegalDetails = observer(({
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="very relaxed" content="Verify my identity" />
+          <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={inProgress} />
         </div>
       </Form>
     </Modal.Content>
