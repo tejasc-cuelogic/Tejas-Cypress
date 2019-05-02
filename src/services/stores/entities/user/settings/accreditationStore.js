@@ -2,7 +2,7 @@ import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
-import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, FILLING_STATUS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
+import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -23,7 +23,6 @@ export class AccreditationStore {
     Validator.prepareFormObject(TRUST_ENTITY_ACCREDITATION);
   @observable NETWORTH_QAL_FORM = Validator.prepareFormObject(NETWORTH_QAL);
   @observable ACCREDITATION_FORM = Validator.prepareFormObject(INCOME_QAL);
-  @observable FILLING_STATUS_FORM = Validator.prepareFormObject(FILLING_STATUS);
   @observable VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
   @observable INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
   @observable ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
@@ -275,8 +274,7 @@ export class AccreditationStore {
       this.setFormFileArray(form, field, 'preSignedUrl', '');
     }
     if (form === 'INCOME_UPLOAD_DOC_FORM') {
-      this[form].fields.isAcceptedForfilling.value = [];
-      this[form].fields.isAcceptedForUnfilling.value = [];
+      this[form].fields.isAccepted.value = [];
     }
     this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
@@ -316,7 +314,7 @@ export class AccreditationStore {
 
   @action
   resetAllForms = () => {
-    const forms = ['NETWORTH_QAL_FORM', 'FILLING_STATUS_FORM', 'ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
+    const forms = ['NETWORTH_QAL_FORM', 'ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
     forms.forEach((formName) => {
       Validator.resetFormData(this[formName]);
     });
@@ -397,7 +395,6 @@ export class AccreditationStore {
       ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10],
       INCOME_UPLOAD_DOC_FORM: [2, 12],
       ENTITY_ACCREDITATION_FORM: [],
-      FILLING_STATUS_FORM: [],
       TRUST_ENTITY_ACCREDITATION_FRM: [7, 8, 9, 10, 11, 12],
     };
     const formList = [];
@@ -576,17 +573,8 @@ export class AccreditationStore {
     if (filesData && filesData.length) {
       this.INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
       this.ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
-      const filingStatus = find(filesData, obj => obj.type === 'INCOME_2018');
-      if (filingStatus) {
-        this.FILLING_STATUS_FORM.fields.method.value = true;
-        this.changeRuleAsPerFilingStatus(true);
-      } else {
-        this.FILLING_STATUS_FORM.fields.method.value = false;
-        this.changeRuleAsPerFilingStatus(false);
-      }
       if (filesData) {
-        this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.value = ['ACCEPTED'];
-        this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.value = ['ACCEPTED'];
+        this.INCOME_UPLOAD_DOC_FORM.fields.isAccepted.value = ['ACCEPTED'];
         this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = ['ACCEPTED'];
       }
       forEach(filesData, (file) => {
@@ -1014,7 +1002,7 @@ export class AccreditationStore {
   changeRuleAsPerFilingStatus = (isFilingTrue) => {
     this.filingStatus = isFilingTrue;
     this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = isFilingTrue ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAccepted.rule = isFilingTrue ? 'required' : 'optional';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
