@@ -21,7 +21,7 @@ export default class CrowdPay extends Component {
     }
   }
   change = (date, field) => {
-    if (date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+    if ((date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) || date.value === '') {
       this.props.accreditationStore.setInitiateSrch(field, date);
     }
   }

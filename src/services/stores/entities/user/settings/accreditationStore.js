@@ -338,7 +338,9 @@ export class AccreditationStore {
     if (name === 'startDate' || name === 'endDate') {
       const date = DataFormatter.getDate(value.formattedValue, true, name);
       this.requestState.search[name] = date;
-      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
+      if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') ||
+      (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
+      ) {
         const srchParams = { ...this.requestState.search };
         this.initiateSearch(srchParams);
       }
