@@ -2,6 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, get, filter, orderBy } from 'lodash';
 import money from 'money-math';
+import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -9,8 +10,9 @@ import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsFor
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
-import uiStore from '../shared/uiStore';
+// import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
+import { DataFormatter } from '../../../../helper';
 
 export class CampaignStore {
   @observable data = [];
@@ -96,7 +98,11 @@ export class CampaignStore {
 
   @computed get getEarlyBirdCheck() {
     return this.earlyBirdCheck && this.earlyBirdCheck.data &&
-    this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
+      this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
+  }
+
+  @computed get earlyBirdLoading() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.loading;
   }
 
   @computed get OfferingList() {
@@ -105,13 +111,20 @@ export class CampaignStore {
   }
 
   @computed get active() {
-    const offeringList = this.activeList.slice();
+    const offeringList = this.orderedActiveList.slice();
     return offeringList.splice(0, this.activeToDisplay);
   }
 
   @computed get activeList() {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     return orderBy(activeListArr, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
+  }
+
+  @computed get orderedActiveList() {
+    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    const orderedActiveListArr =
+      activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
+    return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
   }
 
   @computed get completed() {
@@ -150,26 +163,28 @@ export class CampaignStore {
   }
 
   @action
-  isEarlyBirdExist(accountType) {
+  isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
-    uiStore.setProgress();
+    // uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
     this.earlyBirdCheck =
-    graphql({
-      client,
-      query: checkIfEarlyBirdExist,
-      variables: { offeringId, accountId },
-      onFetch: (data) => {
-        if (data && !this.earlyBirdCheck.loading) {
-          uiStore.setProgress(false);
-        }
-      },
-      onError: () => {
-        uiStore.setProgress(false);
-      },
-    });
+      graphql({
+        client,
+        query: checkIfEarlyBirdExist,
+        variables: { offeringId, accountId },
+        // onFetch: (data) => {
+        //   if (data && !this.earlyBirdCheck.loading) {
+        //     uiStore.setProgress(false);
+        //   }
+        // },
+        // onError: (err) => {
+        //   console.log(err);
+        //   uiStore.setProgress(false);
+        // },
+      });
   }
 
   @computed
@@ -212,7 +227,7 @@ export class CampaignStore {
 
   @computed get dataRoomDocs() {
     return this.campaign && this.campaign.legal && this.campaign.legal.dataroom
-    && this.campaign.legal.dataroom.documents ?
+      && this.campaign.legal.dataroom.documents ?
       this.campaign.legal.dataroom.documents : [];
   }
 
@@ -233,14 +248,14 @@ export class CampaignStore {
   @action
   updateDocs = ele => this.docsWithBoxLink.push(ele);
 
-   getIndexValue = vale => this.campaign.legal.dataroom.documents
-      && this.campaign.legal.dataroom.documents
-        .findIndex(x => x.upload.fileId === vale);
+  getIndexValue = vale => this.campaign.legal.dataroom.documents
+    && this.campaign.legal.dataroom.documents
+      .findIndex(x => x.upload.fileId === vale);
 
   @computed get sortedDocswithBoxLink() {
-     return this.docsWithBoxLink.sort((a, b) =>
-       (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
-   }
+    return this.docsWithBoxLink.sort((a, b) =>
+      (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
+  }
 
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
     clientPublic.mutate({
@@ -260,8 +275,8 @@ export class CampaignStore {
       if (comments) {
         comments.map((c) => {
           if (c.scope === 'PUBLIC' &&
-          ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
-            (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+            ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
+              (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
             sum = sum + 1 + (get(c, 'threadComment.length') || 0);
           }
           return null;
@@ -298,6 +313,67 @@ export class CampaignStore {
       });
     });
     this.totalPaymentChart = payChart;
+  }
+
+  generateBanner = (offeringDetails, addObjectProps = false) => {
+    const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
+    const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
+    const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
+    const regulation = get(offeringKeyTermDetails, 'regulation');
+    const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
+    const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
+    const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
+    const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+    const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
+    const divResult = money.div(raisedAmount, minimumOfferingAmount);
+    const percent = money.mul(divResult, '100.00');
+    let labelBannerFirst = null;
+    let labelBannerSecond = null;
+    let bannerToShowFlag = false;
+    const resultObject = addObjectProps ? { ...offeringDetails } : {};
+    const customDateObj = {
+      number: 48,
+      format: 'Hours',
+    };
+    const launchDaysToRemains =
+    DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
+    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+    let order = null;
+    if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
+      launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
+      labelBannerFirst = 'NEW';
+      order = 0;
+    } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+      labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
+      order = closeDaysToRemains + 1;
+    } else if (closeDaysToRemains > 7) {
+      if (launchDaysToRemains !== null) {
+        order = 2047483647 + launchDaysToRemains;
+      } else {
+        order = 2057483647 + 1;
+      }
+    } else if (closeDaysToRemains === null) {
+      order = 2057483647 + 1;
+    }
+    const percentageCompairResult = money.cmp(percent, '50.00').toString();
+    const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
+    if (money.isNegative(amountCompairResult) &&
+      !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
+      labelBannerSecond = `${Math.round(percent)}% Funded`;
+      order = order !== null ? order : 2147483645;
+    } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+      labelBannerSecond = 'Reached Max';
+      order = 2147483647;
+    }
+    if (labelBannerFirst || labelBannerSecond) {
+      bannerToShowFlag = true;
+    }
+    resultObject.order = order !== null ? order : 2147483646;
+    resultObject.launchDate = moment(launchDate).unix() || null;
+    resultObject.isBannerShow = bannerToShowFlag;
+    resultObject.bannerFirstText = labelBannerFirst;
+    resultObject.bannerSecondText = labelBannerSecond;
+    return resultObject;
   }
 }
 

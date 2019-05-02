@@ -45,7 +45,7 @@ export default class OfferingDetails extends Component {
     const { offerLoading, offerOld } = offeringsStore;
     let { offer } = offeringsStore;
     offer = !offerLoading && offerOld.stage ? offerOld : offer;
-    if (offerLoading || (offerLoading && offer && !offer.stage)) {
+    if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
     const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
@@ -72,7 +72,7 @@ export default class OfferingDetails extends Component {
                 (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
               ))}
               <Header.Subheader className="mt-10">
-                <Link target="_blank" to={`/offerings/preview/${offer.offeringSlug}/overview`}>
+                <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}/overview`}>
                   <Icon className="ns-view" /><b>Preview the offering page</b>
                 </Link>
                 {offer.stage === 'CREATION' &&

@@ -16,16 +16,16 @@ export class AccountStore {
     0: {
       store: individualAccountStore,
       location: 1,
-      accountId: individualAccountStore.individualAccId,
+      accountId: 'individualAccId',
       name: 'individual',
     },
     1: {
-      store: iraAccountStore, location: 3, accountId: iraAccountStore.iraAccountId, name: 'ira',
+      store: iraAccountStore, location: 3, accountId: 'iraAccountId', name: 'ira',
     },
     2: {
       store: entityAccountStore,
       location: 5,
-      accountId: entityAccountStore.entityAccountId,
+      accountId: 'entityAccountId',
       name: 'entity',
     },
   };
@@ -53,7 +53,8 @@ export class AccountStore {
       get(userDetailsStore, 'currentUser.data.user.roles'),
       { name: this.ACC_TYPE_MAPPING[accountValue].name },
     );
-    return this.ACC_TYPE_MAPPING[accountValue].accountId ||
+    const { accountId } = this.ACC_TYPE_MAPPING[accountValue];
+    return this.ACC_TYPE_MAPPING[accountValue].store[accountId] ||
       get(accountDetails, 'details.accountId');
   }
 

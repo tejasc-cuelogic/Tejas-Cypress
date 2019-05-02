@@ -12,9 +12,6 @@ import Helper from '../../../../../helper/utility';
 @observer
 export default class AddFunds extends Component {
   componentWillMount() {
-    // this.props.bankAccountStore.validateAddFunds();
-    // eslint-disable-next-line max-len
-    // this.props.bankAccountStore.validateAddfundsAmount(this.props.accountStore.investmentAccType);
     this.props.bankAccountStore.setDepositMoneyNow(true);
   }
   componentDidMount() {
@@ -22,11 +19,9 @@ export default class AddFunds extends Component {
   }
   componentWillUnmount() {
     this.props.bankAccountStore.resetShowAddFunds();
-    // this.props.bankAccountStore.resetEntityAddFundsForm();
-    // this.props.bankAccountStore.resetAddFundsForm();
   }
   doNotDepositMoneyNow = () => {
-    this.props.bankAccountStore.resetAddFundsForm();
+    this.props.bankAccountStore.validateAddFunds();
     this.props.bankAccountStore.setDepositMoneyNow(false);
     this.renderStep();
   }

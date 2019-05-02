@@ -1353,6 +1353,9 @@ a.icon-link {
 			height: auto;
 		}
 	}
+	a {
+		cursor: pointer;
+	}
 }
 
 // Vertical Timeline End

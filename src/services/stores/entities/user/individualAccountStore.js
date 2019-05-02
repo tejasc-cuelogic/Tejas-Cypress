@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { isEmpty, find, get } from 'lodash';
+import { isEmpty, find, get, isNull } from 'lodash';
 import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
@@ -72,18 +72,15 @@ class IndividualAccountStore {
           }
         }).catch((err) => {
           console.log('Error', err);
-          uiStore.resetcreateAccountMessage();
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
               this.submitAccount();
             } else {
-              uiStore.setErrors(DataFormatter.getSimpleErr(err));
-              uiStore.setProgress(false);
+              uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
             }
           } else {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.setProgress(false);
+            uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           }
           reject();
         });
@@ -159,7 +156,6 @@ class IndividualAccountStore {
             variables,
           })
           .then(action((result) => {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             if (result.data.upsertInvestorAccount) {
               this.individualAccId = result.data.upsertInvestorAccount.accountId;
               const { linkedBank } = result.data.upsertInvestorAccount;
@@ -167,16 +163,10 @@ class IndividualAccountStore {
             }
             const { isValid } = bankAccountStore.formAddFunds.meta;
             if (currentStep) {
-              // FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
-              if (!bankAccountStore.depositMoneyNow) {
-                // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-              } else if (currentStep.name === 'Add funds' && isValid) {
+              if (currentStep.name === 'Add funds' && isValid) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
-            } else {
-              // Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
             }
-            // this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);
@@ -186,9 +176,6 @@ class IndividualAccountStore {
             uiStore.setProgress(false);
             reject();
           }));
-        // .finally(() => {
-        //   uiStore.setProgress(false);
-        // });
       })
         .catch(() => {
           uiStore.setProgress(false);
@@ -199,16 +186,13 @@ class IndividualAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bindividual(?![-])\b/])) {
       if (!isEmpty(userData) && !this.formStatus) {
         const account = find(userData.roles, { name: 'individual' });
-        // const { isValid } = bankAccountStore.formAddFunds.meta;
         if (account && account.details) {
-          // if (isValid) {
           bankAccountStore.formAddFunds.fields.value.value =
           account.details.initialDepositAmount;
-          // }
-          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+          if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
             bankAccountStore.setPlaidAccDetails(plaidAccDetails);
           } else {
@@ -225,17 +209,13 @@ class IndividualAccountStore {
           }
           bankAccountStore.validateAddFunds();
           bankAccountStore.validateAddfundsAmount();
-          const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0)
-            ? 2 : this.stepToBeRendered;
-          this.setStepToBeRendered(renderStep);
-          // uiStore.setProgress(false);
-          // if (!this.isManualLinkBankSubmitted && (
-          //   bankAccountStore.formLinkBankManually.meta.isValid ||
-          //   !isEmpty(bankAccountStore.plaidAccDetails))) {
-          //   const getIndividualStep = AccCreationHelper.individualSteps();
-          //   this.setStepToBeRendered(getIndividualStep.summary);
-          //   this.setIsManualLinkBankSubmitted(false);
-          // }
+          if (!bankAccountStore.isAccountPresent) {
+            this.setStepToBeRendered(0);
+          } else if (isNull(account.details.initialDepositAmount)) {
+            this.setStepToBeRendered(1);
+          } else {
+            this.setStepToBeRendered(2);
+          }
         }
       }
     }

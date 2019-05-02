@@ -33,13 +33,24 @@ export default class DropZone extends Component {
 
   handelGetFileHandel = (e, fileId) => {
     e.preventDefault();
-    this.props.commonStore.getBoxFileDetails(fileId).then((response) => {
-      const boxFileId = response && response.getFileDetails &&
-      response.getFileDetails.boxFileId;
-      if (boxFileId) {
-        window.open(`${NEXTSEED_BOX_URL}file/${boxFileId}`, '_blank');
-      }
-    });
+    if (this.props.sharableLink) {
+      const params = {
+        uploadId: fileId,
+        accountType: 'SERVICES',
+        type: 'FILES',
+      };
+      this.props.commonStore.getsharedLink(params).then((shareLink) => {
+        window.open(shareLink, '_blank');
+      });
+    } else {
+      this.props.commonStore.getBoxFileDetails(fileId).then((response) => {
+        const boxFileId = response && response.getFileDetails &&
+        response.getFileDetails.boxFileId;
+        if (boxFileId) {
+          window.open(`${NEXTSEED_BOX_URL}file/${boxFileId}`, '_blank');
+        }
+      });
+    }
   }
 
   render() {
@@ -50,7 +61,10 @@ export default class DropZone extends Component {
       showLoader,
       fileId,
     } = this.props.fielddata;
-    const { hideFields, size } = this.props;
+    const {
+      hideFields, size, commonStore, blockDownload,
+    } = this.props;
+    const { inProgress } = commonStore;
     return (
       <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label &&
@@ -101,8 +115,8 @@ export default class DropZone extends Component {
                   />
                 </Aux>
               }
-              {hideFields ?
-                <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId)} title={item}><Icon className="ns-file" />{item}</Link> :
+              {(hideFields && !blockDownload) ? inProgress === fileId[key] ? '...Loading'
+                : <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId[key])} title={item}><Icon className="ns-file" />{item}</Link> :
                 <span title={item}>{item}</span>
               }
             </div>
@@ -129,8 +143,8 @@ export default class DropZone extends Component {
                   />
                 </Aux>
               }
-              {hideFields ?
-                <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId)} title={value}><Icon className="ns-file" />{value}</Link> :
+              {(hideFields && !blockDownload) ? inProgress === fileId ? '...Loading'
+                : <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId)} title={value}><Icon className="ns-file" />{value}</Link> :
                 <span title={value}>{value}</span>
               }
             </div> : hideFields &&

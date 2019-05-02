@@ -1,4 +1,4 @@
-import { camelCase, upperFirst, reduce, assign } from 'lodash';
+import { camelCase, upperFirst, reduce, assign, get } from 'lodash';
 import moment from 'moment';
 
 class DataFormatter {
@@ -34,6 +34,26 @@ class DataFormatter {
   diffDays = (timeStamp2, inHours = false, returnNegative = false) => {
     const d1 = moment().format('MM/DD/YYYY');
     const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
+    const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
+    if (inHours) {
+      const date = new Date();
+      const convertedtimeStamp2 = new Date(timeStamp2);
+      const difference = convertedtimeStamp2.getTime() - date.getTime();
+      return Math.floor(difference / 1000 / 60 / 60);
+    }
+    if (!returnNegative && diff <= 0) {
+      return 0;
+    }
+    return diff;
+  }
+
+  diffDaysForLauch = (
+    timeStamp2, inHours = false, returnNegative = false, isCustomDate = false,
+    customDateObj = undefined,
+  ) => {
+    const d1 = moment().format('MM/DD/YYYY');
+    // const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
+    const d2 = isCustomDate && customDateObj && get(customDateObj, 'number') ? timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').add(customDateObj.number, customDateObj.format.toString()).format('MM/DD/YYYY') : null : timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
     const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
     if (inHours) {
       const date = new Date();

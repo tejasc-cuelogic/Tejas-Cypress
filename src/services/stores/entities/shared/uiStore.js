@@ -240,6 +240,12 @@ export class UiStore {
   setAuthRef = (url) => {
     this.authRef = url || '';
   }
+
+  resetUIAccountCreationError = (err) => {
+    this.resetcreateAccountMessage();
+    this.setErrors(err);
+    this.setProgress(false);
+  }
 }
 
 export default new UiStore();

@@ -68,8 +68,8 @@ export default class AccountCreation extends React.Component {
     } = this.props.entityAccountStore;
     const {
       formEntityAddFunds, isAccountPresent, formLinkBankManually,
-      isEntityPlaidDirty, linkbankSummary, bankSummarySubmit,
-      stepbankSummary,
+      isPlaidDirty, linkbankSummary, bankSummarySubmit,
+      stepbankSummary, setLinkBankSummary, showAddFunds,
     } = this.props.bankAccountStore;
     const steps =
       [
@@ -137,7 +137,7 @@ export default class AccountCreation extends React.Component {
           name: 'Link bank',
           component: <Plaid />,
           isValid: (formEntityAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 5 ? 'error' : '',
-          isDirty: isEntityPlaidDirty,
+          isDirty: isPlaidDirty,
           validate: validationActions.validateLinkBankForm,
           disableNextButton: !linkbankSummary,
           validForm: isAccountPresent,
@@ -158,7 +158,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress" >
-        <MultiStep isAccountCreation loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

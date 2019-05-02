@@ -15,10 +15,8 @@ export default class LinkbankSummary extends React.Component {
     this.props.bankAccountStore.fetchRoutingNumber();
   }
   componentDidUpdate() {
-    const {
-      setLoaderForAccountBlank,
-    } = this.props.bankAccountStore;
-    setLoaderForAccountBlank();
+    this.props.bankAccountStore.setLoaderForAccountBlank();
+    this.props.bankAccountStore.fetchRoutingNumber();
   }
 
   render() {

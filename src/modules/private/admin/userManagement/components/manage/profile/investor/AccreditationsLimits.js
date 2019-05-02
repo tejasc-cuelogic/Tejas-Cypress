@@ -57,6 +57,12 @@ export default class AccreditationsLimits extends Component {
                   <dt>Status :</dt>
                   <b><dd className={`${get(accreditationData[account.name], 'status') === 'REQUESTED' ? 'warning' : get(accreditationData[account.name], 'status') === 'CONFIRMED' ? 'positive' : get(accreditationData[account.name], 'status') === 'INVALID' ? 'negative' : ''}-text`}>{get(accreditationData[account.name], 'status') ? ACCREDITATION_STATUS_LABEL[get(accreditationData[account.name], 'status')] : 'N/A'}</dd></b>
                 </dl>
+                {accreditationData[account.name].status === 'INVALID' ?
+                  <dl className="dl-horizontal">
+                    <dt>Message :</dt>
+                    <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
+                  </dl> : ''
+                }
                 <Form.Group widths={4}>
                   <Form.Input fluid label="Accredited with" placeholder="Accredited with" value={get(ACCREDITATION_METHOD_ENUMS, get(accreditationData[account.name], 'method')) || 'N/A'} readOnly className="display-only" />
                   {get(accreditationData[account.name], 'netWorth') && <Form.Input fluid label="Net worth" placeholder="Net worth" value={Helper.MoneyMathDisplayCurrency(get(ACCREDITATION_NETWORTH_LABEL, get(accreditationData[account.name], 'netWorth')))} readOnly className="display-only" />}

@@ -38,6 +38,7 @@ export class NavStore {
 
   @computed get myRoutes() {
     try {
+      const uKey = _.get(userStore, 'currentUser.sub') || 'public';
       let permitted = [];
       const { roles } = this.params;
       if (userDetailsStore.signupStatus.isMigratedFullAccount
@@ -56,9 +57,9 @@ export class NavStore {
           signupStatus: userDetailsStore.signupStatus,
           permitted,
         };
-        localStorage.setItem(`${userStore.currentUser.sub}_pInfo`, JSON.stringify(pInvestorInfo));
+        localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
-      const pInvestorInfo = localStorage.getItem(`${userStore.currentUser.sub}_pInfo`);
+      const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
       if (userDetailsStore.userFirstLoad !== true &&
         (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {
@@ -192,8 +193,9 @@ export class NavStore {
       this.navMeta = nav;
     }
     const acctiveAccountList = userDetailsStore.getActiveAccounts;
+    const { accStatus } = userDetailsStore.signupStatus;
     if (this.navMeta && this.navMeta.subNavigations &&
-        acctiveAccountList && acctiveAccountList.length === 0) {
+        ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
       this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
     }
     if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations &&

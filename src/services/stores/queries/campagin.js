@@ -22,15 +22,21 @@ query getOfferingList($filters: OfferingFilterInputType){
         overview {
           tombstoneDescription
         }
+        launch {
+          targetDate
+        }
       }
       closureSummary {
         processingDate
+        launchDate
         hardCloseDate
         totalInvestmentAmount
         totalInvestorCount
       }
       keyTerms {
         regulation
+        minOfferingAmountCF
+        maxOfferingAmountCF
         offeringDisclaimer
         shorthandBusinessName
         legalBusinessName
@@ -149,6 +155,7 @@ export const campaignDetailsQuery = gql`
         locationAnalysis
       }
       launch {
+        targetDate
         edgarLink
       }
       misc {
@@ -225,6 +232,7 @@ export const campaignDetailsQuery = gql`
     closureSummary {
       processingDate
       hardCloseDate
+      launchDate
       totalInvestmentAmount
       totalInvestorCount
       repayment {

@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
+import money from 'money-math';
 import { DataFormatter } from '../../../../../helper';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { Image64 } from '../../../../../theme/shared';
@@ -26,12 +27,14 @@ export default class CampaignHeader extends Component {
     const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
     const isInProcessing = diffForProcessing === 0 && !get(campaign, 'closureSummary.hardCloseDate');
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    let minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
-    const percent = (collected / maxOffering) * 100;
+    const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
+    const percent = (collected / minMaxOffering) * 100;
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const isClosed = campaign.stage !== 'LIVE';

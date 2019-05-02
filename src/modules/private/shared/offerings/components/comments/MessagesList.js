@@ -49,11 +49,11 @@ const MessagesList = props => (
             )) : <UserAvatar
               size="mini"
               UserInfo={{
-                firstName: get(msg, 'createdUserInfo.info.firstName'),
-                lastName: get(msg, 'createdUserInfo.info.lastName'),
-                avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-                roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
-              }}
+              firstName: get(msg, 'createdUserInfo.info.firstName'),
+              lastName: get(msg, 'createdUserInfo.info.lastName'),
+              avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
+              roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
+            }}
             />}
           </div>
           <List.Content>

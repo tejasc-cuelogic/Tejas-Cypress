@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, get, map } from 'lodash';
+import { isEmpty, find, get, map, isNull } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import {
@@ -138,18 +138,15 @@ class EntityAccountStore {
           resolve();
         })
         .catch((err) => {
-          uiStore.resetcreateAccountMessage();
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
               this.submitAccount();
             } else {
-              uiStore.setErrors(DataFormatter.getSimpleErr(err));
-              uiStore.setProgress(false);
+              uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
             }
           } else {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            uiStore.setProgress(false);
+            uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           }
           reject();
         });
@@ -415,28 +412,11 @@ class EntityAccountStore {
       if (bankAccountStore.manualLinkBankSubmitted) {
         currentStep.validate();
       }
-      // const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
       isValidCurrentStep = bankAccountStore.formEntityAddFunds.meta.isValid ||
       bankAccountStore.isAccountPresent ||
       bankAccountStore.formLinkBankManually.meta.isValid;
       if (isValidCurrentStep) {
         uiStore.setProgress();
-        // if (!isEmpty(bankAccountStore.plaidAccDetails) &&
-        //   !bankAccountStore.manualLinkBankSubmitted) {
-        //   const plaidBankDetails = {};
-        //   plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
-        //   plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
-        //   accountAttributes.linkedBank = plaidBankDetails;
-        // } else {
-        //   const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
-        //   if (accountNumber && routingNumber) {
-        //     const plaidBankDetails = {
-        //       accountNumber: accountNumber.value,
-        //       routingNumber: routingNumber.value,
-        //     };
-        //     accountAttributes.linkedBank = plaidBankDetails;
-        //   }
-        // }
         accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
         accountAttributes.initialDepositAmount =
           bankAccountStore.accountAttributes.initialDepositAmount;
@@ -448,9 +428,6 @@ class EntityAccountStore {
             rej();
           });
       }
-      // } else {
-      //   rej();
-      // }
     }
     return true;
   })
@@ -483,14 +460,10 @@ class EntityAccountStore {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
           accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
             FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
             FormValidator.setIsDirty(bankAccountStore.formLinkBankManually, false);
-            // if (bankAccountStore.ManualLinkBankSubmitted) {
-            //   FormValidator.resetFormData(bankAccountStore.formAddFunds);
-            // }
           }
           if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
             if (removeUploadedData) {
@@ -577,7 +550,7 @@ class EntityAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'entity' });
         if (account) {
@@ -599,13 +572,10 @@ class EntityAccountStore {
             this.setEntityAttributes('Formation doc');
           }
           bankAccountStore.validateAddFunds();
-          // const { isValid } = bankAccountStore.formEntityAddFunds.meta;
-          if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
+          if (account.details.linkedBank) {
             bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-            // if (isValid) {
             bankAccountStore.formEntityAddFunds.fields.value.value =
             account.details.initialDepositAmount;
-            // }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
@@ -615,17 +585,17 @@ class EntityAccountStore {
               }
               return null;
             });
-            if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+            if (account.details.linkedBank.routingNumber !== '' &&
             account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
-            // if (isValid) {
             bankAccountStore.formEntityAddFunds.fields.value.value =
             account.details.initialDepositAmount;
-            // }
           }
           bankAccountStore.validateAddFunds();
-          // bankAccountStore.validateAddfundsAmount();
+          if (bankAccountStore.isAccountPresent && isNull(account.details.initialDepositAmount)) {
+            bankAccountStore.setShowAddFunds();
+          }
           this.renderAfterPopulate();
         }
       }

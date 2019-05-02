@@ -185,7 +185,7 @@ class offerDetails extends Component {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaignSideBarShow, campaign, navCountData,
+      details, campaign, navCountData,
     } = campaignStore;
     let navItems = [];
     if (isMobile) {
@@ -221,7 +221,7 @@ class offerDetails extends Component {
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous className="visi-one">
-              <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
+              <CampaignSideBar navItems={navItems} />
               <MobileDropDownNav
                 inverted
                 refMatch={match}

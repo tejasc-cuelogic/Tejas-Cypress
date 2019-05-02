@@ -8,12 +8,11 @@ import NotFound from '../../shared/NotFound';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const overrideContainerClass = ['account-details/:accountType/transactions'];
-@inject('uiStore', 'navStore', 'userDetailsStore')
+@inject('uiStore', 'navStore')
 @observer
 class PrivateLayout extends Component {
   render() {
     const { location, navStore } = this.props;
-    const { getUserCreatedAccounts } = this.props.userDetailsStore;
     const pageMeta = navStore.navMeta;
     if (!pageMeta) {
       return <NotFound />;
@@ -43,7 +42,7 @@ class PrivateLayout extends Component {
           </Grid>
         </div>
         {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav) &&
-          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} userCreatedAccounts={getUserCreatedAccounts} />
+          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
         }
         {this.props.P1 &&
           <div className="search-filters">

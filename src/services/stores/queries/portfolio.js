@@ -28,6 +28,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            maturity
             investmentMultiple
             interestRate
             regulation
@@ -63,6 +64,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            maturity
             investmentMultiple
             interestRate
             regulation
@@ -98,6 +100,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+            maturity
             investmentMultiple
             interestRate
             regulation

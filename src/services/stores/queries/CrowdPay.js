@@ -147,6 +147,7 @@ query getCrowdPayUsers($limit: Int, $page: Int, $accountType: InvestorAccountTyp
           }
           processing {
             gs {
+              id
               date
               by
             }
@@ -198,4 +199,9 @@ mutation _submitInvestorAccount($userId: String,$accountId: String!, $accountTyp
     accountId: $accountId,
     accountType: $accountType
   )
+}`;
+
+export const getDecryptedGoldstarAccountNumber = gql`
+mutation _getDecryptedGoldstarAccountNumber($userId:String!, $accountId: String!){
+  getDecryptedGoldstarAccountNumber(userId: $userId , accountId: $accountId )
 }`;

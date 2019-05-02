@@ -16,7 +16,6 @@ import {
 } from '../../../../../constants/account';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import CashMovement from '../../summary/components/CashMovement';
-import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
@@ -51,8 +50,8 @@ export default class AccountSetup extends Component {
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
-    // TODO change to regex
-    if (!Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
+    if (signupStatus.activeAccounts.length !== 0 &&
+      signupStatus.investorProfileCompleted) {
       this.props.portfolioStore.getSummary();
     }
     this.props.uiStore.clearErrors();

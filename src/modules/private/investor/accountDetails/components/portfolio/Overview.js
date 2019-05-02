@@ -10,12 +10,15 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from 
 import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
-@inject('portfolioStore', 'campaignStore')
+@inject('portfolioStore', 'campaignStore', 'userDetailsStore')
 @observer
 class Overview extends Component {
   componentWillMount() {
-    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    this.props.portfolioStore.getPayOffData(accountType);
+    const { isAdmin } = this.props;
+    const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    // const investor = this.props.userDetailsStore.getDetailsOfUser;
+    const accountType = isAdmin && get(accountDetails, 'name') ? get(accountDetails, 'name') : includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    this.props.portfolioStore.getPayOffData(accountType, isAdmin);
   }
   render() {
     const { campaign } = this.props.campaignStore;
@@ -229,7 +232,7 @@ class Overview extends Component {
             <Divider />
             <div className="inner-content-spacer payoff-chart">
               <Header as="h4">Payments</Header>
-              <PayOffChart />
+              <PayOffChart chartData={chartData} />
             </div>
           </Aux>
         }
