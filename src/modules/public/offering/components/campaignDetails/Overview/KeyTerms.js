@@ -7,7 +7,8 @@ import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
-const isTablet = document.documentElement.clientWidth < 991;
+const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 992;
 
 @withRouter
 @inject('campaignStore')
@@ -24,7 +25,7 @@ class KeyTerms extends Component {
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className={`${isMobile ? 'mb-10' : 'mb-30'} anchor-wrap`}>
           Investment Highlights
           <span className="anchor" id="investment-highlights" />
         </Header>

@@ -10,6 +10,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from 
 import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore')
 @withRouter
 @observer
@@ -120,12 +121,12 @@ export default class CampaignHeader extends Component {
                     </Link>
                   </div>
                 </Grid.Column>
-                <Grid.Column width={6} verticalAlign="middle">
+                <Grid.Column width={6}>
                   <Header as="h3" inverted>
                     {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                     <Header.Subheader>{address}</Header.Subheader>
                   </Header>
-                  <Statistic inverted size="tiny" className="basic mb-0">
+                  <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
                     <Statistic.Value>
                       <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
                     </Statistic.Value>
