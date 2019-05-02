@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'lodash';
-import { Card, Table, Button, Grid, Form, Checkbox, Icon, Label } from 'semantic-ui-react';
+import { Card, Table, Button, Grid, Form, Checkbox, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { InlineLoader, NsPagination, DateTimeFormat } from './../../../../../theme/shared';
 import { FAQ_TYPE_ENUM } from '../../../../../services/constants/admin/faqs';
@@ -17,11 +17,15 @@ export default class AllFaqs extends Component {
   }
   handleAction = (action, faqId) => {
     if (action === 'Delete') {
-      this.props.uiStore.setConfirmBox(action, faqId);
+      this.props.faqStore.setConfirmBox(action, faqId);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/${faqId}`);
+      this.props.faqStore.push(`${this.props.match.url}/${faqId}`);
     }
   }
+  handleDeleteCancel = () => {
+    this.props.faqStore.setConfirmBox('');
+  }
+
   paginate = params => this.props.faqStore.pageRequest(params);
   render() {
     const { globalAction } = this.props;
@@ -30,6 +34,7 @@ export default class AllFaqs extends Component {
       loading,
       count,
       requestState,
+      confirmBox,
     } = this.props.faqStore;
     const actions = {
       edit: { label: 'Edit', icon: 'pencil' },
@@ -101,6 +106,15 @@ export default class AllFaqs extends Component {
         {totalRecords > 0 &&
           <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
         }
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to delete this item?"
+          open={confirmBox.entity === 'Delete'}
+          onCancel={this.handleDeleteCancel}
+          onConfirm={this.deleteTeamMember}
+          size="mini"
+          className="deletion"
+        />
 
       </Aux>
     );

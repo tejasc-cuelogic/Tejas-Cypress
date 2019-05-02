@@ -44,6 +44,11 @@ export class FaqStore {
       },
     });
   }
+  @action
+  setConfirmBox = (entity, refId) => {
+    this.confirmBox.entity = entity;
+    this.confirmBox.refId = refId;
+  }
 
   @action
   setDb = (data) => {
