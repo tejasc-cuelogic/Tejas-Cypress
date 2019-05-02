@@ -232,12 +232,12 @@ export class InvestmentStore {
     if (campaign && campaign.keyTerms) {
       offeringSecurityType = get(campaign, 'keyTerms.securities');
       interestRate = get(campaign, 'keyTerms.interestRate') && get(campaign, 'keyTerms.interestRate') !== null ? get(campaign, 'keyTerms.interestRate') : '0';
-      investmentMultiple = get(campaign, 'keyTerms.investmentMultiple') && get(campaign, 'keyTerms.investmentMultiple') !== null ? get(campaign, 'keyTerms.investmentMultiple') : '0';
+      investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || '0';
       loanTerm = parseFloat(get(campaign, 'keyTerms.maturity'));
     } else {
       offeringSecurityType = get(getInvestorAccountById, 'offering.keyTerms.securities');
       interestRate = get(getInvestorAccountById, 'offering.keyTerms.interestRate') && get(getInvestorAccountById, 'offering.keyTerms.interestRate') !== null ? get(getInvestorAccountById, 'offering.keyTerms.interestRate') : '0';
-      investmentMultiple = get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') && get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') !== null ? get(getInvestorAccountById, 'offering.keyTerms.investmentMultiple') : '0';
+      investmentMultiple = get(getInvestorAccountById, 'offering.closureSummary.keyTerms.multiple') || '0';
       loanTerm = parseFloat(get(getInvestorAccountById, 'offering.keyTerms.maturity'));
     }
     const investAmt = this.investmentAmount;

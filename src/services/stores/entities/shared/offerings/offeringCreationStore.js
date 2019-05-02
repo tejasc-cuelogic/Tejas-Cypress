@@ -1161,6 +1161,17 @@ export class OfferingCreationStore {
     }
     if (keyName === 'keyTerms') {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
+      const closureSummary = { ...getOfferingById.closureSummary };
+      const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple };
+      payloadData.closureSummary = closureSummary;
+      payloadData.closureSummary = mergeWith(
+        toJS(getOfferingById.closureSummary),
+        payloadData.closureSummary,
+        this.mergeCustomize,
+      );
+      payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+      payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
     }
     if (keyName !== 'BonusRewardTier' && keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
