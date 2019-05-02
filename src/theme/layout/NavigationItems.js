@@ -85,7 +85,7 @@ export class NavItems extends Component {
             ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
             `}
             name={item.to}
-            disabled={isMobile && item.title === 'How NextSeed Works'}
+            // disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
@@ -177,10 +177,14 @@ export class NavigationItems extends Component {
   }
   render() {
     const {
-      stepInRoute, location, currentUser, loading, isMobBussinessApp,
+      location, currentUser, loading, isMobBussinessApp,
       isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
+    const stepInRoute = [
+      { to: 'login', title: 'Log In', className: 'basic' },
+      { to: 'register', title: 'Sign Up', className: 'secondary' },
+    ];
     return (
       <Menu
         stackable={!isMobBussinessApp}
@@ -224,15 +228,20 @@ export class NavigationItems extends Component {
             : !location.pathname.includes('/business-application') &&
             (
               !currentUser ? (
-                <Menu.Item as={Link} onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`}>
-                  <Button secondary compact>{stepInRoute.title}</Button>
-                </Menu.Item>
+                <Aux>
+                  {stepInRoute.map(route => (
+                    <Menu.Item className="menu-button">
+                      <Button as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`}>{route.title}</Button>
+                    </Menu.Item>
+                  ))}
+                </Aux>
               ) : (
                 <Menu.Item
+                  className="menu-button"
                   as={Link}
                   to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
                 >
-                  <Button secondary compact>Dashboard</Button>
+                  <Button secondary>Dashboard</Button>
                 </Menu.Item>
                 ))}
         </Container>

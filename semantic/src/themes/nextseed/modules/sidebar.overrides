@@ -361,6 +361,9 @@
 				top: 16px;
 				z-index: 1;			
 			}
+			.ns-scrollbar .view{
+				padding: 0;
+			}
 		}
 	}
 	.ui.image.logo{
@@ -407,7 +410,17 @@
 			text-overflow:ellipsis;
 		}
 	}
-	// &.visible {
+	&.visible {
+		~ .social-media {
+			width: 260px;
+			visibility: visible;
+			transition: all .5s ease;
+			transform: translate3d(0,0,0);
+			> .icon{
+				display:block;
+			}
+		}
+	}
 	// 	.user-picture:hover{
 	// 		background-color:@neutral-offwhite;
 	// 	}
