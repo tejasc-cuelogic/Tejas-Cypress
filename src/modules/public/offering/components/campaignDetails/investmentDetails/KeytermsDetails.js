@@ -120,7 +120,7 @@ class KeyTermsDetails extends Component {
                 </Table.Cell>
                 <Table.Cell>
                   <p>
-                    {get(KeyTerms, 'investmentMultiple') ? `Up to ${get(KeyTerms, 'investmentMultiple')}x` : 'NA'}
+                    {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
                   </p>
                   <HtmlEditor
                     readOnly
