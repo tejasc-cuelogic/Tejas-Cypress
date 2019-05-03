@@ -32,6 +32,9 @@ query getOfferingList($filters: OfferingFilterInputType){
         hardCloseDate
         totalInvestmentAmount
         totalInvestorCount
+        keyTerms {
+          multiple
+        }
       }
       keyTerms {
         regulation
@@ -237,6 +240,9 @@ export const campaignDetailsQuery = gql`
       totalInvestorCount
       repayment {
         count
+      }
+      keyTerms {
+        multiple
       }
     }
     comments {
