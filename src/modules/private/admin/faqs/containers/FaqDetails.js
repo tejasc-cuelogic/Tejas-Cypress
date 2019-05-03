@@ -139,6 +139,14 @@ export default class FaqDetails extends Component {
                           onChange={(e, result) => formChange(e, result)}
                         />
                       </div>
+                      <div className="field">
+                        <FormInput
+                          type="text"
+                          name="slug"
+                          fielddata={FAQ_FRM.fields.slug}
+                          changed={formChange}
+                        />
+                      </div>
                     </Form>
                   </Card.Content>
                 </Card>

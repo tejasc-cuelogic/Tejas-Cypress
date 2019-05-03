@@ -5,6 +5,9 @@ export const FAQ = {
   categoryId: {
     value: '', label: 'Category Name', placeHolder: '', error: undefined, rule: 'required',
   },
+  slug: {
+    value: '', label: 'Slug', error: undefined, rule: 'required',
+  },
   answer: {
     value: '', label: 'Answer', error: undefined, rule: 'required', placeHolder: 'Describe the answer',
   },

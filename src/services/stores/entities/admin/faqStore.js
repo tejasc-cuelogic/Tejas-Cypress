@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { forEach, map, sortBy } from 'lodash';
+import { forEach, map, sortBy, kebabCase } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
@@ -227,6 +227,13 @@ export class FaqStore {
   @action
   formChange = (e, result) => {
     this.FAQ_FRM = Validator.onChange(this.FAQ_FRM, Validator.pullValues(e, result));
+    if (result.name === 'question') {
+      const formValue = { value: kebabCase(result.value), name: 'slug' };
+      this.FAQ_FRM = Validator.onChange(
+        this.FAQ_FRM,
+        Validator.pullValues(e, formValue),
+      );
+    }
   }
 
   @action
