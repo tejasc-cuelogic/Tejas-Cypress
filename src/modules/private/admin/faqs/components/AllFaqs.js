@@ -23,7 +23,10 @@ export default class AllFaqs extends Component {
   }
   globalActionChange = (e, { name, value }) =>
     this.props.faqStore.setGlobalAction(name, value);
-
+  deleteFaq = () => {
+    this.props.faqStore.deleteRecords(this.props.faqStore.confirmBox.refId);
+    this.props.faqStore.setConfirmBox('');
+  }
   handleDeleteCancel = () => {
     this.props.faqStore.setConfirmBox('');
   }
@@ -64,7 +67,7 @@ export default class AllFaqs extends Component {
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
-              <Grid.Column>{selectedCount ? `Selected ${selectedCount} items` : ''}</Grid.Column>
+              <Grid.Column>{selectedCount ? `Selected ${selectedRecords.includes('all') ? selectedCount - 1 : selectedCount} items` : ''}</Grid.Column>
               <Grid.Column width={3} floated="right">
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
@@ -81,7 +84,9 @@ export default class AllFaqs extends Component {
                 <Table.Row>
                   <Table.HeaderCell collapsing>
                     <Checkbox
-                      defaultIndeterminate
+                      defaultIndeterminate={false}
+                      value="all"
+                      checked={selectedRecords.includes('all')}
                       onChange={(e, result) => this.checkAll(e, result)}
                     />
                   </Table.HeaderCell>
@@ -138,7 +143,8 @@ export default class AllFaqs extends Component {
           content="Are you sure you want to delete this item?"
           open={confirmBox.entity === 'Delete'}
           onCancel={this.handleDeleteCancel}
-          onConfirm={this.deleteTeamMember}
+          onConfirm={this.deleteFaq}
+          closeOnDimmerClick={false}
           size="mini"
           className="deletion"
         />

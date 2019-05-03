@@ -204,6 +204,7 @@ export class IdentityStore {
       cip.requestId = response.passId;
       if (response.key && response.message) {
         cip.failReason = [{ key: response.key, message: response.message }];
+        cip.failType = 'FAIL_WITH_QUESTIONS';
       }
     } else if (response.message === 'FAIL' && response.questions) {
       cip.expiration = Helper.getDaysfromNow(21);

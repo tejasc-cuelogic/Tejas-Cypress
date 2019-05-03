@@ -59,10 +59,16 @@ export class FaqStore {
   addSelectedRecord = (id) => {
     this.isReadOnly = false;
     this.selectedRecords.push(id);
+    if (this.selectedRecords.length === this.allFaqs.length) {
+      this.selectedRecords.push('all');
+    }
   }
   @action
   removeUnSelectedRecord = (id) => {
     this.selectedRecords = this.selectedRecords.filter(recordId => recordId !== id);
+    if (id !== 'all') {
+      this.selectedRecords = this.selectedRecords.filter(recordId => recordId !== 'all');
+    }
   }
 
   @action
@@ -100,17 +106,20 @@ export class FaqStore {
     this.globalAction = '';
   }
   deleteRecords = (id) => {
+    uiStore.setProgress();
     clientPrivate.mutate({
       mutation: deleteFaq,
       variables: {
-        id,
+        ids: id.isArray ? id : [id],
       },
       refetchQueries: [{ query: faqs }],
     }).then(() => {
       this.resetSelectedRecords();
+      uiStore.setProgress(false);
       Helper.toast('Records deleted successfully.', 'success');
     }).catch(() => {
       this.resetSelectedRecords();
+      uiStore.setProgress(false);
       Helper.toast('Error while deleting records.', 'error');
     });
   }
@@ -211,21 +220,6 @@ export class FaqStore {
     this.FAQ_FRM.fields[field].value = value;
     Validator.validateForm(this.FAQ_FRM);
   }
-
-  @action
-  deleteTeamMemberById = (id) => {
-    clientPrivate
-      .mutate({
-        mutation: faqs,
-        variables: {
-          id,
-        },
-        refetchQueries: [{ query: faqs }],
-      })
-      .then(() => Helper.toast('FAQ deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting FAQ ', 'error'));
-  }
-
   @action
   save = (id, isDraft = false) => new Promise((resolve, reject) => {
     uiStore.setProgress();
@@ -270,6 +264,7 @@ export class FaqStore {
       },
       onFetch: (res) => {
         if (res && res.faqsListByFilters) {
+          this.resetSelectedRecords();
           this.setDb(res.faqsListByFilters);
         }
       },
@@ -283,6 +278,7 @@ export class FaqStore {
     this.requestState.displayTillIndex = this.requestState.perPage * page;
     this.requestState.page = page;
     this.requestState.skip = skip;
+    this.resetSelectedRecords();
   }
   @action
   setInitiateSrch = (keyword, value) => {

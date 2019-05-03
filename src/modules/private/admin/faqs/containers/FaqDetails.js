@@ -35,6 +35,8 @@ export default class FaqDetails extends Component {
       formChange,
       htmlContentChange,
     } = this.props.faqStore;
+    const faqStatuses = FAQ_STATUS_VALUES.filter(faqStatus => faqStatus.key !== 'All');
+    const faqTypes = FAQ_TYPES_VALUES.filter(faqStatus => faqStatus.key !== 'All');
     const isNew = this.props.match.params.id === 'new';
     const { inProgress } = this.props.uiStore;
     const { categoriesDropdown } = this.props.articleStore;
@@ -79,8 +81,6 @@ export default class FaqDetails extends Component {
                     changed={formChange}
                   />
                   <HtmlEditor
-                    // readOnly={(this.props.status === 'PUBLISHED'
-                    // && isManager) ? !this.state.editForm : isReadonly}
                     changed={htmlContentChange}
                     name="answer"
                     content={FAQ_FRM.fields.answer.value}
@@ -102,7 +102,7 @@ export default class FaqDetails extends Component {
                           value={FAQ_FRM.fields.itemStatus.value}
                           placeholder="Choose here"
                           name="itemStatus"
-                          options={FAQ_STATUS_VALUES}
+                          options={faqStatuses}
                           onChange={(e, result) => formChange(e, result)}
                         />
                       </div>
@@ -123,7 +123,7 @@ export default class FaqDetails extends Component {
                           value={FAQ_FRM.fields.faqType.value}
                           placeholder="Choose here"
                           name="faqType"
-                          options={FAQ_TYPES_VALUES}
+                          options={faqTypes}
                           onChange={(e, result) => formChange(e, result)}
                         />
                       </div>
