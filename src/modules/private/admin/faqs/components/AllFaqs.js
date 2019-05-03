@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { get } from 'lodash';
 import { Card, Table, Button, Grid, Form, Checkbox, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { InlineLoader, NsPagination, DateTimeFormat } from './../../../../../theme/shared';
-import { FAQ_TYPE_ENUM } from '../../../../../services/constants/admin/faqs';
+import { FAQ_TYPE_ENUM, GLOBAL_ACTIONS } from '../../../../../services/constants/admin/faqs';
 
 @inject('faqStore')
 @withRouter
@@ -22,6 +21,9 @@ export default class AllFaqs extends Component {
       this.props.history.push(`${this.props.match.url}/${faqId}`);
     }
   }
+  globalActionChange = (e, { name, value }) =>
+    this.props.faqStore.setGlobalAction(name, value);
+
   handleDeleteCancel = () => {
     this.props.faqStore.setConfirmBox('');
   }
@@ -33,8 +35,10 @@ export default class AllFaqs extends Component {
       this.props.faqStore.removeUnSelectedRecord(result.value);
     }
   }
+  checkAll = (e, result) => {
+    this.props.faqStore.checkUncheckAll(result.checked);
+  }
   render() {
-    const { globalAction } = this.props;
     const {
       allFaqs,
       loading,
@@ -44,6 +48,8 @@ export default class AllFaqs extends Component {
       applyGlobalAction,
       disableApply,
       selectedCount,
+      selectedRecords,
+      globalAction,
     } = this.props.faqStore;
     const actions = {
       edit: { label: 'Edit', icon: 'pencil' },
@@ -60,7 +66,7 @@ export default class AllFaqs extends Component {
             <Grid.Row>
               <Grid.Column>{selectedCount ? `Selected ${selectedCount} items` : ''}</Grid.Column>
               <Grid.Column width={3} floated="right">
-                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" />
+                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
               <Grid.Column width={2}>
                 <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
@@ -73,7 +79,12 @@ export default class AllFaqs extends Component {
             <Table unstackable striped sortable className="user-list">
               <Table.Header>
                 <Table.Row>
-                  <Table.Cell collapsing><Checkbox defaultIndeterminate /></Table.Cell>
+                  <Table.HeaderCell collapsing>
+                    <Checkbox
+                      defaultIndeterminate
+                      onChange={(e, result) => this.checkAll(e, result)}
+                    />
+                  </Table.HeaderCell>
                   <Table.HeaderCell width={5}>Title</Table.HeaderCell>
                   <Table.HeaderCell>Type</Table.HeaderCell>
                   <Table.HeaderCell>Category</Table.HeaderCell>
@@ -91,6 +102,7 @@ export default class AllFaqs extends Component {
                         <Checkbox
                           name={record.id}
                           value={record.id}
+                          checked={selectedRecords.includes(record.id)}
                           onChange={(e, result) => this.checkedRecords(e, result)}
                         />
                       </Table.Cell>

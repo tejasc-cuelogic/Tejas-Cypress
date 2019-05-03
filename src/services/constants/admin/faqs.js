@@ -20,10 +20,6 @@ export const AUTHORS = [
   { key: 'John Smith', value: 'John Smith', text: 'John Smith' },
 ];
 
-export const GLOBAL_ACTIONS = [
-  { key: 'Delete', value: 'delete', text: 'Delete' },
-];
-
 export const FAQ_STATUS_VALUES = [
   { key: 'All', text: 'All', value: 'All' },
   { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
@@ -40,4 +36,11 @@ export const FAQ_TYPES_VALUES = [
   { key: 'INV_LINKED_BANK_FAQ', text: 'Investor Linked Bank FAQ', value: 'INV_LINKED_BANK_FAQ' },
   { key: 'INV_TRANSFER_FUNDS_FAQ', text: 'Investor Transfer Funds FAQ', value: 'INV_TRANSFER_FUNDS_FAQ' },
   { key: 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ', text: 'Issuer Offering Creation Leadership FAQ', value: 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ' },
+];
+
+export const GLOBAL_ACTIONS = [
+  { key: 'Delete', value: 'delete', text: 'Delete' },
+  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'Save to approve' },
+  { key: 'DRAFT', value: 'DRAFT', text: 'Save to draft' },
+  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'Save to review' },
 ];

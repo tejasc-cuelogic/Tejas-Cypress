@@ -15,6 +15,7 @@ export class FaqStore {
   @observable FAQ_FRM = Validator.prepareFormObject(FAQ);
   @observable editMode = false;
   @observable filters = false;
+  @observable globalAction = '';
   @observable selectedRecords = [];
   @observable requestState = {
     skip: 0,
@@ -44,6 +45,10 @@ export class FaqStore {
         }
       },
     });
+  }
+  @action
+  setGlobalAction = (name, globalAction) => {
+    this[name] = globalAction;
   }
   @action
   setConfirmBox = (entity, refId) => {
@@ -77,7 +82,7 @@ export class FaqStore {
       mutation: updateStatus,
       variables: {
         id,
-        status,
+        itemStatus: status,
       },
       refetchQueries: [{ query: faqs }],
     }).then(() => {
@@ -170,7 +175,18 @@ export class FaqStore {
     });
     return data;
   }
-
+  @action
+  checkUncheckAll = (checked = false) => {
+    if (checked) {
+      this.allFaqs.forEach((faq) => {
+        this.addSelectedRecord(faq.id);
+      });
+    } else {
+      this.allFaqs.forEach((faq) => {
+        this.removeUnSelectedRecord(faq.id);
+      });
+    }
+  }
   @action
   reset = () => {
     this.FAQ_FRM = Validator.prepareFormObject(FAQ);

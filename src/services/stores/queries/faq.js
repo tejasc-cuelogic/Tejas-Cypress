@@ -27,6 +27,7 @@ export const getFaqById = gql`
       slug
       author
       question
+      categoryId
       categoryName
       answer
       faqType
@@ -89,7 +90,7 @@ mutation setMemberOrderInTeam($teamDetails: [TeamOrderInput]) {
 }
 `;
 export const updateStatus = gql`
-  mutation updateStatus($id: [String]!, $status:ArticleStatusEnum!){
-    updateStatus(id: $id, status:$status)
+  mutation updateStatus($id: [String]!, $itemStatus:ArticleStatusEnum!){
+    updateStatus(id: $id, itemStatus:$itemStatus)
 }  
 `;
