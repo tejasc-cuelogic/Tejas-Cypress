@@ -46,6 +46,7 @@ export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($ti
       categoryId,
       authorName,
       categoryName,
+      order,
     }
   }  
 `;
@@ -95,7 +96,9 @@ query knowledgeBaseById($id: ID!) {
       itemStatus
       categoryName,
       categoryId,
-      authorName
+      authorName,
+      order,
+      slug
   }
 }
 `;
@@ -132,7 +135,10 @@ mutation createKnowledgeBaseItem($payload:  KnowledgeBaseItem!, $isPartial: Bool
     content
     itemStatus,
     categoryName
-    userType
+    userType,
+    authorName,
+    order,
+    slug,
   }
 }
 `;
@@ -146,6 +152,9 @@ mutation updateKnowledgeBaseItem($id:ID!,$payload:  KnowledgeBaseItem!, $isParti
     itemStatus
     categoryName
     userType
+    authorName,
+    order,
+    slug,
   }
 }
 `;
@@ -166,3 +175,7 @@ export const deleteKnowledgeBaseItem = gql`mutation deleteKnowledgeBaseItems($id
 }  
 `;
 
+export const setOrderForKnowledgeBase = gql`mutation setOrderForKnowledgeBase($knowledgeBaseItemsList: [KnowledgeBaseOrderInput]) {
+  setOrderForKnowledgeBase(knowledgeBaseItemsList: $knowledgeBaseItemsList)
+}
+`;

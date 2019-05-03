@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
 import _ from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
-import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
+import { Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
 import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/knowledgeBase';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
@@ -12,6 +13,73 @@ const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
   delete: { label: 'Delete', icon: 'trash' },
 };
+
+
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+const SortableItem = SortableElement(({
+  knowledgeBase, key, handleAction, checkedRecords,
+}) => (
+  <div className="row-wrap" key={key}>
+    <div className="balance">
+      <DragHandle />
+    </div>
+    <div className="balance">
+      <Checkbox
+        name={knowledgeBase.id}
+        value={knowledgeBase.id}
+        onChange={(e, result) => checkedRecords(e, result)}
+      />
+    </div>
+    <div className="balance-half">
+      <span className="user-name">
+        <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>
+          <b>{_.capitalize(knowledgeBase.title)}</b>
+        </Link>
+      </span>
+    </div>
+    <div className="balance-half">
+      {_.capitalize(knowledgeBase.userType)}
+    </div>
+    <div className="balance-half">
+      {_.capitalize(knowledgeBase.categoryName) || 'N/A'}
+    </div>
+    <div className="balance-half">
+      {_.capitalize(knowledgeBase.authorName) || 'N/A'}
+    </div>
+    <div className="balance-half">
+      <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
+    </div>
+    <div className="balance-half">
+      <DateTimeFormat format="MM-DD-YYYY" datetime={knowledgeBase.updated && knowledgeBase.updated.date} />
+    </div>
+    <div className="action right-align">
+      <Button.Group>
+        {Object.keys(actions).map(action => (
+          <Button className="link-button" >
+            <Icon className={`ns-${actions[action].icon}`} onClick={() => handleAction(actions[action].label, knowledgeBase.id, knowledgeBase.itemStatus)} />
+          </Button>
+        ))}
+      </Button.Group>
+    </div>
+  </div>
+));
+
+const SortableList = SortableContainer(({
+  AllKnowledgeBase, handleAction, checkedRecords,
+}) => (
+  <div className="tbody">
+    { AllKnowledgeBase.map((knowledgeBase, index) => (
+      <SortableItem
+        key={knowledgeBase.id}
+        docIndx={index}
+        knowledgeBase={knowledgeBase}
+        index={index}
+        handleAction={handleAction}
+        checkedRecords={checkedRecords}
+      />
+    )) };
+  </div>
+));
 
 @withRouter
 @inject('knowledgeBaseStore', 'uiStore')
@@ -22,8 +90,15 @@ export default class AllKnowledgeBaseItems extends Component {
     this.props.knowledgeBaseStore.resetPagination();
     this.props.knowledgeBaseStore.resetSearch();
   }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const { AllKnowledgeBase, setKnowledgeBaseOrder } = this.props.knowledgeBaseStore;
+    if (oldIndex !== newIndex) {
+      setKnowledgeBaseOrder(AllKnowledgeBase[newIndex], newIndex);
+    }
+  }
   globalActionChange = (e, { name, value }) =>
     this.props.knowledgeBaseStore.setGlobalAction(name, value);
+
   handleAction = (action, articleId, status) => {
     if (action === 'Delete') {
       this.props.knowledgeBaseStore.setConfirmBox(action, articleId);
@@ -31,7 +106,7 @@ export default class AllKnowledgeBaseItems extends Component {
       this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
     }
   }
-  deleteTeamMember = () => {
+  deleteKnowledgeBase = () => {
     const { deleteKBById, setConfirmBox } = this.props.knowledgeBaseStore;
     deleteKBById(this.props.knowledgeBaseStore.confirmBox.refId);
     setConfirmBox('');
@@ -60,6 +135,8 @@ export default class AllKnowledgeBaseItems extends Component {
       applyGlobalAction,
       disableApply,
       categoryLoading,
+      selectedRecordsCount,
+      selectRecordsOnPage,
     } = knowledgeBaseStore;
     const totalRecords = count || 0;
     if (loading || categoryLoading) {
@@ -73,7 +150,7 @@ export default class AllKnowledgeBaseItems extends Component {
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
-              {/* <Grid.Column>Selected 15 items</Grid.Column> */}
+              <Grid.Column>Selected {selectedRecordsCount} items</Grid.Column>
               <Grid.Column width={3} floated="right">
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
@@ -83,60 +160,40 @@ export default class AllKnowledgeBaseItems extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Card fluid>
-          <div className="table-wrapper">
-            <Table unstackable striped sortable className="user-list">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell collapsing>&nbsp;</Table.HeaderCell>
-                  <Table.HeaderCell width={5}>Title</Table.HeaderCell>
-                  <Table.HeaderCell>Type</Table.HeaderCell>
-                  <Table.HeaderCell>Category</Table.HeaderCell>
-                  <Table.HeaderCell>Author</Table.HeaderCell>
-                  <Table.HeaderCell>Status</Table.HeaderCell>
-                  <Table.HeaderCell>Last update date</Table.HeaderCell>
-                  <Table.HeaderCell textAlign="center" />
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {
-                  AllKnowledgeBase.map(record => (
-                    <Table.Row key={record.id}>
-                      <Table.Cell>
-                        <Checkbox
-                          name={record.id}
-                          value={record.id}
-                          onChange={(e, result) => this.checkedRecords(e, result)}
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <span className="user-name"><Link to={`/app/knowledge-base/${record.id}/${record.itemStatus}`}><b>{_.capitalize(record.title)}</b></Link></span>
-                      </Table.Cell>
-                      <Table.Cell>{_.capitalize(record.userType)}</Table.Cell>
-                      <Table.Cell>{_.capitalize(record.categoryName) || 'N/A'}</Table.Cell>
-                      <Table.Cell>
-                        {_.capitalize(record.authorName) || 'N/A'}
-                      </Table.Cell>
-                      <Table.Cell><Label color={`${record.itemStatus === 'PUBLISHED' ? 'green' : record.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
-                      <Table.Cell>
-                        <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
-                      </Table.Cell>
-                      <Table.Cell textAlign="center">
-                        <Button.Group>
-                          {Object.keys(actions).map(action => (
-                            <Button className="link-button" >
-                              <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id, record.itemStatus)} />
-                            </Button>
-                          ))}
-                        </Button.Group>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))
-                }
-              </Table.Body>
-            </Table>
+        <div className="ui card fluid">
+          <div className="ui basic table team-table striped">
+            <div className="row-wrap thead">
+              <div className="balance">&nbsp;</div>
+              <div className="balance">
+                <Checkbox
+                  name="selectAllChkbox"
+                  value="selectAllChkbox"
+                  onChange={selectRecordsOnPage}
+                  defaultIndeterminate
+                />
+              </div>
+              <div className="balance-half">Title</div>
+              <div className="balance-half">Type</div>
+              <div className="balance-half">Category</div>
+              <div className="balance-half">Author</div>
+              <div className="balance-half">Status</div>
+              <div className="balance-half">Last update date</div>
+              <div className="action right-align" />
+            </div>
+            {/* {AllKnowledgeBase.map((knowledgeBase, index) => ( */}
+            <SortableList
+              AllKnowledgeBase={AllKnowledgeBase}
+              pressDelay={100}
+              onSortEnd={e => this.onSortEnd(e)}
+              lockAxis="y"
+              useDragHandle
+              handleAction={this.handleAction}
+              checkedRecords={this.checkedRecords}
+            />
+            {/* ))} */}
+
           </div>
-        </Card>
+        </div>
         {totalRecords > 0 &&
           <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
         }
@@ -145,7 +202,7 @@ export default class AllKnowledgeBaseItems extends Component {
           content="Are you sure you want to delete this item?"
           open={confirmBox.entity === 'Delete'}
           onCancel={this.handleDeleteCancel}
-          onConfirm={this.deleteTeamMember}
+          onConfirm={this.deleteKnowledgeBase}
           size="mini"
           className="deletion"
         />

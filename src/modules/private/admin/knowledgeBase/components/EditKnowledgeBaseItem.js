@@ -146,6 +146,18 @@ export default class EditKnowledgeBaseItem extends Component {
                               fielddata={KNOWLEDGE_BASE_FRM.fields.authorName}
                               changed={knowledgeBaseChange}
                             />
+                            <FormInput
+                              type="text"
+                              name="order"
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.order}
+                              changed={knowledgeBaseChange}
+                            />
+                            <FormInput
+                              type="text"
+                              name="slug"
+                              fielddata={KNOWLEDGE_BASE_FRM.fields.slug}
+                              changed={knowledgeBaseChange}
+                            />
                           </Form>
                         </Card.Content>
                       </Card>

@@ -8,11 +8,17 @@ export const KNOWLEDGE_BASE = {
   authorName: {
     value: '', label: 'Author', error: undefined, rule: 'required',
   },
+  order: {
+    value: '', label: 'Order', error: undefined, rule: 'required',
+  },
   categoryId: {
     value: '', label: 'Category', error: undefined, rule: 'required',
   },
   content: {
-    value: '', label: 'description', error: undefined, rule: 'required',
+    value: '', label: 'Description', error: undefined, rule: 'required',
+  },
+  slug: {
+    value: '', label: 'Slug', error: undefined, rule: 'required',
   },
   userType: {
     key: 'userType',

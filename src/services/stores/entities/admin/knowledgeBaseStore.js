@@ -1,14 +1,15 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { isArray, orderBy, find, map, filter, get } from 'lodash';
+import { isArray, orderBy, find, map, filter, get, kebabCase } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { KNOWLEDGE_BASE, CATEGORY_TYPES } from '../../../constants/admin/knowledgeBase';
-import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters, updateKnowledgeBaseItem, deleteKnowledgeBaseItem } from '../../queries/knowledgeBase';
+import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters, updateKnowledgeBaseItem, deleteKnowledgeBaseItem, setOrderForKnowledgeBase } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
+import { uiStore } from '../../index';
 
 export class KnowledgeBaseStore {
   @observable data = [];
@@ -147,6 +148,18 @@ export class KnowledgeBaseStore {
     this.requestState.page = page;
     this.requestState.skip = skip;
   }
+
+  @computed get page() {
+    return this.requestState.perPage || 1;
+  }
+
+  @action selectRecordsOnPage = () => {
+    const data = this.db.slice(this.requestState.skip, this.requestState.displayTillIndex) || [];
+    data.forEach((d) => {
+      this.selectedRecords.push(d.id);
+    });
+  }
+
   @action
   resetPagination = () => {
     this.requestState.skip = 0;
@@ -213,6 +226,13 @@ export class KnowledgeBaseStore {
       this.KNOWLEDGE_BASE_FRM,
       Validator.pullValues(e, result),
     );
+    if (result.name === 'title') {
+      const formValue = { value: kebabCase(result.value), name: 'slug' };
+      this.KNOWLEDGE_BASE_FRM = Validator.onChange(
+        this.KNOWLEDGE_BASE_FRM,
+        Validator.pullValues(e, formValue),
+      );
+    }
   };
   @action
   maskChange = (values, field) => {
@@ -365,6 +385,11 @@ export class KnowledgeBaseStore {
     this.selectedRecords.push(id);
   }
 
+  @computed get selectedRecordsCount() {
+    console.log('inside selectedRecordsCount');
+    return this.selectedRecords.count || 0;
+  }
+
   @action
   applyGlobalAction = () => {
     const idArr = this.selectedRecords;
@@ -415,6 +440,29 @@ export class KnowledgeBaseStore {
       this.resetSelectedRecords();
       Helper.toast('Error while deleting records.', 'error');
     });
+  }
+
+  @action
+  setKnowledgeBaseOrder = (newArr, newOrder) => {
+    uiStore.setProgress();
+    const data = [];
+    data.push({
+      id: newArr.id,
+      order: newOrder,
+    });
+    client
+      .mutate({
+        mutation: setOrderForKnowledgeBase,
+        variables: { knowledgeBaseItemsList: data },
+        refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
+      }).then(() => {
+        Helper.toast('Order updated successfully.', 'success');
+      }).catch(() => {
+        Helper.toast('Error while updating order', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 
