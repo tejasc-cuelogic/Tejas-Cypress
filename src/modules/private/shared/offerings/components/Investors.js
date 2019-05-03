@@ -18,12 +18,12 @@ export default class BonusRewards extends Component {
     this.props.offeringInvestorStore.setInitiateSrch('keyword', e.target.value);
   }
   populateCsvData = () => {
-    const { investorLists } = this.props.offeringInvestorStore;
+    const { investorListsForCsvExport } = this.props.offeringInvestorStore;
     const { offer } = this.props.offeringsStore;
-    const fields = ['firstName', 'lastName', 'userEmail', 'city', 'state', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode.code', 'referralCode.isValid'];
+    const fields = ['firstName', 'lastName', 'userEmail', 'city', 'state', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode'];
     const params = {
       fields,
-      data: toJS(investorLists),
+      data: toJS(investorListsForCsvExport),
       fileName: `${get(offer, 'keyTerms.shorthandBusinessName')}-investors`,
     };
     Helper.downloadCSV(params);

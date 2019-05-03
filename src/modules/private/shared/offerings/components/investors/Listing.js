@@ -8,8 +8,6 @@ import { inject, observer } from 'mobx-react';
 import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
-// const meta = ['Investor\'s Name', 'Residence City',
-// 'Investment Amount', 'Investment Time', 'Referral Code'];
 const meta = [
   { label: '', value: 'avatar' },
   { label: 'Investor\'s Name', value: 'firstName' },
@@ -38,7 +36,6 @@ export default class Listing extends Component {
     return (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
   }
 
-  // paginate = params => this.props.offeringInvestorStore.pageRequest(params);
   render() {
     const { offer } = this.props.offeringsStore;
     const { isIssuer, isAdmin } = this.props.userStore;
@@ -50,7 +47,6 @@ export default class Listing extends Component {
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
-    // const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
     }
@@ -143,13 +139,6 @@ export default class Listing extends Component {
             </Table.Body>
           </Table>
         </div>
-        {/* {totalRecords > 0 &&
-          <NsPagination
-           floated="right"
-            initRequest={this.paginate}
-             meta={{ totalRecords, requestState }}
-              />
-        } */}
       </Aux>
     );
   }
