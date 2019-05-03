@@ -2,11 +2,74 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Card, Table, Button, Grid, Form, Checkbox, Icon, Label, Confirm } from 'semantic-ui-react';
+import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
+import { Button, Grid, Form, Checkbox, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { InlineLoader, NsPagination, DateTimeFormat } from './../../../../../theme/shared';
 import { FAQ_TYPE_ENUM, GLOBAL_ACTIONS } from '../../../../../services/constants/admin/faqs';
 
+const actions = {
+  edit: { label: 'Edit', icon: 'pencil' },
+  delete: { label: 'Delete', icon: 'trash' },
+};
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+const SortableItem = SortableElement(({
+  faq, key, handleAction, checkedRecords, selectedRecords,
+}) => (
+  <div className="row-wrap" key={key}>
+    <div className="balance">
+      <DragHandle />
+    </div>
+    <div className="balance">
+      <Checkbox
+        name={faq.id}
+        value={faq.id}
+        checked={selectedRecords.includes(faq.id)}
+        onChange={(e, result) => checkedRecords(e, result)}
+      />
+    </div>
+    <div className="balance-half">
+      <span className="user-name">
+        <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
+      </span>
+    </div>
+    <div className="balance-half">{FAQ_TYPE_ENUM[faq.faqType]}</div>
+    <div className="balance-half">{faq.categoryName || 'N/A'}</div>
+    <div className="balance-half">{faq.author || 'N/A'}</div>
+    <div className="balance-half"><Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></div>
+    <div className="balance-half">
+      <DateTimeFormat format="MM-DD-YYYY" datetime={faq.updated && faq.updated.date} />
+    </div>
+    <div className="balance-half">{faq.order}</div>
+    <div className="action right-align">
+      <Button.Group>
+        {Object.keys(actions).map(action => (
+          <Button className="link-button" >
+            <Icon className={`ns-${actions[action].icon}`} onClick={() => handleAction(actions[action].label, faq.id, faq.itemStatus)} />
+          </Button>
+        ))}
+      </Button.Group>
+    </div>
+  </div>
+));
+
+const SortableList = SortableContainer(({
+  allFaqs, handleAction, checkedRecords, selectedRecords,
+}) => (
+  <div className="tbody">
+    { allFaqs.map((faq, index) => (
+      <SortableItem
+        key={faq.id}
+        docIndx={index}
+        faq={faq}
+        index={index}
+        handleAction={handleAction}
+        checkedRecords={checkedRecords}
+        selectedRecords={selectedRecords}
+      />
+    )) };
+  </div>
+));
 @inject('faqStore')
 @withRouter
 @observer
@@ -14,6 +77,13 @@ export default class AllFaqs extends Component {
   componentWillMount() {
     this.props.faqStore.initRequest(); // load data
   }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const { allFaqs, setFaqOrder } = this.props.faqStore;
+    if (oldIndex !== newIndex) {
+      setFaqOrder(allFaqs[newIndex], newIndex);
+    }
+  }
+
   handleAction = (action, faqId) => {
     if (action === 'Delete') {
       this.props.faqStore.setConfirmBox(action, faqId);
@@ -54,10 +124,6 @@ export default class AllFaqs extends Component {
       selectedRecords,
       globalAction,
     } = this.props.faqStore;
-    const actions = {
-      edit: { label: 'Edit', icon: 'pencil' },
-      delete: { label: 'Delete', icon: 'trash' },
-    };
     const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
@@ -77,64 +143,39 @@ export default class AllFaqs extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Card fluid>
-          <div className="table-wrapper">
-            <Table unstackable striped sortable className="user-list">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell collapsing>
-                    <Checkbox
-                      defaultIndeterminate={false}
-                      value="all"
-                      checked={selectedRecords.includes('all')}
-                      onChange={(e, result) => this.checkAll(e, result)}
-                    />
-                  </Table.HeaderCell>
-                  <Table.HeaderCell width={5}>Title</Table.HeaderCell>
-                  <Table.HeaderCell>Type</Table.HeaderCell>
-                  <Table.HeaderCell>Category</Table.HeaderCell>
-                  <Table.HeaderCell>Author</Table.HeaderCell>
-                  <Table.HeaderCell>Status</Table.HeaderCell>
-                  <Table.HeaderCell>Last update date</Table.HeaderCell>
-                  <Table.HeaderCell textAlign="center" />
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {
-                  allFaqs.map(record => (
-                    <Table.Row key={record.id}>
-                      <Table.Cell>
-                        <Checkbox
-                          name={record.id}
-                          value={record.id}
-                          checked={selectedRecords.includes(record.id)}
-                          onChange={(e, result) => this.checkedRecords(e, result)}
-                        />
-                      </Table.Cell>
-                      <Table.Cell><Link to={`${this.props.match.url}/${record.id}`}>{record.question}</Link></Table.Cell>
-                      <Table.Cell>{FAQ_TYPE_ENUM[record.faqType]}</Table.Cell>
-                      <Table.Cell>{record.categoryName}</Table.Cell>
-                      <Table.Cell>{record.author}</Table.Cell>
-                      <Table.Cell><Label color={`${record.itemStatus === 'PUBLISHED' ? 'green' : record.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
-                      <Table.Cell>
-                        <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
-                      </Table.Cell>
-                      <Table.Cell textAlign="center">
-                        <Button.Group>
-                          {Object.keys(actions).map(action => (
-                            <Button className="link-button" >
-                              <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id)} />
-                            </Button>
-                          ))}
-                        </Button.Group>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))
-                }
-              </Table.Body>
-            </Table>
+        <div className="ui card fluid">
+          <div className="ui basic table team-table striped">
+            <div className="row-wrap thead">
+              <div className="balance">&nbsp;</div>
+              <div className="balance">
+                <Checkbox
+                  indeterminate={selectedCount > 0 && !selectedRecords.includes('all')}
+                  value="all"
+                  checked={selectedRecords.includes('all')}
+                  onChange={(e, result) => this.checkAll(e, result)}
+                />
+              </div>
+              <div className="balance-half">Title</div>
+              <div className="balance-half">Type</div>
+              <div className="balance-half">Category</div>
+              <div className="balance-half">Author</div>
+              <div className="balance-half">Status</div>
+              <div className="balance-half">Last update date</div>
+              <div className="balance-half">Order</div>
+              <div className="action right-align" />
+            </div>
+            <SortableList
+              allFaqs={allFaqs}
+              pressDelay={100}
+              onSortEnd={e => this.onSortEnd(e)}
+              lockAxis="y"
+              useDragHandle
+              handleAction={this.handleAction}
+              checkedRecords={this.checkedRecords}
+              selectedRecords={selectedRecords}
+            />
           </div>
-        </Card>
+        </div>
         {totalRecords > 0 &&
           <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
         }
@@ -148,7 +189,6 @@ export default class AllFaqs extends Component {
           size="mini"
           className="deletion"
         />
-
       </Aux>
     );
   }

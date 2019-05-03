@@ -11,6 +11,7 @@ export const faqs = gql`
       categoryName
       answer
       faqType
+      order
       itemStatus
       updated{
         by
@@ -31,6 +32,7 @@ export const getFaqById = gql`
       categoryName
       answer
       faqType
+      order
       itemStatus
       updated{
         by
@@ -57,6 +59,7 @@ export const upsertFaq = gql`
       answer
       faqType
       itemStatus
+      order
       updated{
         by
         date
@@ -74,6 +77,7 @@ export const faqsListByFilters = gql`
       question
       categoryName
       answer
+      order
       faqType
       itemStatus
       updated{
@@ -84,9 +88,9 @@ export const faqsListByFilters = gql`
   }
 `;
 
-export const setMemberOrderInTeam = gql`
-mutation setMemberOrderInTeam($teamDetails: [TeamOrderInput]) {
-  setMemberOrderInTeam(teamDetails: $teamDetails)
+export const setOrderForFAQ = gql`
+mutation setOrderForFAQ($faqItemsList: [FaqOrderInput]) {
+  setOrderForFAQ(faqItemsList: $faqItemsList)
 }
 `;
 export const updateStatus = gql`

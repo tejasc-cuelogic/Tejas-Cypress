@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { forEach, map } from 'lodash';
+import { forEach, map, sortBy } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { faqs, getFaqById, upsertFaq, faqsListByFilters, deleteFaq, updateStatus } from '../../queries/faq';
+import { faqs, getFaqById, upsertFaq, faqsListByFilters, deleteFaq, updateStatus, setOrderForFAQ } from '../../queries/faq';
 import { FAQ } from '../../../constants/faq';
 import { uiStore } from '../../index';
 
@@ -135,7 +135,7 @@ export class FaqStore {
 
   @computed get allFaqs() {
     return (this.db && this.db.length &&
-      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+      toJS(sortBy(this.db, ['order']).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
 
   @computed get loading() {
@@ -188,7 +188,9 @@ export class FaqStore {
   checkUncheckAll = (checked = false) => {
     if (checked) {
       this.allFaqs.forEach((faq) => {
-        this.addSelectedRecord(faq.id);
+        if (!this.selectedRecords.includes(faq.id)) {
+          this.addSelectedRecord(faq.id);
+        }
       });
     } else {
       this.allFaqs.forEach((faq) => {
@@ -200,7 +202,28 @@ export class FaqStore {
   reset = () => {
     this.FAQ_FRM = Validator.prepareFormObject(FAQ);
   }
-
+  @action
+  setFaqOrder = (newArr, newOrder) => {
+    uiStore.setProgress();
+    const data = [];
+    data.push({
+      id: newArr.id,
+      order: newOrder,
+    });
+    clientPrivate
+      .mutate({
+        mutation: setOrderForFAQ,
+        variables: { faqItemsList: data },
+        refetchQueries: [{ query: setOrderForFAQ }],
+      }).then(() => {
+        Helper.toast('Order updated successfully.', 'success');
+      }).catch(() => {
+        Helper.toast('Error while updating order', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
   @action
   formChange = (e, result) => {
     this.FAQ_FRM = Validator.onChange(this.FAQ_FRM, Validator.pullValues(e, result));
