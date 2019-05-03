@@ -57,7 +57,9 @@
 	}
 }
 .ui.sidebar.left.menu{
-	transform:none;
+	&.push{
+		transform:none;
+	}
 	@media only screen and (min-width : @largeMonitorBreakpoint){
 		~.fixed, ~.pusher{
 			padding-left:260px;
