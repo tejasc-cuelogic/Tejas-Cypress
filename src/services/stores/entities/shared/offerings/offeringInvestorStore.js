@@ -1,11 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy } from 'lodash';
+import { orderBy, get, find, map } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { getInvestorListForOffering } from '../../../queries/offering/investor';
 import { ClientDb } from '../../../../../helper';
+import { offeringsStore } from '../../../index';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingInvestorStore {
@@ -92,6 +93,18 @@ export class OfferingInvestorStore {
     // return (this.db && this.db.length &&
     //   this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
+
+  @computed get investorListsForCsvExport() {
+    const { offer } = offeringsStore;
+    const referralCode = get(offer, 'referralCode');
+    const investorList = map(this.investorLists, (i) => {
+      const matchReferral = find(i.referralCode, r => r.code === referralCode);
+      const iReferralCode = (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
+      return { ...i, referralCode: iReferralCode };
+    });
+    return investorList;
+  }
+
   @action
   setSortingOrder = (column = null, direction = null) => {
     this.sortOrder.column = column;
