@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
@@ -17,7 +18,7 @@ const actions = {
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  knowledgeBase, key, handleAction, checkedRecords,
+  knowledgeBase, key, handleAction, checkedRecords, getSelectedRecords,
 }) => (
   <div className="row-wrap" key={key}>
     <div className="balance">
@@ -28,6 +29,7 @@ const SortableItem = SortableElement(({
         name={knowledgeBase.id}
         value={knowledgeBase.id}
         onChange={(e, result) => checkedRecords(e, result)}
+        checked={getSelectedRecords.includes(knowledgeBase.id)}
       />
     </div>
     <div className="balance-half">
@@ -65,10 +67,10 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  AllKnowledgeBase, handleAction, checkedRecords,
+  AllKnowledgeBase, handleAction, checkedRecords, getSelectedRecords,
 }) => (
   <div className="tbody">
-    { AllKnowledgeBase.map((knowledgeBase, index) => (
+    {AllKnowledgeBase.map((knowledgeBase, index) => (
       <SortableItem
         key={knowledgeBase.id}
         docIndx={index}
@@ -76,8 +78,9 @@ const SortableList = SortableContainer(({
         index={index}
         handleAction={handleAction}
         checkedRecords={checkedRecords}
+        getSelectedRecords={getSelectedRecords}
       />
-    )) };
+    ))};
   </div>
 ));
 
@@ -120,7 +123,13 @@ export default class AllKnowledgeBaseItems extends Component {
   checkedRecords = (e, result) => {
     if (result && result.type === 'checkbox' && result.checked) {
       this.props.knowledgeBaseStore.addSelectedRecords(result.value);
+    } else {
+      this.props.knowledgeBaseStore.removeSelectedRecords(result.value);
     }
+  }
+
+  checkedAllRecords = (e, result) => {
+    this.props.knowledgeBaseStore.selectRecordsOnPage(result.checked);
   }
 
   render() {
@@ -133,10 +142,9 @@ export default class AllKnowledgeBaseItems extends Component {
       count,
       requestState,
       applyGlobalAction,
-      disableApply,
+      isReadOnly,
       categoryLoading,
-      selectedRecordsCount,
-      selectRecordsOnPage,
+      getSelectedRecords,
     } = knowledgeBaseStore;
     const totalRecords = count || 0;
     if (loading || categoryLoading) {
@@ -150,12 +158,12 @@ export default class AllKnowledgeBaseItems extends Component {
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
-              <Grid.Column>Selected {selectedRecordsCount} items</Grid.Column>
+              <Grid.Column><b>Selected {getSelectedRecords.length || 0} items </b></Grid.Column>
               <Grid.Column width={3} floated="right">
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
               <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
+                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={isReadOnly} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -168,8 +176,11 @@ export default class AllKnowledgeBaseItems extends Component {
                 <Checkbox
                   name="selectAllChkbox"
                   value="selectAllChkbox"
-                  onChange={selectRecordsOnPage}
-                  defaultIndeterminate
+                  onChange={(e, result) => this.checkedAllRecords(e, result)}
+                  defaultIndeterminate={(getSelectedRecords.length > 0 &&
+                    getSelectedRecords.length < AllKnowledgeBase.length)}
+                  checked={getSelectedRecords.length > 0 &&
+                    getSelectedRecords.length === AllKnowledgeBase.length}
                 />
               </div>
               <div className="balance-half">Title</div>
@@ -189,6 +200,7 @@ export default class AllKnowledgeBaseItems extends Component {
               useDragHandle
               handleAction={this.handleAction}
               checkedRecords={this.checkedRecords}
+              getSelectedRecords={getSelectedRecords}
             />
             {/* ))} */}
 
