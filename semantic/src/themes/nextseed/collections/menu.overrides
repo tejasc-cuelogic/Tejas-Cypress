@@ -754,30 +754,3 @@ footer{
     max-width: 1680px;
     margin: auto !important;
 }
-.social-media {
-    left: 0;
-    z-index: 104;
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    text-align: center;
-    visibility: hidden;
-    padding-bottom: @24px;
-    background: @white;
-    .ui.menu{
-        justify-content: center;
-        align-items: center;
-        box-shadow: none;
-        .item {
-            color: @neutral-middark;
-            margin: @13px @16px;
-            padding: 0;
-            i.icon {
-                margin: 0;
-            }
-            &::before{
-                display: none;
-            }
-        }
-    }
-}

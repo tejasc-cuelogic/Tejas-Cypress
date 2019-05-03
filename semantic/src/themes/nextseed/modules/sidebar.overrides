@@ -320,6 +320,33 @@
 			}
 		}
 	}
+	~ .social-media {
+		position: absolute;
+		width: 0;
+		left: 0;
+		bottom: 0;
+		padding-bottom: @24px;
+		z-index: 104;
+		text-align: center;
+		visibility: hidden;
+		background: @white;
+		.ui.menu{
+			justify-content: center;
+			align-items: center;
+			box-shadow: none;
+			.item {
+				color: @neutral-middark;
+				margin: @13px @16px;
+				padding: 0;
+				i.icon {
+					margin: 0;
+				}
+				&::before{
+					display: none;
+				}
+			}
+		}
+	}
 }
 
 .ui.sidebar.left.inverted.menu{
