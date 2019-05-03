@@ -34,7 +34,6 @@ query _getArticleByCategoryId($id:ID! ) {
     featuredImage
     minuteRead
     title
-    authorId
     updated {
       date
     }

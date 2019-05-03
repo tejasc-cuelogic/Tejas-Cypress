@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
+import money from 'money-math';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -26,11 +27,18 @@ export default class CampaignSecondaryMenu extends Component {
     && campaign.closureSummary.processingDate;
     const diff = DataFormatter.diffDays(processingDate);
     const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
-    const isInProcessing = diffForProcessing === 0 && !get(campaign, 'closureSummary.hardCloseDate');
+    const isInProcessing = diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const { navStatus, subNavStatus } = this.props.navStore;
-    const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
+    // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
+    const formatedRaisedAmount = money.floatToAmount(collected);
+    const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
+    const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
+    const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
+    const maxFlagStatus =
+    !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+     money.isPositive(formatedReachedMaxCompairAmountValue));
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
@@ -49,8 +57,8 @@ export default class CampaignSecondaryMenu extends Component {
                   }
                 </Aux>
             }
-              {(!isClosed && diffForProcessing >= 0) &&
-                <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
+              {!isClosed &&
+                <Button compact primary={!isInProcessing} content={`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
@@ -64,7 +72,7 @@ export default class CampaignSecondaryMenu extends Component {
                 </List.Header>
               </List.Item>
               {!isMobile && (get(campaign, 'keyTerms.interestRate') || get(campaign, 'keyTerms.investmentMultiple')) &&
-              <List.Item>{get(campaign, 'keyTerms.securities') === 'TERM_NOTE' ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : `Up to ${get(campaign, 'keyTerms.investmentMultiple') || ''}x Investment Multiple`}</List.Item>
+              <List.Item>{get(campaign, 'keyTerms.securities') === 'TERM_NOTE' ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
             }
             </List>
           </Container>

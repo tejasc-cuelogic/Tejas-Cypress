@@ -55,7 +55,7 @@ const LegalIdentityQuestions = observer(({
           </Message>
         }
         <div className="center-align mt-30">
-          <Button loading={inProgress} color="green" size="large" className="relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
+          <Button loading={inProgress} color="green" size="large" className="relaxed" disabled={!form.meta.isValid || inProgress}>Verify my identity</Button>
         </div>
       </Form>
     </Modal.Content>

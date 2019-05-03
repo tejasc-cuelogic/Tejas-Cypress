@@ -129,7 +129,9 @@ export class IdentityStore {
 
   @action
   setVerifyIdentityResponse = (response) => {
-    this.ID_VERIFICATION_FRM.response = response;
+    const IDENTITY_FORM = this.ID_VERIFICATION_FRM;
+    IDENTITY_FORM.response = response;
+    this.ID_VERIFICATION_FRM = { ...IDENTITY_FORM };
   }
 
   @action
@@ -154,6 +156,7 @@ export class IdentityStore {
     const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       legalName: {
+        salutation: fields.title.value,
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
@@ -187,6 +190,8 @@ export class IdentityStore {
     return { userInfo, phoneDetails };
   }
 
+  checkIncorrectAns = res => res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete')
+
   @computed
   get formattedUserInfo() {
     const { fields, response } = this.ID_VERIFICATION_FRM;
@@ -197,12 +202,21 @@ export class IdentityStore {
     } else if (response.message === 'PASS' || (response.summary && response.summary === 'pass')) {
       cip.expiration = Helper.getDaysfromNow(21);
       cip.requestId = response.passId;
+      if (response.key && response.message) {
+        cip.failReason = [{ key: response.key, message: response.message }];
+        cip.failType = 'FAIL_WITH_QUESTIONS';
+      }
     } else if (response.message === 'FAIL' && response.questions) {
       cip.expiration = Helper.getDaysfromNow(21);
       cip.requestId = response.softFailId;
       cip.failType = 'FAIL_WITH_QUESTIONS';
       // omitDeep, cleanDeep
       cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+    } else if (this.checkIncorrectAns(response) && response.hardFailId) {
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.hardFailId;
+      cip.failType = 'FAIL_WITH_UPLOADS';
+      cip.failReason = [{ key: response.key, message: response.message }];
     } else {
       cip.expiration = Helper.getDaysfromNow(21);
       cip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
@@ -454,16 +468,19 @@ export class IdentityStore {
         })
         .then((result) => {
           /* eslint-disable no-underscore-dangle */
-          if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
-            this.setCipStatus('PASS');
-            this.updateUserInfo();
-          }
+          this.setVerifyIdentityResponse(result.data.verifyCIPAnswers);
+          // eslint-disable-next-line no-unused-expressions
+          result.data.verifyCIPAnswers.__typename === 'UserCIPPass' ?
+            this.setCipStatus('PASS') : this.setCipStatus('HARD_FAIL');
+          this.updateUserInfo();
           uiStore.setProgress(false);
+          this.setFieldValue('signUpLoading', false);
           resolve(result);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
+          this.setFieldValue('signUpLoading', false);
           reject();
         });
       // .finally(() => {
@@ -814,6 +831,7 @@ export class IdentityStore {
     const { legalDetails, phone } = userDetailsStore.userDetails;
     const { fields } = this.ID_VERIFICATION_FRM;
     if (legalDetails && legalDetails.legalName) {
+      fields.title.value = legalDetails.legalName.salutation;
       fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
       fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
     }

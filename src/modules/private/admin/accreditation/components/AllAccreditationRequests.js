@@ -12,7 +12,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore', 'commonStore')
+@inject('accreditationStore', 'commonStore', 'userStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -39,6 +39,9 @@ export default class AllAccreditationRequests extends Component {
     const {
       accreditations, loading, count, requestState, emailVerifier,
     } = accreditationStore;
+
+    const access = this.props.userStore.myAccessForModule('ACCREDITATION');
+    const isManager = access.asManager;
     if (loading) {
       return <InlineLoader />;
     }
@@ -53,7 +56,9 @@ export default class AllAccreditationRequests extends Component {
                 <Table.HeaderCell>Requested Date</Table.HeaderCell>
                 <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
-                <Table.HeaderCell>Method</Table.HeaderCell>
+                {isManager &&
+                  <Table.HeaderCell>Method</Table.HeaderCell>
+                }
                 <Table.HeaderCell textAlign="center" />
               </Table.Row>
             </Table.Header>
@@ -91,25 +96,27 @@ export default class AllAccreditationRequests extends Component {
                         }
                       </p>
                     </Table.Cell>
-                    <Table.Cell>
-                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
-                        accreditation.assetsUpload[0].fileInfo &&
-                        accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                        (inProgress === accreditation.assetsUpload[0]
-                          .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p> :
-                          <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
-                          )
-                          : <p className="note">N/A</p>
-                        : 'Verifier'}
-                        {accreditation.verifier &&
-                          <Aux>
-                            <br /><b>Role: </b> {accreditation.verifier.role}
-                            <br /><b>Email: </b> {accreditation.verifier.email}
-                          </Aux>
-                        }
-                      </p>
-                    </Table.Cell>
-                    {accreditation.accreditationStatus === 'REQUESTED' ?
+                    {isManager &&
+                      <Table.Cell>
+                        <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
+                          accreditation.assetsUpload[0].fileInfo &&
+                          accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
+                          (inProgress === accreditation.assetsUpload[0]
+                            .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p> :
+                            <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
+                            )
+                            : <p className="note">N/A</p>
+                          : 'Verifier'}
+                          {accreditation.verifier &&
+                            <Aux>
+                              <br /><b>Role: </b> {accreditation.verifier.role}
+                              <br /><b>Email: </b> {accreditation.verifier.email}
+                            </Aux>
+                          }
+                        </p>
+                      </Table.Cell>
+                    }
+                    {accreditation.accreditationStatus === 'REQUESTED' && isManager ?
                       <Aux>
                         <Actions
                           accountId={accreditation.accountId}
@@ -122,7 +129,7 @@ export default class AllAccreditationRequests extends Component {
                         />
                       </Aux> :
                       <Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
                       </Table.Cell>
                     }
                   </Table.Row>
