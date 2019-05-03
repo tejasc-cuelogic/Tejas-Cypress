@@ -111,37 +111,35 @@ export default class NavBarMobile extends Component {
             >
               <Icon onClick={onToggle} className="ns-close-light" />
               <div className="public-mobile-nav">
-                <div className="mobile-nav-inner-container">
-                  <div className="public-header-nav">
-                    <NavItems
-                      refLoc="public"
-                      currentUser={currentUser}
-                      location={location}
-                      isMobile={isMobile}
-                      navStatus={navStatus}
-                      onToggle={onToggle}
-                      navItems={PUBLIC_NAV}
-                    />
-                    <NavItems
-                      refLoc="public"
-                      currentUser={currentUser}
-                      location={location}
-                      isMobile={isMobile}
-                      navStatus={navStatus}
-                      onToggle={onToggle}
-                      navItems={FOOTER_NAV}
-                    />
-                    <div className="public-action-nav mt-30">
-                      {!currentUser ? logInSignUp.map(route => (
-                        <Menu.Item>
-                          <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
-                        </Menu.Item>
-                      )) :
+                <div className="public-header-nav">
+                  <NavItems
+                    refLoc="public"
+                    currentUser={currentUser}
+                    location={location}
+                    isMobile={isMobile}
+                    navStatus={navStatus}
+                    onToggle={onToggle}
+                    navItems={PUBLIC_NAV}
+                  />
+                  <NavItems
+                    refLoc="public"
+                    currentUser={currentUser}
+                    location={location}
+                    isMobile={isMobile}
+                    navStatus={navStatus}
+                    onToggle={onToggle}
+                    navItems={FOOTER_NAV}
+                  />
+                  <div className="public-action-nav mt-20">
+                    {!currentUser ? logInSignUp.map(route => (
                       <Menu.Item>
-                        <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" className="basic" compact>Logout</Button>
+                        <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
                       </Menu.Item>
-                      }
-                    </div>
+                    )) :
+                    <Menu.Item>
+                      <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" className="basic" compact>Logout</Button>
+                    </Menu.Item>
+                    }
                   </div>
                 </div>
               </div>

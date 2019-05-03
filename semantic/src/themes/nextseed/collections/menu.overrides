@@ -651,16 +651,8 @@ footer{
 .public-mobile-nav {
     position: relative;
     padding: 0;
-    height: 100%;
-    overflow: hidden;
-    .mobile-nav-inner-container {
-        height: 100%;
-        overflow: auto;
-        position: relative;
-        .public-header-nav{
-            padding: @50px 0;
-            background: @white;
-        }
+    .public-header-nav{
+        padding: @47px 0 @64px;
     }
 }
 .ui.sidebar.menu.public-sidebar {
@@ -678,7 +670,7 @@ footer{
     &.visible.vertical {
         .item {
             border-radius: 0 !important;
-            padding: @8px @24px;
+            padding: @14px @26px;
             font-weight: @fontMedium;
             span {
                 margin-left: 0;
@@ -709,6 +701,7 @@ footer{
         }
         .public-action-nav .item {
             border-bottom: 0;
+            padding: @8px @26px;
             .ui.button{
                 width: 212px;
                 &.basic {
@@ -760,27 +753,4 @@ footer{
 .slide-down .ui.secondary.menu {
     max-width: 1680px;
     margin: auto !important;
-}
-.social-media {
-    left: 0;
-    z-index: 104;
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    text-align: center;
-    visibility: hidden;
-    .ui.menu{
-        justify-content: center;
-        align-items: center;
-        box-shadow: none;
-        .item {
-            color: @neutral-middark;
-            i.icon {
-                margin: 0;
-            }
-            &::before{
-                display: none;
-            }
-        }
-    }
 }
