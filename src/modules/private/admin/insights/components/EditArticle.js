@@ -4,11 +4,11 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form } from 'semantic-ui-react';
 import { MaskedInput, FormInput, FormDropDown, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
-import { ARTICLE_STATUS_VALUES, AUTHORS } from '../../../../../services/constants/admin/article';
+import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
 import Actions from './Actions';
 
 
-@inject('articleStore', 'userStore', 'offeringCreationStore')
+@inject('articleStore', 'userStore')
 @withRouter
 @observer
 export default class EditArticle extends Component {
@@ -17,7 +17,6 @@ export default class EditArticle extends Component {
     const { id } = this.props.match.params;
     if (id !== 'new') {
       this.initiateFlow(id);
-      this.props.articleStore.setFormData(id);
     }
     // else {
     //   this.props.articleStore.reset();
@@ -32,7 +31,11 @@ export default class EditArticle extends Component {
   }
   initiateFlow = (id) => {
     if (id !== 'new') {
-      this.props.articleStore.getArticleAdminListing(id, false);
+      new Promise(() => {
+        this.props.articleStore.getArticleAdminListing(id, false);
+      }).then(() => {
+        this.props.articleStore.setFormData(id);
+      }).catch();
     } else {
       this.props.articleStore.reset();
     }
@@ -60,6 +63,7 @@ export default class EditArticle extends Component {
     const {
       ARTICLE_FRM,
       articleChange,
+      maskChange,
       htmlContentChange,
       categoriesDropdown,
     } = this.props.articleStore;
@@ -85,8 +89,6 @@ export default class EditArticle extends Component {
                 <small>Article name</small>
                 <Form>
                   <FormInput
-                    // readOnly={(this.props.status === 'PUBLISHED' &&
-                    // isManager) ? !this.state.editForm : isReadonly}
                     ishidelabel
                     fluid
                     type="text"
@@ -95,8 +97,6 @@ export default class EditArticle extends Component {
                     changed={articleChange}
                   />
                   <HtmlEditor
-                    // readOnly={(this.props.status === 'PUBLISHED'
-                    // && isManager) ? !this.state.editForm : isReadonly}
                     changed={htmlContentChange}
                     name="content"
                     content={ARTICLE_FRM.fields.content.value}
@@ -122,23 +122,11 @@ export default class EditArticle extends Component {
                           onChange={(e, result) => articleChange(e, result)}
                         />
                       </div>
-                      <div className="field">
-                        <FormDropDown
-                          fielddata={ARTICLE_FRM.fields.author}
-                          selection
-                          containerclassname="dropdown-field"
-                          value={ARTICLE_FRM.fields.author.value}
-                          placeholder="Choose here"
-                          name="author"
-                          options={AUTHORS}
-                          onChange={(e, result) => articleChange(e, result)}
-                        />
-                      </div>
-                      {/* <FormInput
+                      <FormInput
                         name="author"
                         fielddata={ARTICLE_FRM.fields.author}
                         changed={articleChange}
-                      /> */}
+                      />
                       <div className="field">
                         <FormDropDown
                           fielddata={ARTICLE_FRM.fields.categoryId}
@@ -156,11 +144,6 @@ export default class EditArticle extends Component {
                         fielddata={ARTICLE_FRM.fields.tags}
                         changed={articleChange}
                       />
-                      {/* <FormInput
-                        name="minuteRead"
-                        fielddata={ARTICLE_FRM.fields.minuteRead}
-                        changed={articleChange}
-                      /> */}
                       <MaskedInput
                         containerclassname={displayMode ? 'display-only' : ''}
                         readOnly={false}
@@ -168,13 +151,17 @@ export default class EditArticle extends Component {
                         number
                         value={ARTICLE_FRM.fields.minuteRead.value}
                         fielddata={ARTICLE_FRM.fields.minuteRead}
-                        changed={articleChange}
+                        changed={maskChange}
                       />
-                      <FormInput
-                        name="banner"
-                        fielddata={ARTICLE_FRM.fields.banner}
-                        changed={articleChange}
-                      />
+                      {
+                        ['banner', 'slug'].map(field => (
+                          <FormInput
+                            key={field}
+                            name={field}
+                            fielddata={ARTICLE_FRM.fields[field]}
+                            onChange={(e, result) => articleChange(e, result)}
+                          />))
+                      }
                     </Form>
                   </Card.Content>
                 </Card>

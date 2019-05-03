@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import map from 'lodash/map';
+import { map, kebabCase } from 'lodash';
 // import { sortBy } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
@@ -73,20 +73,15 @@ export class ArticleStore {
     }
 
     @action
-    getArticleAdminListing = (id, isPublic = true) => {
-      const query = isPublic ? getArticleDetails : getArticleById;
-      const apiClient = isPublic ? clientPublic : client;
+    getArticleAdminListing = (id) => {
       this.article = graphql({
-        client: apiClient,
-        query,
+        client,
+        query: getArticleById,
         variables: { id },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
-          if (!isPublic && res) {
-            Object.keys(this.ARTICLE_FRM.fields).map((key) => {
-              this.ARTICLE_FRM.fields[key].value = res.insightsArticle[key];
-              return null;
-            });
-            Validator.validateForm(this.ARTICLE_FRM);
+          if (res) {
+            this.setFormData(res.insightsArticle);
           }
         },
 
@@ -96,6 +91,7 @@ export class ArticleStore {
     @action
     save = (id) => {
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
+      // data.tags = data.tags.split(',');
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
@@ -190,6 +186,10 @@ export class ArticleStore {
       return (this.article.data && toJS(this.article.data.insightArticleBySlug)) || null;
     }
 
+    @computed get singleArticlesDetails() {
+      return (this.article.data && toJS(this.article.data.insightsArticle)) || null;
+    }
+
     @computed get articleLoading() {
       return this.article.loading;
     }
@@ -230,6 +230,9 @@ export class ArticleStore {
     @action
     articleChange = (e, result) => {
       this.ARTICLE_FRM = Validator.onChange(this.ARTICLE_FRM, Validator.pullValues(e, result));
+      if (result.name === 'title') {
+        this.creteSlug('ARTICLE_FRM', result.name);
+      }
     };
     @action
     maskChange = (values, field) => {
@@ -240,6 +243,17 @@ export class ArticleStore {
       } else {
         this.setInitiateSrch(field, values.value);
       }
+      if (field === 'minuteRead') {
+        this.ARTICLE_FRM = Validator.onChange(
+          this.ARTICLE_FRM,
+          { name: field, value: values.floatValue },
+        );
+      }
+    }
+    @action
+    creteSlug = (formName, field) => {
+      const { value } = this[formName].fields[field];
+      this[formName].fields.slug.value = kebabCase(value);
     }
     @computed get categoriesDropdown() {
       console.log(this.Categories);
@@ -292,11 +306,21 @@ export class ArticleStore {
     }
 
     @action
-    setFormData = (id) => {
-      this.ARTICLE_FRM =
-      Validator.setFormData(this.ARTICLE_FRM, this.InsightArticles.find(obj => obj.id === id));
-      // this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
-      Validator.validateForm(this.ARTICLE_FRM);
+    setFormData = (res) => {
+      // this.ARTICLE_FRM =
+      // Validator.setFormData(
+      //   this.ARTICLE_FRM,
+      //   this.singleArticlesDetails.find(obj => obj.id === id),
+      // );
+      // // this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
+      // Validator.validateForm(this.ARTICLE_FRM);
+      if (!this.article.loading) {
+        Object.keys(this.ARTICLE_FRM.fields).map((key) => {
+          this.ARTICLE_FRM.fields[key].value = res[key];
+          return null;
+        });
+        Validator.validateForm(this.ARTICLE_FRM);
+      }
     }
     @action
     reset = () => {

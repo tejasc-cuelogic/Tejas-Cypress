@@ -17,6 +17,9 @@ export const ARTICLES = {
   banner: {
     value: '', label: 'Banner', error: undefined, rule: 'optional',
   },
+  slug: {
+    value: '', label: 'Slug', error: undefined, rule: 'optional',
+  },
   tags: {
     value: '', label: 'Tags', error: undefined, rule: 'optional',
   },

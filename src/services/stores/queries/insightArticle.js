@@ -54,13 +54,7 @@ query insight($id: ID!) {
     content
     category
     tags
-    author {
-      id
-      info {
-        lastName
-        firstName
-      }
-    }
+    author
     articleStatus
     updated {
       by
@@ -81,13 +75,7 @@ query insight($id: ID!) {
     content
     category
     tags
-    author {
-      id
-      info {
-        lastName
-        firstName
-      }
-    }
+    author
     articleStatus
     updated {
       by
@@ -130,6 +118,7 @@ mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
     title
     articleStatus
     category
+    slug
   }
 }
 `;
@@ -141,6 +130,7 @@ mutation updateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartia
     title
     articleStatus
     category
+    slug
   }
 }
 `;
