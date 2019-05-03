@@ -404,6 +404,11 @@
                 .ui.image.avatar, .sb-avatar {
                     margin-right: @10px;
                 }
+                .ui.fitted.checkbox{
+                    display:inline-block;
+                    margin-right:@10px;
+                    vertical-align:middle;
+                }
             }
             &.action{
                 flex: 1;
@@ -540,6 +545,9 @@
         font-weight:@normal;
         color:@neutral-middark;
         border:none;
+        .icon.invisible{
+            font-size:@14px;
+        }
     }
 }
 /* Drag-and-Drop effect styles in action */
