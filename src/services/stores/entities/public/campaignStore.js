@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy } from 'lodash';
+import { pickBy, get, filter, orderBy, remove } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -124,7 +124,9 @@ export class CampaignStore {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     const orderedActiveListArr =
       activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
-    return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
+    // return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
+    const partailResult = orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
+    return this.sortedOfferingList(partailResult);
   }
 
   @computed get completed() {
@@ -343,9 +345,11 @@ export class CampaignStore {
       format: 'Hours',
     };
     const launchDaysToRemains =
-    DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
+      DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
     const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+    const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
     let order = null;
+    let isProcessing = false;
     if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
       launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
       labelBannerFirst = 'NEW';
@@ -370,17 +374,35 @@ export class CampaignStore {
       order = order !== null ? order : 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
-      order = 2147483647;
+      order = 2147483647 + 1;
     }
+    if (isInProcessing) {
+      labelBannerFirst = 'Processing';
+      order = 2247483647;
+      isProcessing = true;
+    }
+
     if (labelBannerFirst || labelBannerSecond) {
       bannerToShowFlag = true;
     }
     resultObject.order = order !== null ? order : 2147483646;
+    resultObject.isProcessing = isProcessing;
     resultObject.launchDate = moment(launchDate).unix() || null;
+    resultObject.processingDate = moment(closingDate).unix() || null;
     resultObject.isBannerShow = bannerToShowFlag;
     resultObject.bannerFirstText = labelBannerFirst;
     resultObject.bannerSecondText = labelBannerSecond;
     return resultObject;
+  }
+  sortedOfferingList = (offeringList) => {
+    if (offeringList.length > 0) {
+      const sortedList = offeringList;
+      const prossingOfferingList = remove(sortedList, o => o.isProcessing);
+      const orderedProcessingList = orderBy(prossingOfferingList, ['processingDate'], ['desc']);
+      const sortedResult = [...sortedList, ...orderedProcessingList];
+      return sortedResult;
+    }
+    return offeringList;
   }
 }
 
