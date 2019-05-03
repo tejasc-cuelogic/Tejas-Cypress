@@ -41,8 +41,8 @@ export const getFaqById = gql`
 `;
 
 export const deleteFaq = gql`
-  mutation deleteFaq($id: [String]){
-    deleteFaq(id: $id)
+  mutation deleteFaq($ids: [String]){
+    deleteFaq(ids: $ids)
   }
 `;
 

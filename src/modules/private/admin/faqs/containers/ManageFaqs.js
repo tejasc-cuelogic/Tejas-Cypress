@@ -42,7 +42,7 @@ export default class ManageFaqs extends Component {
                 <Button color="basic" as={Link} to={`${match.url}/new`}>
                   Add FAQ
                 </Button>
-                <Button color="green" as={Link} to={`${match.url}/new`}>
+                <Button color="green" as={Link} to="/app/categories">
                   Manage categories
                 </Button>
               </Grid.Column>
