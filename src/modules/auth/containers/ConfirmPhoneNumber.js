@@ -201,7 +201,7 @@ export default class ConfirmPhoneNumber extends Component {
               :
               <Button.Group widths="2" className="inline">
                 <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                <Button type="button" primary content="Save" onClick={() => this.startPhoneVerification()} />
+                <Button type="button" disabled={!ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
               </Button.Group>
             }
           </Form>

@@ -623,7 +623,7 @@ export class Auth {
   segmentTrackLogout = (logoutType) => {
     if (window.analytics) {
       window.analytics.track('Logged Out', { logoutType });
-      // this.shutdownIntercom();
+      this.shutdownIntercom();
       window.analytics.reset();
     }
   }
