@@ -225,15 +225,15 @@
 		.ns-scrollbar .view{
 			padding:0;
 		}
-		.logo-wrapper{
-			display:none;
-		}
 		.ns-close-light{
 			position:absolute;
 			top:0;
 			right:10px;
 			font-size:@12px;
 			height:auto;
+		}
+		.ui.image.logo{
+			margin:@20px auto @20px @26px;
 		}
 		.user-picture{
 			text-align:left;
