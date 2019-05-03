@@ -8,7 +8,7 @@ import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { InlineLoader, NsPagination, DateTimeFormat } from './../../../../../theme/shared';
 import { FAQ_TYPE_ENUM } from '../../../../../services/constants/admin/faqs';
 
-@inject('faqStore', 'uiStore', 'articleStore')
+@inject('faqStore')
 @withRouter
 @observer
 export default class AllFaqs extends Component {
@@ -19,14 +19,20 @@ export default class AllFaqs extends Component {
     if (action === 'Delete') {
       this.props.faqStore.setConfirmBox(action, faqId);
     } else if (action === 'Edit') {
-      this.props.faqStore.push(`${this.props.match.url}/${faqId}`);
+      this.props.history.push(`${this.props.match.url}/${faqId}`);
     }
   }
   handleDeleteCancel = () => {
     this.props.faqStore.setConfirmBox('');
   }
-
   paginate = params => this.props.faqStore.pageRequest(params);
+  checkedRecords = (e, result) => {
+    if (result && result.type === 'checkbox' && result.checked) {
+      this.props.faqStore.addSelectedRecord(result.value);
+    } else {
+      this.props.faqStore.removeUnSelectedRecord(result.value);
+    }
+  }
   render() {
     const { globalAction } = this.props;
     const {
@@ -35,6 +41,9 @@ export default class AllFaqs extends Component {
       count,
       requestState,
       confirmBox,
+      applyGlobalAction,
+      disableApply,
+      selectedCount,
     } = this.props.faqStore;
     const actions = {
       edit: { label: 'Edit', icon: 'pencil' },
@@ -49,12 +58,12 @@ export default class AllFaqs extends Component {
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
-              <Grid.Column>Selected 15 items</Grid.Column>
+              <Grid.Column>{selectedCount ? `Selected ${selectedCount} items` : ''}</Grid.Column>
               <Grid.Column width={3} floated="right">
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" />
               </Grid.Column>
               <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" />
+                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -64,7 +73,7 @@ export default class AllFaqs extends Component {
             <Table unstackable striped sortable className="user-list">
               <Table.Header>
                 <Table.Row>
-                  <Table.Cell collapsing></Table.Cell>
+                  <Table.Cell collapsing><Checkbox defaultIndeterminate /></Table.Cell>
                   <Table.HeaderCell width={5}>Title</Table.HeaderCell>
                   <Table.HeaderCell>Type</Table.HeaderCell>
                   <Table.HeaderCell>Category</Table.HeaderCell>
@@ -78,11 +87,17 @@ export default class AllFaqs extends Component {
                 {
                   allFaqs.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell><Checkbox /></Table.Cell>
+                      <Table.Cell>
+                        <Checkbox
+                          name={record.id}
+                          value={record.id}
+                          onChange={(e, result) => this.checkedRecords(e, result)}
+                        />
+                      </Table.Cell>
                       <Table.Cell><Link to={`${this.props.match.url}/${record.id}`}>{record.question}</Link></Table.Cell>
                       <Table.Cell>{FAQ_TYPE_ENUM[record.faqType]}</Table.Cell>
                       <Table.Cell>{record.categoryName}</Table.Cell>
-                      <Table.Cell>{`${get(record, 'author.info.firstName') !== 'undefined' && get(record, 'author.info.firstName')} ${get(record, 'author.info.lastName') !== 'undefined' && get(record, 'author.info.lastName')}` || 'Admin' }</Table.Cell>
+                      <Table.Cell>{record.author}</Table.Cell>
                       <Table.Cell><Label color={`${record.itemStatus === 'PUBLISHED' ? 'green' : record.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
                       <Table.Cell>
                         <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />

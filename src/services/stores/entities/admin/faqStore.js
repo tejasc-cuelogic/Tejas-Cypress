@@ -5,7 +5,7 @@ import { forEach, map } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { faqs, getFaqById, upsertFaq, faqsListByFilters } from '../../queries/faq';
+import { faqs, getFaqById, upsertFaq, faqsListByFilters, deleteFaq, updateStatus } from '../../queries/faq';
 import { FAQ } from '../../../constants/faq';
 import { uiStore } from '../../index';
 
@@ -15,6 +15,7 @@ export class FaqStore {
   @observable FAQ_FRM = Validator.prepareFormObject(FAQ);
   @observable editMode = false;
   @observable filters = false;
+  @observable selectedRecords = [];
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -48,6 +49,65 @@ export class FaqStore {
   setConfirmBox = (entity, refId) => {
     this.confirmBox.entity = entity;
     this.confirmBox.refId = refId;
+  }
+  @action
+  addSelectedRecord = (id) => {
+    this.isReadOnly = false;
+    this.selectedRecords.push(id);
+  }
+  @action
+  removeUnSelectedRecord = (id) => {
+    this.selectedRecords = this.selectedRecords.filter(recordId => recordId !== id);
+  }
+
+  @action
+  applyGlobalAction = () => {
+    const idArr = this.selectedRecords;
+    const status = this.globalAction;
+    this.data.loading = true;
+    if (status === 'delete') {
+      this.deleteRecords(idArr);
+    } else {
+      this.updateRecordStatus(idArr, status);
+    }
+  }
+
+  updateRecordStatus = (id, status) => {
+    clientPrivate.mutate({
+      mutation: updateStatus,
+      variables: {
+        id,
+        status,
+      },
+      refetchQueries: [{ query: faqs }],
+    }).then(() => {
+      this.resetSelectedRecords();
+      Helper.toast('Status updated successfully.', 'success');
+    }).catch(() => {
+      this.resetSelectedRecords();
+      Helper.toast('Error while updating status.', 'error');
+    });
+  }
+  @action
+  resetSelectedRecords = () => {
+    this.selectedRecords = [];
+    this.isReadOnly = true;
+    this.globalAction = '';
+  }
+  deleteRecords = (id) => {
+    clientPrivate.mutate({
+      mutation: deleteFaq,
+      variables: {
+        id,
+      },
+      refetchQueries: [{ query: faqs }],
+    }).then(() => {
+      this.resetSelectedRecords();
+      Helper.toast('Records deleted successfully.', 'success');
+    }).catch(() => {
+      this.resetSelectedRecords();
+      Helper.toast('Error while deleting records.', 'error');
+    });
   }
 
   @action
@@ -106,9 +166,7 @@ export class FaqStore {
   getFaqFormData = () => {
     const data = {};
     forEach(this.FAQ_FRM.fields, (t, key) => {
-      if (!t.ArrayObjItem && key !== 'author') {
-        data[key] = this.FAQ_FRM.fields[key].value;
-      }
+      data[key] = this.FAQ_FRM.fields[key].value;
     });
     return data;
   }
@@ -173,7 +231,6 @@ export class FaqStore {
         reject();
       });
   });
-
   @action
   setFormFileArray = (formName, field, getField, value) => {
     if (Array.isArray(toJS(this[formName].fields[field][getField]))) {
@@ -182,7 +239,6 @@ export class FaqStore {
       this[formName].fields[field][getField] = value;
     }
   }
-
   @action
   faqListByFilter = () => {
     const data = this.requestState.search;
@@ -203,18 +259,15 @@ export class FaqStore {
       },
     });
   }
-
   @computed get count() {
     return (this.db && this.db.length) || 0;
   }
-
   @action
   pageRequest = ({ skip, page }) => {
     this.requestState.displayTillIndex = this.requestState.perPage * page;
     this.requestState.page = page;
     this.requestState.skip = skip;
   }
-
   @action
   setInitiateSrch = (keyword, value) => {
     this.requestState.search[keyword] = value;
@@ -222,6 +275,9 @@ export class FaqStore {
     if (keyword !== 'keyword') {
       this.faqListByFilter();
     }
+  }
+  @computed get selectedCount() {
+    return this.selectedRecords.length || 0;
   }
 }
 

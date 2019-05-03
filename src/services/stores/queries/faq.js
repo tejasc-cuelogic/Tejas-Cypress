@@ -5,12 +5,7 @@ export const faqs = gql`
     faqs {
       id
       slug
-      author{
-        info{
-          firstName
-          lastName
-        }
-      }
+      author
       question
       categoryId
       categoryName
@@ -30,12 +25,7 @@ export const getFaqById = gql`
     getFaqById (id: $id) {
       id
       slug
-      author{
-        info{
-          firstName
-          lastName
-        }
-      }
+      author
       question
       categoryName
       answer
@@ -49,9 +39,9 @@ export const getFaqById = gql`
   }
 `;
 
-export const deleteTeamMemberById = gql`
-  mutation deleteTeamMember($id: [ID]){
-    deleteTeamMember(id: $id)
+export const deleteFaq = gql`
+  mutation deleteFaq($id: [String]){
+    deleteFaq(id: $id)
   }
 `;
 
@@ -60,12 +50,7 @@ export const upsertFaq = gql`
     upsertFaq ( faqInput: $faqInput ) {
       id
       slug
-      author{
-        info{
-          firstName
-          lastName
-        }
-      }
+      author
       question
       categoryName
       answer
@@ -84,12 +69,7 @@ export const faqsListByFilters = gql`
     faqsListByFilters (question: $question, faqType: $faqType, categoryId: $categoryId, itemStatus: $itemStatus){
       id
       slug
-      author{
-        info{
-          firstName
-          lastName
-        }
-      }
+      author
       question
       categoryName
       answer
@@ -107,4 +87,9 @@ export const setMemberOrderInTeam = gql`
 mutation setMemberOrderInTeam($teamDetails: [TeamOrderInput]) {
   setMemberOrderInTeam(teamDetails: $teamDetails)
 }
+`;
+export const updateStatus = gql`
+  mutation updateStatus($id: [String]!, $status:ArticleStatusEnum!){
+    updateStatus(id: $id, status:$status)
+}  
 `;
