@@ -40,8 +40,8 @@ export default class CampaignHeader extends Component {
     const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
     const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
     const maxFlagStatus =
-    !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
-     money.isPositive(formatedReachedMaxCompairAmountValue));
+      !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+      money.isPositive(formatedReachedMaxCompairAmountValue));
     const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
     const percent = (collected / minMaxOffering) * 100;
     const address = campaign && campaign.keyTerms ?

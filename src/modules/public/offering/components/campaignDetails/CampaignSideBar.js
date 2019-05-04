@@ -42,7 +42,9 @@ export default class CampaignSideBar extends Component {
     const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
     const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
     const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
-    const maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue) || money.isPositive(formatedReachedMaxCompairAmountValue));
+    const maxFlagStatus =
+      !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+      money.isPositive(formatedReachedMaxCompairAmountValue));
     const percentBefore = (minOffering / maxOffering) * 100;
     const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
     const percent = (collected / minMaxOffering) * 100;

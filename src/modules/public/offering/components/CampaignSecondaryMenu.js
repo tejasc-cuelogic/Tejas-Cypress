@@ -37,8 +37,8 @@ export default class CampaignSecondaryMenu extends Component {
     const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
     const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
     const maxFlagStatus =
-    !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
-     money.isPositive(formatedReachedMaxCompairAmountValue));
+      !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+      money.isPositive(formatedReachedMaxCompairAmountValue));
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
