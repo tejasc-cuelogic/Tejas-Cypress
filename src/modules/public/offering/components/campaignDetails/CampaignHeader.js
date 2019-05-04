@@ -30,7 +30,8 @@ export default class CampaignHeader extends Component {
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     let minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
-    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    let maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), minOffering) : minOffering;
     const minFlagStatus = collected >= minOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
     // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
@@ -39,8 +40,8 @@ export default class CampaignHeader extends Component {
     const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
     const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
     const maxFlagStatus =
-    !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
-     money.isPositive(formatedReachedMaxCompairAmountValue));
+      !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+      money.isPositive(formatedReachedMaxCompairAmountValue));
     const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
     const percent = (collected / minMaxOffering) * 100;
     const address = campaign && campaign.keyTerms ?
@@ -195,9 +196,16 @@ export default class CampaignHeader extends Component {
                       <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
                     : ''
                     }
-                    {!isClosed &&
+                    {(!isClosed && diff > 0) &&
                       <Aux>
-                        <Button fluid secondary={!isInProcessing} content={`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
+                        <Button
+                          fluid
+                          secondary={!isInProcessing}
+                          disabled={maxFlagStatus || isInProcessing}
+                          onClick={this.handleInvestNowClick}
+                        >
+                          {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                        </Button>
                         <small>
                           {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                         </small>
