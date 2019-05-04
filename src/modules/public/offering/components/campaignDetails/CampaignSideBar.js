@@ -168,8 +168,7 @@ export default class CampaignSideBar extends Component {
                     {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                   </Button>
                   <p>
-                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                      || 0} min investment
+                    {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                   </p>
                 </Aux>
               }
