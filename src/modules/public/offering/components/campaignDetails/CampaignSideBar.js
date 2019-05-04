@@ -11,7 +11,7 @@ import Helper from '../../../../../helper/utility';
 import share from '../campaignDetails/Share';
 // import { ASSETS_URL } from '../../../../../constants/aws';
 import { Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 
 // const nsvideos = {
 //   embed: '218642510',
@@ -145,9 +145,16 @@ export default class CampaignSideBar extends Component {
                 />
               </p>
               }
-              <p className="mb-half mt-half">
-              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
-              </p>
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
+                <p className="mb-0">
+                  Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
+                </p>
+              }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
+                <p className="mb-0">
+                  Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
+                </p>
+              }
               <p className="mt-half">
                 Maturity: {get(campaign, 'keyTerms.maturity')} months
               </p>
