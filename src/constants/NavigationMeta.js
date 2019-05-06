@@ -156,6 +156,7 @@ export const PRIVATE_NAV = [
     icon: 'ns-setting',
     to: 'profile-settings',
     heading: 'Profile Settings',
+    hideSubOnSideBar: true,
     subPanel: 1,
     accessibleTo: [],
     path: 'shared/settings/containers/ProfileSettings',

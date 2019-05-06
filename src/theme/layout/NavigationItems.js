@@ -73,15 +73,16 @@ export class NavItems extends Component {
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
+    const hasMoreThanOneAcc = this.props.userDetailsStore.getAccountList.length > 1;
     return myNavItems.map(item => (
       <Aux>
-        {(item.subPanel === 1 && item.subNavigations) ? (
+        {(item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar) ? (
           <Dropdown
             open={item.clickable && this.isOpen(item.to, location, item.subNavigations)}
             item
             defaultOpen={item.defaultOpen}
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''} ${(item.title === 'Account Settings' && this.props.userDetailsStore.getAccountList.length) ? 'mt-10' : ''}`}
+            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}`}
             name={item.to}
             // disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
@@ -110,11 +111,11 @@ export class NavItems extends Component {
               ))}
             </Dropdown.Menu>
           </Dropdown>
-        ) : item.isMenuHeader ?
+        ) : (item.isMenuHeader && hasMoreThanOneAcc) ?
           <Menu.Item className="menu-header">
             <Menu.Header>{item.title}</Menu.Header>
           </Menu.Item> :
-          item.title === 'Bonus Rewards' && !this.props.bonusRewards ?
+          (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader) ?
             null
             : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to]) ||
             (item.to !== 'updates') ?
@@ -123,7 +124,7 @@ export class NavItems extends Component {
               <Menu.Item
                 key={item.to}
                 name={item.to}
-                className={isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}
+                className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
                 as={NavLink}
                 onClick={isMobile ? onToggle : this.doNothing}
                 to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
