@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import _ from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
@@ -88,14 +88,14 @@ const SortableList = SortableContainer(({
 @observer
 export default class AllKnowledgeBaseItems extends Component {
   componentWillMount() {
-    this.props.knowledgeBaseStore.initRequest(); // load data
     this.props.knowledgeBaseStore.resetPagination();
     this.props.knowledgeBaseStore.resetSearch();
+    this.props.knowledgeBaseStore.initRequest(); // load data
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { AllKnowledgeBase, setKnowledgeBaseOrder } = this.props.knowledgeBaseStore;
     if (oldIndex !== newIndex) {
-      setKnowledgeBaseOrder(AllKnowledgeBase[newIndex], newIndex);
+      setKnowledgeBaseOrder(arrayMove(AllKnowledgeBase, oldIndex, newIndex));
     }
   }
   globalActionChange = (e, { name, value }) =>

@@ -135,7 +135,7 @@ export class KnowledgeBaseStore {
     // return this.sortBydate(list);
   }
 
-  sortBydate = data => orderBy(data, o => (o.updated.date ? moment(new Date(o.updated.date)) : ''), ['desc'])
+  sortBydate = data => orderBy(orderBy(data, o => (o.updated.date ? new Date(o.updated.date) : ''), ['desc']), d => d.order, ['asc'])
 
   @computed get count() {
     return (this.data.data && this.data.data.knowledgeBaseByFilters &&
@@ -347,8 +347,9 @@ export class KnowledgeBaseStore {
       fetchPolicy: 'network-only',
       onFetch: (res) => {
         if (res && !this.data.loading) {
-          this.requestState.page = 1;
-          this.requestState.skip = 0;
+          // this.requestState.page = 1;
+          // this.requestState.skip = 0;
+          // this.requestState.displayTillIndex = 10;
           this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
         }
       },
@@ -465,12 +466,16 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  setKnowledgeBaseOrder = (newArr, newOrder) => {
+  setKnowledgeBaseOrder = (newArr) => {
     uiStore.setProgress();
     const data = [];
-    data.push({
-      id: newArr.id,
-      order: newOrder,
+    newArr.forEach((item, index) => {
+      data.push({
+        id: item.id,
+        order: index + 1,
+      });
+      // eslint-disable-next-line no-param-reassign
+      newArr[index].order = index + 1;
     });
     client
       .mutate({
