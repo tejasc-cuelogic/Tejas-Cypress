@@ -4,8 +4,6 @@ import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
-import money from 'money-math';
-import { DataFormatter } from '../../../../../helper';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
@@ -21,36 +19,12 @@ export default class CampaignHeader extends Component {
   }
   render() {
     const { campaignStore } = this.props;
-    const { campaign, offerStructure } = campaignStore;
-    const processingDate = campaign && campaign.closureSummary
-    && campaign.closureSummary.processingDate;
-    const diff = DataFormatter.diffDays(processingDate);
-    const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
-    const isInProcessing = diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
-    const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    let minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
-    minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
-    let maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
-    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), minOffering) : minOffering;
-    const minFlagStatus = collected >= minOffering;
-    const percentBefore = (minOffering / maxOffering) * 100;
-    // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
-    const formatedRaisedAmount = money.floatToAmount(collected);
-    const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
-    const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
-    const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
-    const maxFlagStatus =
-      !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
-      money.isPositive(formatedReachedMaxCompairAmountValue));
-    const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
-    const percent = (collected / minMaxOffering) * 100;
-    const address = campaign && campaign.keyTerms ?
-      `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const isClosed = campaign.stage !== 'LIVE';
-    const isCreation = campaign.stage === 'CREATION';
-    const earlyBird = get(campaign, 'earlyBird') || null;
-    const bonusRewards = get(campaign, 'bonusRewards') || [];
-    const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
+    const { campaign, offerStructure, campaignStatus } = campaignStore;
+    const {
+      diff, isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
+      minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
+      percentBefore, diffForProcessing,
+    } = campaignStatus;
     return (
       <Aux>
         <div className="campaign-banner">
@@ -196,7 +170,7 @@ export default class CampaignHeader extends Component {
                       <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
                     : ''
                     }
-                    {(!isClosed && diff > 0) &&
+                    {!isClosed &&
                       <Aux>
                         <Button
                           fluid
