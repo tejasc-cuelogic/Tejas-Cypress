@@ -1,12 +1,12 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { map, kebabCase } from 'lodash';
+import { map, kebabCase, sortBy, remove } from 'lodash';
 // import { sortBy } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES } from '../../../constants/admin/article';
@@ -27,7 +27,15 @@ export class ArticleStore {
     @observable currentArticleId = null;
     @observable globalAction = '';
     @observable allInsightsList = [];
+    @observable db = [];
+    @observable selectedRecords= [];
+    @observable isReadOnly = true;
     @observable requestState = {
+      skip: 0,
+      page: 1,
+      perPage: 10,
+      displayTillIndex: 10,
+      filters: false,
       search: {},
     };
 
@@ -81,6 +89,7 @@ export class ArticleStore {
         fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res) {
+            this.setDb(res.insightsArticle);
             this.setFormData(res.insightsArticle);
           }
         },
@@ -113,12 +122,19 @@ export class ArticleStore {
     @action
     sortArticlesByFilter = () => {
       const {
-        articleStatus, categoryId, tags,
+        articleStatus, categoryId, tags, author, title,
       } = this.requestState.search;
       this.allInsightsList = graphql({
         client,
         query: insightArticlesListByFilter,
-        variables: { articleStatus, categoryId, tags },
+        variables: {
+          articleStatus, categoryId, tags, author, title,
+        },
+        onFetch: (res) => {
+          if (res && res.insightArticlesListByFilter) {
+            this.setDb(res.insightArticlesListByFilter);
+          }
+        },
       });
     }
 
@@ -218,10 +234,7 @@ export class ArticleStore {
     @computed get loading() {
       return this.data.loading;
     }
-    // @action
-    // reset = () => {
-    //   this.ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
-    // }
+
     @action
     htmlContentChange = (field, value) => {
       this.ARTICLE_FRM.fields[field].value = value;
@@ -255,9 +268,76 @@ export class ArticleStore {
       const { value } = this[formName].fields[field];
       this[formName].fields.slug.value = kebabCase(value);
     }
+
+    @computed get getSelectedRecords() {
+      return toJS(this.selectedRecords);
+    }
+
+    @action selectRecordsOnPage = (isChecked) => {
+      if (isChecked) {
+        const data = this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)
+        || [];
+        data.forEach((d) => {
+          if (!this.selectedRecords.includes(d.id)) {
+            this.selectedRecords.push(d.id);
+          }
+        });
+        this.isReadOnly = false;
+      } else {
+        this.selectedRecords = [];
+        this.isReadOnly = true;
+      }
+    }
+
+    @action
+    addSelectedRecords = (id) => {
+      this.isReadOnly = false;
+      if (!this.selectedRecords.includes(id)) {
+        this.selectedRecords.push(id);
+      }
+    }
+    @action
+    removeSelectedRecords = (id) => {
+      remove(this.selectedRecords, e => e === id);
+      if (this.selectedRecords && this.selectedRecords.length <= 0) {
+        this.isReadOnly = true;
+      }
+    }
+
+    @computed get selectedRecordsCount() {
+      console.log('inside selectedRecordsCount');
+      return this.selectedRecords.length || 0;
+    }
+
+    @action
+    pageRequest = ({ skip, page }) => {
+      this.requestState.displayTillIndex = this.requestState.perPage * page;
+      this.requestState.page = page;
+      this.requestState.skip = skip;
+    }
+
+    @computed get count() {
+      return (this.db && this.db.length) || 0;
+    }
+
+    @action
+    setDb = (data) => {
+      const d = map(data, (dd) => {
+        const de = { teamId: dd.id, ...dd };
+        return de;
+      });
+      this.db = ClientDb.initiateDb(d, true);
+    }
+
+    @computed get allInsightsListing() {
+      return (this.allInsightsList && this.allInsightsList.data &&
+        this.allInsightsList.data.insightArticlesListByFilter &&
+        sortBy(toJS(this.allInsightsList.data.insightArticlesListByFilter.slice(this.requestState.skip, this.requestState.displayTillIndex)), ['order'])) || [];
+    }
+
     @computed get categoriesDropdown() {
-      console.log(this.Categories);
       const categoriesArray = [];
+      categoriesArray.push({ key: 'All', value: '', text: 'All' });
       if (this.Categories.data && this.Categories.data.categories) {
         this.Categories.data.categories.map((ele) => {
           categoriesArray.push({ key: ele.categoryName, value: ele.id, text: ele.categoryName });

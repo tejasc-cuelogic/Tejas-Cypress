@@ -51,9 +51,9 @@ export const TAGS = [
 
 export const ARTICLE_STATUS_VALUES = [
   { key: 'All', value: '', text: 'All' },
-  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
-  { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
-  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN_REVIEW' },
+  { key: 'PUBLISHED', value: 'PUBLISHED', text: 'Published' },
+  { key: 'DRAFT', value: 'DRAFT', text: 'Draft' },
+  { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'In Review' },
 ];
 
 export const AUTHORS = [

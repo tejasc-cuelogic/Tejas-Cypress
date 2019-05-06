@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
 import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/article';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
-import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -42,16 +42,33 @@ export default class AllInsights extends Component {
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+  paginate = params => this.props.articleStore.pageRequest(params);
+  checkedRecords = (e, result) => {
+    if (result && result.type === 'checkbox' && result.checked) {
+      this.props.articleStore.addSelectedRecords(result.value);
+    } else {
+      this.props.articleStore.removeSelectedRecords(result.value);
+    }
+  }
+
+  checkedAllRecords = (e, result) => {
+    this.props.articleStore.selectRecordsOnPage(result.checked);
+  }
+
 
   render() {
     const { articleStore } = this.props;
     const { confirmBox } = this.props.uiStore;
     const {
-      // InsightArticles,
-      allInsightsList,
+      allInsightsListing,
       articleListingLoader,
       globalAction,
+      count,
+      requestState,
+      getSelectedRecords,
+      selectedRecordsCount,
     } = articleStore;
+    const totalRecords = count || 0;
     if (articleListingLoader) {
       return <InlineLoader />;
     }
@@ -60,7 +77,7 @@ export default class AllInsights extends Component {
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
-              <Grid.Column>Selected 15 items</Grid.Column>
+              <Grid.Column>{`Selected ${selectedRecordsCount} items`}</Grid.Column>
               <Grid.Column width={3} floated="right">
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
@@ -75,7 +92,17 @@ export default class AllInsights extends Component {
             <Table unstackable striped sortable className="user-list">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell collapsing>&nbsp;</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>
+                    <Checkbox
+                      name="selectAllChkbox"
+                      value="selectAllChkbox"
+                      onChange={(e, result) => this.checkedAllRecords(e, result)}
+                      indeterminate={(getSelectedRecords.length > 0 &&
+                        getSelectedRecords.length < allInsightsListing.length)}
+                      checked={getSelectedRecords.length > 0 &&
+                        getSelectedRecords.length === allInsightsListing.length}
+                    />
+                  </Table.HeaderCell>
                   <Table.HeaderCell width={5}>Title</Table.HeaderCell>
                   <Table.HeaderCell>Category</Table.HeaderCell>
                   <Table.HeaderCell>Tags</Table.HeaderCell>
@@ -87,11 +114,17 @@ export default class AllInsights extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  allInsightsList && allInsightsList.data &&
-                  allInsightsList.data.insightArticlesListByFilter ?
-                  allInsightsList.data.insightArticlesListByFilter.map(record => (
+                  allInsightsListing ? allInsightsListing.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell><Checkbox /></Table.Cell>
+                      <Table.Cell>
+                        <Checkbox
+                          name={record.id}
+                          value={record.id}
+                          onChange={(e, result) => this.checkedRecords(e, result)}
+                          checked={getSelectedRecords.includes(record.id)}
+                        />
+
+                      </Table.Cell>
                       <Table.Cell>{record.title}</Table.Cell>
                       <Table.Cell>{record.category}</Table.Cell>
                       <Table.Cell>{record.tags}</Table.Cell>
@@ -131,6 +164,9 @@ export default class AllInsights extends Component {
               </Table.Body>
             </Table>
           </div>
+          {totalRecords > 0 &&
+            <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+          }
         </Card>
         <Confirm
           header="Confirm"
