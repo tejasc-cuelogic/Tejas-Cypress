@@ -15,45 +15,45 @@ const actions = {
 };
 
 
-const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+const DragHandle = sortableHandle(props => <Icon className={`${props.className} ns-drag-holder-large mr-10`} />);
 const SortableItem = SortableElement(({
   knowledgeBase, key, handleAction, checkedRecords, getSelectedRecords,
 }) => (
-  <div className="row-wrap" key={key}>
-    <div className="balance">
-      <DragHandle />
+  <div className="row-wrap striped-table" key={key}>
+    {/* <div className="balance">
     </div>
     <div className="balance">
+    </div> */}
+    <div className="balance-half first-column">
+      <DragHandle />
       <Checkbox
         name={knowledgeBase.id}
         value={knowledgeBase.id}
         onChange={(e, result) => checkedRecords(e, result)}
         checked={getSelectedRecords.includes(knowledgeBase.id)}
       />
-    </div>
-    <div className="balance-half">
       <span className="user-name">
         <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>
           <b>{_.capitalize(knowledgeBase.title)}</b>
         </Link>
       </span>
     </div>
-    <div className="balance-half">
+    <div className="balance width-130">
       {_.capitalize(knowledgeBase.userType)}
     </div>
     <div className="balance-half">
       {_.capitalize(knowledgeBase.categoryName) || 'N/A'}
     </div>
-    <div className="balance-half">
+    <div className="balance">
       {_.capitalize(knowledgeBase.authorName) || 'N/A'}
     </div>
-    <div className="balance-half">
+    <div className="balance width-70 center-align">
       <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
     </div>
-    <div className="balance-half">
+    <div className="balance width-130">
       <DateTimeFormat format="MM-DD-YYYY" datetime={knowledgeBase.updated && knowledgeBase.updated.date} />
     </div>
-    <div className="action right-align">
+    <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
           <Button className="link-button" >
@@ -79,7 +79,7 @@ const SortableList = SortableContainer(({
         checkedRecords={checkedRecords}
         getSelectedRecords={getSelectedRecords}
       />
-    ))};
+    ))}
   </div>
 ));
 
@@ -168,10 +168,13 @@ export default class AllKnowledgeBaseItems extends Component {
           </Grid>
         </Form>
         <div className="ui card fluid">
-          <div className="ui basic table team-table striped">
-            <div className="row-wrap thead">
-              <div className="balance">&nbsp;</div>
+          <div className="ui basic table">
+            <div className="row-wrap striped-table thead">
+              {/* <div className="balance">&nbsp;</div>
               <div className="balance">
+              </div> */}
+              <div className="balance-half first-column">
+                <DragHandle className="invisible" />
                 <Checkbox
                   name="selectAllChkbox"
                   value="selectAllChkbox"
@@ -181,14 +184,14 @@ export default class AllKnowledgeBaseItems extends Component {
                   checked={getSelectedRecords.length > 0 &&
                     getSelectedRecords.length === AllKnowledgeBase.length}
                 />
+                Title
               </div>
-              <div className="balance-half">Title</div>
-              <div className="balance-half">Type</div>
+              <div className="balance width-130">Type</div>
               <div className="balance-half">Category</div>
-              <div className="balance-half">Author</div>
-              <div className="balance-half">Status</div>
-              <div className="balance-half">Last update date</div>
-              <div className="action right-align" />
+              <div className="balance">Author</div>
+              <div className="balance width-70 center-align">Status</div>
+              <div className="balance width-130">Last update date</div>
+              <div className="action width-100 right-align" />
             </div>
             <SortableList
               AllKnowledgeBase={AllKnowledgeBase}

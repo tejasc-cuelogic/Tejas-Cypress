@@ -36,8 +36,6 @@ export const DropdownFilterWithHeader = props => (
       props.options && props.options !== null ?
         <Dropdown
           text={props.value || 'Select Filter'}
-          floating
-          labeled
           className={props.className}
           name={props.keyName || camelCase(props.name)}
           onChange={props.change}
