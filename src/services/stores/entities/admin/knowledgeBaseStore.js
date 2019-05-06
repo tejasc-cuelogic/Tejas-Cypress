@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { isArray, orderBy, find, map, filter, get, kebabCase } from 'lodash';
+import { isArray, orderBy, find, map, filter, get, kebabCase, remove } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
@@ -142,6 +142,10 @@ export class KnowledgeBaseStore {
       this.data.data.knowledgeBaseByFilters.length) || 0;
   }
 
+  @computed get getSelectedRecords() {
+    return toJS(this.selectedRecords);
+  }
+
   @action
   pageRequest = ({ skip, page }) => {
     this.requestState.displayTillIndex = this.requestState.perPage * page;
@@ -153,11 +157,19 @@ export class KnowledgeBaseStore {
     return this.requestState.perPage || 1;
   }
 
-  @action selectRecordsOnPage = () => {
-    const data = this.db.slice(this.requestState.skip, this.requestState.displayTillIndex) || [];
-    data.forEach((d) => {
-      this.selectedRecords.push(d.id);
-    });
+  @action selectRecordsOnPage = (isChecked) => {
+    if (isChecked) {
+      const data = this.db.slice(this.requestState.skip, this.requestState.displayTillIndex) || [];
+      data.forEach((d) => {
+        if (!this.selectedRecords.includes(d.id)) {
+          this.selectedRecords.push(d.id);
+        }
+      });
+      this.isReadOnly = false;
+    } else {
+      this.selectedRecords = [];
+      this.isReadOnly = true;
+    }
   }
 
   @action
@@ -382,12 +394,22 @@ export class KnowledgeBaseStore {
   @action
   addSelectedRecords = (id) => {
     this.isReadOnly = false;
-    this.selectedRecords.push(id);
+    if (!this.selectedRecords.includes(id)) {
+      this.selectedRecords.push(id);
+    }
+  }
+
+  @action
+  removeSelectedRecords = (id) => {
+    remove(this.selectedRecords, e => e === id);
+    if (this.selectedRecords && this.selectedRecords.length <= 0) {
+      this.isReadOnly = true;
+    }
   }
 
   @computed get selectedRecordsCount() {
     console.log('inside selectedRecordsCount');
-    return this.selectedRecords.count || 0;
+    return this.selectedRecords.length || 0;
   }
 
   @action

@@ -40,6 +40,8 @@ query getOfferingList($filters: OfferingFilterInputType){
         regulation
         minOfferingAmountCF
         maxOfferingAmountCF
+        minOfferingAmount506C
+        maxOfferingAmount506C
         offeringDisclaimer
         shorthandBusinessName
         legalBusinessName

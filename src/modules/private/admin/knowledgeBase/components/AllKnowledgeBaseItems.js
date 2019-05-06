@@ -17,7 +17,7 @@ const actions = {
 
 const DragHandle = sortableHandle(props => <Icon className={`${props.className} ns-drag-holder-large mr-10`} />);
 const SortableItem = SortableElement(({
-  knowledgeBase, key, handleAction, checkedRecords,
+  knowledgeBase, key, handleAction, checkedRecords, getSelectedRecords,
 }) => (
   <div className="row-wrap striped-table" key={key}>
     {/* <div className="balance">
@@ -30,6 +30,7 @@ const SortableItem = SortableElement(({
         name={knowledgeBase.id}
         value={knowledgeBase.id}
         onChange={(e, result) => checkedRecords(e, result)}
+        checked={getSelectedRecords.includes(knowledgeBase.id)}
       />
       <span className="user-name">
         <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>
@@ -65,7 +66,7 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  AllKnowledgeBase, handleAction, checkedRecords,
+  AllKnowledgeBase, handleAction, checkedRecords, getSelectedRecords,
 }) => (
   <div className="tbody">
     {AllKnowledgeBase.map((knowledgeBase, index) => (
@@ -76,6 +77,7 @@ const SortableList = SortableContainer(({
         index={index}
         handleAction={handleAction}
         checkedRecords={checkedRecords}
+        getSelectedRecords={getSelectedRecords}
       />
     ))}
   </div>
@@ -120,7 +122,13 @@ export default class AllKnowledgeBaseItems extends Component {
   checkedRecords = (e, result) => {
     if (result && result.type === 'checkbox' && result.checked) {
       this.props.knowledgeBaseStore.addSelectedRecords(result.value);
+    } else {
+      this.props.knowledgeBaseStore.removeSelectedRecords(result.value);
     }
+  }
+
+  checkedAllRecords = (e, result) => {
+    this.props.knowledgeBaseStore.selectRecordsOnPage(result.checked);
   }
 
   render() {
@@ -133,10 +141,9 @@ export default class AllKnowledgeBaseItems extends Component {
       count,
       requestState,
       applyGlobalAction,
-      disableApply,
+      isReadOnly,
       categoryLoading,
-      selectedRecordsCount,
-      selectRecordsOnPage,
+      getSelectedRecords,
     } = knowledgeBaseStore;
     const totalRecords = count || 0;
     if (loading || categoryLoading) {
@@ -150,12 +157,12 @@ export default class AllKnowledgeBaseItems extends Component {
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
-              <Grid.Column>Selected {selectedRecordsCount} items</Grid.Column>
+              <Grid.Column><b>Selected {getSelectedRecords.length || 0} items </b></Grid.Column>
               <Grid.Column width={3} floated="right">
                 <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
               </Grid.Column>
               <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
+                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={isReadOnly} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -171,8 +178,11 @@ export default class AllKnowledgeBaseItems extends Component {
                 <Checkbox
                   name="selectAllChkbox"
                   value="selectAllChkbox"
-                  onChange={selectRecordsOnPage}
-                  defaultIndeterminate
+                  onChange={(e, result) => this.checkedAllRecords(e, result)}
+                  indeterminate={(getSelectedRecords.length > 0 &&
+                    getSelectedRecords.length < AllKnowledgeBase.length)}
+                  checked={getSelectedRecords.length > 0 &&
+                    getSelectedRecords.length === AllKnowledgeBase.length}
                 />
                 Title
               </div>
@@ -183,7 +193,6 @@ export default class AllKnowledgeBaseItems extends Component {
               <div className="balance width-130">Last update date</div>
               <div className="action width-100 right-align" />
             </div>
-            {/* {AllKnowledgeBase.map((knowledgeBase, index) => ( */}
             <SortableList
               AllKnowledgeBase={AllKnowledgeBase}
               pressDelay={100}
@@ -192,9 +201,8 @@ export default class AllKnowledgeBaseItems extends Component {
               useDragHandle
               handleAction={this.handleAction}
               checkedRecords={this.checkedRecords}
+              getSelectedRecords={getSelectedRecords}
             />
-            {/* ))} */}
-
           </div>
         </div>
         {totalRecords > 0 &&
