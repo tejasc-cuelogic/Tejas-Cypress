@@ -19,12 +19,12 @@ const DragHandle = sortableHandle(props => <Icon className={`${props.className} 
 const SortableItem = SortableElement(({
   knowledgeBase, key, handleAction, checkedRecords,
 }) => (
-  <div className="row-wrap" key={key}>
+  <div className="row-wrap striped-table" key={key}>
     {/* <div className="balance">
     </div>
     <div className="balance">
     </div> */}
-    <div className="balance-half">
+    <div className="balance-half first-column">
       <DragHandle />
       <Checkbox
         name={knowledgeBase.id}
@@ -37,7 +37,7 @@ const SortableItem = SortableElement(({
         </Link>
       </span>
     </div>
-    <div className="balance">
+    <div className="balance width-130">
       {_.capitalize(knowledgeBase.userType)}
     </div>
     <div className="balance-half">
@@ -46,13 +46,13 @@ const SortableItem = SortableElement(({
     <div className="balance">
       {_.capitalize(knowledgeBase.authorName) || 'N/A'}
     </div>
-    <div className="balance">
+    <div className="balance width-70 center-align">
       <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
     </div>
-    <div className="balance">
+    <div className="balance width-130">
       <DateTimeFormat format="MM-DD-YYYY" datetime={knowledgeBase.updated && knowledgeBase.updated.date} />
     </div>
-    <div className="action right-align">
+    <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
           <Button className="link-button" >
@@ -68,7 +68,7 @@ const SortableList = SortableContainer(({
   AllKnowledgeBase, handleAction, checkedRecords,
 }) => (
   <div className="tbody">
-    { AllKnowledgeBase.map((knowledgeBase, index) => (
+    {AllKnowledgeBase.map((knowledgeBase, index) => (
       <SortableItem
         key={knowledgeBase.id}
         docIndx={index}
@@ -77,7 +77,7 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         checkedRecords={checkedRecords}
       />
-    )) };
+    ))}
   </div>
 ));
 
@@ -161,12 +161,12 @@ export default class AllKnowledgeBaseItems extends Component {
           </Grid>
         </Form>
         <div className="ui card fluid">
-          <div className="ui basic table team-table striped">
-            <div className="row-wrap thead">
+          <div className="ui basic table">
+            <div className="row-wrap striped-table thead">
               {/* <div className="balance">&nbsp;</div>
               <div className="balance">
               </div> */}
-              <div className="balance-half">
+              <div className="balance-half first-column">
                 <DragHandle className="invisible" />
                 <Checkbox
                   name="selectAllChkbox"
@@ -176,12 +176,12 @@ export default class AllKnowledgeBaseItems extends Component {
                 />
                 Title
               </div>
-              <div className="balance">Type</div>
+              <div className="balance width-130">Type</div>
               <div className="balance-half">Category</div>
               <div className="balance">Author</div>
-              <div className="balance">Status</div>
-              <div className="balance">Last update date</div>
-              <div className="action right-align" />
+              <div className="balance width-70 center-align">Status</div>
+              <div className="balance width-130">Last update date</div>
+              <div className="action width-100 right-align" />
             </div>
             {/* {AllKnowledgeBase.map((knowledgeBase, index) => ( */}
             <SortableList
