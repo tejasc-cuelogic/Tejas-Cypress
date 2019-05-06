@@ -70,7 +70,7 @@ const SortableList = SortableContainer(({
     )) };
   </div>
 ));
-@inject('faqStore')
+@inject('faqStore', 'uiStore')
 @withRouter
 @observer
 export default class AllFaqs extends Component {
@@ -114,7 +114,6 @@ export default class AllFaqs extends Component {
   render() {
     const {
       allFaqs,
-      loading,
       count,
       requestState,
       confirmBox,
@@ -125,7 +124,8 @@ export default class AllFaqs extends Component {
       globalAction,
     } = this.props.faqStore;
     const totalRecords = count || 0;
-    if (loading) {
+    const { inProgress } = this.props.uiStore;
+    if (inProgress) {
       return <InlineLoader />;
     }
     return (

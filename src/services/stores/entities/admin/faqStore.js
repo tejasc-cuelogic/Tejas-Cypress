@@ -34,6 +34,7 @@ export class FaqStore {
 
   @action
   initRequest = () => {
+    uiStore.setProgress();
     const query = faqs;
     const client = clientPrivate;
     this.data = graphql({
@@ -42,6 +43,7 @@ export class FaqStore {
       onFetch: (res) => {
         if (res && res.faqs) {
           this.setDb(res.faqs);
+          uiStore.setProgress(false);
         }
       },
     });
@@ -84,6 +86,7 @@ export class FaqStore {
   }
 
   updateRecordStatus = (id, status) => {
+    uiStore.setProgress();
     clientPrivate.mutate({
       mutation: updateStatus,
       variables: {
@@ -93,9 +96,11 @@ export class FaqStore {
       refetchQueries: [{ query: faqs }],
     }).then(() => {
       this.resetSelectedRecords();
+      uiStore.setProgress();
       Helper.toast('Status updated successfully.', 'success');
     }).catch(() => {
       this.resetSelectedRecords();
+      uiStore.setProgress();
       Helper.toast('Error while updating status.', 'error');
     });
   }
@@ -282,6 +287,7 @@ export class FaqStore {
   @action
   faqListByFilter = () => {
     const data = this.requestState.search;
+    uiStore.setProgress();
     this.data = graphql({
       client: clientPrivate,
       query: faqsListByFilters,
@@ -295,6 +301,7 @@ export class FaqStore {
       onFetch: (res) => {
         if (res && res.faqsListByFilters) {
           this.resetSelectedRecords();
+          uiStore.setProgress(false);
           this.setDb(res.faqsListByFilters);
         }
       },
