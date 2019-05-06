@@ -88,9 +88,9 @@ const SortableList = SortableContainer(({
 @observer
 export default class AllKnowledgeBaseItems extends Component {
   componentWillMount() {
-    this.props.knowledgeBaseStore.initRequest(); // load data
     this.props.knowledgeBaseStore.resetPagination();
     this.props.knowledgeBaseStore.resetSearch();
+    this.props.knowledgeBaseStore.initRequest(); // load data
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { AllKnowledgeBase, setKnowledgeBaseOrder } = this.props.knowledgeBaseStore;

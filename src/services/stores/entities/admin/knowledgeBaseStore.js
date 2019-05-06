@@ -347,8 +347,9 @@ export class KnowledgeBaseStore {
       fetchPolicy: 'network-only',
       onFetch: (res) => {
         if (res && !this.data.loading) {
-          this.requestState.page = 1;
-          this.requestState.skip = 0;
+          // this.requestState.page = 1;
+          // this.requestState.skip = 0;
+          // this.requestState.displayTillIndex = 10;
           this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
         }
       },
