@@ -2033,6 +2033,9 @@ i.icon[class*="ns-"]{
 .ns-long-arrow-left:before{
     content:@ns-long-arrow-left;
 }
+.ns-minus:before{
+    content:@ns-minus; 
+}
 .ns-minus-square:before{
     content:@ns-minus-square;
 }
