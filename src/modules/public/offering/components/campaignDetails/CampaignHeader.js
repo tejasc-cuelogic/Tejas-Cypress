@@ -31,7 +31,7 @@ export default class CampaignHeader extends Component {
     let minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
     let maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
-    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), minOffering) : minOffering;
+    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), maxOffering) : maxOffering;
     const minFlagStatus = collected >= minOffering;
     const percentBefore = (minOffering / maxOffering) * 100;
     // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
@@ -196,7 +196,7 @@ export default class CampaignHeader extends Component {
                       <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
                     : ''
                     }
-                    {(!isClosed && diff > 0) &&
+                    {!isClosed &&
                       <Aux>
                         <Button
                           fluid

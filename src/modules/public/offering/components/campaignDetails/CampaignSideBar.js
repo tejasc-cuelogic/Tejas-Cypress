@@ -35,7 +35,7 @@ export default class CampaignSideBar extends Component {
     minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
     // const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     let maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
-    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), minOffering) : minOffering;
+    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), maxOffering) : maxOffering;
     const minFlagStatus = collected >= minOffering;
     // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const formatedRaisedAmount = money.floatToAmount(collected);

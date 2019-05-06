@@ -29,7 +29,9 @@ export default class CampaignSecondaryMenu extends Component {
     const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
     const isInProcessing = diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    // const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    let maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), maxOffering) : maxOffering;
     const { navStatus, subNavStatus } = this.props.navStore;
     // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const formatedRaisedAmount = money.floatToAmount(collected);
