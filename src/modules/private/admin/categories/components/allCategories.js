@@ -14,14 +14,14 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   cat, openModal, publishStatus, handleDeleteConfirm, category, categoryTypeIndex,
 }) => (
-  <div className="row-wrap">
-    <div>
+  <div className="row-wrap categories-table">
+    <div className="balance-half first-column">
       <DragHandle />
       <a onClick={() => openModal(cat.id, category.title, cat.categoryType, categoryTypeIndex)}>
         {cat.categoryName}
       </a>
     </div>
-    <div className="action">
+    <div className="action width-130 right-align">
       <Button onClick={() => openModal(cat.id, category.title, cat.categoryType, categoryTypeIndex)} className="link-button">
         <Icon name="ns-pencil" />
       </Button>
@@ -125,7 +125,7 @@ export default class AllCategories extends Component {
               <Button onClick={() => this.openModal('new', category.title, category.type, index)} className="link-button pull-right"><small>+ Add Category</small></Button>
             </Accordion.Title>
             <Accordion.Content active={activeIndex === index} className="categories-acc">
-              <div className="ui basic compact table form-table categories-table">
+              <div className="ui basic compact table">
                 <SortableList
                   docs={category.categories}
                   pressDelay={100}
