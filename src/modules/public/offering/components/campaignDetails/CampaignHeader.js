@@ -4,8 +4,6 @@ import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
-import money from 'money-math';
-import { DataFormatter } from '../../../../../helper';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
@@ -21,35 +19,12 @@ export default class CampaignHeader extends Component {
   }
   render() {
     const { campaignStore } = this.props;
-    const { campaign, offerStructure } = campaignStore;
-    const processingDate = campaign && campaign.closureSummary
-    && campaign.closureSummary.processingDate;
-    const diff = DataFormatter.diffDays(processingDate);
-    const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
-    const isInProcessing = diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
-    const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    let minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
-    minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
-    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
-    const minFlagStatus = collected >= minOffering;
-    const percentBefore = (minOffering / maxOffering) * 100;
-    // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
-    const formatedRaisedAmount = money.floatToAmount(collected);
-    const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
-    const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
-    const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
-    const maxFlagStatus =
-    !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
-     money.isPositive(formatedReachedMaxCompairAmountValue));
-    const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
-    const percent = (collected / minMaxOffering) * 100;
-    const address = campaign && campaign.keyTerms ?
-      `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const isClosed = campaign.stage !== 'LIVE';
-    const isCreation = campaign.stage === 'CREATION';
-    const earlyBird = get(campaign, 'earlyBird') || null;
-    const bonusRewards = get(campaign, 'bonusRewards') || [];
-    const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
+    const { campaign, offerStructure, campaignStatus } = campaignStore;
+    const {
+      diff, isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
+      minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
+      percentBefore, diffForProcessing,
+    } = campaignStatus;
     return (
       <Aux>
         <div className="campaign-banner">
@@ -106,7 +81,7 @@ export default class CampaignHeader extends Component {
                           bonusRewards ?
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
-                                {campaign.earlyBird.available}
+                                {get(campaign, 'earlyBird.available') || 0}
                               </Statistic.Value>
                               <Statistic.Label>Early Bird Rewards</Statistic.Label>
                             </Statistic> : ''
@@ -169,7 +144,7 @@ export default class CampaignHeader extends Component {
                   }
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
                     <p className="mb-0">
-                    Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
+                      Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
                     </p>
                   }
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
@@ -181,14 +156,9 @@ export default class CampaignHeader extends Component {
                     <p className="mb-0">
                       Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                     </p> :
-                    <Aux>
-                      <p className="mb-0">
-                      Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
-                      </p>
-                      <p className="mb-0">
-                      Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
-                      </p>
-                    </Aux>
+                    <p className="mb-0">
+                      Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : '-'}
+                    </p>
                   }
                   <div className="center-align mt-20">
                     {isCreation ?
@@ -197,7 +167,14 @@ export default class CampaignHeader extends Component {
                     }
                     {!isClosed &&
                       <Aux>
-                        <Button fluid secondary={!isInProcessing} content={`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
+                        <Button
+                          fluid
+                          secondary={!isInProcessing}
+                          disabled={maxFlagStatus || isInProcessing}
+                          onClick={this.handleInvestNowClick}
+                        >
+                          {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                        </Button>
                         <small>
                           {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                         </small>
