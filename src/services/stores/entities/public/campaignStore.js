@@ -198,6 +198,10 @@ export class CampaignStore {
     return (this.campaign && this.campaign.id);
   }
 
+  @computed get getOfferingSlug() {
+    return (this.campaign && this.campaign.offeringSlug);
+  }
+
   @action
   isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
