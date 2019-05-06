@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { toJS } from 'mobx';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
@@ -177,7 +176,7 @@ export default class AllKnowledgeBaseItems extends Component {
                   name="selectAllChkbox"
                   value="selectAllChkbox"
                   onChange={(e, result) => this.checkedAllRecords(e, result)}
-                  defaultIndeterminate={(getSelectedRecords.length > 0 &&
+                  indeterminate={(getSelectedRecords.length > 0 &&
                     getSelectedRecords.length < AllKnowledgeBase.length)}
                   checked={getSelectedRecords.length > 0 &&
                     getSelectedRecords.length === AllKnowledgeBase.length}
@@ -191,7 +190,6 @@ export default class AllKnowledgeBaseItems extends Component {
               <div className="balance-half">Last update date</div>
               <div className="action right-align" />
             </div>
-            {/* {AllKnowledgeBase.map((knowledgeBase, index) => ( */}
             <SortableList
               AllKnowledgeBase={AllKnowledgeBase}
               pressDelay={100}
@@ -202,8 +200,6 @@ export default class AllKnowledgeBaseItems extends Component {
               checkedRecords={this.checkedRecords}
               getSelectedRecords={getSelectedRecords}
             />
-            {/* ))} */}
-
           </div>
         </div>
         {totalRecords > 0 &&
