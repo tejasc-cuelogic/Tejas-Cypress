@@ -55,6 +55,7 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      userHash
       wpUserId
       status
       accreditation {
