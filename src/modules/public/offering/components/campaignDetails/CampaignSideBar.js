@@ -28,6 +28,7 @@ export default class CampaignSideBar extends Component {
     const {
       diff, isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
+      earlyBird, isEarlyBirdRewards, bonusRewards,
     } = campaignStatus;
     return (
       <Aux>
@@ -93,13 +94,16 @@ export default class CampaignSideBar extends Component {
                     </Statistic.Value>
                     <Statistic.Label>Investors</Statistic.Label>
                   </Statistic>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Value>
-                      {get(campaign, 'earlyBird.available')
-                        || 0}
-                    </Statistic.Value>
-                    <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                  </Statistic>
+                  {earlyBird && earlyBird.available > 0 &&
+                  isEarlyBirdRewards && !isClosed &&
+                  bonusRewards ?
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Value>
+                        {get(campaign, 'earlyBird.available') || 0}
+                      </Statistic.Value>
+                      <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                    </Statistic> : ''
+                  }
                 </Statistic.Group>
               </div>
               {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] &&
@@ -123,9 +127,14 @@ export default class CampaignSideBar extends Component {
                   Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
                 </p>
               }
-              <p className="mt-half">
-                Maturity: {get(campaign, 'keyTerms.maturity')} months
-              </p>
+              {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
+                <p className="mb-0">
+                  Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
+                </p> :
+                <p className="mb-0">
+                  Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : '-'}
+                </p>
+              }
               <Divider hidden />
               {isCreation ?
                 <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />

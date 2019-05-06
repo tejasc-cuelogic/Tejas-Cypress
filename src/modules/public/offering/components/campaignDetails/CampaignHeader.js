@@ -81,7 +81,7 @@ export default class CampaignHeader extends Component {
                           bonusRewards ?
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
-                                {campaign.earlyBird.available}
+                                {get(campaign, 'earlyBird.available') || 0}
                               </Statistic.Value>
                               <Statistic.Label>Early Bird Rewards</Statistic.Label>
                             </Statistic> : ''
@@ -156,14 +156,9 @@ export default class CampaignHeader extends Component {
                     <p className="mb-0">
                       Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                     </p> :
-                    <Aux>
-                      <p className="mb-0">
-                      Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
-                      </p>
-                      <p className="mb-0">
-                      Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
-                      </p>
-                    </Aux>
+                    <p className="mb-0">
+                      Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : '-'}
+                    </p>
                   }
                   <div className="center-align mt-20">
                     {isCreation ?

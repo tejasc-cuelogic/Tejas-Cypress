@@ -182,9 +182,9 @@ export class CampaignStore {
     campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
     money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
-    campaignStatus.address = `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}`;
+    campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}` : '--';
     campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
-    campaignStatus.isCreation = get(campaign, 'stage') !== 'CREATION';
+    campaignStatus.isCreation = get(campaign, 'stage') === 'CREATION';
     campaignStatus.earlyBird = get(campaign, 'earlyBird') || null;
     campaignStatus.bonusRewards = get(campaign, 'bonusRewards') || [];
     campaignStatus.isEarlyBirdRewards =
