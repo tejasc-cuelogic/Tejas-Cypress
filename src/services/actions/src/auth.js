@@ -191,6 +191,12 @@ export class Auth {
                 window.analytics.identify(userStore.currentUser.sub, {
                   name: `${get(data, 'user.info.firstName')} ${get(data, 'user.info.lastName')}`,
                   email: get(data, 'user.email.address'),
+                }, {
+                  integrations: {
+                    Intercom: {
+                      user_hash: get(data, 'user.userHash'),
+                    },
+                  },
                 });
               }
               res();
