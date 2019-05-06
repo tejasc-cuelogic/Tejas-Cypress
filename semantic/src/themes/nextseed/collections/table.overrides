@@ -596,7 +596,7 @@
                     flex: 1;
                 }
                 .ui.image.avatar, .sb-avatar {
-                    margin-right: @10px;
+                    margin-right:0;
                 }
                 .ui.fitted.checkbox{
                     display:inline-block;
@@ -607,6 +607,11 @@
             &.action{
                 flex: 1;
             }
+        }
+        .sb-avatar{
+            width:2em;
+            height:2em;
+            line-height:2em;
         }
     }
 }
