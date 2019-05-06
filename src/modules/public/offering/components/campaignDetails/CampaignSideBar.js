@@ -4,13 +4,14 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Route, Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
+import money from 'money-math';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import share from '../campaignDetails/Share';
 // import { ASSETS_URL } from '../../../../../constants/aws';
 import { Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 
 // const nsvideos = {
 //   embed: '218642510',
@@ -29,10 +30,21 @@ export default class CampaignSideBar extends Component {
     const { campaignStore } = this.props;
     const { campaign, navCountData, campaignSideBarShow } = campaignStore;
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
-    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    // const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    let minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
+    // const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    let maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), minOffering) : minOffering;
     const minFlagStatus = collected >= minOffering;
-    const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
+    // const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
+    const formatedRaisedAmount = money.floatToAmount(collected);
+    const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
+    const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
+    const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
+    const maxFlagStatus =
+      !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+      money.isPositive(formatedReachedMaxCompairAmountValue));
     const percentBefore = (minOffering / maxOffering) * 100;
     const minMaxOffering = minFlagStatus ? maxOffering : minOffering;
     const percent = (collected / minMaxOffering) * 100;
@@ -41,11 +53,14 @@ export default class CampaignSideBar extends Component {
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(processingDate);
+    const diffForProcessing = DataFormatter.diffDays(processingDate, false, true);
+    const isInProcessing = diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     // const rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const { offerStructure } = campaignStore;
     const isClosed = campaign.stage !== 'LIVE';
+    const isCreation = campaign.stage === 'CREATION';
     return (
       <Aux>
         <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
@@ -97,10 +112,13 @@ export default class CampaignSideBar extends Component {
               </p>
               <div className="offer-stats">
                 <Statistic.Group>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Value>{diff || 0}</Statistic.Value>
-                    <Statistic.Label>Days left</Statistic.Label>
-                  </Statistic>
+                  {diff ?
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Value>{diff}</Statistic.Value>
+                      <Statistic.Label>Days left</Statistic.Label>
+                    </Statistic>
+                    : ''
+                  }
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
                       {get(campaign, 'closureSummary.totalInvestorCount') || 0}
@@ -127,19 +145,37 @@ export default class CampaignSideBar extends Component {
                 />
               </p>
               }
-              <p className="mb-half mt-half">
-              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
-              </p>
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
+                <p className="mb-0">
+                  Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
+                </p>
+              }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
+                <p className="mb-0">
+                  Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
+                </p>
+              }
               <p className="mt-half">
                 Maturity: {get(campaign, 'keyTerms.maturity')} months
               </p>
               <Divider hidden />
-              {(!isClosed && diff > 0) &&
+              {isCreation ?
+                <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
+                : ''
+              }
+              {!isClosed &&
                 <Aux>
-                  <Button compact fluid={isMobile} onClick={this.handleInvestNowClick} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+                  <Button
+                    compact
+                    fluid={isMobile}
+                    secondary={!isInProcessing}
+                    disabled={maxFlagStatus || isInProcessing}
+                    onClick={this.handleInvestNowClick}
+                  >
+                    {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                  </Button>
                   <p>
-                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                      || 0} min investment
+                    {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                   </p>
                 </Aux>
               }
