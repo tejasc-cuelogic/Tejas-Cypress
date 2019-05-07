@@ -123,10 +123,10 @@ class KeyTermsDetails extends Component {
                     {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
                   </p>
                   <p>
-                    {`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
                   </p>
                   <p>
-                    {`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
                   </p>
                 </Table.Cell>
               </Table.Row>
