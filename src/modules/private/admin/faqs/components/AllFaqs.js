@@ -1,46 +1,219 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Card, Table } from 'semantic-ui-react';
+import { withRouter, Link } from 'react-router-dom';
+import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
+import { Button, Grid, Form, Checkbox, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
+import { DropdownFilter } from '../../../../../theme/form/Filters';
+import { InlineLoader, NsPagination } from './../../../../../theme/shared';
+import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/faqs';
 
-@inject('helloWorldStore')
+const actions = {
+  edit: { label: 'Edit', icon: 'pencil' },
+  delete: { label: 'Delete', icon: 'trash' },
+};
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+const SortableItem = SortableElement(({
+  faq, key, handleAction,
+}) => (
+  <div className="row-wrap" key={key}>
+    <div className="balance">
+      <DragHandle />
+    </div>
+    <div className="balance-half">
+      <span className="user-name">
+        <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
+      </span>
+    </div>
+    <div className="balance-half"><Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></div>
+    <div className="action right-align">
+      <Button.Group>
+        {Object.keys(actions).map(action => (
+          <Button className="link-button" >
+            <Icon className={`ns-${actions[action].icon}`} onClick={() => handleAction(actions[action].label, faq.id, faq.itemStatus)} />
+          </Button>
+        ))}
+      </Button.Group>
+    </div>
+  </div>
+));
+
+const SortableList = SortableContainer(({
+  allFaqs, handleAction, checkedRecords, selectedRecords,
+}) => (
+  <div className="tbody">
+    { allFaqs.map((faq, index) => (
+      <SortableItem
+        key={faq.id}
+        docIndx={index}
+        faq={faq}
+        index={index}
+        handleAction={handleAction}
+        checkedRecords={checkedRecords}
+        selectedRecords={selectedRecords}
+      />
+    )) }
+  </div>
+));
+@inject('faqStore', 'uiStore')
+@withRouter
 @observer
 export default class AllFaqs extends Component {
+  state = { activeIndex: 0 }
   componentWillMount() {
-    this.props.helloWorldStore.initRequest(); // load data
+    this.props.faqStore.initRequest(); // load data
+  }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const { allFaqs, setFaqOrder, requestState } = this.props.faqStore;
+    const aIndex = (requestState.page * 10) + oldIndex;
+    const bIndex = (requestState.page * 10) + newIndex;
+    if (aIndex !== bIndex) {
+      setFaqOrder(arrayMove(allFaqs, aIndex, bIndex));
+    }
+  }
+  handleAction = (action, faqId) => {
+    if (action === 'Delete') {
+      this.props.faqStore.setConfirmBox(action, faqId);
+    } else if (action === 'Edit') {
+      this.props.history.push(`${this.props.match.url}/${faqId}`);
+    }
+  }
+  globalActionChange = (e, { name, value }) =>
+    this.props.faqStore.setGlobalAction(name, value);
+  deleteFaq = () => {
+    this.props.faqStore.deleteRecords(this.props.faqStore.confirmBox.refId);
+    this.props.faqStore.setConfirmBox('');
+  }
+  handleDeleteCancel = () => {
+    this.props.faqStore.setConfirmBox('');
+  }
+  paginate = params => this.props.faqStore.pageRequest(params);
+  checkedRecords = (e, result) => {
+    if (result && result.type === 'checkbox' && result.checked) {
+      this.props.faqStore.addSelectedRecord(result.value);
+    } else {
+      this.props.faqStore.removeUnSelectedRecord(result.value);
+    }
+  }
+  checkAll = (e, result) => {
+    this.props.faqStore.checkUncheckAll(result.checked);
+  }
+  toggleAccordion = (index, field) => {
+    const newIndex = this.state[field] === index ? -1 : index;
+    const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
+    this.setState(stateChange);
   }
   render() {
-    const { match, helloWorldStore } = this.props;
-    const { allRecords } = helloWorldStore;
+    const { activeIndex, innerActiveIndex } = this.state;
+    const {
+      allFaqs,
+      count,
+      requestState,
+      confirmBox,
+      applyGlobalAction,
+      disableApply,
+      selectedCount,
+      selectedRecords,
+      globalAction,
+      allCategorizedFaqs,
+    } = this.props.faqStore;
+    const totalRecords = count || 0;
+    const { inProgress } = this.props.uiStore;
+    if (inProgress) {
+      return <InlineLoader />;
+    }
     return (
-      <Card fluid>
-        <div className="table-wrapper">
-          <Table unstackable striped sortable singleLine className="user-list">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Title</Table.HeaderCell>
-                <Table.HeaderCell>Created date</Table.HeaderCell>
-                <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {
-                allRecords.map(record => (
-                  <Table.Row key={record.id}>
-                    <Table.Cell>{record.title}</Table.Cell>
-                    <Table.Cell>{record.createdAt}</Table.Cell>
-                    <Table.Cell textAlign="right">
-                      <div className="actions">
-                        <Link to={`${match.url}/${record.id}`} className="green">Details</Link>
-                      </div>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
-              }
-            </Table.Body>
-          </Table>
+      <Aux>
+        {Object.keys(allCategorizedFaqs).map(faqType => (
+          <Accordion key={faqType} fluid styled className="card-style">
+            <Accordion.Title onClick={() => this.toggleAccordion(faqType, 'activeIndex')} className="text-capitalize">
+              <Icon className={activeIndex === faqType ? 'ns-chevron-up' : 'ns-chevron-down'} />
+              {faqType}
+            </Accordion.Title>
+            <Accordion.Content active={activeIndex === faqType} className="categories-acc">
+              {Object.keys(allCategorizedFaqs[faqType]).map(categorizedFaqs => (
+                <Accordion key={categorizedFaqs} fluid className="card-style">
+                  <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
+                    <Icon className={activeIndex === categorizedFaqs ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                    {categorizedFaqs}
+                  </Accordion.Title>
+                  <Accordion.Content active={innerActiveIndex === categorizedFaqs} className="categories-acc">
+                    <SortableList
+                      allFaqs={allCategorizedFaqs[faqType][categorizedFaqs]}
+                      pressDelay={100}
+                      onSortEnd={e => this.onSortEnd(e)}
+                      lockAxis="y"
+                      useDragHandle
+                      handleAction={this.handleAction}
+                      checkedRecords={this.checkedRecords}
+                      selectedRecords={selectedRecords}
+                    />
+                  </Accordion.Content>
+                </Accordion>
+              ))}
+            </Accordion.Content>
+          </Accordion>
+        ))}
+        <Form>
+          <Grid columns="equal" verticalAlign="bottom">
+            <Grid.Row>
+              <Grid.Column>{selectedCount ? `Selected ${selectedRecords.includes('all') ? selectedCount - 1 : selectedCount} items` : ''}</Grid.Column>
+              <Grid.Column width={3} floated="right">
+                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
+              </Grid.Column>
+              <Grid.Column width={2}>
+                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Form>
+        <div className="ui card fluid">
+          <div className="ui basic table team-table striped">
+            <div className="row-wrap thead">
+              <div className="balance">&nbsp;</div>
+              <div className="balance">
+                <Checkbox
+                  indeterminate={selectedCount > 0 && !selectedRecords.includes('all')}
+                  value="all"
+                  checked={selectedRecords.includes('all')}
+                  onChange={(e, result) => this.checkAll(e, result)}
+                />
+              </div>
+              <div className="balance-half">Title</div>
+              <div className="balance-half">Type</div>
+              <div className="balance-half">Category</div>
+              <div className="balance-half">Author</div>
+              <div className="balance-half">Status</div>
+              <div className="balance-half">Last update date</div>
+              <div className="balance-half">Order</div>
+              <div className="action right-align" />
+            </div>
+            <SortableList
+              allFaqs={allFaqs}
+              pressDelay={100}
+              onSortEnd={e => this.onSortEnd(e)}
+              lockAxis="y"
+              useDragHandle
+              handleAction={this.handleAction}
+              checkedRecords={this.checkedRecords}
+              selectedRecords={selectedRecords}
+            />
+          </div>
         </div>
-      </Card>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        }
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to delete this item?"
+          open={confirmBox.entity === 'Delete'}
+          onCancel={this.handleDeleteCancel}
+          onConfirm={this.deleteFaq}
+          closeOnDimmerClick={false}
+          size="mini"
+          className="deletion"
+        />
+      </Aux>
     );
   }
 }

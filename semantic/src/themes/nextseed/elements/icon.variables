@@ -209,6 +209,7 @@
 @ns-link: "\e943";
 @ns-lock: "\e92b";
 @ns-long-arrow-left: "\e92c";
+@ns-minus: "\e99e";
 @ns-minus-square: "\e986";
 @ns-new-business: "\e95d";
 @ns-new-location: "\e95e";
