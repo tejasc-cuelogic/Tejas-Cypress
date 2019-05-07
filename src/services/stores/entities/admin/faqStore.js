@@ -137,12 +137,30 @@ export class FaqStore {
     });
     this.db = ClientDb.initiateDb(d, true);
   }
-
   @computed get allFaqs() {
     return (this.db && this.db.length &&
       toJS(sortBy(this.db, ['order']).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
-
+  @computed get allCategorizedFaqs() {
+    const arrFaqs = [];
+    if (this.db && this.db.length) {
+      this.db.forEach((faq) => {
+        if (arrFaqs[faq.faqType]) {
+          if (arrFaqs[faq.faqType][faq.categoryName]) {
+            arrFaqs[faq.faqType][faq.categoryName].push(faq);
+          } else {
+            arrFaqs[faq.faqType][faq.categoryName] = [];
+            arrFaqs[faq.faqType][faq.categoryName].push(faq);
+          }
+        } else {
+          arrFaqs[`${faq.faqType}`] = [];
+          arrFaqs[`${faq.faqType}`][`${faq.categoryName}`] = [];
+          arrFaqs[`${faq.faqType}`][`${faq.categoryName}`].push(faq);
+        }
+      });
+    }
+    return arrFaqs;
+  }
   @computed get loading() {
     return this.data.loading;
   }

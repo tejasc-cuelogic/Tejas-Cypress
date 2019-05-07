@@ -3,10 +3,10 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
-import { Button, Grid, Form, Checkbox, Icon, Label, Confirm } from 'semantic-ui-react';
+import { Button, Grid, Form, Checkbox, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
-import { InlineLoader, NsPagination, DateTimeFormat } from './../../../../../theme/shared';
-import { FAQ_TYPE_ENUM, GLOBAL_ACTIONS } from '../../../../../services/constants/admin/faqs';
+import { InlineLoader, NsPagination } from './../../../../../theme/shared';
+import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/faqs';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -14,33 +14,18 @@ const actions = {
 };
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  faq, key, handleAction, checkedRecords, selectedRecords,
+  faq, key, handleAction,
 }) => (
   <div className="row-wrap" key={key}>
     <div className="balance">
       <DragHandle />
-    </div>
-    <div className="balance">
-      <Checkbox
-        name={faq.id}
-        value={faq.id}
-        checked={selectedRecords.includes(faq.id)}
-        onChange={(e, result) => checkedRecords(e, result)}
-      />
     </div>
     <div className="balance-half">
       <span className="user-name">
         <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
       </span>
     </div>
-    <div className="balance-half">{FAQ_TYPE_ENUM[faq.faqType]}</div>
-    <div className="balance-half">{faq.categoryName || 'N/A'}</div>
-    <div className="balance-half">{faq.author || 'N/A'}</div>
     <div className="balance-half"><Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></div>
-    <div className="balance-half">
-      <DateTimeFormat format="MM-DD-YYYY" datetime={faq.updated && faq.updated.date} />
-    </div>
-    <div className="balance-half">{faq.order}</div>
     <div className="action right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
@@ -67,13 +52,14 @@ const SortableList = SortableContainer(({
         checkedRecords={checkedRecords}
         selectedRecords={selectedRecords}
       />
-    )) };
+    )) }
   </div>
 ));
 @inject('faqStore', 'uiStore')
 @withRouter
 @observer
 export default class AllFaqs extends Component {
+  state = { activeIndex: 0 }
   componentWillMount() {
     this.props.faqStore.initRequest(); // load data
   }
@@ -112,7 +98,13 @@ export default class AllFaqs extends Component {
   checkAll = (e, result) => {
     this.props.faqStore.checkUncheckAll(result.checked);
   }
+  toggleAccordion = (index, field) => {
+    const newIndex = this.state[field] === index ? -1 : index;
+    const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
+    this.setState(stateChange);
+  }
   render() {
+    const { activeIndex, innerActiveIndex } = this.state;
     const {
       allFaqs,
       count,
@@ -123,6 +115,7 @@ export default class AllFaqs extends Component {
       selectedCount,
       selectedRecords,
       globalAction,
+      allCategorizedFaqs,
     } = this.props.faqStore;
     const totalRecords = count || 0;
     const { inProgress } = this.props.uiStore;
@@ -131,6 +124,36 @@ export default class AllFaqs extends Component {
     }
     return (
       <Aux>
+        {Object.keys(allCategorizedFaqs).map(faqType => (
+          <Accordion key={faqType} fluid styled className="card-style">
+            <Accordion.Title onClick={() => this.toggleAccordion(faqType, 'activeIndex')} className="text-capitalize">
+              <Icon className={activeIndex === faqType ? 'ns-chevron-up' : 'ns-chevron-down'} />
+              {faqType}
+            </Accordion.Title>
+            <Accordion.Content active={activeIndex === faqType} className="categories-acc">
+              {Object.keys(allCategorizedFaqs[faqType]).map(categorizedFaqs => (
+                <Accordion key={categorizedFaqs} fluid className="card-style">
+                  <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
+                    <Icon className={activeIndex === categorizedFaqs ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                    {categorizedFaqs}
+                  </Accordion.Title>
+                  <Accordion.Content active={innerActiveIndex === categorizedFaqs} className="categories-acc">
+                    <SortableList
+                      allFaqs={allCategorizedFaqs[faqType][categorizedFaqs]}
+                      pressDelay={100}
+                      onSortEnd={e => this.onSortEnd(e)}
+                      lockAxis="y"
+                      useDragHandle
+                      handleAction={this.handleAction}
+                      checkedRecords={this.checkedRecords}
+                      selectedRecords={selectedRecords}
+                    />
+                  </Accordion.Content>
+                </Accordion>
+              ))}
+            </Accordion.Content>
+          </Accordion>
+        ))}
         <Form>
           <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
