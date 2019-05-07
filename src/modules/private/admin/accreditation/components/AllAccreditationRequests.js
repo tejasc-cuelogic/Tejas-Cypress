@@ -136,7 +136,7 @@ export default class AllAccreditationRequests extends Component {
                       </Table.Cell>
                     }
                     {accreditation.accreditationStatus === 'CONFIRMED' &&
-                      <Table.Cell>{get(accreditation, 'expiration') ? ` on ${moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY')}` : '-'}</Table.Cell>
+                      <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
                     }
                   </Table.Row>
                 ))
