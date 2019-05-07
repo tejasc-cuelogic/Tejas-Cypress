@@ -66,7 +66,7 @@ const MessagesList = props => (
         </List.Item>
       ))
     }
-    {props.messages.length ?
+    {!props.passedProcessingDate && props.messages.length ?
       <div className="sticky-wrap">
         <Button color="blue" size="small" className="link-button" content="Post new Comment" onClick={props.newPostComment} />
       </div> : null

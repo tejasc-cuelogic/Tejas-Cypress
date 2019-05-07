@@ -71,7 +71,6 @@ export class NavItems extends Component {
     const {
       location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
-    const modifiedReflink = refLink ? refLink.replace(/\/$/, '') : refLink;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
     const investorAccounts = this.props.userDetailsStore.getAccountList;
@@ -87,7 +86,7 @@ export class NavItems extends Component {
             className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
             name={item.to}
             // disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${modifiedReflink}/${item.to}` : false, item.clickable)}
+            onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
                 {item.icon && <Icon className={item.icon} />}
@@ -105,7 +104,7 @@ export class NavItems extends Component {
                     className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
                     as={NavLink}
                     onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
-                    to={sn.useRefLink ? `${modifiedReflink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                    to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                   >
                     {sn.title}
                   </Dropdown.Item>
