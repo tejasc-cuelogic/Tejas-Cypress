@@ -1,16 +1,20 @@
 import { fillSignUpFormAndProceed } from './signUp';
-import { enterCodeAndConfirmEmail, confirmEmailAddressScreen } from './ConfirmEmail';
+import { confirmEmailAddressScreen } from './ConfirmEmail';
+import { confirmPhoneNumberScreen } from './ConfirmPhoneNumber';
 import { fillLegalFormAndProceed } from './identityVerification';
-import { waitForAPIcall } from './common';
+import { waitForAPIcall, enterCodeAndConfirm } from './common';
+import { completeInvestorProfile } from './InvestorProfile'
 
 export const InvestorFlowProcess = () => {
   cy.visit('/');
   fillSignUpFormAndProceed();
-  enterCodeAndConfirmEmail();
-  cy.server();
-  cy.route('POST', '**/graphql').as('graphql');
-  cy.wait('@graphql');
+  enterCodeAndConfirm();
+  waitForAPIcall('confirmEmail');
   confirmEmailAddressScreen();
   fillLegalFormAndProceed();
-  waitForAPIcall();
+  waitForAPIcall('LegalDetails');
+  enterCodeAndConfirm();
+  waitForAPIcall('confirmPhone');
+  confirmPhoneNumberScreen();
+  completeInvestorProfile();
 };

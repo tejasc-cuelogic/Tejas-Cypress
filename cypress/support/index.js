@@ -16,9 +16,9 @@
 // Import commands.js using ES2015 syntax:
 import './commands';
 
-// Cypress.on('window:before:load', (win) => {
-//   delete win.fetch;
-// });
+Cypress.on('window:before:load', (win) => {
+  delete win.fetch;
+});
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

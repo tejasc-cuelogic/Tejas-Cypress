@@ -3,17 +3,16 @@ import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from '../.
 describe('Log In', () => {
   beforeEach(() => {
     cy.visit('/');
+    goToLoginScreen();
   });
 
   it('succesfully performs login action', () => {
-    goToLoginScreen();
     cy.get('input[type="email"]').type(loginCredentials.email);
     cy.get('input[type="password"]').type(loginCredentials.password);
     cy.get('button.button').contains('Log in').click({ force: true });
   });
 
   it('should check email format', () => {
-    goToLoginScreen();
     cy.get('input[type="email"]').type(inValidEmailCredentials.email);
     cy.get('input[type="email"]').blur();
     cy.wait(500);
@@ -21,7 +20,6 @@ describe('Log In', () => {
   });
 
   it('should be able to go on forgot password', () => {
-    goToLoginScreen();
     cy.get('form').within(() => {
       cy.get('a').contains('Forgot password?')
         .invoke('attr', 'href')
