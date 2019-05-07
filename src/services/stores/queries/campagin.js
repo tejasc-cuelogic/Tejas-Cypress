@@ -239,6 +239,8 @@ export const campaignDetailsQuery = gql`
       hardCloseDate
       launchDate
       totalInvestmentAmount
+      totalInvestmentAmountCf
+      totalInvestmentAmount506C
       totalInvestorCount
       repayment {
         count
@@ -326,6 +328,8 @@ query getOfferingById($id: ID) {
       processingDate
       hardCloseDate
       totalInvestmentAmount
+      totalInvestmentAmountCf
+      totalInvestmentAmount506C
       repayment {
         completeDate
       }
