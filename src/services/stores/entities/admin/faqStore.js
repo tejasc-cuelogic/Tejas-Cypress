@@ -208,12 +208,18 @@ export class FaqStore {
     this.FAQ_FRM = Validator.prepareFormObject(FAQ);
   }
   @action
-  setFaqOrder = (newArr, newOrder) => {
+  setFaqOrder = (newArr) => {
     uiStore.setProgress();
     const data = [];
-    data.push({
-      id: newArr.id,
-      order: newOrder,
+    newArr.forEach((item, index) => {
+      if (item) {
+        data.push({
+          id: item.id,
+          order: index + 1,
+        });
+        // eslint-disable-next-line no-param-reassign
+        newArr[index].order = index + 1;
+      }
     });
     clientPrivate
       .mutate({

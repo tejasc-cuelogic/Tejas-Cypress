@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Button, Grid, Form, Checkbox, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { InlineLoader, NsPagination, DateTimeFormat } from './../../../../../theme/shared';
@@ -78,12 +78,13 @@ export default class AllFaqs extends Component {
     this.props.faqStore.initRequest(); // load data
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allFaqs, setFaqOrder } = this.props.faqStore;
-    if (oldIndex !== newIndex) {
-      setFaqOrder(allFaqs[newIndex], newIndex);
+    const { allFaqs, setFaqOrder, requestState } = this.props.faqStore;
+    const aIndex = (requestState.page * 10) + oldIndex;
+    const bIndex = (requestState.page * 10) + newIndex;
+    if (aIndex !== bIndex) {
+      setFaqOrder(arrayMove(allFaqs, aIndex, bIndex));
     }
   }
-
   handleAction = (action, faqId) => {
     if (action === 'Delete') {
       this.props.faqStore.setConfirmBox(action, faqId);
