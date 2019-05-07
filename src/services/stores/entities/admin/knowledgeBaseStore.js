@@ -470,14 +470,16 @@ export class KnowledgeBaseStore {
     uiStore.setProgress();
     const data = [];
     newArr.forEach((item, index) => {
+      const i = this.requestState.skip + index;
       data.push({
         id: item.id,
-        order: index + 1,
+        order: i + 1,
       });
       // eslint-disable-next-line no-param-reassign
-      newArr[index].order = index + 1;
+      newArr[index].order = i + 1;
     });
     this.setDb(newArr);
+    this.data.loading = true;
     client
       .mutate({
         mutation: setOrderForKnowledgeBase,
