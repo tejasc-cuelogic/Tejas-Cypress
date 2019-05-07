@@ -94,6 +94,16 @@ export const PERSONAL_SIGNATURE = {
 };
 
 export const FILER_INFORMATION = {
+  skipScreenshot: {
+    value: false,
+    key: 'skipScreenshot',
+    label: 'Screenshot',
+    error: undefined,
+    rule: 'required|boolean',
+    customErrors: {
+      required: 'The Screenshot field is required.',
+    },
+  },
   offeringUrl: {
     value: '',
     key: 'offeringUrl',

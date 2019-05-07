@@ -390,13 +390,16 @@ export class Business {
     graphql({
       client,
       query: getXmlDetails,
+      fetchPolicy: 'network-only',
       variables: {
         filingId,
         xmlSubmissionId: xmlId,
       },
       onFetch: (data) => {
-        uiStore.removeOneFromProgressArray('fetchXmlDetails');
-        this.setXmlPayload(data.businessFilingSubmission);
+        if (data && data.businessFilingSubmission) {
+          uiStore.removeOneFromProgressArray('fetchXmlDetails');
+          this.setXmlPayload(data.businessFilingSubmission);
+        }
       },
       onError: (err) => {
         uiStore.removeOneFromProgressArray('fetchXmlDetails');
@@ -591,7 +594,7 @@ export class Business {
     const formattedData = {};
     const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      formattedData[key] = dateKeys.includes(key) ? moment(data.value).format('MM-DD-YYYY') : data.value;
+      formattedData[key] = dateKeys.includes(key) ? moment(data.value).format('MM/DD/YYYY') : data.value;
     });
     return formattedData;
   }
@@ -606,7 +609,7 @@ export class Business {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
-      personData.signatureDate = moment(person.signatureDate.value).format('MM-DD-YYYY');
+      personData.signatureDate = moment(person.signatureDate.value).format('MM/DD/YYYY');
       formattedData.signaturePersons.push(personData);
     });
     return formattedData;
@@ -652,7 +655,7 @@ export class Business {
 
   setXmlPayload = (data) => {
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
-    const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
+    const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag', 'skipScreenshot'];
 
     if (data) {
       businessStore.setOfferingId(data.offeringId);
@@ -668,14 +671,14 @@ export class Business {
       });
       _.map(data.payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setIssuerInfo(key, moment(value).format('MM-DD-YYYY'));
+          businessStore.setIssuerInfo(key, moment(value).format('MM/DD/YYYY'));
         } else {
           businessStore.setIssuerInfo(key, (value || ''));
         }
       });
       _.map(data.payload.offeringInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setOfferingInfo(key,  moment(value).format('MM-DD-YYYY'));
+          businessStore.setOfferingInfo(key,  moment(value).format('MM/DD/YYYY'));
         } else {
           businessStore.setOfferingInfo(key, (value || ''))
         }
@@ -696,7 +699,7 @@ export class Business {
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
-              businessStore.changePersonalSignature(key, id, value ? moment(value).format('MM-DD-YYYY') : moment().format('MM-DD-YYYY'), false);
+              businessStore.changePersonalSignature(key, id, value ? moment(value).format('MM/DD/YYYY') : moment().format('MM/DD/YYYY'), false);
             } else {
               businessStore.changePersonalSignature(key, id, value, false);
             }
