@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { map, kebabCase, sortBy, remove } from 'lodash';
+import { map, kebabCase, sortBy, remove, orderBy } from 'lodash';
 // import { sortBy } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
@@ -31,13 +31,17 @@ export class ArticleStore {
     @observable selectedRecords= [];
     @observable isReadOnly = true;
     @observable requestState = {
-      skip: 0,
-      page: 1,
-      perPage: 10,
-      displayTillIndex: 10,
+      // skip: 0,
+      // page: 1,
+      // perPage: 10,
+      // displayTillIndex: 10,
       filters: false,
       search: {},
     };
+    @observable sortOrder = {
+      column: null,
+      direction: 'asc',
+    }
 
     @action
     initiateSearch = (srchParams) => {
@@ -144,9 +148,36 @@ export class ArticleStore {
       });
     }
 
+    @action
+    setSortingOrder = (column = null, direction = null) => {
+      this.sortOrder.column = column;
+      this.sortOrder.direction = direction;
+    }
+
+    @computed get adminInsightList() {
+      if (this.sortOrder.column && this.sortOrder.direction && this.db) {
+        return orderBy(
+          this.db,
+          [user => (this.sortOrder.column === 'updated' &&
+          user[this.sortOrder.column] && user[this.sortOrder.column].date
+            ? moment(user[this.sortOrder.column].date).unix() :
+            user[this.sortOrder.column] && user[this.sortOrder.column].toString().toLowerCase())],
+          [this.sortOrder.direction],
+        );
+      }
+      return this.db || [];
+      // return (this.db && this.db.length &&
+      //   this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    }
+
     @computed get getInsightArticleListing() {
       return (this.allInsightsList.data && (toJS(this.data.data.insightsArticles)
         || toJS(this.allInsightsList.data.insightArticlesByCategoryId))) || [];
+    }
+
+    @computed get adminInsightArticleListing() {
+      return (this.allInsightsList && this.allInsightsList.data &&
+        this.allInsightsList.data.insightArticlesListByFilter) || [];
     }
 
     @computed get articleListingLoader() {

@@ -2,15 +2,25 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
-import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/article';
-import { DropdownFilter } from '../../../../../theme/form/Filters';
-import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
+import { join } from 'lodash';
+import { Card, Table, Button, Icon, Label, Form, Confirm } from 'semantic-ui-react';
+// import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/article';
+// import { DropdownFilter } from '../../../../../theme/form/Filters';
+import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
   delete: { label: 'Delete', icon: 'trash' },
 };
+const meta = [
+  { label: 'Title', value: 'title' },
+  { label: 'Category', value: 'category' },
+  { label: 'Tags', value: 'tags' },
+  { label: 'Author', value: 'author' },
+  { label: 'Status', value: 'articleStatus' },
+  { label: 'Last update date', value: 'updated' },
+  { label: '', value: 'action' },
+];
 
 @withRouter
 @inject('articleStore', 'uiStore')
@@ -55,37 +65,49 @@ export default class AllInsights extends Component {
     this.props.articleStore.selectRecordsOnPage(result.checked);
   }
 
+  handleSort = clickedColumn => () => {
+    if (clickedColumn === 'tags' || clickedColumn === 'action') {
+      return;
+    }
+    const { setSortingOrder, sortOrder } = this.props.articleStore;
+    setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
+  }
+
 
   render() {
     const { articleStore } = this.props;
     const { confirmBox } = this.props.uiStore;
     const {
-      allInsightsListing,
+      // adminInsightArticleListing,
+      // allInsightsListing,
       articleListingLoader,
-      globalAction,
-      count,
-      requestState,
-      getSelectedRecords,
-      selectedRecordsCount,
+      sortOrder,
+      adminInsightList,
+      // globalAction,
+      // count,
+      // requestState,
+      // getSelectedRecords,
+      // selectedRecordsCount,
     } = articleStore;
-    const totalRecords = count || 0;
+    // const totalRecords = count || 0;
     if (articleListingLoader) {
       return <InlineLoader />;
     }
     return (
       <Aux>
         <Form>
-          <Grid columns="equal" verticalAlign="bottom">
+          {/* <Grid columns="equal" verticalAlign="bottom">
             <Grid.Row>
               <Grid.Column>{`Selected ${selectedRecordsCount} items`}</Grid.Column>
               <Grid.Column width={3} floated="right">
-                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
-              </Grid.Column>
+                <DropdownFilter value={globalAction} change={this.globalActionChange}
+                name="globalAction" keyName="globalAction" label="Global actions"
+                options={GLOBAL_ACTIONS} /></Grid.Column>
               <Grid.Column width={2}>
                 <Button inverted color="green" compact fluid content="Apply" />
               </Grid.Column>
             </Grid.Row>
-          </Grid>
+          </Grid> */}
         </Form>
         <Card fluid>
           <div className="table-wrapper">
@@ -93,7 +115,7 @@ export default class AllInsights extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell collapsing>
-                    <Checkbox
+                    {/* <Checkbox
                       name="selectAllChkbox"
                       value="selectAllChkbox"
                       onChange={(e, result) => this.checkedAllRecords(e, result)}
@@ -101,36 +123,48 @@ export default class AllInsights extends Component {
                         getSelectedRecords.length < allInsightsListing.length)}
                       checked={getSelectedRecords.length > 0 &&
                         getSelectedRecords.length === allInsightsListing.length}
-                    />
+                    /> */}
                   </Table.HeaderCell>
-                  <Table.HeaderCell width={5}>Title</Table.HeaderCell>
+                  {/* <Table.HeaderCell width={5}>Title</Table.HeaderCell>
                   <Table.HeaderCell>Category</Table.HeaderCell>
                   <Table.HeaderCell>Tags</Table.HeaderCell>
                   <Table.HeaderCell>Author</Table.HeaderCell>
                   <Table.HeaderCell>Status</Table.HeaderCell>
-                  <Table.HeaderCell>Last update date</Table.HeaderCell>
-                  <Table.HeaderCell textAlign="center" />
+                  <Table.HeaderCell>Last update date</Table.HeaderCell> */}
+                  {
+                    meta.map(cell => (
+                      <Table.HeaderCell
+                        key={cell.label.split(' ')[0]}
+                        width={cell.value === 'title' ? 5 : ''}
+                        textAlign={cell.value === 'action' ? 'center' : ''}
+                        sorted={sortOrder.column === cell.value ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                        onClick={this.handleSort(cell.value)}
+                      >
+                        {cell.label}
+                      </Table.HeaderCell>
+                    ))
+                  }
+                  {/* <Table.HeaderCell textAlign="center" /> */}
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {
-                  allInsightsListing ? allInsightsListing.map(record => (
+                  adminInsightList ? adminInsightList.map(record => (
                     <Table.Row key={record.id}>
                       <Table.Cell>
-                        <Checkbox
+                        {/* <Checkbox
                           name={record.id}
                           value={record.id}
                           onChange={(e, result) => this.checkedRecords(e, result)}
                           checked={getSelectedRecords.includes(record.id)}
-                        />
+                        /> */}
 
                       </Table.Cell>
-                      <Table.Cell>{record.title}</Table.Cell>
-                      <Table.Cell>{record.category}</Table.Cell>
-                      <Table.Cell>{record.tags}</Table.Cell>
+                      <Table.Cell>{record.title || '-'}</Table.Cell>
+                      <Table.Cell>{record.category || 'N/A'}</Table.Cell>
+                      <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>
                       <Table.Cell>
-                        {record.author && record.author.info && record.author.info.firstName}
-                        {record.author && record.author.info && record.author.info.lastName}
+                        {record.author || 'N/A'}
                       </Table.Cell>
                       <Table.Cell><Label color={`${record.articleStatus === 'PUBLISHED' ? 'green' : record.articleStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
                       <Table.Cell>
@@ -164,9 +198,10 @@ export default class AllInsights extends Component {
               </Table.Body>
             </Table>
           </div>
-          {totalRecords > 0 &&
-            <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-          }
+          {/* {totalRecords > 0 &&
+            <NsPagination floated="right" initRequest={this.paginate}
+            meta={{ totalRecords, requestState }} />
+          } */}
         </Card>
         <Confirm
           header="Confirm"

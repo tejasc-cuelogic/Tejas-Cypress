@@ -49,6 +49,7 @@ export default class ManageInsights extends Component {
             toggleSearch={this.toggleSearch}
             filters={filters}
             requestState={requestState}
+            more="no"
           />
         }
         P2={
