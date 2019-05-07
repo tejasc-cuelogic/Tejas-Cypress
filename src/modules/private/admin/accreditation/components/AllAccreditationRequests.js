@@ -60,6 +60,9 @@ export default class AllAccreditationRequests extends Component {
                   <Table.HeaderCell>Method</Table.HeaderCell>
                 }
                 <Table.HeaderCell textAlign="center" />
+                {requestState.search.status === 'CONFIRMED' &&
+                  <Table.HeaderCell>Expiration Date</Table.HeaderCell>
+                }
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -129,8 +132,11 @@ export default class AllAccreditationRequests extends Component {
                         />
                       </Aux> :
                       <Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}</p>
                       </Table.Cell>
+                    }
+                    {accreditation.accreditationStatus === 'CONFIRMED' &&
+                      <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
                     }
                   </Table.Row>
                 ))

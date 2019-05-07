@@ -389,7 +389,7 @@ export class CampaignStore {
     let order = null;
     let isProcessing = false;
     if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
-      launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
+      launchDaysToRemains >= 0 && launchDaysToRemains <= 7) {
       labelBannerFirst = 'NEW';
       order = 0;
     } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
