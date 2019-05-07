@@ -1,4 +1,4 @@
-import { loginCredentials, inValidEmailCredentials, goToLoginScreen, visitLink } from '../../support/login';
+import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from '../../support/login';
 
 describe('Log In', () => {
   beforeEach(() => {
