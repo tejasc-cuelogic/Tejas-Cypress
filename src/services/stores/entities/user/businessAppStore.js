@@ -636,7 +636,7 @@ export class BusinessAppStore {
         fullLegalName: this.getValidDataForString(item.fullLegalName),
         yearsOfExp: item.yearsOfExp.value ? this.getValidDataForInt(item.yearsOfExp) : null,
         ssn: this.getValidDataForString(item.ssn),
-        dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM-DD-YYYY') : null,
+        dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM/DD/YYYY') : null,
         companyOwnerShip: item.companyOwnerShip.value ?
           this.getValidDataForInt(item.companyOwnerShip, 1) : null,
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),
