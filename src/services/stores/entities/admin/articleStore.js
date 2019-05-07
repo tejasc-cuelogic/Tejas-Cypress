@@ -122,13 +122,19 @@ export class ArticleStore {
     @action
     sortArticlesByFilter = () => {
       const {
-        articleStatus, categoryId, tags, author, title,
+        articleStatus, categoryId, tags, author, title, endDate, startDate,
       } = this.requestState.search;
       this.allInsightsList = graphql({
         client,
         query: insightArticlesListByFilter,
         variables: {
-          articleStatus, categoryId, tags, author, title,
+          articleStatus,
+          categoryId,
+          tags,
+          author,
+          title,
+          fromDate: startDate,
+          toDate: endDate,
         },
         onFetch: (res) => {
           if (res && res.insightArticlesListByFilter) {
