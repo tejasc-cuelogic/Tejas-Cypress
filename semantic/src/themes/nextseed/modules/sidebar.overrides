@@ -114,6 +114,9 @@
 					background-color:transparent !important;
 					color:@tertiary-text;
 				}
+				&.hide-dropdown>.icon.dropdown{
+					display:none;
+				}
 				.menu.transition{
 					position:relative;
 					left:0;

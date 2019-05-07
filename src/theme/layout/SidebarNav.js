@@ -10,7 +10,7 @@ import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('navStore', 'offeringsStore', 'uiStore')
+@inject('navStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export class SidebarNav extends Component {

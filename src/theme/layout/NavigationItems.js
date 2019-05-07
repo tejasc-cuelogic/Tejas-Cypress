@@ -74,7 +74,8 @@ export class NavItems extends Component {
     const modifiedReflink = refLink ? refLink.replace(/\/$/, '') : refLink;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
-    const hasMoreThanOneAcc = this.props.userDetailsStore.getAccountList.length > 1;
+    const investorAccounts = this.props.userDetailsStore.getAccountList;
+    const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map(item => (
       <Aux>
         {(item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar) ? (
@@ -83,7 +84,7 @@ export class NavItems extends Component {
             item
             defaultOpen={item.defaultOpen}
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}`}
+            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
             name={item.to}
             // disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${modifiedReflink}/${item.to}` : false, item.clickable)}
@@ -94,7 +95,7 @@ export class NavItems extends Component {
               </Aux>
             }
           >
-            <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}`}>
+            <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
               {item.subNavigations.map(sn => (
                 sn.external ? (
                   <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
