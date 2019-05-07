@@ -61,7 +61,7 @@ export default class AllAccreditationRequests extends Component {
                 }
                 <Table.HeaderCell textAlign="center" />
                 {requestState.search.status === 'CONFIRMED' &&
-                  <Table.HeaderCell>Method</Table.HeaderCell>
+                  <Table.HeaderCell>Expiration Date</Table.HeaderCell>
                 }
               </Table.Row>
             </Table.Header>
@@ -136,7 +136,7 @@ export default class AllAccreditationRequests extends Component {
                       </Table.Cell>
                     }
                     {accreditation.accreditationStatus === 'CONFIRMED' &&
-                      <Table.Cell>{get(accreditation, 'expiration') || ''}</Table.Cell>
+                      <Table.Cell>{get(accreditation, 'expiration') || '-'}</Table.Cell>
                     }
                   </Table.Row>
                 ))
