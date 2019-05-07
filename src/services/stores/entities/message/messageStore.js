@@ -68,7 +68,7 @@ export class NewMessage {
       variables: { offerId: offeringCreationStore.currentOfferingId },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data.offeringCommentsByOfferId && data.offeringCommentsByOfferId.length) {
+        if (data && data.offeringCommentsByOfferId && data.offeringCommentsByOfferId.length) {
           if (this.currentMessageId) {
             this.setDataValue('currentMessageId', this.currentMessageId);
           } else {
