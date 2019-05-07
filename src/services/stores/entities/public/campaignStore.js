@@ -160,8 +160,46 @@ export class CampaignStore {
     return {};
   }
 
+  @computed get campaignStatus() {
+    const { campaign } = this;
+    const campaignStatus = {};
+    campaignStatus.diff = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'));
+    campaignStatus.diffForProcessing = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true);
+    campaignStatus.isInProcessing = campaignStatus.diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
+    campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
+    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), maxOffering) : maxOffering;
+    campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
+    campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
+    const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
+    const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
+    const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
+    const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
+    const minMaxOffering = campaignStatus.minFlagStatus ?
+      campaignStatus.maxOffering : campaignStatus.minOffering;
+    campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+    money.isPositive(formatedReachedMaxCompairAmountValue));
+    campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
+    campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}` : '--';
+    campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
+    campaignStatus.isCreation = get(campaign, 'stage') === 'CREATION';
+    campaignStatus.earlyBird = get(campaign, 'earlyBird') || null;
+    campaignStatus.bonusRewards = get(campaign, 'bonusRewards') || [];
+    campaignStatus.isEarlyBirdRewards =
+      campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
+    campaignStatus.isBonusReward =
+      campaignStatus.bonusRewards && campaignStatus.bonusRewards.length;
+    return campaignStatus;
+  }
+
   @computed get getOfferingId() {
     return (this.campaign && this.campaign.id);
+  }
+
+  @computed get getOfferingSlug() {
+    return (this.campaign && this.campaign.offeringSlug);
   }
 
   @action

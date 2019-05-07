@@ -512,9 +512,7 @@ export class InvestmentStore {
             }],
           })
           .then((data) => {
-            // resolve(data.data.finishInvestment);
             const { status, message, flag } = data.data.investNowSubmit;
-
             if (flag === 1) {
               this.isGetTransferRequestCall = true;
             } else {
@@ -522,6 +520,7 @@ export class InvestmentStore {
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
             resolve(status);
+            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug);
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
