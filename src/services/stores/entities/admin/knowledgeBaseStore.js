@@ -477,6 +477,7 @@ export class KnowledgeBaseStore {
       // eslint-disable-next-line no-param-reassign
       newArr[index].order = index + 1;
     });
+    this.setDb(newArr);
     client
       .mutate({
         mutation: setOrderForKnowledgeBase,

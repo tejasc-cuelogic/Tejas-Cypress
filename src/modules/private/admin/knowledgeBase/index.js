@@ -11,6 +11,7 @@ export default class KnowledgeBase extends Component {
   componentWillMount() {
     if (!this.props.knowledgeBaseStore.categoriesLoaded) {
       this.props.knowledgeBaseStore.getCategoryList(false);
+      this.props.knowledgeBaseStore.toggleSearch();
     }
   }
   render() {
