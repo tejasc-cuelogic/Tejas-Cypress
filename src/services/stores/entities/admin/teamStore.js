@@ -227,6 +227,7 @@ export class TeamStore {
     let fileField = '';
     fileField = this[form].fields[name];
     fileField.showLoader = true;
+    uiStore.setProgress();
     fileUpload.uploadToS3(files[0], 'team')
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
@@ -234,12 +235,15 @@ export class TeamStore {
         fileField.preSignedUrl = res;
         fileField.fileId = `${files[0].name}${Date.now()}`;
         fileField.fileName = `${files[0].name}${Date.now()}`;
+        uiStore.setProgress(false);
       }))
       .catch(action(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
         fileField.showLoader = false;
       }))
       .finally(action(() => {
+        uiStore.setProgress(false);
         fileField.showLoader = false;
       }));
   }
