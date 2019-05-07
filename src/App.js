@@ -46,6 +46,9 @@ class App extends Component {
     this.checkUserIdleStatus();
     const { authStore, location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
+    if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
+      history.push(location.pathname.replace(/\/+$/, ''));
+    }
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
       const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
       this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
