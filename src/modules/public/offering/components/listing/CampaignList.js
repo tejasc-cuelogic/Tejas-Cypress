@@ -119,7 +119,7 @@ export default class CampaignList extends Component {
                             Offered by NextSeed {offering && offering.regulation ?
                               (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.regulation] ||
                      CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.keyTerms.regulation])
-                              : 'US'} LLC
+                              : 'US'}, LLC
                           </Message>
                         </Aux>
                         {offering.stage === 'LOCK' && (

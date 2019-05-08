@@ -175,7 +175,7 @@ class KeyTerms extends Component {
                 NextSeed {get(campaign, 'regulation') && get(campaign, 'regulation') ?
                 (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(campaign, 'regulation')] ||
                 CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(campaign, 'keyTerms.regulation')])
-                : 'US'} LLC
+                : 'US'}, LLC
               </Table.Cell>
             </Table.Row>
           </Table.Body>
