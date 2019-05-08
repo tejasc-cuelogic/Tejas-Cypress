@@ -252,75 +252,69 @@
         }
     }
 }
-.footer-head{
-    .ui.menu{
-        &.inverted{
-            background-color:transparent;
-            .right.menu .item{
-                padding:@13px @7px;
-                font-weight:@normal;
-            }
-        }
-        .item > .icon{
-            margin:0;
-        }
-        >.item, a.item{
-            min-width:120px;
-            padding:@13px 0;
+.footer-head .ui.menu{
+    &.inverted{
+        background-color:transparent;
+        .right.menu .item{
+            padding:@13px @7px;
             font-weight:@normal;
-            &:hover{
-                background-color:transparent;
-            }
-            @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-				min-width: 110px;
-			}
         }
-        .menu {
-            a.item {
-                min-width: 0;
+    }
+    .item > .icon{
+        margin:0;
+    }
+    >.item, a.item{
+        min-width:120px;
+        padding:@13px 0;
+        font-weight:@normal;
+        &:hover{
+            background-color:transparent;
+        }
+        @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+            min-width: 110px;
+        }
+    }
+    .menu a.item {
+        min-width: 0;
+    }
+}
+footer .ui.text.menu{
+    @media only screen and (max-width : @largestMobileScreen){
+        flex-wrap: wrap;
+    }
+    &.vertical {
+        flex: 1;
+        width: 140px;
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: 0;
+        }
+        .item{
+            color: @neutral-middark;
+            padding: @3px 0;
+            margin: 0;
+            @media only screen and (max-width : @largestMobileScreen){
+                text-align: center;
+            }
+            &.header {
+                margin-top: 0;
+            }
+            &:hover {
+                background-color: transparent;
+                color: @neutral-middark;
             }
         }
     }
-}
-footer{
-    .ui.text.menu{
-        @media only screen and (max-width : @largestMobileScreen){
-            flex-wrap: wrap;
-        }
-        &.vertical {
-            flex: 1;
-            width: 140px;
-            @media only screen and (max-width : @largestMobileScreen){
-                padding: 0;
-            }
-            .item{
-                color: @neutral-middark;
-                padding: @3px 0;
-                margin: 0;
-                @media only screen and (max-width : @largestMobileScreen){
-                    text-align: center;
-                }
-                &.header {
-                    margin-top: 0;
-                }
-                &:hover {
-                    background-color: transparent;
-                    color: @neutral-middark;
-                }
-            }
-        }
-        .item{
-            font-size: @15px;
+    .item{
+        font-size: @15px;
+        line-height: @20px;
+        &.header{
+            color: @neutral-middark;
+            padding: 0;
+            font-size: @13px;
             line-height: @20px;
-            &.header{
-                color: @neutral-middark;
-                padding: 0;
-                font-size: @13px;
-                line-height: @20px;
-                @media only screen and (max-width : @largestMobileScreen){
-                    display: block;
-                    width: 100%;
-                }
+            @media only screen and (max-width : @largestMobileScreen){
+                display: block;
+                width: 100%;
             }
         }
     }
@@ -662,7 +656,7 @@ footer{
         margin: @14px 0 0 @24px;
         width: 150px;
     }
-    &.visible.vertical {
+    &.vertical {
         .item {
             border-radius: 0 !important;
             padding: @14px @26px;
@@ -720,9 +714,6 @@ footer{
                 &:focus,&:hover {
                     color: @neutral !important;
                 }
-                // &.really{
-                //     background-color: transparent !important;
-                // }
                 .menu.transition .item {
                     &.active, &:hover, &:focus {
                         color: @primary-one !important;
