@@ -6,6 +6,7 @@ import { get } from 'lodash';
 import Aux from 'react-aux';
 import { FormInput, MaskedInput } from '../../../../../theme/form';
 import { FieldError } from '../../../../../theme/shared';
+import OfferingAudit from './data/OfferingAudit';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -29,7 +30,6 @@ export default class Data extends Component {
       BULK_STORAGE_DETAILS_SYNC_FRM, storageDetailsChange, countValues, bulkSyncLoader,
     } = elasticSearchStore;
     const { inProgress, errors } = uiStore;
-
     return (
       <Grid>
         <Grid.Column>
@@ -54,7 +54,6 @@ export default class Data extends Component {
                     </Form.Field>
                   </Form.Group>
                 </Form>
-
                 <Form error onSubmit={this.bulkFormOnSubmit}>
                   <Form.Group className="bottom-aligned">
                     <MaskedInput
@@ -86,6 +85,7 @@ export default class Data extends Component {
               </Card.Description>
             </Card.Content>
           </Card>
+          <OfferingAudit />
         </Grid.Column>
       </Grid>
     );

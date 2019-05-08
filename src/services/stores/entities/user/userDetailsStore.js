@@ -18,7 +18,7 @@ import {
   investmentStore,
   userListingStore,
 } from '../../index';
-import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -40,6 +40,7 @@ export class UserDetailsStore {
   @observable partialInvestNowSessionURL = '';
   @observable userStatus = null;
   @observable selectedUserId = '';
+  @observable displayMode = true;
 
   @action
   setFieldValue = (field, value) => {
@@ -250,7 +251,7 @@ export class UserDetailsStore {
     this.setFieldValue('selectedUserId', userId);
     this.detailsOfUser = graphql({
       client,
-      query: userDetailsQuery,
+      query: selectedUserDetailsQuery,
       variables: { userId },
       fetchPolicy: 'network-only',
     });
