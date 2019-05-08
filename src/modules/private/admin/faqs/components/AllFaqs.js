@@ -3,10 +3,8 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
-import { Button, Grid, Form, Checkbox, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
-import { DropdownFilter } from '../../../../../theme/form/Filters';
-import { InlineLoader, NsPagination } from './../../../../../theme/shared';
-import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/faqs';
+import { Button, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
+import { InlineLoader } from './../../../../../theme/shared';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -106,18 +104,10 @@ export default class AllFaqs extends Component {
   render() {
     const { activeIndex, innerActiveIndex } = this.state;
     const {
-      allFaqs,
-      count,
-      requestState,
       confirmBox,
-      applyGlobalAction,
-      disableApply,
-      selectedCount,
       selectedRecords,
-      globalAction,
       allCategorizedFaqs,
     } = this.props.faqStore;
-    const totalRecords = count || 0;
     const { inProgress } = this.props.uiStore;
     if (inProgress) {
       return <InlineLoader />;
@@ -154,55 +144,6 @@ export default class AllFaqs extends Component {
             </Accordion.Content>
           </Accordion>
         ))}
-        <Form>
-          <Grid columns="equal" verticalAlign="bottom">
-            <Grid.Row>
-              <Grid.Column>{selectedCount ? `Selected ${selectedRecords.includes('all') ? selectedCount - 1 : selectedCount} items` : ''}</Grid.Column>
-              <Grid.Column width={3} floated="right">
-                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
-              </Grid.Column>
-              <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Form>
-        <div className="ui card fluid">
-          <div className="ui basic table team-table striped">
-            <div className="row-wrap thead">
-              <div className="balance">&nbsp;</div>
-              <div className="balance">
-                <Checkbox
-                  indeterminate={selectedCount > 0 && !selectedRecords.includes('all')}
-                  value="all"
-                  checked={selectedRecords.includes('all')}
-                  onChange={(e, result) => this.checkAll(e, result)}
-                />
-              </div>
-              <div className="balance-half">Title</div>
-              <div className="balance-half">Type</div>
-              <div className="balance-half">Category</div>
-              <div className="balance-half">Author</div>
-              <div className="balance-half">Status</div>
-              <div className="balance-half">Last update date</div>
-              <div className="balance-half">Order</div>
-              <div className="action right-align" />
-            </div>
-            <SortableList
-              allFaqs={allFaqs}
-              pressDelay={100}
-              onSortEnd={e => this.onSortEnd(e)}
-              lockAxis="y"
-              useDragHandle
-              handleAction={this.handleAction}
-              checkedRecords={this.checkedRecords}
-              selectedRecords={selectedRecords}
-            />
-          </div>
-        </div>
-        {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-        }
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this item?"
