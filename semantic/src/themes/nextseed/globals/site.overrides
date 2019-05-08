@@ -452,10 +452,8 @@ footer{
 			color:@neutral-middark;
 			padding-bottom: @6px;
 		}
-		.ui.checkbox {
-			label {
-				color:@neutral-middark;
-			}
+		.ui.checkbox label {
+			color:@neutral-middark;
 		}
 		i {
 			font-size: @16px;
