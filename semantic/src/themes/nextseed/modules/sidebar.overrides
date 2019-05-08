@@ -154,14 +154,14 @@
 				white-space: nowrap;
 				overflow: hidden;
 			}
-			&:not(:last-child){
-				&:hover, &:focus, &.active{
-					background:@neutral-offwhite;
-					.icon:not(.dropdown){
-						color:@primary-one;
-					}
+			&:hover, &:focus, &.active{
+				background:@neutral-offwhite;
+				.icon:not(.dropdown){
+					color:@primary-one;
 				}
 			}
+			// &:not(:last-child){
+			// }
 			&.menu-header:hover{
 				background-color:transparent;
 			}

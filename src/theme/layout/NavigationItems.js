@@ -83,7 +83,7 @@ export class NavItems extends Component {
             item
             defaultOpen={item.defaultOpen}
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
+            className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
             name={item.to}
             // disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
