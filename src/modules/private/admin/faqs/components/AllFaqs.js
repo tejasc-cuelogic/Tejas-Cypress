@@ -23,6 +23,9 @@ const SortableItem = SortableElement(({
         <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
       </span>
     </div>
+    <div className="balance-half">
+      {faq.order}
+    </div>
     <div className="balance-half"><Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></div>
     <div className="action right-align">
       <Button.Group>
@@ -61,12 +64,10 @@ export default class AllFaqs extends Component {
   componentWillMount() {
     this.props.faqStore.initRequest(); // load data
   }
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allFaqs, setFaqOrder, requestState } = this.props.faqStore;
-    const aIndex = (requestState.page * 10) + oldIndex;
-    const bIndex = (requestState.page * 10) + newIndex;
-    if (aIndex !== bIndex) {
-      setFaqOrder(arrayMove(allFaqs, aIndex, bIndex));
+  onSortEnd = ({ oldIndex, newIndex }, faqType, categorizedFaqs) => {
+    const { allCategorizedFaqs, setFaqOrder } = this.props.faqStore;
+    if (oldIndex !== newIndex) {
+      setFaqOrder(arrayMove(allCategorizedFaqs[faqType][categorizedFaqs], oldIndex, newIndex));
     }
   }
   handleAction = (action, faqId) => {
@@ -107,9 +108,10 @@ export default class AllFaqs extends Component {
       confirmBox,
       selectedRecords,
       allCategorizedFaqs,
+      loading,
     } = this.props.faqStore;
     const { inProgress } = this.props.uiStore;
-    if (inProgress) {
+    if (inProgress || loading) {
       return <InlineLoader />;
     }
     return (
@@ -131,7 +133,7 @@ export default class AllFaqs extends Component {
                     <SortableList
                       allFaqs={allCategorizedFaqs[faqType][categorizedFaqs]}
                       pressDelay={100}
-                      onSortEnd={e => this.onSortEnd(e)}
+                      onSortEnd={e => this.onSortEnd(e, faqType, categorizedFaqs)}
                       lockAxis="y"
                       useDragHandle
                       handleAction={this.handleAction}
