@@ -29,6 +29,7 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:width', content: '1600' },
   { type: 'ogTag', property: 'og:image:height', content: '1067' },
+  { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
   { type: 'meta', name: 'twitter:card', content: 'summary_large_image' },
   { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'meta', name: 'twitter:title', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
