@@ -149,6 +149,16 @@ export class ArticleStore {
         fetchPolicy: 'network-only',
       });
     }
+    @action
+    getCategoryListByTypes = (isPublic = true, types) => {
+      const apiClient = isPublic ? clientPublic : client;
+      this.Categories = graphql({
+        client: apiClient,
+        query: getCategories(isPublic),
+        variables: { types },
+        fetchPolicy: 'network-only',
+      });
+    }
 
     @computed get InsightCategories() {
       const iMap = { categoryName: 'title', id: 'to' };
