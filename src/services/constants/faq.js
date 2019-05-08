@@ -14,9 +14,9 @@ export const FAQ = {
   faqType: {
     value: null, label: 'FAQ Type', placeHolder: '', error: undefined, rule: 'optional',
   },
-  author: {
-    value: '', label: 'Author', error: undefined, rule: 'required',
-  },
+  // author: {
+  //   value: '', label: 'Author', error: undefined, rule: 'required',
+  // },
   itemStatus: {
     value: '', label: 'Status', error: undefined, rule: 'required',
   },

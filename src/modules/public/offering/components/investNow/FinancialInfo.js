@@ -148,6 +148,7 @@ class FinancialInfo extends Component {
         }
         {
           // isValidInvestAmtInOffering &&
+          false &&
           validBonusRewards.length > 0 &&
           validBonusRewards.map(reward => (
             <p className="grey-header">+ {reward.title}</p>

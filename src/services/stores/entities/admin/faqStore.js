@@ -40,6 +40,7 @@ export class FaqStore {
     this.data = graphql({
       client,
       query,
+      fetchPolicy: 'network-only',
       onFetch: (res) => {
         if (res && res.faqs) {
           this.setDb(res.faqs);
@@ -148,9 +149,11 @@ export class FaqStore {
         if (arrFaqs[faq.faqType]) {
           if (arrFaqs[faq.faqType][faq.categoryName]) {
             arrFaqs[faq.faqType][faq.categoryName].push(faq);
+            sortBy(arrFaqs[faq.faqType][faq.categoryName], ['order']);
           } else {
             arrFaqs[faq.faqType][faq.categoryName] = [];
             arrFaqs[faq.faqType][faq.categoryName].push(faq);
+            sortBy(arrFaqs[faq.faqType][faq.categoryName], ['order']);
           }
         } else {
           arrFaqs[`${faq.faqType}`] = [];
@@ -243,14 +246,12 @@ export class FaqStore {
       .mutate({
         mutation: setOrderForFAQ,
         variables: { faqItemsList: data },
-        refetchQueries: [{ query: setOrderForFAQ }],
       }).then(() => {
+        this.initRequest();
         Helper.toast('Order updated successfully.', 'success');
       }).catch(() => {
-        Helper.toast('Error while updating order', 'error');
-      })
-      .finally(() => {
         uiStore.setProgress(false);
+        Helper.toast('Error while updating order', 'error');
       });
   }
   @action
