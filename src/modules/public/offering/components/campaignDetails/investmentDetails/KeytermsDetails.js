@@ -35,8 +35,12 @@ class KeyTermsDetails extends Component {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
     const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
+    const totalInvestmentAmount = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
+    const totalInvestmentAmountCf = get(campaign, 'closureSummary.totalInvestmentAmountCf') || 0;
+    const totalInvestmentAmount506C =
+    get(campaign, 'closureSummary.totalInvestmentAmount506C') || 0;
     const investmentMultipleTooltip =
-    isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
+      isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
@@ -57,17 +61,17 @@ class KeyTermsDetails extends Component {
           <Grid.Column>
             <p>
               <b>Type of Offering</b>
-              { get(campaign, 'regulation') &&
-                    CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content={
-                          CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
-                        }
-                        hoverable
-                        position="top center"
-                      /> : ''
+              {get(campaign, 'regulation') &&
+                CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={
+                    CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                   }
+                    hoverable
+                    position="top center"
+                  /> : ''
+              }
               <br />
               {get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
             </p>
@@ -97,18 +101,35 @@ class KeyTermsDetails extends Component {
                         {get(KeyTerms, 'regulation') === 'BD_CF_506C' && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key) ?
                           type.key === 'minOfferingAmountCF' ?
                             Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'minOfferingAmount506C')), 0)
-                          : type.key === 'maxOfferingAmountCF' &&
+                            : type.key === 'maxOfferingAmountCF' &&
                             Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'maxOfferingAmount506C')), 0)
                           : get(KeyTerms, type.key) ?
                             Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
-                          :
-                          'NA'}
+                            :
+                            'NA'}
                       </p>
                     </Table.Cell>
                   </Table.Row> : ''
                 }
               </Aux>
             ))
+            }
+            {get(KeyTerms, 'regulation') === 'BD_CF_506C' &&
+              <Table.Row verticalAlign="top">
+                <Table.Cell width={5} className="neutral-text"><b>Raised to date{' '}</b>
+                </Table.Cell>
+                <Table.Cell>
+                  <p>
+                    {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
+                  </p>
+                  <p>
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
+                  </p>
+                  <p>
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                  </p>
+                </Table.Cell>
+              </Table.Row>
             }
             {get(KeyTerms, 'investmentMultiple') &&
               <Table.Row verticalAlign="top">

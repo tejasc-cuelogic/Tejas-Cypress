@@ -52,3 +52,4 @@ export { default as offeringInvestorStore } from './entities/shared/offerings/of
 // dev stores
 export { default as elasticSearchStore } from './entities/dev/elasticSearchStore';
 export { default as knowledgeBaseStore } from './entities/admin/knowledgeBaseStore';
+export { default as faqStore } from './entities/admin/faqStore';

@@ -25,7 +25,7 @@
 .ui.checkbox input:indeterminate ~ .box:after,
 .ui.checkbox input:indeterminate ~ label:after {
 	font-size: 12px;
-	content: '\e801';
+	content: '\e99e';
 }
 
 /* Disabled */

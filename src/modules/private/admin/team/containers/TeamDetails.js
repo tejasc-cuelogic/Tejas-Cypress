@@ -6,7 +6,7 @@ import { Modal, Header, Grid, Card, Form, Button, Item, Confirm } from 'semantic
 import { FormInput, FormTextarea, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 
-@inject('teamStore')
+@inject('teamStore', 'uiStore')
 @withRouter
 @observer
 export default class TeamDetails extends Component {
@@ -57,6 +57,7 @@ export default class TeamDetails extends Component {
       formChange,
       confirmBox,
     } = this.props.teamStore;
+    const { inProgress } = this.props.uiStore;
     const formName = 'TEAM_FRM';
     const formFields = ['title', 'memberName', 'order'];
     // const STATUS = [
@@ -167,6 +168,7 @@ export default class TeamDetails extends Component {
                       </div>
                     </div>
                     <DropZone
+                      loading={inProgress}
                       name="heroImage"
                       fielddata={TEAM_FRM.fields.heroImage}
                       ondrop={(files, name) => this.onFileDrop(files, name)}

@@ -43,6 +43,12 @@ export default class FilerInformation extends React.Component {
     return (
       <div>
         <Card fluid className="form-card">
+          <Form.Checkbox
+            label="Skip screenshot generation"
+            name="skipScreenshot"
+            checked={formFilerInfo.fields.skipScreenshot.value}
+            onChange={this.handleCheckboxChange}
+          />
           <FormInput
             type="text"
             fielddata={formFilerInfo.fields.offeringUrl}
