@@ -25,8 +25,8 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
-  { type: 'ogTag', property: 'og:image', content: 'https://www.nextseed.com/og-image_A.jpg' },
-  { type: 'ogTag', property: 'og:image:secure_url', content: 'https://www.nextseed.com/og-image_A.jpg' },
+  { type: 'ogTag', property: 'og:image', content: `https://${window.location.hostname}/og-image_A.jpg` },
+  { type: 'ogTag', property: 'og:image:secure_url', content: `https://${window.location.hostname}/og-image_A.jpg` },
   { type: 'ogTag', property: 'og:image:width', content: '1369' },
   { type: 'ogTag', property: 'og:image:height', content: '1027' },
   { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
@@ -34,7 +34,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'meta', name: 'twitter:title', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'meta', name: 'twitter:site', content: '@thenextseed' },
-  { type: 'meta', name: 'twitter:image', content: 'https://www.nextseed.com/og-image_A.jpg' },
+  { type: 'meta', name: 'twitter:image', content: `https://${window.location.hostname}/og-image_A.jpg` },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
