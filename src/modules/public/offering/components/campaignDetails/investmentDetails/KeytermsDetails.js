@@ -83,7 +83,7 @@ class KeyTermsDetails extends Component {
           </Grid.Column>
           <Grid.Column>
             <p><b>Offered By</b><br />
-              Offered by NextSeed {get(KeyTerms, 'regulation') && get(KeyTerms, 'regulation') ?
+              NextSeed {get(KeyTerms, 'regulation') && get(KeyTerms, 'regulation') ?
               (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(KeyTerms, 'regulation')] ||
               CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(KeyTerms, 'keyTerms.regulation')])
               : 'US'} LLC
