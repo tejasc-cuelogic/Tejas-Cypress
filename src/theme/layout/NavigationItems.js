@@ -83,10 +83,10 @@ export class NavItems extends Component {
             item
             defaultOpen={item.defaultOpen}
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
+            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
             name={item.to}
             // disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
+            onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
                 {item.icon && <Icon className={item.icon} />}
@@ -94,7 +94,7 @@ export class NavItems extends Component {
               </Aux>
             }
           >
-            <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
+            <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
               {item.subNavigations.map(sn => (
                 sn.external ? (
                   <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>

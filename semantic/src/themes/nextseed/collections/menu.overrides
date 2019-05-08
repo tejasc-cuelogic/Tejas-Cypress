@@ -648,7 +648,7 @@ footer{
     position: relative;
     padding-top: @47px;
     .public-header-nav{
-        padding: 0 0 @64px;
+        padding: 0 0 @30px;
     }
 }
 .ui.sidebar.menu.public-sidebar {

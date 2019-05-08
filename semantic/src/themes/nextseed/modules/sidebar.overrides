@@ -69,7 +69,7 @@
 		transition:all .5s ease;
 		.ns-scrollbar{
 			.view{
-				padding:@50px 0 @64px;
+				padding:@50px 0 0;
 			}
 			.track-vertical{
 				width:4px !important;
@@ -210,7 +210,7 @@
 			}
 		}
 		&.public-sidebar {
-			padding-bottom: 0;
+			padding-bottom: @64px;
 			.ns-close-light {
 				top: 7px;		
 			}
