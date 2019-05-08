@@ -172,9 +172,9 @@ class KeyTerms extends Component {
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Offered By</b></Table.Cell>
               <Table.Cell className="grey-header">
-                NextSeed {get(KeyTerms, 'regulation') && get(KeyTerms, 'regulation') ?
-                (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(KeyTerms, 'regulation')] ||
-                CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(KeyTerms, 'keyTerms.regulation')])
+                NextSeed {get(campaign, 'regulation') && get(campaign, 'regulation') ?
+                (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(campaign, 'regulation')] ||
+                CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(campaign, 'keyTerms.regulation')])
                 : 'US'} LLC
               </Table.Cell>
             </Table.Row>
