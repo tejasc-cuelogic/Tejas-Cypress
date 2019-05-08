@@ -18,7 +18,7 @@ export const ARTICLES = {
     value: '', label: 'Banner', error: undefined, rule: 'optional',
   },
   slug: {
-    value: '', label: 'Slug', error: undefined, rule: 'optional',
+    value: '', label: 'Slug', error: undefined, rule: 'required',
   },
   tags: {
     value: '', label: 'Tags', error: undefined, rule: 'optional',
@@ -27,9 +27,14 @@ export const ARTICLES = {
     value: '', label: 'description', error: undefined, rule: 'required',
   },
   featuredImage: {
-    value: '', label: 'featuredImage', error: undefined, rule: 'optional',
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Featured Image', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  isFeatured: {
+    value: '', label: 'Featured Insight', error: undefined, rule: 'optional',
   },
 };
+
+export const THUMBNAIL_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
 export const CATEGORY_VALUES = [
   { key: 'All', value: 'All', text: 'All' },
@@ -50,15 +55,9 @@ export const TAGS = [
 ];
 
 export const ARTICLE_STATUS_VALUES = [
-  { key: 'All', value: '', text: 'All' },
   { key: 'PUBLISHED', value: 'PUBLISHED', text: 'Published' },
   { key: 'DRAFT', value: 'DRAFT', text: 'Draft' },
   { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'In Review' },
-];
-
-export const AUTHORS = [
-  { key: 'All', value: 'All', text: 'All' },
-  { key: 'John Smith', value: 'John Smith', text: 'John Smith' },
 ];
 
 export const GLOBAL_ACTIONS = [

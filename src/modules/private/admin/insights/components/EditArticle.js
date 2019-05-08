@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Divider, Grid, Card, Form } from 'semantic-ui-react';
-import { MaskedInput, FormInput, FormDropDown, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { join } from 'lodash';
+import { Modal, Header, Divider, Grid, Card, Form, Checkbox, Button } from 'semantic-ui-react';
+import { MaskedInput, FormInput, FormDropDown, ImageCropper, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
+import { Image64 } from '../../../../../theme/shared';
 import Actions from './Actions';
 
 
@@ -17,22 +19,36 @@ export default class EditArticle extends Component {
     const { id } = this.props.match.params;
     if (id !== 'new') {
       this.initiateFlow(id);
+      this.props.articleStore.setFormData(id);
+      this.props.articleStore.getCategoryList(false);
     }
-    // else {
-    //   this.props.articleStore.reset();
-    // }
-    // this.props.articleStore.reset();
   }
   onDrop = (files, name) => {
     this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files);
   }
+  setData = (attr, value, fieldName) => {
+    this.props.articleStore.setThumbnail(attr, value, fieldName);
+  }
+  uploadMedia = (name) => {
+    this.props.articleStore.uploadMedia(name);
+  }
   handleDelDoc = (field) => {
     this.props.articleStore.removeUploadedData(field);
+  }
+  handleresetProfilePhoto = (field) => {
+    this.props.articleStore.resetThumbnail(field);
+  }
+  handelImageDeimension = (width, height, field) => {
+    if (width < 200 || height < 200) {
+      const attr = 'error';
+      const errorMsg = 'Image size should not be less than 200 x 200.';
+      this.props.articleStore.setThumbnail(attr, errorMsg, field);
+    }
   }
   initiateFlow = (id) => {
     if (id !== 'new') {
       new Promise(() => {
-        this.props.articleStore.getArticleAdminListing(id, false);
+        this.props.articleStore.getSingleInsightAdmin(id, false);
       }).then(() => {
         this.props.articleStore.setFormData(id);
       }).catch();
@@ -66,6 +82,7 @@ export default class EditArticle extends Component {
       maskChange,
       htmlContentChange,
       categoriesDropdown,
+      handleVerifyFileExtension,
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
     // const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -74,7 +91,7 @@ export default class EditArticle extends Component {
     // const isReadonly = !isManager &&
     // (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
     return (
-      <Modal dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
+      <Modal closeOnDimmerClick={false} closeOnEscape={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
@@ -142,6 +159,7 @@ export default class EditArticle extends Component {
                       <FormInput
                         name="tags"
                         fielddata={ARTICLE_FRM.fields.tags}
+                        value={ARTICLE_FRM.fields.tags.value ? join(ARTICLE_FRM.fields.tags.value, ', ') : ''}
                         changed={articleChange}
                       />
                       <MaskedInput
@@ -162,6 +180,16 @@ export default class EditArticle extends Component {
                             onChange={(e, result) => articleChange(e, result)}
                           />))
                       }
+                      <Checkbox
+                        name="isFeatured"
+                        value={ARTICLE_FRM.fields.isFeatured.value}
+                        onChange={(e, result) => articleChange(e, result)}
+                        checked={
+                          ARTICLE_FRM.fields.isFeatured &&
+                          ARTICLE_FRM.fields.isFeatured.value
+                        }
+                        label="Featured Insight"
+                      />
                     </Form>
                   </Card.Content>
                 </Card>
@@ -176,6 +204,27 @@ export default class EditArticle extends Component {
                       uploadtitle="Upload a file  or drag it here"
                       containerclassname="field"
                     />
+                    {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
+                      <div className="file-uploader attached">
+                        {
+                          <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                      }
+                        <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.src} />
+                      </div>
+                ) : (
+                  <ImageCropper
+                    fieldData={ARTICLE_FRM.fields.featuredImage}
+                    setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
+                    verifyExtension={handleVerifyFileExtension}
+                    handelReset={() => this.handleresetProfilePhoto('featuredImage')}
+                    verifyImageDimension={this.handelImageDeimension}
+                    field={ARTICLE_FRM.fields.featuredImage}
+                    modalUploadAction={this.uploadMedia}
+                    name="featuredImage"
+                    cropInModal
+                    aspect={3 / 2}
+                  />
+              )}
                   </Card.Content>
                 </Card>
               </Grid.Column>

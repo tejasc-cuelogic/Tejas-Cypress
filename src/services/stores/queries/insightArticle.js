@@ -49,7 +49,9 @@ export const getArticleById = gql`
 query insight($id: ID!) {
   insightsArticle(id: $id) {
     id
+    minuteRead
     title
+    banner
     featuredImage
     content
     category
@@ -119,6 +121,7 @@ mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
     articleStatus
     category
     slug
+    isFeatured
   }
 }
 `;
@@ -145,8 +148,10 @@ export const insightArticlesListByFilter = gql`
 query insightArticlesListByFilter($categoryId: String, $articleStatus: ArticleStatusEnum, $title: String, $tags: [String], $author: String, $fromDate: String, $toDate: String){
   insightArticlesListByFilter(categoryId: $categoryId, articleStatus: $articleStatus, title: $title, tags: $tags, author: $author, fromDate: $fromDate, toDate: $toDate){
     id
+    slug
     content
     category
+    categoryId
     featuredImage
     tags
     articleStatus
@@ -157,6 +162,7 @@ query insightArticlesListByFilter($categoryId: String, $articleStatus: ArticleSt
       id
       date
     }
+    isFeatured
     created {
       id
       date

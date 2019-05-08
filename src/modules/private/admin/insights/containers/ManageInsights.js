@@ -17,9 +17,9 @@ export default class ManageInsights extends Component {
   setSearchParam = (e, { name, value }) =>
     this.props.articleStore.setInitiateSrch(name, value);
   search = (e, name) => {
-    if (e.charCode === 13) {
-      this.props.articleStore.setInitiateSrch(name, e.target.value);
-    }
+    // if (e.charCode === 13) {
+    this.props.articleStore.setInitiateSrch(name, e.target.value);
+    // }
   }
   toggleSearch = () => this.props.articleStore.toggleSearch();
   render() {
@@ -38,7 +38,8 @@ export default class ManageInsights extends Component {
             {...this.props}
             w={[10]}
             placeholder="Search by keyword or phrase"
-            executeSearch={e => this.search(e, 'title')}
+            // executeSearch={e => this.search(e, 'title')}
+            change={e => this.search(e, 'title')}
             addon={
               <Grid.Column width={3} textAlign="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
