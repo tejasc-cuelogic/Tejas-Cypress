@@ -18,6 +18,9 @@ const SortableItem = SortableElement(({
     <div className="balance">
       <DragHandle />
     </div>
+    <div className="balance">
+      <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
+    </div>
     <div className="balance-half">
       <span className="user-name">
         <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
@@ -26,7 +29,6 @@ const SortableItem = SortableElement(({
     <div className="balance-half">
       {faq.order}
     </div>
-    <div className="balance-half"><Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></div>
     <div className="action right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
@@ -124,9 +126,9 @@ export default class AllFaqs extends Component {
             </Accordion.Title>
             <Accordion.Content active={activeIndex === faqType} className="categories-acc">
               {Object.keys(allCategorizedFaqs[faqType]).map(categorizedFaqs => (
-                <Accordion key={categorizedFaqs} fluid className="card-style">
+                <Accordion key={categorizedFaqs} styled fluid className="card-style">
                   <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
-                    <Icon className={activeIndex === categorizedFaqs ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                    <Icon className={innerActiveIndex === categorizedFaqs ? 'ns-chevron-up' : 'ns-chevron-down'} />
                     {categorizedFaqs}
                   </Accordion.Title>
                   <Accordion.Content active={innerActiveIndex === categorizedFaqs} className="categories-acc">
