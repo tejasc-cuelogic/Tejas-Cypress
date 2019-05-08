@@ -647,8 +647,9 @@ footer{
 .public-mobile-nav {
     position: relative;
     padding: 0;
+    margin-top: @47px;
     .public-header-nav{
-        padding: @47px 0 @64px;
+        padding: 0 0 @64px;
     }
 }
 .ui.sidebar.menu.public-sidebar {
