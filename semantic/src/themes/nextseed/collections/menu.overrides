@@ -647,11 +647,13 @@ footer{
 .public-mobile-nav {
     position: relative;
     padding-top: @47px;
+    .public-header-nav{
+        padding: 0 0 @64px;
+    }
 }
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
     z-index: 103;
-    padding-bottom: @40px;
     .ui.divider {
         margin-left: @24px;
         margin-right: @24px;
