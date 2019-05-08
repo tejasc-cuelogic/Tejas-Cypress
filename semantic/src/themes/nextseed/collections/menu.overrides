@@ -638,12 +638,12 @@ footer .ui.text.menu{
 
 
 //Public Responsive Menu Start
-.public-mobile-nav {
-    position: relative;
-    margin-top: @47px;
-    .public-header-nav{
-        padding: 0 0 @30px;
-    }
+// .public-mobile-nav {
+//     position: relative;
+//     margin-top: @47px;
+// }
+.public-header-nav{
+    padding:@47px 0 @20px;
 }
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
@@ -673,11 +673,11 @@ footer .ui.text.menu{
                     color: @primary-one;
                 }
                 .menu.transition {
-                    margin-left: -@24px;
-                    margin-right: -@24px;
+                    margin-left: -@26px;
+                    margin-right: -@26px;
                     margin-bottom: @3px;
                     .item {
-                        padding: @8px @24px !important;
+                        padding: @8px @26px !important;
                         margin: 0;
                         border-bottom: 0;
                         color: @neutral;
