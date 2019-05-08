@@ -40,6 +40,7 @@ class Disclosure extends Component {
           width="100%"
           height="100%"
           title="agreement"
+          allowFullScreen="true"
           src={doc.BoxUrl}
           ref={(c) => { this.iframeComponent = c; }}
         />
