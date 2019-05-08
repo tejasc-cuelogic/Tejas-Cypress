@@ -2,19 +2,25 @@ import { fillSignUpFormAndProceed } from './signUp';
 import { confirmEmailAddressScreen } from './ConfirmEmail';
 import { confirmPhoneNumberScreen } from './ConfirmPhoneNumber';
 import { fillLegalFormAndProceed } from './identityVerification';
-import { waitForAPIcall, enterCodeAndConfirm } from './common';
-import { completeInvestorProfile } from './InvestorProfile'
+import { waitForAPIcall, enterCodeAndConfirm } from '../common';
+import { completeInvestorProfile } from './InvestorProfile';
 
 export const InvestorFlowProcess = () => {
+  Cypress.on('window:before:load', (win) => {
+    delete win.fetch
+  });
   cy.visit('/');
   fillSignUpFormAndProceed();
+  waitForAPIcall();
   enterCodeAndConfirm();
-  waitForAPIcall('confirmEmail');
+  waitForAPIcall();
+  waitForAPIcall();
   confirmEmailAddressScreen();
   fillLegalFormAndProceed();
-  waitForAPIcall('LegalDetails');
+  waitForAPIcall();
+  waitForAPIcall();
   enterCodeAndConfirm();
-  waitForAPIcall('confirmPhone');
+  waitForAPIcall();
   confirmPhoneNumberScreen();
   completeInvestorProfile();
 };

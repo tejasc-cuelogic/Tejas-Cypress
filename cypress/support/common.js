@@ -1,7 +1,7 @@
-export const waitForAPIcall = (operationName) => {
+export const waitForAPIcall = () => {
   cy.server();
-  cy.route('POST', '**/**').as(operationName);
-  cy.wait(`@${operationName}`);
+  cy.route('POST', '**/**').as('graphql');
+  cy.wait('@graphql');
 }
 
 export const typeOtpCode = () => {

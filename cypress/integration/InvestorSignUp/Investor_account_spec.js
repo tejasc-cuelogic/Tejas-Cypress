@@ -1,4 +1,4 @@
-import { InvestorFlowProcess } from '../../support/investorFlow';
+import { InvestorFlowProcess } from '../../support/investorSignup/investorFlow';
 describe('Account Creation', () => {
   beforeEach(() => {
     InvestorFlowProcess();

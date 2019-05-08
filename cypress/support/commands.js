@@ -24,14 +24,8 @@ import { API_ROOT } from '../../src/constants/common';
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-Cypress.Commands.add('waitForGraph', (operationName) => {
-  cy.route('**/graphql/**').as('graphqlRequest');
-  // This will capture every request
-  cy.wait('@graphqlRequest').then(({ request }) => {
-    // If the captured request doesn't match the operation name of your query
-    // it will wait again for the next one until it gets matched.
-    if (request.body.operationName !== operationName) {
-      return cy.waitForGraph(operationName);
-    }
-  });
-});
+
+
+Cypress.on('window:before:load', win => {
+  delete win.fetch
+})
