@@ -646,7 +646,7 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding-top: @47px;
+    margin-top: @47px;
     .public-header-nav{
         padding: 0 0 @30px;
     }
