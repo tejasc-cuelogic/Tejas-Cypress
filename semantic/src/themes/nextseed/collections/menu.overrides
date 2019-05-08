@@ -675,8 +675,8 @@ footer{
                 .icon.dropdown {
                     color: @neutral !important;
                 }
-                &.active {
-                    color: @neutral !important;
+                &.active .text>span {
+                    color: @primary-one;
                 }
                 .menu.transition {
                     margin-left: -@24px;
@@ -717,8 +717,8 @@ footer{
                 color: @neutral !important;
             }
             &.dropdown {
-                &.active,&:focus,&:hover {
-                    color: @primary-one !important;
+                &:focus,&:hover {
+                    color: @neutral !important;
                 }
                 &.really{
                     background-color: transparent !important;
