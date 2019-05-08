@@ -23,7 +23,7 @@ export default class OfferingAudit extends Component {
         <Card.Content header="Offering Audit" />
         <Card.Content>
           <Card.Description>
-            <Form error onSubmit={this.onSubmit}>
+            <Form onSubmit={this.onSubmit}>
               <Form.Group className="bottom-aligned">
                 <FormCheckbox
                   fielddata={OFFERING_REPAYMENT_META_FRM.fields.audit}
