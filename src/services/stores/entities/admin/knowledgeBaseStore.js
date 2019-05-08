@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
@@ -493,6 +494,26 @@ export class KnowledgeBaseStore {
       .finally(() => {
         uiStore.setProgress(false);
       });
+  }
+  @computed get allCategorizedKnowledgeBase() {
+    const arrKnowledgeBase = [];
+    if (this.db && this.db.length) {
+      this.db.forEach((knowledgeBase) => {
+        if (arrKnowledgeBase[knowledgeBase.userType]) {
+          if (arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName]) {
+            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName].push(knowledgeBase);
+          } else {
+            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName] = [];
+            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName].push(knowledgeBase);
+          }
+        } else {
+          arrKnowledgeBase[`${knowledgeBase.userType}`] = [];
+          arrKnowledgeBase[`${knowledgeBase.userType}`][`${knowledgeBase.categoryName}`] = [];
+          arrKnowledgeBase[`${knowledgeBase.userType}`][`${knowledgeBase.categoryName}`].push(knowledgeBase);
+        }
+      });
+    }
+    return arrKnowledgeBase;
   }
 }
 

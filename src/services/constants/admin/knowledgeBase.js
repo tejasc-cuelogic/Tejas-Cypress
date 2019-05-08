@@ -5,9 +5,9 @@ export const KNOWLEDGE_BASE = {
   itemStatus: {
     value: '', label: 'Status', error: undefined, rule: 'required',
   },
-  authorName: {
-    value: '', label: 'Author', error: undefined, rule: 'required',
-  },
+  // authorName: {
+  //   value: '', label: 'Author', error: undefined, rule: 'required',
+  // },
   order: {
     value: '', label: 'Order', error: undefined, rule: 'required',
   },

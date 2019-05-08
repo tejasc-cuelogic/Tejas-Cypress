@@ -55,7 +55,7 @@ export default class EditKnowledgeBaseItem extends Component {
               <div>
                 <div>
                   <Header as="h3">
-                    {isNew ? 'Create' : 'Edit'} Article
+                    {isNew ? 'Create' : 'Edit'} Knowledge Base
                     <Actions
                       save={this.save}
                       meta={KNOWLEDGE_BASE_FRM.meta}
@@ -68,7 +68,7 @@ export default class EditKnowledgeBaseItem extends Component {
                 <Grid>
                   <Grid.Row>
                     <Grid.Column width={12}>
-                      <small>Article Title</small>
+                      <small>Knowledge Base Title</small>
                       <Form>
                         <FormInput
                           ishidelabel
@@ -140,12 +140,6 @@ export default class EditKnowledgeBaseItem extends Component {
                                 onChange={(e, result) => knowledgeBaseChange(e, result)}
                               />
                             </div>
-                            <FormInput
-                              type="text"
-                              name="authorName"
-                              fielddata={KNOWLEDGE_BASE_FRM.fields.authorName}
-                              changed={knowledgeBaseChange}
-                            />
                             <FormInput
                               type="text"
                               name="order"
