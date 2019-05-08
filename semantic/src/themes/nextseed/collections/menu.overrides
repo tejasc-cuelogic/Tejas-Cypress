@@ -646,11 +646,7 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: 0;
-    margin-top: @47px;
-    .public-header-nav{
-        padding: 0 0 @64px;
-    }
+    padding-top: @47px;
 }
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
