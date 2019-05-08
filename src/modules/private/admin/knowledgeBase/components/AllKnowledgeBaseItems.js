@@ -32,9 +32,6 @@ const SortableItem = SortableElement(({
         </Link>
       </span>
     </div>
-    <div className="balance">
-      {knowledgeBase.order}
-    </div>
     <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
