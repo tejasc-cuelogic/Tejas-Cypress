@@ -4,7 +4,12 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import {
+  CAMPAIGN_KEYTERMS_SECURITIES,
+  CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING,
+  CAMPAIGN_REGULATION_DETAILED,
+  CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
+} from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -77,7 +82,12 @@ class KeyTermsDetails extends Component {
             </p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
+            <p><b>Offered By</b><br />
+              Offered by NextSeed {get(KeyTerms, 'regulation') && get(KeyTerms, 'regulation') ?
+              (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(KeyTerms, 'regulation')] ||
+              CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(KeyTerms, 'keyTerms.regulation')])
+              : 'US'} LLC
+            </p>
           </Grid.Column>
         </Grid>
         {!isMobile ? <Divider /> : null}
@@ -127,6 +137,16 @@ class KeyTermsDetails extends Component {
                   </p>
                   <p>
                     <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                  </p>
+                </Table.Cell>
+              </Table.Row>
+            }
+            {get(KeyTerms, 'securities') &&
+              <Table.Row verticalAlign="top">
+                <Table.Cell width={5} className="neutral-text"><b>Type of Securities{' '}</b></Table.Cell>
+                <Table.Cell>
+                  <p>
+                    {offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}
                   </p>
                 </Table.Cell>
               </Table.Row>
