@@ -26,9 +26,6 @@ const SortableItem = SortableElement(({
         <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
       </span>
     </div>
-    <div className="balance-half">
-      {faq.order}
-    </div>
     <div className="action right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
@@ -62,7 +59,7 @@ const SortableList = SortableContainer(({
 @withRouter
 @observer
 export default class AllFaqs extends Component {
-  state = { activeIndex: 0 }
+  state = { activeIndex: 0, innerActiveIndex: [] }
   componentWillMount() {
     this.props.faqStore.initRequest(); // load data
   }
@@ -100,8 +97,19 @@ export default class AllFaqs extends Component {
     this.props.faqStore.checkUncheckAll(result.checked);
   }
   toggleAccordion = (index, field) => {
+    let stateChange = [];
     const newIndex = this.state[field] === index ? -1 : index;
-    const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
+    if (field === 'activeIndex') {
+      stateChange = { activeIndex: newIndex };
+    } else if (this.state.innerActiveIndex.includes(index)) {
+      this.state.innerActiveIndex =
+        this.state.innerActiveIndex.filter(innerIndex => innerIndex !== index);
+    } else {
+      this.state.innerActiveIndex.push(newIndex);
+      stateChange = { ...this.state };
+    }
+    // const stateChange = field === 'activeIndex' ?
+    // { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
     this.setState(stateChange);
   }
   render() {
@@ -128,10 +136,10 @@ export default class AllFaqs extends Component {
               {Object.keys(allCategorizedFaqs[faqType]).map(categorizedFaqs => (
                 <Accordion key={categorizedFaqs} styled fluid className="card-style">
                   <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
-                    <Icon className={innerActiveIndex === categorizedFaqs ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                    <Icon className={!innerActiveIndex.includes(categorizedFaqs) ? 'ns-chevron-up' : 'ns-chevron-down'} />
                     {categorizedFaqs}
                   </Accordion.Title>
-                  <Accordion.Content active={innerActiveIndex === categorizedFaqs} className="categories-acc">
+                  <Accordion.Content active={!innerActiveIndex.includes(categorizedFaqs)} className="categories-acc">
                     <SortableList
                       allFaqs={allCategorizedFaqs[faqType][categorizedFaqs]}
                       pressDelay={100}
