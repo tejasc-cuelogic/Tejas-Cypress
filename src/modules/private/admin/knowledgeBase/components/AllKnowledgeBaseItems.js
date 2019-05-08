@@ -13,7 +13,6 @@ const actions = {
   delete: { label: 'Delete', icon: 'trash' },
 };
 
-
 const DragHandle = sortableHandle(props => <Icon className={`${props.className} ns-drag-holder-large mr-10`} />);
 const SortableItem = SortableElement(({
   knowledgeBase, key, handleAction,
@@ -61,7 +60,6 @@ const SortableList = SortableContainer(({
     ))}
   </div>
 ));
-
 @withRouter
 @inject('knowledgeBaseStore', 'uiStore')
 @observer
@@ -108,8 +106,17 @@ export default class AllKnowledgeBaseItems extends Component {
     }
   }
   toggleAccordion = (index, field) => {
+    let stateChange = { ...this.state };
     const newIndex = this.state[field] === index ? -1 : index;
-    const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
+    if (field === 'activeIndex') {
+      stateChange = { activeIndex: newIndex, innerActiveIndex: [] };
+    } else if (this.state.innerActiveIndex.includes(index)) {
+      this.state.innerActiveIndex = this.state.innerActiveIndex.filter(innerIndex => innerIndex !== index);
+      stateChange = { ...this.state };
+    } else {
+      this.state.innerActiveIndex.push(index);
+      stateChange = { ...this.state };
+    }
     this.setState(stateChange);
   }
   checkedAllRecords = (e, result) => {
@@ -143,10 +150,10 @@ export default class AllKnowledgeBaseItems extends Component {
               {Object.keys(allCategorizedKnowledgeBase[userType]).map(category => (
                 <Accordion key={category} fluid styled className="card-style">
                   <Accordion.Title onClick={() => this.toggleAccordion(category, 'innerActiveIndex')} className="text-capitalize">
-                    <Icon className={activeIndex === category ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                    <Icon className={!innerActiveIndex.includes(category) ? 'ns-chevron-up' : 'ns-chevron-down'} />
                     {category}
                   </Accordion.Title>
-                  <Accordion.Content active={innerActiveIndex === category} className="categories-acc">
+                  <Accordion.Content active={!innerActiveIndex.includes(category)} className="categories-acc">
                     <SortableList
                       allCategorizedKnowledgeBase={allCategorizedKnowledgeBase[userType][category]}
                       pressDelay={100}
