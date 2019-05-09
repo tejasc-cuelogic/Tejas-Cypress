@@ -17,7 +17,7 @@ export default class Admin extends Component {
   }
   render() {
     const {
-      USER_BASIC, formChange, displayMode, maskChange,
+      USER_BASIC, formChange, displayMode, maskChange, userEleChange,
     } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const { capabilitiesMeta } = this.props.userStore;
@@ -92,7 +92,7 @@ export default class Admin extends Component {
                 selection
                 fluid
                 containerclassname="dropdown-field"
-                onChange={(e, res) => formChange(e, res, formName, 'dropdown')}
+                onChange={(e, res) => userEleChange(e, res, 'dropdown')}
               />
             }
           </div>

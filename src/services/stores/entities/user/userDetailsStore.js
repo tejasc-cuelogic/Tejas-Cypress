@@ -574,7 +574,10 @@ export class UserDetailsStore {
       );
     }
   }
-
+  @action
+  userEleChange = (e, res, type) => {
+    this.USER_BASIC = Validator.onChange(this.USER_BASIC, Validator.pullValues(e, res), type);
+  };
   @action
   resetStoreData = () => {
     this.currentUser = {};
