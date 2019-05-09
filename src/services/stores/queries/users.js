@@ -249,6 +249,206 @@ export const userDetailsQuery = gql`
   }
 `;
 
+export const selectedUserDetailsQuery = gql`
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      userHash
+      wpUserId
+      status
+      accreditation {
+        status
+      }
+      cip {
+        expiration
+        failType
+        failReason {
+          key
+          message
+        }
+      }
+      limits {
+        income
+        netWorth
+        otherContributions
+        limit
+      }
+      info {
+        firstName
+        lastName
+        mailingAddress {
+          street
+          city
+          state
+          zipCode
+          streetTwo
+        }
+        avatar {
+          name
+          url
+        }
+      }
+      email {
+        address
+        verified
+      }
+      capabilities
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            goldstar {
+              accountNumber
+              contactId
+            }
+            accreditation {
+              status
+            }
+            limits {
+              income
+              netWorth
+              otherContributions
+              limit
+            }
+            taxStatement {
+              fileId
+              fileName
+              year
+              formType
+            }
+            name
+            taxId
+            entityType
+            address {
+              street
+              city
+              state
+              zipCode
+              streetTwo
+            }
+            isTrust
+            trustDate
+            legalInfo {
+              legalFirstName
+              legalLastName
+              title
+              legalDocUrl {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            accountId
+            iraAccountType
+            fundingType
+            identityDoc {
+              fileId
+              fileName
+              fileHandle
+            }
+            legalDocs {
+              formationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              operatingAgreementDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              einVerificationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            initialDepositAmount
+            linkedBank {
+              bankName
+              plaidAccountId
+              plaidItemId
+              plaidInstitutionId
+              accountNumber
+              routingNumber
+              plaidAccessToken
+              dateLinked
+              pendingUpdate
+              accountType
+              changeRequest {
+                accountNumber
+                bankName
+                plaidAccessToken
+                plaidAccountId
+                plaidItemId
+                plaidInstitutionId
+                dateRequested
+                status
+              }
+            }
+            created {
+              date
+            }
+            accountStatus
+          }
+        }
+      }
+      locked {
+        lock
+      }
+      created {
+        date
+      }
+      lastLoginDate
+      phone {
+        number
+        type
+        verified
+      }
+      legalDetails {
+        legalName {
+          salutation
+          firstLegalName
+          lastLegalName
+        }
+        dateOfBirth
+        ssn
+        verificationCompletionDate
+        legalAddress {
+          street
+          city
+          state
+          zipCode
+          streetTwo
+        }
+        status
+      }
+      investorProfileData {
+        isPartialProfile
+        employment {
+          status
+          employer
+          position
+        }
+        brokerageFirmName
+        publicCompanyTicker
+        taxFilingAs
+        netWorth
+        annualIncome {
+          year
+          income
+        }
+        experienceLevel
+        isRiskTaker
+        isComfortable
+      }
+      mfaMode
+    }
+  }
+`;
+
 export const userAccreditationQuery = gql`
   query userAccreditationQuery($userId: ID!) {
     user(id: $userId) {

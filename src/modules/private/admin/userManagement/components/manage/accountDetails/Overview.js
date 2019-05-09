@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { includes, get } from 'lodash';
+import moment from 'moment';
 import { Header, Form, Divider, Table } from 'semantic-ui-react';
+import Aux from 'react-aux';
 import AccountHeader from './AccountHeader';
 import IndividualSummary from './IndividualSummary';
 import IraSummary from './IraSummary';
@@ -39,6 +41,18 @@ export default class Overview extends Component {
           <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.accountNumber') || 'N/A'} readOnly className="display-only" />
         </Form.Group>
         <Divider />
+        {get(account, 'linkedBank.changeRequest') &&
+          <Aux>
+            <Header as="h6">Change Bank Account Request</Header>
+            <Form.Group widths={3}>
+              <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
+              <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.changeRequest.accountNumber') || 'N/A'} readOnly className="display-only" />
+              <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? moment(get(account, 'details.linkedBank.changeRequest.dateRequested')).format('MM/DD/YYYY') : 'N/A'} readOnly className="display-only" />
+              <Form.Input fluid label="Status" placeholder="Status" value={get(account, 'details.linkedBank.changeRequest.status') || 'N/A'} readOnly className="display-only" />
+            </Form.Group>
+            <Divider />
+          </Aux>
+        }
         <Header as="h6">Summary</Header>
         <div className="bg-offwhite">
           <div className="table-wrapper">
