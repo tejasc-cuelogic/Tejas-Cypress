@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -172,10 +172,9 @@ class KeyTerms extends Component {
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Offered By</b></Table.Cell>
               <Table.Cell className="grey-header">
-                NextSeed {get(campaign, 'regulation') && get(campaign, 'regulation') ?
-                (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(campaign, 'regulation')] ||
-                CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(campaign, 'keyTerms.regulation')])
-                : 'US'}, LLC
+                {campaign && get(campaign, 'regulation') ?
+                  CAMPAIGN_OFFERED_BY[get(campaign, 'regulation')] :
+                  CAMPAIGN_OFFERED_BY[get(campaign, 'keyTerms.regulation')]}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
