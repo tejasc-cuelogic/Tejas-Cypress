@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
-import { Card, Button, Form } from 'semantic-ui-react';
+import { Card, Button, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
+import Aux from 'react-aux';
 import { FormInput, FormCheckbox } from '../../../../../../theme/form';
-// import { FieldError } from '../../../../../../theme/shared';
 
 @inject('dataStore')
 @withRouter
 @observer
 export default class OfferingAudit extends Component {
   componentWillMount() {
-    this.props.dataStore.resetForm('OFFERING_REPAYMENT_META_FRM');
+    this.props.dataStore.resetOfferingAudit();
   }
   onSubmit = () => {
     this.props.dataStore.updateOfferingRepaymentsMeta();
   }
   render() {
     const { dataStore } = this.props;
-    const { OFFERING_REPAYMENT_META_FRM, formChange, inProgress } = dataStore;
+    const {
+      OFFERING_REPAYMENT_META_FRM, formChange, inProgress, outputMsg,
+    } = dataStore;
     return (
       <Card fluid className="elastic-search">
         <Card.Content header="Offering Audit" />
@@ -46,6 +49,22 @@ export default class OfferingAudit extends Component {
                 </Form.Field>
               </Form.Group>
             </Form>
+            {outputMsg &&
+              <Aux>
+                <Header as="h6">Output:</Header>
+                {get(outputMsg, 'type') === 'error' ?
+                  <p className="negative-text">{get(outputMsg, 'data')}</p> :
+                  <dl className="dl-horizontal">
+                    <dt>Offering Id</dt>
+                    <dd>{get(outputMsg, 'data.offeringId') || 'N/A'}</dd>
+                    <dt>Count</dt>
+                    <dd>{get(outputMsg, 'data.count') || 'N/A'}</dd>
+                    <dt>Current Repaid Amount</dt>
+                    <dd>{get(outputMsg, 'data.currentRepaidAmount') || 'N/A'}</dd>
+                  </dl>
+                }
+              </Aux>
+            }
           </Card.Description>
         </Card.Content>
       </Card>

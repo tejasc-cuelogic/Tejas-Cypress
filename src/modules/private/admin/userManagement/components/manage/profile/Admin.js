@@ -16,7 +16,9 @@ export default class Admin extends Component {
     this.props.userDetailsStore.setFieldValue('displayMode', val);
   }
   render() {
-    const { USER_BASIC, formChange, displayMode } = this.props.userDetailsStore;
+    const {
+      USER_BASIC, formChange, displayMode, maskChange,
+    } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const { capabilitiesMeta } = this.props.userStore;
     return (
@@ -34,7 +36,7 @@ export default class Admin extends Component {
               <Button
                 primary
                 onClick={this.handleSubmit}
-                disabled={!USER_BASIC.meta.isValid}
+                // disabled={!USER_BASIC.meta.isValid} // temporary disabled
               >
                 Update
               </Button>
@@ -57,17 +59,18 @@ export default class Admin extends Component {
             key="number"
             name="number"
             fielddata={USER_BASIC.fields.number}
-            changed={(values, name) => formChange(values, formName, name)}
+            changed={(values, field) => maskChange(values, formName, field)}
+            // changed={(values, name) => formChange(values, formName, name)}
             phoneNumber
             format="(###) ###-####"
-            displayMode
+            displayMode={displayMode}
           />
           <FormInput
             key="address"
             name="address"
             fielddata={USER_BASIC.fields.address}
             changed={(e, result) => formChange(e, result, formName)}
-            displayMode
+            displayMode={displayMode}
           />
         </Form.Group>
         <Divider />

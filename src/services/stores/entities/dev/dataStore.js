@@ -1,5 +1,6 @@
 
 import { observable, action, toJS } from 'mobx';
+import { get } from 'lodash';
 import { updateOfferingRepaymentsMeta } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -11,6 +12,7 @@ export class DataStore {
   @observable inProgress = {
     offeringRepayment: false,
   };
+  @observable outputMsg = null;
 
   @action
   setFieldValue = (field, value, field2 = false) => {
@@ -27,6 +29,12 @@ export class DataStore {
   }
 
   @action
+  resetOfferingAudit = () => {
+    this.OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
+    this.outputMsg = null;
+  }
+
+  @action
   formChange = (e, res, form) => {
     this[form] =
     Validator.onChange(this[form], Validator.pullValues(e, res));
@@ -36,6 +44,7 @@ export class DataStore {
   updateOfferingRepaymentsMeta = () => {
     const offeringData = Validator.evaluateFormData(this.OFFERING_REPAYMENT_META_FRM.fields);
     this.setFieldValue('inProgress', true, 'offeringRepayment');
+    this.setFieldValue('outputMsg', null);
     return new Promise((res, rej) => {
       client
         .mutate({
@@ -49,9 +58,11 @@ export class DataStore {
           this.setFieldValue('inProgress', false, 'offeringRepayment');
           Helper.toast('Your request is processed.', 'success');
           this.resetForm('OFFERING_REPAYMENT_META_FRM');
+          this.setFieldValue('outputMsg', { type: 'success', data: get(result, 'updateOfferingRepaymentsMeta') });
           res(result);
         }))
         .catch((error) => {
+          this.setFieldValue('outputMsg', { type: 'error', data: get(error, 'message') });
           this.setFieldValue('inProgress', false, 'offeringRepayment');
           Helper.toast('Something went wrong, please try again later.', 'error');
           rej(error);

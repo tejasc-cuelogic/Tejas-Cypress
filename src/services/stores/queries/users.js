@@ -299,10 +299,10 @@ export const selectedUserDetailsQuery = gql`
         status
         details {
           ... on Investor {
-            # goldstar {
-            #   accountNumber
-            #   contactId
-            # }
+            goldstar {
+              accountNumber
+              contactId
+            }
             accreditation {
               status
             }
