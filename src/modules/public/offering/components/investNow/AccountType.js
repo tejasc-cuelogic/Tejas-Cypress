@@ -8,6 +8,7 @@ import cookie from 'react-cookies';
 import { FormRadioGroup, FormCheckbox } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
 @withRouter
 @observer
@@ -365,7 +366,7 @@ class AccountType extends Component {
                         <p className="center-align">{headerSubheaderObj.subHeader}</p>
                         {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' ?
                           offeringReuglation && offeringReuglation === 'BD_CF_506C' ?
-                            <Card.Group itemsPerRow={2}>
+                            <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
                               <Card>
                                 <Card.Content>
                                   <Header as="h5" color="green">Yes, let’s get you verified.</Header>
