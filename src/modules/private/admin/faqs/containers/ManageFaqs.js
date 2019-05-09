@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import { Grid, Button, Form } from 'semantic-ui-react';
+import { Grid, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../../shared/PrivateLayout';
-import { ByKeyword as Search, DropdownFilter } from '../../../../../theme/form/Filters';
+import { ByKeyword as Search } from '../../../../../theme/form/Filters';
 import AllFaqs from '../components/AllFaqs';
-import { FAQ_STATUS_VALUES, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/faqs';
 
 @inject('faqStore', 'articleStore')
 @observer
 export default class ManageFaqs extends Component {
-  componentWillMount() {
-    this.props.articleStore.getCategoryListByTypes(false, ['INV_FAQ', 'ISSUER_FAQ']);
-  }
   onFilterChange = (e) => {
     this.props.faqStore.setInitiateSrch('keyword', e.target.value);
   }
@@ -26,8 +22,6 @@ export default class ManageFaqs extends Component {
   toggleSearch = () => this.props.faqStore.toggleSearch();
   render() {
     const { match } = this.props;
-    const { categoriesDropdown } = this.props.articleStore;
-    const { filters, requestState } = this.props.faqStore;
     return (
       <PrivateLayout
         {...this.props}
