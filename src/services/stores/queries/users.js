@@ -71,6 +71,10 @@ export const userDetailsQuery = gql`
       cip {
         expiration
         failType
+        failReason {
+          key
+          message
+        }
       }
       limits {
         income
