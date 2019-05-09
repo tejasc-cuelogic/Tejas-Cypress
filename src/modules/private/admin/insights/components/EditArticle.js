@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { join } from 'lodash';
-import { Modal, Header, Divider, Grid, Card, Form, Checkbox, Button } from 'semantic-ui-react';
-import { MaskedInput, FormInput, FormDropDown, ImageCropper, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { Modal, Header, Divider, Grid, Card, Form, Checkbox } from 'semantic-ui-react';
+import { MaskedInput, FormInput, FormDropDown } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
-import { Image64 } from '../../../../../theme/shared';
+// import { Image64 } from '../../../../../theme/shared';
 import Actions from './Actions';
 
 
@@ -82,7 +82,7 @@ export default class EditArticle extends Component {
       maskChange,
       htmlContentChange,
       categoriesDropdown,
-      handleVerifyFileExtension,
+      // handleVerifyFileExtension,
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
     // const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -193,21 +193,22 @@ export default class EditArticle extends Component {
                     </Form>
                   </Card.Content>
                 </Card>
-                <Card fluid>
+                {/* <Card fluid>
                   <Card.Content>
                     <Header as="h4">Thumbnail</Header>
-                    {/* <DropZone
+                    <DropZone
                       name="featuredImage"
                       fielddata={ARTICLE_FRM.fields.featuredImage}
                       ondrop={(files, name) => this.onDrop(files, name)}
                       onremove={fieldName => this.handleDelDoc(fieldName)}
                       uploadtitle="Upload a file  or drag it here"
                       containerclassname="field"
-                    /> */}
+                    />
                     {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
                       <div className="file-uploader attached">
                         {
-                          <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                          <Button onClick={fieldName => this.handleDelDoc(fieldName)}
+                          circular icon={{ className: 'ns-close-light' }} />
                       }
                         <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.src} />
                       </div>
@@ -226,7 +227,7 @@ export default class EditArticle extends Component {
                   />
               )}
                   </Card.Content>
-                </Card>
+                </Card> */}
               </Grid.Column>
             </Grid.Row>
           </Grid>
