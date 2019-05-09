@@ -182,7 +182,7 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', requestDate = '') => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', requestDate = '', accountId) => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -196,6 +196,16 @@ export class AccreditationStore {
         if (accreditationMethod !== 'Admin') {
           fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
+            fileUpload.putUploadedFileOnS3({
+              preSignedUrl, fileData: file, fileType: fileData.fileType,
+            }).then(() => {
+              this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+                this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+              });
+            }).catch(() => {
+              Helper.toast('Something went wrong, please try again later.', 'error');
+              this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+            });
             this.putUploadedFileOnS3(
               form, field, preSignedUrl, file, fileData, fileId,
               accreditationMethod,
@@ -226,24 +236,25 @@ export class AccreditationStore {
 
   @action
   putUploadedFileOnS3 = (form, field, preSignedUrl, file, fileData, fileId, scope) => {
-    this.docsToUpload.push({
-      preSignedUrl, fileData: file, fileType: fileData.fileType, field,
-    });
+    if (scope === 'Admin') {
+      this.docsToUpload.push({
+        preSignedUrl, fileData: file, fileType: fileData.fileType, field,
+      });
+      this.setFormFileArray(form, field, 'showLoader', false, scope);
+    }
     this.setFormFileArray(form, field, 'fileData', file);
     this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
     this.setFormFileArray(form, field, 'fileId', fileId);
     this.setFormFileArray(form, field, 'value', fileData.fileName);
     this.setFormFileArray(form, field, 'error', undefined);
     this.checkFormValid(form, false, false);
-    this.setFormFileArray(form, field, 'showLoader', false, scope);
   }
   @action
-  uploadAllDocs = isFinalStep => new Promise((resolve, reject) => {
-    if (this.docsToUpload && isFinalStep) {
+  uploadAllDocs = () => new Promise((resolve, reject) => {
+    if (this.docsToUpload.length) {
       const uploadedArr = [];
       this.docsToUpload.forEach((item, index) => {
         fileUpload.putUploadedFileOnS3(item).then(() => {
-          // this.docsToUpload.splice((this.docsToUpload.length > 1) ? index : 0, 1);
           uploadedArr.push(index);
           if (this.docsToUpload.length === uploadedArr.length) {
             resolve();
@@ -259,15 +270,15 @@ export class AccreditationStore {
     }
   });
   @action
-  removeUploadedData = (form, field, index = null) => {
-    let removeFileIds = '';
+  removeUploadedData = (form, field, index = null, accountType, accountId) => {
+    let removeFileId = '';
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
-      removeFileIds = fileId;
+      removeFileId = fileId;
     } else {
       const { fileId } = this[form].fields[field];
-      removeFileIds = fileId;
+      removeFileId = fileId;
       this.setFormFileArray(form, field, 'fileId', '');
       this.setFormFileArray(form, field, 'fileData', '');
       this.setFormFileArray(form, field, 'value', '');
@@ -276,7 +287,19 @@ export class AccreditationStore {
     if (form === 'INCOME_UPLOAD_DOC_FORM') {
       this[form].fields.isAccepted.value = [];
     }
-    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+    if (accountType && accountId) {
+      fileUpload.removeUploadedData(removeFileId).then(() => {
+        this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+          this.setFormFileArray(form, field, 'showLoader', false);
+        }).catch(() => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          this.setFormFileArray(form, field, 'showLoader', false);
+        });
+      }).catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      });
+    }
+    // this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
     this.checkFormValid(form, false, false);
@@ -473,10 +496,12 @@ export class AccreditationStore {
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
       forEach(fileUploadData, (file, key) => {
-        const fileObj = {};
-        fileObj.type = UPLOAD_ASSET_ENUMS[key];
-        fileObj.fileInfo = file;
-        userAccreditationDetails.assetsUpload.push(fileObj);
+        if (key === 'statementDoc' || (file.fileId && file.fileName)) {
+          const fileObj = {};
+          fileObj.type = UPLOAD_ASSET_ENUMS[key];
+          fileObj.fileInfo = file;
+          userAccreditationDetails.assetsUpload.push(fileObj);
+        }
       });
       this.VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
       hasVerifier = false;
@@ -500,32 +525,26 @@ export class AccreditationStore {
     if (hasVerifier !== null) {
       payLoad.hasVerifier = hasVerifier;
     }
+    const refetchQueries = formType ? [{
+      query: userAccreditationQuery,
+      variables: {
+        userId: userDetailsStore.currentUserId,
+      },
+    }] : [];
     return new Promise((resolve, reject) => {
-      this.uploadAllDocs(form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM').then(() => {
-        client
-          .mutate({
-            mutation: updateAccreditation,
-            variables: payLoad,
-            refetchQueries: [{
-              query: userAccreditationQuery,
-              variables: {
-                userId: userDetailsStore.currentUserId,
-              },
-            }],
-          })
-          .then(() => resolve())
-          .catch((error) => {
-            Helper.toast('Something went wrong, please try again later.', 'error');
-            uiStore.setErrors(error.message);
-            reject();
-          })
-          .finally(() => uiStore.setProgress(false));
-      }).catch((error) => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setErrors(error.message);
-        uiStore.setProgress(false);
-        reject();
-      });
+      client
+        .mutate({
+          mutation: updateAccreditation,
+          variables: payLoad,
+          refetchQueries,
+        })
+        .then(() => resolve())
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        })
+        .finally(() => uiStore.setProgress(false));
     });
   }
 
@@ -538,7 +557,7 @@ export class AccreditationStore {
       fileName: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.value,
     }];
     return new Promise((resolve, reject) => {
-      this.uploadAllDocs(false).then(() => {
+      this.uploadAllDocs().then(() => {
         client
           .mutate({
             mutation: approveOrDeclineForAccreditationRequest,
@@ -999,23 +1018,6 @@ export class AccreditationStore {
   setHeaderAndSubHeader = (headerText, subHeaderText) => {
     this.headerSubheaderObj.header = headerText.header;
     this.headerSubheaderObj.subHeader = headerText.subHeader || subHeaderText;
-  }
-  @action
-  changeRuleAsPerFilingStatus = (isFilingTrue) => {
-    this.filingStatus = isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAccepted.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value = !isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value;
-    this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
-    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocThirdLastYear');
-    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocSecondLastYear');
-    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocLastYear');
-    this.docsToUpload = [];
   }
   @action
   setDefaultCheckboxVal = () => {

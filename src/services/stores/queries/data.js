@@ -13,3 +13,12 @@ mutation storageDetailsForInvestor($limit: Int = 0) {
       createdCount
     }
   }`;
+
+export const updateOfferingRepaymentsMeta = gql`
+mutation updateOfferingRepaymentsMeta($audit: Boolean!, $offeringId: String){
+    updateOfferingRepaymentsMeta(audit: $audit, offeringId: $offeringId) {
+      offeringId
+      currentRepaidAmount
+      count
+    }  
+}`;

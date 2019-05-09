@@ -7,14 +7,10 @@ import { Form, Header, Grid } from 'semantic-ui-react';
 @inject('accreditationStore')
 @observer
 export default class IncomeQualificationCheck extends Component {
-  componentWillMount() {
-    this.props.accreditationStore.setFieldVal('docsToUpload', []);
-  }
   componentWillUpdate() {
     const {
       INCOME_UPLOAD_DOC_FORM, ASSETS_UPLOAD_DOC_FORM,
     } = this.props.accreditationStore;
-    this.props.accreditationStore.setFieldVal('docsToUpload', []);
     this.props.accreditationStore.resetAccreditation(INCOME_UPLOAD_DOC_FORM);
     this.props.accreditationStore.resetAccreditation(ASSETS_UPLOAD_DOC_FORM);
   }

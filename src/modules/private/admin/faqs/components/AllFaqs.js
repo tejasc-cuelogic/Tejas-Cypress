@@ -3,10 +3,8 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
-import { Button, Grid, Form, Checkbox, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
-import { DropdownFilter } from '../../../../../theme/form/Filters';
-import { InlineLoader, NsPagination } from './../../../../../theme/shared';
-import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/faqs';
+import { Button, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
+import { InlineLoader } from './../../../../../theme/shared';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -20,12 +18,14 @@ const SortableItem = SortableElement(({
     <div className="balance">
       <DragHandle />
     </div>
+    <div className="balance">
+      <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
+    </div>
     <div className="balance-half">
       <span className="user-name">
         <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
       </span>
     </div>
-    <div className="balance-half"><Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></div>
     <div className="action right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
@@ -59,16 +59,14 @@ const SortableList = SortableContainer(({
 @withRouter
 @observer
 export default class AllFaqs extends Component {
-  state = { activeIndex: 0 }
+  state = { activeIndex: 0, innerActiveIndex: [] }
   componentWillMount() {
     this.props.faqStore.initRequest(); // load data
   }
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allFaqs, setFaqOrder, requestState } = this.props.faqStore;
-    const aIndex = (requestState.page * 10) + oldIndex;
-    const bIndex = (requestState.page * 10) + newIndex;
-    if (aIndex !== bIndex) {
-      setFaqOrder(arrayMove(allFaqs, aIndex, bIndex));
+  onSortEnd = ({ oldIndex, newIndex }, faqType, categorizedFaqs) => {
+    const { allCategorizedFaqs, setFaqOrder } = this.props.faqStore;
+    if (oldIndex !== newIndex) {
+      setFaqOrder(arrayMove(allCategorizedFaqs[faqType][categorizedFaqs], oldIndex, newIndex));
     }
   }
   handleAction = (action, faqId) => {
@@ -99,27 +97,31 @@ export default class AllFaqs extends Component {
     this.props.faqStore.checkUncheckAll(result.checked);
   }
   toggleAccordion = (index, field) => {
+    let stateChange = [];
     const newIndex = this.state[field] === index ? -1 : index;
-    const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
+    if (field === 'activeIndex') {
+      stateChange = { activeIndex: newIndex };
+    } else if (this.state.innerActiveIndex.includes(index)) {
+      this.state.innerActiveIndex =
+        this.state.innerActiveIndex.filter(innerIndex => innerIndex !== index);
+    } else {
+      this.state.innerActiveIndex.push(newIndex);
+      stateChange = { ...this.state };
+    }
+    // const stateChange = field === 'activeIndex' ?
+    // { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
     this.setState(stateChange);
   }
   render() {
     const { activeIndex, innerActiveIndex } = this.state;
     const {
-      allFaqs,
-      count,
-      requestState,
       confirmBox,
-      applyGlobalAction,
-      disableApply,
-      selectedCount,
       selectedRecords,
-      globalAction,
       allCategorizedFaqs,
+      loading,
     } = this.props.faqStore;
-    const totalRecords = count || 0;
     const { inProgress } = this.props.uiStore;
-    if (inProgress) {
+    if (inProgress || loading) {
       return <InlineLoader />;
     }
     return (
@@ -132,16 +134,16 @@ export default class AllFaqs extends Component {
             </Accordion.Title>
             <Accordion.Content active={activeIndex === faqType} className="categories-acc">
               {Object.keys(allCategorizedFaqs[faqType]).map(categorizedFaqs => (
-                <Accordion key={categorizedFaqs} fluid className="card-style">
+                <Accordion key={categorizedFaqs} styled fluid className="card-style">
                   <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
-                    <Icon className={activeIndex === categorizedFaqs ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                    <Icon className={!innerActiveIndex.includes(categorizedFaqs) ? 'ns-chevron-up' : 'ns-chevron-down'} />
                     {categorizedFaqs}
                   </Accordion.Title>
-                  <Accordion.Content active={innerActiveIndex === categorizedFaqs} className="categories-acc">
+                  <Accordion.Content active={!innerActiveIndex.includes(categorizedFaqs)} className="categories-acc">
                     <SortableList
                       allFaqs={allCategorizedFaqs[faqType][categorizedFaqs]}
                       pressDelay={100}
-                      onSortEnd={e => this.onSortEnd(e)}
+                      onSortEnd={e => this.onSortEnd(e, faqType, categorizedFaqs)}
                       lockAxis="y"
                       useDragHandle
                       handleAction={this.handleAction}
@@ -154,55 +156,6 @@ export default class AllFaqs extends Component {
             </Accordion.Content>
           </Accordion>
         ))}
-        <Form>
-          <Grid columns="equal" verticalAlign="bottom">
-            <Grid.Row>
-              <Grid.Column>{selectedCount ? `Selected ${selectedRecords.includes('all') ? selectedCount - 1 : selectedCount} items` : ''}</Grid.Column>
-              <Grid.Column width={3} floated="right">
-                <DropdownFilter value={globalAction} change={this.globalActionChange} name="globalAction" keyName="globalAction" label="Global actions" options={GLOBAL_ACTIONS} />
-              </Grid.Column>
-              <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" onClick={applyGlobalAction} disabled={disableApply} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Form>
-        <div className="ui card fluid">
-          <div className="ui basic table team-table striped">
-            <div className="row-wrap thead">
-              <div className="balance">&nbsp;</div>
-              <div className="balance">
-                <Checkbox
-                  indeterminate={selectedCount > 0 && !selectedRecords.includes('all')}
-                  value="all"
-                  checked={selectedRecords.includes('all')}
-                  onChange={(e, result) => this.checkAll(e, result)}
-                />
-              </div>
-              <div className="balance-half">Title</div>
-              <div className="balance-half">Type</div>
-              <div className="balance-half">Category</div>
-              <div className="balance-half">Author</div>
-              <div className="balance-half">Status</div>
-              <div className="balance-half">Last update date</div>
-              <div className="balance-half">Order</div>
-              <div className="action right-align" />
-            </div>
-            <SortableList
-              allFaqs={allFaqs}
-              pressDelay={100}
-              onSortEnd={e => this.onSortEnd(e)}
-              lockAxis="y"
-              useDragHandle
-              handleAction={this.handleAction}
-              checkedRecords={this.checkedRecords}
-              selectedRecords={selectedRecords}
-            />
-          </div>
-        </div>
-        {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-        }
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this item?"
