@@ -26,7 +26,7 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
   { type: 'ogTag', property: 'article:publisher', content: 'https://www.facebook.com/thenextseed' },
-  // { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
+  { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
   { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:width', content: '1600' },

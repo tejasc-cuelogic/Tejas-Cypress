@@ -24,3 +24,24 @@ export const BULK_STORAGE_DETAILS_SYNC = {
     },
   },
 };
+
+export const OFFERING_REPAYMENT_META = {
+  audit: {
+    value: [],
+    values: [
+      { label: 'Audit', value: true },
+    ],
+    error: undefined,
+    rule: 'optional',
+  },
+  offeringId: {
+    value: '',
+    label: 'Offering ID',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'This field is required',
+    },
+  },
+};

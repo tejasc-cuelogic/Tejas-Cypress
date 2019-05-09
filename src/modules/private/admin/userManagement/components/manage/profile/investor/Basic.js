@@ -3,8 +3,10 @@ import { toJS } from 'mobx';
 import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
+import { Header, Icon, Form, Divider, Button, Table } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
+import CIPInformation from './CIPInformation';
+import OtherInformation from '../OtherInformation';
 
 @inject('userDetailsStore', 'uiStore')
 @withRouter
@@ -176,18 +178,24 @@ export default class Basic extends Component {
           />
         </Form.Group>
         <Divider />
-        <Header as="h6">MFA</Header>
-        <Form.Group widths={4}>
-          <Form.Input type="password" fluid label="Password" placeholder="Password" value="Demopassword123" readOnly className="display-only" />
-          <Form.Input
-            fluid
-            label="Send verification codes to"
-            placeholder="Send verification codes to"
-            value={details.mfaMode === 'EMAIL' ? 'Email ID' : 'Phone number'}
-            readOnly
-            className="display-only"
-          />
-        </Form.Group>
+        <Header as="h6">CIP Information</Header>
+        <div className="bg-offwhite">
+          <div className="table-wrapper">
+            <Table unstackable basic="very" fixed>
+              <CIPInformation details={details} />
+            </Table>
+          </div>
+        </div>
+        <Divider />
+        <Header as="h6">Other Information</Header>
+        <div className="bg-offwhite">
+          <div className="table-wrapper">
+            <Table unstackable basic="very" fixed>
+              <OtherInformation details={details} />
+            </Table>
+          </div>
+        </div>
+        <Divider />
       </Form>
     );
   }
