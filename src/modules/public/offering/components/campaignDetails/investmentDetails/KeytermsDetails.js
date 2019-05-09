@@ -6,7 +6,7 @@ import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
 import {
   CAMPAIGN_KEYTERMS_SECURITIES,
-  CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING,
+  CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
 } from '../../../../../../constants/offering';
@@ -83,9 +83,7 @@ class KeyTermsDetails extends Component {
           </Grid.Column>
           <Grid.Column>
             <p><b>Offered By</b><br />
-              NextSeed {get(KeyTerms, 'regulation') && get(KeyTerms, 'regulation') ?
-              CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[get(KeyTerms, 'regulation')]
-              : 'US'}, LLC
+              {CAMPAIGN_OFFERED_BY[get(KeyTerms, 'regulation')]}
             </p>
           </Grid.Column>
         </Grid>
