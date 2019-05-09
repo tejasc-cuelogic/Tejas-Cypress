@@ -562,9 +562,7 @@
     .content{
         padding:@21px;
         p.accredetaion-intro{
-            @media screen and (min-width:@tabletBreakpoint){
-                min-height:84px;
-            }
+            min-height:84px;
         }
     }
 }
