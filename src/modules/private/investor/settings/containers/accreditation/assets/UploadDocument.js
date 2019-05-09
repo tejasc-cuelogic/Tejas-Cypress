@@ -14,7 +14,8 @@ export default class UploadDocument extends Component {
     }
   }
   onFileDrop = (files, field) => {
-    this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Assets');
+    const { params } = this.props.match;
+    this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Assets', '', '', '', params.accountId);
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
@@ -23,7 +24,7 @@ export default class UploadDocument extends Component {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelDoc = (field, index) => {
-    this.props.accreditationStore.removeUploadedData('ASSETS_UPLOAD_DOC_FORM', field, index);
+    this.props.accreditationStore.removeUploadedData('ASSETS_UPLOAD_DOC_FORM', field, index, this.props.accountType, this.props.match.params.accountId);
   }
 
   render() {

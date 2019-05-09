@@ -11,7 +11,7 @@ import { FAQ_STATUS_VALUES, FAQ_TYPES_VALUES } from '../../../../../services/con
 @observer
 export default class ManageFaqs extends Component {
   componentWillMount() {
-    this.props.articleStore.getCategoryList(false);
+    this.props.articleStore.getCategoryListByTypes(false, ['INV_FAQ', 'ISSUER_FAQ']);
   }
   onFilterChange = (e) => {
     this.props.faqStore.setInitiateSrch('keyword', e.target.value);

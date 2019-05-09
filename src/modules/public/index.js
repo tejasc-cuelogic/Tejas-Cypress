@@ -44,10 +44,13 @@ export default class Public extends React.Component {
       <Route component={NotFound} />
     </Switch>
   );
-  handleLogOut = () => {
-    authActions.logout('user')
+  handleLogOut = (isToggle = false) => {
+    authActions.logout()
       .then(() => {
         this.props.history.push('/');
+        if (isToggle) {
+          this.handleToggle();
+        }
       });
   }
   preQualSubmit = (e) => {
@@ -102,6 +105,7 @@ export default class Public extends React.Component {
             visible={visible}
             location={location}
             match={match}
+            handleLogOut={() => this.handleLogOut(true)}
             isMobile
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}

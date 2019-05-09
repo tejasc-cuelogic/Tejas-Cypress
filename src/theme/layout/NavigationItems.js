@@ -73,35 +73,28 @@ export class NavItems extends Component {
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
+    const investorAccounts = this.props.userDetailsStore.getAccountList;
+    const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map(item => (
       <Aux>
-        {(item.subPanel === 1 && item.subNavigations) ? (
+        {(item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar) ? (
           <Dropdown
             open={item.clickable && this.isOpen(item.to, location, item.subNavigations)}
             item
             defaultOpen={item.defaultOpen}
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''}
-            ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
-            `}
+            className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
             name={item.to}
-            disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && (isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
+            // disabled={isMobile && item.title === 'How NextSeed Works'}
+            onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
-                {item.icon &&
-                  <Icon className={item.icon} />
-                }
-                <span>
-                  {typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
-                </span>
+                {item.icon && <Icon className={item.icon} />}
+                <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
               </Aux>
             }
           >
-            <Dropdown.Menu
-              className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
-              `}
-            >
+            <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
               {item.subNavigations.map(sn => (
                 sn.external ? (
                   <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
@@ -119,8 +112,11 @@ export class NavItems extends Component {
               ))}
             </Dropdown.Menu>
           </Dropdown>
-        ) :
-          item.title === 'Bonus Rewards' && !this.props.bonusRewards ?
+        ) : (item.isMenuHeader && hasMoreThanOneAcc) ?
+          <Menu.Item className="menu-header">
+            <Menu.Header>{item.title}</Menu.Header>
+          </Menu.Item> :
+          (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader) ?
             null
             : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to]) ||
             (item.to !== 'updates') ?
@@ -129,24 +125,14 @@ export class NavItems extends Component {
               <Menu.Item
                 key={item.to}
                 name={item.to}
-                className={isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}
+                className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
                 as={NavLink}
                 onClick={isMobile ? onToggle : this.doNothing}
                 to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
               >
-                {item.icon &&
-                  <Icon className={item.icon} />
-                }
-                {item.to === 'messages' &&
-                  <Label circular color="red" size="mini" horizontal>3</Label>
-                }
-                {
-                    item.title !== 'Updates' ?
-                      <span>{item.title}</span> :
-                    (item.title === 'Updates' && item.to === 'updates' && this.props.countData ?
-                      <span>{item.title}</span> : ''
-                    )
-                }
+                {item.icon && <Icon className={item.icon} />}
+                {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
+                {item.title !== 'Updates' ? <span>{item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
                 {(item.to === 'updates' || item.to === 'comments') && this.props.countData ?
                   <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
                 }
@@ -158,10 +144,6 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoGreenGrey');
-// const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-//   (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoGreenGrey' :
-//     (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoGreenGrey'))
-// ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
@@ -174,10 +156,14 @@ export class NavigationItems extends Component {
   }
   render() {
     const {
-      stepInRoute, location, currentUser, loading, isMobBussinessApp,
+      location, currentUser, loading, isMobBussinessApp,
       isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
+    const stepInRoute = [
+      { to: 'login', title: 'Log In', className: 'basic' },
+      { to: 'register', title: 'Sign Up', className: 'secondary' },
+    ];
     return (
       <Menu
         stackable={!isMobBussinessApp}
@@ -221,15 +207,20 @@ export class NavigationItems extends Component {
             : !location.pathname.includes('/business-application') &&
             (
               !currentUser ? (
-                <Menu.Item as={Link} onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`}>
-                  <Button secondary compact>{stepInRoute.title}</Button>
-                </Menu.Item>
+                <Aux>
+                  {stepInRoute.map(route => (
+                    <Menu.Item className="menu-button">
+                      <Button as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`}>{route.title}</Button>
+                    </Menu.Item>
+                  ))}
+                </Aux>
               ) : (
                 <Menu.Item
+                  className="menu-button"
                   as={Link}
                   to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
                 >
-                  <Button secondary compact>Dashboard</Button>
+                  <Button secondary>Dashboard</Button>
                 </Menu.Item>
                 ))}
         </Container>
