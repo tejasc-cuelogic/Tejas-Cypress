@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { join } from 'lodash';
-import { Modal, Header, Divider, Grid, Card, Form, Checkbox } from 'semantic-ui-react';
-import { MaskedInput, FormInput, FormDropDown } from '../../../../../theme/form';
+import { Modal, Header, Divider, Grid, Card, Form, Checkbox, Button } from 'semantic-ui-react';
+import { MaskedInput, FormInput, FormDropDown, ImageCropper } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
-// import { Image64 } from '../../../../../theme/shared';
+import { Image64 } from '../../../../../theme/shared';
 import Actions from './Actions';
 
 
@@ -24,16 +24,19 @@ export default class EditArticle extends Component {
     }
   }
   onDrop = (files, name) => {
-    this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files);
+    const { id } = this.props.match.params;
+    this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files, id);
   }
   setData = (attr, value, fieldName) => {
     this.props.articleStore.setThumbnail(attr, value, fieldName);
   }
   uploadMedia = (name) => {
-    this.props.articleStore.uploadMedia(name);
+    const { id } = this.props.match.params;
+    this.props.articleStore.uploadMedia(name, 'ARTICLE_FRM', id);
   }
-  handleDelDoc = (field) => {
-    this.props.articleStore.removeUploadedData(field);
+  handleDelDoc = () => {
+    const { id } = this.props.match.params;
+    this.props.articleStore.removeMedia('featuredImage', id);
   }
   handleresetProfilePhoto = (field) => {
     this.props.articleStore.resetThumbnail(field);
@@ -82,7 +85,7 @@ export default class EditArticle extends Component {
       maskChange,
       htmlContentChange,
       categoriesDropdown,
-      // handleVerifyFileExtension,
+      handleVerifyFileExtension,
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
     // const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -193,41 +196,35 @@ export default class EditArticle extends Component {
                     </Form>
                   </Card.Content>
                 </Card>
-                {/* <Card fluid>
-                  <Card.Content>
-                    <Header as="h4">Thumbnail</Header>
-                    <DropZone
-                      name="featuredImage"
-                      fielddata={ARTICLE_FRM.fields.featuredImage}
-                      ondrop={(files, name) => this.onDrop(files, name)}
-                      onremove={fieldName => this.handleDelDoc(fieldName)}
-                      uploadtitle="Upload a file  or drag it here"
-                      containerclassname="field"
-                    />
-                    {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
-                      <div className="file-uploader attached">
-                        {
-                          <Button onClick={fieldName => this.handleDelDoc(fieldName)}
-                          circular icon={{ className: 'ns-close-light' }} />
-                      }
-                        <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.src} />
-                      </div>
-                ) : (
-                  <ImageCropper
-                    fieldData={ARTICLE_FRM.fields.featuredImage}
-                    setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
-                    verifyExtension={handleVerifyFileExtension}
-                    handelReset={() => this.handleresetProfilePhoto('featuredImage')}
-                    verifyImageDimension={this.handelImageDeimension}
-                    field={ARTICLE_FRM.fields.featuredImage}
-                    modalUploadAction={this.uploadMedia}
-                    name="featuredImage"
-                    cropInModal
-                    aspect={3 / 2}
-                  />
-              )}
-                  </Card.Content>
-                </Card> */}
+                {
+                  isNew ? '' :
+                  <Card fluid>
+                    <Card.Content>
+                      <Header as="h4">Thumbnail</Header>
+                      {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
+                        <div className="file-uploader attached">
+                          {
+                            <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                          }
+                          <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
+                        </div>
+                    ) : (
+                      <ImageCropper
+                        fieldData={ARTICLE_FRM.fields.featuredImage}
+                        setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
+                        verifyExtension={handleVerifyFileExtension}
+                        handelReset={() => this.handleresetProfilePhoto('featuredImage')}
+                        verifyImageDimension={this.handelImageDeimension}
+                        field={ARTICLE_FRM.fields.featuredImage}
+                        modalUploadAction={this.uploadMedia}
+                        name="featuredImage"
+                        cropInModal
+                        aspect={3 / 2}
+                      />
+                  )}
+                    </Card.Content>
+                  </Card>
+                }
               </Grid.Column>
             </Grid.Row>
           </Grid>

@@ -55,8 +55,10 @@ query insight($id: ID!) {
     featuredImage
     content
     category
+    categoryId
     tags
     author
+    slug
     articleStatus
     updated {
       by
