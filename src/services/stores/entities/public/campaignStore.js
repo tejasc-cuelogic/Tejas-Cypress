@@ -450,7 +450,7 @@ export class CampaignStore {
     });
     parallelOfferingsArr = orderBy(parallelOfferingsArr, ['launchDate'], ['desc']);
     newOfferingsArr = orderBy(newOfferingsArr, ['launchDate'], ['desc']);
-    closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['desc']);
+    closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['asc']);
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['launchDate'], ['desc']);
     const sortedResultObject = [
