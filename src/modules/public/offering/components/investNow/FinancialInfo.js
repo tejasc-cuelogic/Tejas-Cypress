@@ -41,11 +41,12 @@ class FinancialInfo extends Component {
       investMoneyChange,
       estReturnVal,
       calculateEstimatedReturn,
-      validBonusRewards,
       setStepToBeRendered,
       validateMaskedInputForAmount,
       getDiffInvestmentLimitAmount,
+      investmentBonusRewards,
     } = this.props.investmentStore;
+    const validBonusRewards = investmentBonusRewards(investmentAmount);
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     const { match, refLink, offeringDetails } = this.props;
@@ -148,7 +149,6 @@ class FinancialInfo extends Component {
         }
         {
           // isValidInvestAmtInOffering &&
-          false &&
           validBonusRewards.length > 0 &&
           validBonusRewards.map(reward => (
             <p className="grey-header">+ {reward.title}</p>
