@@ -2,7 +2,6 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
 import { map, kebabCase, sortBy, remove, orderBy } from 'lodash';
-// import { sortBy } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
@@ -31,10 +30,6 @@ export class ArticleStore {
     @observable selectedRecords= [];
     @observable isReadOnly = true;
     @observable requestState = {
-      // skip: 0,
-      // page: 1,
-      // perPage: 10,
-      // displayTillIndex: 10,
       filters: false,
       search: {},
     };
@@ -46,7 +41,6 @@ export class ArticleStore {
     @action
     initiateSearch = (srchParams) => {
       this.requestState.search = srchParams;
-      // this.sortArticlesByFilter();
       this.initiateFilters();
     }
     @action
@@ -97,23 +91,6 @@ export class ArticleStore {
     requestArticlesByCategoryId = (id) => {
       this.data = graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
     }
-
-    // @action
-    // getArticleAdminListing = (id) => {
-    //   this.article = graphql({
-    //     client,
-    //     query: getArticleById,
-    //     variables: { id },
-    //     fetchPolicy: 'network-only',
-    //     onFetch: (res) => {
-    //       if (res) {
-    //         this.setDb(res.insightsArticle);
-    //         this.setFormData(res.insightsArticle);
-    //       }
-    //     },
-
-    //   });
-    // }
 
     @action
     getSingleInsightAdmin = (id) => {
@@ -169,7 +146,6 @@ export class ArticleStore {
     @action
     save = (id) => {
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
-      // data.tags = data.tags.split(',');
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
@@ -232,8 +208,6 @@ export class ArticleStore {
         );
       }
       return this.db || [];
-      // return (this.db && this.db.length &&
-      //   this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
     }
 
     @computed get getInsightArticleListing() {
@@ -426,7 +400,6 @@ export class ArticleStore {
     }
 
     @computed get selectedRecordsCount() {
-      console.log('inside selectedRecordsCount');
       return this.selectedRecords.length || 0;
     }
 
@@ -453,12 +426,14 @@ export class ArticleStore {
     @computed get allInsightsListing() {
       return (this.allInsightsList && this.allInsightsList.data &&
         this.allInsightsList.data.insightArticlesListByFilter &&
-        sortBy(toJS(this.allInsightsList.data.insightArticlesListByFilter.slice(this.requestState.skip, this.requestState.displayTillIndex)), ['title'])) || [];
+        toJS(sortBy(
+          this.allInsightsList.data.insightArticlesListByFilter,
+          ['title'],
+        ).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
     }
 
     @computed get categoriesDropdown() {
       const categoriesArray = [];
-      // categoriesArray.push({ key: 'All', value: '', text: 'All' });
       if (this.Categories.data && this.Categories.data.categories) {
         this.Categories.data.categories.map((ele) => {
           categoriesArray.push({ key: ele.categoryName, value: ele.id, text: ele.categoryName });
@@ -513,7 +488,6 @@ export class ArticleStore {
     removeMedia = (name, id) => {
       let filename = '';
       filename = this.ARTICLE_FRM.fields[name].value;
-      console.log(filename);
       commonStore.deleteCdnS3File(`insights/${id}/${filename}`)
         .then((res) => {
           console.log(res);

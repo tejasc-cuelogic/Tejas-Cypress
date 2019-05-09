@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Grid, Button, Form } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-// import { FormInput } from '../../../../../theme/form';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
 import { ByKeyword as Search, DropdownFilter, DateRangeFilter } from '../../../../../theme/form/Filters';
@@ -17,9 +16,7 @@ export default class ManageInsights extends Component {
   setSearchParam = (e, { name, value }) =>
     this.props.articleStore.setInitiateSrch(name, value);
   search = (e, name) => {
-    // if (e.charCode === 13) {
     this.props.articleStore.setInitiateSrch(name, e.target.value);
-    // }
   }
   toggleSearch = () => this.props.articleStore.toggleSearch();
   render() {
@@ -38,7 +35,6 @@ export default class ManageInsights extends Component {
             {...this.props}
             w={[10]}
             placeholder="Search by keyword or phrase"
-            // executeSearch={e => this.search(e, 'title')}
             change={e => this.search(e, 'title')}
             addon={
               <Grid.Column width={3} textAlign="right">
@@ -72,9 +68,6 @@ export default class ManageInsights extends Component {
                       showLabel
                       more="no"
                     />
-                    {/* <DropdownFilter value={requestState.search.tags}
-                  change={this.setSearchParam} name="Tags" keyName="tags"
-                  options={TAGS} isMultiple /> */}
                   </Grid.Column>
                   <Grid.Column>
                     <DropdownFilter value={requestState.search.articleStatus} change={this.setSearchParam} name="Status" keyName="articleStatus" options={ARTICLE_STATUS_VALUES} />

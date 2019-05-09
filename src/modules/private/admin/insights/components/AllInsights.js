@@ -3,9 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { join } from 'lodash';
-import { Card, Table, Button, Icon, Label, Form, Confirm } from 'semantic-ui-react';
-// import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/article';
-// import { DropdownFilter } from '../../../../../theme/form/Filters';
+import { Card, Table, Button, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
 
 const actions = {
@@ -27,7 +25,6 @@ const meta = [
 @observer
 export default class AllInsights extends Component {
   componentWillMount() {
-    // this.props.articleStore.requestAllArticles(false); // load data
     this.props.articleStore.sortArticlesByFilter();
     console.log('allInsightsList ->', this.props.articleStore.allInsightsList);
   }
@@ -35,7 +32,6 @@ export default class AllInsights extends Component {
     this.props.articleStore.setGlobalAction(name, value);
   handleAction = (action, articleId) => {
     if (action === 'Delete') {
-      // this.props.uiStore.setConfirmBox(action, articleId);
       this.handleDeleteConfirm(articleId);
     } else if (action === 'Edit') {
       this.props.articleStore.currentArticleId = articleId;
@@ -78,59 +74,22 @@ export default class AllInsights extends Component {
     const { articleStore } = this.props;
     const { confirmBox } = this.props.uiStore;
     const {
-      // adminInsightArticleListing,
-      // allInsightsListing,
       articleListingLoader,
       sortOrder,
       adminInsightList,
-      // globalAction,
-      // count,
-      // requestState,
-      // getSelectedRecords,
-      // selectedRecordsCount,
     } = articleStore;
-    // const totalRecords = count || 0;
     if (articleListingLoader) {
       return <InlineLoader />;
     }
     return (
       <Aux>
-        <Form>
-          {/* <Grid columns="equal" verticalAlign="bottom">
-            <Grid.Row>
-              <Grid.Column>{`Selected ${selectedRecordsCount} items`}</Grid.Column>
-              <Grid.Column width={3} floated="right">
-                <DropdownFilter value={globalAction} change={this.globalActionChange}
-                name="globalAction" keyName="globalAction" label="Global actions"
-                options={GLOBAL_ACTIONS} /></Grid.Column>
-              <Grid.Column width={2}>
-                <Button inverted color="green" compact fluid content="Apply" />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid> */}
-        </Form>
         <Card fluid>
           <div className="table-wrapper">
             <Table unstackable striped sortable className="user-list">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell collapsing>
-                    {/* <Checkbox
-                      name="selectAllChkbox"
-                      value="selectAllChkbox"
-                      onChange={(e, result) => this.checkedAllRecords(e, result)}
-                      indeterminate={(getSelectedRecords.length > 0 &&
-                        getSelectedRecords.length < allInsightsListing.length)}
-                      checked={getSelectedRecords.length > 0 &&
-                        getSelectedRecords.length === allInsightsListing.length}
-                    /> */}
                   </Table.HeaderCell>
-                  {/* <Table.HeaderCell width={5}>Title</Table.HeaderCell>
-                  <Table.HeaderCell>Category</Table.HeaderCell>
-                  <Table.HeaderCell>Tags</Table.HeaderCell>
-                  <Table.HeaderCell>Author</Table.HeaderCell>
-                  <Table.HeaderCell>Status</Table.HeaderCell>
-                  <Table.HeaderCell>Last update date</Table.HeaderCell> */}
                   {
                     meta.map(cell => (
                       <Table.HeaderCell
@@ -144,7 +103,6 @@ export default class AllInsights extends Component {
                       </Table.HeaderCell>
                     ))
                   }
-                  {/* <Table.HeaderCell textAlign="center" /> */}
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -152,12 +110,6 @@ export default class AllInsights extends Component {
                   adminInsightList ? adminInsightList.map(record => (
                     <Table.Row key={record.id}>
                       <Table.Cell>
-                        {/* <Checkbox
-                          name={record.id}
-                          value={record.id}
-                          onChange={(e, result) => this.checkedRecords(e, result)}
-                          checked={getSelectedRecords.includes(record.id)}
-                        /> */}
 
                       </Table.Cell>
                       <Table.Cell>{record.title || '-'}</Table.Cell>
@@ -170,14 +122,6 @@ export default class AllInsights extends Component {
                       <Table.Cell>
                         <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
                       </Table.Cell>
-                      {/* <div className="actions">
-                        <Button
-                          as={Link}
-                          to={`${this.props.match.url}/${record.id}`}
-                          className="link-button"
-                        > */}
-                      {/* Details
-                          </Button> */}
                       <Table.Cell textAlign="center">
                         <Button.Group>
                           {Object.keys(actions).map(action => (
@@ -198,10 +142,6 @@ export default class AllInsights extends Component {
               </Table.Body>
             </Table>
           </div>
-          {/* {totalRecords > 0 &&
-            <NsPagination floated="right" initRequest={this.paginate}
-            meta={{ totalRecords, requestState }} />
-          } */}
         </Card>
         <Confirm
           header="Confirm"

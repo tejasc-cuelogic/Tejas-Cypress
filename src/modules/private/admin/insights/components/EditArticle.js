@@ -60,7 +60,6 @@ export default class EditArticle extends Component {
     }
   }
   handleCloseModal = () => {
-    // e.stopPropagation();
     if (this.props.match.params.id !== 'new') {
       this.props.articleStore.reset();
     }
@@ -70,10 +69,6 @@ export default class EditArticle extends Component {
   save = (status) => {
     console.log(status);
     this.props.articleStore.save(this.props.match.params.id);
-    // const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    // const isManager = access.asManager;
-    // this.props.articleStore.save(this.props.match.params.id,
-    // status, isManager, this.props.status === 'PUBLISHED');
     this.props.history.push(this.props.refLink);
     this.handleCloseModal();
   }
@@ -88,11 +83,6 @@ export default class EditArticle extends Component {
       handleVerifyFileExtension,
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
-    // const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    // const isManager = access.asManager;
-    // const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
-    // const isReadonly = !isManager &&
-    // (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
     return (
       <Modal closeOnDimmerClick={false} closeOnEscape={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
@@ -201,27 +191,29 @@ export default class EditArticle extends Component {
                   <Card fluid>
                     <Card.Content>
                       <Header as="h4">Thumbnail</Header>
-                      {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
-                        <div className="file-uploader attached">
-                          {
-                            <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
-                          }
-                          <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
-                        </div>
-                    ) : (
-                      <ImageCropper
-                        fieldData={ARTICLE_FRM.fields.featuredImage}
-                        setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
-                        verifyExtension={handleVerifyFileExtension}
-                        handelReset={() => this.handleresetProfilePhoto('featuredImage')}
-                        verifyImageDimension={this.handelImageDeimension}
-                        field={ARTICLE_FRM.fields.featuredImage}
-                        modalUploadAction={this.uploadMedia}
-                        name="featuredImage"
-                        cropInModal
-                        aspect={3 / 2}
-                      />
-                  )}
+                      <Form className="cropper-wrap headshot-img">
+                        {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
+                          <div className="file-uploader attached">
+                            {
+                              <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                            }
+                            <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
+                          </div>
+                      ) : (
+                        <ImageCropper
+                          fieldData={ARTICLE_FRM.fields.featuredImage}
+                          setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
+                          verifyExtension={handleVerifyFileExtension}
+                          handelReset={() => this.handleresetProfilePhoto('featuredImage')}
+                          verifyImageDimension={this.handelImageDeimension}
+                          field={ARTICLE_FRM.fields.featuredImage}
+                          modalUploadAction={this.uploadMedia}
+                          name="featuredImage"
+                          cropInModal
+                          aspect={3 / 2}
+                        />
+                    )}
+                      </Form>
                     </Card.Content>
                   </Card>
                 }
