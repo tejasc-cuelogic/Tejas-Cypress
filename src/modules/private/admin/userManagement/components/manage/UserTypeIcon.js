@@ -8,7 +8,7 @@ const accChars = {
   ira: 'R',
   entity: 'E',
   admin: 'A',
-  investor: 'I',
+  investor: 'P',
 };
 const UserTypeIcon = (props) => {
   const classes = ['account-type', 'small'];
@@ -16,10 +16,10 @@ const UserTypeIcon = (props) => {
     classes.push('accredited');
   }
   const byRoles = props.role.map((r) => {
-    if (r.name === 'investor') {
-      if (props.role.find(obj => toLower(obj.name) === 'individual')) {
-        return null;
-      }
+    if (r.name === 'investor' && props.role.length > 1) {
+      // if (props.role.find(obj => toLower(obj.name) === 'individual')) {
+      return null;
+      // }
     }
     return (
       <div key={r.name} className={`${classes.join(' ')} ${r.name}`}>
