@@ -196,14 +196,14 @@ export default class EditArticle extends Component {
                 <Card fluid>
                   <Card.Content>
                     <Header as="h4">Thumbnail</Header>
-                    <DropZone
+                    {/* <DropZone
                       name="featuredImage"
                       fielddata={ARTICLE_FRM.fields.featuredImage}
                       ondrop={(files, name) => this.onDrop(files, name)}
                       onremove={fieldName => this.handleDelDoc(fieldName)}
                       uploadtitle="Upload a file  or drag it here"
                       containerclassname="field"
-                    />
+                    /> */}
                     {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
                       <div className="file-uploader attached">
                         {
