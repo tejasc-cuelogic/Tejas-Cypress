@@ -34,11 +34,11 @@ export default class ManageFaqs extends Component {
         P1={
           <Search
             {...this.props}
-            w={[8]}
+            w={[9]}
             placeholder="Search by keyword or phrase"
             executeSearch={this.search}
             addon={
-              <Grid.Column width={5} textAlign="right">
+              <Grid.Column width={7} textAlign="right">
                 <Button color="basic" as={Link} to={`${match.url}/new`}>
                   Add FAQ
                 </Button>
@@ -50,27 +50,8 @@ export default class ManageFaqs extends Component {
             name="keyword"
             change={this.onFilterChange}
             toggleSearch={this.toggleSearch}
-            filters={filters}
+            more="no"
           />}
-        P2={
-          <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
-            <Form>
-              <Grid stackable columns="equal">
-                <Grid.Row>
-                  <Grid.Column>
-                    <DropdownFilter keyword="type" value={requestState.search.type} width={1} change={this.setSearchParam} keyName="type" options={FAQ_TYPES_VALUES} />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <DropdownFilter keyword="categoryName" value={requestState.search.categoryName} width={1} change={this.setSearchParam} keyName="categoryName" options={categoriesDropdown} />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <DropdownFilter keyword="status" value={requestState.search.status} width={1} change={this.setSearchParam} keyName="status" options={FAQ_STATUS_VALUES} />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Form>
-          </div>
-        }
       >
         <AllFaqs match={match} {...this.props} />
       </PrivateLayout>
