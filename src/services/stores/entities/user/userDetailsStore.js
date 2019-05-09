@@ -694,11 +694,13 @@ export class UserDetailsStore {
         state: infoAdd.state,
         zipCode: infoAdd.zipCode,
       },
-      avatar: {
+    };
+    if (this.detailsOfUser.data.user.info.avatar) {
+      profileDetails.avatar = {
         name: this.detailsOfUser.data.user.info.avatar.name,
         url: this.detailsOfUser.data.user.info.avatar.url,
-      },
-    };
+      };
+    }
     const legalDetails = {
       dateOfBirth: basicData.dateOfBirth,
       legalAddress: {
