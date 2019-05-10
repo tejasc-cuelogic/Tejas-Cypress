@@ -244,13 +244,6 @@ export class ArticleStore {
         });
     }
 
-    // @action
-    // featuredRequestArticlesByCategoryId = () => {
-    //   const id = this.featuredCategoryId;
-    //   this.featuredData =
-    //     graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
-    // }
-
     @action
     featuredRequestArticles = () => {
       this.featuredData = graphql({
@@ -283,7 +276,6 @@ export class ArticleStore {
     @computed get InsightFeaturedArticles() {
       const featured = get(this.featuredData, 'data.getInsightsArticles') || [];
       return filter(featured, a => a.isFeatured);
-      // return featured;
     }
 
     @computed get ArticlesDetails() {
@@ -328,7 +320,7 @@ export class ArticleStore {
     }
 
     @computed get loading() {
-      return this.data.loading;
+      return (this.data.loading || this.featuredData.loading);
     }
 
     @action

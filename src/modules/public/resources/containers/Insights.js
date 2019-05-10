@@ -16,18 +16,19 @@ export default class Insights extends Component {
   };
   componentWillMount() {
     if (this.props.match.params && this.props.match.params.id) {
-      this.props.articleStore.requestAllArticles(true, false, this.props.match.params.id);
+      const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
+      this.props.articleStore.requestAllArticles(true, false, id);
     } else {
       this.props.articleStore.requestAllArticles(true, false);
       this.props.articleStore.featuredRequestArticles();
       this.props.articleStore.getCategoryList(true);
     }
-    // this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
+      const id = nextProps.match.params.id === 'all' ? null : nextProps.match.params.id;
       this.props.articleStore
-        .requestAllArticles(true, this.state.sortAsc, nextProps.match.params.id);
+        .requestAllArticles(true, this.state.sortAsc, id);
     }
   }
   activeText = () => {
@@ -77,8 +78,6 @@ export default class Insights extends Component {
                   as={Link}
                   to={`/resources/insights/${i.slug}`}
                 />
-                {/* <Image fluid as={Link} to={`/resources/insights/${i.slug}`}
-              src={i.featuredImage} key={i} /> */}
                 <Link to={`/resources/insights/${i.slug}`} className="image-caption">
                   <p className="news-category">
                     Featured
@@ -94,7 +93,7 @@ export default class Insights extends Component {
         <Responsive secondary minWidth={1200} as={Menu} className="menu-secondary-fixed insight-menu">
           <Container>
             <Menu.Menu secondary className="menu-secondary">
-              <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
+              <Menu.Item as={Link} to="/resources/insights/category/all">All</Menu.Item>
               {InsightCategories &&
                 InsightCategories.map(item => (
                   <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
@@ -120,7 +119,6 @@ export default class Insights extends Component {
                     className={this.state.sortAsc ? '' : 'active'}
                   >Oldest
                   </Dropdown.Item>
-                  {/* <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item> */}
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
