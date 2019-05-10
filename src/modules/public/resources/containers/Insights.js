@@ -75,8 +75,6 @@ export default class Insights extends Component {
                   srcUrl={i.featuredImage ? i.featuredImage : null}
                   key={i}
                   fluid
-                  as={Link}
-                  to={`/resources/insights/${i.slug}`}
                 />
                 <Link to={`/resources/insights/${i.slug}`} className="image-caption">
                   <p className="news-category">
