@@ -401,9 +401,6 @@ export class CampaignStore {
           launchDate || null,
           false, true, true, customAddingHoursDateObject,
         );
-      if (resultObject.id === 'ac77b870-6053-11e9-a5cd-ad3d179cfa05') {
-        console.log('here..');
-      }
       const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
       const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
