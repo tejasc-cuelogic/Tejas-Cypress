@@ -45,9 +45,9 @@ export default class ManageKnowledgeBase extends Component {
             w={[10]}
             placeholder="Search by keyword or phrase"
             addon={
-              <Grid.Column width={3} textAlign="right">
+              <Grid.Column width={6} textAlign="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
-                  Add new article
+                  Add Knowledge Base
                 </Button>
               </Grid.Column>
             }
@@ -58,6 +58,7 @@ export default class ManageKnowledgeBase extends Component {
             removeFilter={this.removeFilter}
             requestState={requestState}
             change={e => this.onFilterChange(e)}
+            more="no"
           />
         }
       >
