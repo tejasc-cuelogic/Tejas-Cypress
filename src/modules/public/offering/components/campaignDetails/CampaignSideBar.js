@@ -149,7 +149,7 @@ export default class CampaignSideBar extends Component {
                     disabled={maxFlagStatus || isInProcessing}
                     onClick={this.handleInvestNowClick}
                   >
-                    {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                    {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                   </Button>
                   <p>
                     {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
