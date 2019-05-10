@@ -88,8 +88,7 @@ export default class AllInsights extends Component {
             <Table unstackable striped sortable className="user-list">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell collapsing>
-                  </Table.HeaderCell>
+                  <Table.HeaderCell collapsing />
                   {
                     meta.map(cell => (
                       <Table.HeaderCell
@@ -109,9 +108,7 @@ export default class AllInsights extends Component {
                 {
                   adminInsightList ? adminInsightList.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell>
-
-                      </Table.Cell>
+                      <Table.Cell />
                       <Table.Cell>{record.title || '-'}</Table.Cell>
                       <Table.Cell>{record.category || 'N/A'}</Table.Cell>
                       <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>

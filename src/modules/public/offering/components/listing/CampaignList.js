@@ -27,6 +27,9 @@ export default class CampaignList extends Component {
   }
   renderBaners = (offering) => {
     const resultFound = get(offering, 'isBannerShow');
+    if (offering.id === 'ac77b870-6053-11e9-a5cd-ad3d179cfa05') {
+      console.log('here..');
+    }
     if (resultFound) {
       const bannerFirst = get(offering, 'bannerFirstText');
       const bannerSecond = get(offering, 'bannerSecondText');

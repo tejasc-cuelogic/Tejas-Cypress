@@ -135,7 +135,7 @@ export class CampaignStore {
   }
   @action
   loadMoreRecord = (type) => {
-    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.activeList;
+    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.orderedActiveList;
     if (offeringsList.length > this[type]) {
       this[type] = this[type] + this.RECORDS_TO_DISPLAY;
     }
@@ -160,8 +160,9 @@ export class CampaignStore {
   @computed get campaignStatus() {
     const { campaign } = this;
     const campaignStatus = {};
-    campaignStatus.diff = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'));
-    campaignStatus.diffForProcessing = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true);
+    const closingDate = get(campaign, 'closureSummary.processingDate') && get(campaign, 'closureSummary.processingDate') !== 'Invalid date' ? get(campaign, 'closureSummary.processingDate') : null;
+    campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
+    campaignStatus.diffForProcessing = DataFormatter.diffDays(closingDate || null, false, true);
     campaignStatus.isInProcessing = campaignStatus.diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
@@ -396,6 +397,9 @@ export class CampaignStore {
           launchDate || null,
           false, true, true, customAddingHoursDateObject,
         );
+      if (resultObject.id === 'ac77b870-6053-11e9-a5cd-ad3d179cfa05') {
+        console.log('here..');
+      }
       const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
       const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
@@ -430,8 +434,8 @@ export class CampaignStore {
       } else if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'Processing';
-        resultObject.bannerSecondText =
-          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        // resultObject.bannerSecondText =
+        //   this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         return processingOfferingsArr.push(resultObject);
@@ -439,11 +443,11 @@ export class CampaignStore {
       if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
         closeDaysToRemains === null) &&
         launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
-        resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'NEW';
       }
       resultObject.bannerSecondText =
         this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+      resultObject.isBannerShow = !!(resultObject.bannerFirstText || resultObject.bannerSecondText);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
       return otherOfferingsArr.push(resultObject);
