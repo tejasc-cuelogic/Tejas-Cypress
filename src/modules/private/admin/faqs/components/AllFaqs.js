@@ -14,19 +14,15 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   faq, key, handleAction,
 }) => (
-  <div className="row-wrap" key={key}>
-    <div className="balance">
+  <div className="row-wrap striped-table" key={key}>
+    <div className="balance-half first-column">
       <DragHandle />
-    </div>
-    <div className="balance">
-      <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
-    </div>
-    <div className="balance-half">
+      <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
         <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
       </span>
     </div>
-    <div className="action right-align">
+    <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
           <Button className="link-button" >
