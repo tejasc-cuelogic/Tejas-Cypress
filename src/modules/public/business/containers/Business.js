@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive } from 'semantic-ui-react';
+import { Responsive, Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
@@ -63,9 +63,12 @@ class Business extends Component {
           location.pathname === '/business' ? <Banner /> :
           <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
-        <div className={`slide-down ${location.pathname.split('/')[2]}`}>
+        <Visibility
+          onUpdate={this.handleUpdate}
+          continuous
+          className={`slide-down ${location.pathname.split('/')[2]}`}
+        >
           <PublicSubNav
-            navStatus={navStore.navStatus}
             stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
@@ -85,7 +88,7 @@ class Business extends Component {
             }
             <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
           </Switch>
-        </div>
+        </Visibility>
       </Aux>
     );
   }

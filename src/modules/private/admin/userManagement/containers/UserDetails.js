@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
 import Aux from 'react-aux';
+import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty } from 'lodash';
 import Loadable from 'react-loadable';
@@ -46,6 +46,7 @@ export default class AccountDetails extends Component {
   state = {
     errorMsg: '',
   }
+  // state = { isActivity: false };
   componentWillMount() {
     if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
@@ -61,6 +62,9 @@ export default class AccountDetails extends Component {
       this.setState({ errorMsg: res });
     });
   }
+  // activityState = (state) => {
+  //   this.setState({ isActivity: state });
+  // }
   handleCloseModal = () => this.props.history.push(this.props.refLink);
 
   render() {
