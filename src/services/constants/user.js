@@ -21,7 +21,8 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909'));
+    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909')) &&
+      moment(value, 'MM/DD/YYYY', true).isValid();
   },
   'Invalid Date',
 );
