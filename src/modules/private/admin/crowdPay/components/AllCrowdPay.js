@@ -140,7 +140,7 @@ export default class AllCrowdPay extends Component {
                     }
                     {(type !== 'review' && type === 'individual') &&
                     <Table.Cell>
-                      {get(account, 'cip.faiReason') ?
+                      {get(account, 'cip.failReason') ?
                         <List as="ol">{(account.cip.failReason).map(obj => <List.Item as="li" value="-">{obj.message}</List.Item>)}</List>
                         : <p>-</p>
                       }
