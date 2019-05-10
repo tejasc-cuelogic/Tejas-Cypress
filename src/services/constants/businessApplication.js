@@ -351,7 +351,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
         tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        label: 'Neither I, nor any entity under my control, have ever been found guilty of fraud or similar crimes, and neither I, nor any entity under my control, are currently being charged with fraud or any similar crime. ',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
       },
       {
