@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { map, kebabCase, sortBy, remove, orderBy } from 'lodash';
+import { map, kebabCase, sortBy, remove, orderBy, filter, get } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
@@ -244,11 +244,21 @@ export class ArticleStore {
         });
     }
 
+    // @action
+    // featuredRequestArticlesByCategoryId = () => {
+    //   const id = this.featuredCategoryId;
+    //   this.featuredData =
+    //     graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
+    // }
+
     @action
-    featuredRequestArticlesByCategoryId = () => {
-      const id = this.featuredCategoryId;
-      this.featuredData =
-        graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
+    featuredRequestArticles = () => {
+      this.featuredData = graphql({
+        client: clientPublic,
+        query: allInsightArticles,
+        fetchPolicy: 'network-only',
+        variables: { sortByCreationDateAsc: false },
+      });
     }
 
     @action
@@ -271,8 +281,9 @@ export class ArticleStore {
         || toJS(this.data.data.getInsightsArticles))) || [];
     }
     @computed get InsightFeaturedArticles() {
-      return (this.featuredData.data && (toJS(this.featuredData.data.insightsArticles)
-        || toJS(this.featuredData.data.insightArticlesByCategoryId))) || [];
+      const featured = get(this.featuredData, 'data.getInsightsArticles') || [];
+      return filter(featured, a => a.isFeatured);
+      // return featured;
     }
 
     @computed get ArticlesDetails() {

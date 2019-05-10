@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Image, Menu, Dropdown, Responsive } from 'semantic-ui-react';
+import { Container, Menu, Dropdown, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link, NavLink, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { NsCarousel, InlineLoader } from '../../../../theme/shared';
+import { NsCarousel, InlineLoader, Image64 } from '../../../../theme/shared';
 import InsightArticlesList from '../components/insightArticlesList';
 
 
@@ -19,9 +19,10 @@ export default class Insights extends Component {
       this.props.articleStore.requestAllArticles(true, false, this.props.match.params.id);
     } else {
       this.props.articleStore.requestAllArticles(true, false);
+      this.props.articleStore.featuredRequestArticles();
+      this.props.articleStore.getCategoryList(true);
     }
-    this.props.articleStore.getCategoryList(true);
-    this.props.articleStore.featuredRequestArticlesByCategoryId();
+    // this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
@@ -68,8 +69,17 @@ export default class Insights extends Component {
             sliderInsightFeaturedArticles &&
             sliderInsightFeaturedArticles.map(i => (
               <div className="insight-image-wrapper">
-                <Image fluid as={Link} to={`/resources/insights/${i.id}`} src={i.featuredImage} key={i} />
-                <Link to={`/resources/insights/${i.id}`} className="image-caption">
+                <Image64
+                  centered
+                  srcUrl={i.featuredImage ? i.featuredImage : null}
+                  key={i}
+                  fluid
+                  as={Link}
+                  to={`/resources/insights/${i.slug}`}
+                />
+                {/* <Image fluid as={Link} to={`/resources/insights/${i.slug}`}
+              src={i.featuredImage} key={i} /> */}
+                <Link to={`/resources/insights/${i.slug}`} className="image-caption">
                   <p className="news-category">
                     Featured
                   </p>
