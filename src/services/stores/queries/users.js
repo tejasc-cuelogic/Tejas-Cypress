@@ -600,6 +600,16 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
    )
  }`;
 
+export const deleteProfile = gql`
+mutation adminDeleteInvestorOrIssuerUser($userId: String!) {
+  adminDeleteInvestorOrIssuerUser(
+     cognitoUUId: $userId
+  ) {
+    status
+    message
+  }
+ }`;
+
 export const frozenEmailToAdmin = gql`
 mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
   notifyAdminFrozenAccountActivity(
