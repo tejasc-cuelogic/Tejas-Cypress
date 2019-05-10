@@ -147,18 +147,18 @@ export class FaqStore {
     if (this.db && this.db.length) {
       this.db.forEach((faq) => {
         if (arrFaqs[faq.faqType]) {
-          if (arrFaqs[faq.faqType][faq.categoryName]) {
-            arrFaqs[faq.faqType][faq.categoryName].push(faq);
-            sortBy(arrFaqs[faq.faqType][faq.categoryName], ['order']);
+          if (arrFaqs[faq.faqType][faq.categoryId]) {
+            arrFaqs[faq.faqType][faq.categoryId].push(faq);
+            sortBy(arrFaqs[faq.faqType][faq.categoryId], ['order']);
           } else {
-            arrFaqs[faq.faqType][faq.categoryName] = [];
-            arrFaqs[faq.faqType][faq.categoryName].push(faq);
-            sortBy(arrFaqs[faq.faqType][faq.categoryName], ['order']);
+            arrFaqs[faq.faqType][faq.categoryId] = [];
+            arrFaqs[faq.faqType][faq.categoryId].push(faq);
+            sortBy(arrFaqs[faq.faqType][faq.categoryId], ['order']);
           }
         } else {
           arrFaqs[`${faq.faqType}`] = [];
-          arrFaqs[`${faq.faqType}`][`${faq.categoryName}`] = [];
-          arrFaqs[`${faq.faqType}`][`${faq.categoryName}`].push(faq);
+          arrFaqs[`${faq.faqType}`][`${faq.categoryId}`] = [];
+          arrFaqs[`${faq.faqType}`][`${faq.categoryId}`].push(faq);
         }
       });
     }
