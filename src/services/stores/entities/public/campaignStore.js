@@ -135,7 +135,7 @@ export class CampaignStore {
   }
   @action
   loadMoreRecord = (type) => {
-    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.activeList;
+    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.orderedActiveList;
     if (offeringsList.length > this[type]) {
       this[type] = this[type] + this.RECORDS_TO_DISPLAY;
     }
@@ -160,8 +160,9 @@ export class CampaignStore {
   @computed get campaignStatus() {
     const { campaign } = this;
     const campaignStatus = {};
-    campaignStatus.diff = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'));
-    campaignStatus.diffForProcessing = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true);
+    const closingDate = get(campaign, 'closureSummary.processingDate') && get(campaign, 'closureSummary.processingDate') !== 'Invalid date' ? get(campaign, 'closureSummary.processingDate') : null;
+    campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
+    campaignStatus.diffForProcessing = DataFormatter.diffDays(closingDate || null, false, true);
     campaignStatus.isInProcessing = campaignStatus.diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
@@ -171,7 +172,8 @@ export class CampaignStore {
     campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
-    const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
+    // const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
+    const formatedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
     const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
     const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
     const minMaxOffering = campaignStatus.minFlagStatus ?
@@ -369,11 +371,14 @@ export class CampaignStore {
       const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
       const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
       const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
+      const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+      const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506C') || '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
       const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
       const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
       const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
-      const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+      // const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+      const maxOfferingAmount = regulation === 'BD_CF_506C' ? money.add(maxOfferingAmountCF, maxOfferingAmountRegD) : regulation === 'BD_506C' ? maxOfferingAmountRegD : maxOfferingAmountCF;
       const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
       const divResult = money.div(raisedAmount, minimumOfferingAmount);
       const percent = money.mul(divResult, '100.00');
@@ -430,8 +435,8 @@ export class CampaignStore {
       } else if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'Processing';
-        resultObject.bannerSecondText =
-          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        // resultObject.bannerSecondText =
+        //   this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         return processingOfferingsArr.push(resultObject);
@@ -439,11 +444,11 @@ export class CampaignStore {
       if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
         closeDaysToRemains === null) &&
         launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
-        resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'NEW';
       }
       resultObject.bannerSecondText =
         this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+      resultObject.isBannerShow = !!(resultObject.bannerFirstText || resultObject.bannerSecondText);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
       return otherOfferingsArr.push(resultObject);
