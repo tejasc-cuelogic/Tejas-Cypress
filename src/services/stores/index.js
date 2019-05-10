@@ -53,3 +53,4 @@ export { default as knowledgeBaseStore } from './entities/admin/knowledgeBaseSto
 export { default as faqStore } from './entities/admin/faqStore';
 // dev stores
 export { default as elasticSearchStore } from './entities/dev/elasticSearchStore';
+export { default as dataStore } from './entities/dev/dataStore';

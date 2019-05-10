@@ -4,7 +4,12 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import {
+  CAMPAIGN_KEYTERMS_SECURITIES,
+  CAMPAIGN_OFFERED_BY,
+  CAMPAIGN_REGULATION_DETAILED,
+  CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
+} from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -77,7 +82,9 @@ class KeyTermsDetails extends Component {
             </p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
+            <p><b>Offered By</b><br />
+              {CAMPAIGN_OFFERED_BY[get(KeyTerms, 'regulation')]}
+            </p>
           </Grid.Column>
         </Grid>
         {!isMobile ? <Divider /> : null}
@@ -131,12 +138,22 @@ class KeyTermsDetails extends Component {
                 </Table.Cell>
               </Table.Row>
             }
+            {get(KeyTerms, 'securities') &&
+              <Table.Row verticalAlign="top">
+                <Table.Cell width={5} className="neutral-text"><b>Type of Securities{' '}</b></Table.Cell>
+                <Table.Cell>
+                  <p>
+                    {offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}
+                  </p>
+                </Table.Cell>
+              </Table.Row>
+            }
             {get(KeyTerms, 'investmentMultiple') &&
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Investment Multiple{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
                     position="top center"
                   />
                 </Table.Cell>

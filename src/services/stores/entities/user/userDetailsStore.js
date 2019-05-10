@@ -18,7 +18,7 @@ import {
   investmentStore,
   userListingStore,
 } from '../../index';
-import { userDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -40,6 +40,7 @@ export class UserDetailsStore {
   @observable partialInvestNowSessionURL = '';
   @observable userStatus = null;
   @observable selectedUserId = '';
+  @observable displayMode = true;
 
   @action
   setFieldValue = (field, value) => {
@@ -250,7 +251,7 @@ export class UserDetailsStore {
     this.setFieldValue('selectedUserId', userId);
     this.detailsOfUser = graphql({
       client,
-      query: userDetailsQuery,
+      query: selectedUserDetailsQuery,
       variables: { userId },
       fetchPolicy: 'network-only',
     });
@@ -573,7 +574,10 @@ export class UserDetailsStore {
       );
     }
   }
-
+  @action
+  userEleChange = (e, res, type) => {
+    this.USER_BASIC = Validator.onChange(this.USER_BASIC, Validator.pullValues(e, res), type);
+  };
   @action
   resetStoreData = () => {
     this.currentUser = {};
@@ -678,6 +682,8 @@ export class UserDetailsStore {
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
+    const capabilities = [...basicData.capabilities];
+    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
@@ -688,11 +694,13 @@ export class UserDetailsStore {
         state: infoAdd.state,
         zipCode: infoAdd.zipCode,
       },
-      avatar: {
+    };
+    if (this.detailsOfUser.data.user.info.avatar) {
+      profileDetails.avatar = {
         name: this.detailsOfUser.data.user.info.avatar.name,
         url: this.detailsOfUser.data.user.info.avatar.url,
-      },
-    };
+      };
+    }
     const legalDetails = {
       dateOfBirth: basicData.dateOfBirth,
       legalAddress: {
@@ -715,6 +723,39 @@ export class UserDetailsStore {
           variables: {
             profileDetails: { ...profileDetails },
             legalDetails: { ...legalDetails },
+            targetUserId: get(this.getDetailsOfUser, 'id'),
+          },
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+        })
+        .then(() => {
+          Helper.toast('Profile has been updated.', 'success');
+          uiStore.setProgress(false);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setProgress(false);
+          reject(err);
+          Helper.toast('Something went wrong, please try again in sometime', 'error');
+        });
+    });
+  }
+  @action
+  updateUserBasicInfo = () => {
+    const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
+    const capabilities = [...basicData.capabilities];
+    console.log(capabilities);
+    const profileDetails = {
+      firstName: basicData.firstName,
+      lastName: basicData.lastName,
+    };
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserProfileData,
+          variables: {
+            profileDetails: { ...profileDetails },
+            capabilities: [...capabilities],
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
           refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],

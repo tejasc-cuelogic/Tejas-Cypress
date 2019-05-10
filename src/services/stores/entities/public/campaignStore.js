@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy, remove } from 'lodash';
+import { pickBy, get, filter, orderBy } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -122,11 +122,8 @@ export class CampaignStore {
 
   @computed get orderedActiveList() {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    const orderedActiveListArr =
-      activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
-    // return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
-    const partailResult = orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
-    return this.sortedOfferingList(partailResult);
+    const orderedActiveListArr = this.generateBanner(activeListArr, true);
+    return orderedActiveListArr;
   }
 
   @computed get completed() {
@@ -180,7 +177,7 @@ export class CampaignStore {
     const minMaxOffering = campaignStatus.minFlagStatus ?
       campaignStatus.maxOffering : campaignStatus.minOffering;
     campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
-    money.isPositive(formatedReachedMaxCompairAmountValue));
+      money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
     campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}` : '--';
     campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
@@ -362,85 +359,118 @@ export class CampaignStore {
     this.totalPaymentChart = payChart;
   }
 
-  generateBanner = (offeringDetails, addObjectProps = false) => {
-    const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
-    const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
-    const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
-    const regulation = get(offeringKeyTermDetails, 'regulation');
-    const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
-    const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
-    const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
-    const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
-    const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
-    const divResult = money.div(raisedAmount, minimumOfferingAmount);
-    const percent = money.mul(divResult, '100.00');
-    let labelBannerFirst = null;
-    let labelBannerSecond = null;
-    let bannerToShowFlag = false;
-    const resultObject = addObjectProps ? { ...offeringDetails } : {};
-    const customDateObj = {
-      number: 48,
-      format: 'Hours',
-    };
-    const launchDaysToRemains =
-      DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
-    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
-    const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
-    let order = null;
-    let isProcessing = false;
-    if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
-      launchDaysToRemains >= 0 && launchDaysToRemains <= 7) {
-      labelBannerFirst = 'NEW';
-      order = 0;
-    } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
-      labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
-      order = closeDaysToRemains + 1;
-    } else if (closeDaysToRemains > 7) {
-      if (launchDaysToRemains !== null) {
-        order = 2047483647 + launchDaysToRemains;
-      } else {
-        order = 2057483647 + 1;
+  generateBanner = (offeringDetailsList, addObjectProps = false) => {
+    let parallelOfferingsArr = [];
+    let newOfferingsArr = [];
+    let closingOfferingsArr = [];
+    let processingOfferingsArr = [];
+    let otherOfferingsArr = [];
+    offeringDetailsList.map((offeringDetails) => {
+      const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
+      const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
+      const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
+      const regulation = get(offeringKeyTermDetails, 'regulation');
+      const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
+      const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
+      const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
+      const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+      const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
+      const divResult = money.div(raisedAmount, minimumOfferingAmount);
+      const percent = money.mul(divResult, '100.00');
+      const resultObject = addObjectProps ? { ...offeringDetails } : {};
+      const customAddinggDaysDateObj = {
+        number: 7,
+        format: 'days',
+      };
+      const launchDaysToRemainsForNewLable =
+        DataFormatter.diffDaysForLauch(
+          launchDate || null,
+          false, true, true, customAddinggDaysDateObj,
+        );
+      const customAddingHoursDateObject = {
+        number: 48,
+        format: 'Hours',
+      };
+      const launchDaysToRemains =
+        DataFormatter.diffDaysForLauch(
+          launchDate || null,
+          false, true, true, customAddingHoursDateObject,
+        );
+      const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+      const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
+      const percentageCompairResult = money.cmp(percent, '50.00').toString();
+      const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
+      if (regulation === 'BD_CF_506C' && !isInProcessing) {
+        resultObject.isBannerShow = true;
+        resultObject.bannerFirstText = 'NEW';
+        resultObject.bannerSecondText =
+          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return parallelOfferingsArr.push(resultObject);
+      } else if (launchDate && (launchDaysToRemains < closeDaysToRemains ||
+        closeDaysToRemains === null) &&
+        launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
+        resultObject.isBannerShow = true;
+        resultObject.bannerFirstText = 'NEW';
+        resultObject.bannerSecondText =
+          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return newOfferingsArr.push(resultObject);
+      } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+        const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
+        resultObject.isBannerShow = !!labelBannerFirst;
+        resultObject.bannerFirstText = labelBannerFirst;
+        resultObject.bannerSecondText =
+          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return closingOfferingsArr.push(resultObject);
+      } else if (isInProcessing) {
+        resultObject.isBannerShow = true;
+        resultObject.bannerFirstText = 'Processing';
+        resultObject.bannerSecondText =
+          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return processingOfferingsArr.push(resultObject);
       }
-    } else if (closeDaysToRemains === null) {
-      order = 2057483647 + 1;
-    }
-    const percentageCompairResult = money.cmp(percent, '50.00').toString();
-    const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
+      if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
+        closeDaysToRemains === null) &&
+        launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+        resultObject.isBannerShow = true;
+        resultObject.bannerFirstText = 'NEW';
+      }
+      resultObject.bannerSecondText =
+        this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      return otherOfferingsArr.push(resultObject);
+    });
+    parallelOfferingsArr = orderBy(parallelOfferingsArr, ['launchDate'], ['desc']);
+    newOfferingsArr = orderBy(newOfferingsArr, ['launchDate'], ['desc']);
+    closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['asc']);
+    processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
+    otherOfferingsArr = orderBy(otherOfferingsArr, ['launchDate'], ['desc']);
+    const sortedResultObject = [
+      ...parallelOfferingsArr,
+      ...newOfferingsArr,
+      ...closingOfferingsArr,
+      ...otherOfferingsArr,
+      ...processingOfferingsArr,
+    ];
+    return sortedResultObject;
+  }
+  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent) => {
+    let labelBannerSecond = null;
     if (money.isNegative(amountCompairResult) &&
       !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
-      order = order !== null ? order : 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
-      order = 2147483647 + 1;
     }
-    if (isInProcessing) {
-      labelBannerFirst = 'Processing';
-      order = 2247483647;
-      isProcessing = true;
-    }
-
-    if (labelBannerFirst || labelBannerSecond) {
-      bannerToShowFlag = true;
-    }
-    resultObject.order = order !== null ? order : 2147483646;
-    resultObject.isProcessing = isProcessing;
-    resultObject.launchDate = moment(launchDate).unix() || null;
-    resultObject.processingDate = moment(closingDate).unix() || null;
-    resultObject.isBannerShow = bannerToShowFlag;
-    resultObject.bannerFirstText = labelBannerFirst;
-    resultObject.bannerSecondText = labelBannerSecond;
-    return resultObject;
-  }
-  sortedOfferingList = (offeringList) => {
-    if (offeringList.length > 0) {
-      const sortedList = offeringList;
-      const prossingOfferingList = remove(sortedList, o => o.isProcessing);
-      const orderedProcessingList = orderBy(prossingOfferingList, ['processingDate'], ['desc']);
-      const sortedResult = [...sortedList, ...orderedProcessingList];
-      return sortedResult;
-    }
-    return offeringList;
+    return labelBannerSecond;
   }
 }
 

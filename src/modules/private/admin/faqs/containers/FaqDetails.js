@@ -48,7 +48,7 @@ export default class FaqDetails extends Component {
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
-              {isNew ? 'Create' : 'Edit'} Article
+              {isNew ? 'Create' : 'Edit'} FAQ
               <Button.Group compact floated="right">
                 <Button
                   inverted
@@ -70,7 +70,7 @@ export default class FaqDetails extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={12}>
-                <small>Article name</small>
+                <small>FAQ name</small>
                 <Form>
                   <FormInput
                     ishidelabel
@@ -104,15 +104,6 @@ export default class FaqDetails extends Component {
                           name="itemStatus"
                           options={faqStatuses}
                           onChange={(e, result) => formChange(e, result)}
-                        />
-                      </div>
-                      <div className="field">
-                        <FormInput
-                          fluid
-                          type="text"
-                          name="author"
-                          fielddata={FAQ_FRM.fields.author}
-                          changed={formChange}
                         />
                       </div>
                       <div className="field">

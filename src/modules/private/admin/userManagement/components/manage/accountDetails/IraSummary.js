@@ -1,6 +1,7 @@
 import React from 'react';
 import { get, startCase } from 'lodash';
 import { Table } from 'semantic-ui-react';
+import moment from 'moment';
 import Helper from '../../../../../../../helper/utility';
 
 
@@ -31,8 +32,20 @@ const IndividualSummary = ({ account, investor }) => (
       <Table.Cell>{get(account, 'details.linkedBank.accountNumber') || 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
+      <Table.Cell>GoldStar Account Number: </Table.Cell>
+      <Table.Cell>{get(account, 'details.goldstar.accountNumber') || 'N/A'}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>GoldStar Contact Id: </Table.Cell>
+      <Table.Cell>{get(account, 'details.goldstar.contactId') || 'N/A'}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
       <Table.Cell>Your Initial Deposit</Table.Cell>
       <Table.Cell>{(get(account, 'details.initialDepositAmount') && get(account, 'details.initialDepositAmount') !== '-1.00') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) : 'N/A'}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Account Creation Date: </Table.Cell>
+      <Table.Cell>{get(account, 'details.created.date') ? moment(get(account, 'details.created.date')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
     </Table.Row>
   </Table.Body>
 );
