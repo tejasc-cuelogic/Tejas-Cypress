@@ -173,7 +173,7 @@ export default class CampaignHeader extends Component {
                           disabled={maxFlagStatus || isInProcessing}
                           onClick={this.handleInvestNowClick}
                         >
-                          {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                          {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                         </Button>
                         <small>
                           {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
