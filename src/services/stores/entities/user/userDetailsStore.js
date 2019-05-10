@@ -217,6 +217,7 @@ export class UserDetailsStore {
         reject(res.data.adminDeleteInvestorOrIssuerUser.message);
       }
     } catch (error) {
+      uiStore.removeOneFromProgressArray('deleteProfile');    
       Helper.toast('Something went wrong, please try again in sometime', 'error');
     }
   });
