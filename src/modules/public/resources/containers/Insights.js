@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Image, Menu, Dropdown, Responsive } from 'semantic-ui-react';
+import { Container, Menu, Dropdown, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link, NavLink, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { NsCarousel, InlineLoader } from '../../../../theme/shared';
+import { NsCarousel, InlineLoader, Image64 } from '../../../../theme/shared';
 import InsightArticlesList from '../components/insightArticlesList';
 
 
@@ -16,17 +16,19 @@ export default class Insights extends Component {
   };
   componentWillMount() {
     if (this.props.match.params && this.props.match.params.id) {
-      this.props.articleStore.requestAllArticles(true, false, this.props.match.params.id);
+      const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
+      this.props.articleStore.requestAllArticles(true, false, id);
     } else {
       this.props.articleStore.requestAllArticles(true, false);
+      this.props.articleStore.featuredRequestArticles();
+      this.props.articleStore.getCategoryList(true);
     }
-    this.props.articleStore.getCategoryList(true);
-    this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
+      const id = nextProps.match.params.id === 'all' ? null : nextProps.match.params.id;
       this.props.articleStore
-        .requestAllArticles(true, this.state.sortAsc, nextProps.match.params.id);
+        .requestAllArticles(true, this.state.sortAsc, id);
     }
   }
   activeText = () => {
@@ -68,8 +70,13 @@ export default class Insights extends Component {
             sliderInsightFeaturedArticles &&
             sliderInsightFeaturedArticles.map(i => (
               <div className="insight-image-wrapper">
-                <Image fluid as={Link} to={`/resources/insights/${i.id}`} src={i.featuredImage} key={i} />
-                <Link to={`/resources/insights/${i.id}`} className="image-caption">
+                <Image64
+                  centered
+                  srcUrl={i.featuredImage ? i.featuredImage : null}
+                  key={i}
+                  fluid
+                />
+                <Link to={`/resources/insights/${i.slug}`} className="image-caption">
                   <p className="news-category">
                     Featured
                   </p>
@@ -84,7 +91,7 @@ export default class Insights extends Component {
         <Responsive secondary minWidth={1200} as={Menu} className="menu-secondary-fixed insight-menu">
           <Container>
             <Menu.Menu secondary className="menu-secondary">
-              <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
+              <Menu.Item as={Link} to="/resources/insights/category/all">All</Menu.Item>
               {InsightCategories &&
                 InsightCategories.map(item => (
                   <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
@@ -110,7 +117,6 @@ export default class Insights extends Component {
                     className={this.state.sortAsc ? '' : 'active'}
                   >Oldest
                   </Dropdown.Item>
-                  {/* <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item> */}
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>

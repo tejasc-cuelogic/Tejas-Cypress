@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
 import Aux from 'react-aux';
+import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty } from 'lodash';
 import Loadable from 'react-loadable';
@@ -43,6 +43,10 @@ const navMeta = [
 @inject('userStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class AccountDetails extends Component {
+  state = {
+    errorMsg: '',
+  }
+  // state = { isActivity: false };
   componentWillMount() {
     if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
@@ -51,12 +55,24 @@ export default class AccountDetails extends Component {
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);
   }
+  handleDeleteProfile = () => {
+    this.props.userDetailsStore.deleteProfile().then(() => {
+      this.props.history.push(this.props.refLink);
+    }).catch((res) => {
+      this.setState({ errorMsg: res });
+    });
+  }
+  // activityState = (state) => {
+  //   this.setState({ isActivity: state });
+  // }
   handleCloseModal = () => this.props.history.push(this.props.refLink);
 
   render() {
     const { match } = this.props;
     const { inProgressArray } = this.props.uiStore;
-    const { getDetailsOfUserLoading, getDetailsOfUser } = this.props.userDetailsStore;
+    const {
+      getDetailsOfUserLoading, getDetailsOfUser,
+    } = this.props.userDetailsStore;
     if (getDetailsOfUserLoading) {
       return <InlineLoader text="Loading User Details..." />;
     }
@@ -95,13 +111,16 @@ export default class AccountDetails extends Component {
                     <Header.Subheader>{rolesRaw[0]}</Header.Subheader>
                   </Header>
                   <Button.Group floated="right">
-                    <Button inverted color="red" content="Delete Profile" />
+                    <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteProfile} content="Delete Profile" />
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
                       <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                     </Button>
                   </Button.Group>
                 </Item.Content>
               </Item>
+              {this.state.errorMsg &&
+                <p className="negative-text right-align"><small>{this.state.errorMsg}</small></p>
+              }
             </Item.Group>
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />

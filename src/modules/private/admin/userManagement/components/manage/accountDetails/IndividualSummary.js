@@ -14,7 +14,7 @@ const IndividualSummary = ({
       <Table.Cell>{get(investor, 'info.firstName') && get(investor, 'info.lastName') ? `${get(investor, 'info.firstName')} ${get(investor, 'info.lastName')}` : 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
-      <Table.Cell>Bank: </Table.Cell>
+      <Table.Cell>Bank Name: </Table.Cell>
       <Table.Cell>{get(account, 'details.linkedBank.bankName') || 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>

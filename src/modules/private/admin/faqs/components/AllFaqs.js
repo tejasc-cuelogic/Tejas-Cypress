@@ -14,19 +14,15 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   faq, key, handleAction,
 }) => (
-  <div className="row-wrap" key={key}>
-    <div className="balance">
+  <div className="row-wrap striped-table" key={key}>
+    <div className="balance-half first-column">
       <DragHandle />
-    </div>
-    <div className="balance">
-      <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
-    </div>
-    <div className="balance-half">
+      <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
         <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
       </span>
     </div>
-    <div className="action right-align">
+    <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
           <Button className="link-button" >
@@ -137,7 +133,8 @@ export default class AllFaqs extends Component {
                 <Accordion key={categorizedFaqs} styled fluid className="card-style">
                   <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
                     <Icon className={!innerActiveIndex.includes(categorizedFaqs) ? 'ns-chevron-up' : 'ns-chevron-down'} />
-                    {categorizedFaqs}
+                    {allCategorizedFaqs[faqType][categorizedFaqs][0].categoryName}
+                    <Button as={Link} to={`${this.props.match.url}/new/${faqType}/${categorizedFaqs}`} className="link-button pull-right"><small>+ Add FAQ</small></Button>
                   </Accordion.Title>
                   <Accordion.Content active={!innerActiveIndex.includes(categorizedFaqs)} className="categories-acc">
                     <SortableList

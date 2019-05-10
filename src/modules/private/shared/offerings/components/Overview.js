@@ -28,6 +28,10 @@ export default class Overview extends Component {
     } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
     const { inProgress } = this.props.uiStore;
+    const isLaunchContingency = !isIssuer ? true :
+      LAUNCH_CONTITNGENCIES_FRM.fields.launch && LAUNCH_CONTITNGENCIES_FRM.fields.launch.length > 0;
+    const isCloseContingency = !isIssuer ? true : CLOSING_CONTITNGENCIES_FRM.fields.launch &&
+      CLOSING_CONTITNGENCIES_FRM.fields.launch.length > 0;
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
@@ -49,8 +53,12 @@ export default class Overview extends Component {
             <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
           </div>
           }
-          <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
-          <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
+          {isLaunchContingency &&
+            <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
+          }
+          {isCloseContingency &&
+            <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
+          }
         </Form>
       </div>
     );
