@@ -6,6 +6,7 @@ import { Grid, Input, Dropdown, Form, Label, Icon, List, Button } from 'semantic
 import moment from 'moment';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
+import _ from 'lodash';
 import NumberFormat from 'react-number-format';
 
 
@@ -28,17 +29,62 @@ export const DropdownFilter = props => (
   </Form.Field>
 );
 
+export const DropdownFilterWithHeader = props => (
+  <Form.Field className="dropdown-field">
+    <label>{props.label || props.name}</label>
+    {
+      props.options && props.options !== null ?
+        <Dropdown
+          text={props.value || 'Select Filter'}
+          className={props.className}
+          name={props.keyName || camelCase(props.name)}
+          onChange={props.change}
+          value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
+          placeholder={props.placeHolder || 'Select Filter'}
+          selection
+        >
+          <Dropdown.Menu>
+            {_.map(props.options, rec => (
+              <Aux>
+                {rec.title ?
+                  <Aux>
+                    <Dropdown.Header content={rec.title} key={rec.title} />
+                    <Dropdown.Divider />
+                  </Aux> : ''}
+                {
+                  rec.options.map(el => (
+                    <Dropdown.Item
+                      key={el.value}
+                      name={props.keyName || camelCase(props.name)}
+                      onClick={e => props.change(e, { name: props.keyName, value: el.value })}
+                      value={el.value}
+                      active={el.value === props.value}
+                    >{el.text}
+                    </Dropdown.Item>
+                  ))
+                }
+              </Aux>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown> : null
+    }
+
+    <div className="dropdown-effect">{props.label || props.name}</div>
+  </Form.Field>
+);
+
 export const ByKeyword = ({
   w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon,
-  more, enableSearch, change, showLabel,
+  more, enableSearch, change, addLabel, name, showLabel,
 }) => (
   <Aux>
     <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
       <Form>
         <Form.Field inverted>
+          {addLabel ? <label>{addLabel || addLabel}</label> : ''}
           {fLabel && <label className={showLabel ? '' : 'invisible'}>{placeholder}</label>}
           {!enableSearch &&
-          <Input fluid onChange={change} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />}
+          <Input fluid onChange={change} name={name} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />}
         </Form.Field>
       </Form>
     </Grid.Column>
