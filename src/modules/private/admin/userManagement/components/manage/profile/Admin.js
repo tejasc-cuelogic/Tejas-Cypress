@@ -4,8 +4,9 @@ import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormDropDown } from '../../../../../../../theme/form';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
-@inject('userDetailsStore', 'userStore')
+@inject('userDetailsStore', 'userStore', 'uiStore')
 @withRouter
 @observer
 export default class Admin extends Component {
@@ -15,12 +16,22 @@ export default class Admin extends Component {
   toggleDisplayMode = (val) => {
     this.props.userDetailsStore.setFieldValue('displayMode', val);
   }
+  updateUserData = (e) => {
+    e.preventDefault();
+    this.props.userDetailsStore.updateUserBasicInfo().then(() => {
+      this.toggleDisplayMode(true);
+    });
+  }
   render() {
     const {
-      USER_BASIC, formChange, displayMode, maskChange,
+      USER_BASIC, formChange, displayMode, maskChange, userEleChange,
     } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const { capabilitiesMeta } = this.props.userStore;
+    const { inProgress } = this.props.uiStore;
+    if (inProgress) {
+      return (<InlineLoader />);
+    }
     return (
       <Form>
         <Header as="h4">
@@ -35,7 +46,7 @@ export default class Admin extends Component {
               <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={() => this.toggleDisplayMode(true)} />
               <Button
                 primary
-                onClick={this.handleSubmit}
+                onClick={this.updateUserData}
                 // disabled={!USER_BASIC.meta.isValid} // temporary disabled
               >
                 Update
@@ -92,7 +103,7 @@ export default class Admin extends Component {
                 selection
                 fluid
                 containerclassname="dropdown-field"
-                onChange={(e, res) => formChange(e, res, formName, 'dropdown')}
+                onChange={(e, res) => userEleChange(e, res, 'dropdown')}
               />
             }
           </div>

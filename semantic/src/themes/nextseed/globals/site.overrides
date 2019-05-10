@@ -157,6 +157,9 @@ h6{
 .pl-50{
 	padding-left: @50px !important;
 }
+.pl-60{
+	padding-left: @60px !important;
+}
 .pull-left{
 	float:left !important;
 }
