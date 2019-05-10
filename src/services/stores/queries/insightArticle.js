@@ -5,6 +5,7 @@ query insights($sortByCreationDateAsc: Boolean!, $categoryId: String){
   getInsightsArticles(sortByCreationDateAsc: $sortByCreationDateAsc, categoryId: $categoryId){
     id
     content
+    isFeatured
     category
     featuredImage
     tags
