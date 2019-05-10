@@ -133,7 +133,8 @@ export default class AllFaqs extends Component {
                 <Accordion key={categorizedFaqs} styled fluid className="card-style">
                   <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
                     <Icon className={!innerActiveIndex.includes(categorizedFaqs) ? 'ns-chevron-up' : 'ns-chevron-down'} />
-                    {categorizedFaqs}
+                    {allCategorizedFaqs[faqType][categorizedFaqs][0].categoryName}
+                    <Button as={Link} to={`${this.props.match.url}/new/${faqType}/${categorizedFaqs}`} className="link-button pull-right"><small>+ Add FAQ</small></Button>
                   </Accordion.Title>
                   <Accordion.Content active={!innerActiveIndex.includes(categorizedFaqs)} className="categories-acc">
                     <SortableList
