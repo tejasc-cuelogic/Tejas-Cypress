@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import moment from 'moment';
 import { lowerCase, get } from 'lodash';
 import { withRouter, Route, Link } from 'react-router-dom';
-import { Card, Table, Icon, Button } from 'semantic-ui-react';
+import { Card, Table, Icon, Button, List } from 'semantic-ui-react';
 import ConfirmModel from './ConfirmModel';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader, NsPagination } from './../../../../../theme/shared';
@@ -140,7 +140,10 @@ export default class AllCrowdPay extends Component {
                     }
                     {(type !== 'review' && type === 'individual') &&
                     <Table.Cell>
-                      {account.cip && account.cip.failReason && account.cip.failReason.message ? account.cip.failReason.message : <p className="intro-text">N/A</p>}
+                      {account.cip && account.cip.failReason.length ?
+                        <List as="ol">{(account.cip.failReason).map(obj => <List.Item as="li" value="-">{obj.message}</List.Item>)}</List>
+                        : <p>-</p>
+                      }
                     </Table.Cell>
                     }
                     {type === 'individual' &&
