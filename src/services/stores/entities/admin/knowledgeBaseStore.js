@@ -99,11 +99,7 @@ export class KnowledgeBaseStore {
       variables: { id },
       onFetch: (res) => {
         if (res && res.knowledgeBaseById && res.knowledgeBaseById !== null) {
-          Object.keys(this.KNOWLEDGE_BASE_FRM.fields).map((key) => {
-            this.KNOWLEDGE_BASE_FRM.fields[key].value = res.knowledgeBaseById[key];
-            return null;
-          });
-          Validator.validateForm(this.KNOWLEDGE_BASE_FRM);
+          this.setFormData(res.knowledgeBaseById);
         } else {
           Helper.toast('Invalid knowledge base id', 'error');
         }
@@ -268,33 +264,14 @@ export class KnowledgeBaseStore {
       ((c.categoryType === `${this.KNOWLEDGE_BASE_FRM.fields.userType.value}_KB`) ?
         { key: c.categoryName, value: c.id, text: c.categoryName } : false)), d => d);
   }
-
   @computed get categoriesDropdown() {
-    const categoriesArray = {};
-    const defaultOption = {
-      key: 'all',
-      value: null,
-      text: 'All',
-    };
+    const categoriesArray = [];
     if (this.Categories.data && this.Categories.data.categories) {
       this.Categories.data.categories.map((ele) => {
-        categoriesArray.ALL = [];
-        categoriesArray.ALL.push(defaultOption);
-
-        if (!categoriesArray[ele.categoryType]) {
-          categoriesArray[ele.categoryType] = [];
-        }
-
-        categoriesArray[ele.categoryType].push({
-          key: ele.categoryName,
-          value: ele.id,
-          text: ele.categoryName,
-          header: ele.categoryType,
-        });
-
+        categoriesArray.push({ key: ele.categoryName, value: ele.id, text: ele.categoryName });
         return categoriesArray;
       });
-      return map(categoriesArray, (c, k) => ({ title: CATEGORY_TYPES[k], options: c }));
+      return categoriesArray;
     }
     return null;
   }
@@ -305,7 +282,13 @@ export class KnowledgeBaseStore {
       Validator.pullValues(e, result),
     );
   }
-
+  @action
+  setFormData = (formData) => {
+    Object.keys(this.KNOWLEDGE_BASE_FRM.fields).map(action((key) => {
+      this.KNOWLEDGE_BASE_FRM.fields[key].value = formData[key];
+    }));
+    Validator.validateForm(this.KNOWLEDGE_BASE_FRM);
+  }
   @action
   resetFormData = (form) => {
     const resettedForm = Validator.resetFormData(this[form]);
@@ -500,16 +483,16 @@ export class KnowledgeBaseStore {
     if (this.db && this.db.length) {
       this.db.forEach((knowledgeBase) => {
         if (arrKnowledgeBase[knowledgeBase.userType]) {
-          if (arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName]) {
-            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName].push(knowledgeBase);
+          if (arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryId]) {
+            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryId].push(knowledgeBase);
           } else {
-            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName] = [];
-            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryName].push(knowledgeBase);
+            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryId] = [];
+            arrKnowledgeBase[knowledgeBase.userType][knowledgeBase.categoryId].push(knowledgeBase);
           }
         } else {
           arrKnowledgeBase[`${knowledgeBase.userType}`] = [];
-          arrKnowledgeBase[`${knowledgeBase.userType}`][`${knowledgeBase.categoryName}`] = [];
-          arrKnowledgeBase[`${knowledgeBase.userType}`][`${knowledgeBase.categoryName}`].push(knowledgeBase);
+          arrKnowledgeBase[`${knowledgeBase.userType}`][`${knowledgeBase.categoryId}`] = [];
+          arrKnowledgeBase[`${knowledgeBase.userType}`][`${knowledgeBase.categoryId}`].push(knowledgeBase);
         }
       });
     }

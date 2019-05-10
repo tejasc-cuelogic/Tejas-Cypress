@@ -18,17 +18,11 @@ const SortableItem = SortableElement(({
   knowledgeBase, key, handleAction,
 }) => (
   <div className="row-wrap striped-table" key={key}>
-    {/* <div className="balance">
-    </div>
-    <div className="balance">
-    </div> */}
     <div className="balance-half first-column">
       <DragHandle />
-      <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty />
+      <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
-        <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>
-          <b>{_.capitalize(knowledgeBase.title)}</b>
-        </Link>
+        <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>{_.capitalize(knowledgeBase.title)}</Link>
       </span>
     </div>
     <div className="action width-100 right-align">
@@ -151,7 +145,8 @@ export default class AllKnowledgeBaseItems extends Component {
                 <Accordion key={category} fluid styled className="card-style">
                   <Accordion.Title onClick={() => this.toggleAccordion(category, 'innerActiveIndex')} className="text-capitalize">
                     <Icon className={!innerActiveIndex.includes(category) ? 'ns-chevron-up' : 'ns-chevron-down'} />
-                    {category}
+                    {allCategorizedKnowledgeBase[userType][category][0].categoryName}
+                    <Button as={Link} to={`${this.props.match.url}/new/DRAFT/${userType}/${category}`} className="link-button pull-right"><small>+ Add Knowledge Base</small></Button>
                   </Accordion.Title>
                   <Accordion.Content active={!innerActiveIndex.includes(category)} className="categories-acc">
                     <SortableList
