@@ -131,12 +131,12 @@ export default class NavBarMobile extends Component {
                 />
                 <div className="public-action-nav mt-20">
                   {!currentUser ? logInSignUp.map(route => (
-                    <Menu.Item>
+                    <Menu.Item className="btn-item">
                       <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
                     </Menu.Item>
                   )) :
-                  <Menu.Item>
-                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" className="basic" compact>Logout</Button>
+                  <Menu.Item className="btn-item">
+                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
                   </Menu.Item>
                   }
                 </div>
