@@ -71,6 +71,10 @@ export const userDetailsQuery = gql`
       cip {
         expiration
         failType
+        failReason {
+          key
+          message
+        }
       }
       limits {
         income
@@ -598,6 +602,16 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
      userId: $userId
      shouldSkip: $shouldSkip
    )
+ }`;
+
+export const deleteProfile = gql`
+mutation adminDeleteInvestorOrIssuerUser($userId: String!) {
+  adminDeleteInvestorOrIssuerUser(
+     cognitoUUId: $userId
+  ) {
+    status
+    message
+  }
  }`;
 
 export const frozenEmailToAdmin = gql`

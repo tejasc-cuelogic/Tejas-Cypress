@@ -33,14 +33,21 @@ export default class FaqDetails extends Component {
       loading,
       FAQ_FRM,
       formChange,
+      setFormData,
       htmlContentChange,
     } = this.props.faqStore;
     const faqStatuses = FAQ_STATUS_VALUES.filter(faqStatus => faqStatus.key !== 'All');
     const faqTypes = FAQ_TYPES_VALUES.filter(faqStatus => faqStatus.key !== 'All');
     const isNew = this.props.match.params.id === 'new';
     const { inProgress } = this.props.uiStore;
-    const { categoriesDropdown } = this.props.articleStore;
-    if (loading || inProgress) {
+    const { categoriesDropdown, Categories } = this.props.articleStore;
+    if (isNew) {
+      setFormData({
+        faqType: this.props.match.params.faqType,
+        categoryId: this.props.match.params.categoryId,
+      });
+    }
+    if (loading || inProgress || Categories.loading) {
       return <InlineLoader />;
     }
     return (

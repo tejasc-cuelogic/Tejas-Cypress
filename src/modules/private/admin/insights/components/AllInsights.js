@@ -88,57 +88,48 @@ export default class AllInsights extends Component {
             <Table unstackable striped sortable className="user-list">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell collapsing>
-                  </Table.HeaderCell>
-                  {
-                    meta.map(cell => (
-                      <Table.HeaderCell
-                        key={cell.label.split(' ')[0]}
-                        width={cell.value === 'title' ? 5 : ''}
-                        textAlign={cell.value === 'action' ? 'center' : ''}
-                        sorted={sortOrder.column === cell.value ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
-                        onClick={this.handleSort(cell.value)}
-                      >
-                        {cell.label}
-                      </Table.HeaderCell>
-                    ))
-                  }
+                  {meta.map(cell => (
+                    <Table.HeaderCell
+                      key={cell.label.split(' ')[0]}
+                      width={cell.value === 'title' ? 5 : ''}
+                      textAlign={cell.value === 'action' ? 'center' : ''}
+                      sorted={sortOrder.column === cell.value ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                      onClick={this.handleSort(cell.value)}
+                    >
+                      {cell.label}
+                    </Table.HeaderCell>
+                  ))}
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {
-                  adminInsightList ? adminInsightList.map(record => (
-                    <Table.Row key={record.id}>
-                      <Table.Cell>
-
-                      </Table.Cell>
-                      <Table.Cell>{record.title || '-'}</Table.Cell>
-                      <Table.Cell>{record.category || 'N/A'}</Table.Cell>
-                      <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>
-                      <Table.Cell>
-                        {record.author || 'N/A'}
-                      </Table.Cell>
-                      <Table.Cell><Label color={`${record.articleStatus === 'PUBLISHED' ? 'green' : record.articleStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
-                      <Table.Cell>
-                        <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
-                      </Table.Cell>
-                      <Table.Cell textAlign="center">
-                        <Button.Group>
-                          {Object.keys(actions).map(action => (
-                            <Button className="link-button" >
-                              <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id)} />
-                            </Button>
-                          ))}
-                        </Button.Group>
-                      </Table.Cell>
-                    </Table.Row>
-                  )) :
-                  <Table.Row>
-                    <Table.Cell colSpan="7">
-                      <InlineLoader text="No data available." />
+                {adminInsightList ? adminInsightList.map(record => (
+                  <Table.Row key={record.id}>
+                    <Table.Cell>{record.title || '-'}</Table.Cell>
+                    <Table.Cell>{record.category || 'N/A'}</Table.Cell>
+                    <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>
+                    <Table.Cell>
+                      {record.author || 'N/A'}
+                    </Table.Cell>
+                    <Table.Cell><Label color={`${record.articleStatus === 'PUBLISHED' ? 'green' : record.articleStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
+                    <Table.Cell>
+                      <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
+                    </Table.Cell>
+                    <Table.Cell textAlign="center">
+                      <Button.Group>
+                        {Object.keys(actions).map(action => (
+                          <Button className="link-button" >
+                            <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id)} />
+                          </Button>
+                        ))}
+                      </Button.Group>
                     </Table.Cell>
                   </Table.Row>
-                }
+                )) :
+                <Table.Row>
+                  <Table.Cell colSpan="7">
+                    <InlineLoader text="No data available." />
+                  </Table.Cell>
+                </Table.Row>}
               </Table.Body>
             </Table>
           </div>

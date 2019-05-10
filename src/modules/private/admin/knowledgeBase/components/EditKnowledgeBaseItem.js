@@ -41,10 +41,18 @@ export default class EditKnowledgeBaseItem extends Component {
       htmlContentChange,
       loading,
       userTypeChange,
-      getCategories,
+      categoriesDropdown,
+      setFormData,
     } = this.props.knowledgeBaseStore;
     const isNew = this.props.match.params.id === 'new';
     const itemStatus = this.props.match.params.status;
+    if (isNew) {
+      setFormData({
+        userType: this.props.match.params.userType,
+        categoryId: this.props.match.params.categoryId,
+        itemStatus: 'DRAFT',
+      });
+    }
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
@@ -124,7 +132,7 @@ export default class EditKnowledgeBaseItem extends Component {
                                 value={KNOWLEDGE_BASE_FRM.fields.categoryId.value}
                                 placeholder="Choose here"
                                 name="categoryId"
-                                options={getCategories}
+                                options={categoriesDropdown}
                                 onChange={(e, result) => knowledgeBaseChange(e, result)}
                               />
                             </div>

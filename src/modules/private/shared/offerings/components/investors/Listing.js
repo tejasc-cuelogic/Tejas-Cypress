@@ -115,7 +115,7 @@ export default class Listing extends Component {
                         <span> ({`${data.investmentsCount} Investments`})</span>
                       :
                       null}
-                      {(data.credit || data.autoDraftAmount) ?
+                      {(data.credit || data.autoDraftAmount) && isAdmin ?
                         <Popup
                           trigger={<Icon name="help circle" color="green" />}
                           content={

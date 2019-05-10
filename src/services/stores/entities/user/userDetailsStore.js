@@ -18,7 +18,7 @@ import {
   investmentStore,
   userListingStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -199,6 +199,28 @@ export class UserDetailsStore {
         this.isAddressSkip = res.data.skipAddressValidationCheck;
       }));
   }
+  @action
+  deleteProfile = () => new Promise(async (resolve, reject) => {
+    uiStore.addMoreInProgressArray('deleteProfile');
+    const payLoad = { userId: this.selectedUserId };
+    try {
+      const res = await client
+        .mutate({
+          mutation: deleteProfile,
+          variables: payLoad,
+        });
+      uiStore.removeOneFromProgressArray('deleteProfile');
+      if (res.data.adminDeleteInvestorOrIssuerUser.status) {
+        Helper.toast('User Profile Deleted Successfully!', 'success');
+        resolve();
+      } else {
+        reject(res.data.adminDeleteInvestorOrIssuerUser.message);
+      }
+    } catch (error) {
+      uiStore.removeOneFromProgressArray('deleteProfile');
+      Helper.toast('Something went wrong, please try again in sometime', 'error');
+    }
+  });
 
   @action
   getUser = userId => new Promise((res) => {

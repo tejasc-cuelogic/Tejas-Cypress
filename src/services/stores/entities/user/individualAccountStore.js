@@ -108,7 +108,7 @@ class IndividualAccountStore {
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
         if (this.retryGoldStar < 1) {
           this.retryGoldStar += 1;
-          this.submitAccount();
+          this.createGoldstarAccount();
         } else {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
