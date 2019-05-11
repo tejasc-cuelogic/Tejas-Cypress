@@ -86,7 +86,6 @@ export default class CampaignSideBar extends Component {
                       <Statistic.Value>{diff}</Statistic.Value>
                       <Statistic.Label>Days left</Statistic.Label>
                     </Statistic>
-                    : ''
                   }
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
