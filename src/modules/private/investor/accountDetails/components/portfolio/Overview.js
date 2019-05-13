@@ -99,7 +99,7 @@ class Overview extends Component {
                         </Table.Cell>
                         {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                           <Table.Cell>
-                            {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? `${get(campaign, 'closureSummary.keyTerms.multiple')}` : 'N/A'}{' '}
+                            {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? get(campaign, 'closureSummary.keyTerms.multiple') : 'N/A'}{' '}
                             <HtmlEditor
                               readOnly
                               content={(keyTerms && keyTerms.investmentMultipleSummary ?
