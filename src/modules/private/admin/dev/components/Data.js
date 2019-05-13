@@ -7,6 +7,7 @@ import Aux from 'react-aux';
 import { FormInput, MaskedInput } from '../../../../../theme/form';
 import { FieldError } from '../../../../../theme/shared';
 import OfferingAudit from './data/OfferingAudit';
+import ProcessFullAccount from './data/processFullAccount';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -85,6 +86,7 @@ export default class Data extends Component {
               </Card.Description>
             </Card.Content>
           </Card>
+          <ProcessFullAccount />
           <OfferingAudit />
         </Grid.Column>
       </Grid>

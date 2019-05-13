@@ -45,3 +45,37 @@ export const OFFERING_REPAYMENT_META = {
     },
   },
 };
+
+export const PROCESS_FULL_ACCOUNT_META = {
+  userId: {
+    value: '',
+    label: 'User ID',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'This field is required',
+    },
+  },
+  accountId: {
+    value: '',
+    label: 'Account ID',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'This field is required',
+    },
+  },
+  options: {
+    value: [],
+    values: [
+      { label: 'Create RS Account', value: 'createRSAccount' },
+      { label: 'Create Initial Deposit', value: 'createInitialDeposit' },
+      { label: 'Send Email To Investor', value: 'sendEmailToInvestor' },
+    ],
+    error: undefined,
+    rule: 'optional',
+  },
+};
+
