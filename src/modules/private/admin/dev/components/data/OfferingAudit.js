@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Header } from 'semantic-ui-react';
+import { Card, Button, Form, Header, Table } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
@@ -45,7 +45,7 @@ export default class OfferingAudit extends Component {
                   changed={(e, result) => formChange(e, result, 'OFFERING_REPAYMENT_META_FRM')}
                 />
                 <Form.Field width={4}>
-                  <Button primary fluid content="Update the Offering Closure Repayment" disabled={!OFFERING_REPAYMENT_META_FRM.meta.isValid || inProgress.offeringRepayment} loading={inProgress.offeringRepayment} />
+                  <Button primary fluid content="Update the Offering Closure Repayment" disabled={inProgress.offeringRepayment} loading={inProgress.offeringRepayment} />
                 </Form.Field>
               </Form.Group>
             </Form>
@@ -53,15 +53,28 @@ export default class OfferingAudit extends Component {
               <Aux>
                 <Header as="h6">Output:</Header>
                 {get(outputMsg, 'type') === 'error' ?
-                  <p className="negative-text">{get(outputMsg, 'data')}</p> :
-                  <dl className="dl-horizontal">
-                    <dt>Offering Id</dt>
-                    <dd>{get(outputMsg, 'data.offeringId') || 'N/A'}</dd>
-                    <dt>Count</dt>
-                    <dd>{get(outputMsg, 'data.count') || 'N/A'}</dd>
-                    <dt>Current Repaid Amount</dt>
-                    <dd>{get(outputMsg, 'data.currentRepaidAmount') || 'N/A'}</dd>
-                  </dl>
+                  <p className="negative-text">{get(outputMsg, 'data')}</p> : get(outputMsg, 'data[0]') ?
+                    <div className="table-wrapper">
+                      <Table unstackable singleLine className="investment-details">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell>OfferingId</Table.HeaderCell>
+                            <Table.HeaderCell>Count</Table.HeaderCell>
+                            <Table.HeaderCell>Current Repaid Amount</Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {get(outputMsg, 'data').map(data => (
+                            <Table.Row key={data.offeringId}>
+                              <Table.Cell>{data.offeringId}</Table.Cell>
+                              <Table.Cell>{data.count}</Table.Cell>
+                              <Table.Cell>{data.currentRepaidAmount}</Table.Cell>
+                            </Table.Row>
+                            ))
+                          }
+                        </Table.Body>
+                      </Table>
+                    </div> : null
                 }
               </Aux>
             }

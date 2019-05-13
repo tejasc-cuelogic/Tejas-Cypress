@@ -38,10 +38,7 @@ export const OFFERING_REPAYMENT_META = {
     value: '',
     label: 'Offering ID',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here',
-    customErrors: {
-      required: 'This field is required',
-    },
   },
 };

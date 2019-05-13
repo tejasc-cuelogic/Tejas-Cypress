@@ -263,6 +263,13 @@ export const selectedUserDetailsQuery = gql`
       accreditation {
         status
       }
+      saasquatch {
+        signupCode
+        userId
+        referredBy
+        accountId
+        status
+      }
       cip {
         expiration
         failType
