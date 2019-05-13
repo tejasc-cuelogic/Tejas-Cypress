@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
+import { Container, Icon, Menu, Dropdown, Label, Button, Accordion } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
@@ -13,7 +13,19 @@ const isTablet = document.documentElement.clientWidth < 992;
 @inject('navStore', 'uiStore', 'userDetailsStore')
 @observer
 export class NavItems extends Component {
-  state = { active: '', active2: '', byHideArrow: '' };
+  state = {
+    active: '',
+    active2: '',
+    byHideArrow: '',
+    activeIndex: 0,
+  };
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+
+    this.setState({ activeIndex: newIndex });
+  }
   navClick = (e, { name }) => {
     if (this.props.refLoc !== 'public') {
       const newState = this.state.active === name ? '' : name;
@@ -68,6 +80,7 @@ export class NavItems extends Component {
     }
   }
   render() {
+    // const { activeIndex } = this.state;
     const {
       location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
@@ -77,67 +90,100 @@ export class NavItems extends Component {
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map(item => (
       <Aux>
-        {(item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar) ? (
-          <Dropdown
-            open={item.clickable && this.isOpen(item.to, location, item.subNavigations)}
-            item
-            defaultOpen={item.defaultOpen}
-            key={item.to}
-            className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
-            name={item.to}
-            // disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
-            text={
-              <Aux>
-                {item.icon && <Icon className={item.icon} />}
-                <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
-              </Aux>
-            }
-          >
-            <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
-              {item.subNavigations.map(sn => (
-                sn.external ? (
-                  <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
-                ) : (
-                  <Dropdown.Item
-                    key={sn.to}
-                    className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
-                    as={NavLink}
-                    onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
-                    to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
-                  >
-                    {sn.title}
-                  </Dropdown.Item>
-                )
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        ) : (item.isMenuHeader && hasMoreThanOneAcc) ?
-          <Menu.Item className="menu-header">
-            <Menu.Header>{item.title}</Menu.Header>
-          </Menu.Item> :
-          (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader) ?
-            null
-            : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to]) ||
-            (item.to !== 'updates') ?
-            (item.title === 'Bonus Rewards' && this.props.isBonusReward) ||
-            (item.title !== 'Bonus Rewards') ? (
-              <Menu.Item
-                key={item.to}
-                name={item.to}
-                className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
-                as={NavLink}
-                onClick={isMobile ? onToggle : this.doNothing}
-                to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
-              >
-                {item.icon && <Icon className={item.icon} />}
-                {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
-                {item.title !== 'Updates' ? <span>{item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
-                {(item.to === 'updates' || item.to === 'comments') && this.props.countData ?
-                  <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
+        {item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar && isMobile ? (
+          <Accordion as={Menu} vertical>
+            <Menu.Item>
+              <Accordion.Title
+                content={typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
+                index={0}
+                onClick={this.handleClick}
+              />
+              <Accordion.Content
+                content={
+                  <Menu.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
+                    {item.subNavigations.map(sn => (
+                      sn.external ? (
+                        <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                      ) : (
+                        <Menu.Item
+                          key={sn.to}
+                          className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
+                          as={NavLink}
+                          onClick={
+                            isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)
+                          }
+                          to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                        >
+                          {sn.title}
+                        </Menu.Item>
+                      )
+                    ))}
+                  </Menu.Menu>
                 }
-              </Menu.Item>) : '' : ''
-            )}
+              />
+            </Menu.Item>
+          </Accordion>) :
+          (item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar) ? (
+            <Dropdown
+              open={item.clickable && this.isOpen(item.to, location, item.subNavigations)}
+              item
+              defaultOpen={item.defaultOpen}
+              key={item.to}
+              className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
+              name={item.to}
+              // disabled={isMobile && item.title === 'How NextSeed Works'}
+              onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
+              text={
+                <Aux>
+                  {item.icon && <Icon className={item.icon} />}
+                  <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
+                </Aux>
+              }
+            >
+              <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
+                {item.subNavigations.map(sn => (
+                  sn.external ? (
+                    <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                  ) : (
+                    <Dropdown.Item
+                      key={sn.to}
+                      className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
+                      as={NavLink}
+                      onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
+                      to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                    >
+                      {sn.title}
+                    </Dropdown.Item>
+                  )
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (item.isMenuHeader && hasMoreThanOneAcc) ?
+            <Menu.Item className="menu-header">
+              <Menu.Header>{item.title}</Menu.Header>
+            </Menu.Item> :
+            (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader) ?
+              null
+              : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to]) ||
+              (item.to !== 'updates') ?
+              (item.title === 'Bonus Rewards' && this.props.isBonusReward) ||
+              (item.title !== 'Bonus Rewards') ? (
+                <Menu.Item
+                  key={item.to}
+                  name={item.to}
+                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
+                  as={NavLink}
+                  onClick={isMobile ? onToggle : this.doNothing}
+                  to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
+                >
+                  {item.icon && <Icon className={item.icon} />}
+                  {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
+                  {item.title !== 'Updates' ? <span>{item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
+                  {(item.to === 'updates' || item.to === 'comments') && this.props.countData ?
+                    <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
+                  }
+                </Menu.Item>) : '' : ''
+              )}
       </Aux>
     ));
   }
