@@ -80,9 +80,10 @@ export class TeamStore {
   }
   @action
   maskChange = (values, form, field) => {
-    this[form] = Validator.onChange(
+    const fieldValue = Math.abs(values.floatValue);
+    this[form] = Validator.onArrayFieldChange(
       this[form],
-      { name: field, value: values.floatValue },
+      { name: field, value: fieldValue },
     );
   }
   @action
