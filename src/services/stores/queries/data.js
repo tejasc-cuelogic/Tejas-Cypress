@@ -22,3 +22,14 @@ mutation updateOfferingRepaymentsMeta($audit: Boolean!, $offeringId: String){
       count
     }  
 }`;
+
+export const processFullInvestorAccount = gql`
+mutation processFullInvestorAccount($userId: String!, $accountId: String!, $createRSAccount: Boolean!, $createInitialDeposit: Boolean!, $sendEmailToInvestor: Boolean!) {
+  processFullInvestorAccount(
+    userId: $userId,
+    accountId: $accountId,
+    createRSAccount: $createRSAccount, 
+    createInitialDeposit: $createInitialDeposit,
+    sendEmailToInvestor: $sendEmailToInvestor,
+  )
+}`;
