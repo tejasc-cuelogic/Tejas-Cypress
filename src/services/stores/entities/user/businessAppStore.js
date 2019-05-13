@@ -163,7 +163,7 @@ export class BusinessAppStore {
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && !this.businessAppDataById.loading) {
+        if (data && data.getPreQualificationById && !this.businessAppDataById.loading) {
           resolve(data.getPreQualificationById);
         }
       },
