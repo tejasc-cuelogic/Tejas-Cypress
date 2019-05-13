@@ -152,7 +152,10 @@ export class BusinessAppStore {
   });
 
   @action
-  fetchAdminApplicationById = (appId, appType, userId) => new Promise((resolve) => {
+  fetchAdminApplicationById = (appId, appType, userId, loader = false) => new Promise((resolve) => {
+    if (loader) {
+      uiStore.setProgress(loader);
+    }
     this.setFieldvalue('applicationId', appId);
     const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payLoad = {
