@@ -80,7 +80,7 @@ export class NavItems extends Component {
     }
   }
   render() {
-    // const { activeIndex } = this.state;
+    const { activeIndex } = this.state;
     const {
       location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
@@ -88,17 +88,19 @@ export class NavItems extends Component {
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
-    return myNavItems.map(item => (
+    return myNavItems.map((item, key) => (
       <Aux>
         {item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar && isMobile ? (
           <Accordion as={Menu} vertical>
             <Menu.Item>
               <Accordion.Title
+                active={activeIndex === key}
                 content={typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
-                index={0}
+                index={key}
                 onClick={this.handleClick}
               />
               <Accordion.Content
+                active={activeIndex === key}
                 content={
                   <Menu.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
                     {item.subNavigations.map(sn => (
@@ -204,6 +206,7 @@ export class NavigationItems extends Component {
     const {
       location, currentUser, loading, isMobBussinessApp,
       isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
+      isMobile,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     const stepInRoute = [
@@ -234,7 +237,10 @@ export class NavigationItems extends Component {
                 refLoc="public"
                 currentUser={currentUser}
                 location={location}
-                navItems={PUBLIC_NAV.filter(nav => nav.header !== false)}
+                navItems={
+                  isMobile ? PUBLIC_NAV.filter(nav => nav.header !== false) :
+                   PUBLIC_NAV.filter(nav => nav.header !== false && nav.title !== 'Legal')
+                  }
               />
             }
           </Menu.Menu>
