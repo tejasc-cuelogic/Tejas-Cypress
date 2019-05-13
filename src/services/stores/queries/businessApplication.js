@@ -343,6 +343,17 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
 }
 `;
 
+export const getPreQualificationById = gql`
+query getPreQualificationById ($id: ID!) {
+  getPreQualificationById(preQualId: $id){
+    id
+    email
+    firstName
+    lastName
+  }
+}
+`;
+
 export const getPrequalBusinessApplicationsById = gql`
 query getprequalInfo ($id: ID!) {
   getPreQualificationById(preQualId: $id){

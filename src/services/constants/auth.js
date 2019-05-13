@@ -68,7 +68,7 @@ export const SIGNUP = {
   givenName: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'required|removeFrontAndTrailingSpaces',
     label: 'First Name',
     placeHolder: 'First Name',
     customErrors: {
@@ -78,7 +78,7 @@ export const SIGNUP = {
   familyName: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'required|removeFrontAndTrailingSpaces',
     label: 'Last Name',
     placeHolder: 'Last Name',
     customErrors: {
