@@ -61,7 +61,7 @@ export class DataStore {
           this.setFieldValue('inProgress', false, 'offeringRepayment');
           Helper.toast('Your request is processed.', 'success');
           this.resetForm('OFFERING_REPAYMENT_META_FRM');
-          this.setFieldValue('outputMsg', { type: 'success', data: get(result, 'updateOfferingRepaymentsMeta') });
+          this.setFieldValue('outputMsg', { type: 'success', data: get(result, 'data.updateOfferingRepaymentsMeta') });
           res(result);
         }))
         .catch((error) => {
