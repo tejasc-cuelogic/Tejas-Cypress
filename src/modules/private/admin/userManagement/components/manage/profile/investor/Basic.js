@@ -7,6 +7,7 @@ import { Header, Icon, Form, Divider, Button, Table } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
 import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
+import SaasquatchInformation from '../SaasquatchInformation.';
 
 @inject('userDetailsStore', 'uiStore')
 @withRouter
@@ -183,6 +184,15 @@ export default class Basic extends Component {
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <CIPInformation details={details} />
+            </Table>
+          </div>
+        </div>
+        <Divider />
+        <Header as="h6">Saasquatch Information</Header>
+        <div className="bg-offwhite">
+          <div className="table-wrapper">
+            <Table unstackable basic="very" fixed>
+              <SaasquatchInformation details={details} />
             </Table>
           </div>
         </div>
