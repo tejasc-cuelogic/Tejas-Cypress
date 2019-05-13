@@ -150,10 +150,10 @@ export const NEED_HELP = {
 
 export const BUSINESS_PRE_QUALIFICATION_BASIC = {
   firstName: {
-    value: '', label: 'First Name', error: undefined, rule: 'required', placeHolder: 'e.g. John', customErrors: { required: 'required' },
+    value: '', label: 'First Name', error: undefined, rule: 'required|removeFrontAndTrailingSpaces', placeHolder: 'e.g. John', customErrors: { required: 'required' },
   },
   lastName: {
-    value: '', label: 'Last Name', error: undefined, rule: 'required', placeHolder: 'e.g. Smith', customErrors: { required: 'required' },
+    value: '', label: 'Last Name', error: undefined, rule: 'required|removeFrontAndTrailingSpaces', placeHolder: 'e.g. Smith', customErrors: { required: 'required' },
   },
   email: {
     value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g. abc@xyz.com', customErrors: { required: 'required' },
