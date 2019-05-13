@@ -1,7 +1,10 @@
-export const waitForAPIcall = () => {
+export const waitForAPIcall = (operationName) => {
+  cy.wait(`@${operationName}`);
+}
+
+export const registerApiCall = (operationName) => {
   cy.server();
-  cy.route('POST', '**/**').as('graphql');
-  cy.wait('@graphql');
+  cy.route('POST', '**/**').as(operationName);
 }
 
 export const typeOtpCode = () => {
@@ -15,5 +18,7 @@ export const typeOtpCode = () => {
 
 export const enterCodeAndConfirm = () => {
   typeOtpCode();
+  registerApiCall('confirm');
   cy.get('form').find('button').contains('Confirm').click();
+  waitForAPIcall('confirm');
 }

@@ -1,3 +1,5 @@
+import { registerApiCall, waitForAPIcall } from "../common";
+
 export const SignUpMeta = {
   givenName: 'Nextseed',
   familyName: 'Test',
@@ -24,7 +26,9 @@ export const FillSignUpForm = () => {
 };
 
 export const fillSignUpFormAndProceed = () => {
+  registerApiCall('signUpForm');
   goToSignUpScreen();
   FillSignUpForm();
   cy.get('button.button').contains('Register').click();
+  waitForAPIcall('signUpForm');
 };
