@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Grid, Card, Form, Button, Item, Confirm } from 'semantic-ui-react';
-import { FormInput, FormTextarea, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { FormInput, FormTextarea, DropZoneConfirm as DropZone, MaskedInput } from '../../../../../theme/form';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 
 @inject('teamStore', 'uiStore')
@@ -56,10 +56,11 @@ export default class TeamDetails extends Component {
       TEAM_FRM,
       formChange,
       confirmBox,
+      maskChange,
     } = this.props.teamStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'TEAM_FRM';
-    const formFields = ['title', 'memberName', 'order'];
+    const formFields = ['title', 'memberName'];
     // const STATUS = [
     //   { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
     //   { key: 'LIVE', value: 'LIVE', text: 'LIVE' },
@@ -116,6 +117,13 @@ export default class TeamDetails extends Component {
                       />
                     ))
                     }
+                    <MaskedInput
+                      displayOnly={false}
+                      name="order"
+                      fielddata={TEAM_FRM.fields.order}
+                      changed={(values, name) => maskChange(values, formName, name)}
+                      number
+                    />
                     {/* <FormDropDown
                       name="status"
                       fielddata={TEAM_FRM.fields.status}
