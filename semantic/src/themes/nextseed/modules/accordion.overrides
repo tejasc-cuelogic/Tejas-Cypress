@@ -251,6 +251,9 @@
 		}
 
 	}
+	.row-wrap:last-child{
+		border-radius:0 0 @styledBorderRadius @styledBorderRadius;
+	}
 }
 
 //	Knowledge Base UI
