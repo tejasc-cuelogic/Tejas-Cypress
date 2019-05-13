@@ -156,14 +156,15 @@ export class NavigationItems extends Component {
   }
   render() {
     const {
-      location, currentUser, loading, isMobBussinessApp,
+      stepInRoute, location, currentUser, loading, isMobBussinessApp,
       isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
-    const stepInRoute = [
+    const logInSignUp = stepInRoute.to !== 'login' ? [
       { to: 'login', title: 'Log In', className: 'basic' },
       { to: 'register', title: 'Sign Up', className: 'secondary' },
-    ];
+    ] :
+      [{ ...stepInRoute, className: 'basic' }];
     return (
       <Menu
         stackable={!isMobBussinessApp}
@@ -208,7 +209,7 @@ export class NavigationItems extends Component {
             (
               !currentUser ? (
                 <Aux>
-                  {stepInRoute.map(route => (
+                  {logInSignUp.map(route => (
                     <Menu.Item className="menu-button">
                       <Button as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`}>{route.title}</Button>
                     </Menu.Item>
