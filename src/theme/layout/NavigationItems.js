@@ -91,7 +91,7 @@ export class NavItems extends Component {
     return myNavItems.map(item => (
       <Aux>
         {item.subPanel === 1 && item.subNavigations && !item.hideSubOnSideBar && isMobile ? (
-          <Accordion as={Menu} vertical>
+          <Accordion as={Menu} vertical fluid>
             <Menu.Item>
               <Accordion.Title
                 content={typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
