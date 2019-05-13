@@ -38,7 +38,8 @@ export default class StatusChangeAppModal extends Component {
     const { match } = this.props;
     const { params } = match;
     const appType = 'prequal-failed';
-    this.props.businessAppStore.fetchAdminApplicationById(params.appId, appType, params.userId)
+    this.props.businessAppStore
+      .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
         const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
         if (prequalData) {
@@ -90,7 +91,7 @@ export default class StatusChangeAppModal extends Component {
     const { errors } = uiStore;
     const { params } = match;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
+      <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
         </Modal.Header>
@@ -109,7 +110,7 @@ export default class StatusChangeAppModal extends Component {
               </Message>
             }
             <div className="center-align">
-              <Button primary className="very relaxed" content="Submit" disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
+              <Button primary className="very relaxed" content="Submit" disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid || inProgress} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
             </div>
           </Form>
         </Modal.Content>
