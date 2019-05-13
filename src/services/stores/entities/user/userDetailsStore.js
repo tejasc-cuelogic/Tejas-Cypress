@@ -509,21 +509,12 @@ export class UserDetailsStore {
       routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
       routingUrl = '/app/summary/account-creation';
-    } else if (!this.signupStatus.activeAccounts.length &&
-      this.signupStatus.partialAccounts.length > 0) {
+    } else if (this.signupStatus.partialAccounts.length > 0) {
       // const accValue =
       //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       // accountStore.setAccTypeChange(accValue);
       const redirectAccount =
         selectedAccountType || this.signupStatus.partialAccounts[0];
-      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
-    } else if (!this.signupStatus.activeAccounts.length &&
-      this.signupStatus.inActiveAccounts.length > 0) {
-      // const accValue =
-      //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
-      // accountStore.setAccTypeChange(accValue);
-      const redirectAccount =
-        selectedAccountType || this.signupStatus.inActiveAccounts[0];
       routingUrl = `/app/summary/account-creation/${redirectAccount}`;
     } else {
       routingUrl = '/app/summary';
