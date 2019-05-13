@@ -368,6 +368,7 @@ export class TransactionStore {
             resolve();
           } else {
             uiStore.setErrors('OTP verificaton failed.');
+            uiStore.setProgress(false);
             reject();
           }
         })
