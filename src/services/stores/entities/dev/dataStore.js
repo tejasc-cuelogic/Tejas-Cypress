@@ -85,9 +85,9 @@ export class DataStore {
           variables: {
             userId: processData.userId,
             accountId: processData.accountId,
-            createRSAccount: toJS(processData.audit).include('createRSAccount'),
-            createInitialDeposit: toJS(processData.audit).include('createInitialDeposit'),
-            sendEmailToInvestor: toJS(processData.audit).include('sendEmailToInvestor'),
+            createRSAccount: (toJS(processData.options)).includes('createRSAccount'),
+            createInitialDeposit: (toJS(processData.options)).includes('createInitialDeposit'),
+            sendEmailToInvestor: (toJS(processData.options)).includes('sendEmailToInvestor'),
           },
         })
         .then(action((result) => {
