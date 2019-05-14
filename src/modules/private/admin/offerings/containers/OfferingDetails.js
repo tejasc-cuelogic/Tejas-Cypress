@@ -17,6 +17,7 @@ import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 @observer
 export default class OfferingDetails extends Component {
   componentWillMount() {
+    this.props.offeringCreationStore.setFieldValue('isListingPage', false);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }

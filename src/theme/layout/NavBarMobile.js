@@ -32,7 +32,7 @@ export default class NavBarMobile extends Component {
       { to: 'login', title: 'Log In', className: 'basic' },
       { to: 'register', title: 'Sign Up', className: 'secondary' },
     ] :
-      [{ ...stepInRoute, className: 'basic' }];
+      [{ ...stepInRoute, className: 'secondary' }];
     if (location.pathname.startsWith('/invest')) {
       navTitle = 'Investing';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {

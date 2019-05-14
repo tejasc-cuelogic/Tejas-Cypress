@@ -93,7 +93,7 @@ class FinancialInfo extends Component {
                       in Reg CF offerings over a 12-month period.
                        This limit is calculated based on your
             annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
-            your limit is innacurate, please update your <Link to="/app/profile-settings/profile-data">Investor Profile</Link>
+            your limit is innacurate, please update your <Link to="/app/account-settings/profile-data">Investor Profile</Link>
                     </span>
                   )}
                   position="top center"

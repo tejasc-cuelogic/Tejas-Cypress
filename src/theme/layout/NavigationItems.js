@@ -224,7 +224,7 @@ export class NavigationItems extends Component {
       { to: 'login', title: 'Log In', className: 'basic' },
       { to: 'register', title: 'Sign Up', className: 'secondary' },
     ] :
-      [{ ...stepInRoute, className: 'basic' }];
+      [{ ...stepInRoute, className: 'secondary' }];
     return (
       <Menu
         stackable={!isMobBussinessApp}

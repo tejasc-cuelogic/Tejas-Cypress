@@ -154,8 +154,8 @@ export const PRIVATE_NAV = [
   {
     title: 'Account Settings',
     icon: 'ns-setting',
-    to: 'profile-settings',
-    heading: 'Profile Settings',
+    to: 'account-settings',
+    heading: 'Account Settings',
     hideSubOnSideBar: true,
     subPanel: 1,
     accessibleTo: [],
@@ -202,7 +202,9 @@ export const PRIVATE_NAV = [
       { title: 'Media', to: 'media', accessFor: [1] },
       { title: 'Leadership', to: 'leadership', accessFor: [1] },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
-      { title: 'Transactions', to: 'transactions', accessFor: [3, 4] },
+      {
+        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
       { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
