@@ -89,6 +89,8 @@ export default class AccountDetails extends Component {
       ((!n.accessibleTo || n.accessibleTo.length === 0 ||
         intersection(n.accessibleTo, roles).length > 0)) &&
       (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
+    // const activityMenu = navItems.filter(m => m.to === 'activity');
+    // const activityModule = activityMenu ? getModule(activityMenu[0].component) : '';
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
@@ -139,6 +141,7 @@ export default class AccountDetails extends Component {
                               module={item.title === 'Activity' ? 'userDetails' : false}
                               showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
                               {...props}
+                              adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                               resourceId={details.id}
                             />)
                                 }
@@ -148,6 +151,23 @@ export default class AccountDetails extends Component {
                   }
                 </Switch>
               </div>
+              {/* <div>
+                {activityMenu ?
+                  <Route
+                    key={activityMenu[0].to}
+                    path={`${match.url}/${activityMenu[0].to}`}
+                    render={props => (
+                      <activityModule
+                        module={activityMenu[0].title === 'Activity' ? 'userDetails' : false}
+                        showFilters={activityMenu[0].title === 'Activity' ?
+                        ['activityType', 'activityUserType'] : false}
+                        {...props}
+                        resourceId={details.id}
+                      />)
+                          }
+                  /> : ''
+                }
+              </div> */}
             </Card>
           </Modal.Content>
         </Modal>
