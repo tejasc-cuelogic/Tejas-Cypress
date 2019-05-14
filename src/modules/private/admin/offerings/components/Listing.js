@@ -15,13 +15,15 @@ const actions = {
   publish: { label: 'Publish', icon: 'view', icon1: 'no-view' },
 };
 
-@inject('uiStore', 'offeringsStore')
+@inject('uiStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
 @observer
 export default class Listing extends Component {
   state = { isPublic: false };
   componentWillMount() {
+    this.props.offeringCreationStore.setFieldValue('isListingPage', true);
     this.props.offeringsStore.resetInitLoad();
+    this.props.offeringCreationStore.resetInitLoad();
     this.props.offeringsStore.resetPagination();
   }
   handleAction = (action, offeringId, isPublished = false) => {
