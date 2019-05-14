@@ -32,7 +32,7 @@ export default class ConfirmVerificationCode extends Component {
   }
 
   gotoMfaSettings = () => {
-    this.props.history.push('/app/profile-settings/security');
+    this.props.history.push('/app/account-settings/security');
   }
 
   resendVerification = (e) => {
@@ -69,7 +69,7 @@ export default class ConfirmVerificationCode extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <p className="display-only">{formattedPhoneNumber}</p>
-          <p><Link to="/app/profile-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
+          <p><Link to="/app/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
           <Form error onSubmit={this.submit}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>

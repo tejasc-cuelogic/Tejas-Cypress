@@ -154,8 +154,8 @@ export const PRIVATE_NAV = [
   {
     title: 'Account Settings',
     icon: 'ns-setting',
-    to: 'profile-settings',
-    heading: 'Profile Settings',
+    to: 'account-settings',
+    heading: 'Account Settings',
     hideSubOnSideBar: true,
     subPanel: 1,
     accessibleTo: [],
