@@ -96,6 +96,16 @@ export class OfferingCreationStore {
   @observable removeFileIdsList = [];
   @observable removeFileNamesList = [];
   @observable isUploadingFile = false;
+  @observable isListingPage = false;
+
+  @action
+  setFieldValue = (field, value, field2 = false) => {
+    if (field2) {
+      this[field][field2] = value;
+    } else {
+      this[field] = value;
+    }
+  }
 
   @action
   resetBonusRewardForm = () => {
@@ -1279,10 +1289,10 @@ export class OfferingCreationStore {
     this.issuerOfferingBac = graphql({
       client,
       query: getOfferingBac,
+      fetchPolicy: 'network-only',
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading) {
-          this.initLoad.splice(this.initLoad.indexOf('ISSUER_FRM'), 1);
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading && !this.isListingPage) {
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
@@ -1302,7 +1312,7 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.affiliatedIssuerOfferingBac.loading && !this.isListingPage) {
           this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {});
         }
       },
