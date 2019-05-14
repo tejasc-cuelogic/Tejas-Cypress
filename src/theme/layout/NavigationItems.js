@@ -69,6 +69,10 @@ export class NavItems extends Component {
     }
     return false;
   }
+  mobileMenuClick = () => {
+    this.props.onToggle();
+    this.setState({ activeIndex: 0 });
+  }
   doNothing = (e, path = false, eHandeler = false) => {
     if (eHandeler) {
       e.stopPropagation();
@@ -94,15 +98,21 @@ export class NavItems extends Component {
           <Accordion as={Menu} vertical fluid>
             <Menu.Item>
               <Accordion.Title
-                active={activeIndex === key}
+                active={
+                  activeIndex === key ||
+                  (this.isActive(item.to, location, app, item.subNavigations))
+                }
                 content={typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
                 index={key}
                 onClick={this.handleClick}
               />
               <Accordion.Content
-                active={activeIndex === key}
+                active={
+                  activeIndex === key ||
+                  (this.isActive(item.to, location, app, item.subNavigations))
+                }
                 content={
-                  <Menu.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
+                  <Menu.Menu>
                     {item.subNavigations.map(sn => (
                       sn.external ? (
                         <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
@@ -175,7 +185,7 @@ export class NavItems extends Component {
                   name={item.to}
                   className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
                   as={NavLink}
-                  onClick={isMobile ? onToggle : this.doNothing}
+                  onClick={isMobile ? this.mobileMenuClick : this.doNothing}
                   to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
                 >
                   {item.icon && <Icon className={item.icon} />}
