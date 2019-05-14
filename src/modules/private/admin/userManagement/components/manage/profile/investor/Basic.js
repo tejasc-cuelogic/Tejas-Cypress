@@ -1,23 +1,41 @@
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Icon, Form, Divider, Button, Table } from 'semantic-ui-react';
+import { get } from 'lodash';
+import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
 import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
 import SaasquatchInformation from '../SaasquatchInformation.';
-
-@inject('userDetailsStore', 'uiStore')
+import ReferralsInformation from '../ReferralsInformation';
+@inject('userDetailsStore', 'uiStore', 'referralsStore')
 @withRouter
 @observer
 export default class Basic extends Component {
-  state = { displayMode: true };
+  state = {
+    displayMode: true,
+    availableCredit: 0,
+    spentCredit: 0,
+    totalEarnedCredit: 0,
+    totalReferredUsers: 0,
+  };
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setAddressCheck();
+    this.props.referralsStore
+      .getUserReferralDetails(this.props.userDetailsStore.selectedUserId, false)
+      .then((data) => {
+        this.setState({
+          availableCredit: get(data, 'getUserReferralDetails.availableCredit') || 0,
+          spentCredit: get(data, 'getUserReferralDetails.spentCredit') || 0,
+          totalEarnedCredit: get(data, 'getUserReferralDetails.totalEarnedCredit') || 0,
+          totalReferredUsers: get(data, 'getUserReferralDetails.totalReferredUsers') || 0,
+        });
+      });
   }
   updateMode = (e, val) => {
     e.preventDefault();
@@ -179,32 +197,13 @@ export default class Basic extends Component {
           />
         </Form.Group>
         <Divider />
-        <Header as="h6">CIP Information</Header>
-        <div className="bg-offwhite">
-          <div className="table-wrapper">
-            <Table unstackable basic="very" fixed>
-              <CIPInformation details={details} />
-            </Table>
-          </div>
-        </div>
+        <CIPInformation details={details} />
         <Divider />
-        <Header as="h6">Saasquatch Information</Header>
-        <div className="bg-offwhite">
-          <div className="table-wrapper">
-            <Table unstackable basic="very" fixed>
-              <SaasquatchInformation details={details} />
-            </Table>
-          </div>
-        </div>
+        <SaasquatchInformation details={details} />
         <Divider />
-        <Header as="h6">Other Information</Header>
-        <div className="bg-offwhite">
-          <div className="table-wrapper">
-            <Table unstackable basic="very" fixed>
-              <OtherInformation details={details} />
-            </Table>
-          </div>
-        </div>
+        <ReferralsInformation details={this.state} />
+        <Divider />
+        <OtherInformation details={details} />
         <Divider />
       </Form>
     );

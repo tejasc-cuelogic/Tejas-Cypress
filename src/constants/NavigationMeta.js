@@ -154,8 +154,8 @@ export const PRIVATE_NAV = [
   {
     title: 'Account Settings',
     icon: 'ns-setting',
-    to: 'profile-settings',
-    heading: 'Profile Settings',
+    to: 'account-settings',
+    heading: 'Account Settings',
     hideSubOnSideBar: true,
     subPanel: 1,
     accessibleTo: [],
@@ -202,7 +202,9 @@ export const PRIVATE_NAV = [
       { title: 'Media', to: 'media', accessFor: [1] },
       { title: 'Leadership', to: 'leadership', accessFor: [1] },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
-      { title: 'Transactions', to: 'transactions', accessFor: [3, 4] },
+      {
+        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
       { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
@@ -601,6 +603,19 @@ export const PUBLIC_NAV = [
       { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
     ],
   },
+  {
+    title: 'Legal',
+    to: 'agreements/legal',
+    exact: true,
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Terms of Use', to: 'terms-of-use' },
+      { title: 'Privacy Policy', to: 'privacy-policy' },
+      { title: 'General Disclosures', to: 'general-disclosures' },
+      { title: 'General Risk Factors', to: 'general-risk-factors' },
+      { title: 'Legal Documents', to: 'legal-documents' },
+    ],
+  },
 ];
 
 
@@ -626,17 +641,17 @@ export const FOOTER_NAV = [
   //     { title: 'Press', to: 'press' },
   //   ],
   // },
-  {
-    title: 'Legal',
-    to: 'agreements/legal',
-    exact: true,
-    subPanel: 1,
-    subNavigations: [
-      { title: 'Terms of Use', to: 'terms-of-use' },
-      { title: 'Privacy Policy', to: 'privacy-policy' },
-      { title: 'General Disclosures', to: 'general-disclosures' },
-      { title: 'General Risk Factors', to: 'general-risk-factors' },
-      { title: 'Legal Documents', to: 'legal-documents' },
-    ],
-  },
+  // {
+  //   title: 'Legal',
+  //   to: 'agreements/legal',
+  //   exact: true,
+  //   subPanel: 1,
+  //   subNavigations: [
+  //     { title: 'Terms of Use', to: 'terms-of-use' },
+  //     { title: 'Privacy Policy', to: 'privacy-policy' },
+  //     { title: 'General Disclosures', to: 'general-disclosures' },
+  //     { title: 'General Risk Factors', to: 'general-risk-factors' },
+  //     { title: 'Legal Documents', to: 'legal-documents' },
+  //   ],
+  // },
 ];

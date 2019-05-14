@@ -8,7 +8,7 @@ import { Logo, SocialLinks } from '../shared';
 import { NavItems, NavigationItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
-import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
+import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 // import NSImage from '../../modules/shared/NSImage';
 
 const hasFooter = ['/'];
@@ -32,7 +32,7 @@ export default class NavBarMobile extends Component {
       { to: 'login', title: 'Log In', className: 'basic' },
       { to: 'register', title: 'Sign Up', className: 'secondary' },
     ] :
-      [{ ...stepInRoute, className: 'basic' }];
+      [{ ...stepInRoute, className: 'secondary' }];
     if (location.pathname.startsWith('/invest')) {
       navTitle = 'Investing';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
@@ -121,7 +121,7 @@ export default class NavBarMobile extends Component {
                   onToggle={onToggle}
                   navItems={PUBLIC_NAV}
                 />
-                <NavItems
+                {/* <NavItems
                   refLoc="public"
                   currentUser={currentUser}
                   location={location}
@@ -129,7 +129,7 @@ export default class NavBarMobile extends Component {
                   navStatus={navStatus}
                   onToggle={onToggle}
                   navItems={FOOTER_NAV}
-                />
+                /> */}
                 <div className="public-action-nav mt-20">
                   {!currentUser ? logInSignUp.map(route => (
                     <Menu.Item className="btn-item">
