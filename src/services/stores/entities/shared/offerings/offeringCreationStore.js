@@ -1292,8 +1292,7 @@ export class OfferingCreationStore {
       fetchPolicy: 'network-only',
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading) {
-          this.initLoad.splice(this.initLoad.indexOf('ISSUER_FRM'), 1);
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading && !this.isListingPage) {
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
