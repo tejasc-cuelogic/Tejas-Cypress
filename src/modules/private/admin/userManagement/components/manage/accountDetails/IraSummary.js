@@ -47,6 +47,10 @@ const IndividualSummary = ({ account, investor }) => (
       <Table.Cell>Account Creation Date: </Table.Cell>
       <Table.Cell>{get(account, 'details.created.date') ? moment(get(account, 'details.created.date')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
     </Table.Row>
+    <Table.Row>
+      <Table.Cell>Account Status: </Table.Cell>
+      <Table.Cell>{get(account, 'details.accountStatus') || 'N/A'}</Table.Cell>
+    </Table.Row>
   </Table.Body>
 );
 
