@@ -700,6 +700,57 @@ footer .ui.text.menu{
             }
         }
     }
+    .vertical.accordion{
+        box-shadow:none;
+        .item{
+            padding:0;
+            &:hover, &:focus, &.active{
+                background-color:transparent;
+            }
+            .title{
+                padding:@14px @26px;
+                font-size:@14px;
+                line-height:@22px;
+                color:@neutral;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                &.active{
+                    color:@primary-one;
+                    .icon.dropdown{
+                        transform:scale(-1);
+                    }
+                }
+                .icon.dropdown{
+                    font-family:"Nextseed";
+                    height:22px;
+                    margin:0 0 0 1em;
+                    font-size:@12px;
+                    line-height:22px;
+                    color:@neutral;
+                    vertical-align:top;
+                    transform:none;
+                    &:before{
+                        content:"\E914";
+                    }
+                }
+            }
+            .content{
+                margin:-@2px 0 @17px;
+            }
+            .menu .item{
+                padding:@8px @26px;
+                font-size:@14px;
+                line-height:1em;
+                font-weight:@normal;
+                text-transform:none;
+                color:@tertiary-text;
+                &:hover, &.active{
+                    background:@subtleTransparentBlack;
+                }
+            }
+        }
+    }
     &.left {
         .item {
             text-transform: uppercase;

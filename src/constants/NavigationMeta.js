@@ -603,6 +603,19 @@ export const PUBLIC_NAV = [
       { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
     ],
   },
+  {
+    title: 'Legal',
+    to: 'agreements/legal',
+    exact: true,
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Terms of Use', to: 'terms-of-use' },
+      { title: 'Privacy Policy', to: 'privacy-policy' },
+      { title: 'General Disclosures', to: 'general-disclosures' },
+      { title: 'General Risk Factors', to: 'general-risk-factors' },
+      { title: 'Legal Documents', to: 'legal-documents' },
+    ],
+  },
 ];
 
 
@@ -628,17 +641,17 @@ export const FOOTER_NAV = [
   //     { title: 'Press', to: 'press' },
   //   ],
   // },
-  {
-    title: 'Legal',
-    to: 'agreements/legal',
-    exact: true,
-    subPanel: 1,
-    subNavigations: [
-      { title: 'Terms of Use', to: 'terms-of-use' },
-      { title: 'Privacy Policy', to: 'privacy-policy' },
-      { title: 'General Disclosures', to: 'general-disclosures' },
-      { title: 'General Risk Factors', to: 'general-risk-factors' },
-      { title: 'Legal Documents', to: 'legal-documents' },
-    ],
-  },
+  // {
+  //   title: 'Legal',
+  //   to: 'agreements/legal',
+  //   exact: true,
+  //   subPanel: 1,
+  //   subNavigations: [
+  //     { title: 'Terms of Use', to: 'terms-of-use' },
+  //     { title: 'Privacy Policy', to: 'privacy-policy' },
+  //     { title: 'General Disclosures', to: 'general-disclosures' },
+  //     { title: 'General Risk Factors', to: 'general-risk-factors' },
+  //     { title: 'Legal Documents', to: 'legal-documents' },
+  //   ],
+  // },
 ];
