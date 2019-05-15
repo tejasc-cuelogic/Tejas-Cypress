@@ -41,7 +41,7 @@ export default class PaymentCalculator extends Component {
             top: 5, right: 30, left: 20, bottom: 5,
           }}
         >
-          <XAxis interval={6} dataKey="month" />
+          <XAxis label="Months" interval={6} dataKey="month" />
           <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
             cursor={{ fill: 'none', fillOpacity: 0.00 }}
