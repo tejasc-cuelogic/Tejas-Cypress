@@ -128,7 +128,7 @@ export class Utility {
     return fileData;
   }
 
-  sanitize = (name) => name ? sanitize(name) : '';
+  sanitize = name => (name ? sanitize(name) : '');
 
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
     const funcArray = [];
