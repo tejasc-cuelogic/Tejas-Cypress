@@ -146,7 +146,7 @@ export default class AllKnowledgeBaseItems extends Component {
                   <Accordion.Title onClick={() => this.toggleAccordion(category, 'innerActiveIndex')} className="text-capitalize">
                     <Icon className={!innerActiveIndex.includes(category) ? 'ns-chevron-up' : 'ns-chevron-down'} />
                     {allCategorizedKnowledgeBase[userType][category][0].categoryName}
-                    <Button as={Link} to={`${this.props.match.url}/new/DRAFT/${userType}/${category}`} className="link-button pull-right"><small>+ Add Knowledge Base</small></Button>
+                    <Button as={Link} to={`${this.props.match.url}/new/DRAFT/${userType}/${category}`} className="link-button pull-right"><small>+ Add Knowledge Base Article</small></Button>
                   </Accordion.Title>
                   <Accordion.Content active={!innerActiveIndex.includes(category)}>
                     <SortableList
