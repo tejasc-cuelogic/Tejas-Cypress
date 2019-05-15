@@ -7,6 +7,7 @@ import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
 import { STAGES } from '../../../../../services/constants/admin/offerings';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -75,13 +76,22 @@ export default class Listing extends Component {
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
-                <Table.HeaderCell>Created Date</Table.HeaderCell>
-                <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
+                {stage !== 'engagement' ?
+                  <Aux>
+                    <Table.HeaderCell>Created Date</Table.HeaderCell>
+                    <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
+                  </Aux>
+                  : <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
+                }
                 {stage === 'live' &&
                   <Table.HeaderCell>Days till close</Table.HeaderCell>
                 }
-                <Table.HeaderCell>Lead</Table.HeaderCell>
+                {stage !== 'engagement' ?
+                  <Table.HeaderCell>Lead</Table.HeaderCell>
+                  : <Table.HeaderCell>Repayment Amount</Table.HeaderCell>
+                }
                 <Table.HeaderCell>POC</Table.HeaderCell>
+                <Table.HeaderCell>Securities</Table.HeaderCell>
                 <Table.HeaderCell textAlign="center" />
               </Table.Row>
             </Table.Header>
@@ -100,16 +110,26 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage ?
-                        STAGES[offering.stage].label : '-'
+                        stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) === 0 ?
+                          STAGES.PROCESSING.label
+                        : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 2 ?
+                          STAGES.LOCK.label
+                          : STAGES[offering.stage].label
+                        : STAGES[offering.stage].label
                       }
                     </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      {offering.offering && offering.offering.launch &&
-                      offering.offering.launch.targetDate ?
-                      DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
-                      }
-                    </Table.Cell>
+                    {stage !== 'engagement' ?
+                      <Aux>
+                        <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
+                        <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                          {offering.offering && offering.offering.launch &&
+                          offering.offering.launch.targetDate ?
+                          DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
+                          }
+                        </Table.Cell>
+                      </Aux>
+                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}</Table.Cell>
+                    }
                     {stage === 'live' &&
                       <Table.Cell>
                         {offering.closureSummary && offering.closureSummary.processingDate ?
@@ -117,7 +137,10 @@ export default class Listing extends Component {
                         }
                       </Table.Cell>
                     }
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
+                    {stage !== 'engagement' ?
+                      <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
+                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `$${get(offering, 'closureSummary.repayment.currentRepaidAmount')} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
+                    }
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
                         {offering.issuerDetails ?
@@ -134,9 +157,13 @@ export default class Listing extends Component {
                         }
                       </p>
                     </Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                      {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+                    </Table.Cell>
                     <Table.Cell collapsing textAlign="center">
                       <Button.Group>
                         {Object.keys(actions).map(action => (
+                          action.label === 'Delete' && stage === 'engagement' ? '' :
                           <Button icon className="link-button" >
                             <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
                           </Button>
