@@ -86,12 +86,14 @@ export default class Listing extends Component {
                 {stage === 'live' &&
                   <Table.HeaderCell>Days till close</Table.HeaderCell>
                 }
-                {stage !== 'engagement' ?
+                {stage !== 'engagement' &&
                   <Table.HeaderCell>Lead</Table.HeaderCell>
-                  : <Table.HeaderCell>Repayment Amount</Table.HeaderCell>
                 }
                 <Table.HeaderCell>POC</Table.HeaderCell>
                 <Table.HeaderCell>Securities</Table.HeaderCell>
+                {stage === 'engagement' &&
+                  <Table.HeaderCell>Repayment Amount</Table.HeaderCell>
+                }
                 <Table.HeaderCell textAlign="center" />
               </Table.Row>
             </Table.Header>
@@ -137,9 +139,8 @@ export default class Listing extends Component {
                         }
                       </Table.Cell>
                     }
-                    {stage !== 'engagement' ?
+                    {stage !== 'engagement' &&
                       <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
-                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))` (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
                     }
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
@@ -160,6 +161,9 @@ export default class Listing extends Component {
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
                     </Table.Cell>
+                    {stage === 'engagement' &&
+                      <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))` (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
+                    }
                     <Table.Cell collapsing textAlign="center">
                       <Button.Group>
                         {Object.keys(actions).map(action => (
