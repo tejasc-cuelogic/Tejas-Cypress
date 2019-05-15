@@ -355,7 +355,7 @@ export class CampaignStore {
       totalPaid = totalPaid + item.interest + item.principal;
       payChart.push({
         month: index + 1,
-        'Projected total payment': money.floatToAmount(totalPaid, 2),
+        'Projected total payment': parseFloat((totalPaid).toFixed(2)),
       });
     });
     this.totalPaymentChart = payChart;
