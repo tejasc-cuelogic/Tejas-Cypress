@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import _ from 'lodash';
 import moment from 'moment';
 import money from 'money-math';
+import sanitize from 'sanitize-filename';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 
@@ -126,6 +127,8 @@ export class Utility {
     }
     return fileData;
   }
+
+  sanitize = (name) => name ? sanitize(name) : '';
 
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
     const funcArray = [];
