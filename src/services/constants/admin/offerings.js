@@ -18,7 +18,7 @@ export const STAGES = {
     ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
   },
   LOCK: {
-    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
+    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Lock In',
   },
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
