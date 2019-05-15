@@ -47,7 +47,7 @@ export default class ManageKnowledgeBase extends Component {
             addon={
               <Grid.Column width={6} textAlign="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
-                  Add Knowledge Base
+                  New KB Article
                 </Button>
               </Grid.Column>
             }
