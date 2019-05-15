@@ -1,6 +1,7 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
@@ -54,6 +55,10 @@ export class AccreditationStore {
   @observable inProgress = [];
   @observable docsToUpload = [];
   @observable filingStatus = null;
+  @observable sortOrder = {
+    column: null,
+    direction: 'asc',
+  }
 
   @action
   addLoadingUserId = (requestId) => {
@@ -389,8 +394,14 @@ export class AccreditationStore {
     return this.data.loading || this.userData.loading;
   }
   @computed get accreditations() {
-    return (this.data && this.data.data && this.data.data.listAccreditation &&
-      this.data.data.listAccreditation.accreditation) || [];
+    if (this.sortOrder.column && this.sortOrder.direction && get(this.data, 'data.listAccreditation.accreditation')) {
+      return orderBy(
+        this.data.data.listAccreditation.accreditation,
+        [accreditation => (this.sortOrder.column === 'requestDate' ? moment(accreditation[this.sortOrder.column]).unix() : accreditation[this.sortOrder.column] && accreditation[this.sortOrder.column].toString().toLowerCase())],
+        [this.sortOrder.direction],
+      );
+    }
+    return (this.data && get(this.data, 'data.listAccreditation.accreditation')) || [];
   }
 
   @action
@@ -1040,6 +1051,11 @@ export class AccreditationStore {
       search: {
       },
     };
+  }
+  @action
+  setSortingOrder = (column = null, direction = null) => {
+    this.sortOrder.column = column;
+    this.sortOrder.direction = direction;
   }
 }
 export default new AccreditationStore();

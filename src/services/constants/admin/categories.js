@@ -3,7 +3,7 @@ export const CATEGORY_DATA = [
   { title: 'Issuer FAQ', enum: 'ISSUER_FAQ' },
   { title: 'Issuer Knowledge Base', enum: 'ISSUER_KB' },
   { title: 'Investor Knowledge Base', enum: 'INVESTOR_KB' },
-  { title: 'Offerings', enum: 'OFFERINGS' },
+  // { title: 'Offerings', enum: 'OFFERINGS' },
   { title: 'Insights', enum: 'INSIGHTS' },
 ];
 
