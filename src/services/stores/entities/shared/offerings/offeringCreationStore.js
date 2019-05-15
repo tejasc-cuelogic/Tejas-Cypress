@@ -320,7 +320,7 @@ export class OfferingCreationStore {
     const fileObj = {
       obj: this[form].fields[name].base64String,
       // type: this[form].fields[name].meta.type,
-      name: this[form].fields[name].fileName,
+      name: Helper.sanitize(this[form].fields[name].fileName),
     };
     fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
       .then((res) => {

@@ -112,7 +112,7 @@ query getCrowdPayUsers($limit: Int, $page: Int, $accountType: InvestorAccountTyp
                 }
               }
               addressProof {
-                 fileName
+                fileName
                 fileHandle {
                   boxFolderId
                   boxFileId
