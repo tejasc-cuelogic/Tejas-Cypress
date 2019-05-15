@@ -691,12 +691,9 @@ footer .ui.text.menu{
         .public-action-nav .item {
             border-bottom: 0;
             padding: @8px @26px;
-            .ui.button{
-                width: 212px;
-                &.basic {
-                    box-shadow: 0 0 0 1px @thumbInactiveBackground inset !important;
-                    border: none !important;
-                }
+            .ui.button.basic{
+                box-shadow:0 0 0 1px @thumbInactiveBackground inset !important;
+                border:none !important;
             }
         }
     }
