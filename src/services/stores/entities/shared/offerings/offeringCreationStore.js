@@ -1173,7 +1173,7 @@ export class OfferingCreationStore {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
       const closureSummary = { ...getOfferingById.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
-      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple };
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
         toJS(getOfferingById.closureSummary),
