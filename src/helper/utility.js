@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import _ from 'lodash';
 import moment from 'moment';
 import money from 'money-math';
-import sanitize from 'sanitize-filename';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 
@@ -120,7 +119,7 @@ export class Utility {
     const fileData = {};
     if (file) {
       const fileInfo = file;
-      fileData.fileName = fileInfo.name.replace(/ /g, '_');
+      fileData.fileName = this.sanitize(fileInfo.name);
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
       fileData.fileSize = fileInfo.size;
@@ -128,7 +127,7 @@ export class Utility {
     return fileData;
   }
 
-  sanitize = name => (name ? sanitize(name) : '');
+  sanitize = name => (name ? name.replace(/[^a-z0-9._-]+/gi, '_') : '');
 
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
     const funcArray = [];
