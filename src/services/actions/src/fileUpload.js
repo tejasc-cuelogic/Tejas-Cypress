@@ -2,6 +2,7 @@ import moment from 'moment';
 import { createUploadEntry, removeUploadedFile, createUploadEntryAccreditationAdmin } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
+import Helper from '../../../helper/utility';
 import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
 
@@ -73,8 +74,10 @@ export class FileUpload {
 
   uploadToS3 = (fileObj, dir) => new Promise((resolve, reject) => {
     const key = `${dir}/${moment().unix()}_${fileObj.name}`;
+    const dataToUpload = Helper.isBase64(fileObj.obj) ? Helper.b64toBlob(fileObj.obj)
+      : fileObj.obj;
     commonStore.getCdnSignedUrl(key).then((res) => {
-      apiService.uploadOnS3(res.data.createCdnSignedUrl, fileObj.obj, fileObj.type).then(() => resolve(`${key}`))
+      apiService.uploadOnS3(res.data.createCdnSignedUrl, dataToUpload, fileObj.type).then(() => resolve(`${key}`))
         .catch(err => reject(err));
     }).catch(err => reject(err));
   });

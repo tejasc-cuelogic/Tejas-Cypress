@@ -94,8 +94,7 @@ export class NavItems extends Component {
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map((item, key) => (
       <Aux>
-        {item.subPanel === 1 && item.subNavigations &&
-        !item.hideSubOnSideBar && isMobile && !isApp ? (
+        {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (
           <Accordion as={Menu} vertical fluid>
             <Menu.Item>
               <Accordion.Title
