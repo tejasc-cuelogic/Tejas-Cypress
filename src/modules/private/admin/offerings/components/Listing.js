@@ -139,7 +139,7 @@ export default class Listing extends Component {
                     }
                     {stage !== 'engagement' ?
                       <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
-                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `$${get(offering, 'closureSummary.repayment.currentRepaidAmount')} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
+                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))` (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
                     }
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
