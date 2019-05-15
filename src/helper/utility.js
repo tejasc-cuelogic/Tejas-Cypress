@@ -119,13 +119,15 @@ export class Utility {
     const fileData = {};
     if (file) {
       const fileInfo = file;
-      fileData.fileName = fileInfo.name.replace(/ /g, '_');
+      fileData.fileName = this.sanitize(fileInfo.name);
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
       fileData.fileSize = fileInfo.size;
     }
     return fileData;
   }
+
+  sanitize = name => (name ? name.replace(/[^a-z0-9._-]+/gi, '_') : '');
 
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
     const funcArray = [];
