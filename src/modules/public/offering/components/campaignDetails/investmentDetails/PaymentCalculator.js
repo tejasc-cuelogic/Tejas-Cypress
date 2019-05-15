@@ -41,13 +41,22 @@ export default class PaymentCalculator extends Component {
             top: 5, right: 30, left: 20, bottom: 5,
           }}
         >
-          <XAxis label="Months" interval={6} dataKey="month" />
+          <XAxis
+            label={{
+              value: 'Months',
+              position: 'insideBottom',
+              offset: -20,
+              fill: '#676a73',
+            }}
+            interval={6}
+            dataKey="month"
+          />
           <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
             cursor={{ fill: 'none', fillOpacity: 0.00 }}
             content={({ payload }) => (<CustomTooltip data={payload[0]} />)}
           />
-          <Legend />
+          <Legend wrapperStyle={{ bottom: -20, marginLeft: 30 }} />
           <Line dataKey="Projected total payment" onMouseOver={this.handleHover} />
         </LineChart>
       </ResponsiveContainer>
