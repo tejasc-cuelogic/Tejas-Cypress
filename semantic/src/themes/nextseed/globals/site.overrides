@@ -2974,5 +2974,5 @@ input[type='range']::-webkit-slider-thumb {
 	}
 }
 .activity-component {
-	margin: -1.42857143rem!important;
+	margin: -1.42857143rem;
 }
