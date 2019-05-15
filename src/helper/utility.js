@@ -198,6 +198,38 @@ export class Utility {
       console.error(err);
     }
   }
+
+  isBase64 = (data) => {
+    try {
+      const block = data.split(';');
+      return block[1].split(',')[0] === 'base64';
+    } catch (e) {
+      return false;
+    }
+  }
+  b64toBlob = (data, sliceSize = 512) => {
+    const block = data.split(';');
+    // Get the content type of the image
+    const contentType = block[0].split(':')[1];
+    // get the real base64 content of the file
+    const b64Data = block[1].split(',')[1];
+    const size = sliceSize || 512;
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += size) {
+      const slice = byteCharacters.slice(offset, offset + size);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i += 1) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  }
 }
 
 export default new Utility();

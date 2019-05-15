@@ -182,16 +182,16 @@ export const BUSINESS_PRE_QUALIFICATION = {
         value: 'HAS_NOT_SOLD_SECURITIES',
       },
       {
-        label: 'I have never filed for bankruptcy.',
+        label: 'The control owner(s) have not filed for bankruptcy.',
         value: 'HAS_NEVER_FILED_BANKRUPTCY',
         tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy',
       },
       {
-        label: 'Neither I, nor any entity under my control, have ever been found guilty of fraud or similar crimes, and neither I, nor any entity under my control, are currently being charged with fraud or any similar crime. ',
+        label: 'Neither I, nor any entity under my control, have ever been found guilty of fraud or similar crimes.',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        label: 'Neither I, nor any entity under my control, are currently being charged with fraud or any similar crime.',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
       },
     ],
