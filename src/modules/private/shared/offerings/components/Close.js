@@ -9,7 +9,7 @@ import { MaskedInput } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 
 const closingActions = {
-  ENUM1: { label: 'Soft Close Notification', ref: 1, enum: 'ENUM1' },
+  ENUM1: { label: 'Soft Close Notification', ref: 1, enum: 'SOFT_CLOSE_NOTIFICATION' },
   ENUM2: { label: 'Confrim Balances', ref: 1, enum: 'ENUM1' },
   ENUM3: { label: 'Issue Credits', ref: 1, enum: 'ENUM1' },
   ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'ENUM1' },
@@ -54,7 +54,7 @@ export default class Close extends Component {
     await offeringClose({
       offeringId: offer.id,
       process: status,
-    })
+    });
     console.log(status);
   }
   handleCloseOffering = () => {
@@ -130,7 +130,7 @@ export default class Close extends Component {
                   number
                 />
                 <Button.Group className="mt-50">
-                  {filter(closingActions, a => a.ref === 1).map((fA, key) => (
+                  {filter(closingActions, a => a.ref === 1).map(fA => (
                     <Button onClick={() => this.closeAction(fA.enum)} primary>{fA.label}</Button>
                   ))}
                 </Button.Group>
