@@ -2,6 +2,7 @@
 import fetch from 'isomorphic-fetch';
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import Auth from '@aws-amplify/auth';
 import { get } from 'lodash';
 import { authStore } from '../services/stores';
 import { API_ROOT } from '../constants/common';
@@ -23,9 +24,11 @@ authStore.resetIdelTimer();
 export const GqlClient = new ApolloClient({
   uri,
   request: async (operation) => {
+    const session = await Auth.currentSession();
+    const jwtToken = get(session, 'idToken.jwtToken');
     operation.setContext({
       headers: {
-        authorization: window.localStorage.getItem('jwt') ? `Bearer ${window.localStorage.getItem('jwt')}` : '',
+        authorization: jwtToken ? `Bearer ${jwtToken}` : '',
       },
     });
   },
