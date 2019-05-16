@@ -46,10 +46,9 @@ export const completeInvestorProfile = () => {
         break;
       case 'Investment Experience':
         cy.get('input[name="experienceLevel"]').check('GOOD', { force: true });
+        cy.get('div[role="listitem"]').get('[type="checkbox"]').parent()
+          .click({ multiple: true });
         cy.wait(3000);
-        cy.get('div[role="listitem"]').get('[type="checkbox"]').then(($input) => {
-          $input[0].setAttribute('checked', true);
-        });
         cy.get('.center-align > button').contains('Continue to Account').click({ force: true });
         waitForAPIcall('upsertProfile');
         cy.wait(3000);

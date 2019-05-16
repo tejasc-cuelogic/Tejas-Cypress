@@ -93,6 +93,7 @@ const MySidebar = observer(props => (
           props.signupStatus &&
           !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
            props.signupStatus.investorProfileCompleted &&
+           props.signupStatus.inActiveAccounts.length > 0 &&
            <Link className="add-account" to="/app/summary/account-creation">
              <Icon name="add circle" />
              <span>Add New Account</span>
