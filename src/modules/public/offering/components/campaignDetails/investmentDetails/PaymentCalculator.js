@@ -1,18 +1,18 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Cell } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import Helper from '../../../../../../helper/utility';
 
 class CustomTooltip extends Component {
   render() {
-    const { active, data } = this.props;
-    if (active) {
+    const { data } = this.props;
+    if (data && data.payload) {
       return (
         <div className="custom-tooltip">
-          <p><b>{`${data.month} Month`}</b></p>
+          <p><b>{`${data.payload.month} Month`}</b></p>
           <p className="label" style={{ fontWeight: 'normal' }}>Projected total payment</p>
-          <p className="highlight-text">{Helper.CurrencyFormat(data['Projected total payment'])}</p>
+          <p className="highlight-text">{Helper.CurrencyFormat(data.payload['Projected total payment'])}</p>
         </div>
       );
     }
@@ -20,25 +20,20 @@ class CustomTooltip extends Component {
   }
 }
 export default class PaymentCalculator extends Component {
-  state = {
-    activeIndex: 0,
-  }
-  handleHover = (data1, index) => {
-    this.setState({
-      activeIndex: index,
-    });
-  }
-  handleHover = (data1, index) => {
-    this.setState({
-      activeIndex: index,
-    });
-  }
+  // state = {
+  //   activeIndex: 0,
+  // }
+  // handleHover = (data1, index) => {
+  //   this.setState({
+  //     activeIndex: index,
+  //   });
+  // }
 
   formatY = item => Helper.CurrencyFormat(item);
   render() {
     return (
       <ResponsiveContainer height={320}>
-        <BarChart
+        <LineChart
           width={600}
           height={300}
           data={this.props.data}
@@ -46,22 +41,24 @@ export default class PaymentCalculator extends Component {
             top: 5, right: 30, left: 20, bottom: 5,
           }}
         >
-          <XAxis interval={6} dataKey="month" />
+          <XAxis
+            label={{
+              value: 'Months',
+              position: 'insideBottom',
+              offset: -20,
+              fill: '#676a73',
+            }}
+            interval={6}
+            dataKey="month"
+          />
           <YAxis tickLine={false} tickFormatter={this.formatY} axisLine={false} orientation="left" />
           <Tooltip
             cursor={{ fill: 'none', fillOpacity: 0.00 }}
-            content={<CustomTooltip data={this.props.data[this.state.activeIndex]} />}
+            content={({ payload }) => (<CustomTooltip data={payload[0]} />)}
           />
-          <Legend />
-          <Bar dataKey="Projected total payment" barSize={7} onMouseOver={this.handleHover}>
-            {
-              this.props.data.map((entry, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Cell cursor="pointer" fill={index === this.state.activeIndex ? '#263E64' : '#1781FB'} key={`cell-${index}`} />
-              ))
-            }
-          </Bar>
-        </BarChart>
+          <Legend wrapperStyle={{ bottom: -20, marginLeft: 30 }} />
+          <Line dataKey="Projected total payment" onMouseOver={this.handleHover} />
+        </LineChart>
       </ResponsiveContainer>
     );
   }

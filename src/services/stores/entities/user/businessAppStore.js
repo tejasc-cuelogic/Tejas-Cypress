@@ -399,6 +399,9 @@ export class BusinessAppStore {
         data.financialStatements.fiveYearProjection.length) {
         this.setFileObjectToForm(data.financialStatements.fiveYearProjection, 'BUSINESS_PERF_FRM', 'fiveYearProjection');
       }
+      if (data.sourcesAndUses && data.sourcesAndUses.length) {
+        this.setFileObjectToForm(data.sourcesAndUses, 'BUSINESS_PERF_FRM', 'sourcesAndUses');
+      }
       if ((this.currentApplicationType === 'business' && this.getBusinessTypeCondtion) || (this.currentApplicationType !== 'business' && this.getOwnPropertyCondtion)) {
         ['priorToThreeYear', 'ytd'].forEach((field) => {
           if (data.financialStatements[field] && data.financialStatements[field].length) {
@@ -687,6 +690,10 @@ export class BusinessAppStore {
           this.BUSINESS_PERF_FRM.fields.fiveYearProjection,
         ),
       },
+      sourcesAndUses: this.getFilesArray(
+        data.sourcesAndUses.value,
+        this.BUSINESS_PERF_FRM.fields.sourcesAndUses,
+      ),
     };
     if (this.currentApplicationType === 'business') {
       inputData = {

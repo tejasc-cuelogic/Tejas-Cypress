@@ -17,7 +17,7 @@ export default class ProcessFullAccount extends Component {
   render() {
     const { dataStore } = this.props;
     const {
-      PROCESS_FULL_ACCOUNT_META_FRM, formChange,
+      PROCESS_FULL_ACCOUNT_META_FRM, formChange, inProgress,
     } = dataStore;
     return (
       <Card fluid className="elastic-search">
@@ -49,7 +49,7 @@ export default class ProcessFullAccount extends Component {
                 />))
               }
               <Form.Field width={4}>
-                <Button primary fluid content="Submit" disabled={!PROCESS_FULL_ACCOUNT_META_FRM.meta.isValid} />
+                <Button primary fluid content="Submit" disabled={!PROCESS_FULL_ACCOUNT_META_FRM.meta.isValid || inProgress.processFullAccount} loading={inProgress.processFullAccount} />
               </Form.Field>
             </Form.Group>
           </Form>

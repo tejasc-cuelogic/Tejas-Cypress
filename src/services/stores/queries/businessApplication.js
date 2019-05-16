@@ -278,6 +278,11 @@ query _getBusinessApplicationById ($id: String!) {
           fileName
         }
       }
+      sourcesAndUses {
+        fileId
+        fileName
+        fileHandle
+      }
       performance {
         nextYearSnapshot {
           grossSales
