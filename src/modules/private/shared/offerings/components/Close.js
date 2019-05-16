@@ -10,7 +10,7 @@ import { DataFormatter } from '../../../../../helper';
 
 const closingActions = {
   ENUM1: { label: 'Soft Close Notification', ref: 1, enum: 'SOFT_CLOSE_NOTIFICATION' },
-  ENUM2: { label: 'Confrim Balances', ref: 1, enum: 'CHECK_BALANCE' },
+  ENUM2: { label: 'Confirm Balances', ref: 1, enum: 'CHECK_BALANCE' },
   ENUM3: { label: 'Issue Credits', ref: 1, enum: 'ISSUE_CREDITS' },
   ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'FUND_ESCROW' },
   ENUM5: { label: 'Process Notes', ref: 2, enum: 'PROCESS_NOTES' },
@@ -70,6 +70,7 @@ export default class Close extends Component {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
+    this.props.uiStore.setProgress('CLOSEME');
     new Promise((res, rej) => {
       updateOfferingMutation(
         currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
@@ -77,6 +78,7 @@ export default class Close extends Component {
       );
     })
       .then(() => {
+        this.props.uiStore.setProgress(false);
         this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
       });
   }
