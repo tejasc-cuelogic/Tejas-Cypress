@@ -71,16 +71,17 @@ export class Auth {
     return (
       new Promise((res, rej) => {
         AmplifyAuth.currentAuthenticatedUser().then((user) => {
-          const mapData = this.parseRoles(this.mapCognitoToken(user.attributes));
+          const { signInUserSession, attributes } = user;
+          const mapData = this.parseRoles(this.mapCognitoToken(attributes));
           userStore.setCurrentUser(mapData);
           authStore.setUserLoggedIn(true);
-          commonStore.setToken(user.signInUserSession.idToken.jwtToken);
+          commonStore.setToken(signInUserSession.idToken.jwtToken);
           AWS.config.region = AWS_REGION;
           if (userStore.isCurrentUserWithRole('admin')) {
-            this.setAWSAdminAccess(user.signInUserSession.idToken.jwtToken);
+            this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
           }
 
-          return res({ attributes: user.attributes, session: user.signInUserSession });
+          return res({ attributes, session: signInUserSession });
         }).catch((err) => {
           console.log('error in verifysession', err);
           rej(err);
@@ -109,7 +110,6 @@ export class Auth {
       jwtToken;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
-
     return AWS.config.credentials.refresh((error) => {
       if (error) {
         uiStore.setErrors(this.simpleErr(error));
@@ -293,15 +293,12 @@ export class Auth {
     uiStore.setProgress();
     try {
       const passData = mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
-      console.log('passData', passData);
       const user = await AmplifyAuth.currentAuthenticatedUser();
-      console.log('userData', user);
       if (user) {
         await AmplifyAuth.changePassword(user, passData.oldPasswd, passData.newPasswd);
         Helper.toast('Password changed successfully', 'success');
       }
     } catch (err) {
-      console.log('change pass err', err);
       uiStore.setErrors(this.simpleErr(err));
       throw err;
     } finally {
@@ -515,7 +512,6 @@ export class Auth {
   parseRoles = (data) => {
     const newData = data;
     newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
-    // newData.capabilities = (data.capabilities) ? JSON.parse(data.capabilities) : [];
     return newData;
   };
 
@@ -527,12 +523,6 @@ export class Auth {
   resendConfirmationCode = () => {
     uiStore.setProgress();
     const { email } = authStore.CONFIRM_FRM.fields;
-
-    // Auth.resendSignUp(username).then(() => {
-    //   console.log('code resent successfully');
-    // }).catch(e => {
-    //   console.log(e);
-    // });
 
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: email.value.toLowerCase(),

@@ -58,17 +58,8 @@ export class AuthStore {
   }
 
   @action
-  setUserId = (userId) => {
-    this.userId = userId;
-  }
-
-  @action
   setPwdVisibilityStatus = () => {
-    if (this.pwdInputType === 'password') {
-      this.pwdInputType = 'text';
-    } else {
-      this.pwdInputType = 'password';
-    }
+    this.pwdInputType = this.pwdInputType === 'password' ? 'text' : 'password';
   }
 
   @action
@@ -293,9 +284,6 @@ export class AuthStore {
           uiStore.setProgress(false);
           reject(err);
         });
-      // .finally(() => {
-      //   uiStore.setProgress(false);
-      // });
     });
   }
 
