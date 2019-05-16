@@ -121,8 +121,8 @@ export default class ChooseOffer extends Component {
               <Card.Content extra className="center-align">
                 { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? '' :
                 <Button.Group>
-                  <Button color="red" loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
-                  <Button primary loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
+                  <Button color="red" disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
+                  <Button primary disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
                 </Button.Group>
                 }
               </Card.Content>
