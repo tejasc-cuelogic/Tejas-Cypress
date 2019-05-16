@@ -7,6 +7,7 @@ import { capitalize, isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from './../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
+import { DELETED_ACCOUNT_STATUS } from '../../../../constants/user';
 
 export class UserListingStore {
   @observable usersData = [];
@@ -28,14 +29,25 @@ export class UserListingStore {
   @action
   initRequest = (reqParams, getAllUsers = false) => {
     const {
-      keyword, accountType, accountStatus, startDate, endDate,
+      keyword, accountType, accountStatus, startDate, endDate, isDeleted,
     } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
+    let deletedAccountStatus = [];
+    if (isDeleted) {
+      if (accountType && accountType.length && !accountStatus) {
+        accountType.forEach((s) => {
+          const statusArray = (s === 'ADMIN' || s === 'ISSUER') ? DELETED_ACCOUNT_STATUS[s] : DELETED_ACCOUNT_STATUS.INVESTOR;
+          deletedAccountStatus = [...deletedAccountStatus, ...statusArray];
+        });
+      } else if (accountStatus) {
+        deletedAccountStatus = [...deletedAccountStatus, ...DELETED_ACCOUNT_STATUS[accountStatus]];
+      }
+    }
     let params = {
       search: keyword,
       accountType,
-      accountStatus,
+      accountStatus: isDeleted ? deletedAccountStatus : accountStatus,
       page: reqParams ? reqParams.page : 1,
       limit: getAllUsers ? 100 : this.requestState.perPage,
     };
@@ -122,7 +134,7 @@ export class UserListingStore {
   }
 
   @action
-  setInitiateSrch = (name, value) => {
+  setInitiateSrch = (name, value, type = false) => {
     if (name === 'startDate' || name === 'endDate') {
       this.requestState.search[name] = value;
       if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
@@ -132,6 +144,8 @@ export class UserListingStore {
     } else {
       const srchParams = { ...this.requestState.search };
       if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else if (type === 'checkbox') {
         srchParams[name] = value;
       } else {
         delete srchParams[name];
