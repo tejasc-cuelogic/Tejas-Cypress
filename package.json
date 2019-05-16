@@ -1,7 +1,8 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "ns-client",
+  "version": "0.0.0",
   "private": true,
+  "description": "NS-Client",
   "devDependencies": {
     "copy-webpack-plugin": "^4.6.0",
     "eslint-config-airbnb": "^16.1.0",
