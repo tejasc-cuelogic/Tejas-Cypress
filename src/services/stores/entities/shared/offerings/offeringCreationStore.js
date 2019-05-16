@@ -1515,6 +1515,7 @@ export class OfferingCreationStore {
       });
   }
 
+  @action
   offeringClose = (params) => {
     client
       .mutate({

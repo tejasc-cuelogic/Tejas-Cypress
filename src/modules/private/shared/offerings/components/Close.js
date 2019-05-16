@@ -50,7 +50,8 @@ export default class Close extends Component {
     this.setState({ open: false });
   }
   closeAction = async (status) => {
-    const { offer, offeringClose } = this.props.offeringsStore;
+    const { offer } = this.props.offeringsStore;
+    const { offeringClose } = this.props.offeringCreationStore;
     await offeringClose({
       offeringId: offer.id,
       process: status,
