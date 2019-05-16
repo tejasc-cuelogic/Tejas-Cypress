@@ -406,8 +406,12 @@ export class CampaignStore {
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
       const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
       if (regulation === 'BD_CF_506C' && !isInProcessing) {
-        resultObject.isBannerShow = true;
-        resultObject.bannerFirstText = 'NEW';
+        if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
+          closeDaysToRemains === null) &&
+          launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+          resultObject.isBannerShow = true;
+          resultObject.bannerFirstText = 'NEW';
+        }
         resultObject.bannerSecondText =
           this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
