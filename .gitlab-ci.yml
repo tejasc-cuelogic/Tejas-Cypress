@@ -201,7 +201,7 @@ build:qa:
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME && cd ../..
     - npm install
-    - npm run build  
+    - npm run build
 
 #Deploying code to s3 bucket
 deploy:qa:
@@ -212,9 +212,10 @@ deploy:qa:
   environment:
     name: qa
     url: http://$QA_URL
-  script: 
+  script:
     # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../.. #- sh deployApp.sh $QA_URL
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $QA_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:qa
 
