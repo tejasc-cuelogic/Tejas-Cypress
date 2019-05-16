@@ -53,7 +53,7 @@ export default class Close extends Component {
   closeAction = async (status, step) => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
-    if (step === 'CLOSEME') {
+    if (status === 'CLOSEME') {
       this.handleCloseOffering();
     } else {
       await offeringClose(
