@@ -1517,7 +1517,7 @@ export class OfferingCreationStore {
 
   @action
   offeringClose = (params, step) => {
-    const formData = Validator.evaluateFormData(this[`${OFFERING_CLOSE_}${step}`].fields);
+    const formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     console.log(formData);
     client
       .mutate({
