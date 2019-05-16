@@ -152,7 +152,7 @@ export default class Close extends Component {
                   }
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 2).map(fA => (
-                      <Button primary>{fA.label}</Button>
+                      <Button onClick={() => this.closeAction(fA.enum)} primary>{fA.label}</Button>
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
@@ -168,7 +168,7 @@ export default class Close extends Component {
                   />
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
-                      <Button primary>{fA.label}</Button>
+                      <Button onClick={() => this.closeAction(fA.enum)} primary>{fA.label}</Button>
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
