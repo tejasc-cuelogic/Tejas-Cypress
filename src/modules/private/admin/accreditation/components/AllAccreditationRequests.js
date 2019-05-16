@@ -12,7 +12,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
-@inject('accreditationStore', 'commonStore')
+@inject('accreditationStore', 'commonStore', 'userStore')
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
@@ -20,6 +20,10 @@ export default class AllAccreditationRequests extends Component {
     if (this.props.match.isExact) {
       this.props.accreditationStore.initRequest();
     }
+  }
+  handleSort = clickedColumn => () => {
+    const { setSortingOrder, sortOrder } = this.props.accreditationStore;
+    setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
   handleDocumentsLink = (e, folderId) => {
     e.preventDefault();
@@ -37,8 +41,11 @@ export default class AllAccreditationRequests extends Component {
     const { match, accreditationStore, commonStore } = this.props;
     const { inProgress } = commonStore;
     const {
-      accreditations, loading, count, requestState, emailVerifier,
+      accreditations, loading, count, requestState, emailVerifier, sortOrder,
     } = accreditationStore;
+
+    const access = this.props.userStore.myAccessForModule('ACCREDITATION');
+    const isManager = access.asManager;
     if (loading) {
       return <InlineLoader />;
     }
@@ -46,15 +53,45 @@ export default class AllAccreditationRequests extends Component {
     return (
       <Card fluid>
         <div className="table-wrapper">
-          <Table unstackable className="application-list">
+          <Table sortable unstackable className="application-list">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Investor Name</Table.HeaderCell>
-                <Table.HeaderCell>Requested Date</Table.HeaderCell>
-                <Table.HeaderCell>Account Type</Table.HeaderCell>
-                <Table.HeaderCell>Type</Table.HeaderCell>
-                <Table.HeaderCell>Method</Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('firstName')}
+                  sorted={sortOrder.column === 'firstName' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Investor Name
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('requestDate')}
+                  sorted={sortOrder.column === 'requestDate' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Requested Date
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('accountType')}
+                  sorted={sortOrder.column === 'accountType' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Account Type
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('method')}
+                  sorted={sortOrder.column === 'method' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Type
+                </Table.HeaderCell>
+                {isManager &&
+                  <Table.HeaderCell>Method</Table.HeaderCell>
+                }
                 <Table.HeaderCell textAlign="center" />
+                {requestState.search.status === 'CONFIRMED' &&
+                  <Table.HeaderCell
+                    onClick={this.handleSort('expiration')}
+                    sorted={sortOrder.column === 'expiration' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                  >
+                    Expiration Date
+                  </Table.HeaderCell>
+                }
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -91,25 +128,27 @@ export default class AllAccreditationRequests extends Component {
                         }
                       </p>
                     </Table.Cell>
-                    <Table.Cell>
-                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
-                        accreditation.assetsUpload[0].fileInfo &&
-                        accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                        (inProgress === accreditation.assetsUpload[0]
-                          .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p> :
-                          <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
-                          )
-                          : <p className="note">N/A</p>
-                        : 'Verifier'}
-                        {accreditation.verifier &&
-                          <Aux>
-                            <br /><b>Role: </b> {accreditation.verifier.role}
-                            <br /><b>Email: </b> {accreditation.verifier.email}
-                          </Aux>
-                        }
-                      </p>
-                    </Table.Cell>
-                    {accreditation.accreditationStatus === 'REQUESTED' ?
+                    {isManager &&
+                      <Table.Cell>
+                        <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
+                          accreditation.assetsUpload[0].fileInfo &&
+                          accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
+                          (inProgress === accreditation.assetsUpload[0]
+                            .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p> :
+                            <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
+                            )
+                            : <p className="note">N/A</p>
+                          : 'Verifier'}
+                          {accreditation.verifier &&
+                            <Aux>
+                              <br /><b>Role: </b> {accreditation.verifier.role}
+                              <br /><b>Email: </b> {accreditation.verifier.email}
+                            </Aux>
+                          }
+                        </p>
+                      </Table.Cell>
+                    }
+                    {accreditation.accreditationStatus === 'REQUESTED' && isManager ?
                       <Aux>
                         <Actions
                           accountId={accreditation.accountId}
@@ -122,8 +161,11 @@ export default class AllAccreditationRequests extends Component {
                         />
                       </Aux> :
                       <Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}</p>
                       </Table.Cell>
+                    }
+                    {accreditation.accreditationStatus === 'CONFIRMED' &&
+                      <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
                     }
                   </Table.Row>
                 ))

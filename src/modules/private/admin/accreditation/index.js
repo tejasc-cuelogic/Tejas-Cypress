@@ -12,6 +12,9 @@ export default class CrowdPay extends Component {
   componentWillMount() {
     this.props.accreditationStore.initRequest();
   }
+  componentWillUnmount() {
+    this.props.accreditationStore.resetFilters();
+  }
   setSearchParam = (e, { name, value }) =>
     this.props.accreditationStore.setInitiateSrch(name, value);
   toggleSearch = () => this.props.accreditationStore.toggleSearch();
@@ -21,7 +24,7 @@ export default class CrowdPay extends Component {
     }
   }
   change = (date, field) => {
-    if (date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+    if ((date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) || date.value === '') {
       this.props.accreditationStore.setInitiateSrch(field, date);
     }
   }

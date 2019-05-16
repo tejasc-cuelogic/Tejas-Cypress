@@ -10,7 +10,8 @@ import Header from './../../theme/layout/Header';
 import Footer from './../../theme/layout/Footer';
 import Auth from '../auth';
 import NotFound from '../shared/NotFound';
-import Referral from '../shared/Referral';
+// import Referral from '../shared/Referral';
+import RedirectManager from '../shared/RedirectManager';
 import Helper from '../../helper/utility';
 import Firework from '../public/offering/components/investNow/agreement/components/FireworkAnimation';
 
@@ -38,14 +39,18 @@ export default class Public extends React.Component {
         />
       ))}
       <Route path="/auth" component={Auth} />
-      <Route path="/:referralCode" component={Referral} />
+      <Route exact path="/:fromUrl" component={RedirectManager} />
+      {/* <Route path="/:referralCode" component={Referral} /> */}
       <Route component={NotFound} />
     </Switch>
   );
-  handleLogOut = () => {
+  handleLogOut = (isToggle = false) => {
     authActions.logout()
       .then(() => {
         this.props.history.push('/');
+        if (isToggle) {
+          this.handleToggle();
+        }
       });
   }
   preQualSubmit = (e) => {
@@ -100,6 +105,7 @@ export default class Public extends React.Component {
             visible={visible}
             location={location}
             match={match}
+            handleLogOut={() => this.handleLogOut(true)}
             isMobile
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}

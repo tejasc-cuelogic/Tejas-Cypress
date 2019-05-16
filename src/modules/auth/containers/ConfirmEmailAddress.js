@@ -23,7 +23,7 @@ export default class ConfirmEmailAddress extends Component {
     }
 
     if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
-      !this.props.authStore.isUserLoggedIn) {
+      this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
     }
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
@@ -153,7 +153,7 @@ export default class ConfirmEmailAddress extends Component {
 
   render() {
     const changeEmailAddressLink = this.props.refLink ?
-      '/app/profile-settings/profile-data/new-email-address' : '/auth/register-investor';
+      '/app/account-settings/profile-data/new-email-address' : '/auth/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,

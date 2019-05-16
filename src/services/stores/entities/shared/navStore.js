@@ -38,8 +38,12 @@ export class NavStore {
 
   @computed get myRoutes() {
     try {
+      const uKey = _.get(userStore, 'currentUser.sub') || 'public';
       let permitted = [];
+      let navigationItems = this.NAV_ITEMS;
       const { roles } = this.params;
+      const User = { ...userStore.currentUser };
+      const { userDetails } = userDetailsStore;
       if (userDetailsStore.signupStatus.isMigratedFullAccount
         && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
         permitted = [...roles];
@@ -50,15 +54,18 @@ export class NavStore {
           ...userDetailsStore.signupStatus.processingAccounts,
           ...userDetailsStore.signupStatus.frozenAccounts];
       }
+      if (User.roles.includes('investor') && userDetails && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
+        navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
+      }
       if (permitted && permitted.length > 1 && permitted.includes('investor')) {
         const pInvestorInfo = {
           roles,
           signupStatus: userDetailsStore.signupStatus,
           permitted,
         };
-        localStorage.setItem(`${userStore.currentUser.sub}_pInfo`, JSON.stringify(pInvestorInfo));
+        localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
-      const pInvestorInfo = localStorage.getItem(`${userStore.currentUser.sub}_pInfo`);
+      const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
       if (userDetailsStore.userFirstLoad !== true &&
         (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {
@@ -71,7 +78,7 @@ export class NavStore {
         permitted = JSON.parse(pInvestorInfo).permitted || permitted;
       }
       const routes = _.filter(
-        this.NAV_ITEMS,
+        navigationItems,
         n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
           _.intersection(n.accessibleTo, permitted).length > 0) &&
         (!n.env || n.env.length === 0 ||
@@ -148,7 +155,7 @@ export class NavStore {
   }
 
   @computed get sidebarItems() {
-    const reject = ['profile-settings', 'business-application/:applicationType/:applicationId', 'edgar'];
+    const reject = ['business-application/:applicationType/:applicationId', 'edgar'];
     return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
   }
 

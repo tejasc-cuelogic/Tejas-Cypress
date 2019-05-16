@@ -11,7 +11,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
-@inject('campaignStore', 'accreditationStore', 'navStore')
+@inject('campaignStore', 'accreditationStore')
 @withRouter
 @observer
 export default class TermsOfUse extends Component {

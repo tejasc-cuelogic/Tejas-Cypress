@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { isEmpty, find, get } from 'lodash';
+import { isEmpty, find, get, isNull } from 'lodash';
 import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
@@ -66,7 +66,6 @@ class IndividualAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
-
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           }
@@ -96,10 +95,8 @@ class IndividualAccountStore {
       uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', true);
-        Helper.toast('Individual account submitted successfully.', 'success');
-      } else {
-        Helper.toast('Individual account created successfully.', 'success');
       }
+      Helper.toast('Individual account created successfully.', 'success');
       bankAccountStore.resetStoreData();
       this.isFormSubmitted = true;
       resolve();
@@ -108,14 +105,12 @@ class IndividualAccountStore {
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
         if (this.retryGoldStar < 1) {
           this.retryGoldStar += 1;
-          this.submitAccount();
+          this.createGoldstarAccount(payLoad, resolve, reject);
         } else {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
+          uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
         }
       } else {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        uiStore.setProgress(false);
+        uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
       }
       reject();
     });
@@ -209,9 +204,13 @@ class IndividualAccountStore {
           }
           bankAccountStore.validateAddFunds();
           bankAccountStore.validateAddfundsAmount();
-          const renderStep = (bankAccountStore.isAccountPresent && this.stepToBeRendered === 0)
-            ? 2 : this.stepToBeRendered;
-          this.setStepToBeRendered(renderStep);
+          if (!bankAccountStore.isAccountPresent) {
+            this.setStepToBeRendered(0);
+          } else if (isNull(account.details.initialDepositAmount)) {
+            this.setStepToBeRendered(1);
+          } else {
+            this.setStepToBeRendered(2);
+          }
         }
       }
     }

@@ -13,7 +13,7 @@ const InvestmentList = (props) => {
   const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Investment Type', 'Invested Amount', 'Status'];
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
   const {
-    investments, match, viewAgreement, handleInvestNowClick, handleViewInvestment,
+    investments, match, viewAgreement, handleInvestNowClick, handleViewInvestment, isAdmin,
   } = props;
   const isActive = !props.inActiveItems.includes(props.listOf);
   return (
@@ -44,7 +44,7 @@ const InvestmentList = (props) => {
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
                         <div className="offering-title">
-                          {props.listOf === 'pending' ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
+                          {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
                             <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                           )}
                           <p className="date-stamp">
@@ -93,7 +93,7 @@ const InvestmentList = (props) => {
                             {viewAgreement && data.agreementId} {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
-                            {!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) === 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
+                            {!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
                               <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                             }
                             {DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2 &&

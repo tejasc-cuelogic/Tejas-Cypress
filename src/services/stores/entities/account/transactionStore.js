@@ -368,6 +368,7 @@ export class TransactionStore {
             resolve();
           } else {
             uiStore.setErrors('OTP verificaton failed.');
+            uiStore.setProgress(false);
             reject();
           }
         })
@@ -486,13 +487,15 @@ export class TransactionStore {
   })
 
   @action
-  getInvestmentsByOfferingId = () => new Promise((resolve, reject) => {
+  getInvestmentsByOfferingId = isAdmin => new Promise((resolve, reject) => {
+    const investorDetail = userDetailsStore.getDetailsOfUser;
+    const userDetailId = isAdmin ? investorDetail.id : get(userDetailsStore, 'userDetails.id');
     this.investmentsByOffering = graphql({
       client,
       query: getInvestmentsByUserIdAndOfferingId,
       variables: {
         offeringId: offeringCreationStore.currentOfferingId,
-        userId: get(userDetailsStore, 'userDetails.id'),
+        userId: userDetailId,
       },
       onFetch: (data) => {
         if (data && !this.investmentsByOffering.loading) {

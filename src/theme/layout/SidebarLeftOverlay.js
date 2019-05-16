@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Responsive, Sidebar, Menu, Button, Icon, Dimmer, Loader } from 'semantic-ui-react';
+import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader, Button } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
-import { SidebarNav, GetNavItem } from './SidebarNav';
+import { SidebarNav } from './SidebarNav';
 import { UserAvatar, Logo, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
@@ -47,11 +47,9 @@ const MySidebar = observer(props => (
         <Sidebar
           as={Menu}
           animation={props.desktop ? 'push' : 'overlay'}
-          width="thin"
           visible={
             props.desktop ? props.layoutState.leftPanel : props.layoutState.leftPanelMobile
           }
-          icon
           vertical
           inverted={(props.UserInfo.roles[0] !== 'investor')}
           className={props.UserInfo.roles[0]}
@@ -64,7 +62,7 @@ const MySidebar = observer(props => (
             renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
             renderView={p => <div {...p} className="view" />}
           >
-            <Link to="/">
+            <Link to="/" className="logo-wrapper">
               <Logo
                 className="logo"
                 dataSrc={((props.layoutState.leftPanel) ?
@@ -83,10 +81,9 @@ const MySidebar = observer(props => (
                 /> :
                 <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
-              {props.UserInfo.fullname ? <h2>{props.UserInfo.fullname}</h2> : ''}
-              {GetNavItem('profile-settings', props.UserInfo.roles)}
+              <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
             </div>
-            <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
+            <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
         </Sidebar>
         {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
@@ -109,6 +106,8 @@ const MySidebar = observer(props => (
     ) : <SidebarNav roles={props.UserInfo.roles} onlyMount />
     }
     <Sidebar.Pusher
+      dimmed={props.mobile && props.layoutState.leftPanelMobile}
+      onClick={(props.mobile && props.layoutState.leftPanelMobile) ? props.toggle : undefined}
       className={`${props.match.url.includes('/business-application') ?
         'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
     >

@@ -32,11 +32,16 @@ query getOfferingList($filters: OfferingFilterInputType){
         hardCloseDate
         totalInvestmentAmount
         totalInvestorCount
+        keyTerms {
+          multiple
+        }
       }
       keyTerms {
         regulation
         minOfferingAmountCF
         maxOfferingAmountCF
+        minOfferingAmount506C
+        maxOfferingAmount506C
         offeringDisclaimer
         shorthandBusinessName
         legalBusinessName
@@ -234,9 +239,14 @@ export const campaignDetailsQuery = gql`
       hardCloseDate
       launchDate
       totalInvestmentAmount
+      totalInvestmentAmountCf
+      totalInvestmentAmount506C
       totalInvestorCount
       repayment {
         count
+      }
+      keyTerms {
+        multiple
       }
     }
     comments {
@@ -318,6 +328,8 @@ query getOfferingById($id: ID) {
       processingDate
       hardCloseDate
       totalInvestmentAmount
+      totalInvestmentAmountCf
+      totalInvestmentAmount506C
       repayment {
         completeDate
       }

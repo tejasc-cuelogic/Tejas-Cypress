@@ -2027,8 +2027,14 @@ i.icon[class*="ns-"]{
 .ns-lock:before{
     content:@ns-lock;
 }
+.ns-logout:before{
+    content:@ns-logout; 
+}  
 .ns-long-arrow-left:before{
     content:@ns-long-arrow-left;
+}
+.ns-minus:before{
+    content:@ns-minus; 
 }
 .ns-minus-square:before{
     content:@ns-minus-square;

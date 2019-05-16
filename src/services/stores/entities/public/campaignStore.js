@@ -10,7 +10,7 @@ import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsFor
 import { STAGES } from '../../../constants/admin/offerings';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
-import uiStore from '../shared/uiStore';
+// import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
 
@@ -101,6 +101,10 @@ export class CampaignStore {
       this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
   }
 
+  @computed get earlyBirdLoading() {
+    return this.earlyBirdCheck && this.earlyBirdCheck.loading;
+  }
+
   @computed get OfferingList() {
     return (this.allData.data && this.allData.data.getOfferingList &&
       toJS(this.allData.data.getOfferingList)) || [];
@@ -118,9 +122,8 @@ export class CampaignStore {
 
   @computed get orderedActiveList() {
     const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    const orderedActiveListArr =
-      activeListArr.map(offeringDetail => this.generateBanner(offeringDetail, true));
-    return orderBy(orderedActiveListArr, ['order', 'launchDate'], ['asc', 'asc']);
+    const orderedActiveListArr = this.generateBanner(activeListArr, true);
+    return orderedActiveListArr;
   }
 
   @computed get completed() {
@@ -132,7 +135,7 @@ export class CampaignStore {
   }
   @action
   loadMoreRecord = (type) => {
-    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.activeList;
+    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.orderedActiveList;
     if (offeringsList.length > this[type]) {
       this[type] = this[type] + this.RECORDS_TO_DISPLAY;
     }
@@ -154,30 +157,72 @@ export class CampaignStore {
     return {};
   }
 
+  @computed get campaignStatus() {
+    const { campaign } = this;
+    const campaignStatus = {};
+    const closingDate = get(campaign, 'closureSummary.processingDate') && get(campaign, 'closureSummary.processingDate') !== 'Invalid date' ? get(campaign, 'closureSummary.processingDate') : null;
+    campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
+    campaignStatus.diffForProcessing = DataFormatter.diffDays(closingDate || null, false, true);
+    campaignStatus.isInProcessing = campaignStatus.diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
+    campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
+    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : minOffering;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
+    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), maxOffering) : maxOffering;
+    campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
+    campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
+    const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
+    // const formatedMaxOfferingAmount = money.floatToAmount(maxOffering);
+    const formatedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
+    const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
+    const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
+    const minMaxOffering = campaignStatus.minFlagStatus ?
+      campaignStatus.maxOffering : campaignStatus.minOffering;
+    campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
+      money.isPositive(formatedReachedMaxCompairAmountValue));
+    campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
+    campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}` : '--';
+    campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
+    campaignStatus.isCreation = get(campaign, 'stage') === 'CREATION';
+    campaignStatus.earlyBird = get(campaign, 'earlyBird') || null;
+    campaignStatus.bonusRewards = get(campaign, 'bonusRewards') || [];
+    campaignStatus.isEarlyBirdRewards =
+      campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
+    campaignStatus.isBonusReward =
+      campaignStatus.bonusRewards && campaignStatus.bonusRewards.length;
+    return campaignStatus;
+  }
+
   @computed get getOfferingId() {
     return (this.campaign && this.campaign.id);
   }
 
+  @computed get getOfferingSlug() {
+    return (this.campaign && this.campaign.offeringSlug);
+  }
+
   @action
-  isEarlyBirdExist(accountType) {
+  isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
-    uiStore.setProgress();
+    // uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = userDetailsStore.currentActiveAccountDetails;
+    const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
     this.earlyBirdCheck =
       graphql({
         client,
         query: checkIfEarlyBirdExist,
         variables: { offeringId, accountId },
-        onFetch: (data) => {
-          if (data && !this.earlyBirdCheck.loading) {
-            uiStore.setProgress(false);
-          }
-        },
-        onError: () => {
-          uiStore.setProgress(false);
-        },
+        // onFetch: (data) => {
+        //   if (data && !this.earlyBirdCheck.loading) {
+        //     uiStore.setProgress(false);
+        //   }
+        // },
+        // onError: (err) => {
+        //   console.log(err);
+        //   uiStore.setProgress(false);
+        // },
       });
   }
 
@@ -250,7 +295,14 @@ export class CampaignStore {
     return this.docsWithBoxLink.sort((a, b) =>
       (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
   }
-
+  @computed get commentsMainThreadCount() {
+    const comments = get(this.campaign, 'comments') || [];
+    const issuerId = this.campaign && this.campaign.issuerId;
+    const filtered = comments.filter(c => ((c.createdUserInfo && c.createdUserInfo.id === issuerId
+      && c.approved) ||
+      (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC');
+    return filtered.length;
+  }
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
@@ -303,71 +355,131 @@ export class CampaignStore {
       totalPaid = totalPaid + item.interest + item.principal;
       payChart.push({
         month: index + 1,
-        'Projected total payment': money.floatToAmount(totalPaid, 2),
+        'Projected total payment': parseFloat((totalPaid).toFixed(2)),
       });
     });
     this.totalPaymentChart = payChart;
   }
 
-  generateBanner = (offeringDetails, addObjectProps = false) => {
-    const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
-    const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
-    const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
-    const regulation = get(offeringKeyTermDetails, 'regulation');
-    const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
-    const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
-    const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
-    const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
-    const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
-    const divResult = money.div(raisedAmount, minimumOfferingAmount);
-    const percent = money.mul(divResult, '100.00');
-    let labelBannerFirst = null;
-    let labelBannerSecond = null;
-    let bannerToShowFlag = false;
-    const resultObject = addObjectProps ? { ...offeringDetails } : {};
-    const customDateObj = {
-      number: 48,
-      format: 'Hours',
-    };
-    const launchDaysToRemains =
-    DataFormatter.diffDaysForLauch(launchDate || null, false, true, true, customDateObj);
-    const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
-    let order = null;
-    if (launchDate && (launchDaysToRemains < closeDaysToRemains || closeDaysToRemains === null) &&
-      launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
-      labelBannerFirst = 'NEW';
-      order = 0;
-    } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
-      labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
-      order = closeDaysToRemains + 1;
-    } else if (closeDaysToRemains > 7) {
-      if (launchDaysToRemains !== null) {
-        order = 2047483647 + launchDaysToRemains;
-      } else {
-        order = 2057483647 + 1;
+  generateBanner = (offeringDetailsList, addObjectProps = false) => {
+    let parallelOfferingsArr = [];
+    let newOfferingsArr = [];
+    let closingOfferingsArr = [];
+    let processingOfferingsArr = [];
+    let otherOfferingsArr = [];
+    offeringDetailsList.map((offeringDetails) => {
+      const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
+      const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
+      const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
+      const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+      const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506C') || '0.00';
+      const regulation = get(offeringKeyTermDetails, 'regulation');
+      const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : regulation === 'BD_506C' ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
+      const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
+      const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
+      // const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
+      const maxOfferingAmount = regulation === 'BD_CF_506C' ? money.add(maxOfferingAmountCF, maxOfferingAmountRegD) : regulation === 'BD_506C' ? maxOfferingAmountRegD : maxOfferingAmountCF;
+      const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
+      const divResult = money.div(raisedAmount, minimumOfferingAmount);
+      const percent = money.mul(divResult, '100.00');
+      const resultObject = addObjectProps ? { ...offeringDetails } : {};
+      const customAddinggDaysDateObj = {
+        number: 7,
+        format: 'days',
+      };
+      const launchDaysToRemainsForNewLable =
+        DataFormatter.diffDaysForLauch(
+          launchDate || null,
+          false, true, true, customAddinggDaysDateObj,
+        );
+      const customAddingHoursDateObject = {
+        number: 48,
+        format: 'Hours',
+      };
+      const launchDaysToRemains =
+        DataFormatter.diffDaysForLauch(
+          launchDate || null,
+          false, true, true, customAddingHoursDateObject,
+        );
+      const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
+      const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
+      const percentageCompairResult = money.cmp(percent, '50.00').toString();
+      const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
+      if (regulation === 'BD_CF_506C' && !isInProcessing) {
+        if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
+          closeDaysToRemains === null) &&
+          launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+          resultObject.isBannerShow = true;
+          resultObject.bannerFirstText = 'NEW';
+        }
+        resultObject.bannerSecondText =
+          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return parallelOfferingsArr.push(resultObject);
+      } else if (launchDate && (launchDaysToRemains < closeDaysToRemains ||
+        closeDaysToRemains === null) &&
+        launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
+        resultObject.isBannerShow = true;
+        resultObject.bannerFirstText = 'NEW';
+        resultObject.bannerSecondText =
+          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return newOfferingsArr.push(resultObject);
+      } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+        const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
+        resultObject.isBannerShow = !!labelBannerFirst;
+        resultObject.bannerFirstText = labelBannerFirst;
+        resultObject.bannerSecondText =
+          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return closingOfferingsArr.push(resultObject);
+      } else if (isInProcessing) {
+        resultObject.isBannerShow = true;
+        resultObject.bannerFirstText = 'Processing';
+        // resultObject.bannerSecondText =
+        //   this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.launchDate = moment(launchDate).unix() || null;
+        resultObject.processingDate = moment(closingDate).unix() || null;
+        return processingOfferingsArr.push(resultObject);
       }
-    } else if (closeDaysToRemains === null) {
-      order = 2057483647 + 1;
-    }
-    const percentageCompairResult = money.cmp(percent, '50.00').toString();
-    const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
+      if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
+        closeDaysToRemains === null) &&
+        launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+        resultObject.bannerFirstText = 'NEW';
+      }
+      resultObject.bannerSecondText =
+        this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+      resultObject.isBannerShow = !!(resultObject.bannerFirstText || resultObject.bannerSecondText);
+      resultObject.launchDate = moment(launchDate).unix() || null;
+      resultObject.processingDate = moment(closingDate).unix() || null;
+      return otherOfferingsArr.push(resultObject);
+    });
+    parallelOfferingsArr = orderBy(parallelOfferingsArr, ['launchDate'], ['desc']);
+    newOfferingsArr = orderBy(newOfferingsArr, ['launchDate'], ['desc']);
+    closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['asc']);
+    processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
+    otherOfferingsArr = orderBy(otherOfferingsArr, ['launchDate'], ['desc']);
+    const sortedResultObject = [
+      ...parallelOfferingsArr,
+      ...newOfferingsArr,
+      ...closingOfferingsArr,
+      ...otherOfferingsArr,
+      ...processingOfferingsArr,
+    ];
+    return sortedResultObject;
+  }
+  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent) => {
+    let labelBannerSecond = null;
     if (money.isNegative(amountCompairResult) &&
       !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
-      order = order !== null ? order : 2147483645;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
-      order = 2147483647;
     }
-    if (labelBannerFirst || labelBannerSecond) {
-      bannerToShowFlag = true;
-    }
-    resultObject.order = order !== null ? order : 2147483646;
-    resultObject.launchDate = moment(launchDate).unix() || null;
-    resultObject.isBannerShow = bannerToShowFlag;
-    resultObject.bannerFirstText = labelBannerFirst;
-    resultObject.bannerSecondText = labelBannerSecond;
-    return resultObject;
+    return labelBannerSecond;
   }
 }
 

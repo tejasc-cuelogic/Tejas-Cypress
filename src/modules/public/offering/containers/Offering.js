@@ -31,7 +31,7 @@ class Offering extends Component {
         <Banner />
         <Responsive maxWidth={767} as={Container}>
           <Header as="h2" className="mt-30">
-            Invest in growing local<br /> businesses
+            Invest in growing local businesses
           </Header>
         </Responsive>
         <CampaignList
@@ -54,12 +54,14 @@ class Offering extends Component {
             <SubscribeForNewsletter className="public-form" />
           </Container>
         </section>
-        <CampaignList
-          loading={loading}
-          campaigns={completed}
-          locked={3}
-          heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
-        />
+        {!loading &&
+          <CampaignList
+            loading={loading}
+            campaigns={completed}
+            locked={3}
+            heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
+          />
+        }
         {completedList && completedList.length > RECORDS_TO_DISPLAY
         && completedToDisplay < completedList.length &&
         <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />

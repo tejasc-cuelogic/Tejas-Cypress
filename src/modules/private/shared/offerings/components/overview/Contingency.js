@@ -105,6 +105,7 @@ export default class Contingency extends Component {
     const {
       form, formName, addon,
     } = this.props;
+    const { isAdmin } = this.props.userStore;
     const dataKey = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
     const { offer } = this.props.offeringsStore;
     const contingenciesData = offer && offer.contingencies;
@@ -153,6 +154,7 @@ export default class Contingency extends Component {
                   </Header>
                 </label>
               }
+              disabled={!isAdmin}
               checked={form.fields[dataKey][index].status.value}
               onChange={(e, result) => this.formArrayChange(e, result, formName, dataKey, index)}
             />

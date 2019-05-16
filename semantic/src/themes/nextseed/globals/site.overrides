@@ -154,8 +154,14 @@ h6{
 .ml-10 {
 	margin-left: @10px !important;
 }
+.pt-0{
+	padding-top:0 !important;
+}
 .pl-50{
 	padding-left: @50px !important;
+}
+.pl-60{
+	padding-left: @60px !important;
 }
 .pull-left{
 	float:left !important;
@@ -452,10 +458,8 @@ footer{
 			color:@neutral-middark;
 			padding-bottom: @6px;
 		}
-		.ui.checkbox {
-			label {
-				color:@neutral-middark;
-			}
+		.ui.checkbox label {
+			color:@neutral-middark;
 		}
 		i {
 			font-size: @16px;
@@ -564,7 +568,7 @@ footer{
 .offering-intro {
 	padding: @20px @20px 0;
 	@media only screen and (max-width : @largestTabletScreen){
-		padding: @20px @32px;
+		padding: @50px @32px @36px;
 	}
 	h4.ui.header {
 		position: relative;
@@ -1211,6 +1215,7 @@ a.icon-link {
 	padding-left: @28px;
 	@media only screen and (max-width : @largestTabletScreen){
 		padding-left: @20px;
+		padding-top: 0;
 	}
 	&:before {
 		width: 1px;
@@ -2967,4 +2972,7 @@ input[type='range']::-webkit-slider-thumb {
 			top: 20%;
 		}
 	}
+}
+.activity-component {
+	margin: -1.42857143rem;
 }

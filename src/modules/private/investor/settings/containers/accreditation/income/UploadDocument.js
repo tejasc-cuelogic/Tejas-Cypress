@@ -8,16 +8,8 @@ import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../
 @withRouter
 @observer
 export default class UploadDocument extends Component {
-  componentWillMount() {
-    const {
-      changeRuleAsPerFilingStatus, FILLING_STATUS_FORM, filingStatus,
-    } = this.props.accreditationStore;
-    if (FILLING_STATUS_FORM.fields.method.value !== filingStatus) {
-      changeRuleAsPerFilingStatus(FILLING_STATUS_FORM.fields.method.value);
-    }
-  }
   onFileDrop = (files, field) => {
-    this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income');
+    this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income', '', '', '', this.props.match.params.accountId);
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
@@ -26,17 +18,13 @@ export default class UploadDocument extends Component {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelDoc = (field) => {
-    this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field);
+    this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field, null, this.props.accountType, this.props.match.params.accountId);
   }
 
   render() {
     const {
-      INCOME_UPLOAD_DOC_FORM, FILLING_STATUS_FORM, formChange,
+      INCOME_UPLOAD_DOC_FORM, formChange,
     } = this.props.accreditationStore;
-    let docsToUpload = ['incomeDocSecondLastYear', 'incomeDocLastYear'];
-    if (!FILLING_STATUS_FORM.fields.method.value) {
-      docsToUpload = ['incomeDocThirdLastYear', 'incomeDocSecondLastYear'];
-    }
     return (
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
@@ -45,7 +33,7 @@ export default class UploadDocument extends Component {
         <Form>
           <Grid stackable columns="equal">
             {
-              docsToUpload.map(field => (
+              ['incomeDocSecondLastYear', 'incomeDocLastYear'].map(field => (
                 <Grid.Column key={field}>
                   <DropZone
                     name={field}
@@ -60,19 +48,14 @@ export default class UploadDocument extends Component {
           </Grid>
           <Divider hidden />
           <FormCheckbox
-            fielddata={
-              FILLING_STATUS_FORM.fields.method.value ?
-              INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
-              : INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling
+            fielddata={INCOME_UPLOAD_DOC_FORM.fields.isAccepted
             }
-            name={FILLING_STATUS_FORM.fields.method.value ? 'isAcceptedForfilling' : 'isAcceptedForUnfilling'}
+            name="isAccepted"
             changed={(e, result) => formChange(e, result, 'INCOME_UPLOAD_DOC_FORM')}
             defaults
-            disabled={FILLING_STATUS_FORM.fields.method.value ?
+            disabled={
               (INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear.fileId === '' ||
-                INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '') :
-              (INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear.fileId === '' ||
-                INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.fileId === '')}
+                INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '')}
             containerclassname="ui relaxed list"
           />
           <div className="center-align">

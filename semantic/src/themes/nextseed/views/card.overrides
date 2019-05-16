@@ -10,7 +10,7 @@
 .ui.card{
     &.campaign{ 
         box-shadow:none;
-        height: 100%;
+        // height: 100%;
         &:hover, &:focus {
             text-decoration: none;
         }
@@ -63,6 +63,9 @@
             // line-height:@24px;
             @media only screen and (max-width : @largestMobileScreen){
                 padding:@20px @22px;
+            }
+            >.header:not(.ui) {
+                clear: both;
             }
             .tags{
                 font-size:@13px;
@@ -559,7 +562,9 @@
     .content{
         padding:@21px;
         p.accredetaion-intro{
-            min-height:84px;
+            @media screen and (min-width:@tabletBreakpoint){
+                min-height:84px;
+            }
         }
     }
 }

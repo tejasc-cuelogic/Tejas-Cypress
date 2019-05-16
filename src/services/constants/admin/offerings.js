@@ -18,7 +18,7 @@ export const STAGES = {
     ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
   },
   LOCK: {
-    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
+    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Lock In',
   },
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
@@ -110,7 +110,7 @@ export const KEY_TERMS = {
   },
   investmentMultiple: {
     value: '',
-    label: 'Investment Multiple',
+    label: 'Investment Multiple (copy)',
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
@@ -675,6 +675,13 @@ export const MISC = {
 };
 
 export const CLOSURE_SUMMARY = {
+  multiple: {
+    value: '',
+    label: 'Investment Multiple (calculation)',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
   processingDate: {
     value: '',
     label: 'Close Date',

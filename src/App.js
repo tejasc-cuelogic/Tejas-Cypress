@@ -25,15 +25,16 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
-  { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
-  { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
-  { type: 'ogTag', property: 'og:image:width', content: '1600' },
-  { type: 'ogTag', property: 'og:image:height', content: '1067' },
+  { type: 'ogTag', property: 'og:image', content: `https://${window.location.hostname}/og-image_A.jpg` },
+  { type: 'ogTag', property: 'og:image:secure_url', content: `https://${window.location.hostname}/og-image_A.jpg` },
+  { type: 'ogTag', property: 'og:image:width', content: '1369' },
+  { type: 'ogTag', property: 'og:image:height', content: '1027' },
+  { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
   { type: 'meta', name: 'twitter:card', content: 'summary_large_image' },
   { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'meta', name: 'twitter:title', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'meta', name: 'twitter:site', content: '@thenextseed' },
-  { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'meta', name: 'twitter:image', content: `https://${window.location.hostname}/og-image_A.jpg` },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
@@ -46,6 +47,9 @@ class App extends Component {
     this.checkUserIdleStatus();
     const { authStore, location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
+    if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
+      history.push(location.pathname.replace(/\/+$/, ''));
+    }
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
       const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
       this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
@@ -96,7 +100,7 @@ class App extends Component {
       if (!document.hidden) {
         // console.log('Browser tab is hidden');
       } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
-        authActions.forceLogout().then(() => {
+        authActions.forceLogout('timeout').then(() => {
           this.props.history.push('/auth/login');
         });
       }
@@ -130,7 +134,7 @@ class App extends Component {
   }
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
-      authActions.logout().then(() => {
+      authActions.logout('timeout').then(() => {
         this.props.history.push('/auth/login');
       });
     }
