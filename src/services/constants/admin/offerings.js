@@ -2601,7 +2601,7 @@ const LIMIT = {
 };
 
 export const OFFERING_CLOSE_1 = {
-  limit: { ...LIMIT },
+  queueLimit: { ...LIMIT },
   targetDate: {
     value: '',
     label: 'Launch Date',
@@ -2613,7 +2613,7 @@ export const OFFERING_CLOSE_1 = {
 };
 
 export const OFFERING_CLOSE_2 = {
-  limit: { ...LIMIT },
+  queueLimit: { ...LIMIT },
   notePurchaseDate: {
     value: '',
     label: 'Note Purchase Date',
@@ -2624,5 +2624,5 @@ export const OFFERING_CLOSE_2 = {
 };
 
 export const OFFERING_CLOSE_3 = {
-  limit: { ...LIMIT },
+  queueLimit: { ...LIMIT },
 };

@@ -10,16 +10,16 @@ import { DataFormatter } from '../../../../../helper';
 
 const closingActions = {
   ENUM1: { label: 'Soft Close Notification', ref: 1, enum: 'SOFT_CLOSE_NOTIFICATION' },
-  ENUM2: { label: 'Confrim Balances', ref: 1, enum: 'ENUM1' },
-  ENUM3: { label: 'Issue Credits', ref: 1, enum: 'ENUM1' },
-  ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'ENUM1' },
-  ENUM5: { label: 'Process Notes', ref: 2, enum: 'ENUM1' },
-  ENUM6: { label: 'Finalize Notes', ref: 2, enum: 'ENUM1' },
+  ENUM2: { label: 'Confrim Balances', ref: 1, enum: 'CHECK_BALANCE' },
+  ENUM3: { label: 'Issue Credits', ref: 1, enum: 'ISSUE_CREDITS' },
+  ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'FUND_ESCROW' },
+  ENUM5: { label: 'Process Notes', ref: 2, enum: 'PROCESS_NOTES' },
+  ENUM6: { label: 'Finalize Notes', ref: 2, enum: 'FINALIZE_NOTES' },
   ENUM7: { label: 'Close', ref: 3, enum: 'ENUM1' },
-  ENUM8: { label: 'Hard Close Notification', ref: 3, enum: 'ENUM1' },
+  ENUM8: { label: 'Hard Close Notification', ref: 3, enum: 'HARD_CLOSE_NOTIFICATION' },
 };
 
-@inject('offeringCreationStore', 'offeringsStore')
+@inject('offeringCreationStore', 'offeringsStore', 'uiStore')
 @observer
 export default class Close extends Component {
   state = {
@@ -83,6 +83,7 @@ export default class Close extends Component {
       maskChange,
       formArrayChange,
     } = this.props.offeringCreationStore;
+    const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer } = this.props.offeringsStore;
     const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
@@ -125,14 +126,19 @@ export default class Close extends Component {
               {this.state.activeStep === 1 &&
               <Aux>
                 <MaskedInput
-                  name="limit"
-                  fielddata={OFFERING_CLOSE_1.fields.limit}
+                  name="queueLimit"
+                  fielddata={OFFERING_CLOSE_1.fields.queueLimit}
                   changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
                   number
                 />
                 <Button.Group className="mt-50">
                   {filter(closingActions, a => a.ref === 1).map(fA => (
-                    <Button onClick={() => this.closeAction(fA.enum)} primary>{fA.label}</Button>
+                    <Button
+                      loading={inProgress === fA.enum}
+                      onClick={() => this.closeAction(fA.enum)}
+                      primary
+                    >{fA.label}
+                    </Button>
                   ))}
                 </Button.Group>
                 <Divider className="doubled" />
@@ -140,19 +146,24 @@ export default class Close extends Component {
               }
               {this.state.activeStep === 2 &&
                 <Aux>
-                  {['limit', 'notePurchaseDate'].map(field => (
+                  {['queueLimit', 'notePurchaseDate'].map(field => (
                     <MaskedInput
                       name={field}
                       fielddata={OFFERING_CLOSE_2.fields[field]}
                       changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
                       dateOfBirth={field === 'notePurchaseDate'}
-                      number={field === 'limit'}
+                      number={field === 'queueLimit'}
                     />
                   ))
                   }
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 2).map(fA => (
-                      <Button onClick={() => this.closeAction(fA.enum)} primary>{fA.label}</Button>
+                      <Button
+                        loading={inProgress === fA.enum}
+                        onClick={() => this.closeAction(fA.enum)}
+                        primary
+                      >{fA.label}
+                      </Button>
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
@@ -161,14 +172,19 @@ export default class Close extends Component {
               {this.state.activeStep === 3 &&
                 <Aux>
                   <MaskedInput
-                    name="limit"
-                    fielddata={OFFERING_CLOSE_3.fields.limit}
+                    name="queueLimit"
+                    fielddata={OFFERING_CLOSE_3.fields.queueLimit}
                     changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
                     number
                   />
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
-                      <Button onClick={() => this.closeAction(fA.enum)} primary>{fA.label}</Button>
+                      <Button
+                        loading={inProgress === fA.enum}
+                        onClick={() => this.closeAction(fA.enum)}
+                        primary
+                      >{fA.label}
+                      </Button>
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />

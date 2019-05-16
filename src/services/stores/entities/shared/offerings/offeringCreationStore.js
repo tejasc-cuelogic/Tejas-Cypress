@@ -1517,13 +1517,16 @@ export class OfferingCreationStore {
 
   @action
   offeringClose = (params) => {
+    uiStore.setProgress(params.process);
     client
       .mutate({
         mutation: offerClose,
         variables: params,
       }).then((data) => {
+        uiStore.setProgress(false);
         console.log(data);
       }).catch((err) => {
+        uiStore.setProgress(false);
         console.log(err);
         Helper.toast('Something went wrong.', 'error');
       });
