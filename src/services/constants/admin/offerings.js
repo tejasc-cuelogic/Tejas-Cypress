@@ -2593,3 +2593,36 @@ export const POC_DETAILS = {
   },
 };
 
+const LIMIT = {
+  value: '',
+  label: 'limit',
+  error: undefined,
+  rule: 'required',
+};
+
+export const OFFERING_CLOSE_1 = {
+  limit: { ...LIMIT },
+  targetDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    objRef: 'offering.launch',
+    rule: 'string',
+    placeHolder: 'MM/DD/YYYY',
+  },
+};
+
+export const OFFERING_CLOSE_2 = {
+  limit: { ...LIMIT },
+  notePurchaseDate: {
+    value: '',
+    label: 'Note Purchase Date',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'MM/DD/YYYY',
+  },
+};
+
+export const OFFERING_CLOSE_3 = {
+  limit: { ...LIMIT },
+};

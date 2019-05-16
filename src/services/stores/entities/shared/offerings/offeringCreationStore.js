@@ -11,10 +11,11 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
+  OFFERING_CLOSE_1, OFFERING_CLOSE_2, OFFERING_CLOSE_3,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
+  getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
   getBonusRewards, getOfferingFilingList,
   generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -40,6 +41,9 @@ export class OfferingCreationStore {
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
+  @observable OFFERING_CLOSE_1 = Validator.prepareFormObject(OFFERING_CLOSE_1);
+  @observable OFFERING_CLOSE_2 = Validator.prepareFormObject(OFFERING_CLOSE_2);
+  @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
   @observable LEADERSHIP_FRM =
     Validator.prepareFormObject(
@@ -1508,6 +1512,19 @@ export class OfferingCreationStore {
       }))
       .finally(() => {
         uiStore.setProgress(false);
+      });
+  }
+
+  offeringClose = (params) => {
+    client
+      .mutate({
+        mutation: offerClose,
+        variables: params,
+      }).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err);
+        Helper.toast('Something went wrong.', 'error');
       });
   }
 
