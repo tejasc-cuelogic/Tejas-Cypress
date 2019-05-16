@@ -1,4 +1,3 @@
-import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
 import Amplify from '@aws-amplify/core';
 import AmplifyAuth from '@aws-amplify/auth';
@@ -27,7 +26,6 @@ import Helper from '../../../helper/utility';
  * @function $resetPassword - reset password for user
  * @function $setNewPassword - Sets password for newly created user from admin section
  * @function $changePassword - Changes password for user
- * @function $confirmCode - Confirms user after registration
  * @function $logout - Logs out user
  */
 export class Auth {
@@ -344,79 +342,6 @@ export class Auth {
     }
   }
 
-  /**
-   * @desc Confirms code that user gets on email on successfull registration
-   * @return null
-   * @todo Remove this method as new user who is registering will be auto confirmed.
-   */
-  confirmCode() {
-    uiStore.reset();
-    uiStore.setProgress();
-    const { code, email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.toLowerCase(), Pool: this.userPool,
-    });
-
-    return new Promise((res, rej) => {
-      this.cognitoUser.confirmRegistration(
-        code,
-        true,
-        err => (err ? rej(err) : res()),
-      );
-    })
-      .then(() => {
-        Helper.toast('Successfully done confirmation', 'success');
-
-        const authenticationDetails = new AWSCognito.AuthenticationDetails({
-          Username: email.toLowerCase(), Password: password,
-        });
-
-        this.cognitoUser = new AWSCognito.CognitoUser({
-          Username: email.toLowerCase(), Pool: this.userPool,
-        });
-
-        return new Promise((res, rej) => {
-          this.cognitoUser.authenticateUser(authenticationDetails, {
-            onSuccess: result => res({ data: result }),
-            newPasswordRequired: (result) => {
-              res({ data: result, action: 'newPassword' });
-            },
-            onFailure: err => rej(err),
-          });
-        })
-          .then((result) => {
-            authStore.setUserLoggedIn(true);
-            if (result.action && result.action === 'newPassword') {
-              authStore.setEmail(result.data.email.toLowerCase());
-              authStore.setCognitoUserSession(this.cognitoUser.Session);
-              authStore.setNewPasswordRequired(true);
-            } else {
-              const { data } = result;
-              // Extract JWT from token
-              commonStore.setToken(data.idToken.jwtToken);
-              userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-              userDetailsStore.getUser(userStore.currentUser.sub);
-              AWS.config.region = AWS_REGION;
-              if (userStore.isCurrentUserWithRole('admin')) {
-                this.setAWSAdminAccess(data.idToken.jwtToken);
-              }
-            }
-          })
-          .catch((err) => {
-            uiStore.setErrors(this.simpleErr(err));
-            throw err;
-          });
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
-  }
-
   segmentTrackLogout = (logoutType) => {
     if (window.analytics) {
       window.analytics.track('Logged Out', { logoutType });
@@ -436,30 +361,28 @@ export class Auth {
 
   forceLogout = logoutType => (
     new Promise((res) => {
-      commonStore.setToken(undefined);
-      localStorage.removeItem('lastActiveTime');
-      localStorage.removeItem('defaultNavExpanded');
-      authStore.setUserLoggedIn(false);
-      userStore.forgetUser();
-      this.segmentTrackLogout(logoutType);
+      this.resetData(logoutType);
       res();
     })
     // Clear all AWS credentials
   );
 
+  resetData = (logoutType) => {
+    commonStore.setToken(undefined);
+    localStorage.removeItem('lastActiveTime');
+    localStorage.removeItem('defaultNavExpanded');
+    authStore.setUserLoggedIn(false);
+    userStore.forgetUser();
+    this.segmentTrackLogout(logoutType);
+  }
   /**
    * @desc Logs out user and clears all tokens stored in browser's local storage
    * @return null
    */
   logout = async (logoutType) => {
-    commonStore.setToken(undefined);
-    authStore.setUserLoggedIn(false);
-    userStore.forgetUser();
+    this.resetData(logoutType);
     await AmplifyAuth.signOut();
-    localStorage.removeItem('lastActiveTime');
-    localStorage.removeItem('defaultNavExpanded');
     AWS.config.clear();
-    this.segmentTrackLogout(logoutType);
     // Clear all AWS credentials
   };
 
@@ -514,34 +437,6 @@ export class Auth {
     newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
     return newData;
   };
-
-  /**
-   * @desc to resend confirmation code to user-email address
-   * @return null
-   * @todo Remove this method as new user who is registering will be auto confirmed.
-   */
-  resendConfirmationCode = () => {
-    uiStore.setProgress();
-    const { email } = authStore.CONFIRM_FRM.fields;
-
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.value.toLowerCase(),
-      Pool: this.userPool,
-    });
-    return new Promise((res, rej) => {
-      this.cognitoUser.resendConfirmationCode(err => (err ? rej(err) : res()));
-    })
-      .then(() => {
-        Helper.toast('Successfully sent confirmation code', 'success');
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
 }
 
 export default new Auth();
