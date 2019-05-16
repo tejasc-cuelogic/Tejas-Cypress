@@ -15,7 +15,7 @@ const closingActions = {
   ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'FUND_ESCROW' },
   ENUM5: { label: 'Process Notes', ref: 2, enum: 'PROCESS_NOTES' },
   ENUM6: { label: 'Finalize Notes', ref: 2, enum: 'FINALIZE_NOTES' },
-  ENUM7: { label: 'Close', ref: 3, enum: 'ENUM1' },
+  ENUM7: { label: 'Close', ref: 3, enum: 'CLOSEME' },
   ENUM8: { label: 'Hard Close Notification', ref: 3, enum: 'HARD_CLOSE_NOTIFICATION' },
 };
 
@@ -53,14 +53,17 @@ export default class Close extends Component {
   closeAction = async (status, step) => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
-    await offeringClose(
-      {
-        offeringId: offer.id,
-        process: status,
-      },
-      step,
-    );
-    console.log(status);
+    if (step === 'CLOSEME') {
+      this.handleCloseOffering();
+    } else {
+      await offeringClose(
+        {
+          offeringId: offer.id,
+          process: status,
+        },
+        step,
+      );
+    }
   }
   handleCloseOffering = () => {
     const {
