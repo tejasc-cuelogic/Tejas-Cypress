@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Button, Form, Icon } from 'semantic-ui-react';
+import { Grid, Button, Form, Icon, Checkbox } from 'semantic-ui-react';
 import { ByKeyword, DropdownFilter, DateRangeFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 
@@ -30,10 +30,17 @@ export const P5 = props => (
             <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} isMultiple />
           </Grid.Column>
           <Grid.Column width={3}>
-            <DropdownFilter value={props.requestState.search.accountStatus} name="Account Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
+            <DropdownFilter value={props.requestState.search.accountStatus} name="Account Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus.filter(a => ((props.requestState.search.isDeleted && a.allowedDeleted) || !props.requestState.search.isDeleted))} />
           </Grid.Column>
           <Grid.Column width={4}>
             <DateRangeFilter filters={props.requestState.search} label="Account Creation" name="createdAt" change={props.dateFilter} />
+          </Grid.Column>
+          <Grid.Column width={3}>
+            <Checkbox
+              label="Deleted"
+              checked={props.requestState.search.isDeleted}
+              onChange={() => props.setSearchParam(null, { name: 'isDeleted', value: !props.requestState.search.isDeleted }, 'checkbox')}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>

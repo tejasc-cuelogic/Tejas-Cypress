@@ -29,6 +29,18 @@ export const USER_LIST_META = [
   ['actions', '', false],
 ];
 
+export const DELETED_ACCOUNT_STATUS = {
+  PARTIAL: ['DELETED_INVESTOR_PARTIAL'],
+  BASIC: ['DELETED_INVESTOR_BASIC'],
+  FULL: ['DELETED_INVESTOR_FULL'],
+  FROZEN: [],
+  LOCKED: [''],
+  UNLOCKED: [''],
+  ISSUER: ['DELETED_ISSUER_ISSUER'],
+  ADMIN: ['DELETED_ADMIN_ADMIN'],
+  INVESTOR: ['DELETED_INVESTOR_PARTIAL', 'DELETED_INVESTOR_BASIC', 'DELETED_INVESTOR_FULL'],
+};
+
 export const FILTER_META = {
   accountType: [
     { text: 'Admin', value: 'ADMIN' },
@@ -38,13 +50,15 @@ export const FILTER_META = {
     { text: 'Entity', value: 'ENTITY' },
   ],
   accountStatus: [
-    { text: 'Select Filter', key: '', value: '' },
-    { text: 'Partial', value: 'PARTIAL' },
-    { text: 'Basic', value: 'BASIC' },
-    { text: 'Full', value: 'FULL' },
-    { text: 'Frozen', value: 'FROZEN' },
-    { text: 'Locked', value: 'LOCKED' },
-    { text: 'Unlocked', value: 'UNLOCKED' },
+    {
+      text: 'Select Filter', key: '', value: '', allowedDeleted: true,
+    },
+    { text: 'Partial', value: 'PARTIAL', allowedDeleted: true },
+    { text: 'Basic', value: 'BASIC', allowedDeleted: true },
+    { text: 'Full', value: 'FULL', allowedDeleted: true },
+    { text: 'Frozen', value: 'FROZEN', allowedDeleted: false },
+    { text: 'Locked', value: 'LOCKED', allowedDeleted: false },
+    { text: 'Unlocked', value: 'UNLOCKED', allowedDeleted: false },
   ],
   accreditation: [
     { text: 'Accridiated', value: 'yes' },

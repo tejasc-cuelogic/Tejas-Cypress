@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormDropDown } from '../../../../../../../theme/form';
 import { InlineLoader } from '../../../../../../../theme/shared';
+import OtherInformation from './OtherInformation';
 
 @inject('userDetailsStore', 'userStore', 'uiStore')
 @withRouter
@@ -24,11 +26,12 @@ export default class Admin extends Component {
   }
   render() {
     const {
-      USER_BASIC, formChange, displayMode, maskChange, userEleChange,
+      USER_BASIC, formChange, displayMode, maskChange, userEleChange, detailsOfUser,
     } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const { capabilitiesMeta } = this.props.userStore;
     const { inProgress } = this.props.uiStore;
+    const details = toJS({ ...detailsOfUser.data.user });
     if (inProgress) {
       return (<InlineLoader />);
     }
@@ -108,6 +111,9 @@ export default class Admin extends Component {
             }
           </div>
         </Form.Group>
+        <Divider />
+        <OtherInformation details={details} />
+        <Divider />
       </Form>
     );
   }
