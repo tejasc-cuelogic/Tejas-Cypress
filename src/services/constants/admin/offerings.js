@@ -2602,14 +2602,6 @@ const LIMIT = {
 
 export const OFFERING_CLOSE_1 = {
   queueLimit: { ...LIMIT },
-  targetDate: {
-    value: '',
-    label: 'Launch Date',
-    error: undefined,
-    objRef: 'offering.launch',
-    rule: 'string',
-    placeHolder: 'MM/DD/YYYY',
-  },
 };
 
 export const OFFERING_CLOSE_2 = {
@@ -2618,7 +2610,7 @@ export const OFFERING_CLOSE_2 = {
     value: '',
     label: 'Note Purchase Date',
     error: undefined,
-    rule: 'string',
+    rule: 'optional',
     placeHolder: 'MM/DD/YYYY',
   },
 };
