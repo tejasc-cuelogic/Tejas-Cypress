@@ -3,6 +3,7 @@ import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../../theme/form';
+import OtherInformation from './OtherInformation';
 
 @inject('userDetailsStore')
 @observer
@@ -67,18 +68,8 @@ export default class Issuer extends Component {
           }
         </Form.Group>
         <Divider />
-        <Header as="h6">MFA</Header>
-        <Form.Group widths={4}>
-          <Form.Input type="password" fluid label="Password" placeholder="Password" value="Demopassword123" readOnly className="display-only" />
-          <Form.Input
-            fluid
-            label="Send verification codes to"
-            placeholder="Send verification codes to"
-            value={details.mfaMode === 'EMAIL' ? 'Email ID' : 'Phone number'}
-            readOnly
-            className="display-only"
-          />
-        </Form.Group>
+        <OtherInformation details={details} />
+        <Divider />
       </Form>
     );
   }
