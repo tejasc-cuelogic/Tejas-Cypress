@@ -1139,7 +1139,7 @@ query getTotalAmount{
   `;
 
 export const offerClose = gql`
-  mutation _offeringClose($process: OfferingCloseProcessEnum, $queueLimit: Int,  $offeringId: String!) {
-    offeringClose(process: $process, process: $process, offeringId: $offeringId)
+  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!) {
+    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId)
   }
 `;
