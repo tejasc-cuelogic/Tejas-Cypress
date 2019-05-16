@@ -21,7 +21,7 @@ class Banner extends Component {
     const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `auth/${get(stepInRoute, 'to')}`;
 
     return (
-      <section className="banner business-banner">
+      <section className="banner home-banner">
         <Container>
           <Responsive minWidth={768} as={Aux}>
             <div className="banner-caption">
@@ -41,7 +41,7 @@ class Banner extends Component {
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,000 from 75 investors
+              <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
             </p>
           </div>
         </Container>
@@ -56,4 +56,3 @@ class Banner extends Component {
 }
 
 export default Banner;
-

@@ -109,7 +109,7 @@ class HowItWorks extends Component {
               <Divider section />
             </Responsive>
             <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
-              Get flexible financing that doesn’t <Responsive minWidth={768} as="br" />cost you everything.
+          Get flexible financing that doesn’t <Responsive minWidth={768} as="br" />cost you everything.
             </Header>
             <Grid stackable columns={3} doubling>
               <Grid.Column className="info-grid">

@@ -6,7 +6,7 @@ import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
 import { Container, Card, List, Grid, Message, Label } from 'semantic-ui-react';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_OFFERED_BY } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -116,9 +116,10 @@ export default class CampaignList extends Component {
                             </List>
                           </Card.Content>
                           <Message attached="bottom" color="teal">
-                            Offered by {offering && offering.regulation ?
-                              CAMPAIGN_OFFERED_BY[offering.regulation] :
-                              CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
+                            Offered by NextSeed {offering && offering.regulation ?
+                              (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.regulation] ||
+                     CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.keyTerms.regulation])
+                              : 'US'} LLC
                           </Message>
                         </Aux>
                         {offering.stage === 'LOCK' && (

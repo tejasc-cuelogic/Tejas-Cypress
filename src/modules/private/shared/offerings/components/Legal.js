@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import Loadable from 'react-loadable';
+import React, { Component, Suspense, lazy } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
@@ -7,12 +6,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 
-const getModule = component => Loadable({
-  loader: () => import(`./legal/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`./legal/${component}`));
 
 @inject('userStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
@@ -74,23 +68,25 @@ export default class Legal extends Component {
             </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                component={getModule(this.module(userLegalInfo[0].title))}
-              />
-              {
-                userLegalInfo.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                ))
-              }
-              {!isIssuer &&
-                adminLegalInfo.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                ))
-              }
-            </Switch>
+            <Suspense fallback={<InlineLoader />}>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={getModule(this.module(userLegalInfo[0].title))}
+                />
+                {
+                  userLegalInfo.map(item => (
+                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                  ))
+                }
+                {!isIssuer &&
+                  adminLegalInfo.map(item => (
+                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                  ))
+                }
+              </Switch>
+            </Suspense>
           </Grid.Column>
         </Grid>
       </div>

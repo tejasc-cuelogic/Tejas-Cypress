@@ -101,8 +101,8 @@ class ClientDb {
       e[key]).unix() : subkey ? e[key][subkey] :
       e[key], 10)
     <= endDate && parseInt(isUnix ? moment(subkey ? e[key][subkey] :
-        e[key]).unix() : subkey ? e[key][subkey] :
-        e[key], 10) >= startDate);
+      e[key]).unix() : subkey ? e[key][subkey] :
+      e[key], 10) >= startDate);
     this.initiateDb(filterData, true);
   }
 

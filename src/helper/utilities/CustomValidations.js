@@ -54,11 +54,6 @@ class CustomValidations extends Component {
       const regex = /^[a-zA-Z ]*$/;
       return regex.test(value);
     }, 'Invalid ticker symbol, please verify and enter again.');
-
-    Validator.register('removeFrontAndTrailingSpaces', (value) => {
-      const regex = /^[a-zA-Z0-9!@#$&()\\-`.+,/"]+(?: +[a-zA-Z0-9!@#$&()\\-`.+,/"]+)*$/;
-      return regex.test(value);
-    }, 'Front or trailing spaces are not allowed.');
   }
 }
 

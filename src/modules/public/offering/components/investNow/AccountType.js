@@ -8,7 +8,6 @@ import cookie from 'react-cookies';
 import { FormRadioGroup, FormCheckbox } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
-const isMobile = document.documentElement.clientWidth < 768;
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
 @withRouter
 @observer
@@ -347,24 +346,26 @@ class AccountType extends Component {
                 :
                 <Aux>
                   {isDocumentUpload === false ?
-                    <div className="center-align">
-                      <p>
-                        There is a technical issue with this offering.
-                        The NextSeed team has been notified and will
-                        resolve it as soon as possible.
-                        Please try back later.
-                      </p>
-                      <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                    </div>
+                    <Aux>
+                      <div className="center-align">
+                        <Aux>
+                          <p>
+                            There is a technical issue with this offering.
+                            The NextSeed team has been notified and will
+                            resolve it as soon as possible.
+                            Please try back later.
+                          </p>
+                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                        </Aux>
+                      </div>
+                    </Aux>
                     :
                     selectedAccountStatus === 'FULL' ?
                       <div className="center-align">
-                        {headerSubheaderObj.subHeader ?
-                          <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
-                        }
+                        <p className="center-align">{headerSubheaderObj.subHeader}</p>
                         {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' ?
                           offeringReuglation && offeringReuglation === 'BD_CF_506C' ?
-                            <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
+                            <Card.Group itemsPerRow={2}>
                               <Card>
                                 <Card.Content>
                                   <Header as="h5" color="green">Yes, let’s get you verified.</Header>
@@ -409,17 +410,19 @@ class AccountType extends Component {
                             </Aux>
                           :
                           userAccredetiationState === 'EXPIRED' ?
-                            <Form error>
-                              <FormCheckbox
-                                fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
-                                name="financialStatus"
-                                changed={expirationChange}
-                                defaults
-                                containerclassname="ui relaxed list"
-                              />
-                              <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
-                              <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
-                            </Form>
+                            <Aux>
+                              <Form error>
+                                <FormCheckbox
+                                  fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
+                                  name="financialStatus"
+                                  changed={expirationChange}
+                                  defaults
+                                  containerclassname="ui relaxed list"
+                                />
+                                <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
+                                <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
+                              </Form>
+                            </Aux>
                             :
                             <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         }

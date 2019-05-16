@@ -149,7 +149,7 @@ export class NavStore {
   }
 
   @computed get sidebarItems() {
-    const reject = ['business-application/:applicationType/:applicationId', 'edgar'];
+    const reject = ['profile-settings', 'business-application/:applicationType/:applicationId', 'edgar'];
     return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
   }
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, Link } from 'react-router-dom';
-import { Menu, Icon } from 'semantic-ui-react';
+import { Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../shared/PrivateLayout';
 import OfferingModule from '../../shared/offerings/components';
 import { DataFormatter } from '../../../../helper';
@@ -32,11 +31,7 @@ export default class Offering extends Component {
     }
     const navItems = this.props.navStore.navMeta.subNavigations;
     return (
-      <PrivateLayout
-        {...this.props}
-        offeringSlug={offer.offeringSlug}
-        rightLabel={<Menu.Item position="right"><Link target="_blank" to={`/offerings/preview/${offer.offeringSlug}/overview`}><Icon className="ns-view" /><b>View Offering</b></Link></Menu.Item>}
-      >
+      <PrivateLayout {...this.props}>
         <Switch>
           <Route exact path={match.url} component={OfferingModule('overview')} />
           {

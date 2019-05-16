@@ -55,12 +55,12 @@ export class ReferralStore {
     });
   });
 
-  getUserReferralDetails = (id = false, showToast = true) => new Promise((resolve, reject) => {
+  getUserReferralDetails = () => new Promise((resolve, reject) => {
     const { userDetails } = userDetailsStore;
     graphql({
       client,
       query: getUserReferralDetails,
-      variables: { userId: id || userDetails.id },
+      variables: { userId: userDetails.id },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {
@@ -68,9 +68,7 @@ export class ReferralStore {
         }
       },
       onError: () => {
-        if (showToast) {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        }
+        Helper.toast('Something went wrong, please try again later.', 'error');
         reject();
       },
     });

@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -87,7 +87,7 @@ class KeyTerms extends Component {
                 </Table.Cell>
               </Table.Row>
             </Aux>
-            }
+      }
             {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
             <Aux>
               <Table.Row verticalAlign="top">
@@ -117,7 +117,7 @@ class KeyTerms extends Component {
                 </Table.Cell>
               </Table.Row>
             </Aux>
-            }
+        }
             {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5}><b>Maturity</b>{' '}
@@ -169,14 +169,6 @@ class KeyTerms extends Component {
                 }
               </Aux>
             }
-            <Table.Row verticalAlign="top">
-              <Table.Cell><b>Offered By</b></Table.Cell>
-              <Table.Cell className="grey-header">
-                {campaign && get(campaign, 'regulation') ?
-                  CAMPAIGN_OFFERED_BY[get(campaign, 'regulation')] :
-                  CAMPAIGN_OFFERED_BY[get(campaign, 'keyTerms.regulation')]}
-              </Table.Cell>
-            </Table.Row>
           </Table.Body>
         </Table>
         <Button fluid={isTablet} onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">

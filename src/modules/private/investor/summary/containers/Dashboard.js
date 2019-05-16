@@ -99,14 +99,12 @@ export default class Dashboard extends Component {
           <SummaryHeader details={summaryDetails(summary)} />
           {cashMovementData && cashMovementData.length ?
             <Aux>
-              {!isMobile ?
-                <Card fluid>
-                  <Card.Content>
-                    <Header as="h4">Investments and Payments</Header>
-                    <CashMovement data={cashMovementData} />
-                  </Card.Content>
-                </Card> : null
-              }
+              <Card fluid>
+                <Card.Content>
+                  <Header as="h4">Investments and Payments</Header>
+                  <CashMovement data={cashMovementData} />
+                </Card.Content>
+              </Card>
             </Aux> :
             <Aux>
               <Card fluid={isMobile}>

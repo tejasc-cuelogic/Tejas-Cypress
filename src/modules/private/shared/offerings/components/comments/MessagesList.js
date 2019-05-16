@@ -46,15 +46,19 @@ const MessagesList = props => (
                   roles: get(u, 'createdUserInfo.roles') ? get(u, 'createdUserInfo.roles').map(r => r.scope) : [],
                 }}
               />
-            )) : <UserAvatar
-              size="mini"
-              UserInfo={{
-              firstName: get(msg, 'createdUserInfo.info.firstName'),
-              lastName: get(msg, 'createdUserInfo.info.lastName'),
-              avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-              roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
-            }}
-            />}
+            )) :
+                  // eslint-disable-next-line react/jsx-indent
+                  <UserAvatar
+                    size="mini"
+                    UserInfo={{
+                firstName: get(msg, 'createdUserInfo.info.firstName'),
+                lastName: get(msg, 'createdUserInfo.info.lastName'),
+                avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
+                roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
+              }}
+              // eslint-disable-next-line react/jsx-closing-bracket-location
+              />
+          }
           </div>
           <List.Content>
             <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? `${props.threadUsersList(msg.threadComments).length === 1 && (get(msg, 'createdUserInfo.id') !== get(props.threadUsersList(msg.threadComments), '[0].createdUserInfo.id')) ? `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')} ,` : ''} ${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`}</List.Header>
@@ -66,7 +70,7 @@ const MessagesList = props => (
         </List.Item>
       ))
     }
-    {!props.passedProcessingDate && props.messages.length ?
+    {props.messages.length ?
       <div className="sticky-wrap">
         <Button color="blue" size="small" className="link-button" content="Post new Comment" onClick={props.newPostComment} />
       </div> : null

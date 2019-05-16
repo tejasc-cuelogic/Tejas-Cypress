@@ -16,20 +16,7 @@ class Success extends Component {
   componentWillMount() {
     if (this.props.isPublic) {
       const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM_BASIC;
-      if (fields.email.value === '') {
-        const { id, applicationType } = this.props.match.params;
-        this.props.businessAppStore.fetchPreQualAppDataById(id).then((data) => {
-          const fieldData = {};
-          fieldData.email = { value: data.email };
-          fieldData.firstName = { value: data.firstName };
-          fieldData.lastName = { value: data.lastName };
-          this.props.authStore.setUserDetails(fieldData);
-          this.props.businessAppStore.setFieldvalue('applicationId', data.id);
-          this.props.businessAppStore.setFieldvalue('currentApplicationType', applicationType);
-        });
-      } else {
-        this.props.authStore.setUserDetails(fields);
-      }
+      this.props.authStore.setUserDetails(fields);
     }
   }
   onProceed = (e) => {

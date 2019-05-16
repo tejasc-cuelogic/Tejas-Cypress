@@ -153,7 +153,7 @@ export default class ConfirmEmailAddress extends Component {
 
   render() {
     const changeEmailAddressLink = this.props.refLink ?
-      '/app/account-settings/profile-data/new-email-address' : '/auth/register-investor';
+      '/app/profile-settings/profile-data/new-email-address' : '/auth/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,

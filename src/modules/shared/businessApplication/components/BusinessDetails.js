@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup } from 'semantic-ui-react';
+import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../theme/shared';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../theme/form';
@@ -80,21 +80,11 @@ export default class BusinessDetails extends Component {
           }
           <FormElementWrap
             hideFields={hideFields}
-            header="Business Plan"
-            subHeader={
+            header={
               <Aux>
-                The business plan is intended to describe the who, what, when, where,
-                how and why of your project.*
-                {!hideFields && currentApplicationType === 'business' ?
-                  <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
-                  :
-                  <Popup
-                    trigger={<Icon className="ns-help-circle" />}
-                    content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
-                    position="top center"
-                    className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
-                    wide
-                  />
+                Business Plan
+                {!hideFields && currentApplicationType === 'business' &&
+                <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
                 }
               </Aux>
             }
@@ -103,6 +93,7 @@ export default class BusinessDetails extends Component {
               sharableLink
               toolTipClassName="left-align justify-text"
               hideFields={hideFields}
+              tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
               disabled={formReadOnlyMode}
               multiple
               asterisk="true"
@@ -302,7 +293,6 @@ export default class BusinessDetails extends Component {
                           hideFields={hideFields}
                           disabled={formReadOnlyMode}
                           name="resume"
-                          asterisk="true"
                           fielddata={owner.resume}
                           ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
                           onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}

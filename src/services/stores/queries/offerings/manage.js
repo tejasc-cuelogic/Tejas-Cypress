@@ -25,7 +25,6 @@ export const allOfferings = gql`
       keyTerms {
         legalBusinessName
         shorthandBusinessName
-        securities
       }
       leadDetails {
         id
@@ -49,9 +48,9 @@ export const allOfferings = gql`
           firstName
           lastName
         }
-        phone {
-          number
-        }
+       phone {
+        number
+      }
       }
       offering {
         launch {
@@ -69,14 +68,6 @@ export const allOfferings = gql`
       updated {
         id
         date
-      }
-      closureSummary {
-        processingDate
-        hardCloseDate
-        repayment {
-          currentRepaidAmount
-          count
-        }
       }
     }
   }

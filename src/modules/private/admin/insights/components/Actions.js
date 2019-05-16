@@ -12,7 +12,7 @@ const Actions = observer((props) => {
         inverted
         onClick={() => save('DRAFT')}
         color="green"
-        content="Save"
+        content="Save as draft"
         disabled={!meta.isValid}
       />
       <Button

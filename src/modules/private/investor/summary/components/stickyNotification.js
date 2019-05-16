@@ -6,7 +6,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class StickyNotification extends Component {
   handleVerifyAccreditation = (e) => {
     e.preventDefault();
-    const url = '/app/account-settings/investment-limits';
+    const url = '/app/profile-settings/investment-limits';
     const { accountType, accountId, multipleAccounts } = this.props;
     if (!multipleAccounts) {
       if (accountType === 'entity') {
@@ -19,7 +19,7 @@ export default class StickyNotification extends Component {
         this.props.history.push(`${url}/verify-accreditation/${accountId}/${accountType}`);
       }
     } else {
-      this.props.history.push('/app/account-settings/investment-limits');
+      this.props.history.push('/app/profile-settings/investment-limits');
     }
   }
 

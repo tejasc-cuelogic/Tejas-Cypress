@@ -51,6 +51,7 @@ export default class AllRequests extends Component {
                 <Table.HeaderCell>Requested Date</Table.HeaderCell>
                 <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
+                <Table.HeaderCell>GS Transaction #</Table.HeaderCell>
                 <Table.HeaderCell>Account</Table.HeaderCell>
                 <Table.HeaderCell textAlign="center" />
               </Table.Row>
@@ -79,6 +80,9 @@ export default class AllRequests extends Component {
                       <p>{req.linkedBank && req.linkedBank.changeRequest &&
                         req.linkedBank.changeRequest.plaidAccessToken ? 'Plaid' : 'Manual'}
                       </p>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <p>N/A</p>
                     </Table.Cell>
                     <Table.Cell>
                       {(req.linkedBank && req.linkedBank.changeRequest

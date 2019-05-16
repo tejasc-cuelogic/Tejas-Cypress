@@ -29,7 +29,7 @@ class Disclosure extends Component {
           {
             !this.props.userStore.currentUser ?
               <Button as={Link} to={`/auth/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" /> :
-              <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+              <Button as={Link} to="/app/profile-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
           }
         </section>
       );
@@ -40,7 +40,6 @@ class Disclosure extends Component {
           width="100%"
           height="100%"
           title="agreement"
-          allowFullScreen="true"
           src={doc.BoxUrl}
           ref={(c) => { this.iframeComponent = c; }}
         />

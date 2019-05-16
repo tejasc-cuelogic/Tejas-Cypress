@@ -23,7 +23,7 @@ export default class MessagesWrap extends Component {
   }
   render() {
     const {
-      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate,
+      uiStore, messageStore, userDetailsStore, isIssuer,
     } = this.props;
     const {
       thread, approveComment, buttonLoader, currentOfferingIssuerId, threadMainMessage,
@@ -42,9 +42,7 @@ export default class MessagesWrap extends Component {
           commentEditHandler={this.commentEditHandler}
           deleteCommentHandler={this.confirmDelete}
         />
-        {!passedProcessingDate &&
         <Compose isIssuer={isIssuer} />
-        }
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this message?"

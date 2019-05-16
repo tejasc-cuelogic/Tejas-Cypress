@@ -1,22 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
-import Loadable from 'react-loadable';
 // import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import NotFound from '../../../../shared/NotFound';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/portfolio/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/portfolio/${component}`));
 const navItems = [
   { title: 'Overview', to: 'overview', component: 'Overview' },
   { title: 'Transactions', to: 'transactions', component: 'Transactions' },
@@ -94,32 +88,34 @@ class InvestmentDetails extends Component {
           <SummaryHeader details={summaryDetails} />
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                component={getModule(navItems[0].component)}
-              />
-              {
-                navItems.map((item) => {
-                  const CurrentModule = item.load === false ?
-                    item.component : getModule(item.component);
-                  return (
-                    <Route
-                      key={item.to}
-                      path={`${match.url}/${item.to}`}
-                      // component={getModule(item.component)}
-                      render={props => (
-                        <CurrentModule
-                          isAdmin={this.props.isAdmin}
-                          {...props}
-                        />)
-                     }
-                    />
-                  );
-                })
-              }
-            </Switch>
+            <Suspense fallback={<InlineLoader />}>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={getModule(navItems[0].component)}
+                />
+                {
+                  navItems.map((item) => {
+                    const CurrentModule = item.load === false ?
+                      item.component : getModule(item.component);
+                    return (
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        // component={getModule(item.component)}
+                        render={props => (
+                          <CurrentModule
+                            isAdmin={this.props.isAdmin}
+                            {...props}
+                          />)
+                        }
+                      />
+                    );
+                  })
+                }
+              </Switch>
+            </Suspense>
           </Card>
         </Modal.Content>
       </Modal>

@@ -1,7 +1,7 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, omit, get, isNull, uniqWith, isEqual } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, omit, get } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -192,56 +192,41 @@ export class IdentityStore {
 
   checkIncorrectAns = res => res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete')
 
-  CipFailReasons = (failReasonArr, obj) => {
-    failReasonArr.push(obj);
-    // eslint-disable-next-line no-shadow
-    const filteredArr = map(failReasonArr, obj => (omit(obj, [['__typename']])));
-    return uniqWith(filteredArr, isEqual);
-  }
-
   @computed
   get formattedUserInfo() {
     const { fields, response } = this.ID_VERIFICATION_FRM;
-    const legalCip = {};
-    // eslint-disable-next-line no-unused-vars
-    const { phone, cip } = userDetailsStore.userDetails;
+    const cip = {};
     if (response.key === 'id.error') {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = 'ERROR_NO_REQUEST_ID';
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = 'ERROR_NO_REQUEST_ID';
     } else if (response.message === 'PASS' || (response.summary && response.summary === 'pass')) {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.passId;
-      if (response.key && Helper.matchRegexWithString(/\bcorrect(?![-])\b/, response.message)) {
-        legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }] :
-          this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
-        legalCip.failType = 'FAIL_WITH_QUESTIONS';
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.passId;
+      if (response.key && response.message) {
+        cip.failReason = [{ key: response.key, message: response.message }];
+        cip.failType = 'FAIL_WITH_QUESTIONS';
       }
     } else if (response.message === 'FAIL' && response.questions) {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.softFailId;
-      legalCip.failType = 'FAIL_WITH_QUESTIONS';
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.softFailId;
+      cip.failType = 'FAIL_WITH_QUESTIONS';
       // omitDeep, cleanDeep
-      legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])] :
-        this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-      // [...cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+      cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
     } else if (this.checkIncorrectAns(response) && response.hardFailId) {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.hardFailId;
-      legalCip.failType = 'FAIL_WITH_UPLOADS';
-      legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }] :
-        this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.hardFailId;
+      cip.failType = 'FAIL_WITH_UPLOADS';
+      cip.failReason = [{ key: response.key, message: response.message }];
     } else {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
-      legalCip.failType = 'FAIL_WITH_UPLOADS';
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
+      cip.failType = 'FAIL_WITH_UPLOADS';
       if (response.qualifiers && response.qualifiers !== null) {
-        legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])] :
-          this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-      // [...cip.failReason,
-        // ...omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+        cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
       }
     }
     const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
+    const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       legalName: {
         salutation: fields.title.value,
@@ -275,7 +260,7 @@ export class IdentityStore {
     }
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
     const phoneDetails = { number };
-    return { userInfo, phoneDetails, legalCip };
+    return { userInfo, phoneDetails, cip };
   }
 
   @action
@@ -320,7 +305,7 @@ export class IdentityStore {
           }
         })
         .catch((err) => {
-          if (err || err.response) {
+          if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject(err);
           } else {
@@ -586,7 +571,7 @@ export class IdentityStore {
         variables: {
           user: this.formattedUserInfo.userInfo,
           phoneDetails: this.formattedUserInfo.phoneDetails,
-          cip: this.formattedUserInfo.legalCip,
+          cip: this.formattedUserInfo.cip,
         },
       })
       .then((data) => {

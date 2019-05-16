@@ -11,22 +11,20 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   teamMember, handleAction, handleEdit, save,
 }) => (
-  <div className="row-wrap striped-table">
-    <div className="balance-half first-column">
+  <div className="row-wrap">
+    <div className="balance-half">
       <DragHandle />
-      <div className="mr-10">
-        <UserAvatar
-          UserInfo={{
-            avatarUrl: teamMember.avatar ? teamMember.avatar : '',
-            name: teamMember.memberName ? teamMember.memberName : '',
-          }}
-          size="nosize"
-          base64url
-        />
-      </div>
+      <UserAvatar
+        UserInfo={{
+          avatarUrl: teamMember.avatar ? teamMember.avatar : '',
+          name: teamMember.memberName ? teamMember.memberName : '',
+        }}
+        size="mini"
+        base64url
+      />
       {teamMember.memberName}
     </div>
-    <div className="balance">
+    <div className="balance-half">
       {teamMember.title}
     </div>
     <div className="balance-half">
@@ -39,10 +37,10 @@ const SortableItem = SortableElement(({
           </Aux>
         )) : ''}
     </div>
-    <div className="balance width-70 center-align">
+    <div className="balance-half">
       {teamMember.order}
     </div>
-    <div className="action width-130 right-align">
+    <div className="action right-align">
       <Button.Group>
         <Button icon className="link-button" >
           <Icon className="ns-pencil" onClick={() => handleEdit(teamMember.id)} />
@@ -158,13 +156,13 @@ export default class AllTeam extends Component {
           </Grid>
         </Form>
         <div className="ui card fluid">
-          <div className="ui basic table">
-            <div className="row-wrap striped-table thead">
-              <div className="balance-half first-column">Name</div>
-              <div className="balance">Postion</div>
+          <div className="ui basic table team-table striped">
+            <div className="row-wrap thead">
+              <div className="balance-half">Name</div>
+              <div className="balance-half">Postion</div>
               <div className="balance-half">Links</div>
-              <div className="balance width-70 center-align">Order</div>
-              <div className="action width-130 right-align" />
+              <div className="balance-half">Order</div>
+              <div className="action right-align" />
             </div>
             <SortableList
               teamMembers={teamMembers}

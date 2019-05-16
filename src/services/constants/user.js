@@ -21,8 +21,7 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909')) &&
-      moment(value, 'MM/DD/YYYY', true).isValid();
+    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909'));
   },
   'Invalid Date',
 );
@@ -89,7 +88,7 @@ export const USER_IDENTITY = {
     label: 'First Name (Legal)',
     placeHolder: 'John',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required|alpha',
     customErrors: {
       required: '* required.',
     },
@@ -101,7 +100,7 @@ export const USER_IDENTITY = {
     label: 'Last Name (Legal)',
     placeHolder: 'Smith',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required|alpha',
     customErrors: {
       required: '* required.',
     },
@@ -257,7 +256,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'First name',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     placeHolder: 'First name',
     objRef: 'info',
   },
@@ -265,7 +264,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Last name',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     placeHolder: 'Last name',
     objRef: 'info',
   },
@@ -273,7 +272,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Phone Number',
     error: undefined,
-    rule: 'optional',
+    rule: 'string',
     placeHolder: 'Phone Number',
     objRef: 'phone',
   },
@@ -281,7 +280,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Email',
     error: undefined,
-    rule: 'optional|email',
+    rule: 'required|email',
     placeHolder: 'Email',
     objRef: 'email',
   },
@@ -393,7 +392,7 @@ export const USER_PROFILE_FOR_ADMIN = {
     value: [],
     key: 'capabilities',
     error: undefined,
-    rule: 'optional',
+    rule: '',
     label: '',
     src: '',
     base64String: '',

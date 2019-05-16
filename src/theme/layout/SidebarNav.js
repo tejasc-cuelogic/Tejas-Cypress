@@ -3,14 +3,14 @@ import { Link, withRouter, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import Aux from 'react-aux';
-import { Menu, Icon, Button } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('navStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
+@inject('navStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export class SidebarNav extends Component {
@@ -27,10 +27,9 @@ export class SidebarNav extends Component {
   toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
 
   render() {
-    const { props } = this;
     const {
       roles, location, isVerified, createdAccount, navStore, onlyMount,
-    } = props;
+    } = this.props;
     if (onlyMount) return null;
     return (
       <Aux>
@@ -45,18 +44,9 @@ export class SidebarNav extends Component {
           isMobile={isMobile}
         />
         <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
-          <Icon name="ns-logout" />
+          <Icon name="sign out" />
           <span>Logout</span>
         </Menu.Item>
-        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
-          props.signupStatus &&
-          !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
-          props.signupStatus.investorProfileCompleted &&
-          props.signupStatus.inActiveAccounts.length > 0 &&
-            <Menu.Item className="btn-item mt-30">
-              <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Open New Account" />
-            </Menu.Item>
-        }
       </Aux>
     );
   }

@@ -1,59 +1,28 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button } from 'semantic-ui-react';
-import { FormInput, MaskedInput, FormDropDown } from '../../../../../../../theme/form';
-import { InlineLoader } from '../../../../../../../theme/shared';
+import { Header, Form, Divider } from 'semantic-ui-react';
+import { FormInput, MaskedInput } from '../../../../../../../theme/form';
 
-@inject('userDetailsStore', 'userStore', 'uiStore')
+@inject('userDetailsStore')
 @withRouter
 @observer
 export default class Admin extends Component {
+  state = { displayMode: true };
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
   }
-  toggleDisplayMode = (val) => {
-    this.props.userDetailsStore.setFieldValue('displayMode', val);
-  }
-  updateUserData = (e) => {
-    e.preventDefault();
-    this.props.userDetailsStore.updateUserBasicInfo().then(() => {
-      this.toggleDisplayMode(true);
-    });
-  }
   render() {
-    const {
-      USER_BASIC, formChange, displayMode, maskChange, userEleChange,
-    } = this.props.userDetailsStore;
+    const { USER_BASIC, formChange } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
-    const { capabilitiesMeta } = this.props.userStore;
-    const { inProgress } = this.props.uiStore;
-    if (inProgress) {
-      return (<InlineLoader />);
-    }
+    const { displayMode } = this.state;
     return (
       <Form>
         <Header as="h4">
           User{"'"}s profile data
         </Header>
-        <Header as="h6">
-          Personal info
-          {displayMode ?
-            <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={() => this.toggleDisplayMode(false)}><small>Edit information</small></Link>
-            :
-            <Button.Group floated="right" size="mini" compact>
-              <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={() => this.toggleDisplayMode(true)} />
-              <Button
-                primary
-                onClick={this.updateUserData}
-                // disabled={!USER_BASIC.meta.isValid} // temporary disabled
-              >
-                Update
-              </Button>
-            </Button.Group>
-          }
-        </Header>
+        <Header as="h6">Personal info</Header>
         <Form.Group widths={4}>
           {
           ['firstName', 'lastName'].map(field => (
@@ -70,8 +39,7 @@ export default class Admin extends Component {
             key="number"
             name="number"
             fielddata={USER_BASIC.fields.number}
-            changed={(values, field) => maskChange(values, formName, field)}
-            // changed={(values, name) => formChange(values, formName, name)}
+            changed={(values, name) => formChange(values, formName, name)}
             phoneNumber
             format="(###) ###-####"
             displayMode={displayMode}
@@ -90,22 +58,9 @@ export default class Admin extends Component {
           <Form.Input fluid label="Role" placeholder="Address" value="Admin" readOnly className="display-only" />
           <div className="field display-only">
             <label>Capabilities</label>
-            {displayMode ?
-              <div className="ui fluid input">
-                {USER_BASIC.fields.capabilities.value.join(', ')}
-              </div> :
-              <FormDropDown
-                name="capabilities"
-                fielddata={USER_BASIC.fields.capabilities}
-                options={capabilitiesMeta}
-                search
-                multiple
-                selection
-                fluid
-                containerclassname="dropdown-field"
-                onChange={(e, res) => userEleChange(e, res, 'dropdown')}
-              />
-            }
+            <div className="ui fluid input">
+              {USER_BASIC.fields.capabilities.value.join(', ')}
+            </div>
           </div>
         </Form.Group>
       </Form>

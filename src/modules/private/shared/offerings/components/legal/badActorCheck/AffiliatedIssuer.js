@@ -15,10 +15,8 @@ export default class AffiliatedIssuer extends Component {
       getAffiliatedIssuerOfferingBac,
       currentOfferingId,
       initLoad,
-      resetAffiliatedIssuerForm,
     } = this.props.offeringCreationStore;
-    if (!initLoad.includes('AFFILIATED_ISSUER_FRM') && this.props.match.isExact) {
-      resetAffiliatedIssuerForm();
+    if (!initLoad.includes('AFFILIATED_ISSUER_FRM')) {
       getAffiliatedIssuerOfferingBac(currentOfferingId, 'AFFILIATED_ISSUER');
     }
   }

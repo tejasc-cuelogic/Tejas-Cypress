@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Grid, Icon, Button, Divider } from 'semantic-ui-react';
-import Loadable from 'react-loadable';
 import { mapValues } from 'lodash';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
@@ -10,12 +9,7 @@ import { InlineLoader } from '../../../../../../theme/shared';
 // import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import { NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
-const getModule = component => Loadable({
-  loader: () => import(`./review/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`./review/${component}`));
 
 const navItems = [
   { title: 'Overview', to: 'overview' },
@@ -84,9 +78,14 @@ export default class Review extends Component {
             </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
+            <Suspense fallback={<InlineLoader />}>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={getModule(this.module(navItems[0].title))}
+                />
+                {
                 navItems.map((item) => {
                   const CurrentComponent = (item.component || getModule(this.module(item.title)));
                   return (
@@ -104,7 +103,8 @@ export default class Review extends Component {
                   );
                 })
               }
-            </Switch>
+              </Switch>
+            </Suspense>
           </Grid.Column>
         </Grid>
       </div>

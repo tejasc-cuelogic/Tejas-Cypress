@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
-import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -12,12 +11,7 @@ import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/details/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/details/${component}`));
 
 @inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
 @observer
@@ -87,7 +81,7 @@ export default class ApplicationDetails extends Component {
       { title: 'Pre-qualification', to: 'pre-qualification' },
     ];
     if ((applicationStatus || prequalStatus) !==
-    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+      BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
       navItems = [
         ...navItems,
         { title: 'Business Details', to: 'business-details' },
@@ -96,17 +90,17 @@ export default class ApplicationDetails extends Component {
       ];
     }
     if (!deleted && !stashed && ((applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ||
-    (applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED || (applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
+      BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ||
+      (applicationStatus || prequalStatus) ===
+      BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED || (applicationStatus || prequalStatus) ===
+      BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
       navItems = [
         ...navItems,
         { title: 'Review', to: 'review' },
       ];
     }
     const { businessName, contactDetails } =
-    businessGeneralInfo || prequalDetails.businessGeneralInfo;
+      businessGeneralInfo || prequalDetails.businessGeneralInfo;
     const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnDimmerClick={false} onClose={this.handleCloseModal} centered={false}>
@@ -118,8 +112,8 @@ export default class ApplicationDetails extends Component {
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
             {(applicationStatus || prequalStatus) ===
-            BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-            <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/prequal-failed/${id}/new/${prequalStatus}/PROMOTE/confirm`} />
+              BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+              <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/prequal-failed/${id}/new/${prequalStatus}/PROMOTE/confirm`} />
             }
           </Header>
           <Grid columns="equal">
@@ -129,17 +123,17 @@ export default class ApplicationDetails extends Component {
                   <Card.Header>
                     Information
                     {(applicationStatus || prequalStatus) !==
-                    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-                    <small className="pull-right">
-                      {this.state.displayOnly ?
-                        <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
-                      :
-                        <Aux>
-                          <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
-                          <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}><Icon name="save" />Update</Link>
-                        </Aux>
-                      }
-                    </small>
+                      BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+                      <small className="pull-right">
+                        {this.state.displayOnly ?
+                          <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
+                          :
+                          <Aux>
+                            <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
+                            <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}><Icon name="save" />Update</Link>
+                          </Aux>
+                        }
+                      </small>
                     }
                   </Card.Header>
                   <Card.Content>
@@ -191,7 +185,7 @@ export default class ApplicationDetails extends Component {
                 </Card>
               </Grid.Column>
               {(applicationStatus || prequalStatus) ===
-              BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+                BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
                 <Grid.Column>
                   <Card fluid className="ba-info-card">
                     <Card.Header>Failed Reason</Card.Header>
@@ -208,34 +202,36 @@ export default class ApplicationDetails extends Component {
           </Grid>
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                component={navItems[0].component || getModule(this.module(navItems[0].title))}
-              />
-              {
-                navItems.map((item) => {
-                  const { params } = match;
-                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
-                  return (
-                    <Route
-                      key={item.to}
-                      path={`${match.url}/${item.to}`}
-                      render={props =>
-                        (<CurrentComponent
-                          module={item.title === 'Activity History' ? 'applicationDetails' : false}
-                          showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
-                          resourceId={params.appId}
-                          appType={params.id}
-                          {...props}
-                        />)
-                      }
-                    />
-                  );
-                })
-              }
-            </Switch>
+            <Suspense fallback={<InlineLoader />}>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={navItems[0].component || getModule(this.module(navItems[0].title))}
+                />
+                {
+                  navItems.map((item) => {
+                    const { params } = match;
+                    const CurrentComponent = (item.component || getModule(this.module(item.title)));
+                    return (
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props =>
+                          (<CurrentComponent
+                            module={item.title === 'Activity History' ? 'applicationDetails' : false}
+                            showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
+                            resourceId={params.appId}
+                            appType={params.id}
+                            {...props}
+                          />)
+                        }
+                      />
+                    );
+                  })
+                }
+              </Switch>
+            </Suspense>
           </Card>
         </Modal.Content>
       </Modal>

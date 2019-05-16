@@ -92,13 +92,14 @@ export const CAMPAIGN_REGULATION_ABREVIATION = {
   BD_506C: 'REG D 506(C)',
   BD_CF_506C: 'REG CF & REG D 506(C)',
 };
-export const CAMPAIGN_OFFERED_BY = {
-  FP_TX: 'NextSeed TX LLC',
-  FP_CF: 'NextSeed US LLC',
-  BD_CF: 'NextSeed Securities, LLC',
-  BD_506C: 'NextSeed Securities, LLC',
-  BD_CF_506C: 'NextSeed Securities, LLC',
+export const CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING = {
+  FP_TX: 'TX',
+  FP_CF: 'US',
+  BD_CF: 'Securities',
+  BD_506C: 'Securities',
+  BD_CF_506C: 'Securities',
 };
+
 export const OFFERING_COMMENTS_SCOPE = {
   NEXTSEED: { title: 'Private Note', color: 'orange' },
   PUBLIC: { title: 'Public', color: 'green' },
@@ -106,6 +107,7 @@ export const OFFERING_COMMENTS_SCOPE = {
     titleITo: 'Note to NS', titleIFrom: 'Note from NS', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
   },
 };
+
 export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {
   PENDING: { header: 'Accreditation Verification In Review', subHeader: 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.' },
   NOT_ELGIBLE: { header: 'Accreditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
@@ -113,6 +115,7 @@ export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {
   EXPIRED: { header: 'Accreditation Expired - Renewal Required', subHeader: 'Your accreditation status has expired.  Please confirm the following to renew.' },
   ELGIBLE: { header: 'ELGIBLE', subHeader: '' },
 };
+
 export const CAMPAIGN_OFFERING_STAGE = {
   CREATION: 'Creation',
   LIVE: 'Live',

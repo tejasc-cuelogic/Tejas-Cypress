@@ -81,11 +81,12 @@ export default class CampaignSideBar extends Component {
               </p>
               <div className="offer-stats">
                 <Statistic.Group>
-                  {!isClosed && diff > 0 &&
+                  {diff ?
                     <Statistic size="mini" className="basic">
                       <Statistic.Value>{diff}</Statistic.Value>
                       <Statistic.Label>Days left</Statistic.Label>
                     </Statistic>
+                    : ''
                   }
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
@@ -148,7 +149,7 @@ export default class CampaignSideBar extends Component {
                     disabled={maxFlagStatus || isInProcessing}
                     onClick={this.handleInvestNowClick}
                   >
-                    {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                    {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                   </Button>
                   <p>
                     {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment

@@ -17,7 +17,7 @@ class UserAvatar extends Component {
     } = this.props;
     // const isBase64ImgTag = !!(UserInfo.avatarUrl ||
     // (UserInfo.firstName !== '' && UserInfo.lastName !== '') || UserInfo.name);
-    const imgSize = size === 'nosize' ? undefined : (size || 'tiny');
+    const imgSize = size || 'tiny';
     const fullName = UserInfo.name && UserInfo.name.split(' ');
     const avatarName = (UserInfo.firstName && UserInfo.lastName) ? `${UserInfo.firstName[0]} ${UserInfo.lastName[0]}` : UserInfo.name && fullName.length > 0 ? (fullName.length === 1 ? fullName[0] : `${fullName[0]} ${fullName[fullName.length - 1]}`) : '';
     const avatarProfile = UserInfo.avatarUrl || (UserInfo.firstName && UserInfo.lastName) || UserInfo.name ? UserInfo.avatarUrl : 'leader-placeholder.jpg';

@@ -45,12 +45,8 @@ export const listAccreditation = gql`
       lastName
       status
       accountType
-      expiration
       accreditationStatus
       requestDate
-      reviewed {
-        date
-      }
       method
       netWorth
       grantorName

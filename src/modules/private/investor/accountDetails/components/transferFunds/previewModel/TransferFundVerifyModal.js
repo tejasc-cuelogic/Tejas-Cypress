@@ -29,7 +29,7 @@ export default class TransferFundVerifyModal extends Component {
   }
 
   gotoMfaSettings = () => {
-    this.props.history.push('/app/account-settings/security');
+    this.props.history.push('/app/profile-settings/security');
   }
 
   resendVerification = (e) => {

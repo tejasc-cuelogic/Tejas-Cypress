@@ -278,11 +278,6 @@ query _getBusinessApplicationById ($id: String!) {
           fileName
         }
       }
-      sourcesAndUses {
-        fileId
-        fileName
-        fileHandle
-      }
       performance {
         nextYearSnapshot {
           grossSales
@@ -345,17 +340,6 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
     applicationType: $applicationType
     userId: $userId
   )
-}
-`;
-
-export const getPreQualificationById = gql`
-query getPreQualificationById ($id: ID!) {
-  getPreQualificationById(preQualId: $id){
-    id
-    email
-    firstName
-    lastName
-  }
 }
 `;
 
