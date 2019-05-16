@@ -42,6 +42,11 @@ export class UserListingStore {
         });
       } else if (accountStatus) {
         deletedAccountStatus = [...deletedAccountStatus, ...DELETED_ACCOUNT_STATUS[accountStatus]];
+      } else {
+        deletedAccountStatus = [
+          ...DELETED_ACCOUNT_STATUS.INVESTOR, ...DELETED_ACCOUNT_STATUS.ISSUER,
+          ...DELETED_ACCOUNT_STATUS.ADMIN,
+        ];
       }
     }
     let params = {
@@ -147,6 +152,9 @@ export class UserListingStore {
         srchParams[name] = value;
       } else if (type === 'checkbox') {
         srchParams[name] = value;
+        if (name === 'isDeleted' && ['FROZEN', 'LOCKED', 'UNLOCKED'].includes(srchParams.accountStatus)) {
+          delete srchParams.accountStatus;
+        }
       } else {
         delete srchParams[name];
       }
