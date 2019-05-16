@@ -49,13 +49,17 @@ export default class Close extends Component {
   handleCancel = () => {
     this.setState({ open: false });
   }
-  closeAction = async (status) => {
+  toggleStep = activeStep => (this.setState({ activeStep }));
+  closeAction = async (status, step) => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
-    await offeringClose({
-      offeringId: offer.id,
-      process: status,
-    });
+    await offeringClose(
+      {
+        offeringId: offer.id,
+        process: status,
+      },
+      step,
+    );
     console.log(status);
   }
   handleCloseOffering = () => {
@@ -114,7 +118,11 @@ export default class Close extends Component {
             <Aux>
               <Step.Group className="campaign-close">
                 {['Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
-                  <Step active={this.state.activeStep === (index + 1)}>
+                  <Step
+                    style={{ background: 'none', textDecoration: 'none' }}
+                    onClick={() => this.toggleStep(index + 1)}
+                    active={this.state.activeStep === (index + 1)}
+                  >
                     <Label circular color={this.state.activeStep === (index + 1) ? 'blue' : 'grey'}>{index + 1}</Label>
                     <Step.Content>
                       <Step.Title>{item}</Step.Title>
@@ -127,6 +135,7 @@ export default class Close extends Component {
               <Aux>
                 <MaskedInput
                   name="queueLimit"
+                  containerwidth="4"
                   fielddata={OFFERING_CLOSE_1.fields.queueLimit}
                   changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
                   number
@@ -135,7 +144,7 @@ export default class Close extends Component {
                   {filter(closingActions, a => a.ref === 1).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
-                      onClick={() => this.closeAction(fA.enum)}
+                      onClick={() => this.closeAction(fA.enum, 1)}
                       primary
                     >{fA.label}
                     </Button>
@@ -149,6 +158,7 @@ export default class Close extends Component {
                   {['queueLimit', 'notePurchaseDate'].map(field => (
                     <MaskedInput
                       name={field}
+                      containerwidth="4"
                       fielddata={OFFERING_CLOSE_2.fields[field]}
                       changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
                       dateOfBirth={field === 'notePurchaseDate'}
@@ -160,7 +170,7 @@ export default class Close extends Component {
                     {filter(closingActions, a => a.ref === 2).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
-                        onClick={() => this.closeAction(fA.enum)}
+                        onClick={() => this.closeAction(fA.enum, 2)}
                         primary
                       >{fA.label}
                       </Button>
@@ -173,6 +183,7 @@ export default class Close extends Component {
                 <Aux>
                   <MaskedInput
                     name="queueLimit"
+                    containerwidth="4"
                     fielddata={OFFERING_CLOSE_3.fields.queueLimit}
                     changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
                     number
@@ -181,7 +192,7 @@ export default class Close extends Component {
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
-                        onClick={() => this.closeAction(fA.enum)}
+                        onClick={() => this.closeAction(fA.enum, 3)}
                         primary
                       >{fA.label}
                       </Button>

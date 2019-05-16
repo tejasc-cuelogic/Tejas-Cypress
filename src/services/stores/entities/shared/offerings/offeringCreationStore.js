@@ -1516,8 +1516,10 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params) => {
+  offeringClose = (params, step) => {
     uiStore.setProgress(params.process);
+    const formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
+    console.log(formData);
     client
       .mutate({
         mutation: offerClose,
