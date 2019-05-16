@@ -141,6 +141,7 @@ export default class AccountDetails extends Component {
                               module={item.title === 'Activity' ? 'userDetails' : false}
                               showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
                               {...props}
+                              adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                               resourceId={details.id}
                             />)
                                 }
