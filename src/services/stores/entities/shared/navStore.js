@@ -40,7 +40,10 @@ export class NavStore {
     try {
       const uKey = _.get(userStore, 'currentUser.sub') || 'public';
       let permitted = [];
+      let navigationItems = this.NAV_ITEMS;
       const { roles } = this.params;
+      const User = { ...userStore.currentUser };
+      const { userDetails } = userDetailsStore;
       if (userDetailsStore.signupStatus.isMigratedFullAccount
         && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
         permitted = [...roles];
@@ -50,6 +53,9 @@ export class NavStore {
           ...userDetailsStore.signupStatus.activeAccounts,
           ...userDetailsStore.signupStatus.processingAccounts,
           ...userDetailsStore.signupStatus.frozenAccounts];
+      }
+      if (User.roles.includes('investor') && userDetails && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
+        navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
       }
       if (permitted && permitted.length > 1 && permitted.includes('investor')) {
         const pInvestorInfo = {
@@ -72,7 +78,7 @@ export class NavStore {
         permitted = JSON.parse(pInvestorInfo).permitted || permitted;
       }
       const routes = _.filter(
-        this.NAV_ITEMS,
+        navigationItems,
         n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
           _.intersection(n.accessibleTo, permitted).length > 0) &&
         (!n.env || n.env.length === 0 ||

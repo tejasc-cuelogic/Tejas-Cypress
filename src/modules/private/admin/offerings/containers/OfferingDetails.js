@@ -54,7 +54,8 @@ export default class OfferingDetails extends Component {
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
     );
     if (this.props.match.params.stage === 'live' && !isDev) {
-      navItems = navItems.filter(n => (!['Bonus Rewards', 'Close'].includes(n.title)));
+      navItems = navItems.filter(n => (!['Bonus Rewards'].includes(n.title)));
+      // navItems = navItems.filter(n => (!['Bonus Rewards', 'Close'].includes(n.title)));
     }
     if (this.props.match.params.stage !== 'creation' && !isDev) {
       navItems = navItems.filter(n => (!['Bonus Rewards'].includes(n.title)));

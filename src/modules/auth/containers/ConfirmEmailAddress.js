@@ -23,7 +23,7 @@ export default class ConfirmEmailAddress extends Component {
     }
 
     if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
-      !this.props.authStore.isUserLoggedIn) {
+      this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
     }
     if (this.props.userDetailsStore.signupStatus.isMigratedUser

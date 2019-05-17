@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
-import { intersection, isEmpty } from 'lodash';
+import { intersection, isEmpty, includes } from 'lodash';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
@@ -89,7 +89,9 @@ export default class AccountDetails extends Component {
                     <Header.Subheader>{rolesRaw[0]}</Header.Subheader>
                   </Header>
                   <Button.Group floated="right">
-                    <Button inverted color="red" content="Delete Profile" />
+                    {!includes(details.status, 'DELETED') && details.status !== 'ADMIN' &&
+                      <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteProfile} content="Delete Profile" />
+                    }
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
                       <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                     </Button>

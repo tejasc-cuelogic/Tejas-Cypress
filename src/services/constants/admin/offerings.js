@@ -2593,3 +2593,28 @@ export const POC_DETAILS = {
   },
 };
 
+const LIMIT = {
+  value: '',
+  label: 'limit',
+  error: undefined,
+  rule: 'required',
+};
+
+export const OFFERING_CLOSE_1 = {
+  queueLimit: { ...LIMIT },
+};
+
+export const OFFERING_CLOSE_2 = {
+  queueLimit: { ...LIMIT },
+  notePurchaseDate: {
+    value: '',
+    label: 'Note Purchase Date',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'MM/DD/YYYY',
+  },
+};
+
+export const OFFERING_CLOSE_3 = {
+  queueLimit: { ...LIMIT },
+};
