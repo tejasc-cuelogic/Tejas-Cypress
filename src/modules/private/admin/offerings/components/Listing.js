@@ -112,7 +112,7 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage ?
-                        stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) === 0 ?
+                        stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 0 ?
                           STAGES.PROCESSING.label
                         : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 2 ?
                           STAGES.LOCK.label

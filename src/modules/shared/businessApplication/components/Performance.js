@@ -66,7 +66,7 @@ export default class Performance extends Component {
             subHeader={
               <span>
                 Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the <br />
-                proposed NextSeed amount) for your project in addition to the proposed uses of that capital.*
+                proposed NextSeed amount) for your project in addition to the proposed uses of that capital.
               </span>
             }
           >
