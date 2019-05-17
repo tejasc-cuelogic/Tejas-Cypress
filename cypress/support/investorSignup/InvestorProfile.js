@@ -3,6 +3,16 @@ import { registerApiCall } from '../common';
 const handleOverviewStep = () => {
   cy.get('div.multistep > .center-align > button').contains('Continue').click();
 };
+const btnClickAndWait = () => {
+  cy.get('button.next').click();
+  cy.wait('@upsertProfile');
+  cy.wait(2000);
+};
+
+const clickRadioAndNext = (selector, radioVal) => {
+  cy.get(selector).check(radioVal, { force: true });
+  btnClickAndWait();
+};
 
 export const completeInvestorProfile = () => {
   registerApiCall('upsertProfile');
@@ -15,33 +25,22 @@ export const completeInvestorProfile = () => {
         completeInvestorProfile();
         break;
       case 'Employment Status':
-        cy.get('input[name="status"]').check('SELF_EMPLOYED', { force: true });
-        cy.get('button.next').click();
-        cy.wait('@upsertProfile');
-        cy.wait(2000);
+        clickRadioAndNext('input[name="status"]', 'SELF_EMPLOYED');
         completeInvestorProfile();
         break;
       case 'Brokerage Employment':
-        cy.get('input[name="brokerageEmployment"]').check('no', { force: true });
-        cy.get('button.next').click();
-        cy.wait('@upsertProfile');
-        cy.wait(2000);
+        clickRadioAndNext('input[name="brokerageEmployment"]', 'no');
         completeInvestorProfile();
         break;
       case 'Public Company Relations':
-        cy.get('input[name="publicCompanyRel"]').check('no', { force: true });
-        cy.get('button.next').click();
-        cy.wait('@upsertProfile');
-        cy.wait(2000);
+        clickRadioAndNext('input[name="publicCompanyRel"]', 'no');
         completeInvestorProfile();
         break;
       case 'Financial Information':
         cy.get('input[name="investorProfileType"]').check('JOINT', { force: true });
         cy.get('input[name="netWorth"]').type('123456789');
         cy.get('input[name="annualIncomeCurrentYear"]').type('123456789');
-        cy.get('button.next').click();
-        cy.wait('@upsertProfile');
-        cy.wait(3000);
+        btnClickAndWait();
         completeInvestorProfile();
         break;
       case 'Investment Experience':
@@ -56,3 +55,4 @@ export const completeInvestorProfile = () => {
     }
   });
 };
+
