@@ -232,10 +232,6 @@ export class Utility {
     return blob;
   }
   sendErrorMail = (res) => {
-    const redirectToHome = () => {
-      window.location = window.location.origin;
-    };
-
     const errors = {};
     const gqlErr = {};
 
@@ -268,13 +264,9 @@ export class Utility {
       const params = {
         emailContent: JSON.stringify(errors),
       };
-      authStore.notifyApplicationError(params).then(() => {
-        redirectToHome();
-      }).catch(() => {
-        redirectToHome();
-      });
+      authStore.notifyApplicationError(params).then(() => { }).catch(() => { });
     } catch (e) {
-      redirectToHome();
+      console.log('Error', e);
     }
   }
 }
