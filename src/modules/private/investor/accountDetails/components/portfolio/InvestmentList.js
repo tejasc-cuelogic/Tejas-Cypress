@@ -87,14 +87,13 @@ const InvestmentList = (props) => {
                             {viewAgreement && data.agreementId} {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
-                            {!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
+                            {!props.isAccountFrozen && (!((DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0) && !get(data, 'offering.closureSummary.hardCloseDate')) || !get(data, 'offering.closureSummary.processingDate')) &&
                               <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                             }
-                            {DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2 &&
+                            {(!get(data, 'offering.closureSummary.processingDate') || DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2) &&
                               <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             }
-                            {!(!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
-                            DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2) &&
+                            {get(data.offering, 'closureSummary.processingDate') && (DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 0 || DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2) &&
                               <Button
                                 disabled
                                 content={get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2 ?
