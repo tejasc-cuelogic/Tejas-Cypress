@@ -121,7 +121,7 @@
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semantic-ui-css": "^2.4.0",
-    "semantic-ui-react": "^0.87.1",
+    "semantic-ui-react": "^0.82.3",
     "semver": "6.0.0",
     "shortid": "^2.2.8",
     "slick-carousel": "^1.8.1",
