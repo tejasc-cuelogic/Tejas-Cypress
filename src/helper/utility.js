@@ -7,6 +7,7 @@ import moment from 'moment';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
+import { userStore, authStore, userDetailsStore } from '../services/stores';
 
 export class Utility {
   // Default options for the toast
@@ -229,6 +230,52 @@ export class Utility {
 
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
+  }
+  sendErrorMail = (res) => {
+    const redirectToHome = () => {
+      window.location = window.location.origin;
+    };
+
+    const errors = {};
+    const gqlErr = {};
+
+    if (authStore.isUserLoggedIn) {
+      errors.userEmailId = userStore.getUserEmailAddress();
+      errors.userId = userDetailsStore.currentUserId;
+    }
+    errors.browserName = window.navigator.userAgent;
+    errors.platform = window.navigator.platform;
+
+    const errorList = _.map(_.get(res, 'graphQLErrors'), (e) => {
+      const err = [];
+      err.push(e.message);
+      return err;
+    });
+    gqlErr.operationName = _.get(res, 'operation') ? _.get(res, 'operation.operationName') : '';
+    gqlErr.errors = errorList;
+    gqlErr.requestParams = _.get(res, 'operation') ? JSON.stringify(_.get(res, 'operation.variables')) : '';
+    errors.graphqlError = gqlErr;
+
+    if (_.get(res, 'networkError.statusCode')) {
+      const networkErr = {};
+      networkErr.statusCode = _.get(res, 'networkError.statusCode');
+      networkErr.errorMessage = _.get(res, 'networkError.result.message');
+
+      errors.networkError = networkErr;
+    }
+
+    try {
+      const params = {
+        emailContent: JSON.stringify(errors),
+      };
+      authStore.notifyApplicationError(params).then(() => {
+        redirectToHome();
+      }).catch(() => {
+        redirectToHome();
+      });
+    } catch (e) {
+      redirectToHome();
+    }
   }
 }
 
