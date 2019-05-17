@@ -10,7 +10,7 @@ export const SignUpMeta = {
 
 export const goToSignUpScreen = () => {
   cy.contains('Sign up');
-  cy.get('button.compact').click();
+  cy.get('.header-wrap').get('.menu-button').contains('Sign Up').click();
   cy.get('.user-type').find('h4').contains('Investor').click();
   cy.get('.center-align').find('a').click();
 };

@@ -42,18 +42,23 @@ describe('Account Creation', () => {
     cy.get('input[name="accType"]').check('0', { force: true });
     cy.get('button.next').click();
     cy.get('.bank-link:first').click({ force: true });
-    cy.wait(10000);
+    cy.wait(3000);
     cy.get('iframe').then(($iframe) => {
       const $body = $iframe.contents().find('body');
       let stripe = cy.wrap($body);
       stripe.find('.Pane__actions > button').click({ force: true });
       stripe = cy.wrap($body);
       stripe.find('input[name="username"]').type('user_good');
+      stripe = cy.wrap($body);
       stripe.find('input[name="password"]').type('pass_good');
+      stripe = cy.wrap($body);
       stripe.find('button[type="submit"]').click();
+      cy.wait(3000);
+      stripe = cy.wrap($body);
+      stripe.find('div.SelectAccountPane__account-list:first').click();
+      stripe = cy.wrap($body);
+      stripe.find('button').contains('Continue').click();
     });
-    cy.get('.SelectAccountPane__account-list:first').click();
-    cy.get('button').contains('Continue').click();
     cy.wait('@upsertInvestorAccount');
     cy.get('form').within(() => {
       cy.get('input[name="value"]').type('15000');
@@ -62,7 +67,7 @@ describe('Account Creation', () => {
     });
     cy.wait(3000);
     cy.get('.multistep').within(() => {
-      cy.get('button').contains('Create your account').click({ force: true });
+      cy.get('.center-align > .button').contains('Create your account').click({ force: true });
     });
   });
 });
