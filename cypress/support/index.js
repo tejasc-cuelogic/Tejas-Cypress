@@ -20,5 +20,9 @@ Cypress.on('window:before:load', (win) => {
   delete win.fetch;
 });
 
+Cypress.Cookies.defaults({
+  whitelist: 'session_id',
+})
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
