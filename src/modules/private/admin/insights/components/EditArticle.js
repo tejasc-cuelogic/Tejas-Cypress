@@ -191,7 +191,7 @@ export default class EditArticle extends Component {
                   <Card fluid>
                     <Card.Content>
                       <Header as="h4">Thumbnail</Header>
-                      <Form className="cropper-wrap headshot-img">
+                      <Form className="cropper-wrap tombstone-img">
                         {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
                           <div className="file-uploader attached">
                             {
