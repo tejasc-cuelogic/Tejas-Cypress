@@ -8,7 +8,6 @@ import { API_ROOT, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
 import { authActions } from '../services/actions';
-import Helper from '../helper/utility';
 
 global.fetch = fetch;
 
@@ -39,7 +38,7 @@ export const GqlClient = new ApolloClient({
     }
     if (get(res, 'graphQLErrors')) {
       if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
-        Helper.sendErrorMail(res);
+        authStore.sendErrorMail(res);
       }
     }
   },
