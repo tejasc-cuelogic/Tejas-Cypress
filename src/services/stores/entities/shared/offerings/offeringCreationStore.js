@@ -1518,11 +1518,15 @@ export class OfferingCreationStore {
   @action
   offeringClose = (params, step) => {
     uiStore.setProgress(params.process);
-    const formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
+    let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
+    formData = cleanDeep(formData);
+    if (formData.payload) {
+      formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+    }
     client
       .mutate({
         mutation: offerClose,
-        variables: { ...params, ...cleanDeep(formData) },
+        variables: { ...params, ...formData },
       }).then((data) => {
         uiStore.setProgress(false);
         console.log(data);
