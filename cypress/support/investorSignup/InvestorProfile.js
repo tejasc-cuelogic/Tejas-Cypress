@@ -1,4 +1,4 @@
-import { waitForAPIcall, registerApiCall } from '../common';
+import { registerApiCall } from '../common';
 
 const handleOverviewStep = () => {
   cy.get('div.multistep > .center-align > button').contains('Continue').click();
@@ -17,21 +17,21 @@ export const completeInvestorProfile = () => {
       case 'Employment Status':
         cy.get('input[name="status"]').check('SELF_EMPLOYED', { force: true });
         cy.get('button.next').click();
-        waitForAPIcall('upsertProfile');
+        cy.wait('@upsertProfile');
         cy.wait(2000);
         completeInvestorProfile();
         break;
       case 'Brokerage Employment':
         cy.get('input[name="brokerageEmployment"]').check('no', { force: true });
         cy.get('button.next').click();
-        waitForAPIcall('upsertProfile');
+        cy.wait('@upsertProfile');
         cy.wait(2000);
         completeInvestorProfile();
         break;
       case 'Public Company Relations':
         cy.get('input[name="publicCompanyRel"]').check('no', { force: true });
         cy.get('button.next').click();
-        waitForAPIcall('upsertProfile');
+        cy.wait('@upsertProfile');
         cy.wait(2000);
         completeInvestorProfile();
         break;
@@ -40,7 +40,7 @@ export const completeInvestorProfile = () => {
         cy.get('input[name="netWorth"]').type('123456789');
         cy.get('input[name="annualIncomeCurrentYear"]').type('123456789');
         cy.get('button.next').click();
-        waitForAPIcall('upsertProfile');
+        cy.wait('@upsertProfile');
         cy.wait(3000);
         completeInvestorProfile();
         break;
@@ -50,7 +50,7 @@ export const completeInvestorProfile = () => {
           .click({ multiple: true });
         cy.wait(3000);
         cy.get('.center-align > button').contains('Continue to Account').click({ force: true });
-        waitForAPIcall('upsertProfile');
+        cy.wait('@upsertProfile');
         cy.wait(3000);
         break;
     }

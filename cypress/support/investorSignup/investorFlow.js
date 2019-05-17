@@ -6,9 +6,6 @@ import { enterCodeAndConfirm } from '../common';
 import { completeInvestorProfile } from './InvestorProfile';
 
 export const InvestorFlowProcess = () => {
-  Cypress.on('window:before:load', (win) => {
-    delete win.fetch
-  });
   cy.visit('/');
   fillSignUpFormAndProceed();
   enterCodeAndConfirm();

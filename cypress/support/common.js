@@ -1,6 +1,3 @@
-export const waitForAPIcall = (operationName) => {
-  cy.wait(`@${operationName}`);
-}
 
 export const registerApiCall = (operationName) => {
   cy.server();
@@ -16,11 +13,9 @@ export const typeOtpCode = () => {
   });
 };
 
-export const escapeCharFromSel = myid => `.${myid.replace(/(:|\.|\[|\]|,|=|@)/g, '\\$1')}`;
-
 export const enterCodeAndConfirm = () => {
   typeOtpCode();
   registerApiCall('confirm');
   cy.get('form').find('button').contains('Confirm').click();
-  waitForAPIcall('confirm');
+  cy.wait('@confirm');
 }

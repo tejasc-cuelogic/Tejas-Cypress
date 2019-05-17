@@ -1,4 +1,4 @@
-import { registerApiCall, waitForAPIcall } from "../common";
+import { registerApiCall } from "../common";
 
 export const legalDetailsMeta = {
   salutation: 'Mr.',
@@ -38,5 +38,5 @@ export const fillLegalFormAndProceed = () => {
   registerApiCall('legal');
   fillLegalDetailsForm();
   cy.get('form').find('button').contains('Verify my identity').click();
-  waitForAPIcall('legal');
+  cy.wait('@legal');
 };
