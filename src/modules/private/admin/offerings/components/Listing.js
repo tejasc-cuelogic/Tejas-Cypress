@@ -98,14 +98,12 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage ?
-                        STAGES[offering.stage].label : '-'
-                      }
-                    </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      {offering.offering && offering.offering.launch &&
-                      offering.offering.launch.targetDate ?
-                      DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
+                        stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 0 ?
+                          STAGES.PROCESSING.label
+                        : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 2 ?
+                          STAGES.LOCK.label
+                          : STAGES[offering.stage].label
+                        : STAGES[offering.stage].label
                       }
                     </Table.Cell>
                     {stage === 'live' &&
