@@ -12,7 +12,8 @@ class Users extends Component {
     this.props.userListingStore.initRequest();
   }
 
-  setSearchParam = (e, { name, value }) => this.props.userListingStore.setInitiateSrch(name, value);
+  setSearchParam = (e, { name, value }, type) =>
+    this.props.userListingStore.setInitiateSrch(name, value, type);
 
   toggleSearch = () => this.props.userListingStore.toggleSearch();
 

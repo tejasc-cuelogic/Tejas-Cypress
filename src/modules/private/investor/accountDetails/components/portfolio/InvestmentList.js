@@ -10,7 +10,7 @@ import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 const InvestmentList = (props) => {
-  const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Investment Type', 'Invested Amount', 'Status'];
+  const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Status', 'Investment Type', 'Invested Amount'];
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
   const {
     investments, match, viewAgreement, handleInvestNowClick, handleViewInvestment, isAdmin,
@@ -53,33 +53,27 @@ const InvestmentList = (props) => {
                         </div>
                       </Table.Cell>
                       <Table.Cell>
-                        {props.listOf !== 'pending' ?
+                        {
                           data && data.offering && data.offering.stage ?
-                            props.listOf === 'active' ? 'Active' : STAGES[data.offering.stage].label : '-' :
-                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                            props.listOf === 'active' ? 'Active' : data.offering.stage === 'LIVE' ?
+                            get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 0 ? STAGES.PROCESSING.label :
+                            get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2 ?
+                          STAGES.LOCK.label : STAGES[data.offering.stage].label : STAGES[data.offering.stage].label : '-'
                         }
                       </Table.Cell>
                       <Table.Cell>
-                        {props.listOf !== 'pending' ?
-                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share' :
+                        {
+                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                        }
+                      </Table.Cell>
+                      <Table.Cell className="text-capitalize">
+                        {
                           <Aux>
                             {Helper.CurrencyFormat(data.investedAmount, 0)}
                             <p className="date-stamp">
                               <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
                             </p>
                           </Aux>
-                        }
-                      </Table.Cell>
-                      <Table.Cell className="text-capitalize">
-                        {props.listOf !== 'pending' ?
-                          <Aux>
-                            {Helper.CurrencyFormat(data.investedAmount, 0)}
-                            <p className="date-stamp">
-                              <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
-                            </p>
-                          </Aux> :
-                          data && data.offering && data.offering.stage ?
-                            STAGES[data.offering.stage].label : '-'
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>
@@ -93,11 +87,19 @@ const InvestmentList = (props) => {
                             {viewAgreement && data.agreementId} {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
-                            {!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
+                            {!props.isAccountFrozen && (!((DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0) && !get(data, 'offering.closureSummary.hardCloseDate')) || !get(data, 'offering.closureSummary.processingDate')) &&
                               <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                             }
-                            {DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2 &&
+                            {(!get(data, 'offering.closureSummary.processingDate') || DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2) &&
                               <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
+                            }
+                            {get(data.offering, 'closureSummary.processingDate') && (DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 0 || DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2) &&
+                              <Button
+                                disabled
+                                content={get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2 ?
+                                STAGES.LOCK.label : 'Processing'}
+                                color="red"
+                              />
                             }
                           </Button.Group>
                         )}
@@ -108,7 +110,7 @@ const InvestmentList = (props) => {
               </Table.Body>
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell colSpan={`${props.listOf === 'pending' ? '1' : '2'}`} />
+                  <Table.HeaderCell colSpan="2" />
                   <Table.HeaderCell>Total:</Table.HeaderCell>
                   <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
                   <Table.HeaderCell colSpan="3" />
