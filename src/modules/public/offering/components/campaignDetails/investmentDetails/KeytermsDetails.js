@@ -4,7 +4,12 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_DETAILED, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import {
+  CAMPAIGN_KEYTERMS_SECURITIES,
+  CAMPAIGN_OFFERED_BY,
+  CAMPAIGN_REGULATION_DETAILED,
+  CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
+} from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -35,8 +40,12 @@ class KeyTermsDetails extends Component {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
     const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
+    const totalInvestmentAmount = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
+    const totalInvestmentAmountCf = get(campaign, 'closureSummary.totalInvestmentAmountCf') || 0;
+    const totalInvestmentAmount506C =
+    get(campaign, 'closureSummary.totalInvestmentAmount506C') || 0;
     const investmentMultipleTooltip =
-    isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
+      isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
@@ -57,23 +66,25 @@ class KeyTermsDetails extends Component {
           <Grid.Column>
             <p>
               <b>Type of Offering</b>
-              { get(campaign, 'regulation') &&
-                    CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content={
-                          CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
-                        }
-                        hoverable
-                        position="top center"
-                      /> : ''
+              {get(campaign, 'regulation') &&
+                CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={
+                    CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                   }
+                    hoverable
+                    position="top center"
+                  /> : ''
+              }
               <br />
               {get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
             </p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
+            <p><b>Offered By</b><br />
+              {CAMPAIGN_OFFERED_BY[get(KeyTerms, 'regulation')]}
+            </p>
           </Grid.Column>
         </Grid>
         {!isMobile ? <Divider /> : null}
@@ -97,12 +108,12 @@ class KeyTermsDetails extends Component {
                         {get(KeyTerms, 'regulation') === 'BD_CF_506C' && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key) ?
                           type.key === 'minOfferingAmountCF' ?
                             Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'minOfferingAmount506C')), 0)
-                          : type.key === 'maxOfferingAmountCF' &&
+                            : type.key === 'maxOfferingAmountCF' &&
                             Helper.CurrencyFormat(money.add(get(KeyTerms, type.key), get(KeyTerms, 'maxOfferingAmount506C')), 0)
                           : get(KeyTerms, type.key) ?
                             Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
-                          :
-                          'NA'}
+                            :
+                            'NA'}
                       </p>
                     </Table.Cell>
                   </Table.Row> : ''
@@ -110,12 +121,39 @@ class KeyTermsDetails extends Component {
               </Aux>
             ))
             }
+            {get(KeyTerms, 'regulation') === 'BD_CF_506C' &&
+              <Table.Row verticalAlign="top">
+                <Table.Cell width={5} className="neutral-text"><b>Raised to date{' '}</b>
+                </Table.Cell>
+                <Table.Cell>
+                  <p>
+                    {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
+                  </p>
+                  <p>
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
+                  </p>
+                  <p>
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                  </p>
+                </Table.Cell>
+              </Table.Row>
+            }
+            {get(KeyTerms, 'securities') &&
+              <Table.Row verticalAlign="top">
+                <Table.Cell width={5} className="neutral-text"><b>Type of Securities{' '}</b></Table.Cell>
+                <Table.Cell>
+                  <p>
+                    {offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}
+                  </p>
+                </Table.Cell>
+              </Table.Row>
+            }
             {get(KeyTerms, 'investmentMultiple') &&
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Investment Multiple{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
                     position="top center"
                   />
                 </Table.Cell>
