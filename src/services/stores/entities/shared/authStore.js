@@ -461,7 +461,7 @@ export class AuthStore {
 
     if (this.isUserLoggedIn) {
       errors.userEmailId = userStore.getUserEmailAddress();
-      errors.userId = userDetailsStore.currentUserId;
+      errors.userId = userStore.getUserId();
     }
     errors.browserName = window.navigator.userAgent;
     errors.platform = window.navigator.platform;
