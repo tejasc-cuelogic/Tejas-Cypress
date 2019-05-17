@@ -56,8 +56,9 @@ const InvestmentList = (props) => {
                         {
                           data && data.offering && data.offering.stage ?
                             props.listOf === 'active' ? 'Active' : data.offering.stage === 'LIVE' ?
-                            get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2 ?
-                          STAGES.LOCK.label : 'Processing' : STAGES[data.offering.stage].label : '-'
+                            get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 0 ? STAGES.PROCESSING.label :
+                            get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2 ?
+                          STAGES.LOCK.label : STAGES[data.offering.stage].label : STAGES[data.offering.stage].label : '-'
                         }
                       </Table.Cell>
                       <Table.Cell>
