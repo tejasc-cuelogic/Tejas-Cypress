@@ -10,7 +10,7 @@ import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 const InvestmentList = (props) => {
-  const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Investment Type', 'Invested Amount', 'Status'];
+  const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Status', 'Investment Type', 'Invested Amount'];
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
   const {
     investments, match, viewAgreement, handleInvestNowClick, handleViewInvestment, isAdmin,
@@ -53,33 +53,26 @@ const InvestmentList = (props) => {
                         </div>
                       </Table.Cell>
                       <Table.Cell>
-                        {props.listOf !== 'pending' ?
+                        {
                           data && data.offering && data.offering.stage ?
-                            props.listOf === 'active' ? 'Active' : STAGES[data.offering.stage].label : '-' :
-                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                            props.listOf === 'active' ? 'Active' : data.offering.stage === 'LIVE' ?
+                            get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2 ?
+                          STAGES.LOCK.label : 'Processing' : STAGES[data.offering.stage].label : '-'
                         }
                       </Table.Cell>
                       <Table.Cell>
-                        {props.listOf !== 'pending' ?
-                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share' :
+                        {
+                          get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                        }
+                      </Table.Cell>
+                      <Table.Cell className="text-capitalize">
+                        {
                           <Aux>
                             {Helper.CurrencyFormat(data.investedAmount, 0)}
                             <p className="date-stamp">
                               <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
                             </p>
                           </Aux>
-                        }
-                      </Table.Cell>
-                      <Table.Cell className="text-capitalize">
-                        {props.listOf !== 'pending' ?
-                          <Aux>
-                            {Helper.CurrencyFormat(data.investedAmount, 0)}
-                            <p className="date-stamp">
-                              <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
-                            </p>
-                          </Aux> :
-                          data && data.offering && data.offering.stage ?
-                            STAGES[data.offering.stage].label : '-'
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>
@@ -98,6 +91,15 @@ const InvestmentList = (props) => {
                             }
                             {DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2 &&
                               <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
+                            }
+                            {!(!props.isAccountFrozen && !(DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0 && !get(data, 'offering.closureSummary.hardCloseDate')) &&
+                            DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2) &&
+                              <Button
+                                disabled
+                                content={get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2 ?
+                                STAGES.LOCK.label : 'Processing'}
+                                color="red"
+                              />
                             }
                           </Button.Group>
                         )}
