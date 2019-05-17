@@ -31,9 +31,6 @@ export const GqlClient = new ApolloClient({
       if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
         Helper.sendErrorMail(res);
       }
-      authActions.logout('timeout').then(() => {
-        window.location = '/auth/login';
-      });
     }
   },
   cache: new InMemoryCache({ fragmentMatcher }),
