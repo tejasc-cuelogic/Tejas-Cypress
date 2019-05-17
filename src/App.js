@@ -8,14 +8,14 @@ import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner } from './theme/shared';
 import Layout from './theme/layout/Layout';
-import Private from './modules/private';
+// import Private from './modules/private';
 import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 import { userIdleTime } from './constants/common';
 /**
- * Main App
+ * Main  App
  */
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
@@ -194,7 +194,7 @@ class App extends Component {
           <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
               <Switch>
-                <Route exact path="/app/*" component={Private} />
+                {/* <Route exact path="/app/*" component={Private} /> */}
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>
