@@ -2,7 +2,6 @@
 import fetch from 'isomorphic-fetch';
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import { get } from 'lodash';
 import { authStore } from '../services/stores';
 import { REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
@@ -26,10 +25,8 @@ export const GqlClient = new ApolloClient({
     });
   },
   onError: (res) => {
-    if (get(res, 'graphQLErrors')) {
-      if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
-        authStore.sendErrorMail(res);
-      }
+    if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
+      authStore.sendErrorMail(res);
     }
   },
   cache: new InMemoryCache({ fragmentMatcher }),

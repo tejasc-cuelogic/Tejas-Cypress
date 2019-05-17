@@ -466,14 +466,10 @@ export class AuthStore {
     errors.browserName = window.navigator.userAgent;
     errors.platform = window.navigator.platform;
 
-    const errorList = map(get(res, 'graphQLErrors'), (e) => {
-      const err = [];
-      err.push(e.message);
-      return err;
-    });
-    gqlErr.operationName = get(res, 'operation') ? get(res, 'operation.operationName') : '';
+    const errorList = map(get(res, 'graphQLErrors'), e => e.message);
+    gqlErr.operationName = get(res, 'operation.operationName') || '';
     gqlErr.errors = errorList;
-    gqlErr.requestParams = get(res, 'operation') ? JSON.stringify(get(res, 'operation.variables')) : '';
+    gqlErr.requestParams = JSON.stringify(get(res, 'operation.variables') || '');
     errors.graphqlError = gqlErr;
 
     if (get(res, 'networkError.statusCode')) {
@@ -484,14 +480,13 @@ export class AuthStore {
       errors.networkError = networkErr;
     }
 
-    try {
-      const params = {
-        emailContent: JSON.stringify(errors),
-      };
-      this.notifyApplicationError(params).then(() => { }).catch(() => { });
-    } catch (e) {
-      console.log('Error', e);
-    }
+
+    const params = {
+      emailContent: JSON.stringify(errors),
+    };
+    this.notifyApplicationError(params).then(() => { }).catch((e) => {
+      console.log('Error while calling notifyApplicationError', e);
+    });
   }
 }
 

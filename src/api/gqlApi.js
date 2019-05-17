@@ -30,16 +30,14 @@ export const GqlClient = new ApolloClient({
     });
   },
   onError: (res) => {
+    if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
+      authStore.sendErrorMail(res);
+    }
     if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
       console.log(res);
       authActions.logout('timeout').then(() => {
         window.location = '/auth/login';
       });
-    }
-    if (get(res, 'graphQLErrors')) {
-      if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
-        authStore.sendErrorMail(res);
-      }
     }
   },
   cache: new InMemoryCache({ fragmentMatcher }),
