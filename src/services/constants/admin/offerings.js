@@ -2610,10 +2610,10 @@ export const OFFERING_CLOSE_2 = {
     value: '',
     label: 'Note Purchase Date',
     error: undefined,
-    // objType: 'DATE',
+    objType: 'DATE',
     objRefOutput: 'payload',
     rule: 'optional',
-    // placeHolder: 'MM/DD/YYYY',
+    placeHolder: 'MM/DD/YYYY',
   },
 };
 
