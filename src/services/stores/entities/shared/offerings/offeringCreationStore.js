@@ -1521,7 +1521,15 @@ export class OfferingCreationStore {
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
     if (formData.payload) {
-      formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+      if (formData.payload.notePurchaseDate) {
+        formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.maturityDate) {
+        formData.payload.maturityDate = moment(formData.payload.maturityDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.hardCloseDate) {
+        formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
+      }
     }
     client
       .mutate({

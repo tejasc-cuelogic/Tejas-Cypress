@@ -137,7 +137,7 @@ export default class Close extends Component {
                 }
               </Step.Group>
               {this.state.activeStep === 1 &&
-              <Aux>
+              <Form.Group widths={3}>
                 <MaskedInput
                   name="queueLimit"
                   containerwidth="4"
@@ -156,10 +156,10 @@ export default class Close extends Component {
                   ))}
                 </Button.Group>
                 <Divider className="doubled" />
-              </Aux>
+              </Form.Group>
               }
               {this.state.activeStep === 2 &&
-                <Aux>
+                <Form.Group widths={3}>
                   {['queueLimit', 'notePurchaseDate'].map(field => (
                     <MaskedInput
                       name={field}
@@ -182,17 +182,23 @@ export default class Close extends Component {
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
-                </Aux>
+                </Form.Group>
               }
               {this.state.activeStep === 3 &&
-                <Aux>
-                  <MaskedInput
-                    name="queueLimit"
-                    containerwidth="4"
-                    fielddata={OFFERING_CLOSE_3.fields.queueLimit}
-                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
-                    number
-                  />
+                <Form.Group widths={3}>
+                  {
+                    Object.keys(OFFERING_CLOSE_3.fields).map(field => (
+                      <MaskedInput
+                        key={field}
+                        name={field}
+                        number={['queueLimit', 'interestRate', 'revSharePercentage'].includes(field)}
+                        currency={['nsPayment', 'investorFee', 'multiple'].includes(field)}
+                        dateOfBirth={['maturityDate', 'hardCloseDate'].includes(field)}
+                        fielddata={OFFERING_CLOSE_3.fields[field]}
+                        changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
+                      />
+                    ))
+                  }
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
@@ -204,7 +210,7 @@ export default class Close extends Component {
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
-                </Aux>
+                </Form.Group>
               }
               {this.state.activeStep === 4 && false &&
                 <Aux>
@@ -243,6 +249,7 @@ export default class Close extends Component {
               }
             </Aux>
           }
+          
           <Contingency
             formArrayChange={formArrayChange}
             form={CLOSING_CONTITNGENCIES_FRM}
