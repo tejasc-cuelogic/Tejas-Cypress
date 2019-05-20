@@ -124,6 +124,7 @@ export class Auth {
   async login() {
     uiStore.reset();
     uiStore.setProgress();
+    client.clearStore();
     const { email, password } = Validator.ExtractValues(authStore.LOGIN_FRM.fields);
     const lowerCasedEmail = email.toLowerCase();
     client.clearStore();
@@ -374,6 +375,7 @@ export class Auth {
     authStore.setUserLoggedIn(false);
     userStore.forgetUser();
     this.segmentTrackLogout(logoutType);
+    client.clearStore();
   }
   /**
    * @desc Logs out user and clears all tokens stored in browser's local storage
