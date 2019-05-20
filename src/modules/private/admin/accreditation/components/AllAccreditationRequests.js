@@ -85,12 +85,20 @@ export default class AllAccreditationRequests extends Component {
                 }
                 <Table.HeaderCell textAlign="center" />
                 {requestState.search.status === 'CONFIRMED' &&
-                  <Table.HeaderCell
-                    onClick={this.handleSort('expiration')}
-                    sorted={sortOrder.column === 'expiration' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
-                  >
-                    Expiration Date
-                  </Table.HeaderCell>
+                  <Aux>
+                    <Table.HeaderCell
+                      onClick={this.handleSort('expiration')}
+                      sorted={sortOrder.column === 'expiration' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                    >
+                      Expiration Date
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      onClick={this.handleSort('promotionCredits')}
+                      sorted={sortOrder.column === 'promotionCredits' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                    >
+                      Promotion Credits
+                    </Table.HeaderCell>
+                  </Aux>
                 }
               </Table.Row>
             </Table.Header>
@@ -165,7 +173,10 @@ export default class AllAccreditationRequests extends Component {
                       </Table.Cell>
                     }
                     {accreditation.accreditationStatus === 'CONFIRMED' &&
-                      <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
+                      <Aux>
+                        <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
+                        <Table.Cell>{get(accreditation, 'promotionCredits')}</Table.Cell>
+                      </Aux>
                     }
                   </Table.Row>
                 ))
