@@ -5,7 +5,7 @@ import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemo
 import Auth from '@aws-amplify/auth';
 import { get } from 'lodash';
 import { authStore } from '../services/stores';
-import { API_ROOT } from '../constants/common';
+import { API_ROOT, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
 import { authActions } from '../services/actions';
@@ -33,6 +33,9 @@ export const GqlClient = new ApolloClient({
     });
   },
   onError: (res) => {
+    if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
+      authStore.sendErrorMail(res);
+    }
     if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
       console.log(res);
       authActions.logout('timeout').then(() => {

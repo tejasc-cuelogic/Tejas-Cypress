@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
+// import Aux from 'react-aux';
 import moment from 'moment';
 import { Grid, Form } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';
@@ -35,9 +35,9 @@ export default class ActivityHistory extends Component {
     const {
       ACTIVITY_FRM, msgEleChange, activities, loading, requestState, activityTypes,
     } = this.props.activityHistoryStore;
-    const { showFilters } = this.props;
+    const { showFilters, adminActivity } = this.props;
     return (
-      <Aux>
+      <div className={adminActivity ? 'activity-component' : ''}>
         <div className="search-filters more inner-content-spacer">
           <Form>
             <Grid columns={4}>
@@ -66,7 +66,7 @@ export default class ActivityHistory extends Component {
         </div>
         <AddActivity submit={this.logActivity} form={ACTIVITY_FRM} change={msgEleChange} />
         <ActivityFeed loading={loading} activities={activities} change={msgEleChange} />
-      </Aux>
+      </div>
     );
   }
 }

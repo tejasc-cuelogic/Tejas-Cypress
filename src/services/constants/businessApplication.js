@@ -548,7 +548,7 @@ export const BUSINESS_PERF_COMMON = {
     value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   sourcesAndUses: {
-    value: [], label: '  ', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: '  ', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };
 
