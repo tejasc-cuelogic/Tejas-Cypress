@@ -103,7 +103,6 @@
 .account-type-tab, .funding-option{
     .ui.attached.segment{
         border:none;
-        // text-align:center;
     }
 }
 

@@ -16,7 +16,6 @@ section{
             padding: 0;
         }
         background-position: top center;
-        // margin-top: -72px;
         >.ui.container{
             display: flex;
             height: 100%;
@@ -155,7 +154,6 @@ section{
 }
 .public-pusher>section.banner{
     @media only screen and (max-width : @largestMobileScreen){
-        // margin-top:-58px; 
         &.funding-options, &.how-it-works, &.track {
             height: auto;
             margin-top: 0;
@@ -197,9 +195,6 @@ section{
         bottom: 0;
         right: 0;
         color:  @white;
-        // @media only screen and (min-width : @monitorBreakpoint) and (max-width: @largestSmallMonitor){
-            //     padding-top: @50px;
-            // }
         @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor){
             padding-top: @50px;
             padding-bottom: @50px;
@@ -298,10 +293,6 @@ section{
         @media only screen and (max-width : @largestTabletScreen){
             background:none;
         }
-        // @media only screen and (min-width: @monitorBreakpoint) and (max-width: @largestLargeMonitor ) {
-        //     background-size: 50%;
-        //     background-position: right;
-        // }
         @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
             background-size: auto 46%;
         }

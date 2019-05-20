@@ -41,13 +41,9 @@
 		&:not(body) {
 			transform: translateZ(0);
 		}
-		>.sidebar {
-			~ .pusher{
-				&.public-pusher {
-					min-height:100vh;
-					height:100vh;
-				}
-			}
+		>.sidebar ~ .pusher.public-pusher {
+			min-height:100vh;
+			height:100vh;
 		}
 	}
 }
