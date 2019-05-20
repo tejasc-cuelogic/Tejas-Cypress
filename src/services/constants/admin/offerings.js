@@ -2612,7 +2612,7 @@ export const OFFERING_CLOSE_2 = {
     error: undefined,
     objType: 'DATE',
     objRefOutput: 'payload',
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
 };
