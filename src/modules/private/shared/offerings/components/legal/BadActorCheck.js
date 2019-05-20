@@ -1,24 +1,18 @@
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import { Route, Switch } from 'react-router-dom';
 import { DataFormatter } from '../../../../../../helper';
-import { InlineLoader } from '../../../../../../theme/shared';
-
-const getModule = component => Loadable({
-  loader: () => import(`./badActorCheck/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+import Issuer from './badActorCheck/Issuer';
+import AffiliatedIssuer from './badActorCheck/AffiliatedIssuer';
+import Leadership from './badActorCheck/Leadership';
 
 export default class BadActorCheck extends Component {
   module = name => DataFormatter.upperCamelCase(name);
 
   render() {
     const badActorCheckInfo = [
-      { title: 'Issuer', to: 'issuer' },
-      { title: 'Affiliated Issuer', to: 'affiliated-issuer' },
-      { title: 'Leadership', to: 'leadership' },
+      { title: 'Issuer', to: 'issuer', component: Issuer },
+      { title: 'Affiliated Issuer', to: 'affiliated-issuer', component: AffiliatedIssuer },
+      { title: 'Leadership', to: 'leadership', component: Leadership },
     ];
     const { match } = this.props;
 
@@ -27,11 +21,11 @@ export default class BadActorCheck extends Component {
         <Route
           exact
           path={match.url}
-          component={getModule(this.module(badActorCheckInfo[0].title))}
+          component={badActorCheckInfo[0].component}
         />
         {
           badActorCheckInfo.map(item => (
-            <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+            <Route key={item.to} path={`${match.url}/${item.to}`} component={item.component} />
           ))
         }
       </Switch>

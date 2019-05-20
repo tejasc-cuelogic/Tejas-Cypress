@@ -4,24 +4,19 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
-import Loadable from 'react-loadable';
-// import money from 'money-math';
-import SummaryHeader from '../components/portfolio/SummaryHeader';
-import { InlineLoader } from '../../../../../theme/shared';
+import Overview from '../components/portfolio/SummaryHeader';
+import SummaryHeader from '../components/portfolio/Overview';
+import Transactions from '../components/portfolio/Transactions';
+import Updates from '../components/portfolio/Updates';
+import BonusRewards from '../components/portfolio/BonusRewards';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import NotFound from '../../../../shared/NotFound';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/portfolio/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
 const navItems = [
-  { title: 'Overview', to: 'overview', component: 'Overview' },
-  { title: 'Transactions', to: 'transactions', component: 'Transactions' },
-  { title: 'Updates', to: 'updates', component: 'Updates' },
-  { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
+  { title: 'Overview', to: 'overview', component: Overview },
+  { title: 'Transactions', to: 'transactions', component: Transactions },
+  { title: 'Updates', to: 'updates', component: Updates },
+  { title: 'Bonus Rewards', to: 'bonus-rewards', component: BonusRewards },
 ];
 @inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore')
 @observer
@@ -98,12 +93,11 @@ class InvestmentDetails extends Component {
               <Route
                 exact
                 path={match.url}
-                component={getModule(navItems[0].component)}
+                component={navItems[0].component}
               />
               {
                 navItems.map((item) => {
-                  const CurrentModule = item.load === false ?
-                    item.component : getModule(item.component);
+                  const CurrentModule = item.component;
                   return (
                     <Route
                       key={item.to}
