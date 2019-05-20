@@ -136,7 +136,6 @@
         }
         .sticky-sidebar {
             top: 130px;
-            // transform: translate(0, -50%);
         }
         .team {
             padding: 30px;

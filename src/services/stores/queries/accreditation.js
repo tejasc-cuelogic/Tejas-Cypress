@@ -51,6 +51,7 @@ export const listAccreditation = gql`
       reviewed {
         date
       }
+      promotionCredits
       method
       netWorth
       grantorName

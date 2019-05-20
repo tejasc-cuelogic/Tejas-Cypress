@@ -1,11 +1,10 @@
- /*******************************
+/*******************************
         Global Overrides
 *******************************/
 /* PUBLIC PAGES UI STYLES ==> START */
 //	iOS cursor position on keypad-in fix
 html,body{
 	-webkit-overflow-scrolling : touch !important;
-	// overflow: auto !important;
 	height: 100% !important;
 }
 //	iOS cursor position on keypad-in fix
@@ -19,17 +18,6 @@ body{
 	min-height: 100vh;
 	margin: 0 auto;
 	box-shadow: 0px 4px 10px @thumbInactiveBackground;
-	// removed because it was creating issue in data room section - moving UI to left
-	// &:before{
-	// 	content: '';
-	// 	position: absolute;
-	// 	left: -100%;
-	// 	right: -100%;
-	// 	top: 0;
-	// 	bottom: 0;
-	// 	background-color: @white;
-	// 	z-index: -1;
-	// }
 	a:not(.item), a:not(.ui.button) {
 		cursor: pointer !important;
 		&:hover, &:active, &:focus {
@@ -69,7 +57,6 @@ h1, h1.ui.header{
 	}
 }
 h2, h2.ui.header{
-	// line-height:34px;
 	@media only screen and (max-width : @largestMobileScreen){
 		font-size: @28px !important;
 		line-height: 38px;
@@ -527,9 +514,6 @@ footer{
 		color:@white;
 	}
 }
-// .offer-details {
-// 	min-height:~"calc(100vh - 58px)";
-// }
 .offering-side-menu {
 	@media only screen and (min-width : @largestTabletScreen){
 		padding-top:@20px;
@@ -588,12 +572,6 @@ footer{
 	margin: @30px auto;
 }
 .campaign-content-wrapper {
-	// padding: @40px;
-	// flex-grow: 1;
-	// // background-color: @white;
-	// @media only screen and (max-width : @largestMobileScreen){
-	// 	padding: @40px 0;
-	// }
 	p {
 		color: @neutral-middark;
 		font-size: @15px;
@@ -751,11 +729,6 @@ footer{
 		margin-left: 56px;
 	}
 }
-// .funding-option {
-// 	.ui.secondary.button {
-// 		display: block;
-// 	}
-// }
 .content-spacer {
 	.column.side-section {
 		background-color:@invertedMutedTextColor;
@@ -830,9 +803,6 @@ footer{
 			font-size: @30px;
 			color: @neutral-middark;
 		}
-		// @media only screen and (max-width : @largestMobileScreen){
-		// 	top: 25%;
-		// }
 	}
 	.slick-prev {
 		left: -40px;
@@ -885,57 +855,6 @@ footer{
 			}
 		}
 	}
-	// &.slider-thumbnails {
-	// 	background: @fullBlack;
-	// 	.slick-slide {
-	// 		padding: @18px @5px;
-	// 		border-radius: 4px;
-	// 		width: 102px !important;
-	// 		margin: 0 4px;
-	// 		@media only screen and (max-width: @computerBreakpoint) {
-	// 			padding: @5px;
-	// 		}
-	// 		img {
-	// 			border: 2px solid @fullBlack;
-	// 			border-radius: 4px;
-	// 		}
-	// 	}
-	// 	.slick-track{
-	// 		margin: 0 6px;
-	// 		@media only screen and (max-width: @computerBreakpoint) {
-	// 			margin: 0;
-	// 		}
-	// 	}
-	// 	.slick-arrow {
-	// 		display: none!important;
-	// 	}
-	// 	.slick-list .slick-slide {
-	// 		.carousel-bg-thumb{
-	// 			// height:auto;
-	// 			// width:12.5% !important;
-	// 			// @media only screen and (max-width: @smallMonitorScreen) {
-	// 			// 	width:25% !important;
-	// 			// }
-	// 			// img {
-	// 			// 	max-height:90px;
-	// 			// 	width:auto !important;
-	// 			// }
-	// 			width: 102px;
-	// 			height: 85px;
-	// 			background-size: cover;
-	// 			background-position: center;
-	// 			background-position: center;
-	// 			border-radius: 4px;
-	// 			box-shadow: inset 0 0 0 2px transparent;
-	// 			cursor: pointer;
-	// 		}
-	// 		&.slick-current {
-	// 			.carousel-bg-thumb {
-	// 				box-shadow: inset 0 0 0 2px @primary-one;
-	// 			}
-	// 		}
-	// 	}
-	// }
 	&.offers-carousel{
 		@media only screen and (min-width : @tabletBreakpoint) {
 			margin:0 -@14px;
@@ -979,25 +898,23 @@ footer{
 //	Investor homepage
 .how-it-works-steps {
 	counter-reset: section;
-	.ui.grid {
-		&.stackable>.column:not(.row) {
-			text-align: left;
-			padding-left: @40px;
-			position: relative;
-			&:before {
-				counter-increment: section;
-				content: counter(section);
-				position: absolute;
-				left: 0;
-				top: 10px;
-				font-weight: @fontMedium;
-				font-size: @40px;
-				color: @primary-one;
-				line-height: 1;
-			}
-			@media only screen and (max-width : @largestMobileScreen){
-				padding-left: @30px !important;
-			}
+	.ui.grid.stackable>.column:not(.row) {
+		text-align: left;
+		padding-left: @40px;
+		position: relative;
+		&:before {
+			counter-increment: section;
+			content: counter(section);
+			position: absolute;
+			left: 0;
+			top: 10px;
+			font-weight: @fontMedium;
+			font-size: @40px;
+			color: @primary-one;
+			line-height: 1;
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-left: @30px !important;
 		}
 	}
 	h5.ui.header {
@@ -1045,16 +962,14 @@ footer{
 	}
 }
 //	press page
-.press-news {
-	.news {
-		position: relative;
-		overflow: hidden;
-		img.ui.image {
-			width: auto;
-			max-width: none;
-			@media only screen and (max-width : @largestMobileScreen){
-				width: 100%;
-			}
+.press-news .news {
+	position: relative;
+	overflow: hidden;
+	img.ui.image {
+		width: auto;
+		max-width: none;
+		@media only screen and (max-width : @largestMobileScreen){
+			width: 100%;
 		}
 	}
 }
@@ -1126,16 +1041,14 @@ address p{
 	}
 }
 //	Education center
-.edu-center {
-	.ui.card {
+.edu-center .ui.card {
+	border: 0;
+	.content.padded {
+		padding: 0;
 		border: 0;
-		.content.padded {
-			padding: 0;
-			border: 0;
-		}
-		&:hover {
-			box-shadow: none;
-		}
+	}
+	&:hover {
+		box-shadow: none;
 	}
 }
 pre.migrated-content{
@@ -1178,10 +1091,8 @@ pre.migrated-content{
 	i.icon {
 		margin-left: 5px;
 	}
-	p{
-		b {
-			color: @fullBlack;
-		}
+	p b {
+		color: @fullBlack;
 	}
 }
 a.icon-link {
@@ -1375,18 +1286,15 @@ a.icon-link {
 .content-wrapper{
 	min-height:~"calc(100vh - 58px)";
 }
-.ui.segment.vertical{
-    &.content{
-        padding:50px 0;
-		// min-height:~"calc(100vh - 330px)";
-		border:none;
-		&.banner-img{
-			background:url('@{imagePath}/banner_raise.jpg') center center no-repeat;
-			background-size:cover;
-		}
-		&.foot-banner{
-			min-height:~"calc(100vh - 364px)";
-		}
+.ui.segment.vertical.content{
+	padding:50px 0;
+	border:none;
+	&.banner-img{
+		background:url('@{imagePath}/banner_raise.jpg') center center no-repeat;
+		background-size:cover;
+	}
+	&.foot-banner{
+		min-height:~"calc(100vh - 364px)";
 	}
 }
 .content-spacer{
@@ -1427,7 +1335,6 @@ a.icon-link {
 .sticky-actions{
 	position:sticky;
 	padding:@14px 0 0;
-	// border-top:@neutral-offdark 1px solid;
 	bottom:0;
 	background-color:@white;
 	display:flex;
@@ -1478,21 +1385,6 @@ a.icon-link {
 			}
 		}
 	}
-	// .featured-section{
-	// 	padding: @14px @20px;
-	// 	margin:@20px 0;
-	// 	&:first-child{
-	// 		margin-top:0;
-	// 	}
-	// 	&:last-child{
-	// 		margin-bottom:0;
-	// 	}
-	// }
-	// .field .ui.label{					//	commented to resolve issue on admin user creation multi-select dropdown
-	// 	background: transparent;
-	// 	padding: 0px 0 14px;
-	// 	color: @neutral;
-	// }
 	p b {
 		color: @neutral;
 	}
@@ -1686,9 +1578,6 @@ div.login-form {
 	.ui.button.link-button{
 		padding:@11px 0;
 	}
-	// &.more{
-	// 	background-color:@neutral-offwhite;
-	// }
 }
 .filter-meta{
 	background-color:@neutral;
@@ -1741,11 +1630,8 @@ div.login-form {
 }
 
 .top-cta-section{
-	// height:104px;
 	padding:@20px @40px;
 	position:relative;
-	// margin-bottom:@50px;
-	// background:@tertiary-text;
 	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@20px;
 	}
@@ -1755,7 +1641,8 @@ div.login-form {
 	&:before{
 		content:"";
 		width:100%;
-		height:104px;
+		height:56%;
+		max-height:104px;
 		background-color:@tertiary-text;
 		position:absolute;
 		top:0;
@@ -1800,11 +1687,9 @@ div.login-form {
 //	Web Footer Style
 .ui.segment,
 .ui.primary.segment{
-	&.inverted{
-		&.footer{
-			padding:@28px;
-			background-color:@darken-bg-color;
-		}
+	&.inverted.footer{
+		padding:@28px;
+		background-color:@darken-bg-color;
 	}
 }
 .footer .ui.header{
@@ -1905,27 +1790,25 @@ div.login-form {
 }
 
 //	Toast message Styles
-.toast-message{
-	> div{
-		min-height:54px;
-		padding:0.7em 1em;
-		border-radius:@absoluteBorderRadius;
-		button{
-			font-size:@12px;
-			font-weight:400;
-		}
-		&.success{
-			background-color:lighten(@highlight-tertiary, 5%);
-		}
-		&.error{
-			background-color:lighten(@highlight-primary, 5%);
-		}
-		&.info{
-			background-color:lighten(@highlight-quaternary, 5%);
-		}
-		&.warning{
-			background-color:lighten(@highlight-secondary, 5%);
-		}
+.toast-message > div{
+	min-height:54px;
+	padding:0.7em 1em;
+	border-radius:@absoluteBorderRadius;
+	button{
+		font-size:@12px;
+		font-weight:400;
+	}
+	&.success{
+		background-color:lighten(@highlight-tertiary, 5%);
+	}
+	&.error{
+		background-color:lighten(@highlight-primary, 5%);
+	}
+	&.info{
+		background-color:lighten(@highlight-quaternary, 5%);
+	}
+	&.warning{
+		background-color:lighten(@highlight-secondary, 5%);
 	}
 }
 .field-error-message{
@@ -1963,14 +1846,10 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 }
 
 //	Check List
-.check-list{
-	.item{
-		i.icon{
-			color:@border-color;
-			&.check.circle{
-				color:@primary-one;
-			}
-		}
+.check-list .item i.icon{
+	color:@border-color;
+	&.check.circle{
+		color:@primary-one;
 	}
 }
 
@@ -2237,13 +2116,11 @@ svg:not(:root).recharts-surface{
 	}
 }
 
-.welcome-packet{
-	.pdf-viewer{
-		height:~"calc(100vh - 188px)";
-		width:100%;
-		max-width:1000px;
-		margin:0 auto;
-	}
+.welcome-packet .pdf-viewer{
+	height:~"calc(100vh - 188px)";
+	width:100%;
+	max-width:1000px;
+	margin:0 auto;
 }
 
 .issuer-signup{
@@ -2426,31 +2303,29 @@ p.check-extra-info{
 	}
 }
 
-.or-divider{
-	.file-uploader-wrap{
-		width:360px;
-		margin:0 @40px 0 0;
-		display:inline-block;
-		vertical-align:top;
-		position:relative;
-		+ .file-uploader-wrap{
-			margin-top:0;
-		}
+.or-divider .file-uploader-wrap{
+	width:360px;
+	margin:0 @40px 0 0;
+	display:inline-block;
+	vertical-align:top;
+	position:relative;
+	+ .file-uploader-wrap{
+		margin-top:0;
+	}
+	&:after{
+		content:"or";
+		font-size:@14px;
+		font-weight:@fontMedium;
+		color:@neutral-offdark;
+		position:absolute;
+		right:-26px;
+		top:50%;
+		transform:translate(0%, -50%);
+	}
+	&:last-of-type{
+		margin-right:0;
 		&:after{
-			content:"or";
-			font-size:@14px;
-			font-weight:@fontMedium;
-			color:@neutral-offdark;
-			position:absolute;
-			right:-26px;
-			top:50%;
-			transform:translate(0%, -50%);
-		}
-		&:last-of-type{
-			margin-right:0;
-			&:after{
-				display:none;
-			}
+			display:none;
 		}
 	}
 }
@@ -2531,9 +2406,6 @@ p.check-extra-info{
 	justify-content: center;
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
 	z-index: 100;
-	// &.active {
-	// 	z-index: 0;
-	// }
 	&.inverted {
 		background-color: fade(@neutral, 90%);
 		transition:all 300ms ease-in-out;
@@ -2544,15 +2416,6 @@ p.check-extra-info{
 			background-color:@neutral;
 		}
 	}
-	// .icon.hamburger {
-	// 	font-size: @30px;
-	// 	line-height: 30px;
-	// 	color: @white;
-	// 	position: absolute;
-	// 	top: 14px;
-	// 	left: 18px;
-	// 	z-index: 1;
-	// }
 	.sign-in {
 		font-size: @14px;
 		color: @neutral;
@@ -2560,10 +2423,8 @@ p.check-extra-info{
 		top: 18px;
 		right: 18px;
 	}
-	a {
-		&:hover {
-			text-decoration: none;
-		}
+	a:hover {
+		text-decoration: none;
 	}
 	.fixed-button {
 		position: fixed;
@@ -2581,10 +2442,8 @@ p.check-extra-info{
 		width: auto;
 	}
 }
-.proven-result-section {
-	.ui.grid>* {
-		padding: 0;
-	}
+.proven-result-section .ui.grid>* {
+	padding: 0;
 }
 .full-logo {
     position: fixed;
@@ -2694,7 +2553,6 @@ input[type='range']::-webkit-slider-thumb {
 	}
 }
 .about-carousel .slick-slider .slick-slide{
-	// height:506px;
 	display:flex;
 	>div{
 		position:relative;
@@ -2702,7 +2560,6 @@ input[type='range']::-webkit-slider-thumb {
 		padding-top:56.25%;
 	}
 	.about-gallery-bg{
-		// height:100%;
 		position:absolute;
 		top:0;
 		right:0;
@@ -2730,14 +2587,7 @@ input[type='range']::-webkit-slider-thumb {
 .careers-banner {
 	margin: 0 auto;
 }
-//	Avtar image on public pages
-// .updates-modal, .campaign-updates {
-// 	.sb-avatar{
-// 		width:36px;
-// 		height:36px;
-// 		line-height:36px;
-// 	}
-// }
+
 //	investment-limit-calculator
 #investment-limit-calculator .form-group.row {
 	display: flex;
@@ -2759,11 +2609,9 @@ input[type='range']::-webkit-slider-thumb {
 	}
 }
 //	Homepage featured on section logos - mobile
-.featured-logos {
-	img.ui.image {
-		@media only screen and (max-width : @largestMobileScreen){
-			transform: scale(0.8, 0.8);
-		}
+.featured-logos img.ui.image {
+	@media only screen and (max-width : @largestMobileScreen){
+		transform: scale(0.8, 0.8);
 	}
 }
 //	IRA account creation
