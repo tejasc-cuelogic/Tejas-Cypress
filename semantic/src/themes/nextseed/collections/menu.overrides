@@ -637,11 +637,6 @@ footer .ui.text.menu{
 }
 
 
-//Public Responsive Menu Start
-// .public-mobile-nav {
-//     position: relative;
-//     margin-top: @47px;
-// }
 .public-header-nav{
     padding:@47px 0 @20px;
 }

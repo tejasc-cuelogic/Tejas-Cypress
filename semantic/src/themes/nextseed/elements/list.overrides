@@ -324,24 +324,10 @@ ol.ui.list.step-list{
     }
 }
 
-.ui.list.horizontal{
-    // below code commented as conflicts on public pages
-    // min-width:600px;
-    // @media only screen and (max-width : @largeMonitorBreakpoint){
-    //     min-width:auto;
-    // }
-    .item.ui.checkbox{
-        min-width:25%;
-        margin:0;
-        padding-right:@14px;
-    }
-    //below code comment as campaign secondary header list get disturb on tablet view
-    // .item:not(:first-child) {
-    //     @media only screen and (max-width : @largeMonitorBreakpoint){
-    //         padding-left: 0 !important;
-    //         margin-left: 0;
-    //     }
-    // }
+.ui.list.horizontal .item.ui.checkbox{
+    min-width:25%;
+    margin:0;
+    padding-right:@14px;
 }
 .ui.form.gallery-img .ui.horizontal.list >.item{
     float:left;
