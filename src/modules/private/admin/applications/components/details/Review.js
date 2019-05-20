@@ -16,6 +16,7 @@ import Offer from './review/Offer';
 import Inputs from './review/Inputs';
 import Variables from './review/Variables';
 import Results from './review/Results';
+import Model from './review/Model';
 
 const navItems = [
   { title: 'Overview', to: 'overview', component: Overview },
@@ -28,6 +29,7 @@ const navItems = [
   {
     title: 'Model',
     to: 'model',
+    component: Model,
     subNavigations: [
       { title: 'Inputs', to: 'model/inputs', component: Inputs },
       { title: 'Variables', to: 'model/variables', component: Variables },
