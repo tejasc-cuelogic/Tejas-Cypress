@@ -2,42 +2,6 @@
          Theme Overrides
 *******************************/
 //  Public page Starts
-// .offer-details {
-// 	.offering-side-menu .ui.statistics .statistic{
-// 			>.value, >.label {
-// 				font-size: @13px !important;
-// 				color: @white;
-// 				font-weight: normal;
-// 				text-transform: none;
-// 			}
-// 	}
-// 	.offering-wrapper .ui.statistic {
-// 		width: 100%;
-// 		padding: 0;
-// 		>.label{
-// 			color:@neutral;
-// 			font-size: @13px;
-// 		}
-// 		>.value {
-// 			font-size: @28px !important;
-// 			color:@neutral-middark;
-// 			font-weight: @bold;
-// 			text-transform: none;
-// 			line-height: 30px;
-// 			margin-top: @30px;
-// 			@media only screen and (max-width : @largestSmallMonitor){
-// 				margin-top: 0;
-// 			}
-// 		}
-// 		&.mini >.value {
-// 			font-size: @13px !important;
-// 			color: @neutral;
-// 			line-height: 18px;
-// 			font-weight: @normal;
-// 			margin-top: @8px;
-// 		}
-// 	}
-// }
 .campaign-banner, .offering-intro {
 	.offer-stats {
 		padding: @15px;
@@ -132,22 +96,20 @@
 	}
 }
 // Business - how it works
-.proven-result-section {
-	.ui.mini.statistic {
-		>.value {
-			text-align: left;
-			font-size: @40px !important;
-			font-weight: @fontMedium;
-		}
-		>.label {
-			font-size: @15px;
-			text-align: left;
-			text-transform: none;
-			font-weight: @normal;
-		}
+.proven-result-section .ui.mini.statistic {
+	>.value {
+		text-align: left;
+		font-size: @40px !important;
+		font-weight: @fontMedium;
+	}
+	>.label {
+		font-size: @15px;
+		text-align: left;
+		text-transform: none;
+		font-weight: @normal;
 	}
 }
-//Impact
+//	Impact
 .featured-statistic { 
 	.ui.statistic{
 		>.value {

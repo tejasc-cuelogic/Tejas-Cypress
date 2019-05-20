@@ -72,70 +72,58 @@
 }
 //  Public page Ends
 
-.filter-meta{
-    .ui.horizontal.list{
-        .item{
-            font-size:@12px;
-            color:@white;
-        }
-        a.item{
-            color:@neutral-offdark;
-            &:hover, &:focus, &.active{
-                color:@primary-one;
-            }
-        }
+.filter-meta .ui.horizontal.list{
+    .item{
+        font-size:@12px;
+        color:@white;
     }
-}
-.secondary-menu{
     a.item{
-        font-size:@14px;
-        font-weight:900;
-        // padding:@16px @20px !important;
-        // border-left:@tertiary-text 1px solid;
-        color:@neutral;
+        color:@neutral-offdark;
         &:hover, &:focus, &.active{
-            color:@primary-one !important;
-            background-color:@neutral-offwhite;
-        }
-    }
-	// .ui.horizontal.celled.list{
-	// }
-}
-
-.tabular-wrap .ui.segment{
-    .ui.horizontal.list.link{
-        margin-bottom:@28px;
-        .item{
-            color:@tertiary-text;
-            border-bottom:2px solid transparent;
-            &:hover, &:focus, &.active{
-                color:@neutral;
-                border-color:@primary-one;
-            }
+            color:@primary-one;
         }
     }
 }
+.secondary-menu a.item{
+    font-size:@14px;
+    font-weight:900;
+    color:@neutral;
+    &:hover, &:focus, &.active{
+        color:@primary-one !important;
+        background-color:@neutral-offwhite;
+    }
+}
 
-.page-header-section{
-    .ui.list{
-        &.horizontal{
-            margin-left:@14px;
-            vertical-align:middle;
+.tabular-wrap .ui.segment .ui.horizontal.list.link{
+    margin-bottom:@28px;
+    .item{
+        color:@tertiary-text;
+        border-bottom:2px solid transparent;
+        &:hover, &:focus, &.active{
+            color:@neutral;
+            border-color:@primary-one;
         }
-        .item{
-            padding:0;
-            font-size:@14px;
+    }
+}
+
+.page-header-section .ui.list{
+    &.horizontal{
+        margin-left:@14px;
+        vertical-align:middle;
+    }
+    .item{
+        padding:0;
+        font-size:@14px;
+    }
+    .list>.item .description, >.item .description{
+        color:@white;
+    }
+    i.circular.icon{
+        &.red{
+            box-shadow:0 0 0 0.1em @red;
         }
-        .list>.item .description, >.item .description{
-            color:@white;
-        }
-        i.circular.icon{
-            &.red{
-                box-shadow:0 0 0 0.1em @red;
-            }
-            &.green{
-                box-shadow:0 0 0 0.1em @green;
-            }
+        &.green{
+            box-shadow:0 0 0 0.1em @green;
         }
     }
 }
@@ -336,34 +324,16 @@ ol.ui.list.step-list{
     }
 }
 
-.ui.list.horizontal{
-    // below code commented as conflicts on public pages
-    // min-width:600px;
-    // @media only screen and (max-width : @largeMonitorBreakpoint){
-    //     min-width:auto;
-    // }
-    .item.ui.checkbox{
-        min-width:25%;
-        margin:0;
-        padding-right:@14px;
-    }
-    //below code comment as campaign secondary header list get disturb on tablet view
-    // .item:not(:first-child) {
-    //     @media only screen and (max-width : @largeMonitorBreakpoint){
-    //         padding-left: 0 !important;
-    //         margin-left: 0;
-    //     }
-    // }
+.ui.list.horizontal .item.ui.checkbox{
+    min-width:25%;
+    margin:0;
+    padding-right:@14px;
 }
-.ui.form.gallery-img{
-    .ui.horizontal.list{
-        display:flex;
-        flex-wrap:wrap;
-        >.item{
-            margin:0 @20px @20px 0;
-            padding:0;
-        }
-    }
+.ui.form.gallery-img .ui.horizontal.list >.item{
+    float:left;
+    min-width:320px;
+    padding:0;
+    margin:0 @20px @20px 0;
 }
 .ui.list.rewards-tier{
     width:50%;
