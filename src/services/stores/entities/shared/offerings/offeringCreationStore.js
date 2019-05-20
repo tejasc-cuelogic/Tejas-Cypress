@@ -506,8 +506,9 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
+    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate'];
     const fieldValue =
-      (field === 'launchDate' || field === 'processingDate' || field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (cMap.includes(field)) ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
