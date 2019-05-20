@@ -587,14 +587,16 @@ export class InvestmentStore {
     const { campaign } = campaignStore;
     const offeringInvestedAmount = typeof investedAmount === 'string' ? parseFloat(investedAmount || '0.00') : (investedAmount || 0);
     let rewardsTiers = [];
-    campaign.bonusRewards.map((reward) => {
-      rewardsTiers = reward.tiers.concat(rewardsTiers);
-      return false;
-    });
+    if (campaign && campaign.bonusRewards) {
+      campaign.bonusRewards.map((reward) => {
+        rewardsTiers = reward.tiers.concat(rewardsTiers);
+        return false;
+      });
+    }
     rewardsTiers = [...new Set(toJS(rewardsTiers))].sort((a, b) => b - a);
     const matchTier = rewardsTiers ? rewardsTiers.find(t => offeringInvestedAmount >= t) : 0;
     let bonusRewards = [];
-    bonusRewards = campaign && campaign.bonusRewards
+    bonusRewards = campaign && campaign.bonusRewards && campaign.bonusRewards
       .filter(reward => reward.tiers.includes(matchTier));
     return bonusRewards;
   }

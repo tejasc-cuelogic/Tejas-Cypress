@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
-import { isEmpty, get } from 'lodash';
+import { isEmpty, get, map } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 import {
@@ -442,6 +442,40 @@ export class AuthStore {
         });
     }
   });
+
+  sendErrorMail = (res) => {
+    const errors = {};
+    const gqlErr = {};
+
+    if (this.isUserLoggedIn) {
+      errors.userEmailId = userStore.getUserEmailAddress();
+      errors.userId = userStore.getUserId();
+    }
+    errors.browserName = window.navigator.userAgent;
+    errors.platform = window.navigator.platform;
+
+    const errorList = map(get(res, 'graphQLErrors'), e => e.message);
+    gqlErr.operationName = get(res, 'operation.operationName') || '';
+    gqlErr.errors = errorList;
+    gqlErr.requestParams = JSON.stringify(get(res, 'operation.variables') || '');
+    errors.graphqlError = gqlErr;
+
+    if (get(res, 'networkError.statusCode')) {
+      const networkErr = {};
+      networkErr.statusCode = get(res, 'networkError.statusCode');
+      networkErr.errorMessage = get(res, 'networkError.result.message');
+
+      errors.networkError = networkErr;
+    }
+
+
+    const params = {
+      emailContent: JSON.stringify(errors),
+    };
+    this.notifyApplicationError(params).then(() => { }).catch((e) => {
+      console.log('Error while calling notifyApplicationError', e);
+    });
+  }
 }
 
 export default new AuthStore();

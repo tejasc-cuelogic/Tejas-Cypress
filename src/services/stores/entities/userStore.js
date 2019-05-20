@@ -89,6 +89,9 @@ export class UserStore {
     const emailDetails = (this.currentUser && toJS(this.currentUser.email)) || null;
     return emailDetails;
   }
+  getUserId() {
+    return (this.currentUser && toJS(this.currentUser.sub)) || null;
+  }
 }
 
 export default new UserStore();

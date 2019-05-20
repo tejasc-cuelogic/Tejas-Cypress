@@ -40,7 +40,6 @@ class IndividualAccountStore {
         })
         .then(res => resolve(res))
         .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         });
     });
@@ -66,7 +65,6 @@ class IndividualAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
-
             Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           }
@@ -82,7 +80,6 @@ class IndividualAccountStore {
           } else {
             uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           }
-          reject();
         });
     });
   }
@@ -96,10 +93,8 @@ class IndividualAccountStore {
       uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', true);
-        Helper.toast('Individual account submitted successfully.', 'success');
-      } else {
-        Helper.toast('Individual account created successfully.', 'success');
       }
+      Helper.toast('Individual account created successfully.', 'success');
       bankAccountStore.resetStoreData();
       this.isFormSubmitted = true;
       resolve();
@@ -108,16 +103,13 @@ class IndividualAccountStore {
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
         if (this.retryGoldStar < 1) {
           this.retryGoldStar += 1;
-          this.createGoldstarAccount();
+          this.createGoldstarAccount(payLoad, resolve, reject);
         } else {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
+          resolve();
         }
       } else {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        uiStore.setProgress(false);
+        uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
       }
-      reject();
     });
   }
 
