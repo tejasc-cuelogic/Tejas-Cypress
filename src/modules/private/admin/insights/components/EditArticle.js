@@ -186,19 +186,16 @@ export default class EditArticle extends Component {
                     </Form>
                   </Card.Content>
                 </Card>
-                {
-                  isNew ? '' :
-                  <Card fluid>
-                    <Card.Content>
-                      <Header as="h4">Thumbnail</Header>
-                      <Form className="cropper-wrap tombstone-img">
-                        {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
-                          <div className="file-uploader attached">
-                            {
-                              <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
-                            }
-                            <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
-                          </div>
+                {isNew ? '' :
+                <Card fluid>
+                  <Card.Content>
+                    <Header as="h4">Thumbnail</Header>
+                    <Form className="cropper-wrap tombstone-img">
+                      {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
+                        <div className="file-uploader attached">
+                          <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                          <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
+                        </div>
                       ) : (
                         <ImageCropper
                           fieldData={ARTICLE_FRM.fields.featuredImage}
@@ -212,11 +209,10 @@ export default class EditArticle extends Component {
                           cropInModal
                           aspect={3 / 2}
                         />
-                    )}
-                      </Form>
-                    </Card.Content>
-                  </Card>
-                }
+                      )}
+                    </Form>
+                  </Card.Content>
+                </Card>}
               </Grid.Column>
             </Grid.Row>
           </Grid>
