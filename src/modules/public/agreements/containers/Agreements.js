@@ -9,7 +9,7 @@ import { InlineLoader } from '../../../../theme/shared';
 import { DataFormatter } from '../../../../helper';
 import NotFound from '../../../shared/NotFound';
 
-const getModule = component => lazy(() => import(`./components/${component}`));
+const getModule = component => lazy(() => import(`../components/${component}`));
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('navStore')

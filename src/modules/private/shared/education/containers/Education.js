@@ -5,7 +5,7 @@ import PrivateLayout from '../../../shared/PrivateLayout';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { InlineLoader } from '../../../../../theme/shared';
 
-const getModule = component => lazy(() => import(`./components/${component}`));
+const getModule = component => lazy(() => import(`../components/${component}`));
 
 @inject('userStore')
 @observer

@@ -10,7 +10,7 @@ import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
-const getModule = component => lazy(() => import(`./components/${component}`));
+const getModule = component => lazy(() => import(`../components/${component}`));
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn how small business entrepreneurs are using debt crowdfunding on NextSeed to retain ownership in their breweries, restaurants, bars, fitness studios, and more.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
