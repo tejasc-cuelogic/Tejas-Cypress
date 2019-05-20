@@ -40,7 +40,6 @@ class IndividualAccountStore {
         })
         .then(res => resolve(res))
         .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         });
     });
@@ -81,7 +80,6 @@ class IndividualAccountStore {
           } else {
             uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           }
-          reject();
         });
     });
   }
@@ -107,12 +105,11 @@ class IndividualAccountStore {
           this.retryGoldStar += 1;
           this.createGoldstarAccount(payLoad, resolve, reject);
         } else {
-          uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
+          resolve();
         }
       } else {
         uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
       }
-      reject();
     });
   }
 
