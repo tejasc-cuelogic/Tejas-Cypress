@@ -1,0 +1,97 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.comments {
+    .comment {
+        border-bottom: 1px solid @neutral-darkwhite;
+        border-top: 0;
+        padding: @30px;
+        @media only screen and (max-width : @mobileBreakpoint){
+			padding: @15px;
+		}
+        &:first-child {
+            border-top: 0;
+            padding-top: @30px;
+        }
+        &:not(:last-child) {
+            border-top: 0;
+        }
+        .author {
+            line-height: 24px;
+        }
+        .text {
+            line-height: 24px;
+            margin-bottom: 0;
+        }
+        .content {
+            position: relative;
+        }
+        .actions {
+            opacity: 1 !important;
+            a {
+                font-weight: @fontMedium;
+                line-height: 24px;
+            }
+        }
+        .ui.blue.label {
+            margin: 0 0 0 @10px;
+            vertical-align: top;
+        }
+        &.issuer-comment {
+            background: fade(@primary-two-darken, 8%);
+            border-radius: 4px;
+            border-top: 0;
+            +.issuer-comment {
+                margin-top: @24px;
+            }
+            +.comment {
+                border-top: 0;
+            }
+        }
+        .comments {
+            margin: 0;
+            &.reply-comments {
+                margin: @30px 0 0;
+                .comment {
+                    // padding: @24px @30px;
+                    background: transparent;
+                    border-top: 1px solid fade(@primary-two-darken, 8%);
+                    &:not(.issuer-comment):last-child {
+                        padding-bottom: 0;
+                    }
+                    &.issuer-comment {
+                        background: fade(@primary-two-darken, 8%);
+                        border-radius: 4px;
+                        border-top: 0;
+                        // margin: @30px 0 0;
+                        +.issuer-comment {
+                            margin-top: @24px;
+                        }
+                        +.comment {
+                            border-top: 1px solid fade(@primary-two-darken, 8%);
+                        }
+                    }
+                }  
+            }
+
+        }
+        .public-form~p{
+            font-size: @12px;
+        }
+    }
+    &.comments-modal {
+        .comment {
+            padding: @30px;
+            &.reply-comment {
+                background: transparent;
+                padding: 0 @30px @30px;
+            }
+            &.issuer-comment {
+                background: fade(@primary-two, 10%);
+                border-radius: 4px;
+            }
+        }
+    }
+} 
+
+

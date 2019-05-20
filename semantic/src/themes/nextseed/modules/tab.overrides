@@ -1,0 +1,119 @@
+/*******************************
+         Tab Overrides
+*******************************/
+.tabular-wrap{
+    min-height:~"calc(100vh - 205px)";
+    .ui.vertical.tabular.menu{
+        height:100%;
+        min-height:~"calc(100vh - 205px)";
+        border:none;
+        background:@white;
+        .item{
+            padding:@18px @20px;
+            border-radius:0 !important;
+            border-left:none;
+            border-top:none;
+            border-bottom:@border-color 1px solid;
+            .account-type{
+                margin-right:@18px;
+            }
+            &.active{
+                background:@neutral-offwhite;
+            }
+        }
+    }
+    .horizontal-spacer{
+        padding:0 @30px;
+        position:relative;
+    }
+    .ui.segment{
+        background:transparent;
+        padding:@30px 0;
+        &.attached.tab{
+            width:100%;
+            max-width:none;
+            margin:0;
+            border:none;
+        }
+        h2{
+            margin-bottom:2rem;
+            .account-type{
+                margin-right:1rem;
+            }
+        }
+        .main.actions{
+            position:absolute;
+            right:@30px;
+            top:0;
+            font-size:@14px;
+            font-weight:700;
+            > a{
+                color:@highlight-primary;
+                &:hover, &:focus, &:active{
+                    color:darken(@highlight-primary, 15%);
+                }
+            }
+        }
+    }
+}
+.account-type-tab{
+    margin:@36px 0;
+    &:last-child{
+        margin-bottom:0;
+    }
+    > .ui.item.menu.secondary{
+        margin: 0 -1rem 2rem !important;
+        width: auto !important;
+        a.item{
+            margin-top:1rem;
+            padding:0 1em !important;
+            .account-tab{
+                width:100%;
+                padding:1rem;
+                font-size:@16px;
+                border:@borderColor 1px solid;
+                border-radius:@defaultBorderRadius * 1.5;
+                .account-type{
+                    margin-right:@8px;
+                }
+            }
+            &.active{
+                .account-tab{
+                    border-color:@primary-one;
+                    .account-type{
+                        color:@primary-one;
+                        border-color:@primary-one;
+                    }
+                }
+            }
+        }
+    }
+    .tab{
+        font-size:@14px;
+    }
+}
+
+.ui.tabular.menu {
+    border-bottom: 2px solid @primary-two;
+    .item {
+        background: @neutral-offwhite;
+        padding: @15px @22px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+        border-top-width: 0;
+        border-color: @white;
+        font-size: @15px;
+        &.active {
+            background: @primary-two;
+            color: @white;
+            font-weight: @bold;
+            border-radius: 0 !important;
+            border-color: @primary-two;
+        }
+    }
+}
+.ui.segment.tab.active {
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
+}

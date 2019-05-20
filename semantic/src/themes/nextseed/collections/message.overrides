@@ -1,0 +1,89 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.message{
+    font-size:@12px;
+    word-break:break-all;
+    &.toast{
+        position:fixed;
+        top:-180px;
+        right:10px;
+        margin:0;
+        transition:all .5s ease-in-out;
+        &.visible{
+            top:10px;
+        }
+    }
+    &.bottom-error{
+        font-size:@14px;
+        text-align:center;
+        padding-top:@26px;
+        padding-bottom:@26px;
+        margin:@40px -@28px -@20px;
+        box-shadow:0 -3px 0 @highlight-primary inset;
+    }
+}
+
+.notification-panel{
+    .ui.message{
+        min-height:113px;
+        padding:@10px @14px;
+        border-radius:@6px;
+        background-color:@tertiary-text;
+        box-shadow:0 0 20px fade(@fullBlack, 32%);
+        .timestamp{
+            font-size:@13px;
+            color:@neutral-offdark;
+        }
+        .header:not(.ui){
+            margin:@7px 0;
+            font-size:@14px;
+            font-weight:400;
+            color:@midWhite;
+            line-height:18px;
+            >b{
+                color:@white;
+                font-weight:@fontMedium;
+            }
+        }
+        h3.ui.header{
+            margin:0 0 @7px 0;
+            color:@white;
+        }
+        a.link{
+            font-weight:@fontMedium;
+            color:@primary-one;
+            &:hover, &:focus{
+                color:@primary-one;
+                text-decoration:underline;
+            }
+        }
+        i.icon:not(.ns-close-light){
+            font-size:@32px;
+            margin:0 0 0 0.6em;
+            color:@primary-one;
+        }
+        .link-button.close{
+            font-size:@12px;
+            color:@grey;
+            position:absolute;
+            right:7px;
+        }
+        .confirm-dismiss{
+            padding:@10px @14px;
+            background:@tertiary-text;
+            display:flex;
+            flex-direction:column;
+            border-radius:6px;
+            position:absolute;
+            left:0;
+            top:0;
+            bottom:0;
+            right:0;
+            >p{
+                color:@midWhite;
+                flex-grow:1;
+            }
+        }
+    }
+}

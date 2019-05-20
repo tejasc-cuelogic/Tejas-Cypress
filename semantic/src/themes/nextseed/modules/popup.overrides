@@ -1,0 +1,20 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.popup{
+    .content{
+        font-size:13px;
+        line-height:20px;
+    }
+    &.reward-info{
+        .content{
+            padding:@7px;
+        }
+        .ui.header{
+            margin-bottom:@14px;
+        }
+    }
+    span a:hover {
+        text-decoration: underline !important;
+    }
+}

@@ -1,0 +1,351 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+// 	Sidebar pushable CSS
+.pushable {
+	&:not(body) {
+		transform: none;
+	}
+	>.sidebar ~ .pusher{
+		transition:all .5s ease;
+		height:100vh;
+		overflow-y:auto;
+		background-color:@neutral-offwhite;
+		.ui.vertical.segment.content{
+			padding:0;
+			min-height:~"calc(100vh - 58px)";
+		}
+		&.banner{
+			height:~"calc(100vh - 34px)";
+		}
+		&.public-pusher {
+			padding-top: 58px;
+			min-height:auto;
+			height:auto;
+			background-color: transparent;
+			&.noheader{
+				padding-top: 0;
+			}
+		}
+		&.dimmed {
+			overflow: hidden;
+			z-index: unset;
+			&:after {
+				position: fixed !important;
+				z-index: 101;
+			}
+		}
+	}
+	&.show-pushable {
+		&:not(body) {
+			transform: translateZ(0);
+		}
+		>.sidebar {
+			~ .pusher{
+				&.public-pusher {
+					min-height:100vh;
+					height:100vh;
+				}
+			}
+		}
+	}
+}
+.ui.sidebar.left.menu{
+	&.push{
+		transform:none;
+	}
+	@media only screen and (min-width : @largeMonitorBreakpoint){
+		~.fixed, ~.pusher{
+			padding-left:260px;
+			transform:translate3D(0,0,0);
+		}
+	}
+}
+.ui.sidebar.menu{
+	&.vertical{
+		padding:@10px 0;
+		visibility:visible;
+		transition:all .5s ease;
+		.ns-scrollbar{
+			.view{
+				padding:@50px 0 0;
+			}
+			.track-vertical{
+				width:4px !important;
+				top:2px;
+				bottom:2px;
+				right:1px;
+				opacity:0;
+				transition:all .3s ease-in-out;
+				.thumb-vertical{
+					border-radius:@4px;
+					background-color:@thumbBackground;
+				}
+			}
+			&:hover .track-vertical{
+				opacity:1;
+			}
+		}
+		.item{
+			min-width: auto;
+			text-align: left;
+			overflow:hidden;
+			padding:@9px @26px;
+			margin-bottom:@1px !important;
+			font-weight:400;
+			&.menu-header .header:not(.ui){
+				margin:@18px 0 0;
+			}
+			&.dropdown{
+				.icon.dropdown{
+					font-family:'Nextseed';
+					height:22px;
+					line-height:22px;
+					vertical-align:top;
+					&:before{
+						content:"\e914";
+					}
+				}
+				&.active .icon.dropdown{
+					transform:scaleY(-1);
+				}
+				&:hover, &:focus, &.active, &.active:hover{
+					background-color:transparent !important;
+					color:@tertiary-text;
+				}
+				&.hide-dropdown>.icon.dropdown{
+					display:none;
+				}
+				.menu.transition{
+					position:relative;
+					left:0;
+					margin:@9px -@12px -@9px;
+					border:none;
+					box-shadow:none;
+					background:transparent;
+					.item{
+						padding:@8px @16px @8px @42px !important;
+						font-size:@14px !important;
+						font-weight: @normal !important;
+						color:@tertiary-text !important;
+					}
+				}
+			}
+			&.ui.dropdown>.text{
+				min-width:~"calc(100% - 27px)";
+			}
+			&:first-child:before, &:before{
+				display:none;
+				background:none;
+			}
+			.icon:not(.dropdown){
+				float:left;
+				height:auto;
+				font-size:@16px;
+				line-height:@22px;
+				margin:0;
+			}
+			span{
+				margin-left:@30px;
+				display:block;
+				line-height:@22px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			&:not(.btn-item){
+				&:hover, &:focus, &.active{
+					background:@neutral-offwhite;
+					.icon:not(.dropdown){
+						color:@primary-one;
+					}
+				}
+			}
+			&.menu-header:hover{
+				background-color:transparent;
+			}
+		}
+	}
+	&.overlay{
+		.ns-scrollbar .view{
+			padding:0;
+		}
+		.ns-close-light{
+			position:absolute;
+			top:0;
+			right:10px;
+			font-size:@12px;
+			height:auto;
+		}
+		.ui.image.logo{
+			margin:@20px auto @20px @26px;
+		}
+		.user-picture{
+			text-align:left;
+			margin:0 0 @20px;
+			padding:@10px @26px @20px;
+			>img, .sb-avatar{
+				max-width:40px;
+			}
+			.sb-avatar{
+				height:40px;
+				.sb-avatar__text{
+					width:40px;
+					height:40px;
+					font-size:@16px;
+					line-height:40px;
+				}
+			}
+		}
+		~.pusher .icon.ns-hamburger{
+			font-size:@16px;
+			color:@white;
+			position:absolute;
+			top:18px;
+			left:18px;
+			z-index:1;
+			&:hover, &:active, &:focus{
+				color:@white;
+			}
+		}
+		&.public-sidebar {
+			padding-bottom: @64px;
+			.ns-close-light {
+				top: 7px;		
+			}
+		}
+	}
+	.ui.image.logo{
+		height:36px;
+		max-height:36px;
+		margin:0 auto;
+	}
+	.user-picture{
+		margin:@28px 0;
+		padding:@12px @26px @40px;
+		text-align:center;
+		color:@neutral-middark;
+		border-bottom:@neutral-midwhite 1px solid;
+		> img{
+			max-width:60px;
+			margin:0 auto;
+		}
+		p{
+			font-weight:@normal;
+			margin-top:@14px;
+		}
+		.sb-avatar{
+			width:60px;
+			height:60px;
+			.sb-avatar__text{
+				width:60px;
+				height:60px;
+				font-size:@20px;
+				line-height:60px;
+			}
+		}
+		> img, p, .sb-avatar, .sb-avatar__text{
+			transition:all .5s ease;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
+		}
+	}
+	&.visible ~ .social-media {
+		width: 260px;
+		visibility: visible;
+		transition: all .5s ease;
+		transform: translate3d(0,0,0);
+		> .icon{
+			display:block;
+		}
+	}
+	~ .social-media {
+		position: absolute;
+		width: 260px;
+		left: 0;
+		bottom: 0;
+		padding-bottom: @24px;
+		z-index: 104;
+		text-align: center;
+		visibility: hidden;
+		background: @white;
+		width: 260px;
+		visibility: visible;
+		transition: all .5s ease;
+		transform: translate3d(-100%,0,0);
+		.ui.menu{
+			justify-content: center;
+			align-items: center;
+			box-shadow: none;
+			.item {
+				color: @neutral-middark;
+				margin: @13px @16px;
+				padding: 0;
+				i.icon {
+					margin: 0;
+				}
+				&::before{
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+.ui.sidebar.left.inverted.menu{
+	.ns-scrollbar .track-vertical .thumb-vertical{
+		background-color:@thumbInvertedBackground;
+	}
+	.ns-close-light{
+		color:@neutral-middark;
+	}
+	.user-picture{
+		color:@white;
+		border-color:@neutral-middark;
+	}
+	.item{
+		&:hover, &:focus, &.active, &.active:hover{
+			background-color:@neutral;
+			color:@primary-one !important;
+			.icon:not(.dropdown){
+				color:@neutral-offdark;
+			}
+		}
+		.icon:not(.dropdown){
+			color:@neutral-offdark;
+		}
+		&.dropdown .menu.transition .item{
+			color:@white !important;
+			&:hover, &:focus, &.active{
+				color:@primary-one !important;
+				background-color:@neutral !important;
+			}
+		}
+	}
+	&:not(.visible) .dropdown .menu.transition{
+		background-color:@neutral;
+	}
+	&.issuer{
+		.item{
+			&:hover, &:focus, &.active, &.active:hover{
+				background-color:@neutral;
+				color:@white !important;
+				.icon:not(.dropdown){
+					color:@neutral-middark;
+				}
+			}
+		}
+		&.visible .item.dropdown{
+			&:hover, &:focus, &.active, &.active:hover{
+				background-color:transparent;
+			}
+			.item:hover, .item:focus, .item.active{
+				color:@white !important;
+				background-color:@neutral !important;
+			}
+		}
+	}
+}
+

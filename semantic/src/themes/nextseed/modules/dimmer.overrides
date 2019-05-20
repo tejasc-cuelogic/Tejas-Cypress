@@ -1,0 +1,19 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.dimmer{
+  &.fullscreen{
+    position:fixed;
+  }
+  .ui.loader .ui.header{
+    color:@white;
+    .sub.header{
+      font-size:.75em;
+      margin-top:@7px;
+    }
+  }
+}
+.scrolling .ui.modals.active{
+  overflow:auto;
+  justify-content:flex-start;
+}

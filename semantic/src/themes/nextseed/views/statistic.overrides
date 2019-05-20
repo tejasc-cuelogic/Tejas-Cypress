@@ -1,0 +1,274 @@
+/*******************************
+         Theme Overrides
+*******************************/
+//  Public page Starts
+// .offer-details {
+// 	.offering-side-menu .ui.statistics .statistic{
+// 			>.value, >.label {
+// 				font-size: @13px !important;
+// 				color: @white;
+// 				font-weight: normal;
+// 				text-transform: none;
+// 			}
+// 	}
+// 	.offering-wrapper .ui.statistic {
+// 		width: 100%;
+// 		padding: 0;
+// 		>.label{
+// 			color:@neutral;
+// 			font-size: @13px;
+// 		}
+// 		>.value {
+// 			font-size: @28px !important;
+// 			color:@neutral-middark;
+// 			font-weight: @bold;
+// 			text-transform: none;
+// 			line-height: 30px;
+// 			margin-top: @30px;
+// 			@media only screen and (max-width : @largestSmallMonitor){
+// 				margin-top: 0;
+// 			}
+// 		}
+// 		&.mini >.value {
+// 			font-size: @13px !important;
+// 			color: @neutral;
+// 			line-height: 18px;
+// 			font-weight: @normal;
+// 			margin-top: @8px;
+// 		}
+// 	}
+// }
+.campaign-banner, .offering-intro {
+	.offer-stats {
+		padding: @15px;
+		background: @mutedTextColor;
+		position: absolute;
+		top:0;
+		left:0;
+		@media only screen and (max-width : @mobileBreakpoint){
+			margin: 0 -@28px;
+		}
+		@media only screen and (max-width : @largestTabletScreen){
+			background: transparent;
+			position: static;
+			padding: @15px 0;
+		}
+		.ui.statistics {
+			margin: 0;
+			@media only screen and (max-width : @largestTabletScreen){
+				justify-content: center;
+			}
+			.statistic {
+				padding: 0 @15px;
+				margin: 0;
+				@media only screen and (max-width : @largestTabletScreen){
+					padding: 0 @10px;
+				}
+				>.value {
+					font-size: @20px !important;
+					color: @white;
+					~.label {
+						font-size: @15px;
+						color: @white;
+					}
+				}
+				+.statistic {
+					margin: 0;
+				}
+			}
+		}
+	}
+	.ui.statistic >.label.flag-status{
+        font-size: @12px;
+		line-height: 18px;
+		margin-top: @10px;
+		color: @white;
+	}
+}
+/** About Us **/
+.statistic-section {
+	.statistic {
+		margin-bottom: 0;
+		.value, .label {
+			color: @white;
+			text-transform: none;
+		}
+		.value {
+			font-weight: @fontMedium;
+		}
+	}
+	.ui.grid.secondary-statistic {
+		background: @white;
+		padding: @14px;
+		margin-top: @14px;
+		border: 1px solid @neutral-offwhite;
+		border-top: 0; 
+		.statistic {
+			.value {
+				font-family: @fontName; 
+				font-size: @28px;
+				line-height: @33px;
+				&.primary-text {
+					color: @primaryColor;
+				}
+				&.secondary-text {
+					color: @secondary-color;
+				}
+			}
+			.label {
+				color: @neutral-middark;
+				font-size: @14px;
+				line-height: @16px;
+				text-transform: inherit;
+				font-weight: normal;
+			}
+		}
+	}
+	.ui.celled.grid>.row>.column {
+		box-shadow: -1px 0 0 0 @neutral-offwhite;
+		@media only screen and (max-width : @largestMobileScreen){
+			border-top: 0;
+		}
+	}
+}
+// Business - how it works
+.proven-result-section {
+	.ui.mini.statistic {
+		>.value {
+			text-align: left;
+			font-size: @40px !important;
+			font-weight: @fontMedium;
+		}
+		>.label {
+			font-size: @15px;
+			text-align: left;
+			text-transform: none;
+			font-weight: @normal;
+		}
+	}
+}
+//Impact
+.featured-statistic { 
+	.ui.statistic{
+		>.value {
+			font-size: @60px !important;
+			font-weight: @normal;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @30px !important;
+				font-weight: @fontMedium;
+			}
+		}
+		.label {
+			font-size: @15px;
+		}
+		&.small >.value {
+			font-size: @40px !important;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @30px !important;
+			}
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @20px !important;
+			}
+		}
+	}
+	.ui.celled.grid>.row>.column {
+		box-shadow: none;
+	}
+}
+//  Public page Ends
+.ui.statistics .statistic,
+.ui.statistic{
+	> .value, > .label{
+		text-align:inherit;
+	}
+	>.value .icon{
+		margin:0 !important;
+		height:auto;
+		vertical-align:bottom;
+	}
+	&.disabled{
+		opacity:.5 !important;
+	}
+}
+.ui.statistics.vertical{
+	margin:0;
+	flex-direction:column;
+	>.statistic{
+		margin:0 0 2em;
+		&:last-child{
+			margin:0;
+		}
+	}
+}
+
+.ui.statistic:not(.basic){
+    position:relative;
+    padding-left:@18px;
+    &:before{
+        content:"";
+        width:3px;
+        height:100%;
+        background:@primary-one;
+        position:absolute;
+        left:0;
+	}
+	&.pending:before{
+		background-color:@highlight-secondary;
+	}
+    i.icon{
+        margin:0 0 0 @7px;
+    }
+    a.label{
+        font-weight:@fontMedium;
+        color:@primary-one;
+    }
+    >.label~.value{
+        margin:0.15em 0;
+    }
+}
+.investment-summary .ui.statistic{
+    padding-left:0;
+    &:before{
+        display:none;
+    }
+}
+.tabular-wrap, .sticky-notification{
+    .ui.statistic{
+        position:relative;
+        padding-left:1em;
+        &:before{
+            content:"";
+            width:3px;
+            height:100%;
+            background:@statGradient;
+            position:absolute;
+            left:0;
+        }
+        i.icon{
+            margin:0 0 0 @7px;
+        }
+    }
+}
+.sticky-notification{
+    .ui.statistic{
+        margin:0;
+        &:before{
+            background:@primary-one;
+        }
+        .value{
+            font-size:@16px !important;
+            text-transform:none;
+        }
+        .label{
+            font-size:@14px;
+		}
+		&.acc-verify-status {
+			width: 80%;
+			@media only screen and (max-width : @largestMobileScreen){
+				width: 100%;
+			}
+
+		}
+	}
+}
+

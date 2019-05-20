@@ -1,0 +1,13 @@
+/*******************************
+        Video Overrides
+*******************************/
+.ui.embed.centered-video{
+	margin:@40px 0;
+}
+.offering-intro .ui.embed {
+        max-width: ~"calc(100% + 40px)";
+        >.placeholder {
+            height: auto;  
+        }
+}
+
