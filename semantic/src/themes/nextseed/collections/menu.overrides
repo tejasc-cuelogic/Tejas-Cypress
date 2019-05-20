@@ -616,7 +616,7 @@ footer .ui.text.menu{
                 background-color:@neutral-offwhite;
             }
             >.icon{
-                color:@neutral-darkwhite;
+                color:@neutral-offdark;
             }
             &.done >.icon{
                 color:@primary-one;
