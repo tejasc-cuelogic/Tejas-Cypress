@@ -8,7 +8,7 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 
-const getModule = component => lazy(() => import(`./review/${component}`));
+const getModule = component => lazy(() => import(`./components/${component}`));
 
 @inject('navStore', 'userStore')
 @observer

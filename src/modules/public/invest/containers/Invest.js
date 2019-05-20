@@ -10,7 +10,7 @@ import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 
-const getModule = component => lazy(() => import(`./review/${component}`));
+const getModule = component => lazy(() => import(`./components/${component}`));
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },

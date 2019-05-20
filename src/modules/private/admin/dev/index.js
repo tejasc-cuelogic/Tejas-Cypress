@@ -5,7 +5,7 @@ import { InlineLoader } from '../../../../theme/shared';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 
 
-const getModule = component => lazy(() => import(`./review/${component}`));
+const getModule = component => lazy(() => import(`./components/${component}`));
 export default class Dev extends Component {
   componentWillMount() {
     const { match } = this.props;

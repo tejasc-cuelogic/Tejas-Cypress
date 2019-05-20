@@ -22,7 +22,7 @@ import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
-const getModule = component => lazy(() => import(`./review/${component}`));
+const getModule = component => lazy(() => import(`./components/campaignDetails/${component}`));
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore')

@@ -9,7 +9,7 @@ import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import AccountSetup from './AccountSetup';
 
-const getModule = component => lazy(() => import(`./review/${component}`));
+const getModule = component => lazy(() => import(`./${component}`));
 
 const processingMsg = `We are currently processing your account creation request. Please contact
   <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any questions.`;
