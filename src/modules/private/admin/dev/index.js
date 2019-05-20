@@ -1,10 +1,17 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Loadable from 'react-loadable';
 import PrivateLayout from '../../shared/PrivateLayout';
 import { InlineLoader } from '../../../../theme/shared';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 
-const getModule = component => lazy(() => import(`./components/${component}`));
+
+const getModule = component => Loadable({
+  loader: () => import(`./components/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 export default class Dev extends Component {
   componentWillMount() {
     const { match } = this.props;
@@ -20,15 +27,13 @@ export default class Dev extends Component {
         // hideSubNav
         {...this.props}
       >
-        <Suspense fallback={<InlineLoader />}>
-          <Switch>
-            {
-              navItems.map(item => (
-                <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
-              ))
-            }
-          </Switch>
-        </Suspense>
+        <Switch>
+          {
+            navItems.map(item => (
+              <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+            ))
+          }
+        </Switch>
       </PrivateLayout>
     );
   }

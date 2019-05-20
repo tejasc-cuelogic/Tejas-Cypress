@@ -141,7 +141,7 @@ export default class DataRoom extends Component {
             <div className="row-wrap thead">
               <div className="balance-half">Document Name</div>
               <div className="balance-half">Document</div>
-              <div className="action">Actions</div>
+              <div className="action width-70">Actions</div>
             </div>
             <SortableList
               docs={docs}

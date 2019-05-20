@@ -21,6 +21,10 @@ export default class AllAccreditationRequests extends Component {
       this.props.accreditationStore.initRequest();
     }
   }
+  handleSort = clickedColumn => () => {
+    const { setSortingOrder, sortOrder } = this.props.accreditationStore;
+    setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
+  }
   handleDocumentsLink = (e, folderId) => {
     e.preventDefault();
     const params = {
@@ -37,7 +41,7 @@ export default class AllAccreditationRequests extends Component {
     const { match, accreditationStore, commonStore } = this.props;
     const { inProgress } = commonStore;
     const {
-      accreditations, loading, count, requestState, emailVerifier,
+      accreditations, loading, count, requestState, emailVerifier, sortOrder,
     } = accreditationStore;
 
     const access = this.props.userStore.myAccessForModule('ACCREDITATION');
@@ -49,17 +53,45 @@ export default class AllAccreditationRequests extends Component {
     return (
       <Card fluid>
         <div className="table-wrapper">
-          <Table unstackable className="application-list">
+          <Table sortable unstackable className="application-list">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Investor Name</Table.HeaderCell>
-                <Table.HeaderCell>Requested Date</Table.HeaderCell>
-                <Table.HeaderCell>Account Type</Table.HeaderCell>
-                <Table.HeaderCell>Type</Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('firstName')}
+                  sorted={sortOrder.column === 'firstName' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Investor Name
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('requestDate')}
+                  sorted={sortOrder.column === 'requestDate' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Requested Date
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('accountType')}
+                  sorted={sortOrder.column === 'accountType' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Account Type
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort('method')}
+                  sorted={sortOrder.column === 'method' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                >
+                  Type
+                </Table.HeaderCell>
                 {isManager &&
                   <Table.HeaderCell>Method</Table.HeaderCell>
                 }
                 <Table.HeaderCell textAlign="center" />
+                {requestState.search.status === 'CONFIRMED' &&
+                  <Table.HeaderCell
+                    onClick={this.handleSort('expiration')}
+                    sorted={sortOrder.column === 'expiration' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                  >
+                    Expiration Date
+                  </Table.HeaderCell>
+                }
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -129,8 +161,11 @@ export default class AllAccreditationRequests extends Component {
                         />
                       </Aux> :
                       <Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}</p>
                       </Table.Cell>
+                    }
+                    {accreditation.accreditationStatus === 'CONFIRMED' &&
+                      <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
                     }
                   </Table.Row>
                 ))

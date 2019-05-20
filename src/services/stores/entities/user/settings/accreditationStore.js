@@ -1,6 +1,7 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
@@ -54,6 +55,10 @@ export class AccreditationStore {
   @observable inProgress = [];
   @observable docsToUpload = [];
   @observable filingStatus = null;
+  @observable sortOrder = {
+    column: null,
+    direction: 'asc',
+  }
 
   @action
   addLoadingUserId = (requestId) => {
@@ -182,7 +187,7 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', requestDate = '') => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', requestDate = '', accountId) => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -196,6 +201,16 @@ export class AccreditationStore {
         if (accreditationMethod !== 'Admin') {
           fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
+            fileUpload.putUploadedFileOnS3({
+              preSignedUrl, fileData: file, fileType: fileData.fileType,
+            }).then(() => {
+              this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+                this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+              });
+            }).catch(() => {
+              Helper.toast('Something went wrong, please try again later.', 'error');
+              this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+            });
             this.putUploadedFileOnS3(
               form, field, preSignedUrl, file, fileData, fileId,
               accreditationMethod,
@@ -226,24 +241,25 @@ export class AccreditationStore {
 
   @action
   putUploadedFileOnS3 = (form, field, preSignedUrl, file, fileData, fileId, scope) => {
-    this.docsToUpload.push({
-      preSignedUrl, fileData: file, fileType: fileData.fileType, field,
-    });
+    if (scope === 'Admin') {
+      this.docsToUpload.push({
+        preSignedUrl, fileData: file, fileType: fileData.fileType, field,
+      });
+      this.setFormFileArray(form, field, 'showLoader', false, scope);
+    }
     this.setFormFileArray(form, field, 'fileData', file);
     this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
     this.setFormFileArray(form, field, 'fileId', fileId);
     this.setFormFileArray(form, field, 'value', fileData.fileName);
     this.setFormFileArray(form, field, 'error', undefined);
     this.checkFormValid(form, false, false);
-    this.setFormFileArray(form, field, 'showLoader', false, scope);
   }
   @action
-  uploadAllDocs = isFinalStep => new Promise((resolve, reject) => {
-    if (this.docsToUpload && isFinalStep) {
+  uploadAllDocs = () => new Promise((resolve, reject) => {
+    if (this.docsToUpload.length) {
       const uploadedArr = [];
       this.docsToUpload.forEach((item, index) => {
         fileUpload.putUploadedFileOnS3(item).then(() => {
-          // this.docsToUpload.splice((this.docsToUpload.length > 1) ? index : 0, 1);
           uploadedArr.push(index);
           if (this.docsToUpload.length === uploadedArr.length) {
             resolve();
@@ -259,15 +275,15 @@ export class AccreditationStore {
     }
   });
   @action
-  removeUploadedData = (form, field, index = null) => {
-    let removeFileIds = '';
+  removeUploadedData = (form, field, index = null, accountType, accountId) => {
+    let removeFileId = '';
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
       this[form].fields[field].value.splice(index, 1);
-      removeFileIds = fileId;
+      removeFileId = fileId;
     } else {
       const { fileId } = this[form].fields[field];
-      removeFileIds = fileId;
+      removeFileId = fileId;
       this.setFormFileArray(form, field, 'fileId', '');
       this.setFormFileArray(form, field, 'fileData', '');
       this.setFormFileArray(form, field, 'value', '');
@@ -276,7 +292,19 @@ export class AccreditationStore {
     if (form === 'INCOME_UPLOAD_DOC_FORM') {
       this[form].fields.isAccepted.value = [];
     }
-    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+    if (accountType && accountId) {
+      fileUpload.removeUploadedData(removeFileId).then(() => {
+        this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+          this.setFormFileArray(form, field, 'showLoader', false);
+        }).catch(() => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          this.setFormFileArray(form, field, 'showLoader', false);
+        });
+      }).catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      });
+    }
+    // this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
     this.checkFormValid(form, false, false);
@@ -366,8 +394,14 @@ export class AccreditationStore {
     return this.data.loading || this.userData.loading;
   }
   @computed get accreditations() {
-    return (this.data && this.data.data && this.data.data.listAccreditation &&
-      this.data.data.listAccreditation.accreditation) || [];
+    if (this.sortOrder.column && this.sortOrder.direction && get(this.data, 'data.listAccreditation.accreditation')) {
+      return orderBy(
+        this.data.data.listAccreditation.accreditation,
+        [accreditation => (this.sortOrder.column === 'requestDate' ? moment(accreditation[this.sortOrder.column]).unix() : accreditation[this.sortOrder.column] && accreditation[this.sortOrder.column].toString().toLowerCase())],
+        [this.sortOrder.direction],
+      );
+    }
+    return (this.data && get(this.data, 'data.listAccreditation.accreditation')) || [];
   }
 
   @action
@@ -473,10 +507,12 @@ export class AccreditationStore {
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
       forEach(fileUploadData, (file, key) => {
-        const fileObj = {};
-        fileObj.type = UPLOAD_ASSET_ENUMS[key];
-        fileObj.fileInfo = file;
-        userAccreditationDetails.assetsUpload.push(fileObj);
+        if (key === 'statementDoc' || (file.fileId && file.fileName)) {
+          const fileObj = {};
+          fileObj.type = UPLOAD_ASSET_ENUMS[key];
+          fileObj.fileInfo = file;
+          userAccreditationDetails.assetsUpload.push(fileObj);
+        }
       });
       this.VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
       hasVerifier = false;
@@ -500,32 +536,26 @@ export class AccreditationStore {
     if (hasVerifier !== null) {
       payLoad.hasVerifier = hasVerifier;
     }
+    const refetchQueries = formType ? [{
+      query: userAccreditationQuery,
+      variables: {
+        userId: userDetailsStore.currentUserId,
+      },
+    }] : [];
     return new Promise((resolve, reject) => {
-      this.uploadAllDocs(form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM').then(() => {
-        client
-          .mutate({
-            mutation: updateAccreditation,
-            variables: payLoad,
-            refetchQueries: [{
-              query: userAccreditationQuery,
-              variables: {
-                userId: userDetailsStore.currentUserId,
-              },
-            }],
-          })
-          .then(() => resolve())
-          .catch((error) => {
-            Helper.toast('Something went wrong, please try again later.', 'error');
-            uiStore.setErrors(error.message);
-            reject();
-          })
-          .finally(() => uiStore.setProgress(false));
-      }).catch((error) => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setErrors(error.message);
-        uiStore.setProgress(false);
-        reject();
-      });
+      client
+        .mutate({
+          mutation: updateAccreditation,
+          variables: payLoad,
+          refetchQueries,
+        })
+        .then(() => resolve())
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        })
+        .finally(() => uiStore.setProgress(false));
     });
   }
 
@@ -538,7 +568,7 @@ export class AccreditationStore {
       fileName: this.CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.value,
     }];
     return new Promise((resolve, reject) => {
-      this.uploadAllDocs(false).then(() => {
+      this.uploadAllDocs().then(() => {
         client
           .mutate({
             mutation: approveOrDeclineForAccreditationRequest,
@@ -919,7 +949,7 @@ export class AccreditationStore {
     const userCreatedAccountList = userDetailsStore.userDetails.roles;
     const selectedAccountDetails = find(userCreatedAccountList, { name: selectedAccountName });
     const selectedAccountId = selectedAccountDetails.details.accountId;
-    const urlToReturn = selectedAccountName === 'entity' ? `/app/profile-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/app/profile-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
+    const urlToReturn = selectedAccountName === 'entity' ? `/app/account-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/app/account-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
     return urlToReturn;
   }
   offeringAccreditatoinStatusMessage = (
@@ -1001,23 +1031,6 @@ export class AccreditationStore {
     this.headerSubheaderObj.subHeader = headerText.subHeader || subHeaderText;
   }
   @action
-  changeRuleAsPerFilingStatus = (isFilingTrue) => {
-    this.filingStatus = isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.isAccepted.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value = !isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value;
-    this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
-    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocThirdLastYear');
-    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocSecondLastYear');
-    this.removeUploadedData('INCOME_UPLOAD_DOC_FORM', 'incomeDocLastYear');
-    this.docsToUpload = [];
-  }
-  @action
   setDefaultCheckboxVal = () => {
     this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = [true];
   }
@@ -1038,6 +1051,11 @@ export class AccreditationStore {
       search: {
       },
     };
+  }
+  @action
+  setSortingOrder = (column = null, direction = null) => {
+    this.sortOrder.column = column;
+    this.sortOrder.direction = direction;
   }
 }
 export default new AccreditationStore();

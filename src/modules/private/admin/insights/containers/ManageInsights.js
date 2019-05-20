@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Grid, Button, Form } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import PrivateLayout from '../../../shared/PrivateLayout';
-import { CATEGORY_VALUES, TAGS, ARTICLE_STATUS_VALUES, AUTHORS } from '../../../../../services/constants/admin/article';
+import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
 import { ByKeyword as Search, DropdownFilter, DateRangeFilter } from '../../../../../theme/form/Filters';
 import AllInsights from '../components/AllInsights';
 
@@ -15,10 +15,8 @@ export default class ManageInsights extends Component {
   }
   setSearchParam = (e, { name, value }) =>
     this.props.articleStore.setInitiateSrch(name, value);
-  search = (e) => {
-    if (e.charCode === 13 && false) {
-      // search goes here..
-    }
+  search = (e, name) => {
+    this.props.articleStore.setInitiateSrch(name, e.target.value);
   }
   toggleSearch = () => this.props.articleStore.toggleSearch();
   render() {
@@ -26,6 +24,7 @@ export default class ManageInsights extends Component {
     const {
       filters,
       requestState,
+      categoriesDropdown,
       maskChange,
     } = this.props.articleStore;
     return (
@@ -36,7 +35,7 @@ export default class ManageInsights extends Component {
             {...this.props}
             w={[10]}
             placeholder="Search by keyword or phrase"
-            executeSearch={this.search}
+            change={e => this.search(e, 'title')}
             addon={
               <Grid.Column width={3} textAlign="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
@@ -44,9 +43,10 @@ export default class ManageInsights extends Component {
                 </Button>
               </Grid.Column>
             }
-            change={this.setSearchParam}
             toggleSearch={this.toggleSearch}
             filters={filters}
+            requestState={requestState}
+            more="no"
           />
         }
         P2={
@@ -55,19 +55,41 @@ export default class ManageInsights extends Component {
               <Grid stackable columns="equal">
                 <Grid.Row>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.categoryName} change={this.setSearchParam} name="Category" keyName="categoryName" options={CATEGORY_VALUES} />
+                    <DropdownFilter value={requestState.search.categoryId} change={this.setSearchParam} name="Category" keyName="categoryId" options={categoriesDropdown} />
                   </Grid.Column>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.tags} change={this.setSearchParam} name="Tags" keyName="tags" options={TAGS} isMultiple />
+                    <Search
+                      {...this.props}
+                      w={[4]}
+                      placeholder="Search by Tags"
+                      executeSearch={e => this.search(e, 'tags')}
+                      filters={filters}
+                      fLabel="Tags"
+                      showLabel
+                      more="no"
+                    />
                   </Grid.Column>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.status} change={this.setSearchParam} name="Status" keyName="status" options={ARTICLE_STATUS_VALUES} />
+                    <DropdownFilter value={requestState.search.articleStatus} change={this.setSearchParam} name="Status" keyName="articleStatus" options={ARTICLE_STATUS_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.author} change={this.setSearchParam} name="Author" keyName="author" options={AUTHORS} />
+                    <Search
+                      {...this.props}
+                      w={[4]}
+                      fLabel="Author"
+                      placeholder="Search by Author"
+                      executeSearch={e => this.search(e, 'author')}
+                      filters={filters}
+                      more="no"
+                      showLabel
+                    />
                   </Grid.Column>
                   <Grid.Column width={4}>
-                    <DateRangeFilter change={maskChange} label="Date Range" name="dateRange" />
+                    <DateRangeFilter
+                      change={maskChange}
+                      label="Date Range"
+                      name="dateRange"
+                    />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

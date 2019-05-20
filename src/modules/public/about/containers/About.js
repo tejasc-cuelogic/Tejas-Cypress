@@ -1,6 +1,7 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import Loadable from 'react-loadable';
 import { Visibility } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
@@ -8,7 +9,12 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
+const getModule = component => Loadable({
+  loader: () => import(`../components/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 
 @inject('navStore', 'userStore')
 @observer
@@ -35,20 +41,18 @@ class About extends Component {
             navItems={navItems}
             title="About Us"
           />
-          <Suspense fallback={<InlineLoader />}>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
-                  />
-                ))
-              }
-            </Switch>
-          </Suspense>
+          <Switch>
+            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+            {
+              navItems.map(item => (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  component={getModule(this.module(item.title))}
+                />
+              ))
+            }
+          </Switch>
         </Visibility>
       </Aux>
     );

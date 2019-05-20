@@ -9,7 +9,7 @@ import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../
 @observer
 export default class UploadDocument extends Component {
   onFileDrop = (files, field) => {
-    this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income');
+    this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income', '', '', '', this.props.match.params.accountId);
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
@@ -18,14 +18,13 @@ export default class UploadDocument extends Component {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelDoc = (field) => {
-    this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field);
+    this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field, null, this.props.accountType, this.props.match.params.accountId);
   }
 
   render() {
     const {
       INCOME_UPLOAD_DOC_FORM, formChange,
     } = this.props.accreditationStore;
-    const docsToUpload = ['incomeDocSecondLastYear', 'incomeDocLastYear'];
     return (
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
@@ -34,7 +33,7 @@ export default class UploadDocument extends Component {
         <Form>
           <Grid stackable columns="equal">
             {
-              docsToUpload.map(field => (
+              ['incomeDocSecondLastYear', 'incomeDocLastYear'].map(field => (
                 <Grid.Column key={field}>
                   <DropZone
                     name={field}

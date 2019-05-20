@@ -1,6 +1,0 @@
-/*******************************
-         Theme Overrides
-*******************************/
-.ui.breadcrumb a.section {
-    line-height: 24px;
-}

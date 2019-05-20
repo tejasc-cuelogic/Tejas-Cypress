@@ -1,9 +1,0 @@
-/*******************************
-         Theme Overrides
-*******************************/
-.gallery-preview img.ui.image{
-    cursor: pointer;
-    &:not(:last-child) {
-        margin-bottom: @40px;
-    }
-}

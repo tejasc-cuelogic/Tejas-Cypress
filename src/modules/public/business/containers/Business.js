@@ -1,8 +1,9 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
-import { Responsive } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
+import { Responsive, Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
@@ -10,8 +11,12 @@ import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
-
+const getModule = component => Loadable({
+  loader: () => import(`../components/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn how small business entrepreneurs are using debt crowdfunding on NextSeed to retain ownership in their breweries, restaurants, bars, fitness studios, and more.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -21,7 +26,7 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
   { type: 'ogTag', property: 'article:publisher', content: 'https://www.facebook.com/thenextseed' },
-  // { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
+  { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
   { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:width', content: '1600' },
@@ -58,31 +63,32 @@ class Business extends Component {
           location.pathname === '/business' ? <Banner /> :
           <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
-        <div className={`slide-down ${location.pathname.split('/')[2]}`}>
+        <Visibility
+          onUpdate={this.handleUpdate}
+          continuous
+          className={`slide-down ${location.pathname.split('/')[2]}`}
+        >
           <PublicSubNav
-            navStatus={navStore.navStatus}
             stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
             navItems={navItems}
             title="Fundraising"
           />
-          <Suspense fallback={<InlineLoader />}>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
-                  />
-                ))
-              }
-              <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
-            </Switch>
-          </Suspense>
-        </div>
+          <Switch>
+            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+            {
+              navItems.map(item => (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  component={getModule(this.module(item.title))}
+                />
+              ))
+            }
+            <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
+          </Switch>
+        </Visibility>
       </Aux>
     );
   }

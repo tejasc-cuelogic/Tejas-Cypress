@@ -69,7 +69,7 @@ export default class PopulateAccreditationSteps extends React.Component {
     // }
   }
   handleMultiStepModalclose = () => {
-    this.props.history.push('/app/profile-settings/investment-limits');
+    this.props.history.push('/app/account-settings/investment-limits');
     this.props.accreditationStore.resetAllForms();
     this.props.accreditationStore.setFieldVal('firstInit', '');
     this.props.accreditationStore.resetUserAccreditatedStatus();

@@ -1,7 +1,8 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
+import Loadable from 'react-loadable';
 import { Visibility, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
@@ -10,8 +11,12 @@ import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
-
+const getModule = component => Loadable({
+  loader: () => import(`../components/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -21,7 +26,7 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:url', content: window.location.href },
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
   { type: 'ogTag', property: 'article:publisher', content: 'https://www.facebook.com/thenextseed' },
-  // { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
+  { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
   { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:width', content: '1600' },
@@ -79,20 +84,18 @@ class Invest extends Component {
             navItems={navItems}
             title="Investing"
           />
-          <Suspense fallback={<InlineLoader />}>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
-                  />
-                ))
-              }
-            </Switch>
-          </Suspense>
+          <Switch>
+            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+            {
+              navItems.map(item => (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  component={getModule(this.module(item.title))}
+                />
+              ))
+            }
+          </Switch>
         </Visibility>
       </Aux>
     );

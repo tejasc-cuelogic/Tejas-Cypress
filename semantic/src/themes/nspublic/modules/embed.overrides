@@ -1,7 +1,0 @@
-/*******************************
-        Video Overrides
-*******************************/
-.ui.embed.centered-video{
-	margin:@40px 0;
-}
-

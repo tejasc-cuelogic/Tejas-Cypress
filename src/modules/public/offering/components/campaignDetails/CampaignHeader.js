@@ -55,12 +55,11 @@ export default class CampaignHeader extends Component {
                     }
                     <div className="offer-stats">
                       <Statistic.Group>
-                        {diff ?
+                        {!isClosed && diff > 0 &&
                           <Statistic size="mini" className="basic">
                             <Statistic.Value>{diff}</Statistic.Value>
                             <Statistic.Label>Days left</Statistic.Label>
                           </Statistic>
-                          : ''
                         }
                         <Statistic size="mini" className="basic">
                           <Statistic.Value>
@@ -173,7 +172,7 @@ export default class CampaignHeader extends Component {
                           disabled={maxFlagStatus || isInProcessing}
                           onClick={this.handleInvestNowClick}
                         >
-                          {`${isInProcessing && !maxFlagStatus ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                          {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                         </Button>
                         <small>
                           {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment

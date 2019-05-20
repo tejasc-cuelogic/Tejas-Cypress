@@ -585,7 +585,7 @@ export class InvestmentStore {
 
   investmentBonusRewards = (investedAmount) => {
     const { campaign } = campaignStore;
-    const offeringInvestedAmount = investedAmount || 0;
+    const offeringInvestedAmount = typeof investedAmount === 'string' ? parseFloat(investedAmount || '0.00') : (investedAmount || 0);
     let rewardsTiers = [];
     if (campaign && campaign.bonusRewards) {
       campaign.bonusRewards.map((reward) => {

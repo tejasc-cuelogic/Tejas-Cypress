@@ -100,6 +100,16 @@ export class OfferingCreationStore {
   @observable removeFileIdsList = [];
   @observable removeFileNamesList = [];
   @observable isUploadingFile = false;
+  @observable isListingPage = false;
+
+  @action
+  setFieldValue = (field, value, field2 = false) => {
+    if (field2) {
+      this[field][field2] = value;
+    } else {
+      this[field] = value;
+    }
+  }
 
   @action
   resetBonusRewardForm = () => {
@@ -314,7 +324,7 @@ export class OfferingCreationStore {
     const fileObj = {
       obj: this[form].fields[name].base64String,
       // type: this[form].fields[name].meta.type,
-      name: this[form].fields[name].fileName,
+      name: Helper.sanitize(this[form].fields[name].fileName),
     };
     fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
       .then((res) => {
@@ -506,7 +516,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod', 'interestRate'], field) ? Math.abs(values.floatValue) || '' : values.floatValue;
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate'], field) ? values.value : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,
@@ -1167,7 +1177,7 @@ export class OfferingCreationStore {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
       const closureSummary = { ...getOfferingById.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
-      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple };
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
         toJS(getOfferingById.closureSummary),
@@ -1283,10 +1293,10 @@ export class OfferingCreationStore {
     this.issuerOfferingBac = graphql({
       client,
       query: getOfferingBac,
+      fetchPolicy: 'network-only',
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading) {
-          this.initLoad.splice(this.initLoad.indexOf('ISSUER_FRM'), 1);
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading && !this.isListingPage) {
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
@@ -1306,7 +1316,7 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.affiliatedIssuerOfferingBac.loading && !this.isListingPage) {
           this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {});
         }
       },
@@ -1508,11 +1518,15 @@ export class OfferingCreationStore {
   @action
   offeringClose = (params, step) => {
     uiStore.setProgress(params.process);
-    const formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
+    let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
+    formData = cleanDeep(formData);
+    if (formData.payload) {
+      formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+    }
     client
       .mutate({
         mutation: offerClose,
-        variables: { ...params, ...cleanDeep(formData) },
+        variables: { ...params, ...formData },
       }).then((data) => {
         uiStore.setProgress(false);
         console.log(data);

@@ -49,5 +49,8 @@ export { default as offeringsStore } from './entities/shared/offerings/offerings
 export { default as offeringCreationStore } from './entities/shared/offerings/offeringCreationStore';
 export { default as referralsStore } from './entities/user/referralsStore';
 export { default as offeringInvestorStore } from './entities/shared/offerings/offeringInvestorStore';
+export { default as knowledgeBaseStore } from './entities/admin/knowledgeBaseStore';
+export { default as faqStore } from './entities/admin/faqStore';
 // dev stores
 export { default as elasticSearchStore } from './entities/dev/elasticSearchStore';
+export { default as dataStore } from './entities/dev/dataStore';

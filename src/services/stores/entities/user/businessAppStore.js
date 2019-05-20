@@ -25,6 +25,7 @@ import {
 } from '../../../constants/businessApplication';
 import Helper from '../../../../helper/utility';
 import {
+  getPreQualificationById,
   getBusinessApplicationsById,
   getBusinessApplicationsDetailsAdmin,
   getPrequalBusinessApplicationsById,
@@ -68,6 +69,7 @@ export class BusinessAppStore {
   @observable isPrequalQulify = false;
   @observable userExists = false;
   @observable urlParameter = null;
+  @observable businessAppDataById = null;
 
   @action
   setFieldvalue = (field, value) => {
@@ -137,8 +139,8 @@ export class BusinessAppStore {
         id: applicationId,
       },
       fetchPolicy: 'network-only',
-      onFetch: () => {
-        if (!this.businessApplicationsDataById.loading) {
+      onFetch: (data) => {
+        if (data && data.businessApplication && !this.businessApplicationsDataById.loading) {
           this.setBusinessApplicationData(isPartialApp);
           uiStore.setAppLoader(false);
           resolve();
@@ -152,7 +154,27 @@ export class BusinessAppStore {
   });
 
   @action
-  fetchAdminApplicationById = (appId, appType, userId) => new Promise((resolve) => {
+  fetchPreQualAppDataById = applicationId => new Promise((resolve) => {
+    this.businessAppDataById = graphql({
+      client: clientPublic,
+      query: getPreQualificationById,
+      variables: {
+        id: applicationId,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getPreQualificationById && !this.businessAppDataById.loading) {
+          resolve(data.getPreQualificationById);
+        }
+      },
+    });
+  });
+
+  @action
+  fetchAdminApplicationById = (appId, appType, userId, loader = false) => new Promise((resolve) => {
+    if (loader) {
+      uiStore.setProgress(loader);
+    }
     this.setFieldvalue('applicationId', appId);
     const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payLoad = {
@@ -376,6 +398,9 @@ export class BusinessAppStore {
       if (data.financialStatements.fiveYearProjection &&
         data.financialStatements.fiveYearProjection.length) {
         this.setFileObjectToForm(data.financialStatements.fiveYearProjection, 'BUSINESS_PERF_FRM', 'fiveYearProjection');
+      }
+      if (data.sourcesAndUses && data.sourcesAndUses.length) {
+        this.setFileObjectToForm(data.sourcesAndUses, 'BUSINESS_PERF_FRM', 'sourcesAndUses');
       }
       if ((this.currentApplicationType === 'business' && this.getBusinessTypeCondtion) || (this.currentApplicationType !== 'business' && this.getOwnPropertyCondtion)) {
         ['priorToThreeYear', 'ytd'].forEach((field) => {
@@ -665,6 +690,10 @@ export class BusinessAppStore {
           this.BUSINESS_PERF_FRM.fields.fiveYearProjection,
         ),
       },
+      sourcesAndUses: this.getFilesArray(
+        data.sourcesAndUses.value,
+        this.BUSINESS_PERF_FRM.fields.sourcesAndUses,
+      ),
     };
     if (this.currentApplicationType === 'business') {
       inputData = {

@@ -25,6 +25,7 @@ export const allOfferings = gql`
       keyTerms {
         legalBusinessName
         shorthandBusinessName
+        securities
       }
       leadDetails {
         id
@@ -48,9 +49,9 @@ export const allOfferings = gql`
           firstName
           lastName
         }
-       phone {
-        number
-      }
+        phone {
+          number
+        }
       }
       offering {
         launch {
@@ -68,6 +69,14 @@ export const allOfferings = gql`
       updated {
         id
         date
+      }
+      closureSummary {
+        processingDate
+        hardCloseDate
+        repayment {
+          currentRepaidAmount
+          count
+        }
       }
     }
   }
@@ -1130,7 +1139,7 @@ query getTotalAmount{
   `;
 
 export const offerClose = gql`
-  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!) {
-    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId)
+  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType) {
+    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload)
   }
 `;

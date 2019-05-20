@@ -71,6 +71,10 @@ export const userDetailsQuery = gql`
       cip {
         expiration
         failType
+        failReason {
+          key
+          message
+        }
       }
       limits {
         income
@@ -216,6 +220,213 @@ export const userDetailsQuery = gql`
         }
         dateOfBirth
         ssn
+        legalAddress {
+          street
+          city
+          state
+          zipCode
+          streetTwo
+        }
+        status
+      }
+      investorProfileData {
+        isPartialProfile
+        employment {
+          status
+          employer
+          position
+        }
+        brokerageFirmName
+        publicCompanyTicker
+        taxFilingAs
+        netWorth
+        annualIncome {
+          year
+          income
+        }
+        experienceLevel
+        isRiskTaker
+        isComfortable
+      }
+      mfaMode
+    }
+  }
+`;
+
+export const selectedUserDetailsQuery = gql`
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      userHash
+      wpUserId
+      status
+      accreditation {
+        status
+      }
+      saasquatch {
+        signupCode
+        userId
+        referredBy
+        accountId
+        status
+      }
+      cip {
+        expiration
+        failType
+        failReason {
+          key
+          message
+        }
+      }
+      limits {
+        income
+        netWorth
+        otherContributions
+        limit
+      }
+      info {
+        firstName
+        lastName
+        mailingAddress {
+          street
+          city
+          state
+          zipCode
+          streetTwo
+        }
+        avatar {
+          name
+          url
+        }
+      }
+      email {
+        address
+        verified
+      }
+      capabilities
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            goldstar {
+              accountNumber
+              contactId
+            }
+            accreditation {
+              status
+            }
+            limits {
+              income
+              netWorth
+              otherContributions
+              limit
+            }
+            taxStatement {
+              fileId
+              fileName
+              year
+              formType
+            }
+            name
+            taxId
+            entityType
+            address {
+              street
+              city
+              state
+              zipCode
+              streetTwo
+            }
+            isTrust
+            trustDate
+            legalInfo {
+              legalFirstName
+              legalLastName
+              title
+              legalDocUrl {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            accountId
+            iraAccountType
+            fundingType
+            identityDoc {
+              fileId
+              fileName
+              fileHandle
+            }
+            legalDocs {
+              formationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              operatingAgreementDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              einVerificationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            initialDepositAmount
+            linkedBank {
+              bankName
+              plaidAccountId
+              plaidItemId
+              plaidInstitutionId
+              accountNumber
+              routingNumber
+              plaidAccessToken
+              dateLinked
+              pendingUpdate
+              accountType
+              changeRequest {
+                accountNumber
+                bankName
+                plaidAccessToken
+                plaidAccountId
+                plaidItemId
+                plaidInstitutionId
+                dateRequested
+                status
+              }
+            }
+            created {
+              date
+            }
+            accountStatus
+          }
+        }
+      }
+      locked {
+        lock
+      }
+      created {
+        date
+      }
+      lastLoginDate
+      phone {
+        number
+        type
+        verified
+      }
+      legalDetails {
+        legalName {
+          salutation
+          firstLegalName
+          lastLegalName
+        }
+        dateOfBirth
+        ssn
+        verificationCompletionDate
         legalAddress {
           street
           city
@@ -398,6 +609,16 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
      userId: $userId
      shouldSkip: $shouldSkip
    )
+ }`;
+
+export const deleteProfile = gql`
+mutation adminDeleteInvestorOrIssuerUser($userId: String!) {
+  adminDeleteInvestorOrIssuerUser(
+     cognitoUUId: $userId
+  ) {
+    status
+    message
+  }
  }`;
 
 export const frozenEmailToAdmin = gql`
