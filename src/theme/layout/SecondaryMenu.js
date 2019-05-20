@@ -48,7 +48,7 @@ const NavItems = ({
               :
               <Icon
                 color={item.icon_color[stepsStatus[key].status]}
-                name={item.icon[stepsStatus[key].status]}
+                name={item.icon[stepsStatus[key].status] || 'ns-circle'}
               />
             :
             null

@@ -2,15 +2,9 @@
          Theme Overrides
 *******************************/
 //  Public page Starts
-// .ui.card{
-//     &:hover{
-//         box-shadow:@cardHoverShadow;
-//     }
-// }
 .ui.card{
     &.campaign{ 
         box-shadow:none;
-        // height: 100%;
         &:hover, &:focus {
             text-decoration: none;
         }
@@ -33,8 +27,6 @@
             }
         }
         > .ui.image {
-            // max-height: 200px;
-            // height: 200px;
             width: 100%;
         }
         .ui.labels{
@@ -60,7 +52,6 @@
         }
         >.content{
             padding:@21px @28px;
-            // line-height:@24px;
             @media only screen and (max-width : @largestMobileScreen){
                 padding:@20px @22px;
             }
@@ -552,7 +543,6 @@
         color:@border-color;
     }
     &.done{
-        // background-color:@neutral-offwhite;
         box-shadow:none;
     }
 }
