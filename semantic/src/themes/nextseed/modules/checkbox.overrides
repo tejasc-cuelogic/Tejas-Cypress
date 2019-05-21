@@ -47,10 +47,6 @@
 		flex-wrap:wrap;
 		.field{
 			padding-top:@relative14px;
-			// @media only screen and (max-width : @largestMobileScreen){
-			// 	width: 50%;
-			// 	padding-right: 0;
-			// }
 			@media only screen and (min-width : @largestMobileScreen){
 				&:last-child{
 					padding-right: 0;
@@ -100,11 +96,6 @@
 				line-height: @18px;
 				color: @neutral-offdark;
 			}
-			// @media only screen and (max-width : @largestMobileScreen){
-			// 	min-width:100px;
-			// 	padding:@10px @15px;
-			// 	height: auto;
-			// }
 		}
 		input[type="radio"], input[type="checkbox"]{
 			width:100%;
@@ -214,9 +205,6 @@
 			&:before, &:after{
 				top:3px;
 			}
-			// &:not(:focus):before {
-			// 	background: @white;
-			// }
 		}
 		input:not(checked) ~ label:before{
 			background:@white;

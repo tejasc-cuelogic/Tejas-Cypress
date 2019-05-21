@@ -189,23 +189,6 @@
 				border-top:none;
 			}
 		}
-		// .actions{
-		// 	position:relative;
-		// 	float:right;
-		// 	z-index:99;
-		// 	a, .ui.button, .ui.buttons .button{
-		// 		font-size:@13px;
-		// 		font-weight:@fontMedium;
-		// 		text-transform:none;
-		// 		margin:0;
-		// 		padding:0 @8px;
-		// 		border-right:@borderColor 1px solid;
-		// 		&:last-child{
-		// 			border:none;
-		// 			padding-right:0;
-		// 		}
-		// 	}
-		// }
 		a{
 			&:hover, &:focus, &:active{
 				text-decoration:none;
