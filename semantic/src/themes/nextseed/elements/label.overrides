@@ -1,0 +1,38 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.labeled.input{
+    &:not([class*="corner labeled"]) .label:first-child{
+        padding-left:0;
+    }
+    >.label{
+        background-color:transparent;
+        border-radius:0;
+        border:none;
+        border-bottom:@border-color 1px solid;
+    }
+}
+.ui.card.messages{
+    .ui.circular.label{
+        padding:@4px @12px !important;
+        font-size:@10px;
+        min-height:auto;
+        vertical-align:middle;
+    }
+    .ui.label.approve{
+        padding:@4px 0 !important;
+        border:none;
+        font-weight:@bold;
+        background-color:transparent;
+        .icon{
+            margin:0 0 0 @5px;
+        }
+    }
+}
+
+// .ui.label{                  // commented to resolve label design in sidebar menu
+//     &.circular.horizontal{
+//         min-height:auto;
+//         padding:.4em .833em !important;
+//     }
+// }

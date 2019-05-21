@@ -1,0 +1,266 @@
+/*******************************
+             Icon
+*******************************/
+
+/*--------------
+   Font Files
+---------------*/
+
+@fontName: 'icons';
+@src:
+  url("@{fontPath}/@{fontName}.eot?#iefix") format('embedded-opentype'),
+  url("@{fontPath}/@{fontName}.woff2") format('woff2'),
+  url("@{fontPath}/@{fontName}.woff") format('woff'),
+  url("@{fontPath}/@{fontName}.ttf") format('truetype'),
+  url("@{fontPath}/@{fontName}.svg#icons") format('svg')
+;
+@fallbackSRC: url("@{fontPath}/@{fontName}.eot");
+
+/*--------------
+ Optional Files
+---------------*/
+
+/* Outline Icons */
+@importOutlineIcons: true;
+@outlineFontName: 'outline-icons';
+@outlineSrc:
+  url("@{fontPath}/@{outlineFontName}.eot?#iefix") format('embedded-opentype'),
+  url("@{fontPath}/@{outlineFontName}.woff2") format('woff2'),
+  url("@{fontPath}/@{outlineFontName}.woff") format('woff'),
+  url("@{fontPath}/@{outlineFontName}.ttf") format('truetype'),
+  url("@{fontPath}/@{outlineFontName}.svg#icons") format('svg')
+;
+@outlineFallbackSRC: url("@{fontPath}/@{outlineFontName}.eot");
+
+/* Brand Icons */
+@importBrandIcons: true;
+@brandFontName: 'brand-icons';
+@brandSrc:
+  url("@{fontPath}/@{brandFontName}.eot?#iefix") format('embedded-opentype'),
+  url("@{fontPath}/@{brandFontName}.woff2") format('woff2'),
+  url("@{fontPath}/@{brandFontName}.woff") format('woff'),
+  url("@{fontPath}/@{brandFontName}.ttf") format('truetype'),
+  url("@{fontPath}/@{brandFontName}.svg#icons") format('svg')
+;
+@brandFallbackSRC: url("@{fontPath}/@{brandFontName}.eot");
+
+/*--------------
+   Definition
+---------------*/
+
+/* Icon Variables */
+@opacity: 1;
+@width: @iconWidth;
+@height: 1em;
+@distanceFromText: 0.25rem;
+
+
+/* Variations */
+@linkOpacity: 0.8;
+@linkDuration: 0.3s;
+@loadingDuration: 2s;
+
+@circularSize: 2em;
+@circularPadding: 0.5em 0em;
+@circularShadow: 0em 0em 0em 0.1em rgba(0, 0, 0, 0.1) inset;
+
+@borderedSize: 2em;
+@borderedVerticalPadding: ((@borderedSize - @height) / 2);
+@borderedHorizontalPadding: 0em;
+@borderedShadow: 0em 0em 0em 0.1em rgba(0, 0, 0, 0.1) inset;
+
+@cornerIconSize: 0.45em;
+@cornerIconStroke: 1px;
+@cornerIconShadow:
+  -@cornerIconStroke -@cornerIconStroke 0 @white,
+   @cornerIconStroke -@cornerIconStroke 0 @white,
+  -@cornerIconStroke  @cornerIconStroke 0 @white,
+   @cornerIconStroke  @cornerIconStroke 0 @white
+;
+@cornerIconInvertedShadow:
+  -@cornerIconStroke -@cornerIconStroke 0 @black,
+   @cornerIconStroke -@cornerIconStroke 0 @black,
+  -@cornerIconStroke  @cornerIconStroke 0 @black,
+   @cornerIconStroke  @cornerIconStroke 0 @black
+;
+
+@mini: 0.4em;
+@tiny: 0.5em;
+@small: 0.75em;
+@medium: 1em;
+@large: 1.5em;
+@big: 2em;
+@huge: 4em;
+@massive: 8em;
+
+//  Nextseed V2 Custome icon font
+@nsFontName: 'nextseed';
+@nsFallbackSRC: url("@{fontPath}/@{nsFontName}.eot?n09i5h");
+@nsSrc:
+  url("@{fontPath}/@{nsFontName}.eot?n09i5h#iefix") format('embedded-opentype'),
+  url("@{fontPath}/@{nsFontName}.ttf?n09i5h") format('truetype'),
+  url("@{fontPath}/@{nsFontName}.woff2?n09i5h") format('woff2'),
+  url("@{fontPath}/@{nsFontName}.woff?n09i5h") format('woff'),
+  url("@{fontPath}/@{nsFontName}.svg?n09i5h#nextseed") format('svg')
+;
+
+//  NextSeed V2 custom Icon Variables
+@ns-activity-arrow: "\e900";
+@ns-appartment: "\e98e";
+@ns-arrow-double-left: "\e984";
+@ns-arrow-double-right: "\e985";
+@ns-arrow-down: "\e901";
+@ns-arrow-left: "\e902";
+@ns-arrow-right: "\e903";
+@ns-arrow-up: "\e904";
+@ns-article: "\e905";
+@ns-attachment: "\e988";
+@ns-author: "\e906";
+@ns-bag: "\e907";
+@ns-bar: "\e951";
+@ns-bar-chart: "\e908";
+@ns-bar-line-chart: "\e96f";
+@ns-beauty-spa: "\e954";
+@ns-bell: "\e909";
+@ns-box: "\e90a";
+@ns-business: "\e90b";
+@ns-calendar: "\e90c";
+@ns-campaign-dashboard: "\e994";
+@ns-caret-down: "\e90d";
+@ns-caret-left: "\e90e";
+@ns-caret-right: "\e90f";
+@ns-caret-up: "\e910";
+@ns-cash-dollar: "\e975";
+@ns-category: "\e911";
+@ns-category-line: "\e912";
+@ns-chart-setting: "\e970";
+@ns-check-circle: "\e913";
+@ns-check-circle-line: "\e976";
+@ns-checkbox-checked: "\e98b";
+@ns-checkbox-indeterminate: "\e98c";
+@ns-checkbox-outline: "\e98d";
+@ns-chevron-down: "\e914";
+@ns-chevron-down-compact: "\e915";
+@ns-chevron-left: "\e916";
+@ns-chevron-left-compact: "\e917";
+@ns-chevron-right: "\e918";
+@ns-chevron-right-compact: "\e919";
+@ns-chevron-up: "\e91a";
+@ns-chevron-up-compact: "\e91b";
+@ns-circle: "\e996";
+@ns-circle-line: "\e91c";
+@ns-clear-formating: "\e98f";
+@ns-clipboard-check: "\e96b";
+@ns-close: "\e94b";
+@ns-close-circle: "\e92d";
+@ns-close-light: "\e950";
+@ns-code: "\e990";
+@ns-comments-edit: "\e93c";
+@ns-comments-info: "\e91d";
+@ns-comments-q-a: "\e97a";
+@ns-compas: "\e91e";
+@ns-contact-card: "\e971";
+@ns-corporation: "\e955";
+@ns-credit-card: "\e91f";
+@ns-dashboard: "\e920";
+@ns-dashboard-circle: "\e921";
+@ns-document: "\e977";
+@ns-document-search: "\e97b";
+@ns-doller-circle: "\e922";
+@ns-download: "\e923";
+@ns-drag-holder: "\e998";
+@ns-drag-holder-large: "\e997";
+@ns-dumbbells: "\e959";
+@ns-edu-center: "\e97c";
+@ns-ellipsis: "\e924";
+@ns-entity: "\e93d";
+@ns-entity-line: "\e94d";
+@ns-envelope: "\e925";
+@ns-envelope-line: "\e972";
+@ns-equipment-purchase: "\e956";
+@ns-exit-fullscreen: "\e993";
+@ns-expand-business: "\e957";
+@ns-facebook: "\e93e";
+@ns-file: "\e93f";
+@ns-first-aid: "\e958";
+@ns-fitness: "\e952";
+@ns-flag-line: "\e97d";
+@ns-food: "\e940";
+@ns-food-light: "\e95a";
+@ns-franchise: "\e95b";
+@ns-freeze: "\e98a";
+@ns-fullscreen: "\e991";
+@ns-hamburger: "\e99c";
+@ns-help: "\e949";
+@ns-help-circle: "\e926";
+@ns-home-line: "\e97e";
+@ns-hospitality: "\e953";
+@ns-hospitality-2: "\e99a";
+@ns-image: "\e927";
+@ns-individual: "\e941";
+@ns-individual-line: "\e94e";
+@ns-info-circle: "\e928";
+@ns-inventory: "\e95c";
+@ns-investment: "\e97f";
+@ns-investor: "\e929";
+@ns-ira: "\e942";
+@ns-ira-line: "\e94f";
+@ns-line-chart: "\e92a";
+@ns-link: "\e943";
+@ns-lock: "\e92b";
+@ns-logout: "\e99d";
+@ns-long-arrow-left: "\e92c";
+@ns-minus: "\e99e";
+@ns-minus-square: "\e986";
+@ns-new-business: "\e95d";
+@ns-new-location: "\e95e";
+@ns-new-product: "\e95f";
+@ns-nextseed-icon: "\e944";
+@ns-nextseed-icon-line: "\e945";
+@ns-no-view: "\e999";
+@ns-off-shoot-business: "\e960";
+@ns-offering: "\e92e";
+@ns-other: "\e99b";
+@ns-paper-plane: "\e961";
+@ns-partnership: "\e962";
+@ns-pdf: "\e92f";
+@ns-pencil: "\e930";
+@ns-pencil-circle-line: "\e96e";
+@ns-phone-line: "\e973";
+@ns-play: "\e992";
+@ns-plus-square: "\e987";
+@ns-proprietor: "\e963";
+@ns-real-estate: "\e964";
+@ns-reload-circle: "\e978";
+@ns-reload-circle-line: "\e979";
+@ns-renovations: "\e965";
+@ns-replay: "\e946";
+@ns-restructure-debt: "\e966";
+@ns-rewards: "\e980";
+@ns-rss-feed: "\e94a";
+@ns-search: "\e931";
+@ns-send-right: "\e989";
+@ns-setting: "\e932";
+@ns-shield-check: "\e96c";
+@ns-star: "\e981";
+@ns-statement: "\e933";
+@ns-store: "\e967";
+@ns-tags: "\e934";
+@ns-technology: "\e968";
+@ns-tick: "\e96a";
+@ns-time-left: "\e995";
+@ns-timer: "\e96d";
+@ns-times-box: "\e935";
+@ns-times-circle: "\e936";
+@ns-trash: "\e937";
+@ns-trending: "\e982";
+@ns-twitter: "\e947";
+@ns-unlock: "\e948";
+@ns-updates: "\e983";
+@ns-upload: "\e938";
+@ns-user: "\e94c";
+@ns-users: "\e939";
+@ns-view: "\e93a";
+@ns-wallet: "\e93b";
+@ns-warning-circle: "\e974";
+@ns-working-capital: "\e969";

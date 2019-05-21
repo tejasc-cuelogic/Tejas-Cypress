@@ -1,0 +1,8 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.top.attached.header {
+    padding-left: 0;
+    padding-right: 0;
+    border: 0;
+}
