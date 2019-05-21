@@ -6,8 +6,9 @@ import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
+import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore', 'commonStore')
 @observer
 export default class OfferingLaunch extends Component {
   // componentWillMount() {
@@ -23,6 +24,15 @@ export default class OfferingLaunch extends Component {
     } = this.props.offeringCreationStore;
     const successMsg = isApproved && isApproved.status === 'manager_approved' ? null : undefined;
     updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, successMsg, isApproved);
+  }
+  handleFileLink = (fileId) => {
+    this.props.commonStore.getBoxFileDetails(fileId).then((response) => {
+      const boxFileId = response && response.getFileDetails &&
+      response.getFileDetails.boxFileId;
+      if (boxFileId) {
+        window.open(`${NEXTSEED_BOX_URL}file/${boxFileId}`, '_blank');
+      }
+    });
   }
   launch = () => {
     const {
@@ -85,7 +95,7 @@ export default class OfferingLaunch extends Component {
                 {legalDocs && legalDocs[document] && legalDocs[document].fileName ?
                   <Aux>
                     <div className="display-only">
-                      <Link to={this.props.match.url} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
+                      <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
                     <p>uploaded on{' '}
                       {
