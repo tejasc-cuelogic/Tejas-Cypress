@@ -31,8 +31,6 @@ const postcssNormalize = require('postcss-normalize');
 
 const WebpackDashboard = require('webpack-dashboard/plugin');
 
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -149,13 +147,9 @@ module.exports = function (webpackEnv) {
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
       isEnvDevelopment &&
-<<<<<<< HEAD
         require.resolve('webpack-dev-server/client') + '?/',
         require.resolve('webpack/hot/dev-server'),
         // require.resolve('react-dev-utils/webpackHotDevClient'),
-=======
-      require.resolve('react-dev-utils/webpackHotDevClient'),
->>>>>>> f31133b80fb65ef1561a0bea07c7212235338e39
       // Finally, this is your app's code:
       paths.appIndexJs,
       // paths.appPublicIndexJs,
@@ -503,7 +497,6 @@ module.exports = function (webpackEnv) {
           },
           isEnvProduction
             ? {
-<<<<<<< HEAD
                 minify: {
                   removeComments: true,
                   collapseWhitespace: true,
@@ -522,23 +515,6 @@ module.exports = function (webpackEnv) {
               title: 'Hot Module Replacement For Development',
             }
         )
-=======
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true,
-              },
-            }
-            : undefined,
-        ),
->>>>>>> f31133b80fb65ef1561a0bea07c7212235338e39
       ),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
