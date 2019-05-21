@@ -388,7 +388,7 @@ export class BankAccountStore {
   }
 
   @computed get count() {
-    return (this.changeRequests && this.changeRequests.length) || 0;
+    return (get(this.data, 'data.listLinkedBankUsers.resultCount')) || 0;
   }
   @computed get isLinkbankInComplete() {
     const isAddFundsDirty = this.addFundsByAccType.meta.isDirty;
