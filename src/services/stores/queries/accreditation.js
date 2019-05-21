@@ -28,7 +28,7 @@ export const approveOrDeclineForAccreditationRequest = gql`
 `;
 
 export const listAccreditation = gql`
-  query listAccreditation($page: Int, $search: String, $method: FilterAccreditationMethodEnum, $type: UserAccreditationMethodEnum, $accountCreateFromDate: String, $accountCreateToDate: String, $status: AccreditationStatus) {
+  query listAccreditation($page: Int, $search: String, $method: FilterAccreditationMethodEnum, $type: UserAccreditationMethodEnum, $accountCreateFromDate: String, $accountCreateToDate: String, $status: AccreditationStatus, $limit: Int) {
   listAccreditation (
     page: $page
     search: $search
@@ -37,6 +37,7 @@ export const listAccreditation = gql`
     accountCreateFromDate: $accountCreateFromDate
     accountCreateToDate: $accountCreateToDate
     status: $status
+    limit: $limit
   ) {
     accreditation {
       userId

@@ -82,6 +82,7 @@ export class AccreditationStore {
       method: method !== 'ALL' ? method : null,
       type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
+      limit: reqParams ? reqParams.perPage : 25,
     };
     if (status && status !== '') {
       params = {
