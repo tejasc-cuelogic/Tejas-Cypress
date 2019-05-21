@@ -409,6 +409,11 @@ export const BUSINESS_INDUSTRIES = [
   { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
+export const SCOPE_VALUES = [
+  { key: 'Admin - Test Email', value: 'ADMIN', text: 'Admin - Test Email' },
+  { key: 'Investor - Final Confirmation', value: 'INVESTOR', text: 'Investor - Final Confirmation' },
+];
+
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
@@ -2674,5 +2679,13 @@ export const OFFERING_CLOSE_3 = {
     objRefOutput: 'payload',
     rule: 'optional',
     placeHolder: 'Enter here',
+  },
+  scope: {
+    value: 'ADMIN',
+    label: 'Scope',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'string',
+    placeHolder: 'Choose here',
   },
 };
