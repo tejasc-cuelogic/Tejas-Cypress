@@ -24,7 +24,7 @@ export default class Comments extends Component {
     const {
       messages, currentMessageId, loading, error, threadUsersList, newPostComment, threadMsgCount,
     } = messageStore;
-    const { isIssuer } = userStore;
+    const { isIssuer, isAdmin } = userStore;
     const { offer } = offeringsStore;
     const passedProcessingDate = DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) <= 0;
     if (loading) {
@@ -50,7 +50,11 @@ export default class Comments extends Component {
             isIssuer={isIssuer}
           /> : null
         }
-        <MessagesWrap passedProcessingDate={passedProcessingDate} isIssuer={isIssuer} />
+        <MessagesWrap
+          passedProcessingDate={passedProcessingDate}
+          isIssuer={isIssuer}
+          isAdmin={isAdmin}
+        />
       </Card>
     );
   }

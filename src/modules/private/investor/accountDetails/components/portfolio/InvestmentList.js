@@ -9,6 +9,7 @@ import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const InvestmentList = (props) => {
   const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Status', 'Investment Type', 'Invested Amount'];
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
@@ -40,12 +41,12 @@ const InvestmentList = (props) => {
               <Table.Body>
                 {
                   investments.map(data => (
-                    <Table.Row key={data.investmentDate} onClick={() => handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : '')}>
+                    <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : ''); } }}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
                         <div className="offering-title">
                           {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
-                            <Link to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
+                            <Link className={isMobile ? 'disable-click' : ''} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                           )}
                           <p className="date-stamp">
                             {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
