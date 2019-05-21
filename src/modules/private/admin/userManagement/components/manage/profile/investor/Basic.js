@@ -77,7 +77,7 @@ export default class Basic extends Component {
           </Button.Group>
         </Header>
         <Header as="h6">Personal Info</Header>
-        <Form.Group widths={4}>
+        <Form.Group widths={2}>
           {
           ['firstName', 'lastName'].map(field => (
             <FormInput
@@ -106,7 +106,7 @@ export default class Basic extends Component {
             displayMode
           />
         </Form.Group>
-        <Form.Group widths={4}>
+        <Form.Group widths={2}>
           {
           ['firstLegalName', 'lastLegalName', 'ssn'].map(field => (
             <FormInput
