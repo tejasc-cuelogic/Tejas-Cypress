@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader, Button } from 'semantic-ui-react';
+import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav } from './SidebarNav';
@@ -86,22 +86,6 @@ const MySidebar = observer(props => (
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
         </Sidebar>
-        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
-          props.signupStatus &&
-          !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
-           props.signupStatus.investorProfileCompleted &&
-           props.signupStatus.inActiveAccounts.length > 0 &&
-           <Link className="add-account" to="/app/summary/account-creation">
-             <Icon name="add circle" />
-             <span>Add New Account</span>
-           </Link>
-        }
-        {props.desktop &&
-          <Button onClick={props.toggle} className="item collapseIcon">
-            <i className={`angle ${(props.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
-            <span>Collapse</span>
-          </Button>
-        }
       </Aux>
     ) : <SidebarNav roles={props.UserInfo.roles} onlyMount />
     }

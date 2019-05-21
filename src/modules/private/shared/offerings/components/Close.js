@@ -2,12 +2,27 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Aux from 'react-aux';
+import { filter, find } from 'lodash';
 import { Form, Header, Divider, Step, Label, Button, Icon, Confirm } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
-import { MaskedInput, FormCheckbox } from '../../../../../theme/form';
+import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
+import { MaskedInput, FormDropDown } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 
-@inject('offeringCreationStore', 'offeringsStore')
+const closingActions = {
+  ENUM1: { label: 'Soft Close Notification', ref: 1, enum: 'SOFT_CLOSE_NOTIFICATION' },
+  ENUM2: { label: 'Confirm Balances', ref: 1, enum: 'CHECK_BALANCE' },
+  ENUM3: { label: 'Issue Credits', ref: 1, enum: 'ISSUE_CREDITS' },
+  ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'FUND_ESCROW' },
+  ENUM5: { label: 'Process Notes', ref: 2, enum: 'PROCESS_NOTES' },
+  ENUM6: { label: 'Finalize Notes', ref: 2, enum: 'FINALIZE_NOTES' },
+  ENUM7: { label: 'Close', ref: 3, enum: 'CLOSEME' },
+  ENUM8: {
+    label: 'Hard Close Notification', ref: 3, enum: 'HARD_CLOSE_NOTIFICATION', confirm: true,
+  },
+};
+
+@inject('offeringCreationStore', 'offeringsStore', 'uiStore')
 @observer
 export default class Close extends Component {
   state = {
@@ -16,32 +31,59 @@ export default class Close extends Component {
     cancelButtonTxt: 'No, it has not',
     confirmButtonTxt: 'Yes, it has',
     open: false,
+    action: '',
+    confirmed: false,
   }
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_FRM', 'closureSummary');
   }
   submitStep = () => {
-    const currentStep = this.state.activeStep;
-    this.setState({ open: false, activeStep: currentStep + 1 });
+    this.setState({ open: false, confirmed: true });
+    const { activeStep, action } = this.state;
+    this.closeAction(action, activeStep, true);
   }
-  showConfirmBox = () => {
+  showConfirmBox = (meta) => {
     if (this.state.activeStep === 3) {
       this.setState({
-        confirmContentTxt: 'Are you sure you want to Finalize and Close the envelopes?',
+        confirmContentTxt: `Are you sure you want to proceed with the ${meta.label}`,
         cancelButtonTxt: 'No, go back',
         confirmButtonTxt: 'Yes, proceed',
       });
     }
-    this.setState({ open: true });
+    this.setState({ open: true, action: meta.enum });
   }
   handleCancel = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, action: '' });
+  }
+  toggleStep = activeStep => (this.setState({ activeStep }));
+  closeAction = async (status, step, forced = false) => {
+    const { offer } = this.props.offeringsStore;
+    const { offeringClose } = this.props.offeringCreationStore;
+    const { confirmed } = this.state;
+    const confirmFor = find(closingActions, a => a.enum === status && a.confirm === true);
+    if (confirmFor && confirmed === false && forced === false) {
+      this.showConfirmBox(confirmFor);
+    } else {
+      if (status === 'CLOSEME') {
+        this.handleCloseOffering();
+      } else {
+        await offeringClose(
+          {
+            offeringId: offer.id,
+            process: status,
+          },
+          step,
+        );
+      }
+      this.setState({ confirmed: false, action: '' });
+    }
   }
   handleCloseOffering = () => {
     const {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
+    this.props.uiStore.setProgress('CLOSEME');
     new Promise((res, rej) => {
       updateOfferingMutation(
         currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
@@ -49,16 +91,21 @@ export default class Close extends Component {
       );
     })
       .then(() => {
+        this.props.uiStore.setProgress(false);
         this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
       });
   }
   render() {
     const {
       OFFERING_CLOSE_FRM,
+      OFFERING_CLOSE_1,
+      OFFERING_CLOSE_2,
+      OFFERING_CLOSE_3,
       CLOSING_CONTITNGENCIES_FRM,
       maskChange,
       formArrayChange,
     } = this.props.offeringCreationStore;
+    const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer } = this.props.offeringsStore;
     const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
@@ -88,8 +135,12 @@ export default class Close extends Component {
           {hoursToClose <= 0 &&
             <Aux>
               <Step.Group className="campaign-close">
-                {['Fund Escrow', 'Process Notes', 'Finalize envelopes', 'Finalize closure'].map((item, index) => (
-                  <Step active={this.state.activeStep === (index + 1)}>
+                {['Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
+                  <Step
+                    style={{ background: 'none', textDecoration: 'none' }}
+                    onClick={() => this.toggleStep(index + 1)}
+                    active={this.state.activeStep === (index + 1)}
+                  >
                     <Label circular color={this.state.activeStep === (index + 1) ? 'blue' : 'grey'}>{index + 1}</Label>
                     <Step.Content>
                       <Step.Title>{item}</Step.Title>
@@ -100,50 +151,97 @@ export default class Close extends Component {
               </Step.Group>
               {this.state.activeStep === 1 &&
               <Aux>
-                <Header as="h4" className="mt-40 mb-30">Start funding escrow</Header>
-                <Button primary onClick={this.showConfirmBox}>Fund Escrow</Button>
+                <Form.Group widths={3}>
+                  <MaskedInput
+                    name="queueLimit"
+                    containerwidth="4"
+                    fielddata={OFFERING_CLOSE_1.fields.queueLimit}
+                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                    number
+                  />
+                </Form.Group>
+                <Button.Group className="mt-50">
+                  {filter(closingActions, a => a.ref === 1).map(fA => (
+                    <Button
+                      loading={inProgress === fA.enum}
+                      onClick={() => this.closeAction(fA.enum, 1)}
+                      primary
+                    >{fA.label}
+                    </Button>
+                  ))}
+                </Button.Group>
                 <Divider className="doubled" />
               </Aux>
               }
               {this.state.activeStep === 2 &&
                 <Aux>
-                  <Header as="h4" className="mt-40 mb-30">Confirm</Header>
-                  <FormCheckbox
-                    fielddata={OFFERING_CLOSE_FRM.fields.checkboxes}
-                    name="checkboxes"
-                    changed
-                    defaults
-                    containerclassname="ui relaxed list"
-                  />
-                  <Button primary onClick={this.submitStep} className="mt-20">Process Notes</Button>
+                  <Form.Group widths={3}>
+                    {['queueLimit', 'notePurchaseDate'].map(field => (
+                      <MaskedInput
+                        name={field}
+                        containerwidth="4"
+                        fielddata={OFFERING_CLOSE_2.fields[field]}
+                        changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
+                        dateOfBirth={field === 'notePurchaseDate'}
+                        number={field === 'queueLimit'}
+                      />
+                    ))
+                    }
+                  </Form.Group>
+                  <Button.Group className="mt-50">
+                    {filter(closingActions, a => a.ref === 2).map(fA => (
+                      <Button
+                        loading={inProgress === fA.enum}
+                        onClick={() => this.closeAction(fA.enum, 2)}
+                        primary
+                      >{fA.label}
+                      </Button>
+                    ))}
+                  </Button.Group>
                   <Divider className="doubled" />
                 </Aux>
               }
               {this.state.activeStep === 3 &&
                 <Aux>
-                  <Header as="h4" className="mt-40 mb-30">Finalize envelopes</Header>
-                  <p>This will finalize all investments in DocuSign.</p>
-                  <Button primary className="mt-20" onClick={this.showConfirmBox}>Close Envelopes </Button>
+                  <Form.Group widths={3}>
+                    {
+                      Object.keys(OFFERING_CLOSE_3.fields).filter(f => f !== 'scope').map(field => (
+                        <MaskedInput
+                          key={field}
+                          name={field}
+                          number={['queueLimit', 'interestRate', 'revSharePercentage'].includes(field)}
+                          currency={['nsPayment', 'investorFee', 'multiple'].includes(field)}
+                          dateOfBirth={['maturityDate', 'hardCloseDate'].includes(field)}
+                          fielddata={OFFERING_CLOSE_3.fields[field]}
+                          changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
+                        />
+                      ))
+                    }
+                    <FormDropDown
+                      fielddata={OFFERING_CLOSE_3.fields.scope}
+                      selection
+                      value={OFFERING_CLOSE_3.fields.scope.value}
+                      placeholder="Choose here"
+                      name="scope"
+                      options={SCOPE_VALUES}
+                      onChange={(e, result) => formArrayChange(e, result, 'OFFERING_CLOSE_3')}
+                    />
+                  </Form.Group>
+                  <Button.Group className="mt-50">
+                    {filter(closingActions, a => a.ref === 3).map(fA => (
+                      <Button
+                        loading={inProgress === fA.enum}
+                        onClick={() => this.closeAction(fA.enum, 3)}
+                        primary
+                      >{fA.label}
+                      </Button>
+                    ))}
+                  </Button.Group>
                   <Divider className="doubled" />
                 </Aux>
               }
-              {this.state.activeStep === 4 &&
+              {this.state.activeStep === 4 && false &&
                 <Aux>
-                  {/* <Header as="h4" className="mt-40 mb-30">Envelopes processing
-                    <Header.Subheader>
-                      It may take a moment, please complete the form below while processing.
-                    </Header.Subheader>
-                  </Header>
-                  <Grid>
-                    <Grid.Column width={7}>
-                      <Progress percent={10} size="tiny"
-                      color="green" className="campaign-close-progress">
-                      34 of 420 investors processed...
-                      </Progress>
-                    </Grid.Column>
-                  </Grid>
-                  <Divider hidden clearing />
-                  <Divider section clearing /> */}
                   <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
                   <Form>
                     <Form.Group widths={3}>

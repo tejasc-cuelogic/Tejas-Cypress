@@ -11,10 +11,11 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
+  OFFERING_CLOSE_1, OFFERING_CLOSE_2, OFFERING_CLOSE_3,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
+  getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
   getBonusRewards, getOfferingFilingList,
   generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -40,6 +41,9 @@ export class OfferingCreationStore {
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
+  @observable OFFERING_CLOSE_1 = Validator.prepareFormObject(OFFERING_CLOSE_1);
+  @observable OFFERING_CLOSE_2 = Validator.prepareFormObject(OFFERING_CLOSE_2);
+  @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
   @observable LEADERSHIP_FRM =
     Validator.prepareFormObject(
@@ -502,8 +506,9 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
+    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate'];
     const fieldValue =
-      (field === 'launchDate' || field === 'processingDate' || field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (cMap.includes(field)) ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -1508,6 +1513,36 @@ export class OfferingCreationStore {
       }))
       .finally(() => {
         uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  offeringClose = (params, step) => {
+    uiStore.setProgress(params.process);
+    let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
+    formData = cleanDeep(formData);
+    if (formData.payload) {
+      if (formData.payload.notePurchaseDate) {
+        formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.maturityDate) {
+        formData.payload.maturityDate = moment(formData.payload.maturityDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.hardCloseDate) {
+        formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
+      }
+    }
+    client
+      .mutate({
+        mutation: offerClose,
+        variables: { ...params, ...formData },
+      }).then((data) => {
+        uiStore.setProgress(false);
+        console.log(data);
+      }).catch((err) => {
+        uiStore.setProgress(false);
+        console.log(err);
+        Helper.toast('Something went wrong.', 'error');
       });
   }
 

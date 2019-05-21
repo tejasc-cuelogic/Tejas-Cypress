@@ -366,6 +366,7 @@ export class CampaignStore {
     let newOfferingsArr = [];
     let closingOfferingsArr = [];
     let processingOfferingsArr = [];
+    let reachedMaxOfferingsArr = [];
     let otherOfferingsArr = [];
     offeringDetailsList.map((offeringDetails) => {
       const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
@@ -455,6 +456,9 @@ export class CampaignStore {
       resultObject.isBannerShow = !!(resultObject.bannerFirstText || resultObject.bannerSecondText);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
+      if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+        return reachedMaxOfferingsArr.push(resultObject);
+      }
       return otherOfferingsArr.push(resultObject);
     });
     parallelOfferingsArr = orderBy(parallelOfferingsArr, ['launchDate'], ['desc']);
@@ -462,11 +466,13 @@ export class CampaignStore {
     closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['asc']);
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['launchDate'], ['desc']);
+    reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['desc']);
     const sortedResultObject = [
       ...parallelOfferingsArr,
       ...newOfferingsArr,
       ...closingOfferingsArr,
       ...otherOfferingsArr,
+      ...reachedMaxOfferingsArr,
       ...processingOfferingsArr,
     ];
     return sortedResultObject;
