@@ -9,7 +9,7 @@
     "eslint-plugin-import": "^2.17.2",
     "gh-pages": "^1.0.0",
     "hard-source-webpack-plugin": "^0.13.1",
-    "semantic-ui": "2.4.0",
+    "semantic-ui": "2.4.2",
     "webpack-bugsnag-plugins": "^1.4.0",
     "webpack-cli": "^3.3.2",
     "webpack-subresource-integrity": "^1.3.2"
@@ -219,6 +219,18 @@
           "legacy": true
         }
       ]
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

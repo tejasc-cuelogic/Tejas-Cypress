@@ -588,7 +588,7 @@ module.exports = function (webpackEnv) {
           from: 'src/assets/js/a.js',
           to: 'assets/js/a.js',
           transform: function (content, transformPath) {
-            return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].SEGMENT_WRITE_KEY));
+            return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].REACT_APP_SEGMENT_WRITE_KEY));
           },
         },
       ]),
