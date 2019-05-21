@@ -135,6 +135,11 @@ module.exports = function (webpackEnv) {
       : isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
+    // entry: {
+    //   main: paths.appIndexJs,
+    //   Public: paths.appPublicIndexJs,
+    //   Private: paths.appPrivateIndexJs,
+    // }
     entry: [
       // Include an alternative client for WebpackDevServer. A client's job is to
       // connect to WebpackDevServer by a socket and get notified about changes.
@@ -148,6 +153,7 @@ module.exports = function (webpackEnv) {
       // require.resolve('webpack/hot/dev-server'),
       isEnvDevelopment &&
         require.resolve('webpack-dev-server/client') + '?/',
+      isEnvDevelopment &&
         require.resolve('webpack/hot/dev-server'),
         // require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
@@ -256,8 +262,19 @@ module.exports = function (webpackEnv) {
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
-        chunks: 'all',
+        // chunks: 'all',
         name: false,
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          vendor: {
+            name: 'vendor',
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+            reuseExistingChunk: true,
+            enforce: true,
+          }
+        }
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
