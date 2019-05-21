@@ -109,7 +109,7 @@ const Body = props => (
                     </Aux>
                   }
                   edit={
-                    msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved &&
+                    ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin) &&
                     <div className="comment-actions">
                       <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
                       {!props.isIssuer &&
