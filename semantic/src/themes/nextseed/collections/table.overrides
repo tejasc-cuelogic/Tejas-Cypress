@@ -169,6 +169,9 @@
             }
             .offering-title{
                 display:inline-block;
+                .disable-click {
+                    pointer-events: none;
+                }
             }
             p.date-stamp{
                 font-size:@12px;
