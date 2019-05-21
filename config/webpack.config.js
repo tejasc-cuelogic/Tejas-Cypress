@@ -155,7 +155,7 @@ module.exports = function (webpackEnv) {
         require.resolve('webpack-dev-server/client') + '?/',
       isEnvDevelopment &&
         require.resolve('webpack/hot/dev-server'),
-        // require.resolve('react-dev-utils/webpackHotDevClient'),
+      // require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       paths.appIndexJs,
       // paths.appPublicIndexJs,
@@ -605,7 +605,7 @@ module.exports = function (webpackEnv) {
           from: 'src/assets/js/a.js',
           to: 'assets/js/a.js',
           transform: function (content, transformPath) {
-            return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].SEGMENT_WRITE_KEY));
+            return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].REACT_APP_SEGMENT_WRITE_KEY));
           },
         },
       ]),
