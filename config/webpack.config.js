@@ -148,8 +148,9 @@ module.exports = function (webpackEnv) {
       // require.resolve('webpack/hot/dev-server'),
       isEnvDevelopment &&
         require.resolve('webpack-dev-server/client') + '?/',
+      isEnvDevelopment &&
         require.resolve('webpack/hot/dev-server'),
-        // require.resolve('react-dev-utils/webpackHotDevClient'),
+      // require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       paths.appIndexJs,
       // paths.appPublicIndexJs,
