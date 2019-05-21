@@ -83,7 +83,16 @@ export default class AllAccreditationRequests extends Component {
                 {isManager &&
                   <Table.HeaderCell>Method</Table.HeaderCell>
                 }
-                <Table.HeaderCell textAlign="center" />
+                {requestState.search.status === 'REQUESTED' ?
+                  <Table.HeaderCell textAlign="center" />
+                  :
+                  <Table.HeaderCell
+                    onClick={this.handleSort('reviewed.date')}
+                    sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                  >
+                    Status
+                  </Table.HeaderCell>
+                }
                 {requestState.search.status === 'CONFIRMED' &&
                   <Aux>
                     <Table.HeaderCell
