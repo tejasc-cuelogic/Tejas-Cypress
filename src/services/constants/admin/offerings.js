@@ -409,6 +409,11 @@ export const BUSINESS_INDUSTRIES = [
   { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
+export const SCOPE_VALUES = [
+  { key: 'Admin - Test Email', value: 'ADMIN', text: 'Admin - Test Email' },
+  { key: 'Investor - Final Confirmation', value: 'INVESTOR', text: 'Investor - Final Confirmation' },
+];
+
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
@@ -2595,7 +2600,7 @@ export const POC_DETAILS = {
 
 const LIMIT = {
   value: '',
-  label: 'limit',
+  label: 'Limit',
   error: undefined,
   rule: 'required',
 };
@@ -2612,11 +2617,75 @@ export const OFFERING_CLOSE_2 = {
     error: undefined,
     objType: 'DATE',
     objRefOutput: 'payload',
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
 };
 
 export const OFFERING_CLOSE_3 = {
   queueLimit: { ...LIMIT },
+  nsPayment: {
+    value: null,
+    label: 'NS Payment',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  investorFee: {
+    value: null,
+    label: 'Investor Fee',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  maturityDate: {
+    value: '',
+    label: 'Maturity Date',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'MM/DD/YYYY',
+  },
+  hardCloseDate: {
+    value: '',
+    label: 'Hard Close Date',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'MM/DD/YYYY',
+  },
+  interestRate: {
+    value: null,
+    label: 'Interest Rate',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  revSharePercentage: {
+    value: null,
+    label: 'Revenue Sharing Percentage',
+    objRefOutput: 'payload',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  multiple: {
+    value: null,
+    label: 'Investment Multiple',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  scope: {
+    value: 'ADMIN',
+    label: 'Scope',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'string',
+    placeHolder: 'Choose here',
+  },
 };

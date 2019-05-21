@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { findKey, isEmpty } from 'lodash';
-import Aux from 'react-aux';
+import { findKey } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
-import { Header, Card } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
@@ -14,33 +13,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
-import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
-import CashMovement from '../../summary/components/CashMovement';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const summaryDetails = ({
-  totalInvested, pendingInvestments, paidToDate, tnar,
-}) => {
-  console.log(tnar);
-  return {
-    accountType: 'individual',
-    title: false,
-    summary: [
-      {
-        title: 'Total Invested', content: totalInvested, type: 1, info: 'Total Invested as of today',
-      },
-      {
-        title: 'Pending Investment', content: pendingInvestments, type: 1, info: 'Pending Investment',
-      },
-      {
-        title: 'Paid to Date', content: paidToDate, type: 1, info: 'Paid to Date',
-      },
-      {
-        title: 'Simple Earnings %', content: `${tnar} %`, type: 0, info: 'Simple Earnings %',
-      },
-    ],
-  };
-};
 @inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore')
 @observer
 export default class AccountSetup extends Component {
@@ -76,8 +50,6 @@ export default class AccountSetup extends Component {
       getStepStatus,
       isBasicVerDoneForMigratedFullUser,
     } = this.props.userDetailsStore;
-    const activeAccLength = signupStatus.activeAccounts.length;
-    const { summaryLoading, summary } = this.props.portfolioStore;
     return (
       <PrivateLayout
         {...this.props}
@@ -103,24 +75,6 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
-        {
-          activeAccLength !== 0 && signupStatus.investorProfileCompleted ?
-            summaryLoading ?
-              <InlineLoader /> :
-              <Aux>
-                <Header as="h4">Values Performance</Header>
-                <SummaryHeader details={summaryDetails(summary)} />
-                { !isEmpty(summary.cashMovement) &&
-                  <Card fluid>
-                    <Card.Content>
-                      <Header as="h4">Cash Movement from Inception</Header>
-                      <CashMovement data={summary.cashMovement} />
-                    </Card.Content>
-                  </Card>
-                }
-              </Aux>
-          : null
-        }
       </PrivateLayout>
     );
   }

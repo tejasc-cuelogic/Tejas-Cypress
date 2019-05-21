@@ -115,18 +115,15 @@
         .icon {
             padding: @6px @5px;
         }
-        &.active {
-            // border-bottom: 0 !important;
-            .menu {
-                box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
-                border: 1px solid rgba(34,36,38,.15);
-                margin: 0px -@1px;
-                padding: 0 @5px;
-                min-width: ~"calc(100% + 2px)";
-                width: ~"calc(100% + 2px)";
-                .item {
-                    font-size: @13px;
-                }
+        &.active .menu {
+            box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+            border: 1px solid rgba(34,36,38,.15);
+            margin: 0px -@1px;
+            padding: 0 @5px;
+            min-width: ~"calc(100% + 2px)";
+            width: ~"calc(100% + 2px)";
+            .item {
+                font-size: @13px;
             }
         }
     }
@@ -194,20 +191,6 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
         white-space:nowrap;
         text-overflow:ellipsis;
     }
-    // &.selection{
-    //     .menu .item .sb-avatar{
-    //         height:2em;
-    //         width:2em;
-    //         line-height:2em;
-    //         margin-right:@11px;
-    //         margin-top:-.5em;
-    //         margin-bottom:-.5em;
-    //         .sb-avatar__text{
-    //             font-size:@12px;
-    //             font-weight:@normal;
-    //         }
-    //     }
-    // }
     &.inverted>.text{
         color:@white;
     }
@@ -218,15 +201,13 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
 .ui.vertical.menu .ui.dropdown.item > .text{
     max-width:~"calc(100% - 20px)";
 }
-.notification-box{
-	.ui.dropdown .icon.dropdown{
-		margin:0 5px 0 0;
-		&:before{
-			content:"\00B7\00B7\00B7";
-			font-size:@27px;
-			letter-spacing:-3px;
-			line-height:@10px;
-			color:@neutral-middark;
-		}
-	}
+.notification-box .ui.dropdown .icon.dropdown{
+    margin:0 5px 0 0;
+    &:before{
+        content:"\00B7\00B7\00B7";
+        font-size:@27px;
+        letter-spacing:-3px;
+        line-height:@10px;
+        color:@neutral-middark;
+    }
 }
