@@ -490,15 +490,14 @@ export class UserDetailsStore {
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/auth/welcome-email';
-      } else if ((this.userDetails &&
-        this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
+      } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
+        routingUrl = '/app/summary/identity-verification/0';
+      } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
           routingUrl = '/app/summary/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {
           routingUrl = '/app/summary/establish-profile';
         }
-      } else {
-        routingUrl = '/app/summary/identity-verification/0';
       }
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification) &&
       this.signupStatus.activeAccounts.length === 0) {
