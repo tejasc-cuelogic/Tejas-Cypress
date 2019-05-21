@@ -23,9 +23,12 @@ export default class ConfirmEmailAddress extends Component {
     }
 
     if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
-      this.props.authStore.isUserLoggedIn) {
+      !this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
     }
+
+    this.props.authStore.setUserCredentiansForMigratedUser();
+
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
       && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
@@ -37,12 +40,7 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
-      const { password } = this.props.authStore.CONFIRM_FRM.fields;
-      const { address } = this.props.userDetailsStore.userDetails.email;
-      const userCredentials = { email: address, password: password.value };
-      this.props.authStore.setCredentials(userCredentials);
-    }
+    this.props.authStore.setUserCredentiansForMigratedUser();
   }
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
@@ -224,7 +222,7 @@ export default class ConfirmEmailAddress extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail)) || (errors && errors.message) || inProgress} />
+            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
           </Form>
         </Modal.Content>
       </Modal>

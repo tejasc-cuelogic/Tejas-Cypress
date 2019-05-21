@@ -211,6 +211,19 @@ export class AuthStore {
     }
   }
 
+  setUserCredentiansForMigratedUser = () => {
+    if (userDetailsStore.signupStatus.isMigratedUser) {
+      const { password } = this.CONFIRM_FRM.fields;
+      const { address } = userDetailsStore.userDetails.email;
+      const userCredentials = {
+        email: address,
+        password: password.value,
+        givenName: userDetailsStore.userDetails.info.firstName,
+      };
+      this.setCredentials(userCredentials);
+    }
+  }
+
   @computed get devPasswdProtection() {
     return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
