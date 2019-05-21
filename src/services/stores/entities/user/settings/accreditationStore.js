@@ -397,7 +397,7 @@ export class AccreditationStore {
     if (this.sortOrder.column && this.sortOrder.direction && get(this.data, 'data.listAccreditation.accreditation')) {
       return orderBy(
         this.data.data.listAccreditation.accreditation,
-        [accreditation => ((this.sortOrder.column === 'requestDate' || this.sortOrder.column === 'reviewed.date') ? moment(get(accreditation, `${this.sortOrder.column}`)).unix() : get(accreditation, `${this.sortOrder.column}`).toString().toLowerCase())],
+        [accreditation => ((this.sortOrder.column === 'requestDate' || this.sortOrder.column === 'reviewed.date') ? moment(get(accreditation, `${this.sortOrder.column}`)).unix() : accreditation[this.sortOrder.column] && get(accreditation, `${this.sortOrder.column}`).toString().toLowerCase())],
         [this.sortOrder.direction],
       );
     }

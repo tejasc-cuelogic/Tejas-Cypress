@@ -83,7 +83,7 @@ export default class AllAccreditationRequests extends Component {
                 {isManager &&
                   <Table.HeaderCell>Method</Table.HeaderCell>
                 }
-                {requestState.search.status === 'REQUESTED' ?
+                {!get(requestState, 'search.status') || requestState.search.status === 'REQUESTED' ?
                   <Table.HeaderCell textAlign="center" />
                   :
                   <Table.HeaderCell
