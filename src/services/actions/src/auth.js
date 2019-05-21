@@ -158,6 +158,7 @@ export class Auth {
       if (user.signInUserSession) {
         authStore.setCognitoUserSession(user.signInUserSession);
       }
+      authStore.setEmail(user.attributes.email.toLowerCase());
       authStore.setNewPasswordRequired(true);
     }
     if (user && user.signInUserSession) {
@@ -225,6 +226,7 @@ export class Auth {
       });
 
       if (user && user.userConfirmed) {
+        authStore.setUserId(user.userSub);
         const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
         if (!isMobile) {
           if (signUpRole === 'investor') {

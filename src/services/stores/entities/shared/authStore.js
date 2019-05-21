@@ -206,6 +206,10 @@ export class AuthStore {
     return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
 
+  @action setUserId(userId) {
+    this.userId = userId;
+  }
+
   @action
   setDevAppAuthStatus(status) {
     cookie.save('DEV_AUTH_TOKEN', status, { maxAge: 86400 });
