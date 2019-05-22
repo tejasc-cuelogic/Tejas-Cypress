@@ -37,7 +37,7 @@ export class AccreditationStore {
   @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
     skip: 0,
-    perPage: 10,
+    perPage: 25,
     filters: false,
     search: {
     },
@@ -82,6 +82,7 @@ export class AccreditationStore {
       method: method !== 'ALL' ? method : null,
       type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
+      limit: reqParams ? reqParams.perPage : 25,
     };
     if (status && status !== '') {
       params = {
@@ -397,7 +398,7 @@ export class AccreditationStore {
     if (this.sortOrder.column && this.sortOrder.direction && get(this.data, 'data.listAccreditation.accreditation')) {
       return orderBy(
         this.data.data.listAccreditation.accreditation,
-        [accreditation => (this.sortOrder.column === 'requestDate' ? moment(accreditation[this.sortOrder.column]).unix() : accreditation[this.sortOrder.column] && accreditation[this.sortOrder.column].toString().toLowerCase())],
+        [accreditation => ((this.sortOrder.column === 'requestDate' || this.sortOrder.column === 'reviewed.date') ? moment(get(accreditation, `${this.sortOrder.column}`)).unix() : accreditation[this.sortOrder.column] && get(accreditation, `${this.sortOrder.column}`).toString().toLowerCase())],
         [this.sortOrder.direction],
       );
     }
@@ -1046,7 +1047,7 @@ export class AccreditationStore {
   resetFilters = () => {
     this.requestState = {
       skip: 0,
-      perPage: 10,
+      perPage: 25,
       filters: false,
       search: {
       },
