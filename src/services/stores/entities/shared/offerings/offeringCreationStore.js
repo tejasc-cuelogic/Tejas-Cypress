@@ -1571,7 +1571,7 @@ export class OfferingCreationStore {
     const earlyBird = get(offeringsStore.offer, 'earlyBird') || null;
     const tiersArray = [];
     forEach(tiers, (tier, index) => {
-      const tierFieldObj = { rule: 'alpha_dash', error: undefined };
+      const tierFieldObj = { rule: 'optional', error: undefined };
       tierFieldObj.values = [{ label: `Invest ${Helper.CurrencyFormat(tier)} or more`, value: tier }];
       tierFieldObj.key = tier;
       tierFieldObj.earlyBirdQuantity = get(earlyBird, 'quantity') !== 0 && get(earlyBird, 'amount') === tier ? get(earlyBird, 'quantity') : 0;
@@ -1693,7 +1693,7 @@ export class OfferingCreationStore {
     const tiers = [];
     map(fields, ((field) => {
       if ((field.key) &&
-      field.value.length && field.value.length === 1) {
+      field.value.length && field.value.includes(field.key)) {
         tiers.push(field.key);
       }
     }));
