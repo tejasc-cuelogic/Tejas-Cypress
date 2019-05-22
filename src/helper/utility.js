@@ -23,14 +23,14 @@ export class Utility {
    * reference: https://fkhadra.github.io/react-toastify/
    */
   toast = (msg, alertType, optionsOverride) => {
-    if (userStore.isAdmin) {
-      const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
-      if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-        toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
-      } else {
-        toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
-      }
+    // if (userStore.isAdmin) {
+    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
+    if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
+      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+    } else {
+      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
     }
+    // }
   }
 
   unMaskInput = maskedInput => (
