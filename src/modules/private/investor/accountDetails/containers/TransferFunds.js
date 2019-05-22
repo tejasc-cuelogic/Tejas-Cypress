@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { includes, isEmpty, get } from 'lodash';
+import money from 'money-math';
 import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
@@ -32,6 +33,7 @@ export default class TransferFunds extends Component {
     const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { cash, cashAvailable } = this.props.transactionStore;
+    const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : cash;
     if (this.props.match.isExact && (!cash || cashAvailable.loading)) {
       return <InlineLoader />;
     }
@@ -53,7 +55,7 @@ export default class TransferFunds extends Component {
                   <AvailableCashTransfer
                     match={this.props.match}
                     isAccountFrozen={isAccountFrozen}
-                    cash={cash || '0.00'}
+                    cash={cashAmount || '0.00'}
                   />
                 </Grid.Column>
               </Grid.Row>
