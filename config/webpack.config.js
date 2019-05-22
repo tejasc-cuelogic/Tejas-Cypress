@@ -31,6 +31,8 @@ const postcssNormalize = require('postcss-normalize');
 
 const WebpackDashboard = require('webpack-dashboard/plugin');
 
+const AutoDllPlugin = require('autodll-webpack-plugin-webpack-4');
+
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -174,7 +176,8 @@ module.exports = function (webpackEnv) {
       // In development, it does not produce real files.
       filename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
+        : isEnvDevelopment && 'static/js/[name].[hash:8].js',
+        // : isEnvDevelopment && 'static/js/bundle.js',
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
@@ -263,7 +266,7 @@ module.exports = function (webpackEnv) {
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
         // chunks: 'all',
-        name: false,
+        // name: false,
         cacheGroups: {
           default: false,
           vendors: false,
@@ -278,7 +281,7 @@ module.exports = function (webpackEnv) {
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
-      runtimeChunk: true,
+      runtimeChunk: 'single',
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -368,7 +371,6 @@ module.exports = function (webpackEnv) {
                 customize: require.resolve(
                   'babel-preset-react-app/webpack-overrides'
                 ),
-
                 plugins: [
                   [
                     require.resolve('babel-plugin-named-asset-import'),
@@ -533,6 +535,25 @@ module.exports = function (webpackEnv) {
             }
         )
       ),
+      isEnvDevelopment && new AutoDllPlugin({
+        inject: true, // will inject the DLL bundle to index.html
+        debug: true,
+        filename: '[name].[hash:8].js',
+        path: paths.appDll,
+        entry: {
+          dllVendor: [
+            'react',
+            'react-dom',
+            'lodash'
+          ],
+          dllPublic: [
+            paths.appPublicIndexJs
+          ],
+          dllPrivate: [
+            paths.appPrivateIndexJs
+          ],
+        }
+      }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       isEnvProduction &&
@@ -560,6 +581,7 @@ module.exports = function (webpackEnv) {
       // a plugin that prints an error when you attempt to do this.
       // See https://github.com/facebook/create-react-app/issues/240
       isEnvDevelopment && new CaseSensitivePathsPlugin(),
+      isEnvDevelopment && new webpack.HashedModuleIdsPlugin(),
       // If you require a missing module and then `npm install` it, you still have
       // to restart the development server for Webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.

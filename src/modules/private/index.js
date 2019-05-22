@@ -60,6 +60,7 @@ export default class Private extends React.Component {
       roles: toJS(User.roles),
     };
     const routes = this.getPrivateRoutes(UserInfo.roles);
+    console.log('Private routes==>', routes);
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     if (userFirstLoad === false) {
       return <InlineLoader />;

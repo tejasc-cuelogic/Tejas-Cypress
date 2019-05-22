@@ -4,6 +4,7 @@
   "private": true,
   "description": "NS-Client",
   "devDependencies": {
+    "autodll-webpack-plugin-webpack-4": "^1.0.0",
     "copy-webpack-plugin": "^4.6.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.17.2",
@@ -143,6 +144,7 @@
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",
     "start": "webpack-dashboard -- node --max_old_space_size=8192 scripts/start.js",
+    "build-status": "node scripts/start.js --mode development --profile --json > stats.json",
     "build-js": "node --max_old_space_size=7500 scripts/build.js",
     "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
