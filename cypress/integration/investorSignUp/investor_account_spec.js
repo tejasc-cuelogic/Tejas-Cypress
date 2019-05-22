@@ -25,11 +25,11 @@ describe('Account Creation', () => {
     cy.get('button.button').contains('Confirm').click();
     cy.wait('@upsertInvestorAccount');
   };
-  const plaidProcess = () => {
+  const plaidProcess = (progressStep) => {
     registerApiCall('upsertInvestorAccount');
-    cy.get('.multistep-modal > ol.progtrckr > .progtrckr-done').click().invoke('text').then((step) => {
-      cy.log('step value', step);
-      if (step.toUpperCase === 'LINK BANK') {
+    cy.get(`.multistep-modal > ol.progtrckr > ${progressStep}`).click().invoke('text').then((step) => {
+      cy.log('bank step', step.toUpperCase());
+      if (step.toUpperCase() === 'LINK BANK') {
         cy.get('button.link-button').contains('Or link account directly').click();
         cy.get('.bank-link:first').click({ force: true });
         cy.wait(5000);
@@ -75,12 +75,8 @@ describe('Account Creation', () => {
           clickRadioAndNext('input[name="fundingType"]', '0', 'upsertInvestorAccount');
           iraAccountCreation();
           break;
-        case 'Public Company Relations':
-          clickRadioAndNext('input[name="publicCompanyRel"]', 'no');
-          iraAccountCreation();
-          break;
         case 'Link bank':
-          plaidProcess();
+          plaidProcess('.progtrckr-doing');
           iraAccountCreation();
           break;
         case 'Investment Experience':
@@ -101,7 +97,7 @@ describe('Account Creation', () => {
   });
 
   it('should successfully link bank with plaid process', () => {
-    plaidProcess();
+    plaidProcess('.progtrckr-done');
   });
 
   it('should create individual account successfully', () => {
