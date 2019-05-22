@@ -212,14 +212,16 @@ export class AuthStore {
   }
 
   setUserCredentiansConfirmEmail = () => {
-    const { password, email } = this.CONFIRM_FRM.fields;
-    const { address } = userDetailsStore.userDetails.email;
-    const userCredentials = {
-      email: email.value || localStorage.getItem('changedEmail') || address,
-      password: password.value,
-      givenName: userDetailsStore.userDetails.info.firstName,
-    };
-    this.setCredentials(userCredentials);
+    if (this.isUserLoggedIn) {
+      const { password, email } = this.CONFIRM_FRM.fields;
+      const { address } = userDetailsStore.userDetails.email;
+      const userCredentials = {
+        email: email.value || localStorage.getItem('changedEmail') || address,
+        password: password.value,
+        givenName: userDetailsStore.userDetails.info.firstName,
+      };
+      this.setCredentials(userCredentials);
+    }
   }
 
   @computed get devPasswdProtection() {
