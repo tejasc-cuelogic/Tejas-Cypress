@@ -27,7 +27,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push(this.props.refLink || '/auth/login');
     }
 
-    this.props.authStore.setUserCredentiansForMigratedUser();
+    this.props.authStore.setUserCredentiansConfirmEmail();
 
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
@@ -40,7 +40,7 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   componentDidUpdate() {
-    this.props.authStore.setUserCredentiansForMigratedUser();
+    this.props.authStore.setUserCredentiansConfirmEmail();
   }
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');

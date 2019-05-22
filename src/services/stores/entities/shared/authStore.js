@@ -211,17 +211,15 @@ export class AuthStore {
     }
   }
 
-  setUserCredentiansForMigratedUser = () => {
-    if (userDetailsStore.signupStatus.isMigratedUser) {
-      const { password } = this.CONFIRM_FRM.fields;
-      const { address } = userDetailsStore.userDetails.email;
-      const userCredentials = {
-        email: address,
-        password: password.value,
-        givenName: userDetailsStore.userDetails.info.firstName,
-      };
-      this.setCredentials(userCredentials);
-    }
+  setUserCredentiansConfirmEmail = () => {
+    const { password, email } = this.CONFIRM_FRM.fields;
+    const { address } = userDetailsStore.userDetails.email;
+    const userCredentials = {
+      email: email.value || localStorage.getItem('changedEmail') || address,
+      password: password.value,
+      givenName: userDetailsStore.userDetails.info.firstName,
+    };
+    this.setCredentials(userCredentials);
   }
 
   @computed get devPasswdProtection() {
