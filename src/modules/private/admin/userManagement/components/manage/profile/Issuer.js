@@ -23,7 +23,7 @@ export default class Issuer extends Component {
           Profile Info
         </Header>
         <Header as="h6">Personal info</Header>
-        <Form.Group widths={4}>
+        <Form.Group widths={2}>
           {
           ['firstName', 'lastName'].map(field => (
             <FormInput
