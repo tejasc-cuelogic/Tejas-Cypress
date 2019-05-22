@@ -129,7 +129,7 @@ class TransferRequest extends Component {
           By clicking the “Confirm” button, I authorize the transfer from
           my {bankAndAccountName} to my NextSeed account in the
           amount equal to the Transfer Requested above. I understand this transfer will
-          be initiated within 1 business day.
+          be initiated within 1-3 business days.
         </p>
       </div>
     );
