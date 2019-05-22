@@ -37,11 +37,11 @@ class Login extends Component {
       if (res) {
         authActions.login()
           .then(() => {
-            this.props.authStore.setCredentials(userCredentials);
-            this.props.authStore.resetForm('LOGIN_FRM');
             if (this.props.authStore.newPasswordRequired) {
               this.props.history.push('/auth/change-password');
             } else {
+              this.props.authStore.setCredentials(userCredentials);
+              this.props.authStore.resetForm('LOGIN_FRM');
               this.props.history.push(this.props.uiStore.authRef || '/');
             }
           }).catch((err) => {
