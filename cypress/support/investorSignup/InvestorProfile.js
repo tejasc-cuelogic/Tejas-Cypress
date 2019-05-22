@@ -1,17 +1,7 @@
-import { registerApiCall } from '../common';
+import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../common';
 
 const handleOverviewStep = () => {
   cy.get('div.multistep > .center-align > button').contains('Continue').click();
-};
-const btnClickAndWait = () => {
-  cy.get('button.next').click();
-  cy.wait('@upsertProfile');
-  cy.wait(2000);
-};
-
-const clickRadioAndNext = (selector, radioVal) => {
-  cy.get(selector).check(radioVal, { force: true });
-  btnClickAndWait();
 };
 
 export const completeInvestorProfile = () => {
@@ -25,22 +15,22 @@ export const completeInvestorProfile = () => {
         completeInvestorProfile();
         break;
       case 'Employment Status':
-        clickRadioAndNext('input[name="status"]', 'SELF_EMPLOYED');
+        clickRadioAndNext('input[name="status"]', 'SELF_EMPLOYED', 'upsertProfile');
         completeInvestorProfile();
         break;
       case 'Brokerage Employment':
-        clickRadioAndNext('input[name="brokerageEmployment"]', 'no');
+        clickRadioAndNext('input[name="brokerageEmployment"]', 'no', 'upsertProfile');
         completeInvestorProfile();
         break;
       case 'Public Company Relations':
-        clickRadioAndNext('input[name="publicCompanyRel"]', 'no');
+        clickRadioAndNext('input[name="publicCompanyRel"]', 'no', 'upsertProfile');
         completeInvestorProfile();
         break;
       case 'Financial Information':
         cy.get('input[name="investorProfileType"]').check('JOINT', { force: true });
         cy.get('input[name="netWorth"]').type('123456789');
         cy.get('input[name="annualIncomeCurrentYear"]').type('123456789');
-        btnClickAndWait();
+        btnClickAndWait('upsertProfile');
         completeInvestorProfile();
         break;
       case 'Investment Experience':

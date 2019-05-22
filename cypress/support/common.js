@@ -16,6 +16,17 @@ export const typeOtpCode = () => {
   });
 };
 
+export const btnClickAndWait = (operationName) => {
+  cy.get('button.next').click();
+  cy.wait(`@${operationName}`);
+  cy.wait(2000);
+};
+
+export const clickRadioAndNext = (selector, radioVal, operationName) => {
+  cy.get(selector).check(radioVal, { force: true });
+  btnClickAndWait(operationName);
+};
+
 export const escapeCharFromSel = myid => `.${myid.replace(/(:|\.|\[|\]|,|=|@)/g, '\\$1')}`;
 
 export const enterCodeAndConfirm = () => {

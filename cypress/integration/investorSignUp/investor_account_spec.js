@@ -1,5 +1,5 @@
 import { InvestorFlowProcess } from '../../support/investorSignup/investorFlow';
-import { registerApiCall } from '../../support/common';
+import { registerApiCall, clickRadioAndNext, btnClickAndWait } from '../../support/common';
 
 describe('Account Creation', () => {
   before(() => {
@@ -25,17 +25,17 @@ describe('Account Creation', () => {
     cy.get('button.button').contains('Confirm').click();
     cy.wait('@upsertInvestorAccount');
   };
-
   const plaidProcess = () => {
     registerApiCall('upsertInvestorAccount');
     cy.get('.multistep-modal > ol.progtrckr > .progtrckr-done').click().invoke('text').then((step) => {
       cy.log('step value', step);
-      if (step === 'Link Bank') {
+      if (step.toUpperCase === 'LINK BANK') {
         cy.get('button.link-button').contains('Or link account directly').click();
         cy.get('.bank-link:first').click({ force: true });
-        cy.wait(3000);
+        cy.wait(5000);
         cy.get('iframe').then(($iframe) => {
           const $body = $iframe.contents().find('body');
+          cy.log('body', $iframe.contents());
           let stripe = cy.wrap($body);
           stripe.find('.Pane__actions > button').click({ force: true });
           stripe = cy.wrap($body);
@@ -51,6 +51,47 @@ describe('Account Creation', () => {
           stripe.find('button').contains('Continue').click();
           cy.wait('@upsertInvestorAccount');
         });
+      }
+    });
+  };
+
+  const iraAccountCreation = () => {
+    registerApiCall('upsertInvestorAccount');
+    cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
+      cy.log('step value', text);
+      // eslint-disable-next-line default-case
+      switch (text) {
+        case 'Financial info':
+          cy.get('input[name="netWorth"]').type('123456789');
+          cy.get('input[name="income"]').type('123456789');
+          btnClickAndWait('upsertInvestorAccount');
+          iraAccountCreation();
+          break;
+        case 'Account type':
+          clickRadioAndNext('input[name="iraAccountType"]', '1', 'upsertInvestorAccount');
+          iraAccountCreation();
+          break;
+        case 'Funding':
+          clickRadioAndNext('input[name="fundingType"]', '0', 'upsertInvestorAccount');
+          iraAccountCreation();
+          break;
+        case 'Public Company Relations':
+          clickRadioAndNext('input[name="publicCompanyRel"]', 'no');
+          iraAccountCreation();
+          break;
+        case 'Link bank':
+          plaidProcess();
+          iraAccountCreation();
+          break;
+        case 'Investment Experience':
+          cy.get('input[name="experienceLevel"]').check('GOOD', { force: true });
+          cy.get('div[role="listitem"]').get('[type="checkbox"]').parent()
+            .click({ multiple: true });
+          cy.wait(3000);
+          cy.get('.center-align > button').contains('Continue to Account').click({ force: true });
+          cy.wait('@upsertProfile');
+          cy.wait(3000);
+          break;
       }
     });
   };
@@ -72,7 +113,16 @@ describe('Account Creation', () => {
     cy.wait('@upsertInvestorAccount');
     cy.wait(3000);
     cy.get('.multistep').within(() => {
-      cy.get('.center-align > .button').contains('Create your account').click({ force: true });
+      cy.get('div.center-align').find('button').contains('Create your account').click({ force: true });
     });
+    cy.wait('@upsertInvestorAccount');
+  });
+
+  it('should create IRA account successfully', () => {
+    registerApiCall('upsertInvestorAccount');
+    cy.get('.btn-item').contains('Open New Account').click({ force: true });
+    cy.get('input[name="accType"]').check('1', { force: true });
+    cy.get('button.next').click();
+    iraAccountCreation();
   });
 });
