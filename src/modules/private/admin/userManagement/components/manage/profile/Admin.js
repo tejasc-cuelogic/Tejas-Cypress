@@ -57,7 +57,7 @@ export default class Admin extends Component {
             </Button.Group>
           }
         </Header>
-        <Form.Group widths={4}>
+        <Form.Group widths={2}>
           {
           ['firstName', 'lastName'].map(field => (
             <FormInput

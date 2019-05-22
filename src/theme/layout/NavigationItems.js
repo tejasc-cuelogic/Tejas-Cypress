@@ -206,11 +206,26 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoGre
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 
-@inject('navStore', 'uiStore')
+@inject('navStore', 'uiStore', 'userStore', 'userDetailsStore')
+@withRouter
 @observer
 export class NavigationItems extends Component {
   setAuthRef = () => {
     this.props.uiStore.setAuthRef(this.props.location.pathname);
+  }
+  handleDashboardBtn = () => {
+    const { redirectURL } = this.props.uiStore;
+    const { roles } = this.props.userStore.currentUser;
+    const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep :
+      '/app/dashboard';
+    if (invLogsIn === '/app/summary') {
+      const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
+      if (hasExpanded) {
+        this.props.uiStore.setNavExpanded(hasExpanded.to);
+      }
+    }
+    this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
+      `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
   }
   render() {
     const {
@@ -280,8 +295,7 @@ export class NavigationItems extends Component {
               ) : (
                 <Menu.Item
                   className="menu-button"
-                  as={Link}
-                  to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                  onClick={this.handleDashboardBtn}
                 >
                   <Button secondary>Dashboard</Button>
                 </Menu.Item>

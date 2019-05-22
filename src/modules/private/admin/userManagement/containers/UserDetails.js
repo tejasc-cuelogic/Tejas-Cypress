@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
-import { intersection, isEmpty, includes } from 'lodash';
+import { intersection, isEmpty, includes, get } from 'lodash';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
@@ -39,6 +40,7 @@ const navMeta = [
 export default class AccountDetails extends Component {
   state = {
     errorMsg: '',
+    copied: false,
   }
   // state = { isActivity: false };
   componentWillMount() {
@@ -102,7 +104,15 @@ export default class AccountDetails extends Component {
                   <Header as="h3">
                     {details.info && details.info.firstName} {details.info && details.info.lastName}
                     <UserTypeIcon role={details.roles} />
-                    <Header.Subheader>{rolesRaw[0]}</Header.Subheader>
+                    <Header.Subheader>
+                      {rolesRaw[0]} -
+                      <CopyToClipboard
+                        text={get(details, 'id')}
+                        onCopy={() => this.setState({ copied: true })}
+                      >
+                        <span> {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}</span>
+                      </CopyToClipboard>
+                    </Header.Subheader>
                   </Header>
                   <Button.Group floated="right">
                     {!includes(details.status, 'DELETED') && details.status !== 'ADMIN' &&

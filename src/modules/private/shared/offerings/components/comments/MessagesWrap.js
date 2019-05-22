@@ -23,7 +23,7 @@ export default class MessagesWrap extends Component {
   }
   render() {
     const {
-      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate,
+      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin,
     } = this.props;
     const {
       thread, approveComment, buttonLoader, currentOfferingIssuerId, threadMainMessage,
@@ -41,6 +41,7 @@ export default class MessagesWrap extends Component {
           thread={threadMessages}
           commentEditHandler={this.commentEditHandler}
           deleteCommentHandler={this.confirmDelete}
+          isAdmin={isAdmin}
         />
         {!passedProcessingDate &&
         <Compose isIssuer={isIssuer} />
