@@ -75,6 +75,8 @@ export const getOfferingById = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       previewPassword
+      isAvailablePublicly
+      stage
     }
   }
 `;

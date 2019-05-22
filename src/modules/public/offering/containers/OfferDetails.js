@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
@@ -31,32 +32,45 @@ const getModule = component => Loadable({
 });
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
-@inject('campaignStore', 'userStore', 'navStore')
+@inject('campaignStore', 'userStore', 'navStore', 'uiStore')
 @withRouter
 @observer
 class offerDetails extends Component {
   state = {
     showPassDialog: false,
+    preLoading: true,
+    found: 0,
   }
   componentWillMount() {
     const { currentUser } = this.props.userStore;
-    if ((!currentUser || (currentUser && !currentUser.roles.includes('admin'))) && this.props.match.url.includes('preview')) {
-      this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-        if (currentUser && (currentUser.roles.includes('issuer') || currentUser.roles.includes('investor'))) {
-          if (data && data.length && data[0].issuerId === currentUser.sub) {
-            this.setState({ showPassDialog: false });
-            this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-          } else {
-            this.setState({ showPassDialog: true });
-          }
-        } else {
-          this.setState({ showPassDialog: true });
+    this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
+      const oMinData = data ? data[0] : null;
+      if ((currentUser && currentUser.roles.includes('admin')) ||
+        oMinData.isAvailablePublicly ||
+        (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
+        this.setState({ preLoading: false, showPassDialog: false });
+        this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+      } else if (currentUser && currentUser.roles.includes('issuer')) {
+        if (oMinData.issuerId !== currentUser.sub) {
+          this.setState(oMinData.stage === 'CREATION' ?
+            { showPassDialog: true, preLoading: false } :
+            { showPassDialog: false, found: 2, preLoading: false });
         }
-      });
-    } else {
-      this.setState({ showPassDialog: false });
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-    }
+      } else if (currentUser && currentUser.roles.includes('investor')) {
+        this.setState({ showPassDialog: false, preLoading: false });
+      } else {
+        if (oMinData.stage === 'CREATION') {
+          this.setState({ showPassDialog: true, preLoading: false });
+        } else if (oMinData.stage !== 'CREATION' && oMinData.isAvailablePublicly !== true) {
+          this.setState({ showPassDialog: false, preLoading: false });
+          this.props.uiStore.setAuthRef(this.props.location.pathname);
+          this.props.history.push('/auth/login');
+        } else {
+          console.log('.');
+        }
+      }
+      console.log('checkIn', currentUser && currentUser.sub, oMinData);
+    });
   }
   componentDidMount() {
     window.scrollTo(0, 0);
@@ -181,7 +195,7 @@ class offerDetails extends Component {
         authPreviewOffer={this.authPreviewOffer}
       />);
     }
-    if (!campaignStore.details || campaignStore.details.loading) {
+    if (!campaignStore.details || campaignStore.details.loading || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
@@ -199,8 +213,9 @@ class offerDetails extends Component {
     const offeringStage = get(campaign, 'stage');
     navItems =
       this.modifyInvestmentDetailsSubNav(navItems, offeringStage);
-    if (details && details.data &&
-      details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
+    if ((details && details.data &&
+      details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) ||
+      this.state.found === 2) {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
