@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider, Dimmer, Loader } from 'semantic-ui-react';
+import { isEmpty } from 'lodash';
 import { authActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
@@ -196,7 +197,7 @@ export default class ConfirmEmailAddress extends Component {
             title={CONFIRM_FRM.fields.email.value}
             className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only`}
           />
-          {!isMigratedUser &&
+          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value)) &&
             <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
           }
           <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
