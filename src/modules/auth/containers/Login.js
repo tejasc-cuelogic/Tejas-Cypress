@@ -37,23 +37,12 @@ class Login extends Component {
       if (res) {
         authActions.login()
           .then(() => {
-            const { redirectURL } = this.props.uiStore;
             if (this.props.authStore.newPasswordRequired) {
               this.props.history.push('/auth/change-password');
             } else {
-              const { roles } = this.props.userStore.currentUser;
               this.props.authStore.setCredentials(userCredentials);
               this.props.authStore.resetForm('LOGIN_FRM');
-              const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep :
-                '/app/dashboard';
-              if (invLogsIn === '/app/summary') {
-                const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
-                if (hasExpanded) {
-                  this.props.uiStore.setNavExpanded(hasExpanded.to);
-                }
-              }
-              this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
-                `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+              this.props.history.push(this.props.uiStore.authRef || '/');
             }
           }).catch((err) => {
             console.log(err);

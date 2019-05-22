@@ -93,6 +93,11 @@ export class OfferingCreationStore {
     2: LEADERSHIP_EXP.employer,
     3: LEADERSHIP_EXP.employer,
     4: LEADERSHIP_EXP.employer,
+    5: LEADERSHIP_EXP.employer,
+    6: LEADERSHIP_EXP.employer,
+    7: LEADERSHIP_EXP.employer,
+    8: LEADERSHIP_EXP.employer,
+    9: LEADERSHIP_EXP.employer,
   };
   @observable requestState = {
     search: {},

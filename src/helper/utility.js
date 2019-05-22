@@ -21,14 +21,16 @@ export class Utility {
    * @desc To show alert notifications to the user
    * reference: https://fkhadra.github.io/react-toastify/
    */
-  toast = (msg, alertType, optionsOverride) => {
-    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
-
-    if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
-    } else {
-      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
-    }
+  // toast = (msg, alertType, optionsOverride) => {
+  // eslint-disable-next-line no-unused-vars
+  toast = (msg, alertType) => {
+    // const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
+    // if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
+    //   toast[alertType](`${cleanMsg(msg)}`,
+    // _.merge({}, this.options, optionsOverride, { className: alertType }));
+    // } else {
+    //   toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+    // }
   }
 
   unMaskInput = maskedInput => (

@@ -18,7 +18,7 @@ export class ActivityHistoryStore {
 
   @action
   initRequest = (resourceId, defaultFilter = false) => {
-    if (defaultFilter) {
+    if (defaultFilter && resourceId === 'ELASTIC_SEARCH') {
       this.requestState.filters.startDate = DataFormatter.getDate(moment().subtract(2, 'day').format('MM-DD-YYYY'), true, 'startDate', true);
       this.requestState.filters.endDate = DataFormatter.getDate(moment().format('MM-DD-YYYY'), true, 'endDate', true);
     }
