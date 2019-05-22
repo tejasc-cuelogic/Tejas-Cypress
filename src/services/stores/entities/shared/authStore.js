@@ -214,11 +214,11 @@ export class AuthStore {
   setUserCredentiansConfirmEmail = () => {
     if (this.isUserLoggedIn) {
       const { password, email } = this.CONFIRM_FRM.fields;
-      const { address } = userDetailsStore.userDetails.email;
       const userCredentials = {
-        email: email.value || localStorage.getItem('changedEmail') || address,
+        email: email.value || localStorage.getItem('changedEmail') ||
+          get(userDetailsStore, 'userDetails.email.address') || '',
         password: password.value,
-        givenName: userDetailsStore.userDetails.info.firstName,
+        givenName: get(userDetailsStore, 'userDetails.info.firstName') || '',
       };
       this.setCredentials(userCredentials);
     }

@@ -26,9 +26,7 @@ export default class ConfirmEmailAddress extends Component {
       !this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
     }
-
     this.props.authStore.setUserCredentiansConfirmEmail();
-
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
       && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
