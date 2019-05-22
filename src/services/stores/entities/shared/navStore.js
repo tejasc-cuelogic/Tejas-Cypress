@@ -54,7 +54,7 @@ export class NavStore {
           ...userDetailsStore.signupStatus.processingAccounts,
           ...userDetailsStore.signupStatus.frozenAccounts];
       }
-      if (User.roles.includes('investor') && userDetails && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
+      if (User.roles && User.roles.includes('investor') && userDetails && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
         navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
       }
       if (permitted && permitted.length > 1 && permitted.includes('investor')) {
