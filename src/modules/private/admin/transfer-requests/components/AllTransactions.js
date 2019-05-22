@@ -106,7 +106,7 @@ export default class AllTransactions extends Component {
                                 {STATUS_MAPPING[statusType].syncCta.title}
                               </Button> :
                               has(STATUS_MAPPING[statusType], 'affirmativeCta') &&
-                              <Button loading={btnLoader.includes(row.requestId)} color="blue" disabled={row.failDesc || moment().isBefore(moment(row.estDateAvailable * 1000))} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
+                              <Button loading={btnLoader.includes(row.requestId)} color={`${statusType === 'pending' && ['FROZEN'].includes(get(row, 'investorAccountInfo.accountStatus')) ? 'gray' : 'blue'}`} disabled={(statusType === 'pending' && ['FROZEN'].includes(get(row, 'investorAccountInfo.accountStatus'))) || row.failDesc || moment().isBefore(moment(row.estDateAvailable * 1000))} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
                                 {STATUS_MAPPING[statusType].affirmativeCta.title}
                               </Button>
                             }
