@@ -5,7 +5,9 @@ import moment from 'moment';
 import Helper from '../../../../../../../helper/utility';
 
 
-const IndividualSummary = ({ account, investor }) => (
+const IndividualSummary = ({
+  account, investor, availableCash, totalBalance, availableCashL, totalBalanceL,
+}) => (
   <Table.Body>
     <Table.Row>
       <Table.Cell>Type: </Table.Cell>
@@ -42,6 +44,14 @@ const IndividualSummary = ({ account, investor }) => (
     <Table.Row>
       <Table.Cell>Your Initial Deposit</Table.Cell>
       <Table.Cell>{(get(account, 'details.initialDepositAmount') && get(account, 'details.initialDepositAmount') !== '-1.00') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) : 'N/A'}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Your Available Balance</Table.Cell>
+      <Table.Cell>{availableCashL ? 'Loading...' : Helper.MoneyMathDisplayCurrency(availableCash)}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Your Total Balance</Table.Cell>
+      <Table.Cell>{totalBalanceL ? 'Loading...' : Helper.MoneyMathDisplayCurrency(totalBalance)}</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Account Creation Date: </Table.Cell>

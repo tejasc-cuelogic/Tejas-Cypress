@@ -93,6 +93,11 @@ export class OfferingCreationStore {
     2: LEADERSHIP_EXP.employer,
     3: LEADERSHIP_EXP.employer,
     4: LEADERSHIP_EXP.employer,
+    5: LEADERSHIP_EXP.employer,
+    6: LEADERSHIP_EXP.employer,
+    7: LEADERSHIP_EXP.employer,
+    8: LEADERSHIP_EXP.employer,
+    9: LEADERSHIP_EXP.employer,
   };
   @observable requestState = {
     search: {},
@@ -506,8 +511,9 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
+    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate'];
     const fieldValue =
-      (field === 'notePurchaseDate' || field === 'launchDate' || field === 'processingDate' || field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (cMap.includes(field)) ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -1521,7 +1527,15 @@ export class OfferingCreationStore {
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
     if (formData.payload) {
-      formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+      if (formData.payload.notePurchaseDate) {
+        formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.maturityDate) {
+        formData.payload.maturityDate = moment(formData.payload.maturityDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.hardCloseDate) {
+        formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
+      }
     }
     client
       .mutate({

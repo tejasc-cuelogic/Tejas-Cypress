@@ -1003,26 +1003,13 @@
 /* --------------------------------------------
       OLD VARIABLE VALUES TO BE REMOVED
 -------------------------------------------- */
-// @theme-primary:#98CE23;
-// @theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
-
 //  BACKGROUND COLORS
 @dark-bg-color:#424242;
 @darken-bg-color:darken(@dark-bg-color, 4%);				    		//  #383838           (when base = 424242)
 @darker-bg-color:darken(@dark-bg-color, 11%);			    			//  #262626           (when base = 424242)
 
-// @light-bg-color:#F7F7F7;
-// @lighten-bg-color:lighten(@light-bg-color, 1%);			  			//  #FAFAFA           (when base = F7F7F7)
-// @lighter-bg-color:lighten(@light-bg-color, 4%);			  			//  #FFFFFF           (when base = F7F7F7)
-
 //  TEXT COLORS
-// @primary-text:#242424;
-// @secondary-text:#383838;
 @tertiary-text:#4F4F4F;
-// @quaternary-text:#989898;
-// @inverse-text:#FFFFFF;
-// @inverse-secondary-text:darken(@inverse-text, 51%);				     //  #7D7D7D           (when base = FFFFFF)
-// @inverse-darken:darken(@inverse-text, 5%);                     //  #F2F2F2         (when base = FFFFFF)
 
 @link-color:@primary-one;
 @link-color-darken:darken(@link-color, 10%);

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Aux from 'react-aux';
-import { filter } from 'lodash';
+import { filter, find } from 'lodash';
 import { Form, Header, Divider, Step, Label, Button, Icon, Confirm } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
-import { MaskedInput } from '../../../../../theme/form';
+import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
+import { MaskedInput, FormDropDown } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 
 const closingActions = {
@@ -16,7 +17,9 @@ const closingActions = {
   ENUM5: { label: 'Process Notes', ref: 2, enum: 'PROCESS_NOTES' },
   ENUM6: { label: 'Finalize Notes', ref: 2, enum: 'FINALIZE_NOTES' },
   ENUM7: { label: 'Close', ref: 3, enum: 'CLOSEME' },
-  ENUM8: { label: 'Hard Close Notification', ref: 3, enum: 'HARD_CLOSE_NOTIFICATION' },
+  ENUM8: {
+    label: 'Hard Close Notification', ref: 3, enum: 'HARD_CLOSE_NOTIFICATION', confirm: true,
+  },
 };
 
 @inject('offeringCreationStore', 'offeringsStore', 'uiStore')
@@ -28,41 +31,51 @@ export default class Close extends Component {
     cancelButtonTxt: 'No, it has not',
     confirmButtonTxt: 'Yes, it has',
     open: false,
+    action: '',
+    confirmed: false,
   }
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_FRM', 'closureSummary');
   }
   submitStep = () => {
-    const currentStep = this.state.activeStep;
-    this.setState({ open: false, activeStep: currentStep + 1 });
+    this.setState({ open: false, confirmed: true });
+    const { activeStep, action } = this.state;
+    this.closeAction(action, activeStep, true);
   }
-  showConfirmBox = () => {
+  showConfirmBox = (meta) => {
     if (this.state.activeStep === 3) {
       this.setState({
-        confirmContentTxt: 'Are you sure you want to Finalize and Close the envelopes?',
+        confirmContentTxt: `Are you sure you want to proceed with the ${meta.label}`,
         cancelButtonTxt: 'No, go back',
         confirmButtonTxt: 'Yes, proceed',
       });
     }
-    this.setState({ open: true });
+    this.setState({ open: true, action: meta.enum });
   }
   handleCancel = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, action: '' });
   }
   toggleStep = activeStep => (this.setState({ activeStep }));
-  closeAction = async (status, step) => {
+  closeAction = async (status, step, forced = false) => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
-    if (status === 'CLOSEME') {
-      this.handleCloseOffering();
+    const { confirmed } = this.state;
+    const confirmFor = find(closingActions, a => a.enum === status && a.confirm === true);
+    if (confirmFor && confirmed === false && forced === false) {
+      this.showConfirmBox(confirmFor);
     } else {
-      await offeringClose(
-        {
-          offeringId: offer.id,
-          process: status,
-        },
-        step,
-      );
+      if (status === 'CLOSEME') {
+        this.handleCloseOffering();
+      } else {
+        await offeringClose(
+          {
+            offeringId: offer.id,
+            process: status,
+          },
+          step,
+        );
+      }
+      this.setState({ confirmed: false, action: '' });
     }
   }
   handleCloseOffering = () => {
@@ -138,13 +151,15 @@ export default class Close extends Component {
               </Step.Group>
               {this.state.activeStep === 1 &&
               <Aux>
-                <MaskedInput
-                  name="queueLimit"
-                  containerwidth="4"
-                  fielddata={OFFERING_CLOSE_1.fields.queueLimit}
-                  changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
-                  number
-                />
+                <Form.Group widths={3}>
+                  <MaskedInput
+                    name="queueLimit"
+                    containerwidth="4"
+                    fielddata={OFFERING_CLOSE_1.fields.queueLimit}
+                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                    number
+                  />
+                </Form.Group>
                 <Button.Group className="mt-50">
                   {filter(closingActions, a => a.ref === 1).map(fA => (
                     <Button
@@ -160,17 +175,19 @@ export default class Close extends Component {
               }
               {this.state.activeStep === 2 &&
                 <Aux>
-                  {['queueLimit', 'notePurchaseDate'].map(field => (
-                    <MaskedInput
-                      name={field}
-                      containerwidth="4"
-                      fielddata={OFFERING_CLOSE_2.fields[field]}
-                      changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
-                      dateOfBirth={field === 'notePurchaseDate'}
-                      number={field === 'queueLimit'}
-                    />
-                  ))
-                  }
+                  <Form.Group widths={3}>
+                    {['queueLimit', 'notePurchaseDate'].map(field => (
+                      <MaskedInput
+                        name={field}
+                        containerwidth="4"
+                        fielddata={OFFERING_CLOSE_2.fields[field]}
+                        changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
+                        dateOfBirth={field === 'notePurchaseDate'}
+                        number={field === 'queueLimit'}
+                      />
+                    ))
+                    }
+                  </Form.Group>
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 2).map(fA => (
                       <Button
@@ -186,13 +203,30 @@ export default class Close extends Component {
               }
               {this.state.activeStep === 3 &&
                 <Aux>
-                  <MaskedInput
-                    name="queueLimit"
-                    containerwidth="4"
-                    fielddata={OFFERING_CLOSE_3.fields.queueLimit}
-                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
-                    number
-                  />
+                  <Form.Group widths={3}>
+                    {
+                      Object.keys(OFFERING_CLOSE_3.fields).filter(f => f !== 'scope').map(field => (
+                        <MaskedInput
+                          key={field}
+                          name={field}
+                          number={['queueLimit', 'interestRate', 'revSharePercentage'].includes(field)}
+                          currency={['nsPayment', 'investorFee', 'multiple'].includes(field)}
+                          dateOfBirth={['maturityDate', 'hardCloseDate'].includes(field)}
+                          fielddata={OFFERING_CLOSE_3.fields[field]}
+                          changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
+                        />
+                      ))
+                    }
+                    <FormDropDown
+                      fielddata={OFFERING_CLOSE_3.fields.scope}
+                      selection
+                      value={OFFERING_CLOSE_3.fields.scope.value}
+                      placeholder="Choose here"
+                      name="scope"
+                      options={SCOPE_VALUES}
+                      onChange={(e, result) => formArrayChange(e, result, 'OFFERING_CLOSE_3')}
+                    />
+                  </Form.Group>
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button

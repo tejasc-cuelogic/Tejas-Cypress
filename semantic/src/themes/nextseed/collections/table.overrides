@@ -45,13 +45,11 @@
     .ui.fitted.checkbox{
         display:block;
     }
-    &.sortable{
-        thead th{
-            color:@tertiary-text;
-            &:after{
-                font-size:@16px;
-                color:@primary-one;
-            }
+    &.sortable thead th{
+        color:@tertiary-text;
+        &:after{
+            font-size:@16px;
+            color:@primary-one;
         }
     }
     &.striped{
@@ -149,18 +147,12 @@
         white-space:nowrap;
         display:block;
     }
-    &.statment-tables{
-        td>i.icon{
-            color:@neutral-middark;
-            margin-left:@6px;
-            vertical-align:middle;
-        }
+    &.statment-tables td>i.icon{
+        color:@neutral-middark;
+        margin-left:@6px;
+        vertical-align:middle;
     }
     &.investment-details{
-        // thead th{
-        //     font-size:@12px;
-        //     color:@neutral-middark;
-        // }
         .ui.avatar.image{
             margin-right:0;
             border:1px solid @border-color;
@@ -177,6 +169,9 @@
             }
             .offering-title{
                 display:inline-block;
+                .disable-click {
+                    pointer-events: none;
+                }
             }
             p.date-stamp{
                 font-size:@12px;
@@ -196,9 +191,6 @@
         }
     }
     &.application-list{
-        // thead th{
-        //     color:@neutral;
-        // }
         h6.ui.header{
             margin:0 0 @7px;
         }
@@ -222,12 +214,10 @@
             }
         }
     }
-    &.confirm-transfer-table {
-        tr td {
-            border-top: 0;
-            &.right.aligned input{
-                text-align:right;
-            }
+    &.confirm-transfer-table tr td {
+        border-top: 0;
+        &.right.aligned input{
+            text-align:right;
         }
     }
     &[class*="very basic"]:not(.unstackable){
@@ -240,8 +230,6 @@
             border-top: none;
         }
     }
-    // &:not(.unstackable) tr>td {
-    // }
     &.basic.form-table {
         background: @neutral-offwhite;
         padding-bottom: @7px;
@@ -448,17 +436,6 @@
                 .field{
                     display: inline-block;
                     width: calc(100% - 30px);
-                    // padding-left:@30px;
-                    // &:before{
-                    //     content:"\e998";
-                    //     font-family:'nextseed';
-                    //     font-size:@14px;
-                    //     color:@neutral-middark;
-                    //     position:absolute;
-                    //     left:10px;
-                    //     top:50%;
-                    //     transform:translate(0%, -50%);
-                    // }
                 }
             }
         }
