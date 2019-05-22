@@ -66,8 +66,8 @@ mutation sendAlertToAdminFromClient($emailContent: String!){
 `;
 
 export const createUploadEntryAccreditationAdmin = gql`
-  mutation _createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum, $action:AccreditationStatus!, $userId: String!, $requestDate: String!) {
-    createUploadEntryAccreditationAdmin(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId, requestDate: $requestDate) {
+  mutation _createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum!, $action:AccreditationStatus!, $userId: String!) {
+    createUploadEntryAccreditationAdmin(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId) {
       preSignedUrl
       fileId
     }

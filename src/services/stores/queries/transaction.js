@@ -118,6 +118,7 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
       type
       investorAccountInfo {
         accountType
+        accountStatus
       }
       userInfo {
         id
