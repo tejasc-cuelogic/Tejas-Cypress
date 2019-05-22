@@ -93,7 +93,7 @@ export default class AllRequests extends Component {
                       inProgress={inProgress}
                       userId={req.userId}
                       accountId={req.accountId}
-                      isLocked={get(req, 'userInfo.locked')}
+                      isLocked={get(req, 'userInfo.locked.lock') === 'LOCKED'}
                       updateAccountChangeAction={bankAccountStore.updateAccountChangeAction}
                     />
                   </Table.Row>
