@@ -275,11 +275,6 @@ export const PRIVATE_NAV = [
     to: 'categories',
     path: 'admin/categories',
     accessibleTo: ['admin', 'manager', 'support'],
-    // subPanel: 1,
-    // subNavigations: [
-    //   { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
-    //   { title: 'Data', to: 'data', component: 'Data' },
-    // ],
   },
   {
     icon: 'lightbulb outline',
