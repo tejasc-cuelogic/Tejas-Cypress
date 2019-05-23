@@ -647,10 +647,6 @@ mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!,
      userId: $userId
      accountId: $accountId
      freeze: $freeze
-<<<<<<< HEAD
      reason: $reason
-=======
-     reason: $message
->>>>>>> 104da4f448f644e40e26c3378fac7e77007618b3
    )
  }`;
