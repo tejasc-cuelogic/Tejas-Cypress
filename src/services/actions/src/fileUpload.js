@@ -82,7 +82,7 @@ export class FileUpload {
     }).catch(err => reject(err));
   });
 
-  setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId, requestDate) =>
+  setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) =>
     new Promise((resolve, reject) => {
       client
         .mutate({
@@ -93,7 +93,6 @@ export class FileUpload {
             accountType,
             action,
             userId,
-            requestDate,
           },
         })
         .then((result) => {

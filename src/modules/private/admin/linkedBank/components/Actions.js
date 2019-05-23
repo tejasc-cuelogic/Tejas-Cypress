@@ -19,7 +19,7 @@ export default class Actions extends Component {
     return (
       <Table.Cell collapsing textAlign="center">
         <Button.Group vertical compact size="mini">
-          {Object.keys(actions).map(action => (
+          {!this.props.isLocked ? Object.keys(actions).map(action => (
             <Button
               loading={loadingRequestIds.includes(this.props.userId)}
               className={actions[action].color}
@@ -28,7 +28,10 @@ export default class Actions extends Component {
             >
               {actions[action].label}
             </Button>
-            ))}
+            ))
+          :
+          <Button disabled className="red" >Locked</Button>
+          }
         </Button.Group>
       </Table.Cell>
     );

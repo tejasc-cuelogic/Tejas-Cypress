@@ -31,6 +31,10 @@ const OtherInformation = ({ details }) => (
               <Table.Cell>User Status: </Table.Cell>
               <Table.Cell>{get(details, 'status')}</Table.Cell>
             </Table.Row>
+            <Table.Row>
+              <Table.Cell>Account Status: </Table.Cell>
+              <Table.Cell>{get(details, 'locked.lock')}</Table.Cell>
+            </Table.Row>
           </Table.Body>
         </Table>
       </div>

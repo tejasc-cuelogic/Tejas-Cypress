@@ -34,11 +34,13 @@ export default class AccountHeader extends Component {
               <Icon className={`ns-${accountType.toLocaleLowerCase()}-line`} color="green" />{(accountType === 'ira') ? accountType.toUpperCase() : startCase(accountType)} {this.props.module || ''}
             </Header>
           </span>
+          {this.props.showFreezeCTA &&
           <span className="pull-right">
             <Button.Group compact size="tiny">
               <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, true)}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
             </Button.Group>
           </span>
+          }
         </div>
         <Divider hidden />
         <Confirm
