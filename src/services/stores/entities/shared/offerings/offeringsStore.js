@@ -177,7 +177,10 @@ export class OfferingsStore {
       },
     });
   }
-
+  @action
+  setOfferingOrder = (newArr) => {
+    console.log(newArr);
+  }
   @computed get allPhases() {
     return values(mapValues(this.phases, s => s.ref.toUpperCase()));
   }
