@@ -378,7 +378,10 @@ export class UserDetailsStore {
         .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); uiStore.setProgress(false); });
     });
   };
-
+  @action
+  resetModalForm = () => {
+    this.FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
+  }
   @computed get signupStatus() {
     const details = {
       idVerification: 'FAIL',
