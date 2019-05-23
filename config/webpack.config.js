@@ -31,7 +31,7 @@ const postcssNormalize = require('postcss-normalize');
 
 const WebpackDashboard = require('webpack-dashboard/plugin');
 
-const AutoDllPlugin = require('autodll-webpack-plugin-webpack-4');
+// const AutoDllPlugin = require('autodll-webpack-plugin-webpack-4');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -279,7 +279,7 @@ module.exports = function (webpackEnv) {
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
-      runtimeChunk: isEnvDevelopment ? 'single' : true,
+      runtimeChunk: 'single',
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -533,25 +533,24 @@ module.exports = function (webpackEnv) {
             }
         )
       ),
-      isEnvDevelopment &&
-      new AutoDllPlugin({
-        debug: true,
-        inject: true,
-        filename: '[name].js',
-        // path: './dll',
-        entry: {
-          dllVendor: [
-            'react',
-            'react-dom',
-            'lodash',
-            'moment',
-            'money-math',
-            'recharts',
-            'semantic-ui',
-            'react-router-dom',
-          ],
-        }
-      }),
+      // isEnvDevelopment && new AutoDllPlugin({
+      //   debug: true,
+      //   inject: true,
+      //   filename: '[name].js',
+      //   // path: './dll',
+      //   entry: {
+      //     dllVendor: [
+      //       'react',
+      //       'react-dom',
+      //       'lodash',
+      //       'moment',
+      //       'money-math',
+      //       'recharts',
+      //       'semantic-ui',
+      //       'react-router-dom'
+      //     ],
+      //   }
+      // }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       isEnvProduction &&
