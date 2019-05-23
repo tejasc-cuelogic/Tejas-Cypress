@@ -318,6 +318,8 @@ export const selectedUserDetailsQuery = gql`
             frozen {
               by
               date
+              reason
+              previousStatus
             }
             accreditation {
               status
@@ -645,6 +647,6 @@ mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!,
      userId: $userId
      accountId: $accountId
      freeze: $freeze
-     message: $message
+     reason: $message
    )
  }`;
