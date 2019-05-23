@@ -673,6 +673,7 @@ export class Auth {
       });
       localStorage.removeItem('lastActiveTime');
       localStorage.removeItem('defaultNavExpanded');
+      localStorage.removeItem('changedEmail');
       AWS.config.clear();
       this.clearMobxStore();
       this.segmentTrackLogout(logoutType);

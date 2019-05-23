@@ -71,6 +71,7 @@ export const userDetailsQuery = gql`
       cip {
         expiration
         failType
+        requestId
         failReason {
           key
           message

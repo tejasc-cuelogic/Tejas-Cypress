@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { includes, get } from 'lodash';
 import moment from 'moment';
-import { Header, Form, Divider, Table } from 'semantic-ui-react';
+import { Header, Form, Divider, Table, Card } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import AccountHeader from './AccountHeader';
 import IndividualSummary from './IndividualSummary';
@@ -11,8 +11,9 @@ import IraSummary from './IraSummary';
 import EntitySummary from './EntitySummary';
 import Helper from '../../../../../../../helper/utility';
 import LockedInformation from '../profile/LockedInformation';
+import CashMovement from '../../../../../investor/summary/components/CashMovement';
 
-@inject('userDetailsStore', 'bankAccountStore', 'transactionStore')
+@inject('userDetailsStore', 'bankAccountStore', 'transactionStore', 'portfolioStore')
 @withRouter
 @observer
 export default class Overview extends Component {
@@ -35,6 +36,7 @@ export default class Overview extends Component {
         this.setState({ totalBalance: get(dataN, 'getInvestorAvailableCash'), totalBalanceL: false });
       }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
     }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
+    this.props.portfolioStore.getSummary(true);
   }
   getRoutingNumber = (e, accountId, userId) => {
     e.stopPropagation();
@@ -44,8 +46,10 @@ export default class Overview extends Component {
     }).catch(() => this.setState({ loading: false }));
   }
   render() {
+    const { getChartData } = this.props.portfolioStore;
     const investor = this.props.userDetailsStore.getDetailsOfUser;
     const account = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const cashMovementData = getChartData('cashMovement');
     return (
       <Form>
         {this.props.isAdmin &&
@@ -56,6 +60,16 @@ export default class Overview extends Component {
           <LockedInformation account details={account} />
           <Divider />
         </Aux>
+        }
+        {cashMovementData && cashMovementData.length ?
+          <Aux>
+            <Card fluid>
+              <Card.Content>
+                <Header as="h4">Investments and Payments</Header>
+                <CashMovement data={cashMovementData} />
+              </Card.Content>
+            </Card>
+          </Aux> : null
         }
         <Header as="h6">Balances</Header>
         <Form.Group widths={2}>
