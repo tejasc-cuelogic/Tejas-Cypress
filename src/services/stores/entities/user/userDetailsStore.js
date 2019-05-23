@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
 import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -36,6 +36,7 @@ export class UserDetailsStore {
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
+  @observable FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
   @observable accountForWhichCipExpired = '';
   @observable partialInvestNowSessionURL = '';
   @observable userStatus = null;
@@ -365,7 +366,7 @@ export class UserDetailsStore {
             userId,
             accountId,
             freeze,
-            message,
+            reason: message,
           },
           refetchQueries: [{ query: userDetailsQuery, variables: { userId } }],
         })
@@ -377,7 +378,10 @@ export class UserDetailsStore {
         .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); uiStore.setProgress(false); });
     });
   };
-
+  @action
+  resetModalForm = () => {
+    this.FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
+  }
   @computed get signupStatus() {
     const details = {
       idVerification: 'FAIL',
