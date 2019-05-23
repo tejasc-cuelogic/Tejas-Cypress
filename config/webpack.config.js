@@ -54,7 +54,7 @@ module.exports = function (webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
-  console.log('isEnvDevelopment==>', isEnvDevelopment);
+  isEnvDevelopment && console.log('isEnvDevelopment==>', isEnvDevelopment);
   // Webpack uses `publicPath` to determine where the app is being served from.
   // It requires a trailing slash, or the file assets will get an incorrect path.
   // In development, we always serve from the root. This makes config easier.
@@ -160,8 +160,6 @@ module.exports = function (webpackEnv) {
       // require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       paths.appIndexJs,
-      // paths.appPublicIndexJs,
-      // paths.appPrivateIndexJs,
       // We include the app code last so that if there is a runtime error during
       // initialization, it doesn't blow up the WebpackDevServer client, and
       // changing JS code would still trigger a refresh.
@@ -281,7 +279,7 @@ module.exports = function (webpackEnv) {
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
-      runtimeChunk: 'single',
+      runtimeChunk: isEnvDevelopment ? 'single' : true,
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -535,22 +533,22 @@ module.exports = function (webpackEnv) {
             }
         )
       ),
-      isEnvDevelopment && new AutoDllPlugin({
-        inject: true, // will inject the DLL bundle to index.html
+      isEnvDevelopment &&
+      new AutoDllPlugin({
         debug: true,
-        filename: '[name].[hash:8].js',
-        path: paths.appDll,
+        inject: true,
+        filename: '[name].js',
+        // path: './dll',
         entry: {
           dllVendor: [
             'react',
             'react-dom',
-            'lodash'
-          ],
-          dllPublic: [
-            paths.appPublicIndexJs
-          ],
-          dllPrivate: [
-            paths.appPrivateIndexJs
+            'lodash',
+            'moment',
+            'money-math',
+            'recharts',
+            'semantic-ui',
+            'react-router-dom',
           ],
         }
       }),
