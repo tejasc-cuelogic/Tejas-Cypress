@@ -33,7 +33,7 @@ export default class TransferFunds extends Component {
     const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { cash, cashAvailable } = this.props.transactionStore;
-    const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : cash;
+    const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     if (this.props.match.isExact && (!cash || cashAvailable.loading)) {
       return <InlineLoader />;
     }
