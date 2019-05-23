@@ -16,6 +16,7 @@ export default class NewEmailAddress extends Component {
       this.props.identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
+      localStorage.setItem('changedEmail', email.value);
       this.props.authStore.setCredentials({
         email: email.value.toLowerCase(), password: password.value,
       });
