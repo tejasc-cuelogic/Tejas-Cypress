@@ -16,6 +16,7 @@ import MonthlyStatements from '../../../../investor/accountDetails/components/st
 import TaxForms from '../../../../investor/accountDetails/components/statements/TaxForms';
 import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import Helper from '../../../../../../helper/utility';
+import ConfirmModel from './accountDetails/ConfirmModel';
 
 const navMeta = [
   { title: 'Overview', to: 'overview' },
@@ -72,6 +73,7 @@ export default class AccountDetails extends Component {
             <Route path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
             <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />
+            <Route exact path={`${match.url}/overview/:action`} render={props => <ConfirmModel {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/overview`} accountId={get(account, 'details.accountId')} />} />
           </Switch>
         </Grid.Column>
       </Grid>

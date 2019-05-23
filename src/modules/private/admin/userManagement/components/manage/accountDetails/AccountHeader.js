@@ -3,14 +3,16 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { includes, startCase, get } from 'lodash';
 import { Header, Icon, Button, Divider, Confirm } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 
 @inject('userDetailsStore', 'uiStore')
+@withRouter
 @observer
 export default class AccountHeader extends Component {
   state = { showModal: false };
-  toggleConfirmModal = (e, val) => {
+  toggleConfirmModal = (e, action) => {
     e.preventDefault();
-    this.setState({ showModal: val });
+    this.props.history.push(`${this.props.pathname}/${action}`);
   }
   freezeAccountToggle = (userId, accountId, freeze) => {
     this.props.userDetailsStore.freezeAccountToggle(userId, accountId, freeze);
@@ -36,7 +38,7 @@ export default class AccountHeader extends Component {
           </span>
           <span className="pull-right">
             <Button.Group compact size="tiny">
-              <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, true)}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
+              <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
             </Button.Group>
           </span>
         </div>
