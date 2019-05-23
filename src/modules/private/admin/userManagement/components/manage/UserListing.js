@@ -25,7 +25,7 @@ class UserListing extends Component {
   };
   render() {
     const {
-      paginate, sortState, listData, requestState, count,
+      paginate, sortState, listData, requestState, count, isManager,
     } = this.props;
     const { by, direction } = sortState;
     const totalRecords = count || 0;
@@ -69,7 +69,7 @@ class UserListing extends Component {
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link></span>
+                    <span className="user-name">{isManager ? <Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link> : <b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b>}</span>
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>
@@ -90,7 +90,9 @@ class UserListing extends Component {
                       'N/A'
                     }
                   </Table.Cell>
+                  {isManager &&
                   <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
+                  }
                 </Table.Row>
               ))}
               {this.statusRow(this.props)}
