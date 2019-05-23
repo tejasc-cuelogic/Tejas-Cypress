@@ -839,6 +839,7 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
     this.confirmMigratedUserPhoneNumber = false;
     this.signUpLoading = false;
+    this.isOptConfirmed = false;
   }
 
   @action
