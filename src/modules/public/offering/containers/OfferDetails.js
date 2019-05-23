@@ -63,6 +63,7 @@ class offerDetails extends Component {
   }
   componentWillUnmount() {
     this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
+    this.props.navStore.setFieldValue('navStatus', 'main');
   }
   getOgDataFromSocial = (obj, type, att) => {
     const data = find(obj, o => o.type === type);

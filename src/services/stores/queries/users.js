@@ -71,6 +71,7 @@ export const userDetailsQuery = gql`
       cip {
         expiration
         failType
+        requestId
         failReason {
           key
           message
@@ -314,6 +315,12 @@ export const selectedUserDetailsQuery = gql`
               accountNumber
               contactId
             }
+            frozen {
+              by
+              date
+              reason
+              previousStatus
+            }
             accreditation {
               status
             }
@@ -408,6 +415,9 @@ export const selectedUserDetailsQuery = gql`
       }
       locked {
         lock
+        by
+        date
+        comment
       }
       created {
         date
@@ -632,11 +642,11 @@ mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!,
  }`;
 
 export const freezeAccount = gql`
-mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $message: String) {
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $reason: String) {
   freezeAccount(
      userId: $userId
      accountId: $accountId
      freeze: $freeze
-     message: $message
+     reason: $reason
    )
  }`;

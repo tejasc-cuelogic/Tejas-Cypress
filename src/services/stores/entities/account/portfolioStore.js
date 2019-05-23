@@ -20,6 +20,7 @@ export class PortfolioStore {
   @observable currentAcccountType = null;
   @observable isAdmin = false;
   @observable portfolioError = false;
+  @observable apiCall = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -58,12 +59,14 @@ export class PortfolioStore {
   }
 
   @action
-  getSummary = () => {
+  getSummary = (isAdmin = false) => {
+    const { getDetailsOfUser } = userDetailsStore;
+    const userId = isAdmin ? getDetailsOfUser.id : userStore.currentUser.sub;
     this.accSummary = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getUserAccountSummary,
-      variables: { userId: userStore.currentUser.sub },
+      variables: { userId },
     });
   }
 
@@ -156,6 +159,7 @@ export class PortfolioStore {
           this.calculateInvestmentType();
           this.portfolioError = false;
         }
+        this.setFieldValue('apiCall', true);
       },
       onError: () => {
         this.portfolioError = true;

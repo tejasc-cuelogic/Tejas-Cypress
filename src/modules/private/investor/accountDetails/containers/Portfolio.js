@@ -5,7 +5,7 @@ import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
-// import money from 'money-math';
+import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
@@ -33,7 +33,10 @@ export default class Portfolio extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);
     this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
-    this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
+    if (!this.props.isAdmin ||
+    (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
+      this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
+    }
     this.props.portfolioStore.calculateInvestmentType();
     window.addEventListener('message', this.docuSignListener);
     this.props.portfolioStore.setPortfolioError(false);
@@ -108,6 +111,7 @@ export default class Portfolio extends Component {
       );
     }
     const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
+    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
     const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
       Please check back again later, and contact us at
       <a href="mailto:support@nextseed.com">support@nextseed.com</a> with any questions.`;
@@ -128,7 +132,7 @@ export default class Portfolio extends Component {
       className: 'investment-summary',
       summary: [
         {
-          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Total Balance includes funds that are immediately available for investment. This includes pending incoming deposits, but excludes investment credits and pending investments.',
+          title: 'Total Balance', content: totalPortfolioBalance, type: 1, info: 'Total Balance includes funds that are immediately available for investment. This includes pending incoming deposits, but excludes investment credits and pending investments.',
         },
         {
           title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
@@ -156,7 +160,7 @@ export default class Portfolio extends Component {
         }
         <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
-          <PortfolioAllocations pieChart={getPieChartData} /> : ''
+          <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?

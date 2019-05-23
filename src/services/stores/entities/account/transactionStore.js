@@ -45,6 +45,7 @@ export class TransactionStore {
   @observable loanAgreementData = {};
   @observable isAdmin = false;
   @observable db = [];
+  @observable apiCall = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -74,6 +75,7 @@ export class TransactionStore {
         } else if (!this.data.loading) {
           this.setData();
         }
+        this.setFieldValue('apiCall', true);
       },
       onError: () => {
         this.hasError = true;
