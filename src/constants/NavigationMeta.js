@@ -275,6 +275,11 @@ export const PRIVATE_NAV = [
     to: 'categories',
     path: 'admin/categories',
     accessibleTo: ['admin', 'manager', 'support'],
+    // subPanel: 1,
+    // subNavigations: [
+    //   { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
+    //   { title: 'Data', to: 'data', component: 'Data' },
+    // ],
   },
   {
     icon: 'lightbulb outline',
@@ -368,10 +373,10 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'university',
-    title: 'Change Linked Account Bank Request',
+    title: 'Linked Bank Request',
     capability: 'LINKED_BANK_ANY',
     to: 'change-linked-bank-requests',
-    heading: 'Change Linked Account Bank Request',
+    heading: 'Linked Bank Request',
     path: 'admin/linkedBank',
     accessibleTo: ['admin'],
   },

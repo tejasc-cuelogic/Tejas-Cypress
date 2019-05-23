@@ -314,6 +314,10 @@ export const selectedUserDetailsQuery = gql`
               accountNumber
               contactId
             }
+            frozen {
+              by
+              date
+            }
             accreditation {
               status
             }
@@ -408,6 +412,9 @@ export const selectedUserDetailsQuery = gql`
       }
       locked {
         lock
+        by
+        date
+        comment
       }
       created {
         date

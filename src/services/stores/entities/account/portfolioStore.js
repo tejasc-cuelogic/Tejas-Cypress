@@ -20,6 +20,7 @@ export class PortfolioStore {
   @observable currentAcccountType = null;
   @observable isAdmin = false;
   @observable portfolioError = false;
+  @observable apiCall = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -156,6 +157,7 @@ export class PortfolioStore {
           this.calculateInvestmentType();
           this.portfolioError = false;
         }
+        this.setFieldValue('apiCall', true);
       },
       onError: () => {
         this.portfolioError = true;

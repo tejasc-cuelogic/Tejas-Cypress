@@ -33,7 +33,10 @@ export default class Portfolio extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);
     this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
-    this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
+    if (!this.props.isAdmin ||
+    (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
+      this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
+    }
     this.props.portfolioStore.calculateInvestmentType();
     window.addEventListener('message', this.docuSignListener);
     this.props.portfolioStore.setPortfolioError(false);
