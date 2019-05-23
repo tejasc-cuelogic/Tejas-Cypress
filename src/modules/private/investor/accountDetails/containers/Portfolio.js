@@ -156,7 +156,7 @@ export default class Portfolio extends Component {
         }
         <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
-          <PortfolioAllocations pieChart={getPieChartData} /> : ''
+          <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }
         <Header as="h4">My Investments</Header>
         {pendingSorted.length ?
