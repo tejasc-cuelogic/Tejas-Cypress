@@ -211,6 +211,19 @@ export class AuthStore {
     }
   }
 
+  setUserCredentiansConfirmEmail = () => {
+    if (this.isUserLoggedIn) {
+      const { password, email } = this.CONFIRM_FRM.fields;
+      const userCredentials = {
+        email: email.value || localStorage.getItem('changedEmail') ||
+          get(userDetailsStore, 'userDetails.email.address') || '',
+        password: password.value,
+        givenName: get(userDetailsStore, 'userDetails.info.firstName') || '',
+      };
+      this.setCredentials(userCredentials);
+    }
+  }
+
   @computed get devPasswdProtection() {
     return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
