@@ -315,6 +315,12 @@ export const selectedUserDetailsQuery = gql`
               accountNumber
               contactId
             }
+            frozen {
+              by
+              date
+              reason
+              previousStatus
+            }
             accreditation {
               status
             }
@@ -409,6 +415,9 @@ export const selectedUserDetailsQuery = gql`
       }
       locked {
         lock
+        by
+        date
+        comment
       }
       created {
         date
@@ -638,6 +647,10 @@ mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!,
      userId: $userId
      accountId: $accountId
      freeze: $freeze
+<<<<<<< HEAD
      reason: $reason
+=======
+     reason: $message
+>>>>>>> 104da4f448f644e40e26c3378fac7e77007618b3
    )
  }`;
