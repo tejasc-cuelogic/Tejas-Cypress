@@ -2304,7 +2304,7 @@ export const ADD_NEW_TIER = {
       },
     ],
     error: undefined,
-    rule: 'alpha_dash',
+    rule: 'optional',
   },
   amountForEarlyBird: {
     label: 'Amount for this Early Bird tier',

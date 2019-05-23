@@ -7,7 +7,7 @@ import Helper from '../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const hasData = compState => compState.validForm;
-const isAccountCreation = Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]);
+const isAccountCreation = Helper ? Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/, /\bestablish-profile(?![-])\b/]) : false;
 
 const getNavStates = (indx, length, steps) => {
   const styles = [];
