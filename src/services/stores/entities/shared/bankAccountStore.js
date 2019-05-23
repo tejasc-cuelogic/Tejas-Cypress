@@ -46,6 +46,7 @@ export class BankAccountStore {
     perPage: 10,
     displayTillIndex: 10,
     filters: false,
+    isLocked: false,
     search: {
     },
   };
@@ -102,7 +103,12 @@ export class BankAccountStore {
       Validator.pullValues(e, result),
     );
   }
-
+  @action
+  fChange = (e, result) => {
+    this.FILTER_FRM = Validator.onChange(this.FILTER_FRM, Validator.pullValues(e, result));
+    this.requestState.isLocked = this.FILTER_FRM.fields.locked.value[0] || false;
+    this.requestState = { ...this.requestState };
+  };
   @action
   setBankLinkInterface(mode) {
     this.resetLinkBankForm();
@@ -344,6 +350,13 @@ export class BankAccountStore {
     return this.data.loading;
   }
   @computed get changeRequests() {
+    if (!this.requestState.isLocked) {
+      return (this.db && this.db.length &&
+        toJS(filter(
+          this.db.slice(this.requestState.skip, this.requestState.displayTillIndex),
+          changeRequest => get(changeRequest, 'userInfo.locked.lock') !== 'LOCKED',
+        ))) || [];
+    }
     return (this.db && this.db.length &&
       toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
