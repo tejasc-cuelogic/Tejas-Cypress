@@ -252,6 +252,14 @@ export const PHONE_VERIFICATION = {
   },
 };
 
+export const FREEZE_FORM = {
+  reason: {
+    value: '',
+    label: 'Reason:',
+    error: undefined,
+    rule: 'optional',
+  },
+};
 export const UPDATE_PROFILE_INFO = {
   firstName: {
     value: '',
