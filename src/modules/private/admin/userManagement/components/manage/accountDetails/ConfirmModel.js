@@ -40,7 +40,7 @@ export default class ConfirmModel extends Component {
               changed={(e, result) => formChange(e, result, 'FRM_FREEZE')}
             />
             <div className="center-align mt-30">
-              <Button className={actionValue === 'CONFIRMED' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'unfreeze' ? 'Unfreeze Account' : 'Freeze Account'} loading={inProgress} onClick={() => this.freezeAccountToggle(userId, accountId, actionValue)} />
+              <Button className="primary relaxed" content={actionValue === 'unfreeze' ? 'Unfreeze Account' : 'Freeze Account'} loading={inProgress} onClick={() => this.freezeAccountToggle(userId, accountId, actionValue)} />
             </div>
           </Form>
         </Modal.Content>
