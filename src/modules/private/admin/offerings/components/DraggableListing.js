@@ -95,9 +95,6 @@ const SortableItem = SortableElement(({
         {offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}
       </div>
     }
-    <div className="balance">
-      {offering.order}
-    </div>
     <div className="action width-130 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
@@ -204,7 +201,6 @@ export default class DraggableListing extends Component {
               {stage === 'engagement' &&
                 <div className="balance">Repayment Amount</div>
               }
-              <div className="balance">Order</div>
               <div className="action width-130 right-align" />
             </div>
             <SortableList
