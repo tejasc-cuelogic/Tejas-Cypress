@@ -4,14 +4,14 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
-@inject('campaignStore', 'accreditationStore')
+@inject('campaignStore', 'accreditationStore', 'authStore')
 @withRouter
 @observer
 export default class TermsOfUse extends Component {
@@ -26,7 +26,10 @@ export default class TermsOfUse extends Component {
       if (isMobile) {
         this.props.campaignStore.getAllBoxLinks(accountType);
       }
-      this.props.accreditationStore.getUserAccreditation();
+      if (this.props.authStore.isUserLoggedIn &&
+        isEmpty(this.props.accreditationStore.userData)) {
+        this.props.accreditationStore.getUserAccreditation();
+      }
     }
   }
   componentDidMount() {
