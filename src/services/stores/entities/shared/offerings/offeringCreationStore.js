@@ -373,7 +373,11 @@ export class OfferingCreationStore {
       fileField = this[form].fields[name];
     }
     fileField.showLoader = true;
-    fileUpload.uploadToS3(files[0], `offerings/${this.currentOfferingId}`)
+    const fileObj = {
+      obj: files[0],
+      name: Helper.sanitize(files[0].name),
+    };
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
         fileField.value = files[0].name;
@@ -1571,7 +1575,7 @@ export class OfferingCreationStore {
     const earlyBird = get(offeringsStore.offer, 'earlyBird') || null;
     const tiersArray = [];
     forEach(tiers, (tier, index) => {
-      const tierFieldObj = { rule: 'alpha_dash', error: undefined };
+      const tierFieldObj = { rule: 'optional', error: undefined };
       tierFieldObj.values = [{ label: `Invest ${Helper.CurrencyFormat(tier)} or more`, value: tier }];
       tierFieldObj.key = tier;
       tierFieldObj.earlyBirdQuantity = get(earlyBird, 'quantity') !== 0 && get(earlyBird, 'amount') === tier ? get(earlyBird, 'quantity') : 0;
@@ -1693,7 +1697,7 @@ export class OfferingCreationStore {
     const tiers = [];
     map(fields, ((field) => {
       if ((field.key) &&
-      field.value.length && field.value.length === 1) {
+      field.value.length && field.value.includes(field.key)) {
         tiers.push(field.key);
       }
     }));

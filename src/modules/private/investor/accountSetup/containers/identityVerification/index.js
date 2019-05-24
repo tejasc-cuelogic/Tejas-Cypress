@@ -17,6 +17,9 @@ export default class IdentityVerification extends Component {
   componentWillMount() {
     this.props.identityStore.setCipDetails();
     this.props.uiStore.setErrors(null);
+    if (this.props.match.url !== this.props.userDetailsStore.pendingStep) {
+      this.props.history.push('/app/summary');
+    }
   }
   onPhotoIdDrop = (files) => {
     this.props.identityStore.setFileUploadData('photoId', files);

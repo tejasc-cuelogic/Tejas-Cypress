@@ -816,6 +816,14 @@ export const FILTER_META = {
     error: undefined,
     rule: 'empty',
   },
+  locked: {
+    value: [],
+    values: [
+      { label: 'Locked', value: 'LOCKED' },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
 };
 
 export const LINKED_ACCOUND_STATUS = {

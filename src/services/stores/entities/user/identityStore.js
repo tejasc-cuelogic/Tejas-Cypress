@@ -839,6 +839,7 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
     this.confirmMigratedUserPhoneNumber = false;
     this.signUpLoading = false;
+    this.isOptConfirmed = false;
   }
 
   @action
@@ -890,7 +891,7 @@ export class IdentityStore {
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
           if (!isMobile) {
-            Helper.toast(`Verification code sent to ${email.value}.`, 'success');
+            Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
           }
           resolve();
         })

@@ -174,6 +174,7 @@ export default class ConfirmPhoneNumber extends Component {
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                disabled={(reSendVerificationCode && this.props.uiStore.inProgress) || (errors && errors.message && errors.message.includes('The number you entered is invalid'))}
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
@@ -201,7 +202,7 @@ export default class ConfirmPhoneNumber extends Component {
               :
               <Button.Group widths="2" className="inline">
                 <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                <Button type="button" disabled={!ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
+                <Button type="button" loading={reSendVerificationCode && this.props.uiStore.inProgress} disabled={errors || !ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
               </Button.Group>
             }
           </Form>
