@@ -23,7 +23,9 @@ export default class TermsOfUse extends Component {
       const offeringRegulationArr = (regulation && regulation.split('_')) || '';
       const regulationType = get(offeringRegulationArr, '[0]');
       const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
-      this.props.campaignStore.getAllBoxLinks(accountType);
+      if (isMobile) {
+        this.props.campaignStore.getAllBoxLinks(accountType);
+      }
       this.props.accreditationStore.getUserAccreditation();
     }
   }
@@ -33,6 +35,7 @@ export default class TermsOfUse extends Component {
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }
   }
+
   componentWillUnmount() {
     const { setFieldValue } = this.props.campaignStore;
     setFieldValue('isFetchedError', false);
@@ -48,14 +51,14 @@ export default class TermsOfUse extends Component {
     const { campaign } = this.props.campaignStore;
     const campaignCreatedBy = get(campaign, 'created.id') || null;
     const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
-    if (!dataRoomDocs.length || !sortedDocswithBoxLink.length) {
+    if (!dataRoomDocs.length) {
       return (
         <div className="campaign-content-wrapper">
         {this.dataRoomHeader}
       <InlineLoader text="No Documents to Display" className="bg-offwhite" />
         </div>);
     }
-    if (dataRoomDocs.length !== sortedDocswithBoxLink.length) {
+    if (isMobile && dataRoomDocs.length !== sortedDocswithBoxLink.length) {
       return (
         <div className="campaign-content-wrapper">
           {this.dataRoomHeader}
@@ -75,10 +78,11 @@ export default class TermsOfUse extends Component {
         ))
         :
         <Aux>
-          <Header as="h4" className="mb-20 grey-header">{sortedDocswithBoxLink[index - 1].name}</Header>
+          <Header as="h4" className="mb-20 grey-header">{dataRoomDocs[index - 1].name}</Header>
           <Disclosure
             campaignCreatedBy={campaignCreatedBy}
-            doc={sortedDocswithBoxLink[index - 1]}
+            doc={dataRoomDocs[index - 1]}
+            fileId={get(dataRoomDocs[index - 1], 'upload.fileHandle.boxFileId')}
           />
         </Aux>
         }
