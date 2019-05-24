@@ -1,5 +1,6 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { get } from 'lodash';
+import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
 import { generateInvestorFolderStructure, storageDetailsForInvestor } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -16,6 +17,7 @@ export class ElasticSearchStore {
   @observable bulkSyncLoader = false;
   @observable boxMsg = '';
   @observable countValues = [];
+  @observable esAudit = null;
 
   @action
   setFieldValue = (field, value) => {
@@ -25,6 +27,25 @@ export class ElasticSearchStore {
   @action
   resetForm = (form) => {
     this[form] = Validator.resetFormData(this[form]);
+  }
+
+  @action
+  getESAudit = () => {
+    const variables = {};
+    this.esAudit = graphql({
+      client,
+      query: elasticSearchQueries.getESAudit,
+      variables,
+      fetchPolicy: 'network-only',
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
+
+  @computed get eSAudit() {
+    return get(this.esAudit, 'data.getESAudit') ?
+      toJS(get(this.esAudit, 'data.getESAudit')) : [];
   }
 
   @action

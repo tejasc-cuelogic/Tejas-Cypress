@@ -1,76 +1,61 @@
 import gql from 'graphql-tag';
 
-export const userCreateIndices = gql`
-  mutation userCreateIndices {
-    userCreateIndices
-  }`;
-
 export const userDeleteIndices = gql`
-  mutation userDeleteIndices {
-    userDeleteIndices
+  mutation userDeleteIndices($index: ENUM) {
+    userDeleteIndices(index: $index)
   }`;
 
 export const userPopulateIndex = gql`
-  mutation userPopulateIndex {
-    userPopulateIndex
-  }`;
-
-export const crowdPayCreateIndices = gql`
-  mutation crowdPayCreateIndices {
-    crowdPayCreateIndices
+  mutation userPopulateIndex($index: ENUM) {
+    userPopulateIndex(index: $index)
   }`;
 
 export const crowdPayDeleteIndices = gql`
-  mutation crowdPayDeleteIndices {
-    crowdPayDeleteIndices
+  mutation crowdPayDeleteIndices($index: ENUM) {
+    crowdPayDeleteIndices(index: $index)
   }`;
 
 export const crowdPayPopulateIndex = gql`
-  mutation crowdPayPopulateIndex {
-    crowdPayPopulateIndex
-  }`;
-
-export const linkedBankCreateIndices = gql`
-  mutation linkedBankCreateIndices {
-    linkedBankCreateIndices
+  mutation crowdPayPopulateIndex($index: ENUM) {
+    crowdPayPopulateIndex(index: $index)
   }`;
 
 export const linkedBankDeleteIndices = gql`
-  mutation linkedBankDeleteIndices {
-    linkedBankDeleteIndices
+  mutation linkedBankDeleteIndices($index: ENUM) {
+    linkedBankDeleteIndices(index: $index)
   }`;
 
 export const linkedBankPopulateIndex = gql`
-  mutation linkedBankPopulateIndex {
-    linkedBankPopulateIndex
-  }`;
-
-export const accreditationCreateIndices = gql`
-  mutation accreditationCreateIndices {
-    accreditationCreateIndices
+  mutation linkedBankPopulateIndex($index: ENUM) {
+    linkedBankPopulateIndex(index: $index)
   }`;
 
 export const accreditationDeleteIndices = gql`
-  mutation accreditationDeleteIndices {
-    accreditationDeleteIndices
+  mutation accreditationDeleteIndices($index: ENUM) {
+    accreditationDeleteIndices(index: $index)
   }`;
 
 export const accreditationPopulateIndex = gql`
-  mutation accreditationPopulateIndex {
-    accreditationPopulateIndex
+  mutation accreditationPopulateIndex($index: ENUM) {
+    accreditationPopulateIndex(index: $index)
   }`;
 
-export const offeringsCreateIndices = gql`
-mutation offeringCreateIndices {
-  offeringCreateIndices
-}`;
-
 export const offeringsDeleteIndices = gql`
-  mutation offeringDeleteIndices {
-    offeringDeleteIndices
+  mutation offeringDeleteIndices($index: ENUM) {
+    offeringDeleteIndices(index: $index)
   }`;
 
 export const offeringsPopulateIndex = gql`
-  mutation offeringPopulateIndices {
-    offeringPopulateIndices
+  mutation offeringPopulateIndices($index: ENUM) {
+    offeringPopulateIndices(index: $index)
   }`;
+
+export const getESAudit = gql`
+query getESAudit($indexAliasName: ENUM, $documentId: String) {
+  offeringPopulateIndices(indexAliasName: $indexAliasName, documentId: $documentId)
+}`;
+
+export const swapIndexAliases = gql`
+mutation swapIndexAliases($indexAliasName: ENUM!) {
+  offeringPopulateIndices(indexAliasName: $indexAliasName)
+}`;

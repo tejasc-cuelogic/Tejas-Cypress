@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
-import { Grid, Card, Button, Confirm } from 'semantic-ui-react';
+import { Grid, Card, Button, Confirm, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { map, capitalize } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
-const elasticSearchModules = [
-  { module: 'user', title: 'Users Index' },
-  { module: 'crowdPay', title: 'CrowdPay Index' },
-  { module: 'accreditation', title: 'Accreditation Index' },
-  { module: 'linkedBank', title: 'LinkedBank Index' },
-  { module: 'offerings', title: 'Offerings Index' },
-];
+// const elasticSearchModules = [
+//   { module: 'user', title: 'Users Indices' },
+//   { module: 'crowdPay', title: 'CrowdPay Indices' },
+//   { module: 'accreditation', title: 'Accreditation Indices' },
+//   { module: 'linkedBank', title: 'LinkedBank Indices' },
+//   { module: 'offerings', title: 'Offerings Indices' },
+// ];
 
 @inject('elasticSearchStore')
 @withRouter
 @observer
 export default class ElasticSearch extends Component {
   state = { confirmModal: false, title: '', mutation: null };
+  componentWillMount() {
+    this.props.elasticSearchStore.getESAudit();
+  }
   elasticSearchHandler = (mutation) => {
     this.cancelConfirmModal();
     this.props.elasticSearchStore.elasticSearchHandler(mutation);
@@ -28,28 +32,38 @@ export default class ElasticSearch extends Component {
   cancelConfirmModal = () => {
     this.setState({ confirmModal: false, mutation: null, title: '' });
   }
+  renderTitle = title => capitalize(title.replace('_', ' '));
   render() {
     const { match, elasticSearchStore } = this.props;
-    const { inProgress } = elasticSearchStore;
+    const { inProgress, eSAudit } = elasticSearchStore;
     const navItems = [
       { title: 'Activity History', to: '' },
     ];
     return (
       <Grid>
         <Grid.Column width={5}>
-          {elasticSearchModules.map(es => (
+          {eSAudit && eSAudit.length &&
+          map(eSAudit, (es, key) => (
             <Card fluid className="elastic-search">
-              <Card.Content header={es.title} />
               <Card.Content>
-                <Card.Description>
-                  <Button.Group compact size="mini" widths={3}>
-                    {/* <Button onClick={() => this.toggleConfirmModal(`${es.module}
-                  CreateIndices`, `Create ${es.title}`)} loading={inProgress ===
-                  `${es.module}CreateIndices`} content="Create" color="green" /> */}
-                    <Button onClick={() => this.toggleConfirmModal(`${es.module}PopulateIndex`, `Populate ${es.title}`)} loading={inProgress === `${es.module}PopulateIndex`} content="Generate" color="blue" />
-                    <Button onClick={() => this.toggleConfirmModal(`${es.module}DeleteIndices`, `Delete ${es.title}`)} loading={inProgress === `${es.module}DeleteIndices`} content="Delete" color="red" />
-                  </Button.Group>
-                </Card.Description>
+                <Card.Header>{`${this.renderTitle(key)} Indices`}</Card.Header>
+                <Button onClick={() => this.toggleConfirmModal('swapIndexAliases', `Swap ${this.renderTitle(key)}`)} loading={inProgress === `${key}swapIndexAliases`} content="Swap" color="blue" />
+              </Card.Content>
+              <Card.Content>
+                {es ?
+                  map(es, (e, k) => k !== 'active' && (
+                    <Card.Description>
+                      <Header as="h5">
+                        {this.renderTitle(k)}
+                        <Header.Subheader>1 Days</Header.Subheader>
+                      </Header>
+                      <Button.Group compact size="mini" widths={3}>
+                        <Button onClick={() => this.toggleConfirmModal('getESAudit', `Audit ${this.renderTitle(key)} on ${this.renderTitle(k)}`, key)} loading={inProgress === `${key}DeleteIndices`} content="Audit" primary />
+                        <Button onClick={() => this.toggleConfirmModal(`${key}PopulateIndex`, `Populate ${this.renderTitle(key)} on ${this.renderTitle(k)}`, key)} loading={inProgress === `${key}PopulateIndex`} content="Generate" color="blue" />
+                      </Button.Group>
+                    </Card.Description>
+                  )) : null
+                }
               </Card.Content>
             </Card>
           ))
