@@ -131,8 +131,7 @@ export class PortfolioStore {
         return null;
       });
     }
-    // moment(new Date("2019-01-01")).add(1,'M').format('YYYY-MM-DD');
-    sortBy(formattedData, ['yearMonth']).map((k, i) => {
+    formattedData.map((k, i) => {
       newFormattedData.push({
         name: moment(k.yearMonth).format('MMM YYYY'),
         Payment: k.payment ? parseFloat(k.payment) : 0,
@@ -140,10 +139,9 @@ export class PortfolioStore {
         'Paid to date': k.paidToDate ? parseFloat(k.paidToDate) : 0,
       });
 
-      const j = i + 1;
-      if (formattedData[j]) {
+      if (formattedData[i + 1]) {
         const d1 = moment(k.yearMonth).format('YYYY-MM-DD');
-        const d2 = moment(formattedData[j].yearMonth).format('YYYY-MM-DD');
+        const d2 = moment(formattedData[i + 1].yearMonth).format('YYYY-MM-DD');
         const mDiff = moment(d2).diff(d1, 'months', true);
         if (mDiff > 1) {
           times(mDiff, (m) => {
