@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
+import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Button, Header } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -7,9 +8,27 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @inject('campaignStore', 'accreditationStore', 'userDetailsStore', 'userStore', 'navStore')
 @withRouter
 class Disclosure extends Component {
+  state = {
+    loading: false,
+    boxUrl: '',
+  };
+
+  componentWillMount() {
+    if (this.props.fileId) {
+      const { campaign } = this.props.campaignStore;
+      const regulation = get(campaign, 'regulation');
+      const offeringRegulationArr = (regulation && regulation.split('_')) || '';
+      const regulationType = get(offeringRegulationArr, '[0]');
+      const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
+      this.setState({ loading: true });
+      this.props.campaignStore.getBoxLink(this.props.fileId, accountType).then((res) => {
+        this.setState({ boxUrl: res, loading: false });
+      });
+    }
+  }
   render() {
     const { doc, campaignCreatedBy } = this.props;
-    if (!doc) {
+    if (!doc || this.state.loading) {
       return <InlineLoader />;
     }
     const { isInvestorAccreditated } = this.props.userDetailsStore;
@@ -41,7 +60,7 @@ class Disclosure extends Component {
           height="100%"
           title="agreement"
           allowFullScreen="true"
-          src={doc.BoxUrl}
+          src={doc.BoxUrl || this.state.boxUrl}
           ref={(c) => { this.iframeComponent = c; }}
         />
       </div>
