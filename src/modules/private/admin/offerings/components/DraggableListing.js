@@ -95,6 +95,9 @@ const SortableItem = SortableElement(({
         {offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}
       </div>
     }
+    <div className="balance">
+      {offering.order}
+    </div>
     <div className="action width-130 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
@@ -136,9 +139,9 @@ export default class DraggableListing extends Component {
     this.props.offeringsStore.resetPagination();
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allOfferingsList, setOfferingOrder } = this.props.offeringsStore;
+    const { allOfferingsList, setOrderForOfferings } = this.props.offeringsStore;
     if (oldIndex !== newIndex) {
-      setOfferingOrder(arrayMove(allOfferingsList, oldIndex, newIndex));
+      setOrderForOfferings(arrayMove(allOfferingsList, oldIndex, newIndex), this.props.stage);
     }
   }
   handleAction = (action, offeringId, isPublished = false) => {
@@ -172,8 +175,8 @@ export default class DraggableListing extends Component {
       uiStore, offeringsStore, stage,
     } = this.props;
     const { allOfferingsList, loading } = offeringsStore;
-    const { confirmBox } = uiStore;
-    if (loading) {
+    const { confirmBox, inProgress } = uiStore;
+    if (loading || inProgress) {
       return <InlineLoader />;
     }
     return (
@@ -201,6 +204,7 @@ export default class DraggableListing extends Component {
               {stage === 'engagement' &&
                 <div className="balance">Repayment Amount</div>
               }
+              <div className="balance">Order</div>
               <div className="action width-130 right-align" />
             </div>
             <SortableList

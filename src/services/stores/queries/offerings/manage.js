@@ -13,6 +13,7 @@ export const allOfferingsCompact = gql`
         id
         date
       }
+      order
     }
   }
 `;
@@ -78,6 +79,7 @@ export const allOfferings = gql`
           count
         }
       }
+      order
     }
   }
 `;
@@ -1141,5 +1143,11 @@ query getTotalAmount{
 export const offerClose = gql`
   mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType) {
     offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload)
+  }
+`;
+
+export const setOrderForOfferings = gql`
+  mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){
+    setOrderForOfferings(offeringOrderDetails: $offeringOrderDetails)
   }
 `;

@@ -1,15 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, mapValues, values, map } from 'lodash';
+import { pickBy, mapValues, values, map, sortBy } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, updateOffering,
-  deleteOffering, getOfferingDetails, getTotalAmount,
+  deleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore } from '../../../index';
 import { ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -178,8 +178,31 @@ export class OfferingsStore {
     });
   }
   @action
-  setOfferingOrder = (newArr) => {
-    console.log(newArr);
+  setOrderForOfferings = (newArr, stage) => {
+    const offeringOrderDetails = [];
+    newArr.forEach((item, index) => {
+      offeringOrderDetails.push({
+        offeringId: item.id,
+        order: index + 1,
+      });
+      // eslint-disable-next-line no-param-reassign
+      newArr[index].order = index + 1;
+    });
+    this.setDb(newArr);
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: setOrderForOfferings,
+        variables: { offeringOrderDetails },
+      }).then(() => {
+        Helper.toast('Order updated successfully.', 'success');
+        this.initRequest({ stage });
+      }).catch(() => {
+        Helper.toast('Error while updating order', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
   @computed get allPhases() {
     return values(mapValues(this.phases, s => s.ref.toUpperCase()));
@@ -187,7 +210,7 @@ export class OfferingsStore {
 
   @computed get allOfferingsList() {
     return (this.data.data && this.data.data.getOfferings &&
-      toJS(this.data.data.getOfferings)) || [];
+      toJS(sortBy(this.data.data.getOfferings, ['order']))) || [];
   }
 
   @computed get totalRecords() {
