@@ -106,12 +106,12 @@ describe('Account Creation', () => {
       cy.get('input[name="value"]').type('15000');
       cy.get('button').contains('Confirm').click();
     });
-    cy.wait('@upsertInvestorAccount');
-    cy.wait(3000);
-    cy.get('.multistep').within(() => {
-      cy.get('div.center-align').find('button').contains('Create your account').click({ force: true });
-    });
-    cy.wait('@upsertInvestorAccount');
+    registerApiCall('submitAccount');
+    cy.wait(2000);
+    cy.get('div.content > .center-align').find('button[role="button"]').contains('Create your account').click({ force: true });
+    cy.wait('@submitAccount').its('status').should('be', 200);
+    cy.wait(2000);
+    cy.get('.account-type-tab > div.center-align').find('div').should('have.length', 2);
   });
 
   it('should create IRA account successfully', () => {

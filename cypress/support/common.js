@@ -19,7 +19,7 @@ export const typeOtpCode = () => {
 export const btnClickAndWait = (operationName) => {
   cy.get('button.next').click();
   cy.wait(`@${operationName}`);
-  cy.wait(2000);
+  cy.wait(1000);
 };
 
 export const clickRadioAndNext = (selector, radioVal, operationName) => {
