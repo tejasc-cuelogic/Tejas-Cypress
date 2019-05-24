@@ -143,6 +143,7 @@
   },
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",
+    "prestart": "webpack --config config/vendor.webpack.config",
     "start": "webpack-dashboard -- node --max_old_space_size=8192 scripts/start.js",
     "build-status": "node scripts/start.js --mode development --profile --json > stats.json",
     "build-js": "node --max_old_space_size=7500 scripts/build.js",
