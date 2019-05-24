@@ -369,10 +369,10 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'university',
-    title: 'Change Linked Account Bank Request',
+    title: 'Linked Bank Request',
     capability: 'LINKED_BANK_ANY',
     to: 'change-linked-bank-requests',
-    heading: 'Change Linked Account Bank Request',
+    heading: 'Linked Bank Request',
     path: 'admin/linkedBank',
     accessibleTo: ['admin'],
   },

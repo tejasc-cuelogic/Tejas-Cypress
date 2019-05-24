@@ -373,7 +373,11 @@ export class OfferingCreationStore {
       fileField = this[form].fields[name];
     }
     fileField.showLoader = true;
-    fileUpload.uploadToS3(files[0], `offerings/${this.currentOfferingId}`)
+    const fileObj = {
+      obj: files[0],
+      name: Helper.sanitize(files[0].name),
+    };
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
         fileField.value = files[0].name;

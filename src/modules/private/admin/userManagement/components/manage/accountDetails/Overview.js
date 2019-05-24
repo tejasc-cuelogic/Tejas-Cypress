@@ -9,6 +9,8 @@ import AccountHeader from './AccountHeader';
 import IndividualSummary from './IndividualSummary';
 import IraSummary from './IraSummary';
 import EntitySummary from './EntitySummary';
+import Helper from '../../../../../../../helper/utility';
+import LockedInformation from '../profile/LockedInformation';
 import CashMovement from '../../../../../investor/summary/components/CashMovement';
 
 @inject('userDetailsStore', 'bankAccountStore', 'transactionStore', 'portfolioStore')
@@ -51,18 +53,31 @@ export default class Overview extends Component {
     return (
       <Form>
         {this.props.isAdmin &&
-          <AccountHeader pathname={this.props.location.pathname} />
+          <AccountHeader showFreezeCTA pathname={this.props.location.pathname} />
         }
+        {get(account, 'details.accountStatus') === 'FROZEN' &&
+        <Aux>
+          <LockedInformation account details={account} />
+          <Divider />
+        </Aux>
+        }
+        <Header as="h6">Balances</Header>
+        <Form.Group widths={2}>
+          <Form.Input fluid label="Your Available Balance" value={this.state.availableCashL ? 'Loading...' : Helper.MoneyMathDisplayCurrency(this.state.availableCash)} readOnly className="display-only" />
+          <Form.Input fluid label="Your Total Balance" value={this.state.totalBalanceL ? 'Loading...' : Helper.MoneyMathDisplayCurrency(this.state.totalBalance)} readOnly className="display-only" />
+        </Form.Group>
         <Header as="h6">Bank Account</Header>
-        <Form.Group widths={3}>
+        <Form.Group widths={2}>
           <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.bankName') || 'N/A'} readOnly className="display-only" />
           <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.accountNumber') || 'N/A'} readOnly className="display-only" />
+          <Form.Input fluid label="GoldStar Account Number" placeholder="GoldStar Account Number" value={get(account, 'details.goldstar.accountNumber') || 'N/A'} readOnly className="display-only" />
+          <Form.Input fluid label="GoldStar Contact Id" placeholder="GoldStar Contact Id" value={get(account, 'details.goldstar.contactId') || 'N/A'} readOnly className="display-only" />
         </Form.Group>
         <Divider />
         {get(account, 'linkedBank.changeRequest') &&
           <Aux>
             <Header as="h6">Change Bank Account Request</Header>
-            <Form.Group widths={3}>
+            <Form.Group widths={2}>
               <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
               <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.changeRequest.accountNumber') || 'N/A'} readOnly className="display-only" />
               <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? moment(get(account, 'details.linkedBank.changeRequest.dateRequested')).format('MM/DD/YYYY') : 'N/A'} readOnly className="display-only" />
@@ -71,7 +86,7 @@ export default class Overview extends Component {
             <Divider />
           </Aux>
         }
-        <Header as="h6">Summary</Header>
+        <Header as="h6">Opening Summary</Header>
         <div className="bg-offwhite">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
@@ -82,28 +97,11 @@ export default class Overview extends Component {
                   getRoutingNumber={this.getRoutingNumber}
                   loading={this.state.loading}
                   routingNumber={this.state.routingNumber}
-                  availableCash={this.state.availableCash}
-                  availableCashL={this.state.availableCashL}
-                  totalBalance={this.state.totalBalance}
-                  totalBalanceL={this.state.totalBalanceL}
                 /> :
                 get(account, 'name') === 'ira' ?
-                  <IraSummary
-                    investor={investor}
-                    account={account}
-                    availableCash={this.state.availableCash}
-                    availableCashL={this.state.availableCashL}
-                    totalBalance={this.state.totalBalance}
-                    totalBalanceL={this.state.totalBalanceL}
-                  /> :
-                  get(account, 'name') === 'entity' ?
-                    <EntitySummary
-                      account={account}
-                      availableCash={this.state.availableCash}
-                      availableCashL={this.state.availableCashL}
-                      totalBalance={this.state.totalBalance}
-                      totalBalanceL={this.state.totalBalanceL}
-                    /> : null
+                  <IraSummary investor={investor} account={account} /> :
+                get(account, 'name') === 'entity' ?
+                  <EntitySummary investor={investor} account={account} /> : null
               }
             </Table>
           </div>
