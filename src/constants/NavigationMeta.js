@@ -270,6 +270,19 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'list layout',
+    title: 'Content',
+    capability: 'CONTENT_ANY',
+    to: 'content',
+    path: 'admin/content',
+    accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Categories', to: 'categories', component: 'categories' },
+      { title: 'Faqs', to: 'faqs', component: 'faqs' },
+    ],
+  },
+  {
+    icon: 'list layout',
     title: 'Categories',
     capability: 'CATEGORIES_ANY',
     to: 'categories',

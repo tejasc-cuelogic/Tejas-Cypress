@@ -24,6 +24,7 @@ export default class ManageFaqs extends Component {
     const { match } = this.props;
     return (
       <PrivateLayout
+        refMatch={this.props.refMatch}
         {...this.props}
         P1={
           <Search

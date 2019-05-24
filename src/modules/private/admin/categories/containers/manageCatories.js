@@ -13,6 +13,7 @@ export default class ManageCategories extends Component {
     const { match } = this.props;
     return (
       <PrivateLayout
+        refMatch={this.props.refMatch}
         {...this.props}
       >
         <AllCategories match={match} />
