@@ -158,7 +158,9 @@ export class Auth {
       if (user.signInUserSession) {
         authStore.setCognitoUserSession(user.signInUserSession);
       }
-      authStore.setEmail(user.attributes.email.toLowerCase());
+      if (user.attributes) {
+        authStore.setEmail(user.attributes.email.toLowerCase());
+      }
       authStore.setNewPasswordRequired(true);
     }
     if (user && user.signInUserSession) {
