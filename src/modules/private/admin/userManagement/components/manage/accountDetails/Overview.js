@@ -61,16 +61,6 @@ export default class Overview extends Component {
           <Divider />
         </Aux>
         }
-        {cashMovementData && cashMovementData.length ?
-          <Aux>
-            <Card fluid>
-              <Card.Content>
-                <Header as="h4">Investments and Payments</Header>
-                <CashMovement data={cashMovementData} />
-              </Card.Content>
-            </Card>
-          </Aux> : null
-        }
         <Header as="h6">Balances</Header>
         <Form.Group widths={2}>
           <Form.Input fluid label="Your Available Balance" value={this.state.availableCashL ? 'Loading...' : Helper.MoneyMathDisplayCurrency(this.state.availableCash)} readOnly className="display-only" />
@@ -116,6 +106,16 @@ export default class Overview extends Component {
             </Table>
           </div>
         </div>
+        {cashMovementData && cashMovementData.length ?
+          <Aux>
+            <Card fluid>
+              <Card.Content>
+                <Header as="h4">Investments and Payments</Header>
+                <CashMovement data={cashMovementData} />
+              </Card.Content>
+            </Card>
+          </Aux> : null
+        }
       </Form>
     );
   }
