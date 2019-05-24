@@ -944,6 +944,7 @@ export const getOfferingDetails = gql`
         by
         date
       }
+      order
     }
   }
 `;

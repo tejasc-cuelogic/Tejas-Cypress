@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy } from 'lodash';
+import { pickBy, get, filter, orderBy, sortBy } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -128,7 +128,7 @@ export class CampaignStore {
 
   @computed get completed() {
     const offeringList = this.completedList.slice();
-    return offeringList.splice(0, this.completedToDisplay);
+    return (sortBy(offeringList.splice(0, this.completedToDisplay), ['order']));
   }
   @computed get completedList() {
     return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage));
