@@ -31,8 +31,6 @@ const postcssNormalize = require('postcss-normalize');
 
 const WebpackDashboard = require('webpack-dashboard/plugin');
 
-// const AutoDllPlugin = require('autodll-webpack-plugin-webpack-4');
-
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -533,27 +531,10 @@ module.exports = function (webpackEnv) {
             }
         )
       ),
-      // isEnvDevelopment && new AutoDllPlugin({
-      //   debug: true,
-      //   inject: true,
-      //   filename: '[name].js',
-      //   entry: {
-      //     dllVendor: [
-      //       'react',
-      //       'react-dom',
-      //       'lodash',
-      //       'moment',
-      //       'money-math',
-      //       'recharts',
-      //       'semantic-ui',
-      //       'react-router-dom'
-      //     ],
-      //   }
+      // isEnvDevelopment &&  new webpack.DllReferencePlugin({
+      //   context: __dirname,
+      //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
       // }),
-      isEnvDevelopment &&  new webpack.DllReferencePlugin({
-        context: __dirname,
-        manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
-      }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       isEnvProduction &&
