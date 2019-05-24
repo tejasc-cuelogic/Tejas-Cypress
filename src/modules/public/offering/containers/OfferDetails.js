@@ -32,7 +32,7 @@ const getModule = component => Loadable({
 });
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
-@inject('campaignStore', 'userStore', 'navStore', 'uiStore')
+@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 class offerDetails extends Component {
@@ -57,7 +57,20 @@ class offerDetails extends Component {
             { showPassDialog: false, found: 2, preLoading: false });
         }
       } else if (currentUser && currentUser.roles.includes('investor')) {
-        this.setState({ showPassDialog: false, preLoading: false });
+        const params = {
+          userId: currentUser.sub,
+          offeringId: data[0].id,
+          offeringStage: oMinData.stage,
+        };
+        this.props.campaignStore.isValidInvestorInOffering(params).then((res) => {
+          console.log('res: ', res);
+          if (res) {
+            this.setState({ preLoading: false, showPassDialog: false });
+            this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+          } else {
+            this.setState({ showPassDialog: false, found: 2, preLoading: false });
+          }
+        });
       } else {
         if (oMinData.stage === 'CREATION') {
           this.setState({ showPassDialog: true, preLoading: false });
