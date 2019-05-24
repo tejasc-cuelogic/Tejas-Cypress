@@ -14,7 +14,7 @@ query getOfferingList($filters: OfferingFilterInputType){
           fileName
         }
       }
-
+      order
       offering {
         about {
           theCompany
@@ -66,6 +66,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       id
       offeringSlug
       referralCode
+      order
     }
   }
 `;
