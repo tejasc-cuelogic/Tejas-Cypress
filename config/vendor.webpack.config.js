@@ -25,7 +25,13 @@ module.exports = function (webpackEnv) {
     },
     entry: {
       nodeModuleDll: [
-         'react'
+        'react',
+        'react-dom',
+        'lodash',
+        'moment',
+        'money-math',
+        'recharts',
+        'react-router-dom'
       ]
    },
     // entry: [
