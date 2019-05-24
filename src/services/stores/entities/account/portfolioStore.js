@@ -1,7 +1,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { forEach, sortBy, get } from 'lodash';
+import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
@@ -117,19 +117,53 @@ export class PortfolioStore {
 
   getChartData = (type) => {
     const formattedData = [];
+    const newFormattedData = [];
     const rawData = type === 'cashMovement' ? this.summary.cashMovement : (this.PayOffData.data && this.PayOffData.data.getMonthlyPaymentsToInvestorByOffering) || [];
     if (rawData) {
       sortBy(rawData, ['yearMonth']).map((k) => {
         formattedData.push({
           name: moment(k.yearMonth).format('MMM YYYY'),
-          Payment: k.payment ? parseFloat(k.payment) : 0,
-          Invested: k.invested ? parseFloat(k.invested) : 0,
-          'Paid to date': k.paidToDate ? parseFloat(k.paidToDate) : 0,
+          payment: k.payment ? parseFloat(k.payment) : 0,
+          invested: k.invested ? parseFloat(k.invested) : 0,
+          paidToDate: k.paidToDate ? parseFloat(k.paidToDate) : 0,
+          yearMonth: k.yearMonth,
         });
         return null;
       });
     }
-    return formattedData;
+    // moment(new Date("2019-01-01")).add(1,'M').format('YYYY-MM-DD');
+    sortBy(formattedData, ['yearMonth']).map((k, i) => {
+      newFormattedData.push({
+        name: moment(k.yearMonth).format('MMM YYYY'),
+        Payment: k.payment ? parseFloat(k.payment) : 0,
+        Invested: k.invested ? parseFloat(k.invested) : 0,
+        'Paid to date': k.paidToDate ? parseFloat(k.paidToDate) : 0,
+      });
+
+      const j = i + 1;
+      if (formattedData[j]) {
+        const d1 = moment(k.yearMonth).format('YYYY-MM-DD');
+        const d2 = moment(formattedData[j].yearMonth).format('YYYY-MM-DD');
+        const mDiff = moment(d2).diff(d1, 'months', true);
+        if (mDiff > 1) {
+          times(mDiff, (m) => {
+            const index = m + 1;
+            const nextMonth = moment(d1).add(index, 'M').format('YYYY-MM-DD');
+            if (index <= mDiff && nextMonth < d2) {
+              newFormattedData.push({
+                name: moment(nextMonth).format('MMM YYYY'),
+                Payment: 0,
+                Invested: 0,
+                'Paid to date': 0,
+              });
+            }
+          });
+        }
+      }
+      return null;
+    });
+
+    return newFormattedData;
   }
 
   @computed get summaryLoading() {
