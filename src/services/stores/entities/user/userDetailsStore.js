@@ -504,7 +504,8 @@ export class UserDetailsStore {
         }
       }
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification) &&
-      this.signupStatus.activeAccounts.length === 0) {
+      this.signupStatus.activeAccounts.length === 0 &&
+      this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
       routingUrl = '/app/summary/identity-verification/3';
