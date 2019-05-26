@@ -58,17 +58,8 @@ export class AuthStore {
   }
 
   @action
-  setUserId = (userId) => {
-    this.userId = userId;
-  }
-
-  @action
   setPwdVisibilityStatus = () => {
-    if (this.pwdInputType === 'password') {
-      this.pwdInputType = 'text';
-    } else {
-      this.pwdInputType = 'password';
-    }
+    this.pwdInputType = this.pwdInputType === 'password' ? 'text' : 'password';
   }
 
   @action
@@ -100,6 +91,9 @@ export class AuthStore {
     if (e.password || e.password === '') {
       this.SIGNUP_FRM =
         Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
+      if (this.SIGNUP_FRM.fields.password.value === this.SIGNUP_FRM.fields.verify.value) {
+        this.SIGNUP_FRM.fields.verify.error = undefined;
+      }
     } else {
       this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
     }
@@ -228,6 +222,10 @@ export class AuthStore {
     return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
 
+  @action setUserId(userId) {
+    this.userId = userId;
+  }
+
   @action
   setDevAppAuthStatus(status) {
     cookie.save('DEV_AUTH_TOKEN', status, { maxAge: 86400 });
@@ -306,9 +304,6 @@ export class AuthStore {
           uiStore.setProgress(false);
           reject(err);
         });
-      // .finally(() => {
-      //   uiStore.setProgress(false);
-      // });
     });
   }
 
