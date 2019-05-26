@@ -167,7 +167,7 @@ class App extends Component {
         <Route path="/secure-gateway" component={SecureGateway} />
       );
     }
-    if (this.props.authStore.hasSession && this.props.uiStore.appLoader) {
+    if (this.props.uiStore.appLoader) {
       return (
         <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
       );
