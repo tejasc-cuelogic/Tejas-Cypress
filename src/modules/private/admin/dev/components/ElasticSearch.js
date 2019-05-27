@@ -42,7 +42,7 @@ export default class ElasticSearch extends Component {
     return (
       <Grid>
         <Grid.Column width={5}>
-          {eSAudit && eSAudit.length &&
+          {eSAudit && eSAudit.length ?
           map(eSAudit, (es, key) => (
             <Card fluid className="elastic-search">
               <Card.Content>
@@ -66,8 +66,35 @@ export default class ElasticSearch extends Component {
                 }
               </Card.Content>
             </Card>
-          ))
+          )) : null
           }
+          <Card fluid className="elastic-search">
+            <Card.Content>
+              <Grid>
+                <Grid.Column width={7} verticalAlign="middle">
+                  <Header as="h5" className="mt-0">Users Indices</Header>
+                </Grid.Column>
+                <Grid.Column width={9} floated="right">
+                  <Button.Group compact widths={2}>
+                    <Button onClick={() => this.toggleConfirmModal('swapIndexAliases', 'Swap')} loading={inProgress === ''} content="Swap" color="blue" />
+                    <Button onClick={() => this.toggleConfirmModal('getESAudit', 'Audit', 0)} loading={inProgress === 'ds'} content="Audit" primary />
+                  </Button.Group>
+                </Grid.Column>
+              </Grid>
+            </Card.Content>
+            <Card.Content>
+              <Header as="h5">
+                <Button floated="right" compact onClick={() => this.toggleConfirmModal('PopulateIndex', 'Populate on ', '')} loading={inProgress === 'PopulateIndex'} content="Generate" color="blue" />
+                Index A
+                <Header.Subheader>1 Days</Header.Subheader>
+              </Header>
+              <Header as="h5">
+                <Button floated="right" compact disabled onClick={() => this.toggleConfirmModal('PopulateIndex', 'Populate on ', '')} loading={inProgress === 'PopulateIndex'} content="Primary" />
+                Index B
+                <Header.Subheader>1 Days</Header.Subheader>
+              </Header>
+            </Card.Content>
+          </Card>
         </Grid.Column>
         <Grid.Column width={11}>
           <div className="sticky-sidebar">
