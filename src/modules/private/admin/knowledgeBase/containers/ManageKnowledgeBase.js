@@ -37,6 +37,7 @@ export default class ManageKnowledgeBase extends Component {
     } = this.props.knowledgeBaseStore;
     return (
       <PrivateLayout
+        refMatch={this.props.refMatch}
         {...this.props}
         P1={
           <Search

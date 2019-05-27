@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
-import _ from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Button, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -22,7 +21,7 @@ const SortableItem = SortableElement(({
       <DragHandle />
       <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
-        <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>{_.capitalize(knowledgeBase.title)}</Link>
+        <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>{knowledgeBase.title}</Link>
       </span>
     </div>
     <div className="action width-100 right-align">
