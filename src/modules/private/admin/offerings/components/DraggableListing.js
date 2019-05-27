@@ -66,11 +66,6 @@ const SortableItem = SortableElement(({
         }
       </div>
     }
-    {stage !== 'engagement' &&
-      <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
-        {offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}
-      </div>
-    }
     <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
       <p>
         {offering.issuerDetails ?
@@ -192,9 +187,6 @@ export default class DraggableListing extends Component {
               }
               {stage === 'live' &&
                 <div className="balance">Days till close</div>
-              }
-              {stage !== 'engagement' &&
-                <div className="balance">Lead</div>
               }
               <div className="balance">POC</div>
               <div className="balance">Securities</div>
