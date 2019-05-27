@@ -8,18 +8,28 @@ import { REDIRECT_META } from '../../constants/redirect';
 @inject('campaignStore', 'authStore', 'commonStore', 'userStore')
 @observer
 export default class RedirectManager extends React.PureComponent {
-  state = { found: 0 }; // 0: not started, 1: loading, 2: found, 3: not found
+  state = { found: 0, viaProtect: false }; // 0: not started, 1: loading, 2: found, 3: not found
   componentWillMount() {
     this.processRedirection();
   }
   componentWillUpdate() {
-    this.processRedirection();
+    const { viaProtect } = this.state;
+    if (viaProtect) {
+      this.processRedirection(false);
+    }
   }
-  processRedirection = () => {
+  processRedirection = (ref = true) => {
     let { fromUrl } = this.props.match.params;
+    const { viaProtect } = this.props.match.params;
     const redirectMeta = this.findRedirectUrl(fromUrl);
     if (fromUrl === 'password-protected') {
+      if (ref) {
+        this.setState({ viaProtect: true });
+      }
       fromUrl = window.location ? window.location.pathname.split('/')[1] : fromUrl;
+    }
+    if (viaProtect) {
+      this.setState({ viaProtect: false });
     }
     if (redirectMeta) {
       const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `https://${window.location.hostname}${redirectMeta.to}`;
