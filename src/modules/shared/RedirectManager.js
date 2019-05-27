@@ -16,7 +16,7 @@ export default class RedirectManager extends React.Component {
       this.setState({ found: 2 });
       const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `https://${window.location.hostname}${redirectMeta.to}`;
       window.location = toUrl;
-    } else {
+    } else if (fromUrl !== 'password-protected') {
       this.findIssuerReferralCode(fromUrl);
     }
   }
