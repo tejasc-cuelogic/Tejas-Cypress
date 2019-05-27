@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@babel/core": "7.4.3",
+    "@aws-amplify/auth": "^1.2.23",
+    "@aws-amplify/core": "^1.0.26",
     "@bugsnag/js": "^5.2.0",
     "@bugsnag/plugin-react": "^5.2.0",
     "@svgr/webpack": "4.1.0",
@@ -33,6 +35,7 @@
     "apollo-link-ws": "^1.0.7",
     "apollo-utilities": "^1.0.10",
     "autoprefixer": "7.1.2",
+    "aws-amplify": "^1.1.27",
     "aws-sdk": "2.177.0",
     "babel-eslint": "10.0.1",
     "babel-jest": "24.7.1",

@@ -96,7 +96,7 @@ class AccountType extends Component {
         sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
       }
     }
-    if (!this.props.accreditationStore.accreditationData.ira) {
+    if (this.props.userStore.isInvestor && !this.props.accreditationStore.accreditationData.ira) {
       this.props.accreditationStore.getUserAccreditation().then(() => {
         initiateAccreditation();
       });
