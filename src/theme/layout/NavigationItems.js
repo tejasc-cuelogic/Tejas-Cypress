@@ -216,6 +216,9 @@ export class NavigationItems extends Component {
   handleDashboardBtn = () => {
     const { redirectURL } = this.props.uiStore;
     const { roles } = this.props.userStore.currentUser;
+    if (this.props.userDetailsStore.currentUser.loading) {
+      return;
+    }
     const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep :
       '/app/dashboard';
     if (invLogsIn === '/app/summary') {
