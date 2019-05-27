@@ -31,6 +31,8 @@ export class ElasticSearchStore {
 
   @action
   getESAudit = () => {
+    // indexAliasName
+    // random: "RANDOM"
     const variables = {};
     this.esAudit = graphql({
       client,
@@ -44,8 +46,8 @@ export class ElasticSearchStore {
   }
 
   @computed get eSAudit() {
-    return get(this.esAudit, 'data.getESAudit') ?
-      toJS(get(this.esAudit, 'data.getESAudit')) : [];
+    return get(this.esAudit, 'data.getESAudit.indices[0]') ?
+      toJS(get(this.esAudit, 'data.getESAudit.indices')) : [];
   }
 
   @action

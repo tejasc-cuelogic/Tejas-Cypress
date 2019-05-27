@@ -42,28 +42,26 @@ export default class ElasticSearch extends Component {
     return (
       <Grid>
         <Grid.Column width={5}>
-          {eSAudit && eSAudit.length &&
-          map(eSAudit, (es, key) => (
+          {eSAudit.length &&
+          map(eSAudit, es => (
             <Card fluid className="elastic-search">
               <Card.Content>
-                <Card.Header>{`${this.renderTitle(key)} Indices`}</Card.Header>
-                <Button onClick={() => this.toggleConfirmModal('swapIndexAliases', `Swap ${this.renderTitle(key)}`)} loading={inProgress === `${key}swapIndexAliases`} content="Swap" color="blue" />
+                <Card.Header>{`${this.renderTitle(es.alias)} Indices`}</Card.Header>
+                <Button onClick={() => this.toggleConfirmModal('swapIndexAliases', `Swap ${this.renderTitle(es.alias)}`)} loading={inProgress === `${es.alias}swapIndexAliases`} content="Swap" color="blue" />
               </Card.Content>
               <Card.Content>
-                {es ?
-                  map(es, (e, k) => k !== 'active' && (
-                    <Card.Description>
-                      <Header as="h5">
-                        {this.renderTitle(k)}
-                        <Header.Subheader>1 Days</Header.Subheader>
-                      </Header>
-                      <Button.Group compact size="mini" widths={3}>
-                        <Button onClick={() => this.toggleConfirmModal('getESAudit', `Audit ${this.renderTitle(key)} on ${this.renderTitle(k)}`, key)} loading={inProgress === `${key}DeleteIndices`} content="Audit" primary />
-                        <Button onClick={() => this.toggleConfirmModal(`${key}PopulateIndex`, `Populate ${this.renderTitle(key)} on ${this.renderTitle(k)}`, key)} loading={inProgress === `${key}PopulateIndex`} content="Generate" color="blue" />
-                      </Button.Group>
-                    </Card.Description>
-                  )) : null
-                }
+                {map(['index_a', 'index_b'], e => (
+                  <Card.Description>
+                    <Header as="h5">
+                      {this.renderTitle(e)}
+                      <Header.Subheader>1 Days</Header.Subheader>
+                    </Header>
+                    <Button.Group compact size="mini" widths={3}>
+                      <Button onClick={() => this.toggleConfirmModal('getESAudit', `Audit ${this.renderTitle(e)} on ${this.renderTitle(e)}`, e)} loading={inProgress === `${e}DeleteIndices`} content="Audit" primary />
+                      <Button onClick={() => this.toggleConfirmModal(`${e}PopulateIndex`, `Populate ${this.renderTitle(e)} on ${this.renderTitle(e)}`, e)} loading={inProgress === `${e}PopulateIndex`} content="Generate" color="blue" />
+                    </Button.Group>
+                  </Card.Description>
+                  ))}
               </Card.Content>
             </Card>
           ))

@@ -51,8 +51,32 @@ export const offeringsPopulateIndex = gql`
   }`;
 
 export const getESAudit = gql`
-query getESAudit($indexAliasName: ENUM, $documentId: String) {
-  offeringPopulateIndices(indexAliasName: $indexAliasName, documentId: $documentId)
+query getESAudit($indexAliasName: ENUM, $random: String) {
+  offeringPopulateIndices(indexAliasName: $indexAliasName, random: $random)
+  {
+    indices {
+      alias
+      active
+      index_a {
+        record
+        count
+        created {
+          id
+          by
+          date
+        }
+      }
+      index_b {
+        record
+        count
+        created {
+          id
+          by
+          date
+        }
+      }
+    }
+  }
 }`;
 
 export const swapIndexAliases = gql`
