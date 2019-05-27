@@ -20,7 +20,7 @@ export default class RedirectManager extends React.PureComponent {
   }
   processRedirection = (ref = true) => {
     let { fromUrl } = this.props.match.params;
-    const { viaProtect } = this.props.match.params;
+    const { viaProtect } = this.state;
     const redirectMeta = this.findRedirectUrl(fromUrl);
     if (fromUrl === 'password-protected') {
       if (ref) {
