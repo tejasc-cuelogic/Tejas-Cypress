@@ -10,12 +10,10 @@ import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'r
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
 import { STAGES } from '../../../../../services/constants/admin/offerings';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
-  edit: { label: 'Edit', icon: 'pencil' },
-  delete: { label: 'Delete', icon: 'trash' },
   publish: { label: 'Publish', icon: 'view', icon1: 'no-view' },
 };
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
@@ -31,7 +29,7 @@ const SortableItem = SortableElement(({
           (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
         ))}
         <br />
-        {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+        {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
       </a>
     </div>
     <div className="balance">
@@ -45,17 +43,10 @@ const SortableItem = SortableElement(({
       }
     </div>
     <div className="balance">
-      `Create: {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}`<br />
-      `Launched: {get(offering, 'launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'launch.targetDate')} /> : 'N/A'}`<br />
-      `Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}`
+      Create: {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}<br />
+      Launched: {get(offering, 'offering.launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'offering.launch.targetDate')} /> : 'N/A'}<br />
+      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
     </div>
-    {stage === 'live' &&
-      <div className="balance">
-        {offering.closureSummary && offering.closureSummary.processingDate ?
-        DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
-        }
-      </div>
-    }
     <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
       <p>
         {offering.issuerDetails ?
@@ -72,15 +63,9 @@ const SortableItem = SortableElement(({
         }
       </p>
     </div>
-    {stage === 'engagement' &&
-      <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
-        {offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}
-      </div>
-    }
-    <div className="action width-130 right-align">
+    <div className="action right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
-          action.label === 'Delete' && stage === 'engagement' ? '' :
           <Button icon className="link-button" >
             <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
           </Button>
@@ -153,7 +138,7 @@ export default class DraggableListing extends Component {
     const {
       uiStore, offeringsStore, stage,
     } = this.props;
-    const { allOfferingsList, loading } = offeringsStore;
+    const { allOfferings, loading } = offeringsStore;
     const { confirmBox, inProgress } = uiStore;
     if (loading || inProgress) {
       return <InlineLoader />;
@@ -167,10 +152,10 @@ export default class DraggableListing extends Component {
               <div className="balance">Status</div>
               <div className="balance" />
               <div className="balance">POC</div>
-              <div className="action width-130 right-align" />
+              <div className="action right-align" />
             </div>
             <SortableList
-              allOfferingsList={allOfferingsList}
+              allOfferingsList={allOfferings}
               pressDelay={100}
               handleAction={this.handleAction}
               onSortEnd={e => this.onSortEnd(e)}

@@ -217,7 +217,9 @@ export class OfferingsStore {
     return (this.data.data && this.data.data.getOfferings &&
       this.data.data.getOfferings.count) || 0;
   }
-
+  @computed get allOfferings() {
+    return this.db && this.db.length ? this.db : [];
+  }
   @computed get offerings() {
     return (this.db && this.db.length &&
       this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
