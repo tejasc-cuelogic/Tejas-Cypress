@@ -297,7 +297,12 @@ export class NavigationItems extends Component {
                   className="menu-button"
                   onClick={this.handleDashboardBtn}
                 >
-                  <Button secondary>Dashboard</Button>
+                  <Button
+                    loading={this.props.userDetailsStore.currentUser.loading}
+                    disabled={this.props.userDetailsStore.currentUser.loading}
+                    secondary
+                  >Dashboard
+                  </Button>
                 </Menu.Item>
                 ))}
         </Container>
