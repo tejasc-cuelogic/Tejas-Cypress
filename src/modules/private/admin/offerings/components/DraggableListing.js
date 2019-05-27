@@ -30,6 +30,8 @@ const SortableItem = SortableElement(({
           offering.keyTerms.shorthandBusinessName : (
           (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
         ))}
+        <br />
+        {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
       </a>
     </div>
     <div className="balance">
@@ -42,23 +44,11 @@ const SortableItem = SortableElement(({
         : STAGES[offering.stage].label
       }
     </div>
-    {stage !== 'engagement' ?
-      <Aux>
-        <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
-          {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}
-        </div>
-        <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
-          {offering.offering && offering.offering.launch &&
-            offering.offering.launch.targetDate ?
-            DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
-          }
-        </div>
-      </Aux>
-      :
-      <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
-        {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
-      </div>
-    }
+    <div className="balance">
+      `Create: {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}`<br />
+      `Launched: {get(offering, 'launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'launch.targetDate')} /> : 'N/A'}`<br />
+      `Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}`
+    </div>
     {stage === 'live' &&
       <div className="balance">
         {offering.closureSummary && offering.closureSummary.processingDate ?
@@ -81,9 +71,6 @@ const SortableItem = SortableElement(({
           <b>N/A</b>
         }
       </p>
-    </div>
-    <div className="balance">
-      {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
     </div>
     {stage === 'engagement' &&
       <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
@@ -178,21 +165,8 @@ export default class DraggableListing extends Component {
             <div className="row-wrap striped-table thead">
               <div className="balance-half first-column">Name</div>
               <div className="balance">Status</div>
-              {stage !== 'engagement' ?
-                <Aux>
-                  <div className="balance">Created Date</div>
-                  <div className="balance">{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</div>
-                </Aux>
-                : <div className="balance">Hard Close Date</div>
-              }
-              {stage === 'live' &&
-                <div className="balance">Days till close</div>
-              }
+              <div className="balance" />
               <div className="balance">POC</div>
-              <div className="balance">Securities</div>
-              {stage === 'engagement' &&
-                <div className="balance">Repayment Amount</div>
-              }
               <div className="action width-130 right-align" />
             </div>
             <SortableList
