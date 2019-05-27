@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Grid, Card, Button, Confirm, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { map, capitalize } from 'lodash';
+import { map, capitalize, get } from 'lodash';
+import Aux from 'react-aux';
+import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -18,19 +20,28 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 @withRouter
 @observer
 export default class ElasticSearch extends Component {
-  state = { confirmModal: false, title: '', mutation: null };
+  state = {
+    confirmModal: false,
+    title: '',
+    alias: null,
+    module: '',
+  };
   componentWillMount() {
     this.props.elasticSearchStore.getESAudit();
   }
-  elasticSearchHandler = (mutation) => {
+  elasticSearchHandler = (alias, module) => {
     this.cancelConfirmModal();
-    this.props.elasticSearchStore.elasticSearchHandler(mutation);
+    this.props.elasticSearchStore.elasticSearchHandler(alias, module);
   }
-  toggleConfirmModal = (mutation, title) => {
-    this.setState({ confirmModal: true, mutation, title });
+  toggleConfirmModal = (alias, title, module) => {
+    this.setState({
+      confirmModal: true, alias, title, module,
+    });
   }
   cancelConfirmModal = () => {
-    this.setState({ confirmModal: false, mutation: null, title: '' });
+    this.setState({
+      confirmModal: false, alias: null, title: '', module: '',
+    });
   }
   renderTitle = title => capitalize(title.replace('_', ' '));
   render() {
@@ -42,29 +53,39 @@ export default class ElasticSearch extends Component {
     return (
       <Grid>
         <Grid.Column width={5}>
-          {eSAudit.length &&
+          {eSAudit.length ?
           map(eSAudit, es => (
             <Card fluid className="elastic-search">
               <Card.Content>
-                <Card.Header>{`${this.renderTitle(es.alias)} Indices`}</Card.Header>
-                <Button onClick={() => this.toggleConfirmModal('swapIndexAliases', `Swap ${this.renderTitle(es.alias)}`)} loading={inProgress === `${es.alias}swapIndexAliases`} content="Swap" color="blue" />
+                <Grid>
+                  <Grid.Column width={7} verticalAlign="middle">
+                    <Header as="h5" className="mt-0">{`${this.renderTitle(es.alias)} Indices`}</Header>
+                  </Grid.Column>
+                  <Grid.Column width={9} floated="right">
+                    <Button.Group compact widths={2}>
+                      <Button onClick={() => this.toggleConfirmModal(es.alias, `Swap ${this.renderTitle(es.alias)} Indices`, 'SWAP')} loading={inProgress === `${es.alias}_SWAP`} content="Swap" color="blue" />
+                      <Button onClick={() => this.toggleConfirmModal(es.alias, `Audit ${this.renderTitle(es.alias)} Indices`, 'AUDIT')} loading={inProgress === `${es.alias}_AUDIT`} content="Audit" primary />
+                    </Button.Group>
+                  </Grid.Column>
+                </Grid>
               </Card.Content>
               <Card.Content>
                 {map(['index_a', 'index_b'], e => (
-                  <Card.Description>
-                    <Header as="h5">
-                      {this.renderTitle(e)}
-                      <Header.Subheader>1 Days</Header.Subheader>
-                    </Header>
-                    <Button.Group compact size="mini" widths={3}>
-                      <Button onClick={() => this.toggleConfirmModal('getESAudit', `Audit ${this.renderTitle(e)} on ${this.renderTitle(e)}`, e)} loading={inProgress === `${e}DeleteIndices`} content="Audit" primary />
-                      <Button onClick={() => this.toggleConfirmModal(`${e}PopulateIndex`, `Populate ${this.renderTitle(e)} on ${this.renderTitle(e)}`, e)} loading={inProgress === `${e}PopulateIndex`} content="Generate" color="blue" />
-                    </Button.Group>
-                  </Card.Description>
-                  ))}
+                  <Header as="h5">
+                    {get(es, 'active') === e ?
+                      <Button floated="right" compact disabled content="Primary" /> :
+                      <Aux>
+                        <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE')} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />
+                        <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `DELETE ${this.renderTitle(es.alias)} Indices`, 'DELETE')} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
+                      </Aux>
+                    }
+                    {this.renderTitle(e)}
+                    <Header.Subheader>{get(es[e], 'created.date') ? moment(get(es[e], 'created.date')).startOf('hour').fromNow() : ''}</Header.Subheader>
+                  </Header>
+                ))}
               </Card.Content>
             </Card>
-          ))
+          )) : null
           }
         </Grid.Column>
         <Grid.Column width={11}>
@@ -82,7 +103,7 @@ export default class ElasticSearch extends Component {
           content={`Are you sure to proceed with ${this.state.title}.`}
           open={this.state.confirmModal}
           onCancel={this.cancelConfirmModal}
-          onConfirm={() => this.elasticSearchHandler(this.state.mutation)}
+          onConfirm={() => this.elasticSearchHandler(this.state.alias, this.state.module)}
           size="mini"
           className="deletion"
         />

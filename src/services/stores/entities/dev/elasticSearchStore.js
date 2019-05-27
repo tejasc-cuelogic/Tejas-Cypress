@@ -12,12 +12,21 @@ import uiStore from '../../../stores/entities/shared/uiStore';
 export class ElasticSearchStore {
   @observable STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
   @observable BULK_STORAGE_DETAILS_SYNC_FRM =
-  Validator.prepareFormObject(BULK_STORAGE_DETAILS_SYNC);
+    Validator.prepareFormObject(BULK_STORAGE_DETAILS_SYNC);
   @observable inProgress = {};
   @observable bulkSyncLoader = false;
   @observable boxMsg = '';
   @observable countValues = [];
   @observable esAudit = null;
+  @observable esAuditOutput = null;
+  @observable swapIndex = null;
+  @observable mutations = {
+    USERS: ['userDeleteIndices', 'userPopulateIndex'],
+    CrowdPay: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
+    Accreditation: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
+    LinkedBank: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
+    Offerings: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
+  }
 
   @action
   setFieldValue = (field, value) => {
@@ -30,11 +39,69 @@ export class ElasticSearchStore {
   }
 
   @action
+  elasticSearchHandler = (alias, module) => {
+    this.setFieldValue('inProgress', `${alias}_${module}`);
+    if (module === 'SWAP') {
+      this.swapIndexAliases(alias);
+    } else if (module === 'POPULATE' || module === 'DELETE') {
+      const mutation = this.mutations[alias];
+      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0]);
+    }
+  }
+
+  @action
+  esMutations = mutation => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: elasticSearchQueries[mutation],
+      })
+      .then((result) => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        resolve(result);
+        this.setFieldValue('inProgress', false);
+      })
+      .catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject(error);
+        this.setFieldValue('inProgress', false);
+      });
+  });
+
+  @action
   getESAudit = () => {
-    // indexAliasName
-    // random: "RANDOM"
-    const variables = {};
     this.esAudit = graphql({
+      client,
+      query: elasticSearchQueries.getESAudit,
+      variables: {},
+      fetchPolicy: 'network-only',
+      onError: () => {
+        this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
+
+  @action
+  swapIndexAliases = () => {
+    this.swapIndex = graphql({
+      client,
+      query: elasticSearchQueries.swapIndexAliases,
+      variables: {},
+      fetchPolicy: 'network-only',
+      onError: () => {
+        this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
+
+  @action
+  getESAuditPara = (indexAliasName, random = 'RANDOM') => {
+    const variables = {
+      indexAliasName,
+      random,
+    };
+    this.esAuditOutput = graphql({
       client,
       query: elasticSearchQueries.getESAudit,
       variables,
@@ -86,7 +153,7 @@ export class ElasticSearchStore {
   @action
   storageDetailsChange = (e, res) => {
     this.STORAGE_DETAILS_SYNC_FRM =
-    Validator.onChange(this.STORAGE_DETAILS_SYNC_FRM, Validator.pullValues(e, res));
+      Validator.onChange(this.STORAGE_DETAILS_SYNC_FRM, Validator.pullValues(e, res));
     this.setFieldValue('boxMsg', '');
   };
 
@@ -108,7 +175,7 @@ export class ElasticSearchStore {
       }
     } else {
       this[formName] =
-      Validator.onChange(this[formName], Validator.pullValues(field, values));
+        Validator.onChange(this[formName], Validator.pullValues(field, values));
     }
   };
 
@@ -138,27 +205,6 @@ export class ElasticSearchStore {
           Helper.toast('Something went wrong, please try again later.', 'error');
           this.setFieldValue('bulkSyncLoader', false);
           rej(error);
-        });
-    });
-  }
-
-  @action
-  elasticSearchHandler = (mutation) => {
-    this.setFieldValue('inProgress', mutation);
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: elasticSearchQueries[mutation],
-        })
-        .then((result) => {
-          Helper.toast('Your request is processed successfully.', 'success');
-          resolve(result);
-          this.setFieldValue('inProgress', false);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          reject(error);
-          this.setFieldValue('inProgress', false);
         });
     });
   }
