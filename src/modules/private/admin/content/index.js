@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-// import PrivateLayout from '../../shared/PrivateLayout';
 import { InlineLoader } from '../../../../theme/shared';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 
@@ -23,7 +22,6 @@ export default class Content extends Component {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], false).subNavigations;
     return (
-      // <PrivateLayout {...this.props} >
       <Switch>
         {
           navItems.map((item) => {
@@ -34,7 +32,6 @@ export default class Content extends Component {
           })
         }
       </Switch>
-      // </PrivateLayout>
     );
   }
 }
