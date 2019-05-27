@@ -368,7 +368,7 @@ export class Auth {
   shutdownIntercom = () => {
     try {
       window.Intercom('shutdown');
-      console.log('Intercom Shutdown');
+      console.log('Intercom Shutdown time:', new Date());
     } catch (e) {
       console.log(e);
     }
