@@ -10,10 +10,15 @@ import { REDIRECT_META } from '../../constants/redirect';
 export default class RedirectManager extends React.Component {
   state = { found: 0 }; // 0: not started, 1: loading, 2: found, 3: not found
   componentWillMount() {
-    const { fromUrl } = this.props.match.params;
+    this.processRedirection();
+  }
+  processRedirection = () => {
+    let { fromUrl } = this.props.match.params;
     const redirectMeta = this.findRedirectUrl(fromUrl);
+    if (fromUrl === 'password-protected') {
+      fromUrl = window.location.pathname ? window.location.pathname.split('/')[1] : fromUrl;
+    }
     if (redirectMeta) {
-      this.setState({ found: 2 });
       const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `https://${window.location.hostname}${redirectMeta.to}`;
       window.location = toUrl;
     } else if (fromUrl !== 'password-protected') {
