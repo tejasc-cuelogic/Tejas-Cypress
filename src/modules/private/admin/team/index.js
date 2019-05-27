@@ -6,13 +6,13 @@ import UpdateMemberProfilePhoto from './components/UpdateMemberProfileData';
 
 export default class Team extends Component {
   render() {
-    const { match } = this.props;
+    const { match, refMatch } = this.props;
     return (
       <Switch>
         <Route
           exact
           path={`${match.url}`}
-          render={props => <ManageTeam refLink={match.url} {...props} />}
+          render={props => <ManageTeam refMatch={refMatch} refLink={match.url} {...props} />}
         />
         <Route
           exact
