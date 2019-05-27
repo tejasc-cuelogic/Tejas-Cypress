@@ -27,6 +27,7 @@ export const allOfferings = gql`
         legalBusinessName
         shorthandBusinessName
         securities
+        regulation
       }
       leadDetails {
         id

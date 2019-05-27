@@ -29,6 +29,7 @@ export default class ManageInsights extends Component {
     } = this.props.articleStore;
     return (
       <PrivateLayout
+        refMatch={this.props.refMatch}
         {...this.props}
         P1={
           <Search

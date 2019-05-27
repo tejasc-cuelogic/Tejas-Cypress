@@ -15,11 +15,11 @@ export default class KnowledgeBase extends Component {
     }
   }
   render() {
-    const { match } = this.props;
+    const { match, refMatch } = this.props;
     return (
       <Switch>
-        <Route exact path={`${match.url}`} component={ManageKnowledgeBase} />
-        <Route exact path={`${match.url}/:id/:status/:userType?/:categoryId?`} render={() => <EditKnowledgeBaseItem refLink={match.url} {...this.props} />} />
+        <Route exact path={`${match.url}`} render={props => <ManageKnowledgeBase refMatch={refMatch} {...props} />} />
+        <Route exact path={`${match.url}/:id/:status/:userType?/:categoryId?`} render={props => <EditKnowledgeBaseItem refLink={match.url} {...props} />} />
       </Switch>
     );
   }

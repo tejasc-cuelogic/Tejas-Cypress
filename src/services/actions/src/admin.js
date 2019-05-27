@@ -60,7 +60,7 @@ export class Admin {
         });
       })
         .then((res) => {
-          adminStore.setUserId(res.User.Username);
+          adminStore.setFieldvalue('userId', res.User.Username);
           adminStore.pushToDb({ ...dbPushParams, ...{ userId: res.User.Username } });
         })
         .catch((err) => {
