@@ -71,7 +71,7 @@ class SecondaryMenu extends Component {
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
   render() {
     const {
-      navItems, match, location, vertical,
+      navItems, match, refMatch, location, vertical,
       noinvert, attached, className, stepsStatus, addon, heading,
       force2ary, navCustomClick,
     } = this.props;
@@ -97,7 +97,7 @@ class SecondaryMenu extends Component {
               location={this.props.location}
               navItems={navItems}
               navClick={this.navClick}
-              match={match}
+              match={refMatch || match}
               stepsStatus={stepsStatus}
               navCustomClick={navCustomClick}
             />
@@ -108,7 +108,7 @@ class SecondaryMenu extends Component {
           {match.url === '/agreements/legal' ?
             <MobileDropDownNav
               inverted
-              refMatch={match}
+              refMatch={refMatch || match}
               navItems={navItems}
               location={location}
               className="legal-menu"
@@ -116,7 +116,7 @@ class SecondaryMenu extends Component {
             :
             <MobileDropDownNav
               className="private-secondary-menu"
-              refMatch={match}
+              refMatch={refMatch || match}
               navItems={navItems}
               location={location}
               // options={mobNavItems}

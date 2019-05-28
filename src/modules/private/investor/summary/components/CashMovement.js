@@ -18,6 +18,7 @@ export default class CashMovement extends Component {
           width={500}
           height={240}
           data={data}
+          barGap={25}
           margin={{
             top: 30, right: 30, left: 30, bottom: 30,
           }}

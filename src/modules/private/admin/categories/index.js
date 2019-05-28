@@ -5,11 +5,11 @@ import ManageCategories from './containers/manageCatories';
 
 export default class Categories extends Component {
   render() {
-    const { match } = this.props;
+    const { match, refMatch } = this.props;
     return (
       <Switch>
-        <Route exact path={`${match.url}`} component={ManageCategories} />
-        <Route exact path={`${match.url}/:id`} render={() => <AddNewCategory refLink={match.url} />} />
+        <Route exact path={`${match.url}`} render={props => <ManageCategories refMatch={refMatch} {...props} />} />
+        <Route exact path={`${match.url}/:id`} render={props => <AddNewCategory refLink={match.url} {...props} />} />
       </Switch>
     );
   }
