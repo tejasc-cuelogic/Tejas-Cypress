@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import { Grid } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
-
-const getModule = component => Loadable({
-  loader: () => import(`./legal/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+import General from './legal/General';
+import RiskFactors from './legal/RiskFactors';
+import Documentation from './legal/Documentation';
+import GenerateDocs from './legal/GenerateDocs';
+import DataRoom from './legal/DataRoom';
+import BadActorCheck from './legal/BadActorCheck';
+import Issuer from './legal/badActorCheck/Issuer';
+import AffiliatedIssuer from './legal/badActorCheck/AffiliatedIssuer';
+import Leadership from './legal/badActorCheck/Leadership';
 
 @inject('userStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
@@ -39,20 +40,21 @@ export default class Legal extends Component {
 
   render() {
     const userLegalInfo = [
-      { title: 'General', to: 'general' },
-      { title: 'Risk Factors', to: 'risk-factors' },
-      { title: 'Documentation', to: 'documentation' },
+      { title: 'General', to: 'general', component: General },
+      { title: 'Risk Factors', to: 'risk-factors', component: RiskFactors },
+      { title: 'Documentation', to: 'documentation', component: Documentation },
     ];
     const adminLegalInfo = [
-      { title: 'Generate Docs', to: 'generate-docs' },
-      { title: 'Data Room', to: 'data-room' },
+      { title: 'Generate Docs', to: 'generate-docs', component: GenerateDocs },
+      { title: 'Data Room', to: 'data-room', component: DataRoom },
       {
         title: 'Bad Actor Check',
         to: 'bad-actor-check',
+        component: BadActorCheck,
         subNavigations: [
-          { title: 'Issuer', to: 'bad-actor-check/issuer' },
-          { title: 'Affiliated Issuer', to: 'bad-actor-check/affiliated-issuer' },
-          { title: 'Leadership', to: 'bad-actor-check/leadership' },
+          { title: 'Issuer', to: 'bad-actor-check/issuer', component: Issuer },
+          { title: 'Affiliated Issuer', to: 'bad-actor-check/affiliated-issuer', component: AffiliatedIssuer },
+          { title: 'Leadership', to: 'bad-actor-check/leadership', component: Leadership },
         ],
       },
     ];
@@ -78,16 +80,16 @@ export default class Legal extends Component {
               <Route
                 exact
                 path={match.url}
-                component={getModule(this.module(userLegalInfo[0].title))}
+                component={userLegalInfo[0].component}
               />
               {
                 userLegalInfo.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={item.component} />
                 ))
               }
               {!isIssuer &&
                 adminLegalInfo.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={item.component} />
                 ))
               }
             </Switch>

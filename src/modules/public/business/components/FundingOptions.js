@@ -1,23 +1,18 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Switch, Link } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import { Header, Container, Menu, Segment, Grid, Responsive, Divider, List } from 'semantic-ui-react';
-import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
+import { MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
-
-const getModule = component => Loadable({
-  loader: () => import(`./fundingOptions/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+import TermNotes from './fundingOptions/TermNotes';
+import RevenueSharingNotes from './fundingOptions/RevenueSharingNotes';
+import PreferredEquity from './fundingOptions/PreferredEquity';
 
 const navItems = [
-  { title: 'Term Notes', to: 'term-notes' },
-  { title: 'Revenue Sharing Notes', to: 'revenue-sharing-notes' },
-  { title: 'Preferred Equity', to: 'preferred-equity' },
+  { title: 'Term Notes', to: 'term-notes', component: TermNotes },
+  { title: 'Revenue Sharing Notes', to: 'revenue-sharing-notes', component: RevenueSharingNotes },
+  { title: 'Preferred Equity', to: 'preferred-equity', component: PreferredEquity },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -63,14 +58,14 @@ export default class FundingOption extends Component {
                 <Route
                   exact
                   path={match.url}
-                  component={getModule(this.module(navItems[0].title))}
+                  component={navItems[0].component}
                 />
                 {
                   navItems.map(item => (
                     <Route
                       key={item.to}
                       path={`${match.url}/${item.to}`}
-                      component={getModule(this.module(item.title))}
+                      component={item.component}
                     />
                   ))
                 }

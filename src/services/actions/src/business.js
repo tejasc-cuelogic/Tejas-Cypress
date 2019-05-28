@@ -3,8 +3,7 @@ import moment from 'moment';
 import shortid from 'shortid';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../api/gqlApi';
-import {
-  getXmlDetails,
+import { getXmlDetails,
   filerInformationMutation,
   issuerInformationMutation,
   offeringInformationMutation,

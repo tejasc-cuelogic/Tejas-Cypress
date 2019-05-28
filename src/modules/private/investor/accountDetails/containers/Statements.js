@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
-import Loadable from 'react-loadable';
-import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import MonthlyStatements from '../components/statements/MonthlyStatements';
 import TaxForms from '../components/statements/TaxForms';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
-
-const getModule = component => Loadable({
-  loader: () => import(`../components/statements/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
 
 const navItems = [
   { title: 'Monthly Statements', to: 'monthly-statements', component: MonthlyStatements },
@@ -34,7 +25,7 @@ export default class Statements extends Component {
     const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
     const navigationItems = isDev || this.props.isAdmin ? navItems : navItems.filter(item => item.to !== 'monthly-statements');
     const DefaultComponent =
-      navigationItems[0].component || getModule(navigationItems[0].component);
+      navigationItems[0].component;
     return (
       <div>
         <Grid>
@@ -50,7 +41,7 @@ export default class Statements extends Component {
               />
               {
                 navigationItems.map((item) => {
-                  const CurrentModule = item.component || getModule(item.component);
+                  const CurrentModule = item.component;
                   return (
                     <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule isAdmin={this.props.isAdmin} {...props} />} />
                   );
