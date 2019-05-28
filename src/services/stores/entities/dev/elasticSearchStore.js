@@ -117,6 +117,10 @@ export class ElasticSearchStore {
       toJS(get(this.esAudit, 'data.getESAudit.indices')) : [];
   }
 
+  @computed get eSAuditLoading() {
+    return this.esAudit.loading;
+  }
+
   @action
   submitStorageDetails = () => {
     uiStore.setProgress();
