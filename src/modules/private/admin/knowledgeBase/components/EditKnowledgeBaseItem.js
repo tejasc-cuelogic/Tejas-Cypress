@@ -14,14 +14,15 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class EditKnowledgeBaseItem extends Component {
   componentWillMount() {
-    this.initiateFlow(this.props.match.params.id);
-    this.props.knowledgeBaseStore.reset();
-  }
-  initiateFlow = (id) => {
-    if (id !== 'new') {
-      this.props.knowledgeBaseStore.getKnowledgeBase(id, false);
+    if (this.props.match.params.id !== 'new') {
+      this.props.knowledgeBaseStore.getKnowledgeBase(this.props.match.params.id, false);
     } else {
       this.props.knowledgeBaseStore.reset();
+      this.props.knowledgeBaseStore.setFormData({
+        userType: this.props.match.params.userType,
+        categoryId: this.props.match.params.categoryId,
+        itemStatus: 'DRAFT',
+      });
     }
   }
   handleCloseModal = (e) => {
@@ -42,17 +43,9 @@ export default class EditKnowledgeBaseItem extends Component {
       loading,
       userTypeChange,
       categoriesDropdown,
-      setFormData,
     } = this.props.knowledgeBaseStore;
     const isNew = this.props.match.params.id === 'new';
     const itemStatus = this.props.match.params.status;
-    if (isNew) {
-      setFormData({
-        userType: this.props.match.params.userType,
-        categoryId: this.props.match.params.categoryId,
-        itemStatus: 'DRAFT',
-      });
-    }
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
@@ -149,7 +142,7 @@ export default class EditKnowledgeBaseItem extends Component {
                               />
                             </div>
                             <FormInput
-                              type="text"
+                              type="number"
                               name="order"
                               fielddata={KNOWLEDGE_BASE_FRM.fields.order}
                               changed={knowledgeBaseChange}

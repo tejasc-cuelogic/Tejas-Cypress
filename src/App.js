@@ -45,7 +45,6 @@ const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', 
 @observer
 class App extends Component {
   componentWillMount() {
-    this.checkUserIdleStatus();
     const { authStore, location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
@@ -58,6 +57,7 @@ class App extends Component {
     }
     authActions.verifySession()
       .then(() => {
+        this.checkUserIdleStatus();
         if (this.props.uiStore.redirectURL) {
           history.push(this.props.uiStore.redirectURL);
         }
@@ -154,7 +154,7 @@ class App extends Component {
       if (idleTime >= userIdleTime) {
         this.onIdle();
       }
-    } else if (this.props.authStore.isUserLoggedIn && !localStorage.getItem('lastActiveTime')) {
+    } else if (this.props.authStore.isUserLoggedIn && !localStorage.getItem('lastActiveTime') && this.props.authStore.idleTimer) {
       localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
     }
   }

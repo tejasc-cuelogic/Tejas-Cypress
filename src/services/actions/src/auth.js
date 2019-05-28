@@ -368,7 +368,7 @@ export class Auth {
   shutdownIntercom = () => {
     try {
       window.Intercom('shutdown');
-      console.log('Intercom Shutdown');
+      console.log('Intercom Shutdown time:', new Date());
     } catch (e) {
       console.log(e);
     }
@@ -397,12 +397,19 @@ export class Auth {
    * @desc Logs out user and clears all tokens stored in browser's local storage
    * @return null
    */
-  logout = async (logoutType) => {
-    this.resetData(logoutType);
-    await AmplifyAuth.signOut();
-    AWS.config.clear();
-    // Clear all AWS credentials
-  };
+  logout = logoutType => (
+    new Promise((res, rej) => {
+      try {
+        this.resetData(logoutType);
+        AmplifyAuth.signOut();
+        AWS.config.clear();
+        res();
+      } catch (err) {
+        console.log('Error occured while logout====', err);
+        rej();
+      }
+    })
+  )
 
   clearMobxStore = () => {
     authStore.resetStoreData();
