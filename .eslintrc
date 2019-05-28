@@ -27,13 +27,6 @@
         "aspects": ["noHref", "invalidHref", "preferButton"]
       }
     ],
-    "no-underscore-dangle": ["error", { "allow": ["_id", "_allUsersMeta"] }],
-    "no-self-assign": ["error", {"props": false}],
-    "object-curly-newline": ["error", { "consistent": true }]
-  },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "legacyDecorators": true
-    }
+    "no-underscore-dangle": ["error", { "allow": ["_id", "_allUsersMeta"] }]
   }
 }
