@@ -40,7 +40,6 @@ export const completeInvestorProfile = () => {
         cy.wait(3000);
         cy.get('.center-align > button').contains('Continue to Account').click({ force: true });
         cy.wait('@upsertProfile');
-        cy.wait(3000);
         break;
     }
   });
