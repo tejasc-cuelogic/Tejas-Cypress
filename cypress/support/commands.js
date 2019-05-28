@@ -43,3 +43,35 @@ Cypress.Commands.add('restoreLocalStorage', () => {
     localStorage.setItem(key, LOCAL_STORAGE_MEMORY[key]);
   });
 });
+
+function hexStringToByte(str) {
+  if (!str) {
+    return new Uint8Array();
+  }
+
+  let a = [];
+  for (let i = 0, len = str.length; i < len; i += 2) {
+    a.push(parseInt(str.substr(i, 2), 16));
+  }
+
+  return new Uint8Array(a);
+}
+
+Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
+  cy.get(selector).then((subject) => {
+    cy.fixture(fileName, 'hex').then((fileHex) => {
+      const fileBytes = hexStringToByte(fileHex);
+      const testFile = new File([fileBytes], fileName, {
+        type: fileType,
+      });
+      const dataTransfer = new DataTransfer();
+      const el = subject[0];
+
+      dataTransfer.items.add(testFile);
+      el.files = dataTransfer.files;
+    });
+  });
+});
+
+// UTILS
+

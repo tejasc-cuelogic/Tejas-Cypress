@@ -17,7 +17,7 @@ export const typeOtpCode = () => {
 };
 
 export const btnClickAndWait = (operationName) => {
-  cy.get('button.next').click();
+  cy.get('button.next').click({ force: true });
   cy.wait(`@${operationName}`);
   cy.wait(1000);
 };

@@ -1,4 +1,4 @@
-import { registerApiCall } from "../common";
+import { registerApiCall } from '../common';
 
 export const legalDetailsMeta = {
   salutation: 'Mr.',
@@ -13,7 +13,8 @@ export const legalDetailsMeta = {
   ssn: '112223333',
 };
 export const fillLegalDetailsForm = () => {
-  cy.get('form').within(() => {
+  cy.wait(3000);
+  cy.get('div.content > form').within(() => {
     cy.get('div[name="title"]')
       .click()
       .get(`div[role="option"]:contains(${legalDetailsMeta.salutation})`)
