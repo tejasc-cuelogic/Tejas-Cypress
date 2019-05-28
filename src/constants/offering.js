@@ -125,3 +125,12 @@ export const CAMPAIGN_OFFERING_STAGE = {
   COMPLETE: 'Completed',
   DEFAULT: 'Default',
 };
+
+export const OFFERING_REGULATIONS = {
+  FP_TX: 'FP - TX',
+  TX_CF: 'TX - CF',
+  FP_CF: 'FP - CF',
+  BD_CF: 'BD - CF',
+  BD_506C: 'BD - 506C',
+  BD_CF_506C: 'BD - Parallel',
+};

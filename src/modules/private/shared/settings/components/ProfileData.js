@@ -18,7 +18,6 @@ import { InlineLoader, UserAvatar, Image64 } from '../../../../../theme/shared';
 import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
 import EstablishProfile from '../../../investor/accountSetup/containers/establishProfile';
 
-
 @inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {

@@ -19,6 +19,11 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
           dateRequested
         }
       }
+      userInfo {
+        locked {
+          lock
+        }
+      }
     }
     resultCount
     }

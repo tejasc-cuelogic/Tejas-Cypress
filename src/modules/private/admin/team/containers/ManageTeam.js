@@ -12,6 +12,7 @@ export default class ManageTeam extends Component {
     const { match } = this.props;
     return (
       <PrivateLayout
+        refMatch={this.props.refMatch}
         {...this.props}
       >
         <AllTeam match={match} />
