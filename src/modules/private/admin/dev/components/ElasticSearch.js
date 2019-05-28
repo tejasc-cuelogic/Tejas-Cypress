@@ -75,7 +75,7 @@ export default class ElasticSearch extends Component {
                 <Card.Content>
                   {map(['index_a', 'index_b'], e => (
                     <Header as="h5">
-                      {get(es, 'active') === get(es[e], 'indexName') ?
+                      {get(es, 'active') === get(es[e], 'indexNameq') ?
                         <Button floated="right" compact disabled content="Primary" /> :
                         <Aux>
                           <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />

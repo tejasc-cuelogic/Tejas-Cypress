@@ -51,11 +51,11 @@ export class ElasticSearchStore {
   }
 
   @action
-  esMutations = (mutation, indexAliasName) => new Promise((resolve, reject) => {
+  esMutations = (mutation, index) => new Promise((resolve, reject) => {
     client
       .mutate({
         mutation: elasticSearchQueries[mutation],
-        variables: { indexAliasName },
+        variables: { index },
       })
       .then((result) => {
         Helper.toast('Your request is processed successfully.', 'success');
@@ -83,17 +83,23 @@ export class ElasticSearchStore {
   }
 
   @action
-  swapIndexAliases = (indexAliasName) => {
-    this.swapIndex = graphql({
-      client,
-      query: elasticSearchQueries.swapIndexOnAlias,
-      variables: { indexAliasName },
-      onError: () => {
+  swapIndexAliases = indexAliasName => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: elasticSearchQueries.swapIndexOnAlias,
+        variables: { indexAliasName },
+      })
+      .then((result) => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        resolve(result);
         this.setFieldValue('inProgress', false);
+      })
+      .catch((error) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-    });
-  }
+        reject(error);
+        this.setFieldValue('inProgress', false);
+      });
+  });
 
   @action
   getESAuditPara = (indexAliasName, documentId = 'RANDOM') => {
