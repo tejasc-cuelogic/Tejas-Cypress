@@ -9,6 +9,9 @@ export default class EsAudit extends Component {
   componentWillMount() {
     this.props.elasticSearchStore.resetForm('ES_AUDIT_FRM');
   }
+  onSubmit = () => {
+    this.props.elasticSearchStore.getESAuditPara();
+  }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
@@ -25,7 +28,7 @@ export default class EsAudit extends Component {
             <Button floated="right" primary size="large" className="very relaxed" content="Set new password" />
             <FormInput
               name="random"
-              fielddata={ES_AUDIT_FRM.random}
+              fielddata={ES_AUDIT_FRM.fields.random}
               changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
             />
             <Grid>

@@ -72,7 +72,7 @@ export class ElasticSearchStore {
   getESAudit = () => {
     this.esAudit = graphql({
       client,
-      query: elasticSearchQueries.getESAudit,
+      query: elasticSearchQueries.getESAuditList,
       variables: {},
       onError: () => {
         this.setFieldValue('inProgress', false);
