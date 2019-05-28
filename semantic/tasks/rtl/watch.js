@@ -22,7 +22,7 @@ var
   replace      = require('gulp-replace'),
   rtlcss       = require('gulp-rtlcss'),
   uglify       = require('gulp-uglify'),
-  replaceExt   = require('replace-ext'),
+  util         = require('gulp-util'),
   watch        = require('gulp-watch'),
 
   // user config
@@ -107,16 +107,16 @@ module.exports = function(callback) {
       else if(isPackagedTheme) {
         console.log('Change detected in packaged theme');
         lessPath = lessPath.replace(tasks.regExp.theme, source.definitions);
-        lessPath = replaceExt(file.path, '.less');
+        lessPath = util.replaceExtension(file.path, '.less');
       }
       else if(isSiteTheme) {
         console.log('Change detected in site theme');
         lessPath = lessPath.replace(source.site, source.definitions);
-        lessPath = replaceExt(file.path, '.less');
+        lessPath = util.replaceExtension(file.path, '.less');
       }
       else if(isDefinition) {
         console.log('Change detected in definition');
-        lessPath = replaceExt(file.path, '.less');
+        lessPath = util.replaceExtension(file.path, '.less');
       }
 
       /*--------------
@@ -154,7 +154,7 @@ module.exports = function(callback) {
           })
         ;
 
-        compressedStream
+        compressedStream = stream
           .pipe(plumber())
           .pipe(replace(assets.source, assets.compressed))
           .pipe(minifyCSS(settings.minify))

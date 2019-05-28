@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import { Modal, Header, Card, Menu, Button, Statistic } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
 import OffersPanel from '../../../shared/offerings/components/shared/OffersPanel';
-
-const getModule = component => Loadable({
-  loader: () => import(`./tabs/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+import GeneralConditions from './tabs/GeneralConditions';
+import AdditionalTerms from './tabs/AdditionalTerms';
+import PaymentChart from './tabs/PaymentChart';
+import SummaryOfFees from './tabs/SummaryOfFees';
+import TaxReporting from './tabs/TaxReporting';
 
 @inject('businessAppReviewStore', 'uiStore')
 @withRouter
@@ -52,15 +49,15 @@ export default class ChooseOffer extends Component {
       selectedOfferIndex, offerLoading, fetchBusinessApplicationOffers,
     } = businessAppReviewStore;
     const navItems = [
-      { title: 'General Conditions', to: 'general-conditions' },
-      { title: 'Summary of Fees', to: 'summary-of-fees' },
-      { title: 'Tax Reporting', to: 'tax-reporting' },
-      { title: 'Payment Chart', to: 'payment-chart' },
+      { title: 'General Conditions', to: 'general-conditions', component: GeneralConditions },
+      { title: 'Summary of Fees', to: 'summary-of-fees', component: SummaryOfFees },
+      { title: 'Tax Reporting', to: 'tax-reporting', component: TaxReporting },
+      { title: 'Payment Chart', to: 'payment-chart', component: PaymentChart },
     ];
     if (fetchBusinessApplicationOffers) {
       const offer = fetchBusinessApplicationOffers.offers.offer[selectedOfferIndex];
       if (offer && offer.additionalTerms) {
-        navItems.push({ title: 'Additional Terms', to: 'additional-terms' });
+        navItems.push({ title: 'Additional Terms', to: 'additional-terms', component: AdditionalTerms });
       }
     }
     return (
@@ -109,11 +106,11 @@ export default class ChooseOffer extends Component {
                   <Route
                     exact
                     path={match.url}
-                    component={getModule(this.module(navItems[0].title))}
+                    component={navItems[0].component}
                   />
                   {
                     navItems.map(item => (
-                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={item.component} />
                     ))
                   }
                 </Switch>
