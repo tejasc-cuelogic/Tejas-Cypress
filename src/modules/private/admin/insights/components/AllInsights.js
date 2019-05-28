@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { join } from 'lodash';
 import { Card, Table, Button, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
@@ -81,6 +81,9 @@ export default class AllInsights extends Component {
     if (articleListingLoader) {
       return <InlineLoader />;
     }
+    if (adminInsightList.length === 0) {
+      return <InlineLoader text="No data found." />;
+    }
     return (
       <Aux>
         <Card fluid>
@@ -104,14 +107,14 @@ export default class AllInsights extends Component {
               <Table.Body>
                 {adminInsightList ? adminInsightList.map(record => (
                   <Table.Row key={record.id}>
-                    <Table.Cell>{record.title || '-'}</Table.Cell>
+                    <Table.Cell><Link to={`app/insights/${record.id}`}>{record.title || '-'}</Link></Table.Cell>
                     <Table.Cell>{record.category || 'N/A'}</Table.Cell>
                     <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>
                     <Table.Cell>
                       {record.author || 'N/A'}
                     </Table.Cell>
                     <Table.Cell><Label color={`${record.articleStatus === 'PUBLISHED' ? 'green' : record.articleStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell>{record.updated && record.updated.date}
                       <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
                     </Table.Cell>
                     <Table.Cell textAlign="center">

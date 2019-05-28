@@ -121,6 +121,14 @@ export class ArticleStore {
     }
 
     @action
+    resetFormData = (formData) => {
+      Object.keys(this.ARTICLE_FRM.fields).map(action((key) => {
+        this.ARTICLE_FRM.fields[key].value = formData[key];
+      }));
+      Validator.validateForm(this.ARTICLE_FRM);
+    }
+
+    @action
     setForm = (res) => {
       Validator.validateForm(this.ARTICLE_FRM);
       if (!this.article.loading) {
@@ -146,6 +154,9 @@ export class ArticleStore {
     @action
     save = (id) => {
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
+      // if (data.minuteRead && data.minuteRead === null) {
+      //   delete (data.minuteRead);
+      // }
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
@@ -163,6 +174,8 @@ export class ArticleStore {
           uiStore.setProgress(false);
         });
     }
+
+    sortBydate = data => orderBy(data, o => (o.updated.date ? new Date(o.updated.date) : ''), ['desc'])
 
     @action
     sortArticlesByFilter = () => {
@@ -184,7 +197,7 @@ export class ArticleStore {
         },
         onFetch: (res) => {
           if (res && res.insightArticlesListByFilter) {
-            this.setDb(res.insightArticlesListByFilter);
+            this.setDb(this.sortBydate(res.insightArticlesListByFilter));
           }
         },
       });

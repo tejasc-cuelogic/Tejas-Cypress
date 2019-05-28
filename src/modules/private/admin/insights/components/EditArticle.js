@@ -17,6 +17,11 @@ export default class EditArticle extends Component {
   state = { displayMode: false };
   componentWillMount() {
     const { id } = this.props.match.params;
+    if (id === 'new') {
+      this.props.articleStore.resetFormData({
+        categoryId: this.props.match.params.categoryId,
+      });
+    }
     if (id !== 'new') {
       this.initiateFlow(id);
       this.props.articleStore.setFormData(id);
