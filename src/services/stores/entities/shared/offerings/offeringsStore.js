@@ -50,7 +50,7 @@ export class OfferingsStore {
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages } :
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-      fetchPolicy: 'network-only',
+      // fetchPolicy: 'network-only',
       onFetch: (res) => {
         if (res && !this.data.loading) {
           this.requestState.page = 1;
