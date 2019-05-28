@@ -3,17 +3,18 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button, Grid } from 'semantic-ui-react';
 import { FormInput } from '../../../../../theme/form';
 
-@inject('authStore', 'uiStore')
+@inject('elasticSearchStore')
 @observer
 export default class EsAudit extends Component {
   componentWillMount() {
-    // this.props.authStore.resetForm('CHANGE_PASS_FRM');
+    this.props.elasticSearchStore.resetForm('ES_AUDIT_FRM');
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
   }
   render() {
+    const { ES_AUDIT_FRM, formChange } = this.props.elasticSearchStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -24,8 +25,8 @@ export default class EsAudit extends Component {
             <Button floated="right" primary size="large" className="very relaxed" content="Set new password" />
             <FormInput
               name="random"
-              fielddata={{ name: 'random', value: 'radnom', label: 'Random' }}
-              // changed={changePassChange}
+              fielddata={ES_AUDIT_FRM.random}
+              changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
             />
             <Grid>
               <Grid.Row columns={2}>

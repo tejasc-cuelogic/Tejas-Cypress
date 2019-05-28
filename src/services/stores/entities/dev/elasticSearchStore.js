@@ -6,11 +6,12 @@ import { generateInvestorFolderStructure, storageDetailsForInvestor } from '../.
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { STORAGE_DETAILS_SYNC, BULK_STORAGE_DETAILS_SYNC } from '../../../constants/admin/data';
+import { STORAGE_DETAILS_SYNC, BULK_STORAGE_DETAILS_SYNC, ES_AUDIT } from '../../../constants/admin/data';
 import uiStore from '../../../stores/entities/shared/uiStore';
 
 export class ElasticSearchStore {
   @observable STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
+  @observable ES_AUDIT_FRM = Validator.prepareFormObject(ES_AUDIT);
   @observable BULK_STORAGE_DETAILS_SYNC_FRM =
     Validator.prepareFormObject(BULK_STORAGE_DETAILS_SYNC);
   @observable inProgress = {};
@@ -73,7 +74,6 @@ export class ElasticSearchStore {
       client,
       query: elasticSearchQueries.getESAudit,
       variables: {},
-      fetchPolicy: 'network-only',
       onError: () => {
         this.setFieldValue('inProgress', false);
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -87,7 +87,6 @@ export class ElasticSearchStore {
       client,
       query: elasticSearchQueries.swapIndexAliases,
       variables: {},
-      fetchPolicy: 'network-only',
       onError: () => {
         this.setFieldValue('inProgress', false);
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -105,7 +104,6 @@ export class ElasticSearchStore {
       client,
       query: elasticSearchQueries.getESAudit,
       variables,
-      fetchPolicy: 'network-only',
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
@@ -152,6 +150,14 @@ export class ElasticSearchStore {
           rej(error);
         });
     });
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    this[form] = Validator.onChange(
+      this[form],
+      Validator.pullValues(e, result),
+    );
   }
 
   @action

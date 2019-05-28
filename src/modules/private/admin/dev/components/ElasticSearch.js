@@ -21,9 +21,7 @@ export default class ElasticSearch extends Component {
     module: '',
   };
   componentWillMount() {
-    if (this.props.match.isExact) {
-      this.props.elasticSearchStore.getESAudit();
-    }
+    this.props.elasticSearchStore.getESAudit();
   }
   elasticSearchHandler = (alias, module) => {
     this.cancelConfirmModal();
