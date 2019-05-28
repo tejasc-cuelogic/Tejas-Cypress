@@ -461,14 +461,18 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-setting',
     title: 'Dev',
-    capability: 'ELASTICSEARCH_ANY',
+    capability: 'DEV_ANY',
     to: 'dev',
     path: 'admin/dev',
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 1,
     subNavigations: [
-      { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
-      { title: 'Data', to: 'data', component: 'Data' },
+      {
+        title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch', capability: 'ELASTICSEARCH_ANY',
+      },
+      {
+        title: 'Data', to: 'data', component: 'Data', capability: 'DATA_ANY',
+      },
     ],
   },
 ];

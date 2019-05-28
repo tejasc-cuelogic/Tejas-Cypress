@@ -40,9 +40,22 @@ export class UserStore {
       return opt;
     };
     let capabilities = [];
-    const primaryCapabilities = [...PRIVATE_NAV.map(n => n.capability),
-      ...PRIVATE_NAV.map(n => n.subNavigations &&
-        n.subNavigations.map(c => c.capability))];
+    const primaryCapabilities = [];
+    PRIVATE_NAV.forEach((n) => {
+      if (n.capability && !primaryCapabilities.includes(n.capability)) {
+        primaryCapabilities.push(n.capability);
+      }
+      if (n.subNavigations) {
+        n.subNavigations.forEach((c) => {
+          if (c.capability && !primaryCapabilities.includes(c.capability)) {
+            primaryCapabilities.push(c.capability);
+          }
+        });
+      }
+    });
+    // const primaryCapabilities = [...PRIVATE_NAV.map(n => n.capability),
+    //   ...PRIVATE_NAV.map(n => n.subNavigations &&
+    //     n.subNavigations.map(c => c.capability))];
     primaryCapabilities.forEach((c) => {
       if (c) {
         const meta = c.replace('_ANY', '');
