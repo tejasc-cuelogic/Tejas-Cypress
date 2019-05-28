@@ -131,6 +131,8 @@ class AccountType extends Component {
     prepareAccountTypes(accountToConsider);
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
+    // const offeringDetailObj =
+    // this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
     let offeringDetailObj = {};
     if (this.props.changeInvest) {
       offeringDetailObj = campaign && campaign.keyTerms ? campaign : get(getInvestorAccountById, 'offering');
@@ -243,6 +245,8 @@ class AccountType extends Component {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
     const offeringId = get(campaign, 'id');
+    // const offeringDetailObj =
+    //  this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
     let offeringDetailObj = {};
     if (this.props.changeInvest) {
       offeringDetailObj = campaign && campaign.keyTerms ? campaign : get(getInvestorAccountById, 'offering');

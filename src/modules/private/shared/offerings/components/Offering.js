@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
+import Loadable from 'react-loadable';
 import { observer, inject } from 'mobx-react';
 import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
+import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import OfferingOverview from './offering/OfferingOverview';
-import OfferingCompany from './offering/OfferingCompany';
-import Misc from './offering/Misc';
-import OfferingLaunch from './offering/OfferingLaunch';
 
+const getModule = component => Loadable({
+  loader: () => import(`./offering/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 
 @inject('userStore', 'uiStore', 'offeringCreationStore')
 @withRouter
@@ -28,15 +32,15 @@ export default class Offering extends Component {
   render() {
     const { isIssuer } = this.props.userStore;
     let navItems = [
-      { title: 'Overview', to: 'overview', component: OfferingOverview },
-      { title: 'About the Company', to: 'about-company', component: OfferingCompany },
+      { title: 'Overview', to: 'overview', component: 'OfferingOverview' },
+      { title: 'About the Company', to: 'about-company', component: 'OfferingCompany' },
     ];
     if (!isIssuer) {
       navItems = [
         ...navItems,
         ...[
-          { title: 'Misc', to: 'misc', component: Misc },
-          { title: 'Launch', to: 'launch', component: OfferingLaunch },
+          { title: 'Misc', to: 'misc', component: 'Misc' },
+          { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
         ],
       ];
     }
@@ -52,10 +56,10 @@ export default class Offering extends Component {
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <div className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
               <Switch>
-                <Route exact path={match.url} component={navItems[0].component} />
+                <Route exact path={match.url} component={getModule(navItems[0].component)} />
                 {
                   navItems.map(item => (
-                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={item.component} />
+                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
                   ))
                 }
               </Switch>

@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -10,11 +11,13 @@ import { InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
-import PreQualification from '../components/details/PreQualification';
-import BusinessDetails from '../components/details/BusinessDetails';
-import Performance from '../components/details/Performance';
-import Documentation from '../components/details/Documentation';
-import Review from '../components/details/Review';
+
+const getModule = component => Loadable({
+  loader: () => import(`../components/details/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 
 @inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
 @observer
@@ -81,15 +84,15 @@ export default class ApplicationDetails extends Component {
     } = businessApplicationDetailsAdmin;
     let navItems = [
       { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
-      { title: 'Pre-qualification', to: 'pre-qualification', component: PreQualification },
+      { title: 'Pre-qualification', to: 'pre-qualification' },
     ];
     if ((applicationStatus || prequalStatus) !==
     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
       navItems = [
         ...navItems,
-        { title: 'Business Details', to: 'business-details', component: BusinessDetails },
-        { title: 'Performance', to: 'performance', component: Performance },
-        { title: 'Documentation', to: 'documentation', component: Documentation },
+        { title: 'Business Details', to: 'business-details' },
+        { title: 'Performance', to: 'performance' },
+        { title: 'Documentation', to: 'documentation' },
       ];
     }
     if (!deleted && !stashed && ((applicationStatus || prequalStatus) ===
@@ -99,7 +102,7 @@ export default class ApplicationDetails extends Component {
     BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
       navItems = [
         ...navItems,
-        { title: 'Review', to: 'review', component: Review },
+        { title: 'Review', to: 'review' },
       ];
     }
     const { businessName, contactDetails } =
@@ -209,12 +212,12 @@ export default class ApplicationDetails extends Component {
               <Route
                 exact
                 path={match.url}
-                component={navItems[0].component}
+                component={navItems[0].component || getModule(this.module(navItems[0].title))}
               />
               {
                 navItems.map((item) => {
                   const { params } = match;
-                  const CurrentComponent = item.component;
+                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
                   return (
                     <Route
                       key={item.to}

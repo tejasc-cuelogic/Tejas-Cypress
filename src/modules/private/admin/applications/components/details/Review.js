@@ -2,41 +2,39 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Grid, Icon, Button, Divider } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
 import { mapValues } from 'lodash';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
+import { DataFormatter } from '../../../../../../helper';
+import { InlineLoader } from '../../../../../../theme/shared';
+// import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import { NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
-import Overview from './review/Overview';
-import PreQualification from './review/PreQualification';
-import BusinessPlan from './review/BusinessPlan';
-import Projections from './review/Projections';
-import Documentation from './review/Documentation';
-import Miscellaneous from './review/Miscellaneous';
-import Contingencies from './review/Contingencies';
-import Offer from './review/Offer';
-import Inputs from './review/Inputs';
-import Variables from './review/Variables';
-import Results from './review/Results';
-import Model from './review/Model';
+
+const getModule = component => Loadable({
+  loader: () => import(`./review/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 
 const navItems = [
-  { title: 'Overview', to: 'overview', component: Overview },
-  { title: 'PreQualification', to: 'preQualification', component: PreQualification },
-  { title: 'Business Plan', to: 'businessPlan', component: BusinessPlan },
-  { title: 'Projections', to: 'projections', component: Projections },
-  { title: 'Documentation', to: 'documentation', component: Documentation },
-  { title: 'Miscellaneous', to: 'miscellaneous', component: Miscellaneous },
-  { title: 'Contingencies', to: 'contingencies', component: Contingencies },
+  { title: 'Overview', to: 'overview' },
+  { title: 'PreQualification', to: 'preQualification' },
+  { title: 'Business Plan', to: 'businessPlan' },
+  { title: 'Projections', to: 'projections' },
+  { title: 'Documentation', to: 'documentation' },
+  { title: 'Miscellaneous', to: 'miscellaneous' },
+  { title: 'Contingencies', to: 'contingencies' },
   {
     title: 'Model',
     to: 'model',
-    component: Model,
     subNavigations: [
-      { title: 'Inputs', to: 'model/inputs', component: Inputs },
-      { title: 'Variables', to: 'model/variables', component: Variables },
-      { title: 'Results', to: 'model/results', component: Results },
+      { title: 'Inputs', to: 'model/inputs', component: 'Inputs' },
+      { title: 'Variables', to: 'model/variables', component: 'Variables' },
+      { title: 'Results', to: 'model/results', component: 'Results' },
     ],
   },
-  { title: 'Offer', to: 'offer', component: Offer },
+  { title: 'Offer', to: 'offer' },
 ];
 
 @inject('businessAppReviewStore')
@@ -49,6 +47,8 @@ export default class Review extends Component {
       this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);
     }
   }
+
+  module = name => DataFormatter.upperCamelCase(name);
 
   representAddon = summary => mapValues(summary, s => (
     s !== '' && <Icon color={s === 'ns-check-circle' ? 'green' : 'orange'} name={s} />
@@ -85,10 +85,10 @@ export default class Review extends Component {
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>
-              <Route exact path={match.url} component={navItems[0].component} />
+              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
               {
                 navItems.map((item) => {
-                  const CurrentComponent = item.component;
+                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
                   return (
                     <Route
                       exact={false}
