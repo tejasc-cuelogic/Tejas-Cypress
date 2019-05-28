@@ -119,15 +119,6 @@ export class ArticleStore {
       }
       Validator.validateForm(this.ARTICLE_FRM);
     }
-
-    @action
-    resetFormData = (formData) => {
-      Object.keys(this.ARTICLE_FRM.fields).map(action((key) => {
-        this.ARTICLE_FRM.fields[key].value = formData[key];
-      }));
-      Validator.validateForm(this.ARTICLE_FRM);
-    }
-
     @action
     setForm = (res) => {
       Validator.validateForm(this.ARTICLE_FRM);
@@ -154,9 +145,6 @@ export class ArticleStore {
     @action
     save = (id) => {
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
-      // if (data.minuteRead && data.minuteRead === null) {
-      //   delete (data.minuteRead);
-      // }
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
@@ -195,6 +183,7 @@ export class ArticleStore {
           toDate: endDate,
           slug,
         },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.insightArticlesListByFilter) {
             this.setDb(this.sortBydate(res.insightArticlesListByFilter));
@@ -249,10 +238,9 @@ export class ArticleStore {
           }],
         }).then(() => {
           Helper.toast('Category deleted successfully.', 'success');
+          uiStore.setProgress(false);
         }).catch(() => {
           Helper.toast('Error while Deleting Category', 'error');
-        })
-        .finally(() => {
           uiStore.setProgress(false);
         });
     }

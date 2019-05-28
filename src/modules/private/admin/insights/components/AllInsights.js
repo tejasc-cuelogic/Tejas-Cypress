@@ -26,7 +26,6 @@ const meta = [
 export default class AllInsights extends Component {
   componentWillMount() {
     this.props.articleStore.sortArticlesByFilter();
-    console.log('allInsightsList ->', this.props.articleStore.allInsightsList);
   }
   globalActionChange = (e, { name, value }) =>
     this.props.articleStore.setGlobalAction(name, value);
@@ -72,13 +71,13 @@ export default class AllInsights extends Component {
 
   render() {
     const { articleStore } = this.props;
-    const { confirmBox } = this.props.uiStore;
+    const { confirmBox, inProgress } = this.props.uiStore;
     const {
       articleListingLoader,
       sortOrder,
       adminInsightList,
     } = articleStore;
-    if (articleListingLoader) {
+    if (articleListingLoader || inProgress) {
       return <InlineLoader />;
     }
     if (adminInsightList.length === 0) {
@@ -114,7 +113,7 @@ export default class AllInsights extends Component {
                       {record.author || 'N/A'}
                     </Table.Cell>
                     <Table.Cell><Label color={`${record.articleStatus === 'PUBLISHED' ? 'green' : record.articleStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
-                    <Table.Cell>{record.updated && record.updated.date}
+                    <Table.Cell>
                       <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
                     </Table.Cell>
                     <Table.Cell textAlign="center">

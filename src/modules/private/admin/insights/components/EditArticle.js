@@ -6,7 +6,7 @@ import { Modal, Header, Divider, Grid, Card, Form, Checkbox, Button } from 'sema
 import { MaskedInput, FormInput, FormDropDown, ImageCropper } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
-import { Image64 } from '../../../../../theme/shared';
+import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
 
 
@@ -17,15 +17,13 @@ export default class EditArticle extends Component {
   state = { displayMode: false };
   componentWillMount() {
     const { id } = this.props.match.params;
-    if (id === 'new') {
-      this.props.articleStore.resetFormData({
-        categoryId: this.props.match.params.categoryId,
-      });
-    }
+
     if (id !== 'new') {
       this.initiateFlow(id);
       this.props.articleStore.setFormData(id);
       this.props.articleStore.getCategoryList(false);
+    } else {
+      this.props.articleStore.reset();
     }
   }
   onDrop = (files, name) => {
@@ -71,10 +69,8 @@ export default class EditArticle extends Component {
     this.props.history.replace(this.props.refLink);
   };
 
-  save = (status) => {
-    console.log(status);
+  save = () => {
     this.props.articleStore.save(this.props.match.params.id);
-    this.props.history.push(this.props.refLink);
     this.handleCloseModal();
   }
   render() {
@@ -88,6 +84,9 @@ export default class EditArticle extends Component {
       handleVerifyFileExtension,
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
+    if (!categoriesDropdown) {
+      return <InlineLoader />;
+    }
     return (
       <Modal closeOnDimmerClick={false} closeOnEscape={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
