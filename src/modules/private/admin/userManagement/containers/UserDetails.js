@@ -4,39 +4,34 @@ import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty, includes, get } from 'lodash';
-import Loadable from 'react-loadable';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
-
-const getModule = component => Loadable({
-  loader: () => import(`../components/manage/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+import ProfileData from '../components/manage/ProfileData';
+import AccDetails from '../components/manage/AccountDetails';
+import BonusRewards from '../components/manage/BonusRewards';
 
 const navMeta = [
   {
-    title: 'Profile Data', to: 'profile-data', component: 'ProfileData',
+    title: 'Profile Data', to: 'profile-data', component: ProfileData,
   },
   {
-    title: 'Individual', to: 'individual', component: 'AccountDetails', accessibleTo: ['individual'],
+    title: 'Individual', to: 'individual', component: AccDetails, accessibleTo: ['individual'],
   },
   {
-    title: 'IRA', to: 'ira', component: 'AccountDetails', accessibleTo: ['ira'],
+    title: 'IRA', to: 'ira', component: AccDetails, accessibleTo: ['ira'],
   },
   {
-    title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
+    title: 'Entity', to: 'entity', component: AccDetails, accessibleTo: ['entity'],
   },
   {
-    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
+    title: 'Bonus Rewards', to: 'bonus-rewards', component: BonusRewards, accessibleTo: ['investor'], env: ['localhost', 'develop'],
   },
   {
-    title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
+    title: 'Activity', to: 'activity', component: ActivityHistory,
   },
 ];
 
@@ -139,8 +134,7 @@ export default class AccountDetails extends Component {
                 <Switch>
                   {
                     navItems.map((item) => {
-                      const CurrentModule = item.load === false ?
-                        item.component : getModule(item.component);
+                      const CurrentModule = item.component;
                       return (
                         <Route
                           key={item.to}

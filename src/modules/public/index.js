@@ -39,8 +39,8 @@ export default class Public extends React.Component {
         />
       ))}
       <Route path="/auth" component={Auth} />
+      <Route path="/password-protected" component={NotFound} />
       <Route exact path="/:fromUrl" component={RedirectManager} />
-      {/* <Route path="/:referralCode" component={Referral} /> */}
       <Route component={NotFound} />
     </Switch>
   );

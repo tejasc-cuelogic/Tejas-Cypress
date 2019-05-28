@@ -40,6 +40,7 @@ const metaTagsData = [
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
 @inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
+
 @withRouter
 @observer
 class App extends Component {
@@ -80,19 +81,18 @@ class App extends Component {
     if (isMobile) {
       document.activeElement.blur();
     }
-    if (this.props.authStore.isUserLoggedIn) {
-      authActions.getUserSession().then((session) => {
-        if (!session.isValid()) {
-          this.onIdle();
-        }
-      }).catch((err) => {
-        if (err && (get(err, 'code') === 'NotAuthorizedException' || get(err, 'code') === 'Refresh Token has been revoked' || get(err, 'code') === 'Access Token has been revoked')) {
-          this.onIdle();
-        }
-      });
-    } else {
+    authActions.getUserSession().then((session) => {
+      if (!session.isValid()) {
+        this.onIdle();
+        this.props.authStore.setUserLoggedIn(true);
+      }
+    }).catch((err) => {
+      if (err && (get(err, 'code') === 'NotAuthorizedException' || get(err, 'code') === 'Refresh Token has been revoked' || get(err, 'code') === 'Access Token has been revoked')) {
+        this.onIdle();
+      }
+      this.props.authStore.setUserLoggedIn(false);
       localStorage.removeItem('lastActiveTime');
-    }
+    });
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
     }
