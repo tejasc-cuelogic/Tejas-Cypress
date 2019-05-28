@@ -278,11 +278,21 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 1,
     subNavigations: [
-      { title: 'Categories', to: 'categories', component: 'categories' },
-      { title: 'Faqs', to: 'faqs', component: 'faqs' },
-      { title: 'Knowledge Base', to: 'knowledgeBase', component: 'knowledgeBase' },
-      { title: 'Insights', to: 'insights', component: 'insights' },
-      { title: 'Team', to: 'team', component: 'team' },
+      {
+        title: 'Categories', to: 'categories', component: 'categories', capability: 'CATEGORIES_ANY',
+      },
+      {
+        title: 'Faqs', to: 'faqs', component: 'faqs', capability: 'FAQ_ANY',
+      },
+      {
+        title: 'Knowledge Base', to: 'knowledgeBase', component: 'knowledgeBase', capability: 'KNOWLEDGE_BASE_ANY',
+      },
+      {
+        title: 'Insights', to: 'insights', component: 'insights', capability: 'INSIGHTS_ANY',
+      },
+      {
+        title: 'Team', to: 'team', component: 'team', capability: 'TEAM_ANY',
+      },
     ],
   },
   // {
