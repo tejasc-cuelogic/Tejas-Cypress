@@ -34,6 +34,7 @@ export default class Offerings extends Component {
       filters,
       requestState,
     } = this.props.offeringsStore;
+    const { inProgressArray } = this.props.uiStore;
     return (
       <div>
         <Form>
@@ -52,7 +53,7 @@ export default class Offerings extends Component {
                     <Grid.Column width={5} textAlign="right" floated="right">
                       <Button.Group floated="right">
                         {stage === 'creation' &&
-                          <Button color="green" as={Link} to={`${match.url}/new`} content="Create New Offering" />
+                          <Button color="green" as={Link} to={`${match.url}/new`} loading={inProgressArray.includes('upsert')} content="Create New Offering" />
                         }
                         <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
                       </Button.Group>

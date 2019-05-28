@@ -975,7 +975,7 @@ export class OfferingCreationStore {
   }
   addNewOffer = () => {
     const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
-    uiStore.setProgress();
+    uiStore.addMoreInProgressArray('upsert');
     client
       .mutate({
         mutation: upsertOffering,
@@ -986,14 +986,13 @@ export class OfferingCreationStore {
         }],
       })
       .then((res) => {
+        uiStore.removeOneFromProgressArray(false);
         this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
         Helper.toast('Offering created successfully.', 'success');
       })
       .catch(() => {
+        uiStore.removeOneFromProgressArray(false);
         Helper.toast('Error while creating offer', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
       });
   }
 

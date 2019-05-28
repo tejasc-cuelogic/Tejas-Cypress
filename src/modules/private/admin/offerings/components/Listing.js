@@ -20,7 +20,7 @@ const actions = {
 @withRouter
 @observer
 export default class Listing extends Component {
-  state = { isPublic: false };
+  state = { isPublic: false, loadingOfferId: '' };
   componentWillMount() {
     this.props.offeringCreationStore.setFieldValue('isListingPage', true);
     this.props.offeringsStore.resetInitLoad();
@@ -33,7 +33,7 @@ export default class Listing extends Component {
     } else if (action === 'Edit') {
       this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
     } else if (action === 'Publish') {
-      this.setState({ isPublic: isPublished });
+      this.setState({ isPublic: isPublished, loadingOfferId: offeringId });
       this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
     }
   }
@@ -49,6 +49,7 @@ export default class Listing extends Component {
   }
   handleDeleteOffering = () => {
     const { offeringsStore, uiStore } = this.props;
+    this.setState({ loadingOfferId: uiStore.confirmBox.refId });
     offeringsStore.deleteOffering(uiStore.confirmBox.refId);
     this.props.uiStore.setConfirmBox('');
   }
@@ -169,7 +170,7 @@ export default class Listing extends Component {
                         {Object.keys(actions).map(action => (
                           action.label === 'Delete' && stage === 'engagement' ? '' :
                           <Button icon className="link-button" >
-                            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
+                            <Icon loading={this.props.uiStore.inProgressArray.includes(action) && offering.id === this.state.loadingOfferId} className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
                           </Button>
                         ))}
                       </Button.Group>

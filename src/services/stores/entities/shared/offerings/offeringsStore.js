@@ -50,7 +50,7 @@ export class OfferingsStore {
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages } :
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-      fetchPolicy: 'network-only',
+      // fetchPolicy: 'network-only',
       onFetch: (res) => {
         if (res && !this.data.loading) {
           this.requestState.page = 1;
@@ -69,6 +69,8 @@ export class OfferingsStore {
   }
   @action
   updateOfferingPublicaly = (id, isAvailablePublicly) => {
+    uiStore.addMoreInProgressArray('publish');
+    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === this.requestState.stage));
     const variables = {
       id,
       offeringDetails: { isAvailablePublicly },
@@ -77,10 +79,18 @@ export class OfferingsStore {
       .mutate({
         mutation: updateOffering,
         variables,
+        refetchQueries: [{
+          query: allOfferings,
+          variables: { stage: reqStages },
+        }],
       }).then(() => {
+        uiStore.removeOneFromProgressArray('publish');
         this.initRequest(this.requestState);
         Helper.toast('Offering updated successfully.', 'success');
-      }).catch(() => Helper.toast('Error while updating offering', 'error'));
+      }).catch(() => {
+        uiStore.removeOneFromProgressArray('publish');
+        Helper.toast('Error while updating offering', 'error');
+      });
   }
 
   @action
@@ -132,6 +142,7 @@ export class OfferingsStore {
 
   @action
   deleteOffering = (id) => {
+    uiStore.addMoreInProgressArray('delete');
     const reqStages = Object.keys(pickBy(STAGES, s => s.ref === this.requestState.stage));
     client
       .mutate({
@@ -144,8 +155,14 @@ export class OfferingsStore {
           variables: { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
         }],
       })
-      .then(() => Helper.toast('Offering deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting offering', 'error'));
+      .then(() => {
+        uiStore.removeOneFromProgressArray('delete');
+        Helper.toast('Offering deleted successfully.', 'success');
+      })
+      .catch(() => {
+        uiStore.removeOneFromProgressArray('delete');
+        Helper.toast('Error while deleting offering', 'error');
+      });
   }
 
   @action
