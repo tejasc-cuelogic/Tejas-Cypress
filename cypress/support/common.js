@@ -17,10 +17,19 @@ export const typeOtpCode = () => {
 };
 
 export const btnClickAndWait = (operationName) => {
+  registerApiCall(operationName);
   cy.get('button.next').click({ force: true });
   cy.wait(`@${operationName}`);
   cy.wait(1000);
 };
+
+export const uploadFile = (selector = '') => {
+  registerApiCall('fileUpload');
+  cy.fixture('images/test-img.png').as('img');
+  cy.upload_file('images/test-img.png', 'png', selector || 'input[type=file]');
+  cy.wait('@fileUpload');
+
+}  
 
 export const clickRadioAndNext = (selector, radioVal, operationName) => {
   cy.get(selector).check(radioVal, { force: true });
