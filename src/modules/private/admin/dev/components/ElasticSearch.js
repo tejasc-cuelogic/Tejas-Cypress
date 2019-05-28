@@ -26,7 +26,7 @@ export default class ElasticSearch extends Component {
   elasticSearchHandler = (alias, module) => {
     this.cancelConfirmModal();
     if (module === 'AUDIT') {
-      this.props.history.push(`${this.props.match.url}/audit`);
+      this.props.history.push(`${this.props.match.url}/${alias}`);
     } else {
       this.props.elasticSearchStore.elasticSearchHandler(alias, module);
     }
@@ -78,7 +78,7 @@ export default class ElasticSearch extends Component {
                         <Button floated="right" compact disabled content="Primary" /> :
                         <Aux>
                           <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE')} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />
-                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `DELETE ${this.renderTitle(es.alias)} Indices`, 'DELETE')} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
+                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Delete ${this.renderTitle(es.alias)} Indices`, 'DELETE')} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
                         </Aux>
                       }
                       {this.renderTitle(get(es[e], 'indexName'))}
@@ -110,7 +110,7 @@ export default class ElasticSearch extends Component {
             className="deletion"
           />
         </Grid>
-        <Route exact path={`${match.url}/audit`} component={EsAudit} />
+        <Route exact path={`${match.url}/:auditAlias`} component={EsAudit} />
       </Aux>
     );
   }

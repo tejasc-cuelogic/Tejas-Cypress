@@ -7,10 +7,13 @@ import { FormInput } from '../../../../../theme/form';
 @observer
 export default class EsAudit extends Component {
   componentWillMount() {
+    const { auditAlias } = this.props.match.params;
+    this.props.elasticSearchStore.getESAuditPara(auditAlias);
     this.props.elasticSearchStore.resetForm('ES_AUDIT_FRM');
   }
   onSubmit = () => {
-    this.props.elasticSearchStore.getESAuditPara();
+    const { auditAlias } = this.props.match.params;
+    this.props.elasticSearchStore.getESAuditPara(auditAlias);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
@@ -25,7 +28,7 @@ export default class EsAudit extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>
-            <Button floated="right" primary size="large" className="very relaxed" content="Set new password" />
+            <Button floated="right" primary size="large" className="very relaxed" content="Submit" />
             <FormInput
               name="random"
               fielddata={ES_AUDIT_FRM.fields.random}

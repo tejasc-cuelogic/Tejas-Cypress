@@ -46,15 +46,16 @@ export class ElasticSearchStore {
       this.swapIndexAliases(alias);
     } else if (module === 'POPULATE' || module === 'DELETE') {
       const mutation = this.mutations[alias];
-      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0]);
+      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], alias.toUpperCase());
     }
   }
 
   @action
-  esMutations = mutation => new Promise((resolve, reject) => {
+  esMutations = (mutation, indexAliasName) => new Promise((resolve, reject) => {
     client
       .mutate({
         mutation: elasticSearchQueries[mutation],
+        variables: { indexAliasName },
       })
       .then((result) => {
         Helper.toast('Your request is processed successfully.', 'success');
@@ -82,11 +83,11 @@ export class ElasticSearchStore {
   }
 
   @action
-  swapIndexAliases = () => {
+  swapIndexAliases = (indexAliasName) => {
     this.swapIndex = graphql({
       client,
       query: elasticSearchQueries.swapIndexAliases,
-      variables: {},
+      variables: { indexAliasName },
       onError: () => {
         this.setFieldValue('inProgress', false);
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -95,11 +96,15 @@ export class ElasticSearchStore {
   }
 
   @action
-  getESAuditPara = (indexAliasName, random = 'RANDOM') => {
+  getESAuditPara = (indexAliasName, documentId = 'RANDOM') => {
+    const { fields } = this.ES_AUDIT_FRM;
+    const formData = Validator.evaluateFormData(fields);
     const variables = {
       indexAliasName,
-      random,
     };
+    if (formData.random || documentId) {
+      variables.random = formData.random || documentId;
+    }
     this.esAuditOutput = graphql({
       client,
       query: elasticSearchQueries.getESAudit,
