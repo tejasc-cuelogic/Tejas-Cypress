@@ -1,6 +1,7 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch, Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import Loadable from 'react-loadable';
 import { Menu } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
@@ -14,7 +15,12 @@ import NeedHelpModal from '../../../../shared/businessApplication/components/Nee
 import LendioSuccess from '../../../../shared/businessApplication/components/lendio/LendioSuccess';
 import { HeaderButtons } from '../../../../shared/businessApplication/components/HeaderButtons';
 
-const getModule = component => lazy(() => import(`../../../../shared/businessApplication/components//${component}`));
+const getModule = component => Loadable({
+  loader: () => import(`../../../../shared/businessApplication/components//${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 
 @inject('businessAppStore', 'uiStore', 'navStore')
 @withRouter
@@ -149,20 +155,18 @@ export default class BusinessApplication extends Component {
           />
         }
       >
-        <Suspense fallback={<InlineLoader />}>
-          <Switch>
-            <Route exact path={match.url} component={getModule(navItems[0].component)} />
-            <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
-            <Route exact path={`${match.url}/lendio`} render={props => <Application applicationId={match.params.applicationId} {...props} />} />
-            <Route exact path={`${match.url}/lendio/:condition`} component={LendioSuccess} />
-            <Route exact path={`${match.url}/success`} render={props => <Success refLink={match.url} applicationId={match.params.applicationId} {...props} />} />
-            {
-              navItems.map(item => (
-                <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
-              ))
-            }
-          </Switch>
-        </Suspense>
+        <Switch>
+          <Route exact path={match.url} component={getModule(navItems[0].component)} />
+          <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
+          <Route exact path={`${match.url}/lendio`} render={props => <Application applicationId={match.params.applicationId} {...props} />} />
+          <Route exact path={`${match.url}/lendio/:condition`} component={LendioSuccess} />
+          <Route exact path={`${match.url}/success`} render={props => <Success refLink={match.url} applicationId={match.params.applicationId} {...props} />} />
+          {
+            navItems.map(item => (
+              <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+            ))
+          }
+        </Switch>
         <Route exact path={`${match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={pathname} refLink={match.url} />} />
         <Route exact path={`${match.url}/need-help`} render={() => <NeedHelpModal />} />
       </PrivateLayout>

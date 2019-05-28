@@ -40,7 +40,6 @@ const metaTagsData = [
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
 @inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
-
 @withRouter
 @observer
 class App extends Component {
