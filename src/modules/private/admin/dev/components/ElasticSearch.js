@@ -19,26 +19,27 @@ export default class ElasticSearch extends Component {
     title: '',
     alias: null,
     module: '',
+    indexName: '',
   };
   componentWillMount() {
     this.props.elasticSearchStore.getESAudit();
   }
-  elasticSearchHandler = (alias, module) => {
+  elasticSearchHandler = (alias, module, indexName) => {
     this.cancelConfirmModal();
     if (module === 'AUDIT') {
       this.props.history.push(`${this.props.match.url}/${alias}`);
     } else {
-      this.props.elasticSearchStore.elasticSearchHandler(alias, module);
+      this.props.elasticSearchStore.elasticSearchHandler(alias, module, indexName);
     }
   }
-  toggleConfirmModal = (alias, title, module) => {
+  toggleConfirmModal = (alias, title, module, indexName) => {
     this.setState({
-      confirmModal: true, alias, title, module,
+      confirmModal: true, alias, title, module, indexName,
     });
   }
   cancelConfirmModal = () => {
     this.setState({
-      confirmModal: false, alias: null, title: '', module: '',
+      confirmModal: false, alias: null, title: '', module: '', indexName: '',
     });
   }
   renderTitle = title => capitalize(title.replace('_', ' '));
@@ -77,8 +78,8 @@ export default class ElasticSearch extends Component {
                       {get(es, 'active') === get(es[e], 'indexName') ?
                         <Button floated="right" compact disabled content="Primary" /> :
                         <Aux>
-                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE')} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />
-                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Delete ${this.renderTitle(es.alias)} Indices`, 'DELETE')} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
+                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />
+                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Delete ${this.renderTitle(es.alias)} Indices`, 'DELETE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
                         </Aux>
                       }
                       {this.renderTitle(get(es[e], 'indexName'))}
@@ -105,7 +106,8 @@ export default class ElasticSearch extends Component {
             content={`Are you sure to proceed with ${this.state.title}.`}
             open={this.state.confirmModal}
             onCancel={this.cancelConfirmModal}
-            onConfirm={() => this.elasticSearchHandler(this.state.alias, this.state.module)}
+            onConfirm={() =>
+              this.elasticSearchHandler(this.state.alias, this.state.module, this.state.indexName)}
             size="mini"
             className="deletion"
           />

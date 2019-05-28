@@ -23,10 +23,10 @@ export class ElasticSearchStore {
   @observable swapIndex = null;
   @observable mutations = {
     USERS: ['userDeleteIndices', 'userPopulateIndex'],
-    CrowdPay: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
-    Accreditation: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
-    LinkedBank: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
-    Offerings: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
+    CROWDPAY: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
+    ACCREDITATIONS: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
+    LINKEDBANK: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
+    OFFERINGS: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
   }
 
   @action
@@ -40,13 +40,13 @@ export class ElasticSearchStore {
   }
 
   @action
-  elasticSearchHandler = (alias, module) => {
+  elasticSearchHandler = (alias, module, indexName) => {
     this.setFieldValue('inProgress', `${alias}_${module}`);
     if (module === 'SWAP') {
       this.swapIndexAliases(alias);
     } else if (module === 'POPULATE' || module === 'DELETE') {
       const mutation = this.mutations[alias];
-      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], alias.toUpperCase());
+      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], indexName.toUpperCase());
     }
   }
 
@@ -86,7 +86,7 @@ export class ElasticSearchStore {
   swapIndexAliases = (indexAliasName) => {
     this.swapIndex = graphql({
       client,
-      query: elasticSearchQueries.swapIndexAliases,
+      query: elasticSearchQueries.swapIndexOnAlias,
       variables: { indexAliasName },
       onError: () => {
         this.setFieldValue('inProgress', false);
@@ -118,6 +118,11 @@ export class ElasticSearchStore {
   @computed get eSAudit() {
     return get(this.esAudit, 'data.getESAudit.indices[0]') ?
       toJS(get(this.esAudit, 'data.getESAudit.indices')) : [];
+  }
+
+  @computed get esAuditParaOutput() {
+    return get(this.esAudit, 'data.getESAudit.indices[0]') ?
+      toJS(get(this.esAudit, 'data.getESAudit.indices[0]')) : [];
   }
 
   @computed get eSAuditLoading() {
