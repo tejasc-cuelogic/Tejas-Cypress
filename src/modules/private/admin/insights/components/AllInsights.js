@@ -107,7 +107,7 @@ export default class AllInsights extends Component {
               <Table.Body>
                 {adminInsightList ? adminInsightList.map(record => (
                   <Table.Row key={record.id}>
-                    <Table.Cell><Link to={`app/insights/${record.id}`}>{record.title || '-'}</Link></Table.Cell>
+                    <Table.Cell><Link to={`insights/${record.id}`}>{record.title || '-'}</Link></Table.Cell>
                     <Table.Cell>{record.category || 'N/A'}</Table.Cell>
                     <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>
                     <Table.Cell>
