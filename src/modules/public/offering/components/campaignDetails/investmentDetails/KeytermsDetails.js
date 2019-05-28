@@ -17,6 +17,7 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore')
 @observer
 class KeyTermsDetails extends Component {

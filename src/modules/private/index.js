@@ -1,7 +1,8 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
+import Loadable from 'react-loadable';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../../modules/routes';
@@ -30,8 +31,13 @@ export default class Private extends React.Component {
         routes[`${item.path}_${item.to}`] = (
           <Route
             path={`/app/${item.to}`}
-            component={lazy(() => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]] :
-            item.path}`))}
+            component={Loadable({
+              loader: () => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]] :
+              item.path}`),
+              loading() {
+                return <InlineLoader />;
+              },
+            })}
             key={item.path}
           />
         );
@@ -73,22 +79,20 @@ export default class Private extends React.Component {
           signupStatus={signupStatus}
           accForm={INVESTMENT_ACC_TYPES}
         >
-          <Suspense fallback={<InlineLoader />}>
-            <Switch>
-              {privateRoutes.map(route => (
-                <Route
-                  exact={route.exact ? route.exact : false}
-                  path={route.path}
-                  component={(route.auth) ?
-                    route.auth(route.component, this.props) : route.component}
-                  key={route.path}
-                />
-              ))}
-              {Object.keys(routes).map(route => routes[route])}
-              {myRoutes.length > 0 ? <Route component={NotFound} /> :
-              <Route component={InlineLoader} />}
-            </Switch>
-          </Suspense>
+          <Switch>
+            {privateRoutes.map(route => (
+              <Route
+                exact={route.exact ? route.exact : false}
+                path={route.path}
+                component={(route.auth) ?
+                  route.auth(route.component, this.props) : route.component}
+                key={route.path}
+              />
+            ))}
+            {Object.keys(routes).map(route => routes[route])}
+            {myRoutes.length > 0 ? <Route component={NotFound} /> :
+            <Route component={InlineLoader} />}
+          </Switch>
         </SidebarLeftOverlay>
       );
     }
