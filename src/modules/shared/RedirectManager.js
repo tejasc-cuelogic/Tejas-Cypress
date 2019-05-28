@@ -11,6 +11,9 @@ export default class RedirectManager extends React.PureComponent {
   state = { found: 0, viaProtect: false }; // 0: not started, 1: loading, 2: found, 3: not found
   componentWillMount() {
     this.processRedirection();
+    if (window.location.pathname && window.location.pathname.includes('password-protected')) {
+      this.setState({ found: 3 });
+    }
   }
   componentWillUpdate() {
     const { viaProtect } = this.state;
