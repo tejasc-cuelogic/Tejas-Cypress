@@ -36,7 +36,7 @@ export default class EsAudit extends Component {
           {esAuditParaOutputLoading ?
             <InlineLoader /> :
             <Form error onSubmit={this.onSubmit}>
-              <Form.Group className="bottom-aligned mb-20">
+              <Form.Group className="bottom-aligned mb-40">
                 <FormInput
                   containerwidth={10}
                   name="random"
@@ -47,10 +47,6 @@ export default class EsAudit extends Component {
                   <Button primary content="Submit" />
                 </Form.Field>
               </Form.Group>
-              <Header as="h4" className="mb-30 mt-20">
-                Output:
-                <Header.Subheader>Document Id: XYZ</Header.Subheader>
-              </Header>
               <Grid>
                 <Grid.Row columns={2} divided>
                   <Grid.Column>
@@ -58,10 +54,10 @@ export default class EsAudit extends Component {
                       Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).startOf('hour').fromNow() : ''}</span>
                     </Header>
                     {get(esAuditParaOutput, 'index_a.record') ?
-                      <p>
+                      <div className="scrollable">
                         Objects are not valid as a React child (found: object with keys
                         {/* {get(esAuditParaOutput, 'index_a.record')} */}
-                      </p> :
+                      </div> :
                       <section className="bg-offwhite center-align">
                         <h3 className="grey-header">No data found</h3>
                       </section>
@@ -72,10 +68,10 @@ export default class EsAudit extends Component {
                       Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).startOf('hour').fromNow() : ''}</span>
                     </Header>
                     {get(esAuditParaOutput, 'index_b.record') ?
-                      <p>
+                      <div className="scrollable">
                         Objects are not valid as a React child (found: object with keys
                         {/* {get(esAuditParaOutput, 'index_b.record')} */}
-                      </p> :
+                      </div> :
                       <section className="bg-offwhite center-align">
                         <h3 className="grey-header">No data found</h3>
                       </section>
