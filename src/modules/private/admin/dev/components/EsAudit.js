@@ -24,6 +24,7 @@ export default class EsAudit extends Component {
     e.stopPropagation();
     this.props.history.goBack();
   }
+  renderTitle = title => capitalize(title.replace('_', ' '));
   render() {
     const {
       ES_AUDIT_FRM, formChange, esAuditParaOutput, esAuditParaOutputLoading,
@@ -53,7 +54,7 @@ export default class EsAudit extends Component {
                 <Grid.Row columns={2} divided>
                   <Grid.Column>
                     <Header as="h6">
-                      Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).startOf('hour').fromNow() : ''}</span>
+                      {this.renderTitle(get(esAuditParaOutput, 'index_a.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).startOf('hour').fromNow() : ''}</span>)
                     </Header>
                     {get(esAuditParaOutput, 'index_a.record') ?
                       <div className="scrollable">
@@ -66,7 +67,7 @@ export default class EsAudit extends Component {
                   </Grid.Column>
                   <Grid.Column>
                     <Header as="h6">
-                      Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).startOf('hour').fromNow() : ''}</span>
+                      {this.renderTitle(get(esAuditParaOutput, 'index_b.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).startOf('hour').fromNow() : ''}</span>)
                     </Header>
                     {get(esAuditParaOutput, 'index_b.record') ?
                       <div className="scrollable">
