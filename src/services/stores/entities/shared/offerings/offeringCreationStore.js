@@ -1013,12 +1013,14 @@ export class OfferingCreationStore {
         variables.adminId = this.POC_DETAILS_FRM.fields.id.value;
       }
     }
+    const toRefetch = ['editPocForm', 'keyTerms', false].includes(keyName) ? ['overview', 'creation', 'live', 'completed', 'failed'] : [];
     client
       .mutate({
         mutation: updateOffering,
         variables,
       })
       .then(() => {
+        offeringsStore.setFieldValue('reFetchList', toRefetch);
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(`${successMsg}`, msgType);

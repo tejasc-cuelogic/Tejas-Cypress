@@ -35,6 +35,7 @@ export class OfferingsStore {
   };
   @observable db;
   @observable currentId = '';
+  @observable reFetchList = [];
   @observable initLoad = [];
   @observable totalRaisedAmount = [];
 
@@ -51,8 +52,10 @@ export class OfferingsStore {
       variables: stage !== 'active' ? { stage: reqStages } :
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
       // fetchPolicy: 'network-only',
+      fetchPolicy: this.reFetchList.includes(stage) ? 'network-only' : undefined,
       onFetch: (res) => {
         if (res && !this.data.loading) {
+          this.reFetchList.splice(this.reFetchList.indexOf(stage), 1);
           this.requestState.page = 1;
           this.requestState.skip = 0;
           this.setDb(res.getOfferings);
