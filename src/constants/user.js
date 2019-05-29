@@ -126,11 +126,16 @@ export const FILTER_META = {
   ],
   subType: [
     { text: 'None', value: null },
-    { text: 'Users', value: 'USERS' },
-    { text: 'Linked Bank', value: 'LINKED_BANK' },
-    { text: 'Acceditation', value: 'ACCREDITATION' },
-    { text: 'CrowdPay', value: 'CROWDPAY' },
-    { text: 'Offering', value: 'OFFERING' },
+    { text: 'Users A', value: 'users_a' },
+    { text: 'Users B', value: 'users_b' },
+    { text: 'Linked Bank A', value: 'linkedbank_a' },
+    { text: 'Linked Bank B', value: 'linkedbank_b' },
+    { text: 'Acceditation A', value: 'accreditations_a' },
+    { text: 'Acceditation B', value: 'accreditations_b' },
+    { text: 'CrowdPay A', value: 'crowdpay_a' },
+    { text: 'CrowdPay B', value: 'crowdpay_b' },
+    { text: 'Offering A', value: 'offerings_a' },
+    { text: 'Offering B', value: 'offerings_b' },
   ],
 };
 
