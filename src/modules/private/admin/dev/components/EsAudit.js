@@ -28,28 +28,22 @@ export default class EsAudit extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>
+            <Form.Group className="bottom-aligned mb-20">
+              <FormInput
+                containerwidth={10}
+                name="random"
+                fielddata={ES_AUDIT_FRM.fields.random}
+                changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
+              />
+              <Form.Field width={4}>
+                <Button primary content="Submit" />
+              </Form.Field>
+            </Form.Group>
+            <Header as="h4" className="mb-30 mt-20">
+              Output:
+              <Header.Subheader>Document Id: XYZ</Header.Subheader>
+            </Header>
             <Grid>
-              <Grid.Row className="mb-20">
-                <Grid.Column width={10}>
-                  <FormInput
-                    name="random"
-                    fielddata={ES_AUDIT_FRM.fields.random}
-                    changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
-                  />
-                </Grid.Column>
-                <Grid.Column width={6} verticalAlign="middle">
-                  <Button primary content="Submit" />
-                </Grid.Column>
-              </Grid.Row>
-              <Divider section />
-              <Grid.Row columns={2} divided className="mt-20">
-                <Grid.Column>
-                  <Header as="h4">
-                    Output:
-                    <Header.Subheader className="mt-10">Document Id: XYZ</Header.Subheader>
-                  </Header>
-                </Grid.Column>
-              </Grid.Row>
               <Grid.Row columns={2} divided>
                 <Grid.Column>
                   <Header as="h6">
