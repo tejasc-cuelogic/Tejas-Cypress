@@ -1,80 +1,119 @@
 import React, { Component } from 'react';
-import { Grid, Card, Button, Confirm } from 'semantic-ui-react';
+import { Grid, Card, Button, Confirm, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { map, capitalize, get } from 'lodash';
+import Aux from 'react-aux';
+import moment from 'moment';
+import { Route, withRouter } from 'react-router-dom';
 import ActivityHistory from '../../../shared/ActivityHistory';
+import { InlineLoader } from './../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-
-const elasticSearchModules = [
-  { module: 'user', title: 'Users Index' },
-  { module: 'crowdPay', title: 'CrowdPay Index' },
-  { module: 'accreditation', title: 'Accreditation Index' },
-  { module: 'linkedBank', title: 'LinkedBank Index' },
-  { module: 'offerings', title: 'Offerings Index' },
-];
+import EsAudit from './EsAudit';
 
 @inject('elasticSearchStore')
 @withRouter
 @observer
 export default class ElasticSearch extends Component {
-  state = { confirmModal: false, title: '', mutation: null };
-  elasticSearchHandler = (mutation) => {
-    this.cancelConfirmModal();
-    this.props.elasticSearchStore.elasticSearchHandler(mutation);
+  state = {
+    confirmModal: false,
+    title: '',
+    alias: null,
+    module: '',
+    indexName: '',
+  };
+  componentWillMount() {
+    this.props.elasticSearchStore.getESAudit();
   }
-  toggleConfirmModal = (mutation, title) => {
-    this.setState({ confirmModal: true, mutation, title });
+  elasticSearchHandler = (alias, module, indexName) => {
+    this.cancelConfirmModal();
+    if (module === 'AUDIT') {
+      this.props.history.push(`${this.props.match.url}/${alias}`);
+    } else {
+      this.props.elasticSearchStore.elasticSearchHandler(alias, module, indexName);
+    }
+  }
+  toggleConfirmModal = (alias, title, module, indexName) => {
+    this.setState({
+      confirmModal: true, alias, title, module, indexName,
+    });
   }
   cancelConfirmModal = () => {
-    this.setState({ confirmModal: false, mutation: null, title: '' });
+    this.setState({
+      confirmModal: false, alias: null, title: '', module: '', indexName: '',
+    });
   }
+  renderTitle = title => capitalize(title.replace('_', ' '));
   render() {
     const { match, elasticSearchStore } = this.props;
-    const { inProgress } = elasticSearchStore;
+    const { inProgress, eSAudit, eSAuditLoading } = elasticSearchStore;
     const navItems = [
       { title: 'Activity History', to: '' },
     ];
+    if (eSAuditLoading) {
+      return <InlineLoader />;
+    }
     return (
-      <Grid>
-        <Grid.Column width={5}>
-          {elasticSearchModules.map(es => (
-            <Card fluid className="elastic-search">
-              <Card.Content header={es.title} />
-              <Card.Content>
-                <Card.Description>
-                  <Button.Group compact size="mini" widths={3}>
-                    {/* <Button onClick={() => this.toggleConfirmModal(`${es.module}
-                  CreateIndices`, `Create ${es.title}`)} loading={inProgress ===
-                  `${es.module}CreateIndices`} content="Create" color="green" /> */}
-                    <Button onClick={() => this.toggleConfirmModal(`${es.module}PopulateIndex`, `Populate ${es.title}`)} loading={inProgress === `${es.module}PopulateIndex`} content="Generate" color="blue" />
-                    <Button onClick={() => this.toggleConfirmModal(`${es.module}DeleteIndices`, `Delete ${es.title}`)} loading={inProgress === `${es.module}DeleteIndices`} content="Delete" color="red" />
-                  </Button.Group>
-                </Card.Description>
-              </Card.Content>
-            </Card>
-          ))
-          }
-        </Grid.Column>
-        <Grid.Column width={11}>
-          <div className="sticky-sidebar">
-            <Card fluid>
-              <SecondaryMenu match={match} navItems={navItems} />
-              <ActivityHistory module="elasticSearch" showFilters={['activityType', 'activityUserType', 'ActivityDate', 'subType']} resourceId="ELASTIC_SEARCH" />
-            </Card>
-          </div>
-        </Grid.Column>
-        <Confirm
-          header="Confirm"
-          cancelButton="No"
-          confirmButton="Yes"
-          content={`Are you sure to proceed with ${this.state.title}.`}
-          open={this.state.confirmModal}
-          onCancel={this.cancelConfirmModal}
-          onConfirm={() => this.elasticSearchHandler(this.state.mutation)}
-          size="mini"
-          className="deletion"
-        />
-      </Grid>
+      <Aux>
+        <Grid>
+          <Grid.Column width={5}>
+            {eSAudit.length ?
+            map(eSAudit, es => (
+              <Card fluid className="elastic-search">
+                <Card.Content>
+                  <Grid>
+                    <Grid.Column width={7} verticalAlign="middle">
+                      <Header as="h5" className="mt-0">{`${this.renderTitle(es.alias)} Indices`}</Header>
+                    </Grid.Column>
+                    <Grid.Column width={9} floated="right">
+                      <Button.Group compact widths={2}>
+                        <Button onClick={() => this.toggleConfirmModal(es.alias, `Swap ${this.renderTitle(es.alias)} Indices`, 'SWAP')} loading={inProgress === `${es.alias}_SWAP`} content="Swap" color="blue" />
+                        <Button onClick={() => this.toggleConfirmModal(es.alias, `Audit ${this.renderTitle(es.alias)} Indices`, 'AUDIT')} loading={inProgress === `${es.alias}_AUDIT`} content="Audit" primary />
+                      </Button.Group>
+                    </Grid.Column>
+                  </Grid>
+                </Card.Content>
+                <Card.Content>
+                  {map(['index_a', 'index_b'], e => (
+                    <Header as="h5">
+                      {get(es, 'active') === get(es[e], 'indexName') ?
+                        <Button floated="right" compact disabled content="Primary" /> :
+                        <Aux>
+                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />
+                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Delete ${this.renderTitle(es.alias)} Indices`, 'DELETE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
+                        </Aux>
+                      }
+                      {this.renderTitle(get(es[e], 'indexName'))}
+                      <Header.Subheader>{get(es[e], 'created.date') ? moment(get(es[e], 'created.date')).startOf('hour').fromNow() : ''}</Header.Subheader>
+                    </Header>
+                  ))}
+                </Card.Content>
+              </Card>
+            )) : null
+            }
+          </Grid.Column>
+          <Grid.Column width={11}>
+            <div className="sticky-sidebar">
+              <Card fluid>
+                <SecondaryMenu match={match} navItems={navItems} />
+                <ActivityHistory module="elasticSearch" showFilters={['activityType', 'activityUserType', 'ActivityDate', 'subType']} resourceId="ELASTIC_SEARCH" />
+              </Card>
+            </div>
+          </Grid.Column>
+          <Confirm
+            header="Confirm"
+            cancelButton="No"
+            confirmButton="Yes"
+            content={`Are you sure to proceed with ${this.state.title}.`}
+            open={this.state.confirmModal}
+            onCancel={this.cancelConfirmModal}
+            onConfirm={() =>
+              this.elasticSearchHandler(this.state.alias, this.state.module, this.state.indexName)}
+            size="mini"
+            className="deletion"
+          />
+        </Grid>
+        <Route exact path={`${match.url}/:auditAlias`} component={EsAudit} />
+      </Aux>
     );
   }
 }
