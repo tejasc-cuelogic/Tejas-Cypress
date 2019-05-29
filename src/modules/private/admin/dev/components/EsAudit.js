@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Form, Button, Grid, Divider } from 'semantic-ui-react';
+import { Modal, Header, Form, Button, Grid } from 'semantic-ui-react';
 import { FormInput } from '../../../../../theme/form';
 
 @inject('elasticSearchStore')
@@ -28,7 +28,7 @@ export default class EsAudit extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>
-            <Form.Group className="bottom-aligned mb-20">
+            <Form.Group className="bottom-aligned mb-40">
               <FormInput
                 containerwidth={10}
                 name="random"
@@ -39,35 +39,103 @@ export default class EsAudit extends Component {
                 <Button primary content="Submit" />
               </Form.Field>
             </Form.Group>
-            <Header as="h4" className="mb-30 mt-20">
-              Output:
-              <Header.Subheader>Document Id: XYZ</Header.Subheader>
-            </Header>
             <Grid>
-              <Grid.Row columns={2} divided>
+              <Grid.Row columns={2}>
                 <Grid.Column>
                   <Header as="h6">
-                    Count: <span className="ml-10">1 hr ago</span>
+                    Count:1 <span className="ml-10">1 hr ago</span>
                   </Header>
-                  <p>
+                  <div className="scrollable">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.
-                  </p>
-                  <section className="bg-offwhite center-align">
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                  </div>
+                  {/* <section className="bg-offwhite center-align">
                     <h3 className="grey-header">No data found</h3>
-                  </section>
+                  </section> */}
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h6">
                     Count: 1 <span className="ml-10">1 hr ago</span>
                   </Header>
-                  <p>
+                  <div className="scrollable">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.
-                  </p>
-                  <section className="bg-offwhite center-align">
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit, sed do eiusmod
+                  </div>
+                  {/* <section className="bg-offwhite center-align">
                     <h3 className="grey-header">No data found</h3>
-                  </section>
+                  </section> */}
                 </Grid.Column>
               </Grid.Row>
             </Grid>
