@@ -23,10 +23,10 @@ export class ElasticSearchStore {
   @observable swapIndex = null;
   @observable mutations = {
     USERS: ['userDeleteIndices', 'userPopulateIndex'],
-    CrowdPay: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
-    Accreditation: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
-    LinkedBank: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
-    Offerings: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
+    CROWDPAY: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
+    ACCREDITATIONS: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
+    LINKEDBANK: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
+    OFFERINGS: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
   }
 
   @action
@@ -40,22 +40,22 @@ export class ElasticSearchStore {
   }
 
   @action
-  elasticSearchHandler = (alias, module) => {
+  elasticSearchHandler = (alias, module, indexName) => {
     this.setFieldValue('inProgress', `${alias}_${module}`);
     if (module === 'SWAP') {
       this.swapIndexAliases(alias);
     } else if (module === 'POPULATE' || module === 'DELETE') {
       const mutation = this.mutations[alias];
-      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], alias.toUpperCase());
+      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], indexName.toUpperCase());
     }
   }
 
   @action
-  esMutations = (mutation, indexAliasName) => new Promise((resolve, reject) => {
+  esMutations = (mutation, index) => new Promise((resolve, reject) => {
     client
       .mutate({
         mutation: elasticSearchQueries[mutation],
-        variables: { indexAliasName },
+        variables: { index },
       })
       .then((result) => {
         Helper.toast('Your request is processed successfully.', 'success');
@@ -83,17 +83,23 @@ export class ElasticSearchStore {
   }
 
   @action
-  swapIndexAliases = (indexAliasName) => {
-    this.swapIndex = graphql({
-      client,
-      query: elasticSearchQueries.swapIndexAliases,
-      variables: { indexAliasName },
-      onError: () => {
+  swapIndexAliases = indexAliasName => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: elasticSearchQueries.swapIndexOnAlias,
+        variables: { indexAliasName },
+      })
+      .then((result) => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        resolve(result);
         this.setFieldValue('inProgress', false);
+      })
+      .catch((error) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-    });
-  }
+        reject(error);
+        this.setFieldValue('inProgress', false);
+      });
+  });
 
   @action
   getESAuditPara = (indexAliasName, documentId = 'RANDOM') => {
@@ -118,6 +124,11 @@ export class ElasticSearchStore {
   @computed get eSAudit() {
     return get(this.esAudit, 'data.getESAudit.indices[0]') ?
       toJS(get(this.esAudit, 'data.getESAudit.indices')) : [];
+  }
+
+  @computed get esAuditParaOutput() {
+    return get(this.esAudit, 'data.getESAudit.indices[0]') ?
+      toJS(get(this.esAudit, 'data.getESAudit.indices[0]')) : [];
   }
 
   @computed get eSAuditLoading() {

@@ -108,7 +108,7 @@ query getESAudit($indexAliasName: ESIndexAliasEnum, $random: String) {
   }
 }`;
 
-export const swapIndexAliases = gql`
-mutation swapIndexAliases($indexAliasName: ENUM!) {
-  offeringPopulateIndices(indexAliasName: $indexAliasName)
+export const swapIndexOnAlias = gql`
+mutation swapIndexOnAlias($indexAliasName: ESIndexAliasEnum!) {
+  swapIndexOnAlias(indexAliasName: $indexAliasName)
 }`;

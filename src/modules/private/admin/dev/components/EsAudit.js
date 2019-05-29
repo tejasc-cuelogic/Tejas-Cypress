@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Form, Button, Grid, Divider, Card } from 'semantic-ui-react';
+import { Modal, Header, Form, Button, Grid, Divider } from 'semantic-ui-react';
 import { FormInput } from '../../../../../theme/form';
 
 @inject('elasticSearchStore')
@@ -47,7 +47,7 @@ export default class EsAudit extends Component {
               <Grid.Row columns={2} divided>
                 <Grid.Column>
                   <Header as="h6">
-                    Count: 1 <span className="ml-10">1 hr ago</span>
+                    Count: <span className="ml-10">1 hr ago</span>
                   </Header>
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
