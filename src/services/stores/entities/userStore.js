@@ -2,6 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
+import { authStore } from '../index';
 
 export class UserStore {
   @observable currentUser;
@@ -39,7 +40,20 @@ export class UserStore {
       return opt;
     };
     let capabilities = [];
-    PRIVATE_NAV.map(n => n.capability).forEach((c) => {
+    const primaryCapabilities = [];
+    PRIVATE_NAV.forEach((n) => {
+      if (n.capability && !primaryCapabilities.includes(n.capability)) {
+        primaryCapabilities.push(n.capability);
+      }
+      if (n.subNavigations) {
+        n.subNavigations.forEach((c) => {
+          if (c.capability && !primaryCapabilities.includes(c.capability)) {
+            primaryCapabilities.push(c.capability);
+          }
+        });
+      }
+    });
+    primaryCapabilities.forEach((c) => {
       if (c) {
         const meta = c.replace('_ANY', '');
         capabilities = [
@@ -52,7 +66,8 @@ export class UserStore {
   }
 
   @computed get myCapabilities() {
-    return this.currentUser ? toJS(this.currentUser.capabilities) : [];
+    console.log(this.opt);
+    return authStore.capabilities ? toJS(authStore.capabilities) : [];
   }
 
   myAccessForModule(module) {
@@ -70,13 +85,25 @@ export class UserStore {
     return this.currentUser.roles.includes(role);
   }
 
+  @computed get isInvestor() {
+    const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
+    return roles.includes('investor');
+  }
+
   @computed get isIssuer() {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('issuer');
   }
+  @computed get isAdmin() {
+    const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
+    return roles.includes('admin');
+  }
   getUserEmailAddress() {
     const emailDetails = (this.currentUser && toJS(this.currentUser.email)) || null;
     return emailDetails;
+  }
+  getUserId() {
+    return (this.currentUser && toJS(this.currentUser.sub)) || null;
   }
 }
 

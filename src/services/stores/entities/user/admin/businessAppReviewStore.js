@@ -1,14 +1,17 @@
-/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get } from 'lodash';
+import { map, forEach, filter, get, ceil, times } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
+import { Calculator } from 'amortizejs';
+import money from 'money-math';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -43,6 +46,9 @@ export class BusinessAppReviewStore {
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
+  @observable amortizationArray = [];
+  @observable initLoad = [];
+  @observable expAnnualRevCount = 1;
 
   @action
   setFieldvalue = (field, value) => {
@@ -105,6 +111,12 @@ export class BusinessAppReviewStore {
       const index = this[formName].fields[arrayName].length;
       this[formName].fields[arrayName][index - 1].label.value = `Year ${index}`;
     }
+    if (arrayName === 'offer') {
+      this.OFFERS_FRM.fields.offer.map((item, index) => {
+        this.assignAdditionalTermsValue(index);
+        return null;
+      });
+    }
   }
 
   @action
@@ -121,6 +133,9 @@ export class BusinessAppReviewStore {
       this[form],
       Validator.pullValues(e, result), ref, index,
     );
+    if (result.name === 'structure') {
+      this.calculateExpAnnualRevCount();
+    }
   }
 
   @action
@@ -152,22 +167,23 @@ export class BusinessAppReviewStore {
         this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
         fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', userId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
             this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
             this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           }).catch((error) => {
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
           });
         }).catch((error) => {
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-        }).finally(() => {
-          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
         });
       });
     }
@@ -235,14 +251,62 @@ export class BusinessAppReviewStore {
       { name: field, value: fieldValue },
     );
   }
-
+  @action
+  assignAdditionalTermsValue = (index) => {
+    this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+      this.OFFERS_FRM.fields.offer[index].additionalTerms.value ? 'Additional Terms Applied' : 'Add Terms';
+  }
+  @action
+  addAdditionalTermsToFormData = (index) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    if (!businessApplicationDetailsAdmin) {
+      return false;
+    }
+    this.OFFERS_FRM.fields.offer[index].additionalTerms.value =
+    (businessApplicationDetailsAdmin.offers.offer[index] &&
+      businessApplicationDetailsAdmin.offers.offer[index].additionalTerms) || null;
+    return false;
+  }
   @action
   maskChangeWithIndex = (values, form, arrayName = 'data', field, index) => {
-    const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' ? values.formattedValue : values.floatValue;
+    const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' || field === 'companyInceptionDate' ? values.formattedValue : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, arrayName, index,
     );
+    if (form === 'OFFERS_FRM' && (field === 'amount' || field === 'interestRate' || field === 'maturity')) {
+      this.showFormAmortisation(index);
+    }
+    if (field === 'maturity') {
+      this.calculateExpAnnualRevCount();
+    }
+  }
+
+  @action
+  calculateExpAnnualRevCount = () => {
+    const maxMaturity = this.getMaxMaturityValue;
+    const MaxMaturityInYears = maxMaturity ? ceil(maxMaturity / 12) : 4;
+    if (this.expAnnualRevCount !== MaxMaturityInYears) {
+      if (this.expAnnualRevCount < MaxMaturityInYears) {
+        times(MaxMaturityInYears - this.expAnnualRevCount, () => this.addExpAnnRev());
+      } else {
+        times(this.expAnnualRevCount - MaxMaturityInYears, () => this.removeExpAnnRev());
+      }
+      this.expAnnualRevCount = MaxMaturityInYears;
+    }
+  }
+
+  @action
+  addExpAnnRev = () => this.addMore('OFFERS_FRM', 'expectedAnnualRevenue');
+
+  @action
+  removeExpAnnRev = () => this.OFFERS_FRM.fields.expectedAnnualRevenue.splice(-1, 1);
+
+  @computed
+  get getMaxMaturityValue() {
+    const maxValue =
+    Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => (o.structure.value === 'REVENUE_SHARING_NOTE' ? o.maturity.value : 0) || 0));
+    return maxValue || 0;
   }
 
   @computed
@@ -271,12 +335,17 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  resetForm = (form) => {
+    this[form] = Validator.resetFormData(this[form]);
+  }
+
+  @action
   resetCommentFrm = () => {
     this.APPLICATION_STATUS_COMMENT_FRM = Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
   }
 
  @action
-  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag, comment = '') => {
+  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '') => {
     const applicationSource = applStatus ===
     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
@@ -285,9 +354,13 @@ export class BusinessAppReviewStore {
       actionType: 'APPLICATION_STATUS',
       applicationId,
       applicationSource,
-      applicationFlag,
       comments: comment !== '' ? { text: comment } : formInputData,
     };
+    if (applicationFlag !== '') {
+      payload = { ...payload, applicationFlag };
+    } else if (applicationStatus !== '') {
+      payload = { ...payload, applicationStatus };
+    }
     if (userId !== 'new') {
       payload = { ...payload, userId };
     }
@@ -322,7 +395,35 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
+  applicationDeclineByIssuer = (applicationId) => {
+    const comment = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
+    uiStore.setProgress();
+    const payload = {
+      applicationId,
+      comments: comment,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: applicationDeclinedByIssuer,
+          variables: payload,
+          refetchQueries: [{ query: getBusinessApplications }],
+        })
+        .then((result) => {
+          Helper.toast('Application declined successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => uiStore.setProgress(false));
+    });
+  }
+
+  @action
+  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true, showLoader = true) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
     let formInputData = Validator.evaluateFormData(this[formName].fields);
@@ -366,8 +467,10 @@ export class BusinessAppReviewStore {
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
-    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
-    this.setFieldvalue('inProgress', progressButton);
+    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : approveOrSubmitted === 'REVIEW_FAILED' ? 'REVIEW_FAILED' : 'SAVE';
+    if (showLoader) {
+      this.setFieldvalue('inProgress', progressButton);
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -379,14 +482,13 @@ export class BusinessAppReviewStore {
         .then((result) => {
           this.removeUploadedFiles();
           Helper.toast('Data saved successfully.', 'success');
+          this.setFieldvalue('inProgress', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
-        })
-        .finally(() => {
           this.setFieldvalue('inProgress', false);
         });
     });
@@ -415,8 +517,10 @@ export class BusinessAppReviewStore {
       },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        uiStore.setAppLoader(false);
-        resolve();
+        if (!this.businessApplicationOffers.loading) {
+          uiStore.setAppLoader(false);
+          resolve();
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -424,6 +528,80 @@ export class BusinessAppReviewStore {
       },
     });
   });
+
+  @computed get offerStructure() {
+    const offerData = this.fetchBusinessApplicationOffers;
+    const offer = offerData && offerData.offers && offerData.offers.offer[this.selectedOfferIndex]
+      ? offerData.offers.offer[this.selectedOfferIndex] : null;
+    return offer.structure;
+  }
+  revenueSharing = () => {
+    const offerData = this.fetchBusinessApplicationOffers;
+    const offer = offerData && offerData.offers && offerData.offers.offer[this.selectedOfferIndex]
+      ? offerData.offers.offer[this.selectedOfferIndex] : null;
+    if (this.offerStructure === 'REVENUE_SHARING_NOTE' && offer.mthRevenueSharing) {
+      const { expectedAnnualRevenue } = offerData.offers;
+      const result = [];
+      let cumPayment = '0.00';
+      expectedAnnualRevenue.map((key, index) => {
+        const floatYear = key.year && key.year !== 0 ? money.floatToAmount(key.year.toString()) : '0.00';
+        const revenueShare = money.floatToAmount(offer.mthRevenueSharing.toString());
+        cumPayment = money.add(cumPayment, money.percent(
+          floatYear,
+          revenueShare,
+        ));
+        if (floatYear !== '0.00') {
+          result.push({
+            yearAmount: index + 1,
+            annualRevenue: Helper.CurrencyFormat(key.year, 2),
+            revenueSharingPercentage: `${offer.mthRevenueSharing} %`,
+            paymentAmount: Helper.CurrencyFormat(money.percent(
+              floatYear,
+              revenueShare,
+            ), 2),
+            cumulativePayments: Helper.CurrencyFormat(cumPayment, 2),
+          });
+        }
+        return null;
+      });
+      return result;
+    }
+    return [];
+  }
+  paymentChart = () => {
+    const offerData = this.fetchBusinessApplicationOffers;
+    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    if (this.offerStructure === 'TERM_NOTE') {
+      const data = {
+        method: 'mortgage',
+        apr: offer.interestRate,
+        balance: offer.minimumAmount,
+        loanTerm: offer.maturity,
+      };
+      const { schedule, balance } = Calculator.calculate(data);
+      const formattedSchedule = [];
+      schedule.map((sc, index) => {
+        const previousBalance = index === 0 ? money.floatToAmount(balance.toString()) :
+          money.floatToAmount(schedule[index - 1].remainingBalance);
+        const interestAmount = money.floatToAmount(sc.interest.toString());
+        const principalAmount = money.floatToAmount(sc.principal.toString());
+        const totalMonthlyPayment = money.floatToAmount(money.add(principalAmount, interestAmount));
+        formattedSchedule.push({
+          index: index + 1,
+          loanAmount: Helper.CurrencyFormat(previousBalance, 2),
+          monthlyPayment: Helper.CurrencyFormat(totalMonthlyPayment, 2),
+          interestAmount: Helper.CurrencyFormat(sc.interest, 2),
+          principalAmount: Helper.CurrencyFormat(sc.principal, 2),
+          balanceAmount: Helper.CurrencyFormat(money.floatToAmount(sc.remainingBalance), 2),
+          interestPercentage: `${money.div(money.mul('100.00', interestAmount), totalMonthlyPayment)} %`,
+          principalPercentage: `${money.div(money.mul('100.00', principalAmount), totalMonthlyPayment)} %`,
+        });
+        return null;
+      });
+      return formattedSchedule;
+    }
+    return [];
+  }
 
   @action
   signPortalAgreement = () => {
@@ -435,6 +613,7 @@ export class BusinessAppReviewStore {
       applicationId: offerData.applicationId,
       issuerId: offerData.userId,
       selectedOffer: offer,
+      callbackUrl: `${window.location.origin}/secure-gateway`,
     };
     if (!offer.isAccepted) {
       payLoad = {
@@ -514,7 +693,8 @@ export class BusinessAppReviewStore {
 
   @action
   generatePortalAgreement = () => {
-    this.saveReviewForms('OFFERS_FRM').then(() => {
+    this.setFieldvalue('inProgress', 'GENERATE_PA');
+    this.saveReviewForms('OFFERS_FRM', '', true, false).then(() => {
       const { businessApplicationDetailsAdmin } = businessAppStore;
       const { applicationId, userId } = businessApplicationDetailsAdmin;
       const reFetchPayLoad = {
@@ -562,11 +742,60 @@ export class BusinessAppReviewStore {
     }
     this.paBoxFolderId = get(appData, 'storageDetails.Application.Review.Offer.id');
     this[form] = Validator.setFormData(this[form], appData, ref);
+    this.initLoad.push(form);
     const multiForm = this.getActionType(form, 'isMultiForm');
     if (form !== 'MANAGERS_FRM') {
       this.checkFormValid(form, multiForm, false);
     }
+    if (form === 'OFFERS_FRM') {
+      if (appData && get(appData, 'offers.offer')) {
+        appData.offers.offer.map((offer, index) => {
+          this.showFormAmortisation(index);
+          this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+            offer.additionalTerms ? 'Additional Terms Applied' : 'Add Terms';
+          return null;
+        });
+        if (appData.offers.expectedAnnualRevenue && appData.offers.expectedAnnualRevenue.length) {
+          this.expAnnualRevCount = appData.offers.expectedAnnualRevenue.length;
+        }
+      }
+      this.calculateExpAnnualRevCount();
+      if (store === 'appReviewStore') {
+        this.showSingleOfferForSigned(get(appData, 'offers.offer'));
+      }
+    }
     return false;
+  }
+  @action
+  showFormAmortisation = (index) => {
+    const maturity = this.OFFERS_FRM.fields.offer[index].maturity.value || 0;
+    const interestRate = this.OFFERS_FRM.fields.offer[index].interestRate.value || 0;
+    const minimumAmount = this.OFFERS_FRM.fields.offer[index].amount.value || 0;
+    const Formdata = {
+      method: 'mortgage',
+      apr: interestRate,
+      balance: minimumAmount,
+      loanTerm: maturity,
+    };
+    const data = Calculator.calculate(Formdata);
+    const amortizationAmount = data && data.schedule.length ?
+      money.add(
+        money.floatToAmount(data.schedule[0].interest),
+        money.floatToAmount(data.schedule[0].principal),
+      ) : '0.00';
+    const returnedAmount =
+    money.floatToAmount(money.mul(amortizationAmount, money.floatToAmount(maturity)));
+    this.OFFERS_FRM.fields.offer[index].totalCapital.value = returnedAmount;
+    this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = amortizationAmount;
+  }
+  @action
+  showSingleOfferForSigned = (data) => {
+    let offersToShow = null;
+    if (this.fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL') {
+      offersToShow =
+      data.find(obj => obj.isAccepted === true);
+      this.OFFERS_FRM = Validator.setFormData(this.OFFERS_FRM, { offer: [offersToShow] });
+    }
   }
 }
 export default new BusinessAppReviewStore();

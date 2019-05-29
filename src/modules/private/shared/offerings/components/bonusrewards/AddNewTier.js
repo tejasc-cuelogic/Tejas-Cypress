@@ -1,39 +1,52 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { get } from 'lodash';
+import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'offeringsStore')
 @observer
 export default class AddNewTier extends Component {
+  state = { showError: false }
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
   handleAddTier = () => {
-    const { addNewTier } = this.props.offeringCreationStore;
-    addNewTier();
-    this.props.history.push(this.props.refLink);
+    const { offer } = this.props.offeringsStore;
+    const bonusRewardsTiers = get(offer, 'rewardsTiers') || [];
+    const { updateBonusRewardTier, ADD_NEW_TIER_FRM } = this.props.offeringCreationStore;
+    if (bonusRewardsTiers.includes(ADD_NEW_TIER_FRM.fields.amountForThisTier.value)) {
+      this.setState({ showError: true });
+    } else {
+      this.setState({ showError: false });
+      updateBonusRewardTier();
+      this.props.history.push(this.props.refLink);
+    }
   }
   render() {
     const { ADD_NEW_TIER_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_TIER_FRM';
+    const { offer } = this.props.offeringsStore;
+    const earlyBird = get(offer, 'earlyBird') || null;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Add new tier</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form onSubmit={this.handleAddTier}>
+          <Form error onSubmit={this.handleAddTier}>
             <div className="featured-section">
-              <FormCheckbox
-                fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
-                name="isEarlyBirds"
-                changed={(e, result) => formChange(e, result, formName, true)}
-                defaults
-                containerclassname="ui relaxed list"
-                disabled
-              />
+              {(!earlyBird || earlyBird.quantity === 0) &&
+                <FormCheckbox
+                  fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
+                  name="isEarlyBirds"
+                  changed={(e, result) => formChange(e, result, formName, true)}
+                  defaults
+                  containerclassname="ui relaxed list"
+                />
+              }
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS') ?
                   <Aux>
@@ -62,7 +75,12 @@ export default class AddNewTier extends Component {
                   />
               }
             </div>
-            <div className="center-align">
+            {this.state.showError &&
+              <Message error className="mt-30">
+                <ListErrors errors={['The entered tier is already existed.']} />
+              </Message>
+            }
+            <div className="center-align mt-30">
               <Button primary content="Add new bonus reward" disabled={!ADD_NEW_TIER_FRM.meta.isValid} />
             </div>
           </Form>

@@ -28,16 +28,13 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 `;
 
 export const getBusinessApplicationAdmin = gql`
-query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: DecryptedString){
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String){
   businessApplicationsAdmin(
     applicationType: $applicationType
     orderBy: $orderBy
     limit: $limit
     search: $search
-    lek: $lek
-    
   ) {
-    lek
     resultCount
     totalCount
     businessApplications
@@ -89,7 +86,7 @@ mutation submitApplication($applicationId: String!) {
 `;
 
 export const helpAndQuestion = gql`
-mutation helpAndQuestion($question: helpAndQuestionInput!) {
+mutation helpAndQuestion($question: HelpAndQuestionInput!) {
   helpAndQuestion(question: $question)
 }
 `;
@@ -155,6 +152,12 @@ query _getBusinessApplications {
         businessName
       }
     }
+    offers {
+      approved {
+        date
+      }
+    }
+    envelopeStatusChangedDateTime
   }
 }
 `;
@@ -275,6 +278,11 @@ query _getBusinessApplicationById ($id: String!) {
           fileName
         }
       }
+      sourcesAndUses {
+        fileId
+        fileName
+        fileHandle
+      }
       performance {
         nextYearSnapshot {
           grossSales
@@ -340,6 +348,17 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
 }
 `;
 
+export const getPreQualificationById = gql`
+query getPreQualificationById ($id: ID!) {
+  getPreQualificationById(preQualId: $id){
+    id
+    email
+    firstName
+    lastName
+  }
+}
+`;
+
 export const getPrequalBusinessApplicationsById = gql`
 query getprequalInfo ($id: ID!) {
   getPreQualificationById(preQualId: $id){
@@ -401,15 +420,18 @@ mutation updateBusinessApplicationInformation(
   $issuerId: String!
   $businessName: String
   $signupCode: String
+  $utmSource: String
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
     issuerId: $issuerId
     businessName: $businessName
     signupCode: $signupCode
+    utmSource: $utmSource
   ){
     applicationId
     signupCode
+    utmSource
   }
 }
 `;
@@ -498,6 +520,11 @@ query _getBusinessApplicationById ($id: String!) {
         multiple
         totalCapital
         isAccepted
+        additionalTerms
+      }
+      expectedAnnualRevenue {
+        label
+        year
       }
     }  
   }
@@ -505,12 +532,13 @@ query _getBusinessApplicationById ($id: String!) {
 `;
 
 export const signPortalAgreement = gql`
-mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean){
+mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean, $callbackUrl: String){
   signPortalAgreement(
     applicationId: $applicationId
     issuerId: $issuerId
     selectedOffer: $selectedOffer
     isSelectedOfferChanged: $isSelectedOfferChanged
+    callbackUrl: $callbackUrl
   )
 }
 `;
@@ -539,6 +567,15 @@ mutation _generatePortalAgreement($applicationId: String!, $userId: String!){
   generatePortalAgreement(
     applicationId: $applicationId
     userId: $userId
+  )
+}
+`;
+
+export const applicationDeclinedByIssuer = gql`
+mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [BusinessApplicationCommentInput]){
+  applicationDeclinedByIssuer(
+    applicationId: $applicationId
+    comments: $comments
   )
 }
 `;

@@ -12,13 +12,19 @@ import EntityAccCreation from './entity/AccountCreation';
 export default class AccountCreation extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setBankLinkInterface('list');
-    this.props.bankAccountStore.resetShowAddFunds();
+    const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
+    // eslint-disable-next-line prefer-destructuring
+    if (accType) {
+      this.props.accountStore.setAccTypeChange(accType.value);
+    }
   }
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
   }
   renderAccType = () => {
     const { investmentAccType } = this.props.accountStore;
+    this.props.bankAccountStore.resetStoreData();
     this.props.history.push(`${this.props.match.url}/${investmentAccType}`);
   }
   render() {

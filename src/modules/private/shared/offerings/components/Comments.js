@@ -1,33 +1,60 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
+import { get } from 'lodash';
 import MessagesList from './comments/MessagesList';
 import MessagesWrap from './comments/MessagesWrap';
+import { InlineLoader } from '../../../../../theme/shared';
+import { DataFormatter } from '../../../../../helper';
 
-@inject('offeringCreationStore', 'messageStore')
+@inject('offeringCreationStore', 'messageStore', 'userStore', 'offeringsStore')
 @observer
 export default class Comments extends Component {
   componentWillMount() {
     this.props.messageStore.initRequest();
   }
+  messageSelectHandler = (currentMessageId) => {
+    this.props.messageStore.setDataValue('currentMessageId', currentMessageId);
+    this.props.messageStore.resetMessageForm();
+  }
   render() {
-    const { match, messageStore } = this.props;
     const {
-      messages, current, loading, error,
+      match, messageStore, userStore, offeringsStore,
+    } = this.props;
+    const {
+      messages, currentMessageId, loading, error, threadUsersList, newPostComment, threadMsgCount,
     } = messageStore;
+    const { isIssuer, isAdmin } = userStore;
+    const { offer } = offeringsStore;
+    const passedProcessingDate = DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) <= 0;
+    if (loading) {
+      return <InlineLoader />;
+    }
+    if (!messages.length) {
+      this.props.messageStore.setDataValue('currentMessageId', null);
+    }
     return (
       <Card fluid className="messages comments">
-        <MessagesList
-          match={match}
-          messages={messages}
-          current={current}
-          loading={loading}
-          error={error}
+        {messages.length ?
+          <MessagesList
+            passedProcessingDate={passedProcessingDate}
+            threadMsgCount={threadMsgCount}
+            newPostComment={newPostComment}
+            threadUsersList={threadUsersList}
+            messageSelectHandler={this.messageSelectHandler}
+            match={match}
+            messages={messages}
+            currentMessageId={currentMessageId}
+            loading={loading}
+            error={error}
+            isIssuer={isIssuer}
+          /> : null
+        }
+        <MessagesWrap
+          passedProcessingDate={passedProcessingDate}
+          isIssuer={isIssuer}
+          isAdmin={isAdmin}
         />
-        <Switch>
-          <Route exact path={`${match.url}/:id`} component={MessagesWrap} />
-        </Switch>
       </Card>
     );
   }

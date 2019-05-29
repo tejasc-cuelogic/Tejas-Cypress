@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { inject } from 'mobx-react';
-import { Header, Modal, Item, Image, Icon, Divider } from 'semantic-ui-react';
+import { Header, Modal, Item } from 'semantic-ui-react';
+import { Image64 } from '../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('teamStore')
@@ -15,7 +16,7 @@ class TeamModal extends Component {
     const { teamMembers } = this.props.teamStore;
     const { match } = this.props;
     const member = teamMembers.find(obj => obj.id === match.params.id);
-    const types = { FACEBOOK: 'facebook f', LINKEDIN: 'linkedin in' };
+    // const types = { FACEBOOK: 'facebook f', LINKEDIN: 'linkedin in' };
     return (
       <Modal
         open={this.state.modalOpen}
@@ -30,7 +31,10 @@ class TeamModal extends Component {
         <Modal.Content scrolling={isMobile}>
           <Item.Group>
             <Item>
-              <Image src={member.avatar} />
+              <Image64
+                srcUrl={member.avatar}
+                alt={member.memberName}
+              />
               <Item.Content verticalAlign="middle" className="team-details-container">
                 <div className={isMobile ? '' : 'scrollable-content'}>
                   <Header as="h4">
@@ -40,8 +44,8 @@ class TeamModal extends Component {
                   <p>
                     {member.story}
                   </p>
-                  <Divider hidden />
-                  <div>
+                  {/* <Divider hidden />
+                    <div>
                     {member.social.map(stype => (
                       <Link to={stype.url === null ? '/' : stype.url} className="icon-link">
                         <Icon
@@ -51,7 +55,7 @@ class TeamModal extends Component {
                       </Link>
                     ))
                     }
-                  </div>
+                  </div> */}
                 </div>
               </Item.Content>
             </Item>

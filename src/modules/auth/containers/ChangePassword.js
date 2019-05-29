@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { mapValues } from 'lodash';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
@@ -9,6 +10,10 @@ import { ListErrors } from '../../../theme/shared';
 @observer
 export default class ChangePassword extends Component {
   componentWillMount() {
+    const loginData = mapValues(this.props.authStore.LOGIN_FRM.fields, f => f.value);
+    if (this.props.refModule !== 'security' && loginData.email === '') {
+      this.props.history.push('/auth/login');
+    }
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.resetForm('CHANGE_PASS_FRM');
   }
@@ -18,7 +23,9 @@ export default class ChangePassword extends Component {
       'changeMyPassword' : 'updatePassword';
     authActions[method](this.props.refModule)
       .then(() => {
-        this.props.history.goBack();
+        authActions.logout('updatedPassword').then(() => {
+          this.props.history.push('/auth/login');
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -31,7 +38,7 @@ export default class ChangePassword extends Component {
   render() {
     // togglePasswordType
     const {
-      CHANGE_PASS_FRM, changePassChange, pwdInputType,
+      CHANGE_PASS_FRM, changePassChange, pwdInputType, currentScore,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
@@ -76,7 +83,7 @@ export default class ChangePassword extends Component {
               </Message>
             }
             <div className="mt-30 center-align">
-              <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} />
+              <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid || !currentScore} />
             </div>
           </Form>
         </Modal.Content>

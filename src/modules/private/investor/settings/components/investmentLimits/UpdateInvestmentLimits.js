@@ -15,11 +15,11 @@ export default class UpdateInvestmentLimits extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.push(this.props.refLink);
   }
   updateInvestmentLimit = () => {
     this.props.investmentLimitStore.updateInvestmentLimit().then(() => {
-      this.props.history.goBack();
+      this.props.history.push(this.props.refLink);
     });
   }
   render() {
@@ -38,29 +38,18 @@ export default class UpdateInvestmentLimits extends Component {
             <p>
               Ensure that your 12-month Investment Limit for Regulation Crowdfunding is up to date
               by providing your most recent Annual Income and Net Worth.&nbsp;
-              <Link target="_blank" to="/app/resources/faq">
-                See FAQ on how your investment limit is calculated
-              </Link>
+              <Link target="_blank" to="/app/resources/faq">See FAQ on how your investment limit is calculated</Link>
             </p>
           </Modal.Header>
           <Modal.Content>
-            {errors &&
-              <Message error>
-                <ListErrors errors={[errors]} />
-              </Message>
-            }
             <Statistic size="tiny">
-              <Statistic.Label>
-                Estimated investment limit
-              </Statistic.Label>
-              <Statistic.Value>
-                {Helper.CurrencyFormat(currentLimit)}
-              </Statistic.Value>
+              <Statistic.Label>Estimated investment limit</Statistic.Label>
+              <Statistic.Value>{Helper.CurrencyFormat(currentLimit, 0)}</Statistic.Value>
             </Statistic>
             <Divider clearing hidden />
             <Form error onSubmit={this.submit}>
               {fields &&
-                ['annualIncome', 'netWorth', 'otherInvestments'].map(field => (
+                ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
                   <MaskedInput
                     key={field}
                     name={field}
@@ -69,12 +58,21 @@ export default class UpdateInvestmentLimits extends Component {
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
-                    onBlur={investmentCalculate}
+                    onblur={investmentCalculate}
+                    allowNegative={false}
                   />
                 ))
               }
+              {errors &&
+                <Message error className="mt-30">
+                  <ListErrors errors={[errors]} />
+                </Message>
+              }
               <div className="center-align mt-30">
-                <Button loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} color="green">Update investment limits</Button>
+                <Button.Group>
+                  <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
+                  <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} />
+                </Button.Group>
               </div>
             </Form>
           </Modal.Content>

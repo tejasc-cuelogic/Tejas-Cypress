@@ -10,9 +10,12 @@ import Header from './../../theme/layout/Header';
 import Footer from './../../theme/layout/Footer';
 import Auth from '../auth';
 import NotFound from '../shared/NotFound';
+// import Referral from '../shared/Referral';
+import RedirectManager from '../shared/RedirectManager';
 import Helper from '../../helper/utility';
+import Firework from '../public/offering/components/investNow/agreement/components/FireworkAnimation';
 
-@inject('uiStore', 'navStore', 'userStore', 'businessAppStore')
+@inject('uiStore', 'navStore', 'userStore', 'businessAppStore', 'campaignStore')
 @observer
 export default class Public extends React.Component {
   state = {
@@ -36,13 +39,18 @@ export default class Public extends React.Component {
         />
       ))}
       <Route path="/auth" component={Auth} />
+      <Route path="/password-protected" component={NotFound} />
+      <Route exact path="/:fromUrl" component={RedirectManager} />
       <Route component={NotFound} />
     </Switch>
   );
-  handleLogOut = () => {
+  handleLogOut = (isToggle = false) => {
     authActions.logout()
       .then(() => {
         this.props.history.push('/');
+        if (isToggle) {
+          this.handleToggle();
+        }
       });
   }
   preQualSubmit = (e) => {
@@ -59,43 +67,50 @@ export default class Public extends React.Component {
     if (visible) this.setState({ visible: false });
   };
   render() {
-    const { location } = this.props;
+    const { location, match } = this.props;
     const { BUSINESS_APP_FRM, isPrequalQulify } = this.props.businessAppStore;
     const { isValid } = BUSINESS_APP_FRM.meta;
     const { inProgress } = this.props.uiStore;
-    const NoFooter = [
-      '/offerings/:id/:section?', '/business-application', '/auth/:section',
-    ];
+    // const NoFooter = [
+    //   '/offerings/:id/:section?', '/business-application', '/auth/:section',
+    // ];
+    const NoHeader = ['/invest/get-started'];
+    const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
     return (
       <Aux>
-        <Responsive minWidth={768} as={Aux}>
-          <Header
-            location={location}
-            navStatus={this.props.navStore.navStatus}
-            stepInRoute={this.props.navStore.stepInRoute}
-            currentUser={this.props.userStore.currentUser}
-            handleLogOut={this.handleLogOut}
-            canSubmitApp={isValid}
-            isPrequalQulify={isPrequalQulify}
-            preQualSubmit={this.preQualSubmit}
-            loading={inProgress}
-          />
+        {this.props.campaignStore.showFireworkAnimation &&
+          <Firework />
+        }
+        <Responsive minWidth={992} as={Aux}>
+          {hasHeader && (
+            <Header
+              location={location}
+              stepInRoute={this.props.navStore.stepInRoute}
+              currentUser={this.props.userStore.currentUser}
+              handleLogOut={this.handleLogOut}
+              canSubmitApp={isValid}
+              isPrequalQulify={isPrequalQulify}
+              preQualSubmit={this.preQualSubmit}
+              loading={inProgress}
+            />
+          )}
           {this.getRoutes()}
-          {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
-          <Footer path={location.pathname} />}
+          <Footer path={location.pathname} />
         </Responsive>
-        <Responsive maxWidth={767} as={Aux}>
+        <Responsive maxWidth={991} as={Aux}>
           <NavBarMobile
             onPusherClick={this.handlePusher}
             onToggle={this.handleToggle}
             visible={visible}
             location={location}
+            match={match}
+            handleLogOut={() => this.handleLogOut(true)}
             isMobile
-            navStatus={this.props.navStore.navStatus}
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             publicContent={this.getRoutes()}
+            hasHeader={hasHeader}
           />
         </Responsive>
       </Aux>

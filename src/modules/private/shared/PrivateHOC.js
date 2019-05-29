@@ -18,7 +18,7 @@ class PrivateHOC extends Component {
         <div className="page-header-section">
           <Grid columns="equal" stackable>
             <Grid.Row>
-              <Grid.Column>
+              <Grid.Column verticalAlign="middle">
                 {!this.props.P0 ?
                   <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header> :
                   this.props.P0
@@ -29,8 +29,8 @@ class PrivateHOC extends Component {
               {this.props.P3}
               {!this.props.P4 ? (
                 <span className="item notification">
-                  {/* <Icon className="ns-bell"
-                  onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} />
+                  {/* <Icon className="ns-bell" onClick={() =>
+                  this.props.uiStore.updateLayoutState('notificationPanel')} />
                   <span className="unread-count">3</span> */}
                 </span>
                 ) : (
@@ -42,7 +42,7 @@ class PrivateHOC extends Component {
         </div>
         {this.props.P5}
         {(pageMeta.subPanel === 1 || this.props.subNav) &&
-          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} subNavComponent={this.props.subNavComponent} />
+          <SecondaryMenu navCustomClick={this.props.navCustomClick} addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
         <div className="content-spacer">
           {this.props.children}

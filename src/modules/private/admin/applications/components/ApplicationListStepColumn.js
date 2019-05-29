@@ -14,7 +14,7 @@ export const ApplicationListStepColumn = (props) => {
   const documentationStepTitle = businessDocumentation && businessDocumentation.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.IN_PROGRESS ? 'Continue' : businessDocumentation && businessDocumentation.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.COMPLETE ? 'Completed' : 'Not Completed';
   const documentationClass = documentationStepTitle === 'Completed' ? 'done' : documentationStepTitle === 'Continue' ? 'current' : '';
   return (
-    <Table.Cell>
+    <Table.Cell singleLine>
       {(applicationStatus || prequalStatus) ===
       BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ?
         (failReasons.length || prequalDetails.failReasons.length ?

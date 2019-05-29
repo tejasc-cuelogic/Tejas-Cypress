@@ -1,21 +1,45 @@
 import React, { Component } from 'react';
+// import ReactDOM from 'react-dom';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 @inject('agreementsStore')
 @observer
 export default class AgreementsPdfLoader extends Component {
-  getPdfUrl = param => this.props.agreementsStore.getNavItems.find(ele => ele.to === param).url;
+  componentWillMount() {
+    const {
+      getLegalDocsFileIds, alreadySet,
+      getNavItems, getBoxEmbedLink,
+    } = this.props.agreementsStore;
+    const { agreementKey } = this.props.match.params;
+    const doc = agreementKey ? getNavItems.find(ele => ele.to.toString() === agreementKey) :
+      getNavItems[0];
+    if (!alreadySet) {
+      getLegalDocsFileIds().then(() => {
+        getBoxEmbedLink(doc.to, doc.id);
+      });
+    } else {
+      getBoxEmbedLink(doc.to, doc.id);
+    }
+  }
   render() {
-    const { agreementId } = this.props.match.params;
-    const pdfURL = agreementId ? this.getPdfUrl(agreementId) : '';
+    const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <div>
         <Grid>
           <Grid.Row>
             <Grid.Column className="welcome-packet">
               <div className="pdf-viewer">
-                <object width="100%" height="100%" data={pdfURL} type="application/pdf">failed to load..</object>
+                {(docLoading || !embedUrl) ? <InlineLoader /> :
+                <iframe
+                  width="100%"
+                  height="100%"
+                  title="agreement"
+                  src={embedUrl}
+                  ref={(c) => { this.iframeComponent = c; }}
+                />
+                }
               </div>
             </Grid.Column>
           </Grid.Row>

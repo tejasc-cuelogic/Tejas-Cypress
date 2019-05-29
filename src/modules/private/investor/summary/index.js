@@ -8,8 +8,20 @@ import Dashboard from './containers/Dashboard';
 @observer
 export default class Summary extends Component {
   render() {
-    const { signupStatus } = this.props.userDetailsStore;
+    const { signupStatus, isBasicVerDoneForMigratedFullUser } = this.props.userDetailsStore;
+    const partialAccLength = signupStatus.partialAccounts.length;
     const activeAccLength = signupStatus.activeAccounts.length;
-    return <Route component={activeAccLength === 0 ? AccountSetup : Dashboard} />;
+    const processingAccLength = signupStatus.processingAccounts.length;
+    return (
+      <Route
+        component={
+           ((processingAccLength === 0 &&
+            partialAccLength >= 0 &&
+            activeAccLength === 0) ||
+            (signupStatus.isMigratedFullAccount ||
+            !isBasicVerDoneForMigratedFullUser ||
+            !signupStatus.investorProfileCompleted))
+          ? AccountSetup : Dashboard}
+      />);
   }
 }

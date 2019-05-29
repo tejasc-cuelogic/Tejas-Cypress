@@ -462,11 +462,11 @@ export const UPLOADED_DOCUMENTS = {
 export const OFFERS = {
   offer: [{
     structure: {
-      value: '',
-      label: 'Structure',
-      placeHolder: 'Choose',
+      value: 'TERM_NOTE',
+      label: 'Security Type',
       error: undefined,
       rule: 'optional',
+      default: 'TERM_NOTE',
     },
     amount: {
       value: '',
@@ -484,14 +484,14 @@ export const OFFERS = {
     },
     maturity: {
       value: '',
-      label: 'Maturity (# of Months)',
+      label: 'Maturity (months)',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
     },
     mthRevenueSharing: {
       value: '',
-      label: 'Mth Revenue Shareing %',
+      label: 'Mth Revenue Sharing %',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
@@ -505,7 +505,7 @@ export const OFFERS = {
     },
     amortizationAmount: {
       value: '',
-      label: 'Monthly Amortization Amount',
+      label: 'Monthly Payment',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
@@ -526,21 +526,21 @@ export const OFFERS = {
     },
     personalGuarantee: {
       value: '',
-      label: 'Personal Guarantee',
+      label: 'Personal Garuntee',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
     },
     businessBlanket: {
       value: '',
-      label: 'Business Blanket',
+      label: 'Collateral',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
     },
     expirationDate: {
       value: '',
-      label: 'Campaign Approval Exp. Date',
+      label: 'Offer Expiration Date',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'date',
@@ -548,6 +548,21 @@ export const OFFERS = {
       customErrors: {
         date: 'Date format is invalid.',
       },
+    },
+    additionalTermsField: {
+      value: 'Add Terms',
+      label: 'Additional Terms',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+      skipField: true,
+    },
+    additionalTerms: {
+      value: '',
+      label: 'Additional Terms',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
     },
   }],
   term: {
@@ -588,48 +603,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
-    },
-  },
-  {
-    label: {
-      value: 'Year 2',
-      rule: 'optional',
-      error: undefined,
-    },
-    year: {
-      value: null,
-      label: '',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'optional',
-    },
-  },
-  {
-    label: {
-      value: 'Year 3',
-      rule: 'optional',
-      error: undefined,
-    },
-    year: {
-      value: null,
-      label: '',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'optional',
-    },
-  },
-  {
-    label: {
-      value: 'Year 4',
-      rule: 'optional',
-      error: undefined,
-    },
-    year: {
-      value: null,
-      label: '',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'optional',
+      default: null,
     },
   }],
 };

@@ -1,104 +1,63 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form } from 'semantic-ui-react';
+import { Header, Form, Message, Divider } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
-import FieldsForm from '../../components/establishProfile/FieldsForm';
+import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 @inject('investorProfileStore', 'uiStore')
 @withRouter
 @observer
 export default class Finances extends Component {
-  handleCloseNestedModal = () => {
-    this.props.uiStore.setModalStatus(false);
-    this.props.investorProfileStore.resetData(this.props.investorProfileStore.chkboxTicked);
-  }
-  handleFormSubmit = () => {
-    this.props.investorProfileStore.submitFieldsForm();
-    this.props.uiStore.setModalStatus(false);
-  }
-
-  handleTick = (e, values) => {
-    if (this.props.investorProfileStore.FINANCES_FORM.fields[values.name].value[0]) {
-      this.props.investorProfileStore.resetData(values.name);
-    } else {
-      this.props.investorProfileStore.setchkBoxTicked(values.name);
-      this.props.uiStore.setModalStatus(true);
-    }
-  }
-
   render() {
     const {
       FINANCES_FORM,
       financesChange,
-      canSubmitFieldsForm,
-      chkboxTicked,
-      financesInputChange,
+      investorProfileChange,
     } = this.props.investorProfileStore;
-    const { modalStatus } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     return (
-      <div>
-        <FieldsForm
-          canSubmitFieldsForm={canSubmitFieldsForm}
-          close={this.handleCloseNestedModal}
-          handleFormSubmit={this.handleFormSubmit}
-          financesChange={financesInputChange}
-          chkboxTicked={chkboxTicked}
-          modalStatus={modalStatus}
-          form={FINANCES_FORM}
-          {...this.props}
-        />
-        <Header as="h3" textAlign="center">Financial Information</Header>
-        <p className="center-align mb-50">
-          Please provide the following information so that
-          we can determine which investments we are allowed to show you
+      <div className="center-align">
+        <Header as="h3">Financial Information</Header>
+        <p className="tertiary-text">
+          SEC rules and regulations require broker-dealers to collect income and net
+          worth to determine investor suitability for private offerings.
         </p>
+        <p className="tertiary-text">
+          Select whether you are providing your information as an individual or as a couple.
+        </p>
+        <Divider hidden />
         <Form error>
-          <MaskedInput
-            name="netWorth"
-            currency
-            fielddata={FINANCES_FORM.fields.netWorth}
-            changed={financesChange}
-            prefix="$ "
+          <FormRadioGroup
+            fielddata={FINANCES_FORM.fields.investorProfileType}
+            name="investorProfileType"
+            changed={investorProfileChange}
+            containerclassname="three wide button-radio center-align"
+            showerror
           />
-          <Form.Group widths="equal">
-            {['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
-              <MaskedInput
-                type="tel"
-                key={field}
-                name={field}
-                currency
-                fielddata={FINANCES_FORM.fields[field]}
-                changed={financesChange}
-                prefix="$ "
-              />
-            ))
-            }
-          </Form.Group>
-          <FormCheckbox
-            fielddata={FINANCES_FORM.fields.checkbox1}
-            name="checkbox1"
-            changed={this.handleTick}
-            defaults
-          />
-          { FINANCES_FORM.fields.directorShareHolderOfCompany.value ?
-            <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
-              The name of the company is{' '}
-              <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
-            </p>
-            : <p />
-          }
-          <FormCheckbox
-            fielddata={FINANCES_FORM.fields.checkbox2}
-            name="checkbox2"
-            changed={this.handleTick}
-            defaults
-          />
-          { FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value ?
-            <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
-              The name of firm is{' '}
-              <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
-            </p>
-          : <p />
+          <Divider hidden />
+          <div className="field-wrap left-align">
+            <Form.Group widths={2}>
+              {['netWorth', 'annualIncomeCurrentYear'].map(field => (
+                <MaskedInput
+                  key={field}
+                  name={field}
+                  currency
+                  fielddata={FINANCES_FORM.fields[field]}
+                  changed={financesChange}
+                  prefix="$ "
+                  number
+                  showerror
+                  disableDecimal
+                  maxlength={13}
+                  allowNegative={false}
+                />
+              ))}
+            </Form.Group>
+          </div>
+          {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
           }
         </Form>
       </div>

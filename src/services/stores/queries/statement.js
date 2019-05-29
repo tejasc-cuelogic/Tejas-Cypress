@@ -13,6 +13,15 @@ export const allMonthlyStatements = gql`
     }
   }
 `;
+
+export const generateMonthlyStatementsPdf = gql`
+mutation generateMonthlyStatementsPdf($userId: String!, $accountId: String!, $month: Int, $year: Int) {
+  generateMonthlyStatementsPdf(userId: $userId, accountId: $accountId, month: $month, year: $year){
+    pdfUrl
+  }
+}
+`;
+
 export const allTaxForms = gql`
   query _getAccountTaxForm($accountId: String!) {
     investorAccountTaxForms(accountId: $accountId){
@@ -27,9 +36,10 @@ export const allTaxForms = gql`
   }
 `;
 export const downloadFile = gql`
-  mutation downloadFile($fileId: String!) {
-    downloadFile (
-      fileId: $fileId
+query getBoxDownloadLinkByFileId($fileId: String, $accountType: AccountTypeEnum ) {
+    getBoxDownloadLinkByFileId (
+      boxFileId: $fileId
+      accountType: $accountType
     ) {
       preSignedUrl
     }

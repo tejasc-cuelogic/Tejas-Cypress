@@ -20,7 +20,9 @@ const AddMore = ({
 @observer
 export default class BusinessPlan extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('BUSINESS_PLAN_FRM', 'review.businessPlan');
+    if (!this.props.businessAppReviewStore.initLoad.includes('BUSINESS_PLAN_FRM')) {
+      this.props.businessAppReviewStore.setFormData('BUSINESS_PLAN_FRM', 'review.businessPlan');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.businessPlan.managerOverview');
   }
   onFileDrop = (files, name, index) => {
@@ -120,8 +122,6 @@ export default class BusinessPlan extends Component {
                       fielddata={controlPerson.derogatoryMarks}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
-                  </Form.Group>
-                  <Form.Group widths={3}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
                       readOnly={isReadonly}
@@ -140,6 +140,7 @@ export default class BusinessPlan extends Component {
                   <Form.Group widths={3}>
                     <Form.Field>
                       <DropZone
+                        hideFields={isReadonly}
                         containerclassname={isReadonly ? 'display-only' : ''}
                         disabled={isReadonly}
                         name="experienceUpload"
@@ -151,6 +152,7 @@ export default class BusinessPlan extends Component {
                     </Form.Field>
                     <Form.Field>
                       <DropZone
+                        hideFields={isReadonly}
                         containerclassname={isReadonly ? 'display-only' : ''}
                         disabled={isReadonly}
                         name="creditUpload"
@@ -166,21 +168,19 @@ export default class BusinessPlan extends Component {
             ))
           }
           <Divider section />
-          {
-            ['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
-              <Aux>
-                <FormTextarea
-                  containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
-                  readOnly={isReadonly}
-                  key={field}
-                  name={field}
-                  fielddata={BUSINESS_PLAN_FRM.fields[field]}
-                  changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
-                />
-                <Divider section />
-              </Aux>
-            ))
-          }
+          {['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
+            <Aux>
+              <FormTextarea
+                containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
+                readOnly={isReadonly}
+                key={field}
+                name={field}
+                fielddata={BUSINESS_PLAN_FRM.fields[field]}
+                changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
+              />
+              <Divider section />
+            </Aux>
+          ))}
           <Header as="h4">Sources and Uses Chart</Header>
           <Grid columns={2}>
             <Grid.Column>
@@ -217,7 +217,7 @@ export default class BusinessPlan extends Component {
                             name="amount"
                             fielddata={source.amount}
                             changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'sources', field, index)}
-                            ishidelabel
+                            hidelabel
                             size="small"
                           />
                         </Table.Cell>
@@ -281,7 +281,7 @@ export default class BusinessPlan extends Component {
                           name="amount"
                           fielddata={use.amount}
                           changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'uses', field, index)}
-                          ishidelabel
+                          hidelabel
                           size="small"
                         />
                       </Table.Cell>
@@ -316,6 +316,7 @@ export default class BusinessPlan extends Component {
           <MaskedInput
             containerclassname={isReadonly ? 'display-only' : ''}
             readOnly={isReadonly}
+            containerwidth="4"
             name="dateOfIncorporation"
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
             format="##-##-####"

@@ -6,7 +6,7 @@ import { Modal, Button, Form, Divider } from 'semantic-ui-react';
 import { activityActions } from '../../../services/actions';
 import { Logo, FieldError } from '../../../theme/shared';
 
-@inject('authStore')
+@inject('authStore', 'uiStore')
 @withRouter
 @observer
 class DevPassProtected extends Component {
@@ -19,7 +19,9 @@ class DevPassProtected extends Component {
       .then(() => {
         activityActions.log({ action: 'LOGIN', status: 'SUCCESS' });
         this.props.authStore.setDevAppAuthStatus(true);
-        this.props.history.push('/');
+        const url = this.props.uiStore.passwordPreviewURL || '/';
+        this.props.history.push(url);
+        this.props.uiStore.setFieldvalue('passwordPreviewURL', null);
       })
       .catch(() => {
         activityActions.log({ action: 'LOGIN', status: 'FAIL' });
@@ -27,7 +29,7 @@ class DevPassProtected extends Component {
       });
   }
   authPreviewOffer = () => {
-    if (this.state.password === 'fourroses') {
+    if (this.state.password === this.props.previewPassword) {
       this.props.authPreviewOffer(true, this.state.password);
     } else {
       this.setState({ error: 'Entered password is invalid, please try again.' });
@@ -48,6 +50,7 @@ class DevPassProtected extends Component {
                 label="Password"
                 value={this.state.password}
                 type="password"
+                autoFocus
                 name="password"
                 error={this.state.error}
               />

@@ -8,9 +8,20 @@ export default class NsPagination extends Component {
     skip: this.props.meta.requestState.skip || 0,
     first: this.props.meta.requestState.perPage || 10,
     currentPageNo: this.props.meta.requestState.page || 1,
-    totalPages: Math.ceil(this.props.meta.totalRecords / this.props.meta.requestState.perPage),
+    totalPages: this.props.meta.totalRecords > this.props.meta.requestState.perPage ?
+      Math.ceil(this.props.meta.totalRecords / this.props.meta.requestState.perPage) : 1,
     stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
   };
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      skip: nextProps.meta.requestState.skip || 0,
+      first: nextProps.meta.requestState.perPage || 10,
+      currentPageNo: nextProps.meta.requestState.page || 1,
+      totalPages: nextProps.meta.totalRecords > nextProps.meta.requestState.perPage ?
+        Math.ceil(nextProps.meta.totalRecords / nextProps.meta.requestState.perPage) : 1,
+      stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
+    });
+  }
   pageChangeHandler = (e) => {
     this.setState({ currentPageNo: parseInt(e.target.value, 10) });
   }
@@ -27,9 +38,7 @@ export default class NsPagination extends Component {
     }
   }
   goToPage = (currentPageNo) => {
-    const skip = (currentPageNo === this.state.totalPages) ?
-      this.props.meta.totalRecords - (this.props.meta.totalRecords % this.state.first) :
-      (currentPageNo * this.state.first) - this.state.first;
+    const skip = (currentPageNo * this.state.first) - this.state.first;
     this.setState({ skip, currentPageNo });
     this.props.initRequest({ first: this.state.first, skip, page: currentPageNo });
   }
@@ -72,14 +81,14 @@ export default class NsPagination extends Component {
           <Menu.Item
             icon
             onClick={() => this.goToPage(currentPageNo + 1)}
-            className={currentPageNo === totalPages && 'disabled'}
+            className={currentPageNo === totalPages ? 'disabled' : ''}
           >
             <Icon className="ns-chevron-right" color="green" />
           </Menu.Item>
           <Menu.Item
             icon
             onClick={() => this.goToPage(totalPages)}
-            className={currentPageNo === totalPages && 'disabled'}
+            className={currentPageNo === totalPages ? 'disabled' : ''}
           >
             <Icon className="ns-arrow-double-right" color="green" />
           </Menu.Item>

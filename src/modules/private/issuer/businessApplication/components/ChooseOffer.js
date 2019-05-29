@@ -2,18 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Modal, Header, Card, Menu, Button } from 'semantic-ui-react';
+import { Modal, Header, Card, Menu, Button, Statistic } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
 import OffersPanel from '../../../shared/offerings/components/shared/OffersPanel';
-
-const navItems = [
-  { title: 'General Conditions', to: 'general-conditions' },
-  { title: 'Summary of Fees', to: 'summary-of-fees' },
-  { title: 'Tax Reporting', to: 'tax-reporting' },
-  { title: 'Payment Chart', to: 'payment-chart' },
-];
 
 const getModule = component => Loadable({
   loader: () => import(`./tabs/${component}`),
@@ -32,25 +25,55 @@ export default class ChooseOffer extends Component {
       this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
     });
   }
+  getBusinessName = res => ((res && res.prequalDetails) ? res.prequalDetails.businessGeneralInfo.businessName : '');
   signPortalAgreement = () => {
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.signPortalAgreement().then(() => {
       this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
     });
   }
+  declineApplication = () => this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers/decline`);
+  module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = () => {
     this.props.history.push('/app/dashboard');
   }
-  module = name => DataFormatter.upperCamelCase(name);
+  handleSetField = (field, value, location = null) => {
+    this.props.businessAppReviewStore.setFieldvalue(field, value);
+    if (location) {
+      this.props.history.push(`${this.props.match.url}/additional-terms`);
+    } else {
+      this.props.history.push(`${this.props.match.url}/general-conditions`);
+    }
+  }
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
-      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, setFieldvalue, selectedOfferIndex,
-      offerLoading,
+      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex,
+      selectedOfferIndex, offerLoading, fetchBusinessApplicationOffers,
     } = businessAppReviewStore;
+    const navItems = [
+      { title: 'General Conditions', to: 'general-conditions' },
+      { title: 'Summary of Fees', to: 'summary-of-fees' },
+      { title: 'Tax Reporting', to: 'tax-reporting' },
+      { title: 'Payment Chart', to: 'payment-chart' },
+    ];
+    if (fetchBusinessApplicationOffers) {
+      const offer = fetchBusinessApplicationOffers.offers.offer[selectedOfferIndex];
+      if (offer && offer.additionalTerms) {
+        navItems.push({ title: 'Additional Terms', to: 'additional-terms' });
+      }
+    }
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="extra large" closeOnDimmerClick={false}>
         <Modal.Content>
+          <Header as="h3" className="text-capitalize">{this.getBusinessName(fetchBusinessApplicationOffers)} Portal Agreement</Header>
+          <Statistic size="tiny">
+            <Statistic.Value>Congratulations!</Statistic.Value>
+            <Statistic.Label>
+              We are pleased to inform you that your crowdfunding campaign application is
+              approved. Please review the terms below
+            </Statistic.Label>
+          </Statistic>
           <Header as="h4">Choose from campaign offers</Header>
           <p>Please read more about offer details and choose one to sign in and proceed.</p>
           <p>You have one month from the date of this Approval Letter to accept your Approved
@@ -67,7 +90,7 @@ export default class ChooseOffer extends Component {
                 maskChangeWithIndex={maskChangeWithIndex}
                 isReadonly
                 match={this.props.match}
-                selectOffer={setFieldvalue}
+                selectOffer={this.handleSetField}
                 refModule="issuer"
                 selectedOfferIndex={selectedOfferIndex}
               />
@@ -96,7 +119,12 @@ export default class ChooseOffer extends Component {
                 </Switch>
               </div>
               <Card.Content extra className="center-align">
-                <Button primary loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign portal agreement" onClick={this.signPortalAgreement} />
+                { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? '' :
+                <Button.Group>
+                  <Button color="red" disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
+                  <Button primary disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
+                </Button.Group>
+                }
               </Card.Content>
             </Card> : null
           }

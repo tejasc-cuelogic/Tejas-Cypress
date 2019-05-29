@@ -6,12 +6,14 @@ export const allOfferingsCompact = gql`
       id
       keyTerms {
         legalBusinessName
+        shorthandBusinessName
       }
       stage
       created {
         id
         date
       }
+      order
     }
   }
 `;
@@ -20,8 +22,38 @@ export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
       id
+      isAvailablePublicly
       keyTerms {
         legalBusinessName
+        shorthandBusinessName
+        securities
+        regulation
+      }
+      leadDetails {
+        id
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+        phone {
+          number
+        }
+      }
+      issuerDetails {
+        id
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+        phone {
+          number
+        }
       }
       offering {
         launch {
@@ -31,10 +63,6 @@ export const allOfferings = gql`
       }
       applicationId
       issuerId
-      lead {
-        id
-        name
-      }
       stage
       created {
         id
@@ -44,6 +72,15 @@ export const allOfferings = gql`
         id
         date
       }
+      closureSummary {
+        processingDate
+        hardCloseDate
+        repayment {
+          currentRepaidAmount
+          count
+        }
+      }
+      order
     }
   }
 `;
@@ -62,14 +99,53 @@ export const getOfferingDetails = gql`
       id
       offeringSlug
       referralCode
+      previewPassword
+      regulation
+      leadDetails {
+        id
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+        phone {
+          number
+        }
+      }
+      issuerDetails {
+        id
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+       phone {
+        number
+      }
+      }
       keyTerms {
+        unitPrice
+        roundType
+        premoneyValuation
+        additionalKeyterms {
+          label
+          description
+        }
+        startupPeriod
+        revSharePercentageDescription
+        useOfProceedFootnote
+        currentFinancialStatements
         submitted {
-          id
+          aliasId: id
           by
           date
         }
         approved {
-          id
+          aliasId: id
           by
           date
           status
@@ -87,8 +163,10 @@ export const getOfferingDetails = gql`
         investmentMultiple
         revSharePercentage
         interestRate
-        minOfferingAmount
-        maxOfferingAmount
+        minOfferingAmountCF
+        minOfferingAmount506C
+        maxOfferingAmountCF
+        maxOfferingAmount506C
         legalBusinessType
         nsMinFees
         nsMaxFees
@@ -96,18 +174,19 @@ export const getOfferingDetails = gql`
         city
         state
         minInvestAmt
-        maxInvestAmt
         appendixATitle
         investmentMultipleSummary
         stockType
-        offeringExpTarget
-        offeringExpMax
+        offeringDisclaimer
         revShareSummary
         nsFeeCalcDescription
         isNewBusiness
         isHealthcare
         isFood
         isAlcohol
+        totalProjectCost
+        raisedThroughSaleOfEquity
+        nsFeePercentage
         uploadProformas {
           fileId
           fileName
@@ -120,17 +199,17 @@ export const getOfferingDetails = gql`
             stepName
             userId
             created {
-              id
+              aliasId: id
               by
               date
             }
             updated {
-              id
+              aliasId: id
               by
               date
             }
             deleted {
-              id
+              aliasId: id
               by
               date
             }
@@ -174,7 +253,31 @@ export const getOfferingDetails = gql`
           isPublic
           fileName
         }
+        avatar {
+          id
+          url
+          isPublic
+          fileName
+        }
         heroVideo {
+          id
+          url
+          isPublic
+          fileName
+        }
+        heroBackground {
+          id
+          url
+          isPublic
+          fileName
+        }
+        useOfProceeds {
+          id
+          url
+          isPublic
+          fileName
+        }
+        businessModelImage {
           id
           url
           isPublic
@@ -182,12 +285,12 @@ export const getOfferingDetails = gql`
         }
         issuerSubmitted
         submitted {
-          id
+          aliasId: id
           by
           date
         }
         approved {
-          id
+          aliasId: id
           by
           date
           status
@@ -199,7 +302,7 @@ export const getOfferingDetails = gql`
           acceptance
           accepted {
             status
-            id
+            aliasId: id
             by
             date
             comment
@@ -209,7 +312,7 @@ export const getOfferingDetails = gql`
           contingency
           acceptance
           accepted {
-            id
+            aliasId: id
             status
             date
             by
@@ -228,16 +331,22 @@ export const getOfferingDetails = gql`
             url
             shareLink
             blurb
+            featuredImageUpload {
+              id
+              url
+              fileName
+              isPublic
+            }
           }
           issuerWebsite
           issuerSubmitted
           submitted {
-            id
+            aliasId: id
             by
             date
           }
           approved {
-            id
+            aliasId: id
             by
             date
             status
@@ -253,12 +362,12 @@ export const getOfferingDetails = gql`
           locationAnalysis
           issuerSubmitted
           submitted {
-            id
+            aliasId: id
             by
             date
           }
           approved {
-            id
+            aliasId: id
             by
             date
             status
@@ -267,12 +376,12 @@ export const getOfferingDetails = gql`
         misc {
           additionalBonusRewardsContent
           submitted {
-            id
+            aliasId: id
             by
             date
           }
           approved {
-            id
+            aliasId: id
             by
             date
             status
@@ -281,12 +390,12 @@ export const getOfferingDetails = gql`
         misc {
           additionalBonusRewardsContent
           submitted {
-            id
+            aliasId: id
             by
             date
           }
           approved {
-            id
+            aliasId: id
             by
             date
             status
@@ -301,12 +410,12 @@ export const getOfferingDetails = gql`
           escrowNumber
           edgarLink
           submitted {
-            id
+            aliasId: id
             by
             date
           }
           approved {
-            id
+            aliasId: id
             by
             date
             status
@@ -336,10 +445,10 @@ export const getOfferingDetails = gql`
           accountNumber
           businessCapitalization
           useOfProceeds {
-            reachedMinOfferingGoal
-            reachedMaxOfferingGoal
+            offeringExpenseAmount
+            offeringExpenseAmountDescription
           }
-          rightsOfEqShareHolders
+          equityShareholderRights
           security {
             class
             votingRights
@@ -370,29 +479,29 @@ export const getOfferingDetails = gql`
           }
           issuerSubmitted
           submitted {
-            id
+            aliasId: id
             by
             date
           }
           approved {
-            id
+            aliasId: id
             by
             date
             status
           }
         }
         riskFactors {
-          businessRisk
-          financingRisk
-          developmentRisk
-          reputationalRisk
-          competitionRisk
-          marketRisk
+          businessRisks
+          financingRisks
+          developmentRisks
+          reputationalRisks
+          competitionRisks
+          marketRisks
           workStoppagesRisks
-          managementRisk
-          personnelRisk
-          laborSupplyRisk
-          privacyRisk
+          managementRisks
+          personnelRisks
+          laborSupplyRisks
+          privacyRisks
           realEstateRisks
           supplyRisks
           foodSafetyRisks
@@ -416,12 +525,33 @@ export const getOfferingDetails = gql`
           conflictOfInterestRisks
           issuerSubmitted
           submitted {
-            id
+            aliasId: id
             by
             date
           }
           approved {
-            id
+            aliasId: id
+            by
+            date
+            status
+          }
+        }
+        dataroom {
+          documents {
+            name
+            upload {
+              fileId
+              fileName
+            }
+            accreditedOnly
+          }
+          submitted {
+            aliasId: id
+            by
+            date
+          }
+          approved {
+            aliasId: id
             by
             date
             status
@@ -491,12 +621,12 @@ export const getOfferingDetails = gql`
             }
             issuerSubmitted
             submitted {
-              id
+              aliasId: id
               by
               date
             }
             approved {
-              id
+              aliasId: id
               by
               date
               status
@@ -608,14 +738,29 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            promissoryNote {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             edgar
             submitted {
-              id
+              aliasId: id
               by
               date
             }
             approved {
-              id
+              aliasId: id
               by
               date
               status
@@ -713,23 +858,41 @@ export const getOfferingDetails = gql`
         promoters
         issuerSubmitted
         submitted {
-          id
+          aliasId: id
           by
           date
         }
         approved {
-          id
+          aliasId: id
           by
           date
           status
         }
       }
       closureSummary {
-        disbursementDate
-        disbursementAmount
-        totalRepayment
+        processingDate
+        hardCloseDate
+        launchDate
+        disbursement {
+          date
+          amount
+        }
+        keyTerms {
+          multiple
+          revSharePercentage
+          interestRate
+          businessOpenDate
+        }
+        repayment {
+          startDate
+          completeDate
+          currentRepaidAmount
+          count
+        }
         totalCommittedAmount
         totalInvestorCount
+        totalInvestmentAmount
+        failedDate
       }
       bonusRewards{
         id
@@ -738,27 +901,20 @@ export const getOfferingDetails = gql`
         description
         rewardStatus
         expirationDate
-        tiers {
-          amount
-          earlyBirdQuantity
-          created {
-            id
-            by
-            date
-          }
-        }
+        earlyBirdQuantity
+        tiers
         created {
-          id
+          aliasId: id
           by
           date
         }
         updated {
-          id
+          aliasId: id
           by
           date
         }
         deleted {
-          id
+          aliasId: id
           by
           date
         }
@@ -767,40 +923,36 @@ export const getOfferingDetails = gql`
       issuerId
       lead {
         id
-        name
       }
       stage
-      rewardsTierIds {
+      rewardsTiers
+      earlyBird {
+        quantity
         amount
-        earlyBirdQuantity
-        created {
-          id
-          by
-          date
-        }
       }
       created{
-        id
+        aliasId: id
         by
         date
       }
       updated{
-        id
+        aliasId: id
         by
         date
       }
       deleted{
-        id
+        aliasId: id
         by
         date
       }
+      order
     }
   }
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
-  updateOffering(id: $id offeringDetails: $offeringDetails) {
+mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
+  updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
     id
   }
 }
@@ -939,71 +1091,10 @@ export const generateBusinessFiling = gql`
   }
 `;
 
-export const createBonusRewardsTier = gql`
-mutation _createBonusRewardTier($bonusRewardTierDetails: BonusRewardTierInputType!){
-  createBonusRewardTier(bonusRewardTierDetails: $bonusRewardTierDetails) {
-    amount
-    earlyBirdQuantity
-    created{
-      id
-      date
-      by
-    }
-  }
-}
-`;
-
-export const getBonusRewardsTiers = gql`
-query _getBonusRewardTiers{
-  getBonusRewardTiers {
-    amount
-    earlyBirdQuantity
-    created{
-      id
-      date
-      by
-    }
-  }
-}
-`;
-
-export const createBonusReward = gql`
-mutation _createBonusReward($bonusRewardDetails: BonusRewardInputType!){
-  createBonusReward(
-    bonusRewardDetails: $bonusRewardDetails
-  ){
+export const upsertBonusReward = gql`
+mutation _upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputType!){
+  upsertBonusReward(id: $id, bonusRewardDetails: $bonusRewardDetails){
     id
-    offeringId
-    title
-    description
-    rewardStatus
-    expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
-    created{
-      id
-      by
-      date
-    }
-    updated{
-      id
-      by
-      date
-    }
-  }
-}
-`;
-
-export const deleteBonusRewardsTierByOffering = gql`
-mutation _deleteBonusRewardTiersByOffering($offeringId: String! $bonusRewardTierId: BonusRewardTierInputType! ){
-  deleteBonusRewardsByTierId(offeringId: $offeringId bonusRewardTierId: $bonusRewardTierId) {
-    id
-    rewardsTierIds{
-      amount
-      earlyBirdQuantity
-    }
   }
 }
 `;
@@ -1017,17 +1108,13 @@ query _getBonusRewards($offeringId: String!){
     description
     rewardStatus
     expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
+    earlyBirdQuantity
+    tiers
     created{
-      id
       by
       date
     }
     updated{
-      id
       by
       date
     }
@@ -1040,73 +1127,29 @@ mutation _deleteBonusReward($id: String! $offeringId: String!){
   deleteBonusReward(id: $id offeringId: $offeringId
   ){
     id
-    offeringId
-    title
-    description
-    rewardStatus
-    expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
-    created{
-      id
-      by
-      date
-    }
-    updated{
-      id
-      by
-      date
-    }
-    deleted{
-      id
-      by
-      date
-    }
   }
 }
 `;
 
-export const updateBonusReward = gql`
-mutation _updateBonusReward($id: String! $bonusRewardDetails: BonusRewardInputType!){
-  updateBonusReward(id: $id bonusRewardDetails: $bonusRewardDetails){
-    id
-    offeringId
-    title
-    description
-    rewardStatus
-    expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
-    created{
-      id
-      by
-      date
-    }
-    updated{
-      id
-      by
-      date
-    }
+export const getTotalAmount = gql`
+query getTotalAmount{
+  getNSOfferingAmountRaised
+    {
+    amountRaisedUS
+    amountRaisedTX
+    totalInvestorsUS
+  }  
   }
-}
+  `;
+
+export const offerClose = gql`
+  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType) {
+    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload)
+  }
 `;
 
-export const unlinkTiersFromBonusRewards = gql`
-mutation _unlinkTiersFromBonusRewards($bonusRewardId: String! $offeringId: String! $bonusRewardTierId: BonusRewardTierInputType!){
-  unlinkTiersFromBonusRewards(
-    bonusRewardId: $bonusRewardId
-    offeringId: $offeringId
-    bonusRewardTierId: $bonusRewardTierId
-  ) {
-    id
-    rewardsTierIds{
-      amount
-      earlyBirdQuantity
-    }
+export const setOrderForOfferings = gql`
+  mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){
+    setOrderForOfferings(offeringOrderDetails: $offeringOrderDetails)
   }
-}
 `;

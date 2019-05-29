@@ -1,4 +1,6 @@
 import About from './public/about/containers/About';
+import ReferralProgramTerms from './public/agreements/ReferralProgramTerms';
+import AccreditedIncentiveTerms from './public/agreements/AccreditedIncentiveTerms';
 import Agreements from './public/agreements/containers/Agreements';
 import Blog from './public/blog/containers/Blog';
 import Home from './public/home/containers/Home';
@@ -9,6 +11,8 @@ import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
 import Resources from './public/resources';
+import Partners from './public/partners';
+import News from './public/news';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -34,6 +38,14 @@ export const publicRoutes = [
     exact: true,
   },
   {
+    path: '/agreements/referral-program-terms-and-conditions',
+    component: ReferralProgramTerms,
+  },
+  {
+    path: '/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions',
+    component: AccreditedIncentiveTerms,
+  },
+  {
     path: '/agreements/:section',
     component: Agreements,
   },
@@ -48,6 +60,10 @@ export const publicRoutes = [
   {
     path: '/blog',
     component: Blog,
+  },
+  {
+    path: '/invest/get-started',
+    component: News,
   },
   {
     path: '/invest',
@@ -80,6 +96,10 @@ export const publicRoutes = [
   {
     path: '/resources',
     component: Resources,
+  },
+  {
+    path: '/partners',
+    component: Partners,
   },
   {
     path: '/business-application',

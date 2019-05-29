@@ -15,4 +15,4 @@ export const UPLOADS_CONFIG = {
   secretKey: process.env.REACT_APP_UPLOADS_SECRET_KEY,
 };
 
-export const ASSETS_URL = `https://s3.amazonaws.com/${process.env.REACT_APP_UPLOADS_BUCKET}/assets/`;
+export const ASSETS_URL = `https://${process.env.REACT_APP_UPLOADS_BUCKET}/assets/`;

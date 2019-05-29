@@ -8,7 +8,7 @@ const Mission = () => (
     <section>
       <Container>
         <Responsive maxWidth={767} as={Aux}>
-          <Header as="h2">Everyone thrives when we invest in each other.</Header>
+          <Header as="h2">Invest in each other.<br /> Grow together.</Header>
           <Divider section />
         </Responsive>
         <Grid centered stackable>
@@ -29,8 +29,8 @@ const Mission = () => (
               <p>
                 Through NextSeed, local entrepreneurs are building places people love, creating
                 jobs, and making a tangible impact in their neighborhoods. Investors are getting
-                access to private investment opportunities once reserved for the wealthy, and
-                connecting with the businesses that matter most to them.
+                access to private investment opportunities once reserved for the well-connected and
+                engaging with the businesses that matter most to them.
               </p>
             </Grid.Column>
             <Grid.Column width={8}>
@@ -38,7 +38,7 @@ const Mission = () => (
                 The team behind NextSeed created the first registered funding portal with the
                 Securities & Exchange Commission (SEC) and became a member of the Financial
                 Industry Regulatory Authority{' '}
-                (<a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
+                (<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
                 {' '}The portal closed the first-ever regulation crowdfunding offering in the country.
                 Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered
                 broker-dealer and FINRA member.
@@ -67,7 +67,7 @@ const Mission = () => (
           </Grid.Row>
         </Grid>
         <Divider section as={Container} hidden />
-        <Grid celled columns={isMobile ? 1 : 2} className="mb-30">
+        <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Trust</Header>
@@ -90,7 +90,7 @@ const Mission = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={isMobile ? 1 : 2} className="mb-30">
+        <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Innovation</Header>
@@ -114,7 +114,7 @@ const Mission = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={isMobile ? 1 : 2} className="mt-50">
+        <Grid celled columns={isMobile ? 1 : 2}>
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Community</Header>

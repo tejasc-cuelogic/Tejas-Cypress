@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable no-prototype-builtins */
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes } from 'lodash';
+import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -126,6 +127,10 @@ class FormValidator {
           currentForm.fields[key].error = err;
         }
       });
+    } else if (!showErrors && !isMultiForm) {
+      forEach(currentForm.fields, (field, key) => {
+        currentForm.fields[key].error = undefined;
+      });
     }
     return currentForm;
   }
@@ -186,7 +191,8 @@ class FormValidator {
       mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
   resetFormData = (form, targetedFields) => {
     const currentForm = form;
-    const fieldsToReset = targetedFields || Object.keys(currentForm.fields);
+    const fieldsToReset = (targetedFields && targetedFields.length && targetedFields)
+    || Object.keys(currentForm.fields);
     fieldsToReset.map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
@@ -195,6 +201,31 @@ class FormValidator {
           currentForm.fields[field].fileData = [];
           currentForm.fields[field].preSignedUrl = [];
         }
+      } else if (Array.isArray(toJS(currentForm.fields[field]))) {
+        const arr = toJS(currentForm.fields[field]);
+        arr.map((item, index) => {
+          const fieldKeys = Object.keys(currentForm.fields[field][index]);
+          fieldKeys.map((f) => {
+            if (Array.isArray(toJS(currentForm.fields[field][index][f].value))) {
+              currentForm.fields[field][index][f].value = [];
+              if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
+                currentForm.fields[field][index][f].fileId = [];
+                currentForm.fields[field][index][f].fileData = [];
+                currentForm.fields[field][index][f].preSignedUrl = [];
+              }
+            } else {
+              currentForm.fields[field][index][f].value = '';
+              if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
+                currentForm.fields[field][index][f].fileId = '';
+                currentForm.fields[field][index][f].fileData = '';
+                currentForm.fields[field][index][f].preSignedUrl = '';
+              }
+            }
+            return true;
+          });
+          return true;
+        });
+        currentForm.fields[field].splice(1);
       } else {
         currentForm.fields[field].value = '';
         if (currentForm.fields[field].objType === 'FileObjectType') {
@@ -204,6 +235,7 @@ class FormValidator {
         }
       }
       currentForm.fields[field].error = undefined;
+      currentForm.response = {};
       return true;
     });
     currentForm.meta.isValid = false;
@@ -218,9 +250,9 @@ class FormValidator {
     } else {
       this.onChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet });
     }
-    this.onChange(currentForm, { name: 'state', value: data.state });
-    this.onChange(currentForm, { name: 'city', value: data.city });
-    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
+    this.onChange(currentForm, { name: 'state', value: data.state || '' });
+    this.onChange(currentForm, { name: 'city', value: data.city || '' });
+    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
   }
 
   setAddressFieldsIndex = (place, form, formName, subForm = 'data', index) => {
@@ -289,7 +321,9 @@ class FormValidator {
           },
         };
       } else {
-        fields[key].value = typeof fields[key].value === 'number' ? 0 : '';
+        fields[key].value = fields[key].hasOwnProperty('default') ? fields[key].default : '';
+        // fields[key].value = typeof fields[key].value === 'number' ? '' :
+        // fields[key].hasOwnProperty('default') ? fields[key].default : '';
       }
     });
     return fields;
@@ -350,6 +384,16 @@ class FormValidator {
                   return false;
                 });
               }
+            } else if (fields[key].find) {
+              const fieldRef = key.split('_');
+              fields[key].value = fields[key].find ?
+                tempRef.find(o =>
+                  o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].fileName :
+                tempRef[key].fileName;
+              fields[key].preSignedUrl = fields[key].find ?
+                tempRef.find(o =>
+                  o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].url :
+                tempRef[key].url;
             } else {
               fields[key].value = tempRef[key].fileName;
               fields[key].preSignedUrl = tempRef[key].url;
@@ -475,7 +519,7 @@ class FormValidator {
   }
   // evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
 
-  evalDateObj = date => moment(date, 'MM/DD/YYYY').toISOString();
+  evalDateObj = date => moment(new Date(date)).toISOString();
 
   evaluateFormData = (fields) => {
     let inputData = {};
@@ -534,19 +578,14 @@ class FormValidator {
             if (fields[key].objRefOutput && !reference) {
               reference = fields[key].objRefOutput;
             }
-            let objValue = fields[key].value;
+            let objValue = (fields[key].value === '' || (fields[key].value === undefined && fields[key].refSelector === undefined)) && fields[key].defaultValue ? fields[key].defaultValue :
+              fields[key].value;
             if (fields[key].objType && fields[key].objType === 'FileObjectType') {
               objValue = this.evalFileObj(fields[key]);
             } else if (fields[key].objType && fields[key].objType === 'DATE') {
               objValue = this.evalDateObj(fields[key].value);
             } else if (fields[key].objType && fields[key].objType === 's3File') {
               objValue = this.evalS3FileObj(fields[key]);
-              // {
-              //   id: 1,
-              //   url: fields[key].preSignedUrl,
-              //   fileName: fields[key].value,
-              //   isPublic: true,
-              // };
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);

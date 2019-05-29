@@ -6,33 +6,48 @@ import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
+import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore', 'commonStore')
 @observer
 export default class OfferingLaunch extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
-    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
-  }
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+  //   this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+  //   this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  // }
   handleFormSubmit = (isApproved = null) => {
     const {
       COMPANY_LAUNCH_FRM,
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, undefined, isApproved);
+    const successMsg = isApproved && isApproved.status === 'manager_approved' ? null : undefined;
+    updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, successMsg, isApproved);
+  }
+  handleFileLink = (fileId) => {
+    this.props.commonStore.getBoxFileDetails(fileId).then((response) => {
+      const boxFileId = response && response.getFileDetails &&
+      response.getFileDetails.boxFileId;
+      if (boxFileId) {
+        window.open(`${NEXTSEED_BOX_URL}file/${boxFileId}`, '_blank');
+      }
+    });
   }
   launch = () => {
     const {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOfferingMutation(
-      currentOfferingId, { stage: 'LIVE' }, false,
-      true, 'Offering Launched successfully.',
-    );
-    this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+    new Promise((res, rej) => {
+      updateOfferingMutation(
+        currentOfferingId, { stage: 'LIVE' }, false,
+        true, 'Offering Launched successfully.', false, res, rej,
+      );
+    })
+      .then(() => {
+        this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+      });
   }
   render() {
     const {
@@ -75,14 +90,14 @@ export default class OfferingLaunch extends Component {
         <Form.Group widths={3}>
           {
             ['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'disclosure', 'securityAgreement', 'personalGuarantee'].map(document => (
-              <div className="field display-only" >
+              <div className="field">
                 <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
                 {legalDocs && legalDocs[document] && legalDocs[document].fileName ?
                   <Aux>
                     <div className="display-only">
-                      <Link to={this.props.match.url}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
+                      <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
-                    <p>signed on{' '}
+                    <p>uploaded on{' '}
                       {
                         moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
                       }

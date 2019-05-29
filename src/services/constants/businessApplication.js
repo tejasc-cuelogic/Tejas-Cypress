@@ -27,36 +27,75 @@ export const BUSINESS_APPLICATION_STATUS = {
   APPLICATION_SUCCESSFUL: 'APPLICATION_SUCCESSFUL',
   REVIEWED: 'REVIEWED',
   DECLINED: 'DECLINED',
+  APPLICATION_DECLINED: 'APPLICATION_DECLINED',
   APPLICATION_DELETED: 'APPLICATION_DELETED',
   LENDIO_PRE_QUALIFICATION_SUCCESSFUL: 'LENDIO_PRE_QUALIFICATION_SUCCESSFUL',
   LENDIO_PRE_QUALIFICATION_FAILED: 'LENDIO_PRE_QUALIFICATION_FAILED',
   LENDIO_SUCCESS: 'SUCCESS',
+  REVIEW_FAILED: 'REVIEW_FAILED',
+  ISSUER_DECLINED: 'ISSUER_DECLINED',
 };
 
 export const BUSINESS_APP_ADMIN_STATUS = [
   { status: 'NEW', color: 'gray', title: 'New' },
   { status: 'STASH', color: 'green', title: 'Stash' },
   { status: 'SIGNED', color: 'green', title: 'Signed' },
-  { status: 'DECLIENED', color: 'red', title: 'Decliened' },
+  { status: 'DECLINED', color: 'red', title: 'Declined' },
+  { status: 'NS_DECLINED', color: 'red', title: 'Ns Declined' },
+  { status: 'ISSUER_DECLINED', color: 'red', title: 'Issuer Declined' },
   { status: 'ACCEPTED', color: 'green', title: 'Accepted' },
   { status: 'OFFERED', color: 'blue', title: 'Offered' },
   { status: 'DELETED', color: 'red', title: 'Deleted' },
   { status: 'REMOVED', color: 'red', title: 'Removed' },
+  { status: 'APPLICATION_DECLINED', color: 'red', title: 'Admin Declined' },
 ];
 
 export const BUSINESS_APP_USER_STATUS = {
-  PRE_QUALIFICATION_FAILED: { status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange' },
-  PRE_QUALIFICATION_SUCCESSFUL: { status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange' },
-  PRE_QUALIFICATION_SUBMITTED: { status: 'In-progress', icon: 'ns-pencil-circle-line', color: '' },
-  PRE_QUALIFICATION_PROMOTED: { status: 'Promoted', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_SUBMITTED: { status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange' },
-  APPLICATION_OFFERED: { status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange' },
-  APPLICATION_REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_FAILED: { status: 'Failed', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_SUCCESSFUL: { status: 'Signed', icon: 'ns-check-circle-line', color: 'green' },
-  REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
-  DECLINED: { status: 'Declined Offer', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_DELETED: { status: 'Deleted', icon: 'ns-reload-circle-line', color: '' },
+  PRE_QUALIFICATION_FAILED: {
+    status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  PRE_QUALIFICATION_SUCCESSFUL: {
+    status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  PRE_QUALIFICATION_SUBMITTED: {
+    status: 'In-progress', icon: 'ns-pencil-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  PRE_QUALIFICATION_PROMOTED: {
+    status: 'Promoted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_SUBMITTED: {
+    status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Submitted Date', datePath: 'applicationSubmittedDate',
+  },
+  APPLICATION_OFFERED: {
+    status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Offer Date', datePath: 'offers.approved.date',
+  },
+  APPLICATION_REVIEWED: {
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_FAILED: {
+    status: 'Failed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_SUCCESSFUL: {
+    status: 'Signed', icon: 'ns-check-circle-line', color: 'green', dateTitle: 'Signed Date', datePath: 'envelopeStatusChangedDateTime',
+  },
+  REVIEWED: {
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_DELETED: {
+    status: 'Deleted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  ISSUER_DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Declined Date', datePath: 'updated.date',
+  },
+  REVIEW_FAILED: {
+    status: 'Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Reviewed Date',
+  },
 };
 
 export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
@@ -80,6 +119,7 @@ export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
   MISCELLANEOUS_FRM: 'APPN_REVIEW_MISCELLANEOUS',
   BUSINESS_PLAN_FRM: 'CP',
   OFFERS_FRM: 'APPN_REVIEW_OFFER_OFFER',
+  sourcesAndUses: 'SOURCES_AND_USES',
 };
 
 export const BUSINESS_DETAILS_EDIT_META = {
@@ -88,6 +128,9 @@ export const BUSINESS_DETAILS_EDIT_META = {
   },
   signupCode: {
     value: '', label: 'Sign-Up Code', error: undefined, rule: 'optional', placeHolder: 'e.g. JB-123',
+  },
+  utmSource: {
+    value: '', label: 'Utm Source', error: undefined, rule: 'optional', placeHolder: 'e.g. JB-123',
   },
 };
 
@@ -108,10 +151,10 @@ export const NEED_HELP = {
 
 export const BUSINESS_PRE_QUALIFICATION_BASIC = {
   firstName: {
-    value: '', label: 'First Name', error: undefined, rule: 'required', placeHolder: 'e.g. John', customErrors: { required: 'required' },
+    value: '', label: 'First Name', error: undefined, rule: 'required|removeFrontAndTrailingSpaces', placeHolder: 'e.g. John', customErrors: { required: 'required' },
   },
   lastName: {
-    value: '', label: 'Last Name', error: undefined, rule: 'required', placeHolder: 'e.g. Smith', customErrors: { required: 'required' },
+    value: '', label: 'Last Name', error: undefined, rule: 'required|removeFrontAndTrailingSpaces', placeHolder: 'e.g. Smith', customErrors: { required: 'required' },
   },
   email: {
     value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g. abc@xyz.com', customErrors: { required: 'required' },
@@ -138,7 +181,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g. NY', customErrors: { required: 'required' },
   },
   zipCode: {
-    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6, customErrors: { required: 'required' },
+    value: '', label: 'ZIP Code', error: undefined, rule: 'required|maskedField:5', placeHolder: '10012', customErrors: { required: 'required', maskedField: 'The ZIP Code should be at least 5 digits' },
   },
   industryExperience: {
     value: '',
@@ -172,7 +215,7 @@ const BUSINESS_PREQUAL_COMMON = {
       { label: 'LLC', icon: 'ns-business', value: 'LLC' },
       { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
       { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
-      { label: 'Other', value: 'OTHER' },
+      { label: 'Other use of fund', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -193,10 +236,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {
-    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
+    value: '', label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
   },
   businessAgeMonths: {
-    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required' },
+    value: '', label: 'Months', error: undefined, rule: 'maxVal:11|required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required', maxVal: 'Please enter valid value.' },
   },
   franchiseHolder: {
     value: '',
@@ -270,7 +313,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
       { label: 'Restructure Debt', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
-      { label: 'Other Industry Type', value: 'OTHER' },
+      { label: 'Other use of fund', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -304,16 +347,16 @@ export const BUSINESS_PRE_QUALIFICATION = {
         value: 'HAS_NOT_SOLD_SECURITIES',
       },
       {
-        label: 'I have never filed for bankruptcy.',
+        label: 'The control owner(s) have not filed for bankruptcy.',
         value: 'HAS_NEVER_FILED_BANKRUPTCY',
         tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        label: 'Neither I, nor any entity under my control, have ever been found guilty of fraud or similar crimes.',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        label: 'Neither I, nor any entity under my control, are currently being charged with fraud or any similar crime.',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
       },
     ],
@@ -329,8 +372,8 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
     values: [
       { label: 'CRE', icon: 'ns-real-estate', value: 'COMMERCIAL_REAL_ESTATE' },
       { label: 'Restaurant & Bar', icon: 'ns-food-light', value: 'RESTAURANT_AND_BAR' },
-      { label: 'Fitness', icon: 'ns-dumbbells', value: 'FITNESS' },
       { label: 'Health & Wellness', icon: 'ns-beauty-spa', value: 'HEALTH_AND_WELLNESS' },
+      { label: 'Fitness', icon: 'ns-dumbbells', value: 'FITNESS' },
       { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
       { label: 'Other', value: 'OTHER' },
     ],
@@ -421,16 +464,16 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
         value: 'HAS_NOT_SOLD_SECURITIES',
       },
       {
-        label: 'I have never filed for bankruptcy.',
+        label: 'The control owner(s) have not filed for bankruptcy.',
         value: 'HAS_NEVER_FILED_BANKRUPTCY',
         tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        label: 'Neither I, nor any entity under my control, have ever been found guilty of fraud or similar crimes.',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        label: 'Neither I, nor any entity under my control, are currently being charged with fraud or any similar crime. ',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
       },
     ],
@@ -450,17 +493,17 @@ export const BUSINESS_SIGNUP = {
 
 export const BUSINESS_DETAILS = {
   businessPlan: {
-    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   debts: [{
     amount: {
-      value: 0, label: 'Existing Debt', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
       value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %', customErrors: { required: 'required' },
+      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
       value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
@@ -480,10 +523,10 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' },
     },
     dateOfService: {
-      value: null, label: 'Date of Service', error: undefined, rule: 'required', placeHolder: 'Select date', customErrors: { required: 'required' },
+      value: null, label: 'Date of Service', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
     linkedInUrl: {
-      value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional|url', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
+      value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
     },
     title: {
       value: '', label: 'Title', error: undefined, rule: 'optional', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
@@ -504,6 +547,9 @@ export const BUSINESS_PERF_COMMON = {
   fiveYearProjection: {
     value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
+  sourcesAndUses: {
+    value: [], label: '  ', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+  },
 };
 
 export const BUSINESS_PERF = {
@@ -518,7 +564,7 @@ export const BUSINESS_PERF = {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   pyCogs: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $1,250,000', customErrors: { required: 'required' },
@@ -530,7 +576,7 @@ export const BUSINESS_PERF = {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyCogs: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
 };
 
@@ -559,8 +605,8 @@ export const BUSINESS_DOC = {
   personalGuarantee: {
     value: '',
     values: [
-      { label: 'Yes', value: 'true' },
-      { label: 'No', value: 'false' },
+      { label: 'Yes', value: true },
+      { label: 'No', value: false },
     ],
     error: undefined,
     rule: 'required',
@@ -678,4 +724,66 @@ export const LENDIO = {
     1000000: 'AMT_500001_1M', // '$500,001 - $1M'
     1000001: 'GREATER_THAN_1M', // 'Over $1M'
   },
+};
+
+export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
+
+  applicationStatus: [
+    {
+      congratulations: '',
+      header: 'You have been pre-qualified for a NextSeed campaign',
+      message: <span>Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
+    },
+    {
+      congratulations: '',
+      header: 'You’re almost there',
+      message: <span>Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStage: 'IN_PROGRESS',
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'We’re reviewing your application',
+      message: <span>Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStatus: 'APPLICATION_SUBMITTED',
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'You’ve received an offer!',
+      message: <span>We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
+      applicationStatus: 'APPLICATION_OFFERED',
+    },
+  ],
+  offeringStage: [
+    {
+      congratulations: 'Congratulations!',
+      header: 'We’re looking forward to working with you on your campaign!',
+      message: 'You should expect a member of the NextSeed Operations team to reach out shortly to schedule your kickoff call.',
+      offeringStage: ['CREATION'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Your NextSeed campaign is live!',
+      message: 'Let’s get the word out. Remember to use your team’s personalized Share Link when communicating with your network. That will help us keep track of your referrals.',
+      offeringStage: ['LIVE'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Your campaign has successfully closed',
+      message: 'We’ll be reaching out to confirm closing contingencies and to ensure your funds are properly tracked and distributed.',
+      offeringStage: ['PROCESSING', 'LOCK'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Funds have been disbursed',
+      message: 'Congrats! Please check your account and confirm that you have received your funds.',
+      offeringStage: ['STARTUP_PERIOD'],
+    },
+    {
+      congratulations: '!',
+      header: 'How are things progressing?',
+      message: 'It’s time to provide your monthly update. Please go to your Updates section to share the latest with your investors.',
+      offeringStage: ['STARTUP_PERIOD', 'IN_REPAYMENT'],
+    },
+  ],
 };

@@ -1,33 +1,28 @@
 import React, { Component } from 'react';
-import { Header, Grid, Segment, Icon, Image } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { ASSETS_URL } from '../../../../../../constants/aws';
-import { Image64 } from '../../../../../../theme/shared';
+import { Header } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
+import { InlineLoader } from '../../../../../../theme/shared';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
+@inject('campaignStore')
+@observer
 class LocationAnalysis extends Component {
   render() {
-    const {
-      isTabletLand,
-      LocationAnalysisDetailUrl,
-      campaign,
-    } = this.props;
+    const { campaign } = this.props.campaignStore;
     return (
-      <Grid.Column className={isTabletLand && 'mt-30'}>
-        <Segment padded>
-          <Header as="h4">
-            <Link to={`${LocationAnalysisDetailUrl}/locationanalysis`}>
-              Location Analysis
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
-          </Header>
-          {campaign && campaign.media && campaign.media.location &&
-              campaign.media.location.length && campaign.media.location[0].url ?
-                <Image64 srcUrl={campaign.media.location[0].url} />
-                :
-                <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
-          }
-        </Segment>
-      </Grid.Column>
+      <Aux>
+        <Header as="h3" className="anchor-wrap mb-30">
+          Location Analysis
+          <span className="anchor" id="location-analysis" />
+        </Header>
+        {campaign && campaign.offering
+          && campaign.offering.about
+          && campaign.offering.about.locationAnalysis ?
+            <HtmlEditor readOnly content={campaign.offering.about.locationAnalysis} /> :
+            <InlineLoader text="No data found" className="bg-offwhite" />
+        }
+      </Aux>
     );
   }
 }

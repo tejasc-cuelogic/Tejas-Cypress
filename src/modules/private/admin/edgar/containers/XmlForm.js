@@ -20,16 +20,24 @@ import {
   XML_SUBMISSION_TABS,
 } from '../../../../../constants/business';
 
-@inject('businessStore', 'uiStore')
+@inject('businessStore', 'uiStore', 'offeringsStore')
 @observer
 export default class XmlForm extends React.Component {
+  state = {
+    folderId: '',
+  }
   componentDidMount() {
     this.props.businessStore.setXmlActiveTabName('filer');
     this.props.businessStore.setOfferingId(this.props.match.params.offeringId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
     this.props.businessStore.setXmlSubmissionId(this.props.match.params.xmlId);
-    businessActions.getFiles(this.props.match.params)
-      .then(() => {
+    const { offer } = this.props.offeringsStore;
+    const offeringRegulationArr = offer && offer.regulation && offer.regulation.split('_');
+    const regulationType = offeringRegulationArr && offeringRegulationArr[0];
+    const accountTypeToConsider = regulationType && regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
+    businessActions.getFiles(this.props.match.params, accountTypeToConsider)
+      .then((res) => {
+        this.setState({ folderId: res });
         if (this.props.match.params.xmlId) {
           businessActions.fetchXmlDetails(this.props.match.params);
         } else {
@@ -385,13 +393,15 @@ export default class XmlForm extends React.Component {
       xmlSubmissionId,
       xmlSubmissionStatus,
     } = this.props.businessStore;
-    if (this.props.uiStore.inProgress) {
+    const { inProgressArray, inProgress } = this.props.uiStore;
+    if (inProgress || inProgressArray.includes('fetchEdgarDetails') || inProgressArray.includes('fetchXmlDetails') || inProgressArray.includes('fetchAttachedFiles')) {
       return (
         <div>
           <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
         </div>
       );
     }
+    const { offer } = this.props.offeringsStore;
     return (
       <Aux>
         <div className="page-header-section">
@@ -453,7 +463,7 @@ export default class XmlForm extends React.Component {
                 {xmlActiveTabName === 'offering' && <OfferingInformation />}
                 {xmlActiveTabName === 'annual' && <AnnualReportDisclosureRequirements />}
                 {xmlActiveTabName === 'signature' && <Signature />}
-                {xmlActiveTabName === 'doc' && <FileSelector />}
+                {xmlActiveTabName === 'doc' && <FileSelector folderId={this.state.folderId} offeringDetails={offer} />}
               </Form>
             </Grid.Column>
             <FormErrors xmlErrors={xmlErrors} className="field-error-message" />

@@ -10,9 +10,10 @@ const OfferingInvestDetails = props => (
         <Grid.Row>
           <Grid.Column>
             <Statistic size="mini" className="basic">
-              <Statistic.Label>Current investment amount</Statistic.Label>
+              <Statistic.Label>Investment Amount</Statistic.Label>
               <Statistic.Value>
-                {Helper.CurrencyFormat((props.offering && props.offering.investedAmount) || 0)}
+                {Helper.MoneyMathDisplayCurrency((props.offering && props.offering.investedAmount)
+                || 0)}
               </Statistic.Value>
             </Statistic>
           </Grid.Column>
@@ -20,7 +21,7 @@ const OfferingInvestDetails = props => (
             <Statistic size="mini" className="basic">
               <Statistic.Label>Account</Statistic.Label>
               <Statistic.Value>
-                <Icon className={`ns-${props.accType}-line`} color="green" />
+                <Icon className={`ns-${props.accType}-line`} color="green" />{' '}
                 {(props.offering && props.offering.offering.keyTerms &&
                   props.offering.offering.keyTerms.shorthandBusinessName)}
               </Statistic.Value>

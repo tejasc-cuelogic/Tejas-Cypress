@@ -17,17 +17,36 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         agreementId
         investmentDate
         investedAmount
+        regulation
         offering {
           id
           stage
+          offeringSlug
           keyTerms {
             shorthandBusinessName
             securities
             industry
+            city
+            state
+            maturity
+            investmentMultiple
+            interestRate
+            regulation
+            minOfferingAmount506C
+            maxOfferingAmount506C
+            minOfferingAmountCF
+            maxOfferingAmountCF
           }
           offering {
             launch {
               terminationDate
+            }
+          }
+          closureSummary {
+            processingDate
+            hardCloseDate
+            disbursement {
+              date
             }
           }
         }
@@ -35,6 +54,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
       active {
         investedAmount
         investmentDate
+        regulation
         offering {
           id
           stage
@@ -42,15 +62,35 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             shorthandBusinessName
             securities
             industry
+            city
+            state
+            maturity
+            investmentMultiple
+            interestRate
+            regulation
+            minOfferingAmount506C
+            maxOfferingAmount506C
+            minOfferingAmountCF
+            maxOfferingAmountCF
+          }
+          offering {
+            launch {
+              terminationDate
+            }
           }
           closureSummary {
-            disbursementDate
+            processingDate
+            hardCloseDate
+            disbursement {
+              date
+            }
           }
         }
       }
       completed {
         investedAmount
         investmentDate
+        regulation
         offering {
           id
           stage
@@ -58,9 +98,28 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             shorthandBusinessName
             securities
             industry
+            city
+            state
+            maturity
+            investmentMultiple
+            interestRate
+            regulation
+            minOfferingAmount506C
+            maxOfferingAmount506C
+            minOfferingAmountCF
+            maxOfferingAmountCF
+          }
+          offering {
+            launch {
+              terminationDate
+            }
           }
           closureSummary {
-            disbursementDate
+            processingDate
+            hardCloseDate
+            disbursement {
+              date
+            }
           }
         }
       }
@@ -97,6 +156,21 @@ export const addFunds = gql`
   mutation addFunds($amount:  Float!, $accountId: String! ) {
     addFunds(amount: $amount, accountId: $accountId)
   }
+`;
+
+export const getMonthlyPaymentsToInvestorByOffering = gql`
+query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
+  getMonthlyPaymentsToInvestorByOffering (
+    userId: $userId
+    accountId: $accountId
+    offeringId: $offeringId
+  ) {
+    payment
+    yearMonth
+    paidToDate
+  }
+}
+
 `;
 
 export const getUserAccountSummary = gql`

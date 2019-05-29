@@ -1,17 +1,32 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Header, Button } from 'semantic-ui-react';
-import { FormTextarea, FormInput } from '../../../../../../theme/form';
+import { Form, Divider, Header, Button, Confirm } from 'semantic-ui-react';
+import { FormTextarea, FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingOverview extends Component {
-  componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
-    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  // componentWillMount() {
+  //   this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+  //   this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+  //   if (!this.props.offeringCreationStore.initLoad.includes('OFFERING_OVERVIEW_FRM')) {
+  //     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  //   }
+  // }
+  onFileDrop = (files, name) => {
+    this.props.offeringCreationStore.uploadFileToS3('OFFERING_OVERVIEW_FRM', name, files);
+  }
+  handleDelDoc = (field) => {
+    this.props.offeringCreationStore.removeFileFromS3('OFFERING_OVERVIEW_FRM', field);
+  }
+  toggleConfirmModal = (e, index, formName) => {
+    e.preventDefault();
+    this.props.offeringCreationStore.toggleConfirmModal(index, formName);
+  }
+  removeData = (confirmModalName, arrayName = 'highlight') => {
+    this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
   }
   addNewBullet = (e) => {
     e.preventDefault();
@@ -24,10 +39,12 @@ export default class OfferingOverview extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview', true, undefined, isApproved);
   }
+  editorChange = (field, value, form) =>
+    this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const {
-      OFFERING_OVERVIEW_FRM,
-      formArrayChange,
+      OFFERING_OVERVIEW_FRM, formArrayChange, confirmModal, confirmModalName, removeIndex,
+      currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     const { isIssuer } = this.props.userStore;
@@ -44,27 +61,33 @@ export default class OfferingOverview extends Component {
       (isManager && approved && approved.status));
     return (
       <Form>
-        {
-          ['elevatorPitch', 'tombstoneDescription'].map(field => (
-            <Aux>
-              <Header as="h4">{OFFERING_OVERVIEW_FRM.fields[field].label}</Header>
-              <FormTextarea
-                readOnly={isReadonly}
-                key={field}
-                name={field}
-                fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
-                changed={(e, result) => formArrayChange(e, result, formName)}
-                containerclassname="secondary"
-                hidelabel
-              />
-              <Divider section />
-            </Aux>
-          ))
-        }
+        <Header as="h4">Elevator pitch</Header>
+        <HtmlEditor
+          imageUploadPath={`offerings/${currentOfferingId}`}
+          readOnly={isReadonly}
+          changed={this.editorChange}
+          name="elevatorPitch"
+          form="OFFERING_OVERVIEW_FRM"
+          content={OFFERING_OVERVIEW_FRM.fields.elevatorPitch.value}
+        />
+        <Header as="h4">{OFFERING_OVERVIEW_FRM.fields.tombstoneDescription.label}</Header>
+        <FormTextarea
+          readOnly={isReadonly}
+          key="tombstoneDescription"
+          name="tombstoneDescription"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.tombstoneDescription}
+          changed={(e, result) => formArrayChange(e, result, formName)}
+          containerclassname="secondary"
+          hidelabel
+        />
+        <Divider section />
         <Header as="h4">Offering highlights (Top bullet points)</Header>
         {
           OFFERING_OVERVIEW_FRM.fields.highlight.map((highlights, index) => (
             <FormInput
+              removed={!isReadonly && OFFERING_OVERVIEW_FRM.fields.highlight.length &&
+                OFFERING_OVERVIEW_FRM.fields.highlight.length > 1 ?
+                e => this.toggleConfirmModal(e, index, formName) : false}
               displayMode={isReadonly}
               name="highlight"
               label={`Bullet ${index + 1}`}
@@ -73,7 +96,9 @@ export default class OfferingOverview extends Component {
             />
           ))
         }
-        <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
+        {!isReadonly &&
+          <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
+        }
         <Divider section />
         <Header as="h4">Social Media
           <Header.Subheader>
@@ -98,12 +123,24 @@ export default class OfferingOverview extends Component {
           </Header.Subheader>
         </Header>
         <Header as="h6">Facebook</Header>
-        <FormInput
-          displayMode={isReadonly}
-          name="facebook_shareLink"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
-          changed={(e, result) => formArrayChange(e, result, formName)}
-        />
+        <Form.Group>
+          <FormInput
+            displayMode={isReadonly}
+            name="facebook_shareLink"
+            containerwidth="10"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
+            changed={(e, result) => formArrayChange(e, result, formName)}
+          />
+          <DropZone
+            disabled={isReadonly}
+            name="facebook_featuredImageUpload"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featuredImageUpload}
+            ondrop={(files, name) => this.onFileDrop(files, name)}
+            onremove={field => this.handleDelDoc(field)}
+            uploadtitle="Choose a file or drag it here"
+            containerclassname="field six wide"
+          />
+        </Form.Group>
         <FormTextarea
           readOnly={isReadonly}
           name="facebook_blurb"
@@ -112,12 +149,24 @@ export default class OfferingOverview extends Component {
           containerclassname="secondary"
         />
         <Header as="h6">Twitter</Header>
-        <FormInput
-          displayMode={isReadonly}
-          name="twitter_shareLink"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
-          changed={(e, result) => formArrayChange(e, result, formName)}
-        />
+        <Form.Group>
+          <FormInput
+            displayMode={isReadonly}
+            name="twitter_shareLink"
+            containerwidth="10"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
+            changed={(e, result) => formArrayChange(e, result, formName)}
+          />
+          <DropZone
+            disabled={isReadonly}
+            name="twitter_featuredImageUpload"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_featuredImageUpload}
+            ondrop={(files, name) => this.onFileDrop(files, name)}
+            onremove={fieldName => this.handleDelDoc(fieldName)}
+            uploadtitle="Choose a file or drag it here"
+            containerclassname="field six wide"
+          />
+        </Form.Group>
         <FormTextarea
           readOnly={isReadonly}
           name="twitter_blurb"
@@ -147,6 +196,15 @@ export default class OfferingOverview extends Component {
           approved={approved}
           updateOffer={this.handleFormSubmit}
           issuerSubmitted={issuerSubmitted}
+        />
+        <Confirm
+          header="Confirm"
+          content={`Are you sure you want to remove this bullet ${removeIndex + 1}?`}
+          open={confirmModal}
+          onCancel={this.toggleConfirmModal}
+          onConfirm={() => this.removeData(confirmModalName)}
+          size="mini"
+          className="deletion"
         />
       </Form>
     );

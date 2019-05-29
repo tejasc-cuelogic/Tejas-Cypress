@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { get } from 'lodash';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { DateTimeFormat, UserAvatar, NsPagination } from './../../../../../../theme/shared';
+import moment from 'moment';
+import { UserAvatar, NsPagination } from './../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 import UserTypeIcon from './UserTypeIcon';
 
 class UserListing extends Component {
@@ -22,7 +25,7 @@ class UserListing extends Component {
   };
   render() {
     const {
-      paginate, sortState, listData, requestState, count,
+      paginate, sortState, listData, requestState, count, isManager,
     } = this.props;
     const { by, direction } = sortState;
     const totalRecords = count || 0;
@@ -48,8 +51,8 @@ class UserListing extends Component {
               continuous
             >
               {listData.map(user => (
-                <Table.Row className={(user.accountStatus === 'locked') ? 'locked' : ''} key={user.id}>
-                  <Table.Cell collapsing>
+                <Table.Row className={(user.locked && user.locked.lock === 'LOCKED') ? 'locked' : ''} key={user.id}>
+                  <Table.Cell>
                     {!user.profilepic &&
                       <div className="user-image">
                         <UserAvatar
@@ -59,35 +62,37 @@ class UserListing extends Component {
                             avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
                             roles: user.roles.map(r => r.scope),
                           }}
+                          base64url
                           size="mini"
                         />
                       </div>
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</Link></span>
+                    <span className="user-name">{isManager ? <Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link> : <b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b>}</span>
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>
-                    {user.mailingAddress && user.mailingAddress.city ?
-                      user.mailingAddress.city : ''
+                    {get(user, 'info.mailingAddress.zipCode')
                     }
                   </Table.Cell>
-                  <Table.Cell>{user.phone ? user.phone.number : ''}</Table.Cell>
+                  <Table.Cell>{Helper.phoneNumberFormatter(get(user, 'phone.number') ? get(user, 'phone.number') : '')}</Table.Cell>
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created ?
-                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={user.created.date} /> :
+                      moment.unix(user.created.date).format('MM/DD/YYYY') :
                       'N/A'
                     }
                   </Table.Cell>
                   <Table.Cell>
                     {user.lastLoginDate ?
-                      <DateTimeFormat unix fromNow datetime={user.lastLoginDate} /> :
+                      moment.unix(user.lastLoginDate).format('MM/DD/YYYY') :
                       'N/A'
                     }
                   </Table.Cell>
+                  {isManager &&
                   <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
+                  }
                 </Table.Row>
               ))}
               {this.statusRow(this.props)}
@@ -95,7 +100,7 @@ class UserListing extends Component {
           </Table>
         </div>
         {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={paginate} meta={{ totalRecords, requestState }} />
+          <NsPagination initRequest={paginate} meta={{ totalRecords, requestState }} />
         }
       </Card>
     );

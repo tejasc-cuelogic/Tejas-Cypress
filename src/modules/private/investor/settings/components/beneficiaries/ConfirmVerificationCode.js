@@ -2,10 +2,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('beneficiaryStore', 'uiStore')
 @withRouter
@@ -16,10 +19,8 @@ export default class ConfirmVerificationCode extends Component {
       this.props.history.push(this.props.refLink);
     }
   }
-
-  getMaskedPhoneNumber = () => {
-    const number = this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber;
-    return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';
+  componentDidMount() {
+    Helper.otpShield();
   }
 
   submit = (e) => {
@@ -31,7 +32,7 @@ export default class ConfirmVerificationCode extends Component {
   }
 
   gotoMfaSettings = () => {
-    this.props.history.push('/app/profile-settings/security');
+    this.props.history.push('/app/account-settings/security');
   }
 
   resendVerification = (e) => {
@@ -55,6 +56,7 @@ export default class ConfirmVerificationCode extends Component {
       verifyVerificationCodeChange,
     } = this.props.beneficiaryStore;
     const { errors } = this.props.uiStore;
+    const formattedPhoneNumber = get(this.props, 'beneficiaryStore.beneficiaryDisplayPhoneNumber') ? Helper.phoneNumberFormatter(this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber) : '';
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -66,20 +68,8 @@ export default class ConfirmVerificationCode extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
-          <p className="display-only">{this.getMaskedPhoneNumber()}</p>
-          <p>
-            <Link
-              to="/app/profile-settings/security"
-              className="link"
-            >
-            See Multi-Factor Authentication Settings
-            </Link>
-          </p>
+          <p className="display-only">{formattedPhoneNumber}</p>
+          <p><Link to="/app/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
           <Form error onSubmit={this.submit}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
@@ -87,15 +77,21 @@ export default class ConfirmVerificationCode extends Component {
                 name="code"
                 fields={6}
                 type="number"
+                autoFocus={!isMobile}
                 className="otp-field"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />
+              <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={e => this.resendVerification(e)} />
             </Form.Field>
-            <Button.Group vertical>
-              <Button loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTP_VERIFY_META.meta.isValid} >Submit to approval</Button>
-              <Button loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="link-button cancel-link" onClick={e => this.resendVerification(e)}>Resend the code to my phone</Button>
-            </Button.Group>
+            {errors &&
+              <Message error className="mb-40">
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
+            <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTP_VERIFY_META.meta.isValid} />
           </Form>
         </Modal.Content>
       </Modal>

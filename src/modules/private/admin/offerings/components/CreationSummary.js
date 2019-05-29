@@ -1,6 +1,7 @@
 import React from 'react';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { Card, Grid, Popup, Statistic, Icon } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 import { DataFormatter } from '../../../../../helper';
@@ -21,10 +22,19 @@ const summary = offer => [
     content: offer.created ? DataFormatter.formatedDate(offer.created.date) : 'N/A',
     type: 0,
   },
-  { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
   {
-    title: 'Days Till Launch',
-    content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.terminationDate)} days` : 'N/A',
+    title: 'POC',
+    content: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'N/A',
+    type: 0,
+  },
+  {
+    title: 'Lead',
+    content: offer.leadDetails && offer.leadDetails.info ? `${offer.leadDetails.info.firstName} ${offer.leadDetails.info.lastName}` : 'N/A',
+    type: 0,
+  },
+  {
+    title: `${(offer.offering && offer.offering.launch) ? DataFormatter.diffInDaysHoursMin(offer.offering.launch.targetDate).diffType : 'Days'} Till Launch`,
+    content: get(offer, 'closureSummary.launchDate') ? DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.launchDate')).diffText : 'N/A',
     type: 0,
   },
 ];

@@ -10,7 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
@@ -18,18 +18,18 @@ export const STAGES = {
     ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
   },
   LOCK: {
-    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
+    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Lock In',
   },
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
   },
-  FAILED: { ref: 'live', accessKey: 4, label: 'Failed' },
-  TERMINATED: { ref: 'live', accessKey: 4, label: 'Terminated' },
+  FAILED: { ref: 'failed', accessKey: 4, label: 'Failed' },
+  TERMINATED: { ref: 'failed', accessKey: 4, label: 'Terminated' },
   STARTUP_PERIOD: {
-    ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
+    ref: 'completed', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
   },
   IN_REPAYMENT: {
-    ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Payment',
+    ref: 'completed', publicRef: 'completed', accessKey: 3, label: 'Payment',
   },
   COMPLETE: {
     ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Completed',
@@ -47,7 +47,7 @@ export const KEY_TERMS = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Shorthand Name of Business',
+    label: 'Short hand Name of Business',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
@@ -64,6 +64,13 @@ export const KEY_TERMS = {
     label: 'Maturity',
     error: undefined,
     rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  startupPeriod: {
+    value: '',
+    label: 'Startup Period',
+    error: undefined,
+    rule: 'optional|numeric',
     placeHolder: 'Enter here',
   },
   regulation: {
@@ -103,14 +110,29 @@ export const KEY_TERMS = {
   },
   investmentMultiple: {
     value: '',
-    label: 'Investment Multiple',
+    label: 'Investment Multiple (copy)',
     error: undefined,
     rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  offeringDisclaimer: {
+    value: '',
+    label: 'Issuer Statement',
+    error: undefined,
+    rule: 'string',
+    defaultValue: 'The information contained on this campaign page (the "Campaign Information") is furnished solely by the Issuer to prospective investors in the investment opportunity described herein. All Campaign Information is intended to be a summary of the terms and information contained in the Disclosure Statement and the Note Purchase Agreement, and is fully qualified by reference to those documents. In the event any Campaign Information conflicts with the terms of the Disclosure Statement or Note Purchase Agreement, the terms of those documents will control. The Issuer has provided the Campaign Information for inclusion on the website located at <a href="https://www.nextseed.com/" target="_blank">www.nextseed.com</a>, and in no way will the Campaign Information be deemed to have been created or provided by NextSeed Securities, LLC, NextSeed Services, LLC, or their affiliates. ',
     placeHolder: 'Enter here',
   },
   revSharePercentage: {
     value: null,
     label: 'Revenue Sharing Percentage',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  revSharePercentageDescription: {
+    value: '',
+    label: 'Revenue Sharing Percentage Description',
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
@@ -122,16 +144,30 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  minOfferingAmount: {
+  minOfferingAmountCF: {
     value: null,
-    label: 'Minimum Offering Amount',
+    label: 'Minimum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
-  maxOfferingAmount: {
+  maxOfferingAmountCF: {
     value: null,
-    label: 'Maximum Offering Amount',
+    label: 'Maximum Offering Amount CF',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  minOfferingAmount506C: {
+    value: null,
+    label: 'Minimum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  maxOfferingAmount506C: {
+    value: null,
+    label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
@@ -162,20 +198,6 @@ export const KEY_TERMS = {
     label: 'Stock Type',
     error: undefined,
     rule: 'string',
-    placeHolder: 'Enter here',
-  },
-  offeringExpTarget: {
-    value: null,
-    label: 'Offering Expense Min',
-    error: undefined,
-    rule: 'numeric',
-    placeHolder: 'Enter here',
-  },
-  offeringExpMax: {
-    value: null,
-    label: 'Offering Expense Max',
-    error: undefined,
-    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   locationRiskFactors: {
@@ -209,13 +231,6 @@ export const KEY_TERMS = {
   minInvestAmt: {
     value: null,
     label: 'Min Investment Amount',
-    error: undefined,
-    rule: 'numeric',
-    placeHolder: 'Enter here',
-  },
-  maxInvestAmt: {
-    value: null,
-    label: 'Max Investment Amount',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
@@ -288,6 +303,94 @@ export const KEY_TERMS = {
     fileData: '',
     objType: 'FileObjectType',
   },
+  // minOfferingAmtExpense: {
+  //   value: '',
+  //   label: 'Min Offering Amount Expense',
+  //   error: undefined,
+  //   rule: 'string',
+  //   placeHolder: 'Enter here',
+  // },
+  // maxOfferingAmtExpense: {
+  //   value: '',
+  //   label: 'Max Offering Amount Expense',
+  //   error: undefined,
+  //   rule: 'string',
+  //   placeHolder: 'Enter here',
+  // },
+  useOfProceedFootnote: {
+    value: '',
+    label: 'Use of Proceeds Calculation Footnote',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+    defaultValue: 'NextSeed charges a percentage of the total Offering Amount (10% if the Offering Amount is $250,000 or less, 9% if the Offering Amount is more than $250,000 and $500,000 or less, 8% if the Offering Amount is more than $500,000 and $750,000 or less, and 7% if the Offering Amount is more than $750,000) as compensation for its services provided in connection with the Offering; provided that NextSeed will only charge 5% of the amount raised from investors that were introduced to the NextSeed website by the Issuer.',
+  },
+  currentFinancialStatements: {
+    value: '',
+    label: 'Current Financial Statements (New Business)',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+    defaultValue: 'Because the Issuer was formed recently, the Issuer’s current financial statements only reflect the startup costs incurred thus far. Please see Appendix A for the financial statements as well as the full review report by the Issuer’s accountant.',
+  },
+  roundType: {
+    value: '',
+    label: 'Round type',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  unitPrice: {
+    value: null,
+    label: 'Unit Price',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  premoneyValuation: {
+    value: null,
+    label: 'Pre-Money Valuation',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  additionalKeyterms: [{
+    label: {
+      label: 'Label',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+    description: {
+      label: 'Description',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+  }],
+  totalProjectCost: {
+    value: null,
+    label: 'Total project cost',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  raisedThroughSaleOfEquity: {
+    value: null,
+    label: 'Raised through sale of Equity',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  nsFeePercentage: {
+    value: '',
+    label: 'NS Fee %',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Please select a value',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -306,10 +409,21 @@ export const BUSINESS_INDUSTRIES = [
   { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
+export const SCOPE_VALUES = [
+  { key: 'Admin - Test Email', value: 'ADMIN', text: 'Admin - Test Email' },
+  { key: 'Investor - Final Confirmation', value: 'INVESTOR', text: 'Investor - Final Confirmation' },
+];
+
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
-  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity 506C' },
+  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
+];
+
+export const ROUND_TYPE_VALUES = [
+  { key: 'Seed', value: 'SEED', text: 'Seed' },
+  { key: 'Series A', value: 'SERIES_A', text: 'Series A' },
+  { key: 'Series B', value: 'SERIES_B', text: 'Series B' },
 ];
 
 export const BUSINESS_TYPE_VALUES = [
@@ -321,11 +435,25 @@ export const BUSINESS_TYPE_VALUES = [
 ];
 
 export const REGULATION_VALUES = [
-  { key: '506(c)', value: 'REGULATION_506C', text: '506(c)' },
-  { key: 'Reg CF 506(c)', value: 'REGULATION_CF_506C', text: 'Reg CF 506(c)' },
-  { key: 'Reg CF', value: 'REGULATION_CF', text: 'Reg CF' },
+  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
+  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
+  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
+  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
 ];
-
+export const BD_REGULATION_VALUES = [
+  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
+  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
+  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
+];
+export const FP_REGULATION_VALUES = [
+  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
+  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+];
+export const NS_FEE_PERCENTAGE = [
+  { key: '1', value: '1.00', text: '1%' },
+  { key: '2', value: '2.00', text: '2%' },
+];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {
     value: '',
@@ -434,6 +562,23 @@ export const OFFERING_OVERVIEW = {
     type: 'facebook',
     ArrayObjItem: true,
   },
+  facebook_featuredImageUpload: {
+    label: 'Featured Upload image',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    preSignedUrl: '',
+    showLoader: false,
+    id: '',
+    fileData: '',
+    fileName: '',
+    objType: 's3File',
+    skipField: true,
+    type: 'facebook',
+    find: 'type',
+    ArrayObjItem: true,
+    objRef: 'offering.overview.social',
+  },
   twitter_shareLink: {
     value: '',
     label: 'Sharelink',
@@ -457,6 +602,23 @@ export const OFFERING_OVERVIEW = {
     skipField: true,
     type: 'twitter',
     ArrayObjItem: true,
+  },
+  twitter_featuredImageUpload: {
+    label: 'Featured Upload image',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    preSignedUrl: '',
+    showLoader: false,
+    id: '',
+    fileData: '',
+    fileName: '',
+    objType: 's3File',
+    skipField: true,
+    find: 'type',
+    type: 'twitter',
+    ArrayObjItem: true,
+    objRef: 'offering.overview.social',
   },
   googleMeta: {
     value: '',
@@ -514,6 +676,32 @@ export const MISC = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Tell us about why you started the company/why you`re expanding, what your vision is and walk us through your space.',
+  },
+};
+
+export const CLOSURE_SUMMARY = {
+  multiple: {
+    value: '',
+    label: 'Investment Multiple (calculation)',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  processingDate: {
+    value: '',
+    label: 'Close Date',
+    error: undefined,
+    rule: 'optional|date',
+    customErrors: { date: 'Close Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
+  },
+  launchDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    rule: 'optional|date',
+    customErrors: { date: 'Launch Date is not a valid date format.' },
+    placeHolder: '4/3/2018',
   },
 };
 
@@ -588,25 +776,28 @@ export const OFFER_CLOSE = {
     error: undefined,
     rule: 'array',
   },
-  disbursementDate: {
+  date: {
     value: '',
     label: 'Disbursement Date',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'date|required',
     placeHolder: 'MM-DD-YYYY',
   },
-  disbursementAmount: {
+  amount: {
     value: '',
     label: 'Disbursement Amount',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  totalRepayment: {
+  currentRepaidAmount: {
     value: '',
     label: 'Total Repayment',
     error: undefined,
     rule: 'numeric|required',
+    objRef: 'closureSummary.repayment',
     placeHolder: 'Enter here',
   },
   totalCommittedAmount: {
@@ -690,6 +881,13 @@ export const OFFERING_DETAILS = {
     rule: 'required',
     placeHolder: 'Enter here',
   },
+  previewPassword: {
+    value: '',
+    label: 'Preview Password',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
   referralCode: {
     value: '',
     label: 'Offering Referral Code',
@@ -706,8 +904,20 @@ export const MEDIA = {
   heroImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
+  heroBackground: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Background Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
   tombstoneImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  locationHeroImage: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  useOfProceeds: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Use of Proceeds Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  businessModelImage: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Business Model Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   location: {
     fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
@@ -716,7 +926,10 @@ export const MEDIA = {
     fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   logo: {
-    fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  avatar: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Company Avatar', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 
@@ -805,7 +1018,7 @@ export const LEADERSHIP = {
       label: 'Phone Number',
       error: undefined,
       rule: 'numeric',
-      placeHolder: '555-123-8888',
+      placeHolder: '(123) 456-7890',
       objRef: 'phone',
       objRefOutput2: 'phone',
       customErrors: {
@@ -954,6 +1167,10 @@ export const LEADERSHIP = {
       objRef: 'uploads',
       objType: 's3File',
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     heroImage: {
       label: 'Hero Image',
@@ -968,6 +1185,10 @@ export const LEADERSHIP = {
       objType: 's3File',
       showLoader: false,
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     license: {
       label: 'Driver’s License',
@@ -1052,7 +1273,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'Month 20XX',
   },
   offeringDeadline: {
     label: 'Offering Deadline',
@@ -1152,7 +1373,17 @@ export const GENERAL = {
     error: undefined,
     rule: 'optional',
   },
-  reachedMinOfferingGoal: {
+  // offeringExpenseAmount: {
+  //   label: 'Minimum offering amount expense',
+  //   value: '',
+  //   error: undefined,
+  //   rule: 'optional',
+  //   objRef: 'legal.general.useOfProceeds',
+  //   objType: 'useOfProceeds',
+  //   placeHolder: 'Type amount here',
+  //   objRefOutput: 'useOfProceeds',
+  // },
+  offeringExpenseAmountDescription: {
     label: 'If minimum offering amount is reached:',
     value: '',
     error: undefined,
@@ -1162,17 +1393,17 @@ export const GENERAL = {
     placeHolder: 'Type your text here...',
     objRefOutput: 'useOfProceeds',
   },
-  reachedMaxOfferingGoal: {
-    label: 'If maximum offering amount is reached:',
-    value: '',
-    error: undefined,
-    rule: 'optional',
-    objRef: 'legal.general.useOfProceeds',
-    objType: 'useOfProceeds',
-    placeHolder: 'Type your text here...',
-    objRefOutput: 'useOfProceeds',
-  },
-  rightsOfEqShareHolders: {
+  // maxOfferingExpenseAmount: {
+  //   label: 'Maximum offering amount expense',
+  //   value: '',
+  //   error: undefined,
+  //   rule: 'optional',
+  //   objRef: 'legal.general.useOfProceeds',
+  //   objType: 'useOfProceeds',
+  //   placeHolder: 'Type amount here',
+  //   objRefOutput: 'useOfProceeds',
+  // },
+  equityShareholderRights: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
     error: undefined,
@@ -1282,7 +1513,7 @@ export const GENERAL = {
       value: '',
       error: undefined,
       rule: 'date',
-      placeHolder: 'Select date',
+      placeHolder: 'mm/dd/yyyy',
       customErrors: {
         date: 'Maturity Date is not a valid date format.',
       },
@@ -1339,6 +1570,13 @@ export const NEW_OFFER = {
   legalBusinessName: { ...KEY_TERMS.legalBusinessName, objRefOutput: 'keyTerms' },
   shorthandBusinessName: { ...KEY_TERMS.shorthandBusinessName, objRefOutput: 'keyTerms' },
   offeringSlug: { ...OFFERING_DETAILS.offeringSlug },
+  regulation: {
+    value: '',
+    label: 'Regulation',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Choose here',
+  },
 };
 
 export const RISK_FACTORS = {
@@ -1348,7 +1586,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  businessRisk: {
+  businessRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isBusinessRisk',
@@ -1362,12 +1600,14 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  financingRisk: {
+  financingRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isFinancingRisk',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isNewBusiness'],
+    dependantValue: [true],
     defaultValue: 'We have not yet commenced operations and have not generated any revenue to date. In order to begin business operations, we will need to incur expenses related to the development of the planned service, expenses related to the acquisition of certain supplies, expenses related to the opening of the first planned location, and other start-up costs. Accordingly, if we do not obtain additional financing, including the financing sought in this offering, the business will likely fail.',
   },
   isDevelopmentRisk: {
@@ -1376,12 +1616,14 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  developmentRisk: {
+  developmentRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isDevelopmentRisk',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isNewBusiness'],
+    dependantValue: [true],
     defaultValue: 'Our dependence on development exposes us to timing, budgeting and other risks. New project development has a number of risks, including risks associated with: (I) construction delays or cost overruns that may increase project costs; (ii) receipt of zoning, occupancy and other required governmental permits and authorizations from local governmental agencies, which are issued at the discretion of the issuing authority with no guaranty that all licenses and permits applied for by us will be issued; (iii) development costs incurred for projects that are not pursued to completion; (iv) so-called acts of God such as earthquakes, hurricanes, floods or fires that could adversely impact a project; (v) defects in design or construction that may result in additional costs to remedy or require all or a portion of a property to be closed during the period required to rectify the situation; (vi) ability to raise capital; and (vii) governmental restrictions on the nature or size of a project or timing of completion.    We cannot assure you that any development project will in fact be developed, and, if developed, the time period or the budget of such development may be greater than initially contemplated. We are planning to open in {{location}}. There is no guarantee that this site will remain suitable, or that the business will be operated profitably. We depend on cash flow from operations to pay lease obligations and to fulfill other cash requirements. If the business does not generate sufficient cash flow and sufficient funds are not otherwise available from other sources, we may not be able to meet lease obligations, grow the business, respond to competitive challenges or fund its other liquidity and capital needs, which would have a material adverse effect on our business.',
   },
   isReputationalRisk: {
@@ -1390,7 +1632,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  reputationalRisk: {
+  reputationalRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isReputationalRisk',
@@ -1404,7 +1646,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  competitionRisk: {
+  competitionRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isCompetitionRisk',
@@ -1418,7 +1660,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  marketRisk: {
+  marketRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isMarketRisk',
@@ -1446,7 +1688,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  managementRisk: {
+  managementRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isManagementRisk',
@@ -1460,7 +1702,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  personnelRisk: {
+  personnelRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPersonnelRisk',
@@ -1474,7 +1716,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  laborSupplyRisk: {
+  laborSupplyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isLaborSupplyRisk',
@@ -1488,7 +1730,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  privacyRisk: {
+  privacyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPrivacyRisk',
@@ -1522,6 +1764,8 @@ export const RISK_FACTORS = {
     refSelector: 'isSupplyRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Supplies and prices of the various products used in the goods that we offer can be affected by a variety of factors, such as weather, seasonal fluctuations, demand, politics and economics in the producing regions. These factors may subject us to shortages or interruptions in product supplies, which could adversely affect revenue. We do not have control over the businesses of its vendors, suppliers and distributors, and our efforts to specify and monitor the standards under which they perform may not be successful. Higher diesel and gasoline prices may affect supply or transportation costs and may affect our profitability. If we have long-term purchase commitments in excess of what we need due to a decline in demand, this may also adversely affect profitability. Furthermore, certain supplies may be perishable, and we have limited control over whether those items will be delivered in an appropriate condition for use. If any of our vendors, suppliers or distributors are unable to fulfill their obligations to our standards, or if a replacement provider cannot be found in the event of a supply or service disruption, we could encounter supply shortages and incur higher costs to secure adequate supplies, which could materially adversely affect the business, financial condition and results of operation.',
   },
   isFoodSafetyRisks: {
@@ -1536,6 +1780,8 @@ export const RISK_FACTORS = {
     refSelector: 'isFoodSafetyRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'We consider food safety a top priority and dedicate substantial resources toward ensuring that customers enjoy high-quality, safe products. However, food tampering, employee hygiene and cleanliness failures or improper employee conduct at the business could lead to product liability or other claims. Instances of food-borne illnesses, whether real or perceived, and whether at the store or those of competitors, could harm customers and otherwise result in negative publicity about us or the products we serve, which could adversely affect revenue. If customers become ill from food-borne illnesses, we could be forced to temporarily close. In addition, we may have different or additional competitors for intended customers as a result of such changes and may not be able to compete successfully against those competitors. Food safety concerns may also adversely affect the price and availability of those affected ingredients and cause customers to shift their preferences. A decrease in customer traffic as a result of these health concerns or negative publicity, or as a result of a change in menu or customer experience or a temporary closure of the store, could materially and adversely impact the business’s financial condition and results of operations.  A number of pandemic scares related to a variety of raw food ingredients, including meats, fruits and vegetables, have recently caused concern among consumers and health care officials. One or more such outbreaks of such food related illnesses, whether pandemic or isolated, may adversely affect the consumer demand for certain foods and consequently negatively impact the operations and profitability, regardless of the quality and safety of products offered by us.',
   },
   isNutritionalDisclosureRisks: {
@@ -1550,6 +1796,8 @@ export const RISK_FACTORS = {
     refSelector: 'isNutritionalDisclosureRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Government regulation and consumer eating habits may impact our business as a result in changes in attitudes regarding diet and health or new information regarding the health effects of consuming the menu offerings. These changes have resulted in, and may continue to result in, the enactment of laws and regulations that impact the ingredients and nutritional content of the menu offerings, or laws and regulations requiring us to disclose the nutritional content of its food offerings. Compliance with current and future laws and regulations regarding the ingredients and nutritional content of the menu items may be costly and time-consuming. Additionally, government authorities may increase regulations regarding trans-fats and sodium, which may require us to limit or eliminate trans-fat and sodium in the menu offerings, switch to higher cost ingredients or may hinder our ability to operate. We cannot make any assurances regarding its ability to effectively respond to changes in consumer health perceptions or successfully implement the nutrient content disclosure requirements or menu-labeling laws, which could have an adverse effect on the results of operations and financial position.',
   },
   isFoodRisks: {
@@ -1564,6 +1812,8 @@ export const RISK_FACTORS = {
     refSelector: 'isFoodRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Food service businesses can be adversely affected by litigation and complaints from customers or government authorities resulting from food quality, health claims, allergens, illness, injury or other health concerns or operating issues stemming from one or more retail locations. Negative publicity about these allegations may negatively affect us, regardless of whether the allegations are true, by discouraging customers from patronizing {{shorthand_name}}. We may also be impacted by industry trends in litigation, including class-action allegations brought under various consumer protection laws, securities and derivative lawsuits claiming violations of state and federal securities law, and employee lawsuits, including wage and hour claims. Due to the inherent uncertainties of litigation and regulatory proceedings, we cannot accurately predict the outcome of any such proceedings. An unfavorable outcome could have a material adverse impact on the business, financial condition and results of operations. Further, regardless of outcome, these proceedings could result in substantial costs and may require resources be used to defend any claims.',
   },
   isAlcoholSalesRisks: {
@@ -1578,6 +1828,8 @@ export const RISK_FACTORS = {
     refSelector: 'isAlcoholSalesRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isAlcohol'],
+    dependantValue: [true],
     defaultValue: 'We are subject to alcoholic beverage control regulations that govern various aspects of daily operations of the business, including the minimum age of guests and employees, hours of operation, advertising, wholesale purchasing and inventory control, handling and storage. Any failure to obtain and maintain, on a timely basis, liquor or other licenses, permits or approvals required to serve alcoholic beverages or food, as well as any associated negative publicity, could delay or prevent the opening of, or adversely impact the viability of, and could have an adverse effect on, the business operations and financial performance. Because of the many and various state and federal licensing and permitting requirements, there is a risk that one or more regulatory agencies could determine that we have not complied with applicable licensing or permitting regulations or have not maintained the approvals necessary to conduct business within its jurisdiction.  We are subject to state “dram shop” laws, which generally allow a person to sue us if that person was injured by an intoxicated person who was wrongfully served alcoholic beverages at {{shorthand_name}}. A judgment against us under a dram shop law could exceed our liability insurance coverage policy limits and could result in substantial liability and materially adversely affect operations. Any inability to continue to obtain such insurance coverage at reasonable cost could also have a material adverse effect on operations. Regardless of the validity of the claims, we could be adversely affected by negative publicity resulting from such actions.',
   },
   isAlcoholInvestmentRisks: {
@@ -1592,6 +1844,8 @@ export const RISK_FACTORS = {
     refSelector: 'isAlcoholInvestmentRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isAlcohol'],
+    dependantValue: [true],
     defaultValue: 'Alcohol beverage control regulations may limit an Investor’s ability to hold interests in {{shorthand_name}}. For example, {{state_of_formation}} laws and regulations generally do not allow a person from holding financial interests in both manufacturers and distributors of alcoholic beverages and retailers of alcoholic beverages, and local regulators may require disclosure of Investors’ personal information to verify their eligibility to invest in {{shorthand_name}}. In the event that {{state_of_formation}} laws and regulations do not allow an Investor to hold the Securities, such Investor may be required to transfer its interests in the Securities to {{shorthand_name}} as described in the NPA. If a number of Investors are ineligible to hold the Securities, it could materially adversely affect the financial condition.',
   },
   isIndustryRisks: {
@@ -1606,6 +1860,8 @@ export const RISK_FACTORS = {
     refSelector: 'isIndustryRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isHealthcare'],
+    dependantValue: [true],
     defaultValue: 'Our success is impacted by [the medical community’s acceptance and adoption of [product]. Currently, [product], and it is difficult to predict how quickly the medical community will accept [product] or the extent of its use. We are seeking to offer [product] to the public, but the rate of adaptation is uncertain. In addition, while positive patient experiences can be a significant driver of future sales, it is impossible to influence the manner in which this information is transmitted and received, the choices potential patients may make and the recommendations that treating physicians and dentists make to their patients.',
   },
   isHealthcareRisks: {
@@ -1620,6 +1876,8 @@ export const RISK_FACTORS = {
     refSelector: 'isHealthcareRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isHealthcare'],
+    dependantValue: [true],
     defaultValue: 'The use and sale of medical products entail significant risk of product liability claims. The medical device industry, in general, has been subject to significant medical malpractice litigation. Any product liability claims, with or without merit, could result in costly litigation, reduced sales, cause us to incur significant liabilities and divert our management’s time, attention and resources. In addition, there has been substantial litigation regarding patent and other intellectual property rights in the medical device industry, and our competitors may initiate intellectual property litigation as a means of competition. Intellectual property litigation is complex and expensive and outcomes are difficult to predict. We also rely on trademarks to protect its brand and products in the marketplace, but there can be no assurances that its proprietary information will not be shared, confidentiality agreements will not be breached, or that there will be adequate remedies for any such breach. Products offered by us are subject to regulation by a number of governmental agencies, including the U.S. Food and Drug Administration. Compliance with the rules and regulations of these various regulatory bodies may delay or prevent introducing new product models. In addition, government regulations may be adopted that could prevent, delay, modify or rescind regulatory clearance or approval of products offered us. A recall or other regulatory action could substantially increase costs, damage reputation and materially affect operating results.',
   },
   isLegalRisks: {
@@ -1634,6 +1892,8 @@ export const RISK_FACTORS = {
     refSelector: 'isLegalRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isHealthcare', 'isFood'],
+    dependantValue: [false, false],
     defaultValue: 'Businesses in our industry can be adversely affected by litigation and complaints from customers or government authorities resulting from [food quality, health claims, allergens, illness, injury or other health concerns//[name specific risks] or] operating issues stemming from one or more retail locations. Negative publicity about these allegations may negatively affect us, regardless of whether the allegations are true, by discouraging customers from patronizing {{shorthand_name}}. We may also be impacted by industry trends in litigation, including class-action allegations brought under various consumer protection laws, securities and derivative lawsuits claiming violations of state and federal securities law, and employee lawsuits, including wage and hour claims. Due to the inherent uncertainties of litigation and regulatory proceedings, we cannot accurately predict the outcome of any such proceedings. An unfavorable outcome could have a material adverse impact on the business, financial condition and operations. Further, regardless of outcome, these proceedings could result in substantial costs and may require resources be used to defend any claims.',
   },
   isEnvironmentalRisks: {
@@ -1687,7 +1947,7 @@ export const RISK_FACTORS = {
   ipRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
-    refSelector: 'ipRisks',
+    refSelector: 'isIpRisks',
     error: undefined,
     rule: 'optional',
     defaultValue: 'Our intellectual property is material to conducting business. Our success depends in part on furthering brand recognition using trademarks, service marks, trade dress, trade secrets and other proprietary intellectual property, including our name, logos and unique ambiance of {{shorthand_name}}. We have taken efforts to protect our brand, but if its efforts are inadequate, or if any third party misappropriates or infringes on our intellectual property, the value of the store brand or consumer products brand may be harmed, which could have a material adverse effect on the business. There are no material claims against us from prior users of intellectual property, but there can be no assurances that we will not encounter any material claims in the future. If this happens, it could harm our image, brands or competitive position and cause us to incur significant penalties and costs.',
@@ -1704,6 +1964,8 @@ export const RISK_FACTORS = {
     refSelector: 'isRegulatoryRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [false],
     defaultValue: 'Products and services offered by us are subject to regulation. Regulatory action could substantially increase costs, damage reputation and materially affect operating results. Increased costs in complying with these requirements or failure to obtain required licenses or permits in a timely fashion may materially affect operations.   ""Regulations regarding climate change, energy usage and emissions controls may impact us directly through higher cost of goods. The potential impacts of climate change and climate change regulations are highly uncertain at this time, and we cannot anticipate or predict the material adverse effects on the business as a result of climate change or climate change regulation. For instance, changes in the prevailing climates may result in a reduction in, or increased prices of available goods, which may adversely affect our revenue and operating margins.  """"We are subject to various federal, state and local regulations, including regulations related to  zoning and building codes, land use and employee, health, sanitation and safety matters. We are also subject to the U.S. Fair Labor Standards Act, which governs such matters as working conditions, family leave mandates and other employment law matters. In recent years, there has been an increased legislative, regulatory and consumer focus. Compliance with additional regulations can become costly and affect operating results.',
   },
   isRegulatoryFoodRisks: {
@@ -1718,6 +1980,8 @@ export const RISK_FACTORS = {
     refSelector: 'isRegulatoryFoodRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Products and services offered by us are subject to regulation. Regulatory action could substantially increase costs, damage reputation and materially affect operating results. Increased costs in complying with these requirements or failure to obtain required licenses or permits in a timely fashion may materially affect operations.   ""Regulations regarding climate change, energy usage and emissions controls may impact us directly through higher cost of goods. The potential impacts of climate change and climate change regulations are highly uncertain at this time, and we cannot anticipate or predict the material adverse effects on the business as a result of climate change or climate change regulation. For instance, changes in the prevailing climates may result in a reduction in, or increased prices of available goods, which may adversely affect our revenue and operating margins.  """"We are subject to various federal, state and local regulations, including regulations related to [the preparation and sale of food, the sale of alcoholic beverages,]16 zoning and building codes, land use and employee, health, sanitation and safety matters. We are also subject to the U.S. Fair Labor Standards Act, which governs such matters as working conditions, family leave mandates and other employment law matters. In recent years, there has been an increased legislative, regulatory and consumer focus on [nutrition and advertising practices in the food industry]17. Compliance with additional regulations can become costly and affect operating results.  [There is also a potential for increased regulation of certain food establishments in the United States, where compliance with a Hazard Analysis and Critical Control Points (“HACCP”) approach would be required. HACCP refers to a management system in which food safety is addressed through the analysis and control of potential hazards from raw material production, procurement and handling, to manufacturing, distribution and consumption of the finished product.]',
   },
   isTaxRisks: {
@@ -1729,7 +1993,7 @@ export const RISK_FACTORS = {
   taxRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
-    refSelector: 'isRegulatoryFoodRisks',
+    refSelector: 'isTaxRisks',
     error: undefined,
     rule: 'optional',
     defaultValue: 'We are subject to federal, state and local taxes. In making tax estimates and paying taxes, significant judgment is often required. Although we believe our tax positions and estimates are reasonable, we could have additional tax liability, including interest and penalties, if a taxing authority disagrees with the positions. If material, payment of such additional amounts could have a material impact on finances and results of operations.',
@@ -2040,7 +2304,7 @@ export const ADD_NEW_TIER = {
       },
     ],
     error: undefined,
-    rule: 'alpha_dash',
+    rule: 'optional',
   },
   amountForEarlyBird: {
     label: 'Amount for this Early Bird tier',
@@ -2094,7 +2358,7 @@ export const ADD_NEW_BONUS_REWARD = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
     key: 0,
     earlyBirdQuantity: 50,
   },
@@ -2102,21 +2366,21 @@ export const ADD_NEW_BONUS_REWARD = {
     label: 'Name of new bonus reward',
     value: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'required',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   description: {
     label: 'Description',
     value: '',
     error: undefined,
-    rule: 'string',
+    rule: 'optional',
     placeHolder: 'Description',
   },
   expirationDate: {
     label: 'Expiration Date',
     value: '',
     error: undefined,
-    rule: 'date',
+    rule: 'optional|date',
     customErrors: {
       date: 'Expiration Date is not a valid date format.',
     },
@@ -2264,5 +2528,164 @@ export const ADMIN_DOCUMENTATION = {
     stepName: 'DOCUMENTS_LEGAL_PERSONAL_GUARANTEE',
     lastModifiedDate: '',
   },
+  promissoryNote: {
+    value: '',
+    label: 'Promissory Note',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_PROMISSORY_NOTE',
+    lastModifiedDate: '',
+  },
 };
 
+export const DATA_ROOM = {
+  documents: [{
+    name: {
+      label: 'Document Name',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
+    upload: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'required',
+      showLoader: false,
+      preSignedUrl: '',
+      fileId: '',
+      fileData: '',
+      objType: 'FileObjectType',
+    },
+    accreditedOnly: {
+      label: '',
+      value: false,
+      error: undefined,
+      default: false,
+      rule: 'required',
+    },
+  }],
+};
+
+export const POC_DETAILS = {
+  issuerId: {
+    value: '',
+    label: 'POC',
+    error: undefined,
+    // objRef: 'leadDetails',
+    rule: 'string|required',
+  },
+  id: {
+    value: '',
+    label: 'Lead',
+    error: undefined,
+    objRef: 'leadDetails',
+    rule: 'string',
+  },
+  targetDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    objRef: 'offering.launch',
+    rule: 'string',
+    placeHolder: 'MM/DD/YYYY',
+  },
+};
+
+const LIMIT = {
+  value: '',
+  label: 'Limit',
+  error: undefined,
+  rule: 'required',
+};
+
+export const OFFERING_CLOSE_1 = {
+  queueLimit: { ...LIMIT },
+};
+
+export const OFFERING_CLOSE_2 = {
+  queueLimit: { ...LIMIT },
+  notePurchaseDate: {
+    value: '',
+    label: 'Note Purchase Date',
+    error: undefined,
+    objType: 'DATE',
+    objRefOutput: 'payload',
+    rule: 'optional|date',
+    placeHolder: 'MM/DD/YYYY',
+  },
+};
+
+export const OFFERING_CLOSE_3 = {
+  queueLimit: { ...LIMIT },
+  nsPayment: {
+    value: null,
+    label: 'NS Payment',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  investorFee: {
+    value: null,
+    label: 'Investor Fee',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  maturityDate: {
+    value: '',
+    label: 'Maturity Date',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'MM/DD/YYYY',
+  },
+  hardCloseDate: {
+    value: '',
+    label: 'Hard Close Date',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'MM/DD/YYYY',
+  },
+  interestRate: {
+    value: null,
+    label: 'Interest Rate',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  revSharePercentage: {
+    value: null,
+    label: 'Revenue Sharing Percentage',
+    objRefOutput: 'payload',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  multiple: {
+    value: null,
+    label: 'Investment Multiple',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  scope: {
+    value: 'ADMIN',
+    label: 'Scope',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'string',
+    placeHolder: 'Choose here',
+  },
+};

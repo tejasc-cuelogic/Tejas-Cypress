@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Container, Grid, Breadcrumb } from 'semantic-ui-react';
 import { InlineLoader, Image64 } from '../../../../theme/shared';
+import HtmlEditor from '../../../shared/HtmlEditor';
 
 @inject('articleStore')
 @observer
 export default class InsightsDetails extends Component {
   componentWillMount() {
-    this.props.articleStore.getArticle(this.props.match.params.id);
+    this.props.articleStore.getArticleDetailsBySlug(this.props.match.params.slug);
   }
   render() {
     const { ArticlesDetails, articleLoading } = this.props.articleStore;
@@ -31,12 +32,15 @@ export default class InsightsDetails extends Component {
             <Grid.Column computer={12} tablet={16} mobile={16}>
               <Header as="h2">{ArticlesDetails.title}</Header>
               <Image64
-                centered
                 srcUrl={ArticlesDetails.featuredImage}
                 className="mb-30 mt-30"
               />
-              <br />
-              <div dangerouslySetInnerHTML={{ __html: ArticlesDetails.content }} />
+              <pre className="migrated-content justify-text">
+                <HtmlEditor
+                  readOnly
+                  content={(ArticlesDetails.content || '')}
+                />
+              </pre>
             </Grid.Column>
           </Grid>
         </section>

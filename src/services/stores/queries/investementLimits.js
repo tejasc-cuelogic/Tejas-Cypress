@@ -1,31 +1,16 @@
 import gql from 'graphql-tag';
 
-export const finLimit = gql`
-  query FinancialLimits {
-    FinancialLimits(id:"cjheqz99f0dzu0171soskx0pp") {
-      id
-      annualIncome
-      netWorth
-      otherInvestments
-      currentLimit
-    }
-  }
-`;
-
-export const updateFinLimit = gql`
-  mutation updateFinancialLimits($annualIncome: Int!, $netWorth: Int!, $otherInvestments: Int!, $currentLimit: Int!){
-    updateFinancialLimits(
-      id: "cjheqz99f0dzu0171soskx0pp",
-      annualIncome: $annualIncome,
-      netWorth: $netWorth,
-      otherInvestments: $otherInvestments,
-      currentLimit: $currentLimit,
-    ) {
-      id
-      annualIncome
-      netWorth
-      otherInvestments
-      currentLimit
+export const updateInvestmentLimits = gql`
+  mutation _updateInvestmentLimits($userId: String, $accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
+    updateInvestmentLimits(
+      userId: $userId
+      accountId: $accountId
+      annualIncome: $annualIncome
+      netWorth: $netWorth
+      otherRegCfInvestments: $otherRegCfInvestments
+    )
+    {
+      investmentLimit
     }
   }
 `;
@@ -36,3 +21,32 @@ export const getInvestorInvestmentLimit = gql`
   }
 `;
 
+export const getInvestorTotalAmountInvested = gql`
+  query getInvestorTotalAmountInvested($userId: String, $accountId: String, $dateFilterStart: String, $dateFilterStop: String, $closeDateFilter: String, $includeTx: Boolean) {
+    getInvestorTotalAmountInvested(
+      userId: $userId
+      accountId: $accountId
+      dateFilterStart: $dateFilterStart
+      dateFilterStop: $dateFilterStop
+      closeDateFilter: $closeDateFilter
+      includeTx: $includeTx
+    )
+  }
+`;
+
+export const getInvestNowHealthCheck = gql`
+  query investNowHealthCheck($userId: String!, $accountId: String!, $offeringId: String!) {
+    investNowHealthCheck(userId: $userId, accountId: $accountId, offeringId: $offeringId)
+    {
+      investmentLimit
+      availableCash
+      rewardBalance
+      previousAmountInvested
+      bankNameAndAccountNumber
+      availabilityForNPAInOffering
+      previousInvestmentCredit
+      currentInflightLimit
+      investorTotalAmountInvested
+    }
+  }
+`;

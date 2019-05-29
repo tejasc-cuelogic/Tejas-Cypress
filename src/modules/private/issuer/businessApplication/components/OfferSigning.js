@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Grid, Button, Confirm } from 'semantic-ui-react';
+import { Modal, Grid, Confirm } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { DataFormatter } from '../../../../../helper';
@@ -10,13 +10,20 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class OfferSigning extends Component {
   state = {
+    isCreateOffer: false,
     showConfirmModal: false,
   }
+  componentDidMount() {
+    window.addEventListener('message', this.docuSignListener);
+  }
+  componentWillUnmount() {
+    // window.removeEventListener('message', this.docuSignListener);
+  }
   getPortalAgreementStatus = (funType = '') => {
-    const { match, businessAppReviewStore } = this.props;
+    const { businessAppReviewStore } = this.props;
     businessAppReviewStore.getPortalAgreementStatus().then((data) => {
       if (data.getPortalAgreementStatus === 'completed') {
-        this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
+        this.createOffer();
       } else if (funType === 'Button') {
         this.setState({ showConfirmModal: true });
       } else {
@@ -24,6 +31,24 @@ export default class OfferSigning extends Component {
       }
     }).finally(() => this.props.uiStore.setProgress(false));
   }
+  createOffer = () => {
+    this.setState({ isCreateOffer: true });
+    const { match, businessAppReviewStore } = this.props;
+    businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
+      this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
+    });
+  }
+  docuSignListener = (e) => {
+    setTimeout(() => {
+      if (e.data === 'signing_complete' || e.data === 'viewing_complete') {
+        this.getPortalAgreementStatus('Button');
+      // } else if (e.data === 'viewing_complete') {
+      //   this.createOffer();
+      } else if (e && e.data && !e.data.includes('setImmediate') && !e.data.includes('__fs') && !this.state.isCreateOffer) {
+        this.props.history.push('/app/dashboard');
+      }
+    }, 2000);
+  };
   hideConfirm = () => {
     this.setState({ showConfirmModal: false });
   }
@@ -42,11 +67,8 @@ export default class OfferSigning extends Component {
               <Grid.Column className="welcome-packet">
                 <div className="pdf-viewer">
                   {this.props.uiStore.inProgress ? <InlineLoader /> :
-                  <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
+                  <iframe id="docuSignIframe" onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
                   }
-                </div>
-                <div className="mt-20 center-align">
-                  <Button primary loading={this.props.uiStore.inProgress} className="relaxed" content="Finish" onClick={() => this.getPortalAgreementStatus('Button')} />
                 </div>
               </Grid.Column>
             </Grid.Row>

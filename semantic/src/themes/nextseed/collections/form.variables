@@ -31,7 +31,7 @@
 @inputFont: @pageFont;
 @inputWidth: 100%;
 @inputFontSize: 1em;
-@inputPadding: (@inputVerticalPadding + ((1em - @inputLineHeight) / 2)) @inputHorizontalPadding;
+@inputPadding: @inputVerticalPadding @inputHorizontalPadding;
 @inputBorder:none;
 @inputBorderRadius: @absoluteBorderRadius * 0;
 @inputColor: @textColor;
@@ -85,7 +85,7 @@
 /* Input Focus */
 @inputFocusBackground: @inputBackground;
 @inputFocusBorderColor: @primary-one;
-@inputFocusColor: @fullBlack;
+@inputFocusColor: @textColor;
 @inputFocusBoxShadow: @inputFocusPointerSize 0em 0em 0em @selectedBorderColor inset;
 @inputFocusBorderRadius: @inputBorderRadius;
 
@@ -131,8 +131,8 @@
 @inputErrorFocusBoxShadow: none;
 
 /* Placeholder Error */
-@inputErrorPlaceholderColor: lighten(@formErrorColor, 40);
-@inputErrorPlaceholderFocusColor: lighten(@formErrorColor, 30);
+@inputErrorPlaceholderColor: lighten(@formErrorColor, 25);
+@inputErrorPlaceholderFocusColor: lighten(@formErrorColor, 20);
 
 /* Loading Dimmer */
 @loaderDimmerColor: rgba(255, 255, 255, 0.8);

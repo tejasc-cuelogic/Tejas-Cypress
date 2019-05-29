@@ -2,13 +2,16 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [String], $accountStatus: [String], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
-    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page) {
+  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int) {
+    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit) {
       resultCount
       users {
         id
         email {
           address
+        }
+        locked {
+          lock
         }
         info {
           firstName
@@ -19,6 +22,7 @@ export const allUsersQuery = gql`
           }
           mailingAddress {
             city
+            zipCode
           }
         }
         phone {
@@ -26,6 +30,8 @@ export const allUsersQuery = gql`
         }
         roles {
           scope
+          name
+
         }
         lastLoginDate
         created {
@@ -36,10 +42,41 @@ export const allUsersQuery = gql`
   }
 `;
 
+export const userDetailsQueryForBoxFolder = gql`
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      storageDetails
+    }
+  }
+`;
+
 export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      userHash
+      wpUserId
+      status
+      accreditation {
+        status
+      }
+      saasquatch {
+        signupCode
+        referredBy
+        userId
+        accountId
+      }
+      skipAddressVerifyCheck
+      cip {
+        expiration
+        failType
+        requestId
+        failReason {
+          key
+          message
+        }
+      }
       limits {
         income
         netWorth
@@ -54,6 +91,7 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         avatar {
           name
@@ -62,6 +100,7 @@ export const userDetailsQuery = gql`
       }
       email {
         address
+        verified
       }
       capabilities
       roles {
@@ -70,13 +109,30 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            accreditation {
+              status
+            }
+            limits {
+              income
+              netWorth
+              otherContributions
+              limit
+            }
+            taxStatement {
+              fileId
+              fileName
+              year
+              formType
+            }
             name
             taxId
+            entityType
             address {
               street
               city
               state
               zipCode
+              streetTwo
             }
             isTrust
             trustDate
@@ -115,33 +171,38 @@ export const userDetailsQuery = gql`
                 fileHandle
               }
             }
-            annualIncome
-            netWorth
-            netAssets
-            cfInvestment {
-              dateOfInvestment
-              amount
-            }
+            initialDepositAmount
             linkedBank {
               bankName
               plaidAccountId
               plaidItemId
+              plaidInstitutionId
               accountNumber
               routingNumber
               plaidAccessToken
+              dateLinked
+              pendingUpdate
+              accountType
+              changeRequest {
+                accountNumber
+                bankName
+                plaidAccessToken
+                plaidAccountId
+                plaidItemId
+                plaidInstitutionId
+                dateRequested
+                status
+              }
             }
             created {
               date
             }
-            status
+            accountStatus
           }
         }
       }
       locked {
         lock
-      }
-      accreditation {
-        status
       }
       created {
         date
@@ -149,10 +210,12 @@ export const userDetailsQuery = gql`
       lastLoginDate
       phone {
         number
+        type
         verified
       }
       legalDetails {
         legalName {
+          salutation
           firstLegalName
           lastLegalName
         }
@@ -163,32 +226,334 @@ export const userDetailsQuery = gql`
           city
           state
           zipCode
+          streetTwo
         }
         status
       }
       investorProfileData {
         isPartialProfile
-        employmentStatusInfo {
-          employmentStatus
+        employment {
+          status
           employer
-          currentPosition
+          position
         }
-        investorProfileType
-        financialInfo {
-          netWorth
-          annualIncomeThirdLastYear
-          annualIncomeLastYear
-          annualIncomeCurrentYear
-          directorShareHolderOfCompany
-          employedOrAssoWithFINRAFirmName
+        brokerageFirmName
+        publicCompanyTicker
+        taxFilingAs
+        netWorth
+        annualIncome {
+          year
+          income
         }
-        investmentExperienceInfo {
-          investmentExperienceLevel
-          readyInvestingInLimitedLiquiditySecurities
-          readyForRisksInvolved
-        }
+        experienceLevel
+        isRiskTaker
+        isComfortable
       }
       mfaMode
+    }
+  }
+`;
+
+export const selectedUserDetailsQuery = gql`
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      userHash
+      wpUserId
+      status
+      accreditation {
+        status
+      }
+      saasquatch {
+        signupCode
+        userId
+        referredBy
+        accountId
+        status
+      }
+      cip {
+        expiration
+        failType
+        failReason {
+          key
+          message
+        }
+      }
+      limits {
+        income
+        netWorth
+        otherContributions
+        limit
+      }
+      info {
+        firstName
+        lastName
+        mailingAddress {
+          street
+          city
+          state
+          zipCode
+          streetTwo
+        }
+        avatar {
+          name
+          url
+        }
+      }
+      email {
+        address
+        verified
+      }
+      capabilities
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            goldstar {
+              accountNumber
+              contactId
+            }
+            frozen {
+              by
+              date
+              reason
+              previousStatus
+            }
+            accreditation {
+              status
+            }
+            limits {
+              income
+              netWorth
+              otherContributions
+              limit
+            }
+            taxStatement {
+              fileId
+              fileName
+              year
+              formType
+            }
+            name
+            taxId
+            entityType
+            address {
+              street
+              city
+              state
+              zipCode
+              streetTwo
+            }
+            isTrust
+            trustDate
+            legalInfo {
+              legalFirstName
+              legalLastName
+              title
+              legalDocUrl {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            accountId
+            iraAccountType
+            fundingType
+            identityDoc {
+              fileId
+              fileName
+              fileHandle
+            }
+            legalDocs {
+              formationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              operatingAgreementDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              einVerificationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            initialDepositAmount
+            linkedBank {
+              bankName
+              plaidAccountId
+              plaidItemId
+              plaidInstitutionId
+              accountNumber
+              routingNumber
+              plaidAccessToken
+              dateLinked
+              pendingUpdate
+              accountType
+              changeRequest {
+                accountNumber
+                bankName
+                plaidAccessToken
+                plaidAccountId
+                plaidItemId
+                plaidInstitutionId
+                dateRequested
+                status
+              }
+            }
+            created {
+              date
+            }
+            accountStatus
+          }
+        }
+      }
+      locked {
+        lock
+        by
+        date
+        comment
+      }
+      created {
+        date
+      }
+      lastLoginDate
+      phone {
+        number
+        type
+        verified
+      }
+      legalDetails {
+        legalName {
+          salutation
+          firstLegalName
+          lastLegalName
+        }
+        dateOfBirth
+        ssn
+        verificationCompletionDate
+        legalAddress {
+          street
+          city
+          state
+          zipCode
+          streetTwo
+        }
+        status
+      }
+      investorProfileData {
+        isPartialProfile
+        employment {
+          status
+          employer
+          position
+        }
+        brokerageFirmName
+        publicCompanyTicker
+        taxFilingAs
+        netWorth
+        annualIncome {
+          year
+          income
+        }
+        experienceLevel
+        isRiskTaker
+        isComfortable
+      }
+      mfaMode
+    }
+  }
+`;
+
+export const userAccreditationQuery = gql`
+  query userAccreditationQuery($userId: ID!) {
+    user(id: $userId) {
+      id
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            accreditation {
+              status
+              expiration
+              requestDate
+              reviewed {
+                by
+                date
+                justification
+                message
+              }
+              update {
+                id
+                by
+                date
+              }
+              method
+              netWorth
+              grantorName
+              assetsUpload {
+                type
+                fileInfo {
+                  fileId
+                  fileName
+                  fileHandle {
+                    boxFolderId
+                  }
+                }
+              }
+              verifier {
+                role
+                email
+              }
+            }
+            name
+            isTrust
+            accountId
+            accountStatus
+            }
+          }
+        }
+      accreditation {
+        status
+        expiration
+        requestDate
+        reviewed {
+          id
+          by
+          date
+          justification
+          message
+        }
+        update {
+          id
+          by
+          date
+        }
+        method
+        netWorth
+        grantorName
+        assetsUpload {
+          type
+          fileInfo {
+            fileId
+            fileName
+            fileHandle {
+              boxFolderId
+            }
+          }
+        }
+        verifier {
+          role
+          email
+        }
+      }
     }
   }
 `;
@@ -216,8 +581,8 @@ export const deleteUserMutation = gql`
 `;
 
 export const toggleUserAccount = gql`
-  mutation updateUserStatus($id: String!, $status: profileEnum!) {
-    updateUserStatus(userId: $id, accountStatus:$status) {
+  mutation updateUserStatus($id: String!, $accountStatus: profileLockEnum!) {
+    updateUserStatus(userId: $id, accountStatus:$accountStatus) {
       id
     }
   }
@@ -247,3 +612,41 @@ export const adminAddUser = gql`
       }
   }
 `;
+
+export const skipAddressValidation = gql`
+mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
+  skipAddressValidationCheck(
+     userId: $userId
+     shouldSkip: $shouldSkip
+   )
+ }`;
+
+export const deleteProfile = gql`
+mutation adminDeleteInvestorOrIssuerUser($userId: String!) {
+  adminDeleteInvestorOrIssuerUser(
+     cognitoUUId: $userId
+  ) {
+    status
+    message
+  }
+ }`;
+
+export const frozenEmailToAdmin = gql`
+mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
+  notifyAdminFrozenAccountActivity(
+     userId: $userId
+     accountId: $accountId
+     activity: $activity
+     offeringId: $offeringId
+   )
+ }`;
+
+export const freezeAccount = gql`
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $reason: String) {
+  freezeAccount(
+     userId: $userId
+     accountId: $accountId
+     freeze: $freeze
+     reason: $reason
+   )
+ }`;

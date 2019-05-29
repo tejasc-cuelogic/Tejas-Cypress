@@ -1,4 +1,5 @@
 import React from 'react';
+import Parser from 'html-react-parser';
 
 const pillersMeta = [
   { x: 0, rotate: 3, begin: 0 },
@@ -9,10 +10,10 @@ const pillersMeta = [
 ];
 
 const InlineLoader = props => (
-  <section className="center-align">
+  <section className={`center-align ${props.className}`}>
     {
       props.text ? (
-        <h3 style={{ color: '#31333d7d' }}>{props.text}</h3>
+        <h3 className="grey-header">{Parser(props.text) || ''}</h3>
       ) : (
         <svg
           version="1.1"
@@ -25,8 +26,9 @@ const InlineLoader = props => (
           xmlSpace="preserve"
           style={{ height: '60px', width: '100px', display: 'inline-block' }}
         >
-          {pillersMeta.map(p => (
-            <rect fill="#20C86D" x={p.x} width="3" height="50" transform={`translate(0) rotate(180 ${p.rotate} 50)`}>
+          {pillersMeta.map((p, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <rect fill="#20C86D" x={p.x} key={index} width="3" height="50" transform={`translate(0) rotate(180 ${p.rotate} 50)`}>
               <animate
                 attributeName="height"
                 attributeType="XML"

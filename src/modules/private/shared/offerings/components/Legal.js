@@ -14,13 +14,25 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('userStore', 'offeringsStore')
+@inject('userStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
 export default class Legal extends Component {
   componentWillMount() {
+    const { setFormData } = this.props.offeringCreationStore;
+    setFormData('GENERAL_FRM', 'legal.general');
+    setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+    if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
+      setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    }
+    setFormData('DATA_ROOM_FRM', 'legal.dataroom');
+    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/general`);
     }
+  }
+
+  shouldComponentUpdate() {
+    return !this.props.offeringCreationStore.isUploadingFile;
   }
 
   module = name => DataFormatter.upperCamelCase(name);
@@ -33,6 +45,7 @@ export default class Legal extends Component {
     ];
     const adminLegalInfo = [
       { title: 'Generate Docs', to: 'generate-docs' },
+      { title: 'Data Room', to: 'data-room' },
       {
         title: 'Bad Actor Check',
         to: 'bad-actor-check',
@@ -53,7 +66,7 @@ export default class Legal extends Component {
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <div className="sticy-sidebar">
+            <div className="sticky-sidebar">
               <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />
               {!isIssuer &&
                 <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />

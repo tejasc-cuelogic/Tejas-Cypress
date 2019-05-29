@@ -28,19 +28,29 @@ export default class ApplicationDetails extends Component {
   componentWillMount() {
     const { match } = this.props;
     const { params } = match;
-    this.props.businessAppStore.fetchAdminApplicationById(params.appId, params.id, params.userId)
-      .then(() => {
-        // this.props.businessAppReviewStore.resetForms();
-        if (match.isExact) {
-          this.props.history.push(`${match.url}/activity-history`);
-        }
-      });
+    if (this.props.businessAppStore.applicationId !== params.appId) {
+      this.props.businessAppStore.fetchAdminApplicationById(params.appId, params.id, params.userId)
+        .then(() => {
+          // this.props.businessAppReviewStore.resetForms();
+          if (match.isExact) {
+            this.props.history.push(`${match.url}/activity-history`);
+          }
+        });
+    }
+  }
+  componentDidMount() {
+    window.onpopstate = this.handleCloseModal;
   }
   module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = (e) => {
     e.stopPropagation();
     const { params } = this.props.match;
+    this.props.businessAppStore.setFieldvalue('applicationId', null);
+    this.props.businessAppReviewStore.setFieldvalue('initLoad', []);
+    this.props.businessAppReviewStore.setFieldvalue('expAnnualRevCount', 4);
     this.props.history.push(`/app/applications/${params.id}`);
+    this.props.businessAppReviewStore.resetForm('OFFERS_FRM');
+    window.onpopstate = null;
   };
   editBusinessDetails = (e) => {
     e.preventDefault();
@@ -136,7 +146,7 @@ export default class ApplicationDetails extends Component {
                     <Form>
                       <Form.Group widths="equal">
                         {
-                          ['businessName', 'signupCode'].map(field => (
+                          ['businessName', 'signupCode', 'utmSource'].map(field => (
                             <FormInput
                               containerclassname={this.state.displayOnly ? 'display-only' : ''}
                               readOnly={this.state.displayOnly}
@@ -212,7 +222,15 @@ export default class ApplicationDetails extends Component {
                     <Route
                       key={item.to}
                       path={`${match.url}/${item.to}`}
-                      render={props => <CurrentComponent resourceId={params.appId} {...props} />}
+                      render={props =>
+                        (<CurrentComponent
+                          module={item.title === 'Activity History' ? 'applicationDetails' : false}
+                          showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
+                          resourceId={params.appId}
+                          appType={params.id}
+                          {...props}
+                        />)
+                      }
                     />
                   );
                 })

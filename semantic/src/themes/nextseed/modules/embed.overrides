@@ -5,7 +5,6 @@
 	margin:@40px 0;
 }
 .offering-intro .ui.embed {
-        margin: 0 -@20px;
         max-width: ~"calc(100% + 40px)";
         >.placeholder {
             height: auto;  

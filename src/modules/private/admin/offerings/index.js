@@ -14,7 +14,7 @@ import OfferingDetails from './containers/OfferingDetails';
 export default class Repayments extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
-      this.props.history.push(`${this.props.match.url}/overview`);
+      this.props.history.push(`${this.props.match.url}/creation`);
     }
   }
   representAddon = subTabs => mapValues(subTabs, t => ` (${t})`);
@@ -29,7 +29,7 @@ export default class Repayments extends Component {
         subNav
       >
         <Switch>
-          <Route exact path={`${match.url}/overview`} component={Overview} />
+          {/* <Route exact path={`${match.url}/overview`} component={Overview} /> */}
           <Route exact path={`${match.url}/:stage`} component={AllOfferings} />
           <Route exact path={`${match.url}/creation/new`} component={NewOffer} />
           <Route path={`${match.url}/:stage/edit/:offeringid`} render={props => <OfferingDetails refLink={match.url} {...props} />} />

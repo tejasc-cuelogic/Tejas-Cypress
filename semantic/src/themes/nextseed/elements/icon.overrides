@@ -1845,7 +1845,7 @@ i.icon[class*="ns-"]{
     content:@ns-chevron-up-compact;
 }
 .ns-circle:before{
-    content:@ns-circle; 
+    content:@ns-circle;
 }
 .ns-circle-line:before{
     content:@ns-circle-line;
@@ -1907,6 +1907,12 @@ i.icon[class*="ns-"]{
 .ns-download:before{
     content:@ns-download;
 }
+.ns-drag-holder:before{
+    content:@ns-drag-holder;
+}
+.ns-drag-holder-large:before{
+    content:@ns-drag-holder-large;
+}
 .ns-dumbbells:before{
     content:@ns-dumbbells;
 }
@@ -1967,6 +1973,9 @@ i.icon[class*="ns-"]{
 .ns-fullscreen:before{
     content:@ns-fullscreen;
 }
+.ns-hamburger:before{
+    content:@ns-hamburger; 
+}
 .ns-help:before{
     content:@ns-help;
 }
@@ -1978,6 +1987,9 @@ i.icon[class*="ns-"]{
 }
 .ns-hospitality:before{
     content:@ns-hospitality;
+}
+.ns-hospitality-2:before {
+    content:@ns-hospitality-2; 
 }
 .ns-image:before{
     content:@ns-image;
@@ -2015,8 +2027,14 @@ i.icon[class*="ns-"]{
 .ns-lock:before{
     content:@ns-lock;
 }
+.ns-logout:before{
+    content:@ns-logout; 
+}  
 .ns-long-arrow-left:before{
     content:@ns-long-arrow-left;
+}
+.ns-minus:before{
+    content:@ns-minus; 
 }
 .ns-minus-square:before{
     content:@ns-minus-square;
@@ -2036,11 +2054,17 @@ i.icon[class*="ns-"]{
 .ns-nextseed-icon-line:before{
     content:@ns-nextseed-icon-line;
 }
+.ns-no-view:before{
+    content:@ns-no-view;
+}
 .ns-off-shoot-business:before{
     content:@ns-off-shoot-business;
 }
 .ns-offering:before{
     content:@ns-offering;
+}
+.ns-other:before {
+    content:@ns-other; 
 }
 .ns-paper-plane:before{
     content:@ns-paper-plane;

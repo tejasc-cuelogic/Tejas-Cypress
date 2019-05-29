@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { uiStore, userDetailsStore } from '../../../index';
+import { uiStore, userDetailsStore, userStore } from '../../../index';
 import { MFA_MODE_TYPES } from '../../../../constants/multiFactorAuth';
 import { FormValidator as Validator } from '../../../../../helper';
 import { updateMfaModeType } from '../../../queries/mfaModes';
@@ -12,35 +12,22 @@ export class MultiFactorAuthStore {
   @action
   handleMfaModeTypeChanged = (e, { value }) => {
     Validator.onChange(this.MFA_MODE_TYPE_META, { name: 'mfaModeTypes', value });
-    // this.MFA_MODE_TYPE_META.fields.mfaModeTypes.value = value;
   }
 
   @action
   handleMfaModePhoneTypeChanged = (e, { value }) => {
     Validator.onChange(this.MFA_MODE_TYPE_META, { name: 'mfaPhoneModeTypes', value });
-    // this.MFA_MODE_TYPE_META.fields.mfaPhoneModeTypes.value = value;
   }
 
   @action
   initialiseMfaMode = () => {
     const { currentUser } = userDetailsStore;
     if (currentUser && currentUser.data && currentUser.data.user) {
-      const { mfaMode } = currentUser.data.user;
-      if (mfaMode) {
-        switch (mfaMode) {
-          case 'EMAIL':
-            this.handleMfaModeTypeChanged(null, { value: 'EMAIL' });
-            break;
-          case 'TEXT':
-            this.handleMfaModeTypeChanged(null, { value: 'PHONE' });
-            this.handleMfaModePhoneTypeChanged(null, { value: 'TEXT' });
-            break;
-          case 'CALL':
-            this.handleMfaModeTypeChanged(null, { value: 'PHONE' });
-            this.handleMfaModePhoneTypeChanged(null, { value: 'CALL' });
-            break;
-          default: break;
-        }
+      const { mfaMode, phone } = currentUser.data.user;
+      const phoneType = phone.type && phone.type === 'TEXT' ? 'TEXT' : 'CALL';
+      const communicationType = mfaMode === 'EMAIL' ? 'EMAIL' : phoneType;
+      if (communicationType) {
+        this.handleMfaModeTypeChanged(null, { value: communicationType });
       }
     }
   }
@@ -49,7 +36,7 @@ export class MultiFactorAuthStore {
   updateMfaModeType = () => {
     uiStore.setProgress();
     const { fields } = this.MFA_MODE_TYPE_META;
-    const mfaModeType = fields.mfaModeTypes.value === 'EMAIL' ? fields.mfaModeTypes.value : fields.mfaPhoneModeTypes.value;
+    const mfaModeType = fields.mfaModeTypes.value;
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -58,11 +45,12 @@ export class MultiFactorAuthStore {
             mfaMode: mfaModeType,
           },
         })
-        .then(() => {
+        .then(action(() => {
           userDetailsStore.setUserMfaMode(mfaModeType);
           Helper.toast('Multi-factor autentitaction updated successfully.', 'success');
+          userDetailsStore.getUser(userStore.currentUser.sub);
           resolve();
-        })
+        }))
         .catch(() => {
           Helper.toast('Someting went wrong. Please try again in sometime', 'error');
           reject();

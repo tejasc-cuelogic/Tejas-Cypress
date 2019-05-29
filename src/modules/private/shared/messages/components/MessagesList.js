@@ -1,8 +1,8 @@
 import React from 'react';
-import { List, Image, Item, Label } from 'semantic-ui-react';
+import { List, Item, Label } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import ProfilePicTemp from '../../../../../assets/images/james-wright.png';
 import { DateTimeFormat } from '../../../../../theme/shared';
+import NSImage from '../../../../shared/NSImage';
 
 const MessagesList = props => (
   <List divided selection relaxed="very" verticalAlign="middle">
@@ -20,7 +20,7 @@ const MessagesList = props => (
             }
             <DateTimeFormat fromNow datetime={msg.updatedAt} />
           </Item.Extra>
-          <Image avatar src={ProfilePicTemp} />
+          <NSImage avatar path="james-wright.png" />
           <List.Content>
             <List.Header as="h5">Sarah Gainsborough</List.Header>
           </List.Content>

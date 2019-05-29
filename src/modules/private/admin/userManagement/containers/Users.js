@@ -5,14 +5,17 @@ import PrivateLayout from '../../../shared/PrivateLayout';
 import { P1, P3, P5 } from './../components/UserListingSubheader';
 import UserListing from '../components/manage/UserListing';
 
-@inject('userListingStore')
+@inject('userListingStore', 'userStore', 'portfolioStore', 'transactionStore')
 @observer
 class Users extends Component {
   componentWillMount() {
     this.props.userListingStore.initRequest();
+    this.props.portfolioStore.setFieldValue('apiCall', false);
+    this.props.transactionStore.setFieldValue('apiCall', false);
   }
 
-  setSearchParam = (e, { name, value }) => this.props.userListingStore.setInitiateSrch(name, value);
+  setSearchParam = (e, { name, value }, type) =>
+    this.props.userListingStore.setInitiateSrch(name, value, type);
 
   toggleSearch = () => this.props.userListingStore.toggleSearch();
 
@@ -34,15 +37,17 @@ class Users extends Component {
     const {
       users, loading, error, usersSummary, requestState, filters, maskChange, count,
     } = this.props.userListingStore;
+    const access = this.props.userStore.myAccessForModule('USERS');
+    const isManager = access.asManager;
     return (
       <PrivateLayout
         {...this.props}
         P1={<P1
           executeSearch={this.executeSearch}
-          toggleSearch={this.toggleSearch}
           requestState={requestState}
           filters={filters}
-          addon={<P3 />}
+          toggleSearch={this.toggleSearch}
+          addon={isManager ? <P3 /> : null}
         />}
         P2={<P5
           requestState={requestState}
@@ -64,6 +69,7 @@ class Users extends Component {
           paginate={this.paginate}
           count={count}
           requestState={requestState}
+          isManager={isManager}
         />
       </PrivateLayout>
     );

@@ -5,7 +5,7 @@ const Banner = () => (
   <section className="campaign-list-banner banner">
     <Responsive minWidth={768} as={Container}>
       <div className="banner-caption">
-        <Header as="h1">
+        <Header as="h2">
         Invest in growing local<br /> businesses
         </Header>
       </div>

@@ -6,14 +6,14 @@ import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('educationStore')
+@inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.educationStore.initRequest('Faq');
+    this.props.educationStore.initRequest('Faq', null, this.props.userStore.isIssuer ? 'ISSUER_FAQ' : 'INV_FAQ');
   }
   search = (e) => {
-    this.props.educationStore.setSrchParam('Faq', e.target.value);
+    this.props.educationStore.setSrchParam(e.target.value);
     if (this.props.location.pathname !== '/app/resources/faq') {
       this.props.history.replace('/app/resources/faq');
     }
@@ -56,7 +56,7 @@ export default class KnowledgeBase extends Component {
                 render={props => <Details module={modul} {...props} />}
               />
               <Route
-                path={`${match.url}/:id`}
+                path={`${match.url}/:slug`}
                 render={props => <Details module={modul} {...props} />}
               />
             </Grid.Column>

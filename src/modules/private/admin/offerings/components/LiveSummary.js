@@ -1,24 +1,25 @@
 import React from 'react';
 import { Card, Grid, Icon, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 
 const leftSummary = offer => [
   {
     title: 'Business Name',
-    content: ((offer.keyTerms && offer.keyTerms.shorthandBusinessName) ?
-      offer.keyTerms.shorthandBusinessName : (
-        (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
+    content: (get(offer, 'keyTerms.shorthandBusinessName') ?
+      get(offer, 'keyTerms.shorthandBusinessName') : (
+        get(offer, 'keyTerms.legalBusinessName') ? get(offer, 'keyTerms.legalBusinessName') : 'N/A'
       )),
   },
-  { title: 'Launch Date', content: offer && offer.offering && offer.offering.launch && DataFormatter.formatedDate(offer.offering.launch.targetDate) },
-  { title: offer.offering && offer.offering.launch && offer.offering.launch.terminationDate && DataFormatter.diffDays(offer.offering.launch.terminationDate, true) <= 0 ? 'Close Date' : 'Days Till Close', content: (offer.offering && offer.offering.launch && offer.offering.launch.terminationDate && DataFormatter.diffDays(offer.offering.launch.terminationDate, true) >= 0) ? `${DataFormatter.diffDays(offer.offering.launch.terminationDate)} days` : offer.offering.launch.terminationDate ? offer.offering.launch.terminationDate : 'N/A' },
+  { title: 'Launch Date', content: get(offer, 'closureSummary.launchDate') ? DataFormatter.formatedDate(get(offer, 'closureSummary.launchDate')) : 'N/A' },
+  { title: DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0 ? 'Close Date' : `${DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.processingDate')).diffType} Till Close`, content: get(offer, 'closureSummary.processingDate') ? (DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0) ? get(offer, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.processingDate')).diffText : 'N/A' },
 ];
 
 const rightSummary = offer => [
-  { title: 'Name', content: offer.lead ? offer.lead.name : 'NA' },
-  { title: 'Email', content: 'jdoe234@gmail.com' },
-  { title: 'Phone', content: '235-343-6453' },
+  { title: 'Name', content: get(offer, 'issuerDetails.info') ? `${get(offer, 'issuerDetails.info.firstName')} ${get(offer, 'issuerDetails.info.lastName')}` : 'N/A' },
+  { title: 'Email', content: get(offer, 'issuerDetails.email.address') || 'N/A' },
+  { title: 'Phone', content: get(offer, 'issuerDetails.phone.number') || 'N/A' },
 ];
 const LiveSummary = ({ offer, refLink }) => (
   <Grid columns="equal">
@@ -45,7 +46,10 @@ const LiveSummary = ({ offer, refLink }) => (
       </Grid.Column>
       <Grid.Column>
         <Card fluid className="ba-info-card">
-          <Card.Header>Primary POC</Card.Header>
+          <Card.Header>
+            Primary POC
+            <small className="pull-right"><Link to={`${refLink}/editPoc`}><Icon className="ns-pencil" />Edit</Link></small>
+          </Card.Header>
           <Card.Content>
             <Grid columns={3}>
               { rightSummary(offer).map(item => (

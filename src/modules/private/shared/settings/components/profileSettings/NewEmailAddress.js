@@ -1,32 +1,34 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
-import cookie from 'react-cookies';
 import { withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
-import { validationActions } from '../../../../../../services/actions';
 import Helper from '../../../../../../helper/utility';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
     this.props.authStore.requestEmailChange().then(() => {
+      this.props.uiStore.clearErrors();
+      this.props.identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
-      const userCredentials = { email: email.value, password: btoa(password.value) };
-      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-      this.props.history.push('/app/profile-settings/profile-data/confirm-email-address');
+      localStorage.setItem('changedEmail', email.value);
+      this.props.authStore.setCredentials({
+        email: email.value.toLowerCase(), password: password.value,
+      });
+      this.props.history.push(`${this.props.refLink}/confirm-email-address`);
     })
-      .catch(() => {});
+      .catch(() => { });
   }
-  handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('CONFIRM_FRM');
-    this.props.history.push('/app/profile-settings/profile-data');
+    this.props.history.push(this.props.refLink);
   }
   render() {
     const { CONFIRM_FRM, confirmFormChange } = this.props.authStore;
@@ -41,11 +43,6 @@ export default class NewEmailAddress extends Component {
           <p>We will send you a verification code to the email address you provide.</p>
         </Modal.Header>
         <Modal.Content>
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <Form error onSubmit={this.handleChangeEmailAddress}>
             <Form.Input
               fluid
@@ -57,8 +54,13 @@ export default class NewEmailAddress extends Component {
               error={!!CONFIRM_FRM.fields.email.error}
             />
             <FieldError error={CONFIRM_FRM.fields.email.error} />
+            {errors &&
+              <Message error className="mt-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
             <div className="center-align mt-30">
-              <Button disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
+              <Button primary size="large" className="very relaxed" content="Change Email Address" disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value) || this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} />
             </div>
           </Form>
         </Modal.Content>

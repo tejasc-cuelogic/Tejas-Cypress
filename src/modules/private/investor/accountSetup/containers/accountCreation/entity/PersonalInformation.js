@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Header, Form, Grid, Message, Confirm } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Header, Form, Message, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, DropZone } from '../../../../../../../theme/form';
@@ -28,52 +29,45 @@ export default class PersonalInformation extends Component {
     const { currentUser } = this.props.userStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
-      <div>
-        <Header as="h3" textAlign="center">Complete personal info about Entity</Header>
-        <p className="center-align">Enter the Authorized Signatory Information</p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
+      <Aux>
+        <Header as="h3" textAlign="center">Authorized Signatory Information</Header>
+        <p className="center-align">Please provide your title and a copy of your photo ID.</p>
         <Form error>
           <div className="field-wrap">
-            <Form.Input
-              label="Authorized Signatory’s First Legal Name"
-              value={currentUser.givenName}
-              className="readonly"
-              readOnly
-            />
-            <Form.Input
-              label="Authorized Signatory’s Last Legal Name"
-              value={currentUser.familyName}
-              className="readonly"
-              readOnly
-            />
+            <Form.Group widths="equal">
+              <Form.Input
+                label="First Name (Legal)"
+                value={currentUser.givenName}
+                className="readonly"
+                readOnly
+              />
+              <Form.Input
+                label="Last Name (Legal)"
+                value={currentUser.familyName}
+                className="readonly"
+                readOnly
+              />
+            </Form.Group>
             <FormInput
               name="title"
               fielddata={PERSONAL_INFO_FRM.fields.title}
               changed={personalInfoChange}
+              showerror
             />
           </div>
-          <Grid verticalAlign="middle">
-            <Grid.Row>
-              <Grid.Column width={7}>
-                <Header as="h5">
-                  Upload a Photo ID
-                  <Header.Subheader>Drivers License or Passport</Header.Subheader>
-                </Header>
-              </Grid.Column>
-              <Grid.Column width={9}>
-                <DropZone
-                  name="legalDocUrl"
-                  fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
-                  ondrop={this.onLegalDocUrlDrop}
-                  onremove={this.confirmRemoveDoc}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          <DropZone
+            name="legalDocUrl"
+            fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
+            ondrop={this.onLegalDocUrlDrop}
+            onremove={this.confirmRemoveDoc}
+            uploadtitle="Choose a file or drag it here"
+            containerclassname="fluid"
+          />
+          {errors &&
+            <Message error className="mt-30">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
         </Form>
         <Confirm
           header="Confirm"
@@ -84,7 +78,7 @@ export default class PersonalInformation extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }

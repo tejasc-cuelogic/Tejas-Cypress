@@ -13,7 +13,9 @@ import { InlineLoader } from '../../../../../theme/shared';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
-@inject('userDetailsStore', 'accountStore')
+
+const isMobile = document.documentElement.clientWidth < 768;
+@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore')
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
@@ -22,6 +24,11 @@ export default class AccountSetup extends Component {
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
+    if (signupStatus.activeAccounts.length !== 0 &&
+      signupStatus.investorProfileCompleted) {
+      this.props.portfolioStore.getSummary();
+    }
+    this.props.uiStore.clearErrors();
   }
 
   navToAccTypes = (step) => {
@@ -37,18 +44,26 @@ export default class AccountSetup extends Component {
 
   render() {
     const { match } = this.props;
-    const { signupStatus, currentUser, getStepStatus } = this.props.userDetailsStore;
-
+    const {
+      signupStatus,
+      currentUser,
+      getStepStatus,
+      isBasicVerDoneForMigratedFullUser,
+    } = this.props.userDetailsStore;
     return (
       <PrivateLayout
         {...this.props}
         P5={!signupStatus.finalStatus ? !currentUser.loading ?
-          <StickyNotification signupStatus={signupStatus} /> : <InlineLoader /> : ''}
+          <StickyNotification
+            signupStatus={signupStatus}
+            userDetailsStore={this.props.userDetailsStore}
+          /> : <InlineLoader /> : ''}
       >
-        <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
+        <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading ?
           <ProgressCard
             {...this.props}
+            isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
             signupStatus={signupStatus}
             getStepStatus={getStepStatus}
             navToAccTypes={this.navToAccTypes}

@@ -1,37 +1,56 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import cookie from 'react-cookies';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class Login extends Component {
   componentWillMount() {
+    if (this.props.authStore.isUserLoggedIn) {
+      const { authRef } = this.props.uiStore;
+      const { roles } = this.props.userStore.currentUser;
+      this.props.history.push(authRef || (roles && roles.includes('investor') ?
+        `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+    }
     this.props.uiStore.clearErrors();
+    this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
+    localStorage.removeItem('lastActiveTime');
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.login()
-      .then(() => {
-        const { redirectURL } = this.props.uiStore;
-        if (this.props.authStore.newPasswordRequired) {
-          this.props.history.push('/auth/change-password');
-        } else {
-          const { roles } = this.props.userStore.currentUser;
-          this.props.authStore.resetForm('LOGIN_FRM');
-          this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
-            `/app/${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
-        }
+    this.props.uiStore.clearErrors();
+    const { email, password } = this.props.authStore.LOGIN_FRM.fields;
+    const lowerCasedEmail = email.value.toLowerCase();
+    const userCredentials = { email: lowerCasedEmail, password: password.value };
+    this.props.authStore.checkMigrationByEmail(userCredentials).then((res) => {
+      if (res) {
+        authActions.login()
+          .then(() => {
+            if (this.props.authStore.newPasswordRequired) {
+              this.props.history.push('/auth/change-password');
+            } else {
+              this.props.authStore.setCredentials(userCredentials);
+              this.props.authStore.resetForm('LOGIN_FRM');
+              this.props.history.push(this.props.uiStore.authRef || '/');
+            }
+          }).catch((err) => {
+            console.log(err);
+          });
+      }
+    })
+      .catch((err) => {
+        console.log(err);
       });
   };
   handleCloseModal = (e) => {
@@ -43,12 +62,16 @@ class Login extends Component {
       LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
-    const customError = errors && errors.message === 'User does not exist.'
+    let customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
+
+    if (errors && errors.code === 'checkMigrationByEmailFailed') {
+      customError = `There was a problem with authentication. Please try again or contact
+        <a className="negative-text" href="mailto:support@nextseed.com">support@nextseed.com</a>`;
+    }
     if (errors && errors.code === 'UserNotConfirmedException') {
       const { email, password } = this.props.authStore.LOGIN_FRM.fields;
-      const userCredentials = { email: email.value, password: btoa(password.value) };
-      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+      this.props.authStore.setCredentials({ email: email.value, password: password.value });
       this.props.history.push('/auth/confirm-email');
     }
     return (
@@ -57,12 +80,12 @@ class Login extends Component {
           <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form>
+          {/* <Form>
             <Button color="facebook" size="large" fluid>
               Log in with Facebook
             </Button>
           </Form>
-          <Divider horizontal section>or</Divider>
+          <Divider horizontal section>or</Divider> */}
           <Form error onSubmit={this.handleSubmitForm}>
             {
               Object.keys(LOGIN_FRM.fields).map(field => (
@@ -81,7 +104,7 @@ class Login extends Component {
               <Link to="/auth/forgot-password">Forgot password?</Link>
             </Form.Field>
             {errors &&
-              <Message error textAlign="left" className="mt-30">
+              <Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
             }
@@ -91,7 +114,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Dont have an account?</b> <Link to="/auth/register">Sign up</Link></p>
+          <p><b>Don&#39;t have an account?</b> <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

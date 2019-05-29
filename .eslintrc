@@ -6,6 +6,12 @@
     "jest": true
   },
   "extends": "airbnb",
+  "settings": {
+    "react": {
+      "version": "detect"
+      // React version. "detect" automatically picks the version you have installed.
+    }
+  },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/prefer-default-export": "off",

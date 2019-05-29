@@ -1,10 +1,13 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable class-methods-use-this, react/jsx-closing-bracket-location */
 import { toJS, observable, computed, action } from 'mobx';
+import React from 'react';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import isArray from 'lodash/isArray';
+import { capitalize, isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { UserAvatar } from './../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
+import { DELETED_ACCOUNT_STATUS } from '../../../../constants/user';
 
 export class UserListingStore {
   @observable usersData = [];
@@ -24,18 +27,36 @@ export class UserListingStore {
   };
 
   @action
-  initRequest = (reqParams) => {
+  initRequest = (reqParams, getAllUsers = false) => {
     const {
-      keyword, accountType, accountStatus, startDate, endDate,
+      keyword, accountType, accountStatus, startDate, endDate, isDeleted,
     } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
+    let deletedAccountStatus = [];
+    if (isDeleted) {
+      if (accountType && accountType.length && !accountStatus) {
+        accountType.forEach((s) => {
+          const statusArray = (s === 'ADMIN' || s === 'ISSUER') ? DELETED_ACCOUNT_STATUS[s] : DELETED_ACCOUNT_STATUS.INVESTOR;
+          deletedAccountStatus = [...deletedAccountStatus, ...statusArray];
+        });
+      } else if (accountStatus) {
+        deletedAccountStatus = [...deletedAccountStatus, ...DELETED_ACCOUNT_STATUS[accountStatus]];
+      } else {
+        deletedAccountStatus = [
+          ...DELETED_ACCOUNT_STATUS.INVESTOR, ...DELETED_ACCOUNT_STATUS.ISSUER,
+          ...DELETED_ACCOUNT_STATUS.ADMIN,
+        ];
+      }
+    }
     let params = {
       search: keyword,
       accountType,
-      accountStatus,
+      accountStatus: isDeleted ? deletedAccountStatus : accountStatus,
       page: reqParams ? reqParams.page : 1,
+      limit: getAllUsers ? 100 : this.requestState.perPage,
     };
+
     this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
@@ -47,14 +68,15 @@ export class UserListingStore {
       client,
       query: allUsersQuery,
       variables: params,
+      fetchPolicy: 'network-only',
     });
   }
 
   @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-      const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
-        moment(values.formattedValue).add(1, 'day').toISOString();
+      const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString() :
+        moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
       this.setInitiateSrch(field, isoDate);
     }
   }
@@ -111,13 +133,13 @@ export class UserListingStore {
   }
 
   @action
-  initiateSearch = (srchParams) => {
+  initiateSearch = (srchParams, getAllUsers = false) => {
     this.requestState.search = srchParams;
-    this.initRequest();
+    this.initRequest(null, getAllUsers);
   }
 
   @action
-  setInitiateSrch = (name, value) => {
+  setInitiateSrch = (name, value, type = false) => {
     if (name === 'startDate' || name === 'endDate') {
       this.requestState.search[name] = value;
       if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
@@ -128,6 +150,11 @@ export class UserListingStore {
       const srchParams = { ...this.requestState.search };
       if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
         srchParams[name] = value;
+      } else if (type === 'checkbox') {
+        srchParams[name] = value;
+        if (name === 'isDeleted' && ['FROZEN', 'LOCKED', 'UNLOCKED'].includes(srchParams.accountStatus)) {
+          delete srchParams.accountStatus;
+        }
       } else {
         delete srchParams[name];
       }
@@ -174,6 +201,33 @@ export class UserListingStore {
         IRA: 17,
       },
     };
+  }
+
+  @computed get usersOptionsForDropdown() {
+    const usersOptions = {
+      admin: [],
+      issuer: [],
+    };
+    this.users.map((user) => {
+      if (user.roles[0] && user.roles[0].scope && usersOptions[user.roles[0].scope]) {
+        usersOptions[user.roles[0].scope].push({
+          text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
+          value: user.id,
+          icon:
+  <UserAvatar
+    UserInfo={{
+      firstName: user.info ? user.info.firstName : '',
+      lastName: user.info ? user.info.lastName : '',
+      avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+      roles: user.roles.map(r => r.scope),
+    }}
+    base64url
+  />,
+        });
+      }
+      return false;
+    });
+    return usersOptions;
   }
 }
 

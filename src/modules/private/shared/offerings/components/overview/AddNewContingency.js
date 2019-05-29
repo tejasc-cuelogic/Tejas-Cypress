@@ -3,8 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { Form, Button, Modal } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormInput } from '../../../../../../theme/form';
-@withRouter
 @inject('offeringCreationStore')
+@withRouter
 @observer
 export default class AddNewContingency extends React.Component {
   handleCloseModal = () => {

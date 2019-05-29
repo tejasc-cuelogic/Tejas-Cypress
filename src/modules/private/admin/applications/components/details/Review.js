@@ -7,7 +7,8 @@ import { mapValues } from 'lodash';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
 import { InlineLoader } from '../../../../../../theme/shared';
-import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
+// import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
+import { NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
 const getModule = component => Loadable({
   loader: () => import(`./review/${component}`),
@@ -53,7 +54,7 @@ export default class Review extends Component {
     s !== '' && <Icon color={s === 'ns-check-circle' ? 'green' : 'orange'} name={s} />
   ));
   render() {
-    const { match, businessAppReviewStore } = this.props;
+    const { match, businessAppReviewStore, appType } = this.props;
     const {
       subNavPresentation, updateStatuses, paBoxFolderId,
       generatePortalAgreement, showGeneratePA, inProgress,
@@ -63,30 +64,45 @@ export default class Review extends Component {
       <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <SecondaryMenu
-              addon={{ data: this.representAddon(subNavPresentation) }}
-              secondary
-              vertical
-              match={match}
-              navItems={navItems}
-            />
-            <Divider hidden />
-            {showGeneratePA &&
-            <Button.Group size="mini">
-              <Button color="blue" loading={inProgress === 'GENERATE_PA'} type="button" onClick={generatePortalAgreement} >Generate PA</Button>
-              {paBoxFolderId &&
-              <Button color="blue" className="link-button" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')}>PA BOX Link</Button>
+            <div className="sticky-sidebar">
+              <SecondaryMenu
+                addon={{ data: this.representAddon(subNavPresentation) }}
+                secondary
+                vertical
+                match={match}
+                navItems={navItems}
+              />
+              <Divider hidden />
+              {showGeneratePA &&
+              <Button.Group size="mini">
+                <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
+                {paBoxFolderId &&
+                <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
+                }
+              </Button.Group>
               }
-            </Button.Group>
-            }
+            </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
               {
-                navItems.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                ))
+                navItems.map((item) => {
+                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
+                  return (
+                    <Route
+                      exact={false}
+                      key={item.to}
+                      path={`${match.url}/${item.to}`}
+                      render={props =>
+                        (<CurrentComponent
+                          appType={appType}
+                          {...props}
+                        />)
+                      }
+                    />
+                  );
+                })
               }
             </Switch>
           </Grid.Column>

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { LineChart, Line, XAxis, Legend, ResponsiveContainer } from 'recharts';
-
-const data = [
+import { inject, observer } from 'mobx-react';
+import NSImage from '../../../../shared/NSImage';
+// import { ResponsiveContainer } from 'recharts';
+// import { LineChart, Line, XAxis, Legend, ResponsiveContainer } from 'recharts';
+/*
+const data1 = [
   { name: '0 MOS.', 'Your Payments': 5000, 'Your Revenue': 5000 },
   { name: '1 MOS.', 'Your Payments': 5000, 'Your Revenue': 3398 },
   { name: '2 MOS.', 'Your Payments': 5000, 'Your Revenue': 9800 },
@@ -17,21 +20,46 @@ const data = [
   { name: '12 MOS.', 'Your Payments': 5000, 'Your Revenue': 6300 },
 ];
 
+const data2 = [
+  { name: '0 MOS.', 'Your Payments': 5000, 'Your Revenue': 5000 },
+  { name: '1 MOS.', 'Your Payments': 5000, 'Your Revenue': 5000 },
+  { name: '2 MOS.', 'Your Payments': 5000, 'Your Revenue': 5500 },
+  { name: '3 MOS.', 'Your Payments': 7000, 'Your Revenue': 9500 },
+  { name: '4 MOS.', 'Your Payments': 8000, 'Your Revenue': 12500 },
+  { name: '5 MOS.', 'Your Payments': 9000, 'Your Revenue': 13000 },
+  { name: '6 MOS.', 'Your Payments': 8000, 'Your Revenue': 13500 },
+  { name: '7 MOS.', 'Your Payments': 7000, 'Your Revenue': 11000 },
+  { name: '8 MOS.', 'Your Payments': 6000, 'Your Revenue': 9000 },
+  { name: '9 MOS.', 'Your Payments': 7000, 'Your Revenue': 11000 },
+  { name: '10 MOS.', 'Your Payments': 8000, 'Your Revenue': 11500 },
+  { name: '11 MOS.', 'Your Payments': 7000, 'Your Revenue': 9200 },
+  { name: '12 MOS.', 'Your Payments': 6000, 'Your Revenue': 6000 },
+];
+*/
+const data1 = 'trem-notes-chart.svg';
+const data2 = 'rev-sharing-chart.svg';
+
+
+@inject('campaignStore')
+@observer
 export default class RevenueChart extends Component {
   render() {
-    const style = {
-      top: 0,
-      right: 0,
-    };
+    // const style = {
+    //   top: 0,
+    //   right: 0,
+    // };
+    const { chartFor } = this.props;
+    const data = chartFor && chartFor === 'TermNote' ? data1 : data2;
     return (
-      <ResponsiveContainer height={220}>
-        <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>
-          <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={style} />
-          <XAxis tickLine={false} axisLine={false} dataKey="name" interval={11} />
-          <Line type="monotone" dataKey="Your Revenue" dot="" stroke="#20C86D" strokeWidth={3} />
-          <Line type="monotone" dataKey="Your Payments" stroke="#263E64" strokeWidth={2} />
-        </LineChart>
-      </ResponsiveContainer>
+      //  <ResponsiveContainer height={220}>
+      //   <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>
+      //     <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={style} />
+      //     <XAxis tickLine={false} axisLine={false} dataKey="name" interval={11} />
+      //     <Line type="monotone" dataKey="Your Revenue" dot="" stroke="#20C86D" strokeWidth={3} />
+      //     <Line type="monotone" dataKey="Your Payments" stroke="#263E64" strokeWidth={2} />
+      //   </LineChart>
+      // </ResponsiveContainer>
+      <NSImage path={data} />
     );
   }
 }

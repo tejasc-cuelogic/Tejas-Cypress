@@ -2,10 +2,8 @@ import React from 'react';
 import { Form, Card, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
-import moment from 'moment';
-
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../../../constants/business';
-import { FormInput, FormSelect, FormDatePicker } from './../../../../../../theme/form';
+import { FormInput, FormSelect, MaskedInput } from './../../../../../../theme/form';
 
 @inject('businessStore')
 @withRouter
@@ -60,14 +58,13 @@ export default class IssuerInformation extends React.Component {
               changed={issuerInfoChange}
               options={US_STATES}
             />
-            <FormDatePicker
-              type="text"
+            <MaskedInput
               name="dateIncorporation"
-              placeholder="Select date"
-              maxDate={moment()}
               fielddata={formIssuerInfo.fields.dateIncorporation}
-              selected={formIssuerInfo.fields.dateIncorporation.value}
+              format="##/##/####"
               changed={verifyDateIncorporation}
+              dateOfBirth
+              showerror
             />
           </Form.Group>
         </Card>

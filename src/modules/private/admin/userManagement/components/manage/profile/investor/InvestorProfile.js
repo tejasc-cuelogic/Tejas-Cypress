@@ -24,7 +24,7 @@ export default class InvestorProfile extends Component {
         <Header as="h6">Employment</Header>
         <Form.Group widths={3}>
           {
-          ['employmentStatus', 'employer', 'currentPosition'].map(field => (
+          ['status', 'employer', 'position'].map(field => (
             <FormInput
               key={field}
               name={field}
@@ -38,7 +38,7 @@ export default class InvestorProfile extends Component {
         <Divider />
         <Header as="h6">Finances</Header>
         <Form.Group widths={3}>
-          {['netWorth', 'annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
+          {['netWorth', 'annualIncomeCurrentYear'].map(field => (
             <MaskedInput
               type="tel"
               key={field}
@@ -63,9 +63,9 @@ export default class InvestorProfile extends Component {
         <Header as="h6">Experience</Header>
         <Form.Group widths={3}>
           <FormInput
-            key="investmentExperienceLevel"
-            name="investmentExperienceLevel"
-            fielddata={USER_INVESTOR_PROFILE.fields.investmentExperienceLevel}
+            key="experienceLevel"
+            name="experienceLevel"
+            fielddata={USER_INVESTOR_PROFILE.fields.experienceLevel}
             changed={(e, result) => formChange(e, result, formName)}
             displayMode={displayMode}
           />

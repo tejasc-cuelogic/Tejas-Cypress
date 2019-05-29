@@ -457,3 +457,8 @@
 @bigWidth: 20rem;
 @hugeWidth: 22rem;
 @massiveWidth: 25rem;
+
+/*-----------------------------
+        Custom variables
+-------------------------------*/
+@primaryHeaderHeight: 72px;

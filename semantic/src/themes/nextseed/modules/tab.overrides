@@ -102,6 +102,7 @@
         border-right-width: 1px;
         border-top-width: 0;
         border-color: @white;
+        font-size: @15px;
         &.active {
             background: @primary-two;
             color: @white;

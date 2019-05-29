@@ -2,39 +2,72 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { startCase } from 'lodash';
+import { startCase, get } from 'lodash';
+import moment from 'moment';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
+import { ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constants/investmentLimit';
 
-
-@inject('investmentLimitStore', 'uiStore', 'userDetailsStore')
+@inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.investmentLimitStore.getInvestedAmount();
+      this.props.investmentLimitStore.setAccountsLimits();
+      this.props.accreditationStore.getUserAccreditation().then(() => {
+        this.props.accreditationStore.initiateAccreditation();
+      });
+    }
+  }
+  // eslint-disable-next-line react/sort-comp
   submit = (e) => {
     e.preventDefault();
     this.props.investmentLimitStore.updateFinInfo();
   }
-  handleUpdateInvestmentLimit =(e, accountType) => {
+  handleUpdateInvestmentLimit =(e, accountType, accountId) => {
     e.preventDefault();
-    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType);
+    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType, accountId);
     this.props.history.push(`${this.props.match.url}/update`);
   }
-  handleVerifyAccreditation = () => {
-    this.props.history.push(`${this.props.match.url}/verify-accreditation`);
+  handleVerifyAccreditation = (e, accountType, accountId) => {
+    e.preventDefault();
+    if (accountType === 'entity') {
+      if (this.props.userDetailsStore.isEntityTrust) {
+        this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountId}/${accountType}`);
+      } else {
+        this.props.history.push(`${this.props.match.url}/verify-entity-accreditation/${accountId}/${accountType}`);
+      }
+    } else {
+      this.props.history.push(`${this.props.match.url}/verify-accreditation/${accountId}/${accountType}`);
+    }
+  }
+  getStatus = (accName) => {
+    let status = '';
+    status = accName ? (accName.status === 'REQUESTED' && accName.expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accName.expiration), false, true) < 0)) ? 'Expired' : (accName.status && ACCREDITATION_STATUS_LABEL[accName.status]) : '-';
+    return status;
+  }
+  getDate = (accName) => {
+    let date = '';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? moment(accName.requestDate).format('MM/DD/YY') : accName && accName.status === 'CONFIRMED' && accName.expiration ? moment(accName.expiration).format('MM/DD/YY') : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? moment(accName.reviewed.date).format('MM/DD/YY') : '-';
+    return date;
   }
   render() {
     const {
-      INVESTEMENT_LIMIT_META, getActiveAccountList,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
+      getInvestorAmountInvestedLoading,
     } = this.props.investmentLimitStore;
+    const { accreditationData, loading } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    const { fields } = INVESTEMENT_LIMIT_META;
-    if (currentUser.loading) {
+    if (currentUser.loading || getInvestorAmountInvestedLoading ||
+      loading) {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <Grid>
         {getActiveAccountList && getActiveAccountList.accountList.length ?
         getActiveAccountList.accountList.map(account => (
           <Grid.Row>
@@ -49,27 +82,25 @@ export default class FinancialInfo extends Component {
                         <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name.toUpperCase()}
                       </Aux> :
                       <Aux>
-                        <Icon color="teal" className={`ns-${account.name}-line`} /> {startCase(account.name)}
+                        <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)}
                       </Aux>
                     }
                   </Card.Header>
                 </Card.Content>
                 <Divider horizontal className="only-border" />
-                <Grid celled="internally" padded="horizontally" stackable>
+                <Grid celled="internally" padded="horizontally">
                   <Grid.Row>
-                    <Grid.Column width={8}>
+                    <Grid.Column computer={8} tablet={8} mobile={16}>
                       <Card.Content>
-                        <Header as="h4">Regulation Crowdfunding Limits</Header>
+                        <Header as="h5">Regulation Crowdfunding Limits</Header>
                         <p className="intro-text">
-                          {account.name === 'ira' ? `The total amount you can invest in Regulation
-                            Crowdfunding offerings within a 12-month period depends on your income
-                            and net worth.` : `The total amount you can invest in Regulation
+                          {account.name === 'entity' ? `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on the
-                            entity's annual revenue and net assets.`
+                            entity's annual revenue and net assets. ` : `The total amount you can invest in Regulation
+                            Crowdfunding offerings within a 12-month period depends on your income
+                            and net worth. `
                           }
-                          <Link target="_blank" to="/app/resources/faq">
-                            &nbsp;See FAQ on investment limits
-                          </Link>
+                          <Link target="_blank" to="/app/resources/faq">See FAQ on investment limits</Link>
                         </p>
                         <Statistic size="tiny">
                           <Statistic.Label>
@@ -78,26 +109,65 @@ export default class FinancialInfo extends Component {
                               trigger={<Icon className="ns-help-circle" />}
                               content="Your current investment limit as of today"
                               position="top center"
-                              className="center-align"
+                              className="left-align"
                             />
                           </Statistic.Label>
                           <Statistic.Value>
-                            {Helper.CurrencyFormat(account.name === 'entity' ? fields.currentLimitEntity.value : fields.currentLimitIndividualOrIra.value)}
+                            {account.name === 'entity' ?
+                            typeof entityCurrentLimit === 'string' ?
+                            Helper.MoneyMathDisplayCurrency(entityCurrentLimit, false) :
+                            Helper.CurrencyFormat(entityCurrentLimit, 0) :
+                            typeof individualIRACurrentLimit === 'string' ?
+                            Helper.MoneyMathDisplayCurrency(individualIRACurrentLimit, false) :
+                            Helper.CurrencyFormat(individualIRACurrentLimit, 0)
+                            }
                           </Statistic.Value>
                         </Statistic>
                         <Divider clearing hidden />
-                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name)} inverted color="green" content="Update investment limits" />
+                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name, account.details.accountId)} inverted color="green" content="Update investment limits" />
                       </Card.Content>
                     </Grid.Column>
-                    <Grid.Column width={8}>
-                      <Card.Content>
-                        <Header as="h4">Accreditation</Header>
-                        <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
-                        <Divider hidden />
-                        <Card.Description>
-                          <Button onClick={this.handleVerifyAccreditation} primary content="Verify accreditation" />
-                        </Card.Description>
-                      </Card.Content>
+                    <Grid.Column computer={8} tablet={8} mobile={16}>
+                      {accreditationData[account.name] &&
+                      accreditationData[account.name].status ?
+                        <Card.Content>
+                          <Header as="h5">
+                            Accredited Investor Status
+                            {/* <Link as={Button} to="/" className="link" onClick={e =>
+                             this.handleVerifyAccreditation
+                            (e, account.name, account.details.accountId)}><small>Update
+                             accreditation</small></Link> */}
+                          </Header>
+                          <dl className="dl-horizontal">
+                            <dt>Status :</dt>
+                            <dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}><b>{this.getStatus(accreditationData[account.name])}</b></dd>
+                            {accreditationData[account.name].status === 'INVALID' ?
+                              <Aux>
+                                <dt>Message :</dt>
+                                <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
+                              </Aux> : ''
+                            }
+                            <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
+                            <dd>{this.getDate(accreditationData[account.name])}</dd>
+                          </dl>
+                          <Divider hidden />
+                          {accreditationData[account.name].status === 'INVALID' ?
+                            <Card.Description>
+                              <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Accreditation" />
+                            </Card.Description> : ''
+                          }
+                        </Card.Content>
+                        :
+                        <Card.Content>
+                          <Header as="h4">Accredited Investor Status</Header>
+                          <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
+                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor" className="intro-text highlight-text">What is an accredited investor?</Link>
+                          <Divider hidden />
+                          <Card.Description>
+                            <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Status" />
+                          </Card.Description>
+                        </Card.Content>
+                      }
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
@@ -106,7 +176,7 @@ export default class FinancialInfo extends Component {
           </Grid.Row>
           )) : <EmptyDataSet title="No data available for investment limits." />
         }
-      </Aux>
+      </Grid>
     );
   }
 }

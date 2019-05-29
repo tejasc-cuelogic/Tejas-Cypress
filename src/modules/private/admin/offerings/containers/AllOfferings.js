@@ -3,24 +3,22 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Form } from 'semantic-ui-react';
-import { NsPagination } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { DataFormatter } from '../../../../../helper';
 import Listing from '../components/Listing';
+import DraggableListing from '../components/DraggableListing';
 
 
 @inject('uiStore', 'navStore', 'offeringsStore')
 @observer
 export default class Offerings extends Component {
   componentWillMount() {
-    const params = { first: 10, skip: 0, stage: this.props.match.params.stage };
+    const params = { stage: this.props.match.params.stage };
     this.props.offeringsStore.initRequest(params);
   }
 
   executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.offeringsStore.setInitiateSrch('keyword', e.target.value);
-    }
+    this.props.offeringsStore.setInitiateSrch('keyword', e.target.value);
   }
 
   toggleSearch = () => this.props.offeringsStore.toggleSearch();
@@ -33,11 +31,8 @@ export default class Offerings extends Component {
     const { match } = this.props;
     const { stage } = this.props.match.params;
     const {
-      offerings,
-      loading,
       filters,
       requestState,
-      totalRecords,
     } = this.props.offeringsStore;
     return (
       <div>
@@ -45,7 +40,7 @@ export default class Offerings extends Component {
           <Grid stackable>
             <Grid.Row>
               <ByKeyword
-                executeSearch={this.executeSearch}
+                change={this.executeSearch}
                 w={[8]}
                 placeholder="Search by keyword or phrase"
                 toggleSearch={this.toggleSearch}
@@ -54,20 +49,13 @@ export default class Offerings extends Component {
                 more="no"
                 addon={
                   <Aux>
-                    <Grid.Column width={3} textAlign="right">
-                      {totalRecords > 0 &&
-                      <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-                      }
-                    </Grid.Column>
-                    <Grid.Column width={5} textAlign="right">
-                      <Button className="relaxed" color="green" as={Link} floated="right" to={match.url}>
-                        Export
-                      </Button>
-                      {stage === 'creation' &&
-                        <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
-                          Create New Offering
-                        </Button>
-                      }
+                    <Grid.Column width={5} textAlign="right" floated="right">
+                      <Button.Group floated="right">
+                        {stage === 'creation' &&
+                          <Button color="green" as={Link} to={`${match.url}/new`} content="Create New Offering" />
+                        }
+                        <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                      </Button.Group>
                     </Grid.Column>
                   </Aux>
                 }
@@ -75,7 +63,10 @@ export default class Offerings extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Listing offerings={offerings} loading={loading} />
+        {!['completed'].includes(stage) ?
+          <Listing stage={stage} />
+          : <DraggableListing stage={stage} />
+        }
       </div>
     );
   }

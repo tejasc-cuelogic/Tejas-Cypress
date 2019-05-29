@@ -1,7 +1,7 @@
-import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
-import camel from 'to-camel-case';
-import _ from 'lodash';
+import Amplify from '@aws-amplify/core';
+import AmplifyAuth from '@aws-amplify/auth';
+import { map, mapValues, camelCase, get } from 'lodash';
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
@@ -11,7 +11,6 @@ import {
   userDetailsStore,
   authStore,
   commonStore,
-  adminStore,
   uiStore,
   accountStore,
   identityStore,
@@ -19,6 +18,11 @@ import {
   iraAccountStore,
   entityAccountStore,
   bankAccountStore,
+  individualAccountStore,
+  portfolioStore,
+  investmentStore,
+  accreditationStore,
+  transactionStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -33,7 +37,6 @@ import Helper from '../../../helper/utility';
  * @function $resetPassword - reset password for user
  * @function $setNewPassword - Sets password for newly created user from admin section
  * @function $changePassword - Changes password for user
- * @function $confirmCode - Confirms user after registration
  * @function $logout - Logs out user
  */
 export class Auth {
@@ -41,10 +44,26 @@ export class Auth {
   userPool = null;
   cognitoUser = null;
   constructor() {
-    this.userPool = new AWSCognito.CognitoUserPool({
-      UserPoolId: USER_POOL_ID,
-      ClientId: COGNITO_CLIENT_ID,
+    Amplify.configure({
+      Auth: {
+        identityPoolId: COGNITO_IDENTITY_POOL_ID,
+        region: AWS_REGION,
+        userPoolId: USER_POOL_ID,
+        userPoolWebClientId: COGNITO_CLIENT_ID,
+      },
     });
+  }
+
+  async getUserSession() {
+    uiStore.setProgress();
+    try {
+      this.cognitoUser = await AmplifyAuth.currentSession();
+      return this.cognitoUser;
+    } catch (err) {
+      return null;
+    } finally {
+      uiStore.setProgress(false);
+    }
   }
 
   /**
@@ -52,63 +71,38 @@ export class Auth {
    *       if token is present in browsers local storage, also internally set admin access to user
    *       if user has `admin` role.
    */
+
   verifySession = () => {
     uiStore.reset();
     uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting user data');
 
-    Object.keys(localStorage).every((key) => {
-      if (key.match('CognitoIdentityServiceProvider')) {
-        authStore.setHasSession(true);
-      }
-      return key;
-    });
-
     return (
       new Promise((res, rej) => {
-        if (authStore.hasSession) {
-          this.cognitoUser = this.userPool.getCurrentUser();
-          return this.cognitoUser !== null ? res() : rej();
-        }
-        return rej();
+        AmplifyAuth.currentAuthenticatedUser().then((user) => {
+          const { signInUserSession, attributes } = user;
+          const mapData = this.parseRoles(this.mapCognitoToken(attributes));
+          userStore.setCurrentUser(mapData);
+          authStore.setUserLoggedIn(true);
+          commonStore.setToken(signInUserSession.idToken.jwtToken);
+          AWS.config.region = AWS_REGION;
+          if (userStore.isCurrentUserWithRole('admin')) {
+            this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
+          }
+
+          return res({ attributes, session: signInUserSession });
+        }).catch((err) => {
+          console.log('error in verifysession', err);
+          rej(err);
+        })
+          .finally(() => {
+            commonStore.setAppLoaded();
+            uiStore.setAppLoader(false);
+            uiStore.clearLoaderMessage();
+          });
       })
-        .then(() =>
-          new Promise((res, rej) => {
-            this.cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
-          }))
-        .then(session =>
-          new Promise((res, rej) => {
-            this.cognitoUser.getUserAttributes((err, attributes) => {
-              if (err) {
-                return rej(err);
-              }
-              return res({ attributes, session });
-            });
-          }))
-        .then(data =>
-          new Promise((res) => {
-            userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(data.attributes)));
-            authStore.setUserLoggedIn(true);
-            commonStore.setToken(data.session.idToken.jwtToken);
-            AWS.config.region = AWS_REGION;
-            if (userStore.isCurrentUserWithRole('admin')) {
-              this.setAWSAdminAccess(data.session.idToken.jwtToken);
-              adminStore.setAdminCredsLoaded(true);
-            }
-            res();
-          }))
-        .then(() => {
-          Helper.toast('Successfully loaded user data', 'success');
-        })
-        // Empty method needed to avoid warning.
-        .catch(() => { })
-        .finally(() => {
-          commonStore.setAppLoaded();
-          uiStore.setAppLoader(false);
-          uiStore.clearLoaderMessage();
-        })
     );
-  };
+  }
 
   /**
    * @desc This method sets admin access to user if user has admin role
@@ -125,7 +119,6 @@ export class Auth {
       jwtToken;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
-
     return AWS.config.credentials.refresh((error) => {
       if (error) {
         uiStore.setErrors(this.simpleErr(error));
@@ -139,115 +132,131 @@ export class Auth {
    *       password from authStore.
    * @return null
    */
-  login() {
+  async login() {
+    client.clearStore();
     uiStore.reset();
     uiStore.setProgress();
     const { email, password } = Validator.ExtractValues(authStore.LOGIN_FRM.fields);
+    const lowerCasedEmail = email.toLowerCase();
     client.cache.reset();
-    const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: email,
-      Password: password,
-    });
-
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email,
-      Pool: this.userPool,
-    });
     authStore.setNewPasswordRequired(false);
-    return new Promise((res, rej) => {
-      this.cognitoUser.authenticateUser(authenticationDetails, {
-        // onSuccess: result => res({ data: result }),
-        onSuccess: (result) => {
-          authStore.setUserLoggedIn(true);
-          if (result.action && result.action === 'newPassword') {
-            authStore.setEmail(result.data.email);
-            authStore.setCognitoUserSession(this.cognitoUser.Session);
-            authStore.setNewPasswordRequired(true);
-          } else {
-            // Extract JWT from token
-            commonStore.setToken(result.idToken.jwtToken);
-            userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-              res();
-            });
-            AWS.config.region = AWS_REGION;
-            // Check if currentUser has admin role, if user has admin role set admin access to user
-            if (userStore.isCurrentUserWithRole('admin')) {
-              this.setAWSAdminAccess(result.idToken.jwtToken);
-            }
-          }
-        },
-        newPasswordRequired: (result) => {
-          // authStore.setEmail(result.email);
-          authStore.setUserLoggedIn(true);
-          authStore.setCognitoUserSession(this.cognitoUser.Session);
-          authStore.setNewPasswordRequired(true);
-          res({ data: result, action: 'newPassword' });
-        },
-        onFailure: err => rej(err),
+
+    try {
+      const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+      this.amplifyLogin(user);
+    } catch (err) {
+      uiStore.setErrors(this.simpleErr(err));
+      throw err;
+    } finally {
+      uiStore.setProgress(false);
+    }
+  }
+
+  amplifyLogin(user) {
+    if (user && !user.signInUserSession && user.challengeName && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      authStore.setUserLoggedIn(true);
+      if (user.signInUserSession) {
+        authStore.setCognitoUserSession(user.signInUserSession);
+      }
+      if (user.attributes) {
+        authStore.setEmail(user.attributes.email.toLowerCase());
+      }
+      authStore.setNewPasswordRequired(true);
+    }
+    if (user && user.signInUserSession) {
+      authStore.setUserLoggedIn(true);
+      localStorage.removeItem('lastActiveTime');
+      localStorage.removeItem('defaultNavExpanded');
+
+      // Extract JWT from token
+      const { idToken } = user.signInUserSession;
+      commonStore.setToken(idToken.jwtToken);
+      userStore.setCurrentUser(this.parseRoles(this.adjustRoles(idToken.payload)));
+      userDetailsStore.getUser(userStore.currentUser.sub).then((data) => {
+        if (window.localStorage.getItem('ISSUER_REFERRAL_CODE') && window.localStorage.getItem('ISSUER_REFERRAL_CODE') !== undefined) {
+          commonStore.updateUserReferralCode(userStore.currentUser.sub, window.localStorage.getItem('ISSUER_REFERRAL_CODE')).then(() => {
+            window.localStorage.removeItem('ISSUER_REFERRAL_CODE');
+          });
+        }
+        if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
+          window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
+        }
+        if (window.analytics) { // && false
+          window.analytics.identify(userStore.currentUser.sub, {
+            name: `${get(data, 'user.info.firstName')} ${get(data, 'user.info.lastName')}`,
+            email: get(data, 'user.email.address'),
+          }, {
+            integrations: {
+              Intercom: {
+                user_hash: get(data, 'user.userHash'),
+              },
+            },
+          });
+        }
+        // res();
       });
-    })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+      AWS.config.region = AWS_REGION;
+      // Check if currentUser has admin role, if user has admin role set admin access to user
+      if (userStore.isCurrentUserWithRole('admin')) {
+        this.setAWSAdminAccess(user.signInUserSession.idToken.jwtToken);
+      }
+    }
   }
 
   /**
    * @desc Registers new user. Fetches required data from authStore.
    * @return null.
    */
-  register() {
+  async register(isMobile = false) {
+    client.clearStore();
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Signing you up');
 
-    return new Promise((res, rej) => {
-      const { fields } = authStore.SIGNUP_FRM;
-      const attributeRoles = new AWSCognito.CognitoUserAttribute({
-        Name: 'custom:roles', Value: JSON.stringify([fields.role.value]),
+    const { fields } = authStore.SIGNUP_FRM;
+    const signupFields = authStore.CONFIRM_FRM.fields;
+    const attributeList = {
+      'custom:roles': JSON.stringify([fields.role.value]),
+      given_name: fields.givenName.value,
+      family_name: fields.familyName.value,
+    };
+    try {
+      const user = await AmplifyAuth.signUp({
+        username: (fields.email.value || signupFields.email.value).toLowerCase(),
+        password: fields.password.value || signupFields.password.value,
+        attributes: attributeList,
       });
 
-      const attributeFirstName = new AWSCognito.CognitoUserAttribute({
-        Name: 'given_name', Value: fields.givenName.value,
-      });
-
-      const attributeLastName = new AWSCognito.CognitoUserAttribute({
-        Name: 'family_name', Value: fields.familyName.value,
-      });
-      const attributeList = [];
-      attributeList.push(attributeRoles);
-      attributeList.push(attributeFirstName);
-      attributeList.push(attributeLastName);
-      this.userPool.signUp(
-        fields.email.value,
-        fields.password.value,
-        attributeList,
-        null,
-        (err, result) => {
-          if (err) {
-            return rej(err);
+      if (user && user.userConfirmed) {
+        authStore.setUserId(user.userSub);
+        const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
+        if (!isMobile) {
+          if (signUpRole === 'investor') {
+            Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
+          } else if (signUpRole === 'issuer') {
+            Helper.toast('Congrats, you have been PreQualified on NextSeed.', 'success');
           }
-          this.cognitoUser = result;
-          authStore.setUserId(result.userSub);
-          return res();
-        },
-      );
-    })
-      .then(() => {
-        Helper.toast('Thanks! You have successfully signed up to the NextSeed.', 'success');
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+        }
+        if (signUpRole === 'investor') {
+          if (!userStore.currentUser) {
+            const { email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
+            try {
+              const username = email.toLowerCase();
+              const loginUserObj = await AmplifyAuth.signIn({ username, password });
+              this.amplifyLogin(loginUserObj);
+            } catch (err) {
+              uiStore.setErrors(this.simpleErr(err));
+              throw err;
+            }
+          }
+        }
+      }
+    } catch (err) {
+      uiStore.setErrors(this.simpleErr(err));
+      throw err;
+    } finally {
+      uiStore.setProgress(false);
+    }
   }
 
   /**
@@ -256,304 +265,171 @@ export class Auth {
    *       password page.
    * @return null
    */
-  resetPassword() {
+  async resetPassword() {
     uiStore.reset();
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Password changed successfully');
     const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
-
-    return new Promise((res, rej) => {
-      this.cognitoUser = new AWSCognito.CognitoUser({ Username: email, Pool: this.userPool });
-      this.cognitoUser.forgotPassword({
-        onSuccess: data => res(data), onFailure: err => rej(err),
-      });
-    })
-      .then(() => {
-        Helper.toast('Password changed successfully', 'success');
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+    try {
+      await AmplifyAuth.forgotPassword(email.toLowerCase());
+      uiStore.setLoaderMessage('Password changed successfully');
+    } catch (err) {
+      uiStore.setErrors(this.simpleErr(err));
+      throw err;
+    } finally {
+      uiStore.setProgress(false);
+      uiStore.clearLoaderMessage();
+    }
+    return true;
   }
 
   /**
    * @desc Method changes password after first login for new user created from admin panel
    * @return null
    */
-  setNewPassword() {
+  async setNewPassword() {
     uiStore.reset();
     uiStore.setProgress();
     const { code, email, password } = Validator.ExtractValues(authStore.RESET_PASS_FRM.fields);
-
-    return new Promise((res, rej) => {
-      this.cognitoUser = new AWSCognito.CognitoUser({ Username: email, Pool: this.userPool });
-      this.cognitoUser.confirmPassword(code, password, {
-        onSuccess: data => res(data),
-        onFailure: err => rej(err),
-      });
-    })
-      .then(() => {
-        Helper.toast('Password changed successfully', 'success');
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+    try {
+      await AmplifyAuth.forgotPasswordSubmit(email.toLowerCase(), code, password);
+      Helper.toast('Password changed successfully', 'success');
+    } catch (err) {
+      uiStore.setErrors(this.simpleErr(err));
+      throw err;
+    } finally {
+      uiStore.setProgress(false);
+      uiStore.clearLoaderMessage();
+    }
   }
 
-  changeMyPassword() {
+  async changeMyPassword() {
     uiStore.reset();
     uiStore.setProgress();
-    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
-    const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
-    const userEmail = userStore.getUserEmailAddress();
-    const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: loginData.email || userEmail,
-      Password: loginData.password || passData.oldPasswd,
-    });
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: loginData.email || userEmail,
-      Pool: this.userPool,
-    });
-    return new Promise((res, rej) => {
-      this.cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: () => {
-          this.cognitoUser.changePassword(
-            passData.oldPasswd, passData.newPasswd,
-            (err, resultObtained) => {
-              if (err) {
-                rej(err.message || JSON.stringify(err));
-              }
-              res(resultObtained);
-            },
-          );
-        },
-        onFailure: err => rej(err),
-      });
-    })
-      .then(() => {
+    try {
+      const passData = mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+      const user = await AmplifyAuth.currentAuthenticatedUser();
+      if (user) {
+        await AmplifyAuth.changePassword(user, passData.oldPasswd, passData.newPasswd);
         Helper.toast('Password changed successfully', 'success');
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+      }
+    } catch (err) {
+      uiStore.setErrors(this.simpleErr(err));
+      throw err;
+    } finally {
+      uiStore.setProgress(false);
+      uiStore.clearLoaderMessage();
+    }
+    // return true;
   }
 
-  updatePassword() {
+  /**
+   * @desc This method use to reset password for users created by admin.
+   */
+  async updatePassword() {
     uiStore.reset();
     uiStore.setProgress();
-    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
-    const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
-    const userEmail = userStore.getUserEmailAddress();
-    const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: loginData.email || userEmail,
-      Password: loginData.password || passData.oldPasswd,
-    });
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: loginData.email || userEmail,
-      Pool: this.userPool,
-    });
-    return new Promise((res, rej) => {
-      this.cognitoUser.authenticateUser(authenticationDetails, {
-        // onSuccess: result => res({ data: result }),
-        onSuccess: (result) => {
-          authStore.setUserLoggedIn(true);
-          if (result.action && result.action === 'newPassword') {
-            authStore.setEmail(result.data.email);
-            authStore.setCognitoUserSession(this.cognitoUser.Session);
-            authStore.setNewPasswordRequired(true);
-          } else {
-            // Extract JWT from token
-            commonStore.setToken(result.idToken.jwtToken);
-            userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
-              res();
-            });
-            AWS.config.region = AWS_REGION;
-            // Check if currentUser has admin role, if user has admin role set admin access to user
-            if (userStore.isCurrentUserWithRole('admin')) {
-              this.setAWSAdminAccess(result.idToken.jwtToken);
-            }
+    try {
+      const loginData = mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+      const userEmail = userStore.getUserEmailAddress();
+      const passData = mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+      const emailLowerCase = (loginData.email || userEmail).toLowerCase();
+
+      const user = await AmplifyAuth.signIn({
+        username: emailLowerCase,
+        password: passData.oldPasswd,
+      });
+      if (user) {
+        if (user) {
+          try {
+            await AmplifyAuth.completeNewPassword(user, passData.newPasswd);
+            Helper.toast('Password changed successfully', 'success');
+          } catch (error) {
+            uiStore.setErrors(this.simpleErr(error));
+            throw error;
           }
-        },
-        newPasswordRequired: (userAttributes) => {
-          const params = { ...userAttributes };
-          authStore.setUserLoggedIn(true);
-          authStore.setCognitoUserSession(this.cognitoUser.Session);
-          authStore.setNewPasswordRequired(true);
-          delete params.email_verified;
-          this.cognitoUser.completeNewPasswordChallenge(
-            passData.newPasswd,
-            params,
-            {
-              onSuccess: data => res(data),
-              onFailure: err => rej(err),
-            },
-          );
-        },
-        onFailure: err => rej(err),
-      });
-    })
-      .then(() => {
-        Helper.toast('Password changed successfully', 'success');
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+        }
+      }
+    } catch (err) {
+      uiStore.setErrors(this.simpleErr(err));
+      throw err;
+    } finally {
+      uiStore.setProgress(false);
+      uiStore.clearLoaderMessage();
+    }
   }
 
-  /**
-   * @desc Changes user password. Method gets called in success flow of forgot password
-   * @return null.
-   */
-  changePassword() {
-    uiStore.reset();
-    uiStore.setProgress();
-    const { email, password } = authStore.values;
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.value,
-      Pool: this.userPool,
-    });
-    this.cognitoUser.Session = authStore.cognitoUserSession;
-    return new Promise((res, rej) => {
-      // const userData = _.mapValues(authStore.values, prop => prop.value);
-      this.cognitoUser.completeNewPasswordChallenge(
-        password.value,
-        { email: authStore.values.email.value },
-        {
-          onSuccess: data => res(data),
-          onFailure: err => rej(err),
-        },
-      );
-    })
-      .then(() => {
-        Helper.toast('Password changed successfully', 'success');
-        authStore.setNewPasswordRequired(false);
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+  segmentTrackLogout = (logoutType) => {
+    if (window.analytics) {
+      window.analytics.track('Logged Out', { logoutType });
+      this.shutdownIntercom();
+      window.analytics.reset();
+    }
+  }
+  shutdownIntercom = () => {
+    try {
+      window.Intercom('shutdown');
+      console.log('Intercom Shutdown time:', new Date());
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  /**
-   * @desc Confirms code that user gets on email on successfull registration
-   * @return null
-   * @todo Remove this method as new user who is registering will be auto confirmed.
-   */
-  confirmCode() {
-    uiStore.reset();
-    uiStore.setProgress();
-    const { code, email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email, Pool: this.userPool,
-    });
 
-    return new Promise((res, rej) => {
-      this.cognitoUser.confirmRegistration(
-        code,
-        true,
-        err => (err ? rej(err) : res()),
-      );
-    })
-      .then(() => {
-        Helper.toast('Successfully done confirmation', 'success');
-
-        const authenticationDetails = new AWSCognito.AuthenticationDetails({
-          Username: email, Password: password,
-        });
-
-        this.cognitoUser = new AWSCognito.CognitoUser({
-          Username: email, Pool: this.userPool,
-        });
-
-        return new Promise((res, rej) => {
-          this.cognitoUser.authenticateUser(authenticationDetails, {
-            onSuccess: result => res({ data: result }),
-            newPasswordRequired: (result) => {
-              res({ data: result, action: 'newPassword' });
-            },
-            onFailure: err => rej(err),
-          });
-        })
-          .then((result) => {
-            authStore.setUserLoggedIn(true);
-            if (result.action && result.action === 'newPassword') {
-              authStore.setEmail(result.data.email);
-              authStore.setCognitoUserSession(this.cognitoUser.Session);
-              authStore.setNewPasswordRequired(true);
-            } else {
-              const { data } = result;
-              // Extract JWT from token
-              commonStore.setToken(data.idToken.jwtToken);
-              userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-              userDetailsStore.getUser(userStore.currentUser.sub);
-              AWS.config.region = AWS_REGION;
-              if (userStore.isCurrentUserWithRole('admin')) {
-                this.setAWSAdminAccess(data.idToken.jwtToken);
-              }
-            }
-          })
-          .catch((err) => {
-            uiStore.setErrors(this.simpleErr(err));
-            throw err;
-          });
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
-  }
-
-  /**
-   * @desc Logs out user and clears all tokens stored in browser's local storage
-   * @return null
-   */
-  logout = () => (
+  forceLogout = logoutType => (
     new Promise((res) => {
-      commonStore.setToken(undefined);
-      userStore.forgetUser();
-      this.cognitoUser.signOut();
-      AWS.config.clear();
-      authStore.setUserLoggedIn(false);
-      accountStore.resetStoreData();
-      identityStore.resetStoreData();
-      investorProfileStore.resetStoreData();
-      userDetailsStore.resetStoreData();
-      iraAccountStore.resetStoreData();
-      entityAccountStore.resetStoreData();
-      bankAccountStore.resetStoreData();
+      this.resetData(logoutType);
       res();
     })
     // Clear all AWS credentials
   );
+
+  resetData = (logoutType) => {
+    client.clearStore();
+    commonStore.setToken(undefined);
+    localStorage.removeItem('lastActiveTime');
+    localStorage.removeItem('defaultNavExpanded');
+    authStore.setUserLoggedIn(false);
+    userStore.forgetUser();
+    this.segmentTrackLogout(logoutType);
+    this.clearMobxStore();
+  }
+  /**
+   * @desc Logs out user and clears all tokens stored in browser's local storage
+   * @return null
+   */
+  logout = logoutType => (
+    new Promise((res, rej) => {
+      try {
+        this.resetData(logoutType);
+        AmplifyAuth.signOut();
+        AWS.config.clear();
+        res();
+      } catch (err) {
+        console.log('Error occured while logout====', err);
+        rej();
+      }
+    })
+  )
+
+  clearMobxStore = () => {
+    authStore.resetStoreData();
+    accountStore.resetStoreData();
+    identityStore.resetStoreData();
+    investorProfileStore.resetStoreData();
+    userDetailsStore.resetStoreData();
+    iraAccountStore.resetStoreData();
+    entityAccountStore.resetStoreData();
+    bankAccountStore.resetStoreData();
+    individualAccountStore.resetStoreData();
+    portfolioStore.resetPortfolioData();
+    userDetailsStore.setPartialInvestmenSession();
+    investmentStore.resetData();
+    investmentStore.resetAccTypeChanged();
+    transactionStore.resetData();
+    accreditationStore.resetUserAccreditatedStatus();
+    uiStore.clearErrors();
+    uiStore.clearRedirectURL();
+  }
 
   simpleErr = err => ({
     statusCode: err.statusCode,
@@ -567,15 +443,14 @@ export class Auth {
    * @return $newData @type Object - Data with keys in camel case format
    */
   mapCognitoToken = (data) => {
-    const mappedUser = data.reduce((obj, item) => {
-      const key = camel(item.Name.replace(/^custom:/, ''));
-      const newObj = obj;
+    const mappedUser = {};
+    map(data, (obj, item) => {
+      const key = camelCase(item.replace(/^custom:/, ''));
       if (key === 'userCapabilities') {
-        newObj.capabilities = item.Value;
+        mappedUser.capabilities = obj;
       } else {
-        newObj[key] = item.Value;
+        mappedUser[key] = obj;
       }
-      return newObj;
     }, {});
     return mappedUser;
   };
@@ -589,7 +464,7 @@ export class Auth {
    */
   adjustRoles = (data) => {
     const newData = {};
-    _.map(data, (val, key) => { (newData[camel(key)] = val); });
+    map(data, (val, key) => { (newData[camelCase(key)] = val); });
     newData.roles = data['custom:roles'];
     newData.capabilities = data['custom:user_capabilities'] || data['custom:capabilities'] || null;
     delete newData.customRoles;
@@ -605,35 +480,8 @@ export class Auth {
   parseRoles = (data) => {
     const newData = data;
     newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
-    newData.capabilities = (data.capabilities) ? JSON.parse(data.capabilities) : [];
     return newData;
   };
-
-  /**
-   * @desc to resend confirmation code to user-email address
-   * @return null
-   */
-  resendConfirmationCode = () => {
-    uiStore.setProgress();
-    const { email } = authStore.CONFIRM_FRM.fields;
-    this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.value,
-      Pool: this.userPool,
-    });
-    return new Promise((res, rej) => {
-      this.cognitoUser.resendConfirmationCode(err => (err ? rej(err) : res()));
-    })
-      .then(() => {
-        Helper.toast('Successfully sent confirmation code', 'success');
-      })
-      .catch((err) => {
-        uiStore.setErrors(this.simpleErr(err));
-        throw err;
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
 }
 
 export default new Auth();

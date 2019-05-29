@@ -1,39 +1,49 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Grid, Segment, Image } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { NsCarousel, Image64 } from '../../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../../constants/aws';
+import Aux from 'react-aux';
+import { Header, Button, Icon } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { get } from 'lodash';
+import { inject, observer } from 'mobx-react';
+import { Image64 } from '../../../../../../theme/shared';
+import NSImage from '../../../../../shared/NSImage';
 
+const isTablet = document.documentElement.clientWidth < 991;
+@inject('campaignStore')
+@withRouter
+@observer
 class Gallery extends Component {
+  handleViewGallary = (e, index) => {
+    e.preventDefault();
+    this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
+    this.props.history.push(`${this.props.galleryUrl.replace(/\/$/, '')}/photogallery`);
+  }
   render() {
-    const {
-      campaign, settings, isTabletLand, isTablet, galleryUrl,
-    } = this.props;
+    const { campaign } = this.props;
     return (
-      <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
-        <Segment padded>
-          <Breadcrumb>
-            <Breadcrumb.Section as={Link} to={`${galleryUrl}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
-            <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
-          </Breadcrumb>
-          <div className="carousel mt-10 mb-30">
-            <NsCarousel
-              {...settings}
-              handlePaginationFun={() => {}}
-            >
-              {
-                campaign && campaign.media &&
-                  campaign.media.gallery && campaign.media.gallery.length ?
-                  campaign.media.gallery.map(data => (
-                    <Image64 srcUrl={data.url} />
-                  ))
-                  :
-                  <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
-              }
-            </NsCarousel>
-          </div>
-        </Segment>
-      </Grid.Column>
+      <Aux>
+        <Header as="h3" className="mb-30 anchor-wrap mb-30">
+          Gallery
+          <span className="anchor" id="gallery" />
+        </Header>
+        <div className="gallery-preview">
+          {get(campaign, 'media.gallery') ?
+            campaign.media.gallery.map((data, index) => (
+              <Aux>
+                {index < 3 &&
+                  <Image64 onClick={e => this.handleViewGallary(e, index)} fluid className="about-gallery-bg" srcUrl={data.url} />
+                }
+              </Aux>
+            )) :
+            <NSImage fluid className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
+          }
+        </div>
+        {get(campaign, 'media.gallery') &&
+          <Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
+            View Gallery
+            <Icon size="small" className="ns-chevron-right right" color="white" />
+          </Button>
+        }
+      </Aux>
     );
   }
 }

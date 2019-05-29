@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import moment from 'moment';
 import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
-import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme/form';
+import { FormInput, AutoComplete, MaskedInput } from '../../../../../../theme/form';
 import ConfirmVerificationCode from './ConfirmVerificationCode';
 import BeneficiaryShareModal from './BeneficiaryShareModal';
 import BeneficiaryPreviewModal from './BeneficiaryPreviewModal';
@@ -94,15 +93,13 @@ export default class AddBeneficiary extends Component {
                       }
                     </Form.Group>
                     <Form.Group widths="equal">
-                      <FormDatePicker
-                        type="text"
+                      <MaskedInput
                         name="dob"
-                        maxDate={moment()}
-                        placeholderText={beneficiary.dob.placeHolder}
                         fielddata={beneficiary.dob}
-                        selected={beneficiary.dob.value ?
-                          moment(beneficiary.dob.value) : null}
-                        changed={date => beneficiaryDateChange(date, index)}
+                        format="##/##/####"
+                        changed={values => beneficiaryDateChange(values.formattedValue, index)}
+                        dateOfBirth
+                        showerror
                       />
                       <FormInput
                         type="text"

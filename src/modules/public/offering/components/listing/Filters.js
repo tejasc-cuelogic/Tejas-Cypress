@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-// import { Link } from 'react-router-dom';
-import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup, List, Button } from 'semantic-ui-react';
-// import BusinessType from './BusinessType';
+import { Container, Grid, Menu, Header, Checkbox, Form, Icon, Popup, List, Button } from 'semantic-ui-react';
 import Slider from 'react-slick';
-import { ASSETS_URL } from '../../../../../constants/aws';
+import { BUSINESS_INDUSTRIES } from '../../../../../services/constants/offering';
+import NSImage from '../../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 export default class Filters extends Component {
   state = {
     activeSlide: 0,
-    BusinessTypes: [
-      { content: 'Commercial Real Estate', color: 'green', iconName: 'building' },
-      { content: 'Restaurant & Bar', color: 'green', iconName: 'food' },
-      { content: 'Brewery & Pub', color: 'green', iconName: 'bar' },
-      { content: 'Hospitality', iconName: 'bed' },
-      { content: 'Health & Wellness', iconName: 'heartbeat' },
-      { content: 'Fitness', iconName: 'bicycle' },
-      { content: 'Office', iconName: 'fax' },
-      { content: 'Other', iconName: 'ellipsis horizontal' },
-    ],
+    BusinessTypes: BUSINESS_INDUSTRIES,
     MoreOptions: [{
       label: 'Show Funded Deals',
       checkStatus: true,
@@ -179,7 +169,7 @@ export default class Filters extends Component {
           <Container>
             <Menu text>
               <Menu.Item name="filter" onClick={this.props.toggleFilters} className="text-uppercase">
-                <Image src={`${ASSETS_URL}images/icons/icon_filter.png`} className="filterIcon" />
+                <NSImage path="icons/icon_filter.png" className="filterIcon" />
                  Filter
               </Menu.Item>
               {this.props.status ? (
@@ -187,7 +177,7 @@ export default class Filters extends Component {
                   {isMobile ?
                     <Menu.Item name="clear all" onClick={this.clearAll}>CLEAR ALL</Menu.Item> :
                     <Menu.Item name="clear all">
-                      <Image src={`${ASSETS_URL}images/icons/icon_close.png`} className="closeIcon" onClick={this.props.toggleFilters} />
+                      <NSImage path="icons/icon_close.png" className="closeIcon" onClick={this.props.toggleFilters} />
                     </Menu.Item>
                   }
                 </Menu.Menu>

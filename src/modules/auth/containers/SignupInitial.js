@@ -31,13 +31,13 @@ class signupInitial extends Component {
     const selectedType = SIGNUP_FRM.fields.role;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
-      <Modal closeOnDimmerClick={false} open closeIcon onClose={this.handleCloseModal}>
+      <Modal closeOnDimmerClick={false} open closeIcon onClose={this.handleCloseModal} className={`${this.props.match.params.type && 'tiny'}`}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Join the NextSeed community</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Grid stackable textAlign="center" columns="equal">
-            {userTypes.map(type => (
+            {userTypes.map(type => !type.exclude.includes(this.props.match.params.type) && (
               <Grid.Column
                 onClick={e => signupChange(e, { name: 'role', value: type.value })}
                 key={type.key}

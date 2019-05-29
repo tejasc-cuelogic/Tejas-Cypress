@@ -3,12 +3,12 @@ import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
-import { includes } from 'lodash';
+import { includes, get } from 'lodash';
 import Loadable from 'react-loadable';
+// import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { CAMPAIGN_OFFERING_STATUS } from '../../../../../constants/offering';
 import NotFound from '../../../../shared/NotFound';
 
 const getModule = component => Loadable({
@@ -23,19 +23,30 @@ const navItems = [
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
 ];
-@inject('portfolioStore', 'campaignStore')
+@inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore')
 @observer
 class InvestmentDetails extends Component {
   componentWillMount() {
+    const { portfolioStore, uiStore, isAdmin } = this.props;
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
-    this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
+    if (this.props.offeringCreationStore.currentOfferingId !== this.props.match.params.id ||
+      portfolioStore.currentAcccountType !== accountType) {
+      if (uiStore.inProgress !== 'portfolio') {
+        this.props.uiStore.setProgress('portfolioDirect');
+      }
+      portfolioStore.getInvestorDetails(accountType, this.props.match.params.id, isAdmin).then(() =>
+        this.props.uiStore.setProgress(false));
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
+      this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
+      portfolioStore.currentAccoutType(accountType);
+    }
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.offeringCreationStore.resetOfferingId();
     this.props.history.replace(this.props.refLink);
   };
 
@@ -43,32 +54,37 @@ class InvestmentDetails extends Component {
     const { match, portfolioStore } = this.props;
     const { getInvestor } = portfolioStore;
     const { campaign, details } = this.props.campaignStore;
-
+    // const netAnnualizedReturn = get(getInvestor, 'netAnnualizedReturn');
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
-      businessName: 'The Brewers Table',
+      businessName: campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName,
       summary: [
         {
-          title: 'Total invested amount', content: getInvestor && getInvestor.totalRaisedAmount, type: 1, info: 'Your Total invested amount as of today',
+          title: 'Total Raised Amount', content: get(getInvestor, 'totalRaisedAmount') || 'N/A', type: 1, fraction: false,
         },
         {
-          title: 'Status', content: campaign && campaign.offeringStatus ? CAMPAIGN_OFFERING_STATUS[campaign.offeringStatus] : 'NA', info: 'Your Status as of today',
+          title: 'Close Date', content: get(campaign, 'closureSummary.hardCloseDate') ? moment(new Date(get(campaign, 'closureSummary.hardCloseDate'))).format('ll') : 'NA',
         },
         {
-          title: 'Date', content: getInvestor && moment(getInvestor.fundedDate).format('ll'), info: 'Date of investment started',
+          title: 'My Investment', content: get(getInvestor, 'myInvestment') || 'N/A', type: 1, fraction: false,
         },
         {
-          title: 'Net Payments Received', content: getInvestor && getInvestor.netPaymentsReceived, type: 1, info: 'Your Net Payments Received till date',
+          title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') || 'N/A', type: 1, info: 'Payments received to date from this investment, minus NextSeed fees.',
         },
-        {
-          title: 'Net Annualied Returns', content: getInvestor && getInvestor.netAnnualizedReturn, info: 'Your Net Annualied Returns till date',
-        },
+        // {
+        //   title: 'Net Annualized Return', content: netAnnualizedReturn &&
+        // !money.isZero(netAnnualizedReturn) ? `${netAnnualizedReturn}%` : 'N/A',
+        // info: <span>Net Annualized Return (&quot;NAR&quot;) measures the current
+        //   financial return of each investment in your portfolio. See the <Link
+        //   target="_blank" to="/resources/education-center">Education Center</Link>
+        //   for a full explanation of how NAR  is calculated.</span>,
+        // },
       ],
     };
-    if (!details || details.loading) {
-      return <InlineLoader />;
-    }
+    // if (!details || details.loading || uiStore.inProgress === 'portfolioDirect') {
+    //   return <InlineLoader />;
+    // }
     if (details && details.data && !details.data.getOfferingDetailsById) {
       return <NotFound />;
     }
@@ -85,13 +101,23 @@ class InvestmentDetails extends Component {
                 component={getModule(navItems[0].component)}
               />
               {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(item.component)}
-                  />
-                ))
+                navItems.map((item) => {
+                  const CurrentModule = item.load === false ?
+                    item.component : getModule(item.component);
+                  return (
+                    <Route
+                      key={item.to}
+                      path={`${match.url}/${item.to}`}
+                      // component={getModule(item.component)}
+                      render={props => (
+                        <CurrentModule
+                          isAdmin={this.props.isAdmin}
+                          {...props}
+                        />)
+                     }
+                    />
+                  );
+                })
               }
             </Switch>
           </Card>

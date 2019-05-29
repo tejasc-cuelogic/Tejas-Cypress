@@ -3,11 +3,14 @@ import { Link, withRouter, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import Aux from 'react-aux';
-import { Menu, Icon } from 'semantic-ui-react';
+import { Menu, Icon, Button } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
+import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 
-@inject('navStore', 'offeringsStore')
+const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('navStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export class SidebarNav extends Component {
@@ -21,10 +24,13 @@ export class SidebarNav extends Component {
   componentWillReceiveProps(nextProps) {
     this.props.navStore.setAccessParams('currentNav', nextProps.match.url);
   }
+  toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
+
   render() {
+    const { props } = this;
     const {
       roles, location, isVerified, createdAccount, navStore, onlyMount,
-    } = this.props;
+    } = props;
     if (onlyMount) return null;
     return (
       <Aux>
@@ -35,11 +41,22 @@ export class SidebarNav extends Component {
           isUserVerified={isVerified}
           createdAccount={createdAccount}
           isApp
+          onToggle={this.toggleMobile}
+          isMobile={isMobile}
         />
         <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
-          <Icon name="sign out" />
+          <Icon name="ns-logout" />
           <span>Logout</span>
         </Menu.Item>
+        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
+          props.signupStatus &&
+          !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
+          props.signupStatus.investorProfileCompleted &&
+          props.signupStatus.inActiveAccounts.length > 0 &&
+            <Menu.Item className="btn-item mt-30">
+              <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Open New Account" />
+            </Menu.Item>
+        }
       </Aux>
     );
   }
@@ -48,8 +65,10 @@ export class SidebarNav extends Component {
 export const GetNavItem = (item, roles) => {
   const result = _.find(PRIVATE_NAV, i => i.to === item);
   const link = <h3><Link to={`/app/${result.to}`}>{result.title}</Link></h3>;
-  return (result && (result.accessibleTo.length === 0 ||
-    _.intersection(result.accessibleTo, roles).length > 0)) ? link : false;
+  return (result && (!result.accessibleTo || result.accessibleTo.length === 0 ||
+    _.intersection(result.accessibleTo, roles).length > 0) &&
+    (!result.env || result.env.length === 0 ||
+      _.intersection(result.env, [REACT_APP_DEPLOY_ENV]).length > 0)) ? link : false;
 };
 
 export const GetNavMeta = (item, roles, nonprivate) => {
@@ -61,9 +80,14 @@ export const GetNavMeta = (item, roles, nonprivate) => {
       navMeta.title;
     if (navMeta.subNavigations && roles) {
       navMeta.subNavigations = navMeta.subNavigations.filter(n =>
-        !n.accessibleTo || n.accessibleTo.length === 0 ||
-        _.intersection(n.accessibleTo, roles).length > 0);
+        ((!n.accessibleTo || n.accessibleTo.length === 0 ||
+        _.intersection(n.accessibleTo, roles).length > 0)) &&
+        ((!n.env || n.env.length === 0 ||
+        _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
     }
+  }
+  if (!navMeta) {
+    return { subNavigations: [] };
   }
   return navMeta;
 };

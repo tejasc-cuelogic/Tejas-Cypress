@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { Input, Form, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { toJS } from 'mobx';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('educationStore', 'userStore')
@@ -26,7 +27,7 @@ export default class FaqsCombined extends Component {
     this.setState(stateChange);
   }
   search = (e) => {
-    this.props.educationStore.setSrchParam('Faq', e.target.value);
+    this.props.educationStore.setSrchParam(e.target.value);
     if (this.props.location.pathname !== '/resources/education-center/investor/faq') {
       this.props.history.replace('/resources/education-center/investor/faq');
     }
@@ -53,7 +54,7 @@ export default class FaqsCombined extends Component {
         <div className="mt-30">
           {faqs &&
           faqs.map((faq, key) => (
-            <Accordion key={faq.id} className="faq-accordion" >
+            <Accordion key={faq.slug} className="faq-accordion" >
               <Accordion.Title active={activeIndex === key} index={key} onClick={() => this.toggleAccordion(key, 'activeIndex')}>
                 {faq.categoryName}
                 <Icon className="ns-chevron-down" />
@@ -61,7 +62,7 @@ export default class FaqsCombined extends Component {
               <Accordion.Content active={activeIndex === key}>
                 {faq.faqItems &&
                 faq.faqItems.map((faqItem, index) => (
-                  <Accordion key={faqItem.id}>
+                  <Accordion key={faqItem.slug}>
                     <Accordion.Title
                       active={innerActiveIndex === index}
                       index={index}
@@ -70,10 +71,11 @@ export default class FaqsCombined extends Component {
                       <Icon className={innerActiveIndex === index ? 'ns-minus-square' : 'ns-plus-square'} color="green" />
                       {faqItem.question}
                     </Accordion.Title>
-                    <Accordion.Content
-                      dangerouslySetInnerHTML={{ __html: faqItem.answer }}
-                      active={innerActiveIndex === index}
-                    />
+                    <Accordion.Content active={innerActiveIndex === index}>
+                      <pre className="migrated-content">
+                        <HtmlEditor readOnly content={(faqItem.answer || '')} />
+                      </pre>
+                    </Accordion.Content>
                   </Accordion>
                 ))
                 }
@@ -83,7 +85,7 @@ export default class FaqsCombined extends Component {
           }
           <p className="note mt-30">
           If you still have questions, please don’t hesitate to contact us
-          at <a href="mailto:apply@nextseed.com" className="link">info@nextseed.com</a>
+          at <a href="mailto:info@nextseed.com" className="link">info@nextseed.com</a>
           </p>
         </div>
       </Aux>

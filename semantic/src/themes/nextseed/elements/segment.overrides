@@ -3,7 +3,7 @@
 *******************************/
 //  Public page Starts
 .ui.padded.segment {
-    padding: 30px;
+    padding: @30px;
     display: flex;
     flex-direction: column; 
     h4.ui.header {
@@ -31,46 +31,59 @@
     }
     &.reward-block {
         .ui.header{
-            .ui.label {
-                margin: @5px 0 0;
-            }
+            color: @neutral-middark;
+            font-weight: @bold;
+            margin-bottom: 0;
             >img {
-                width: 50px;
+                width: @50px;
             }
+        }
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @20px;
         }
     }
     .segment-container {
-        max-height: 410px;
+        max-height: 544px;
         overflow: hidden;
-        flex-grow: 1;
+        @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largeMonitorBreakpoint ) {
+            max-height: 290px;
+        }
         &.small {
-            max-height: 356px;
+            max-height: 440px;
+            @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largeMonitorBreakpoint ) {
+                max-height: 172px;
+            }
         }
         &.mini {
             max-height: 90px;
         }
-    }
-    &.overview-video {
-        a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            &:hover {
-                text-decoration: none;
-            }
+        p {
+            margin-bottom: @20px;
         }
-        .play-icon{
-            font-size: 80px;
-            line-height: 80px;
-            color: @white;
-            position:absolute;
-            top:50%;
-            transform:translate(0%,-50%);
-            z-index: 1;
-            cursor: pointer;
+        img {
+            width: 100% !important;
         }
     }
+    &.legal-documents {
+        box-shadow: none;
+        align-items: center;
+        p {
+            margin-bottom: @25px;
+            flex-grow: 1;
+        }
+    }
+    .no-comments {
+        padding: 200px 0;  
+        @media only screen and (max-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
+            padding: 100px 0;
+        } 
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @40px 0;
+        }      
+    }
+}
+.ui.segment.offering-comment {
+    padding: 0;
 }
 .press-news {
 	.ui.segment {
@@ -90,7 +103,6 @@
 .account-type-tab, .funding-option{
     .ui.attached.segment{
         border:none;
-        // text-align:center;
     }
 }
 

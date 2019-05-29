@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Header, Item, Icon } from 'semantic-ui-react';
 import { filter } from 'lodash';
-import { InlineLoader } from '../../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../../constants/aws';
+import { InlineLoader, Image64 } from '../../../../../../theme/shared';
+import NSImage from '../../../../../shared/NSImage';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
+
+const isMobile = document.documentElement.clientWidth < 991;
 
 class MeetOurTeam extends Component {
   render() {
     const {
-      campaign, meetOurTeamUrl, emptyStatement,
+      campaign, emptyStatement,
     } = this.props;
     const leadershipArr = campaign && campaign.leadership && campaign.leadership.length ?
       campaign.leadership : [];
@@ -17,56 +19,60 @@ class MeetOurTeam extends Component {
       o.isPublic
     ));
     return (
-      <Grid.Column>
-        <Segment padded>
-          <Header as="h4">
-            {meetTeamOjb.length ?
-              <Link to={`${meetOurTeamUrl}/meetourteam`}>
-                Meet Our Team
-                <Icon className="ns-chevron-right" color="green" />
-              </Link>
-              :
-              <Aux>
-                Meet Our Team
-                <Icon className="ns-chevron-right" color="green" />
-              </Aux>
-            }
-          </Header>
-          {
-            meetTeamOjb.length ?
-              <Grid columns={3}>
-                {
-                  meetTeamOjb.map(data => (
-                    data.isPublic ?
-                      <Grid.Column>
-                        <Reveal animated="small fade">
-                          <Reveal.Content hidden>
-                            <div className="team-overlay">
-                              <p>{`${data.firstName} ${data.lastName}`}</p>
-                            </div>
-                          </Reveal.Content>
-                          <Reveal.Content visible>
-                            <Image
-                              src={
-                                data && data.uploads && data.uploads.headshot &&
-                                  data.uploads.headshot.url ?
-                                  data.uploads.headshot.url : `${ASSETS_URL}images/leader-placeholder.jpg`
-                              }
-                              circular
-                            />
-                          </Reveal.Content>
-                        </Reveal>
-                      </Grid.Column>
-                      :
-                      ''
-                  ))
-                }
-              </Grid>
-              :
-              <InlineLoader text={emptyStatement} />
-          }
-        </Segment>
-      </Grid.Column>
+      <Aux>
+        <Header as="h3" className="anchor-wrap mb-30">
+          Meet the Team
+          <span className="anchor" id="team" />
+        </Header>
+        {meetTeamOjb.length ?
+          <Aux>
+            <Item.Group className="meet-team">
+              {meetTeamOjb.map(data => (
+                data.isPublic &&
+                  <Item>
+                    <Item.Content>
+                      <div className={`campaign-avatar ${isMobile && 'mobile-avatar'}`}>
+                        <div className="avatar-image team-avatar">
+                          {data && data.uploads && data.uploads.headshot &&
+                            data.uploads.headshot.url ? (
+                              <Image64 srcUrl={data.uploads.headshot.url} />
+                            ) : (
+                              <NSImage path="leader-placeholder.jpg" />
+                            )
+                          }
+                        </div>
+                        <div className="avatar-details team-details">
+                          <Item.Header>{`${data.firstName || ''} ${data.lastName || ''}`}</Item.Header>
+                          {data.companyPosition &&
+                            <Item.Meta className="text-uppercase"><b>{data.companyPosition}</b></Item.Meta>
+                          }
+                          {data && data.social &&
+                            <Item.Extra>
+                              <div>
+                                {data && data.social && Object.keys(data.social).map(key => (
+                                  data.social[key] &&
+                                    <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+                                      <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
+                                    </a>
+                                ))}
+                              </div>
+                            </Item.Extra>
+                          }
+                        </div>
+                      </div>
+                      {data.bio &&
+                        <Item.Description className="avatar-description mt-30">
+                          <HtmlEditor readOnly content={data.bio} />
+                        </Item.Description>
+                      }
+                    </Item.Content>
+                  </Item>
+              ))}
+            </Item.Group>
+          </Aux> :
+          <InlineLoader text={emptyStatement} className="bg-offwhite" />
+        }
+      </Aux>
     );
   }
 }

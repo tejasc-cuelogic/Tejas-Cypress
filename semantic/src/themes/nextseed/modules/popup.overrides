@@ -14,4 +14,7 @@
             margin-bottom:@14px;
         }
     }
+    span a:hover {
+        text-decoration: underline !important;
+    }
 }

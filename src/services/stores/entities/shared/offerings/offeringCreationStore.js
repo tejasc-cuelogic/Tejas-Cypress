@@ -1,26 +1,30 @@
-/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
 import cleanDeep from 'clean-deep';
-import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
+import {
+  DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST } from '../../../../constants/admin/offerings';
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
+  OFFERING_CLOSE_1, OFFERING_CLOSE_2, OFFERING_CLOSE_3,
+} from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
-  getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
+import { deleteBonusReward, updateOffering,
+  getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
+  getBonusRewards, getOfferingFilingList,
+  generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
+import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../constants/common';
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
@@ -28,6 +32,7 @@ export class OfferingCreationStore {
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+  @observable CLOSURE_SUMMARY_FRM = Validator.prepareFormObject(CLOSURE_SUMMARY);
   @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
@@ -36,6 +41,9 @@ export class OfferingCreationStore {
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
+  @observable OFFERING_CLOSE_1 = Validator.prepareFormObject(OFFERING_CLOSE_1);
+  @observable OFFERING_CLOSE_2 = Validator.prepareFormObject(OFFERING_CLOSE_2);
+  @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
   @observable LEADERSHIP_FRM =
     Validator.prepareFormObject(
@@ -63,6 +71,8 @@ export class OfferingCreationStore {
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
+  @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
+  @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -72,10 +82,10 @@ export class OfferingCreationStore {
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
   @observable offeringFilingList = {};
+  @observable filingListApiRes = {};
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
-  @observable currentRewardId = null;
   @observable tierTobeUnlinked = {};
   @observable leadershipExperience = {
     0: LEADERSHIP_EXP.employer,
@@ -83,12 +93,34 @@ export class OfferingCreationStore {
     2: LEADERSHIP_EXP.employer,
     3: LEADERSHIP_EXP.employer,
     4: LEADERSHIP_EXP.employer,
+    5: LEADERSHIP_EXP.employer,
+    6: LEADERSHIP_EXP.employer,
+    7: LEADERSHIP_EXP.employer,
+    8: LEADERSHIP_EXP.employer,
+    9: LEADERSHIP_EXP.employer,
   };
   @observable requestState = {
     search: {},
   };
   @observable removeFileIdsList = [];
   @observable removeFileNamesList = [];
+  @observable isUploadingFile = false;
+  @observable isListingPage = false;
+
+  @action
+  setFieldValue = (field, value, field2 = false) => {
+    if (field2) {
+      this[field][field2] = value;
+    } else {
+      this[field] = value;
+    }
+  }
+
+  @action
+  resetBonusRewardForm = () => {
+    this.ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
+    this.setTiersForBonusRewardsForm();
+  }
 
   @action
   setTierToBeUnlinked = (tier) => {
@@ -103,7 +135,7 @@ export class OfferingCreationStore {
     DEFAULT_TIERS.map((tier) => {
       if (this.bonusRewardsTiers.data && this.bonusRewardsTiers.data.getBonusRewardTiers) {
         const isExisted =
-        find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
         }
@@ -111,13 +143,13 @@ export class OfferingCreationStore {
         this.bonusRewardsTiers.data = {};
         this.bonusRewardsTiers.data.getBonusRewardTiers = [];
         const isExisted =
-        find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
         }
       }
       this.bonusRewardsTiers.data.getBonusRewardTiers =
-      orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
+        orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
       return this.bonusRewardsTiers;
     });
   }
@@ -133,18 +165,13 @@ export class OfferingCreationStore {
   }
 
   @action
-  setCurrentRewardId = (id) => {
-    this.currentRewardId = id;
-  }
-
-  @action
-  resetRewardId = () => {
-    this.currentRewardId = null;
-  }
-
-  @action
   setProfilePhoto(attr, value, field) {
     this.MEDIA_FRM.fields[field][attr] = value;
+  }
+
+  @action
+  setLeadershipProfilePhoto(attr, value, field, index) {
+    this.LEADERSHIP_FRM.fields.leadership[index][field][attr] = value;
   }
 
   @action
@@ -160,8 +187,29 @@ export class OfferingCreationStore {
   }
 
   @action
+  resetLeadershipProfilePhoto = (field, index) => {
+    const attributes = ['src', 'error', 'meta'];
+    attributes.forEach((val) => {
+      if ((typeof this.LEADERSHIP_FRM.fields.leadership[index][field][val] === 'object') && (this.LEADERSHIP_FRM.fields.leadership[index][field][val] !== null)) {
+        this.LEADERSHIP_FRM.fields.leadership[index][field][val] = {};
+      } else {
+        this.LEADERSHIP_FRM.fields.leadership[index][field][val] = '';
+      }
+    });
+  }
+
+  @action
   resetForm = (form) => {
     Validator.resetFormData(this[form]);
+  }
+
+  @action
+  resetAllForms = () => {
+    const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    forms.forEach((f) => {
+      this[f] = Validator.resetFormData(this[f]);
+    });
+    this.initLoad = [];
   }
 
   @action
@@ -191,6 +239,45 @@ export class OfferingCreationStore {
   }
 
   @action
+  resetFormFieldForLeadership = (form, field, fileObj, RemoveIndex, index) => {
+    if (fileObj
+      && Array.isArray(toJS(this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl))) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl.push(fileObj.location);
+      this.LEADERSHIP_FRM.fields.leadership[index][field].fileId.push(`${Date.now()}_${fileObj.fileName}`);
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value.push(fileObj.fileName);
+    } else if (fileObj) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl = fileObj.location;
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value = fileObj.fileName;
+      this.LEADERSHIP_FRM.fields.leadership[index][field].fileId = `${Date.now()}_${fileObj.fileName}`;
+    } else if (RemoveIndex > -1
+      && Array.isArray(toJS(this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl))) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl.splice(RemoveIndex, 1);
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value.splice(RemoveIndex, 1);
+    } else if (RemoveIndex === undefined) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl = '';
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value = '';
+    }
+    this[form].fields[field] = {
+      ...this.LEADERSHIP_FRM.fields.leadership[index][field],
+      ...{
+        src: '',
+        meta: {},
+      },
+    };
+  }
+  @action
+  resetAffiliatedIssuerForm = () => {
+    this.AFFILIATED_ISSUER_FRM =
+      Validator.prepareFormObject(
+        AFFILIATED_ISSUER,
+        false,
+        true,
+        false,
+        { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+      );
+    this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+  }
+  @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
     if (index === undefined) {
@@ -198,7 +285,7 @@ export class OfferingCreationStore {
     } else {
       filename = this.MEDIA_FRM.fields[name].value[index];
     }
-    fileUpload.deleteFromS3(this.MEDIA_FRM.fields[name].value)
+    commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${this.MEDIA_FRM.fields[name].value}`)
       .then((res) => {
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
         this.resetFormField('MEDIA_FRM', name, undefined, index);
@@ -213,56 +300,111 @@ export class OfferingCreationStore {
   }
 
   @action
-  uploadMedia = (name) => {
-    const fileObj = {
-      obj: this.MEDIA_FRM.fields[name].base64String,
-      type: this.MEDIA_FRM.fields[name].meta.type,
-      name: this.MEDIA_FRM.fields[name].fileName,
-    };
-    fileUpload.uploadToS3(fileObj)
+  removeMediaForLeadership = (name, index = undefined) => {
+    let filename = '';
+    if (index === undefined) {
+      filename = this.LEADERSHIP_FRM.fields.leadership[index][name].value;
+    } else {
+      filename = this.LEADERSHIP_FRM.fields.leadership[index][name].value[index];
+    }
+    commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${this.LEADERSHIP_FRM.fields.leadership[index][name].value}`)
       .then((res) => {
-        Helper.toast(`${this.MEDIA_FRM.fields[name].label} uploaded successfully.`, 'success');
-        this.resetFormField('MEDIA_FRM', name, res);
-        this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
+        Helper.toast(`${this.LEADERSHIP_FRM.fields.leadership[index][name].label} removed successfully.`, 'success');
+        this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
+        // this.updateOffering
+        // (this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
+        this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
       })
       .catch((err) => {
+        // force record deletion from db;
+        // this.resetFormField('LEADERSHIP_FRM', name, undefined, index);
+        this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
+        this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
+        console.log(err);
+      });
+  }
+
+  @action
+  uploadMedia = (name, form = 'MEDIA_FRM') => {
+    const fileObj = {
+      obj: this[form].fields[name].base64String,
+      // type: this[form].fields[name].meta.type,
+      name: Helper.sanitize(this[form].fields[name].fileName),
+    };
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
+      .then((res) => {
+        Helper.toast(`${this[form].fields[name].label} uploaded successfully.`, 'success');
+        this.resetFormField(form, name, { fileName: fileObj.name, location: res });
+        this.updateOffering(this.currentOfferingId, this[form].fields, 'media', false, false);
+      })
+      .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        console.log(err);
+      });
+  }
+
+  @action
+  uploadMediaForLeadership = (name, form = 'LEADERSHIP_FRM', index) => {
+    const fileObj = {
+      obj: this[form].fields.leadership[index][name].base64String,
+      type: this[form].fields.leadership[index][name].meta.type,
+      name: this[form].fields.leadership[index][name].fileName,
+    };
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
+      .then((res) => {
+        Helper.toast(`${this[form].fields.leadership[index][name].label} uploaded successfully.`, 'success');
+        this.resetFormFieldForLeadership(form, name, {
+          fileName: fileObj.name, location: res,
+        }, undefined, index);
+        this.updateOffering(this.currentOfferingId, this[form].fields, 'leadership', null, true, null, null, true, index);
+      })
+      .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
         console.log(err);
       });
   }
 
   @action
   uploadFileToS3 = (form, name, files, key, index) => {
-    this[form].fields[key][index][name].showLoader = true;
-    fileUpload.uploadToS3(files[0])
+    let fileField = '';
+    if (key) {
+      fileField = this[form].fields[key][index][name];
+    } else {
+      fileField = this[form].fields[name];
+    }
+    fileField.showLoader = true;
+    const fileObj = {
+      obj: files[0],
+      name: Helper.sanitize(files[0].name),
+    };
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
-        this[form].fields[key][index][name].value = res.fileName;
-        this[form].fields[key][index][name].preSignedUrl = res.location;
-        this[form].fields[key][index][name].fileId = `${res.fileName}${Date.now()}`;
-        this[form].fields[key][index][name].fileName = `${res.fileName}${Date.now()}`;
+        fileField.value = files[0].name;
+        fileField.preSignedUrl = res;
+        fileField.fileId = `${files[0].name}${Date.now()}`;
+        fileField.fileName = `${files[0].name}${Date.now()}`;
       }))
       .catch(action((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        this[form].fields[key][index][name].showLoader = false;
-        console.log(err);
+        fileField.showLoader = false;
       }))
       .finally(action(() => {
-        this[form].fields[key][index][name].showLoader = false;
+        fileField.showLoader = false;
       }));
   }
 
   @action
-  removeFileFromS3 = (form, name, key, index) => {
-    fileUpload.deleteFromS3(this[form].fields[key][index][name].fileName)
+  removeFileFromS3 = (form, name) => {
+    commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${this[form].fields[name].value}`)
       .then(action((res) => {
         ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
-          this[form].fields[key][index][name][subKey] = '';
+          this[form].fields[name][subKey] = '';
         });
         Helper.toast('file Deleted successfully', 'success');
       }))
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
       });
   }
   @action
@@ -354,9 +496,13 @@ export class OfferingCreationStore {
   }
 
   @action
-  rtEditorChange = (field, value, form) => {
-    this[form].fields[field].value = value;
-    this[form] = Validator.validateForm(this[form], true, false, false);
+  rtEditorChange = (field, value, form, ref, index = undefined) => {
+    if (index !== undefined) {
+      this[form].fields[ref][index][field].value = value;
+    } else {
+      this[form].fields[field].value = value;
+      this[form] = Validator.validateForm(this[form], true, false, false);
+    }
   }
 
   @action
@@ -369,8 +515,9 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
+    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate'];
     const fieldValue =
-    (field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (cMap.includes(field)) ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -379,7 +526,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = (field === 'maturityDate' || field === 'dob' || field === 'dateOfService') ? values.formattedValue : values.floatValue;
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate'], field) ? values.value : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,
@@ -415,34 +562,39 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadDataMulitple = (form, arrayName, field, files, stepName, index = null) => {
-    if (typeof files !== 'undefined' && files.length) {
-      forEach(files, (file) => {
-        const fileData = Helper.getFormattedFileData(file);
-        this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
-        fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
-          const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
-            this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
-            this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
-            this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
-            this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
-            this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form);
+  setFileUploadDataMulitple =
+    (form, arrayName, field, files, stepName, index = null, multiForm = false) => {
+      if (typeof files !== 'undefined' && files.length) {
+        forEach(files, (file) => {
+          const fileData = Helper.getFormattedFileData(file);
+          this.isUploadingFile = true;
+          this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+          fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
+            const { fileId, preSignedUrl } = result.data.createUploadEntry;
+            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => {
+              this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+              this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+              this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+              this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+              this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+              this.checkFormValid(form, multiForm);
+              this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+              this.isUploadingFile = true;
+            }).catch((error) => {
+              Helper.toast('Something went wrong, please try again later.', 'error');
+              uiStore.setErrors(error.message);
+              this.isUploadingFile = true;
+              this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+            });
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
-            uiStore.setErrors(error.message);
-          }).finally(() => {
+            this.isUploadingFile = true;
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+            uiStore.setErrors(error.message);
           });
-        }).catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
-          uiStore.setErrors(error.message);
         });
-      });
+      }
     }
-  }
 
   @action
   removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false) => {
@@ -480,7 +632,7 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, form === 'LEADERSHIP_FRM');
+    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM' || form === 'KEY_TERMS_FRM'));
   }
 
   @action
@@ -489,7 +641,7 @@ export class OfferingCreationStore {
       const fileList = toJS(this.removeFileNamesList);
       if (fileList.length) {
         forEach(fileList, (fileName) => {
-          fileUpload.deleteFromS3(fileName).then(() => {
+          commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${fileName}`).then(() => {
           }).catch((error) => {
             uiStore.setErrors(error.message);
           });
@@ -511,7 +663,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false, isMultiform = false) => {
     if (stepName) {
       uiStore.setProgress();
       const file = files[0];
@@ -524,7 +676,7 @@ export class OfferingCreationStore {
         this[form].fields[field].fileId = fileId;
         this[form].fields[field].preSignedUrl = preSignedUrl;
         this[form].fields[field].fileData = file;
-        if (index !== null) {
+        if (index !== null || isMultiform) {
           this[form] = Validator.onArrayFieldChange(
             this[form],
             { name: field, value: fileData.fileName }, subForm, index,
@@ -535,7 +687,7 @@ export class OfferingCreationStore {
             { name: field, value: fileData.fileName },
           );
         }
-        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
           .then(() => {
             if (updateOnUpload) {
               this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} uploaded successfully.`);
@@ -572,7 +724,6 @@ export class OfferingCreationStore {
   @action
   removeUploadedData = (form, subForm = 'data', field, index = null, stepName, updateOnRemove = false) => {
     if (stepName) {
-      const currentStep = { name: stepName };
       const { fileId } = this[form].fields[field];
       if (this[form].fields[field].showLoader !== undefined) {
         this[form].fields[field].showLoader = true;
@@ -587,7 +738,6 @@ export class OfferingCreationStore {
         if (updateOnRemove) {
           this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} Removed successfully.`);
         }
-        this.createAccount(currentStep, 'draft', true, field);
       }))
         .catch(() => { })
         .finally(action(() => {
@@ -625,7 +775,9 @@ export class OfferingCreationStore {
   @action
   addMore = (form, key) => {
     this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, true);
-    if (form === 'LEADER_FRM') {
+    if (form === 'DATA_ROOM_FRM' && key === 'documents') {
+      this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
+    } else if (form === 'LEADER_FRM') {
       this.initLoad.push('LEADERS_ADDED');
     }
   }
@@ -668,14 +820,17 @@ export class OfferingCreationStore {
     }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     this.initLoad.push(form);
+    if (form === 'KEY_TERMS_FRM') {
+      this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
+    }
     if (form === 'LEADERSHIP_FRM') {
       forEach(offer.leadership, (emp, key) => {
         this.LEADERSHIP_EXP_FRM =
-        Validator.setFormData(
-          this.LEADERSHIP_EXP_FRM,
-          offer.leadership[key],
-          ref, keepAtLeastOne,
-        );
+          Validator.setFormData(
+            this.LEADERSHIP_EXP_FRM,
+            offer.leadership[key],
+            ref, keepAtLeastOne,
+          );
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
     } else if (form === 'RISK_FACTORS_FRM') {
@@ -708,11 +863,12 @@ export class OfferingCreationStore {
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
       MEDIA_FRM: { isMultiForm: false },
-      KEY_TERMS_FRM: { isMultiForm: false },
+      KEY_TERMS_FRM: { isMultiForm: true },
       OFFERING_OVERVIEW_FRM: { isMultiForm: true },
       OFFERING_COMPANY_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },
       COMPANY_LAUNCH_FRM: { isMultiForm: false },
+      CLOSURE_SUMMARY_FRM: { isMultiForm: false },
       LAUNCH_CONTITNGENCIES_FRM: { isMultiForm: true },
       CLOSING_CONTITNGENCIES_FRM: { isMultiForm: true },
       OFFERING_DETAILS_FRM: { isMultiForm: false },
@@ -726,6 +882,8 @@ export class OfferingCreationStore {
       RISK_FACTORS_FRM: { isMultiForm: false },
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
+      DATA_ROOM_FRM: { isMultiForm: true },
+      POC_DETAILS_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -762,6 +920,14 @@ export class OfferingCreationStore {
             if (key === `${records.type}_blurb`) {
               toObj.blurb = records.value || null;
             }
+            if (key === `${records.type}_featuredImageUpload`) {
+              toObj.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.value,
+                isPublic: true,
+              };
+            }
           } else {
             const object = {};
             object.type = records.type;
@@ -773,6 +939,14 @@ export class OfferingCreationStore {
             }
             if (key === `${records.type}_blurb`) {
               object.blurb = records.value || null;
+            }
+            if (key === `${records.type}_featuredImageUpload`) {
+              object.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.fileName,
+                isPublic: true,
+              };
             }
             social.push(object);
           }
@@ -789,6 +963,16 @@ export class OfferingCreationStore {
     return { social, highlight };
   }
 
+  generateActivityHistory = (resourceId, activityType, activityTitle, subType) => {
+    const payload = {
+      resourceId,
+      activityType,
+      activityTitle,
+      subType,
+      scope: ACTIVITY_HISTORY_SCOPE.DEV,
+    };
+    activityHistoryStore.createActivityHistory(payload);
+  }
   addNewOffer = () => {
     const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
     uiStore.setProgress();
@@ -801,7 +985,10 @@ export class OfferingCreationStore {
           variables: { stage: ['CREATION'] },
         }],
       })
-      .then(() => Helper.toast('Offering created successfully.', 'success'))
+      .then((res) => {
+        this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
+        Helper.toast('Offering created successfully.', 'success');
+      })
       .catch(() => {
         Helper.toast('Error while creating offer', 'error');
       })
@@ -814,29 +1001,47 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj,
   ) => {
-    uiStore.setProgress();
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
+    const variables = {
+      id,
+      offeringDetails: payload,
+    };
+    if (keyName === 'editPocForm') {
+      variables.issuerId = this.POC_DETAILS_FRM.fields.issuerId.value;
+      if (this.POC_DETAILS_FRM.fields.id.value) {
+        variables.adminId = this.POC_DETAILS_FRM.fields.id.value;
+      }
+    }
     client
       .mutate({
         mutation: updateOffering,
-        variables: {
-          id,
-          offeringDetails: payload,
-        },
+        variables,
       })
       .then(() => {
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
-          Helper.toast(`${successMsg}`, 'success');
+          Helper.toast(`${successMsg}`, msgType);
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
         offeringsStore.getOne(id, false);
+        if (keyName === 'contingencies' && successMsg === null) {
+          const activityTitle = isLaunchContingency ? 'All launch contingencies have been signed off' : 'All close contingencies have been signed off';
+          this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.OFFERING, activityTitle, isLaunchContingency ? 'LAUNCH_CONTINGENCIES' : 'CLOSE_CONTINGENCIES');
+        } else if (keyName === 'offering' && successMsg === null) {
+          const activityTitle = `Issuer has confirmed the launch (${variables.offeringDetails.offering.launch.targetDate}), close (${variables.offeringDetails.offering.launch.terminationDate}), and expected opening (${variables.offeringDetails.offering.launch.expectedOpsDate}) dates`;
+          this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.OFFERING, activityTitle, 'LAUNCH_CONFIRMATION');
+        } else if (keyName === false && payload.stage === 'LIVE') {
+          this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.LIVE, 'Application launched!', 'LAUNCHED');
+        }
+        res();
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
+        rej();
       })
       .finally(() => {
         uiStore.setProgress(false);
@@ -847,6 +1052,8 @@ export class OfferingCreationStore {
   mergeCustomize = (objValue, srcValue, key, object, source, stack) => {
     if (OFFERING_CREATION_ARRAY_KEY_LIST.includes(key)) {
       return srcValue;
+    } else if (srcValue === undefined || srcValue === null || srcValue === '') {
+      return null;
     }
   };
 
@@ -855,8 +1062,10 @@ export class OfferingCreationStore {
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
     approvedObj, fromS3 = false, leaderIndex,
-  ) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
+    msgType = 'success', isLaunchContingency = false,
+  ) => new Promise((res, rej) => {
+    let { getOfferingById } = offeringsStore.offerData.data;
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
@@ -870,34 +1079,55 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation = {};
         payloadData[keyName].documentation.issuer = {};
         payloadData[keyName].documentation.issuer =
-        Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+          Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
-        Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+          Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+        const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+        const finalDataRoomDocs = [];
+        dataRoomDocs.map((data, index) => {
+          if (data.name !== '' || data.upload.fileId !== '') {
+            finalDataRoomDocs.push(data);
+          }
+          return finalDataRoomDocs;
+        });
+        payloadData[keyName].dataroom = { documents: finalDataRoomDocs };
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
-          Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
+        if (subKey === 'launch') {
+          const closureSummary = { ...getOfferingById.closureSummary };
+          closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
+          closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
+          payloadData.closureSummary = closureSummary;
+          payloadData.closureSummary = mergeWith(
+            toJS(getOfferingById.closureSummary),
+            payloadData.closureSummary,
+            this.mergeCustomize,
+          );
+          payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+          payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
           const employer =
-          Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
+            Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
           return { ...leadership, ...{ employer: employer.employer } };
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
       } else if (keyName === 'editForm') {
-        payloadData.offering = {};
-        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.closureSummary = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
         payloadData = {
           ...payloadData,
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
@@ -907,22 +1137,67 @@ export class OfferingCreationStore {
           payloadData.keyTerms,
           this.mergeCustomize,
         );
-        payloadData.offering = mergeWith(
-          toJS(getOfferingById.offering),
-          payloadData.offering,
+        payloadData.closureSummary = mergeWith(
+          toJS(getOfferingById.closureSummary),
+          payloadData.closureSummary,
           this.mergeCustomize,
         );
-        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
-        payloadData.offering = cleanDeep(payloadData.offering);
         payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
         payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
+        payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+        payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+      } else if (keyName === 'editPocForm') {
+        if (get(getOfferingById, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
+          payloadData.closureSummary = {};
+          payloadData.closureSummary.launchDate = this.POC_DETAILS_FRM.fields.targetDate.value;
+          payloadData.closureSummary = mergeWith(
+            toJS(getOfferingById.closureSummary),
+            payloadData.closureSummary,
+            this.mergeCustomize,
+          );
+          payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+          payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
+      } else if (keyName === 'BonusRewardTier') {
+        const rewardsTiersData = getOfferingById.rewardsTiers || [];
+        const isEarlyBirds = fields.isEarlyBirds.value;
+        if (!subKey) {
+          if (isEarlyBirds.length) {
+            payloadData.earlyBird = {
+              amount: fields.amountForEarlyBird.value,
+              quantity: fields.earlyBirdQuantity.value,
+              available: fields.earlyBirdQuantity.value,
+            };
+          } else {
+            rewardsTiersData.push(fields.amountForThisTier.value);
+            payloadData.rewardsTiers = sortBy(rewardsTiersData);
+          }
+        } else if (subKey.earlyBirdQuantity > 0) {
+          payloadData.earlyBird = null;
+        } else {
+          payloadData.rewardsTiers = sortBy(rewardsTiersData.filter(r => r !== subKey.amount));
+        }
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    if (keyName !== 'contingencies' && keyName !== 'editForm') {
+    if (keyName === 'keyTerms') {
+      payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
+      const closureSummary = { ...getOfferingById.closureSummary };
+      const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
+      payloadData.closureSummary = closureSummary;
+      payloadData.closureSummary = mergeWith(
+        toJS(getOfferingById.closureSummary),
+        payloadData.closureSummary,
+        this.mergeCustomize,
+      );
+      payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
+      payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+    }
+    if (keyName !== 'BonusRewardTier' && keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
@@ -989,12 +1264,20 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            toJS(getOfferingById[keyName]),
+            getOfferingById[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
         }
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
+        if (keyName === 'keyTerms' && payloadData[keyName].uploadProformas) {
+          const uploadProformas = {
+            fileId: payloadData[keyName].uploadProformas.fileId,
+            fileName: payloadData[keyName].uploadProformas.fileName,
+          };
+          payloadData[keyName] = omitDeep(payloadData[keyName], ['uploadProformas']);
+          payloadData[keyName].uploadProformas = { ...uploadProformas };
+        }
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
     } else if (keyName === 'contingencies') {
@@ -1009,17 +1292,21 @@ export class OfferingCreationStore {
         });
       });
     }
-    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
-  }
+    this.updateOfferingMutation(
+      id, payloadData, keyName, notify, successMsg,
+      fromS3, res, rej, msgType, isLaunchContingency, approvedObj,
+    );
+  });
 
   @action
   getOfferingBac = (offeringId, bacType) => {
     this.issuerOfferingBac = graphql({
       client,
       query: getOfferingBac,
+      fetchPolicy: 'network-only',
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.issuerOfferingBac.loading && !this.isListingPage) {
           this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
         }
       },
@@ -1039,8 +1326,8 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
-          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {}, false);
+        if (res && res.getOfferingBac && !this.affiliatedIssuerOfferingBac.loading && !this.isListingPage) {
+          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {});
         }
       },
     });
@@ -1089,7 +1376,7 @@ export class OfferingCreationStore {
     const offeringBacDetails = Validator.evaluateFormData(fields);
     offeringBacDetails.offeringId = getOfferingById.id;
     offeringBacDetails.bacType = bacType;
-    let mutation = createBac;
+    let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
       offeringBacDetails,
     };
@@ -1166,7 +1453,7 @@ export class OfferingCreationStore {
       }
     }
     variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
-    uiStore.setProgress();
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     client
       .mutate({
         mutation,
@@ -1187,6 +1474,8 @@ export class OfferingCreationStore {
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+        offeringsStore.getOne(getOfferingById.id);
+
         // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })
@@ -1236,73 +1525,60 @@ export class OfferingCreationStore {
       });
   }
 
-  addNewTier = () => {
-    let payloadData = {};
-    const { fields } = this.ADD_NEW_TIER_FRM;
-    const isEarlyBirds = fields.isEarlyBirds.value;
-    if (isEarlyBirds.length > 0) {
-      payloadData = {
-        amount: fields.amountForEarlyBird.value,
-        earlyBirdQuantity: fields.earlyBirdQuantity.value,
-      };
-    } else {
-      payloadData = {
-        amount: fields.amountForThisTier.value,
-        earlyBirdQuantity: 0,
-      };
+  @action
+  offeringClose = (params, step) => {
+    uiStore.setProgress(params.process);
+    let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
+    formData = cleanDeep(formData);
+    if (formData.payload) {
+      if (formData.payload.notePurchaseDate) {
+        formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.maturityDate) {
+        formData.payload.maturityDate = moment(formData.payload.maturityDate).format('MMMM D, YYYY');
+      }
+      if (formData.payload.hardCloseDate) {
+        formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
+      }
     }
-    uiStore.setProgress();
     client
       .mutate({
-        mutation: createBonusRewardsTier,
-        variables: {
-          bonusRewardTierDetails: payloadData,
-        },
-        refetchQueries: [
-          { query: getBonusRewardsTiers },
-        ],
-      })
-      .then(() => {
-        Helper.toast('Tier has been created successfully', 'success');
-        Validator.resetFormData(this.ADD_NEW_TIER_FRM);
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
+        mutation: offerClose,
+        variables: { ...params, ...formData },
+      }).then((data) => {
         uiStore.setProgress(false);
+        console.log(data);
+      }).catch((err) => {
+        uiStore.setProgress(false);
+        console.log(err);
+        Helper.toast('Something went wrong.', 'error');
       });
   }
 
-  @action
-  getBonusRewardsTiers = () => {
-    this.bonusRewardsTiers = graphql({
-      client,
-      fetchPolicy: 'network-only',
-      query: getBonusRewardsTiers,
-      onFetch: (res) => {
-        if (res) {
-          this.setTiersForBonusRewardsForm();
-          this.setDefaultTiers();
-          this.setUpdateBonusRewardsData(
-            this.bonusRewards.data.getBonusRewards,
-            this.currentRewardId,
-          );
-        }
-      },
+  updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
+    const { fields } = this.ADD_NEW_TIER_FRM;
+    const msg = isDelete ? 'Tier has been deleted successfully' : 'Tier has been created successfully';
+    const msgType = isDelete ? 'error' : 'success';
+    const subKey = isDelete ? { amount, earlyBirdQuantity } : null;
+    this.updateOffering(
+      this.currentOfferingId,
+      fields, 'BonusRewardTier', subKey, false, msg,
+      null, false, null, msgType,
+    ).then(() => {
+      Validator.resetFormData(this.ADD_NEW_TIER_FRM);
     });
   }
 
   @action
   setTiersForBonusRewardsForm = () => {
-    const tiers = this.bonusRewardsTiers.data.getBonusRewardTiers;
+    const tiers = get(offeringsStore.offer, 'rewardsTiers') || [];
+    const earlyBird = get(offeringsStore.offer, 'earlyBird') || null;
     const tiersArray = [];
     forEach(tiers, (tier, index) => {
-      const tierFieldObj = { rule: 'alpha_dash', error: undefined };
-      tierFieldObj.values = [{ label: `Invest ${Helper.CurrencyFormat(tier.amount)} or more`, value: tier.amount }];
-      tierFieldObj.key = tier.amount;
-      tierFieldObj.earlyBirdQuantity = tier.earlyBirdQuantity;
+      const tierFieldObj = { rule: 'optional', error: undefined };
+      tierFieldObj.values = [{ label: `Invest ${Helper.CurrencyFormat(tier)} or more`, value: tier }];
+      tierFieldObj.key = tier;
+      tierFieldObj.earlyBirdQuantity = get(earlyBird, 'quantity') !== 0 && get(earlyBird, 'amount') === tier ? get(earlyBird, 'quantity') : 0;
       tierFieldObj.value = [];
       tierFieldObj.seqNum = index;
       tiersArray.push(tierFieldObj);
@@ -1310,6 +1586,19 @@ export class OfferingCreationStore {
     this.ADD_NEW_BONUS_REWARD_FRM.fields =
       { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
   };
+
+  @computed get isCheckedAtLeastOneTiers() {
+    const tiers = get(offeringsStore.offer, 'rewardsTiers') || [];
+    let hasTierVal = false;
+    // eslint-disable-next-line consistent-return
+    forEach(tiers, (tier, index) => {
+      if (this.ADD_NEW_BONUS_REWARD_FRM.fields[index].value.length) {
+        hasTierVal = true;
+        return false;
+      }
+    });
+    return hasTierVal || this.ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds.value.length;
+  }
 
   @action
   bonusRewardTierChange = (e, seqNum, result) => {
@@ -1319,48 +1608,7 @@ export class OfferingCreationStore {
     } else {
       this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.splice(index, 1);
     }
-  }
-
-  createBonusReward = () => {
-    const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
-    const tiers = [];
-    map(fields, ((field) => {
-      if ((field.key || field.earlyBirdQuantity) &&
-      field.value.length && field.value.length === 1) {
-        const tierObj = {};
-        tierObj.amount = field.key;
-        tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
-        tiers.push(tierObj);
-      }
-    }));
-    let payloadData = {};
-    payloadData = {
-      offeringId: this.currentOfferingId,
-      title: fields.name.value,
-      description: fields.description.value,
-      rewardStatus: 'In Review',
-      expirationDate: moment(fields.expirationDate.value).toISOString(),
-      tiers,
-    };
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: createBonusReward,
-        variables: {
-          bonusRewardDetails: payloadData,
-        },
-      })
-      .then(() => {
-        Helper.toast('Bonus Reward has been added successfully', 'success');
-        Validator.resetFormData(this.ADD_NEW_BONUS_REWARD_FRM);
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+    Validator.validateForm(this.ADD_NEW_BONUS_REWARD_FRM, false, false, false);
   }
 
   @action
@@ -1375,12 +1623,17 @@ export class OfferingCreationStore {
 
   @computed
   get allBonusRewards() {
-    return (this.bonusRewards &&
-    toJS(this.bonusRewards)) || [];
+    return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards &&
+      orderBy(toJS(this.bonusRewards.data.getBonusRewards), 'created.date', 'asc')) || [];
+  }
+
+  @computed
+  get allBonusRewardsLoading() {
+    return this.bonusRewards.loading;
   }
 
   @action
-  deleteBonusReward = (id) => {
+  deleteBonusReward = id => new Promise((res, rej) => {
     uiStore.setProgress();
     client
       .mutate({
@@ -1389,115 +1642,96 @@ export class OfferingCreationStore {
           id,
           offeringId: this.currentOfferingId,
         },
-        refetchQueries: [
-          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
-          { query: getBonusRewardsTiers },
-        ],
+        refetchQueries: [{
+          query: getOfferingDetails,
+          variables: { id: this.currentOfferingId },
+        },
+        {
+          query: getBonusRewards,
+          variables: { offeringId: this.currentOfferingId },
+        }],
       })
       .then(() => {
+        res();
         Helper.toast('Bonus Reward has been deleted successfully.', 'success');
       })
       .catch(action((err) => {
+        rej();
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
       }))
       .finally(() => {
         uiStore.setProgress(false);
       });
-  }
+  });
 
   @action
-  deleteBonusRewardTier = (amount, earlyBirdQuantity) => {
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: deleteBonusRewardsTierByOffering,
-        variables: {
-          offeringId: this.currentOfferingId,
-          bonusRewardTierId: {
-            amount,
-            earlyBirdQuantity,
-          },
-        },
-        refetchQueries: [
-          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
-          { query: getBonusRewardsTiers },
-        ],
-      })
-      .then(() => {
-        Helper.toast('Tier has been deleted successfully.', 'success');
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
-  @action
-  setUpdateBonusRewardsData = (bonusRewards, rewardId) => {
+  setUpdateBonusRewardsData = (rewardId) => {
+    this.resetBonusRewardForm();
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
-    if (bonusRewards) {
+    const bonusRewards = this.allBonusRewards;
+    if (bonusRewards && bonusRewards.length) {
       bonusRewards.map((reward) => {
         if (reward.id === rewardId) {
           fields.name.value = reward.title;
-          fields.description.value = reward.description;
-          fields.expirationDate.value = moment(reward.expirationDate).format('MM/DD/YYYY');
-          reward.tiers.map((tier) => {
-            const isExisted = find(fields, { key: tier.amount });
-            if (isExisted && !isExisted.value.includes(tier.amount) &&
-              Array.isArray(toJS(isExisted.value))) {
-              isExisted.value.push(tier.amount);
-              isExisted.value = [...new Set(toJS(isExisted.value))];
-            } else {
-              const isEarlyBird = find(fields, { earlyBirdQuantity: 50 });
-              if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS') &&
-              Array.isArray(toJS(isEarlyBird.value))) {
-                isEarlyBird.value.push('EARLY_BIRDS');
-              }
+          fields.description.value = reward.description ? reward.description : '';
+          fields.expirationDate.value = reward.expirationDate ? moment(reward.expirationDate).format('MM/DD/YYYY') : '';
+          map(fields, (f) => {
+            if (f.earlyBirdQuantity > 0 && reward.earlyBirdQuantity > 0) {
+              f.value.push('EARLY_BIRDS');
             }
-            return null;
+            if (reward.tiers.includes(f.key)) {
+              f.value.push(f.key);
+            }
+            return false;
           });
         }
         return null;
       });
     }
+    Validator.validateForm(this.ADD_NEW_BONUS_REWARD_FRM);
   }
 
-  updateBonusReward = (id) => {
+  createUpdateBonusReward = (earlyBirdQty, id = false) => {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     const tiers = [];
     map(fields, ((field) => {
-      if ((field.key || field.earlyBirdQuantity) &&
-      field.value.length && field.value.length === 1) {
-        const tierObj = {};
-        tierObj.amount = field.key;
-        tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
-        tiers.push(tierObj);
+      if ((field.key) &&
+      field.value.length && field.value.includes(field.key)) {
+        tiers.push(field.key);
       }
     }));
-    let payloadData = {};
-    payloadData = {
-      offeringId: this.currentOfferingId,
-      title: fields.name.value,
-      description: fields.description.value,
-      rewardStatus: 'In Review',
-      expirationDate: moment(fields.expirationDate.value).toISOString(),
-      tiers,
+    const payloadData = {
+      bonusRewardDetails: {
+        offeringId: this.currentOfferingId,
+        title: fields.name.value,
+        description: fields.description.value,
+        rewardStatus: 'In Review',
+        earlyBirdQuantity: fields.isEarlyBirds.value.length ?
+          earlyBirdQty : 0,
+        expirationDate: fields.expirationDate.value ? moment(new Date(fields.expirationDate.value)).toISOString() : '',
+        tiers,
+      },
     };
+    if (id) {
+      payloadData.id = id;
+    }
     uiStore.setProgress();
     client
       .mutate({
-        mutation: updateBonusReward,
-        variables: {
-          id,
-          bonusRewardDetails: payloadData,
+        mutation: upsertBonusReward,
+        variables: payloadData,
+        refetchQueries: [{
+          query: getOfferingDetails,
+          variables: { id: this.currentOfferingId },
         },
+        {
+          query: getBonusRewards,
+          variables: { offeringId: this.currentOfferingId },
+        }],
       })
       .then(() => {
-        Helper.toast('Bonus Reward has been updated successfully', 'success');
+        Helper.toast(`Bonus Reward has been ${id ? 'updated' : 'added'} successfully`, 'success');
         Validator.resetFormData(this.ADD_NEW_BONUS_REWARD_FRM);
       })
       .catch(action((err) => {
@@ -1516,7 +1750,7 @@ export class OfferingCreationStore {
   @action
   getOfferingFilingList = (offeringId) => {
     const params = { field: 'created', sort: 'asc' };
-    graphql({
+    this.filingListApiRes = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingFilingList,
@@ -1563,35 +1797,6 @@ export class OfferingCreationStore {
   }
 
   @action
-  unlinkTierFromBonusReward = (id, tier) => {
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: unlinkTiersFromBonusRewards,
-        variables: {
-          bonusRewardId: id,
-          offeringId: this.currentOfferingId,
-          bonusRewardTierId: this.tierTobeUnlinked,
-        },
-        refetchQueries: [
-          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
-          { query: getBonusRewardsTiers },
-        ],
-      })
-      .then(() => {
-        Helper.toast('Bonus Reward has been deleted successfully.', 'success');
-        this.setTierToBeUnlinked(null);
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
-  @action
   setDataForEditContingency = (form, dataKey, index) => {
     const { fields } = this.EDIT_CONTINGENCY_FRM;
     fields.contingency.value = form.fields[dataKey][index].contingency.value;
@@ -1609,6 +1814,28 @@ export class OfferingCreationStore {
 
   @action resetInitLoad() {
     this.initLoad = [];
+  }
+
+  @action
+  setAccreditedOnlyField = (index) => {
+    this.DATA_ROOM_FRM = Validator.onArrayFieldChange(
+      this.DATA_ROOM_FRM,
+      { name: 'accreditedOnly', value: !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value },
+      'documents',
+      index,
+    );
+  }
+
+  @action
+  setDataRoomDocsOrder = (orderedForm) => {
+    const dataRoomDocs = toJS(orderedForm).map((d) => {
+      return {
+        name: d.name.value,
+        accreditedOnly: d.accreditedOnly.value,
+        upload: { fileId: d.upload.fileId, fileName: d.upload.value },
+      };
+    });
+    this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
   }
 }
 

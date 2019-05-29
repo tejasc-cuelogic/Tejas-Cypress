@@ -6,20 +6,20 @@ import { Form, Header, Button, Divider } from 'semantic-ui-react';
 import EdgarFilingList from './EdgarFilingList';
 import { DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 
-@inject('offeringCreationStore', 'uiStore', 'userStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @observer
 export default class GenerateDocs extends Component {
   componentWillMount() {
     const {
       currentOfferingId,
       getOfferingFilingList,
-      setFormData,
+      // setFormData,
     } = this.props.offeringCreationStore;
     getOfferingFilingList(currentOfferingId);
-    setFormData('GENERAL_FRM', 'legal.general');
-    setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
-    setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
-    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
+    // setFormData('GENERAL_FRM', 'legal.general');
+    // setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+    // setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    // setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
   onFileDrop = (files, field, stepName) => {
     this.props.offeringCreationStore.setFileUploadData('ADMIN_DOCUMENTATION_FRM', field, files, '', null, stepName, true);
@@ -33,8 +33,11 @@ export default class GenerateDocs extends Component {
   }
   render() {
     const { inProgress } = this.props.uiStore;
-    const { offeringFilingList, ADMIN_DOCUMENTATION_FRM } = this.props.offeringCreationStore;
+    const {
+      offeringFilingList, ADMIN_DOCUMENTATION_FRM, filingListApiRes,
+    } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
     const { match } = this.props;
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
@@ -48,23 +51,27 @@ export default class GenerateDocs extends Component {
             loading={inProgress}
           />
           <Divider section />
-          <EdgarFilingList offeringFilings={offeringFilingList} />
+          <EdgarFilingList
+            offeringFilings={offeringFilingList}
+            loading={filingListApiRes.loading}
+            offeringDetails={offer}
+          />
           {!isEmpty(offeringFilingList) &&
             <Aux>
               <Header as="h4">Upload Final Signed Docs</Header>
-              {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'disclosure', 'securityAgreement', 'personalGuarantee'].map(field => (
-                <div className="field-wrap">
-                  <DropZone
-                    size="small"
-                    name="term"
-                    fielddata={ADMIN_DOCUMENTATION_FRM.fields[field]}
-                    ondrop={files =>
-                      this.onFileDrop(files, field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
-                    onremove={() =>
-                      this.handleDelDoc(field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
-                    uploadtitle="Upload"
-                  />
-                </div>
+              {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
+                <DropZone
+                  size="small"
+                  name="term"
+                  fielddata={ADMIN_DOCUMENTATION_FRM.fields[field]}
+                  ondrop={files =>
+                    this.onFileDrop(files, field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
+                  onremove={() =>
+                    this.handleDelDoc(field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
+                  uploadtitle="Upload"
+                />
+                // <div className="field-wrap">
+                // </div>
               ))
               }
             </Aux>

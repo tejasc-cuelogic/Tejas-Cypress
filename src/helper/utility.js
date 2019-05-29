@@ -3,7 +3,11 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
+import moment from 'moment';
+import money from 'money-math';
+import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
+// import userStore from './../services/stores/entities/userStore';
 
 export class Utility {
   // Default options for the toast
@@ -19,16 +23,26 @@ export class Utility {
    * reference: https://fkhadra.github.io/react-toastify/
    */
   toast = (msg, alertType, optionsOverride) => {
+    // if (userStore.isAdmin) {
+    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
     if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-      toast[alertType](`${msg}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
     } else {
-      toast(`${msg}`, _.merge({}, this.options, optionsOverride));
+      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
     }
+    // }
   }
 
   unMaskInput = maskedInput => (
     maskedInput.split('-').join('')
   )
+
+  matchRegexWithUrl = regexList => _.find(
+    regexList,
+    regex => (window.location.href.match(new RegExp(regex)) !== null),
+  )
+
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
 
   guid = () => {
     function s4() {
@@ -40,8 +54,10 @@ export class Utility {
   }
 
   getTotal = (from, key) => {
-    const total = 0;
-    return from.map(r => total + parseInt(r[key], 0)).reduce((sum, n) => sum + n);
+    const total = '0.00';
+    return from.map(f => money.floatToAmount(f[key]))
+      .map(r => money.add(total, r))
+      .reduce((sum, n) => money.add(sum, n));
   }
 
   gAddressClean = (place) => {
@@ -52,22 +68,34 @@ export class Utility {
       state: ['administrative_area_level_1'],
       zipCode: ['postal_code'],
     };
-    Object.keys(addressMap).map(aK => place.address_components.map((c) => {
-      if (_.intersection(addressMap[aK], c.types).length > 0) {
-        const addressEle = {};
-        addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]} ${c.long_name}` : c.long_name;
-        result = _.has(result, aK) ? addressEle : { ...result, ...addressEle };
-      }
-      return result;
-    }));
+    if (place.address_components) {
+      Object.keys(addressMap).map(aK => place.address_components.map((c) => {
+        if (_.intersection(addressMap[aK], c.types).length > 0) {
+          const addressEle = {};
+          addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]} ${c.long_name}` : c.long_name;
+          result = _.has(result, aK) ? addressEle : { ...result, ...addressEle };
+        }
+        return result;
+      }));
+    }
     return result;
   }
 
-  CurrencyFormat = (amount, f) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: typeof (f) === 'number' ? f : 2 }).format(amount)
+  MoneyMathDisplayCurrency = (amount, fraction = true) => {
+    try {
+      return fraction ? `$${amount}` : `$${amount}`.split('.')[0];
+    } catch (e) {
+      return '$0.00';
+    }
+  }
+  CurrencyFormat = (amount, fraction = 2, maxFraction = 2) => new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: maxFraction,
+  }).format(amount)
 
-  cryptedSSNNumber = (ssnNumber) => {
+  formattedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;
-    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
+    // const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, 'X');
+    const cyrptedSSNNumber = ssnNumber;
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
     return formattedSSNNumber;
   }
@@ -78,17 +106,30 @@ export class Utility {
     return encryptedNumber;
   }
 
+  encryptNumberWithX = (number) => {
+    const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
+    return encryptedNumber;
+  }
+
+  replaceKeysDeep = (obj, keysMap) => _.transform(obj, (result, value, key) => {
+    const resultTmp = result;
+    const currentKey = keysMap[key] || key;
+    resultTmp[currentKey] = _.isObject(value) ? this.replaceKeysDeep(value, keysMap) : value;
+  });
+
   getFormattedFileData = (file) => {
     const fileData = {};
     if (file) {
       const fileInfo = file;
-      fileData.fileName = fileInfo.name.replace(/ /g, '_');
+      fileData.fileName = this.sanitize(fileInfo.name);
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
       fileData.fileSize = fileInfo.size;
     }
     return fileData;
   }
+
+  sanitize = name => (name ? name.replace(/[^a-z0-9._-]+/gi, '_') : '');
 
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
     const funcArray = [];
@@ -104,8 +145,92 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
+  }
+  phoneNumberFormatter = (phoneNumber) => {
+    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
+    return maskPhoneNumber;
+  }
+  getDaysfromNow = (days) => {
+    const d = new Date();
+    let daysFromNow = d.setDate(d.getDate() + days);
+    daysFromNow = new Date(daysFromNow).toISOString();
+    return daysFromNow;
+  }
+  getLastThreeYearsLabel = () => {
+    const currentYear = parseInt(moment().format('YYYY'), 10);
+    return {
+      annualIncomeCurrentYear: currentYear,
+      annualIncomePreviousYear: currentYear - 1,
+    };
+  }
+
+  otpShield = () => {
+    try {
+      const OtpItems = document.getElementsByClassName('otp-field')[0] ?
+        document.getElementsByClassName('otp-field')[0]
+          .getElementsByTagName('input') : '';
+      for (let i = 0; i < OtpItems.length; i += 1) {
+        OtpItems[i].addEventListener('keydown', (e) => {
+          if ([16, 107, 110, 109, 69, 187, 188, 189, 190].includes(e.keyCode)) {
+            e.preventDefault();
+          }
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  downloadCSV = (params) => {
+    try {
+      const parser = new Parser({ fields: params.fields, quote: '' });
+      const csv = parser.parse(params.data);
+      const uri = `data:text/csv;charset=utf-8,${escape(csv)}`;
+      const link = document.createElement('a');
+      link.href = uri;
+      link.style = 'visibility:hidden';
+      link.download = `${params.fileName || 'download'}_${moment(new Date()).format('DD-MM-YYYY')}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  isBase64 = (data) => {
+    try {
+      const block = data.split(';');
+      return block[1].split(',')[0] === 'base64';
+    } catch (e) {
+      return false;
+    }
+  }
+  b64toBlob = (data, sliceSize = 512) => {
+    const block = data.split(';');
+    // Get the content type of the image
+    const contentType = block[0].split(':')[1];
+    // get the real base64 content of the file
+    const b64Data = block[1].split(',')[1];
+    const size = sliceSize || 512;
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += size) {
+      const slice = byteCharacters.slice(offset, offset + size);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i += 1) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
   }
 }
 

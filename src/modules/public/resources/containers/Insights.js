@@ -1,29 +1,34 @@
 import React, { Component } from 'react';
-import { Container, Image, Menu, Dropdown, Responsive } from 'semantic-ui-react';
+import { Container, Menu, Dropdown, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link, NavLink, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { NsCarousel, InlineLoader } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
+import { NsCarousel, InlineLoader, Image64 } from '../../../../theme/shared';
 import InsightArticlesList from '../components/insightArticlesList';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('articleStore')
 @observer
 export default class Insights extends Component {
+  state = {
+    sortAsc: false,
+  };
   componentWillMount() {
     if (this.props.match.params && this.props.match.params.id) {
-      this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
+      const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
+      this.props.articleStore.requestAllArticles(true, false, id);
     } else {
-      this.props.articleStore.requestAllArticles();
+      this.props.articleStore.requestAllArticles(true, false);
+      this.props.articleStore.featuredRequestArticles();
+      this.props.articleStore.getCategoryList(true);
     }
-    this.props.articleStore.getCategoryList();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
-      this.props.articleStore.requestArticlesByCategoryId(nextProps.match.params.id);
-    } else {
-      this.props.articleStore.requestAllArticles();
+      const id = nextProps.match.params.id === 'all' ? null : nextProps.match.params.id;
+      this.props.articleStore
+        .requestAllArticles(true, this.state.sortAsc, id);
     }
   }
   activeText = () => {
@@ -39,30 +44,46 @@ export default class Insights extends Component {
     }
     return 'All';
   }
+  requestAllArticles = (isPublic, sortBy) => {
+    this.setState({
+      sortAsc: sortBy,
+    });
+    this.props.articleStore.requestAllArticles(isPublic, this.state.sortAsc);
+  }
   render() {
     const {
       InsightCategories,
       loading,
+      InsightFeaturedArticles,
     } = this.props.articleStore;
     const settings = {
       slidesToShow: isMobile ? '1' : 3,
       slidesToScroll: isMobile ? '1' : 3,
     };
+    const sliderInsightFeaturedArticles =
+        InsightFeaturedArticles && InsightFeaturedArticles.length ?
+          InsightFeaturedArticles.slice(0, 5) : [];
     return (
       <Aux>
         <NsCarousel {...settings}>
           {
-            [1, 2, 3, 4, 5].map(i => (
+            sliderInsightFeaturedArticles &&
+            sliderInsightFeaturedArticles.map(i => (
               <div className="insight-image-wrapper">
-                <Image src={`${ASSETS_URL}images/insights2.jpg`} key={i} />
-                <div className="image-caption">
+                <Image64
+                  centered
+                  srcUrl={i.featuredImage ? i.featuredImage : null}
+                  key={i}
+                  fluid
+                />
+                <Link to={`/resources/insights/${i.slug}`} className="image-caption">
                   <p className="news-category">
-                    BUSINESS
+                    Featured
                   </p>
                   <p className="news-title">
-                    Bring the local food movement home with hyper local sourcing.
+                    {i.title}
                   </p>
-                </div>
+                </Link>
               </div>
             ))
           }
@@ -70,7 +91,7 @@ export default class Insights extends Component {
         <Responsive secondary minWidth={1200} as={Menu} className="menu-secondary-fixed insight-menu">
           <Container>
             <Menu.Menu secondary className="menu-secondary">
-              <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
+              <Menu.Item as={Link} to="/resources/insights/category/all">All</Menu.Item>
               {InsightCategories &&
                 InsightCategories.map(item => (
                   <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
@@ -78,17 +99,30 @@ export default class Insights extends Component {
             </Menu.Menu>
             <Menu.Item position="right">
               SORT BY
-              <Dropdown item text="NEWEST">
+              <Dropdown item>
                 <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/">Newest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Oldest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item>
+                  <Dropdown.Item
+                    key="newest"
+                    as={Link}
+                    to="#"
+                    onClick={() => this.requestAllArticles(true, false)}
+                    className={this.state.sortAsc ? 'active' : ''}
+                  >Newest
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    key="oldest"
+                    as={Link}
+                    to="#"
+                    onClick={() => this.requestAllArticles(true, true)}
+                    className={this.state.sortAsc ? '' : 'active'}
+                  >Oldest
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
           </Container>
         </Responsive>
-        <Responsive maxWidth={1199} as={Menu} className="mobile-dropdown-menu container">
+        <Responsive maxWidth={1199} as={Menu} className={`${sliderInsightFeaturedArticles.length === 0 ? 'mt-30' : ''} mobile-dropdown-menu container`}>
           <Dropdown item text={this.activeText()}>
             <Dropdown.Menu>
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>

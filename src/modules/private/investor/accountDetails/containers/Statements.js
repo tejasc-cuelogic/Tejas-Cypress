@@ -4,6 +4,9 @@ import { Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import MonthlyStatements from '../components/statements/MonthlyStatements';
+import TaxForms from '../components/statements/TaxForms';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/statements/${component}`),
@@ -13,32 +16,45 @@ const getModule = component => Loadable({
 });
 
 const navItems = [
-  { title: 'Monthly Statements', to: 'monthly-statements', component: 'MonthlyStatements' },
-  { title: 'Tax Forms', to: 'tax-forms', component: 'TaxForms' },
+  { title: 'Monthly Statements', to: 'monthly-statements', component: MonthlyStatements },
+  { title: 'Tax Forms', to: 'tax-forms', component: TaxForms },
 ];
 
 export default class Statements extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
+      const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+      const navigationItems = isDev || this.props.isAdmin ? navItems : navItems.filter(item => item.to !== 'monthly-statements');
+      this.props.history.replace(`${this.props.match.url}/${navigationItems[0].to}`);
     }
   }
 
   render() {
     const { match } = this.props;
+    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+    const navigationItems = isDev || this.props.isAdmin ? navItems : navItems.filter(item => item.to !== 'monthly-statements');
+    const DefaultComponent =
+      navigationItems[0].component || getModule(navigationItems[0].component);
     return (
       <div>
         <Grid>
           <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
-            <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+            <SecondaryMenu secondary vertical match={match} navItems={navigationItems} />
           </Grid.Column>
           <Grid.Column floated="right" widescreen={12} largeScreen={11} computer={12} tablet={12} mobile={16}>
             <Switch>
-              <Route exact path={match.url} component={getModule(navItems[0].component)} />
+              <Route
+                exact
+                path={match.url}
+                render={props => <DefaultComponent isAdmin={this.props.isAdmin} {...props} />}
+              />
               {
-                navItems.map(item => (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
-                ))
+                navigationItems.map((item) => {
+                  const CurrentModule = item.component || getModule(item.component);
+                  return (
+                    <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule isAdmin={this.props.isAdmin} {...props} />} />
+                  );
+                })
               }
             </Switch>
           </Grid.Column>

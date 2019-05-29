@@ -11,6 +11,11 @@ export default class FormInput extends Component {
   triggerError = (val) => {
     this.setState({ showError: val });
   }
+  change = (e) => {
+    const { dataid } = this.props;
+    const value = this.props.fielddata.rule.includes('email') ? e.target.value.trim() : e.target.value;
+    this.props.changed(e, { name: e.target.name, value, dataid });
+  }
   render() {
     const { props } = this;
     const {
@@ -34,19 +39,19 @@ export default class FormInput extends Component {
       >
         {!props.ishidelabel && label !== '' &&
           <label>
-            {props.label || label}
+            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip &&
               <Popup
                 hoverable={props.hoverable}
                 trigger={<Icon className="ns-help-circle" />}
                 content={tooltip}
                 position="top center"
-                className="center-align"
+                className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
                 wide
               />
             }
             {props.removed &&
-              <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
                 <Icon className="ns-close-circle" color="grey" />
               </Link>
             }
@@ -60,10 +65,21 @@ export default class FormInput extends Component {
           autoComplete="nope"
           maxLength={maxlength || false}
           type={props.type || 'text'}
-          placeholder={(displayMode || readOnly) ? '' : placeHolder}
+          placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder}
           defaultValue={defaultValue}
-          onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
-          onBlur={() => this.triggerError(true)}
+          onChange={
+            (e) => {
+              this.change(e);
+              this.triggerError(props.showerror || false);
+            }}
+          onBlur={
+            (e) => {
+              this.triggerError(true);
+              if (props.onblur) {
+                this.props.onblur(e.target.value);
+              }
+            }
+          }
           readOnly={displayMode}
           {...props}
           value={value === '' ? undefined : value}

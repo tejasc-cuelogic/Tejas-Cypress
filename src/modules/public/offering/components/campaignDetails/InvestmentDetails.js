@@ -1,96 +1,82 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { inject } from 'mobx-react';
-import { Grid, Header, Segment, Responsive } from 'semantic-ui-react';
-import TermNoteDetails from './investmentDetails/TermNoteDetails';
-import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
-import { InlineLoader, Image64 } from '../../../../../theme/shared';
+import { Header, Divider } from 'semantic-ui-react';
+import KeytermsDetails from './investmentDetails/KeytermsDetails';
+import { InlineLoader } from '../../../../../theme/shared';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
-const isTabletLand = document.documentElement.clientWidth >= 992
-  && document.documentElement.clientWidth < 1200;
-@inject('campaignStore')
+const isMobile = document.documentElement.clientWidth < 992;
+@inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
+  componentWillMount() {
+    this.props.campaignStore.calculateTotalPaymentData();
+    window.addEventListener('scroll', this.handleOnScroll);
+  }
+  componentDidMount() {
+    if (this.props.location.hash && this.props.location.hash !== '') {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    } else if (!isMobile) {
+      const sel = 'use-of-proceeds';
+      document.querySelector(`#${sel}`).scrollIntoView(true);
+    }
+  }
+  componentWillUnmount() {
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  handleOnScroll = () => {
+    const { investmentDetailsSubNavs } = this.props.campaignStore;
+    investmentDetailsSubNavs.forEach((item) => {
+      if (document.getElementById(item.to.slice(1)) &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 200 &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+        this.props.navStore.setFieldValue('currentActiveHash', item.to);
+      }
+    });
+  }
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyContent = 'No data found.';
+    const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
-      <div className="campaign-content-wrapper">
-        <Grid stackable doubling>
-          <Grid.Row>
-            <Responsive maxWidth={767} as={Aux}>
-              <Grid.Column tablet={16}>
-                <Segment padded>
-                  <Image64
-                    srcUrl={campaign && campaign.media &&
-                      campaign.media.heroImage &&
-                      campaign.media.heroImage.url ?
-                      campaign.media.heroImage.url : null
-                    }
-                  />
-                </Segment>
-              </Grid.Column>
-            </Responsive>
-            <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
-              <Segment padded>
-                <Header as="h3">Use of Proceeds</Header>
-                {campaign && campaign.legal &&
-                  campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                  campaign.legal.general.useOfProceeds ?
-                    <Aux>
-                      <Header as="h6">If minimum offering amount is reached:</Header>
-                      <p>
-                        {campaign && campaign.legal &&
-                          campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                          campaign.legal.general.useOfProceeds.reachedMinOfferingGoal ?
-                          campaign.legal.general.useOfProceeds.reachedMinOfferingGoal : emptyContent
-                        }
-                      </p>
-                      <Header as="h6">If maximum offering amount is reached:</Header>
-                      <p>
-                        {campaign && campaign.legal &&
-                          campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                          campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal ?
-                          campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal : emptyContent
-                        }
-                      </p>
-                    </Aux>
-                  :
-                    <InlineLoader text={emptyContent} />
-                }
-              </Segment>
-            </Grid.Column>
-            <Responsive minWidth={768} as={Aux}>
-              <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
-                <Segment padded>
-                  <Image64
-                    srcUrl={campaign && campaign.media &&
-                      campaign.media.heroImage &&
-                      campaign.media.heroImage.url ?
-                      campaign.media.heroImage.url : null
-                    }
-                  />
-                </Segment>
-              </Grid.Column>
-            </Responsive>
-          </Grid.Row>
-          {campaign && campaign.keyTerms &&
-            campaign.keyTerms.securities &&
-            campaign.keyTerms.securities ===
-            CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
-              <RevenueSharingDetails
-                refLink={this.props.refLink}
-                KeyTerms={campaign.keyTerms}
-                {...this.props}
-              /> :
-              <TermNoteDetails
-                refLink={this.props.refLink}
-                KeyTerms={campaign.keyTerms}
-                {...this.props}
-              />
+      <Aux>
+        <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} mt-20 anchor-wrap`}>
+          Use of Proceeds
+          <span className="anchor" id="use-of-proceeds" />
+        </Header>
+        {campaign && campaign.legal &&
+          campaign.legal.general && campaign.legal.general.useOfProceeds ?
+            <HtmlEditor readOnly content={offeringExpenseAmountDescription || emptyContent} />
+            :
+            <InlineLoader text={emptyContent} className="bg-offwhite" />
+        }
+        {/* <Divider hidden />
+        <Image64
+          srcUrl={campaign && campaign.media &&
+            campaign.media.useOfProceeds &&
+            campaign.media.useOfProceeds.url ?
+            campaign.media.useOfProceeds.url : null
           }
-        </Grid>
-      </div>
+          imgType="useOfProceeds"
+          fluid
+        /> */}
+        <Divider section hidden />
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Key Terms
+          <span className="anchor" id="key-terms" />
+        </Header>
+        <KeytermsDetails
+          refLink={this.props.refLink}
+          KeyTerms={campaign && campaign.keyTerms}
+          {...this.props}
+        />
+      </Aux>
     );
   }
 }

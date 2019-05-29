@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Image64 } from '../../../theme/shared';
 
 export default class NsCarousel extends Component {
   constructor(props) {
@@ -22,27 +23,38 @@ export default class NsCarousel extends Component {
   }
   render() {
     const settings = {
-      infinite: true,
+      infinite: false,
       speed: 500,
+      fade: this.props.fade,
+      className: this.props.className,
       slidesToShow: this.props.slidesToShow,
       slidesToScroll: this.props.slidesToScroll,
       arrows: this.props.arrows,
       dots: this.props.dots,
+      initialSlide: this.props.initialSlide || 0,
       adaptiveHeight: this.props.adaptiveHeight,
       beforeChange: (current, next) => {
         if (this.props.handlePaginationFun) {
-          this.props.handlePaginationFun(next);
+          setTimeout(() => {
+            this.props.handlePaginationFun(next);
+          }, 5);
         }
       },
     };
 
     if (this.props.thumbs) {
       let thumbnailClassToApply = '';
-      if (this.props.isTablet) {
-        thumbnailClassToApply = this.props.imageCount >= 4 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+      let thumbSliderCustomClassToApply = '';
+      if (!this.props.customThumSliderClass) {
+        if (this.props.isTablet) {
+          thumbnailClassToApply = this.props.imageCount >= 4 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+        } else {
+          thumbnailClassToApply = this.props.imageCount >= 10 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+        }
       } else {
-        thumbnailClassToApply = this.props.imageCount >= 8 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+        thumbnailClassToApply = 'slider-thumbnails';
       }
+      thumbSliderCustomClassToApply = this.props.customThumSliderClass ? 'thumb-location-gallery' : '';
       return (
         <Aux>
           <Slider
@@ -59,9 +71,12 @@ export default class NsCarousel extends Component {
             slidesToShow={this.props.thumbs}
             swipeToSlide
             focusOnSelect
-            className={thumbnailClassToApply}
+            className={`${thumbnailClassToApply}  ${thumbSliderCustomClassToApply}`}
+            variableWidth
           >
-            {this.props.children}
+            {this.props.refItems.map(i => (
+              <Image64 bg className="carousel-bg-thumb" srcUrl={i.url} />
+            ))}
           </Slider>
         </Aux>
       );

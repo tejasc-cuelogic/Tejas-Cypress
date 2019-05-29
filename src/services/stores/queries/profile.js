@@ -26,8 +26,13 @@ mutation verifyCIPUsers($userId: String!, $user: UserCIPInput){
         summary
       }
       ... on UserCIPHardFail{
+        hardFailId: id
         key
         message
+        qualifiers {
+          key
+          message
+        }
       }
       ... on UserCIPFail{
         key
@@ -55,7 +60,7 @@ export const verifyCIPAnswers = gql`
           }
         }
       }
-    
+
       ... on UserCIPHardFail{
         hardFailId: id
         key
@@ -65,7 +70,7 @@ export const verifyCIPAnswers = gql`
           message
         }
       }
-    
+
       ... on UserCIPPass {
         passId: id
         key
@@ -96,9 +101,8 @@ export const checkUserPhoneVerificationCode = gql`
  }`;
 
 export const updateUserCIPInfo = gql`
-mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!) {
-    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails) {
-      id
+mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation) {
+    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip) {
       email {
         address
       } info{
@@ -112,13 +116,12 @@ mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!) {
   }`;
 
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($profileDetails: UserInfoInput!) {
+  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(
-  profileDetails: $profileDetails
+  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails, capabilities: $capabilities
   ) {
       id
       info {
-        salutation
         firstName
         lastName
         mailingAddress {
@@ -139,11 +142,11 @@ export const requestEmailChnage = gql`
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($confirmationCode: String!) {
+  mutation _verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
     verifyAndUpdateEmail(
       confirmationCode: $confirmationCode
+      resourceId: $resourceId
     ){
-      id
       email {
         address
       }
@@ -166,9 +169,9 @@ export const updateUserPhoneDetail = gql`
     }
   }`;
 
-export const isSsnExistQuery = gql`
-  query getSsnCollisionsample($ssn: String!) {
-    checkUserSSNCollision(ssn: $ssn) {
+export const isUniqueSSN = gql`
+  query isUniqueSSN($ssn: String!) {
+    isUniqueSSN(ssn: $ssn) {
       alreadyExists
     }
   }`;
@@ -181,3 +184,64 @@ export const portPrequalDataToApplication = gql`
       id
     }
   }`;
+
+export const requestOtp = gql`
+  mutation requestOtp($userId: String $type: MFAModeEnum, $address: String){
+    requestOtp(
+      userId: $userId
+      type: $type
+      address: $address
+    )
+  }`;
+
+export const verifyOtp = gql`
+  mutation verifyOtp($resourceId: String! $verificationCode: String!){
+    verifyOtp(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+    )
+  }
+`;
+
+export const requestOtpWrapper = gql`
+  mutation requestOTPWrapper($address: String!, $firstName: String){
+    requestOTPWrapper(
+      address: $address
+      firstName: $firstName
+    )
+  }
+`;
+
+export const verifyOTPWrapper = gql`
+  mutation verifyOTPWrapper($verifyOTPData: VerifyOTPInput!){
+    verifyOTPWrapper(
+      verifyOTPData: $verifyOTPData
+    )
+  }
+`;
+
+export const checkEmailExistsPresignup = gql`
+  query checkEmailExistsPresignup($email: String!){
+    checkEmailExistsPresignup(email: $email)
+  }
+`;
+
+export const checkMigrationByEmail = gql`
+  mutation checkMigrationByEmail($migrationByEmailData: CheckMigrationByEmailInput!) {
+    checkMigrationByEmail(migrationByEmailData: $migrationByEmailData)
+ }`;
+
+export const checkValidAddress = gql`
+  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!, $streetTwo: String!) {
+    checkValidInvestorAddress(
+      street: $street,
+      city: $city,
+      state: $state,
+      zipCode: $zipCode,
+      streetTwo: $streetTwo
+    ){
+      valid
+      message
+    }
+  }
+`;

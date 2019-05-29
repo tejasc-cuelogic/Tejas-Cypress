@@ -3,7 +3,8 @@ import { matchPath } from 'react-router-dom';
 import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
-import { userStore, userDetailsStore, offeringsStore } from '../../index';
+import { userStore, userDetailsStore, offeringsStore, statementStore } from '../../index';
+import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class NavStore {
   @observable NAV_ITEMS = [...PRIVATE_NAV];
@@ -15,28 +16,86 @@ export class NavStore {
   @observable navMeta = [];
   @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
+  @observable currentActiveHash = null;
+  @observable campaignHeaderStatus = false;
 
   constructor() {
     if (userStore.currentUser) {
       userDetailsStore.getUser(userStore.currentUser.sub);
     }
   }
-
-  canAccessBasedOnCapability = (capability) => {
-    const key = capability.split('_');
-    const capabilityCheck = (key[1] !== 'ANY') ? [capability] :
-      [`${key[0]}_FULL`, `${key[0]}_MANAGER`, `${key[0]}_SUPPORT`];
+  @action
+  setFieldValue = (key, val) => {
+    this[key] = val;
+  }
+  canAccessBasedOnCapability = (capab) => {
+    const rest = capab.substring(0, capab.lastIndexOf('_'));
+    const last = capab.substring(capab.lastIndexOf('_') + 1, capab.length);
+    const capabilityCheck = (last !== 'ANY') ? [capab] :
+      [`${rest}_FULL`, `${rest}_MANAGER`, `${rest}_SUPPORT`];
     return _.intersection(userStore.myCapabilities, capabilityCheck).length > 0;
   }
 
   @computed get myRoutes() {
-    const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
-    const routes = _.filter(
-      this.NAV_ITEMS,
-      n => ((n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0) &&
-        (!n.capability || this.canAccessBasedOnCapability(n.capability))),
-    );
-    return routes;
+    try {
+      const uKey = _.get(userStore, 'currentUser.sub') || 'public';
+      let permitted = [];
+      let navigationItems = this.NAV_ITEMS;
+      const { roles } = this.params;
+      const User = { ...userStore.currentUser };
+      const { userDetails } = userDetailsStore;
+      if (userDetailsStore.signupStatus.isMigratedFullAccount
+        && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
+        permitted = [...roles];
+      } else {
+        permitted = [...roles,
+          ...userDetailsStore.signupStatus.partialAccounts,
+          ...userDetailsStore.signupStatus.activeAccounts,
+          ...userDetailsStore.signupStatus.processingAccounts,
+          ...userDetailsStore.signupStatus.frozenAccounts];
+      }
+      if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
+        navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
+      }
+      if (permitted && permitted.length > 1 && permitted.includes('investor')) {
+        const pInvestorInfo = {
+          roles,
+          signupStatus: userDetailsStore.signupStatus,
+          permitted,
+        };
+        localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
+      }
+      const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
+      if (userDetailsStore.userFirstLoad !== true &&
+        (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
+        if (pInvestorInfo) {
+          permitted = JSON.parse(pInvestorInfo).permitted || permitted;
+        } else {
+          return [];
+        }
+      }
+      if (pInvestorInfo && permitted.includes('investor')) {
+        permitted = JSON.parse(pInvestorInfo).permitted || permitted;
+      }
+      let routes = _.filter(
+        navigationItems,
+        n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
+          _.intersection(n.accessibleTo, permitted).length > 0) &&
+        (!n.env || n.env.length === 0 ||
+          _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0) &&
+          (!n.capability || this.canAccessBasedOnCapability(n.capability))),
+      );
+      routes = _.map(routes, r => ({
+        ...r,
+        subNavigations:
+        _.filter(r.subNavigations, s =>
+          (!s.capability || this.canAccessBasedOnCapability(s.capability))),
+      }));
+      return routes;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   @action
@@ -54,20 +113,41 @@ export class NavStore {
     ));
 
   @computed get allNavItems() {
-    const navItems = [...this.myRoutes];
-    const bIndex = navItems.findIndex(r => r.title === 'Offering');
+    const navItems = [...toJS(this.myRoutes)];
+    const filteredNavs = [];
+    navItems.forEach((navitem) => {
+      const nItem = toJS(navitem);
+      if (nItem.subNavigations) {
+        const newSubNav = nItem.subNavigations.filter(n => ((!n.accessibleTo ||
+          n.accessibleTo.length === 0 ||
+          _.intersection(n.accessibleTo, this.params.roles).length > 0)) && (!n.env ||
+            n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
+        nItem.subNavigations = [...newSubNav];
+        if (userStore.isInvestor && ['Individual', 'IRA', 'Entity'].includes(nItem.title)) {
+          if (statementStore.getTaxFormCountInNav(nItem.title.toLocaleLowerCase()) === 0) {
+            nItem.subNavigations = _.filter(
+              nItem.subNavigations,
+              subNavigation => subNavigation.component !== 'Statements',
+            );
+          }
+        }
+      }
+      filteredNavs.push(nItem);
+    });
+    const bIndex = filteredNavs.findIndex(r => r.title === 'Offering');
     if (bIndex !== -1) {
-      const subNavigations = [...navItems[bIndex].subNavigations];
+      const subNavigations = [...filteredNavs[bIndex].subNavigations];
       offeringsStore.offerings.forEach((b) => {
         const sNav = this.filterByAccess(
           subNavigations,
           _.find(offeringsStore.phases, (s, i) => i === b.stage).accessKey,
         );
-        navItems.splice(
+        filteredNavs.splice(
           bIndex,
           0,
           {
-            ...navItems[bIndex],
+            ...filteredNavs[bIndex],
             ...{
               title: this.businessName(b),
               to: `offering/${b.id}`,
@@ -77,11 +157,11 @@ export class NavStore {
         );
       });
     }
-    return navItems;
+    return filteredNavs;
   }
 
   @computed get sidebarItems() {
-    const reject = ['profile-settings', 'business-application/:applicationType/:applicationId', 'edgar'];
+    const reject = ['business-application/:applicationType/:applicationId', 'edgar'];
     return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
   }
 
@@ -97,8 +177,10 @@ export class NavStore {
       nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
+          (!n.env || n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
       }
     }
     return nav;
@@ -112,13 +194,28 @@ export class NavStore {
       const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
+          (!n.env || n.env.length === 0 ||
+            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
         if (nav.title === 'Application' && key === 'appStatus') {
           nav.subNavigations = this.filterByAccess(nav.subNavigations, appStatus);
         }
       }
       this.navMeta = nav;
+    }
+    const acctiveAccountList = userDetailsStore.getActiveAccounts;
+    const { accStatus } = userDetailsStore.signupStatus;
+    if (this.navMeta && this.navMeta.subNavigations &&
+        ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
+      this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
+    }
+    if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations &&
+      statementStore.getTaxFormCountInNav(this.navMeta.title.toLocaleLowerCase()) === 0) {
+      this.navMeta.subNavigations = _.filter(
+        this.navMeta.subNavigations,
+        subNavigation => subNavigation.component !== 'Statements',
+      );
     }
   }
 
@@ -134,6 +231,16 @@ export class NavStore {
       } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
         this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
       }
+    }
+  }
+  @action
+  setMobileNavStatus(calculations) {
+    const {
+      topVisible, bottomPassed,
+    } = calculations;
+    if (typeof topVisible === 'boolean') {
+      // this.subNavStatus = 'main';
+      this.campaignHeaderStatus = bottomPassed;
     }
   }
 }

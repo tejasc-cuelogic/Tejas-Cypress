@@ -4,23 +4,45 @@ export const allOfferings = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      offeringSlug
       stage
       media {
         tombstoneImage {
+          id
           url
           isPublic
           fileName
         }
       }
+      order
       offering {
         about {
           theCompany
         }
+        overview {
+          tombstoneDescription
+        }
+        launch {
+          targetDate
+        }
       }
       closureSummary {
+        processingDate
+        launchDate
+        hardCloseDate
+        totalInvestmentAmount
         totalInvestorCount
+        keyTerms {
+          multiple
+        }
       }
       keyTerms {
+        regulation
+        minOfferingAmountCF
+        maxOfferingAmountCF
+        minOfferingAmount506C
+        maxOfferingAmount506C
+        offeringDisclaimer
         shorthandBusinessName
         legalBusinessName
         securities
@@ -28,32 +50,67 @@ query getOfferingList($filters: OfferingFilterInputType){
         state
         city
       }
+      regulation
+    }
+  }
+`;
+
+export const checkIfEarlyBirdExist = gql`
+query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accountId: String!) {
+  checkEarlyBirdByInvestorAccountAndOfferingId(offeringId: $offeringId, accountId: $accountId)
+}`;
+
+export const getOfferingsReferral = gql`
+query getOfferingList($filters: OfferingFilterInputType){
+    getOfferingList(filters: $filters) {
+      id
+      offeringSlug
+      referralCode
+      order
     }
   }
 `;
 
 export const getOfferingById = gql`
-  query getOfferingById($id: ID!) {
-    getOfferingDetailsById(id: $id) {
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
+      id
+      previewPassword
+      isAvailablePublicly
+      stage
     }
   }
 `;
 
+export const isValidInvestorInOffering = gql`
+  query isValidInvestorInOffering ($offeringId: String!, $userId: String!, $offeringStage: OfferingStageEnumType!) {
+    isValidInvestorInOffering (offeringId: $offeringId, userId: $userId, offeringStage: $offeringStage)
+  }
+`;
+
 export const campaignDetailsQuery = gql`
-  query getOfferingById($id: ID) {
-  getOfferingDetailsById (id: $id) {
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     stage
-    applicationId
-    issuerId
     offeringSlug
-    referralCode
-    selectedOffer {
-      structure
+    issuerId
+    regulation
+    created {
+      id
     }
     keyTerms {
+      unitPrice
+      roundType
+      premoneyValuation
+      additionalKeyterms {
+        label
+        description
+      }
       regulation
+      startupPeriod
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity
@@ -63,23 +120,30 @@ export const campaignDetailsQuery = gql`
       securitiesOwnershipPercentage
       investmentMultiple
       revSharePercentage
+      revSharePercentageDescription
       interestRate
-      minOfferingAmount
-      maxOfferingAmount
-      industry
+      minOfferingAmountCF
+      maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       minInvestAmt
-      maxInvestAmt
-      appendixATitle
       revShareSummary
       investmentMultipleSummary
-      locationRiskFactors
-      isTX
       state
       city
     }
-    rewardsTierIds {
-      amount
+    bonusRewards{
+      id
+      title
+      description
       earlyBirdQuantity
+      tiers
+    }
+    rewardsTiers
+    earlyBird {
+      quantity
+      amount
+      available
     }
     offering {
       overview {
@@ -91,18 +155,9 @@ export const campaignDetailsQuery = gql`
           url
           shareLink
           blurb
-        }
-        googleMeta
-        issuerWebsite
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
+          featuredImageUpload {
+            url
+          }
         }
       }
       about {
@@ -113,22 +168,10 @@ export const campaignDetailsQuery = gql`
         }
         businessModel
         locationAnalysis
-        submitted {
-          id
-          by
-          date
-        }
-        approved {
-          id
-          by
-          date
-        }
       }
       launch {
         targetDate
-        terminationDate
-        expectedOpsDate
-        issuerApprovedDate
+        edgarLink
       }
       misc {
         additionalBonusRewardsContent
@@ -142,21 +185,7 @@ export const campaignDetailsQuery = gql`
       uploads {
         headshot {
           id
-          fileName
           url
-          isPublic
-        }
-        heroImage {
-          id
-          fileName
-          url
-          isPublic
-        }
-        license {
-          id
-          fileName
-          url
-          isPublic
         }
       }
       bio
@@ -166,34 +195,22 @@ export const campaignDetailsQuery = gql`
         facebook
         linkedin
       }
-      approved {
-        id
-        by
-        date
-      }
     }
     media {
       heroImage {
+        id
+        url
+        isPublic
+      }
+      heroBackground {
+        id
         url
         isPublic
       }
       heroVideo {
-        url
-        isPublic
-      }
-      tombstoneImage {
         id
         url
-        isPublic
-      }
-      locationHeroImage {
-        id
-        url
-        isPublic
-      }
-      location  {
-        id
-        url
+        fileName
         isPublic
       }
       gallery  {
@@ -201,7 +218,7 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
-      logo  {
+      avatar  {
         id
         url
         isPublic
@@ -209,91 +226,93 @@ export const campaignDetailsQuery = gql`
     }
     legal {
       general {
-        websiteUrl
         useOfProceeds {
-          reachedMinOfferingGoal
-          reachedMaxOfferingGoal
+          offeringExpenseAmountDescription
         }
-        approved {
-          id
-          by
-          date
+      }
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
         }
       }
     }
     closureSummary {
+      processingDate
+      hardCloseDate
+      launchDate
+      totalInvestmentAmount
+      totalInvestmentAmountCf
+      totalInvestmentAmount506C
       totalInvestorCount
+      repayment {
+        count
+      }
+      keyTerms {
+        multiple
+      }
     }
     comments {
       id
-      offeringId
-      thread
       scope
       comment
       approved {
-        id
-        by
         date
       }
       updated {
-        id
-        by
         date
       }
-      deleted {
-        id
-        by
+      created {
         date
       }
-      actingUserInfo {
+      createdUserInfo {
         id
         info {
           firstName
           lastName
-          avatar {
-            url
+        }
+        roles {
+          name
+        }
+      }
+      threadComment {
+        id
+        scope
+        comment
+        approved {
+          date
+        }
+        updated {
+          date
+        }
+        created {
+          date
+        }
+        createdUserInfo {
+          id
+          info {
+            firstName
+            lastName
+          }
+          roles {
             name
           }
         }
       }
     }
-    updated {
-      id
-      by
-      date
-    }
-    deleted {
-      id
-      by
-      date
-    }
     updates {
       id
-      offeringId
       title
       content
-      status
       scope
-      tiers {
-        amount
-        earlyBirdQuantity
-      }
-      isEarlyBirdOnly
-      notificationSent {
-        by
-        date
-        to
-      }
-      approved {
-        by
-        date
-      }
       updated {
-        by
-        date
-      }
-      deleted {
-        by
         date
       }
       actingUserInfo {
@@ -301,36 +320,10 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
-          avatar {
-            url
-            name
-          }
         }
       }
     }
     earlyBirdsCount
-    bonusRewards{
-      id
-      offeringId
-      title
-      rewardStatus
-      description
-      expirationDate
-      tiers{
-        amount
-        earlyBirdQuantity
-      }
-      created {
-        id
-        by
-        date
-      }
-      updated {
-        id
-        by
-        date
-      }
-    }
   }
 }
 `;
@@ -339,8 +332,28 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
+    isAvailablePublicly
+    stage
+    closureSummary {
+      processingDate
+      hardCloseDate
+      totalInvestmentAmount
+      totalInvestmentAmountCf
+      totalInvestmentAmount506C
+      repayment {
+        completeDate
+      }
+      keyTerms {
+        multiple
+        revSharePercentage
+        interestRate
+        businessOpenDate
+      }
+    }
     keyTerms {
       regulation
+      startupPeriod
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity
@@ -351,11 +364,12 @@ query getOfferingById($id: ID) {
       investmentMultiple
       revSharePercentage
       interestRate
-      minOfferingAmount
-      maxOfferingAmount
+      minOfferingAmountCF
+      maxOfferingAmountCF
+      minOfferingAmount506C
+      maxOfferingAmount506C
       industry
       minInvestAmt
-      maxInvestAmt
       revShareSummary
       investmentMultipleSummary
       locationRiskFactors
@@ -366,20 +380,23 @@ query getOfferingById($id: ID) {
     offering {
       launch {
         targetDate
+        edgarLink
+        terminationDate
       }
+    }
+    selectedOffer {
+      structure
     }
     earlyBirdsCount
     bonusRewards{
       id
       offeringId
       title
-      rewardStatus
       description
+      rewardStatus
       expirationDate
-      tiers{
-        amount
-        earlyBirdQuantity
-      }
+      earlyBirdQuantity
+      tiers
       created {
         id
         by
@@ -398,10 +415,7 @@ query getOfferingById($id: ID) {
       content
       status
       scope
-      tiers {
-        amount
-        earlyBirdQuantity
-      }
+      tiers
       isEarlyBirdOnly
       notificationSent {
         by
@@ -432,9 +446,10 @@ query getOfferingById($id: ID) {
         }
       }
     }
-    rewardsTierIds {
+    rewardsTiers
+    earlyBird {
+      quantity
       amount
-      earlyBirdQuantity
     }
   }
 }

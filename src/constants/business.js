@@ -1,4 +1,3 @@
-import moment from 'moment';
 import shortid from 'shortid';
 
 export const FORM_VALUES = [
@@ -83,7 +82,7 @@ export const PERSONAL_SIGNATURE = {
     },
   },
   signatureDate: {
-    value: moment(),
+    value: '',
     error: undefined,
     rule: 'required',
     key: 'signatureDate',
@@ -95,6 +94,16 @@ export const PERSONAL_SIGNATURE = {
 };
 
 export const FILER_INFORMATION = {
+  skipScreenshot: {
+    value: false,
+    key: 'skipScreenshot',
+    label: 'Screenshot',
+    error: undefined,
+    rule: 'required|boolean',
+    customErrors: {
+      required: 'The Screenshot field is required.',
+    },
+  },
   offeringUrl: {
     value: '',
     key: 'offeringUrl',
@@ -271,7 +280,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   dateIncorporation: {
-    value: moment(),
+    value: '',
     key: 'dateIncorporation',
     placeHolder: 'Date of Incorporation/Organization',
     label: 'Date of Incorporation/Organization',
@@ -333,10 +342,10 @@ export const ISSUER_INFORMATION = {
     placeHolder: 'Zip',
     label: 'Zip',
     error: undefined,
-    rule: 'required|max:10',
+    rule: 'required|maskedField:5',
     customErrors: {
       required: 'The Zip field is required.',
-      max: 'The Zip is too long. Max length is :max.',
+      maskedField: 'The ZIP Code should be at least 5 digits',
     },
   },
   issuerWebsite: {
@@ -543,7 +552,7 @@ export const OFFERING_INFORMATION = {
     },
   },
   deadlineDate: {
-    value: moment(),
+    value: '',
     placeHolder: 'Deadline Date',
     label: 'Deadline Date',
     key: 'deadlineDate',

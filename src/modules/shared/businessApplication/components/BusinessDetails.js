@@ -1,14 +1,17 @@
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
-import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
+import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDatePicker } from '../../../../theme/form';
+import { InlineLoader } from '../../../../theme/shared';
+import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'agreementsStore', 'commonStore')
 @observer
 export default class BusinessDetails extends Component {
   state = {
@@ -20,6 +23,12 @@ export default class BusinessDetails extends Component {
 
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'business-details');
+    const {
+      getLegalDocsFileIds, alreadySet,
+    } = this.props.agreementsStore;
+    if (!alreadySet) {
+      getLegalDocsFileIds();
+    }
   }
 
   removeForm = (e) => {
@@ -39,6 +48,14 @@ export default class BusinessDetails extends Component {
       currentIndex: index,
     });
   }
+  handleLearnMore = () => {
+    const { getBoxLink, setField, agreements } = this.props.agreementsStore;
+    setField('docLoading', true);
+    getBoxLink(agreements[2].id, 'SERVICES').then((res) => {
+      setField('docLoading', false);
+      window.open(res.data.getBoxEmbedLink, '_blank');
+    });
+  }
 
   render() {
     const {
@@ -47,6 +64,10 @@ export default class BusinessDetails extends Component {
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
+    const { docLoading, docIdsLoading } = this.props.agreementsStore;
+    if (docLoading || docIdsLoading) {
+      return <InlineLoader />;
+    }
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
@@ -59,20 +80,32 @@ export default class BusinessDetails extends Component {
           }
           <FormElementWrap
             hideFields={hideFields}
-            header={
+            header="Business Plan"
+            subHeader={
               <Aux>
-                Business Plan
-                {!hideFields && currentApplicationType === 'business' &&
-                  <Link to="/" className="link"><small>Learn More</small></Link>
+                The business plan is intended to describe the who, what, when, where,
+                how and why of your project.*
+                {!hideFields && currentApplicationType === 'business' ?
+                  <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
+                  :
+                  <Popup
+                    trigger={<Icon className="ns-help-circle" />}
+                    content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
+                    position="top center"
+                    className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
+                    wide
+                  />
                 }
               </Aux>
             }
           >
             <DropZone
+              sharableLink
+              toolTipClassName="left-align justify-text"
               hideFields={hideFields}
-              tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
               disabled={formReadOnlyMode}
               multiple
+              asterisk="true"
               name="businessPlan"
               fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
               ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
@@ -88,14 +121,14 @@ export default class BusinessDetails extends Component {
             BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
               <Grid>
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                  <Header as={hideFields ? 'h6' : 'h5'}>Existing Debt {index + 1}
-                    {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                      <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
-                        <Icon color="red" size="small" className="ns-trash" />
-                      </Button>
-                    }
-                  </Header>
                   <div className="field-wrap">
+                    <Header as={hideFields ? 'h6' : 'h5'} className="mb-20">Existing Debt {index + 1}
+                      {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
+                        <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                          <Icon color="red" size="small" className="ns-trash" />
+                        </Button>
+                      }
+                    </Header>
                     <Form.Group widths="equal">
                       <MaskedInput
                         readOnly={formReadOnlyMode}
@@ -145,7 +178,7 @@ export default class BusinessDetails extends Component {
             }
             <Divider hidden />
             {!hideFields &&
-              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+              <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
             }
           </FormElementWrap>
           <FormElementWrap
@@ -188,7 +221,7 @@ export default class BusinessDetails extends Component {
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                   <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
                     {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
-                      <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                      <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
                     }
@@ -202,6 +235,7 @@ export default class BusinessDetails extends Component {
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
                             type="text"
+                            asterisk="true"
                             name={field}
                             fielddata={owner[field]}
                             changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
@@ -216,6 +250,7 @@ export default class BusinessDetails extends Component {
                         number
                         type="text"
                         name="yearsOfExp"
+                        asterisk="true"
                         fielddata={owner.yearsOfExp}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
@@ -224,22 +259,22 @@ export default class BusinessDetails extends Component {
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
                         type="text"
+                        asterisk="true"
                         name="companyOwnerShip"
                         fielddata={owner.companyOwnerShip}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
                     </Form.Group>
                     <Form.Group widths="equal">
-                      <FormDatePicker
-                        isdisabled={formReadOnlyMode}
-                        type="text"
+                      <MaskedInput
                         name="dateOfService"
-                        maxDate={moment()}
-                        placeholderText={owner.dateOfService.placeHolder}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         fielddata={owner.dateOfService}
-                        selected={owner.dateOfService.value ?
-                          moment(owner.dateOfService.value, 'MM-DD-YYYY') : null}
-                        changed={date => businessDetailsDateChange('dateOfService', date, index)}
+                        asterisk="true"
+                        format="##/##/####"
+                        changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
+                        dateOfBirth
                       />
                       <MaskedInput
                         readOnly={formReadOnlyMode}
@@ -247,6 +282,7 @@ export default class BusinessDetails extends Component {
                         ssn
                         type="text"
                         name="ssn"
+                        asterisk="true"
                         fielddata={owner.ssn}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
@@ -262,9 +298,11 @@ export default class BusinessDetails extends Component {
                       />
                       <Form.Field>
                         <DropZone
+                          sharableLink
                           hideFields={hideFields}
                           disabled={formReadOnlyMode}
                           name="resume"
+                          asterisk="true"
                           fielddata={owner.resume}
                           ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
                           onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
@@ -279,17 +317,20 @@ export default class BusinessDetails extends Component {
             {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
               <Aux>
                 <Divider hidden />
-                <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+                <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               </Aux>
             }
           </FormElementWrap>
-          <AppNavigation hideFields={hideFields} />
+          <AppNavigation
+            hideFields={hideFields}
+            isFileUploading={this.props.businessAppStore.isFileUploading}
+          />
         </Form>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${this.state.currentForm}?`}
+          content={`Are you sure you want to remove this ${this.state.currentForm.slice(0, -1)}?`}
           open={this.state.showPartialSaveModal}
-          onCancel={this.toggleConfirm}
+          onCancel={() => this.toggleConfirm(this.state.currentForm, this.state.currentIndex)}
           onConfirm={e => this.removeForm(e)}
           size="mini"
           className="deletion"

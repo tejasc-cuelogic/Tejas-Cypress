@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Accordion, Icon, List } from 'semantic-ui-react';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../../constants/common';
 
 @inject('educationStore')
 @observer
@@ -19,14 +20,16 @@ export default class AccList extends Component {
   isActive = (record, key) => {
     let currId = this.props.location.pathname.split('/')[4];
     if (this.props.educationStore.selected) {
-      currId = this.props.educationStore.selected.id;
+      currId = this.props.educationStore.selected.slug || this.props.educationStore.selected.id;
     }
-    const ids = record[key].map(item => item.id);
-    return this.state.activeIndex === record.id || ids.includes(currId);
+    const ids = record[key].map(item => item.slug);
+    return this.state.activeIndex === record.id || record.slug || ids.includes(currId);
   }
   render() {
+    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
     const {
-      match, data, module, marketing,
+      match, data, module,
+      marketing,
     } = this.props;
     const params = {
       subItems: module === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems',
@@ -42,7 +45,7 @@ export default class AccList extends Component {
                 active={this.isActive(record, params.subItems)}
                 onClick={this.toggleAction}
                 index={record.id}
-                refItem={record[params.subItems].length > 0 ? record[params.subItems][0].id : ''}
+                refItem={record[params.subItems].length > 0 ? record[params.subItems][0].slug : ''}
               >
                 {record.categoryName}
                 <Icon className="ns-chevron-down" />
@@ -53,9 +56,9 @@ export default class AccList extends Component {
                     {
                       record[params.subItems].map(item => (
                         <List.Item
-                          className={selected && selected.id === item.id ? 'active' : ''}
-                          to={`${match.url}/${item.id}`}
-                          key={item.id}
+                          className={selected && selected.slug === item.slug ? 'active' : ''}
+                          to={`${match.url}/${item.slug}`}
+                          key={item.slug}
                           as={NavLink}
                         >
                           {item[params.item]}
@@ -69,7 +72,7 @@ export default class AccList extends Component {
             </Aux>
           ))
         }
-        {marketing &&
+        {isDev && marketing ?
           <Accordion.Title
             refItem="faq"
             onClick={this.toggleAction}
@@ -77,7 +80,7 @@ export default class AccList extends Component {
             to={`${match.url}/faq`}
           >
             FAQ
-          </Accordion.Title>
+          </Accordion.Title> : ''
         }
       </Accordion>
     );

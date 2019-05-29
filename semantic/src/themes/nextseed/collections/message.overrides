@@ -3,6 +3,7 @@
 *******************************/
 .ui.message{
     font-size:@12px;
+    word-break:break-all;
     &.toast{
         position:fixed;
         top:-180px;
@@ -12,6 +13,14 @@
         &.visible{
             top:10px;
         }
+    }
+    &.bottom-error{
+        font-size:@14px;
+        text-align:center;
+        padding-top:@26px;
+        padding-bottom:@26px;
+        margin:@40px -@28px -@20px;
+        box-shadow:0 -3px 0 @highlight-primary inset;
     }
 }
 

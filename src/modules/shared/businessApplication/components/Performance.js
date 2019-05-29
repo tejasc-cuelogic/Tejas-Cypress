@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import { Grid, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -5,7 +6,7 @@ import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'commonStore')
 @observer
 export default class Performance extends Component {
   componentWillMount() {
@@ -42,11 +43,13 @@ export default class Performance extends Component {
                 statmentConst.map(field => (
                   <Grid.Column key={field}>
                     <DropZone
+                      sharableLink
                       hideFields={hideFields}
                       disabled={formReadOnlyMode}
                       multiple
                       key={field}
                       name={field}
+                      asterisk="true"
                       fielddata={fields[field]}
                       ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
                       onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
@@ -54,6 +57,33 @@ export default class Performance extends Component {
                   </Grid.Column>
                 ))
               }
+            </Grid>
+          </FormElementWrap>
+          <FormElementWrap
+            hideFields={hideFields}
+            noDivider={hideFields || formReadOnlyMode}
+            header="Sources & Uses"
+            subHeader={
+              <span>
+                Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the <br />
+                proposed NextSeed amount) for your project in addition to the proposed uses of that capital.
+              </span>
+            }
+          >
+            <Grid stackable columns="equal">
+              <Grid.Column key="sourcesAndUses">
+                <DropZone
+                  sharableLink
+                  hideFields={hideFields}
+                  disabled={formReadOnlyMode}
+                  multiple
+                  key="sourcesAndUses"
+                  name="sourcesAndUses"
+                  fielddata={fields.sourcesAndUses}
+                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
+                  onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
+                />
+              </Grid.Column>
             </Grid>
           </FormElementWrap>
           {currentApplicationType === 'business' &&
@@ -69,7 +99,7 @@ export default class Performance extends Component {
                     <Header as={hideFields ? 'h6' : 'h5'} content="Prior Year" />
                     <div className="field-wrap">
                       {
-                        ['pyGrossSales', 'pyCogs', 'pyOperatingExpenses', 'pyNetIncome'].map(field => (
+                        ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
                           <MaskedInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -77,6 +107,7 @@ export default class Performance extends Component {
                             name={field}
                             prefix="$ "
                             currency
+                            asterisk="true"
                             value={fields[field].value}
                             fielddata={fields[field]}
                             changed={businessPerfMaskingChange}
@@ -90,7 +121,7 @@ export default class Performance extends Component {
                   <Header as={hideFields ? 'h6' : 'h5'} content="Future Year" />
                   <div className="field-wrap">
                     {
-                      ['nyGrossSales', 'nyCogs', 'nyOperatingExpenses', 'nyNetIncome'].map(field => (
+                      ['nyGrossSales', 'nyOperatingExpenses', 'nyNetIncome', 'nyCogs'].map(field => (
                         <MaskedInput
                           readOnly={formReadOnlyMode}
                           containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -98,6 +129,7 @@ export default class Performance extends Component {
                           name={field}
                           prefix="$ "
                           currency
+                          asterisk="true"
                           value={fields[field].value}
                           fielddata={fields[field]}
                           changed={businessPerfMaskingChange}
@@ -109,7 +141,10 @@ export default class Performance extends Component {
               </Grid>
             </FormElementWrap>
           }
-          <AppNavigation hideFields={hideFields} />
+          <AppNavigation
+            hideFields={hideFields}
+            isFileUploading={this.props.businessAppStore.isFileUploading}
+          />
         </Form>
       </div>
     );

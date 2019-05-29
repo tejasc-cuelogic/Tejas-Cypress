@@ -77,6 +77,9 @@
 			}
 		}
 	}
+	&.faq-acc .title:not(.ui) {
+		padding-right: 0;
+	}
 }
 
 /* Dropdown Icon */
@@ -186,23 +189,6 @@
 				border-top:none;
 			}
 		}
-		// .actions{
-		// 	position:relative;
-		// 	float:right;
-		// 	z-index:99;
-		// 	a, .ui.button, .ui.buttons .button{
-		// 		font-size:@13px;
-		// 		font-weight:@fontMedium;
-		// 		text-transform:none;
-		// 		margin:0;
-		// 		padding:0 @8px;
-		// 		border-right:@borderColor 1px solid;
-		// 		&:last-child{
-		// 			border:none;
-		// 			padding-right:0;
-		// 		}
-		// 	}
-		// }
 		a{
 			&:hover, &:focus, &:active{
 				text-decoration:none;
@@ -217,8 +203,8 @@
 			margin-bottom:@35px;
 		}
 		.title{
-			font-weight:700;
-			color:@fullBlack;
+			font-weight:@bold;
+			color:@neutral;
 			&.active{
 				border-bottom:@border-light 1px solid;
 			}
@@ -226,10 +212,30 @@
 				margin-right:@14px;
 				color:@link-color;
 			}
+			small {
+				margin-left: @10px;
+				color: @neutral-middark;
+				font-weight: @fontMedium;
+			}
+			a.link {
+				&:hover {
+					text-decoration: none;
+				}
+				> small{
+					color: @primary-two;
+				}
+			}
 		}
 		.content{
 			padding:0;
+			&.categories-acc {
+				padding: @30px @40px;
+			}
 		}
+
+	}
+	.row-wrap:last-child{
+		border-radius:0 0 @styledBorderRadius @styledBorderRadius;
 	}
 }
 
@@ -252,7 +258,6 @@
 		}
 	}
 }
-
 
 //education-center
 .edu-center {
@@ -299,7 +304,7 @@
 			border-top: 0;
 			color: @neutral-middark;
 			background: @neutral-offwhite;
-			&.active {
+			&.active, &:hover {
 				color: @primary-one;
 				font-weight: @bold;
 			}

@@ -165,7 +165,7 @@ export class BeneficiaryStore {
         this.BENEFICIARY_META = Validator
           .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: beneficiary.address.zipCode }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: moment(beneficiary.dob) }, 'beneficiary', key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: beneficiary.dob && moment(new Date(beneficiary.dob)) ? moment(new Date(beneficiary.dob)) : '' }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
           .onArrayFieldChange(this.BENEFICIARY_META, { name: 'relationship', value: beneficiary.relationship }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator

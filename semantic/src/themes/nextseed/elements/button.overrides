@@ -9,38 +9,19 @@
     &.basic {
         border: 1px solid @thumbBackground;
         box-shadow: none !important;
-    }
-}
-.offering-side-menu {
-    // .ui.secondary.button {
-    //     margin: @20px auto 0;
-    // }
-    @media only screen and (min-width : @tabletBreakpoint){
-        .ui.buttons{
-            padding:@20px @26px @20px @16px;
-            position: fixed;
-            width: 280px;
-            bottom: 0;
-            background-color: @neutral;
+        &.highlight-text {
+            color: @primary-one !important;
+            font-weight: @fontMedium;
         }
-    }
-    @media only screen and (max-width : @largestMobileScreen){
-        .ui.buttons{
-            padding-right:@10px;
-        }
-    }
-    .ui.compact.button {
-        padding: @10px;
     }
 }
 //  Public Page Ends
-
 
 //  Buttons style CSS
 .ui{
     &.button, &.buttons .button{
         + .button{
-            margin-left:@10px !important;
+            margin-left:@10px;
         }
         &.link-button{
             padding:0;
@@ -74,6 +55,9 @@
                 color:@neutral;
                 &:hover, &:focus, &:active{
                     text-decoration: underline;
+                    .icon:not(.button) {
+                        text-decoration: none !important;
+                    }
                 }
             }
             &.grey{
@@ -85,7 +69,9 @@
                 }
             }
             &.icon .icon {
-                margin-right: 5px!important;
+                margin-right:@3px !important;
+                height: auto;
+                vertical-align: middle;
             }
         }
         &.ghost-button{
@@ -145,10 +131,14 @@
             }
         }
         &.time-stamp .time-stamp{
-            padding:@14px 0;
+            padding:@3px 0;
             text-align:left;
+            margin:0 !important;
         }
     }
+}
+.sticky-actions .ui.buttons.time-stamp{
+    flex:1;
 }
 
 .ui.button, .ui.buttons .button{
@@ -163,8 +153,28 @@
 }
 
 .ui.buttons{
+    align-items:center;
     .ui.button{
         border-radius:6px;
+    }
+    &.inline:not(.vertical){
+        width:auto;
+        .ui.button{
+            min-width:130px;
+        }
+    }
+    &.two:not(.vertical) > .ui.button{
+        margin:0 @5px;
+        width:~"calc(50% - "(@10px)~")";
+        &:first-child{
+            margin-left:0;
+        }
+        &:last-child{
+            margin-right:0;
+        }
+    }
+    +.ui.buttons {
+        margin-top: @10px;
     }
 }
 

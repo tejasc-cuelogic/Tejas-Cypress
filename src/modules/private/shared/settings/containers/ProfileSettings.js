@@ -20,6 +20,7 @@ const getModule = (component) => {
   return c;
 };
 
+
 export default class ProfileSettings extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {

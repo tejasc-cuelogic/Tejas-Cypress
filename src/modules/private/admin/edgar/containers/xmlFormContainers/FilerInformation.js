@@ -14,8 +14,6 @@ export default class FilerInformation extends React.Component {
     this.props.businessStore.setXmlError();
   }
 
-  handleChange = (e, { name, value }) => this.props.businessStore.setFilerInfo(name, value)
-
   handleNotificationEmailChange = (chips) => {
     const newErrors = { ...this.props.businessStore.xmlErrors };
     const pattern = /^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/;
@@ -45,6 +43,12 @@ export default class FilerInformation extends React.Component {
     return (
       <div>
         <Card fluid className="form-card">
+          <Form.Checkbox
+            label="Skip screenshot generation"
+            name="skipScreenshot"
+            checked={formFilerInfo.fields.skipScreenshot.value}
+            onChange={this.handleCheckboxChange}
+          />
           <FormInput
             type="text"
             fielddata={formFilerInfo.fields.offeringUrl}

@@ -20,10 +20,13 @@ export class Admin {
     uiStore.setLoaderMessage('Creating new user');
 
     const user = userDetails || mapValues(userStore.USR_FRM.fields, f => f.value);
+    if (user.email) {
+      user.email = user.email.toLowerCase();
+    }
     const attributes = [];
     const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
     Object.keys(user).map((item) => {
-      if (item !== 'TemporaryPassword' && item !== 'verifyPassword') {
+      if (!['capabilities', 'TemporaryPassword', 'verifyPassword'].includes(item)) {
         attributes.push({
           Name: (mapKey[item] || snakeCase(item)),
           Value: (mapKey[item] ? JSON.stringify(toJS(user[item])) : toJS(user[item])),
@@ -35,14 +38,14 @@ export class Admin {
     const params = {
       UserPoolId: USER_POOL_ID,
       TemporaryPassword: user.TemporaryPassword,
-      Username: user.email,
+      Username: user.email.toLowerCase(),
       UserAttributes: attributes,
     };
     this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     const dbPushParams = {
       firstName: user.givenName,
       lastName: user.familyName,
-      email: user.email,
+      email: user.email.toLowerCase(),
       isEmailVerified: true,
       roles: toJS(user.role).map(r => r.toUpperCase()),
       capabilities: toJS(user.capabilities),
@@ -57,7 +60,7 @@ export class Admin {
         });
       })
         .then((res) => {
-          adminStore.setUserId(res.User.Username);
+          adminStore.setFieldvalue('userId', res.User.Username);
           adminStore.pushToDb({ ...dbPushParams, ...{ userId: res.User.Username } });
         })
         .catch((err) => {
@@ -148,7 +151,7 @@ export class Admin {
       { Name: 'custom:roles', Value: JSON.stringify(userStore.userAttributes.roles) },
     ];
     if (newUser) {
-      userData.push({ Name: 'email', Value: userStore.userAttributes.email });
+      userData.push({ Name: 'email', Value: userStore.userAttributes.email.toLowerCase() });
       userData.push({ Name: 'email_verified', Value: 'true' });
     }
     return userData;
@@ -163,7 +166,7 @@ export class Admin {
       new Promise((res, rej) => {
         this.awsCognitoISP.listUsers({
           UserPoolId: USER_POOL_ID,
-          Filter: `email = '${email}'`,
+          Filter: `email = '${email.toLowerCase()}'`,
           Limit: 1,
         }).promise()
           .then((data) => {

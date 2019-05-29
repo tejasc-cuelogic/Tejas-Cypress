@@ -1,72 +1,121 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Button, Message } from 'semantic-ui-react';
-import { MaskedInput } from '../../../../../theme/form';
-import { ListErrors } from '../../../../../theme/shared';
+import Aux from 'react-aux';
+import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
+import LinkbankSummary from './LinkbankSummary';
+import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
-@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore')
+@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
+@withRouter
 @observer
 export default class ManualForm extends Component {
+  componentWillMount() {
+    // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
+    this.props.bankAccountStore.setShouldValidateAmount();
+    this.props.uiStore.clearErrors();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.bankAccountStore.resetAddFundsForm();
+    this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     const { investmentAccType } = this.props.accountStore;
     const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
-    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : undefined;
-
-    this.props[accTypeStore].createAccount(currentStep, 'draft').then(() => {
-      if (investmentAccType === 'individual') {
-        this.props[accTypeStore].setStepToBeRendered(1);
-      } else {
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
+    if (this.props.action === 'change') {
+      this.props.uiStore.setProgress();
+      this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
+        this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+          const confirmUrl = `${this.props.refLink}/confirm`;
+          this.props.history.push(confirmUrl);
+        });
+      });
+    } else {
+      this.props[accTypeStore].createAccount(currentStep).then(() => {
+        this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
+        this.props.bankAccountStore.resetRoutingNum();
         this.props.bankAccountStore.setShowAddFunds();
-      }
-    })
-      .catch(() => { });
+      });
+    }
+  }
+
+  linkAccountDirectly = () => {
+    this.props.bankAccountStore.setBankLinkInterface('list');
+    this.props.uiStore.clearErrors();
   }
 
   render() {
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const {
       showAddFunds,
+      isEncrypted,
       formLinkBankManually,
       linkBankManuallyChange,
+      accountTypeChange,
+      linkbankSummary,
     }
       = this.props.bankAccountStore;
     if (showAddFunds) {
       return <AddFunds />;
     }
+    if (this.props.action !== 'change' && linkbankSummary) {
+      return <LinkbankSummary />;
+    }
+    if (this.props.action === 'change' && inProgress) {
+      return (
+        <Dimmer className="fullscreen" active={inProgress}>
+          <Loader active={inProgress}>
+          Please wait...
+          </Loader>
+        </Dimmer>);
+    }
+    const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
-      <div>
-        <Header as="h3" textAlign="center">Link bank manually</Header>
-        <p className="center-align">Enter your bank`s routing number and your checking account number.</p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
-        <Form error onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap">
-            <MaskedInput
-              name="routingNumber"
-              fielddata={formLinkBankManually.fields.routingNumber}
-              changed={linkBankManuallyChange}
-              routingNumber
-            />
+      <div className="center-align">
+        <Header as="h3">Link bank manually</Header>
+        <p>Enter your bank{"'"}s routing number and your checking account number.</p>
+        <Form error={!!errors} onSubmit={this.handleSubmitForm}>
+          <div className="field-wrap left-align">
             <MaskedInput
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
               changed={linkBankManuallyChange}
+              value={isAccNumberEncrypted ? '' : formLinkBankManually.fields.accountNumber.value}
               accountNumber
+              showerror
             />
+            <MaskedInput
+              name="routingNumber"
+              fielddata={formLinkBankManually.fields.routingNumber}
+              changed={linkBankManuallyChange}
+              value={isEncrypted(formLinkBankManually.fields.routingNumber.value) ? '' : formLinkBankManually.fields.routingNumber.value}
+              routingNumber
+              showerror
+            />
+            <Form.Field>
+              <Aux>
+                {
+                  <FormRadioGroup
+                    fielddata={formLinkBankManually.fields.accountType}
+                    changed={accountTypeChange}
+                    name="accountType"
+                    value={formLinkBankManually.fields.value}
+                  />
+                }
+              </Aux>
+            </Form.Field>
           </div>
-          <div className="center-align">
-            <Button.Group vertical>
-              <Button primary size="large" className="relaxed" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
-              <Button type="button" className="link-button cancel-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
-            </Button.Group>
-          </div>
+          {errors &&
+            <Message error className="mb-30">
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
+            </Message>
+          }
+          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
+        <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
       </div>
     );
   }

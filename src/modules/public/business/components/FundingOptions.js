@@ -32,12 +32,12 @@ export default class FundingOption extends Component {
     const { match, location } = this.props;
     return (
       <Aux>
-        <Container>
-          <section className="funding-option">
+        <section className="funding-option">
+          <Container>
             <Grid centered>
               <Grid.Column computer={15} tablet={16} mobile={16} textAlign={isMobile ? 'left' : 'center'}>
                 <Header as="h2">
-                Choose a funding option that fits your business.
+                  Choose a funding option that fits your business.
                 </Header>
                 <p className={isMobile ? 'mb-10' : 'mb-50'}>
                   Whether you’re raising capital for an expansion, a new venture or to improve your
@@ -85,8 +85,8 @@ export default class FundingOption extends Component {
                 </List.Content>
               </List.Item>
             </List>
-          </section>
-        </Container>
+          </Container>
+        </section>
       </Aux>
     );
   }

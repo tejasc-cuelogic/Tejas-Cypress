@@ -1,19 +1,60 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import Aux from 'react-aux';
+import { withRouter } from 'react-router-dom';
 import { isEmpty, find } from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
-import { ListErrors } from '../../../../../../../theme/shared';
+import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore', 'bankAccountStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends Component {
+  state = {
+    open: false,
+  };
+  componentWillMount() {
+    const {
+      getLegalDocsFileIds, alreadySet,
+    } = this.props.agreementsStore;
+    if (!alreadySet) {
+      getLegalDocsFileIds();
+    }
+    this.props.bankAccountStore.fetchRoutingNumber();
+  }
+
+  componentDidUpdate() {
+    this.props.bankAccountStore.setLoaderForAccountBlank();
+  }
   handleCreateAccount = () => {
-    this.props.iraAccountStore.createAccount('Summary', 'submit').then(() => {
-      this.props.history.push('/app/summary');
+    const { isCipExpired, signupStatus } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
+    if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
+      this.props.history.push('/app/summary/identity-verification/0');
+      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
+    } else if (isCipExpired) {
+      this.props.history.push('/app/summary/identity-verification/0');
+      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
+    } else {
+      this.props.iraAccountStore.submitAccount().then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        // this.props.history.push('app/summary');
+      });
+    }
+  }
+  openModal = (type) => {
+    const { getBoxEmbedLink } = this.props.agreementsStore;
+    getBoxEmbedLink(type);
+    this.setState({
+      open: true,
     });
+  }
+  closeModal = () => {
+    this.setState({ open: false });
   }
   render() {
     const {
@@ -31,70 +72,115 @@ export default class Summary extends Component {
       FUNDING_FRM.fields.fundingType.values,
       { value: FUNDING_FRM.fields.fundingType.value },
     );
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      plaidAccDetails, formLinkBankManually,
+      accountAttributes, routingNum,
+    } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
+    const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <div>
-        <Header as="h3" textAlign="center">Verify your information and create an IRA account</Header>
+      <Aux>
+        <Header as="h3" textAlign="center">Verify your information and submit for review</Header>
+        <div className="field-wrap">
+          <div className="table-wrapper">
+            <Table unstackable basic="very">
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Type:</Table.Cell>
+                  <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Funding Option:</Table.Cell>
+                  <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Net Worth:</Table.Cell>
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
+                    FIN_INFO_FRM.fields.netWorth.value : 0)}
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Annual Income:</Table.Cell>
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value ?
+                    FIN_INFO_FRM.fields.income.value : 0)}
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Identification:</Table.Cell>
+                  <Table.Cell>
+                    {IDENTITY_FRM.fields.identityDoc.value ?
+                      <span>Uploaded</span> :
+                      <span className="negative-text">Not Uploaded</span>}
+                  </Table.Cell>
+                </Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
+                  <Table.Row>
+                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
+                }
+                {fundingOption && fundingOption.value === 0 &&
+                  <Table.Row>
+                    <Table.Cell>Bank Account:</Table.Cell>
+                    <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
+                  </Table.Row>
+                }
+
+                { !isEmpty(routingNum) &&
+                  <Table.Row>
+                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell>
+                      { routingNum || '' }
+                    </Table.Cell>
+                  </Table.Row>
+                }
+                <Table.Row>
+                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell>
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
+                    Helper.CurrencyFormat(0) :
+                    Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </div>
+        </div>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
           </Message>
         }
-        <div className="summary-wrap">
-          <div className="field-wrap">
-            <div className="table-wrapper">
-              <Table unstackable compact basic>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell><b>Type</b></Table.Cell>
-                    <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell><b>Funding Option</b></Table.Cell>
-                    <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell><b>Net Worth</b></Table.Cell>
-                    <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
-                      FIN_INFO_FRM.fields.netWorth.value : 0)}
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell><b>Annual Income</b></Table.Cell>
-                    <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value ?
-                      FIN_INFO_FRM.fields.annualIncome.value : 0)}
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell><b>Identification</b></Table.Cell>
-                    <Table.Cell>
-                      {IDENTITY_FRM.fields.identityDoc.value ?
-                        <span className="positive-text"><b>Uploaded</b></span> :
-                        <span className="negative-text"><b>Not Uploaded</b></span>}
-                    </Table.Cell>
-                  </Table.Row>
-                  {fundingOption && fundingOption.value === 0 &&
-                    <Table.Row>
-                      <Table.Cell><b>Bank account</b></Table.Cell>
-                      <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
-                    </Table.Row>
-                  }
-                </Table.Body>
-              </Table>
-            </div>
-          </div>
+        <div className="center-align mt-30">
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
-        <p className="center-align mb-30">
-          By continuing, I acknowledge that I have read and agree to the
-          terms of the <Link to="/app/summary/account-creation/ira" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/app/summary/account-creation/ira" className="link">Substitute IRS Form W-9 Certification</Link>,
-          and the <Link to="/app/summary/account-creation/ira" className="link">NextSeed Membership Agreement</Link>.
+        <p className="center-align mt-30 grey-header">
+          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+          CrowdPay Custodial Account Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
+          NextSeed US LLC Member Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
+          NextSeed Securities LLC Investor Agreement
+          </span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+          Substitute IRS Form W-9 Certification
+          </span>.
+          {/* <span className="highlight-text" style={{ cursor: 'pointer' }}
+          onClick={() => this.openModal('membershipAgreement')}>
+          NextSeed Membership Agreement
+          </span>. */}
+          <IframeModal
+            open={this.state.open}
+            close={this.closeModal}
+            srcUrl={embedUrl}
+            loading={docLoading}
+          />
         </p>
-        <div className="center-align">
-          <Button primary size="large" onClick={() => this.handleCreateAccount()} className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>
-        </div>
-      </div>
+      </Aux>
     );
   }
 }

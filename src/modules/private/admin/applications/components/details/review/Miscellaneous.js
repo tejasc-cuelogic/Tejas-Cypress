@@ -78,7 +78,9 @@ const AddMore = ({
 @observer
 export default class Miscellaneous extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('MISCELLANEOUS_FRM', 'review.miscellaneous');
+    if (!this.props.businessAppReviewStore.initLoad.includes('MISCELLANEOUS_FRM')) {
+      this.props.businessAppReviewStore.setFormData('MISCELLANEOUS_FRM', 'review.miscellaneous');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.miscellaneous.managerOverview');
   }
   onFileDrop = (files, name, index) => {
@@ -132,7 +134,7 @@ export default class Miscellaneous extends Component {
               {
                 MISCELLANEOUS_FRM.fields.socialMedia.length ?
                 MISCELLANEOUS_FRM.fields.socialMedia.map((socialMedia, index) => (
-                  <Table.Row verticalAlign="top">
+                  <Table.Row>
                     <Table.Cell width={3}>
                       <Dropdown
                         className={isReadonly ? 'display-only secondary' : 'secondary'}
@@ -191,6 +193,7 @@ export default class Miscellaneous extends Component {
                   <Table.Cell>
                     <DropZone
                       size="small"
+                      hideFields={isReadonly}
                       className={isReadonly ? 'display-only secondary' : 'secondary'}
                       disabled={isReadonly}
                       name="docDetails"

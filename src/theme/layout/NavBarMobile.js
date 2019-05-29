@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Divider, Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { Logo, SocialLinks } from '../shared';
-import { NavItems } from './NavigationItems';
+import { NavItems, NavigationItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
-import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
+import { PUBLIC_NAV } from '../../constants/NavigationMeta';
+// import NSImage from '../../modules/shared/NSImage';
 
 const hasFooter = ['/'];
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
-));
-@inject('uiStore')
+// const getLogo = path => (path.includes('/lendio') ? 'nextseed_and_lendio.svg' : 'logo.svg');
+@inject('uiStore', 'businessAppStore')
 @observer
 export default class NavBarMobile extends Component {
   setAuthRef = () => {
@@ -24,12 +24,18 @@ export default class NavBarMobile extends Component {
       onPusherClick, onToggle, visible,
       publicContent, location, isMobile,
       navStatus, currentUser, stepInRoute,
+      hasHeader,
     } = this.props;
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
+    const logInSignUp = stepInRoute.to !== 'login' ? [
+      { to: 'login', title: 'Log In', className: 'basic' },
+      { to: 'register', title: 'Sign Up', className: 'secondary' },
+    ] :
+      [{ ...stepInRoute, className: 'secondary' }];
     if (location.pathname.startsWith('/invest')) {
       navTitle = 'Investing';
-    } else if (location.pathname.startsWith('/business')) {
+    } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
       navTitle = 'Fundraising';
     } else if (location.pathname.startsWith('/resources/education-center')) {
       navTitle = 'Education Center';
@@ -37,96 +43,116 @@ export default class NavBarMobile extends Component {
       navTitle = 'Insights';
     } else if (location.pathname.startsWith('/offerings')) {
       navTitle = '';
+    } else if (location.pathname.startsWith('/agreements/legal')) {
+      navTitle = 'Legal';
     }
-    const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
+    // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <Aux>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
-          <div
-            className={`${visible ? 'visible-logo' : (location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
-            onClick={!visible ? onToggle : false}
-            onKeyPress={!visible ? onToggle : false}
-            role="button"
-            tabIndex="0"
-          >
-            <Logo
-              alt="NextSeed.com"
-              dataSrc={getLogo(location.pathname)}
-              as={visible ? Link : Logo}
-              to="/"
-            />
-          </div>
-          <div
-            className={`public-header-section ${visible ? 'active' : ''}
-            ${!location.pathname.includes('/offerings') ? 'inverted' : ''}
-            ${navStatus === 'sub' ? 'slide-up' : ''}`}
-          >
-            {/* <Icon className="ns-nextseed-icon hamburger" /> */}
-            <Header as="h5" inverted>{navTitle}</Header>
-            {!currentUser ? (
-              <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in">
-                {stepInRoute.title}
-              </Link>
-            ) : (
-              <Link
-                to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                className="sign-in"
+          {hasHeader && (
+            <Aux>
+              <div
+                className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo`}
+                onClick={!visible ? onToggle : false}
+                onKeyPress={!visible ? onToggle : false}
+                role="button"
+                tabIndex="0"
               >
-                Dashboard
-              </Link>
-            )
-            }
-            {investBtn && (
-              <Button fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
-                Invest Now
-              </Button>
-            )}
-          </div>
+                <Icon className="ns-hamburger" role="button" tabIndex="0" />
+              </div>
+              {location.pathname.startsWith('/business-application/') ?
+                <NavigationItems
+                  {...this.props}
+                  isMobBussinessApp
+                  isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
+                /> :
+                <div
+                  className={`public-header-section ${visible ? 'active' : ''}
+                  ${navStatus === 'sub' ? 'slide-up' : ''}`}
+                >
+                  {navTitle === 'Home' || (location.pathname.startsWith('/offerings')) ?
+                    <Logo
+                      dataSrc="LogoGreenGrey"
+                      className="mobile-header-logo"
+                    /> :
+                    <Header as="h5">{navTitle}</Header>
+                  }
+                  {!currentUser ? (
+                    <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
+                      {stepInRoute.title}
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                      className="sign-in neutral-text"
+                    >
+                      Dashboard
+                    </Link>
+                  )
+                  }
+                </div>
+              }
+            </Aux>
+          )}
           <Sidebar
             as={Menu}
             animation="overlay"
-            inverted
             vertical
             visible={visible}
             className="public-sidebar"
           >
-            <Icon onClick={onToggle} className="ns-close-light" />
-            <div className="public-mobile-nav">
-              <div className="mobile-nav-inner-container">
-                <div className="public-header-nav">
-                  <NavItems
-                    refLoc="public"
-                    currentUser={currentUser}
-                    location={location}
-                    isMobile={isMobile}
-                    navStatus={navStatus}
-                    onToggle={onToggle}
-                    navItems={PUBLIC_NAV}
-                  />
-                </div>
-                <Divider />
-                <div className="public-footer-nav">
-                  <NavItems
-                    refLoc="public"
-                    currentUser={currentUser}
-                    location={location}
-                    isMobile={isMobile}
-                    navStatus={navStatus}
-                    onToggle={onToggle}
-                    navItems={FOOTER_NAV}
-                  />
-                </div>
-                <Divider />
-                <div className="social-media">
-                  <SocialLinks />
+            <Scrollbars
+              className="ns-scrollbar"
+              renderTrackVertical={p => <div {...p} className="track-vertical" />}
+              renderThumbVertical={p => <div {...p} className="thumb-vertical" />}
+              renderTrackHorizontal={p => <div {...p} className="track-horizontal" />}
+              renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
+              renderView={p => <div {...p} className="view" />}
+            >
+              <Icon onClick={onToggle} className="ns-close-light" />
+              <div className="public-header-nav">
+                <NavItems
+                  refLoc="public"
+                  currentUser={currentUser}
+                  location={location}
+                  isMobile={isMobile}
+                  navStatus={navStatus}
+                  onToggle={onToggle}
+                  navItems={PUBLIC_NAV}
+                />
+                {/* <NavItems
+                  refLoc="public"
+                  currentUser={currentUser}
+                  location={location}
+                  isMobile={isMobile}
+                  navStatus={navStatus}
+                  onToggle={onToggle}
+                  navItems={FOOTER_NAV}
+                /> */}
+                <div className="public-action-nav mt-20">
+                  {!currentUser ? logInSignUp.map(route => (
+                    <Menu.Item className="btn-item">
+                      <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
+                    </Menu.Item>
+                  )) :
+                  <Menu.Item className="btn-item">
+                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
+                  </Menu.Item>
+                  }
                 </div>
               </div>
-            </div>
+            </Scrollbars>
           </Sidebar>
+          <div className="social-media">
+            <Menu>
+              <SocialLinks />
+            </Menu>
+          </div>
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className="public-pusher"
+            className={`public-pusher ${!hasHeader && 'noheader'}`}
           >
             {publicContent}
             {(hasFooter.find(item => matchPath(location.pathname, { path: item }))) &&

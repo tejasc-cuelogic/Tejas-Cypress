@@ -3,7 +3,7 @@
 *******************************/
 
 .header-wrap{
-    height:58px;
+    height:72px;
     &.large{
         height:80px;
     }
@@ -42,12 +42,8 @@
                 }
             }
         }
-        .ui.dropdown{
-            .menu{
-                >.item{
-                    padding:@11px @30px !important;
-                }
-            }
+        .ui.dropdown .menu >.item{
+            padding:@11px @30px !important;
         }
     }
 }
@@ -73,41 +69,44 @@
         margin-left:@10px;
         >small{
             font-size:@13px;
+            >i.icon{
+                margin-right:@4px;
+            }
         }
     }
 }
 
-.notification-panel{
-	h4.ui.header{
-		margin:0;
-        padding:@14px;
-        position:relative;
-        background-color:@darken-bg-color;
-        .sub.header{
-            font-size:@12px !important;
-            color:@neutral-middark;
-            position:absolute;
-            right:0;
-            top:0;
-        }
-	}
-}
-
-// .ui.header{
-//     .sub.header{
-//         font-weight:inherit;
-//     }
-// }
-h6.ui.header{
+.notification-panel h4.ui.header{
+    margin:0;
+    padding:@14px;
+    position:relative;
+    background-color:@darken-bg-color;
     .sub.header{
-        font-size:@relative12px;
-        font-weight:@normal;
-        line-height:@22px;
+        font-size:@12px !important;
         color:@neutral-middark;
+        position:absolute;
+        right:0;
+        top:0;
     }
+}
+
+h6.ui.header .sub.header{
+    font-size:@relative12px;
+    font-weight:@normal;
+    line-height:@22px;
+    color:@neutral-middark;
 }
 .ui.top.attached.header {
     padding-left: 0;
     padding-right: 0;
     border: 0;
+}
+
+.campaign-details-banner .ui.header .sub.header{
+    margin-top:@7px;
+}
+.signup-header h3.ui.header.greeting {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
+import { Button, Modal, Divider, Header, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import { FormInput, FormSelect, AutoComplete, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
@@ -13,7 +13,7 @@ const LegalDetails = observer(({
 }) => (
   <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h3">Welcome {name}</Header>
+      <Header as="h3" title={name} className="greeting">Welcome {name}</Header>
       <p>Let’s create your NextSeed investment account.</p>
       <Divider section />
       <p>
@@ -22,17 +22,12 @@ const LegalDetails = observer(({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      {errors &&
-      <Message error textAlign="left">
-        <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-      </Message>
-        }
-      {form.response.qualifiers &&
-      <Message error>
-        <CipErrors errorsList={form.response.qualifiers} />
-      </Message>
-        }
-      <Form onSubmit={onSubmit}>
+      <Dimmer className="fullscreen" active={inProgress}>
+        <Loader active={inProgress}>
+        Please wait...<br /><br />We are verifying your identity.<br />This can take up to a minute.
+        </Loader>
+      </Dimmer>
+      <Form error onSubmit={onSubmit}>
         <Form.Group widths="equal">
           <FormSelect
             containerwidth={8}
@@ -42,18 +37,16 @@ const LegalDetails = observer(({
             options={USER_TITLE}
             changed={change}
           />
-          {
-            ['firstLegalName', 'lastLegalName'].map(field => (
-              <FormInput
-                key={field}
-                type="text"
-                name={field}
-                fielddata={form.fields[field]}
-                changed={change}
-                showerror
-              />
-            ))
-          }
+          {['firstLegalName', 'lastLegalName'].map(field => (
+            <FormInput
+              key={field}
+              type="text"
+              name={field}
+              fielddata={form.fields[field]}
+              changed={change}
+              showerror
+            />
+          ))}
         </Form.Group>
         <AutoComplete
           name="residentalStreet"
@@ -61,6 +54,14 @@ const LegalDetails = observer(({
           onplaceselected={autoComplete}
           changed={change}
           placeHolder="Street Address, City, State, Zip"
+          showerror
+        />
+        <FormInput
+          key="streetTwo"
+          type="text"
+          name="streetTwo"
+          fielddata={form.fields.streetTwo}
+          changed={change}
           showerror
         />
         <Form.Group widths={2}>
@@ -78,13 +79,10 @@ const LegalDetails = observer(({
             options={US_STATES_FOR_INVESTOR}
             search
             selection
-            compact
-            placeholder="NY"
+            placeholder="Select"
             // onChange={(e, res) => userEleChange(e, res, 'dropdown')}
             onChange={change}
           />
-        </Form.Group>
-        <Form.Group widths={2}>
           <MaskedInput
             key="zipCode"
             name="zipCode"
@@ -97,13 +95,11 @@ const LegalDetails = observer(({
             name="phoneNumber"
             type="tel"
             fielddata={form.fields.phoneNumber}
-            format="###-###-####"
+            format="(###) ###-####"
             changed={maskChange}
             phoneNumber
             showerror
           />
-        </Form.Group>
-        <Form.Group widths={2}>
           <MaskedInput
             name="dateOfBirth"
             fielddata={form.fields.dateOfBirth}
@@ -120,12 +116,24 @@ const LegalDetails = observer(({
             showerror
           />
         </Form.Group>
+        <p className="note center-align">
+          By selecting <b>Verify my identity</b>, you agree NextSeed may deliver verification
+          codes to you using the phone number you have provided. Codes may be sent using text
+          messages, an autodialer, or artificial or prerecorded voice messages to such phone
+          number. Your mobile carrier’s messaging and data fees may apply.
+        </p>
+        {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
+        }
+        {form.response.qualifiers &&
+          <Message error className="mt-30">
+            <CipErrors errorsList={form.response.qualifiers} />
+          </Message>
+        }
         <div className="center-align mt-30">
-          <Button primary size="large" className="very relaxed" content="Verify my identity" loading={inProgress} />
-          {/* <Button.Group vertical>
-            <Button type="button" className="link-button cancel-link"
-            onClick={close}>I’ll finish this later</Button>
-          </Button.Group> */}
+          <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={inProgress} />
         </div>
       </Form>
     </Modal.Content>

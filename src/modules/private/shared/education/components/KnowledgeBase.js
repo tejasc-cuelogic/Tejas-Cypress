@@ -25,7 +25,7 @@ export default class KnowledgeBase extends Component {
     this.props.educationStore.initRequest('KnowledgeBase', props, categoryType);
   }
   search = (e) => {
-    this.props.educationStore.setSrchParam('KnowledgeBase', e.target.value);
+    this.props.educationStore.setSrchParam(e.target.value);
     if (this.props.location.pathname !== '/app/resources/knowledge-base') {
       this.props.history.replace('/app/resources/knowledge-base');
     }
@@ -96,7 +96,7 @@ export default class KnowledgeBase extends Component {
                 }
               />
               <Route
-                path={`${match.url}/:id`}
+                path={`${match.url}/:slug`}
                 render={props => <Details marketing={marketing} module={modul} {...props} />}
               />
             </Grid.Column>

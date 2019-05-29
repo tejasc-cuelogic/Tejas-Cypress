@@ -13,7 +13,8 @@
 @borderRadius: @defaultBorderRadius;
 
 @raisedShadow: 0px 2px 3px 0px @borderColor;
-@customShadow:0 12px 20px @veryStrongTransparentBlack;
+@customShadow:0 6px 10px @veryStrongTransparentBlack;
+@upwardCustomShadow:0 -6px 10px 0 @veryStrongTransparentBlack;
 
 /*-------------------
        Content
@@ -335,12 +336,12 @@
 /* Upward */
 @upwardSelectionVisibleBorderRadius:0;
 @upwardMenuBoxShadow:none;
-@upwardSelectionMenuBoxShadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.08);
+@upwardSelectionMenuBoxShadow:@upwardCustomShadow;
 @upwardMenuBorderRadius: @borderRadius @borderRadius 0em 0em;
 @upwardSelectionHoverBoxShadow:none;
 @upwardSelectionVisibleBoxShadow:none;
 @upwardSelectionActiveHoverBoxShadow:none;
-@upwardSelectionActiveHoverMenuBoxShadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.08);
+@upwardSelectionActiveHoverMenuBoxShadow:@upwardCustomShadow;
 
 /* Flyout Direction */
 @leftMenuDropdownIconFloat: left;

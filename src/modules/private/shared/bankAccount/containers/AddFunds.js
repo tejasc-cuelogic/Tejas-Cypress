@@ -1,31 +1,39 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-
+import Aux from 'react-aux';
 import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 import { ListErrors } from '../../../../../theme/shared';
+import { validationActions } from '../../../../../services/actions';
+import Helper from '../../../../../helper/utility';
 
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
-  // componentDidMount() {
-  //   this.props.individualAccountStore.setStepToBeRendered(1);
-  // }
+  componentWillMount() {
+    this.props.bankAccountStore.setDepositMoneyNow(true);
+  }
+  componentDidMount() {
+    // this.props.bankAccountStore.validateForm('formAddFunds');
+  }
   componentWillUnmount() {
     this.props.bankAccountStore.resetShowAddFunds();
   }
   doNotDepositMoneyNow = () => {
+    this.props.bankAccountStore.validateAddFunds();
     this.props.bankAccountStore.setDepositMoneyNow(false);
-    if (!this.props.bankAccountStore.formAddFunds.fields.value.error) {
-      this.renderStep();
-    }
+    this.renderStep();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setDepositMoneyNow(true);
+    this.props.bankAccountStore.setShouldValidateAmount(true);
     this.renderStep();
   }
+
+
+  isValidFund = fundObj => !fundObj.meta.isValid || fundObj.fields.value.value === '';
 
   renderStep = () => {
     if (this.props.accountStore.investmentAccType === 'individual') {
@@ -34,51 +42,79 @@ export default class AddFunds extends Component {
         name: 'Add funds',
         stepToBeRendered: 2,
       };
-      this.props.individualAccountStore.createAccount(currentStep);
-      this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
+      this.props.individualAccountStore.createAccount(currentStep).then(() => {
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
+      });
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
-      this.props.entityAccountStore.setStepToBeRendered(AccCreationHelper.entitySteps().summary);
+      const currentStep = {
+        name: 'Link bank',
+        stepToBeRendered: 6,
+        validate: validationActions.validateLinkBankForm,
+      };
+      this.props.entityAccountStore.createAccount(currentStep).then(() => {
+        this.props.bankAccountStore.resetShowAddFunds();
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.entityAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
+      });
     }
     if (this.props.accountStore.investmentAccType === 'ira') {
-      this.props.iraAccountStore.setStepToBeRendered(AccCreationHelper.iraSteps().summary);
+      const currentStep = {
+        name: 'Link bank',
+        validate: validationActions.validateLinkBankForm,
+        stepToBeRendered: 4,
+      };
+      this.props.iraAccountStore.createAccount(currentStep).then(() => {
+        // this.props.bankAccountStore.resetAddFundsForm();
+        this.props.bankAccountStore.resetShowAddFunds();
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.iraAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
+      });
     }
   }
 
-  render() {
-    const { formAddFunds, addFundChange } = this.props.bankAccountStore;
-    const { errors } = this.props.uiStore;
 
+  render() {
+    const {
+      addFundChange,
+      isAccountPresent,
+      addFundsByAccType,
+    } = this.props.bankAccountStore;
+    const { errors } = this.props.uiStore;
+    const isInValid = this.isValidFund(addFundsByAccType);
     return (
-      <div>
-        <Header as="h3" textAlign="center">Add funds</Header>
-        <p className="center-align">How much would you like to deposit into your account today?</p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
-        <Form error onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap">
-            <MaskedInput
-              name="value"
-              type="tel"
-              currency
-              placeholder="$ 15,000"
-              fielddata={formAddFunds.fields.value}
-              changed={values => addFundChange(values, 'value')}
-              maxLength={formAddFunds.fields.value.maxLength}
-              prefix="$ "
-            />
-          </div>
-          <div className="center-align">
-            <Button.Group vertical>
-              <Button primary size="large" className="relaxed" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
-              <Button type="button" className="link-button cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I will do this later</Button>
-            </Button.Group>
-          </div>
-        </Form>
-      </div>
+      <Aux>
+        <div className="center-align">
+          <Header as="h3">Add funds</Header>
+          <p>How much would you like to deposit into your account today?</p>
+          <Form error onSubmit={this.handleSubmitForm}>
+            <div className="field-wrap left-align">
+              <MaskedInput
+                name="value"
+                type="tel"
+                currency
+                placeholder="$ 15,000"
+                fielddata={addFundsByAccType.fields.value}
+                changed={values => addFundChange(values, 'value')}
+                maxLength={addFundsByAccType.maxLength}
+                prefix="$ "
+                showerror
+                allowNegative={false}
+              />
+            </div>
+            {errors &&
+              <Message error className="mb-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
+            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent} />
+          </Form>
+          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) &&
+            <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+          }
+        </div>
+      </Aux>
     );
   }
 }

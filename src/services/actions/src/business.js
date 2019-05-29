@@ -1,10 +1,9 @@
 import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
-import graphql from 'graphql';
+import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
-  listOfferings,
   getXmlDetails,
   filerInformationMutation,
   issuerInformationMutation,
@@ -176,14 +175,6 @@ export class Business {
   * @desc Lists offerings submitted and which needs to be converted to XML for final submission
   *       Fetches list of offerings from DynamoDB
   */
-  listOfferings = () => {
-    graphql({ client, query: listOfferings })
-      .then(data => this.setOfferings(data.body.data.offeringFilings))
-      .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.toggleDropdownLoader();
-      });
-  }
 
   /**
    * @desc List all businesses that were filled to nextseed
@@ -332,6 +323,7 @@ export class Business {
    */
   fetchEdgarDetails = (businessId, filingId) => {
     uiStore.setActionLoader('Fetching Edgar data');
+    uiStore.addMoreInProgressArray('fetchEdgarDetails');
     const payload = {
       query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
         `filingId: "${filingId}") { filingPayload } }`,
@@ -340,6 +332,7 @@ export class Business {
       .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
       .catch(err => console.log(err))
       .finally(() => {
+        uiStore.removeOneFromProgressArray('fetchEdgarDetails');
         uiStore.clearActionLoader();
       });
   }
@@ -362,9 +355,10 @@ export class Business {
       });
   }
 
-  getFiles = ({ offeringId, filingId }) => {
+  getFiles = ({ offeringId, filingId }, accountType) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching details');
+    const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
       query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: ' +
         '$offeringId, filingId: $filingId) { folderId } }',
@@ -376,8 +370,8 @@ export class Business {
     return new Promise((resolve, reject) => {
       ApiService.post(GRAPHQL, payload)
         .then((data) => {
-          this.fetchAttachedFiles(data.body.data.businessFiling.folderId)
-            .then(() => resolve());
+          this.fetchAttachedFiles(data.body.data.businessFiling.folderId, accountTypeToPass)
+            .then(() => resolve(data.body.data.businessFiling.folderId));
         })
         .catch(err => reject(err))
         .finally(() => {
@@ -391,30 +385,42 @@ export class Business {
    * @desc This method fetches XML
    */
   fetchXmlDetails = ({ filingId, xmlId }) => {
-    uiStore.setProgress();
+    uiStore.addMoreInProgressArray('fetchXmlDetails');
     uiStore.setLoaderMessage('Fetching XML Data');
-    const payload = {
+    graphql({
+      client,
       query: getXmlDetails,
+      fetchPolicy: 'network-only',
       variables: {
         filingId,
         xmlSubmissionId: xmlId,
       },
-    };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission))
-      .catch(err => console.log(err));
+      onFetch: (data) => {
+        if (data && data.businessFilingSubmission) {
+          uiStore.removeOneFromProgressArray('fetchXmlDetails');
+          this.setXmlPayload(data.businessFilingSubmission);
+        }
+      },
+      onError: (err) => {
+        uiStore.removeOneFromProgressArray('fetchXmlDetails');
+        console.log('ERROR: ', err);
+      },
+    });
   }
 
   /**
    *
    */
-  fetchAttachedFiles = (folderId) => {
+  fetchAttachedFiles = (folderId, accountType) => {
     uiStore.setProgress();
+    uiStore.addMoreInProgressArray('fetchAttachedFiles');
     uiStore.setLoaderMessage('Fetching available files');
+    const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
-      query: 'query getFIles($folderId: ID!) { files(folderId: $folderId) { id name } }',
+      query: 'query getFIles($folderId: ID!, $accountType: BoxAccountTypeEnum) { files(folderId: $folderId, accountType: $accountType) { id name } }',
       variables: {
         folderId,
+        accountType: accountTypeToPass,
       },
     };
     return new Promise((resolve, reject) => {
@@ -427,6 +433,7 @@ export class Business {
           reject(err);
         })
         .finally(() => {
+          uiStore.removeOneFromProgressArray('fetchAttachedFiles');
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
         });
@@ -548,10 +555,10 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage(`${status} filing`);
     const payload = {
-      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){ 
-        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){ 
-          filingId 
-        } 
+      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){
+        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){
+          filingId
+        }
       }`,
       variables: {
         businessId, filingId, lockedStatus,
@@ -587,7 +594,7 @@ export class Business {
     const formattedData = {};
     const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      formattedData[key] = dateKeys.includes(key) ? data.value.format('MM-DD-YYYY') : data.value;
+      formattedData[key] = dateKeys.includes(key) ? moment(data.value).format('MM/DD/YYYY') : data.value;
     });
     return formattedData;
   }
@@ -602,7 +609,7 @@ export class Business {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
-      personData.signatureDate = person.signatureDate.value.format('MM-DD-YYYY');
+      personData.signatureDate = moment(person.signatureDate.value).format('MM/DD/YYYY');
       formattedData.signaturePersons.push(personData);
     });
     return formattedData;
@@ -648,7 +655,7 @@ export class Business {
 
   setXmlPayload = (data) => {
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
-    const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
+    const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag', 'skipScreenshot'];
 
     if (data) {
       businessStore.setOfferingId(data.offeringId);
@@ -664,14 +671,14 @@ export class Business {
       });
       _.map(data.payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setIssuerInfo(key, moment(value, 'MM-DD-YYYY'));
+          businessStore.setIssuerInfo(key, moment(value).format('MM/DD/YYYY'));
         } else {
           businessStore.setIssuerInfo(key, (value || ''));
         }
       });
       _.map(data.payload.offeringInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setOfferingInfo(key, moment(value, 'MM-DD-YYYY'));
+          businessStore.setOfferingInfo(key,  moment(value).format('MM/DD/YYYY'));
         } else {
           businessStore.setOfferingInfo(key, (value || ''))
         }
@@ -684,22 +691,22 @@ export class Business {
           businessStore.setSignatureInfo(key, (value || ''));
         }
       })
-      
+
       businessStore.setNewPersonalSignature([]);
-      
-      if (data.payload.signature) {        
-         _.map(data.payload.signature.signaturePersons, (signature) => {           
+
+      if (data.payload.signature) {
+         _.map(data.payload.signature.signaturePersons, (signature) => {
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
-              businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))), false);
+              businessStore.changePersonalSignature(key, id, value ? moment(value).format('MM/DD/YYYY') : moment().format('MM/DD/YYYY'), false);
             } else {
               businessStore.changePersonalSignature(key, id, value, false);
             }
           });
         })
       }
-      
+
       if (businessStore.formSignatureInfo.fields.signaturePersons.length === 0) {
         this.addPersonalSignature();
       }
@@ -709,10 +716,10 @@ export class Business {
   }
 
   validateFilerInfo = (filerInformation, setError = true) => {
-    const newFiler = validationActions.validateXmlFormData(filerInformation);    
+    const newFiler = validationActions.validateXmlFormData(filerInformation);
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
       if (businessStore.canSubmitFilerInfoXmlForm) {
         businessStore.setXmlSubStepsStatus('filer', true);
@@ -727,9 +734,9 @@ export class Business {
     const newIssuer = validationActions.validateXmlFormData(issuerInformation);
     const errors = this.newValidationErrors(newIssuer);
     businessStore.setIssuer(newIssuer);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
-      if (businessStore.canSubmitIssuerInfoXmlForm) {      
+      if (businessStore.canSubmitIssuerInfoXmlForm) {
         businessStore.setXmlSubStepsStatus('issuer', true);
         businessStore.updateStatusFlag('formIssuerInfo', 'meta', true);
       } else {
@@ -742,7 +749,7 @@ export class Business {
     const newOffering = validationActions.validateXmlFormData(offeringInformation);
     const errors = this.newValidationErrors(newOffering);
     businessStore.setOffering(newOffering);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
       if (businessStore.canSubmitOfferingInfoXmlForm) {
         businessStore.setXmlSubStepsStatus('offering', true);
@@ -757,7 +764,7 @@ export class Business {
     const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
       if (businessStore.canSubmitAnnualReportXmlForm) {
         businessStore.setXmlSubStepsStatus('annual', true);
@@ -769,13 +776,13 @@ export class Business {
   }
 
   validateSignatureInfo = (signature, setError = true) => {
-    
+
     const newSignature = validationActions.validateXmlFormData({
       issuer: signature.issuer,
       issuerSignature: signature.issuerSignature,
       issuerTitle: signature.issuerTitle,
     });
-       
+
     const errors = this.newValidationErrors(newSignature);
     newSignature['signaturePersons'] = signature.signaturePersons;
     businessStore.setSignature(newSignature);
@@ -784,21 +791,21 @@ export class Business {
 
   validatePersonSign = (signaturePersons, setError = true) => {
     let personSignatureData = [];
-    _.map(signaturePersons, (field, index) => {      
+    _.map(signaturePersons, (field, index) => {
       personSignatureData.push(validationActions.validateXmlFormData({
         personSignature: field.personSignature,
         personTitle: field.personTitle,
         signatureDate: field.signatureDate,
       }));
-      
-      this.newValidationErrors(personSignatureData, true);      
+
+      this.newValidationErrors(personSignatureData, true);
       personSignatureData[index].id = field.id;
     });
-    
+
     businessStore.setNewPersonalSignature(personSignatureData);
 
     if (!setError) {
-      // check form is valid or not 
+      // check form is valid or not
       if (businessStore.canSubmitSigntureForm ||
         _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
           businessStore.setXmlSubStepsStatus('signature', true);
@@ -810,7 +817,7 @@ export class Business {
   }
 
   validateDocumentList = (documentList, setError = true) => {
-    const documentCount = documentList.length;    
+    const documentCount = documentList.length;
     let documnetCurrentCount = 0;
     _.map(documentList, (document) => {
       if (document.checked === false) {
@@ -826,36 +833,36 @@ export class Business {
         businessStore.setXmlError(errorMessage);
       }
       return errorMessage;
-    }    
+    }
   }
 
-  newValidationErrors = (data, isMultiple = false) => {    
+  newValidationErrors = (data, isMultiple = false) => {
     const xmlErrors = { ...businessStore.xmlErrors };
-        
+
     if (isMultiple) {
-      let errors = {};      
-      _.map(data, (key) => {        
+      let errors = {};
+      _.map(data, (key) => {
         errors = _.mapValues(key, input =>  input.error);
         _.merge(xmlErrors, errors);
-      })      
+      })
       return xmlErrors;
     } else {
-      const errors = _.mapValues(data, input => input.error);      
+      const errors = _.mapValues(data, input => input.error);
       return _.merge(xmlErrors, errors);
-    }    
+    }
   }
 
-  checkandUpdateValidationStepsStaus = () => {    
+  checkandUpdateValidationStepsStaus = () => {
     this.validateFilerInfo(businessStore.formFilerInfo.fields, false);
     this.validateIssuerInfo(businessStore.formIssuerInfo.fields, false);
     this.validateOfferingInfo(businessStore.formOfferingInfo.fields, false);
     this.validateAnnualReportInfo(businessStore.formAnnualInfo.fields, false);
     this.validateSignatureInfo(businessStore.formSignatureInfo.fields, false);
-    const errorMessage = this.validateDocumentList(businessStore.formDocumentInfo.documentList, false);      
+    const errorMessage = this.validateDocumentList(businessStore.formDocumentInfo.documentList, false);
 
     if (!errorMessage) {
       businessStore.setXmlSubStepsStatus('doc', true);
-    }   
+    }
   }
   // Private Methods ends here
 }

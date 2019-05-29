@@ -4,8 +4,11 @@ import { inject, observer } from 'mobx-react';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
+import Helper from '../../../helper/utility';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('authStore', 'uiStore')
 @observer
@@ -13,9 +16,12 @@ export default class ResetPassword extends Component {
   componentWillMount() {
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
-    this.props.authStore.resetForm('RESET_PASS_FRM');
+  }
+  componentDidMount() {
+    Helper.otpShield();
   }
   componentWillUnmount() {
+    this.props.authStore.resetForm('RESET_PASS_FRM');
     this.props.uiStore.clearErrors();
   }
   onSubmit = (e) => {
@@ -27,16 +33,18 @@ export default class ResetPassword extends Component {
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
   render() {
-    const { RESET_PASS_FRM, resetPassChange, pwdInputType } = this.props.authStore;
+    const {
+      RESET_PASS_FRM,
+      resetPassChange,
+      pwdInputType,
+      currentScore,
+    } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Set a new password</Header>
-          <p>
-            Password must contain one lowercase letter,
-            one number and be at least 8 characters long.
-          </p>
+          <Header as="h3">Password Reset</Header>
+          <p>Please confirm your verification code and update your password</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>
@@ -47,7 +55,10 @@ export default class ResetPassword extends Component {
                 type="number"
                 filterChars
                 name="code"
+                autoFocus={!isMobile}
                 className="otp-field mt-10"
+                pattern="[0-9]*"
+                inputmode="numeric"
                 fielddata={RESET_PASS_FRM.fields.code}
                 onChange={resetPassChange}
               />
@@ -78,7 +89,7 @@ export default class ResetPassword extends Component {
               </Message>
             }
             <div className="mt-30 center-align">
-              <Button primary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
+              <Button primary size="large" className="very relaxed" content="Set new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid || !currentScore} />
             </div>
           </Form>
         </Modal.Content>

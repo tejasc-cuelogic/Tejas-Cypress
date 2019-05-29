@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link, withRouter } from 'react-router-dom';
-import { Card, Grid, Header, Button, Divider, Label } from 'semantic-ui-react';
+import { Card, Grid, Header, Divider, Label, Button, Table } from 'semantic-ui-react';
 import ChangePassword from '../../../../auth/containers/ChangePassword';
+import NewPhoneNumber from './profileSettings/NewPhoneNumber';
+import NewEmailAddress from './profileSettings/NewEmailAddress';
+import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmEmailAddress';
+import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
+import Helper from '../../../../../helper/utility';
 import { securitySections } from './../../../../../services/constants/user';
 import ManageMultiFactorAuth from '../components/profileSettings/ManageMultiFactorAuth';
 
@@ -15,12 +20,23 @@ export default class Security extends Component {
     const { match } = this.props;
     return (
       <div>
+        <Route path={`${match.url}/new-phone-number`} render={() => <NewPhoneNumber refLink={this.props.match.url} />} />
         <Route exact path={`${match.url}/change-password`} render={props => <ChangePassword refModule="security" {...props} />} />
-        <Route exact path={`${match.url}/mfa`} component={ManageMultiFactorAuth} />
+        <Route
+          path={`${this.props.match.url}/confirm`}
+          render={props =>
+            <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
+        />
+        <Route exact path={`${match.url}/mfa`} render={() => <ManageMultiFactorAuth refLink={this.props.match.url} />} />
+        <Route path={`${this.props.match.url}/new-email-address`} render={() => <NewEmailAddress refLink={this.props.match.url} />} />
+        <Route
+          path={`${this.props.match.url}/confirm-email-address`}
+          render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
+        />
         <Header as="h4">Security</Header>
-        <p className="intro-text">
-          Manage your security settings and contact information.<br />
-          Its important to update your password regularly and utilize the security features
+        <p>
+          Manage your security settings and contact information.
+          It&apos;s important to update your password regularly and utilize the security features
           that apply to you.
         </p>
         <Grid>
@@ -41,20 +57,58 @@ export default class Security extends Component {
                     <Divider hidden />
                     <Card.Description>
                       {(section.action[0] === 'mfa' && getUserMfaMode) ? (
-                        <dl className="dl-horizontal">
-                          <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                          <dd>{userDetails.email.address} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-email-address">Update Email</Link></dd>
-                          <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                          <dd>{userDetails.phone && userDetails.phone.number ? userDetails.phone.number : '--'} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-phone-number">Update Phone</Link></dd>
-                        </dl>
+                        <Table compact="very" basic="very" className="no-border mb-20">
+                          <Table.Body>
+                            <Table.Row>
+                              <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
+                              <Table.Cell collapsing>
+                                {userDetails.email && userDetails.email.address}
+                              </Table.Cell>
+                              <Table.Cell><Link className="link" to="/app/account-settings/security/new-email-address">Update Email</Link></Table.Cell>
+                            </Table.Row>
+                            <Table.Row>
+                              <Table.Cell collapsing><b>Phone</b> {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
+                              <Table.Cell collapsing>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}</Table.Cell>
+                              <Table.Cell><Link className="link" to="/app/account-settings/security/new-phone-number">Update Phone</Link></Table.Cell>
+                            </Table.Row>
+                          </Table.Body>
+                        </Table>
+                        // <dl className="dl-horizontal">
+                        //   <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL'
+                        // && <Label color="green" size="mini">Active MFA</Label> }</dt>
+                        //   <dd>{userDetails.email && userDetails.email.address}
+                        // <Link className="link pull-right" to="/app/account-settings/
+                        // security/new-email-address">Update Email</Link></dd>
+                        //   <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL
+                        // && <Label color="green" size="mini">Active MFA</Label> }</dt>
+                        // <dd>{userDetails.phone && userDetails.phone.number ?
+                        // Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}
+                        // <Link className="link pull-right" to="/app/account-settings/
+                        // security/new-phone-number">Update Phone</Link></dd>
+                        // </dl>
                       ) : null}
                       {section.action[0] === 'social-connect' ? (
                         <Button.Group>
-                          <Button color="facebook" icon={{ className: 'ns-facebook' }} content="Connect with Faceook" />
-                          <Button color="google plus" icon="google plus" content="Connect with Google" />
+                          <Button
+                            color="facebook"
+                            icon={{ className: 'ns-facebook' }}
+                            content="Connect with Faceook"
+                          />
+                          <Button
+                            color="google plus"
+                            icon="google plus"
+                            content="Connect with Google"
+                          />
                         </Button.Group>
                       ) : (
-                        <Button disabled={(section.action[0] === 'mfa' && !getUserMfaMode)} as={Link} to={`${match.url}/${section.action[0]}`} inverted color="green" content={section.action[1]} />
+                        <Button
+                          disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
+                          as={Link}
+                          to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/account-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
+                          inverted
+                          color="green"
+                          content={section.action[1]}
+                        />
                       )
                       }
                     </Card.Description>

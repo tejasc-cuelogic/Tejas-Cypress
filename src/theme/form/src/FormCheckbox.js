@@ -9,7 +9,10 @@ const FormCheckbox = observer((props) => {
   const {
     label, values, tooltip, value,
   } = props.fielddata;
-  const { customLabel } = props;
+  const {
+    customLabel, conditionalCustomLabel, customUpdateLimitLabel, customRegulationLabel,
+    tooltipHardDisable, currentInvestmentStatus,
+  } = props;
   return (
     <div className={props.containerclassname || false}>
       {
@@ -23,8 +26,14 @@ const FormCheckbox = observer((props) => {
                 {...props}
                 label={
                   <label>
-                    {c.customLabel ? customLabel : c.label}
-                    {c.tooltip &&
+                    {c.customLabel ? customLabel :
+                      c.conditionalCustomLabel ? conditionalCustomLabel :
+                        c.customUpdateLimitLabel ? customUpdateLimitLabel :
+                        c.customRegulationLabel ? customRegulationLabel : c.label}
+                    {c.value === '4' && c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== 'BD_506C' ?
+                      <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
+                      :
+                      c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== 'BD_506C' &&
                       <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                     }
                   </label>
@@ -36,21 +45,21 @@ const FormCheckbox = observer((props) => {
                 <input type="checkbox" readOnly checked={value.includes(c.value)} value={c.value} onChange={props.changed} {...props} />
                 <label>
                   {c.icon &&
-                    <Icon className={c.icon} />
-                  }
+                  <Icon className={c.icon} />
+                    }
                   {c.customLabel ? customLabel : c.label}
                   {tooltip &&
-                    <Popup
-                      trigger={<Icon className="ns-help-circle" />}
-                      content={tooltip}
-                      position="top center"
-                      className="center-align"
-                      wide
-                    />
-                  }
+                  <Popup
+                    trigger={<Icon className="ns-help-circle" />}
+                    content={tooltip}
+                    position="top center"
+                    className="center-align"
+                    wide
+                  />
+                    }
                 </label>
               </Aux>
-            )
+              )
             }
           </List.Item>
         ))

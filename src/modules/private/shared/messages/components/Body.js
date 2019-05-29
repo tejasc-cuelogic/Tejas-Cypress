@@ -2,10 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
 import { Label, Item } from 'semantic-ui-react';
-import ProfilePicTemp from '../../../../../assets/images/james-wright.png';
+import NSImage from '../../../../shared/NSImage';
 
 const D_FORMAT = 'MMMM D, YYYY';
-const Avatar = () => <Item.Image size="mini" avatar src={ProfilePicTemp} />;
+const Avatar = () => <div className="ui mini image"><NSImage path="james-wright.png" /></div>;
 const MsgContent = ({ body }) => (
   <Item.Content>
     <Item.Description><p>{body}</p></Item.Description>
@@ -31,7 +31,7 @@ const Body = props => (
         props.thread.map((msg, index) => {
           const d2 = moment(msg.updatedAt).format(D_FORMAT);
           const d1 = index ? moment(props.thread[index - 1].updatedAt).format(D_FORMAT) :
-          moment(msg.updatedAt).subtract(1, 'day');
+          (msg.updatedAt ? moment(new Date(msg.updatedAt)).subtract(1, 'day') : '');
           const diff = moment(d2, D_FORMAT).diff(moment(d1, D_FORMAT), 'days');
           const time = moment(msg.updatedAt).format('h:mm A');
           return (msg.messageDetails.from !== props.current ? (

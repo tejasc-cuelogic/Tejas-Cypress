@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid } from 'semantic-ui-react';
 import FinancialInfo from '../components/investmentLimits/FinancialInfo';
 import VerifyAccreditation from './accreditation/VerifyAccreditation';
+import VerifyEntityAccreditation from './accreditation/VerifyEntityAccreditation';
 import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestmentLimits';
-import AssetsAccreditation from './accreditation/assets/Accreditation';
-import IncomeAccreditation from './accreditation/income/Accreditation';
+import VerifyTrustEntityAccreditation from './accreditation/VerifyTrustEntityAccreditation';
 import ThanksNote from '../components/investmentLimits/accreditation/ThanksNote';
+import FailedAccreditation from '../components/investmentLimits/accreditation/failedAccreditation';
 
-@inject('investmentLimitStore', 'accreditationStore')
+@inject('investmentLimitStore', 'accreditationStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class InvestmentLimits extends Component {
@@ -20,24 +20,29 @@ export default class InvestmentLimits extends Component {
   }
 
   closeModal = () => {
-    const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;
-    this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
-    this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
-    this.props.history.push(this.props.match.url);
+    const {
+      partialInvestNowSessionURL,
+      setPartialInvestmenSession,
+    } = this.props.userDetailsStore;
+    this.props.accreditationStore.resetAllForms();
+    if (partialInvestNowSessionURL) {
+      this.props.history.push(partialInvestNowSessionURL);
+      setPartialInvestmenSession();
+    } else {
+      this.props.history.push(this.props.match.url);
+    }
   }
 
   render() {
-    const { accreditationMethods } = this.props.accreditationStore.ACCREDITATION_FORM.fields;
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-accreditation/income`} component={IncomeAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-accreditation/assets`} component={AssetsAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
-        <Route exact path={`${this.props.match.url}/update`} component={UpdateInvestmentLimits} />
-        <Grid columns={1} stackable>
-          <FinancialInfo />
-        </Grid>
+        <Route exact path={`${this.props.match.url}/verify-accreditation/:accountId/:accountType`} render={() => <VerifyAccreditation refLink={this.props.match.url} />} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/:accountId/:accountType`} render={() => <VerifyEntityAccreditation refLink={this.props.match.url} />} />
+        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/:accountId/:accountType`} render={() => <VerifyTrustEntityAccreditation refLink={this.props.match.url} />} />
+        <Route exact path={`${this.props.match.url}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
+        <Route exact path={`${this.props.match.url}/falied`} render={() => <FailedAccreditation closeModal={this.closeModal} />} />
+        <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
+        <FinancialInfo />
       </div>
     );
   }
