@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { join } from 'lodash';
+// import { join } from 'lodash';
 import { Modal, Header, Divider, Grid, Card, Form, Checkbox, Button } from 'semantic-ui-react';
 import { MaskedInput, FormInput, FormDropDown, ImageCropper } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -153,12 +153,6 @@ export default class EditArticle extends Component {
                           onChange={(e, result) => articleChange(e, result)}
                         />
                       </div>
-                      <FormInput
-                        name="tags"
-                        fielddata={ARTICLE_FRM.fields.tags}
-                        value={ARTICLE_FRM.fields.tags.value ? join(ARTICLE_FRM.fields.tags.value, ', ') : ''}
-                        changed={articleChange}
-                      />
                       <MaskedInput
                         containerclassname={displayMode ? 'display-only' : ''}
                         readOnly={false}
@@ -169,7 +163,7 @@ export default class EditArticle extends Component {
                         changed={maskChange}
                       />
                       {
-                        ['banner', 'slug'].map(field => (
+                        ['banner', 'slug', 'tags'].map(field => (
                           <FormInput
                             key={field}
                             name={field}

@@ -144,7 +144,11 @@ export class ArticleStore {
 
     @action
     save = (id) => {
+      uiStore.setProgress();
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
+      if (data.minuteRead === null || data.minuteRead === '') {
+        delete (data.minuteRead);
+      }
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
@@ -159,6 +163,7 @@ export class ArticleStore {
           Helper.toast('Error while Saving Category', 'error');
         })
         .finally(() => {
+          uiStore.setProgress();
           uiStore.setProgress(false);
         });
     }
