@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { capitalize, get } from 'lodash';
 import moment from 'moment';
+import prettyHtml from 'json-pretty-html';
 import { Modal, Header, Form, Button, Grid } from 'semantic-ui-react';
 import { FormInput } from '../../../../../theme/form';
 import { InlineLoader } from '../../../../../theme/shared';
+import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
 @inject('elasticSearchStore')
 @observer
@@ -55,8 +57,7 @@ export default class EsAudit extends Component {
                     </Header>
                     {get(esAuditParaOutput, 'index_a.record') ?
                       <div className="scrollable">
-                        Objects are not valid as a React child (found: object with keys
-                        {/* {get(esAuditParaOutput, 'index_a.record')} */}
+                        <HtmlEditor readOnly content={prettyHtml(get(esAuditParaOutput, 'index_a.record'))} />
                       </div> :
                       <section className="bg-offwhite center-align">
                         <h3 className="grey-header">No data found</h3>
@@ -69,8 +70,7 @@ export default class EsAudit extends Component {
                     </Header>
                     {get(esAuditParaOutput, 'index_b.record') ?
                       <div className="scrollable">
-                        Objects are not valid as a React child (found: object with keys
-                        {/* {get(esAuditParaOutput, 'index_b.record')} */}
+                        <HtmlEditor readOnly content={prettyHtml(get(esAuditParaOutput, 'index_b.record'))} />
                       </div> :
                       <section className="bg-offwhite center-align">
                         <h3 className="grey-header">No data found</h3>
