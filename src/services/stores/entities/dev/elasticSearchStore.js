@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { get } from 'lodash';
+import { get, sortBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
 import { generateInvestorFolderStructure, storageDetailsForInvestor } from '../../queries/data';
@@ -61,6 +61,7 @@ export class ElasticSearchStore {
       .mutate({
         mutation: elasticSearchQueries[mutation],
         variables: { index },
+        refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
       })
       .then((result) => {
         Helper.toast('Your request is processed successfully.', 'success');
@@ -93,6 +94,7 @@ export class ElasticSearchStore {
       .mutate({
         mutation: elasticSearchQueries.swapIndexOnAlias,
         variables: { indexAliasName },
+        refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
       })
       .then((result) => {
         Helper.toast('Your request is processed successfully.', 'success');
@@ -128,7 +130,7 @@ export class ElasticSearchStore {
 
   @computed get eSAudit() {
     return get(this.esAudit, 'data.getESAudit.indices[0]') ?
-      toJS(get(this.esAudit, 'data.getESAudit.indices')) : [];
+      sortBy(toJS(get(this.esAudit, 'data.getESAudit.indices')), ['alias']) : [];
   }
 
   @computed get esAuditParaOutput() {
