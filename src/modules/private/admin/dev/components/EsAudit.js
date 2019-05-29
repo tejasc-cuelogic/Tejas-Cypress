@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Form, Button, Grid, Divider } from 'semantic-ui-react';
+import { capitalize, get } from 'lodash';
+import moment from 'moment';
+import { Modal, Header, Form, Button, Grid } from 'semantic-ui-react';
 import { FormInput } from '../../../../../theme/form';
+import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('elasticSearchStore')
 @observer
@@ -20,58 +23,68 @@ export default class EsAudit extends Component {
     this.props.history.goBack();
   }
   render() {
-    const { ES_AUDIT_FRM, formChange } = this.props.elasticSearchStore;
+    const {
+      ES_AUDIT_FRM, formChange, esAuditParaOutput, esAuditParaOutputLoading,
+    } = this.props.elasticSearchStore;
+    const { auditAlias } = this.props.match.params;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">ES Audit</Header>
+          <Header as="h3">{capitalize(auditAlias)} ES Audit</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form error onSubmit={this.onSubmit}>
-            <Form.Group className="bottom-aligned mb-20">
-              <FormInput
-                containerwidth={10}
-                name="random"
-                fielddata={ES_AUDIT_FRM.fields.random}
-                changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
-              />
-              <Form.Field width={4}>
-                <Button primary content="Submit" />
-              </Form.Field>
-            </Form.Group>
-            <Header as="h4" className="mb-30 mt-20">
-              Output:
-              <Header.Subheader>Document Id: XYZ</Header.Subheader>
-            </Header>
-            <Grid>
-              <Grid.Row columns={2} divided>
-                <Grid.Column>
-                  <Header as="h6">
-                    Count: <span className="ml-10">1 hr ago</span>
-                  </Header>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.
-                  </p>
-                  <section className="bg-offwhite center-align">
-                    <h3 className="grey-header">No data found</h3>
-                  </section>
-                </Grid.Column>
-                <Grid.Column>
-                  <Header as="h6">
-                    Count: 1 <span className="ml-10">1 hr ago</span>
-                  </Header>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.
-                  </p>
-                  <section className="bg-offwhite center-align">
-                    <h3 className="grey-header">No data found</h3>
-                  </section>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Form>
+          {esAuditParaOutputLoading ?
+            <InlineLoader /> :
+            <Form error onSubmit={this.onSubmit}>
+              <Form.Group className="bottom-aligned mb-20">
+                <FormInput
+                  containerwidth={10}
+                  name="random"
+                  fielddata={ES_AUDIT_FRM.fields.random}
+                  changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
+                />
+                <Form.Field width={4}>
+                  <Button primary content="Submit" />
+                </Form.Field>
+              </Form.Group>
+              <Header as="h4" className="mb-30 mt-20">
+                Output:
+                <Header.Subheader>Document Id: XYZ</Header.Subheader>
+              </Header>
+              <Grid>
+                <Grid.Row columns={2} divided>
+                  <Grid.Column>
+                    <Header as="h6">
+                      Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).startOf('hour').fromNow() : ''}</span>
+                    </Header>
+                    {get(esAuditParaOutput, 'index_a.record') ?
+                      <p>
+                        Objects are not valid as a React child (found: object with keys
+                        {/* {get(esAuditParaOutput, 'index_a.record')} */}
+                      </p> :
+                      <section className="bg-offwhite center-align">
+                        <h3 className="grey-header">No data found</h3>
+                      </section>
+                    }
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Header as="h6">
+                      Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).startOf('hour').fromNow() : ''}</span>
+                    </Header>
+                    {get(esAuditParaOutput, 'index_b.record') ?
+                      <p>
+                        Objects are not valid as a React child (found: object with keys
+                        {/* {get(esAuditParaOutput, 'index_b.record')} */}
+                      </p> :
+                      <section className="bg-offwhite center-align">
+                        <h3 className="grey-header">No data found</h3>
+                      </section>
+                    }
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Form>
+          }
         </Modal.Content>
       </Modal>
     );

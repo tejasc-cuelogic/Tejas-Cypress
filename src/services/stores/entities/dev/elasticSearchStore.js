@@ -127,12 +127,16 @@ export class ElasticSearchStore {
   }
 
   @computed get esAuditParaOutput() {
-    return get(this.esAudit, 'data.getESAudit.indices[0]') ?
-      toJS(get(this.esAudit, 'data.getESAudit.indices[0]')) : [];
+    return get(this.esAuditOutput, 'data.getESAudit.indices[0]') ?
+      toJS(get(this.esAuditOutput, 'data.getESAudit.indices[0]')) : [];
   }
 
   @computed get eSAuditLoading() {
     return this.esAudit.loading;
+  }
+
+  @computed get esAuditParaOutputLoading() {
+    return this.esAuditOutput.loading;
   }
 
   @action
