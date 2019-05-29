@@ -390,7 +390,6 @@ export const USER_PROFILE_FOR_ADMIN = {
   address: { ...UPDATE_PROFILE_INFO.email },
   firstLegalName: { ...USER_IDENTITY.firstLegalName },
   lastLegalName: { ...USER_IDENTITY.lastLegalName },
-  ssn: { ...USER_IDENTITY.ssn },
   dateOfBirth: { ...USER_IDENTITY.dateOfBirth },
   street: { ...USER_IDENTITY.residentalStreet },
   streetTwo: { ...USER_IDENTITY.streetTwo },
@@ -406,6 +405,15 @@ export const USER_PROFILE_FOR_ADMIN = {
     src: '',
     base64String: '',
     responseUrl: '',
+  },
+  ssn: {
+    key: 'ssn',
+    value: '',
+    label: 'Social Security Number',
+    placeHolder: '***-***-1234',
+    error: undefined,
+    rule: 'optional|maskedSSN',
+    objRef: 'legalDetails',
   },
 };
 

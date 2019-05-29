@@ -543,12 +543,15 @@ export class UserDetailsStore {
   }
 
   @action
-  setFormData = (form, ref, keepAtLeastOne, validateForm = false) => {
+  setFormData = (form, ref, keepAtLeastOne, validateForm = false, isRemoveSsn = false) => {
     const details = toJS({ ...this.detailsOfUser.data.user });
     if (!details) {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    if (isRemoveSsn) {
+      this.USER_BASIC.fields.ssn.value = '';
+    }
     if (validateForm) {
       this[form] = Validator.validateForm(this[form]);
     }
