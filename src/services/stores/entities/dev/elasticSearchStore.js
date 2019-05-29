@@ -97,7 +97,11 @@ export class ElasticSearchStore {
         refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
       })
       .then((result) => {
-        Helper.toast('Your request is processed successfully.', 'success');
+        if (get(result, 'data.swapIndexOnAlias.success')) {
+          Helper.toast('Your request is processed successfully.', 'success');
+        } else {
+          Helper.toast(get(result, 'data.swapIndexOnAlias.message'), 'error');
+        }
         resolve(result);
         this.setFieldValue('inProgress', false);
       })
