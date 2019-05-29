@@ -14,7 +14,7 @@ export const STORAGE_DETAILS_SYNC = {
 
 export const ES_AUDIT = {
   random: {
-    value: '',
+    value: 'RANDOM',
     label: 'Document Id',
     error: undefined,
     rule: 'optional',

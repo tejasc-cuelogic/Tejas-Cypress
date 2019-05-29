@@ -40,6 +40,11 @@ export class ElasticSearchStore {
   }
 
   @action
+  resetESForm = () => {
+    this.ES_AUDIT_FRM = Validator.prepareFormObject(ES_AUDIT);
+  }
+
+  @action
   elasticSearchHandler = (alias, module, indexName) => {
     this.setFieldValue('inProgress', `${alias}_${module}`);
     if (module === 'SWAP') {
@@ -102,14 +107,14 @@ export class ElasticSearchStore {
   });
 
   @action
-  getESAuditPara = (indexAliasName, documentId = 'RANDOM') => {
+  getESAuditPara = (indexAliasName) => {
     const { fields } = this.ES_AUDIT_FRM;
     const formData = Validator.evaluateFormData(fields);
     const variables = {
       indexAliasName,
     };
-    if (formData.random || documentId) {
-      variables.random = formData.random || documentId;
+    if (formData.random) {
+      variables.random = formData.random;
     }
     this.esAuditOutput = graphql({
       client,

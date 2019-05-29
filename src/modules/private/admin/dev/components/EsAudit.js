@@ -14,7 +14,7 @@ export default class EsAudit extends Component {
   componentWillMount() {
     const { auditAlias } = this.props.match.params;
     this.props.elasticSearchStore.getESAuditPara(auditAlias);
-    this.props.elasticSearchStore.resetForm('ES_AUDIT_FRM');
+    this.props.elasticSearchStore.resetESForm();
   }
   onSubmit = () => {
     const { auditAlias } = this.props.match.params;
