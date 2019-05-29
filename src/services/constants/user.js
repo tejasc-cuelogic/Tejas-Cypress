@@ -410,7 +410,7 @@ export const USER_PROFILE_FOR_ADMIN = {
     key: 'ssn',
     value: '',
     label: 'Social Security Number',
-    placeHolder: '***-***-1234',
+    placeHolder: '******1234',
     error: undefined,
     rule: 'optional|maskedSSN',
     objRef: 'legalDetails',
