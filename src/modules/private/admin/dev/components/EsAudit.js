@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { capitalize, get } from 'lodash';
 import moment from 'moment';
-import prettyHtml from 'json-pretty-html';
+import beautify from 'json-beautify';
+import ReactDiffViewer from 'react-diff-viewer';
 import { Modal, Header, Form, Button, Grid } from 'semantic-ui-react';
 import { FormInput } from '../../../../../theme/form';
 import { InlineLoader } from '../../../../../theme/shared';
-import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
 @inject('elasticSearchStore')
 @observer
@@ -51,34 +51,23 @@ export default class EsAudit extends Component {
                 </Form.Field>
               </Form.Group>
               <Grid>
-                <Grid.Row columns={2} divided>
+                <Grid.Row columns={2}>
                   <Grid.Column>
                     <Header as="h6">
                       {this.renderTitle(get(esAuditParaOutput, 'index_a.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).startOf('hour').fromNow() : ''}</span>)
                     </Header>
-                    {get(esAuditParaOutput, 'index_a.record') ?
-                      <div className="scrollable">
-                        <HtmlEditor readOnly content={prettyHtml(get(esAuditParaOutput, 'index_a.record'))} />
-                      </div> :
-                      <section className="bg-offwhite center-align">
-                        <h3 className="grey-header">No data found</h3>
-                      </section>
-                    }
                   </Grid.Column>
                   <Grid.Column>
                     <Header as="h6">
                       {this.renderTitle(get(esAuditParaOutput, 'index_b.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).startOf('hour').fromNow() : ''}</span>)
                     </Header>
-                    {get(esAuditParaOutput, 'index_b.record') ?
-                      <div className="scrollable">
-                        <HtmlEditor readOnly content={prettyHtml(get(esAuditParaOutput, 'index_b.record'))} />
-                      </div> :
-                      <section className="bg-offwhite center-align">
-                        <h3 className="grey-header">No data found</h3>
-                      </section>
-                    }
                   </Grid.Column>
                 </Grid.Row>
+                <ReactDiffViewer
+                  oldValue={beautify(get(esAuditParaOutput, 'index_a.record') || 'No Data Found', null, 2)}
+                  newValue={beautify(get(esAuditParaOutput, 'index_b.record') || 'No Data Found', null, 2)}
+                  splitView
+                />
               </Grid>
             </Form>
           }
