@@ -49,9 +49,7 @@ export default class Plaid extends Component {
 
   handleInstitutionClick = (insId, action) => {
     this.props.bankAccountStore.setFieldValue('bankSelect', true);
-    if (this.props.bankAccountStore.bankSelect) {
-      bankAccountActions.bankSelect(insId, action);
-    }
+    bankAccountActions.bankSelect(insId, action);
   }
 
   render() {
