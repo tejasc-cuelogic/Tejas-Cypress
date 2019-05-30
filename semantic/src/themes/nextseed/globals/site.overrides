@@ -2807,9 +2807,6 @@ input[type='range']::-webkit-slider-thumb {
 			height: auto;
 		}
 	}
-	.json-key {
-		font-weight: @bold;
-	}
 }
 .plaid-link-iframe {
 	@media only screen and (max-width : @largestMobileScreen){

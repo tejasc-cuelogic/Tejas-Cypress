@@ -35,5 +35,8 @@ package-lock.json
 # ignore vscode folder
 .vscode
 
+# ignore dist folder local only
+dist
+
 Env.txt
 *.bak
