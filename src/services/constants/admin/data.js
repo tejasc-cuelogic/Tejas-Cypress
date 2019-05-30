@@ -12,16 +12,6 @@ export const STORAGE_DETAILS_SYNC = {
   },
 };
 
-export const ES_AUDIT = {
-  random: {
-    value: 'RANDOM',
-    label: 'Document Id',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-};
-
 export const BULK_STORAGE_DETAILS_SYNC = {
   limit: {
     value: '',
