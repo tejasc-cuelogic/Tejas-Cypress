@@ -21,18 +21,20 @@ const SortableItem = SortableElement(({
   offering, handleAction, stage,
 }) => (
   <div className="row-wrap striped-table">
-    <div className="balance-half first-column">
+    <div className="balance first-column">
       <DragHandle />
       <a onClick={() => handleAction('Edit', offering.id)}>
-        {((offering.keyTerms && offering.keyTerms.shorthandBusinessName) ?
-          offering.keyTerms.shorthandBusinessName : (
-          (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-        ))}
+        <b>
+          {((offering.keyTerms && offering.keyTerms.shorthandBusinessName) ?
+            offering.keyTerms.shorthandBusinessName : (
+            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+          ))}
+        </b>
         <br />
         {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
       </a>
     </div>
-    <div className="balance">
+    <div className="balance width-130">
       {offering && offering.stage ?
         stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 0 ?
           STAGES.PROCESSING.label
@@ -42,13 +44,13 @@ const SortableItem = SortableElement(({
         : STAGES[offering.stage].label
       }
     </div>
-    <div className="balance">
+    <div className="balance width-250">
       Create: {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}<br />
       Launched: {get(offering, 'offering.launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'offering.launch.targetDate')} /> : 'N/A'}<br />
       Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
     </div>
     <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
-      <p>
+      <p className="overflow-text">
         {offering.issuerDetails ?
           <Aux>
             <b>
@@ -63,7 +65,7 @@ const SortableItem = SortableElement(({
         }
       </p>
     </div>
-    <div className="action right-align">
+    <div className="action right-align width-70">
       <Button.Group>
         {Object.keys(actions).map(action => (
           <Button icon className="link-button" >
@@ -148,11 +150,11 @@ export default class DraggableListing extends Component {
         <div className="ui card fluid">
           <div className="ui basic table">
             <div className="row-wrap striped-table thead">
-              <div className="balance-half first-column">Name</div>
-              <div className="balance">Status</div>
-              <div className="balance" />
+              <div className="balance first-column">Name</div>
+              <div className="balance width-130">Status</div>
+              <div className="balance width-250" />
               <div className="balance">POC</div>
-              <div className="action right-align" />
+              <div className="action right-align width-70" />
             </div>
             <SortableList
               allOfferingsList={allOfferings}
