@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-// import { join } from 'lodash';
 import { Modal, Header, Divider, Grid, Card, Form, Checkbox, Button } from 'semantic-ui-react';
 import { MaskedInput, FormInput, FormDropDown, ImageCropper } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -19,8 +18,7 @@ export default class EditArticle extends Component {
     const { id } = this.props.match.params;
 
     if (id !== 'new') {
-      this.initiateFlow(id);
-      this.props.articleStore.setFormData(id);
+      this.props.articleStore.getSingleInsightAdmin(id);
       this.props.articleStore.getCategoryList(false);
     } else {
       this.props.articleStore.reset();
@@ -49,17 +47,6 @@ export default class EditArticle extends Component {
       const attr = 'error';
       const errorMsg = 'Image size should not be less than 200 x 200.';
       this.props.articleStore.setThumbnail(attr, errorMsg, field);
-    }
-  }
-  initiateFlow = (id) => {
-    if (id !== 'new') {
-      new Promise(() => {
-        this.props.articleStore.getSingleInsightAdmin(id, false);
-      }).then(() => {
-        this.props.articleStore.setFormData(id);
-      }).catch();
-    } else {
-      this.props.articleStore.reset();
     }
   }
   handleCloseModal = () => {
