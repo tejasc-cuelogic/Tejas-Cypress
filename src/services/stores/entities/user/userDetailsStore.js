@@ -543,12 +543,15 @@ export class UserDetailsStore {
   }
 
   @action
-  setFormData = (form, ref, keepAtLeastOne, validateForm = false) => {
+  setFormData = (form, ref, keepAtLeastOne, validateForm = false, isRemoveSsn = false) => {
     const details = toJS({ ...this.detailsOfUser.data.user });
     if (!details) {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    if (isRemoveSsn) {
+      this.USER_BASIC.fields.ssn.value = '';
+    }
     if (validateForm) {
       this[form] = Validator.validateForm(this[form]);
     }
@@ -699,8 +702,6 @@ export class UserDetailsStore {
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
-    const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
@@ -732,6 +733,9 @@ export class UserDetailsStore {
         lastLegalName: basicData.lastLegalName,
       },
     };
+    if (basicData.ssn.length === 9) {
+      legalDetails.ssn = basicData.ssn;
+    }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -746,6 +750,7 @@ export class UserDetailsStore {
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');
+          this.setFormData('USER_BASIC', false);
           uiStore.setProgress(false);
           resolve();
         })
@@ -760,7 +765,6 @@ export class UserDetailsStore {
   updateUserBasicInfo = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
