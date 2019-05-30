@@ -26,10 +26,10 @@ export const STAGES = {
   FAILED: { ref: 'failed', accessKey: 4, label: 'Failed' },
   TERMINATED: { ref: 'failed', accessKey: 4, label: 'Terminated' },
   STARTUP_PERIOD: {
-    ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
+    ref: 'completed', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
   },
   IN_REPAYMENT: {
-    ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Payment',
+    ref: 'completed', publicRef: 'completed', accessKey: 3, label: 'Payment',
   },
   COMPLETE: {
     ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Completed',
@@ -2304,7 +2304,7 @@ export const ADD_NEW_TIER = {
       },
     ],
     error: undefined,
-    rule: 'alpha_dash',
+    rule: 'optional',
   },
   amountForEarlyBird: {
     label: 'Amount for this Early Bird tier',

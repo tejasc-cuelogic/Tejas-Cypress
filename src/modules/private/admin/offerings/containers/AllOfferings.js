@@ -6,6 +6,7 @@ import { Grid, Button, Form } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { DataFormatter } from '../../../../../helper';
 import Listing from '../components/Listing';
+import DraggableListing from '../components/DraggableListing';
 
 
 @inject('uiStore', 'navStore', 'offeringsStore')
@@ -62,7 +63,10 @@ export default class Offerings extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Listing stage={stage} />
+        {!['completed'].includes(stage) ?
+          <Listing stage={stage} />
+          : <DraggableListing stage={stage} />
+        }
       </div>
     );
   }

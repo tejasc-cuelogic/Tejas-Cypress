@@ -40,7 +40,20 @@ export class UserStore {
       return opt;
     };
     let capabilities = [];
-    PRIVATE_NAV.map(n => n.capability).forEach((c) => {
+    const primaryCapabilities = [];
+    PRIVATE_NAV.forEach((n) => {
+      if (n.capability && !primaryCapabilities.includes(n.capability)) {
+        primaryCapabilities.push(n.capability);
+      }
+      if (n.subNavigations) {
+        n.subNavigations.forEach((c) => {
+          if (c.capability && !primaryCapabilities.includes(c.capability)) {
+            primaryCapabilities.push(c.capability);
+          }
+        });
+      }
+    });
+    primaryCapabilities.forEach((c) => {
       if (c) {
         const meta = c.replace('_ANY', '');
         capabilities = [

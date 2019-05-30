@@ -448,8 +448,12 @@
         box-shadow:none;
         height:~"calc(100vh - 353px)";
     }
-    &.elastic-search .content .description {
-        padding-right: @10px;
+    &.elastic-search .content .ui.header {
+        margin-top: 0;
+        margin-bottom: @25px;
+        &:last-child{
+            margin-bottom: 0;
+        }
     }
 }
 .ui{

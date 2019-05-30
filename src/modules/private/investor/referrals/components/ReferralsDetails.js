@@ -6,7 +6,6 @@ import bugsnagReact from '@bugsnag/plugin-react';
 import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
-// import Clipboard from 'react-clipboard.js';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
 import { InlineLoader } from './../../../../../theme/shared';
@@ -44,54 +43,56 @@ export default class ReferralsDetails extends Component {
   };
 
 
-  componentWillMount() {
-    const { userDetails } = this.props.userDetailsStore;
-    const saasQuatchUserId = get(userDetails, 'id');
-    if (saasQuatchUserId) {
-      this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
-    }
-  }
+  // componentWillMount() {
+  //   const { userDetails } = this.props.userDetailsStore;
+  //   const saasQuatchUserId = get(userDetails, 'id');
+  //   if (saasQuatchUserId) {
+  //     this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
+  //   }
+  // }
   componentDidMount() {
     const { userDetails } = this.props.userDetailsStore;
     const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
     const userId = saasQuatchUserId || get(userDetails, 'id');
     if (userId) {
-      this.props.referralsStore.getUserReferralDetails()
-        .then((data) => {
-          this.setState({
-            availableCredit: get(data, 'getUserReferralDetails.availableCredit') || 0,
-            spentCredit: get(data, 'getUserReferralDetails.spentCredit') || 0,
-            totalEarnedCredit: get(data, 'getUserReferralDetails.totalEarnedCredit') || 0,
-            totalReferredUsers: get(data, 'getUserReferralDetails.totalReferredUsers') || 0,
-            myShareLink: get(data, 'getUserReferralDetails.myShareLink') || '',
-            emailShareLink: get(data, 'getUserReferralDetails.emailShareLink') || '',
-            twitterShareLink: get(data, 'getUserReferralDetails.twitterShareLink') || '',
-            messengerShareLink: get(data, 'getUserReferralDetails.messengerShareLink') || '',
-            facebookShareLink: get(data, 'getUserReferralDetails.facebookShareLink') || '',
-            smsShareLink: get(data, 'getUserReferralDetails.smsShareLink') || '',
-            messengerMobileShareLink: get(data, 'getUserReferralDetails.messengerMobileShareLink') || '',
-            loading: false,
+      this.props.referralsStore.upsertUserReferralCredits(get(userDetails, 'id')).then(() => {
+        this.props.referralsStore.getUserReferralDetails()
+          .then((data) => {
+            this.setState({
+              availableCredit: get(data, 'getUserReferralDetails.availableCredit') || 0,
+              spentCredit: get(data, 'getUserReferralDetails.spentCredit') || 0,
+              totalEarnedCredit: get(data, 'getUserReferralDetails.totalEarnedCredit') || 0,
+              totalReferredUsers: get(data, 'getUserReferralDetails.totalReferredUsers') || 0,
+              myShareLink: get(data, 'getUserReferralDetails.myShareLink') || '',
+              emailShareLink: get(data, 'getUserReferralDetails.emailShareLink') || '',
+              twitterShareLink: get(data, 'getUserReferralDetails.twitterShareLink') || '',
+              messengerShareLink: get(data, 'getUserReferralDetails.messengerShareLink') || '',
+              facebookShareLink: get(data, 'getUserReferralDetails.facebookShareLink') || '',
+              smsShareLink: get(data, 'getUserReferralDetails.smsShareLink') || '',
+              messengerMobileShareLink: get(data, 'getUserReferralDetails.messengerMobileShareLink') || '',
+              loading: false,
+            });
+          })
+          .catch((e) => {
+            this.setState({
+              availableCredit: 0,
+              spentCredit: 0,
+              totalEarnedCredit: 0,
+              totalReferredUsers: 0,
+              myShareLink: '',
+              emailShareLink: '',
+              twitterShareLink: '',
+              messengerShareLink: '',
+              facebookShareLink: '',
+              smsShareLink: '',
+              messengerMobileShareLink: '',
+              loading: false,
+            });
+            if (bugsnagClient) {
+              bugsnagClient.notify(e);
+            }
           });
-        })
-        .catch((e) => {
-          this.setState({
-            availableCredit: 0,
-            spentCredit: 0,
-            totalEarnedCredit: 0,
-            totalReferredUsers: 0,
-            myShareLink: '',
-            emailShareLink: '',
-            twitterShareLink: '',
-            messengerShareLink: '',
-            facebookShareLink: '',
-            smsShareLink: '',
-            messengerMobileShareLink: '',
-            loading: false,
-          });
-          if (bugsnagClient) {
-            bugsnagClient.notify(e);
-          }
-        });
+      });
     }
   }
 

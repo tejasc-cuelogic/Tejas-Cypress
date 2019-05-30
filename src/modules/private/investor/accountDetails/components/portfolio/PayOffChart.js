@@ -18,6 +18,7 @@ export default class PayOffChart extends Component {
         <ComposedChart
           width={600}
           height={200}
+          barGap={25}
           data={data}
           margin={{
             top: 10, right: 30, left: 0, bottom: 0,

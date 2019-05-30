@@ -188,7 +188,7 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', requestDate = '', accountId) => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', accountId) => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -223,7 +223,7 @@ export class AccreditationStore {
             uiStore.setErrors(error.message);
           });
         } else {
-          fileUpload.setAccreditationFileUploadData('INVESTOR', fileData, accountType.toUpperCase(), actionValue, targetUserId, requestDate).then((result) => {
+          fileUpload.setAccreditationFileUploadData('INVESTOR', fileData, accountType.toUpperCase(), actionValue, targetUserId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntryAccreditationAdmin;
             this.putUploadedFileOnS3(
               form, field, preSignedUrl, file, fileData, fileId,
