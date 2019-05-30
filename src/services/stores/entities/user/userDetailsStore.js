@@ -702,8 +702,6 @@ export class UserDetailsStore {
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
-    const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
@@ -735,6 +733,9 @@ export class UserDetailsStore {
         lastLegalName: basicData.lastLegalName,
       },
     };
+    if (basicData.ssn.length === 9) {
+      legalDetails.ssn = basicData.ssn;
+    }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -749,6 +750,7 @@ export class UserDetailsStore {
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');
+          this.setFormData('USER_BASIC', false);
           uiStore.setProgress(false);
           resolve();
         })
@@ -763,7 +765,6 @@ export class UserDetailsStore {
   updateUserBasicInfo = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
