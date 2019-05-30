@@ -35,11 +35,5 @@ package-lock.json
 # ignore vscode folder
 .vscode
 
-# ignore dist folder
-dist
-
-# ignore vendor config
-config/vendor.webpack.config.js
-
 Env.txt
 *.bak
