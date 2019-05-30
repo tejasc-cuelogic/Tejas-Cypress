@@ -14,7 +14,8 @@ import GsModal from '../../../components/GsProcessingModal';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    if (!this.props.iraAccountStore.isFormSubmitted) {
+    if (!this.props.iraAccountStore.isFormSubmitted &&
+      !this.props.bankAccountStore.bankSelect) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('ira');
       this.props.accountStore.setAccTypeChange(1);

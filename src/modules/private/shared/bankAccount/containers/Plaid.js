@@ -47,6 +47,13 @@ export default class Plaid extends Component {
     });
   }
 
+  handleInstitutionClick = (insId, action) => {
+    this.props.bankAccountStore.setFieldValue('bankSelect', true);
+    if (this.props.bankAccountStore.bankSelect) {
+      bankAccountActions.bankSelect(insId, action);
+    }
+  }
+
   render() {
     const {
       bankLinkInterface,
@@ -124,7 +131,7 @@ export default class Plaid extends Component {
                         as="a"
                         className="bank-link"
                         to={this.props.match.url}
-                        onClick={() => bankAccountActions.bankSelect(
+                        onClick={() => this.handleInstitutionClick(
                           bankData.institution_id,
                           action,
                         )
@@ -147,7 +154,7 @@ export default class Plaid extends Component {
                         className="bank-link"
                         to={this.props.match.url}
                         onClick={
-                          () => bankAccountActions.bankSelect(bankData.institutionID, action)
+                          () => this.handleInstitutionClick(bankData.institutionID, action)
                         }
                       >
                         {/* eslint-disable import/no-dynamic-require */}
