@@ -60,16 +60,12 @@ query getESAudit($indexAliasName: ESIndexAliasEnum, $random: String) {
       index_a {
         indexName
         created {
-          id
-          by
           date
         }
       }
       index_b {
         indexName
         created {
-          id
-          by
           date
         }
       }
@@ -89,8 +85,6 @@ query getESAudit($indexAliasName: ESIndexAliasEnum, $random: String) {
         record
         count
         created {
-          id
-          by
           date
         }
       }
@@ -99,8 +93,6 @@ query getESAudit($indexAliasName: ESIndexAliasEnum, $random: String) {
         record
         count
         created {
-          id
-          by
           date
         }
       }
@@ -110,5 +102,8 @@ query getESAudit($indexAliasName: ESIndexAliasEnum, $random: String) {
 
 export const swapIndexOnAlias = gql`
 mutation swapIndexOnAlias($indexAliasName: ESIndexAliasEnum!) {
-  swapIndexOnAlias(indexAliasName: $indexAliasName)
+  swapIndexOnAlias(indexAliasName: $indexAliasName){
+    message
+    success
+  }
 }`;
