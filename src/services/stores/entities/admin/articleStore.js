@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { map, kebabCase, sortBy, remove, orderBy, filter, get } from 'lodash';
+import { map, kebabCase, sortBy, remove, orderBy, filter, get, join } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
@@ -98,6 +98,7 @@ export class ArticleStore {
         client,
         query: getArticleById,
         variables: { id },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.insightsArticle) {
             this.setForm(res.insightsArticle);
@@ -127,10 +128,11 @@ export class ArticleStore {
           if (key === 'featuredImage') {
             this.ARTICLE_FRM.fields[key].preSignedUrl = res[key];
             this.ARTICLE_FRM.fields[key].value = res[key];
+          } else if (key === 'tags') {
+            this.ARTICLE_FRM.fields[key].value = join(res.tags, ',');
           } else {
             this.ARTICLE_FRM.fields[key].value = res[key];
           }
-          this.ARTICLE_FRM.fields[key].value = res[key];
           return null;
         });
         Validator.validateForm(this.ARTICLE_FRM);
@@ -149,16 +151,15 @@ export class ArticleStore {
       if (data.minuteRead === null || data.minuteRead === '') {
         delete (data.minuteRead);
       }
+      const payload = { ...data };
+      payload.tags = payload.tags.split(',').filter(tag => tag !== '');
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
-          variables: id === 'new' ? { payload: data } :
-            { ...{ payload: data }, id },
-          refetchQueries: [{
-            query: insightArticlesListByFilter,
-          }],
+          variables: id === 'new' ? { payload } : { payload, id },
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
+          this.initiateFilters();
         }).catch(() => {
           Helper.toast('Error while Saving Category', 'error');
         })
