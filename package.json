@@ -72,6 +72,7 @@
     "jest-environment-jsdom-fourteen": "0.1.0",
     "jest-resolve": "24.7.1",
     "jest-watch-typeahead": "0.3.0",
+    "json-pretty-html": "^1.1.6",
     "json2csv": "^4.5.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "0.5.0",
@@ -227,6 +228,18 @@
           "legacy": true
         }
       ]
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }
