@@ -1,6 +1,6 @@
 export const PRODUCTION_REDIRECT_META = [
-  { from: 'get20', live: true, to: 'http://ssqt.co/mzdNRmD' }, // '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GET20&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
-  { from: 'greenway', live: true, to: 'http://ssqt.co/mzedXpD' }, // '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GWAY&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
+  { from: 'get20', live: true, to: '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GET20&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
+  { from: 'greenway', live: true, to: '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GWAY&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
   { from: 'login', live: true, to: '/auth/login' },
   { from: 'register', live: true, to: '/auth/register' },
   { from: 'forgot-password', live: true, to: '/auth/forgot-password' },
