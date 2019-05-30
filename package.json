@@ -142,8 +142,8 @@
     "wysiwyg-editor-node-sdk": "^2.3.4"
   },
   "scripts": {
-    "build-assets": "cd ./semantic && gulp build &&  cd ..",
     "start": "node scripts/start.js",
+    "build-assets": "cd ./semantic && gulp build &&  cd ..",
     "build-js": "node --max_old_space_size=7500 scripts/build.js",
     "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
