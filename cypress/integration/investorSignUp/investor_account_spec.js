@@ -176,8 +176,8 @@ describe('Account Creation', () => {
           plaidProcess('.progtrckr-doing', '3');
           cy.wait(1000);
           addFunds('7000');
-          cy.wait(1000);
           cy.wait('@upsertInvestorAccount');
+          cy.wait(1000);
           entityAccountCreation();
           break;
         case 'Summary':
