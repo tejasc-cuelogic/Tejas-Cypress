@@ -463,6 +463,14 @@
             max-width:130px;
             flex-grow:0;
         }
+        &.width-250{
+            min-width:250px;
+            max-width:250px;
+            flex-grow:0;
+        }
+        p.overflow-text{
+            word-break: break-all;
+        }
     }
     &.thead{
         font-size:@12px;

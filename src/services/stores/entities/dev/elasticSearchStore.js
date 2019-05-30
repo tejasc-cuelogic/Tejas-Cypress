@@ -79,6 +79,7 @@ export class ElasticSearchStore {
   getESAudit = () => {
     this.esAudit = graphql({
       client,
+      fetchPolicy: 'network-only',
       query: elasticSearchQueries.getESAuditList,
       variables: {},
       onError: () => {
@@ -124,6 +125,7 @@ export class ElasticSearchStore {
     }
     this.esAuditOutput = graphql({
       client,
+      fetchPolicy: 'network-only',
       query: elasticSearchQueries.getESAudit,
       variables,
       onError: () => {
