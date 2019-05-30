@@ -1020,7 +1020,7 @@ export class OfferingCreationStore {
         variables,
       })
       .then(() => {
-        offeringsStore.setFieldValue('reFetchList', toRefetch);
+        offeringsStore.setFieldValue('reFetchList', (offeringsStore.reFetchList.length && offeringsStore.reFetchList) || toRefetch);
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(`${successMsg}`, msgType);
