@@ -153,6 +153,11 @@ export default class EditArticle extends Component {
                           onChange={(e, result) => articleChange(e, result)}
                         />
                       </div>
+                      <FormInput
+                        name="tags"
+                        fielddata={ARTICLE_FRM.fields.tags}
+                        changed={articleChange}
+                      />
                       <MaskedInput
                         containerclassname={displayMode ? 'display-only' : ''}
                         readOnly={false}
@@ -163,7 +168,7 @@ export default class EditArticle extends Component {
                         changed={maskChange}
                       />
                       {
-                        ['banner', 'slug', 'tags'].map(field => (
+                        ['banner', 'slug'].map(field => (
                           <FormInput
                             key={field}
                             name={field}
