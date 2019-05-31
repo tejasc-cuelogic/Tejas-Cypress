@@ -18,7 +18,6 @@ import CashMovement from '../../../../../investor/summary/components/CashMovemen
 @observer
 export default class Overview extends Component {
   state = {
-    routingNumber: null,
     loading: false,
     availableCash: '0',
     totalBalance: '0',
@@ -42,7 +41,8 @@ export default class Overview extends Component {
     e.stopPropagation();
     this.setState({ loading: true });
     this.props.bankAccountStore.getDecryptedRoutingNum(accountId, userId, 'LINKED_BANK').then((res) => {
-      this.setState({ loading: false, routingNumber: res });
+      this.props.bankAccountStore.setFieldValue('routingNum', res);
+      this.setState({ loading: false });
     }).catch(() => this.setState({ loading: false }));
   }
   render() {
@@ -96,7 +96,7 @@ export default class Overview extends Component {
                   account={account}
                   getRoutingNumber={this.getRoutingNumber}
                   loading={this.state.loading}
-                  routingNumber={this.state.routingNumber}
+                  routingNumber={this.props.bankAccountStore.routingNum}
                 /> :
                 get(account, 'name') === 'ira' ?
                   <IraSummary investor={investor} account={account} /> :
