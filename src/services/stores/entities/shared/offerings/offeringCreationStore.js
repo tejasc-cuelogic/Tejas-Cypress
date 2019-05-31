@@ -983,7 +983,7 @@ export class OfferingCreationStore {
       })
       .then((res) => {
         uiStore.removeOneFromProgressArray(false);
-        offeringsStore.addNewOne(res.data.upsertOffering);
+        offeringsStore.addNewOne(res.data.upsertOffering, 'creation');
         this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
         Helper.toast('Offering created successfully.', 'success');
       })

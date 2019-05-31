@@ -92,7 +92,7 @@ export default class Close extends Component {
     })
       .then(() => {
         this.props.uiStore.setProgress(false);
-        this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
+        this.props.history.push(`/app/offerings/completed/edit/${currentOfferingId}/overview`);
       });
   }
   render() {
