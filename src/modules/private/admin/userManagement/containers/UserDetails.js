@@ -40,7 +40,7 @@ const navMeta = [
   },
 ];
 
-@inject('userStore', 'userDetailsStore', 'uiStore')
+@inject('userStore', 'userDetailsStore', 'uiStore', 'bankAccountStore')
 @observer
 export default class AccountDetails extends Component {
   state = {
@@ -66,7 +66,10 @@ export default class AccountDetails extends Component {
   // activityState = (state) => {
   //   this.setState({ isActivity: state });
   // }
-  handleCloseModal = () => this.props.history.push(this.props.refLink);
+  handleCloseModal = () => {
+    this.props.bankAccountStore.resetRoutingNum();
+    this.props.history.push(this.props.refLink);
+  }
 
   render() {
     const { match } = this.props;
