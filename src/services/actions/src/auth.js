@@ -79,27 +79,38 @@ export class Auth {
 
     return (
       new Promise((res, rej) => {
-        AmplifyAuth.currentAuthenticatedUser().then((user) => {
-          const { signInUserSession, attributes } = user;
-          const mapData = this.parseRoles(this.mapCognitoToken(attributes));
-          userStore.setCurrentUser(mapData);
-          authStore.setUserLoggedIn(true);
-          commonStore.setToken(signInUserSession.idToken.jwtToken);
-          AWS.config.region = AWS_REGION;
-          if (userStore.isCurrentUserWithRole('admin')) {
-            this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
-          }
+        AmplifyAuth.currentSession().then((currentUser) => {
+          if (currentUser) {
+            AmplifyAuth.currentAuthenticatedUser().then((user) => {
+              const { signInUserSession, attributes } = user;
+              const mapData = this.parseRoles(this.mapCognitoToken(attributes));
+              userStore.setCurrentUser(mapData);
+              authStore.setUserLoggedIn(true);
+              commonStore.setToken(signInUserSession.idToken.jwtToken);
+              AWS.config.region = AWS_REGION;
+              if (userStore.isCurrentUserWithRole('admin')) {
+                this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
+              }
 
-          return res({ attributes, session: signInUserSession });
+              return res({ attributes, session: signInUserSession });
+            }).catch((err) => {
+              console.log('error in verifysession', err);
+              rej(err);
+            })
+              .finally(() => {
+                commonStore.setAppLoaded();
+                uiStore.setAppLoader(false);
+                uiStore.clearLoaderMessage();
+              });
+          }
         }).catch((err) => {
           console.log('error in verifysession', err);
           rej(err);
-        })
-          .finally(() => {
-            commonStore.setAppLoaded();
-            uiStore.setAppLoader(false);
-            uiStore.clearLoaderMessage();
-          });
+        }).finally(() => {
+          commonStore.setAppLoaded();
+          uiStore.setAppLoader(false);
+          uiStore.clearLoaderMessage();
+        });
       })
     );
   }

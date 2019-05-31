@@ -92,7 +92,7 @@ export default class ElasticSearch extends Component {
                   ))}
                 </Card.Content>
               </Card>
-            )) : null
+            )) : <InlineLoader text="No Data Found" />
             }
           </Grid.Column>
           <Grid.Column width={11}>
