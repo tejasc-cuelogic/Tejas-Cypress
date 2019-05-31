@@ -59,11 +59,11 @@ export class ArticleStore {
     initiateFilters = () => {
       const { title } = this.requestState.search;
       if (title) {
-        this.setDb(this.allInsightsListing);
+        this.setDb(this.sortBydate(this.allInsightsListing));
         ClientDb.filterFromNestedObjs(['title', 'category', 'author'], title);
         this.db = ClientDb.getDatabase();
       } else {
-        this.setDb(this.allInsightsListing);
+        this.setDb(this.sortBydate(this.allInsightsListing));
       }
     }
 
@@ -146,7 +146,7 @@ export class ArticleStore {
 
     @action
     save = (id) => {
-      uiStore.setProgress();
+      // uiStore.setProgress();
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
       if (data.minuteRead === null || data.minuteRead === '') {
         delete (data.minuteRead);
@@ -157,6 +157,9 @@ export class ArticleStore {
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
           variables: id === 'new' ? { payload } : { payload, id },
+          refetchQueries: [{
+            query: insightArticlesListByFilter,
+          }],
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
           this.initiateFilters();
@@ -164,8 +167,7 @@ export class ArticleStore {
           Helper.toast('Error while Saving Category', 'error');
         })
         .finally(() => {
-          uiStore.setProgress();
-          uiStore.setProgress(false);
+          // uiStore.setProgress(false);
         });
     }
 
