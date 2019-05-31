@@ -16,7 +16,7 @@ const closingActions = {
   ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'FUND_ESCROW' },
   ENUM5: { label: 'Process Notes', ref: 2, enum: 'PROCESS_NOTES' },
   ENUM6: { label: 'Finalize Notes', ref: 2, enum: 'FINALIZE_NOTES' },
-  ENUM7: { label: 'Close', ref: 3, enum: 'CLOSEME' },
+  ENUM7: { label: 'Close', ref: 3, enum: 'save' },
   ENUM8: {
     label: 'Hard Close Notification', ref: 3, enum: 'HARD_CLOSE_NOTIFICATION', confirm: true,
   },
@@ -64,7 +64,7 @@ export default class Close extends Component {
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
     } else {
-      if (status === 'CLOSEME') {
+      if (status === 'save') {
         this.handleCloseOffering();
       } else {
         await offeringClose(
@@ -83,7 +83,6 @@ export default class Close extends Component {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    this.props.uiStore.setProgress('CLOSEME');
     new Promise((res, rej) => {
       updateOfferingMutation(
         currentOfferingId, { stage: 'STARTUP_PERIOD' }, 'CLOSEOFFERING',
@@ -91,7 +90,6 @@ export default class Close extends Component {
       );
     })
       .then(() => {
-        this.props.uiStore.setProgress(false);
         this.props.history.push(`/app/offerings/completed/edit/${currentOfferingId}/overview`);
       });
   }
