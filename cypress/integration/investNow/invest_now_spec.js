@@ -1,8 +1,7 @@
 import { investNowFlow } from '../../support/investNow/investNowFlow';
 
-describe('My First Test', () => {
-  it('visits home page', () => {
-    cy.visit('/');
+describe('Invest now flow', () => {
+  it('Should proceed for invest now flow', () => {
     investNowFlow();
   });
 });
