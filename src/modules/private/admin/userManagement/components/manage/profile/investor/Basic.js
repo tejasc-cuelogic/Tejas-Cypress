@@ -10,6 +10,7 @@ import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
+import Helper from '../../../../../../../../helper/utility';
 
 @inject('userDetailsStore', 'uiStore', 'referralsStore')
 @withRouter
@@ -23,9 +24,12 @@ export default class Basic extends Component {
   }
   updateMode = (e, val) => {
     e.preventDefault();
-    this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true);
+    this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true, this.state.displayMode);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
+    if (this.state.displayMode) {
+      Helper.removeSsn();
+    }
   }
   updateUserData = (e) => {
     e.preventDefault();
@@ -104,7 +108,7 @@ export default class Basic extends Component {
               name={field}
               fielddata={USER_BASIC.fields[field]}
               changed={(e, result) => formChange(e, result, formName)}
-              displayMode={field === 'ssn' || displayMode}
+              displayMode={displayMode}
             />
             ))
           }
