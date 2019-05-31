@@ -232,6 +232,13 @@ export class Utility {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
+  removeSsn = () => {
+    try {
+      document.getElementsByName('ssn')[0].value = '';
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 export default new Utility();
