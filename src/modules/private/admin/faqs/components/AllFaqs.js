@@ -120,6 +120,9 @@ export default class AllFaqs extends Component {
     if (inProgress || loading) {
       return <InlineLoader />;
     }
+    if (Object.keys(allCategorizedFaqs).length === 0) {
+      return <InlineLoader text="No data found." />;
+    }
     return (
       <Aux>
         {Object.keys(allCategorizedFaqs).map(faqType => (
