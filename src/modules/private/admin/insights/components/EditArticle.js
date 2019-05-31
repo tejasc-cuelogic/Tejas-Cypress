@@ -57,7 +57,9 @@ export default class EditArticle extends Component {
   };
 
   save = () => {
-    this.props.articleStore.save(this.props.match.params.id);
+    this.props.articleStore.save(this.props.match.params.id).then(() => {
+      this.props.history.push(this.props.refLink);
+    });
     this.handleCloseModal();
   }
   render() {

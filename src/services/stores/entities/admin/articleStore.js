@@ -145,8 +145,8 @@ export class ArticleStore {
     }
 
     @action
-    save = (id) => {
-      // uiStore.setProgress();
+    save = id => new Promise((resolve, reject) => {
+      uiStore.setProgress();
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
       if (data.minuteRead === null || data.minuteRead === '') {
         delete (data.minuteRead);
@@ -157,19 +157,17 @@ export class ArticleStore {
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
           variables: id === 'new' ? { payload } : { payload, id },
-          refetchQueries: [{
-            query: insightArticlesListByFilter,
-          }],
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
-          this.initiateFilters();
+          resolve();
         }).catch(() => {
           Helper.toast('Error while Saving Category', 'error');
+          reject();
         })
         .finally(() => {
-          // uiStore.setProgress(false);
+          uiStore.setProgress(false);
         });
-    }
+    });
 
     sortBydate = data => orderBy(data, o => (o.updated.date ? new Date(o.updated.date) : ''), ['desc'])
 
