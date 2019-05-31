@@ -13,8 +13,15 @@ import DraggableListing from '../components/DraggableListing';
 @observer
 export default class Offerings extends Component {
   componentWillMount() {
+    const {
+      db, initRequest, setFieldValue, requestState,
+    } = this.props.offeringsStore;
     const params = { stage: this.props.match.params.stage };
-    this.props.offeringsStore.initRequest(params);
+    if (!db[params.stage]) {
+      initRequest(params);
+    } else {
+      setFieldValue('requestState', { ...requestState, ...params });
+    }
   }
 
   executeSearch = (e) => {

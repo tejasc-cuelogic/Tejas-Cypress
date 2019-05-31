@@ -86,7 +86,7 @@ export default class Close extends Component {
     this.props.uiStore.setProgress('CLOSEME');
     new Promise((res, rej) => {
       updateOfferingMutation(
-        currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
+        currentOfferingId, { stage: 'STARTUP_PERIOD' }, 'CLOSEOFFERING',
         true, 'Offering Closed successfully.', false, res, rej,
       );
     })

@@ -954,6 +954,65 @@ export const updateOffering = gql`
 mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
     id
+    isAvailablePublicly
+    keyTerms {
+      legalBusinessName
+      shorthandBusinessName
+      securities
+      regulation
+    }
+    leadDetails {
+      id
+      email {
+        address
+      }
+      info {
+        firstName
+        lastName
+      }
+      phone {
+        number
+      }
+    }
+    issuerDetails {
+      id
+      email {
+        address
+      }
+      info {
+        firstName
+        lastName
+      }
+      phone {
+        number
+      }
+    }
+    offering {
+      launch {
+        targetDate
+        terminationDate
+      }
+    }
+    applicationId
+    issuerId
+    stage
+    created {
+      id
+      date
+    }
+    updated {
+      id
+      date
+    }
+    closureSummary {
+      processingDate
+      hardCloseDate
+      repayment {
+        currentRepaidAmount
+        count
+      }
+    }
+    order
   }
 }
 `;
@@ -962,6 +1021,65 @@ export const upsertOffering = gql`
 mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
   upsertOffering(id: $id, offeringDetails: $offeringDetails) {
     id
+    isAvailablePublicly
+    keyTerms {
+      legalBusinessName
+      shorthandBusinessName
+      securities
+      regulation
+    }
+    leadDetails {
+      id
+      email {
+        address
+      }
+      info {
+        firstName
+        lastName
+      }
+      phone {
+        number
+      }
+    }
+    issuerDetails {
+      id
+      email {
+        address
+      }
+      info {
+        firstName
+        lastName
+      }
+      phone {
+        number
+      }
+    }
+    offering {
+      launch {
+        targetDate
+        terminationDate
+      }
+    }
+    applicationId
+    issuerId
+    stage
+    created {
+      id
+      date
+    }
+    updated {
+      id
+      date
+    }
+    closureSummary {
+      processingDate
+      hardCloseDate
+      repayment {
+        currentRepaidAmount
+        count
+      }
+    }
+    order
   }
 }
 `;
