@@ -107,8 +107,6 @@ test:review:
   <<: *review_defination
   script:
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com ./node_modules/.bin/cypress run
-  dependencies:
-    - deploy:review
 #---------------------------------Dev-------------------------------------------
 
 #Building code
