@@ -27,6 +27,11 @@ export class UserListingStore {
   };
 
   @action
+  reset = () => {
+    this.requestState.search = {};
+  }
+
+  @action
   initRequest = (reqParams, getAllUsers = false) => {
     const {
       keyword, accountType, accountStatus, startDate, endDate, isDeleted,
