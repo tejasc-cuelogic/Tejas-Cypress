@@ -110,7 +110,7 @@ test:review:
     - node_modules/
   script:
     - npm install
-    - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com ./node_modules/.bin/cypress run
+    - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
 #---------------------------------Dev-------------------------------------------
 
 #Building code
