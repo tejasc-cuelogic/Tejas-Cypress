@@ -64,6 +64,7 @@ build:review:
     key: $CI_COMMIT_REF_SLUG
     paths:
     - node_modules/
+    - /root/.cache/Cypress
   # <<: *before_script_defination
   script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
