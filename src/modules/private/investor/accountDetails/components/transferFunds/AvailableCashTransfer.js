@@ -9,6 +9,16 @@ import TransferFundVerifyModal from './previewModel/TransferFundVerifyModal';
 // const AvailableCashTransfer = props => (
 @withRouter
 class AvailableCashTransfer extends Component {
+  transferCtaInfo = () => ([
+    {
+      url: `${this.props.match.url}/withdraw`,
+      content: 'Withdraw funds',
+    },
+    {
+      url: `${this.props.match.url}/add`,
+      content: 'Add funds',
+    },
+  ]);
   render() {
     const { props } = this;
     const cashMax = Math.max(Number(props.cash.replace(/[^0-9.-]+/g, '')), 0);
@@ -39,8 +49,36 @@ class AvailableCashTransfer extends Component {
               </Grid.Column>
               <Grid.Column mobile={16} tablet={10} computer={10} verticalAlign="middle" className="right-align">
                 <Button.Group widths="2">
-                  <Button as={Link} to={`${props.match.url}/withdraw`} className={props.isAccountFrozen ? 'disabled' : ''} inverted color="green" content="Withdraw funds" />
-                  <Button as={Link} to={`${props.match.url}/add`} className={props.isAccountFrozen ? 'disabled' : ''} primary content="Add funds" />
+                  {
+                  props.isAccountFrozen ?
+                    <Aux>
+                      {
+                        this.transferCtaInfo().map(info => (
+                          <Popup
+                            hoverable
+                            trigger={
+                              <span className="mr-10">
+                                <Button as={Link} to={info.url} className="disabled" inverted color="green" content={info.content} />
+                              </span>
+                            }
+                            position="top center"
+                            wide
+                          >
+                            <Popup.Content>
+                              {`You cannot ${info.content} as your account is in frozen state.`}
+                            </Popup.Content>
+                          </Popup>
+                        ))
+                      }
+                    </Aux> :
+                    <Aux>
+                      {
+                        this.transferCtaInfo().map(info => (
+                          <Button as={Link} to={info.url} inverted color="green" content={info.content} />
+                        ))
+                      }
+                    </Aux>
+                  }
                 </Button.Group>
               </Grid.Column>
             </Grid>

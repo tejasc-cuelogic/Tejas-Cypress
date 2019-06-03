@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
-import { Button, Item, Grid, Card } from 'semantic-ui-react';
+import { Button, Item, Grid, Card, Popup } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
@@ -18,6 +18,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class AccountDetailsView extends Component {
   componentWillMount() {
     const { accountDetails, accountType } = this.props;
+    const { setFieldValue } = this.props.userDetailsStore;
+    const investorAccount = this.props.location.pathname.includes('individual') ? 'individual' : this.props.location.pathname.includes('ira') ? 'ira' : 'entity';
+    setFieldValue('currentActiveAccount', investorAccount);
     const activeBankInstutationId = accountDetails && accountDetails.plaidInstitutionId ?
       accountDetails.plaidInstitutionId : null;
 
@@ -115,8 +118,25 @@ export default class AccountDetailsView extends Component {
             <Grid.Column width={3} textAlign={!isMobile ? 'right' : ''} verticalAlign="middle">
               {accountType === 'active' ?
                 accountDetails && !accountDetails.pendingUpdate &&
-                <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} color="green" content="Change Linked Bank" />
-                :
+                <Aux>
+                { userDetailsStore.isAccountFrozen ?
+                  <Popup
+                    hoverable
+                    trigger={
+                    <span className="mr-10">
+                      <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} className="disabled" color="green" content="Change Linked Bank" />
+                    </span>
+                  }
+                    position="top center"
+                    wide
+                  >
+                  <Popup.Content>
+                    {'You cannot Link Bank as your account is in frozen state.'}
+                  </Popup.Content>
+                  </Popup> :
+                  <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
+                }
+                </Aux> :
                 <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }
             </Grid.Column>
