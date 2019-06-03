@@ -357,6 +357,10 @@
                     max-height:120px;
                 }
             }
+            .scrollable {
+                max-height: 360px;
+                overflow: auto;
+            }
         }
         .user-type{
             height:100%;
