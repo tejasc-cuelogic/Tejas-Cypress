@@ -1,5 +1,58 @@
 import gql from 'graphql-tag';
 
+const common = {
+  offeringBasics: `id
+  isAvailablePublicly
+  keyTerms {
+    legalBusinessName
+    shorthandBusinessName
+    securities
+    regulation
+  }
+  leadDetails {
+    email {
+      address
+    }
+    info {
+      firstName
+      lastName
+    }
+    phone {
+      number
+    }
+  }
+  issuerDetails {
+    email {
+      address
+    }
+    info {
+      firstName
+      lastName
+    }
+    phone {
+      number
+    }
+  }
+  offering {
+    launch {
+      targetDate
+    }
+  }
+  issuerId
+  stage
+  created {
+    date
+  }
+  closureSummary {
+    processingDate
+    hardCloseDate
+    repayment {
+      currentRepaidAmount
+      count
+    }
+  }
+  order`,
+};
 export const allOfferingsCompact = gql`
   query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
     getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
@@ -21,66 +74,7 @@ export const allOfferingsCompact = gql`
 export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
-      id
-      isAvailablePublicly
-      keyTerms {
-        legalBusinessName
-        shorthandBusinessName
-        securities
-        regulation
-      }
-      leadDetails {
-        id
-        email {
-          address
-        }
-        info {
-          firstName
-          lastName
-        }
-        phone {
-          number
-        }
-      }
-      issuerDetails {
-        id
-        email {
-          address
-        }
-        info {
-          firstName
-          lastName
-        }
-        phone {
-          number
-        }
-      }
-      offering {
-        launch {
-          targetDate
-          terminationDate
-        }
-      }
-      applicationId
-      issuerId
-      stage
-      created {
-        id
-        date
-      }
-      updated {
-        id
-        date
-      }
-      closureSummary {
-        processingDate
-        hardCloseDate
-        repayment {
-          currentRepaidAmount
-          count
-        }
-      }
-      order
+      ${common.offeringBasics}
     }
   }
 `;
@@ -953,66 +947,7 @@ export const getOfferingDetails = gql`
 export const updateOffering = gql`
 mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
-    id
-    isAvailablePublicly
-    keyTerms {
-      legalBusinessName
-      shorthandBusinessName
-      securities
-      regulation
-    }
-    leadDetails {
-      id
-      email {
-        address
-      }
-      info {
-        firstName
-        lastName
-      }
-      phone {
-        number
-      }
-    }
-    issuerDetails {
-      id
-      email {
-        address
-      }
-      info {
-        firstName
-        lastName
-      }
-      phone {
-        number
-      }
-    }
-    offering {
-      launch {
-        targetDate
-        terminationDate
-      }
-    }
-    applicationId
-    issuerId
-    stage
-    created {
-      id
-      date
-    }
-    updated {
-      id
-      date
-    }
-    closureSummary {
-      processingDate
-      hardCloseDate
-      repayment {
-        currentRepaidAmount
-        count
-      }
-    }
-    order
+    ${common.offeringBasics}
   }
 }
 `;
@@ -1020,66 +955,7 @@ mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $off
 export const upsertOffering = gql`
 mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
   upsertOffering(id: $id, offeringDetails: $offeringDetails) {
-    id
-    isAvailablePublicly
-    keyTerms {
-      legalBusinessName
-      shorthandBusinessName
-      securities
-      regulation
-    }
-    leadDetails {
-      id
-      email {
-        address
-      }
-      info {
-        firstName
-        lastName
-      }
-      phone {
-        number
-      }
-    }
-    issuerDetails {
-      id
-      email {
-        address
-      }
-      info {
-        firstName
-        lastName
-      }
-      phone {
-        number
-      }
-    }
-    offering {
-      launch {
-        targetDate
-        terminationDate
-      }
-    }
-    applicationId
-    issuerId
-    stage
-    created {
-      id
-      date
-    }
-    updated {
-      id
-      date
-    }
-    closureSummary {
-      processingDate
-      hardCloseDate
-      repayment {
-        currentRepaidAmount
-        count
-      }
-    }
-    order
+    ${common.offeringBasics}
   }
 }
 `;

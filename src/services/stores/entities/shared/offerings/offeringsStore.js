@@ -80,7 +80,7 @@ export class OfferingsStore {
         variables,
       }).then(() => {
         uiStore.removeOneFromProgressArray('publish');
-        this.changePublicFagForOffer(id, isAvailablePublicly);
+        this.changePublicFlagForOffer(id, isAvailablePublicly);
         Helper.toast('Offering updated successfully.', 'success');
       }).catch(() => {
         uiStore.removeOneFromProgressArray('publish');
@@ -159,7 +159,7 @@ export class OfferingsStore {
       });
   }
   @action
-  changePublicFagForOffer = (id, isAvailablePublicly) => {
+  changePublicFlagForOffer = (id, isAvailablePublicly) => {
     const db = { ...toJS(this.db) };
     const offer = db[this.requestState.stage].find(o => o.id === id);
     offer.isAvailablePublicly = isAvailablePublicly;
