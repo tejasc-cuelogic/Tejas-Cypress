@@ -1,7 +1,7 @@
 import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../common';
 
 const handleOverviewStep = () => {
-  cy.get('div.multistep > .center-align > button').contains('Continue').click();
+  cy.get('div.multistep > .center-align > button').contains('Continue').click({ force: true });
 };
 
 export const completeInvestorProfile = () => {
