@@ -103,13 +103,13 @@ delete:review:
  
 #Test review environment
 test:review:
-  <<: *build_definition
   <<: *review_defination
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
     - node_modules/
   script:
+    - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com ./node_modules/.bin/cypress run
 #---------------------------------Dev-------------------------------------------
 
