@@ -89,8 +89,6 @@ build:review:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build 
-  dependencies:
-    - test:review
 
 #Deploying code to s3 bucket
 deploy:review:
