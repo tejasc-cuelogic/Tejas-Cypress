@@ -108,6 +108,7 @@ test:review:
     key: $CI_COMMIT_REF_SLUG
     paths:
     - node_modules/
+    - /root/.cache/Cypress
   script:
     - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
