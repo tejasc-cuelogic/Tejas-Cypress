@@ -100,10 +100,10 @@ export default class Listing extends Component {
             </Table.Header>
             <Table.Body>
               {offerings.length === 0 ? (
-                <Table.Row><Table.Cell colSpan={6} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
+                <Table.Row><Table.Cell colSpan={8} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
                 ) :
                 offerings.map(offering => (
-                  <Table.Row key={offering.id}>
+                  <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName) ?
                           offering.keyTerms.shorthandBusinessName : (
@@ -170,7 +170,7 @@ export default class Listing extends Component {
                         {Object.keys(actions).map(action => (
                           action.label === 'Delete' && stage === 'engagement' ? '' :
                           <Button icon className="link-button" >
-                            <Icon loading={this.props.uiStore.inProgressArray.includes(action) && offering.id === this.state.loadingOfferId} className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
+                            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
                           </Button>
                         ))}
                       </Button.Group>
