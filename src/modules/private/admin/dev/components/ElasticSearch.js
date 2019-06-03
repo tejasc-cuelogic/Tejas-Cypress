@@ -60,17 +60,9 @@ export default class ElasticSearch extends Component {
             map(eSAudit, es => (
               <Card fluid className="elastic-search">
                 <Card.Content>
-                  <Grid>
-                    <Grid.Column width={7} verticalAlign="middle">
-                      <Header as="h5" className="mt-0">{`${this.renderTitle(es.alias)} Indices`}</Header>
-                    </Grid.Column>
-                    <Grid.Column width={9} floated="right">
-                      <Button.Group compact widths={2}>
-                        <Button onClick={() => this.toggleConfirmModal(es.alias, `Swap ${this.renderTitle(es.alias)} Indices`, 'SWAP')} loading={inProgress === `${es.alias}_SWAP`} content="Swap" color="blue" />
-                        <Button onClick={() => this.toggleConfirmModal(es.alias, `Audit ${this.renderTitle(es.alias)} Indices`, 'AUDIT')} loading={inProgress === `${es.alias}_AUDIT`} content="Audit" primary />
-                      </Button.Group>
-                    </Grid.Column>
-                  </Grid>
+                  <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Audit ${this.renderTitle(es.alias)} Indices`, 'AUDIT')} loading={inProgress === `${es.alias}_AUDIT`} content="Audit" primary />
+                  <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Swap ${this.renderTitle(es.alias)} Indices`, 'SWAP')} loading={inProgress === `${es.alias}_SWAP`} content="Swap" color="blue" />
+                  <Header as="h5" className="mt-half">{`${this.renderTitle(es.alias)} Indices`}</Header>
                 </Card.Content>
                 <Card.Content>
                   {map(['index_a', 'index_b'], e => (
