@@ -22,6 +22,7 @@ export class BankAccountStore {
   @observable bankListing = undefined;
   @observable depositMoneyNow = true;
   @observable showAddFunds = false;
+  @observable bankSelect = false;
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
   @observable formEntityAddFunds = Validator.prepareFormObject(ENTITY_ADD_FUND);
@@ -403,6 +404,7 @@ export class BankAccountStore {
   @computed get count() {
     return (get(this.data, 'data.listLinkedBankUsers.resultCount')) || 0;
   }
+
   @computed get isLinkbankInComplete() {
     const isAddFundsDirty = this.addFundsByAccType.meta.isDirty;
     return this.manualLinkBankSubmitted ||
@@ -554,6 +556,7 @@ export class BankAccountStore {
     this.isManualLinkBankSubmitted = false;
     this.linkbankSummary = false;
     this.shouldValidateAmount = false;
+    this.bankSelect = false;
   }
   @action
   setPlaidBankVerificationStatus = (booleanValue) => {
