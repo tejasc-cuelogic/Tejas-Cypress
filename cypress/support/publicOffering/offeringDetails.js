@@ -1,12 +1,14 @@
 import { registerApiCall } from '../common';
 
 export const goToOfferingDetailScreen = () => {
-  registerApiCall('getOfferingDetailsBySlug');
-  cy.get('.campaign-list-wrapper').get('.stackable>div').eq(2).click({ force: true });
+  cy.get('.campaign-list-wrapper').find('.container').find('.stackable').children()
+    .eq(1)
+    .click()
   cy.wait('@getOfferingDetailsBySlug');
 };
 
 export const OfferingDetailFlow = () => {
+  registerApiCall('getOfferingDetailsBySlug');
   goToOfferingDetailScreen();
 };
 

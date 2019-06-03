@@ -6,7 +6,6 @@ export const goToExploreCampaingsScreen = () => {
   cy.get('.header-wrap').get('.menu').get('.item ').contains('Explore Campaigns')
     .click();
   cy.wait('@getOfferingList');
-  // cy.wait('@getOfferingList');
 };
 
 export const OfferingListingFlow = () => {
