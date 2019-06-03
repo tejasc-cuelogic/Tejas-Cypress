@@ -152,6 +152,7 @@
     "build": "npm-run-all build-assets build-js",
     "build:prod": "npm-run-all build-assets build-js:prod",
     "test": "node scripts/test.js --env=jsdom",
+    "cypress:open": "./node_modules/.bin/cypress open",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
