@@ -213,7 +213,7 @@ export class OfferingsStore {
       this.addNewOne(payload, 'completed');
     } else if (key === 'LAUNCHOFFERING') {
       this.removeOneFromData(id, 'creation');
-      this.addNewOne(payload, 'completed');
+      this.addNewOne(payload, 'live');
     } else {
       if (offerIndex !== -1) {
         db[this.requestState.stage][offerIndex] =
