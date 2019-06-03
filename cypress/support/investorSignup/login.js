@@ -14,3 +14,8 @@ export const goToLoginScreen = () => {
   cy.get('button.compact').click();
   cy.get('a').contains('Log in').click();
 };
+
+export const clearLoginForm = () => {
+  cy.get('input[type="email"]').clear();
+  cy.get('input[type="password"]').clear();
+}

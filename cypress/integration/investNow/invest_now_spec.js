@@ -1,26 +1,22 @@
-import { investNowFlow } from '../../support/investNow/investNowFlow';
-import { loginCredentials, inValidEmailCredentials } from '../../support/investorSignup/login';
+import { initializeInvestNowFlow, proceedInvalidLoginAction, proceedInvalidUserLoginAction, proceedWithValidUserLoginAction } from '../../support/investNow/investNowFlow';
 
 describe('Invest now flow', () => {
   it('Should proceed for invest now flow', () => {
-    investNowFlow();
+    initializeInvestNowFlow();
   });
-
   it('Should open login popup if click on Invest Now button and not loged in', () => {
     cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
       .find('.center-align')
       .contains('Invest Now')
       .click();
   });
-  it('should check email format', () => {
-    cy.get('input[type="email"]').type(inValidEmailCredentials.email);
-    cy.get('input[type="email"]').blur();
-    cy.wait(500);
-    cy.get('input[type="email"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
+  it('Invalid login credentails action', () => {
+    proceedInvalidLoginAction();
   });
-  it('succesfully performs login action', () => {
-    cy.get('input[type="email"]').type(loginCredentials.email);
-    cy.get('input[type="password"]').type(loginCredentials.password);
-    cy.get('button.button').contains('Log in').click({ force: true });
+  it('Invalid user type login action', () => {
+    proceedInvalidUserLoginAction();
+  });
+  it('succesfully login as investor with one account', () => {
+    proceedWithValidUserLoginAction();
   });
 });
