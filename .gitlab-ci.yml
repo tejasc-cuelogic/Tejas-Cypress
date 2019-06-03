@@ -56,6 +56,23 @@ before_script:
     
     
 #---------------------------------Review----------------------------------------  
+#Testing code
+test:review:
+  <<: *review_defination
+  stage: test
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com
+    on_stop: delete:review
+  script:
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
+    - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run start
+    - npm run test
+
 #Building code
 build:review:
   <<: *build_definition
@@ -72,19 +89,8 @@ build:review:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build 
-
-test:review:
-  <<: *review_defination
-  stage: test
-  environment:
-    name: $CI_COMMIT_REF_NAME
-    url: http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com
-    on_stop: delete:review
-  script:
-    - npm run start
-    - npm run test
   dependencies:
-    - build:review
+    - test:review
 
 #Deploying code to s3 bucket
 deploy:review:
