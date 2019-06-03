@@ -550,7 +550,7 @@ class EntityAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) && !bankAccountStore.bankSelect) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'entity' });
         if (account) {

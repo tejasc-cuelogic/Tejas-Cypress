@@ -1,6 +1,7 @@
 import About from './public/about/containers/About';
 import ReferralProgramTerms from './public/agreements/ReferralProgramTerms';
 import AccreditedIncentiveTerms from './public/agreements/AccreditedIncentiveTerms';
+import IraPromotionTerms from './public/agreements/IraPromotionTerms';
 import Agreements from './public/agreements/containers/Agreements';
 import Blog from './public/blog/containers/Blog';
 import Home from './public/home/containers/Home';
@@ -44,6 +45,10 @@ export const publicRoutes = [
   {
     path: '/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions',
     component: AccreditedIncentiveTerms,
+  },
+  {
+    path: '/agreements/ira-promotion-terms-and-conditions',
+    component: IraPromotionTerms,
   },
   {
     path: '/agreements/:section',

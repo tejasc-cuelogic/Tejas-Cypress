@@ -82,7 +82,7 @@ export default class FormInput extends Component {
           }
           readOnly={displayMode}
           {...props}
-          value={value === '' ? undefined : value}
+          value={value || ''}
           label={props.prefix || false}
         />
         {((error && this.state.showError) || (error && props.showerror)) &&
