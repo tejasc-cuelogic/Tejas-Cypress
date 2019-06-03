@@ -400,7 +400,7 @@ class IraAccountStore {
 
   @action
   populateData = (userData) => {
-    if (Helper.matchRegexWithUrl([/\bira(?![-])\b/])) {
+    if (Helper.matchRegexWithUrl([/\bira(?![-])\b/]) && !bankAccountStore.bankSelect) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'ira' });
         if (account) {
