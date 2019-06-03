@@ -16,8 +16,8 @@ export class AdminStore {
   }
 
   @action
-  setUserId(id) {
-    this.userId = id;
+  setFieldvalue = (field, value) => {
+    this[field] = value;
   }
 
   @action

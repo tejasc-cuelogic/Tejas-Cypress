@@ -11,10 +11,10 @@ export default class Faqs extends Component {
     this.props.articleStore.getCategoryListByTypes(false, ['INV_FAQ', 'ISSUER_FAQ']);
   }
   render() {
-    const { match } = this.props;
+    const { match, refMatch } = this.props;
     return (
       <Switch>
-        <Route exact path={`${match.url}`} component={ManageFaqs} />
+        <Route exact path={`${match.url}`} render={props => <ManageFaqs refMatch={refMatch} {...props} />} />
         <Route exact path={`${match.url}/:id/:faqType?/:categoryId?`} render={props => <FaqDetails refLink={match.url} {...props} />} />
       </Switch>
     );

@@ -7,6 +7,7 @@ import moment from 'moment';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
+// import userStore from './../services/stores/entities/userStore';
 
 export class Utility {
   // Default options for the toast
@@ -21,15 +22,14 @@ export class Utility {
    * @desc To show alert notifications to the user
    * reference: https://fkhadra.github.io/react-toastify/
    */
-  // toast = (msg, alertType, optionsOverride) => {
-  // eslint-disable-next-line no-unused-vars
-  toast = (msg, alertType) => {
-    // const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
-    // if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-    //   toast[alertType](`${cleanMsg(msg)}`,
-    // _.merge({}, this.options, optionsOverride, { className: alertType }));
-    // } else {
-    //   toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+  toast = (msg, alertType, optionsOverride) => {
+    // if (userStore.isAdmin) {
+    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
+    if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
+      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+    } else {
+      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+    }
     // }
   }
 
@@ -231,6 +231,13 @@ export class Utility {
 
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
+  }
+  removeSsn = () => {
+    try {
+      document.getElementsByName('ssn')[0].value = '';
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 

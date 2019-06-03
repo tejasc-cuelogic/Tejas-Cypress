@@ -54,7 +54,7 @@ export class NavStore {
           ...userDetailsStore.signupStatus.processingAccounts,
           ...userDetailsStore.signupStatus.frozenAccounts];
       }
-      if (User.roles && User.roles.includes('investor') && userDetails && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
+      if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
         navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
       }
       if (permitted && permitted.length > 1 && permitted.includes('investor')) {
@@ -77,7 +77,7 @@ export class NavStore {
       if (pInvestorInfo && permitted.includes('investor')) {
         permitted = JSON.parse(pInvestorInfo).permitted || permitted;
       }
-      const routes = _.filter(
+      let routes = _.filter(
         navigationItems,
         n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
           _.intersection(n.accessibleTo, permitted).length > 0) &&
@@ -85,6 +85,12 @@ export class NavStore {
           _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0) &&
           (!n.capability || this.canAccessBasedOnCapability(n.capability))),
       );
+      routes = _.map(routes, r => ({
+        ...r,
+        subNavigations:
+        _.filter(r.subNavigations, s =>
+          (!s.capability || this.canAccessBasedOnCapability(s.capability))),
+      }));
       return routes;
     } catch (err) {
       console.log(err);

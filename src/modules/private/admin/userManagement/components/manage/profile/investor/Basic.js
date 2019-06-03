@@ -1,45 +1,29 @@
-/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
 import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
-import SaasquatchInformation from '../SaasquatchInformation.';
-import ReferralsInformation from '../ReferralsInformation';
+import LockedInformation from '../LockedInformation';
+import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
+
 @inject('userDetailsStore', 'uiStore', 'referralsStore')
 @withRouter
 @observer
 export default class Basic extends Component {
-  state = {
-    displayMode: true,
-    availableCredit: 0,
-    spentCredit: 0,
-    totalEarnedCredit: 0,
-    totalReferredUsers: 0,
-  };
+  state = { displayMode: true };
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setAddressCheck();
-    this.props.referralsStore
-      .getUserReferralDetails(this.props.userDetailsStore.selectedUserId, false)
-      .then((data) => {
-        this.setState({
-          availableCredit: get(data, 'getUserReferralDetails.availableCredit') || 0,
-          spentCredit: get(data, 'getUserReferralDetails.spentCredit') || 0,
-          totalEarnedCredit: get(data, 'getUserReferralDetails.totalEarnedCredit') || 0,
-          totalReferredUsers: get(data, 'getUserReferralDetails.totalReferredUsers') || 0,
-        });
-      });
   }
   updateMode = (e, val) => {
     e.preventDefault();
-    this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true);
+    this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true, this.state.displayMode);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
   }
@@ -76,6 +60,12 @@ export default class Basic extends Component {
             <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
           </Button.Group>
         </Header>
+        {get(details, 'locked.lock') === 'LOCKED' &&
+        <Aux>
+          <LockedInformation details={details} />
+          <Divider />
+        </Aux>
+        }
         <Header as="h6">Personal Info</Header>
         <Form.Group widths={2}>
           {
@@ -108,29 +98,38 @@ export default class Basic extends Component {
         </Form.Group>
         <Form.Group widths={2}>
           {
-          ['firstLegalName', 'lastLegalName', 'ssn'].map(field => (
+          ['firstLegalName', 'lastLegalName'].map(field => (
             <FormInput
               key={field}
               name={field}
               fielddata={USER_BASIC.fields[field]}
               changed={(e, result) => formChange(e, result, formName)}
-              displayMode={field === 'ssn' || displayMode}
+              displayMode={displayMode}
             />
             ))
           }
-          {/* {!displayMode &&
+          {displayMode ?
+            <FormInput
+              key="ssn"
+              name="ssn"
+              fielddata={USER_BASIC.fields.ssn}
+              changed={(e, result) => formChange(e, result, formName)}
+              displayMode={displayMode}
+            />
+            :
             <MaskedInput
               name="ssn"
               fielddata={USER_BASIC.fields.ssn}
-              changed={formChange}
               ssn
+              changed={(values, field) => maskChange(values, formName, field)}
               displayMode={displayMode}
+              showerror
             />
-          } */}
+          }
           <MaskedInput
             name="dateOfBirth"
             fielddata={USER_BASIC.fields.dateOfBirth}
-            changed={(values, field) => maskChange(values, 'USER_BASIC', field)}
+            changed={(values, field) => maskChange(values, formName, field)}
             dateOfBirth
             displayMode={displayMode}
           />
@@ -199,11 +198,9 @@ export default class Basic extends Component {
         <Divider />
         <CIPInformation details={details} />
         <Divider />
-        <SaasquatchInformation details={details} />
-        <Divider />
-        <ReferralsInformation details={this.state} />
-        <Divider />
         <OtherInformation details={details} />
+        <Divider />
+        <UserInvestorDetails isAdmin refLink={this.props.match.url} />
         <Divider />
       </Form>
     );

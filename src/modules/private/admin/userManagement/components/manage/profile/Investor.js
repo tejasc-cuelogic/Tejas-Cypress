@@ -5,10 +5,11 @@ import { Grid, Divider, Button } from 'semantic-ui-react';
 import { get, isEmpty } from 'lodash';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Basic from './investor/Basic';
-// import InvestorProfile from './investor/InvestorProfile';
+import Overview from './investor/Overview';
 import AccreditationsLimits from './investor/AccreditationsLimits';
 import ConfirmModel from '../../../../accreditation/components/ConfirmModel';
-import UserInvestorDetails from '../../../../../investor/settings/components/UserInvestorDetails';
+// import UserInvestorDetails from '../../../../../investor
+// /settings/components/UserInvestorDetails';
 import { NEXTSEED_BOX_URL } from '../../../../../../../constants/common';
 import Helper from '../../../../../../../helper/utility';
 
@@ -43,7 +44,8 @@ export default class Investor extends Component {
     const { match } = this.props;
     const navMeta = [
       { title: 'Basic', to: 'basic' },
-      { title: 'Investor Profile', to: 'profile' },
+      { title: 'Overview', to: 'overview' },
+      // { title: 'Investor Profile', to: 'profile' },
     ];
     if (getActiveAccountList && getActiveAccountList.accountList.length) {
       navMeta.push({ title: 'Accreditations & Limits', to: 'accreditations' });
@@ -59,8 +61,10 @@ export default class Investor extends Component {
           <Switch>
             <Route path={`${match.url}/accreditations/:action/:userId/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={`${this.props.match.url}/accreditations`} {...props} />} />
             <Route exact path={`${match.url}/accreditations`} component={AccreditationsLimits} />
-            <Route exact path={`${match.url}/profile`} render={props => <UserInvestorDetails isAdmin refLink={this.props.match.url} {...props} />} />
+            {/* <Route exact path={`${match.url}/profile`} render={props =>
+            <UserInvestorDetails isAdmin refLink={this.props.match.url} {...props} />} /> */}
             <Route exact path={`${match.url}/basic`} component={Basic} />
+            <Route exact path={`${match.url}/overview`} component={Overview} />
           </Switch>
         </Grid.Column>
       </Grid>

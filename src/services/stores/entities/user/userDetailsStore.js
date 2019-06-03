@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
 import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -36,6 +36,7 @@ export class UserDetailsStore {
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
+  @observable FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
   @observable accountForWhichCipExpired = '';
   @observable partialInvestNowSessionURL = '';
   @observable userStatus = null;
@@ -365,7 +366,7 @@ export class UserDetailsStore {
             userId,
             accountId,
             freeze,
-            message,
+            reason: message,
           },
           refetchQueries: [{ query: userDetailsQuery, variables: { userId } }],
         })
@@ -377,7 +378,10 @@ export class UserDetailsStore {
         .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); uiStore.setProgress(false); });
     });
   };
-
+  @action
+  resetModalForm = () => {
+    this.FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
+  }
   @computed get signupStatus() {
     const details = {
       idVerification: 'FAIL',
@@ -490,18 +494,18 @@ export class UserDetailsStore {
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/auth/welcome-email';
-      } else if ((this.userDetails &&
-        this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
+      } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
+        routingUrl = '/app/summary/identity-verification/0';
+      } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
           routingUrl = '/app/summary/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {
           routingUrl = '/app/summary/establish-profile';
         }
-      } else {
-        routingUrl = '/app/summary/identity-verification/0';
       }
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification) &&
-      this.signupStatus.activeAccounts.length === 0) {
+      this.signupStatus.activeAccounts.length === 0 &&
+      this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
       routingUrl = '/app/summary/identity-verification/3';
@@ -539,12 +543,15 @@ export class UserDetailsStore {
   }
 
   @action
-  setFormData = (form, ref, keepAtLeastOne, validateForm = false) => {
+  setFormData = (form, ref, keepAtLeastOne, validateForm = false, isRemoveSsn = false) => {
     const details = toJS({ ...this.detailsOfUser.data.user });
     if (!details) {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    if (isRemoveSsn) {
+      this.USER_BASIC.fields.ssn.value = '';
+    }
     if (validateForm) {
       this[form] = Validator.validateForm(this[form]);
     }
@@ -695,8 +702,6 @@ export class UserDetailsStore {
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
-    const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
@@ -728,6 +733,9 @@ export class UserDetailsStore {
         lastLegalName: basicData.lastLegalName,
       },
     };
+    if (String(basicData.ssn).length === 9) {
+      legalDetails.ssn = basicData.ssn;
+    }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -742,6 +750,7 @@ export class UserDetailsStore {
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');
+          this.setFormData('USER_BASIC', false);
           uiStore.setProgress(false);
           resolve();
         })
@@ -756,7 +765,6 @@ export class UserDetailsStore {
   updateUserBasicInfo = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,

@@ -2807,6 +2807,9 @@ input[type='range']::-webkit-slider-thumb {
 			height: auto;
 		}
 	}
+	.json-key {
+		font-weight: @bold;
+	}
 }
 .plaid-link-iframe {
 	@media only screen and (max-width : @largestMobileScreen){
@@ -2823,4 +2826,13 @@ input[type='range']::-webkit-slider-thumb {
 }
 .activity-component {
 	margin: -1.42857143rem;
+}
+table.css-wu4c77-diff-container {
+	overflow: auto;
+	max-height: 520px;
+	display: table-cell;
+	tbody {
+		display: table;
+		width: 100%;
+	}
 }

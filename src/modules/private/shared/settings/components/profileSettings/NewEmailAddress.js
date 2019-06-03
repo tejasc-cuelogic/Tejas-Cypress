@@ -16,12 +16,13 @@ export default class NewEmailAddress extends Component {
       this.props.identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
+      localStorage.setItem('changedEmail', email.value);
       this.props.authStore.setCredentials({
         email: email.value.toLowerCase(), password: password.value,
       });
       this.props.history.push(`${this.props.refLink}/confirm-email-address`);
     })
-      .catch(() => {});
+      .catch(() => { });
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
@@ -59,7 +60,7 @@ export default class NewEmailAddress extends Component {
               </Message>
             }
             <div className="center-align mt-30">
-              <Button primary size="large" className="very relaxed" content="Change Email Address" disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value)} loading={this.props.uiStore.inProgress} />
+              <Button primary size="large" className="very relaxed" content="Change Email Address" disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value) || this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} />
             </div>
           </Form>
         </Modal.Content>

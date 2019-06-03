@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { mapValues } from 'lodash';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
@@ -9,6 +10,10 @@ import { ListErrors } from '../../../theme/shared';
 @observer
 export default class ChangePassword extends Component {
   componentWillMount() {
+    const loginData = mapValues(this.props.authStore.LOGIN_FRM.fields, f => f.value);
+    if (this.props.refModule !== 'security' && loginData.email === '') {
+      this.props.history.push('/auth/login');
+    }
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.resetForm('CHANGE_PASS_FRM');
   }

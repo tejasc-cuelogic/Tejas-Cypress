@@ -14,7 +14,7 @@ query getOfferingList($filters: OfferingFilterInputType){
           fileName
         }
       }
-
+      order
       offering {
         about {
           theCompany
@@ -66,6 +66,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       id
       offeringSlug
       referralCode
+      order
     }
   }
 `;
@@ -74,8 +75,17 @@ export const getOfferingById = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
+      id
       previewPassword
+      isAvailablePublicly
+      stage
     }
+  }
+`;
+
+export const isValidInvestorInOffering = gql`
+  query isValidInvestorInOffering ($offeringId: String!, $userId: String!, $offeringStage: OfferingStageEnumType!) {
+    isValidInvestorInOffering (offeringId: $offeringId, userId: $userId, offeringStage: $offeringStage)
   }
 `;
 

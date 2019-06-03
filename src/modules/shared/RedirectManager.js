@@ -7,16 +7,34 @@ import { REDIRECT_META } from '../../constants/redirect';
 
 @inject('campaignStore', 'authStore', 'commonStore', 'userStore')
 @observer
-export default class RedirectManager extends React.Component {
-  state = { found: 0 }; // 0: not started, 1: loading, 2: found, 3: not found
+export default class RedirectManager extends React.PureComponent {
+  state = { found: 0, viaProtect: false }; // 0: not started, 1: loading, 2: found, 3: not found
   componentWillMount() {
-    const { fromUrl } = this.props.match.params;
+    this.processRedirection();
+  }
+  componentWillUpdate() {
+    const { viaProtect } = this.state;
+    if (viaProtect) {
+      this.processRedirection(false);
+    }
+  }
+  processRedirection = (ref = true) => {
+    let { fromUrl } = this.props.match.params;
+    const { viaProtect } = this.state;
     const redirectMeta = this.findRedirectUrl(fromUrl);
+    if (fromUrl === 'password-protected') {
+      if (ref) {
+        this.setState({ viaProtect: true });
+      }
+      fromUrl = window.location ? window.location.pathname.split('/')[1] : fromUrl;
+    }
+    if (viaProtect) {
+      this.setState({ viaProtect: false });
+    }
     if (redirectMeta) {
-      this.setState({ found: 2 });
       const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `https://${window.location.hostname}${redirectMeta.to}`;
       window.location = toUrl;
-    } else {
+    } else if (fromUrl !== 'password-protected') {
       this.findIssuerReferralCode(fromUrl);
     }
   }
