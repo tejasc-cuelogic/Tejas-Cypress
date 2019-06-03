@@ -110,11 +110,12 @@ describe('Account Creation', () => {
           iraAccountCreation();
           break;
         case 'Summary':
-          registerApiCall('upsertInvestorAccount');
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
           cy.wait('@upsertInvestorAccount');
-          cy.wait(1000);
-          cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
+          cy.wait('@upsertInvestorAccount');
+          if (cy.get('div.mini').length) {
+            cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
+          }
           cy.wait(1000);
           break;
       }
@@ -177,14 +178,16 @@ describe('Account Creation', () => {
           cy.wait(1000);
           addFunds('7000');
           cy.wait('@upsertInvestorAccount');
-          cy.wait(1000);
+          cy.wait('@upsertInvestorAccount');
           entityAccountCreation();
           break;
         case 'Summary':
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
           cy.wait('@upsertInvestorAccount');
-          cy.wait(1000);
-          cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
+          cy.wait('@upsertInvestorAccount');
+          if (cy.get('div.mini').length) {
+            cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
+          }
           cy.wait(1000);
           break;
       }
@@ -201,12 +204,16 @@ describe('Account Creation', () => {
 
   it('should create individual account successfully', () => {
     addFunds('15000');
-    cy.wait('@upsertInvestorAccount');
-    cy.wait('@upsertInvestorAccount');
-    cy.get('div.content').get('div.center-align > button.button').contains('Create your account').click({ force: true });
-    cy.wait('@upsertInvestorAccount');
-    cy.wait(3000);
+    cy.wait(5000);
+    registerApiCall('submitAccount');
+    cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
+    cy.wait('@submitAccount');
+    cy.wait('@submitAccount');
     cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
+    // if (cy.get('div.mini').length) {
+    // } else {
+    //   cy.wait(2000);
+    // }
   });
 
   it('should create IRA account successfully', () => {
