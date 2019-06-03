@@ -44,8 +44,8 @@ export class FaqStore {
       onFetch: (res) => {
         if (res && res.faqs) {
           this.setDb(res.faqs);
-          uiStore.setProgress(false);
         }
+        uiStore.setProgress(false);
       },
     });
   }

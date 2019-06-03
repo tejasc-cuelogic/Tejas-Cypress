@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Icon, Grid, Button, Form, Confirm } from 'semantic-ui-react';
@@ -9,7 +9,7 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  teamMember, handleAction, handleEdit, save,
+  teamMember, handleAction, handleEdit, save, refUrl,
 }) => (
   <div className="row-wrap striped-table">
     <div className="balance-half first-column">
@@ -24,7 +24,7 @@ const SortableItem = SortableElement(({
           base64url
         />
       </div>
-      {teamMember.memberName}
+      <Link to={`${refUrl}/${teamMember.id}`}>{teamMember.memberName}</Link>
     </div>
     <div className="balance">
       {teamMember.title}
@@ -59,7 +59,7 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  teamMembers, handleAction, handleEdit, save,
+  teamMembers, handleAction, handleEdit, save, refUrl,
 }) => (
   <div className="tbody">
     {teamMembers.map((teamMember, index) => (
@@ -72,17 +72,21 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         handleEdit={handleEdit}
         index={index}
+        refUrl={refUrl}
       />
     ))}
   </div>
 ));
 
-@inject('teamStore')
+@inject('teamStore', 'uiStore')
 @withRouter
 @observer
 export default class AllTeam extends Component {
   componentWillMount() {
     this.props.teamStore.initRequest(true);
+  }
+  componentWillUnmount() {
+    this.props.teamStore.reset();
   }
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { teamMembers, setTeamMemberOrder } = this.props.teamStore;
@@ -127,8 +131,12 @@ export default class AllTeam extends Component {
       confirmBox,
     } = this.props.teamStore;
     const totalRecords = count || 0;
-    if (loading) {
+    const { inProgress } = this.props.uiStore;
+    if (loading || inProgress) {
       return <InlineLoader />;
+    }
+    if (teamMembers.length === 0) {
+      return <InlineLoader text="No data found." />;
     }
     return (
       <Aux>
@@ -176,6 +184,7 @@ export default class AllTeam extends Component {
               onSortEnd={e => this.onSortEnd(e)}
               handleDeleteConfirm={this.handleDeleteConfirm}
               lockAxis="y"
+              refUrl={this.props.match.url}
               useDragHandle
             />
           </div>
