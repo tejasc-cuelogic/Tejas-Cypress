@@ -14,12 +14,13 @@ import DraggableListing from '../components/DraggableListing';
 export default class Offerings extends Component {
   componentWillMount() {
     const {
-      db, initRequest, setFieldValue, requestState,
+      db, initRequest, setFieldValue, requestState, setDb, allOfferingsList,
     } = this.props.offeringsStore;
     const params = { stage: this.props.match.params.stage };
     if (!db[params.stage]) {
       initRequest(params);
     } else {
+      setDb(allOfferingsList);
       setFieldValue('requestState', { ...requestState, ...params });
     }
   }

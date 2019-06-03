@@ -290,7 +290,7 @@ export class OfferingsStore {
 
   @computed get allOfferingsList() {
     const data = toJS(this.data[this.requestState.stage]);
-    return (data.data &&
+    return (data && data.data &&
       data.data.getOfferings &&
       toJS(sortBy(data.data.getOfferings, ['order']))) || [];
   }
