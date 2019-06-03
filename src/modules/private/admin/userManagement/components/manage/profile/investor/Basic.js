@@ -23,7 +23,7 @@ export default class Basic extends Component {
   }
   updateMode = (e, val) => {
     e.preventDefault();
-    this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true);
+    this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true, this.state.displayMode);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
   }
@@ -98,20 +98,38 @@ export default class Basic extends Component {
         </Form.Group>
         <Form.Group widths={2}>
           {
-          ['firstLegalName', 'lastLegalName', 'ssn'].map(field => (
+          ['firstLegalName', 'lastLegalName'].map(field => (
             <FormInput
               key={field}
               name={field}
               fielddata={USER_BASIC.fields[field]}
               changed={(e, result) => formChange(e, result, formName)}
-              displayMode={field === 'ssn' || displayMode}
+              displayMode={displayMode}
             />
             ))
+          }
+          {displayMode ?
+            <FormInput
+              key="ssn"
+              name="ssn"
+              fielddata={USER_BASIC.fields.ssn}
+              changed={(e, result) => formChange(e, result, formName)}
+              displayMode={displayMode}
+            />
+            :
+            <MaskedInput
+              name="ssn"
+              fielddata={USER_BASIC.fields.ssn}
+              ssn
+              changed={(values, field) => maskChange(values, formName, field)}
+              displayMode={displayMode}
+              showerror
+            />
           }
           <MaskedInput
             name="dateOfBirth"
             fielddata={USER_BASIC.fields.dateOfBirth}
-            changed={(values, field) => maskChange(values, 'USER_BASIC', field)}
+            changed={(values, field) => maskChange(values, formName, field)}
             dateOfBirth
             displayMode={displayMode}
           />

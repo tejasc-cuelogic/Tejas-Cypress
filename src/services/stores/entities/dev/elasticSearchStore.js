@@ -28,6 +28,119 @@ export class ElasticSearchStore {
   }
 
   @action
+  resetESForm = () => {
+    this.ES_AUDIT_FRM = Validator.prepareFormObject(ES_AUDIT);
+  }
+
+  @action
+  elasticSearchHandler = (alias, module, indexName) => {
+    this.setFieldValue('inProgress', `${alias}_${module}`);
+    if (module === 'SWAP') {
+      this.swapIndexAliases(alias);
+    } else if (module === 'POPULATE' || module === 'DELETE') {
+      const mutation = this.mutations[alias];
+      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], indexName.toUpperCase());
+    }
+  }
+
+  @action
+  esMutations = (mutation, index) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: elasticSearchQueries[mutation],
+        variables: { index },
+        refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
+      })
+      .then((result) => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        resolve(result);
+        this.setFieldValue('inProgress', false);
+      })
+      .catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject(error);
+        this.setFieldValue('inProgress', false);
+      });
+  });
+
+  @action
+  getESAudit = () => {
+    this.esAudit = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: elasticSearchQueries.getESAuditList,
+      variables: {},
+      onError: () => {
+        this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
+
+  @action
+  swapIndexAliases = indexAliasName => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: elasticSearchQueries.swapIndexOnAlias,
+        variables: { indexAliasName },
+        refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
+      })
+      .then((result) => {
+        if (get(result, 'data.swapIndexOnAlias.success')) {
+          Helper.toast('Your request is processed successfully.', 'success');
+        } else {
+          Helper.toast(get(result, 'data.swapIndexOnAlias.message'), 'error');
+        }
+        resolve(result);
+        this.setFieldValue('inProgress', false);
+      })
+      .catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject(error);
+        this.setFieldValue('inProgress', false);
+      });
+  });
+
+  @action
+  getESAuditPara = (indexAliasName) => {
+    const { fields } = this.ES_AUDIT_FRM;
+    const formData = Validator.evaluateFormData(fields);
+    const variables = {
+      indexAliasName,
+    };
+    if (formData.random) {
+      variables.random = formData.random;
+    }
+    this.esAuditOutput = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: elasticSearchQueries.getESAudit,
+      variables,
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
+
+  @computed get eSAudit() {
+    return get(this.esAudit, 'data.getESAudit.indices[0]') ?
+      sortBy(toJS(get(this.esAudit, 'data.getESAudit.indices')), ['alias']) : [];
+  }
+
+  @computed get esAuditParaOutput() {
+    return get(this.esAuditOutput, 'data.getESAudit.indices[0]') ?
+      toJS(get(this.esAuditOutput, 'data.getESAudit.indices[0]')) : [];
+  }
+
+  @computed get eSAuditLoading() {
+    return this.esAudit.loading;
+  }
+
+  @computed get esAuditParaOutputLoading() {
+    return this.esAuditOutput.loading;
+  }
+
+  @action
   submitStorageDetails = () => {
     uiStore.setProgress();
     this.setFieldValue('boxMsg', '');
