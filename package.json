@@ -152,7 +152,7 @@
     "build": "npm-run-all build-assets build-js",
     "build:prod": "npm-run-all build-assets build-js:prod",
     "cypress:open": "./node_modules/.bin/cypress open",
-    "test": "npx cypress run",
+    "test": "$(npm bin)/cypress run",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
