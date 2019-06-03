@@ -19,7 +19,7 @@ const SortableItem = SortableElement(({
       <DragHandle />
       <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
-        <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
+        <Link to={`${this.props.match.url}/${faq.id}`}>{faq.question}</Link>
       </span>
     </div>
     <div className="action width-100 right-align">
@@ -58,6 +58,9 @@ export default class AllFaqs extends Component {
   state = { activeIndex: 0, innerActiveIndex: [] }
   componentWillMount() {
     this.props.faqStore.initRequest(); // load data
+  }
+  componentWillUnmount() {
+    this.props.faqStore.reset();
   }
   onSortEnd = ({ oldIndex, newIndex }, faqType, categorizedFaqs) => {
     const { allCategorizedFaqs, setFaqOrder } = this.props.faqStore;

@@ -58,7 +58,7 @@ export default class FaqDetails extends Component {
                   inverted
                   onClick={() => this.save(true)}
                   color="green"
-                  content="Save as draft"
+                  content="Save"
                   disabled={!FAQ_FRM.meta.isValid}
                 />
                 <Button

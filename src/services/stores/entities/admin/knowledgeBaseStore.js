@@ -119,6 +119,7 @@ export class KnowledgeBaseStore {
         mutation: id === 'new' ? createKnowledgeBase : updateKnowledgeBase,
         variables: id === 'new' ? { payload: data } :
           { ...{ payload: data }, id },
+        refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
       .then(() => {
         Helper.toast(id === 'new' ? 'Knowledge base added successfully.' : 'Knowledge base updated successfully.', 'success');
@@ -296,6 +297,7 @@ export class KnowledgeBaseStore {
   }
   @action
   deleteKBById = (id) => {
+    uiStore.setProgress();
     client
       .mutate({
         mutation: deleteKBById,
@@ -305,7 +307,8 @@ export class KnowledgeBaseStore {
         refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
       .then(() => Helper.toast('Knowledge base item deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'));
+      .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'))
+      .finally(() => uiStore.setProgress());
   }
   @action
   setConfirmBox = (entity, refId) => {

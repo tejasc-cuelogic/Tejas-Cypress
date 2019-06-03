@@ -227,6 +227,7 @@ export class FaqStore {
   @action
   reset = () => {
     this.FAQ_FRM = Validator.prepareFormObject(FAQ);
+    this.requestState.search = {};
   }
   @action
   setFaqOrder = (newArr) => {
