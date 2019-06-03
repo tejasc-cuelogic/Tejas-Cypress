@@ -2834,5 +2834,10 @@ table.css-wu4c77-diff-container {
 	tbody {
 		display: table;
 		width: 100%;
+		td:nth-child(3), td:nth-child(6) {
+			min-width: 270px;
+			max-width: 270px;
+			word-break: break-all;
+		}
 	}
 }
