@@ -20,7 +20,7 @@ export default class Offerings extends Component {
     if (!db[params.stage]) {
       initRequest(params);
     } else {
-      setDb(allOfferingsList);
+      setDb(allOfferingsList, params.stage);
       setFieldValue('requestState', { ...requestState, ...params });
     }
   }
