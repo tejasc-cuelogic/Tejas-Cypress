@@ -41,7 +41,7 @@ export default class OfferingLaunch extends Component {
     } = this.props.offeringCreationStore;
     new Promise((res, rej) => {
       updateOfferingMutation(
-        currentOfferingId, { stage: 'LIVE' }, false,
+        currentOfferingId, { stage: 'LIVE' }, 'LAUNCHOFFERING',
         true, 'Offering Launched successfully.', false, res, rej,
       );
     })
