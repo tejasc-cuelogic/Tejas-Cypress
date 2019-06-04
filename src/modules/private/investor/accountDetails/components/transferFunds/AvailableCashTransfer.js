@@ -68,27 +68,6 @@ class AvailableCashTransfer extends Component {
               <Grid.Column mobile={16} tablet={10} computer={10} verticalAlign="middle" className="right-align">
                 <Button.Group widths="2">
                   {
-                    // <Aux>
-                    //   {
-                    //     this.transferCtaInfo().map(info => (
-                    //       <Popup
-                    //         hoverable
-                    //         trigger={
-                    //           <span className="mr-10">
-                    // eslint-disable-next-line max-len
-                    //             <Button as={Link} to={info.url} className="disabled" inverted color="green" content={info.content} />
-                    //           </span>
-                    //         }
-                    //         position="top center"
-                    //         wide
-                    //       >
-                    //         <Popup.Content>
-                    //           {`You cannot ${info.content} as your account is in frozen state.`}
-                    //         </Popup.Content>
-                    //       </Popup>
-                    //     ))
-                    //   }
-                    // </Aux> :
                     <Aux>
                       {
                         this.transferCtaInfo().map(info => (
