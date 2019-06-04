@@ -8,11 +8,11 @@ variables:
   CI: "false"
 
 stages:
-  - test
   - build
   - version
   - package
   - deploy
+  - test
   - cleanup
 
 # force usage of AWS role, note runner is in old AWS account so need to to assume xaccount role
