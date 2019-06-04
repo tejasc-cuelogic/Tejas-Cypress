@@ -107,11 +107,6 @@ test:review:
   <<: *review_defination
   before_script:
    - echo "Initiate e2e tests..."
-  cache:
-    key: $CI_COMMIT_REF_SLUG
-    paths:
-    - node_modules/
-    - /root/.cache/Cypress
   image: cypress/base:10
   script:
     - npm install
