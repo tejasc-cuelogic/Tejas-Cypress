@@ -31,7 +31,10 @@ export const proceedInvalidUserLoginAction = () => {
   cy.get('input[type="email"]').type(inValidUserCredentials.email);
   cy.get('input[type="password"]').type(inValidUserCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
-  cy.wait(6000);
+  cy.wait(8000);
+  cy.get('div.header-wrap').find('.stackable').find('.container').find('.menu-button')
+    .get('button')
+    .should('contain', 'Dashboard');
   cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
     .find('.center-align')
     .contains('Invest Now')
@@ -46,7 +49,7 @@ export const proceedWithValidUserLoginAction = () => {
   cy.get('input[type="email"]').type(validInvestorHavingOnceAccountCredentials.email);
   cy.get('input[type="password"]').type(validInvestorHavingOnceAccountCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
-  cy.wait(6000);
+  cy.wait(8000);
   cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
     .find('.center-align')
     .contains('Invest Now')
