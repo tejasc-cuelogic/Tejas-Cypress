@@ -16,7 +16,7 @@ const NO_PERMISSION_MSG = `Please contact
 const NO_LINKED_BANK_MSG = `No Linked Bank available to Transfer Fund, go to
   <a href='/app/account-details/ira/bank-accounts'>Bank Accounts<a>`;
 
-@inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore')
+@inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'accountStore')
 @withRouter
 @observer
 export default class TransferFunds extends Component {
@@ -33,6 +33,7 @@ export default class TransferFunds extends Component {
     const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { cash, cashAvailable } = this.props.transactionStore;
+    const { setFieldValue, showAccountFrozenModal } = this.props.accountStore;
     const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     if (this.props.match.isExact && (!cash || cashAvailable.loading)) {
       return <InlineLoader />;
@@ -56,6 +57,8 @@ export default class TransferFunds extends Component {
                     match={this.props.match}
                     isAccountFrozen={isAccountFrozen}
                     cash={cashAmount || '0.00'}
+                    setFieldValue={setFieldValue}
+                    showAccountFrozenModal={showAccountFrozenModal}
                   />
                 </Grid.Column>
               </Grid.Row>

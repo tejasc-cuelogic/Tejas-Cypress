@@ -72,7 +72,8 @@ export class TransactionStore {
         if (props && props.statement && !this.data.loading) {
           this.setFirstTransaction(data);
           this.hasError = false;
-        } else if (!this.data.loading) {
+        }
+        if (!this.data.loading) {
           this.setData();
         }
         this.setFieldValue('apiCall', true);
