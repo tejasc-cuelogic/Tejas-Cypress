@@ -111,21 +111,26 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  save = (id, status) => {
+  save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
     this.KNOWLEDGE_BASE_FRM.fields.itemStatus.value = status;
     const data = Validator.ExtractValues(this.KNOWLEDGE_BASE_FRM.fields);
+    const payload = id === 'new' ? { payload: data } : { payload: data, id };
+    payload.isPartial = isDraft;
+
     client
       .mutate({
         mutation: id === 'new' ? createKnowledgeBase : updateKnowledgeBase,
-        variables: id === 'new' ? { payload: data } :
-          { ...{ payload: data }, id },
+        variables: payload,
       })
       .then(() => {
-        this.initRequest();
         Helper.toast(id === 'new' ? 'Knowledge base added successfully.' : 'Knowledge base updated successfully.', 'success');
+        resolve();
       })
-      .catch(res => Helper.toast(`${res} Error`, 'error'));
-  }
+      .catch((res) => {
+        Helper.toast(`${res} Error`, 'error');
+        reject();
+      });
+  })
 
   @computed get AllKnowledgeBase() {
     return (this.db && this.db.length &&

@@ -31,9 +31,10 @@ export default class EditKnowledgeBaseItem extends Component {
     this.props.knowledgeBaseStore.resetFormData('KNOWLEDGE_BASE_FRM');
   };
 
-  save = (status) => {
-    this.props.knowledgeBaseStore.save(this.props.match.params.id, status);
-    this.props.history.push(this.props.refLink);
+  save = (status, isDraft = false) => {
+    this.props.knowledgeBaseStore.save(this.props.match.params.id, status, isDraft).then(() => {
+      this.props.history.push(this.props.refLink);
+    });
   }
   render() {
     const {
