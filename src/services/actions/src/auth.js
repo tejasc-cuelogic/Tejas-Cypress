@@ -60,6 +60,7 @@ export class Auth {
       this.cognitoUser = await AmplifyAuth.currentSession();
       return this.cognitoUser;
     } catch (err) {
+      console.log('error in getUserSession', err);
       return null;
     } finally {
       uiStore.setProgress(false);
