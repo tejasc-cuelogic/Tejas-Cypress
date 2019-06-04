@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
@@ -59,7 +59,7 @@ export default class AccountDetailsView extends Component {
 
   render() {
     const {
-      accountDetails, match, accountType, pendingAccoungDetails, uiStore, accountStore,
+      accountDetails, match, click, accountType, pendingAccoungDetails, uiStore, accountStore,
     } = this.props;
     const { activeBankPladLogo, pendingBankPladLogo, loadingState } = this.props.bankAccountStore;
     const pladidLogo = accountType === 'pending' ?
@@ -137,7 +137,7 @@ export default class AccountDetailsView extends Component {
                 accountDetails && !accountDetails.pendingUpdate &&
                 <Aux>
                 {
-                  <Button inverted onClick={() => this.handleChangeLinkBank(`${match.url}/link-bank-account`)} color="green" content="Change Linked Bank" />
+                  <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
                 }
                 </Aux> :
                 <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
