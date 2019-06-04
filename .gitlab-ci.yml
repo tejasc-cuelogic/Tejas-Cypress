@@ -8,11 +8,11 @@ variables:
   CI: "false"
 
 stages:
+  - test
   - build
   - version
   - package
   - deploy
-  - test
   - cleanup
 
 # force usage of AWS role, note runner is in old AWS account so need to to assume xaccount role
@@ -105,6 +105,8 @@ delete:review:
 #Test review environment
 test:review:
   <<: *review_defination
+  before_script:
+   - echo "Initiate e2e tests..."
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
