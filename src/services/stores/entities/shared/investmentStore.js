@@ -97,10 +97,11 @@ export class InvestmentStore {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
     const getrewardBalanceAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
-    const getPreviousCreditAvailable = (userAmountDetails && userAmountDetails.previousInvestmentCredit) || '0';
-    const getCurrCreditAvailable =
-      money.add(getrewardBalanceAvailable, getPreviousCreditAvailable);
-    const cashAndCreditBalance = money.add(getCurrCashAvailable, getCurrCreditAvailable);
+    // const getPreviousCreditAvailable =
+    // (userAmountDetails && userAmountDetails.previousInvestmentCredit) || '0';
+    // const getCurrCreditAvailable =
+    //   money.add(getrewardBalanceAvailable, getPreviousCreditAvailable);
+    const cashAndCreditBalance = money.add(getCurrCashAvailable, getrewardBalanceAvailable);
     const getPreviousInvestedAmount =
       (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
     const transferAmount = money.subtract(
