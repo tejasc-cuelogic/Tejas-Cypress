@@ -45,14 +45,6 @@ export default class AccountDetailsView extends Component {
     });
   }
 
-  handleChangeLinkBank = (url) => {
-    if (this.props.userDetailsStore.isAccountFrozen) {
-      this.props.accountStore.setFieldValue('showAccountFrozenModal', true);
-    } else {
-      this.props.history.push(url);
-    }
-  }
-
   handleClose = () => {
     this.props.accountStore.setFieldValue('showAccountFrozenModal', false);
   }
