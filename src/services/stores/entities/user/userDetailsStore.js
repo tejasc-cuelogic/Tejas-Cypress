@@ -733,7 +733,7 @@ export class UserDetailsStore {
         lastLegalName: basicData.lastLegalName,
       },
     };
-    if (basicData.ssn.length === 9) {
+    if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
     uiStore.setProgress();
