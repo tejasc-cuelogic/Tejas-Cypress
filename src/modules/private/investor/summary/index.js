@@ -12,11 +12,13 @@ export default class Summary extends Component {
     const partialAccLength = signupStatus.partialAccounts.length;
     const activeAccLength = signupStatus.activeAccounts.length;
     const processingAccLength = signupStatus.processingAccounts.length;
+    const frozenAccLength = signupStatus.frozenAccounts.length;
     return (
       <Route
         component={
            ((processingAccLength === 0 &&
             partialAccLength >= 0 &&
+            frozenAccLength === 0 &&
             activeAccLength === 0) ||
             (signupStatus.isMigratedFullAccount ||
             !isBasicVerDoneForMigratedFullUser ||

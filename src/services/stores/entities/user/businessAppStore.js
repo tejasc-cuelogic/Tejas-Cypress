@@ -896,7 +896,10 @@ export class BusinessAppStore {
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
     if (this.urlParameter) {
       payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
+      payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
+      payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
       payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
+      payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
     }
     payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {
