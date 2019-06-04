@@ -1,16 +1,12 @@
 import { OfferingListingFlow } from '../publicOffering/offeringListing';
 import { OfferingDetailFlow } from '../publicOffering/offeringDetails';
 import { inValidEmailCredentials, clearLoginForm } from '../investorSignup/login';
+import {
+  inValidUserCredentials,
+  validInvestorHavingOnceAccountCredentials,
+  validInvestorWithIncompleteCIPCredentials,
+} from './investorsCredentailConstant';
 
-export const inValidUserCredentials = {
-  email: 'v2+admin@nextseed.com',
-  password: 'nextseedTest',
-};
-
-export const validInvestorHavingOnceAccountCredentials = {
-  email: 'jackdemerse2017+15@gmail.com',
-  password: 'Jack@12345',
-};
 
 export const initializeInvestNowFlow = () => {
   cy.visit('/');
@@ -41,6 +37,28 @@ export const proceedInvalidUserLoginAction = () => {
     .click();
 };
 
+export const proceedWithIncompleteInvestorCIPAction = () => {
+  cy.wait(2000);
+  cy.get('div.modals').find('.transition .content').get('button').contains('Login as an Investor')
+    .click();
+  clearLoginForm();
+  cy.get('input[type="email"]').type(validInvestorWithIncompleteCIPCredentials.email);
+  cy.get('input[type="password"]').type(validInvestorWithIncompleteCIPCredentials.password);
+  cy.get('button.button').contains('Log in').click({ force: true });
+  cy.wait(8000);
+  cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
+    .find('.center-align')
+    .contains('Invest Now')
+    .click();
+  cy.wait(2000);
+  cy.get('div.modals').find('.multistep-modal').find('.multistep.content').get('form.account-type-tab')
+    .find('.center-align .mt-30')
+    .get('a')
+    .contains('Continue')
+    .click();
+};
+
+
 export const proceedWithValidUserLoginAction = () => {
   cy.wait(2000);
   cy.get('div.modals').find('.transition .content').get('button').contains('Login as an Investor')
@@ -55,3 +73,7 @@ export const proceedWithValidUserLoginAction = () => {
     .contains('Invest Now')
     .click();
 };
+
+// export const proceedIncompleteCIPInvestorAction = () => {
+//   fillLegalFormAndProceed();
+// }

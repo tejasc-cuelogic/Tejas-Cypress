@@ -1,4 +1,10 @@
-import { initializeInvestNowFlow, proceedInvalidLoginAction, proceedInvalidUserLoginAction, proceedWithValidUserLoginAction } from '../../support/investNow/investNowFlow';
+import {
+  initializeInvestNowFlow,
+  proceedInvalidLoginAction,
+  proceedInvalidUserLoginAction,
+  proceedWithIncompleteInvestorCIPAction,
+  // proceedWithValidUserLoginAction,
+} from '../../support/investNow/investNowFlow';
 
 describe('Invest now flow', () => {
   it('Should proceed for invest now flow', () => {
@@ -16,7 +22,10 @@ describe('Invest now flow', () => {
   it('Invalid user type login action', () => {
     proceedInvalidUserLoginAction();
   });
-  it('succesfully login as investor with one account', () => {
-    proceedWithValidUserLoginAction();
+  it('Investor with incomplete CIP information', () => {
+    proceedWithIncompleteInvestorCIPAction();
   });
+  // it('succesfully login as investor with one account', () => {
+  //   proceedWithValidUserLoginAction();
+  // });
 });
