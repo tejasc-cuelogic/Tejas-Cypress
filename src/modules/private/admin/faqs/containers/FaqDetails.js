@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Grid, Card, Form, Divider, Button } from 'semantic-ui-react';
+import { Modal, Header, Grid, Card, Form, Divider } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { FormInput, FormDropDown } from '../../../../../theme/form';
 import { FAQ_STATUS_VALUES, FAQ_TYPES_VALUES } from '../../../../../services/constants/admin/faqs';
+import Actions from '../components/Actions';
 
 @inject('faqStore', 'uiStore', 'articleStore')
 @withRouter
@@ -27,8 +28,8 @@ export default class FaqDetails extends Component {
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   };
-  save = (isDraft = false) => {
-    this.props.faqStore.save(this.props.match.params.id, isDraft).then(() => {
+  save = (status, isDraft = false) => {
+    this.props.faqStore.save(this.props.match.params.id, status, isDraft).then(() => {
       this.props.history.push(this.props.refLink);
     });
   }
@@ -44,6 +45,7 @@ export default class FaqDetails extends Component {
     const isNew = this.props.match.params.id === 'new';
     const { inProgress } = this.props.uiStore;
     const { categoriesDropdown, Categories } = this.props.articleStore;
+    const itemStatus = this.props.match.params.status;
     if (loading || inProgress || Categories.loading) {
       return <InlineLoader />;
     }
@@ -53,21 +55,12 @@ export default class FaqDetails extends Component {
           <div>
             <Header as="h3">
               {isNew ? 'Create' : 'Edit'} FAQ
-              <Button.Group compact floated="right">
-                <Button
-                  inverted
-                  onClick={() => this.save(true)}
-                  color="green"
-                  content="Save"
-                  disabled={!FAQ_FRM.meta.isValid}
-                />
-                <Button
-                  primary
-                  onClick={() => this.save()}
-                  content="Submit for Approval"
-                  disabled={!FAQ_FRM.meta.isValid}
-                />
-              </Button.Group>
+              <Actions
+                save={this.save}
+                meta={FAQ_FRM.meta}
+                isPublished={itemStatus === 'PUBLISHED'}
+                isReview={itemStatus === 'IN_REVIEW'}
+              />
             </Header>
           </div>
           <Divider hidden />

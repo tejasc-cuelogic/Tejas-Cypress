@@ -282,8 +282,9 @@ export class FaqStore {
     Validator.validateForm(this.FAQ_FRM);
   }
   @action
-  save = (id, isDraft = false) => new Promise((resolve, reject) => {
+  save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
     uiStore.setProgress();
+    this.FAQ_FRM.fields.itemStatus.value = status;
     let data = this.getFaqFormData();
     data = id === 'new' ? data : { ...data, id };
     clientPrivate

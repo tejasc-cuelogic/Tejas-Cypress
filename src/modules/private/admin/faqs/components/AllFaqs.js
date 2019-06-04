@@ -12,14 +12,14 @@ const actions = {
 };
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  faq, key, handleAction,
+  faq, key, handleAction, refUrl,
 }) => (
   <div className="row-wrap striped-table" key={key}>
     <div className="balance-half first-column">
       <DragHandle />
       <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
-        <Link to={`${this.props.match.url}/${faq.id}`}>{faq.question}</Link>
+        <Link to={`${refUrl}/${faq.id}/${faq.itemStatus}`}>{faq.question}</Link>
       </span>
     </div>
     <div className="action width-100 right-align">
@@ -35,7 +35,7 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  allFaqs, handleAction, checkedRecords, selectedRecords,
+  allFaqs, handleAction, checkedRecords, selectedRecords, refUrl,
 }) => (
   <div className="tbody">
     { allFaqs.map((faq, index) => (
@@ -47,6 +47,7 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         checkedRecords={checkedRecords}
         selectedRecords={selectedRecords}
+        refUrl={refUrl}
       />
     )) }
   </div>
@@ -68,11 +69,11 @@ export default class AllFaqs extends Component {
       setFaqOrder(arrayMove(allCategorizedFaqs[faqType][categorizedFaqs], oldIndex, newIndex));
     }
   }
-  handleAction = (action, faqId) => {
+  handleAction = (action, faqId, status) => {
     if (action === 'Delete') {
       this.props.faqStore.setConfirmBox(action, faqId);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/${faqId}`);
+      this.props.history.push(`${this.props.match.url}/${faqId}/${status}`);
     }
   }
   globalActionChange = (e, { name, value }) =>
@@ -140,7 +141,7 @@ export default class AllFaqs extends Component {
                   <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
                     <Icon className={!innerActiveIndex.includes(categorizedFaqs) ? 'ns-chevron-up' : 'ns-chevron-down'} />
                     {allCategorizedFaqs[faqType][categorizedFaqs][0].categoryName}
-                    <Button as={Link} to={`${this.props.match.url}/new/${faqType}/${categorizedFaqs}`} className="link-button pull-right"><small>+ Add FAQ</small></Button>
+                    <Button as={Link} to={`${this.props.match.url}/new/DRAFT/${faqType}/${categorizedFaqs}`} className="link-button pull-right"><small>+ Add FAQ</small></Button>
                   </Accordion.Title>
                   <Accordion.Content active={!innerActiveIndex.includes(categorizedFaqs)}>
                     <SortableList
@@ -152,6 +153,7 @@ export default class AllFaqs extends Component {
                       handleAction={this.handleAction}
                       checkedRecords={this.checkedRecords}
                       selectedRecords={selectedRecords}
+                      refUrl={this.props.match.url}
                     />
                   </Accordion.Content>
                 </Accordion>
