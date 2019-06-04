@@ -17,7 +17,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
   getBonusRewards, getOfferingFilingList,
-  generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
+  generateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore } from '../../../index';
@@ -975,25 +975,21 @@ export class OfferingCreationStore {
   }
   addNewOffer = () => {
     const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
-    uiStore.setProgress();
+    uiStore.addMoreInProgressArray('upsert');
     client
       .mutate({
         mutation: upsertOffering,
         variables: { offeringDetails },
-        refetchQueries: [{
-          query: allOfferings,
-          variables: { stage: ['CREATION'] },
-        }],
       })
       .then((res) => {
+        uiStore.removeOneFromProgressArray(false);
+        offeringsStore.addNewOne(res.data.upsertOffering, 'creation');
         this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
         Helper.toast('Offering created successfully.', 'success');
       })
       .catch(() => {
+        uiStore.removeOneFromProgressArray(false);
         Helper.toast('Error while creating offer', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
       });
   }
 
@@ -1019,7 +1015,8 @@ export class OfferingCreationStore {
         mutation: updateOffering,
         variables,
       })
-      .then(() => {
+      .then((result) => {
+        offeringsStore.updateOfferingList(id, result.data.updateOffering, keyName);
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(`${successMsg}`, msgType);
