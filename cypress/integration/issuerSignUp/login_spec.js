@@ -1,3 +1,5 @@
+import { registerApiCall } from '../../support/common';
+
 let businessName = 'test';
 describe('Log In', () => {
   beforeEach(() => {
@@ -38,7 +40,14 @@ describe('Log In', () => {
     fillNextYearProjection();
     cy.get('input[value="LLC"]').click();
     cy.get('input[name="legalConfirmation"]').parent().click({ force: true, multiple: true });
+    registerApiCall('Submit');
     cy.get('button').contains('Submit').click();
+    cy.wait('@Submit');
+    cy.get('input[name="password"]').type('nextseedTest');
+    if (cy.get('input[name="verify"]')) {
+      cy.get('input[name="verify"]').type('nextseedTest');
+    }
+    cy.get('button').contains('Proceed').click();
   })
 });
 const issuerSignUp = () => {
@@ -48,8 +57,10 @@ const issuerSignUp = () => {
 const fillBasicDetails = () => {
   cy.get('input[name="firstName"]').type('automation');
   cy.get('input[name="lastName"]').type('test');
-  cy.get('input[name="email"]').type('pankaj.cuelogic@nextseed.com');
+  cy.get('input[name="email"]').type('pankaj.cuelogic+issuer@nextseed.com');
+  registerApiCall('Continue');
   cy.get('button').contains('Continue').click();
+  cy.wait('@Continue');
 };
 
 const fillGeneralInfo = () => {
