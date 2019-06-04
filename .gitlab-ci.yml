@@ -63,6 +63,7 @@ build:review:
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
+    - .npm
     - node_modules/
     - /root/.cache/Cypress
   # <<: *before_script_defination
@@ -108,6 +109,12 @@ test:review:
   before_script:
    - echo "Initiate e2e tests..."
   image: cypress/base:10
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+    - cypress/screenshots
+    - cypress/videos
   script:
     - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
