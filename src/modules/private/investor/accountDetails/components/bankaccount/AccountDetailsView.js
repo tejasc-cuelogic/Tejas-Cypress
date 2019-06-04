@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
@@ -9,15 +9,19 @@ import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
+import FrozenAccountModal from '../../FrozenAccountModal';
 import NSImage from '../../../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore')
+@inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore', 'accountStore')
 @withRouter
 @observer
 export default class AccountDetailsView extends Component {
   componentWillMount() {
     const { accountDetails, accountType } = this.props;
+    const { setFieldValue } = this.props.userDetailsStore;
+    const investorAccount = this.props.location.pathname.includes('individual') ? 'individual' : this.props.location.pathname.includes('ira') ? 'ira' : 'entity';
+    setFieldValue('currentActiveAccount', investorAccount);
     const activeBankInstutationId = accountDetails && accountDetails.plaidInstitutionId ?
       accountDetails.plaidInstitutionId : null;
 
@@ -40,10 +44,22 @@ export default class AccountDetailsView extends Component {
       this.props.history.push(confirmUrl);
     });
   }
+
+  handleChangeLinkBank = (url) => {
+    if (this.props.userDetailsStore.isAccountFrozen) {
+      this.props.accountStore.setFieldValue('showAccountFrozenModal', true);
+    } else {
+      this.props.history.push(url);
+    }
+  }
+
+  handleClose = () => {
+    this.props.accountStore.setFieldValue('showAccountFrozenModal', false);
+  }
+
   render() {
     const {
-      accountDetails, click, match, accountType, pendingAccoungDetails, uiStore,
-      userDetailsStore,
+      accountDetails, match, accountType, pendingAccoungDetails, uiStore, accountStore,
     } = this.props;
     const { activeBankPladLogo, pendingBankPladLogo, loadingState } = this.props.bankAccountStore;
     const pladidLogo = accountType === 'pending' ?
@@ -57,6 +73,10 @@ export default class AccountDetailsView extends Component {
     }
     if (loadingState) {
       return <InlineLoader />;
+    }
+
+    if (accountStore.showAccountFrozenModal) {
+      return <FrozenAccountModal handleClose={this.handleClose} refLink={this.props.match.url} />;
     }
     return (
       <Card.Content>
@@ -115,8 +135,11 @@ export default class AccountDetailsView extends Component {
             <Grid.Column width={3} textAlign={!isMobile ? 'right' : ''} verticalAlign="middle">
               {accountType === 'active' ?
                 accountDetails && !accountDetails.pendingUpdate &&
-                <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} className={userDetailsStore.isAccountFrozen ? 'disabled' : ''} color="green" content="Change Linked Bank" />
-                :
+                <Aux>
+                {
+                  <Button inverted onClick={() => this.handleChangeLinkBank(`${match.url}/link-bank-account`)} color="green" content="Change Linked Bank" />
+                }
+                </Aux> :
                 <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }
             </Grid.Column>
