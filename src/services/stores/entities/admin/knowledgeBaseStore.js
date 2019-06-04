@@ -119,9 +119,9 @@ export class KnowledgeBaseStore {
         mutation: id === 'new' ? createKnowledgeBase : updateKnowledgeBase,
         variables: id === 'new' ? { payload: data } :
           { ...{ payload: data }, id },
-        refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
       .then(() => {
+        this.initRequest();
         Helper.toast(id === 'new' ? 'Knowledge base added successfully.' : 'Knowledge base updated successfully.', 'success');
       })
       .catch(res => Helper.toast(`${res} Error`, 'error'));
