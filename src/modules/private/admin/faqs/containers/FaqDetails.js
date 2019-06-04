@@ -22,6 +22,7 @@ export default class FaqDetails extends Component {
       this.props.faqStore.setFormData({
         faqType: this.props.match.params.faqType,
         categoryId: this.props.match.params.categoryId,
+        itemStatus: 'DRAFT',
       });
     }
   }
