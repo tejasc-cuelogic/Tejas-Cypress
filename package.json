@@ -77,6 +77,7 @@
     "json-beautify": "^1.1.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "0.5.0",
+    "marked": "^0.3.6",
     "mobx": "^3.2.2",
     "mobx-apollo": "0.0.18",
     "mobx-react": "^4.2.2",
@@ -151,7 +152,7 @@
   },
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",
-    "start": "webpack-dashboard -- node --max_old_space_size=8192 scripts/start.js",
+    "start": "node --max_old_space_size=8192 scripts/start.js",
     "build-status": "node scripts/start.js --mode development --profile --json > stats.json",
     "build-js": "node --max_old_space_size=7500 scripts/build.js",
     "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",

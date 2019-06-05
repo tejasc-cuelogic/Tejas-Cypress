@@ -26,6 +26,8 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const CopyPlugin = require('copy-webpack-plugin');
+const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
+const SriPlugin = require('webpack-subresource-integrity');
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -45,6 +47,7 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+const publicPathBugSnag = paths.servedPath;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -612,6 +615,11 @@ module.exports = function (webpackEnv) {
           },
         },
       ]),
+      isEnvProduction &&
+      new SriPlugin({
+        hashFuncNames: ['sha256'],
+        enabled: true,
+      }),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
       isEnvProduction &&
@@ -668,3 +676,14 @@ module.exports = function (webpackEnv) {
     performance: false,
   };
 };
+
+if (process.env.REACT_APP_BUG_SNAG_KEY && !(['localhost'].includes(process.env.REACT_APP_DEPLOY_ENV))) {
+  // It's a good idea to only run this plugin when you're building a bundle
+  // that will be released, rather than for every development build
+  module.exports.plugins.push(new BugsnagSourceMapUploaderPlugin({
+    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+    publicPathBugSnag,
+    appVersion: process.env.CI_PIPELINE_ID,
+    overwrite: true,
+  }));
+}
