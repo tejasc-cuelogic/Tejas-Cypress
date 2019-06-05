@@ -18,33 +18,6 @@ import { userIdleTime } from './constants/common';
  * Main App
  */
 
-if (window.Cypress) {
-  const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-  if (MutationObserver) {
-    new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        mutation.addedNodes.forEach(processNode);
-      });
-    }).observe(document, { childList: true, subtree: true });
-  }
-  
-  const processNode = function(node) {
-    const tagName = (node.tagName || '').toLowerCase();
-    if (
-      tagName === 'script'
-      && node.integrity
-    ) {
-      node.onerror = function(e) {
-    const fb = document.createElement(tagName);
-    const parent = node.parentNode;
-    if (node.src) fb.setAttribute('src', node.getAttribute('src'));
-    parent.appendChild(fb);
-    node.remove();
-      };
-    }
-  };
-  }
-
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
