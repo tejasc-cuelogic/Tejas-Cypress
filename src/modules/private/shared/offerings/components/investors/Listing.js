@@ -108,7 +108,7 @@ export default class Listing extends Component {
                       {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                     </Table.Cell>
                   }
-                  {(isIssuer && hardClosedDate) || (isAdmin) ?
+                  {isAdmin ?
                     <Table.Cell>
                       {Helper.CurrencyFormat(data.amount, 0)}
                       {parseInt(data.investmentsCount, 10) > 1 ?
