@@ -13,7 +13,7 @@ const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const getCustomConfig = require('./custom-react-scripts/config');
-// const SriPlugin = require('webpack-subresource-integrity');
+const SriPlugin = require('webpack-subresource-integrity');
 const CopyPlugin = require('copy-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -283,10 +283,10 @@ module.exports = {
       },
     ]),
     // Enable SRI on the NS App
-    // new SriPlugin({
-    //   hashFuncNames: ['sha256'],
-    //   enabled: false,
-    // }),
+    new SriPlugin({
+      hashFuncNames: ['sha256'],
+      enabled: true,
+    }),
 
   ],
   // Some libraries import Node modules but don't use them in the browser.

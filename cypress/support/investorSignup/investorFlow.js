@@ -6,7 +6,7 @@ import { enterCodeAndConfirm } from '../common';
 import { completeInvestorProfile } from './InvestorProfile';
 
 export const InvestorFlowProcess = () => {
-  cy.visit('https://1702-cypress-test-framework-poc.s3-website-us-east-1.amazonaws.com/password-protected', { timeout: 80000 });
+  cy.visit('http://1702-cypress-test-framework-poc.s3-website-us-east-1.amazonaws.com/password-protected', { failOnStatusCode: false });
   cy.wait(10000)
   fillSignUpFormAndProceed();
   enterCodeAndConfirm();
