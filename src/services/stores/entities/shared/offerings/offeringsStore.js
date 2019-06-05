@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, mapValues, values, map, sortBy } from 'lodash';
+import { pickBy, mapValues, values, map, sortBy, remove, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
@@ -14,7 +14,7 @@ import { ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
-  @observable data = [];
+  @observable data = {};
   @observable filters = false;
   @observable offerData = {};
   @observable oldOfferData = {};
@@ -33,7 +33,7 @@ export class OfferingsStore {
     displayTillIndex: 10,
     search: {},
   };
-  @observable db;
+  @observable db = {};
   @observable currentId = '';
   @observable initLoad = [];
   @observable totalRaisedAmount = [];
@@ -45,17 +45,17 @@ export class OfferingsStore {
     } = props;
     const reqStages = Object.keys(pickBy(STAGES, s => s.ref === stage));
     this.requestState.stage = stage;
-    this.data = graphql({
+    this.data[stage] = graphql({
       client,
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages } :
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-      fetchPolicy: 'network-only',
+      // fetchPolicy: 'network-only',
       onFetch: (res) => {
-        if (res && !this.data.loading) {
+        if (res && !this.data[stage].loading && !this.db[stage]) {
           this.requestState.page = 1;
           this.requestState.skip = 0;
-          this.setDb(res.getOfferings);
+          this.setDb(res.getOfferings, stage);
         }
       },
       onError: () => {
@@ -69,6 +69,7 @@ export class OfferingsStore {
   }
   @action
   updateOfferingPublicaly = (id, isAvailablePublicly) => {
+    uiStore.addMoreInProgressArray('publish');
     const variables = {
       id,
       offeringDetails: { isAvailablePublicly },
@@ -78,11 +79,14 @@ export class OfferingsStore {
         mutation: updateOffering,
         variables,
       }).then(() => {
-        this.initRequest(this.requestState);
+        uiStore.removeOneFromProgressArray('publish');
+        this.changePublicFlagForOffer(id, isAvailablePublicly);
         Helper.toast('Offering updated successfully.', 'success');
-      }).catch(() => Helper.toast('Error while updating offering', 'error'));
+      }).catch(() => {
+        uiStore.removeOneFromProgressArray('publish');
+        Helper.toast('Error while updating offering', 'error');
+      });
   }
-
   @action
   getTotalAmount = () => {
     this.totalRaisedAmount = graphql({
@@ -98,13 +102,15 @@ export class OfferingsStore {
   }
 
   @action
-  setDb = (data) => {
+  setDb = (data, stage = false) => {
     const updatedData = map(data, d => (
       {
         ...d,
         BusinessName: d.keyTerms ? d.keyTerms.legalBusinessName : '',
       }));
-    this.db = ClientDb.initiateDb(updatedData);
+    const tempDb = this.db;
+    tempDb[stage || this.requestState.stage] = ClientDb.initiateDb(updatedData);
+    this.db = { ...tempDb };
   }
 
   @action
@@ -117,7 +123,9 @@ export class OfferingsStore {
     if (keyword) {
       this.setDb(this.allOfferingsList);
       ClientDb.filterFromNestedObjs(['keyTerms.legalBusinessName', 'keyTerms.shorthandBusinessName'], keyword);
-      this.db = ClientDb.getDatabase();
+      const tempDb = this.db;
+      tempDb[this.requestState.stage] = ClientDb.getDatabase();
+      this.db = { ...tempDb };
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
@@ -132,22 +140,94 @@ export class OfferingsStore {
 
   @action
   deleteOffering = (id) => {
-    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === this.requestState.stage));
+    uiStore.addMoreInProgressArray('delete');
     client
       .mutate({
         mutation: deleteOffering,
         variables: {
           id,
         },
-        refetchQueries: [{
-          query: allOfferings,
-          variables: { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-        }],
       })
-      .then(() => Helper.toast('Offering deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting offering', 'error'));
+      .then(() => {
+        this.removeOneFromData(id);
+        uiStore.removeOneFromProgressArray('delete');
+        Helper.toast('Offering deleted successfully.', 'success');
+      })
+      .catch(() => {
+        uiStore.removeOneFromProgressArray('delete');
+        Helper.toast('Error while deleting offering', 'error');
+      });
   }
-
+  @action
+  changePublicFlagForOffer = (id, isAvailablePublicly) => {
+    const db = { ...toJS(this.db) };
+    const offer = db[this.requestState.stage].find(o => o.id === id);
+    offer.isAvailablePublicly = isAvailablePublicly;
+    this.db = { ...db };
+    const data = { ...toJS(this.data) };
+    const offerInData = data[this.requestState.stage].data.getOfferings.find(o => o.id === id);
+    offerInData.isAvailablePublicly = isAvailablePublicly;
+    this.data = { ...data };
+  }
+  @action
+  removeOneFromData = (id, Stage) => {
+    const stage = Stage || this.requestState.stage;
+    const db = { ...toJS(this.db) };
+    remove(db[stage], i => i.id === id);
+    remove(db.overview, i => i.id === id);
+    ClientDb.initiateDb(db);
+    this.db = { ...db };
+    const data = { ...toJS(this.data) };
+    if (data[stage]) {
+      remove(data[stage].data.getOfferings, i => i.id === id);
+    }
+    if (data.overview) {
+      remove(data.overview.data.getOfferings, i => i.id === id);
+    }
+    this.data = { ...data };
+  }
+  @action
+  addNewOne = (offer, Stage) => {
+    const stage = Stage || this.requestState.stage;
+    const db = { ...toJS(this.db) };
+    if (db[stage]) {
+      db[stage].unshift(offer);
+      ClientDb.initiateDb(db);
+      this.db = { ...db };
+    }
+    const data = { ...toJS(this.data) };
+    if (data[stage]) {
+      data[stage].data.getOfferings.unshift(offer);
+      this.data = { ...data };
+    }
+  }
+  @action
+  updateOfferingList = (id, payload, key) => {
+    const db = { ...toJS(this.db) };
+    const data = { ...toJS(this.data) };
+    const offerIndex = findIndex(db[this.requestState.stage], o => o.id === id);
+    const offerIndexInData =
+    findIndex(data[this.requestState.stage].data.getOfferings, o => o.id === id);
+    if (key === 'CLOSEOFFERING') {
+      this.removeOneFromData(id, 'live');
+      this.addNewOne(payload, 'completed');
+    } else if (key === 'LAUNCHOFFERING') {
+      this.removeOneFromData(id, 'creation');
+      this.addNewOne(payload, 'live');
+    } else {
+      if (offerIndex !== -1) {
+        db[this.requestState.stage][offerIndex] =
+        { ...db[this.requestState.stage][offerIndex], ...payload };
+        ClientDb.initiateDb(db);
+        this.db = { ...db };
+      }
+      if (offerIndexInData !== -1) {
+        data[this.requestState.stage].data.getOfferings[offerIndexInData] =
+        { ...data[this.requestState.stage].data.getOfferings[offerIndexInData], ...payload };
+        this.data = { ...data };
+      }
+    }
+  }
   @action
   getOne = (id, loading = true) => {
     this.initLoad.push('getOne');
@@ -209,20 +289,26 @@ export class OfferingsStore {
   }
 
   @computed get allOfferingsList() {
-    return (this.data.data && this.data.data.getOfferings &&
-      toJS(sortBy(this.data.data.getOfferings, ['order']))) || [];
+    const data = toJS(this.data[this.requestState.stage]);
+    return (data && data.data &&
+      data.data.getOfferings &&
+      toJS(sortBy(data.data.getOfferings, ['order']))) || [];
   }
 
   @computed get totalRecords() {
-    return (this.data.data && this.data.data.getOfferings &&
-      this.data.data.getOfferings.count) || 0;
+    return (this.data[this.requestState.stage].data &&
+      this.data[this.requestState.stage].data.getOfferings &&
+      this.data[this.requestState.stage].data.getOfferings.count) || 0;
   }
   @computed get allOfferings() {
-    return this.db && this.db.length ? this.db : [];
+    return this.db[this.requestState.stage] &&
+    this.db[this.requestState.stage].length ? this.db[this.requestState.stage] : [];
   }
   @computed get offerings() {
-    return (this.db && this.db.length &&
-      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    const list = toJS(this.db[this.requestState.stage]);
+    return (list && list.length &&
+      list
+        .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
   @action
   pageRequest = ({ skip, page }) => {
@@ -238,7 +324,7 @@ export class OfferingsStore {
     this.requestState.displayTillIndex = 10;
   }
   @computed get count() {
-    return (this.db && this.db.length) || 0;
+    return (this.db[this.requestState.stage] && this.db[this.requestState.stage].length) || 0;
   }
 
   @computed get offer() {
@@ -250,7 +336,7 @@ export class OfferingsStore {
   }
 
   @computed get loading() {
-    return this.data.loading;
+    return this.data[this.requestState.stage].loading;
   }
   @action resetInitLoad() {
     this.initLoad = [];

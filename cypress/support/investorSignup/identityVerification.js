@@ -12,26 +12,27 @@ export const legalDetailsMeta = {
   dateOfBirth: ' 02-28-1975',
   ssn: '112223333',
 };
-export const fillLegalDetailsForm = () => {
+export const fillLegalDetailsForm = (legalDetails = undefined) => {
+  const legalDetailObject = legalDetails || legalDetailsMeta;
   cy.wait(3000);
   cy.get('div.content > form').within(() => {
     cy.get('div[name="title"]')
       .click()
-      .get(`div[role="option"]:contains(${legalDetailsMeta.salutation})`)
+      .get(`div[role="option"]:contains(${legalDetailObject.salutation})`)
       .click();
-    // cy.get('div[name="title"]').find('div.text').type(legalDetailsMeta.salutation);
-    cy.get('input[name="firstLegalName"]').type(legalDetailsMeta.firstLegalName);
-    cy.get('input[name="lastLegalName"]').type(legalDetailsMeta.lastLegalName);
-    cy.get('input[name="residentalStreet"]').type(legalDetailsMeta.residentalStreet);
-    cy.get('input[name="city"]').type(legalDetailsMeta.city);
+    // cy.get('div[name="title"]').find('div.text').type(legalDetailObject.salutation);
+    cy.get('input[name="firstLegalName"]').type(legalDetailObject.firstLegalName);
+    cy.get('input[name="lastLegalName"]').type(legalDetailObject.lastLegalName);
+    cy.get('input[name="residentalStreet"]').type(legalDetailObject.residentalStreet);
+    cy.get('input[name="city"]').type(legalDetailObject.city);
     cy.get('div[name="state"]')
       .click()
-      .get(`div[role="option"]:contains(${legalDetailsMeta.state})`)
+      .get(`div[role="option"]:contains(${legalDetailObject.state})`)
       .click();
-    cy.get('input[name="zipCode"]').type(legalDetailsMeta.zipCode);
-    cy.get('input[name="phoneNumber"]').type(legalDetailsMeta.phoneNumber);
-    cy.get('input[name="dateOfBirth"]').type(legalDetailsMeta.dateOfBirth);
-    cy.get('input[name="ssn"]').type(legalDetailsMeta.ssn);
+    cy.get('input[name="zipCode"]').type(legalDetailObject.zipCode);
+    cy.get('input[name="phoneNumber"]').type(legalDetailObject.phoneNumber);
+    cy.get('input[name="dateOfBirth"]').type(legalDetailObject.dateOfBirth);
+    cy.get('input[name="ssn"]').type(legalDetailObject.ssn);
   });
 };
 

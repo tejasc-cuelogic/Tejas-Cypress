@@ -1,4 +1,4 @@
-import { registerApiCall } from "../common";
+import { registerApiCall } from '../common';
 
 export const SignUpMeta = {
   givenName: 'Nextseed',

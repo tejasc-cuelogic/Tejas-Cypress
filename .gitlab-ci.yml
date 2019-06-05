@@ -12,6 +12,7 @@ stages:
   - version
   - package
   - deploy
+  - test
   - cleanup
 
 # force usage of AWS role, note runner is in old AWS account so need to to assume xaccount role
@@ -62,7 +63,9 @@ build:review:
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
+    - .npm
     - node_modules/
+    - /root/.cache/Cypress
   # <<: *before_script_defination
   script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
@@ -100,6 +103,21 @@ delete:review:
     action: stop
   dependencies: []
  
+#Test review environment
+test:review:
+  <<: *review_defination
+  before_script:
+   - echo "Initiate e2e tests..."
+  image: cypress/base:10
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+    - cypress/screenshots
+    - cypress/videos
+  script:
+    - npm install
+    - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
 #---------------------------------Dev-------------------------------------------
 
 #Building code

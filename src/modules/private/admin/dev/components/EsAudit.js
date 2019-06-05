@@ -56,18 +56,25 @@ export default class EsAudit extends Component {
                     <Header as="h6">
                       {this.renderTitle(get(esAuditParaOutput, 'index_a.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).startOf('hour').fromNow() : ''}</span>)
                     </Header>
+                    {!get(esAuditParaOutput, 'index_a.record') && !get(esAuditParaOutput, 'index_b.record') &&
+                    <InlineLoader text="No Data Found" />
+                    }
                   </Grid.Column>
                   <Grid.Column>
                     <Header as="h6">
                       {this.renderTitle(get(esAuditParaOutput, 'index_b.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).startOf('hour').fromNow() : ''}</span>)
                     </Header>
+                    {!get(esAuditParaOutput, 'index_a.record') && !get(esAuditParaOutput, 'index_b.record') &&
+                    <InlineLoader text="No Data Found" />
+                    }
                   </Grid.Column>
                 </Grid.Row>
+                {(get(esAuditParaOutput, 'index_a.record') || get(esAuditParaOutput, 'index_b.record')) &&
                 <ReactDiffViewer
-                  oldValue={beautify(get(esAuditParaOutput, 'index_a.record') || 'No Data Found', null, 2)}
-                  newValue={beautify(get(esAuditParaOutput, 'index_b.record') || 'No Data Found', null, 2)}
+                  oldValue={beautify(get(esAuditParaOutput, 'index_a.record') || '', null, 2)}
+                  newValue={beautify(get(esAuditParaOutput, 'index_b.record') || '', null, 2)}
                   splitView
-                />
+                />}
               </Grid>
             </Form>
           }
