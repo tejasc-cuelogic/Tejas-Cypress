@@ -143,10 +143,10 @@ export class CampaignStore {
 
   @computed get completed() {
     const offeringList = this.completedList.slice();
-    return (sortBy(offeringList.splice(0, this.completedToDisplay), ['order']));
+    return offeringList.splice(0, this.completedToDisplay);
   }
   @computed get completedList() {
-    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage));
+    return sortBy(this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
   }
   @action
   loadMoreRecord = (type) => {

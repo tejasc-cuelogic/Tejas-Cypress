@@ -10,7 +10,6 @@ import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
-import Helper from '../../../../../../../../helper/utility';
 
 @inject('userDetailsStore', 'uiStore', 'referralsStore')
 @withRouter
@@ -27,9 +26,6 @@ export default class Basic extends Component {
     this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true, this.state.displayMode);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
-    if (this.state.displayMode) {
-      Helper.removeSsn();
-    }
   }
   updateUserData = (e) => {
     e.preventDefault();
@@ -102,7 +98,7 @@ export default class Basic extends Component {
         </Form.Group>
         <Form.Group widths={2}>
           {
-          ['firstLegalName', 'lastLegalName', 'ssn'].map(field => (
+          ['firstLegalName', 'lastLegalName'].map(field => (
             <FormInput
               key={field}
               name={field}
@@ -112,10 +108,28 @@ export default class Basic extends Component {
             />
             ))
           }
+          {displayMode ?
+            <FormInput
+              key="ssn"
+              name="ssn"
+              fielddata={USER_BASIC.fields.ssn}
+              changed={(e, result) => formChange(e, result, formName)}
+              displayMode={displayMode}
+            />
+            :
+            <MaskedInput
+              name="ssn"
+              fielddata={USER_BASIC.fields.ssn}
+              ssn
+              changed={(values, field) => maskChange(values, formName, field)}
+              displayMode={displayMode}
+              showerror
+            />
+          }
           <MaskedInput
             name="dateOfBirth"
             fielddata={USER_BASIC.fields.dateOfBirth}
-            changed={(values, field) => maskChange(values, 'USER_BASIC', field)}
+            changed={(values, field) => maskChange(values, formName, field)}
             dateOfBirth
             displayMode={displayMode}
           />

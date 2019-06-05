@@ -37,6 +37,8 @@ export default class ManualForm extends Component {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
         this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
         this.props.bankAccountStore.resetRoutingNum();
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.bankAccountStore.setBankLinkInterface('list');
         this.props.bankAccountStore.setShowAddFunds();
       });
     }
