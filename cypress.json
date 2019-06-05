@@ -1,4 +1,4 @@
 {
-    "baseUrl": "https://dev.nextseed.qa",
+    "baseUrl": "http://1702-cypress-test-framework-poc.s3-website-us-east-1.amazonaws.com/password-protected",
     "chromeWebSecurity": false
 }
