@@ -31,7 +31,7 @@ export default class Transactions extends Component {
     this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
     if (isExact && (!this.props.isAdmin ||
       (this.props.isAdmin && !this.props.transactionStore.apiCall))) {
-      this.props.transactionStore.initRequest(10, 0);
+      this.props.transactionStore.initRequest();
     }
   }
 

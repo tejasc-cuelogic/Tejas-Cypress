@@ -12,6 +12,7 @@ import {
 
 export class AccountStore {
   @observable INVESTMENT_ACC_TYPES = FormValidator.prepareFormObject(ACC_TYPE);
+  @observable showAccountFrozenModal = false;
   @observable ACC_TYPE_MAPPING = {
     0: {
       store: individualAccountStore,
@@ -35,6 +36,11 @@ export class AccountStore {
       this.INVESTMENT_ACC_TYPES,
       FormValidator.pullValues(e, result),
     );
+  }
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
   }
 
   accountToastMessage = (currentStep, actionName, formName = 'formAddFunds') => {
