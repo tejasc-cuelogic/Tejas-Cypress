@@ -123,20 +123,20 @@ export class ArticleStore {
     @action
     setForm = (res) => {
       Validator.validateForm(this.ARTICLE_FRM);
-      if (!this.article.loading) {
-        Object.keys(this.ARTICLE_FRM.fields).map((key) => {
-          if (key === 'featuredImage') {
-            this.ARTICLE_FRM.fields[key].preSignedUrl = res[key];
-            this.ARTICLE_FRM.fields[key].value = res[key];
-          } else if (key === 'tags') {
-            this.ARTICLE_FRM.fields[key].value = join(res.tags, ',');
-          } else {
-            this.ARTICLE_FRM.fields[key].value = res[key];
-          }
-          return null;
-        });
-        Validator.validateForm(this.ARTICLE_FRM);
-      }
+      // if (!this.article.loading) {
+      Object.keys(this.ARTICLE_FRM.fields).map((key) => {
+        if (key === 'featuredImage') {
+          this.ARTICLE_FRM.fields[key].preSignedUrl = res[key];
+          this.ARTICLE_FRM.fields[key].value = res[key];
+        } else if (key === 'tags') {
+          this.ARTICLE_FRM.fields[key].value = join(res.tags, ',');
+        } else {
+          this.ARTICLE_FRM.fields[key].value = res[key];
+        }
+        return null;
+      });
+      Validator.validateForm(this.ARTICLE_FRM);
+      // }
     }
 
     @action
@@ -145,9 +145,10 @@ export class ArticleStore {
     }
 
     @action
-    save = id => new Promise((resolve, reject) => {
+    save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
       uiStore.setProgress();
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
+      this.ARTICLE_FRM.fields.articleStatus.value = status;
       if (data.minuteRead === null || data.minuteRead === '') {
         delete (data.minuteRead);
       }
@@ -156,7 +157,7 @@ export class ArticleStore {
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
-          variables: id === 'new' ? { payload } : { payload, id },
+          variables: id === 'new' ? { payload, isPartialData: isDraft } : { payload, id, isPartialData: isDraft },
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
           resolve();

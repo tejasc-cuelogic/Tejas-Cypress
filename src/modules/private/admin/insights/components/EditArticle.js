@@ -22,6 +22,10 @@ export default class EditArticle extends Component {
       this.props.articleStore.getCategoryList(false);
     } else {
       this.props.articleStore.reset();
+      this.props.articleStore.setForm({
+        categoryId: this.props.match.params.categoryId,
+        articleStatus: 'DRAFT',
+      });
     }
   }
   onDrop = (files, name) => {
@@ -56,8 +60,8 @@ export default class EditArticle extends Component {
     this.props.history.replace(this.props.refLink);
   };
 
-  save = () => {
-    this.props.articleStore.save(this.props.match.params.id).then(() => {
+  save = (status, isDraft = false) => {
+    this.props.articleStore.save(this.props.match.params.id, status, isDraft).then(() => {
       this.props.history.push(this.props.refLink);
     });
     this.handleCloseModal();
@@ -73,6 +77,7 @@ export default class EditArticle extends Component {
       handleVerifyFileExtension,
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
+    const articleStatus = this.props.match.params.status;
     if (!categoriesDropdown) {
       return <InlineLoader />;
     }
@@ -82,7 +87,12 @@ export default class EditArticle extends Component {
           <div>
             <Header as="h3">
               {isNew ? 'Create' : 'Edit'} Article
-              <Actions save={this.save} meta={ARTICLE_FRM.meta} />
+              <Actions
+                save={this.save}
+                meta={ARTICLE_FRM.meta}
+                isPublished={articleStatus === 'PUBLISHED'}
+                isReview={articleStatus === 'IN_REVIEW'}
+              />
             </Header>
           </div>
           <Divider hidden />
