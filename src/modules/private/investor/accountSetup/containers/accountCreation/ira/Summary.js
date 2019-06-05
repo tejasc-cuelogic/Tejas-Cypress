@@ -26,7 +26,9 @@ export default class Summary extends Component {
   }
 
   componentDidUpdate() {
-    this.props.bankAccountStore.setLoaderForAccountBlank();
+    if (this.props.iraAccountStore.FUNDING_FRM.fields.fundingType.value === 0) {
+      this.props.bankAccountStore.setLoaderForAccountBlank();
+    }
   }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;

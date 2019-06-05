@@ -132,12 +132,16 @@ export const campaignDetailsQuery = gql`
       state
       city
     }
-    bonusRewards{
+    bonusRewards {
       id
       title
       description
       earlyBirdQuantity
       tiers
+      created {
+        by
+        date
+      }
     }
     rewardsTiers
     earlyBird {
