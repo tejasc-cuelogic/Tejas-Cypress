@@ -107,7 +107,7 @@ build:dev:
   <<: *build_definition
   only:
     refs:
-      - 1863-add-new-regulation-type-bd_506b-type-for-offering
+      - develop
   # <<: *before_script_defination
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
@@ -118,7 +118,7 @@ build:predev:
   <<: *build_definition
   only:
     refs:
-      - develop
+      - 1863-add-new-regulation-type-bd_506b-type-for-offering
   # <<: *before_script_defination
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
