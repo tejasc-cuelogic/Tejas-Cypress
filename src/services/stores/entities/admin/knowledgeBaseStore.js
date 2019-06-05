@@ -112,6 +112,7 @@ export class KnowledgeBaseStore {
 
   @action
   save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
+    uiStore.setProgress();
     this.KNOWLEDGE_BASE_FRM.fields.itemStatus.value = status;
     const data = Validator.ExtractValues(this.KNOWLEDGE_BASE_FRM.fields);
     const payload = id === 'new' ? { payload: data } : { payload: data, id };
@@ -129,7 +130,8 @@ export class KnowledgeBaseStore {
       .catch((res) => {
         Helper.toast(`${res} Error`, 'error');
         reject();
-      });
+      })
+      .finally(() => uiStore.setProgress(false));
   })
 
   @computed get AllKnowledgeBase() {
