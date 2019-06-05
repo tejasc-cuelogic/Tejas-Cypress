@@ -30,10 +30,10 @@ const FormCheckbox = observer((props) => {
                       c.conditionalCustomLabel ? conditionalCustomLabel :
                         c.customUpdateLimitLabel ? customUpdateLimitLabel :
                         c.customRegulationLabel ? customRegulationLabel : c.label}
-                    {c.value === '4' && c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== 'BD_506C' ?
+                    {c.value === '4' && c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== ('BD_506C' || 'BD_506B') ?
                       <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                       :
-                      c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== 'BD_506C' &&
+                      c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== ('BD_506C' || 'BD_506B') &&
                       <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                     }
                   </label>

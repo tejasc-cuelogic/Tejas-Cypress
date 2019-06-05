@@ -64,7 +64,7 @@ class FinancialInfo extends Component {
     const campaignRegulation = get(campaign, 'keyTerms.regulation');
     const accreditationStatus = get(userDetails, 'accreditation.status');
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
-    const showLimitComponent = !((offeringReuglation === 'BD_506C' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
+    const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading ||
       this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
@@ -80,7 +80,7 @@ class FinancialInfo extends Component {
             <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
-            {investmentRegulation !== 'BD_506C' && showLimitComponent &&
+            {investmentRegulation !== ('BD_506C' || 'BD_506B') && showLimitComponent &&
               <p>
                 Your investment limit: {' '}
                 {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
@@ -104,7 +104,7 @@ class FinancialInfo extends Component {
             }
           </Aux>
         }
-        {!this.props.changeInvest && currentInvestmentStatus !== 'BD_506C' &&
+        {!this.props.changeInvest && currentInvestmentStatus !== ('BD_506C' || 'BD_506B') &&
           <InvestmentLimit
             changeInvest={this.props.changeInvest}
             match={this.props.match}

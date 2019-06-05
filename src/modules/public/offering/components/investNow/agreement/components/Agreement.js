@@ -124,7 +124,7 @@ export default class Agreement extends React.Component {
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const regulationCheck = this.props.changeInvestment && investmentRegulation ?
       investmentRegulation : currentInvestmentStatus;
-    const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : 'Regulation Crowdfunding';
+    const regualtionTypeStatement = regulationCheck && regulationCheck === ('BD_506C' || 'BD_506B') ? 'Regulation D 506C' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     return (
@@ -224,7 +224,7 @@ export default class Agreement extends React.Component {
                               </Aux>
                           )}
                           customUpdateLimitLabel={(
-                            regulationCheck && regulationCheck === 'BD_506C' ?
+                            regulationCheck && regulationCheck === ('BD_506C' || 'BD_506B') ?
                               <Aux>
                                 I hereby certify that I have a reasonable expectation that I will
                                  continue to meet or exceed the requirements to be considered an
@@ -233,7 +233,7 @@ export default class Agreement extends React.Component {
                               :
                               <Aux>
                                 I confirm that I am complying with my <b>annual investment limit</b> {' '}
-                                {regulationCheck && regulationCheck !== 'BD_506C' && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
+                                {regulationCheck && regulationCheck !== ('BD_506C' || 'BD_506B') && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
                               </Aux>
                           )}
                           customRegulationLabel={(
@@ -243,7 +243,7 @@ export default class Agreement extends React.Component {
                                 any funds unless I can afford to lose the entire amount.
                             </Aux>
                           )}
-                          tooltipHardDisable={(regulationCheck && regulationCheck === 'BD_506C')}
+                          tooltipHardDisable={(regulationCheck && regulationCheck === ('BD_506C' || 'BD_506B'))}
                           currentInvestmentStatus={regulationCheck}
                         />
                       </Grid.Column>
