@@ -38,11 +38,10 @@ export default class Listing extends Component {
 
   render() {
     const { offer } = this.props.offeringsStore;
-    const { isIssuer, isAdmin } = this.props.userStore;
+    const { isAdmin } = this.props.userStore;
     const headerList = [...meta];
-    const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
     const referralCode = get(offer, 'referralCode');
-    let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    let computedList = (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
