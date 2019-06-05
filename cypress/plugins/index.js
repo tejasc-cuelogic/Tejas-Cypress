@@ -10,12 +10,8 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const SriPlugin = require('webpack-subresource-integrity');
+
 module.exports = (on, config) => {
-  new SriPlugin({
-    hashFuncNames: ['sha256'],
-    enabled: true,
-  }),
   on('before:browser:launch', (browser = {}, args) => {
     if (browser.name === 'chrome') {
       args.push('--disable-features=CrossSiteDocumentBlockingIfIsolating,CrossSiteDocumentBlockingAlways,IsolateOrigins,site-per-process');

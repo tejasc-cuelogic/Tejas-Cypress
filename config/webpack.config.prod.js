@@ -285,7 +285,7 @@ module.exports = {
     // Enable SRI on the NS App
     new SriPlugin({
       hashFuncNames: ['sha256'],
-      enabled: false,
+      enabled: true,
     }),
 
   ],
