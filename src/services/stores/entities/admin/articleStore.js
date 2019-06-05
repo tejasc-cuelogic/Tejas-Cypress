@@ -147,8 +147,8 @@ export class ArticleStore {
     @action
     save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
       uiStore.setProgress();
-      const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
       this.ARTICLE_FRM.fields.articleStatus.value = status;
+      const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
       if (data.minuteRead === null || data.minuteRead === '') {
         delete (data.minuteRead);
       }

@@ -64,7 +64,7 @@ export default class EditArticle extends Component {
     this.props.articleStore.save(this.props.match.params.id, status, isDraft).then(() => {
       this.props.history.push(this.props.refLink);
     });
-    this.handleCloseModal();
+    // this.handleCloseModal();
   }
   render() {
     const { displayMode } = this.state;
