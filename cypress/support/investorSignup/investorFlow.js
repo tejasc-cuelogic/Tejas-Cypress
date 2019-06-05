@@ -6,9 +6,7 @@ import { enterCodeAndConfirm } from '../common';
 import { completeInvestorProfile } from './InvestorProfile';
 
 export const InvestorFlowProcess = () => {
-  cy.document().then((doc) => {
-    // work with document element
-    cy.visit('https://1702-cypress-test-framework-poc.s3-website-us-east-1.amazonaws.com/password-protected');
+  cy.visit('https://1702-cypress-test-framework-poc.s3-website-us-east-1.amazonaws.com/password-protected', { timeout: 80000 });
   cy.wait(10000)
   fillSignUpFormAndProceed();
   enterCodeAndConfirm();
@@ -17,4 +15,4 @@ export const InvestorFlowProcess = () => {
   enterCodeAndConfirm();
   confirmPhoneNumberScreen();
   completeInvestorProfile();
-};
+}
