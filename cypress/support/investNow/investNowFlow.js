@@ -6,7 +6,7 @@ import {
   validInvestorHavingOnceAccountCredentials,
   validInvestorWithIncompleteCIPCredentials,
 } from './investorsCredentailConstant';
-
+import { enteringInvestmentAmount } from './enteringInvestmentAmount';
 
 export const initializeInvestNowFlow = () => {
   cy.visit('/');
@@ -73,6 +73,10 @@ export const proceedWithValidUserLoginAction = () => {
     .contains('Invest Now')
     .click();
 };
+
+export const proceedWithValidCFInvestmentAction = () => {
+  enteringInvestmentAmount();
+}
 
 // export const proceedIncompleteCIPInvestorAction = () => {
 //   fillLegalFormAndProceed();
