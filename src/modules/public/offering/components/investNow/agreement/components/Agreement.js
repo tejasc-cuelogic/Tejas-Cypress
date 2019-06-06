@@ -244,7 +244,6 @@ export default class Agreement extends React.Component {
                             <Aux>
                               I understand that investing in securities sold in reliance on {' '}
                               {regualtionTypeStatement} involves risks and I should not invest
-                              {regualtionTypeStatement} invol es risks and I sho
                                 any funds unless I can afford to lose the entire amount.
                             </Aux>
                           )}
