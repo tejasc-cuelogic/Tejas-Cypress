@@ -1,5 +1,5 @@
 {
-    "baseUrl": "http://localhost:3000",
-    "chromeWebSecurity": false,
-    "pageTimeoutLoad": 80000
+  "baseUrl": "http://1702-cypress-test-framework-poc.s3-website-us-east-1.amazonaws.com/password-protected",
+  "chromeWebSecurity": false,
+  "pageTimeoutLoad": 80000
 }

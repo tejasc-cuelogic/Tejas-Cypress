@@ -41,4 +41,6 @@ export const fillLegalFormAndProceed = () => {
   fillLegalDetailsForm();
   cy.get('form').find('button').contains('Verify my identity').click();
   cy.wait('@legal');
+  cy.wait('@legal');
+  cy.wait('@legal');
 };

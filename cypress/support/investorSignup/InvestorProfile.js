@@ -5,10 +5,11 @@ const handleOverviewStep = () => {
 };
 
 export const completeInvestorProfile = () => {
-  registerApiCall('upsertProfile');
+  cy.wait(1000);
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
     // eslint-disable-next-line default-case
+    registerApiCall('upsertProfile');
     switch (text) {
       case 'Overview':
         handleOverviewStep();

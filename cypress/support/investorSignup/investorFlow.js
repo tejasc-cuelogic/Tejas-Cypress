@@ -2,7 +2,7 @@ import { fillSignUpFormAndProceed } from './signUp';
 import { confirmEmailAddressScreen } from './ConfirmEmail';
 import { confirmPhoneNumberScreen } from './ConfirmPhoneNumber';
 import { fillLegalFormAndProceed } from './identityVerification';
-import { enterCodeAndConfirm, applicationUnlock } from '../common';
+import { enterCodeAndConfirm, applicationUnlock, registerApiCall } from '../common';
 import { completeInvestorProfile } from './InvestorProfile';
 
 export const InvestorFlowProcess = () => {
@@ -17,5 +17,6 @@ export const InvestorFlowProcess = () => {
   fillLegalFormAndProceed();
   enterCodeAndConfirm();
   confirmPhoneNumberScreen();
+  registerApiCall('upsertProfile');
   completeInvestorProfile();
 }
