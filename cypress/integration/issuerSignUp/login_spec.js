@@ -1,10 +1,11 @@
-import { registerApiCall, uploadFile } from '../../support/common';
+import { registerApiCall, uploadFile, applicationUnlock } from '../../support/common';
 import { issuerDetails } from '../../support/issuerSignUp/issuerDetails';
 import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails, fillNextYearProjection, fillBusinessDetails, loginToApplication } from '../../support/issuerSignUp/issuerSignUp';
 
 describe('Log In', () => {
   beforeEach(() => {
     cy.visit('/');
+    applicationUnlock();
     if (cy.get('a').contains('Sign Up')) {
       cy.get('a').contains('Sign Up').click();
     } else {
@@ -19,18 +20,18 @@ describe('Log In', () => {
 
   it ('should fill basic details', () => {
     issuerSignUp();
-    fillBasicDetails();
+    fillBasicDetails(issuerDetails.basicDetails);
   })
 
   it ('Should Successfully fill pre-qualification form and submit the business application', () => {
     issuerSignUp();
-    fillBasicDetails();
+    fillBasicDetails(issuerDetails.basicDetails);
     cy.get('input[value="B2C"]').click();
-    fillGeneralInfo();
+    fillGeneralInfo(issuerDetails.generalInfo);
     cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
     cy.get('input[value="BRAND_NEW"]').click();
-    fillExperienceDetails();
-    fillNextYearProjection();
+    fillExperienceDetails(issuerDetails.experienceDetails);
+    fillNextYearProjection(issuerDetails.nextYearProjection);
     cy.get('input[value="LLC"]').click();
     cy.get('input[name="legalConfirmation"]').parent().click({ force: true, multiple: true });
   })
