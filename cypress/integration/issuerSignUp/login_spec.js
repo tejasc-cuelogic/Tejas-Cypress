@@ -4,7 +4,7 @@ import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails,
 
 describe('Log In', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
     if (cy.get('a').contains('Sign Up')) {
       cy.get('a').contains('Sign Up').click();
     } else {
@@ -13,27 +13,27 @@ describe('Log In', () => {
     }
   });
 
-  // it('should be able to go on issuer sign up page', () => {
-  //   issuerSignUp();
-  // });
+  it('should be able to go on issuer sign up page', () => {
+    issuerSignUp();
+  });
 
-  // it ('should fill basic details', () => {
-  //   issuerSignUp();
-  //   fillBasicDetails();
-  // })
+  it ('should fill basic details', () => {
+    issuerSignUp();
+    fillBasicDetails();
+  })
 
-  // it ('Should Successfully fill pre-qualification form and submit the business application', () => {
-  //   issuerSignUp();
-  //   fillBasicDetails();
-  //   cy.get('input[value="B2C"]').click();
-  //   fillGeneralInfo();
-  //   cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
-  //   cy.get('input[value="BRAND_NEW"]').click();
-  //   fillExperienceDetails();
-  //   fillNextYearProjection();
-  //   cy.get('input[value="LLC"]').click();
-  //   cy.get('input[name="legalConfirmation"]').parent().click({ force: true, multiple: true });
-  // })
+  it ('Should Successfully fill pre-qualification form and submit the business application', () => {
+    issuerSignUp();
+    fillBasicDetails();
+    cy.get('input[value="B2C"]').click();
+    fillGeneralInfo();
+    cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
+    cy.get('input[value="BRAND_NEW"]').click();
+    fillExperienceDetails();
+    fillNextYearProjection();
+    cy.get('input[value="LLC"]').click();
+    cy.get('input[name="legalConfirmation"]').parent().click({ force: true, multiple: true });
+  })
 
   it ('should able to submit business application and login', () => {
     issuerSignUp();
