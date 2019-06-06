@@ -149,7 +149,7 @@ export default class InvestNow extends React.Component {
       const offeringReuglation = campaign && campaign.regulation;
       const regulationType = offeringReuglation;
       const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C'
-        || offeringReuglation === 'BD_CF_506C'));
+        || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
       const {
         changeShowAccountListFlag,
         userAccredetiationState,
