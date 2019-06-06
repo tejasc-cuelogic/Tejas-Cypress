@@ -29,8 +29,8 @@ export const clickonDashboard = () => {
 export const btnClickAndWait = (operationName) => {
   registerApiCall(operationName);
   cy.get('button.next').click({ force: true });
+  cy.wait(500);
   cy.wait(`@${operationName}`);
-  cy.wait(1000);
 };
 
 export const uploadFile = (selector = '') => {

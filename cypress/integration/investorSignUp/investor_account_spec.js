@@ -200,7 +200,7 @@ describe('Account Creation', () => {
         cy.wait('@submitAccount');
         cy.wait('@submitAccount');
         cy.wait(1000)
-        cy.get('div.min', { timeout: 1000 }).then(($el) => {
+        cy.get('.modal', { timeout: 1000 }).then(($el) => {
           const element = cy.wrap($el)
           element.get('button.button').contains('Continue').click({ force: true });
         });
@@ -226,6 +226,7 @@ describe('Account Creation', () => {
     cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
     cy.wait('@submitAccount');
     cy.wait('@submitAccount');
+    cy.wait(1000)
     cy.get('.modal', { timeout: 1000 }).then(($el) => {
       const element = cy.wrap($el)
       element.get('button.button').contains('Continue').click({ force: true });
