@@ -1,11 +1,16 @@
-import { registerApiCall } from '../../support/common';
+import { registerApiCall, uploadFile } from '../../support/common';
 import { issuerDetails } from '../../support/issuerSignUp/issuerDetails';
 import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails, fillNextYearProjection, fillBusinessDetails, loginToApplication } from '../../support/issuerSignUp/issuerSignUp';
 
 describe('Log In', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000');
-    cy.get('a').contains('Sign Up').click();
+    if (cy.get('a').contains('Sign Up')) {
+      cy.get('a').contains('Sign Up').click();
+    } else {
+      cy.get('a').contains('Log In').click();
+      cy.get('a').contains('Sign Up').click({ force: true });
+    }
   });
 
   // it('should be able to go on issuer sign up page', () => {
@@ -54,13 +59,38 @@ describe('Log In', () => {
     cy.wait('@getOfferings');
     registerApiCall('getBusinessApplicationById');
     cy.wait('@getBusinessApplicationById');
+    registerApiCall('userDetails');
+    cy.wait('@userDetails');
+    registerApiCall('cognitoUser');
+    cy.wait('@cognitoUser');
+    registerApiCall('getBusinessApplicationDetails');
+    cy.wait('@getBusinessApplicationDetails');
+    registerApiCall('getBusinessApplicationPerfomance');
+    cy.wait('@getBusinessApplicationPerfomance');
     registerApiCall('getBusinessApplicationById');
     cy.wait('@getBusinessApplicationById');
-    cy.wait(10000);
     fillBusinessDetails(issuerDetails.businessDetails);
-    cy.get('a').contains('Performance').click();
-    cy.get('a').contains('Documentation').click();
-    cy.get('input[name="blanketLien"]').contains('No').click();
-    cy.get('input[name="personalGuarantee"]').contains('No').click();
+    registerApiCall('perfomance');
+    cy.get('div[class="pull-right"]').children().click({ force: true });
+    cy.wait('@perfomance');
+    cy.wait(3000);
+    uploadFile('input[name="fiveYearProjection"]');
+    cy.wait(5000);
+    uploadFile('input[name="sourcesAndUses"]');
+    cy.wait(5000);
+    cy.get('div[class="pull-right"]').children().click({ force: true });
+    uploadFile('input[name="leaseAgreementsOrLOIs"]');
+    cy.wait(5000);
+    uploadFile('input[name="personalTaxReturn"]');
+    cy.wait(5000);
+    // cy.get('a').contains('Performance').click();
+    // cy.get('a').contains('Documentation').click();
+    cy.get('input[name="blanketLien"]').check('false', { force: true });
+    cy.get('input[name="personalGuarantee"]').check('false', { force: true });
+    if (cy.get('button').contains('Submit')) {
+      cy.get('button').contains('Submit').click();
+    } else {
+      cy.get('button').contains('Save').click();
+    }
   })
 });

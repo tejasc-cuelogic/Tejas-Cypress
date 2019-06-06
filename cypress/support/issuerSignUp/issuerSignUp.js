@@ -1,4 +1,4 @@
-import { registerApiCall } from '../../support/common';
+import { registerApiCall, uploadFile } from '../../support/common';
 
 export const issuerSignUp = () => {
     cy.get('h4').contains('Business').click();
@@ -40,7 +40,9 @@ export const fillNextYearProjection = (nextYearProjection) => {
 }
 
 export const fillBusinessDetails = (businessDetails) => {
-  fillExistingDebt(businessDetails.existingDebt)
+  uploadFile('input[name="businessPlan"]');
+  cy.wait(5000);
+  fillExistingDebt(businessDetails.existingDebt);
   fillOwnerInfo(businessDetails.owner);
 }
 
@@ -65,6 +67,8 @@ export const fillOwnerInfo = (owner) => {
     cy.get('input[name="dateOfService"]').type(owner.dateOfService);
     cy.get('input[name="ssn"]').type(owner.ssn);
     cy.get('input[name="linkedInUrl"]').type(owner.linkedInUrl);
+    uploadFile('input[name="resume"]');
+    cy.wait(5000);
 }
 
 export const fillExistingDebt = (existingDebt) => {
