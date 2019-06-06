@@ -39,7 +39,7 @@ export default class ManageInsights extends Component {
             change={e => this.search(e, 'title')}
             addon={
               <Grid.Column width={3} textAlign="right" floated="right">
-                <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
+                <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
                 Add new article
                 </Button>
               </Grid.Column>

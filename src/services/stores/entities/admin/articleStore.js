@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { map, kebabCase, sortBy, remove, orderBy, filter, get } from 'lodash';
+import { map, kebabCase, sortBy, remove, orderBy, filter, get, join } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
@@ -59,11 +59,11 @@ export class ArticleStore {
     initiateFilters = () => {
       const { title } = this.requestState.search;
       if (title) {
-        this.setDb(this.allInsightsListing);
+        this.setDb(this.sortBydate(this.allInsightsListing));
         ClientDb.filterFromNestedObjs(['title', 'category', 'author'], title);
         this.db = ClientDb.getDatabase();
       } else {
-        this.setDb(this.allInsightsListing);
+        this.setDb(this.sortBydate(this.allInsightsListing));
       }
     }
 
@@ -98,6 +98,7 @@ export class ArticleStore {
         client,
         query: getArticleById,
         variables: { id },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.insightsArticle) {
             this.setForm(res.insightsArticle);
@@ -119,23 +120,23 @@ export class ArticleStore {
       }
       Validator.validateForm(this.ARTICLE_FRM);
     }
-
     @action
     setForm = (res) => {
       Validator.validateForm(this.ARTICLE_FRM);
-      if (!this.article.loading) {
-        Object.keys(this.ARTICLE_FRM.fields).map((key) => {
-          if (key === 'featuredImage') {
-            this.ARTICLE_FRM.fields[key].preSignedUrl = res[key];
-            this.ARTICLE_FRM.fields[key].value = res[key];
-          } else {
-            this.ARTICLE_FRM.fields[key].value = res[key];
-          }
+      // if (!this.article.loading) {
+      Object.keys(this.ARTICLE_FRM.fields).map((key) => {
+        if (key === 'featuredImage') {
+          this.ARTICLE_FRM.fields[key].preSignedUrl = res[key];
           this.ARTICLE_FRM.fields[key].value = res[key];
-          return null;
-        });
-        Validator.validateForm(this.ARTICLE_FRM);
-      }
+        } else if (key === 'tags') {
+          this.ARTICLE_FRM.fields[key].value = join(res.tags, ',');
+        } else {
+          this.ARTICLE_FRM.fields[key].value = res[key];
+        }
+        return null;
+      });
+      Validator.validateForm(this.ARTICLE_FRM);
+      // }
     }
 
     @action
@@ -144,47 +145,42 @@ export class ArticleStore {
     }
 
     @action
-    save = (id) => {
+    save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
+      uiStore.setProgress();
+      this.ARTICLE_FRM.fields.articleStatus.value = status;
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
+      if (data.minuteRead === null || data.minuteRead === '') {
+        delete (data.minuteRead);
+      }
+      const payload = { ...data };
+      payload.tags = payload.tags.split(',').filter(tag => tag !== '');
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
-          variables: id === 'new' ? { payload: data } :
-            { ...{ payload: data }, id },
-          refetchQueries: [{
-            query: insightArticlesListByFilter,
-          }],
+          variables: id === 'new' ? { payload, isPartialData: isDraft } : { payload, id, isPartialData: isDraft },
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
+          resolve();
         }).catch(() => {
           Helper.toast('Error while Saving Category', 'error');
+          reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
         });
-    }
+    });
+
+    sortBydate = data => orderBy(data, o => (o.updated.date ? new Date(o.updated.date) : ''), ['desc'])
 
     @action
     sortArticlesByFilter = () => {
-      const {
-        articleStatus, categoryId, tags, author, title, endDate, startDate, slug,
-      } = this.requestState.search;
       this.allInsightsList = graphql({
         client,
         query: insightArticlesListByFilter,
-        variables: {
-          articleStatus,
-          categoryId,
-          tags,
-          author,
-          title,
-          fromDate: startDate,
-          toDate: endDate,
-          slug,
-        },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.insightArticlesListByFilter) {
-            this.setDb(res.insightArticlesListByFilter);
+            this.setDb(this.sortBydate(res.insightArticlesListByFilter));
           }
         },
       });
@@ -236,10 +232,9 @@ export class ArticleStore {
           }],
         }).then(() => {
           Helper.toast('Category deleted successfully.', 'success');
+          uiStore.setProgress(false);
         }).catch(() => {
           Helper.toast('Error while Deleting Category', 'error');
-        })
-        .finally(() => {
           uiStore.setProgress(false);
         });
     }
