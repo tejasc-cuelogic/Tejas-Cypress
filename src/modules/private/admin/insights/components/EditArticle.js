@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { join } from 'lodash';
 import { Modal, Header, Divider, Grid, Card, Form, Checkbox, Button } from 'semantic-ui-react';
 import { MaskedInput, FormInput, FormDropDown, ImageCropper } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES } from '../../../../../services/constants/admin/article';
-import { Image64 } from '../../../../../theme/shared';
+import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
 
 
@@ -17,10 +16,16 @@ export default class EditArticle extends Component {
   state = { displayMode: false };
   componentWillMount() {
     const { id } = this.props.match.params;
+
     if (id !== 'new') {
-      this.initiateFlow(id);
-      this.props.articleStore.setFormData(id);
+      this.props.articleStore.getSingleInsightAdmin(id);
       this.props.articleStore.getCategoryList(false);
+    } else {
+      this.props.articleStore.reset();
+      this.props.articleStore.setForm({
+        categoryId: this.props.match.params.categoryId,
+        articleStatus: 'DRAFT',
+      });
     }
   }
   onDrop = (files, name) => {
@@ -48,17 +53,6 @@ export default class EditArticle extends Component {
       this.props.articleStore.setThumbnail(attr, errorMsg, field);
     }
   }
-  initiateFlow = (id) => {
-    if (id !== 'new') {
-      new Promise(() => {
-        this.props.articleStore.getSingleInsightAdmin(id, false);
-      }).then(() => {
-        this.props.articleStore.setFormData(id);
-      }).catch();
-    } else {
-      this.props.articleStore.reset();
-    }
-  }
   handleCloseModal = () => {
     if (this.props.match.params.id !== 'new') {
       this.props.articleStore.reset();
@@ -66,11 +60,11 @@ export default class EditArticle extends Component {
     this.props.history.replace(this.props.refLink);
   };
 
-  save = (status) => {
-    console.log(status);
-    this.props.articleStore.save(this.props.match.params.id);
-    this.props.history.push(this.props.refLink);
-    this.handleCloseModal();
+  save = (status, isDraft = false) => {
+    this.props.articleStore.save(this.props.match.params.id, status, isDraft).then(() => {
+      this.props.history.push(this.props.refLink);
+    });
+    // this.handleCloseModal();
   }
   render() {
     const { displayMode } = this.state;
@@ -83,13 +77,22 @@ export default class EditArticle extends Component {
       handleVerifyFileExtension,
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
+    const articleStatus = this.props.match.params.status;
+    if (!categoriesDropdown) {
+      return <InlineLoader />;
+    }
     return (
       <Modal closeOnDimmerClick={false} closeOnEscape={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
               {isNew ? 'Create' : 'Edit'} Article
-              <Actions save={this.save} meta={ARTICLE_FRM.meta} />
+              <Actions
+                save={this.save}
+                meta={ARTICLE_FRM.meta}
+                isPublished={articleStatus === 'PUBLISHED'}
+                isReview={articleStatus === 'IN_REVIEW'}
+              />
             </Header>
           </div>
           <Divider hidden />
@@ -152,7 +155,6 @@ export default class EditArticle extends Component {
                       <FormInput
                         name="tags"
                         fielddata={ARTICLE_FRM.fields.tags}
-                        value={ARTICLE_FRM.fields.tags.value ? join(ARTICLE_FRM.fields.tags.value, ', ') : ''}
                         changed={articleChange}
                       />
                       <MaskedInput

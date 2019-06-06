@@ -8,6 +8,7 @@ import { FormInput, MaskedInput } from '../../../../../theme/form';
 import { FieldError } from '../../../../../theme/shared';
 import OfferingAudit from './data/OfferingAudit';
 import ProcessFullAccount from './data/processFullAccount';
+import RecreateGoldstar from './data/recreateGoldstar';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -85,6 +86,7 @@ export default class Data extends Component {
             </Card.Content>
           </Card>
           <ProcessFullAccount />
+          <RecreateGoldstar />
           <OfferingAudit />
         </Grid.Column>
       </Grid>
