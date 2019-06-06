@@ -1,5 +1,4 @@
-
-export const STORAGE_DETAILS_SYNC = {
+export const common = {
   userId: {
     value: '',
     label: 'User Id',
@@ -10,6 +9,19 @@ export const STORAGE_DETAILS_SYNC = {
       required: 'This field is required',
     },
   },
+  accountId: {
+    value: '',
+    label: 'Account ID',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'This field is required',
+    },
+  },
+};
+export const STORAGE_DETAILS_SYNC = {
+  userId: { ...common.userId },
 };
 
 export const ES_AUDIT = {
@@ -54,29 +66,14 @@ export const OFFERING_REPAYMENT_META = {
 };
 
 export const PROCESS_FULL_ACCOUNT_META = {
-  userId: {
-    value: '',
-    label: 'User ID',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Enter here',
-    customErrors: {
-      required: 'This field is required',
-    },
-  },
-  accountId: {
-    value: '',
-    label: 'Account ID',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Enter here',
-    customErrors: {
-      required: 'This field is required',
-    },
-  },
+  userId: { ...common.userId },
+  accountId: { ...common.accountId },
   options: {
     value: [],
     values: [
+      { label: 'Create GoldStar Contact Account', value: 'createGsContactAccount' },
+      { label: 'Create Account Pdf', value: 'createAccountPdf' },
+      { label: 'Send CrowdPay Email to Goldstar', value: 'sendCrowdPayEmailToGS' },
       { label: 'Create RS Account', value: 'createRSAccount' },
       { label: 'Create Initial Deposit', value: 'createInitialDeposit' },
       { label: 'Send Email To Investor', value: 'sendEmailToInvestor' },
@@ -85,4 +82,7 @@ export const PROCESS_FULL_ACCOUNT_META = {
     rule: 'optional',
   },
 };
-
+export const RECREATEGOLDSTAR_META = {
+  userId: { ...common.userId },
+  accountId: { ...common.accountId },
+};

@@ -17,6 +17,7 @@ import { userIdleTime } from './constants/common';
 /**
  * Main App
  */
+
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -63,6 +64,9 @@ class App extends Component {
         if (this.props.userStore.currentUser) {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
         }
+      })
+      .catch((err) => {
+        console.log('Catch error in app.js verifySession ', err);
       });
   }
 
@@ -81,7 +85,7 @@ class App extends Component {
       document.activeElement.blur();
     }
     authActions.getUserSession().then((session) => {
-      if (!session.isValid()) {
+      if (session && !session.isValid()) {
         this.onIdle();
         this.props.authStore.setUserLoggedIn(true);
       }
@@ -91,6 +95,7 @@ class App extends Component {
       }
       this.props.authStore.setUserLoggedIn(false);
       localStorage.removeItem('lastActiveTime');
+      console.log('error in app.js - getUserSession', err);
     });
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });

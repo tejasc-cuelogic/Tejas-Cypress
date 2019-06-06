@@ -1,8 +1,9 @@
 import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from '../../support/investorSignup/login';
-
+import { applicationUnlock } from '../../support/common'
 describe('Log In', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('/', { failOnStatusCode: false });
+    applicationUnlock();
     goToLoginScreen();
   });
 
