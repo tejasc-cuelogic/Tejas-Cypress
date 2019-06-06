@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Button, Modal, Header, Form } from 'semantic-ui-react';
 import { FormInput, FormTextarea } from '../../../../../theme/form';
-import { FieldError } from '../../../../../theme/shared';
+import { FieldError, InlineLoader } from '../../../../../theme/shared';
 
 @withRouter
 @inject('categoryStore', 'uiStore')
@@ -34,8 +34,11 @@ class AddNewCategory extends Component {
       const {
         formChange, CATEGORY_DETAILS_FRM, selectedCategoryState,
       } = this.props.categoryStore;
-      const { errors } = this.props.uiStore;
+      const { errors, inProgress } = this.props.uiStore;
       const { id } = this.props.match.params;
+      if (inProgress) {
+        return <InlineLoader />;
+      }
       return (
         <Modal
           closeIcon

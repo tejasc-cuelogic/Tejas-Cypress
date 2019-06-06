@@ -44,8 +44,8 @@ export class FaqStore {
       onFetch: (res) => {
         if (res && res.faqs) {
           this.setDb(res.faqs);
-          uiStore.setProgress(false);
         }
+        uiStore.setProgress(false);
       },
     });
   }
@@ -227,6 +227,7 @@ export class FaqStore {
   @action
   reset = () => {
     this.FAQ_FRM = Validator.prepareFormObject(FAQ);
+    this.requestState.search = {};
   }
   @action
   setFaqOrder = (newArr) => {
@@ -281,8 +282,9 @@ export class FaqStore {
     Validator.validateForm(this.FAQ_FRM);
   }
   @action
-  save = (id, isDraft = false) => new Promise((resolve, reject) => {
+  save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
     uiStore.setProgress();
+    this.FAQ_FRM.fields.itemStatus.value = status;
     let data = this.getFaqFormData();
     data = id === 'new' ? data : { ...data, id };
     clientPrivate

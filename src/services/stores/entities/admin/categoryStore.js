@@ -109,6 +109,7 @@ export class CategoryStore {
 
     @action
     saveCategories = (id, isPublished) => {
+      uiStore.setProgress();
       const mutation = id === 'new' ? createCategory : (isPublished === 'defaultPublished' ? updateCategoryInfo : updateCategoryStaus);
       const param = {};
       if (id !== 'new') {
@@ -126,16 +127,11 @@ export class CategoryStore {
         (isPublished === 'defaultPublished' ?
           'Category Updated successfully.' :
           'Category Status Updated successfully.');
-      uiStore.setProgress();
       return new Promise((resolve, reject) => {
         client
           .mutate({
             mutation,
             variables: param,
-            refetchQueries: [{
-              query: getCategoriesList,
-              variables: { types: null },
-            }],
           })
           .then(() => {
             this.currentCategoryIndex = this.selectedCategoryState.index;
@@ -150,6 +146,7 @@ export class CategoryStore {
             reject();
           })
           .finally(() => {
+            this.initRequest();
             uiStore.setProgress(false);
           });
       });

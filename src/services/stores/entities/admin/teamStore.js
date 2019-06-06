@@ -33,15 +33,18 @@ export class TeamStore {
 
   @action
   initRequest = (isPrivate = false) => {
+    uiStore.setProgress();
     const query = allTeamMembers;
     const client = isPrivate ? clientPrivate : clientPublic;
     this.data = graphql({
       client,
       query,
+      fetchPolicy: 'network-only',
       onFetch: (res) => {
         if (res && res.teamMembers) {
           this.setDb(res.teamMembers);
         }
+        uiStore.setProgress(false);
       },
     });
     this.editMode = false;
@@ -147,6 +150,7 @@ export class TeamStore {
 
   @action
   deleteTeamMemberById = (id) => {
+    uiStore.setProgress();
     clientPrivate
       .mutate({
         mutation: deleteTeamMemberById,
@@ -156,7 +160,8 @@ export class TeamStore {
         refetchQueries: [{ query: allTeamMembers }],
       })
       .then(() => Helper.toast('Team Member deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting team member ', 'error'));
+      .catch(() => Helper.toast('Error while deleting team member ', 'error'))
+      .finally(() => uiStore.setProgress(false));
   }
   @action
   setConfirmBox = (entity, refId) => {
@@ -166,6 +171,7 @@ export class TeamStore {
 
   @action
   save = (id, teamMember = undefined) => {
+    uiStore.setProgress();
     let data = {};
     if (!teamMember) {
       data = this.getTeamFormData();
@@ -184,7 +190,8 @@ export class TeamStore {
       .then(() => {
         Helper.toast(id === 'new' ? 'Team Member added successfully.' : 'Team Member updated successfully.', 'success');
       })
-      .catch(res => Helper.toast(`${res} Error`, 'error'));
+      .catch(res => Helper.toast(`${res} Error`, 'error'))
+      .finally(() => uiStore.setProgress(false));
   }
   @action
   setProfilePhoto(attr, value, field) {

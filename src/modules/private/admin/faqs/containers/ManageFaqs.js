@@ -34,7 +34,7 @@ export default class ManageFaqs extends Component {
             executeSearch={this.search}
             addon={
               <Grid.Column width={7} textAlign="right">
-                <Button color="basic" as={Link} to={`${match.url}/new`}>
+                <Button color="basic" as={Link} to={`${match.url}/new/DRAFT`}>
                   Add FAQ
                 </Button>
                 <Button color="green" as={Link} to={this.props.refMatch ? '/app/content/categories' : '/app/categories'}>

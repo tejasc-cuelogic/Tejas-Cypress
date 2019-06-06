@@ -15,7 +15,7 @@ export default class Faqs extends Component {
     return (
       <Switch>
         <Route exact path={`${match.url}`} render={props => <ManageFaqs refMatch={refMatch} {...props} />} />
-        <Route exact path={`${match.url}/:id/:faqType?/:categoryId?`} render={props => <FaqDetails refLink={match.url} {...props} />} />
+        <Route exact path={`${match.url}/:id/:status/:faqType?/:categoryId?`} render={props => <FaqDetails refLink={match.url} {...props} />} />
       </Switch>
     );
   }

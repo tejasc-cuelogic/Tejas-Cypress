@@ -14,14 +14,14 @@ const actions = {
 
 const DragHandle = sortableHandle(props => <Icon className={`${props.className} ns-drag-holder-large mr-10`} />);
 const SortableItem = SortableElement(({
-  knowledgeBase, key, handleAction,
+  knowledgeBase, key, handleAction, refUrl,
 }) => (
   <div className="row-wrap striped-table" key={key}>
     <div className="balance-half first-column">
       <DragHandle />
       <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
-        <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>{knowledgeBase.title}</Link>
+        <Link to={`${refUrl}/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>{knowledgeBase.title}</Link>
       </span>
     </div>
     <div className="action width-100 right-align">
@@ -37,7 +37,7 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  allCategorizedKnowledgeBase, handleAction, checkedRecords, getSelectedRecords,
+  allCategorizedKnowledgeBase, handleAction, checkedRecords, getSelectedRecords, refUrl,
 }) => (
   <div className="tbody">
     {allCategorizedKnowledgeBase.map((knowledgeBase, index) => (
@@ -49,6 +49,7 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         checkedRecords={checkedRecords}
         getSelectedRecords={getSelectedRecords}
+        refUrl={refUrl}
       />
     ))}
   </div>
@@ -155,6 +156,7 @@ export default class AllKnowledgeBaseItems extends Component {
                       lockAxis="y"
                       useDragHandle
                       handleAction={this.handleAction}
+                      refUrl={this.props.match.url}
                     />
                   </Accordion.Content>
                 </Accordion>
