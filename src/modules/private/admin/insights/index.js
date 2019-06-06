@@ -9,7 +9,7 @@ export default class Insights extends Component {
     return (
       <Switch>
         <Route exact path={`${match.url}`} render={props => <ManageInsights refMatch={refMatch} {...props} />} />
-        <Route exact path={`${match.url}/:id`} render={() => <EditArticle refLink={match.url} {...this.props} />} />
+        <Route exact path={`${match.url}/:id/:status`} render={() => <EditArticle refLink={match.url} {...this.props} />} />
       </Switch>
     );
   }

@@ -142,7 +142,7 @@ export class DataStore {
           },
         })
         .then(action((result) => {
-          if (result.adminProcessCip) {
+          if (result.data.adminProcessCip) {
             this.adminProcessInvestorAccount(processData).then(() => {
               this.setFieldValue('inProgress', false, 'adminProcessCip');
               Helper.toast('Your request is processed.', 'success');
