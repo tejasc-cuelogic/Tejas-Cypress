@@ -14,7 +14,6 @@ export const legalDetailsMeta = {
 };
 export const fillLegalDetailsForm = (legalDetails = undefined) => {
   const legalDetailObject = legalDetails || legalDetailsMeta;
-  cy.wait(3000);
   cy.get('div.content > form').within(() => {
     cy.get('div[name="title"]')
       .click()
@@ -37,6 +36,7 @@ export const fillLegalDetailsForm = (legalDetails = undefined) => {
 };
 
 export const fillLegalFormAndProceed = () => {
+  cy.wait(5000);
   registerApiCall('legal');
   fillLegalDetailsForm();
   cy.get('form').find('button').contains('Verify my identity').click();
