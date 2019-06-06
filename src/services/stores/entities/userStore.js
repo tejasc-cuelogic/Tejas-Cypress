@@ -81,10 +81,6 @@ export class UserStore {
       );
   }
 
-  isCurrentUserWithRole(role) {
-    return this.currentUser.roles.includes(role);
-  }
-
   @computed get isInvestor() {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('investor');

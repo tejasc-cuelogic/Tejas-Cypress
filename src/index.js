@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import bugsnag from '@bugsnag/js';
 import React from 'react';
 import ReactDOM from 'react-dom';

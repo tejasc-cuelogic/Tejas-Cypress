@@ -13,6 +13,7 @@ export const GeneralInfoMeta = {
 
 describe('Account Creation', () => {
   before(() => {
+
     InvestorFlowProcess();
   });
 
@@ -126,7 +127,7 @@ describe('Account Creation', () => {
 
   const entityAccountCreation = () => {
     cy.wait(2000);
-    cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
+      cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
       cy.log('step value', text);
       registerApiCall('upsertInvestorAccount');
       // eslint-disable-next-line default-case

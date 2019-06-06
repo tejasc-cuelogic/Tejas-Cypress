@@ -6,10 +6,12 @@ import {
   validInvestorHavingOnceAccountCredentials,
   validInvestorWithIncompleteCIPCredentials,
 } from './investorsCredentailConstant';
-
+import { enteringInvestmentAmount } from './enteringInvestmentAmount';
+import {applicationUnlock } from '../common';
 
 export const initializeInvestNowFlow = () => {
-  cy.visit('/');
+  cy.visit('/', { failOnStatusCode: false });
+  applicationUnlock();
   OfferingListingFlow();
   OfferingDetailFlow();
 };
@@ -73,6 +75,10 @@ export const proceedWithValidUserLoginAction = () => {
     .contains('Invest Now')
     .click();
 };
+
+export const proceedWithValidCFInvestmentAction = () => {
+  enteringInvestmentAmount();
+}
 
 // export const proceedIncompleteCIPInvestorAction = () => {
 //   fillLegalFormAndProceed();

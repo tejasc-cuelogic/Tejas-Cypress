@@ -3,13 +3,13 @@ import { registerApiCall } from '../common';
 export const SignUpMeta = {
   givenName: 'Nextseed',
   familyName: 'Test',
-  email: 'testing001@nextseed.com',
+  email: 'testuser001@nextseed.com',
   password: 'nextseed01test',
   verify: 'nextseed01test',
 };
 
 export const goToSignUpScreen = () => {
-  cy.contains('Sign up');
+  cy.contains('Sign Up');
   cy.get('.header-wrap').get('.menu-button').contains('Sign Up').click();
   cy.get('.user-type').find('h4').contains('Investor').click();
   cy.get('.center-align').find('a').click();
