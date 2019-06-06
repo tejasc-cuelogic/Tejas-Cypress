@@ -271,6 +271,10 @@ module.exports = {
         to: 'assets/js/r.js',
       },
       {
+        from: 'src/assets/js/cypressSri.js',
+        to: 'assets/js/cypressSri.js',
+      },
+      {
         from: 'src/assets/robots.txt',
         to: 'robots.txt',
       },
