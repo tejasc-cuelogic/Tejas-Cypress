@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { get, startsWith } from 'lodash';
+import { get, startsWith, includes } from 'lodash';
 import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
@@ -124,7 +124,11 @@ export default class Agreement extends React.Component {
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const regulationCheck = this.props.changeInvestment && investmentRegulation ?
       investmentRegulation : currentInvestmentStatus;
-    const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : 'Regulation Crowdfunding';
+      // regulationCheck === ('BD_506C' || 'BD_506B')
+    // const regualtionTypeStatement =
+    // regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
+    // 'Regulation D 506C' : 'Regulation Crowdfunding';
+    const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Regulation D 506B' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     return (
@@ -224,7 +228,7 @@ export default class Agreement extends React.Component {
                               </Aux>
                           )}
                           customUpdateLimitLabel={(
-                            regulationCheck && regulationCheck === 'BD_506C' ?
+                            regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
                               <Aux>
                                 I hereby certify that I have a reasonable expectation that I will
                                  continue to meet or exceed the requirements to be considered an
@@ -233,7 +237,7 @@ export default class Agreement extends React.Component {
                               :
                               <Aux>
                                 I confirm that I am complying with my <b>annual investment limit</b> {' '}
-                                {regulationCheck && regulationCheck !== 'BD_506C' && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
+                                {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
                               </Aux>
                           )}
                           customRegulationLabel={(
@@ -243,7 +247,7 @@ export default class Agreement extends React.Component {
                                 any funds unless I can afford to lose the entire amount.
                             </Aux>
                           )}
-                          tooltipHardDisable={(regulationCheck && regulationCheck === 'BD_506C')}
+                          tooltipHardDisable={(regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck))}
                           currentInvestmentStatus={regulationCheck}
                         />
                       </Grid.Column>

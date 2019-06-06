@@ -53,9 +53,9 @@ before_script:
 #.before_script_template: &before_script_defination
 #  before_script:
 #    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
-    
-    
-#---------------------------------Review----------------------------------------  
+
+
+#---------------------------------Review----------------------------------------
 #Building code
 build:review:
   <<: *build_definition
@@ -73,8 +73,8 @@ build:review:
     - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
-    - npm run build 
-  
+    - npm run build
+
 #Deploying code to s3 bucket
 deploy:review:
   <<: *review_defination
@@ -83,7 +83,7 @@ deploy:review:
     name: $CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com
     on_stop: delete:review
-  script: 
+  script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - cd ./scripts/cicd/ && sh ./deployApp.sh $CI_COMMIT_REF_SLUG && cd ../.. # - sh deployApp.sh $CI_COMMIT_REF_SLUG
   dependencies:
@@ -96,7 +96,7 @@ delete:review:
   variables:
     GIT_STRATEGY: none
   script:
-    - aws s3 rb s3://$CI_COMMIT_REF_SLUG --force  
+    - aws s3 rb s3://$CI_COMMIT_REF_SLUG --force
   when: manual
   environment:
     name: $CI_COMMIT_REF_NAME
@@ -136,14 +136,14 @@ build:predev:
   <<: *build_definition
   only:
     refs:
-      - develop
+      - 1863-add-new-regulation-type-bd_506b-type-for-offering
   # <<: *before_script_defination
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build
 
-#Bump version code to patch 
+#Bump version code to patch
 version:dev:
   only:
     refs:
@@ -151,7 +151,7 @@ version:dev:
 #  tags:
 #    - ns-client
   stage: version
-  script: 
+  script:
     # Make a folder for the changelog utility
     - mkdir changelog && cd changelog
     # Clone the changelog.js file from the ops repo
@@ -165,7 +165,7 @@ version:dev:
     - git fetch --tags
     # Create/update the CHANGELOG.md file
     - node ./changelog/index.js --preset angular --infile CHANGELOG.md --same-file --release-count 0
-    # Stage the changes 
+    # Stage the changes
     - git add CHANGELOG.md
     # Commit the changes
     - git commit -m "Updated CHANGELOG.md [skip ci]"
@@ -184,7 +184,7 @@ deploy:dev:
   environment:
     name: dev
     url: http://$DEV_URL
-  script: 
+  script:
     #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - cd ./scripts/cicd/ && sh ./deployApp.sh $DEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
     - aws cloudfront create-invalidation --distribution-id $DEV_DISTRIBUTION_ID --paths "/*"
@@ -195,7 +195,7 @@ deploy:predev:
   <<: *deploy_defination
   only:
     refs:
-      - develop
+      - 1863-add-new-regulation-type-bd_506b-type-for-offering
   environment:
     name: dev
     url: http://$PREDEV_URL
@@ -249,7 +249,7 @@ build:demo:
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
     - npm install
-    - npm run build  
+    - npm run build
 
 #Deploying code to s3 bucket
 deploy:demo:
@@ -260,7 +260,7 @@ deploy:demo:
   environment:
     name: demo
     url: http://$DEMO_URL
-  script: 
+  script:
     # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
     - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"

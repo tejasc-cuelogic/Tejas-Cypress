@@ -14,6 +14,10 @@ class Users extends Component {
     this.props.transactionStore.setFieldValue('apiCall', false);
   }
 
+  componentWillUnmount() {
+    this.props.userListingStore.reset();
+  }
+
   setSearchParam = (e, { name, value }, type) =>
     this.props.userListingStore.setInitiateSrch(name, value, type);
 
@@ -33,6 +37,7 @@ class Users extends Component {
     }
   }
   paginate = params => this.props.userListingStore.initRequest(params);
+
   render() {
     const {
       users, loading, error, usersSummary, requestState, filters, maskChange, count,
