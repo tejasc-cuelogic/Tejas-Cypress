@@ -89,7 +89,7 @@ export class Auth {
               authStore.setUserLoggedIn(true);
               commonStore.setToken(signInUserSession.idToken.jwtToken);
               AWS.config.region = AWS_REGION;
-              if (userStore.isCurrentUserWithRole('admin')) {
+              if (userStore.isAdmin) {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
 
@@ -209,7 +209,7 @@ export class Auth {
       });
       AWS.config.region = AWS_REGION;
       // Check if currentUser has admin role, if user has admin role set admin access to user
-      if (userStore.isCurrentUserWithRole('admin')) {
+      if (userStore.isAdmin) {
         this.setAWSAdminAccess(user.signInUserSession.idToken.jwtToken);
       }
     }

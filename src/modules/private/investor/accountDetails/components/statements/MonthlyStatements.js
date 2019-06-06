@@ -28,9 +28,7 @@ export default class MonthlyStatements extends Component {
     setFieldValue('currentActiveAccount', accountType);
     this.props.statementStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
-    if (!this.props.transactionStore.apiCall) {
-      this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
-    }
+    this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
   }
 
   paginate = params => this.props.statementStore.pageRequest(params);

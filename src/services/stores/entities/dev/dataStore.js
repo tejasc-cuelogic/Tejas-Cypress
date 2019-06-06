@@ -1,19 +1,22 @@
 
 import { observable, action, toJS } from 'mobx';
 import { get } from 'lodash';
-import { updateOfferingRepaymentsMeta, processFullInvestorAccount } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META } from '../../../constants/admin/data';
+import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META } from '../../../constants/admin/data';
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
   @observable PROCESS_FULL_ACCOUNT_META_FRM =
   Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
+  @observable RECREATEGOLDSTAR_FRM =
+  Validator.prepareFormObject(RECREATEGOLDSTAR_META);
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
+    adminProcessCip: false,
   };
   @observable outputMsg = null;
 
@@ -88,6 +91,9 @@ export class DataStore {
             createRSAccount: (toJS(processData.options)).includes('createRSAccount'),
             createInitialDeposit: (toJS(processData.options)).includes('createInitialDeposit'),
             sendEmailToInvestor: (toJS(processData.options)).includes('sendEmailToInvestor'),
+            createGsContactAccount: (toJS(processData.options)).includes('createGsContactAccount'),
+            createAccountPdf: (toJS(processData.options)).includes('createAccountPdf'),
+            sendCrowdPayEmailToGS: (toJS(processData.options)).includes('sendCrowdPayEmailToGS'),
           },
         })
         .then(action((result) => {
@@ -98,6 +104,59 @@ export class DataStore {
         }))
         .catch((error) => {
           this.setFieldValue('inProgress', false, 'processFullAccount');
+          Helper.toast(get(error, 'message'), 'error');
+          rej(error);
+        });
+    });
+  }
+
+  @action
+  adminProcessInvestorAccount = processData => new Promise((res, rej) => {
+    client
+      .mutate({
+        mutation: adminProcessInvestorAccount,
+        variables: {
+          userId: processData.userId,
+          accountId: processData.accountId,
+        },
+      })
+      .then(() => {
+        res();
+      })
+      .catch((error) => {
+        rej(error);
+      });
+  });
+  @action
+  adminProcessCip = () => {
+    const processData = Validator.evaluateFormData(this.RECREATEGOLDSTAR_FRM.fields);
+    this.setFieldValue('inProgress', true, 'adminProcessCip');
+    this.setFieldValue('outputMsg', null);
+    return new Promise((res, rej) => {
+      client
+        .mutate({
+          mutation: adminProcessCip,
+          variables: {
+            userId: processData.userId,
+            accountId: processData.accountId,
+          },
+        })
+        .then(action((result) => {
+          if (result.data.adminProcessCip) {
+            this.adminProcessInvestorAccount(processData).then(() => {
+              this.setFieldValue('inProgress', false, 'adminProcessCip');
+              Helper.toast('Your request is processed.', 'success');
+              this.resetForm('RECREATEGOLDSTAR_FRM');
+              res(result);
+            }).catch((error) => {
+              this.setFieldValue('inProgress', false, 'adminProcessCip');
+              Helper.toast(get(error, 'message'), 'error');
+              rej(error);
+            });
+          }
+        }))
+        .catch((error) => {
+          this.setFieldValue('inProgress', false, 'adminProcessCip');
           Helper.toast(get(error, 'message'), 'error');
           rej(error);
         });

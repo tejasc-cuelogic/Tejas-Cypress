@@ -24,12 +24,29 @@ mutation updateOfferingRepaymentsMeta($audit: Boolean!, $offeringId: String){
 }`;
 
 export const processFullInvestorAccount = gql`
-mutation processFullInvestorAccount($userId: String!, $accountId: String!, $createRSAccount: Boolean!, $createInitialDeposit: Boolean!, $sendEmailToInvestor: Boolean!) {
+mutation processFullInvestorAccount($userId: String!, $accountId: String!, $createRSAccount: Boolean!, $createInitialDeposit: Boolean!, $sendEmailToInvestor: Boolean!, $createGsContactAccount: Boolean!, $createAccountPdf: Boolean!, $sendCrowdPayEmailToGS: Boolean!) {
   processFullInvestorAccount(
     userId: $userId,
     accountId: $accountId,
     createRSAccount: $createRSAccount, 
     createInitialDeposit: $createInitialDeposit,
     sendEmailToInvestor: $sendEmailToInvestor,
+    createGsContactAccount: $createGsContactAccount,
+    createAccountPdf: $createAccountPdf,
+    sendCrowdPayEmailToGS: $sendCrowdPayEmailToGS,
+  )
+}`;
+export const adminProcessCip = gql`
+mutation adminProcessCip($userId: String!, $accountId: String!) {
+  adminProcessCip(
+    userId: $userId,
+    accountId: $accountId,
+  )
+}`;
+export const adminProcessInvestorAccount = gql`
+mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
+  adminProcessInvestorAccount(
+    userId: $userId,
+    accountId: $accountId,
   )
 }`;
