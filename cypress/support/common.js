@@ -16,9 +16,14 @@ export const typeOtpCode = () => {
   });
 };
 
-export const ApplicationUnlock = () => {
+export const applicationUnlock = () => {
   cy.get('input[name="password"]').type('fourroses');
   cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
+}
+
+export const clickonDashboard = () => {
+  cy.wait(7000)
+  cy.get('.header-wrap').get('button.button').contains('Dashboard').click({ force: true });
 }
 
 export const btnClickAndWait = (operationName) => {

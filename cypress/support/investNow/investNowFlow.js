@@ -7,11 +7,11 @@ import {
   validInvestorWithIncompleteCIPCredentials,
 } from './investorsCredentailConstant';
 import { enteringInvestmentAmount } from './enteringInvestmentAmount';
-import {ApplicationUnlock } from '../common';
+import {applicationUnlock } from '../common';
 
 export const initializeInvestNowFlow = () => {
   cy.visit('/', { failOnStatusCode: false });
-  ApplicationUnlock();
+  applicationUnlock();
   OfferingListingFlow();
   OfferingDetailFlow();
 };
