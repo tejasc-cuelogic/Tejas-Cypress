@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { join } from 'lodash';
 import { Card, Table, Button, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
@@ -26,16 +26,15 @@ const meta = [
 export default class AllInsights extends Component {
   componentWillMount() {
     this.props.articleStore.sortArticlesByFilter();
-    console.log('allInsightsList ->', this.props.articleStore.allInsightsList);
   }
   globalActionChange = (e, { name, value }) =>
     this.props.articleStore.setGlobalAction(name, value);
-  handleAction = (action, articleId) => {
+  handleAction = (action, articleId, status) => {
     if (action === 'Delete') {
       this.handleDeleteConfirm(articleId);
     } else if (action === 'Edit') {
       this.props.articleStore.currentArticleId = articleId;
-      this.props.history.push(`${this.props.match.url}/${articleId}`);
+      this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
     }
   }
   handleDeleteConfirm = (id) => {
@@ -72,14 +71,17 @@ export default class AllInsights extends Component {
 
   render() {
     const { articleStore } = this.props;
-    const { confirmBox } = this.props.uiStore;
+    const { confirmBox, inProgress } = this.props.uiStore;
     const {
       articleListingLoader,
       sortOrder,
       adminInsightList,
     } = articleStore;
-    if (articleListingLoader) {
+    if (articleListingLoader || inProgress) {
       return <InlineLoader />;
+    }
+    if (adminInsightList.length === 0) {
+      return <InlineLoader text="No data found." />;
     }
     return (
       <Aux>
@@ -104,7 +106,7 @@ export default class AllInsights extends Component {
               <Table.Body>
                 {adminInsightList ? adminInsightList.map(record => (
                   <Table.Row key={record.id}>
-                    <Table.Cell>{record.title || '-'}</Table.Cell>
+                    <Table.Cell><Link to={`${this.props.match.url}/${record.id}/${record.articleStatus}`}>{record.title || '-'}</Link></Table.Cell>
                     <Table.Cell>{record.category || 'N/A'}</Table.Cell>
                     <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>
                     <Table.Cell>
@@ -118,7 +120,7 @@ export default class AllInsights extends Component {
                       <Button.Group>
                         {Object.keys(actions).map(action => (
                           <Button className="link-button" >
-                            <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id)} />
+                            <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id, record.articleStatus)} />
                           </Button>
                         ))}
                       </Button.Group>

@@ -75,7 +75,7 @@ export default class ElasticSearch extends Component {
                         </Aux>
                       }
                       {this.renderTitle(get(es[e], 'indexName'))}
-                      <Header.Subheader>{get(es[e], 'created.date') ? moment(get(es[e], 'created.date')).startOf('hour').fromNow() : ''}</Header.Subheader>
+                      <Header.Subheader>{get(es[e], 'created.date') ? moment(get(es[e], 'created.date')).fromNow() : ''}</Header.Subheader>
                     </Header>
                   ))}
                 </Card.Content>

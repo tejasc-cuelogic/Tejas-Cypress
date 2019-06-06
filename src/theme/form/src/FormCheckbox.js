@@ -3,6 +3,7 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import Aux from 'react-aux';
+import { includes } from 'lodash';
 import { Icon, Popup, List, Checkbox } from 'semantic-ui-react';
 
 const FormCheckbox = observer((props) => {
@@ -30,10 +31,10 @@ const FormCheckbox = observer((props) => {
                       c.conditionalCustomLabel ? conditionalCustomLabel :
                         c.customUpdateLimitLabel ? customUpdateLimitLabel :
                         c.customRegulationLabel ? customRegulationLabel : c.label}
-                    {c.value === '4' && c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== 'BD_506C' ?
+                    {c.value === '4' && c.tooltip && !tooltipHardDisable && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) ?
                       <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                       :
-                      c.tooltip && !tooltipHardDisable && currentInvestmentStatus !== 'BD_506C' &&
+                      c.tooltip && !tooltipHardDisable && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) &&
                       <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                     }
                   </label>

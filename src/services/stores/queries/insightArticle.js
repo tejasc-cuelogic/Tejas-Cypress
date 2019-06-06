@@ -162,12 +162,10 @@ query insightArticlesListByFilter($categoryId: String, $articleStatus: ArticleSt
     title
     author
     updated {
-      id
       date
     }
     isFeatured
     created {
-      id
       date
     }
     banner
