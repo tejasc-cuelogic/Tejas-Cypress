@@ -111,7 +111,7 @@ test:review:
    - echo "Initiate e2e tests..."
   image: cypress/base:10
   artifacts:
-    expire_in: 1 day
+    expire_in: 4 hrs
     when: always
     paths:
     - cypress/screenshots
@@ -191,6 +191,25 @@ deploy:dev:
     - aws cloudfront create-invalidation --distribution-id $DEV_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:dev
+
+#Test dev environment
+test:dev:
+  stage: test
+  only:
+    refs:
+      - dev
+  before_script:
+   - echo "Initiate e2e tests..."
+  image: cypress/base:10
+  artifacts:
+    expire_in: 8 hrs
+    when: always
+    paths:
+    - cypress/screenshots
+    - cypress/videos
+  script:
+    - npm install
+    - CYPRESS_baseUrl=$DEV_URL $(npm bin)/cypress run
 
 deploy:predev:
   <<: *deploy_defination
