@@ -209,7 +209,7 @@ test:dev:
     - cypress/videos
   script:
     - npm install
-    - CYPRESS_baseUrl=$DEV_URL $(npm bin)/cypress run
+    - CYPRESS_baseUrl=https://$DEV_URL $(npm bin)/cypress run
 
 deploy:predev:
   <<: *deploy_defination
