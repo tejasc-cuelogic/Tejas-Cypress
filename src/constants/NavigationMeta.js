@@ -635,6 +635,19 @@ export const PUBLIC_NAV = [
     ],
   },
   {
+    title: 'My Account',
+    to: '',
+    subPanel: 1,
+    exact: true,
+    subNavigations: [
+      { title: 'Portfolio', to: 'app/dashboard' },
+      { title: 'Settings', to: 'app/account-settings' },
+      { title: 'Refer a Friend', to: 'app/referrals' },
+      { title: 'Log out', to: '' },
+      // { title: 'Press', to: 'press' },
+    ],
+  },
+  {
     title: 'Legal',
     to: 'agreements/legal',
     exact: true,

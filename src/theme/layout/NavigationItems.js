@@ -295,7 +295,7 @@ export class NavigationItems extends Component {
                     </Menu.Item>
                   ))}
                 </Aux>
-              ) : (
+              ) : !this.props.userStore.isInvestor && (
                 <Menu.Item
                   className="menu-button"
                   onClick={this.handleDashboardBtn}
