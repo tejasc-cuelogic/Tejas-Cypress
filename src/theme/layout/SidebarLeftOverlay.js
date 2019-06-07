@@ -11,13 +11,16 @@ import FireworksAnimation from '../../modules/public/offering/components/investN
 
 const progressMap = ['viewLoanAgreement', 'portfolio'];
 
-@inject('uiStore')
+@inject('uiStore', 'userStore')
 @observer
 class SidebarLeftPush extends Component {
   toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
   toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
   render() {
     const { layoutState, showFireworkAnimation } = this.props.uiStore;
+    if (this.props.userStore.isInvestor) {
+      return (<Aux>{this.props.children}</Aux>);
+    }
     return (
       <Aux>
         {showFireworkAnimation &&

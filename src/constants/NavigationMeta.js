@@ -640,7 +640,7 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Portfolio', to: 'app/dashboard' },
+      { title: 'Portfolio', to: 'app/summary' },
       { title: 'Settings', to: 'app/account-settings' },
       { title: 'Refer a Friend', to: 'app/referrals' },
       { title: 'Log out', to: '' },

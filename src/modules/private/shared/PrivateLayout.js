@@ -4,11 +4,12 @@ import { matchPath } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Form, Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
+import NsHeader from '../../../theme/layout/Header';
 import NotFound from '../../shared/NotFound';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const overrideContainerClass = ['account-details/:accountType/transactions'];
-@inject('uiStore', 'navStore')
+@inject('uiStore', 'navStore', 'userStore')
 @observer
 class PrivateLayout extends Component {
   render() {
@@ -19,28 +20,40 @@ class PrivateLayout extends Component {
     }
     return (
       <Aux>
-        <div className="page-header-section">
-          <Grid columns="equal" stackable>
-            <Grid.Row>
-              <Grid.Column verticalAlign="middle">
-                {!this.props.P0 ?
-                  <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header> :
-                  this.props.P0
+        {this.props.userStore.isInvestor ?
+          <NsHeader
+            location={location}
+            stepInRoute={this.props.navStore.stepInRoute}
+            currentUser={this.props.userStore.currentUser}
+            handleLogOut={this.handleLogOut}
+            // canSubmitApp={isValid}
+            // isPrequalQulify={isPrequalQulify}
+            // preQualSubmit={this.preQualSubmit}
+            // loading={inProgress}
+          /> :
+          <div className="page-header-section">
+            <Grid columns="equal" stackable>
+              <Grid.Row>
+                <Grid.Column verticalAlign="middle">
+                  {!this.props.P0 ?
+                    <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header> :
+                    this.props.P0
+                  }
+                </Grid.Column>
+                {!this.props.P4 ? (
+                  <span className="item notification">
+                    {/* <Icon className="ns-bell"
+                    onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} />
+                    <span className="unread-count">3</span> */}
+                  </span>
+                  ) : (
+                    <Grid.Column only="large screen" width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
+                  )
                 }
-              </Grid.Column>
-              {!this.props.P4 ? (
-                <span className="item notification">
-                  {/* <Icon className="ns-bell"
-                  onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} />
-                  <span className="unread-count">3</span> */}
-                </span>
-                ) : (
-                  <Grid.Column only="large screen" width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
-                )
-              }
-            </Grid.Row>
-          </Grid>
-        </div>
+              </Grid.Row>
+            </Grid>
+          </div>
+        }
         {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav) &&
           <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
