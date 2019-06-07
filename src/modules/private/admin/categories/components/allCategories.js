@@ -107,8 +107,8 @@ export default class AllCategories extends Component {
   render() {
     const { activeIndex } = this.state;
     const { loading } = this.props.categoryStore;
-    const { confirmBox } = this.props.uiStore;
-    if (loading) {
+    const { confirmBox, inProgress } = this.props.uiStore;
+    if (loading || inProgress) {
       return <InlineLoader />;
     }
     const categories = this.props.categoryStore.allCategoriesData;

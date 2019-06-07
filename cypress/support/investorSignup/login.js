@@ -10,9 +10,8 @@ export const inValidEmailCredentials = {
 };
 
 export const goToLoginScreen = () => {
-  cy.contains('Sign up');
-  cy.get('button.compact').click();
-  cy.get('a').contains('Log in').click();
+  cy.contains('Sign Up');
+  cy.get('.header-wrap').get('.menu-button').contains('Log In').click({ force: true });
 };
 
 export const clearLoginForm = () => {

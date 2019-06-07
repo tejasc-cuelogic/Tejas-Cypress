@@ -5,11 +5,10 @@ const handleOverviewStep = () => {
 };
 
 export const completeInvestorProfile = () => {
-  cy.wait(1000);
+  cy.wait(2000);
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
     // eslint-disable-next-line default-case
-    registerApiCall('upsertProfile');
     switch (text) {
       case 'Overview':
         handleOverviewStep();
@@ -32,6 +31,7 @@ export const completeInvestorProfile = () => {
         cy.get('input[name="netWorth"]').type('123456789');
         cy.get('input[name="annualIncomeCurrentYear"]').type('123456789');
         btnClickAndWait('upsertProfile');
+        cy.wait(1000);
         completeInvestorProfile();
         break;
       case 'Investment Experience':
@@ -39,6 +39,7 @@ export const completeInvestorProfile = () => {
         cy.get('div[role="listitem"]').get('[type="checkbox"]').parent()
           .click({ multiple: true });
         cy.wait(3000);
+        registerApiCall('upsertProfile');
         cy.get('.center-align > button').contains('Continue to Account').click({ force: true });
         cy.wait('@upsertProfile');
         break;

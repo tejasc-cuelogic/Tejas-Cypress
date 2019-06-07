@@ -26,6 +26,7 @@ describe('Account Creation', () => {
   });
 
   const manualLinkbankProcess = () => {
+    cy.wait(2000);
     cy.get('input[name="accType"]').check('0', { force: true });
     cy.get('button.next').click();
     cy.wait(2000);
@@ -35,9 +36,10 @@ describe('Account Creation', () => {
     cy.get('input[name="accountType"]').check('SAVINGS', { force: true });
     cy.get('button.button').contains('Confirm').click();
     cy.wait('@upsertInvestorAccount');
-    cy.wait(10000)
+    cy.wait(5000)
   };
-  const plaidProcess = (progressStep) => {
+  const plaidProcess = (progressStep, count) => {
+    cy.wait(2000);
     cy.get(`.multistep-modal > ol.progtrckr > ${progressStep}`).click({ force: true }).invoke('text').then((step) => {
       cy.log('bank step', step.toUpperCase());
       if (step.toUpperCase() === 'LINK BANK') {
@@ -46,7 +48,7 @@ describe('Account Creation', () => {
         // }
         cy.get('.bank-link:first').click({ force: true });
         cy.wait(5000);
-        cy.get('#plaid-link-iframe-1').then(($iframe) => {
+        cy.get(`#plaid-link-iframe-${count}`).then(($iframe) => {
           const $body = $iframe.contents().find('body');
           cy.log('body', $iframe.contents().find('body'));
           cy.wait(500);
@@ -74,7 +76,6 @@ describe('Account Creation', () => {
       cy.get('input[name="value"]').type(amount);
       cy.get('button').contains('Confirm').click();
       cy.wait('@upsertInvestorAccount');
-      cy.wait('@upsertInvestorAccount');
     });
   }
 
@@ -89,35 +90,43 @@ describe('Account Creation', () => {
           cy.get('input[name="netWorth"]').type('123456789');
           cy.get('input[name="income"]').type('123456789');
           btnClickAndWait('upsertInvestorAccount');
+          cy.wait(2000);
           iraAccountCreation();
           break;
         case 'Account type':
           clickRadioAndNext('input[name="iraAccountType"]', '1', 'upsertInvestorAccount');
+          cy.wait(2000);
           iraAccountCreation();
           break;
         case 'Funding':
           clickRadioAndNext('input[name="fundingType"]', '0', 'upsertInvestorAccount');
+          cy.wait(2000);
           iraAccountCreation();
           break;
         case 'Link bank':
-          plaidProcess('.progtrckr-doing');
+          plaidProcess('.progtrckr-doing', '2');
           cy.wait(1000);
           addFunds('5010');
           cy.wait('@upsertInvestorAccount');
+          cy.wait(2000);
           iraAccountCreation();
           break;
         case 'Identity':
           uploadFile();
           cy.wait('@fileUpload');
+          cy.wait(1000);
           iraAccountCreation();
           break;
         case 'Summary':
+          registerApiCall('submitAccount')
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
-          cy.wait('@upsertInvestorAccount');
-          cy.wait('@upsertInvestorAccount');
-          if (cy.get('div.mini').length) {
-            cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
-          }
+          cy.wait('@submitAccount');
+          cy.wait('@submitAccount');
+          cy.wait(1000)
+          cy.get('.modal', { timeout: 1000 }).then(($el) => {
+            const element = cy.wrap($el)
+            element.get('button.button').contains('Continue').click({ force: true });
+          });
           cy.wait(1000);
           break;
       }
@@ -126,15 +135,16 @@ describe('Account Creation', () => {
 
   const entityAccountCreation = () => {
     cy.wait(2000);
+    registerApiCall('upsertInvestorAccount');
     cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
-    registerApiCall('upsertInvestorAccount');
     // eslint-disable-next-line default-case
     switch (text) {
       case 'Financial info':
         cy.get('input[name="netAssets"]').type('123456789');
         cy.get('input[name="annualIncome"]').type('123456789');
         btnClickAndWait('upsertInvestorAccount');
+        cy.wait(3000);
         entityAccountCreation();
         break;
       case 'General':
@@ -153,18 +163,18 @@ describe('Account Creation', () => {
         cy.get('input[name="city"]').type(GeneralInfoMeta.city);
         cy.get('input[name="zipCode"]').type(GeneralInfoMeta.zipCode);
         btnClickAndWait('upsertInvestorAccount');
-        cy.wait('@upsertInvestorAccount');
+        cy.wait(3000);
         entityAccountCreation();
         break;
       case 'Trust Status':
         clickRadioAndNext('input[name="isTrust"]', 'false', 'upsertInvestorAccount');
+        cy.wait(2000);
         entityAccountCreation();
         break;
       case 'Personal info':
         cy.get('input[name="title"]').type('CTO');
         uploadFile('input[name="legalDocUrl"]');
-        btnClickAndWait('upsertInvestorAccount');
-        cy.wait(1000);
+        cy.wait('@fileUpload');
         entityAccountCreation();
         break;
       case 'Formation doc':
@@ -172,16 +182,17 @@ describe('Account Creation', () => {
         uploadFile('input[name="operatingAgreementDoc"]');
         uploadFile('input[name="einVerificationDoc"]');
         btnClickAndWait('upsertInvestorAccount');
-        cy.wait(1000);
         registerApiCall('upsertInvestorAccount');
+        cy.wait(2000);
         entityAccountCreation();
         break;
       case 'Link bank':
-        plaidProcess('.progtrckr-doing');
+        plaidProcess('.progtrckr-doing', '3');
         cy.wait(1000);
         addFunds('7000');
         cy.wait('@upsertInvestorAccount');
         cy.wait('@upsertInvestorAccount');
+        cy.wait(2000);
         entityAccountCreation();
         break;
       case 'Summary':
@@ -189,9 +200,11 @@ describe('Account Creation', () => {
         cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
         cy.wait('@submitAccount');
         cy.wait('@submitAccount');
-        if (cy.get('div.mini').get('button.button').contains('Continue').length) {
-          cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
-        }
+        cy.wait(1000)
+        cy.get('.modal', { timeout: 1000 }).then(($el) => {
+          const element = cy.wrap($el)
+          element.get('button.button').contains('Continue').click({ force: true });
+        });
         cy.wait(1000);
         break;
       }
@@ -203,29 +216,30 @@ describe('Account Creation', () => {
   });
 
   it('should successfully link bank with plaid process', () => {
-    plaidProcess('.progtrckr-done');
+    plaidProcess('.progtrckr-done', '1');
   });
 
   it('should create individual account successfully', () => {
-    cy.wait(1000)
+    cy.wait(2000);
     addFunds('15000');
     cy.wait(5000);
     registerApiCall('submitAccount')
     cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
-    cy.wait('@submitAccount');
-    cy.wait('@submitAccount');
-    if (cy.get('div.mini').length) {
-      cy.get('div.mini').get('button.button').contains('Continue').click({ force: true });
-      cy.wait('@submitAccount');
-    } else {
-      cy.wait(2000);
-    }
+    // cy.wait('@submitAccount');
+    // cy.wait('@submitAccount');
+    // cy.wait(1000)
+    // cy.get('.modal', { timeout: 1000 }).then(($el) => {
+    //   const element = cy.wrap($el)
+    //   element.get('button.button').contains('Continue').click({ force: true });
+    // });
+    cy.wait(20000);
   });
 
   it('should create IRA account successfully', () => {
     cy.get('.btn-item').contains('Open New Account').click({ force: true });
     cy.get('input[name="accType"]').check('1', { force: true });
     cy.get('button.next').click();
+    cy.wait(1000);
     iraAccountCreation();
   });
 

@@ -17,6 +17,5 @@ export const InvestorFlowProcess = () => {
   fillLegalFormAndProceed();
   enterCodeAndConfirm();
   confirmPhoneNumberScreen();
-  registerApiCall('upsertProfile');
   completeInvestorProfile();
 }

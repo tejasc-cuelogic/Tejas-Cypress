@@ -9,7 +9,7 @@ import Actions from './Actions';
 import { InlineLoader } from '../../../../../theme/shared';
 
 
-@inject('knowledgeBaseStore', 'userStore', 'offeringCreationStore')
+@inject('knowledgeBaseStore', 'userStore', 'offeringCreationStore', 'uiStore')
 @withRouter
 @observer
 export default class EditKnowledgeBaseItem extends Component {
@@ -31,9 +31,10 @@ export default class EditKnowledgeBaseItem extends Component {
     this.props.knowledgeBaseStore.resetFormData('KNOWLEDGE_BASE_FRM');
   };
 
-  save = (status) => {
-    this.props.knowledgeBaseStore.save(this.props.match.params.id, status);
-    this.props.history.push(this.props.refLink);
+  save = (status, isDraft = false) => {
+    this.props.knowledgeBaseStore.save(this.props.match.params.id, status, isDraft).then(() => {
+      this.props.history.push(this.props.refLink);
+    });
   }
   render() {
     const {
@@ -44,13 +45,14 @@ export default class EditKnowledgeBaseItem extends Component {
       userTypeChange,
       categoriesDropdown,
     } = this.props.knowledgeBaseStore;
+    const { inProgress } = this.props.uiStore;
     const isNew = this.props.match.params.id === 'new';
     const itemStatus = this.props.match.params.status;
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           {
-            loading ?
+            (loading || inProgress) ?
               <InlineLoader />
               :
               <div>

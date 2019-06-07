@@ -39,7 +39,7 @@ class AccountType extends Component {
     const { campaign } = this.props.campaignStore;
     const offeringId = campaign && campaign.id ? campaign.id : this.props.match.params.offeringId;
     const offeringReuglation = campaign && campaign.regulation;
-    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     let isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const {
@@ -141,7 +141,7 @@ class AccountType extends Component {
     }
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
-    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if (!byDefaultRender) {
@@ -183,7 +183,7 @@ class AccountType extends Component {
     // const offeringReuglation = campaign && campaign.regulation;
     const offeringReuglation = get(campaign, 'keyTerms.regulation');
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
-    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
@@ -267,7 +267,7 @@ class AccountType extends Component {
       OfferingRegulationCFMinAmount,
       OfferingRegulationCFMaxAmount,
     };
-    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
     const {
       userDetails,
       setPartialInvestmenSession,
