@@ -98,7 +98,7 @@ settingEnv()
     sed -i.bak "s#^\(REACT_APP_PUBLIC_API_KEY=\).*#\1${REACT_APP_PUBLIC_API_KEY}#" .envTEMPLATE
 
 	echo "Specified ci_commit_ref : $ci_commit_ref $CI_COMMIT_REF_NAME";
-	if [ "$ci_commit_ref" = "dev" ] || "$ci_commit_ref" = "predev" ] || [ "$ci_commit_ref" = "qa" ] || [ "$ci_commit_ref" = "demo" ] || [ "$ci_commit_ref" = "master" ]; then
+	if [ "$ci_commit_ref" = "predev" ] || "$ci_commit_ref" = "dev" ] || [ "$ci_commit_ref" = "qa" ] || [ "$ci_commit_ref" = "demo" ] || [ "$ci_commit_ref" = "master" ]; then
 		REACT_APP_BUG_SNAG_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/bugsnag\/apiKey/ { print $3 }')
 		sed -i.bak "s#^\(REACT_APP_BUG_SNAG_KEY=\).*#\1${REACT_APP_BUG_SNAG_KEY}#" .envTEMPLATE
 
