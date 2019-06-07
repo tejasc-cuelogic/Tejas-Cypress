@@ -178,7 +178,7 @@ deploy:predev:
   <<: *deploy_defination
   only:
     refs:
-      - 1863-add-new-regulation-type-bd_506b-type-for-offering
+      - predev
   environment:
     name: dev
     url: http://$PREDEV_URL
