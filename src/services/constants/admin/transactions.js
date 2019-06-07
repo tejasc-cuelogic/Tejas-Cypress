@@ -44,7 +44,7 @@ export const STATUS_META = [
   },
   {
     title: 'GS Transaction ID',
-    field: 'gstransactionId',
+    field: 'gsTransactionId',
     refStatus: ['PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {
