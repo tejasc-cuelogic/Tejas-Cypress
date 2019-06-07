@@ -65,7 +65,7 @@ class App extends Component {
         }
       })
       .catch((err) => {
-        console.log('Catch error in app.js verifySession ', err);
+        console.log('Catch error in app.js verifySession. ', err);
       });
   }
 
