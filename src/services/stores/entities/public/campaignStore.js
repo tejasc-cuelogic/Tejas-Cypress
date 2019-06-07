@@ -182,11 +182,11 @@ export class CampaignStore {
     campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
-    const minOfferingD = get(campaign, 'keyTerms.minOfferingAmount506C') || 0;
-    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    const minOfferingD = get(campaign, 'keyTerms.minOfferingAmount506') && get(campaign, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.minOfferingAmount506') : get(campaign, 'keyTerms.minOfferingAmount506C') ? get(campaign, 'keyTerms.minOfferingAmount506C') : '0.00';
+    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
-    const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506C') || 0;
-    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
+    const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506') && get(campaign, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.maxOfferingAmount506') : get(campaign, 'keyTerms.maxOfferingAmount506C') ? get(campaign, 'keyTerms.maxOfferingAmount506C') : '0.00';
+    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(maxOfferingD, maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
     campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
@@ -389,9 +389,9 @@ export class CampaignStore {
     offeringDetailsList.map((offeringDetails) => {
       const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
       const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
-      const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
+      const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506') && get(offeringKeyTermDetails, 'minOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'minOfferingAmount506') : get(offeringKeyTermDetails, 'minOfferingAmount506C') ? get(offeringKeyTermDetails, 'minOfferingAmount506C') : '0.00';
       const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
-      const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506C') || '0.00';
+      const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
       // regulation === ('BD_506C' || 'BD_506B')
       const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : includes(['BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
