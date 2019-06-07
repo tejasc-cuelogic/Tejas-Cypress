@@ -2,7 +2,7 @@ import { registerApiCall, uploadFile, applicationUnlock } from '../../support/co
 import { issuerDetails } from '../../support/issuerSignUp/issuerDetails';
 import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails, fillNextYearProjection, fillBusinessDetails, loginToApplication } from '../../support/issuerSignUp/issuerSignUp';
 
-describe('Log In', () => {
+describe('Issuer Sign Up', () => {
   beforeEach(() => {
     cy.visit('/');
     applicationUnlock();
@@ -13,28 +13,6 @@ describe('Log In', () => {
       cy.get('a').contains('Sign Up').click({ force: true });
     }
   });
-
-  it('should be able to go on issuer sign up page', () => {
-    issuerSignUp();
-  });
-
-  it ('should fill basic details', () => {
-    issuerSignUp();
-    fillBasicDetails(issuerDetails.basicDetails);
-  })
-
-  it ('Should Successfully fill pre-qualification form and submit the business application', () => {
-    issuerSignUp();
-    fillBasicDetails(issuerDetails.basicDetails);
-    cy.get('input[value="B2C"]').click();
-    fillGeneralInfo(issuerDetails.generalInfo);
-    cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
-    cy.get('input[value="BRAND_NEW"]').click();
-    fillExperienceDetails(issuerDetails.experienceDetails);
-    fillNextYearProjection(issuerDetails.nextYearProjection);
-    cy.get('input[value="LLC"]').click();
-    cy.get('input[name="legalConfirmation"]').parent().click({ force: true, multiple: true });
-  })
 
   it ('should able to submit business application and login', () => {
     issuerSignUp();
