@@ -79,8 +79,10 @@ export default class AllFaqs extends Component {
   globalActionChange = (e, { name, value }) =>
     this.props.faqStore.setGlobalAction(name, value);
   deleteFaq = () => {
-    this.props.faqStore.deleteRecords(this.props.faqStore.confirmBox.refId);
-    this.props.faqStore.setConfirmBox('');
+    this.props.faqStore.deleteRecords(this.props.faqStore.confirmBox.refId).then(() => {
+      this.props.faqStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
   handleDeleteCancel = () => {
     this.props.faqStore.setConfirmBox('');

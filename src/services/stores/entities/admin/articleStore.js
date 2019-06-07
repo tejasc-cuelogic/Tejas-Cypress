@@ -157,7 +157,7 @@ export class ArticleStore {
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
-          variables: id === 'new' ? { payload, isPartialData: isDraft } : { payload, id, isPartialData: isDraft },
+          variables: id === 'new' ? { payload, isPartial: isDraft } : { payload, id, isPartial: isDraft },
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
           resolve();
@@ -221,23 +221,20 @@ export class ArticleStore {
     }
 
     @action
-    deleteArticle = (id) => {
+    deleteArticle = id => new Promise((resolve, reject) => {
       uiStore.setProgress();
       client
         .mutate({
           mutation: deleteArticle,
           variables: { id },
-          refetchQueries: [{
-            query: insightArticlesListByFilter,
-          }],
         }).then(() => {
           Helper.toast('Category deleted successfully.', 'success');
-          uiStore.setProgress(false);
+          resolve();
         }).catch(() => {
           Helper.toast('Error while Deleting Category', 'error');
-          uiStore.setProgress(false);
-        });
-    }
+          reject();
+        }).finally(() => uiStore.setProgress(false));
+    });
 
     @action
     featuredRequestArticles = () => {
