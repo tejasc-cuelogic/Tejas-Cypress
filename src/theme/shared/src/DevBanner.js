@@ -10,7 +10,7 @@ const DevBanner = props => (
       minHeight: '34px',
       color: 'black',
       textAlign: 'center',
-      background: '#FFE626',
+      background: 'rgb(93, 201, 110)',
       padding: '5px 30px',
       position: 'fixed',
       left: '0',
