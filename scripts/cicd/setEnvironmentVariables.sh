@@ -105,9 +105,11 @@ settingEnv()
 		REACT_APP_BUG_SNAG_STAGE=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/bugsnag\/releaseStage/ { print $3 }')
 		sed -i.bak "s#^\(REACT_APP_BUG_SNAG_STAGE=\).*#\1${REACT_APP_BUG_SNAG_STAGE}#" .envTEMPLATE
 
+		echo "here";
 		#Environment
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1${CI_COMMIT_REF_NAME}#" .envTEMPLATE
 	else
+		echo "there";
 	    #Environment
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1review#" .envTEMPLATE
 	fi
