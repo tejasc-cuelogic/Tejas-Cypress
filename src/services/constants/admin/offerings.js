@@ -172,6 +172,20 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
+  minOfferingAmount506: {
+    value: null,
+    label: 'Minimum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  maxOfferingAmount506: {
+    value: null,
+    label: 'Maximum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
   legalBusinessType: {
     value: '',
     label: 'Legal Business Type',

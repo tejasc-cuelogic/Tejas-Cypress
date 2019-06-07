@@ -255,8 +255,8 @@ class AccountType extends Component {
     }
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
     const offeringTitle = get(offeringDetailObj, 'keyTerms.shorthandBusinessName');
-    const offeringRegulationDMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmount506C');
-    const offeringRegulationDMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmount506C');
+    const offeringRegulationDMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmount506') ? get(offeringDetailObj, 'keyTerms.minOfferingAmount506') : get(offeringDetailObj, 'keyTerms.minOfferingAmount506C');
+    const offeringRegulationDMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmount506') ? get(offeringDetailObj, 'keyTerms.maxOfferingAmount506') : get(offeringDetailObj, 'keyTerms.maxOfferingAmount506C');
     const OfferingRegulationCFMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmountCF');
     const OfferingRegulationCFMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmountCF');
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');

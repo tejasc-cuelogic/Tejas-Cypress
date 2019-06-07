@@ -158,8 +158,10 @@ export const getOfferingDetails = gql`
         revSharePercentage
         interestRate
         minOfferingAmountCF
-        minOfferingAmount506C
+        minOfferingAmount506
         maxOfferingAmountCF
+        maxOfferingAmount506
+        minOfferingAmount506C
         maxOfferingAmount506C
         legalBusinessType
         nsMinFees
@@ -1132,7 +1134,7 @@ query getTotalAmount{
     amountRaisedUS
     amountRaisedTX
     totalInvestorsUS
-  }  
+  }
   }
   `;
 
