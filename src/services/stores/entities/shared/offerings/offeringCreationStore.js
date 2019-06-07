@@ -527,10 +527,22 @@ export class OfferingCreationStore {
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
     const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate'], field) ? values.value : values.floatValue;
-    this[form] = Validator.onArrayFieldChange(
-      this[form],
-      { name: field, value: fieldValue }, subForm, index,
-    );
+    if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fieldValue }, subForm, index,
+      );
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: `${field}C`, value: fieldValue }, subForm, index,
+      );
+    } else if (!includes(['minOfferingAmount506C', 'maxOfferingAmount506C'], field)) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fieldValue }, subForm, index,
+      );
+    }
+
     if (form === 'LEADERSHIP_EXP_FRM') {
       this.leadershipExperience[index2] = this[form];
     }
