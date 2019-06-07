@@ -17,6 +17,7 @@ import { userIdleTime } from './constants/common';
 /**
  * Main App
  */
+
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
