@@ -878,6 +878,9 @@ export const getOfferingDetails = gql`
           revSharePercentage
           interestRate
           businessOpenDate
+          nsPayment
+          investorFee
+          maturityDate
         }
         repayment {
           startDate
@@ -888,6 +891,9 @@ export const getOfferingDetails = gql`
         totalCommittedAmount
         totalInvestorCount
         totalInvestmentAmount
+        totalInvestmentAmountCf
+        totalInvestmentAmount506C
+        totalInvestmentAmount506B
         failedDate
       }
       bonusRewards{
