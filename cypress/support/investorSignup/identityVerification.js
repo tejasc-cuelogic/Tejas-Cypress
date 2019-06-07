@@ -14,7 +14,10 @@ export const legalDetailsMeta = {
 };
 export const fillLegalDetailsForm = (legalDetails = undefined) => {
   const legalDetailObject = legalDetails || legalDetailsMeta;
-  cy.get('div.content > form').within(() => {
+  cy.wait('@legal');
+  cy.wait(1000)
+  cy.wait('@legal');
+  cy.get('div.content > form', { timeout: 5000 }).within(() => {
     cy.get('div[name="title"]')
       .click()
       .get(`div[role="option"]:contains(${legalDetailObject.salutation})`)
@@ -36,10 +39,11 @@ export const fillLegalDetailsForm = (legalDetails = undefined) => {
 };
 
 export const fillLegalFormAndProceed = () => {
-  cy.wait(5000);
   registerApiCall('legal');
   fillLegalDetailsForm();
   cy.get('form').find('button').contains('Verify my identity').click();
+  cy.wait('@legal');
+  cy.wait('@legal');
   cy.wait('@legal');
   cy.wait('@legal');
   cy.wait('@legal');

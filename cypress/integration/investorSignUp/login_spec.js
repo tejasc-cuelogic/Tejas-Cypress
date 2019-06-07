@@ -2,7 +2,7 @@ import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from '../.
 import { applicationUnlock } from '../../support/common'
 describe('Log In', () => {
   beforeEach(() => {
-    cy.visit('/', { failOnStatusCode: false });
+    cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
     applicationUnlock();
     goToLoginScreen();
   });
@@ -25,7 +25,8 @@ describe('Log In', () => {
       cy.get('a').contains('Forgot password?')
         .invoke('attr', 'href')
         .then((href) => {
-          cy.visit(href);
+          cy.log('href', href)
+          cy.visit(href, { failOnStatusCode: false });
         });
     });
   });
@@ -35,7 +36,8 @@ describe('Log In', () => {
     cy.get('.signup-actions').get('a').contains('Sign up')
       .invoke('attr', 'href')
       .then((href) => {
-        cy.visit(href);
+        cy.log('href', href)
+        cy.visit(href, { failOnStatusCode: false });
       });
   });
 });

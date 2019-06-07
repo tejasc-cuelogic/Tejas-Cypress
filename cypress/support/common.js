@@ -28,8 +28,8 @@ export const clickonDashboard = () => {
 
 export const btnClickAndWait = (operationName) => {
   registerApiCall(operationName);
+  cy.wait(500)
   cy.get('button.next').click({ force: true });
-  cy.wait(500);
   cy.wait(`@${operationName}`);
 };
 
@@ -52,5 +52,6 @@ export const enterCodeAndConfirm = () => {
   typeOtpCode();
   registerApiCall('confirm');
   cy.get('form').find('button').contains('Confirm').click();
+  cy.wait('@confirm');
   cy.wait(100);
 }

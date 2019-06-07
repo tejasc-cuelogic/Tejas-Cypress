@@ -15,22 +15,18 @@ export const completeInvestorProfile = () => {
         completeInvestorProfile();
         break;
       case 'Employment Status':
-        registerApiCall('upsertProfile');
         clickRadioAndNext('input[name="status"]', 'SELF_EMPLOYED', 'upsertProfile');
         completeInvestorProfile();
         break;
       case 'Brokerage Employment':
-        registerApiCall('upsertProfile');
         clickRadioAndNext('input[name="brokerageEmployment"]', 'no', 'upsertProfile');
         completeInvestorProfile();
         break;
       case 'Public Company Relations':
-        registerApiCall('upsertProfile');
         clickRadioAndNext('input[name="publicCompanyRel"]', 'no', 'upsertProfile');
         completeInvestorProfile();
         break;
       case 'Financial Information':
-        registerApiCall('upsertProfile');
         cy.get('input[name="investorProfileType"]').check('JOINT', { force: true });
         cy.get('input[name="netWorth"]').type('123456789');
         cy.get('input[name="annualIncomeCurrentYear"]').type('123456789');
@@ -39,11 +35,11 @@ export const completeInvestorProfile = () => {
         completeInvestorProfile();
         break;
       case 'Investment Experience':
-        registerApiCall('upsertProfile');
         cy.get('input[name="experienceLevel"]').check('GOOD', { force: true });
         cy.get('div[role="listitem"]').get('[type="checkbox"]').parent()
           .click({ multiple: true });
         cy.wait(3000);
+        registerApiCall('upsertProfile');
         cy.get('.center-align > button').contains('Continue to Account').click({ force: true });
         cy.wait('@upsertProfile');
         break;
