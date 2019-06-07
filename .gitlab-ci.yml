@@ -43,7 +43,8 @@ before_script:
       - branches
   except:
     - master
-    - develop
+    - dev
+    - predev
     - qa
     - demo
 #  tags:
@@ -107,7 +108,7 @@ build:dev:
   <<: *build_definition
   only:
     refs:
-      - develop
+      - dev
   # <<: *before_script_defination
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
@@ -118,7 +119,7 @@ build:predev:
   <<: *build_definition
   only:
     refs:
-      - 1863-add-new-regulation-type-bd_506b-type-for-offering
+      - predev
   # <<: *before_script_defination
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
@@ -129,7 +130,7 @@ build:predev:
 version:dev:
   only:
     refs:
-      - develop
+      - dev
 #  tags:
 #    - ns-client
   stage: version
@@ -151,8 +152,8 @@ version:dev:
     - git add CHANGELOG.md
     # Commit the changes
     - git commit -m "Updated CHANGELOG.md [skip ci]"
-    # Push the changes back to the develop branch
-    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
+    # Push the changes back to the dev branch
+    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:dev
   allow_failure: true
   dependencies:
     - build:dev
@@ -162,7 +163,7 @@ deploy:dev:
   <<: *deploy_defination
   only:
     refs:
-      - develop
+      - dev
   environment:
     name: dev
     url: http://$DEV_URL
@@ -177,7 +178,7 @@ deploy:predev:
   <<: *deploy_defination
   only:
     refs:
-      - 1863-add-new-regulation-type-bd_506b-type-for-offering
+      - predev
   environment:
     name: dev
     url: http://$PREDEV_URL
