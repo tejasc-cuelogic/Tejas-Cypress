@@ -5,6 +5,8 @@
   "description": "NS-Client",
   "devDependencies": {
     "copy-webpack-plugin": "^4.6.0",
+    "cypress": "^3.3.1",
+    "cypress-plugin-retries": "^1.2.2",
     "eslint": "4.13.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-react-app": "^2.0.0",
@@ -150,7 +152,8 @@
     "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
     "build:prod": "npm-run-all build-assets build-js:prod",
-    "test": "node scripts/test.js --env=jsdom",
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "test": "$(npm bin)/cypress run",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },

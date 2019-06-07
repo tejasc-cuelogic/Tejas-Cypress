@@ -105,7 +105,7 @@ export default class KeyTerms extends Component {
               options={SECURITIES_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
-            {['minOfferingAmountCF', 'maxOfferingAmountCF', 'minOfferingAmount506C', 'maxOfferingAmount506C'].map(field => (
+            {['minOfferingAmountCF', 'maxOfferingAmountCF'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
                 name={field}
@@ -115,6 +115,22 @@ export default class KeyTerms extends Component {
                 prefix="$"
               />
             ))}
+            <MaskedInput
+              displayMode={isReadonly}
+              name="minOfferingAmount506"
+              fielddata={KEY_TERMS_FRM.fields.minOfferingAmount506 && KEY_TERMS_FRM.fields.minOfferingAmount506.value && KEY_TERMS_FRM.fields.minOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.minOfferingAmount506 : KEY_TERMS_FRM.fields.minOfferingAmount506C}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
+            />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="maxOfferingAmount506"
+              fielddata={KEY_TERMS_FRM.fields.maxOfferingAmount506 && KEY_TERMS_FRM.fields.maxOfferingAmount506.value && KEY_TERMS_FRM.fields.maxOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.maxOfferingAmount506 : KEY_TERMS_FRM.fields.maxOfferingAmount506C}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
+            />
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}

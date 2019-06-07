@@ -10,10 +10,13 @@ import { STATUS_MAPPING, STATUS_META } from '../../../../../services/constants/a
 import { NoR } from '../../../../../theme/table/NSTable';
 import Helper from '../../../../../helper/utility';
 
-@inject('transactionsStore')
+@inject('transactionsStore', 'crowdpayStore')
 @withRouter
 @observer
 export default class AllTransactions extends Component {
+  state = {
+    GsAccountNum: {},
+  }
   componentWillMount() {
     const { statusType } = this.props.match.params;
     const transStatus = STATUS_MAPPING[statusType].status;
@@ -23,7 +26,18 @@ export default class AllTransactions extends Component {
     }
     this.props.transactionsStore.pageReload = true;
   }
-
+  getGsAccountNumber = (e, accountId, userId) => {
+    e.stopPropagation();
+    const oldObj = this.state.GsAccountNum;
+    oldObj[accountId] = {};
+    oldObj[accountId].loading = true;
+    this.setState({ GsAccountNum: oldObj });
+    this.props.crowdpayStore.getDecryptedRoutingNum(accountId, userId).then((res) => {
+      oldObj[accountId].decGsAccNumber = res;
+      oldObj[accountId].loading = false;
+      this.setState({ GsAccountNum: oldObj });
+    }).catch(() => { oldObj[accountId].loading = false; });
+  }
   getUserName = (info, userId) => (
     <span className="user-name">
       {userId !== undefined ?
@@ -90,6 +104,17 @@ export default class AllTransactions extends Component {
                                       <Icon size="large" className={`ns-${lowerCase(get(row, 'investorAccountInfo.accountType'))}-line`} color="green" /> : 'N/A'
                                     }
                                   </Aux> :
+                                  col.field === 'cpAccountId' &&
+                                  get(row, 'accountId') ?
+                                    (this.state.GsAccountNum[get(row, 'accountId')] && this.state.GsAccountNum[get(row, 'accountId')].decGsAccNumber ?
+                                    this.state.GsAccountNum[get(row, 'accountId')].decGsAccNumber :
+                                    this.state.GsAccountNum[get(row, 'accountId')] && this.state.GsAccountNum[get(row, 'accountId')].loading ?
+                                      <p>Loading...</p> :
+                                      <Button color="blue" onClick={e => this.getGsAccountNumber(e, get(row, 'accountId'), get(row, 'userInfo.id'))} className="link-button">
+                                        Click to Show
+                                      </Button>
+                                    )
+                                :
                                 get(row, col.field) === undefined ? 'N/A' : row[col.field]
                             }
                           </Table.Cell>
