@@ -103,7 +103,7 @@ delete:review:
     name: $CI_COMMIT_REF_NAME
     action: stop
   dependencies: []
- 
+
 #Test review environment
 test:review:
   <<: *review_defination
