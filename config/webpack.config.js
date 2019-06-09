@@ -25,7 +25,6 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const CopyPlugin = require('copy-webpack-plugin');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const SriPlugin = require('webpack-subresource-integrity');
-const LinkTypePlugin = require('html-webpack-link-type-plugin').HtmlWebpackLinkTypePlugin;
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -605,6 +604,10 @@ module.exports = (webpackEnv) => {
           to: 'assets/js/r.js',
         },
         {
+          from: 'src/assets/js/cypressSri.js',
+          to: 'assets/js/cypressSri.js',
+        },
+        {
           from: 'src/assets/js/a.js',
           to: 'assets/js/a.js',
           transform(content) {
@@ -662,7 +665,6 @@ module.exports = (webpackEnv) => {
         appVersion: process.env.CI_PIPELINE_ID,
         overwrite: true,
       }),
-      new LinkTypePlugin(),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
