@@ -25,6 +25,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const CopyPlugin = require('copy-webpack-plugin');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const SriPlugin = require('webpack-subresource-integrity');
+const LinkTypePlugin = require('html-webpack-link-type-plugin').HtmlWebpackLinkTypePlugin;
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -518,7 +519,7 @@ module.exports = (webpackEnv) => {
               removeRedundantAttributes: true,
               useShortDoctype: true,
               removeEmptyAttributes: true,
-              removeStyleLinkTypeAttributes: true,
+              // removeStyleLinkTypeAttributes: true,
               keepClosingSlash: true,
               minifyJS: true,
               minifyCSS: true,
@@ -661,6 +662,7 @@ module.exports = (webpackEnv) => {
         appVersion: process.env.CI_PIPELINE_ID,
         overwrite: true,
       }),
+      new LinkTypePlugin(),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
