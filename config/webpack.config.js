@@ -1,4 +1,4 @@
-'use strict';
+
 
 const fs = require('fs');
 const isWsl = require('is-wsl');
@@ -83,7 +83,7 @@ module.exports = function (webpackEnv) {
         loader: MiniCssExtractPlugin.loader,
         options: Object.assign(
           {},
-          shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+          shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined,
         ),
       },
       {
@@ -155,7 +155,7 @@ module.exports = function (webpackEnv) {
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
       isEnvDevelopment &&
-        require.resolve('webpack-dev-server/client') + '?/',
+        `${require.resolve('webpack-dev-server/client')}?/`,
       isEnvDevelopment &&
         require.resolve('webpack/hot/dev-server'),
       // require.resolve('react-dev-utils/webpackHotDevClient'),
@@ -173,10 +173,11 @@ module.exports = function (webpackEnv) {
       pathinfo: false,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
+      crossOriginLoading: 'anonymous',
       filename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].js'
         : isEnvDevelopment && 'static/js/[name].[hash:8].js',
-        // : isEnvDevelopment && 'static/js/bundle.js',
+      // : isEnvDevelopment && 'static/js/bundle.js',
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
@@ -185,7 +186,7 @@ module.exports = function (webpackEnv) {
         : isEnvDevelopment && 'static/js/[name].chunk.js',
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
-      publicPath: publicPath,
+      publicPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
@@ -275,8 +276,8 @@ module.exports = function (webpackEnv) {
             chunks: 'all',
             reuseExistingChunk: true,
             enforce: true,
-          }
-        }
+          },
+        },
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
@@ -367,9 +368,7 @@ module.exports = function (webpackEnv) {
               include: paths.appSrc,
               loader: require.resolve('babel-loader'),
               options: {
-                customize: require.resolve(
-                  'babel-preset-react-app/webpack-overrides'
-                ),
+                customize: require.resolve('babel-preset-react-app/webpack-overrides'),
                 plugins: [
                   [
                     require.resolve('babel-plugin-named-asset-import'),
@@ -458,7 +457,7 @@ module.exports = function (webpackEnv) {
                   importLoaders: 2,
                   sourceMap: isEnvProduction && shouldUseSourceMap,
                 },
-                'sass-loader'
+                'sass-loader',
               ),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
@@ -477,7 +476,7 @@ module.exports = function (webpackEnv) {
                   modules: true,
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
-                'sass-loader'
+                'sass-loader',
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -506,34 +505,32 @@ module.exports = function (webpackEnv) {
       isEnvDevelopment &&
       new WebpackDashboard(),
       // Generates an `index.html` file with the <script> injected.
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
+      new HtmlWebpackPlugin(Object.assign(
+        {},
+        {
+          inject: true,
+          template: paths.appHtml,
+        },
+        isEnvProduction
+          ? {
+            minify: {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeRedundantAttributes: true,
+              useShortDoctype: true,
+              removeEmptyAttributes: true,
+              removeStyleLinkTypeAttributes: true,
+              keepClosingSlash: true,
+              minifyJS: true,
+              minifyCSS: true,
+              minifyURLs: true,
+            },
+          }
+          :
           {
-            inject: true,
-            template: paths.appHtml,
+            title: 'Hot Module Replacement For Development',
           },
-          isEnvProduction
-            ? {
-                minify: {
-                  removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
-                },
-              }
-            :
-            {
-              title: 'Hot Module Replacement For Development',
-            }
-        )
-      ),
+      )),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
@@ -584,9 +581,10 @@ module.exports = function (webpackEnv) {
       // having to parse `index.html`.
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
-        publicPath: publicPath,
+        publicPath,
         generate: (seed, files) => {
-          const manifestFiles = files.reduce(function (manifest, file) {
+          const manifestFiles = files.reduce((manifest, file) => {
+            // eslint-disable-next-line no-param-reassign
             manifest[file.name] = file.path;
             return manifest;
           }, seed);
@@ -610,7 +608,7 @@ module.exports = function (webpackEnv) {
         {
           from: 'src/assets/js/a.js',
           to: 'assets/js/a.js',
-          transform: function (content, transformPath) {
+          transform(content) {
             return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].REACT_APP_SEGMENT_WRITE_KEY));
           },
         },
@@ -626,7 +624,7 @@ module.exports = function (webpackEnv) {
         clientsClaim: true,
         exclude: [/\.map$/, /asset-manifest\.json$/],
         importWorkboxFrom: 'cdn',
-        navigateFallback: publicUrl + '/index.html',
+        navigateFallback: `${publicUrl}/index.html`,
         navigateFallbackBlacklist: [
           // Exclude URLs starting with /_, as they're likely an API call
           new RegExp('^/_'),
