@@ -16,6 +16,7 @@ export default class AccountCreation extends React.Component {
   componentWillMount() {
     this.props.userDetailsStore.setUserAccDetails();
   }
+
   handleMultiStepModalclose = () => {
     if (this.props.refUrl) {
       this.props.history.push(this.props.refUrl);
@@ -24,10 +25,12 @@ export default class AccountCreation extends React.Component {
     }
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+
   handleStepChange = (step) => {
     this.props.investorProfileStore.setStepToBeRendered(step);
     this.props.uiStore.clearErrors();
   }
+
   render() {
     const {
       inProgress,
@@ -44,8 +47,7 @@ export default class AccountCreation extends React.Component {
       PUBLIC_COMPANY_REL_FORM,
       stepToBeRendered,
     } = this.props.investorProfileStore;
-    const steps =
-    [
+    const steps = [
       {
         name: 'Overview',
         component: <Overview />,

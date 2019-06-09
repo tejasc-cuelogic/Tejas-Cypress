@@ -1,27 +1,28 @@
-var fs = require('fs-extra');
-var path = require('path');
+const fs = require('fs-extra');
+const path = require('path');
+
 const args = process.argv;
 
-//read md file as text
+// read md file as text
 require.extensions['.md'] = function (module, filename) {
   module.exports = fs.readFileSync(filename, 'utf8');
 };
 
-var filenames = {
+const filenames = {
   BACKUP: 'README_BACKUP.md',
   README: 'README.MD',
-  CUSTOM_README: 'CUSTOM_README.md'
+  CUSTOM_README: 'CUSTOM_README.md',
 };
 
-var paths = {
-  //original
+const paths = {
+  // original
   RSreadme: path.join(__dirname, '..', filenames.README),
   CRAreadme: path.join(__dirname, '../../../', filenames.README),
-  //custom
+  // custom
   customReadme: path.join(__dirname, '../bin/', filenames.CUSTOM_README),
-  //backup
+  // backup
   RSbackup: path.join(__dirname, '..', filenames.BACKUP),
-  CRAbackup: path.join(__dirname, '../../../', filenames.BACKUP)
+  CRAbackup: path.join(__dirname, '../../../', filenames.BACKUP),
 };
 
 function backupOriginal() {
@@ -49,26 +50,26 @@ function placeOriginal() {
   fs.copySync(paths.CRAbackup, paths.CRAreadme);
 }
 
-//will set custom readmes
+// will set custom readmes
 function setCustom() {
   backupOriginal();
   deleteOriginal();
   placeCustom();
 }
 
-//will revert original readmes
+// will revert original readmes
 function revertOriginalBackups() {
   deleteOriginal();
   placeOriginal();
   deleteBackup();
 }
 
-var argFunctionMap = {
+const argFunctionMap = {
   '--custom': setCustom,
   '--original': revertOriginalBackups,
-}
+};
 
 if (args && args.length >= 2) {
-  var command = argFunctionMap[args[2]];
+  const command = argFunctionMap[args[2]];
   command && command();
 }

@@ -17,21 +17,26 @@ export default class ResetPassword extends Component {
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
+
   componentWillUnmount() {
     this.props.authStore.resetForm('RESET_PASS_FRM');
     this.props.uiStore.clearErrors();
   }
+
   onSubmit = (e) => {
     e.preventDefault();
     authActions.setNewPassword().then(() => this.props.history.push('/auth/login'));
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
+
   render() {
     const {
       RESET_PASS_FRM,
@@ -83,10 +88,12 @@ export default class ResetPassword extends Component {
               fielddata={RESET_PASS_FRM.fields.verify}
               changed={resetPassChange}
             />
-            {errors &&
+            {errors
+              && (
               <Message error textAlign="left" className="mt-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
+              )
             }
             <div className="mt-30 center-align">
               <Button primary size="large" className="very relaxed" content="Set new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid || !currentScore} />

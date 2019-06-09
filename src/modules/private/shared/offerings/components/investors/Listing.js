@@ -89,47 +89,61 @@ export default class Listing extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <div>
-                      {get(isUsersCapablities, 'level') ?
-                        <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link> :
-                        `${data.firstName} ${data.lastName}`
+                      {get(isUsersCapablities, 'level')
+                        ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
+                        : `${data.firstName} ${data.lastName}`
                       }
-                      {isAdmin && get(data, 'userEmail') &&
+                      {isAdmin && get(data, 'userEmail')
+                      && (
                       <Aux>
                         <p>{`${get(data, 'userEmail')}`}</p>
                       </Aux>
+                      )
                       }
                     </div>
                   </Table.Cell>
                   <Table.Cell>{data.city}</Table.Cell>
                   <Table.Cell>{data.state}</Table.Cell>
-                  {isAdmin &&
+                  {isAdmin
+                    && (
                     <Table.Cell>
                       {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                     </Table.Cell>
+                    )
                   }
-                  {isAdmin ?
-                    <Table.Cell>
-                      {Helper.CurrencyFormat(data.amount, 0)}
-                      {parseInt(data.investmentsCount, 10) > 1 ?
-                        <span> ({`${data.investmentsCount} Investments`})</span>
-                      :
-                      null}
-                      {(data.credit || data.autoDraftAmount) && isAdmin ?
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={
+                  {isAdmin
+                    ? (
+                      <Table.Cell>
+                        {Helper.CurrencyFormat(data.amount, 0)}
+                        {parseInt(data.investmentsCount, 10) > 1
+                          ? (
                             <span>
-                              {data.credit ? `Credit: ${data.credit}` : ''}
-                              {data.autoDraftAmount && data.credit && <br />}
-                              {data.autoDraftAmount ? `Auto Draft: ${data.autoDraftAmount}` : ''}
-                            </span>}
-                          hoverable
-                          position="top center"
-                        /> : null
+                              {' '}
+(
+                              {`${data.investmentsCount} Investments`}
+)
+                            </span>
+                          )
+                          : null}
+                        {(data.credit || data.autoDraftAmount) && isAdmin
+                          ? (
+                            <Popup
+                              trigger={<Icon name="help circle" color="green" />}
+                              content={(
+                                <span>
+                                  {data.credit ? `Credit: ${data.credit}` : ''}
+                                  {data.autoDraftAmount && data.credit && <br />}
+                                  {data.autoDraftAmount ? `Auto Draft: ${data.autoDraftAmount}` : ''}
+                                </span>
+)}
+                              hoverable
+                              position="top center"
+                            />
+                          ) : null
                       }
-                    </Table.Cell>
-                  :
-                  null
+                      </Table.Cell>
+                    )
+                    : null
                   }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat format="MM/DD/YYYY  h:mma" datetime={data.investmentDate} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{this.showReferralCode(referralCode, data.referralCode)}</Table.Cell>

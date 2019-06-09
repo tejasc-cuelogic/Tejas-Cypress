@@ -136,6 +136,7 @@ class App extends Component {
     //   window.analytics.page();
     // }
   }
+
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
       authActions.logout('timeout').then(() => {
@@ -143,6 +144,7 @@ class App extends Component {
       });
     }
   }
+
   onRouteChanged = ({ oldLocation, newLocation }) => {
     if (window.analytics) {
       window.analytics.page(document.title, {
@@ -151,6 +153,7 @@ class App extends Component {
       });
     }
   }
+
   checkUserIdleStatus = () => {
     if (this.props.authStore.isUserLoggedIn && localStorage.getItem('lastActiveTime')) {
       const idleTime = (new Date().getTime() - localStorage.getItem('lastActiveTime'));
@@ -161,7 +164,9 @@ class App extends Component {
       localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
     }
   }
+
   checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));
+
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
   render() {
@@ -178,7 +183,8 @@ class App extends Component {
     }
     return (
       <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
-        {this.props.authStore.isUserLoggedIn &&
+        {this.props.authStore.isUserLoggedIn
+        && (
         <IdleTimer
           ref={(ref) => { this.props.authStore.idleTimer = ref; }}
           element={document}
@@ -193,10 +199,11 @@ class App extends Component {
           timeout={userIdleTime}
           stopOnIdle
         />
+        )
         }
         <MetaTagGenerator metaTagsData={metaTagsData} />
-        {this.props.authStore.devPasswdProtection ?
-          <Route exact path="/password-protected" component={DevPassProtected} /> : (
+        {this.props.authStore.devPasswdProtection
+          ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
               <Switch>
                 <Route exact path="/app/*" component={Private} />
@@ -206,8 +213,8 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {this.props.uiStore.devBanner &&
-          <DevBanner toggle={this.playDevBanner} />
+        {this.props.uiStore.devBanner
+          && <DevBanner toggle={this.playDevBanner} />
         }
       </div>
     );

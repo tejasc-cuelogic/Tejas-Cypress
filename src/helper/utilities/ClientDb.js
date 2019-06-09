@@ -4,6 +4,7 @@ import moment from 'moment';
 
 class ClientDb {
   database = null;
+
   initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId', addIdKey = false) => {
     let updatedData = data;
     if (isReplaceId) {
@@ -21,12 +22,11 @@ class ClientDb {
   removeRecord = (key, value) => this.database({ [key]: value }).remove();
 
   getCount() {
-    return (this.database && this.database() && this.database().get() &&
-    this.database().get().length) || 0;
+    return (this.database && this.database() && this.database().get()
+    && this.database().get().length) || 0;
   }
 
-  getFilterParaObj = (key, parameters) =>
-    (isArray(key) ? key.map(k => ({ [k]: parameters })) : { [key]: parameters });
+  getFilterParaObj = (key, parameters) => (isArray(key) ? key.map(k => ({ [k]: parameters })) : { [key]: parameters });
 
   filterData = (key, value, filterBy = null, customKey = null, setDb = true) => {
     let resultArray = [];
@@ -97,12 +97,12 @@ class ClientDb {
     const data = this.getDatabase();
     const startDate = isUnix ? moment(sDate).unix() : sDate;
     const endDate = isUnix ? moment(eDate).unix() : eDate;
-    const filterData = data.filter(e => parseInt(isUnix ? moment(subkey ? e[key][subkey] :
-      e[key]).unix() : subkey ? e[key][subkey] :
-      e[key], 10)
-    <= endDate && parseInt(isUnix ? moment(subkey ? e[key][subkey] :
-      e[key]).unix() : subkey ? e[key][subkey] :
-      e[key], 10) >= startDate);
+    const filterData = data.filter(e => parseInt(isUnix ? moment(subkey ? e[key][subkey]
+      : e[key]).unix() : subkey ? e[key][subkey]
+      : e[key], 10)
+    <= endDate && parseInt(isUnix ? moment(subkey ? e[key][subkey]
+      : e[key]).unix() : subkey ? e[key][subkey]
+      : e[key], 10) >= startDate);
     this.initiateDb(filterData, true);
   }
 

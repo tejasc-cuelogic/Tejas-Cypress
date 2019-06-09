@@ -17,10 +17,11 @@ export default class ChangePassword extends Component {
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.resetForm('CHANGE_PASS_FRM');
   }
+
   onSubmit = (e) => {
     e.preventDefault();
-    const method = this.props.refModule && this.props.refModule === 'security' ?
-      'changeMyPassword' : 'updatePassword';
+    const method = this.props.refModule && this.props.refModule === 'security'
+      ? 'changeMyPassword' : 'updatePassword';
     authActions[method](this.props.refModule)
       .then(() => {
         authActions.logout('updatedPassword').then(() => {
@@ -31,10 +32,12 @@ export default class ChangePassword extends Component {
         console.log(err);
       });
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
   }
+
   render() {
     // togglePasswordType
     const {
@@ -50,37 +53,42 @@ export default class ChangePassword extends Component {
           <Form error onSubmit={this.onSubmit}>
             {
               ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
-                (field === 'newPasswd') ?
-                  <FormPasswordStrength
-                    key="newPasswd"
-                    name="newPasswd"
-                    type="password"
-                    iconDisplay
-                    minLength={8}
-                    minScore={4}
-                    tooShortWord="Weak"
-                    scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                    inputProps={{
-                      name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd',
-                    }}
-                    changed={changePassChange}
-                    fielddata={CHANGE_PASS_FRM.fields[field]}
-                  />
-                  :
-                  <FormInput
-                    key={field}
-                    type={pwdInputType}
+                (field === 'newPasswd')
+                  ? (
+                    <FormPasswordStrength
+                      key="newPasswd"
+                      name="newPasswd"
+                      type="password"
+                      iconDisplay
+                      minLength={8}
+                      minScore={4}
+                      tooShortWord="Weak"
+                      scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                      inputProps={{
+                        name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd',
+                      }}
+                      changed={changePassChange}
+                      fielddata={CHANGE_PASS_FRM.fields[field]}
+                    />
+                  )
+                  : (
+                    <FormInput
+                      key={field}
+                      type={pwdInputType}
                     // icon={(field === 'oldPasswd') ? togglePasswordType() : null}
-                    name={field}
-                    fielddata={CHANGE_PASS_FRM.fields[field]}
-                    changed={changePassChange}
-                  />
+                      name={field}
+                      fielddata={CHANGE_PASS_FRM.fields[field]}
+                      changed={changePassChange}
+                    />
+                  )
               ))
             }
-            {errors &&
+            {errors
+              && (
               <Message error textAlign="left" className="mt-30">
                 <ListErrors errors={['Incorrect old password']} />
               </Message>
+              )
             }
             <div className="mt-30 center-align">
               <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid || !currentScore} />

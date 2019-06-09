@@ -18,20 +18,25 @@ export default class OfferingOverview extends Component {
   onFileDrop = (files, name) => {
     this.props.offeringCreationStore.uploadFileToS3('OFFERING_OVERVIEW_FRM', name, files);
   }
+
   handleDelDoc = (field) => {
     this.props.offeringCreationStore.removeFileFromS3('OFFERING_OVERVIEW_FRM', field);
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
+
   removeData = (confirmModalName, arrayName = 'highlight') => {
     this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
   }
+
   addNewBullet = (e) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore('OFFERING_OVERVIEW_FRM', 'highlight');
   }
+
   handleFormSubmit = (isApproved = null) => {
     const {
       OFFERING_OVERVIEW_FRM,
@@ -39,8 +44,9 @@ export default class OfferingOverview extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview', true, undefined, isApproved);
   }
-  editorChange = (field, value, form) =>
-    this.props.offeringCreationStore.rtEditorChange(field, value, form);
+
+  editorChange = (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
+
   render() {
     const {
       OFFERING_OVERVIEW_FRM, formArrayChange, confirmModal, confirmModalName, removeIndex,
@@ -51,14 +57,14 @@ export default class OfferingOverview extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.offering && offer.offering.overview &&
-      offer.offering.overview.submitted) ? offer.offering.overview.submitted : null;
-    const approved = (offer && offer.offering && offer.offering.overview &&
-      offer.offering.overview.approved) ? offer.offering.overview.approved : null;
-    const issuerSubmitted = (offer && offer.offering && offer.offering.overview &&
-      offer.offering.overview.issuerSubmitted) ? offer.offering.overview.issuerSubmitted : null;
-    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
-      (isManager && approved && approved.status));
+    const submitted = (offer && offer.offering && offer.offering.overview
+      && offer.offering.overview.submitted) ? offer.offering.overview.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.overview
+      && offer.offering.overview.approved) ? offer.offering.overview.approved : null;
+    const issuerSubmitted = (offer && offer.offering && offer.offering.overview
+      && offer.offering.overview.issuerSubmitted) ? offer.offering.overview.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
+      || (isManager && approved && approved.status));
     return (
       <Form>
         <Header as="h4">Elevator pitch</Header>
@@ -85,9 +91,9 @@ export default class OfferingOverview extends Component {
         {
           OFFERING_OVERVIEW_FRM.fields.highlight.map((highlights, index) => (
             <FormInput
-              removed={!isReadonly && OFFERING_OVERVIEW_FRM.fields.highlight.length &&
-                OFFERING_OVERVIEW_FRM.fields.highlight.length > 1 ?
-                e => this.toggleConfirmModal(e, index, formName) : false}
+              removed={!isReadonly && OFFERING_OVERVIEW_FRM.fields.highlight.length
+                && OFFERING_OVERVIEW_FRM.fields.highlight.length > 1
+                ? e => this.toggleConfirmModal(e, index, formName) : false}
               displayMode={isReadonly}
               name="highlight"
               label={`Bullet ${index + 1}`}
@@ -96,11 +102,12 @@ export default class OfferingOverview extends Component {
             />
           ))
         }
-        {!isReadonly &&
-          <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
+        {!isReadonly
+          && <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
         }
         <Divider section />
-        <Header as="h4">Social Media
+        <Header as="h4">
+Social Media
           <Header.Subheader>
             Links to social media profiles where investors can learn more about offering
           </Header.Subheader>
@@ -117,7 +124,8 @@ export default class OfferingOverview extends Component {
           ))
         }
         <Divider section />
-        <Header as="h4">Social media share links
+        <Header as="h4">
+Social media share links
           <Header.Subheader>
             Share links that go on the user’s social media to share the offering
           </Header.Subheader>
@@ -175,7 +183,8 @@ export default class OfferingOverview extends Component {
           containerclassname="secondary"
         />
         <Divider section />
-        <Header as="h4">Google
+        <Header as="h4">
+Google
           <Header.Subheader>
             Google metadata that shows up when people search for the offering
           </Header.Subheader>
@@ -210,4 +219,3 @@ export default class OfferingOverview extends Component {
     );
   }
 }
-

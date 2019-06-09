@@ -1,4 +1,4 @@
-
+// eslint-disable-file no-console
 
 const fs = require('fs');
 const isWsl = require('is-wsl');
@@ -19,9 +19,6 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
-const paths = require('./paths');
-const modules = require('./modules');
-const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
@@ -32,6 +29,9 @@ const SriPlugin = require('webpack-subresource-integrity');
 const postcssNormalize = require('postcss-normalize');
 
 const WebpackDashboard = require('webpack-dashboard/plugin');
+const getClientEnvironment = require('./env');
+const modules = require('./modules');
+const paths = require('./paths');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -51,11 +51,11 @@ const publicPathBugSnag = paths.servedPath;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function (webpackEnv) {
+module.exports = (webpackEnv) => {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
-  isEnvDevelopment && console.log('isEnvDevelopment==>', isEnvDevelopment);
+  if (isEnvDevelopment) console.log('isEnvDevelopment==>', isEnvDevelopment);
   // Webpack uses `publicPath` to determine where the app is being served from.
   // It requires a trailing slash, or the file assets will get an incorrect path.
   // In development, we always serve from the root. This makes config easier.
@@ -154,10 +154,10 @@ module.exports = function (webpackEnv) {
       // the line below with these two lines if you prefer the stock client:
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
-      isEnvDevelopment &&
-        `${require.resolve('webpack-dev-server/client')}?/`,
-      isEnvDevelopment &&
-        require.resolve('webpack/hot/dev-server'),
+      isEnvDevelopment
+        && `${require.resolve('webpack-dev-server/client')}?/`,
+      isEnvDevelopment
+        && require.resolve('webpack/hot/dev-server'),
       // require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       paths.appIndexJs,
@@ -189,12 +189,11 @@ module.exports = function (webpackEnv) {
       publicPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
-        ? info =>
-          path
-            .relative(paths.appSrc, info.absoluteResourcePath)
-            .replace(/\\/g, '/')
-        : isEnvDevelopment &&
-        (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        ? info => path
+          .relative(paths.appSrc, info.absoluteResourcePath)
+          .replace(/\\/g, '/')
+        : isEnvDevelopment
+        && (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
     optimization: {
       minimize: isEnvProduction,
@@ -502,8 +501,8 @@ module.exports = function (webpackEnv) {
       ],
     },
     plugins: [
-      isEnvDevelopment &&
-      new WebpackDashboard(),
+      isEnvDevelopment
+      && new WebpackDashboard(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(Object.assign(
         {},
@@ -526,8 +525,7 @@ module.exports = function (webpackEnv) {
               minifyURLs: true,
             },
           }
-          :
-          {
+          : {
             title: 'Hot Module Replacement For Development',
           },
       )),
@@ -537,9 +535,9 @@ module.exports = function (webpackEnv) {
       // }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
-      isEnvProduction &&
-      shouldInlineRuntimeChunk &&
-      new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
+      isEnvProduction
+      && shouldInlineRuntimeChunk
+      && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -567,10 +565,10 @@ module.exports = function (webpackEnv) {
       // to restart the development server for Webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.
       // See https://github.com/facebook/create-react-app/issues/186
-      isEnvDevelopment &&
-      new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-      isEnvProduction &&
-      new MiniCssExtractPlugin({
+      isEnvDevelopment
+      && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+      isEnvProduction
+      && new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
         filename: 'static/css/[name].[contenthash:8].css',
@@ -619,8 +617,8 @@ module.exports = function (webpackEnv) {
       }),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
-      isEnvProduction &&
-      new WorkboxWebpackPlugin.GenerateSW({
+      isEnvProduction
+      && new WorkboxWebpackPlugin.GenerateSW({
         clientsClaim: true,
         exclude: [/\.map$/, /asset-manifest\.json$/],
         importWorkboxFrom: 'cdn',
@@ -634,8 +632,8 @@ module.exports = function (webpackEnv) {
         ],
       }),
       // TypeScript type checking
-      useTypeScript &&
-      new ForkTsCheckerWebpackPlugin({
+      useTypeScript
+      && new ForkTsCheckerWebpackPlugin({
         typescript: resolve.sync('typescript', {
           basedir: paths.appNodeModules,
         }),
@@ -655,6 +653,14 @@ module.exports = function (webpackEnv) {
         // The formatter is invoked directly in WebpackDevServerUtils during development
         formatter: isEnvProduction ? typescriptFormatter : undefined,
       }),
+      process.env.REACT_APP_BUG_SNAG_KEY
+      && !(['localhost'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      && new BugsnagSourceMapUploaderPlugin({
+        apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+        publicPathBugSnag,
+        appVersion: process.env.CI_PIPELINE_ID,
+        overwrite: true,
+      }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
@@ -673,14 +679,3 @@ module.exports = function (webpackEnv) {
     performance: false,
   };
 };
-
-if (process.env.REACT_APP_BUG_SNAG_KEY && !(['localhost'].includes(process.env.REACT_APP_DEPLOY_ENV))) {
-  // It's a good idea to only run this plugin when you're building a bundle
-  // that will be released, rather than for every development build
-  module.exports.plugins.push(new BugsnagSourceMapUploaderPlugin({
-    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
-    publicPathBugSnag,
-    appVersion: process.env.CI_PIPELINE_ID,
-    overwrite: true,
-  }));
-}

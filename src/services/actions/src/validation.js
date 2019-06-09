@@ -105,6 +105,7 @@ export class Validation {
      FormValidator.setFormError(entityAccountStore[form], key, errors && errors[key][0]);
    });
  }
+
  validateLinkBankForm = () => {
    map(bankAccountStore.formLinkBankManually.fields, (value) => {
      const { key } = value;

@@ -19,6 +19,7 @@ class AboutCompany extends Component {
   componentWillMount() {
     window.addEventListener('scroll', this.handleOnScroll);
   }
+
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -31,18 +32,21 @@ class AboutCompany extends Component {
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
   }
+
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
   }
+
   handleOnScroll = () => {
     ['company-description', 'business-model', 'location-analysis', 'history', 'team'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top <= topsAsPerWindowheight &&
-        document.getElementById(item).getBoundingClientRect().top >= -1) {
+      if (document.getElementById(item).getBoundingClientRect().top <= topsAsPerWindowheight
+        && document.getElementById(item).getBoundingClientRect().top >= -1) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
       }
     });
   }
+
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyStatement = 'Detail not found';

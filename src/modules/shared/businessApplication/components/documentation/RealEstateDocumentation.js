@@ -12,6 +12,7 @@ export default class RealEstateDocumentation extends Component {
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
+
   render() {
     const {
       BUSINESS_DOC_FRM,
@@ -39,10 +40,8 @@ export default class RealEstateDocumentation extends Component {
                 multiple
                 name="dueDiligence"
                 fielddata={fields.dueDiligence}
-                ondrop={(files, fieldName) =>
-                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(fieldName, index) =>
-                  businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
+                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>
@@ -63,10 +62,8 @@ export default class RealEstateDocumentation extends Component {
                 multiple
                 name="legalDocs"
                 fielddata={fields.legalDocs}
-                ondrop={(files, fieldName) =>
-                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(fieldName, index) =>
-                  businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
+                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>

@@ -19,7 +19,7 @@ export class Api {
           resolve(data);
         });
     })
-  )
+  );
 
   post = (url, payload) => (
     new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ export class Api {
           resolve(data);
         });
     })
-  )
+  );
 
   postNoAuth = (url, payload) => (
     new Promise((resolve, reject) => {
@@ -50,7 +50,7 @@ export class Api {
           resolve(data);
         });
     })
-  )
+  );
 
   delete = (url, payload) => (
     new Promise((resolve, reject) => {
@@ -66,7 +66,7 @@ export class Api {
           resolve(data);
         });
     })
-  )
+  );
 
   put = (url, payload) => (
     new Promise((resolve, reject) => {
@@ -82,7 +82,7 @@ export class Api {
           resolve(data);
         });
     })
-  )
+  );
 
   uploadOnS3 = (url, file, type = 'text/plain') => (
     new Promise((resolve, reject) => {
@@ -98,7 +98,8 @@ export class Api {
           resolve(data);
         });
     })
-  )
+  );
+
   getRemoteFile = url => (
     new Promise((resolve, reject) => {
       request

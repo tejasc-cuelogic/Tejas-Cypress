@@ -21,6 +21,7 @@ export default class Data extends Component {
   onSubmit = () => {
     this.props.elasticSearchStore.submitStorageDetails();
   }
+
   bulkFormOnSubmit = () => {
     this.props.elasticSearchStore.submitStorageDetailsinBulk();
   }
@@ -72,16 +73,26 @@ export default class Data extends Component {
                   <Form.Field width={4}>
                     <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || bulkSyncLoader} loading={bulkSyncLoader} />
                   </Form.Field>
-                  { errors &&
-                  <FieldError error={errors || ''} />
+                  { errors
+                  && <FieldError error={errors || ''} />
                   }
                 </Form.Group>
               </Form>
-              { countValues && countValues.storageDetailsForInvestor &&
+              { countValues && countValues.storageDetailsForInvestor
+              && (
               <Aux>
-                <p className="hightlight-text" ><b>{get(countValues, 'storageDetailsForInvestor.count') || 0}</b> Users does not have folder structure created.</p>
-                <p className="hightlight-text" ><b>{get(countValues, 'storageDetailsForInvestor.createdCount') || 0}</b> User folders will be created in current run.</p>
+                <p className="hightlight-text">
+                  <b>{get(countValues, 'storageDetailsForInvestor.count') || 0}</b>
+                  {' '}
+Users does not have folder structure created.
+                </p>
+                <p className="hightlight-text">
+                  <b>{get(countValues, 'storageDetailsForInvestor.createdCount') || 0}</b>
+                  {' '}
+User folders will be created in current run.
+                </p>
               </Aux>
+              )
               }
             </Card.Content>
           </Card>

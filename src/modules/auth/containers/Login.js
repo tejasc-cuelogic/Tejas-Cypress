@@ -15,8 +15,8 @@ class Login extends Component {
     if (this.props.authStore.isUserLoggedIn) {
       const { authRef } = this.props.uiStore;
       const { roles } = this.props.userStore.currentUser;
-      this.props.history.push(authRef || (roles && roles.includes('investor') ?
-        `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+      this.props.history.push(authRef || (roles && roles.includes('investor')
+        ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
     }
     this.props.uiStore.clearErrors();
     this.props.uiStore.setProgress(false);
@@ -24,9 +24,11 @@ class Login extends Component {
     this.props.authStore.setDefaultPwdType();
     localStorage.removeItem('lastActiveTime');
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.uiStore.clearErrors();
@@ -53,10 +55,12 @@ class Login extends Component {
         console.log(err);
       });
   };
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
+
   render() {
     const {
       LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
@@ -103,10 +107,12 @@ class Login extends Component {
             <Form.Field>
               <Link to="/auth/forgot-password">Forgot password?</Link>
             </Form.Field>
-            {errors &&
+            {errors
+              && (
               <Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
@@ -114,7 +120,11 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Don&#39;t have an account?</b> <Link to="/auth/register">Sign up</Link></p>
+          <p>
+            <b>Don&#39;t have an account?</b>
+            {' '}
+            <Link to="/auth/register">Sign up</Link>
+          </p>
         </Modal.Actions>
       </Modal>
     );

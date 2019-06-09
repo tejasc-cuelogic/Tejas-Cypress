@@ -13,6 +13,7 @@ export default class CreateNew extends Component {
   componentWillMount() {
     this.props.userStore.userReset();
   }
+
   submit = (e) => {
     e.preventDefault();
     adminActions.createNewUser()

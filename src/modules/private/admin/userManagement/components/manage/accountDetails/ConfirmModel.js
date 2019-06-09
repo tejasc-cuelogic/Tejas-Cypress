@@ -11,9 +11,11 @@ export default class ConfirmModel extends Component {
   componentWillMount() {
     this.props.userDetailsStore.resetModalForm();
   }
+
   handleBack = () => {
     this.props.history.push(`${this.props.refLink}`);
   }
+
   freezeAccountToggle = (userId, accountId, freeze) => {
     const { FRM_FREEZE } = this.props.userDetailsStore;
     this.props.userDetailsStore.freezeAccountToggle(
@@ -24,6 +26,7 @@ export default class ConfirmModel extends Component {
     );
     this.handleBack();
   }
+
   render() {
     const { formChange, FRM_FREEZE } = this.props.userDetailsStore;
     const actionValue = this.props.match.params.action;
@@ -32,7 +35,10 @@ export default class ConfirmModel extends Component {
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Header className="signup-header">
-          <Header textAlign="center" as="h3">Mark as {actionValue === 'unfreeze' ? 'Unfreeze' : 'Freeze'}</Header>
+          <Header textAlign="center" as="h3">
+Mark as
+            {actionValue === 'unfreeze' ? 'Unfreeze' : 'Freeze'}
+          </Header>
         </Modal.Header>
         <Modal.Content>
           <Form>

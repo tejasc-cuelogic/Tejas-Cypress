@@ -33,8 +33,7 @@ export default class Statements extends Component {
     const { match } = this.props;
     const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
     const navigationItems = isDev || this.props.isAdmin ? navItems : navItems.filter(item => item.to !== 'monthly-statements');
-    const DefaultComponent =
-      navigationItems[0].component || getModule(navigationItems[0].component);
+    const DefaultComponent = navigationItems[0].component || getModule(navigationItems[0].component);
     return (
       <div>
         <Grid>

@@ -30,7 +30,7 @@ const FormRadioGroup = observer((props) => {
           }
         </div>
       );
-    } else if (props.withtooltip) {
+    } if (props.withtooltip) {
       return (
         <div className={props.containerclassname || false}>
           <Form.Group className="vertical">
@@ -40,11 +40,12 @@ const FormRadioGroup = observer((props) => {
                   <div className={`ui radio checkbox ${value === radio.value ? 'checked' : ''}`}>
                     <input type="radio" value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
                     <label>
-                      {radio.icon &&
-                        <Icon className={radio.icon} />
+                      {radio.icon
+                        && <Icon className={radio.icon} />
                       }
                       {radio.label}
-                      {radio.tooltip &&
+                      {radio.tooltip
+                        && (
                         <Popup
                           trigger={<Icon className="ns-help-circle" />}
                           content={radio.tooltip}
@@ -52,6 +53,7 @@ const FormRadioGroup = observer((props) => {
                           className="center-align"
                           wide
                         />
+                        )
                       }
                     </label>
                   </div>
@@ -80,8 +82,8 @@ const FormRadioGroup = observer((props) => {
             ))
           }
         </Form.Group>
-        {error && props.showerror &&
-          <FieldError className={props.classname || false} error={error} />
+        {error && props.showerror
+          && <FieldError className={props.classname || false} error={error} />
         }
       </Aux>
     );
@@ -94,11 +96,12 @@ const FormRadioGroup = observer((props) => {
           <div className={`ui radio checkbox ${value === radio.value ? 'checked' : ''}`}>
             <input type="radio" readOnly value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
             <label>
-              {radio.icon &&
-                <Icon className={radio.icon} />
+              {radio.icon
+                && <Icon className={radio.icon} />
               }
               {radio.label}
-              {tooltip &&
+              {tooltip
+                && (
                 <Popup
                   trigger={<Icon className="ns-help-circle" />}
                   content={tooltip}
@@ -106,6 +109,7 @@ const FormRadioGroup = observer((props) => {
                   className="center-align"
                   wide
                 />
+                )
               }
             </label>
           </div>

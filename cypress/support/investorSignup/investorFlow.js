@@ -7,9 +7,9 @@ import { completeInvestorProfile } from './InvestorProfile';
 
 export const InvestorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-  cy.wait(3000)
+  cy.wait(3000);
   applicationUnlock();
-  cy.wait(1000)
+  cy.wait(1000);
   fillSignUpFormAndProceed();
   enterCodeAndConfirm();
   confirmEmailAddressScreen();
@@ -18,4 +18,4 @@ export const InvestorFlowProcess = () => {
   enterCodeAndConfirm();
   confirmPhoneNumberScreen();
   completeInvestorProfile();
-}
+};

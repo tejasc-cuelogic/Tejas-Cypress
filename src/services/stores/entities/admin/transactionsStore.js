@@ -6,11 +6,12 @@ import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove,
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
-import DataFormatter from '../../../../../src/helper/utilities/DataFormatter';
+import DataFormatter from '../../../../helper/utilities/DataFormatter';
 import { TRANSACTION_FAILURE, COUNT_STATUS_MAPPING } from '../../../constants/admin/transactions';
 
 export class TransactionsStore {
   nonTerminatedStatuses = ['PRE_PENDING', 'PENDING', 'PROCESSING']
+
   ctHandler = {
     Approved: transferRequestAdminApprove,
     Declined: transferRequestAdminDecline,
@@ -18,15 +19,23 @@ export class TransactionsStore {
     Failed: transactionFailed,
     Sync: transferRequestAdminSync,
   }
+
   @observable filters = false;
+
   @observable TRANSACTION_FAILURE = Validator.prepareFormObject(TRANSACTION_FAILURE);
+
   @observable data = [];
+
   @observable isNonTerminatedStatus = false
+
   @observable searchCount = null;
+
   @observable db = [];
+
   @observable summary = {
     'pre-pending': 0, pending: 0, processing: 0, complete: 0, failed: 0,
   };
+
   @observable requestState = {
     page: 1,
     perPage: 10,
@@ -36,7 +45,9 @@ export class TransactionsStore {
     search: {
     },
   };
+
   @observable btnLoader = [];
+
   pageReload = true;
 
   @action
@@ -57,8 +68,7 @@ export class TransactionsStore {
     }
     const transactions = get(this.data, 'data.getTransactions.transactions');
     if (isApproved && transactions) {
-      this.data.data.getTransactions.transactions =
-      filter(transactions, row => row.requestId !== requestId);
+      this.data.data.getTransactions.transactions = filter(transactions, row => row.requestId !== requestId);
     } else if (transactions) {
       const index = findIndex(transactions, record => record.requestId === requestId);
       const transaction = find(transactions, record => record.requestId === requestId);
@@ -239,6 +249,7 @@ export class TransactionsStore {
     }
     return searchparams;
   }
+
   @action
   setInitiateSrch = (valueObj, name) => {
     const searchparams = { ...this.requestState.search };

@@ -6,8 +6,8 @@ import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems, NavigationItems } from './NavigationItems';
-import Footer from './../../theme/layout/Footer';
-import { GetNavMeta } from '../../theme/layout/SidebarNav';
+import Footer from './Footer';
+import { GetNavMeta } from './SidebarNav';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 // import NSImage from '../../modules/shared/NSImage';
 
@@ -19,6 +19,7 @@ export default class NavBarMobile extends Component {
   setAuthRef = () => {
     this.props.uiStore.setAuthRef(this.props.location.pathname);
   }
+
   render() {
     const {
       onPusherClick, onToggle, visible,
@@ -31,8 +32,8 @@ export default class NavBarMobile extends Component {
     const logInSignUp = stepInRoute.to !== 'login' ? [
       { to: 'login', title: 'Log In', className: 'basic' },
       { to: 'register', title: 'Sign Up', className: 'secondary' },
-    ] :
-      [{ ...stepInRoute, className: 'secondary' }];
+    ]
+      : [{ ...stepInRoute, className: 'secondary' }];
     if (location.pathname.startsWith('/invest')) {
       navTitle = 'Investing';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
@@ -61,37 +62,43 @@ export default class NavBarMobile extends Component {
               >
                 <Icon className="ns-hamburger" role="button" tabIndex="0" />
               </div>
-              {location.pathname.startsWith('/business-application/') ?
-                <NavigationItems
-                  {...this.props}
-                  isMobBussinessApp
-                  isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
-                /> :
-                <div
-                  className={`public-header-section ${visible ? 'active' : ''}
+              {location.pathname.startsWith('/business-application/')
+                ? (
+                  <NavigationItems
+                    {...this.props}
+                    isMobBussinessApp
+                    isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
+                  />
+                )
+                : (
+                  <div
+                    className={`public-header-section ${visible ? 'active' : ''}
                   ${navStatus === 'sub' ? 'slide-up' : ''}`}
-                >
-                  {navTitle === 'Home' || (location.pathname.startsWith('/offerings')) ?
-                    <Logo
-                      dataSrc="LogoGreenGrey"
-                      className="mobile-header-logo"
-                    /> :
-                    <Header as="h5">{navTitle}</Header>
+                  >
+                    {navTitle === 'Home' || (location.pathname.startsWith('/offerings'))
+                      ? (
+                        <Logo
+                          dataSrc="LogoGreenGrey"
+                          className="mobile-header-logo"
+                        />
+                      )
+                      : <Header as="h5">{navTitle}</Header>
                   }
-                  {!currentUser ? (
-                    <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
-                      {stepInRoute.title}
-                    </Link>
-                  ) : (
-                    <Link
-                      to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                      className="sign-in neutral-text"
-                    >
+                    {!currentUser ? (
+                      <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
+                        {stepInRoute.title}
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                        className="sign-in neutral-text"
+                      >
                       Dashboard
-                    </Link>
-                  )
+                      </Link>
+                    )
                   }
-                </div>
+                  </div>
+                )
               }
             </Aux>
           )}
@@ -135,10 +142,12 @@ export default class NavBarMobile extends Component {
                     <Menu.Item className="btn-item">
                       <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
                     </Menu.Item>
-                  )) :
-                  <Menu.Item className="btn-item">
-                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
-                  </Menu.Item>
+                  ))
+                    : (
+                      <Menu.Item className="btn-item">
+                        <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
+                      </Menu.Item>
+                    )
                   }
                 </div>
               </div>
@@ -155,8 +164,8 @@ export default class NavBarMobile extends Component {
             className={`public-pusher ${!hasHeader && 'noheader'}`}
           >
             {publicContent}
-            {(hasFooter.find(item => matchPath(location.pathname, { path: item }))) &&
-            <Footer path={location.pathname} />}
+            {(hasFooter.find(item => matchPath(location.pathname, { path: item })))
+            && <Footer path={location.pathname} />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </Aux>

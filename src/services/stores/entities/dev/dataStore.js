@@ -9,15 +9,19 @@ import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_ME
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
+
   @observable PROCESS_FULL_ACCOUNT_META_FRM =
   Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
+
   @observable RECREATEGOLDSTAR_FRM =
   Validator.prepareFormObject(RECREATEGOLDSTAR_META);
+
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
     adminProcessCip: false,
   };
+
   @observable outputMsg = null;
 
   @action
@@ -42,8 +46,7 @@ export class DataStore {
 
   @action
   formChange = (e, res, form) => {
-    this[form] =
-    Validator.onChange(this[form], Validator.pullValues(e, res));
+    this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
   };
 
   @action
@@ -127,6 +130,7 @@ export class DataStore {
         rej(error);
       });
   });
+
   @action
   adminProcessCip = () => {
     const processData = Validator.evaluateFormData(this.RECREATEGOLDSTAR_FRM.fields);

@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
-import { DateTimeFormat } from './../../../../../theme/shared';
+import { DateTimeFormat } from '../../../../../theme/shared';
 
 import {
   XML_STATUSES,
@@ -41,19 +41,22 @@ class XmlSubmission extends Component {
                 <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                 <Table.Cell collapsing>
                   {
-                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
-                    xmlSubmission.xmlSubmissionDownloadUrl &&
+                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed
+                    && xmlSubmission.xmlSubmissionDownloadUrl
+                    && (
                     <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" rel="noopener noreferrer" download className="ui button icon link-button">
                       <Icon name="download" />
                     </a>
+                    )
                   }
                   {
-                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.created &&
-                    !xmlSubmission.xmlSubmissionDownloadUrl &&
-                    <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
+                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.created
+                    && !xmlSubmission.xmlSubmissionDownloadUrl
+                    && <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
                   }
                   {
-                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft &&
+                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft
+                    && (
                     <Button
                       icon
                       className="link-button disabled"
@@ -62,6 +65,7 @@ class XmlSubmission extends Component {
                     >
                       <Icon name="download" />
                     </Button>
+                    )
                   }
                   <Button icon className="link-button"><Icon className="ns-link" /></Button>
                   <Button
@@ -118,7 +122,8 @@ class XmlSubmission extends Component {
       <Table.Body active={this.props.active} key="xml_key">
         <Table.Row textAlign="center">
           <Table.Cell colSpan="6">
-            No XML Submissions are present for this filing,{' '}
+            No XML Submissions are present for this filing,
+            {' '}
             <span style={{ cursor: 'pointer' }} onClick={this.createNewSubmission} className="highlight-text">Click here to create a new submission.</span>
           </Table.Cell>
         </Table.Row>

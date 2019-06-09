@@ -7,31 +7,30 @@ import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
 
 export class FileUpload {
-  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '') =>
-    new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: createUploadEntry,
-          variables: {
-            applicationId,
-            applicationIssuerId,
-            stepName,
-            userRole,
-            fileData,
-            offeringId,
-            tags,
-          },
-        })
-        .then((result) => {
-          resolve(result);
-          uiStore.setProgress(false);
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-          uiStore.setProgress(false);
-        });
-    })
+  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '') => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: createUploadEntry,
+        variables: {
+          applicationId,
+          applicationIssuerId,
+          stepName,
+          userRole,
+          fileData,
+          offeringId,
+          tags,
+        },
+      })
+      .then((result) => {
+        resolve(result);
+        uiStore.setProgress(false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        reject(err);
+        uiStore.setProgress(false);
+      });
+  })
 
   removeUploadedData = (removeFileId) => {
     uiStore.setProgress();
@@ -82,29 +81,28 @@ export class FileUpload {
     }).catch(err => reject(err));
   });
 
-  setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) =>
-    new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: createUploadEntryAccreditationAdmin,
-          variables: {
-            userRole,
-            fileData,
-            accountType,
-            action,
-            userId,
-          },
-        })
-        .then((result) => {
-          resolve(result);
-          uiStore.setProgress(false);
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-          uiStore.setProgress(false);
-        });
-    })
+  setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: createUploadEntryAccreditationAdmin,
+        variables: {
+          userRole,
+          fileData,
+          accountType,
+          action,
+          userId,
+        },
+      })
+      .then((result) => {
+        resolve(result);
+        uiStore.setProgress(false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        reject(err);
+        uiStore.setProgress(false);
+      });
+  })
 }
 
 export default new FileUpload();

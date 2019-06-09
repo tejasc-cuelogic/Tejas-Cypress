@@ -21,7 +21,7 @@ import {
   XML_STATUSES,
 } from '../../../constants/business';
 import ApiService from '../../../api/restApi';
-import { validationActions } from '../../../services/actions';
+import { validationActions } from '..';
 import Helper from '../../../helper/utility';
 
 export class Business {
@@ -245,8 +245,8 @@ export class Business {
     }
     const params = { field: 'created', sort: 'desc' };
     const payload = {
-      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description folderId created` +
-        ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus xmlSubmissionStatus lockedStatus} } } }',
+      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description folderId created`
+        + ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus xmlSubmissionStatus lockedStatus} } } }',
       variables: { orderByBusinessFilings: params, orderByBusinessFilingSubmission: params },
     };
     ApiService.post(GRAPHQL, payload)
@@ -324,8 +324,8 @@ export class Business {
     uiStore.setActionLoader('Fetching Edgar data');
     uiStore.addMoreInProgressArray('fetchEdgarDetails');
     const payload = {
-      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
-        `filingId: "${filingId}") { filingPayload } }`,
+      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", `
+        + `filingId: "${filingId}") { filingPayload } }`,
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
@@ -359,8 +359,8 @@ export class Business {
     uiStore.setLoaderMessage('Fetching details');
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
-      query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: ' +
-        '$offeringId, filingId: $filingId) { folderId } }',
+      query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: '
+        + '$offeringId, filingId: $filingId) { folderId } }',
       variables: {
         offeringId,
         filingId,

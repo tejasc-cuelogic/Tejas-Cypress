@@ -412,11 +412,11 @@ export const OFFERING_INFORMATION = {
   compensationAmount: {
     value: '',
     placeHolder: 'Add text here',
-    label: 'Amount of compensation to be paid to the intermediary,' +
-      'whether as a dollar amount or a percentage of the offering amount, ' +
-      'or a good faith estimate if the exact amount is not available at the' +
-      'time of the filing, for conducting the offering, including the amount' +
-      'of referral and any other fees associated with the offering',
+    label: 'Amount of compensation to be paid to the intermediary,'
+      + 'whether as a dollar amount or a percentage of the offering amount, '
+      + 'or a good faith estimate if the exact amount is not available at the'
+      + 'time of the filing, for conducting the offering, including the amount'
+      + 'of referral and any other fees associated with the offering',
     key: 'compensationAmount',
     error: undefined,
     rule: 'required|max:256',
@@ -428,8 +428,8 @@ export const OFFERING_INFORMATION = {
   financialInterest: {
     value: '',
     placeHolder: 'Add text here',
-    label: 'Any other financial interest in the issuer held by the intermediary, ' +
-      'or any arrangement for the intermediary to acquire such an interest',
+    label: 'Any other financial interest in the issuer held by the intermediary, '
+      + 'or any arrangement for the intermediary to acquire such an interest',
     key: 'financialInterest',
     error: undefined,
     rule: 'required|max:256',
@@ -467,8 +467,8 @@ export const OFFERING_INFORMATION = {
     label: 'No. of securities offered',
     key: 'noOfSecurityOffered',
     error: undefined,
-    rule: 'numeric|required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|' +
-      'required_if:securityOfferedType,Preferred Stock|max:9999999999',
+    rule: 'numeric|required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|'
+      + 'required_if:securityOfferedType,Preferred Stock|max:9999999999',
     customErrors: {
       numeric: 'Please provide numeric values.',
       max: 'The No. of securities offered is too long. Max length is :max.',

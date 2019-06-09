@@ -25,50 +25,62 @@ const SortableItem = SortableElement(({
       <DragHandle />
       <a onClick={() => handleAction('Edit', offering.id)}>
         <b>
-          {((offering.keyTerms && offering.keyTerms.shorthandBusinessName) ?
-            offering.keyTerms.shorthandBusinessName : (
-            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-          ))}
+          {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+            ? offering.keyTerms.shorthandBusinessName : (
+              (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+            ))}
         </b>
         <br />
-        {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+        {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`}
+        {' '}
+        {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
       </a>
     </div>
     <div className="balance width-130">
-      {offering && offering.stage ?
-        stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 0 ?
-          STAGES.PROCESSING.label
-        : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 2 ?
-          STAGES.LOCK.label
-          : STAGES[offering.stage].label
+      {offering && offering.stage
+        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 0
+          ? STAGES.PROCESSING.label
+          : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 2
+            ? STAGES.LOCK.label
+            : STAGES[offering.stage].label
         : STAGES[offering.stage].label
       }
     </div>
     <div className="balance width-250">
-      Create: {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}<br />
-      Launched: {get(offering, 'offering.launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'offering.launch.targetDate')} /> : 'N/A'}<br />
-      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
+      Create:
+      {' '}
+      {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}
+      <br />
+      Launched:
+      {' '}
+      {get(offering, 'offering.launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'offering.launch.targetDate')} /> : 'N/A'}
+      <br />
+      Closed:
+      {' '}
+      {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
     </div>
     <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
       <p className="overflow-text">
-        {offering.issuerDetails ?
-          <Aux>
-            <b>
-              {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
-            </b>
-            <br />
-            {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
-            <br />
-            {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
-          </Aux> :
-          <b>N/A</b>
+        {offering.issuerDetails
+          ? (
+            <Aux>
+              <b>
+                {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
+              </b>
+              <br />
+              {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
+              <br />
+              {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
+            </Aux>
+          )
+          : <b>N/A</b>
         }
       </p>
     </div>
     <div className="action right-align width-70">
       <Button.Group>
         {Object.keys(actions).map(action => (
-          <Button icon className="link-button" >
+          <Button icon className="link-button">
             <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
           </Button>
         ))}
@@ -98,18 +110,21 @@ const SortableList = SortableContainer(({
 @observer
 export default class DraggableListing extends Component {
   state = { isPublic: false };
+
   componentWillMount() {
     this.props.offeringCreationStore.setFieldValue('isListingPage', true);
     this.props.offeringsStore.resetInitLoad();
     this.props.offeringCreationStore.resetInitLoad();
     this.props.offeringsStore.resetPagination();
   }
+
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { allOfferingsList, setOrderForOfferings } = this.props.offeringsStore;
     if (oldIndex !== newIndex) {
       setOrderForOfferings(arrayMove(allOfferingsList, oldIndex, newIndex), this.props.stage);
     }
   }
+
   handleAction = (action, offeringId, isPublished = false) => {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offeringId);
@@ -120,16 +135,19 @@ export default class DraggableListing extends Component {
       this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
     }
   }
+
   paginate = params => this.props.offeringsStore.pageRequest(params);
 
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   handlePublishOffering = () => {
     const { offeringsStore, uiStore } = this.props;
     offeringsStore.updateOfferingPublicaly(uiStore.confirmBox.refId, uiStore.confirmBox.subRefId);
     this.props.uiStore.setConfirmBox('');
   }
+
   handleDeleteOffering = () => {
     const { offeringsStore, uiStore } = this.props;
     offeringsStore.deleteOffering(uiStore.confirmBox.refId);

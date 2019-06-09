@@ -11,23 +11,25 @@ export default class Accreditation extends React.Component {
   componentWillMount() {
     this.props.accreditationStore.setAccreditationMethod('income');
   }
+
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/account-settings/investment-limits');
     const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;
     this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
     this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
   }
+
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
+
   render() {
     const {
       INCOME_EVIDENCE_FORM,
       VERIFICATION_REQUEST_FORM,
       INCOME_UPLOAD_DOC_FORM,
     } = this.props.accreditationStore;
-    const steps =
-    [
+    const steps = [
       {
         name: 'Inc. evidence',
         component: <IncomeEvidence />,

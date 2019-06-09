@@ -20,6 +20,7 @@ class Overview extends Component {
   componentWillMount() {
     window.addEventListener('scroll', this.handleOnScroll);
   }
+
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -29,20 +30,23 @@ class Overview extends Component {
       });
     }
   }
+
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
   }
+
   handleOnScroll = () => {
     const { campaign } = this.props.campaignStore;
     const arr = get(campaign, 'updates') ? get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery', 'issuer-statement'] : ['top-things-to-know', 'investment-highlights', 'gallery', 'issuer-statement'] : [];
     arr.forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < topsAsPerWindowheight &&
-        document.getElementById(item).getBoundingClientRect().top > -1) {
+      if (document.getElementById(item).getBoundingClientRect().top < topsAsPerWindowheight
+        && document.getElementById(item).getBoundingClientRect().top > -1) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
       }
     });
   }
+
   render() {
     const { campaign } = this.props.campaignStore;
     return (
@@ -51,15 +55,17 @@ class Overview extends Component {
         <Divider hidden section />
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
-        {get(campaign, 'updates') && get(campaign, 'updates').length !== 0 &&
+        {get(campaign, 'updates') && get(campaign, 'updates').length !== 0
+          && (
           <LatestUpdates
             updates={campaign && campaign.updates}
             refLink={this.props.refLink}
             isTabletLand={isTabletLand}
             companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
-            bussinessName={campaign && campaign.keyTerms &&
-              campaign.keyTerms.shorthandBusinessName}
+            bussinessName={campaign && campaign.keyTerms
+              && campaign.keyTerms.shorthandBusinessName}
           />
+          )
         }
         <Divider hidden section />
         <Gallery
