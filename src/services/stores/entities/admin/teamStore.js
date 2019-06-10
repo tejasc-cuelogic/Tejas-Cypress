@@ -33,13 +33,15 @@ export class TeamStore {
 
   @action
   initRequest = (isPrivate = false) => {
-    uiStore.setProgress();
+    if (isPrivate) {
+      uiStore.setProgress();
+    }
     const query = allTeamMembers;
     const client = isPrivate ? clientPrivate : clientPublic;
     this.data = graphql({
       client,
       query,
-      fetchPolicy: 'network-only',
+      fetchPolicy: isPrivate ? 'network-only' : undefined,
       onFetch: (res) => {
         if (res && res.teamMembers) {
           this.setDb(res.teamMembers);
