@@ -239,6 +239,9 @@ h6{
 .underline-text {
 	text-decoration: underline !important;
 }
+.break-text {
+	word-break: break-all;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
