@@ -590,6 +590,9 @@
                 background-color: @neutral-darkwhite;
             }
         }
+        .ui.attached.bottom.button {
+            border-radius: 0;
+        }
     }
     >.close{
         height:30px;
@@ -625,6 +628,9 @@
         padding:@50px @64px;
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
+            &.scrolling {
+                max-height: calc(100vh - 6.1em);
+            }
         }
         .field-wrap{
             h6{
