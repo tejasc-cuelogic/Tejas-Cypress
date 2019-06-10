@@ -6,11 +6,13 @@ import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button, Accordion } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
+import { authActions } from '../../services/actions';
+import UserAvatar from '../../theme/shared/src/UserAvatar';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore', 'uiStore', 'userDetailsStore')
+@inject('navStore', 'uiStore', 'userDetailsStore', 'userStore')
 @observer
 export class NavItems extends Component {
   state = {
@@ -83,13 +85,19 @@ export class NavItems extends Component {
       console.log('nothing');
     }
   }
+  handleLogOut = () => {
+    authActions.logout()
+      .then(() => {
+        this.props.history.push('/');
+      });
+  }
   render() {
     const { activeIndex } = this.state;
     const {
       location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
     const app = (isApp) ? 'app' : '';
-    const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
+    const myNavItems = this.props.navItems.filter(n => (n.title === 'My Account' ? this.props.userStore.isInvestor : n.noNav !== true));
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map((item, key) => (
@@ -147,6 +155,15 @@ export class NavItems extends Component {
               onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
               text={
                 <Aux>
+                  {item.title === 'My Account' &&
+                  <UserAvatar
+                    UserInfo={{
+                      name: 'c',
+                      className: '',
+                      roles: ['issuer'],
+                    }}
+                    size="5"
+                  />}
                   {item.icon && <Icon className={item.icon} />}
                   <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
                 </Aux>
@@ -161,7 +178,7 @@ export class NavItems extends Component {
                       key={sn.to}
                       className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
                       as={NavLink}
-                      onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
+                      onClick={sn.title === 'Log out' ? this.handleLogOut : isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
                       to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                     >
                       {sn.title}
