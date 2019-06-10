@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { get, orderBy } from 'lodash';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
@@ -29,10 +30,12 @@ class Updates extends Component {
 
   render() {
     const { campaign } = this.props.campaignStore;
-    const updates = campaign && campaign.updates;
+    let updates = campaign && campaign.updates;
+    updates = orderBy(updates, ['updated.date'], 'desc');
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
+    const issuerId = campaign && campaign.issuerId;
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
@@ -63,13 +66,13 @@ class Updates extends Component {
                           : <UserAvatar UserInfo={{}} />
                       }
                       </div>
-                      <Item.Content verticalAlign="middle" className="grey-header">
-                        {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName}
-                        {' '}
-                        {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}
-                        {' '}
-                        <br />
-                        <span>{moment(dataItem.updated.date).format('ll')}</span>
+                      <Item.Content verticalAlign="middle" className="grey-header" >
+                        {(dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId) ?
+                        get(campaign, 'keyTerms.shorthandBusinessName')
+                        : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info &&
+                          dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo &&
+                            dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
+                        <br /><span>{moment(dataItem.updated.date).format('ll')}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>

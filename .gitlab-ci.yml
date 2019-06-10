@@ -214,7 +214,7 @@ test:dev:
    - echo "Initiate e2e tests..."
   image: cypress/base:10
   artifacts:
-    expire_in: 8 hrs
+    expire_in: 1 day
     when: always
     paths:
       - cypress/screenshots
