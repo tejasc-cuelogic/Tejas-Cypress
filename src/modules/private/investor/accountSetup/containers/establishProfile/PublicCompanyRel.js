@@ -12,11 +12,11 @@ export default class PublicCompanyRel extends Component {
     const { errors } = this.props.uiStore;
     return (
       <div className="center-align">
-        <Header as="h3">Public Company Relations</Header>
-        <p>
+        {/* <Header as="h3">Public Company Relations</Header> */}
+        <Header as="h4">
 Are you (or an immediate family member) a 10% shareholder,
           director or senior officer at a publicly traded U.S. company?
-        </p>
+        </Header>
         <Divider hidden />
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
         <Form error>
@@ -26,6 +26,7 @@ Are you (or an immediate family member) a 10% shareholder,
             changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
             containerclassname="three wide button-radio center-align"
             showerror
+            vertical
           />
           {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes'
           && (

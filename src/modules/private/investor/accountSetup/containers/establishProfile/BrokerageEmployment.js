@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import { Form, Header, Message, Divider, Responsive } from 'semantic-ui-react';
+import { Form, Header, Message, Divider } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -13,15 +12,16 @@ export default class BrokerageEmployment extends Component {
     const { errors } = this.props.uiStore;
     return (
       <div className="center-align">
-        <Header as="h3">Brokerage employment</Header>
+        {/* <Header as="h3">Brokerage employment</Header> */}
+        <Header as="h4">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
         <Divider hidden />
-        <p>
+        {/* <p>
           Do you (or an immediate family member) work for a US-based
           {' '}
           <Responsive as={Aux} minWidth={1200}><br /></Responsive>
 securities brokerage firm?
         </p>
-        <Divider hidden />
+        <Divider hidden /> */}
         <p className="mb-40">
           If you do not know what this means, it likely does not apply to you.
         </p>
@@ -32,6 +32,7 @@ securities brokerage firm?
             changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
             containerclassname="three wide button-radio center-align"
             showerror
+            vertical
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes'
           && (

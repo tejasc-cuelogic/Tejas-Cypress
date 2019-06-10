@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
-import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
+import { Modal, Header, Button, Dimmer, Loader, Progress } from 'semantic-ui-react';
 import Helper from '../utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -238,9 +238,11 @@ export default class MultiStep extends React.Component {
           className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
+          inverted={isMobile}
+          centered={isMobile && false}
         >
-          {!this.props.hideHeader
-            && (
+          {!this.props.hideHeader && !isMobile
+            ? (
             <Aux>
               <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
               <ol className="progtrckr">
@@ -250,6 +252,21 @@ export default class MultiStep extends React.Component {
               </ol>
             </Aux>
             )
+            : (
+              <Modal.Header className="text-uppercase">
+                {!this.props.steps[this.state.compState].disablePrevButton
+                  && (
+                  <Button
+                    icon={{ className: 'ns-chevron-left' }}
+                    className={`${this.state.showPreviousBtn ? '' : 'disabled'} multistep__btn prev link-button`}
+                    onClick={this.previous}
+                  />
+                  )
+                }
+                {this.props.steps[this.state.compState].name}
+                <Progress percent={90} attached="bottom" color="green" />
+              </Modal.Header>
+            )
           }
           <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
             <Loader active={this.props.inProgress}>
@@ -258,7 +275,7 @@ export default class MultiStep extends React.Component {
           </Dimmer>
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
-            {!this.props.steps[this.state.compState].disablePrevButton
+            {!this.props.steps[this.state.compState].disablePrevButton && !isMobile
               && (
               <Button
                 circular

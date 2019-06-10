@@ -186,6 +186,10 @@
     margin:0;
     position:absolute;
     top:50%;
+    @media only screen and (max-width:@largestMobileScreen){
+        box-shadow: none !important;
+        background: transparent;
+    }
     &.disabled{
         background:@border-light;
         color:@border-color;
@@ -197,6 +201,10 @@
     &.prev{
         left:0;
         transform:translate(-50%, -50%);
+        @media only screen and (max-width:@largestMobileScreen){
+            left: @20px;
+            color: @neutral-middark;
+        }
     }
     &.next{
         right:0;

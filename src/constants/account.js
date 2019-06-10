@@ -606,7 +606,7 @@ export const EMPLOYMENT = {
           label: 'Employed', value: 'EMPLOYED', key: 'Employed', text: 'Employed',
         },
         {
-          label: 'Self Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
+          label: 'Self-Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
         },
         {
           label: 'Retired', value: 'RETIRED', key: 'Retired', text: 'Retired',
@@ -629,7 +629,7 @@ export const EMPLOYMENT = {
     label: 'Employer',
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
-    placeHolder: 'Type employer name',
+    placeHolder: 'Enter employer name',
     objRef: 'employment',
     objRefOutput: 'employment',
     customErrors: {
@@ -639,10 +639,10 @@ export const EMPLOYMENT = {
   position: {
     key: 'position',
     value: '',
-    label: 'Current Position Held',
+    label: 'Position',
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
-    placeHolder: 'E.g. CEO',
+    placeHolder: 'e.g. Manager',
     objRef: 'employment',
     objRefOutput: 'employment',
     customErrors: {
