@@ -18,6 +18,10 @@ export default class EncryptDecryptUtility extends Component {
       this.setState({
         result: res,
       });
+    }).catch(() => {
+      this.setState({
+        result: '',
+      });
     });
   }
   render() {
