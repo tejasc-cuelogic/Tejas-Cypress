@@ -38,10 +38,11 @@ export default class Listing extends Component {
 
   render() {
     const { offer } = this.props.offeringsStore;
-    const { isAdmin } = this.props.userStore;
+    const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
+    const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
     const referralCode = get(offer, 'referralCode');
-    let computedList = (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
@@ -107,7 +108,7 @@ export default class Listing extends Component {
                       {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                     </Table.Cell>
                   }
-                  {isAdmin ?
+                  {(isIssuer && hardClosedDate) || (isAdmin) ?
                     <Table.Cell>
                       {Helper.CurrencyFormat(data.amount, 0)}
                       {parseInt(data.investmentsCount, 10) > 1 ?
