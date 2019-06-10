@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { get } from 'lodash';
+import { get, orderBy } from 'lodash';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
@@ -27,7 +27,8 @@ class Updates extends Component {
   handleClose = () => this.props.history.goBack();
   render() {
     const { campaign } = this.props.campaignStore;
-    const updates = campaign && campaign.updates;
+    let updates = campaign && campaign.updates;
+    updates = orderBy(updates, ['updated.date'], 'desc');
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
