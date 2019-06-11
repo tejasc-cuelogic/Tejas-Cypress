@@ -593,10 +593,6 @@
         }
         .ui.attached.bottom.button {
             border-radius: 0;
-            position: absolute; 
-            width: 100%;
-            bottom: 42px;
-            left: 0;
         }
     }
     >.close{
