@@ -30,14 +30,14 @@ export default class RecreateGoldstar extends Component {
                   type="text"
                   key={field}
                   name={field}
-                  containerwidth="6"
+                  containerwidth="8"
                   showerror
                   fielddata={RECREATEGOLDSTAR_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'RECREATEGOLDSTAR_FRM')}
                 />))
               }
-              <Form.Field width={4}>
-                <Button primary fluid content="Submit" disabled={!RECREATEGOLDSTAR_FRM.meta.isValid || inProgress.adminProcessCip} loading={inProgress.adminProcessCip} />
+              <Form.Field width={16}>
+                <Button primary content="Submit" disabled={!RECREATEGOLDSTAR_FRM.meta.isValid || inProgress.adminProcessCip} loading={inProgress.adminProcessCip} />
               </Form.Field>
             </Form.Group>
           </Form>
