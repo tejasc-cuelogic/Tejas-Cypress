@@ -627,7 +627,7 @@
         position:relative;
         padding:@50px @64px;
         @media only screen and (max-width : @largestMobileScreen){
-            padding: 0px !important;
+            padding: @30px !important;
             &.scrolling {
                 max-height: calc(100vh - 10.1em);
             }
