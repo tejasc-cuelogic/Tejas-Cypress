@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 import React, { Component } from 'react';
-import { Table, Popup, Icon } from 'semantic-ui-react';
+import { Table, Popup, Icon, Label } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { reject, get, find } from 'lodash';
@@ -110,6 +110,10 @@ export default class Listing extends Component {
                   }
                   {(isIssuer && hardClosedDate) || (isAdmin) ?
                     <Table.Cell>
+                      {data.earlyBirdEligibility ?
+                        <Label color="green" circular empty className="mr-10" />
+                        : ''
+                      }
                       {Helper.CurrencyFormat(data.amount, 0)}
                       {parseInt(data.investmentsCount, 10) > 1 ?
                         <span> ({`${data.investmentsCount} Investments`})</span>
