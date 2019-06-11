@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
+import Aux from 'react-aux';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -169,14 +170,17 @@ export default class NewUpdate extends Component {
                     />
                     <br />
                     {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
-                      <Checkbox
-                        name="tiers"
-                        readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                        value={rewardTier}
-                        onChange={(e, result) => UpdateChange(e, result)}
-                        checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
-                        label={`$${rewardTier}`}
-                      />)) : ''}
+                      <Aux>
+                        <Checkbox
+                          name="tiers"
+                          readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                          value={rewardTier}
+                          onChange={(e, result) => UpdateChange(e, result)}
+                          checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
+                          label={`$${rewardTier}`}
+                        />
+                        <br />
+                      </Aux>)) : ''}
                   </Card.Content>
                 </Card>
               :
