@@ -2,11 +2,11 @@
 import { observable, action, toJS } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
-import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META } from '../../../constants/admin/data';
+import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META, AUDITBOXFOLDER_META } from '../../../constants/admin/data';
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
@@ -16,11 +16,14 @@ export class DataStore {
   Validator.prepareFormObject(RECREATEGOLDSTAR_META);
   @observable ENCRYPTDECRYPTUTILITY_FRM =
   Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
+  @observable AUDITBOXFOLDER_FRM =
+  Validator.prepareFormObject(AUDITBOXFOLDER_META);
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
     adminProcessCip: false,
     encryptDecryptValue: false,
+    auditBoxFolder: false,
   };
   @observable outputMsg = null;
 
@@ -48,6 +51,7 @@ export class DataStore {
   formChange = (e, res, form) => {
     this[form] =
     Validator.onChange(this[form], Validator.pullValues(e, res));
+    console.log(this[form]);
   };
 
   @action
@@ -192,6 +196,30 @@ export class DataStore {
           reject();
         },
       });
+    });
+  }
+
+  @action
+  auditBoxFolder = () => {
+    const processData = Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields);
+    this.setFieldValue('inProgress', true, 'auditBoxFolder');
+    return new Promise((res, rej) => {
+      client
+        .mutate({
+          mutation: auditBoxFolder,
+          variables: processData,
+        })
+        .then(action((result) => {
+          if (result.auditBox) {
+            this.setFieldValue('inProgress', false, 'auditBoxFolder');
+            res(result.auditBox);
+          }
+        }))
+        .catch(() => {
+          this.setFieldValue('inProgress', false, 'auditBoxFolder');
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          rej();
+        });
     });
   }
 }

@@ -101,3 +101,48 @@ export const ENCRYPTDECRYPTUTILITY_META = {
   userId: { ...common.userId },
   text: { ...common.text },
 };
+export const AUDITBOXFOLDER_META = {
+  waitingTime: {
+    key: 'waitingTime',
+    value: '',
+    label: 'Waiting Time',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
+  concurrency: {
+    key: 'concurrency',
+    value: '',
+    label: 'Concurrency',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
+  queueLimit: {
+    key: 'queueLimit',
+    value: '',
+    label: 'Queue Limit',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
+  jobId: {
+    key: 'jobId',
+    value: '',
+    label: 'Job Id',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  userType: {
+    key: 'userType',
+    value: '',
+    values: [
+      { key: 'Investor', text: 'Investor', value: 'INVESTOR' },
+      { key: 'Issuer', text: 'Issuer', value: 'ISSUER' },
+    ],
+    label: 'User Type',
+    error: undefined,
+    rule: 'optional',
+  },
+};

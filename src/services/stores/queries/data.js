@@ -58,3 +58,11 @@ query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDec
    type: $type
  )
 }`;
+export const auditBoxFolder = gql`
+mutation _auditBox($waitingTime: Int!, $concurrency: Int!,$queueLimit: Int!) {
+  auditBox(
+    waitingTime: $waitingTime
+    concurrency: $concurrency
+    queueLimit: $queueLimit
+  )
+}`;

@@ -10,6 +10,7 @@ import OfferingAudit from './data/OfferingAudit';
 import ProcessFullAccount from './data/processFullAccount';
 import RecreateGoldstar from './data/recreateGoldstar';
 import EncryptDecryptUtility from './data/encryptDecryptUtility';
+import AuditBoxFolder from './data/auditBoxFolder';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -90,6 +91,7 @@ export default class Data extends Component {
           <RecreateGoldstar />
           <OfferingAudit />
           <EncryptDecryptUtility />
+          <AuditBoxFolder />
         </Grid.Column>
       </Grid>
     );
