@@ -595,7 +595,7 @@
             border-radius: 0;
             position: absolute; 
             width: 100%;
-            bottom: 0;
+            bottom: 42px;
             left: 0;
         }
     }
@@ -643,6 +643,10 @@
                     width: 100%;
                     bottom: 0;
                     left: 0;
+                }
+                &.increase-height {
+                    max-height: calc(100vh - 4.2em);
+                    margin-bottom: 0;
                 }
             }
         }

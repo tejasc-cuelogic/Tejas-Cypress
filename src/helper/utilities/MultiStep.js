@@ -273,7 +273,7 @@ export default class MultiStep extends React.Component {
               {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
             </Loader>
           </Dimmer>
-          <Modal.Content scrolling={isMobile} className="multistep">
+          <Modal.Content scrolling={isMobile} className={`${this.props.steps[this.state.compState].disableNextButton ? 'increase-height' : ''} multistep`}>
             {this.props.steps[this.state.compState].component}
             {!this.props.steps[this.state.compState].disablePrevButton && !isMobile
               && (
