@@ -17,9 +17,11 @@ export default class NewUpdate extends Component {
     editForm: false,
     confirmModal: false,
   }
+
   componentWillMount() {
     this.initiateFlow(this.props.id);
   }
+
   initiateFlow = (id) => {
     if (id !== 'new') {
       this.props.updateStore.getOne(id);
@@ -27,16 +29,20 @@ export default class NewUpdate extends Component {
       this.props.updateStore.reset();
     }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.replace(this.props.refLink);
   };
+
   showConfirmModal = () => {
     this.setState({ confirmModal: true });
   }
+
   toggleConfirmModal = () => {
     this.setState({ confirmModal: false });
   }
+
   deleteUpdate = () => {
     this.props.updateStore.deleteOfferingUpdates(this.props.id);
     this.props.history.push(this.props.refLink);
@@ -48,16 +54,20 @@ export default class NewUpdate extends Component {
     this.props.updateStore.save(this.props.id, status, isManager, this.props.status === 'PUBLISHED');
     this.props.history.push(this.props.refLink);
   }
+
   edit = () => {
     this.setState({ editForm: true });
   }
+
   cancelUpdate = () => {
     this.props.history.push(this.props.refLink);
   }
+
   cancelChanges = () => {
     this.initiateFlow(this.props.id);
     this.setState({ editForm: false });
   }
+
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange,
@@ -76,9 +86,11 @@ export default class NewUpdate extends Component {
     return (
       <Modal.Content className="transaction-details">
         <Header as="h3">
-          {isNew ? 'New' : 'Edit'} Update
-          {!isNew &&
-            <Status status={PBUILDER_FRM.fields.status.value} />
+          {isNew ? 'New' : 'Edit'}
+          {' '}
+Update
+          {!isNew
+            && <Status status={PBUILDER_FRM.fields.status.value} />
           }
           <Actions
             save={this.save}
@@ -125,9 +137,12 @@ export default class NewUpdate extends Component {
                       <Modal
                         closeOnDimmerClick={false}
                         closeIcon
-                        trigger={
-                          <Button color="green" className="link-button"><Icon className="ns-view" />See the update</Button>
-                        }
+                        trigger={(
+                          <Button color="green" className="link-button">
+                            <Icon className="ns-view" />
+See the update
+                          </Button>
+)}
                       >
                         <Modal.Content>
                           <HtmlEditor readOnly content={(PBUILDER_FRM.fields.content.value || '')} />
@@ -140,7 +155,8 @@ export default class NewUpdate extends Component {
                   </List>
                 </Card.Content>
               </Card>
-              {this.props.match.url.includes('engagement') &&
+              {this.props.match.url.includes('engagement')
+                && (
                 <Card fluid>
                   <Card.Content>
                     <h4>Who’s this update for?</h4>
@@ -155,9 +171,11 @@ export default class NewUpdate extends Component {
                     </Form.Group>
                   </Card.Content>
                 </Card>
+                )
               }
-              {isIssuer && ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(offer.stage) ?
-                <Card fluid>
+              {isIssuer && ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(offer.stage)
+                ? (
+<Card fluid>
                   <Card.Content>
                     <Header as="h4">Who’s this update for?</Header>
                     <FormRadioGroup
@@ -180,11 +198,13 @@ export default class NewUpdate extends Component {
                           label={`$${rewardTier}`}
                         />
                         <br />
-                      </Aux>)) : ''}
+                      </Aux>
+                    )) : ''}
                   </Card.Content>
                 </Card>
-              :
-                <Card fluid>
+                )
+                : (
+<Card fluid>
                   <Card.Content>
                     <Header as="h4">NextSeed Tips</Header>
                     <List bulleted relaxed>
@@ -198,6 +218,7 @@ export default class NewUpdate extends Component {
                     <Link to="/"><b>Helpful Tips on Sending Updates</b></Link>
                   </Card.Content>
                 </Card>
+                )
             }
             </Grid.Column>
           </Grid.Row>

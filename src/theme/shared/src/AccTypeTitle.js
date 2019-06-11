@@ -11,6 +11,7 @@ export default class AccTypeTitle extends Component {
     const accountType = (get(urlParams, '[2]') === 'account-details') ? get(urlParams, '[3]') : get(urlParams, '[6]') === 'investment-details' ? get(urlParams, '[4]') : null;
     return (accountType === 'ira') ? accountType.toUpperCase() : startCase(accountType);
   }
+
   render() {
     const accountType = this.getAccType(this.props.match.url);
     return (
@@ -21,4 +22,3 @@ export default class AccTypeTitle extends Component {
     );
   }
 }
-

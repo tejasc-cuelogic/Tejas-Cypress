@@ -19,29 +19,37 @@ export default class Offer extends Component {
     }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'offers.managerOverview');
   }
+
   onFileDrop = (files, name) => {
     this.props.businessAppReviewStore.setFileUploadData('OFFERS_FRM', '', name, files);
   }
+
   handleDelDoc = (field) => {
     this.props.businessAppReviewStore.removeUploadedData('OFFERS_FRM', field);
   }
+
   toggleConfirmModal = (e, index, modalName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, modalName);
   }
+
   addMore = (e, array) => {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('OFFERS_FRM', array);
   }
+
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OFFERS_FRM');
   }
+
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
+
   maskChangeWithIndex = (values, form, arrayName, field, index) => {
     this.props.businessAppReviewStore.maskChangeWithIndex(values, form, arrayName, field, index);
   }
+
   render() {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
@@ -68,8 +76,8 @@ export default class Offer extends Component {
           <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" submitted={submitted} isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
           <Header as="h4">
             Offers
-            {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
-            <Link to={this.props.match.url} className="link pull-right" onClick={e => this.addMore(e, 'offer')}><small>+ Add new offer</small></Link>
+            {!isReadonly && OFFERS_FRM.fields.offer.length < 4
+            && <Link to={this.props.match.url} className="link pull-right" onClick={e => this.addMore(e, 'offer')}><small>+ Add new offer</small></Link>
             }
           </Header>
           <Divider hidden />
@@ -125,8 +133,8 @@ export default class Offer extends Component {
           <Divider hidden />
           <Header as="h4">
             Expected Annual Revenue
-            {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'expectedAnnualRevenue')}><small>+ Add Another Year</small></Link>
+            {!isReadonly
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'expectedAnnualRevenue')}><small>+ Add Another Year</small></Link>
             }
           </Header>
           <div className="bg-offwhite">
@@ -147,7 +155,7 @@ export default class Offer extends Component {
                       changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'expectedAnnualRevenue', field, index)}
                     />
                   </Aux>
-              ))
+                ))
             }
             </Form.Group>
           </div>

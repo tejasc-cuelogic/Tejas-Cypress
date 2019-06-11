@@ -7,7 +7,7 @@ import {
   validInvestorWithIncompleteCIPCredentials,
 } from './investorsCredentailConstant';
 import { enteringInvestmentAmount } from './enteringInvestmentAmount';
-import {applicationUnlock } from '../common';
+import { applicationUnlock } from '../common';
 
 export const initializeInvestNowFlow = () => {
   cy.visit('/', { failOnStatusCode: false });
@@ -78,7 +78,7 @@ export const proceedWithValidUserLoginAction = () => {
 
 export const proceedWithValidCFInvestmentAction = () => {
   enteringInvestmentAmount();
-}
+};
 
 // export const proceedIncompleteCIPInvestorAction = () => {
 //   fillLegalFormAndProceed();

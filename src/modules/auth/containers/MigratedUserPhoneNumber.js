@@ -20,6 +20,7 @@ export default class MigratedUserPhoneNumber extends Component {
     personalInfoMaskedChange({ value }, 'phoneNumber');
     // validateForm('ID_VERIFICATION_FRM');
   }
+
   handlePhoneNumberConfirmation = () => {
     const { ID_VERIFICATION_FRM } = this.props.identityStore;
     // this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
@@ -27,11 +28,13 @@ export default class MigratedUserPhoneNumber extends Component {
     const phoneNumberValue = phoneNumber.value;
     this.props.identityStore.startPhoneVerification('NEW', phoneNumberValue, isMobile);
   }
+
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
+
   render() {
     const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
     const { errors } = this.props.uiStore;
@@ -62,7 +65,10 @@ export default class MigratedUserPhoneNumber extends Component {
             />
             <Divider hidden />
             <p className="note center-align">
-              By selecting <b>Confirm</b>, you agree NextSeed may deliver verification codes
+              By selecting
+              {' '}
+              <b>Confirm</b>
+, you agree NextSeed may deliver verification codes
               to you using the phone number you have provided. Codes may be sent using text
               messages, an autodialer, or artificial or prerecorded voice messages to such
               phone number. Your mobile carrier’s messaging and data fees may apply.
@@ -70,10 +76,12 @@ export default class MigratedUserPhoneNumber extends Component {
             <Divider hidden />
             <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary size="large" className="very relaxed" content="Confirm" loading={this.props.uiStore.inProgress} />
           </Form>
-          { errors &&
+          { errors
+            && (
             <Message error textAlign="left" className="mb-30">
               <ListErrors errors={errors.message ? [errors.message] : [errors]} />
             </Message>
+            )
           }
         </Modal.Content>
       </Modal>

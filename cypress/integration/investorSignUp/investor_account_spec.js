@@ -36,7 +36,7 @@ describe('Account Creation', () => {
     cy.get('input[name="accountType"]').check('SAVINGS', { force: true });
     cy.get('button.button').contains('Confirm').click();
     cy.wait('@upsertInvestorAccount');
-    cy.wait(5000)
+    cy.wait(5000);
   };
   const plaidProcess = (progressStep, count) => {
     cy.wait(2000);
@@ -77,7 +77,7 @@ describe('Account Creation', () => {
       cy.get('button').contains('Confirm').click();
       cy.wait('@upsertInvestorAccount');
     });
-  }
+  };
 
   const iraAccountCreation = () => {
     cy.wait(2000);
@@ -118,13 +118,13 @@ describe('Account Creation', () => {
           iraAccountCreation();
           break;
         case 'Summary':
-          registerApiCall('submitAccount')
+          registerApiCall('submitAccount');
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
           cy.wait('@submitAccount');
           cy.wait('@submitAccount');
-          cy.wait(1000)
+          cy.wait(1000);
           cy.get('.modal', { timeout: 1000 }).then(($el) => {
-            const element = cy.wrap($el)
+            const element = cy.wrap($el);
             element.get('button.button').contains('Continue').click({ force: true });
           });
           cy.wait(1000);
@@ -137,76 +137,76 @@ describe('Account Creation', () => {
     cy.wait(2000);
     registerApiCall('upsertInvestorAccount');
     cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
-    cy.log('step value', text);
-    // eslint-disable-next-line default-case
-    switch (text) {
-      case 'Financial info':
-        cy.get('input[name="netAssets"]').type('123456789');
-        cy.get('input[name="annualIncome"]').type('123456789');
-        btnClickAndWait('upsertInvestorAccount');
-        cy.wait(3000);
-        entityAccountCreation();
-        break;
-      case 'General':
-        cy.get('input[name="name"]').type(GeneralInfoMeta.name);
-        cy.get('input[name="taxId"]').type(`${GeneralInfoMeta.taxId}${Math.floor((Math.random() * 100000000) + 1)}`);
-        cy.get('div[name="entityType"]')
-          .click()
-          .get(`div[role="option"]:contains(${GeneralInfoMeta.entityType})`)
-          .click();
-        cy.get('input[name="street"]').type(GeneralInfoMeta.residentalStreet);
-        cy.get('input[name="city"]').type(GeneralInfoMeta.city);
-        cy.get('div[name="state"]')
-          .click()
-          .get(`div[role="option"]:contains(${GeneralInfoMeta.state})`)
-          .click();
-        cy.get('input[name="city"]').type(GeneralInfoMeta.city);
-        cy.get('input[name="zipCode"]').type(GeneralInfoMeta.zipCode);
-        btnClickAndWait('upsertInvestorAccount');
-        cy.wait(3000);
-        entityAccountCreation();
-        break;
-      case 'Trust Status':
-        clickRadioAndNext('input[name="isTrust"]', 'false', 'upsertInvestorAccount');
-        cy.wait(2000);
-        entityAccountCreation();
-        break;
-      case 'Personal info':
-        cy.get('input[name="title"]').type('CTO');
-        uploadFile('input[name="legalDocUrl"]');
-        cy.wait('@fileUpload');
-        entityAccountCreation();
-        break;
-      case 'Formation doc':
-        uploadFile('input[name="formationDoc"]');
-        uploadFile('input[name="operatingAgreementDoc"]');
-        uploadFile('input[name="einVerificationDoc"]');
-        btnClickAndWait('upsertInvestorAccount');
-        registerApiCall('upsertInvestorAccount');
-        cy.wait(2000);
-        entityAccountCreation();
-        break;
-      case 'Link bank':
-        plaidProcess('.progtrckr-doing', '3');
-        cy.wait(1000);
-        addFunds('7000');
-        cy.wait('@upsertInvestorAccount');
-        cy.wait('@upsertInvestorAccount');
-        cy.wait(2000);
-        entityAccountCreation();
-        break;
-      case 'Summary':
-        registerApiCall('submitAccount')
-        cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
-        cy.wait('@submitAccount');
-        cy.wait('@submitAccount');
-        cy.wait(1000)
-        cy.get('.modal', { timeout: 1000 }).then(($el) => {
-          const element = cy.wrap($el)
-          element.get('button.button').contains('Continue').click({ force: true });
-        });
-        cy.wait(1000);
-        break;
+      cy.log('step value', text);
+      // eslint-disable-next-line default-case
+      switch (text) {
+        case 'Financial info':
+          cy.get('input[name="netAssets"]').type('123456789');
+          cy.get('input[name="annualIncome"]').type('123456789');
+          btnClickAndWait('upsertInvestorAccount');
+          cy.wait(3000);
+          entityAccountCreation();
+          break;
+        case 'General':
+          cy.get('input[name="name"]').type(GeneralInfoMeta.name);
+          cy.get('input[name="taxId"]').type(`${GeneralInfoMeta.taxId}${Math.floor((Math.random() * 100000000) + 1)}`);
+          cy.get('div[name="entityType"]')
+            .click()
+            .get(`div[role="option"]:contains(${GeneralInfoMeta.entityType})`)
+            .click();
+          cy.get('input[name="street"]').type(GeneralInfoMeta.residentalStreet);
+          cy.get('input[name="city"]').type(GeneralInfoMeta.city);
+          cy.get('div[name="state"]')
+            .click()
+            .get(`div[role="option"]:contains(${GeneralInfoMeta.state})`)
+            .click();
+          cy.get('input[name="city"]').type(GeneralInfoMeta.city);
+          cy.get('input[name="zipCode"]').type(GeneralInfoMeta.zipCode);
+          btnClickAndWait('upsertInvestorAccount');
+          cy.wait(3000);
+          entityAccountCreation();
+          break;
+        case 'Trust Status':
+          clickRadioAndNext('input[name="isTrust"]', 'false', 'upsertInvestorAccount');
+          cy.wait(2000);
+          entityAccountCreation();
+          break;
+        case 'Personal info':
+          cy.get('input[name="title"]').type('CTO');
+          uploadFile('input[name="legalDocUrl"]');
+          cy.wait('@fileUpload');
+          entityAccountCreation();
+          break;
+        case 'Formation doc':
+          uploadFile('input[name="formationDoc"]');
+          uploadFile('input[name="operatingAgreementDoc"]');
+          uploadFile('input[name="einVerificationDoc"]');
+          btnClickAndWait('upsertInvestorAccount');
+          registerApiCall('upsertInvestorAccount');
+          cy.wait(2000);
+          entityAccountCreation();
+          break;
+        case 'Link bank':
+          plaidProcess('.progtrckr-doing', '3');
+          cy.wait(1000);
+          addFunds('7000');
+          cy.wait('@upsertInvestorAccount');
+          cy.wait('@upsertInvestorAccount');
+          cy.wait(2000);
+          entityAccountCreation();
+          break;
+        case 'Summary':
+          registerApiCall('submitAccount');
+          cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
+          cy.wait('@submitAccount');
+          cy.wait('@submitAccount');
+          cy.wait(1000);
+          cy.get('.modal', { timeout: 1000 }).then(($el) => {
+            const element = cy.wrap($el);
+            element.get('button.button').contains('Continue').click({ force: true });
+          });
+          cy.wait(1000);
+          break;
       }
     });
   };
@@ -223,7 +223,7 @@ describe('Account Creation', () => {
     cy.wait(2000);
     addFunds('15000');
     cy.wait(5000);
-    registerApiCall('submitAccount')
+    registerApiCall('submitAccount');
     cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
     // cy.wait('@submitAccount');
     // cy.wait('@submitAccount');

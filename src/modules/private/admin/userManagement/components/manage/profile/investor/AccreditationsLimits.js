@@ -18,25 +18,47 @@ export default class AccreditationsLimits extends Component {
       this.props.accreditationStore.initiateAccreditation();
     });
   }
+
   render() {
     const { getActiveAccountList } = this.props.investmentLimitStore;
     const { getDetailsOfUser } = this.props.userDetailsStore;
     const { accreditationData } = this.props.accreditationStore;
     return (
       <Form>
-        {getActiveAccountList && getActiveAccountList.accountList.length &&
-        getActiveAccountList.accountList.map(account => (
+        {getActiveAccountList && getActiveAccountList.accountList.length
+        && getActiveAccountList.accountList.map(account => (
           <Aux>
             <Header as="h4">
-              {account.name === 'ira' && getActiveAccountList.isIndAccExist ?
-                <Aux>
-                  <Icon color="teal" className="ns-individual-line" /><Icon color="teal" className={`ns-${account.name}-line`} /> Individual & {account.name.toUpperCase()} Limits
-                </Aux> :
-                <Aux>
-                  <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)} Limits
-                </Aux>
+              {account.name === 'ira' && getActiveAccountList.isIndAccExist
+                ? (
+                  <Aux>
+                    <Icon color="teal" className="ns-individual-line" />
+                    <Icon color="teal" className={`ns-${account.name}-line`} />
+                    {' '}
+Individual &
+                    {' '}
+                    {account.name.toUpperCase()}
+                    {' '}
+Limits
+                  </Aux>
+                )
+                : (
+                  <Aux>
+                    <Icon color="teal" className={`ns-${account.name}-line`} />
+                    {' '}
+                    {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)}
+                    {' '}
+Limits
+                  </Aux>
+                )
               }
-              <Link to={this.props.match.url} className="link pull-right"><small><Icon className="ns-pencil" /> Edit</small></Link>
+              <Link to={this.props.match.url} className="link pull-right">
+                <small>
+                  <Icon className="ns-pencil" />
+                  {' '}
+Edit
+                </small>
+              </Link>
             </Header>
             <Header as="h6">Investment limits</Header>
             <Form.Group widths={2}>
@@ -46,7 +68,8 @@ export default class AccreditationsLimits extends Component {
               <Form.Input fluid label="Other Regulation Crowdfunding investment made in prior 12mths" placeholder="Other Regulation Crowdfunding investment made in prior 12mths" value={account.name === 'entity' ? Helper.MoneyMathDisplayCurrency(get(account, 'details.limits.otherContributions')) : Helper.MoneyMathDisplayCurrency(get(getDetailsOfUser, 'limits.otherContributions'))} readOnly className="display-only" />
             </Form.Group>
             <Divider />
-            {(get(accreditationData[account.name], 'status')) &&
+            {(get(accreditationData[account.name], 'status'))
+            && (
             <Aux>
               <Header as="h6">
                 Accreditation
@@ -57,34 +80,46 @@ export default class AccreditationsLimits extends Component {
                   <dt>Status :</dt>
                   <b><dd className={`${get(accreditationData[account.name], 'status') === 'REQUESTED' ? 'warning' : get(accreditationData[account.name], 'status') === 'CONFIRMED' ? 'positive' : get(accreditationData[account.name], 'status') === 'INVALID' ? 'negative' : ''}-text`}>{get(accreditationData[account.name], 'status') ? ACCREDITATION_STATUS_LABEL[get(accreditationData[account.name], 'status')] : 'N/A'}</dd></b>
                 </dl>
-                {accreditationData[account.name].status === 'INVALID' ?
-                  <dl className="dl-horizontal">
-                    <dt>Message :</dt>
-                    <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
-                  </dl> : ''
+                {accreditationData[account.name].status === 'INVALID'
+                  ? (
+                    <dl className="dl-horizontal">
+                      <dt>Message :</dt>
+                      <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
+                    </dl>
+                  ) : ''
                 }
                 <Form.Group widths={4}>
                   <Form.Input fluid label="Accredited with" placeholder="Accredited with" value={get(ACCREDITATION_METHOD_ENUMS, get(accreditationData[account.name], 'method')) || 'N/A'} readOnly className="display-only" />
                   {get(accreditationData[account.name], 'netWorth') && <Form.Input fluid label="Net worth" placeholder="Net worth" value={Helper.MoneyMathDisplayCurrency(get(ACCREDITATION_NETWORTH_LABEL, get(accreditationData[account.name], 'netWorth')))} readOnly className="display-only" />}
                   <Form.Input fluid label="Income evidence type" placeholder="Income evidence type" value={get(accreditationData[account.name], 'assetsUpload[0]') ? 'Uploaded document' : get(accreditationData[account.name], 'verifier') ? 'verifier' : 'N/A'} readOnly className="display-only" />
-                  {get(accreditationData[account.name], 'assetsUpload[0]') ?
-                    // eslint-disable-next-line jsx-a11y/label-has-for
-                    <div className="field display-only"><label>Income evidence doc</label><div className="ui fluid input">{get(accreditationData[account.name], 'assetsUpload[0].fileInfo[0].fileHandle.boxFolderId') ? (<a href={`${NEXTSEED_BOX_URL}folder/${get(accreditationData[account.name], 'assetsUpload[0].fileInfo[0].fileHandle.boxFolderId')}`} className="link" rel="noopener noreferrer" target="_blank" >Uploads</a>) : 'N/A'}</div></div> :
-                    <Aux>
-                      <Form.Input fluid label="Role" placeholder="Role" value={get(accreditationData[account.name], 'verifier.role') || 'N/A'} title={get(accreditationData[account.name], 'verifier.role') || 'N/A'} readOnly className="display-only" />
-                      <Form.Input fluid label="Email" placeholder="Email" value={get(accreditationData[account.name], 'verifier.email') || 'N/A'} title={get(accreditationData[account.name], 'verifier.email') || 'N/A'} readOnly className="display-only" />
-                    </Aux>
+                  {get(accreditationData[account.name], 'assetsUpload[0]')
+                  // eslint-disable-next-line jsx-a11y/label-has-for
+                    ? (
+                      <div className="field display-only">
+                        <label>Income evidence doc</label>
+                        <div className="ui fluid input">{get(accreditationData[account.name], 'assetsUpload[0].fileInfo[0].fileHandle.boxFolderId') ? (<a href={`${NEXTSEED_BOX_URL}folder/${get(accreditationData[account.name], 'assetsUpload[0].fileInfo[0].fileHandle.boxFolderId')}`} className="link" rel="noopener noreferrer" target="_blank">Uploads</a>) : 'N/A'}</div>
+                      </div>
+                    )
+                    : (
+                      <Aux>
+                        <Form.Input fluid label="Role" placeholder="Role" value={get(accreditationData[account.name], 'verifier.role') || 'N/A'} title={get(accreditationData[account.name], 'verifier.role') || 'N/A'} readOnly className="display-only" />
+                        <Form.Input fluid label="Email" placeholder="Email" value={get(accreditationData[account.name], 'verifier.email') || 'N/A'} title={get(accreditationData[account.name], 'verifier.email') || 'N/A'} readOnly className="display-only" />
+                      </Aux>
+                    )
                   }
                 </Form.Group>
-                {(get(accreditationData[account.name], 'status') === 'REQUESTED') &&
+                {(get(accreditationData[account.name], 'status') === 'REQUESTED')
+                && (
                 <Button.Group compact size="tiny" className="mt-10">
                   <Button as={Link} primary content="Accept" to={`${this.props.match.url}/CONFIRMED/${get(getDetailsOfUser, 'id')}${(account.name === 'entity' ? `/${get(account, 'details.accountId')}/ENTITY` : '')}`} />
                   <Button as={Link} color="red" content="Deny" to={`${this.props.match.url}/INVALID/${get(getDetailsOfUser, 'id')}${(account.name === 'entity' ? `/${get(account, 'details.accountId')}/ENTITY` : '')}`} />
                 </Button.Group>
+                )
                 }
               </div>
               <Divider />
             </Aux>
+            )
             }
           </Aux>
         ))}

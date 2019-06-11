@@ -63,4 +63,3 @@ mutation setCategoryOrderForCategoryType($categoryDetails: [CategoryOrderInput])
   setCategoryOrderForCategoryType(categoryDetails: $categoryDetails)
 }
 `;
-

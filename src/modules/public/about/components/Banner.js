@@ -6,7 +6,10 @@ const Banner = () => (
     <Responsive minWidth={768} as={Container}>
       <div className="banner-caption">
         <Header as="h2">
-        Invest in each other.<br /> Grow together.
+        Invest in each other.
+          <br />
+          {' '}
+Grow together.
         </Header>
       </div>
     </Responsive>

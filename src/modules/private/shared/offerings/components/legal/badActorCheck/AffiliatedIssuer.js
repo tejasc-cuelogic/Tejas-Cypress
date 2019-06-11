@@ -22,6 +22,7 @@ export default class AffiliatedIssuer extends Component {
       getAffiliatedIssuerOfferingBac(currentOfferingId, 'AFFILIATED_ISSUER');
     }
   }
+
   render() {
     const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
     const navItems = [];
@@ -38,8 +39,7 @@ export default class AffiliatedIssuer extends Component {
           <Route
             exact
             path={match.url}
-            render={props =>
-              <AfIssuer refLink={match.url} {...props} index={0} />}
+            render={props => <AfIssuer refLink={match.url} {...props} index={0} />}
           />
           {
             navItems.map((item, index) => (

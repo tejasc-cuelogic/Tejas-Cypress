@@ -13,6 +13,7 @@ class Success extends Component {
   state = {
     showProgressLoader: false,
   }
+
   componentWillMount() {
     if (this.props.isPublic) {
       const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM_BASIC;
@@ -32,6 +33,7 @@ class Success extends Component {
       }
     }
   }
+
   onProceed = (e) => {
     e.preventDefault();
     const {
@@ -101,48 +103,52 @@ class Success extends Component {
               <b>You have been prequalified for a NextSeed campaign.</b>
             </p>
             <p>
-              {!userExists || !this.props.isPublic ?
-                `Please begin filling out the rest of the application and
+              {!userExists || !this.props.isPublic
+                ? `Please begin filling out the rest of the application and
                 submitting the necessary paperwork. Our step-by-step guide
-                will take you through the steps and keep the process organized.` :
-                `Please log in to finish filling out the rest of the application
+                will take you through the steps and keep the process organized.`
+                : `Please log in to finish filling out the rest of the application
                 and submitting the necessary paperwork. Our step-by-step guide
                 will walk you through the steps and keep the process organized.`
               }
             </p>
-            {this.props.isPublic &&
+            {this.props.isPublic
+              && (
               <Form error>
                 <Grid>
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                    {!userExists ?
-                      ['email', 'password', 'verify'].map(field => (
-                        (field === 'password') ?
-                          <FormPasswordStrength
-                            key="password"
-                            name="password"
-                            type="password"
-                            userInputs={[fields.email.value]}
-                            iconDisplay
-                            minLength={8}
-                            minScore={4}
-                            tooShortWord="Weak"
-                            scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                            inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-                            changed={signupChange}
-                            fielddata={fields[field]}
-                          />
-                          :
-                          <FormInput
-                            key={field}
-                            readOnly={field === 'email'}
+                    {!userExists
+                      ? ['email', 'password', 'verify'].map(field => (
+                        (field === 'password')
+                          ? (
+                            <FormPasswordStrength
+                              key="password"
+                              name="password"
+                              type="password"
+                              userInputs={[fields.email.value]}
+                              iconDisplay
+                              minLength={8}
+                              minScore={4}
+                              tooShortWord="Weak"
+                              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+                              changed={signupChange}
+                              fielddata={fields[field]}
+                            />
+                          )
+                          : (
+                            <FormInput
+                              key={field}
+                              readOnly={field === 'email'}
                             // icon={field !== 'email' ? togglePasswordType(field) : null}
-                            type={field !== 'email' ? pwdInputType : 'text'}
-                            name={field}
-                            fielddata={fields[field]}
-                            changed={signupChange}
-                          />
-                      )) :
-                      ['email', 'password'].map(field => (
+                              type={field !== 'email' ? pwdInputType : 'text'}
+                              name={field}
+                              fielddata={fields[field]}
+                              changed={signupChange}
+                            />
+                          )
+                      ))
+                      : ['email', 'password'].map(field => (
                         <FormInput
                           key={field}
                           icon={field === 'password' ? togglePasswordType(field) : null}
@@ -154,20 +160,24 @@ class Success extends Component {
                         />
                       ))
                     }
-                    {errors &&
+                    {errors
+                      && (
                       <Message error className="mt-30">
                         <ListErrors errors={[errors.message]} />
                       </Message>
+                      )
                     }
                   </Grid.Column>
                 </Grid>
               </Form>
+              )
             }
             <Divider section hidden />
             <Button primary size="large" className="very relaxed" content="Proceed" loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!SIGNUP_FRM.meta.isValid || !currentScore) && !userExists)} />
           </Grid.Column>
         </Grid>
-        {this.state.showProgressLoader &&
+        {this.state.showProgressLoader
+        && (
         <Dimmer active className="fullscreen">
           <Loader size="large">
             <Header as="h3">
@@ -178,6 +188,7 @@ class Success extends Component {
             </Header>
           </Loader>
         </Dimmer>
+        )
         }
       </Aux>
     );

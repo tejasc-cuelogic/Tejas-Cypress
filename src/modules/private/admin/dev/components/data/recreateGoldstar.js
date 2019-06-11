@@ -11,9 +11,11 @@ export default class RecreateGoldstar extends Component {
   componentWillMount() {
     this.props.dataStore.resetForm('RECREATEGOLDSTAR_FRM');
   }
+
   onSubmit = () => {
     this.props.dataStore.adminProcessCip();
   }
+
   render() {
     const { dataStore } = this.props;
     const {
@@ -34,7 +36,8 @@ export default class RecreateGoldstar extends Component {
                   showerror
                   fielddata={RECREATEGOLDSTAR_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'RECREATEGOLDSTAR_FRM')}
-                />))
+                />
+              ))
               }
               <Form.Field width={16}>
                 <Button primary content="Submit" disabled={!RECREATEGOLDSTAR_FRM.meta.isValid || inProgress.adminProcessCip} loading={inProgress.adminProcessCip} />

@@ -29,8 +29,8 @@ export default class Transactions extends Component {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
     this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
-    if (isExact && (!this.props.isAdmin ||
-      (this.props.isAdmin && !this.props.transactionStore.apiCall))) {
+    if (isExact && (!this.props.isAdmin
+      || (this.props.isAdmin && !this.props.transactionStore.apiCall))) {
       this.props.transactionStore.initRequest();
     }
   }
@@ -49,8 +49,8 @@ export default class Transactions extends Component {
     }
     return (
       <Aux>
-        {this.props.isAdmin &&
-          <AccountHeader module="Transactions" pathname={this.props.location.pathname} />
+        {this.props.isAdmin
+          && <AccountHeader module="Transactions" pathname={this.props.location.pathname} />
         }
         <div className="more search-filters bg-offwhite">
           <Form>
@@ -73,12 +73,12 @@ export default class Transactions extends Component {
             </Grid>
           </Form>
         </div>
-        {this.props.isAdmin &&
-          <Divider hidden />
+        {this.props.isAdmin
+          && <Divider hidden />
         }
         <div className={this.props.isAdmin ? '' : 'content-spacer'}>
-          {!this.props.isAdmin &&
-            <Header as="h4">Transactions</Header>
+          {!this.props.isAdmin
+            && <Header as="h4">Transactions</Header>
           }
           <Grid>
             <Grid.Row>
@@ -86,8 +86,8 @@ export default class Transactions extends Component {
                 <Card fluid>
                   <FillTable loading={loading} error={hasError || error} result={result} />
                 </Card>
-                {totalRecords > 0 &&
-                  <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+                {totalRecords > 0
+                  && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
                 }
               </Grid.Column>
             </Grid.Row>

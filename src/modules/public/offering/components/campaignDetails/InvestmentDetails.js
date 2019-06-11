@@ -14,6 +14,7 @@ class InvestmentDetails extends Component {
     this.props.campaignStore.calculateTotalPaymentData();
     window.addEventListener('scroll', this.handleOnScroll);
   }
+
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -26,20 +27,23 @@ class InvestmentDetails extends Component {
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
   }
+
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
   }
+
   handleOnScroll = () => {
     const { investmentDetailsSubNavs } = this.props.campaignStore;
     investmentDetailsSubNavs.forEach((item) => {
-      if (document.getElementById(item.to.slice(1)) &&
-      document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 200 &&
-      document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+      if (document.getElementById(item.to.slice(1))
+      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 200
+      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
         this.props.navStore.setFieldValue('currentActiveHash', item.to);
       }
     });
   }
+
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyContent = 'No data found.';
@@ -50,11 +54,10 @@ class InvestmentDetails extends Component {
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
-        {campaign && campaign.legal &&
-          campaign.legal.general && campaign.legal.general.useOfProceeds ?
-            <HtmlEditor readOnly content={offeringExpenseAmountDescription || emptyContent} />
-            :
-            <InlineLoader text={emptyContent} className="bg-offwhite" />
+        {campaign && campaign.legal
+          && campaign.legal.general && campaign.legal.general.useOfProceeds
+          ? <HtmlEditor readOnly content={offeringExpenseAmountDescription || emptyContent} />
+          : <InlineLoader text={emptyContent} className="bg-offwhite" />
         }
         {/* <Divider hidden />
         <Image64

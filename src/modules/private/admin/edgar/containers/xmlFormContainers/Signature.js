@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 
 import PersonalSignature from '../../components/PersonalSignature';
 import { businessActions } from '../../../../../../services/actions';
-import { FormInput } from './../../../../../../theme/form';
+import { FormInput } from '../../../../../../theme/form';
 import {
   XML_STATUSES,
 } from '../../../../../../constants/business';
@@ -69,10 +69,12 @@ export default class Signature extends React.Component {
           />
           <Divider hidden />
           {
-            xmlSubmissionStatus === XML_STATUSES.draft &&
+            xmlSubmissionStatus === XML_STATUSES.draft
+            && (
             <div>
               <Button primary compact onClick={this.handleAdd}>Add</Button>
             </div>
+            )
           }
         </Card>
       </div>

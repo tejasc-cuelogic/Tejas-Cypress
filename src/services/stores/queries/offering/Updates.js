@@ -94,4 +94,3 @@ mutation deleteOfferingUpdate($id: [ID]) {
   deleteOfferingUpdates(id: $id)
 }
 `;
-

@@ -24,6 +24,7 @@ export default class ApplicationCards extends Component {
       this.props.businessAppStore.setFieldvalue('isFetchedData', null);
     }
   }
+
   signPortalAgreementHandler = (e, url, resourceId) => {
     const payload = {
       resourceId,
@@ -35,6 +36,7 @@ export default class ApplicationCards extends Component {
     this.props.activityHistoryStore.createActivityHistory(payload);
     this.props.history.push(url);
   }
+
   render() {
     const { fetchBusinessApplication, businessApplicationsList } = this.props.businessAppStore;
 
@@ -48,22 +50,33 @@ export default class ApplicationCards extends Component {
         <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
           <Card fluid>
             <Card.Content>
-              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
+              <Header as="h4">
+                <Icon className="ns-paper-plane" color="green" />
+                {' '}
+Create new application
+              </Header>
             </Card.Content>
             <Card.Content>
-              <p>Want to launch a new campaign?<br />
+              <p>
+Want to launch a new campaign?
+                <br />
                 Let&#39;s get started with an application for your project.
               </p>
               <Divider hidden />
               <Button primary as={Link} to="/app/dashboard/select-application-type">Start application</Button>
             </Card.Content>
           </Card>
-          {fetchBusinessApplication.length ?
-            fetchBusinessApplication.map(application => (
-              application.applicationStatus !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED &&
+          {fetchBusinessApplication.length
+            ? fetchBusinessApplication.map(application => (
+              application.applicationStatus !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
+                && (
                 <Card fluid key={application.applicationId}>
                   <Card.Content>
-                    <Header as="h4"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
+                    <Header as="h4">
+                      <Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} />
+                      {' '}
+                      {application.prequalDetails.businessGeneralInfo.businessName}
+                    </Header>
                   </Card.Content>
                   <Card.Content>
                     <dl className="dl-horizontal">
@@ -74,30 +87,33 @@ export default class ApplicationCards extends Component {
                       <dt>{BUSINESS_APP_USER_STATUS[application.applicationStatus].dateTitle}</dt>
                       <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat datetime={(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date)} /> : '--'}</dd>
                     </dl>
-                    {application.applicationStatus ===
-                    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
-                      <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
+                    {application.applicationStatus
+                    === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
+                      && <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
                     }
-                    {(application.applicationStatus ===
-                    BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
-                    || application.applicationStatus ===
-                    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ||
-                    application.applicationStatus ===
-                    BUSINESS_APPLICATION_STATUS.REVIEW_FAILED) &&
-                      <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
+                    {(application.applicationStatus
+                    === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
+                    || application.applicationStatus
+                    === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL
+                    || application.applicationStatus
+                    === BUSINESS_APPLICATION_STATUS.REVIEW_FAILED)
+                      && <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
-                    {(application.applicationStatus ===
-                      BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED ||
-                      application.applicationStatus ===
-                      BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL) &&
-                      <Button inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)} >
-                        { application.applicationStatus ===
-                        BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'View Offer' : 'Sign agreement'
+                    {(application.applicationStatus
+                      === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED
+                      || application.applicationStatus
+                      === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
+                      && (
+                      <Button inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)}>
+                        { application.applicationStatus
+                        === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'View Offer' : 'Sign agreement'
                       }
                       </Button>
+                      )
                     }
                   </Card.Content>
                 </Card>
+                )
             )) : null
           }
         </Card.Group>

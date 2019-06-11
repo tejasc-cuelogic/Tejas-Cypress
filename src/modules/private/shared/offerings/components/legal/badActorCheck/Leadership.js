@@ -15,6 +15,7 @@ export default class Leadership extends Component {
       this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', false);
     }
   }
+
   render() {
     const { getOfferingById } = this.props.offeringsStore.offerData.data;
     const navItems = [];
@@ -36,8 +37,7 @@ export default class Leadership extends Component {
           <Route
             exact
             path={match.url}
-            render={props =>
-              <Leader refLink={match.url} {...props} index={0} />}
+            render={props => <Leader refLink={match.url} {...props} index={0} />}
           />
           {
             navItems.map((item, index) => (

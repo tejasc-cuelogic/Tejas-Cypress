@@ -18,9 +18,11 @@ class Offering extends Component {
   componentWillMount() {
     this.props.campaignStore.initRequest(['active', 'completed']);
   }
+
   componentWillReceiveProps() {
     this.props.campaignStore.initRequest(['active', 'completed']);
   }
+
   render() {
     const {
       active, completed, loading, loadMoreRecord, activeList,
@@ -40,9 +42,9 @@ class Offering extends Component {
           filters
           heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-30' : 'mb-50'}>Active Campaigns</Header>}
         />
-        {activeList && activeList.length > RECORDS_TO_DISPLAY &&
-        activeToDisplay < activeList.length &&
-          <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
+        {activeList && activeList.length > RECORDS_TO_DISPLAY
+        && activeToDisplay < activeList.length
+          && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
         }
         <section className="learn-more">
           <Container textAlign="center">
@@ -54,17 +56,19 @@ class Offering extends Component {
             <SubscribeForNewsletter className="public-form" />
           </Container>
         </section>
-        {!loading &&
+        {!loading
+          && (
           <CampaignList
             loading={loading}
             campaigns={completed}
             locked={3}
             heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
           />
+          )
         }
         {completedList && completedList.length > RECORDS_TO_DISPLAY
-        && completedToDisplay < completedList.length &&
-        <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
+        && completedToDisplay < completedList.length
+        && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
         }
       </Aux>
     );

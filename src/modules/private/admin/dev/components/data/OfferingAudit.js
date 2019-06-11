@@ -13,9 +13,11 @@ export default class OfferingAudit extends Component {
   componentWillMount() {
     this.props.dataStore.resetOfferingAudit();
   }
+
   onSubmit = () => {
     this.props.dataStore.updateOfferingRepaymentsMeta();
   }
+
   render() {
     const { dataStore } = this.props;
     const {
@@ -49,34 +51,38 @@ export default class OfferingAudit extends Component {
                 </Form.Field>
               </Form.Group>
             </Form>
-            {outputMsg &&
+            {outputMsg
+              && (
               <Aux>
                 <Header as="h6">Output:</Header>
-                {get(outputMsg, 'type') === 'error' ?
-                  <p className="negative-text">{get(outputMsg, 'data')}</p> : get(outputMsg, 'data[0]') ?
-                    <div className="table-wrapper">
-                      <Table unstackable singleLine className="investment-details">
-                        <Table.Header>
-                          <Table.Row>
-                            <Table.HeaderCell>OfferingId</Table.HeaderCell>
-                            <Table.HeaderCell>Count</Table.HeaderCell>
-                            <Table.HeaderCell>Current Repaid Amount</Table.HeaderCell>
-                          </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                          {get(outputMsg, 'data').map(data => (
-                            <Table.Row key={data.offeringId}>
-                              <Table.Cell>{data.offeringId}</Table.Cell>
-                              <Table.Cell>{data.count}</Table.Cell>
-                              <Table.Cell>{data.currentRepaidAmount}</Table.Cell>
+                {get(outputMsg, 'type') === 'error'
+                  ? <p className="negative-text">{get(outputMsg, 'data')}</p> : get(outputMsg, 'data[0]')
+                    ? (
+                      <div className="table-wrapper">
+                        <Table unstackable singleLine className="investment-details">
+                          <Table.Header>
+                            <Table.Row>
+                              <Table.HeaderCell>OfferingId</Table.HeaderCell>
+                              <Table.HeaderCell>Count</Table.HeaderCell>
+                              <Table.HeaderCell>Current Repaid Amount</Table.HeaderCell>
                             </Table.Row>
+                          </Table.Header>
+                          <Table.Body>
+                            {get(outputMsg, 'data').map(data => (
+                              <Table.Row key={data.offeringId}>
+                                <Table.Cell>{data.offeringId}</Table.Cell>
+                                <Table.Cell>{data.count}</Table.Cell>
+                                <Table.Cell>{data.currentRepaidAmount}</Table.Cell>
+                              </Table.Row>
                             ))
                           }
-                        </Table.Body>
-                      </Table>
-                    </div> : null
+                          </Table.Body>
+                        </Table>
+                      </div>
+                    ) : null
                 }
               </Aux>
+              )
             }
           </Card.Description>
         </Card.Content>

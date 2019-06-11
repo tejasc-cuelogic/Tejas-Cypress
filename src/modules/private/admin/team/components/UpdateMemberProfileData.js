@@ -15,6 +15,7 @@ export default class UpdateMemberProfilePhoto extends Component {
   setData = (attr, value, field) => {
     this.props.teamStore.setProfilePhoto(attr, value, field);
   }
+
   uploadProfilePhoto = () => {
     // const backURL = `${this.props.refLink}/new`;
     const backURL = `${this.props.refLink}/${this.props.match.params.action}`;
@@ -99,4 +100,3 @@ export default class UpdateMemberProfilePhoto extends Component {
     );
   }
 }
-

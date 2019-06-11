@@ -18,10 +18,13 @@ const sortMe = (dataToSort, key) => {
 };
 export class EducationStore {
   @observable data = { KnowledgeBase: [], Faq: [] };
+
   @observable searchParam = { Faq: '', KnowledgeBase: '' };
+
   @observable selected = {
     slug: '', title: '', content: '', id: '',
   };
+
   @observable faqsList = [
     {
       id: 1,
@@ -65,11 +68,11 @@ export class EducationStore {
         });
       });
       const item = (!slug) ? this[meta[ref][0]][0][subItems][0] : tempItem;
-      this.selected = item ?
-        {
+      this.selected = item
+        ? {
           slug: item.slug, id: item.id, title: item[meta[ref][1]], content: item[meta[ref][2]],
-        } :
-        {};
+        }
+        : {};
     }
   }
 
@@ -84,8 +87,8 @@ export class EducationStore {
   }
 
   @computed get kbs() {
-    return (this.allData.KnowledgeBase.data &&
-      this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems
+    return (this.allData.KnowledgeBase.data
+      && this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems
     && clientSearch.search(
       sortMe(this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems, 'knowledgeBaseItemList'),
       this.searchParam.KnowledgeBase,

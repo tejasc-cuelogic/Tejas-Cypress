@@ -13,8 +13,11 @@ import {
 
 export class UpdateStore {
     @observable data = [];
+
     @observable filters = false;
+
     @observable currentUpdate = {};
+
     @observable requestState = {
       skip: 0,
       page: 1,
@@ -22,7 +25,9 @@ export class UpdateStore {
       displayTillIndex: 10,
       search: {},
     };
+
     @observable db;
+
     @observable PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
 
     @action
@@ -120,14 +125,14 @@ export class UpdateStore {
       client
         .mutate({
           mutation: id === 'new' ? newUpdate : editUpdate,
-          variables: id === 'new' ? { updatesInput: data } :
-            { ...{ updatesInput: data }, id },
+          variables: id === 'new' ? { updatesInput: data }
+            : { ...{ updatesInput: data }, id },
           refetchQueries: [{ query: allUpdates, variables }],
         })
         .then((res) => {
           if (isManager && !isAlreadyPublished && status !== 'DRAFT') {
-            const UpdateId = res.data.createOfferingUpdates ?
-              res.data.createOfferingUpdates.id : res.data.updateOfferingUpdatesInfo.id;
+            const UpdateId = res.data.createOfferingUpdates
+              ? res.data.createOfferingUpdates.id : res.data.updateOfferingUpdatesInfo.id;
             this.approveUpdate(UpdateId);
           } else {
             Helper.toast('Update added.', 'success');
@@ -172,6 +177,7 @@ export class UpdateStore {
     reset = () => {
       this.PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
     }
+
     @action
     pageRequest = ({ skip, page }) => {
       this.requestState.displayTillIndex = this.requestState.perPage * page;
@@ -189,13 +195,14 @@ export class UpdateStore {
     }
 
     @computed get updates() {
-      return (this.db && this.db.length &&
-        this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+      return (this.db && this.db.length
+        && this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
     }
 
     @computed get loadingCurrentUpdate() {
       return this.currentUpdate.loading;
     }
+
     @computed get count() {
       return (this.db && this.db.length) || 0;
     }

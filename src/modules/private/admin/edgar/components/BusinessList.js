@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Table } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { DateTimeFormat } from './../../../../../theme/shared';
+import { DateTimeFormat } from '../../../../../theme/shared';
 
 const BusinessList = observer(props => (
   <Card fluid>

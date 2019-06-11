@@ -10,9 +10,11 @@ import { ListErrors } from '../../../../../../theme/shared';
 @observer
 export default class AddNewTier extends Component {
   state = { showError: false }
+
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
+
   handleAddTier = () => {
     const { offer } = this.props.offeringsStore;
     const bonusRewardsTiers = get(offer, 'rewardsTiers') || [];
@@ -25,6 +27,7 @@ export default class AddNewTier extends Component {
       this.props.history.push(this.props.refLink);
     }
   }
+
   render() {
     const { ADD_NEW_TIER_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_TIER_FRM';
@@ -38,7 +41,8 @@ export default class AddNewTier extends Component {
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleAddTier}>
             <div className="featured-section">
-              {(!earlyBird || earlyBird.quantity === 0) &&
+              {(!earlyBird || earlyBird.quantity === 0)
+                && (
                 <FormCheckbox
                   fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
                   name="isEarlyBirds"
@@ -46,39 +50,45 @@ export default class AddNewTier extends Component {
                   defaults
                   containerclassname="ui relaxed list"
                 />
+                )
               }
               {
-                ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS') ?
-                  <Aux>
+                ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS')
+                  ? (
+                    <Aux>
+                      <MaskedInput
+                        currency
+                        prefix="$"
+                        name="amountForEarlyBird"
+                        fielddata={ADD_NEW_TIER_FRM.fields.amountForEarlyBird}
+                        changed={(values, field) => maskChange(values, formName, field)}
+                      />
+                      <MaskedInput
+                        number
+                        name="earlyBirdQuantity"
+                        fielddata={ADD_NEW_TIER_FRM.fields.earlyBirdQuantity}
+                        changed={(values, field) => maskChange(values, formName, field)}
+                      />
+                    </Aux>
+                  )
+                  : (
                     <MaskedInput
+                      maxlength={12}
                       currency
                       prefix="$"
-                      name="amountForEarlyBird"
-                      fielddata={ADD_NEW_TIER_FRM.fields.amountForEarlyBird}
+                      name="amountForThisTier"
+                      fielddata={ADD_NEW_TIER_FRM.fields.amountForThisTier}
                       changed={(values, field) => maskChange(values, formName, field)}
                     />
-                    <MaskedInput
-                      number
-                      name="earlyBirdQuantity"
-                      fielddata={ADD_NEW_TIER_FRM.fields.earlyBirdQuantity}
-                      changed={(values, field) => maskChange(values, formName, field)}
-                    />
-                  </Aux>
-                  :
-                  <MaskedInput
-                    maxlength={12}
-                    currency
-                    prefix="$"
-                    name="amountForThisTier"
-                    fielddata={ADD_NEW_TIER_FRM.fields.amountForThisTier}
-                    changed={(values, field) => maskChange(values, formName, field)}
-                  />
+                  )
               }
             </div>
-            {this.state.showError &&
+            {this.state.showError
+              && (
               <Message error className="mt-30">
                 <ListErrors errors={['The entered tier is already existed.']} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button primary content="Add new bonus reward" disabled={!ADD_NEW_TIER_FRM.meta.isValid} />

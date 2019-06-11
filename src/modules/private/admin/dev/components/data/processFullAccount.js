@@ -11,9 +11,11 @@ export default class ProcessFullAccount extends Component {
   componentWillMount() {
     this.props.dataStore.resetForm('PROCESS_FULL_ACCOUNT_META_FRM');
   }
+
   onSubmit = () => {
     this.props.dataStore.processFullInvestorAccountMeta();
   }
+
   render() {
     const { dataStore } = this.props;
     const {
@@ -46,7 +48,8 @@ export default class ProcessFullAccount extends Component {
                   showerror
                   fielddata={PROCESS_FULL_ACCOUNT_META_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'PROCESS_FULL_ACCOUNT_META_FRM')}
-                />))
+                />
+              ))
               }
               <Form.Field width={16}>
                 <Button primary content="Submit" disabled={!PROCESS_FULL_ACCOUNT_META_FRM.meta.isValid || inProgress.processFullAccount} loading={inProgress.processFullAccount} />

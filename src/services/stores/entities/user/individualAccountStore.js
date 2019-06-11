@@ -11,13 +11,21 @@ import Helper from '../../../../helper/utility';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
+
   @observable submited = false;
+
   @observable isManualLinkBankSubmitted = false;
+
   @observable individualAccId = null;
+
   @observable showProcessingModal = false;
+
   @observable isFormSubmitted = false;
+
   retry = 0;
+
   retryGoldStar = 0;
+
   @action
   setIsManualLinkBankSubmitted = (status) => {
     this.isManualLinkBankSubmitted = status;
@@ -28,21 +36,20 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
-  createIndividualGoldStarInvestor = (accountId, userId = userStore.currentUser.sub) =>
-    new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: createIndividualGoldStarInvestor,
-          variables: {
-            userId,
-            accountId,
-          },
-        })
-        .then(res => resolve(res))
-        .catch((err) => {
-          reject(err);
-        });
-    });
+  createIndividualGoldStarInvestor = (accountId, userId = userStore.currentUser.sub) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: createIndividualGoldStarInvestor,
+        variables: {
+          userId,
+          accountId,
+        },
+      })
+      .then(res => resolve(res))
+      .catch((err) => {
+        reject(err);
+      });
+  });
 
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
@@ -83,6 +90,7 @@ class IndividualAccountStore {
         });
     });
   }
+
   @action
   setFieldValue = (field, val) => {
     this[field] = val;
@@ -123,6 +131,7 @@ class IndividualAccountStore {
     };
     return data;
   }
+
   createAccount = (currentStep) => {
     uiStore.setProgress();
     const mutation = upsertInvestorAccount;
@@ -182,8 +191,7 @@ class IndividualAccountStore {
       if (!isEmpty(userData) && !this.formStatus) {
         const account = find(userData.roles, { name: 'individual' });
         if (account && account.details) {
-          bankAccountStore.formAddFunds.fields.value.value =
-          account.details.initialDepositAmount;
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
             bankAccountStore.setPlaidAccDetails(plaidAccDetails);
@@ -191,8 +199,7 @@ class IndividualAccountStore {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
               if (details.linkedBank && details.linkedBank[f] !== '') {
-                bankAccountStore.formLinkBankManually.fields[f].value =
-                details.linkedBank[f];
+                bankAccountStore.formLinkBankManually.fields[f].value = details.linkedBank[f];
                 return bankAccountStore.formLinkBankManually.fields[f];
               }
               return null;

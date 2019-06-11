@@ -16,17 +16,20 @@ import UserInvestorDetails from '../../../../../../investor/settings/components/
 @observer
 export default class Basic extends Component {
   state = { displayMode: true };
+
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setAddressCheck();
   }
+
   updateMode = (e, val) => {
     e.preventDefault();
     this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true, this.state.displayMode);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
   }
+
   updateUserData = (e) => {
     e.preventDefault();
     this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
@@ -34,6 +37,7 @@ export default class Basic extends Component {
     })
       .catch(() => this.setState({ displayMode: true }));
   }
+
   render() {
     const {
       detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, setAddressFieldsForProfile,
@@ -48,23 +52,42 @@ export default class Basic extends Component {
         <Header as="h4">
           Basic Profile Info
           <Button.Group floated="right">
-            {this.state.displayMode ?
-              <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link> :
-              <Aux>
-                <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
-                {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid &&
-                  <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
+            {this.state.displayMode
+              ? (
+                <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10">
+                  <small>
+                    <Icon className="ns-pencil" />
+                    {' '}
+Edit profile data
+                  </small>
+                </Link>
+              )
+              : (
+                <Aux>
+                  <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
+                  {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
+                  && (
+                  <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}>
+                    <small>
+                      <Icon name="save" />
+Update
+                    </small>
+                  </Link>
+                  )
                 }
-              </Aux>
+                </Aux>
+              )
             }
             <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
           </Button.Group>
         </Header>
-        {get(details, 'locked.lock') === 'LOCKED' &&
+        {get(details, 'locked.lock') === 'LOCKED'
+        && (
         <Aux>
           <LockedInformation details={details} />
           <Divider />
         </Aux>
+        )
         }
         <Header as="h6">Personal Info</Header>
         <Form.Group widths={2}>
@@ -106,25 +129,28 @@ export default class Basic extends Component {
               changed={(e, result) => formChange(e, result, formName)}
               displayMode={displayMode}
             />
-            ))
+          ))
           }
-          {displayMode ?
-            <FormInput
-              key="ssn"
-              name="ssn"
-              fielddata={USER_BASIC.fields.ssn}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-            :
-            <MaskedInput
-              name="ssn"
-              fielddata={USER_BASIC.fields.ssn}
-              ssn
-              changed={(values, field) => maskChange(values, formName, field)}
-              displayMode={displayMode}
-              showerror
-            />
+          {displayMode
+            ? (
+              <FormInput
+                key="ssn"
+                name="ssn"
+                fielddata={USER_BASIC.fields.ssn}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            )
+            : (
+              <MaskedInput
+                name="ssn"
+                fielddata={USER_BASIC.fields.ssn}
+                ssn
+                changed={(values, field) => maskChange(values, formName, field)}
+                displayMode={displayMode}
+                showerror
+              />
+            )
           }
           <MaskedInput
             name="dateOfBirth"
@@ -154,7 +180,7 @@ export default class Basic extends Component {
               changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
               displayMode={displayMode}
             />
-            ))
+          ))
           }
           <MaskedInput
             displayMode={displayMode}
@@ -184,7 +210,7 @@ export default class Basic extends Component {
               changed={(e, result) => formChange(e, result, formName)}
               displayMode={displayMode}
             />
-            ))
+          ))
           }
           <MaskedInput
             displayMode={displayMode}

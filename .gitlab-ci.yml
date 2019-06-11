@@ -25,8 +25,6 @@ before_script:
   - export AWS_SESSION_TOKEN=$(echo "$creds_json" | jq .Credentials.SessionToken|tr -d '"')
 #---------------------------------Anchors--------------------------------------
 .build_template: &build_definition
-#  tags:
-#    - ns-client
   stage: build
   artifacts:
     paths:
@@ -34,8 +32,6 @@ before_script:
     expire_in: 1 day
 
 .deploy_template: &deploy_defination
-#  tags:
-#    - ns-client
   stage: deploy
 
 .review_template: &review_defination
@@ -43,13 +39,12 @@ before_script:
     refs:
       - branches
   except:
-    - master
-    - dev
     - predev
+    - dev
     - qa
     - demo
-#  tags:
-#    - ns-client
+    - secops
+    - master
 
 #.before_script_template: &before_script_defination
 #  before_script:
@@ -64,9 +59,9 @@ build:review:
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
-    - .npm
-    - node_modules/
-    - /root/.cache/Cypress
+      - .npm
+      - node_modules/
+      - /root/.cache/Cypress
   # <<: *before_script_defination
   script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
@@ -103,7 +98,7 @@ delete:review:
     name: $CI_COMMIT_REF_NAME
     action: stop
   dependencies: []
- 
+
 #Test review environment
 test:review:
   <<: *review_defination
@@ -114,11 +109,39 @@ test:review:
     expire_in: 4 hrs
     when: always
     paths:
-    - cypress/screenshots
-    - cypress/videos
+      - cypress/screenshots
+      - cypress/videos
   script:
     - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
+
+#---------------------------------PRE DEV-------------------------------------------
+build:predev:
+  <<: *build_definition
+  only:
+    refs:
+      - predev
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+deploy:predev:
+  <<: *deploy_defination
+  only:
+    refs:
+      - predev
+  environment:
+    name: predev
+    url: http://$PREDEV_URL
+  script:
+    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $PREDEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
+    - aws cloudfront create-invalidation --distribution-id $PREDEV_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:predev
+
 #---------------------------------Dev-------------------------------------------
 
 #Building code
@@ -130,17 +153,6 @@ build:dev:
   # <<: *before_script_defination
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
-    - npm install
-    - npm run build
-
-build:predev:
-  <<: *build_definition
-  only:
-    refs:
-      - predev
-  # <<: *before_script_defination
-  script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build
 
@@ -205,26 +217,11 @@ test:dev:
     expire_in: 1 day
     when: always
     paths:
-    - cypress/screenshots
-    - cypress/videos
+      - cypress/screenshots
+      - cypress/videos
   script:
     - npm install
     - CYPRESS_baseUrl=https://$DEV_URL $(npm bin)/cypress run
-
-deploy:predev:
-  <<: *deploy_defination
-  only:
-    refs:
-      - predev
-  environment:
-    name: dev
-    url: http://$PREDEV_URL
-  script:
-    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - cd ./scripts/cicd/ && sh ./deployApp.sh $PREDEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
-    - aws cloudfront create-invalidation --distribution-id $PREDEV_DISTRIBUTION_ID --paths "/*"
-  dependencies:
-    - build:predev
 
 
 #---------------------------------Qa--------------------------------------------

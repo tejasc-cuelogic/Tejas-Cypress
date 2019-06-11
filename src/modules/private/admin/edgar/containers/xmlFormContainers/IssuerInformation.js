@@ -3,7 +3,7 @@ import { Form, Card, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../../../constants/business';
-import { FormInput, FormSelect, MaskedInput } from './../../../../../../theme/form';
+import { FormInput, FormSelect, MaskedInput } from '../../../../../../theme/form';
 
 @inject('businessStore')
 @withRouter

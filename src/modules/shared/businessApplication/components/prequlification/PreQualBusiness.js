@@ -68,7 +68,8 @@ export default class PreQualBusiness extends Component {
           <Grid>
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
-                {getFranchiseCondition &&
+                {getFranchiseCondition
+                  && (
                   <Aux>
                     <Header as="h6" content="Are you an existing or previous franchise holder?*" />
                     <FormRadioGroup
@@ -80,8 +81,10 @@ export default class PreQualBusiness extends Component {
                     />
                     <Divider section hidden />
                   </Aux>
+                  )
                 }
-                {getBusinessTypeCondtion &&
+                {getBusinessTypeCondtion
+                  && (
                   <Aux>
                     <Header as="h6" content="How long has the existing business been operating?" />
                     <Form.Group widths="equal">
@@ -104,6 +107,7 @@ export default class PreQualBusiness extends Component {
                     </Form.Group>
                     <Divider section hidden />
                   </Aux>
+                  )
                 }
                 <Experience
                   fields={fields}
@@ -125,7 +129,8 @@ export default class PreQualBusiness extends Component {
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields}>
           <Grid>
-            {getBusinessTypeCondtion &&
+            {getBusinessTypeCondtion
+              && (
               <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
                 <Header as={hideFields ? 'h4' : 'h3'}>
                   Previous year
@@ -153,6 +158,7 @@ export default class PreQualBusiness extends Component {
                   }
                 </div>
               </Grid.Column>
+              )
             }
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <Header as={hideFields ? 'h4' : 'h3'}>

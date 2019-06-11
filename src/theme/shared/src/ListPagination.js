@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ListPagination = props => {
+const ListPagination = (props) => {
   if (props.totalPagesCount < 2) {
     return null;
   }
@@ -14,15 +14,15 @@ const ListPagination = props => {
     <nav>
       <ul className="pagination">
         {
-          range.map(v => {
+          range.map((v) => {
             const isCurrent = v === props.currentPage;
-            const onClick = ev => {
+            const onClick = (ev) => {
               ev.preventDefault();
               props.onSetPage(v);
             };
             return (
               <li
-                className={ isCurrent ? 'page-item active' : 'page-item' }
+                className={isCurrent ? 'page-item active' : 'page-item'}
                 onClick={onClick}
                 key={v.toString()}
               >

@@ -27,8 +27,8 @@ const RewardList = (props) => {
             <Table.Body>
               {props.data.length === 0 ? (
                 <Table.Row><Table.Cell>No record to display !</Table.Cell></Table.Row>
-                ) :
-                props.data.map(data => (
+              )
+                : props.data.map(data => (
                   <Table.Row key={data.id}>
                     <Table.Cell>{data.name}</Table.Cell>
                     <Table.Cell collapsing>{Helper.CurrencyFormat(data.amount)}</Table.Cell>

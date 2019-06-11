@@ -18,13 +18,16 @@ class Updates extends Component {
     const updates = campaign && campaign.updates ? campaign.updates : [];
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
   }
+
   componentDidMount() {
     if (!isMobile) {
       const sel = 'anchor';
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }
   }
+
   handleClose = () => this.props.history.goBack();
+
   render() {
     const { campaign } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
@@ -39,10 +42,11 @@ class Updates extends Component {
           Updates
           <span className="anchor" />
         </Header>
-        {updates && updates.length ?
-          <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
-            {updates && updates.length &&
-              updates.map((dataItem, index) => (
+        {updates && updates.length
+          ? (
+            <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
+              {updates && updates.length
+              && updates.map((dataItem, index) => (
                 <VerticalTimelineElement
                   position="right"
                   className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updated.date !== dataItem.updated.date ? '' : 'hide-date'}`}
@@ -50,25 +54,26 @@ class Updates extends Component {
                     index === 0 ? {
                       background: '#20C86D', height: 30, width: 30, marginLeft: -15,
                     } : {}}
-                  date={(index - 1) > 0 ?
-                    updates[index - 1].updated.date !== dataItem.updated.date ?
-                      moment(updates[index].updated.date).format('MMMM YYYY') : null : null}
+                  date={(index - 1) > 0
+                    ? updates[index - 1].updated.date !== dataItem.updated.date
+                      ? moment(updates[index].updated.date).format('MMMM YYYY') : null : null}
                 >
                   <Item.Group>
                     <Item>
                       <div className="ui image avatar-image">
-                        {companyAvatarUrl && companyAvatarUrl.length ?
-                          <Image64 srcUrl={companyAvatarUrl} circular />
-                         : <UserAvatar UserInfo={{}} />
+                        {companyAvatarUrl && companyAvatarUrl.length
+                          ? <Image64 srcUrl={companyAvatarUrl} circular />
+                          : <UserAvatar UserInfo={{}} />
                       }
                       </div>
-                      <Item.Content verticalAlign="middle" className="grey-header" >
-                        {(dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId) ?
-                        get(campaign, 'keyTerms.shorthandBusinessName')
-                        : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info &&
-                          dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo &&
-                            dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
-                        <br /><span>{moment(dataItem.updated.date).format('ll')}</span>
+                      <Item.Content verticalAlign="middle" className="grey-header">
+                        {(dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId)
+                          ? get(campaign, 'keyTerms.shorthandBusinessName')
+                          : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info
+                          && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
+                            && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
+                        <br />
+<span>{moment(dataItem.updated.date).format('ll')}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>
@@ -77,19 +82,21 @@ class Updates extends Component {
                     >
                       <HtmlEditor
                         readOnly
-                        content={dataItem.content.length <= 805 ?
-                          dataItem.content : dataItem.content.substring(0, 805)}
+                        content={dataItem.content.length <= 805
+                          ? dataItem.content : dataItem.content.substring(0, 805)}
                       />
-                      {dataItem.content.length > 805 ?
-                        <a
-                          href
-                          onClick={
+                      {dataItem.content.length > 805
+                        ? (
+                          <a
+                            href
+                            onClick={
                             () => this.props.campaignStore.handleReadMoreReadLess(index)
                           }
-                          id={index}
-                        >
+                            id={index}
+                          >
                           Read More
-                        </a> : ''
+                          </a>
+                        ) : ''
                       }
                     </div>
                     <div
@@ -110,9 +117,9 @@ class Updates extends Component {
                 </VerticalTimelineElement>
               ))
             }
-          </VerticalTimeline>
-          :
-          <InlineLoader text="No Updates" className="bg-offwhite" />
+            </VerticalTimeline>
+          )
+          : <InlineLoader text="No Updates" className="bg-offwhite" />
         }
       </div>
     );

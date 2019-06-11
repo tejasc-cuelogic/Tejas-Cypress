@@ -9,7 +9,7 @@ const AccountTypes = ({
   renderAccType,
   handleAccTypeChange,
 }) => (
-  <Modal open closeIcon onClose={close} closeOnDimmerClick={false} >
+  <Modal open closeIcon onClose={close} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">What type of Investment Account would you like to start?</Header>
     </Modal.Header>

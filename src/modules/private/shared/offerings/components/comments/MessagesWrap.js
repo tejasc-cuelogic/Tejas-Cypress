@@ -17,10 +17,12 @@ export default class MessagesWrap extends Component {
     e.preventDefault();
     this.props.messageStore.setCommentForEdit(id, comment, scope);
   }
+
   deleteCommentHandler = (id) => {
     this.props.uiStore.setConfirmBox('', '', '', false);
     this.props.messageStore.deleteMessage(id);
   }
+
   render() {
     const {
       uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin,
@@ -43,8 +45,8 @@ export default class MessagesWrap extends Component {
           deleteCommentHandler={this.confirmDelete}
           isAdmin={isAdmin}
         />
-        {!passedProcessingDate &&
-        <Compose isIssuer={isIssuer} />
+        {!passedProcessingDate
+        && <Compose isIssuer={isIssuer} />
         }
         <Confirm
           header="Confirm"

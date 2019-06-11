@@ -18,12 +18,15 @@ class InvestorSignup extends Component {
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+
   handleIsEmailExist = (email) => {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
@@ -46,6 +49,7 @@ class InvestorSignup extends Component {
       });
     }
   };
+
   render() {
     const {
       SIGNUP_FRM, signupChange, pwdInputType, currentScore,
@@ -68,7 +72,9 @@ class InvestorSignup extends Component {
       >
         <Modal.Header className="center-align signup-header">
           <Header as="h3" className="mb-0">
-            Sign up as {' '}
+            Sign up as
+            {' '}
+            {' '}
             {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'an Investor' : 'Business Owner'}
           </Header>
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
@@ -129,10 +135,12 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
-            {errors &&
+            {errors
+              && (
               <Message error textAlign="left" className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled} />
@@ -140,7 +148,11 @@ class InvestorSignup extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
+          <p>
+            <b>Already have an account?</b>
+            {' '}
+            <Link to="/auth/login">Log in</Link>
+          </p>
         </Modal.Actions>
       </Modal>
     );

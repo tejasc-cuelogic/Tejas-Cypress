@@ -41,8 +41,11 @@ import Helper from '../../../helper/utility';
  */
 export class Auth {
   defaultRole = 'investor';
+
   userPool = null;
+
   cognitoUser = null;
+
   constructor() {
     Amplify.configure({
       Auth: {
@@ -127,8 +130,7 @@ export class Auth {
       IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
       Logins: {},
     };
-    identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] =
-      jwtToken;
+    identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] = jwtToken;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
     return AWS.config.credentials.refresh((error) => {
@@ -377,6 +379,7 @@ export class Auth {
       window.analytics.reset();
     }
   }
+
   shutdownIntercom = () => {
     try {
       if (window.Intercom) {
@@ -407,6 +410,7 @@ export class Auth {
     this.segmentTrackLogout(logoutType);
     this.clearMobxStore();
   }
+
   /**
    * @desc Logs out user and clears all tokens stored in browser's local storage
    * @return null

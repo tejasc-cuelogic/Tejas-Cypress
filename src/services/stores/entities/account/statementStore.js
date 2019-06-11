@@ -8,8 +8,11 @@ import { uiStore, userDetailsStore, transactionStore } from '../../index';
 
 export class StatementStore {
   @observable data = [];
+
   @observable tranStore = [];
+
   @observable pdfLinkData = {};
+
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -17,7 +20,9 @@ export class StatementStore {
     displayTillIndex: 10,
     search: {},
   };
+
   @observable taxFormsCount = 0;
+
   @observable isAdmin = false;
 
   @action
@@ -55,9 +60,9 @@ export class StatementStore {
   generateMonthlyStatementsPdf = (timeStamp) => {
     const year = parseFloat(moment(timeStamp, 'MMM YYYY').format('YYYY'));
     const month = parseFloat(moment(timeStamp, 'MMM YYYY').format('MM'));
-    const account = this.isAdmin ?
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
-      userDetailsStore.currentActiveAccountDetails;
+    const account = this.isAdmin
+      ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
+      : userDetailsStore.currentActiveAccountDetails;
     const { userDetails, getDetailsOfUser } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
@@ -128,19 +133,19 @@ export class StatementStore {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    this.requestState.skip = (skip === pageWiseCount) ?
-      pageWiseCount - this.requestState.perPage : skip;
+    this.requestState.skip = (skip === pageWiseCount)
+      ? pageWiseCount - this.requestState.perPage : skip;
   }
 
   @computed get monthlyStatements() {
-    return (this.allStatements && this.allStatements.length &&
-      this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return (this.allStatements && this.allStatements.length
+      && this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get taxForms() {
-    const { taxStatement } = this.isAdmin ?
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
-      userDetailsStore.currentActiveAccountDetails.details;
+    const { taxStatement } = this.isAdmin
+      ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details
+      : userDetailsStore.currentActiveAccountDetails.details;
     this.taxFormsCount = (taxStatement && taxStatement.length && orderBy(taxStatement, ['year'], ['desc'])
       .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
     return this.taxFormsCount;
@@ -155,18 +160,17 @@ export class StatementStore {
   }
 
   taxFormCount = () => {
-    const { taxStatement } = this.isAdmin ?
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
-      userDetailsStore.currentActiveAccountDetails.details;
+    const { taxStatement } = this.isAdmin
+      ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details
+      : userDetailsStore.currentActiveAccountDetails.details;
     return (taxStatement && taxStatement.length) || 0;
   }
 
   getTaxFormCountInNav = (accountType) => {
-    const accDetails = find(userDetailsStore.userDetails.roles, account =>
-      account.name === accountType &&
-      account.name !== 'investor' &&
-      account && account.details &&
-        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+    const accDetails = find(userDetailsStore.userDetails.roles, account => account.name === accountType
+      && account.name !== 'investor'
+      && account && account.details
+        && (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
     const taxStatement = get(accDetails, 'details.taxStatement');
     return (taxStatement && taxStatement.length) || 0;
   }

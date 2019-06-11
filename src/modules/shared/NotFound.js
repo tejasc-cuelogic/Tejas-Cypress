@@ -14,8 +14,15 @@ export default class NotFound extends React.Component {
           Yeesh. Well, this is awkward. Either this page doesn&apos;t exist or you
           don&apos;t have permission to access it.
           <br />
-          Either way, let&apos;s head to the <Link to="/">HOME</Link> page or{' '}
-          <Link to="/offerings">BROWSE</Link> some campaigns.
+          Either way, let&apos;s head to the
+          {' '}
+          <Link to="/">HOME</Link>
+          {' '}
+page or
+          {' '}
+          <Link to="/offerings">BROWSE</Link>
+          {' '}
+some campaigns.
         </p>
       </div>
     );

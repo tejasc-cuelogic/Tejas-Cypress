@@ -12,6 +12,7 @@ export default class VerifyBankUpdate extends Component {
     const redirectUrl = `/app/account-details/${accountType}/bank-accounts`;
     this.props.history.push(redirectUrl);
   }
+
   render() {
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>

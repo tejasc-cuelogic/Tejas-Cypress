@@ -11,9 +11,11 @@ export default class ConfirmModel extends Component {
   componentWillMount() {
     this.props.crowdpayStore.resetModalForm();
   }
+
   handleBack = () => {
     this.props.history.push(`${this.props.refLink}`);
   }
+
   handleConfirm = () => {
     const { userId, accountId, action } = this.props.match.params;
     const availableActions = ['APPROVE', 'DECLINE'];
@@ -26,6 +28,7 @@ export default class ConfirmModel extends Component {
       this.props.history.push(`${this.props.refLink}`);
     }
   }
+
   render() {
     const { formChange, CONFIRM_CROWDPAY_FRM, loadingCrowdPayIds } = this.props.crowdpayStore;
     const actionValue = this.props.match.params.action;
@@ -33,7 +36,10 @@ export default class ConfirmModel extends Component {
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Header className="signup-header">
-          <Header textAlign="center" as="h3">Mark as {actionValue === 'APPROVE' ? 'approved' : 'declined'}</Header>
+          <Header textAlign="center" as="h3">
+Mark as
+            {actionValue === 'APPROVE' ? 'approved' : 'declined'}
+          </Header>
         </Modal.Header>
         <Modal.Content>
           <Form>
