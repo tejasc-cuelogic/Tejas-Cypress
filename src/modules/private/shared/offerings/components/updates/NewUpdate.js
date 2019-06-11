@@ -160,6 +160,7 @@ export default class NewUpdate extends Component {
                   <Card.Content>
                     <Header as="h4">Who’s this update for?</Header>
                     <FormRadioGroup
+                      readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                       fielddata={PBUILDER_FRM.fields.scope}
                       name="scope"
                       changed={(e, result) => UpdateChange(e, result)}
@@ -170,6 +171,7 @@ export default class NewUpdate extends Component {
                     {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                       <Checkbox
                         name="tiers"
+                        readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                         value={rewardTier}
                         onChange={(e, result) => UpdateChange(e, result)}
                         checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
