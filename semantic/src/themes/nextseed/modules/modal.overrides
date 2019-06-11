@@ -636,7 +636,7 @@
             &.scrolling {
                 max-height: calc(100vh - 8em);
                 border-radius: 0;
-                padding-bottom: @42px;
+                margin-bottom: @42px;
                 .ui.attached.bottom.button {
                     border-radius: 0;
                     position: absolute; 
