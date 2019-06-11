@@ -8,6 +8,7 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @withRouter
 export default class PayOffChart extends Component {
   formatY = item => Helper.CurrencyFormat(item);
+
   render() {
     const data = this.props.chartData;
     if (data.length === 0) {

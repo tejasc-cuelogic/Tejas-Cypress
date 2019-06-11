@@ -13,16 +13,20 @@ export default class UploadDocument extends Component {
       this.props.accreditationStore.setDefaultCheckboxVal();
     }
   }
+
   onFileDrop = (files, field) => {
     const { params } = this.props.match;
     this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Assets', '', '', '', params.accountId);
   }
+
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   confirmRemoveDoc = (e, name) => {
     this.props.uiStore.setConfirmBox(name);
   }
+
   handleDelDoc = (field, index) => {
     this.props.accreditationStore.removeUploadedData('ASSETS_UPLOAD_DOC_FORM', field, index, this.props.accountType, this.props.match.params.accountId);
   }
@@ -43,7 +47,8 @@ export default class UploadDocument extends Component {
             onremove={this.handleDelDoc}
             containerclassname="fluid"
           />
-          {!this.props.isEntity &&
+          {!this.props.isEntity
+            && (
             <FormCheckbox
               fielddata={ASSETS_UPLOAD_DOC_FORM.fields.isAccepted}
               name="isAccepted"
@@ -51,6 +56,7 @@ export default class UploadDocument extends Component {
               defaults
               containerclassname="ui relaxed list"
             />
+            )
           }
           <Divider hidden />
           <div className="center-align">

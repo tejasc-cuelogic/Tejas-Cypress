@@ -25,12 +25,14 @@ export default class Performance extends Component {
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
-          {!hideFields &&
+          {!hideFields
+            && (
             <FormElementWrap
               as="h1"
               header="Performance"
               subHeader="Quickly, safely and accurately submit your business information."
             />
+            )
           }
           <FormElementWrap
             hideFields={hideFields}
@@ -63,12 +65,14 @@ export default class Performance extends Component {
             hideFields={hideFields}
             noDivider={hideFields || formReadOnlyMode}
             header="Sources & Uses"
-            subHeader={
+            subHeader={(
               <span>
-                Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the <br />
+                Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the
+                {' '}
+                <br />
                 proposed NextSeed amount) for your project in addition to the proposed uses of that capital.
               </span>
-            }
+)}
           >
             <Grid stackable columns="equal">
               <Grid.Column key="sourcesAndUses">
@@ -86,7 +90,8 @@ export default class Performance extends Component {
               </Grid.Column>
             </Grid>
           </FormElementWrap>
-          {currentApplicationType === 'business' &&
+          {currentApplicationType === 'business'
+            && (
             <FormElementWrap
               hideFields={hideFields}
               noDivider={hideFields || formReadOnlyMode}
@@ -94,7 +99,8 @@ export default class Performance extends Component {
               subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
             >
               <Grid>
-                {getBusinessTypeCondtion &&
+                {getBusinessTypeCondtion
+                  && (
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                     <Header as={hideFields ? 'h6' : 'h5'} content="Prior Year" />
                     <div className="field-wrap">
@@ -116,6 +122,7 @@ export default class Performance extends Component {
                       }
                     </div>
                   </Grid.Column>
+                  )
                 }
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                   <Header as={hideFields ? 'h6' : 'h5'} content="Future Year" />
@@ -140,6 +147,7 @@ export default class Performance extends Component {
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
+            )
           }
           <AppNavigation
             hideFields={hideFields}

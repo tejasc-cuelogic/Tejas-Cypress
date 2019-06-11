@@ -88,6 +88,7 @@ export class Utility {
       return '$0.00';
     }
   }
+
   CurrencyFormat = (amount, fraction = 2, maxFraction = 2) => new Intl.NumberFormat('en-US', {
     style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: maxFraction,
   }).format(amount)
@@ -149,16 +150,19 @@ export class Utility {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
+
   phoneNumberFormatter = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
+
   getDaysfromNow = (days) => {
     const d = new Date();
     let daysFromNow = d.setDate(d.getDate() + days);
     daysFromNow = new Date(daysFromNow).toISOString();
     return daysFromNow;
   }
+
   getLastThreeYearsLabel = () => {
     const currentYear = parseInt(moment().format('YYYY'), 10);
     return {
@@ -169,8 +173,8 @@ export class Utility {
 
   otpShield = () => {
     try {
-      const OtpItems = document.getElementsByClassName('otp-field')[0] ?
-        document.getElementsByClassName('otp-field')[0]
+      const OtpItems = document.getElementsByClassName('otp-field')[0]
+        ? document.getElementsByClassName('otp-field')[0]
           .getElementsByTagName('input') : '';
       for (let i = 0; i < OtpItems.length; i += 1) {
         OtpItems[i].addEventListener('keydown', (e) => {
@@ -209,6 +213,7 @@ export class Utility {
       return false;
     }
   }
+
   b64toBlob = (data, sliceSize = 512) => {
     const block = data.split(';');
     // Get the content type of the image
@@ -232,6 +237,7 @@ export class Utility {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
+
   removeSsn = () => {
     try {
       document.getElementsByName('ssn')[0].value = '';

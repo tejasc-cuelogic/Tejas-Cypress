@@ -11,7 +11,9 @@ import Helper from '../../../../../helper/utility';
 
 export class OfferingInvestorStore {
   @observable data = [];
+
   @observable filters = false;
+
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -19,7 +21,9 @@ export class OfferingInvestorStore {
     displayTillIndex: 10,
     search: {},
   };
+
   @observable db;
+
   @observable sortOrder = {
     column: null,
     direction: 'asc',
@@ -76,16 +80,16 @@ export class OfferingInvestorStore {
   }
 
   @computed get allInvestorList() {
-    return (this.data.data && this.data.data.getInvestorListForOffering &&
-      toJS(this.data.data.getInvestorListForOffering)) || [];
+    return (this.data.data && this.data.data.getInvestorListForOffering
+      && toJS(this.data.data.getInvestorListForOffering)) || [];
   }
 
   @computed get investorLists() {
     if (this.sortOrder.column && this.sortOrder.direction && this.db) {
       return orderBy(
         this.db,
-        [user => (this.sortOrder.column === 'investmentDate' ? moment(user[this.sortOrder.column]).unix() : this.sortOrder.column === 'amount' ? user[this.sortOrder.column] :
-          user[this.sortOrder.column] && user[this.sortOrder.column].toString().toLowerCase())],
+        [user => (this.sortOrder.column === 'investmentDate' ? moment(user[this.sortOrder.column]).unix() : this.sortOrder.column === 'amount' ? user[this.sortOrder.column]
+          : user[this.sortOrder.column] && user[this.sortOrder.column].toString().toLowerCase())],
         [this.sortOrder.direction],
       );
     }

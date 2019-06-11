@@ -5,9 +5,9 @@ import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { authActions } from '../../services/actions';
-import { privateRoutes } from '../../modules/routes';
+import { privateRoutes } from '../routes';
 import { InlineLoader } from '../../theme/shared';
-import SidebarLeftOverlay from './../../theme/layout/SidebarLeftOverlay';
+import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
 import NotFound from '../shared/NotFound';
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore')
@@ -32,8 +32,8 @@ export default class Private extends React.Component {
           <Route
             path={`/app/${item.to}`}
             component={Loadable({
-              loader: () => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]] :
-              item.path}`),
+              loader: () => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]]
+                : item.path}`),
               loading() {
                 return <InlineLoader />;
               },
@@ -84,14 +84,14 @@ export default class Private extends React.Component {
               <Route
                 exact={route.exact ? route.exact : false}
                 path={route.path}
-                component={(route.auth) ?
-                  route.auth(route.component, this.props) : route.component}
+                component={(route.auth)
+                  ? route.auth(route.component, this.props) : route.component}
                 key={route.path}
               />
             ))}
             {Object.keys(routes).map(route => routes[route])}
-            {myRoutes.length > 0 ? <Route component={NotFound} /> :
-            <Route component={InlineLoader} />}
+            {myRoutes.length > 0 ? <Route component={NotFound} />
+              : <Route component={InlineLoader} />}
           </Switch>
         </SidebarLeftOverlay>
       );

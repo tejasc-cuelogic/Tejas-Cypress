@@ -18,6 +18,7 @@ export default class Misc extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_MISC_FRM.fields, 'offering', 'misc', true, undefined, isApproved);
   }
+
   render() {
     const {
       OFFERING_MISC_FRM, rtEditorChange, currentOfferingId,
@@ -26,10 +27,10 @@ export default class Misc extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.offering && offer.offering.misc &&
-      offer.offering.misc.submitted) ? offer.offering.misc.submitted : null;
-    const approved = (offer && offer.offering && offer.offering.misc &&
-      offer.offering.misc.approved) ? offer.offering.misc.approved : null;
+    const submitted = (offer && offer.offering && offer.offering.misc
+      && offer.offering.misc.submitted) ? offer.offering.misc.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.misc
+      && offer.offering.misc.approved) ? offer.offering.misc.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
       <Form>

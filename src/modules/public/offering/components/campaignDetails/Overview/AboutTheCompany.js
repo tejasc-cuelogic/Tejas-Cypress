@@ -13,12 +13,13 @@ class AboutTheCompany extends Component {
     e.preventDefault();
     this.props.history.push(`${this.props.refLink}/about`);
   }
+
   render() {
     const { campaign } = this.props;
-    const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview &&
-      campaign.offering.overview.elevatorPitch) ||
-      (campaign && campaign.offering && campaign.offering.overview &&
-      campaign.offering.overview.highlight);
+    const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.elevatorPitch)
+      || (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.highlight);
     return (
       <Aux>
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
@@ -26,28 +27,32 @@ class AboutTheCompany extends Component {
           <span className="anchor" id="top-things-to-know" />
         </Header>
         {
-          elevatorPitch ?
-            <Aux>
-              {campaign && campaign.offering && campaign.offering.overview &&
-                campaign.offering.overview.elevatorPitch &&
+          elevatorPitch
+            ? (
+              <Aux>
+                {campaign && campaign.offering && campaign.offering.overview
+                && campaign.offering.overview.elevatorPitch
+                && (
                 <div className="detail-section mt-10">
                   <HtmlEditor readOnly content={campaign.offering.overview.elevatorPitch} />
                 </div>
+                )
               }
-              {campaign && campaign.offering && campaign.offering.overview &&
-                campaign.offering.overview.highlight ?
-                  <List bulleted relaxed="very">
-                    {campaign.offering.overview.highlight.map(field => (
-                      <List.Item className="mb-half">{field}</List.Item>
-                    ))
+                {campaign && campaign.offering && campaign.offering.overview
+                && campaign.offering.overview.highlight
+                  ? (
+                    <List bulleted relaxed="very">
+                      {campaign.offering.overview.highlight.map(field => (
+                        <List.Item className="mb-half">{field}</List.Item>
+                      ))
                     }
-                  </List>
-                :
-                  null
+                    </List>
+                  )
+                  : null
               }
-            </Aux>
-          :
-            <InlineLoader className="bg-offwhite" text="No data found." />
+              </Aux>
+            )
+            : <InlineLoader className="bg-offwhite" text="No data found." />
         }
         <Button fluid={isTablet} onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
           Learn More About the Company

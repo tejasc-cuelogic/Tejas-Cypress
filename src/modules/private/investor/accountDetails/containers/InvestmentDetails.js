@@ -32,18 +32,18 @@ class InvestmentDetails extends Component {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    if (this.props.offeringCreationStore.currentOfferingId !== this.props.match.params.id ||
-      portfolioStore.currentAcccountType !== accountType) {
+    if (this.props.offeringCreationStore.currentOfferingId !== this.props.match.params.id
+      || portfolioStore.currentAcccountType !== accountType) {
       if (uiStore.inProgress !== 'portfolio') {
         this.props.uiStore.setProgress('portfolioDirect');
       }
-      portfolioStore.getInvestorDetails(accountType, this.props.match.params.id, isAdmin).then(() =>
-        this.props.uiStore.setProgress(false));
+      portfolioStore.getInvestorDetails(accountType, this.props.match.params.id, isAdmin).then(() => this.props.uiStore.setProgress(false));
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
       this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
       portfolioStore.currentAccoutType(accountType);
     }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.offeringCreationStore.resetOfferingId();
@@ -102,8 +102,8 @@ class InvestmentDetails extends Component {
               />
               {
                 navItems.map((item) => {
-                  const CurrentModule = item.load === false ?
-                    item.component : getModule(item.component);
+                  const CurrentModule = item.load === false
+                    ? item.component : getModule(item.component);
                   return (
                     <Route
                       key={item.to}
@@ -113,7 +113,8 @@ class InvestmentDetails extends Component {
                         <CurrentModule
                           isAdmin={this.props.isAdmin}
                           {...props}
-                        />)
+                        />
+                      )
                      }
                     />
                   );

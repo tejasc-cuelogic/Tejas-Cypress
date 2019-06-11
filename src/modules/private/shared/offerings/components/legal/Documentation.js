@@ -14,21 +14,27 @@ export default class Documentation extends Component {
     setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
     setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
+
   onCorporateFormationDocDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'corpFormation', files, 'DOCUMENTS_LEGAL_CORPORATE_FORMATION_DOCS');
   }
+
   onFormIdDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'formID', files, 'DOCUMENTS_LEGAL_FORM_ID');
   }
+
   onIssuerFinancialsDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'issuerFinancials', files, 'DOCUMENTS_LEGAL_ISSUER_FINANCIALS');
   }
+
   onLeaseAgreementOrLetterOfIntentDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'leaseAgreement', files, 'DOCUMENTS_LA_LOI');
   }
+
   handleDelDoc = (field, index = undefined) => {
     this.props.offeringCreationStore.removeUploadedDataMultiple('DOCUMENTATION_FRM', field, index, '');
   }
+
   handleFormSubmit = (isApproved = null) => {
     const {
       DOCUMENTATION_FRM,
@@ -37,6 +43,7 @@ export default class Documentation extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, DOCUMENTATION_FRM.fields, 'legal', 'issuer', true, undefined, isApproved);
   }
+
   render() {
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
@@ -44,17 +51,17 @@ export default class Documentation extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.legal && offer.legal.documentation &&
-      offer.legal.documentation.issuer && offer.legal.documentation.issuer.submitted)
+    const submitted = (offer && offer.legal && offer.legal.documentation
+      && offer.legal.documentation.issuer && offer.legal.documentation.issuer.submitted)
       ? offer.legal.documentation.issuer.submitted : null;
-    const approved = (offer && offer.legal && offer.legal.documentation &&
-      offer.legal.documentation.issuer &&
-      offer.legal.documentation.issuer.approved) ? offer.legal.documentation.issuer.approved : null;
-    const issuerSubmitted = (offer && offer.legal && offer.legal.documentation &&
-      offer.legal.documentation.issuer && offer.legal.documentation.issuer.issuerSubmitted)
+    const approved = (offer && offer.legal && offer.legal.documentation
+      && offer.legal.documentation.issuer
+      && offer.legal.documentation.issuer.approved) ? offer.legal.documentation.issuer.approved : null;
+    const issuerSubmitted = (offer && offer.legal && offer.legal.documentation
+      && offer.legal.documentation.issuer && offer.legal.documentation.issuer.issuerSubmitted)
       ? offer.legal.documentation.issuer.issuerSubmitted : null;
-    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
-      (isManager && approved && approved.status));
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
+      || (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Header as="h4">Form ID</Header>

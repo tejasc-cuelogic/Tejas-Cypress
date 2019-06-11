@@ -9,9 +9,11 @@ import OtherInformation from './OtherInformation';
 @observer
 export default class Issuer extends Component {
   state = { displayMode: true };
+
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
   }
+
   render() {
     const { detailsOfUser, USER_BASIC, formChange } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
@@ -64,7 +66,7 @@ export default class Issuer extends Component {
               changed={(e, result) => formChange(e, result, formName)}
               displayMode={displayMode}
             />
-            ))
+          ))
           }
         </Form.Group>
         <Divider />

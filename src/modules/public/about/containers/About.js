@@ -7,7 +7,7 @@ import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
-import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
+import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -24,8 +24,11 @@ class About extends Component {
       this.props.history.replace(`${this.props.match.url}/mission`);
     }
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
+
   render() {
     const { match, location, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;

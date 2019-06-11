@@ -88,9 +88,11 @@ export default class HtmlEditor extends React.Component {
     };
     return { ...config, ...overrides };
   };
+
   handleModelChange = (content) => {
     this.props.changed(this.props.name, content, this.props.form, this.props.index);
   }
+
   render() {
     const { keyStart, readOnly } = this.props;
     // if (readOnly) {

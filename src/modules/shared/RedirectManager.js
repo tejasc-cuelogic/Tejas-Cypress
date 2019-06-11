@@ -8,16 +8,20 @@ import { REDIRECT_META } from '../../constants/redirect';
 @inject('campaignStore', 'authStore', 'commonStore', 'userStore')
 @observer
 export default class RedirectManager extends React.PureComponent {
-  state = { found: 0, viaProtect: false }; // 0: not started, 1: loading, 2: found, 3: not found
+  state = { found: 0, viaProtect: false };
+
+  // 0: not started, 1: loading, 2: found, 3: not found
   componentWillMount() {
     this.processRedirection();
   }
+
   componentWillUpdate() {
     const { viaProtect } = this.state;
     if (viaProtect) {
       this.processRedirection(false);
     }
   }
+
   processRedirection = (ref = true) => {
     let { fromUrl } = this.props.match.params;
     const { viaProtect } = this.state;

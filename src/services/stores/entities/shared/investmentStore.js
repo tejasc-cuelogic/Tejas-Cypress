@@ -20,13 +20,21 @@ import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 
 export class InvestmentStore {
   @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
+
   @observable TRANSFER_REQ_FORM = Validator.prepareFormObject(TRANSFER_REQ_INFO);
+
   @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
+
   @observable INVESTMENT_LIMITS_FORM = Validator.prepareFormObject(INVESTMENT_LIMITS);
+
   @observable cashAvailable = 0;
+
   @observable agreementDetails = null;
+
   @observable investAccTypes = { ...INVEST_ACCOUNT_TYPES };
+
   @observable stepToBeRendered = 0;
+
   @observable offeringMetaData = {
     campaignType: 0,
     rate: 5,
@@ -34,12 +42,19 @@ export class InvestmentStore {
     annualReturn: 1000,
     targetTerm: 5000,
   }
+
   @observable estReturnVal = '-';
+
   @observable disableNextbtn = true;
+
   @observable isValidInvestAmtInOffering = false;
+
   @observable byDefaultRender = true;
+
   @observable showTransferRequestErr = false;
+
   @observable investmentFlowErrorMessage = null;
+
   @observable isGetTransferRequestCall = false;
 
   @action
@@ -57,6 +72,7 @@ export class InvestmentStore {
   setFieldValue = (field, value) => {
     this[field] = value;
   }
+
   @action
   resetAggrementForm = () => {
     this.AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
@@ -65,8 +81,7 @@ export class InvestmentStore {
   @computed get getDiffInvestmentLimitAmount() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     if (userAmountDetails && !money.isZero(this.investmentAmount)) {
-      const getPreviousInvestedAmount =
-        (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
+      const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
       const differenceResult = money.subtract(
         this.investmentAmount,
         getPreviousInvestedAmount,
@@ -85,14 +100,16 @@ export class InvestmentStore {
     const accType = this.investAccTypes.value;
     userDetailsStore.setFieldValue('currentActiveAccount', accType);
     const selectedAccount = userDetailsStore.currentActiveAccountDetails;
-    return (selectedAccount && selectedAccount.details) ?
-      selectedAccount.details.accountId : null;
+    return (selectedAccount && selectedAccount.details)
+      ? selectedAccount.details.accountId : null;
   }
+
   @computed get getCurrCashAvailable() {
-    return (this.cashAvailable &&
-      this.cashAvailable.data.getInvestorAvailableCash)
+    return (this.cashAvailable
+      && this.cashAvailable.data.getInvestorAvailableCash)
       || 0;
   }
+
   @computed get getTransferRequestAmount() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
@@ -102,8 +119,7 @@ export class InvestmentStore {
     // const getCurrCreditAvailable =
     //   money.add(getrewardBalanceAvailable, getPreviousCreditAvailable);
     const cashAndCreditBalance = money.add(getCurrCashAvailable, getrewardBalanceAvailable);
-    const getPreviousInvestedAmount =
-      (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
+    const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
     const transferAmount = money.subtract(
       this.investmentAmount,
       // money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
@@ -112,6 +128,7 @@ export class InvestmentStore {
     return money.isNegative(transferAmount) || money.isZero(transferAmount) ? '0' : transferAmount;
     // return transferAmount < '0' ? '0' : transferAmount;
   }
+
   @computed get getSpendCreditValue() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
@@ -188,10 +205,10 @@ export class InvestmentStore {
       this.setFieldValue('disableNextbtn', false);
     }
   }
+
   @action
   setCheckbox = (e, res) => {
-    this.AGREEMENT_DETAILS_FORM =
-      Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
+    this.AGREEMENT_DETAILS_FORM = Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
   }
 
   @action
@@ -216,10 +233,10 @@ export class InvestmentStore {
   }
 
   @computed get calculateTotalPaymentTermLoan() {
-    return Math.round(((((this.offeringMetaData.annualReturn / 100.0) / 12) *
-      this.investmentAmount) /
-      (1 - ((1 + ((this.offeringMetaData.annualReturn / 100.0) / 12)) **
-        (((-1) * this.offeringMetaData.targetTerm))))) * this.offeringMetaData.targetTerm);
+    return Math.round(((((this.offeringMetaData.annualReturn / 100.0) / 12)
+      * this.investmentAmount)
+      / (1 - ((1 + ((this.offeringMetaData.annualReturn / 100.0) / 12))
+        ** (((-1) * this.offeringMetaData.targetTerm))))) * this.offeringMetaData.targetTerm);
   }
 
   @action
@@ -259,17 +276,15 @@ export class InvestmentStore {
         // const finalAmt = (num/denom)*;
         //
         // const finalAmt_m = money.floatToAmount(finalAmt);
-        const estReturnMIN =
-            Helper.CurrencyFormat(finalAmtM, 0, 0);
+        const estReturnMIN = Helper.CurrencyFormat(finalAmtM, 0, 0);
         this.estReturnVal = estReturnMIN;
         return this.estReturnVal;
       }
       const formatedInvestmentMultiple = money.floatToAmount(investmentMultiple);
-      const estReturnMIN =
-        Helper.CurrencyFormat(money.mul(formatedInvestmentMultiple, investAmt), 0);
+      const estReturnMIN = Helper.CurrencyFormat(money.mul(formatedInvestmentMultiple, investAmt), 0);
       this.estReturnVal = estReturnMIN;
       return this.estReturnVal;
-    } else if (investAmt <= 100) {
+    } if (investAmt <= 100) {
       this.setFieldValue('estReturnVal', '-');
       return this.estReturnVal;
     }
@@ -390,10 +405,10 @@ export class InvestmentStore {
     let resultToReturn = false;
     const offeringDetails = portfolioStore.getInvestorAccountById;
     if (offeringDetails) {
-      const isLokcinPeriod = DataFormatter.diffDays(offeringDetails && offeringDetails.offering &&
-        offeringDetails.offering.closureSummary &&
-        offeringDetails.offering.closureSummary.processingDate ?
-        offeringDetails.offering.closureSummary.processingDate : null) <= 2;
+      const isLokcinPeriod = DataFormatter.diffDays(offeringDetails && offeringDetails.offering
+        && offeringDetails.offering.closureSummary
+        && offeringDetails.offering.closureSummary.processingDate
+        ? offeringDetails.offering.closureSummary.processingDate : null) <= 2;
       if (isLokcinPeriod) {
         const alreadyInvestedAmount = offeringDetails.investedAmount;
         resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
@@ -401,6 +416,7 @@ export class InvestmentStore {
     }
     return resultToReturn;
   }
+
   @action
   validateInvestmentAmount = () => new Promise((resolve, reject) => {
     graphql({
@@ -486,8 +502,8 @@ export class InvestmentStore {
 
   @action
   finishInvestment = () => {
-    const offeringIdToUpdate = campaignStore.getOfferingId ?
-      campaignStore.getOfferingId : portfolioStore.currentOfferingId;
+    const offeringIdToUpdate = campaignStore.getOfferingId
+      ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
     if (this.agreementDetails && offeringIdToUpdate) {
       const varObj = {
         userId: userDetailsStore.currentUserId,
@@ -570,8 +586,8 @@ export class InvestmentStore {
         // const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
         const tiersArray = orderBy(reward.tiers);
         tiersArray.map((tier) => {
-          if (this.investmentAmount >= tier &&
-            (matchedTierAmount === 0 || tier === matchedTierAmount)) {
+          if (this.investmentAmount >= tier
+            && (matchedTierAmount === 0 || tier === matchedTierAmount)) {
             matchedTierAmount = tier;
             bonusRewards.push(reward);
           }
@@ -635,6 +651,7 @@ export class InvestmentStore {
     return investmentLimitStore
       .getInvestmentLimit(data, investmentLimitStore.investorTotalAmountInvested);
   }
+
   @action
   setInvestmentLimitData = () => {
     const userDetail = userDetailsStore.userDetails;
@@ -647,10 +664,11 @@ export class InvestmentStore {
       .setFormData(this.INVESTMENT_LIMITS_FORM, investments);
     this.INVESTMENT_LIMITS_FORM.meta.isValid = true;
   }
+
   @action
   validateMaskedInputForAmount = () => {
-    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount) &&
-      this.isValidMultipleAmount(this.investmentAmount)) {
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)
+      && this.isValidMultipleAmount(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
@@ -663,6 +681,7 @@ export class InvestmentStore {
     this[form].meta.isValid = true;
     this.setFieldValue('investmentFlowErrorMessage', undefined);
   }
+
   isValidMultipleAmount = (amount) => {
     const formatedAmount = parseFloat(amount) || 0;
     return formatedAmount >= 100 && formatedAmount % 100 === 0;

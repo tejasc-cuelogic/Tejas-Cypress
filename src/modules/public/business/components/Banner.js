@@ -11,6 +11,7 @@ class Banner extends Component {
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
   }
+
   redirectTo = (action = '') => {
     if (this.props.authStore.isUserLoggedIn && !this.props.userStore.isIssuer) {
       this.props.history.push(`${this.props.match.url}/confirm-login`);
@@ -22,6 +23,7 @@ class Banner extends Component {
       this.props.history.push('/business-application/commercial-real-estate');
     }
   }
+
   render() {
     const { clientWidth } = document.documentElement;
     const isTablet = clientWidth >= 768 && clientWidth < 992;
@@ -31,8 +33,10 @@ class Banner extends Component {
           <Responsive minWidth={768} as={Aux}>
             <div className="banner-caption">
               <Header as="h2">
-                Accelerate your<br />
-                growth with the<br />
+                Accelerate your
+                <br />
+                growth with the
+                <br />
                 power of the crowd.
               </Header>
               <Button.Group className={!isTablet && 'mt-30'}>
@@ -43,7 +47,9 @@ class Banner extends Component {
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
+              <b>Brian Ching | Pitch 25</b>
+              <br />
+Raised $549,000 from 392 investors
             </p>
           </div>
         </Container>
@@ -53,4 +59,3 @@ class Banner extends Component {
 }
 
 export default Banner;
-

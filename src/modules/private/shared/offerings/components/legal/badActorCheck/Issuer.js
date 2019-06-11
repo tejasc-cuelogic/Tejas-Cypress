@@ -16,6 +16,7 @@ export default class Issuer extends Component {
     } = this.props.offeringCreationStore;
     getOfferingBac(currentOfferingId, 'ISSUER');
   }
+
   handleSubmitIssuer = (isApproved = null) => {
     const {
       createOrUpdateOfferingBac,
@@ -23,6 +24,7 @@ export default class Issuer extends Component {
     } = this.props.offeringCreationStore;
     createOrUpdateOfferingBac('ISSUER', ISSUER_FRM.fields, undefined, undefined, undefined, isApproved);
   }
+
   render() {
     const {
       ISSUER_FRM, formChange, issuerOfferingBacData, issuerOfferingBac,
@@ -32,10 +34,10 @@ export default class Issuer extends Component {
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (issuerOfferingBacData && issuerOfferingBacData.length &&
-      issuerOfferingBacData[0].submitted) ? issuerOfferingBacData[0].submitted : null;
-    const approved = (issuerOfferingBacData && issuerOfferingBacData.length &&
-      issuerOfferingBacData[0].approved) ? issuerOfferingBacData[0].approved : null;
+    const submitted = (issuerOfferingBacData && issuerOfferingBacData.length
+      && issuerOfferingBacData[0].submitted) ? issuerOfferingBacData[0].submitted : null;
+    const approved = (issuerOfferingBacData && issuerOfferingBacData.length
+      && issuerOfferingBacData[0].approved) ? issuerOfferingBacData[0].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
 
     if (issuerOfferingBac && issuerOfferingBac.loading) {
@@ -48,8 +50,8 @@ export default class Issuer extends Component {
           {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
               <Aux>
-                {field === 'issuerDiligence' &&
-                  <Header as="h4">{ISSUER_FRM.fields[field].label}</Header>
+                {field === 'issuerDiligence'
+                  && <Header as="h4">{ISSUER_FRM.fields[field].label}</Header>
                 }
                 <FormTextarea
                   readOnly={isReadonly}

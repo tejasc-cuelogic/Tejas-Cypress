@@ -19,6 +19,7 @@ export default class Dev extends Component {
       this.props.history.push(`${match.url}/elasticsearch`);
     }
   }
+
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], false).subNavigations;

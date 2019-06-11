@@ -5,13 +5,15 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { capitalize, isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { UserAvatar } from './../../../../theme/shared';
+import { UserAvatar } from '../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
 import { DELETED_ACCOUNT_STATUS } from '../../../../constants/user';
 
 export class UserListingStore {
   @observable usersData = [];
+
   @observable filters = false;
+
   @observable requestState = {
     page: 1,
     perPage: 10,
@@ -90,8 +92,8 @@ export class UserListingStore {
   @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-      const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString() :
-        moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
+      const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString()
+        : moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
       this.setInitiateSrch(field, isoDate);
     }
   }

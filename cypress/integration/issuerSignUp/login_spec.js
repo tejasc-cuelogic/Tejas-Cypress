@@ -14,7 +14,7 @@ describe('Issuer Sign Up', () => {
     }
   });
 
-  it ('should able to submit business application and login', () => {
+  it('should able to submit business application and login', () => {
     issuerSignUp();
     fillBasicDetails(issuerDetails.basicDetails);
     cy.get('input[value="B2C"]').click();
@@ -71,5 +71,5 @@ describe('Issuer Sign Up', () => {
     } else {
       cy.get('button').contains('Save').click();
     }
-  })
+  });
 });

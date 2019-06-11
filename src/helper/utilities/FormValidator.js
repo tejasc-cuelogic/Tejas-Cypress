@@ -9,6 +9,7 @@ import Helper from '../utility';
 
 class FormValidator {
   emptyDataSet = { data: [] };
+
   prepareFormObject =
     (fields, isDirty = false, isFieldValid = true, isValid = false, metaData) => ({
       fields: { ...fields },
@@ -21,18 +22,22 @@ class FormValidator {
       },
       response: {},
     });
+
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
     value: typeof data === 'undefined' ? e.target.value : data.value,
   });
+
   pullValuesForPassword = e => ({
     name: 'password',
     value: e.password,
   });
+
   pullValuesForCangePassword = e => ({
     name: 'newPasswd',
     value: e.newPasswd,
   });
+
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
@@ -50,9 +55,9 @@ class FormValidator {
       } else {
         currentForm.fields[element.name].value = element.value;
       }
-      customErrMsg = (currentForm.fields[element.name] &&
-        currentForm.fields[element.name].customErrors) ?
-        currentForm.fields[element.name].customErrors : {};
+      customErrMsg = (currentForm.fields[element.name]
+        && currentForm.fields[element.name].customErrors)
+        ? currentForm.fields[element.name].customErrors : {};
     }
     const validation = new Validator(
       mapValues(currentForm.fields, f => f.value),
@@ -67,8 +72,8 @@ class FormValidator {
       } else {
         currentForm.meta.isFieldValid = false;
       }
-      currentForm.fields[element.name].error = validation.errors.first(element.name) ?
-        replace(
+      currentForm.fields[element.name].error = validation.errors.first(element.name)
+        ? replace(
           validation.errors.first(element.name),
           element.name,
           currentForm.fields[element.name].label,
@@ -77,6 +82,7 @@ class FormValidator {
     currentForm.meta.isDirty = isDirty;
     return currentForm;
   }
+
   validateForm = (form, isMultiForm = false, showErrors = false, isBusinessPlanRequired = true) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
@@ -165,9 +171,9 @@ class FormValidator {
         } else {
           currentFormRelative[element.name].value = element.value;
         }
-        customErrMsg = (currentFormRelative[element.name] &&
-          currentFormRelative[element.name].customErrors) ?
-          currentFormRelative[element.name].customErrors : {};
+        customErrMsg = (currentFormRelative[element.name]
+          && currentFormRelative[element.name].customErrors)
+          ? currentFormRelative[element.name].customErrors : {};
       }
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
       const formRules = this.ExtractFormRules(toJS(currentForm.fields));
@@ -182,13 +188,15 @@ class FormValidator {
       }
       return currentForm;
     }
+
   ExtractValues = fields => mapValues(fields, f => f.value);
-  ExtractFormValues = fields => mapValues(fields, f =>
-    (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value))) :
-      f.value));
-  ExtractFormRules = fields => reduce(mapValues(fields, (f, key) =>
-    (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
-      mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
+
+  ExtractFormValues = fields => mapValues(fields, f => (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value)))
+    : f.value));
+
+  ExtractFormRules = fields => reduce(mapValues(fields, (f, key) => (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`)
+    : mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
+
   resetFormData = (form, targetedFields) => {
     const currentForm = form;
     const fieldsToReset = (targetedFields && targetedFields.length && targetedFields)
@@ -242,6 +250,7 @@ class FormValidator {
     currentForm.meta.error = '';
     return currentForm;
   }
+
   setAddressFields = (place, form) => {
     const currentForm = form;
     const data = Helper.gAddressClean(place);
@@ -272,6 +281,7 @@ class FormValidator {
     const currentForm = form;
     currentForm.meta.isDirty = status;
   }
+
   setFormError = (form, key, error) => {
     const currentForm = form;
     currentForm.fields[key].error = error;
@@ -280,6 +290,7 @@ class FormValidator {
       currentForm.meta.isFieldValid = false;
     }
   }
+
   resetFormToEmpty = metaData => this.prepareFormObject(metaData || this.emptyDataSet);
 
   getMetaData = form => form.refMetadata;
@@ -292,15 +303,17 @@ class FormValidator {
     });
     return tempRef;
   }
+
   addMoreRecordToSubSection = (form, key, count = 1, defaultBlank = false) => {
     const currentForm = form;
-    currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
-      this.addMoreFields(currentForm.fields[key], count) : (
+    currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0]
+      ? this.addMoreFields(currentForm.fields[key], count) : (
         defaultBlank ? currentForm.refMetadata[key] : []
       );
     currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }
+
   addMoreFields = (fields, count = 1) => {
     const arrayData = [...toJS(fields)];
     for (let i = count; i > 0; i -= 1) {
@@ -308,6 +321,7 @@ class FormValidator {
     }
     return arrayData;
   }
+
   resetMoreFieldsObj = (formFields) => {
     const fields = formFields;
     Object.keys(fields).forEach((key) => {
@@ -328,17 +342,18 @@ class FormValidator {
     });
     return fields;
   }
+
   setDataForLevel = (refFields, data, keepAtLeastOne) => {
     const fields = { ...refFields };
     Object.keys(fields).map((key) => {
       try {
         if (fields[key] && Array.isArray(toJS(fields[key]))) {
-          const tempRef = toJS(fields[key])[0].objRef ?
-            this.getRefFromObjRef(fields[key][0].objRef, data) : false;
-          if ((data && data[key] && data[key].length > 0) ||
-            (tempRef && tempRef[key] && tempRef[key].length > 0)) {
-            const addRec = ((data[key] && data[key].length) ||
-              (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
+          const tempRef = toJS(fields[key])[0].objRef
+            ? this.getRefFromObjRef(fields[key][0].objRef, data) : false;
+          if ((data && data[key] && data[key].length > 0)
+            || (tempRef && tempRef[key] && tempRef[key].length > 0)) {
+            const addRec = ((data[key] && data[key].length)
+              || (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
             fields[key] = this.addMoreFields(fields[key], addRec);
             (data[key] || tempRef[key]).forEach((record, index) => {
               fields[key][index] = this.setDataForLevel(
@@ -353,8 +368,8 @@ class FormValidator {
         } else if (fields[key].objRef) {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
           if (fields[key].objType === 'FileObjectType') {
-            if (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
-              fields[key] && Array.isArray(toJS(fields[key].value))) {
+            if (tempRef[key] && Array.isArray(toJS(tempRef[key]))
+              && fields[key] && Array.isArray(toJS(fields[key].value))) {
               if (tempRef[key].length > 0) {
                 tempRef[key].map((item) => {
                   fields[key].value.push(item.fileName);
@@ -366,10 +381,10 @@ class FormValidator {
                 fields[key].fileId = [];
               }
             } else {
-              fields[key].value = Array.isArray(toJS(tempRef[key])) ?
-                tempRef[key][0].fileName : tempRef[key].fileName;
-              fields[key].fileId = Array.isArray(toJS(tempRef[key])) ?
-                tempRef[key][0].fileId : tempRef[key].fileId;
+              fields[key].value = Array.isArray(toJS(tempRef[key]))
+                ? tempRef[key][0].fileName : tempRef[key].fileName;
+              fields[key].fileId = Array.isArray(toJS(tempRef[key]))
+                ? tempRef[key][0].fileId : tempRef[key].fileId;
             }
             // fields[key].value = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
             // tempRef[key].length) ? tempRef[key][0].fileName : tempRef[key].fileName;
@@ -386,14 +401,12 @@ class FormValidator {
               }
             } else if (fields[key].find) {
               const fieldRef = key.split('_');
-              fields[key].value = fields[key].find ?
-                tempRef.find(o =>
-                  o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].fileName :
-                tempRef[key].fileName;
-              fields[key].preSignedUrl = fields[key].find ?
-                tempRef.find(o =>
-                  o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].url :
-                tempRef[key].url;
+              fields[key].value = fields[key].find
+                ? tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].fileName
+                : tempRef[key].fileName;
+              fields[key].preSignedUrl = fields[key].find
+                ? tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].url
+                : tempRef[key].url;
             } else {
               fields[key].value = tempRef[key].fileName;
               fields[key].preSignedUrl = tempRef[key].url;
@@ -402,15 +415,15 @@ class FormValidator {
             fields[key].value = tempRef[key] ? moment(tempRef[key]).format('MM/DD/YYYY') : '';
           } else {
             const fieldRef = key.split('_');
-            fields[key].value = fields[key].find ?
-              tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]] :
-              tempRef[key];
+            fields[key].value = fields[key].find
+              ? tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]]
+              : tempRef[key];
           }
         } else if (key === 'value') {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else if (fields[key].objType === 'FileObjectType') {
-          if (data[key] && Array.isArray(toJS(data[key])) &&
-            fields[key] && Array.isArray(toJS(fields[key].value))) {
+          if (data[key] && Array.isArray(toJS(data[key]))
+            && fields[key] && Array.isArray(toJS(fields[key].value))) {
             if (data[key].length > 0) {
               data[key].map((item) => {
                 fields[key].value.push(item.fileName);
@@ -456,6 +469,7 @@ class FormValidator {
     });
     return fields;
   }
+
   setFormData = (form, dataSrc, ref, keepAtLeastOne = true) => {
     let currentForm = form;
     const data = ref ? this.getRefFromObjRef(ref, dataSrc) : dataSrc;
@@ -463,6 +477,7 @@ class FormValidator {
     currentForm.fields = this.setDataForLevel(currentForm.fields, data, keepAtLeastOne);
     return currentForm;
   };
+
   evaluateObjectRef = (objRef, inputData, key, value) => {
     let tempRef = inputData;
     const rejObjects = objRef.split('.');
@@ -488,13 +503,12 @@ class FormValidator {
     const fileObj = toJS(fileData);
     let fileObjOutput;
     if (Array.isArray(fileObj.preSignedUrl)) {
-      fileObjOutput =
-        map(fileObj.preSignedUrl, (file, index) => ({
-          id: fileObj.fileId[index] || Helper.guid(),
-          isPublic: true,
-          url: file,
-          fileName: fileObj.value[index],
-        }));
+      fileObjOutput = map(fileObj.preSignedUrl, (file, index) => ({
+        id: fileObj.fileId[index] || Helper.guid(),
+        isPublic: true,
+        url: file,
+        fileName: fileObj.value[index],
+      }));
     } else {
       fileObjOutput = fileObj.value ? {
         id: fileObj.fileId || Helper.guid(),
@@ -510,8 +524,7 @@ class FormValidator {
     const fileObj = toJS(fileData);
     let fileObjOutput;
     if (Array.isArray(fileObj.fileId)) {
-      fileObjOutput =
-        map(fileObj.fileId, (file, index) => ({ fileId: file, fileName: fileObj.value[index] }));
+      fileObjOutput = map(fileObj.fileId, (file, index) => ({ fileId: file, fileName: fileObj.value[index] }));
     } else {
       fileObjOutput = { fileId: fileData.fileId ? fileData.fileId : '', fileName: fileData.value ? fileData.value : '' };
     }
@@ -558,8 +571,7 @@ class FormValidator {
                       reference2Val = this.evalDateObj(field[keyRef1].value);
                     }
                     if (reference2) {
-                      arrayFields =
-                        this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
+                      arrayFields = this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
                     } else {
                       arrayFields = { ...arrayFields, [keyRef1]: reference2Val };
                     }
@@ -578,8 +590,8 @@ class FormValidator {
             if (fields[key].objRefOutput && !reference) {
               reference = fields[key].objRefOutput;
             }
-            let objValue = (fields[key].value === '' || (fields[key].value === undefined && fields[key].refSelector === undefined)) && fields[key].defaultValue ? fields[key].defaultValue :
-              fields[key].value;
+            let objValue = (fields[key].value === '' || (fields[key].value === undefined && fields[key].refSelector === undefined)) && fields[key].defaultValue ? fields[key].defaultValue
+              : fields[key].value;
             if (fields[key].objType && fields[key].objType === 'FileObjectType') {
               objValue = this.evalFileObj(fields[key]);
             } else if (fields[key].objType && fields[key].objType === 'DATE') {

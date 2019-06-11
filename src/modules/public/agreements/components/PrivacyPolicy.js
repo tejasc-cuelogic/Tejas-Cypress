@@ -12,7 +12,11 @@ const PrivacyPolicy = () => (
     <Divider section />
     <div className="justify-text privacy-policy">
       <p>
-        NextSeed Services LLC (“NextSeed”) operates a public website at <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">www.nextseed.com</a> (the “Site”)
+        NextSeed Services LLC (“NextSeed”) operates a public website at
+        {' '}
+        <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">www.nextseed.com</a>
+        {' '}
+(the “Site”)
         and an online intermediary platform (the “Platform”) on behalf of its affiliates,
         NextSeed US LLC, a registered funding portal, and NextSeed Securities, LLC, a registered
         broker-dealer. NextSeed is committed to maintaining the confidentiality, integrity, and
@@ -23,18 +27,25 @@ const PrivacyPolicy = () => (
       <p>
         This Privacy Policy applies to Personal Information collected or processed through the
         Site and the Platform (collectively, the “Service”).  In addition to this Privacy Policy,
-        please refer to the <a href="https://nextseed.com/agreements/legal/legal-documents" target="_blank" rel="noopener noreferrer">NextSeed Securities, LLC Privacy Notice</a>
-        {' '}for information on how NextSeed Securities, LLC handles non-public personal information
+        please refer to the
+        {' '}
+        <a href="https://nextseed.com/agreements/legal/legal-documents" target="_blank" rel="noopener noreferrer">NextSeed Securities, LLC Privacy Notice</a>
+        {' '}
+for information on how NextSeed Securities, LLC handles non-public personal information
         (as defined by federal law) of its customers.
       </p>
       <p>
-        If you have questions about this Privacy Policy, please do not hesitate to contact us at{' '}
-        <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>.
+        If you have questions about this Privacy Policy, please do not hesitate to contact us at
+        {' '}
+        <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>
+.
       </p>
       <Divider hidden />
       <Header as="h5" className="text-uppercase">1. What is Personal Information?</Header>
       <p>
-        <b>“Personal Information”</b> is information that, either alone or in combination with
+        <b>“Personal Information”</b>
+        {' '}
+is information that, either alone or in combination with
         other information, identifies you. Examples of Personal Information include, among others,
         name, email address, phone number, and mailing address. When we combine Personal
         Information with other information (such as the name of the company you work for), we
@@ -112,7 +123,8 @@ const PrivacyPolicy = () => (
         <p>
           In addition to the information we gather on the Site and Platform, we may use
           web beacons within e-mails that we send to track whether you actually view our
-          messages or content.<br />
+          messages or content.
+          <br />
           At this time, the Service does not respond to Do Not Track (“DNT”) signals sent
           by your browser, but some of our third-party providers may honor these signals
           in accordance with their privacy policies.
@@ -157,7 +169,8 @@ const PrivacyPolicy = () => (
           your business, the user will submit to us your name and business contact information.
           We also may permit users to share with NextSeed contacts via their local address book
           or via a third party service such as Facebook, which may include your contact
-          information.<br />
+          information.
+          <br />
           Regardless of the source, we will process any Personal Information we collect or
           receive in accordance with this Privacy Policy.
         </p>
@@ -202,25 +215,33 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul" relaxed="very">
           <List.Item as="li" className="item">
-            <b>To NextSeed Affiliates:</b>  NextSeed may disclose information collected from the
+            <b>To NextSeed Affiliates:</b>
+            {' '}
+NextSeed may disclose information collected from the
             Service, including Personal Information, to its affiliates to facilitate services
             offered by those affiliates, as well as those affiliates marketing efforts on behalf
             of the NextSeed family of companies.
           </List.Item>
           <List.Item as="li" className="item">
-            <b>To Issuers:</b> We may provide certain contact information such as email and contact
+            <b>To Issuers:</b>
+            {' '}
+We may provide certain contact information such as email and contact
             information to issuers for the purposes of providing services to you under the
             applicable investment agreements. These providers are not authorized to further disclose
             Personal Information or to use Personal Information for any other purpose other than
             providing such services.
           </List.Item>
           <List.Item as="li" className="item">
-            <b>To Other Users:</b>  The Service may include features where you can post comments or
+            <b>To Other Users:</b>
+            {' '}
+The Service may include features where you can post comments or
             profile information visible to other users. Please exercise caution when posting any
             information that will be publicly available on the Service.
           </List.Item>
           <List.Item as="li" className="item">
-            <b>To Service Providers:</b>  We may provide information, including Personal Information,
+            <b>To Service Providers:</b>
+            {' '}
+We may provide information, including Personal Information,
             to third parties who work for us, such as companies that manage and monitor investment
             accounts, verify credit card information, process credit card payments, manage e-signing,
             analyze data, manage contact information and communications, remove repetitive information
@@ -233,23 +254,31 @@ const PrivacyPolicy = () => (
             Policy.
           </List.Item>
           <List.Item as="li" className="item">
-            <b>To Advertisers:</b> Some of our service providers may use cookies or other technology
+            <b>To Advertisers:</b>
+            {' '}
+Some of our service providers may use cookies or other technology
             to identify users of our Service and display ads tailored to the user’s interests and
             behavior, including those detected outside this Website. In addition to any opt out
             offered by an advertising service, the User may opt out of a third-party service&apos;s
-            use of cookies by visiting the <a target="_blank" className="positive-text" href="http://optout.networkadvertising.org/?c=1">Network Advertising Initiative opt-out page</a>.
+            use of cookies by visiting the
+            <a target="_blank" className="positive-text" href="http://optout.networkadvertising.org/?c=1">Network Advertising Initiative opt-out page</a>
+.
             For more information, including additional information on how to opt out of certain
             advertising tracking, please check the privacy policies of the relevant services (see
             Appendix: NextSeed Service Providers at the end of this Privacy Policy).
           </List.Item>
           <List.Item as="li" className="item">
-            <b>To Companies Involved in Mergers and Acquisitions Transactions:</b> We may in the
+            <b>To Companies Involved in Mergers and Acquisitions Transactions:</b>
+            {' '}
+We may in the
             future sell all or part of our assets or be involved in a merger. Any information
             collected through the Service, including Personal Information, may be among the items
             sold or transferred.
           </List.Item>
           <List.Item as="li" className="item">
-            <b>To Comply with Applicable Law or Protect against Fraud or Other Harm:</b> When we
+            <b>To Comply with Applicable Law or Protect against Fraud or Other Harm:</b>
+            {' '}
+When we
             believe disclosure is appropriate to comply with the law, to enforce our terms of use and
             other rights, or to protect the rights and safety of others. This may include exchanging
             information with government regulatory or law enforcement agencies, or with other
@@ -289,8 +318,10 @@ const PrivacyPolicy = () => (
           With your permission, we may send notifications, promotions, or other information via
           email (“Communications”). You may choose to stop receiving Communications by indicating
           your preference in your account profile or settings. You may also follow the unsubscribe
-          instructions in any email you receive. You may also send a global unsubscribe request to{' '}
-          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>.
+          instructions in any email you receive. You may also send a global unsubscribe request to
+          {' '}
+          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>
+.
           Please note that certain Service-related Communications are necessary for the proper
           functioning and use of the Service (e.g., to provide you with confirmation of your
           account setup) and you may not have the ability to opt out of those Communications.
@@ -298,8 +329,10 @@ const PrivacyPolicy = () => (
         <Header as="h5">9. Your Rights</Header>
         <p>
           If you would like to access, amend, erase, export, or object to or restrict the
-          processing of, Personal Information about you, you may submit a request to{' '}
-          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>.
+          processing of, Personal Information about you, you may submit a request to
+          {' '}
+          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>
+.
           We will promptly review all such requests in accordance with applicable laws.
         </p>
         <p>
@@ -320,12 +353,15 @@ const PrivacyPolicy = () => (
           Personal Information from us for their direct marketing purposes during that calendar
           year, and (iii) examples of the products or services marketed (if we have that
           information). If you are a California resident and would like to make such a request,
-          please e-mail us at{' '}
-          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>.
+          please e-mail us at
+          {' '}
+          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>
+.
         </p>
         <Header as="h5">11. Children&apos;s Online Privacy Protection</Header>
         <p>Our Service is not directed to children. Accordingly, we will not knowingly collect any data from or about any person under the age of 16.</p>
-        <Header as="h5">12. Changes to Our Privacy Policy</Header>.
+        <Header as="h5">12. Changes to Our Privacy Policy</Header>
+.
         <p>
           We may change, modify, add, or remove portions of this Privacy Policy at any time. We
           will provide you with notice of material changes to the Privacy Policy as appropriate
@@ -339,8 +375,10 @@ const PrivacyPolicy = () => (
         <p>Last updated: April 8, 2019</p>
         <p>
           We employ service providers to perform tasks on our behalf and to assist us in
-          providing the Service. For more information, please contact us at{' '}
-          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>.
+          providing the Service. For more information, please contact us at
+          {' '}
+          <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>
+.
         </p>
         <p>
           This Appendix to the Privacy Policy provides examples of our service providers and
@@ -352,23 +390,39 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul">
           <List.Item as="li">
-            Facebook Audience Network (Facebook, Inc.) –{' '}
-            <a target="_blank" href="https://www.facebook.com/about/privacy/">Privacy Policy</a> –{' '}
+            Facebook Audience Network (Facebook, Inc.) –
+            {' '}
+            <a target="_blank" href="https://www.facebook.com/about/privacy/">Privacy Policy</a>
+            {' '}
+–
+            {' '}
             <a target="_blank" href="https://www.facebook.com/login.php?next=https%3A%2F%2Fwww.facebook.com%2Fads%2Fpreferences%2F%3Fentry_product%3Dad_settings_screen">Opt Out</a>
           </List.Item>
           <List.Item as="li">
-            Facebook Remarketing and Facebook Custom Audience (Facebook, Inc.) –{' '}
-            <a target="_blank" href="https://www.facebook.com/about/privacy/">Privacy Policy</a> –{' '}
+            Facebook Remarketing and Facebook Custom Audience (Facebook, Inc.) –
+            {' '}
+            <a target="_blank" href="https://www.facebook.com/about/privacy/">Privacy Policy</a>
+            {' '}
+–
+            {' '}
             <a target="_blank" href="http://optout.aboutads.info/?c=2&lang=EN">Opt Out</a>
           </List.Item>
           <List.Item as="li">
-            Google AdSense (Google Inc.) -{' '}
-            <a target="_blank" href="https://policies.google.com/technologies/ads">Privacy Policy</a> –{' '}
+            Google AdSense (Google Inc.) -
+            {' '}
+            <a target="_blank" href="https://policies.google.com/technologies/ads">Privacy Policy</a>
+            {' '}
+–
+            {' '}
             <a target="_blank" href="https://adssettings.google.com/authenticated?hl=en">Opt Out</a>
           </List.Item>
           <List.Item as="li">
-            Twitter Remarketing and Twitter Tailored Audiences (Twitter, Inc.) -{' '}
-            <a target="_blank" href="https://twitter.com/en/privacy">Privacy Policy</a> –{' '}
+            Twitter Remarketing and Twitter Tailored Audiences (Twitter, Inc.) -
+            {' '}
+            <a target="_blank" href="https://twitter.com/en/privacy">Privacy Policy</a>
+            {' '}
+–
+            {' '}
             <a target="_blank" href="https://help.twitter.com/en/safety-and-security/privacy-controls-for-tailored-ads">Opt Out</a>
           </List.Item>
         </List>
@@ -379,24 +433,32 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul">
           <List.Item as="li">
-            Google Analytics (including Google Ads extensions) (Google Inc.) –{' '}
-            <a target="_blank" href="https://policies.google.com/privacy?hl=en">Privacy Policy</a> –{' '}
+            Google Analytics (including Google Ads extensions) (Google Inc.) –
+            {' '}
+            <a target="_blank" href="https://policies.google.com/privacy?hl=en">Privacy Policy</a>
+            {' '}
+–
+            {' '}
             <a target="_blank" href="https://tools.google.com/dlpage/gaoptout?hl=en">Opt Out</a>
           </List.Item>
           <List.Item as="li">
-            Facebook Ads Conversion Tracking and Facebook Analytics for Apps (Facebook, Inc.)–{' '}
+            Facebook Ads Conversion Tracking and Facebook Analytics for Apps (Facebook, Inc.)–
+            {' '}
             <a target="_blank" href="https://www.facebook.com/about/privacy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Salesforce Analytics Cloud (Salesforce.com, inc.) -{' '}
+            Salesforce Analytics Cloud (Salesforce.com, inc.) -
+            {' '}
             <a target="_blank" href="https://www.salesforce.com/company/privacy/full_privacy.jsp">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Segment (Segment Inc.) -{' '}
+            Segment (Segment Inc.) -
+            {' '}
             <a target="_blank" href="https://segment.com/docs/legal/privacy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Twitter Ads Conversion Tracking (Twitter, Inc.) -{' '}
+            Twitter Ads Conversion Tracking (Twitter, Inc.) -
+            {' '}
             <a target="_blank" href="https://twitter.com/en/privacy">Privacy Policy</a>
           </List.Item>
         </List>
@@ -407,15 +469,18 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul">
           <List.Item as="li">
-            Google Maps widget (Google Inc.) -{' '}
+            Google Maps widget (Google Inc.) -
+            {' '}
             <a target="_blank" href="https://policies.google.com/privacy?hl=en&gl=it">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Vimeo video (Vimeo, LLC) -{' '}
+            Vimeo video (Vimeo, LLC) -
+            {' '}
             <a target="_blank" href="https://vimeo.com/privacy">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            YouTube video widget (Google Inc.) -{' '}
+            YouTube video widget (Google Inc.) -
+            {' '}
             <a target="_blank" href="https://policies.google.com/privacy?hl=en&gl=it">Privacy Policy</a>
           </List.Item>
         </List>
@@ -426,39 +491,48 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul">
           <List.Item as="li">
-            Akismet (Automattic Inc.) -{' '}
+            Akismet (Automattic Inc.) -
+            {' '}
             <a target="_blank" href="https://automattic.com/privacy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Amazon Web Services (AWS) (Amazon) -{' '}
+            Amazon Web Services (AWS) (Amazon) -
+            {' '}
             <a target="_blank" href="https://aws.amazon.com/privacy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Cloudflare (Cloudflare) -{' '}
+            Cloudflare (Cloudflare) -
+            {' '}
             <a target="_blank" href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Google Website Optimizer (Google Inc.) -{' '}
+            Google Website Optimizer (Google Inc.) -
+            {' '}
             <a target="_blank" href="https://policies.google.com/privacy?hl=policies">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Logentries (RevelOps, Inc.) -{' '}
+            Logentries (RevelOps, Inc.) -
+            {' '}
             <a target="_blank" href="https://www.rapid7.com/privacy-policy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            New Relic (New Relic) -{' '}
+            New Relic (New Relic) -
+            {' '}
             <a target="_blank" href="https://newrelic.com/termsandconditions/privacy">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Optimizely (Optimizely, Inc.) -{' '}
+            Optimizely (Optimizely, Inc.) -
+            {' '}
             <a target="_blank" href="https://www.optimizely.com/privacy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Pingdom (Pingdom AB) -{' '}
+            Pingdom (Pingdom AB) -
+            {' '}
             <a target="_blank" href="https://www.solarwinds.com/legal/privacy">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Unbounce (Unbounce Marketing Solutions Inc.) -{' '}
+            Unbounce (Unbounce Marketing Solutions Inc.) -
+            {' '}
             <a target="_blank" href="https://unbounce.com/privacy/">Privacy Policy</a>
           </List.Item>
         </List>
@@ -469,11 +543,13 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul">
           <List.Item as="li">
-            AddThis (Addthis Inc.) -{' '}
+            AddThis (Addthis Inc.) -
+            {' '}
             <a target="_blank" href="https://www.oracle.com/legal/privacy/addthis-privacy-policy.html">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Facebook Like button and social widgets (Facebook, Inc.) -{' '}
+            Facebook Like button and social widgets (Facebook, Inc.) -
+            {' '}
             <a target="_blank" href="https://www.facebook.com/privacy/explanation">Privacy Policy</a>
           </List.Item>
         </List>
@@ -484,15 +560,18 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul">
           <List.Item as="li">
-            Mandrill (The Rocket Science Group, LLC.) -{' '}
+            Mandrill (The Rocket Science Group, LLC.) -
+            {' '}
             <a target="_blank" href="https://mailchimp.com/legal/privacy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            MailChimp (The Rocket Science Group, LLC.) -{' '}
+            MailChimp (The Rocket Science Group, LLC.) -
+            {' '}
             <a target="_blank" href="https://mailchimp.com/legal/privacy/">Privacy Policy</a>
           </List.Item>
           <List.Item as="li">
-            Salesforce Marketing and Sales Cloud (Salesforce.com, Inc.) -{' '}
+            Salesforce Marketing and Sales Cloud (Salesforce.com, Inc.) -
+            {' '}
             <a target="_blank" href="https://www.salesforce.com/company/privacy/full_privacy.jsp">Privacy Policy</a>
           </List.Item>
         </List>
@@ -502,7 +581,8 @@ const PrivacyPolicy = () => (
         </p>
         <List as="ul">
           <List.Item as="li">
-            Facebook Authentication (Facebook, Inc.) -{' '}
+            Facebook Authentication (Facebook, Inc.) -
+            {' '}
             <a target="_blank" href="https://www.facebook.com/help/405977429438260">Privacy Policy</a>
           </List.Item>
         </List>

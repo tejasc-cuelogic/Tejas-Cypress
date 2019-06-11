@@ -17,6 +17,7 @@ class Gallery extends Component {
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
     this.props.history.push(`${this.props.galleryUrl.replace(/\/$/, '')}/photogallery`);
   }
+
   render() {
     const { campaign } = this.props;
     return (
@@ -26,22 +27,24 @@ class Gallery extends Component {
           <span className="anchor" id="gallery" />
         </Header>
         <div className="gallery-preview">
-          {get(campaign, 'media.gallery') ?
-            campaign.media.gallery.map((data, index) => (
+          {get(campaign, 'media.gallery')
+            ? campaign.media.gallery.map((data, index) => (
               <Aux>
-                {index < 3 &&
-                  <Image64 onClick={e => this.handleViewGallary(e, index)} fluid className="about-gallery-bg" srcUrl={data.url} />
+                {index < 3
+                  && <Image64 onClick={e => this.handleViewGallary(e, index)} fluid className="about-gallery-bg" srcUrl={data.url} />
                 }
               </Aux>
-            )) :
-            <NSImage fluid className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
+            ))
+            : <NSImage fluid className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
           }
         </div>
-        {get(campaign, 'media.gallery') &&
+        {get(campaign, 'media.gallery')
+          && (
           <Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
             View Gallery
             <Icon size="small" className="ns-chevron-right right" color="white" />
           </Button>
+          )
         }
       </Aux>
     );

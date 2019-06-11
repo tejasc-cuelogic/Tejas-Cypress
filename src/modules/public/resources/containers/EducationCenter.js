@@ -9,11 +9,12 @@ export default class EducationCenter extends Component {
   find = (location) => {
     if (location.pathname.includes('investor')) {
       return 'investor';
-    } else if (location.pathname.includes('business')) {
+    } if (location.pathname.includes('business')) {
       return 'business';
     }
     return null;
   }
+
   render() {
     const { match, location } = this.props;
     return (

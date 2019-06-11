@@ -13,19 +13,20 @@ class UpdateDetails extends Component {
     const indexId = this.props.match.params.id ? this.props.match.params.id : 0;
     const { updates } = this.props.updateStore;
     const update = updates && updates.length ? updates[indexId] : null;
-    const calculatedDate = update && update.updated.date ?
-      moment(update.updated.date).format('ll') : null;
+    const calculatedDate = update && update.updated.date
+      ? moment(update.updated.date).format('ll') : null;
     return (
-      update ?
-        <Aux>
-          <Header as="h4">
-            {update.title}
-            <Header.Subheader className="mt-half">{calculatedDate}</Header.Subheader>
-          </Header>
-          <HtmlEditor readOnly content={(update.content || '')} />
-        </Aux>
-        :
-        <InlineLoader text="No data found." />
+      update
+        ? (
+          <Aux>
+            <Header as="h4">
+              {update.title}
+              <Header.Subheader className="mt-half">{calculatedDate}</Header.Subheader>
+            </Header>
+            <HtmlEditor readOnly content={(update.content || '')} />
+          </Aux>
+        )
+        : <InlineLoader text="No data found." />
     );
   }
 }

@@ -23,7 +23,8 @@ export default class Track extends Component {
                       <Responsive as={Aux} minWidth={1200}><br /></Responsive>
                        easy-to-use dashboard.
                     </p>
-                    {!authStore.isUserLoggedIn &&
+                    {!authStore.isUserLoggedIn
+                    && (
                     <Aux>
                       <Responsive as={Aux} minWidth={768}>
                         <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
@@ -34,6 +35,7 @@ export default class Track extends Component {
                         </div>
                       </Responsive>
                     </Aux>
+                    )
                     }
                   </div>
                 </Grid.Column>

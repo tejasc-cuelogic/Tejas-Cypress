@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Image64 } from '../../../theme/shared';
+import { Image64 } from '..';
 
 export default class NsCarousel extends Component {
   constructor(props) {
@@ -21,6 +21,7 @@ export default class NsCarousel extends Component {
       nav2: this.slider2,
     });
   }
+
   render() {
     const settings = {
       infinite: false,
@@ -85,7 +86,7 @@ export default class NsCarousel extends Component {
     return (
       <Slider {...settings}>
         {this.props.children}
-      </Slider >
+      </Slider>
     );
   }
 }

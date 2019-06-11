@@ -68,8 +68,8 @@ export default class Legal extends Component {
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />
-              {!isIssuer &&
-                <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />
+              {!isIssuer
+                && <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />
               }
             </div>
           </Grid.Column>
@@ -85,8 +85,8 @@ export default class Legal extends Component {
                   <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
                 ))
               }
-              {!isIssuer &&
-                adminLegalInfo.map(item => (
+              {!isIssuer
+                && adminLegalInfo.map(item => (
                   <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
                 ))
               }

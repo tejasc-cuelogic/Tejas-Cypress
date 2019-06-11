@@ -21,11 +21,13 @@ class TransferRequest extends Component {
       this.props.history.push('agreement');
     }
   }
+
   componentDidMount() {
     const { setStepToBeRendered, setFieldValue } = this.props.investmentStore;
     setFieldValue('disableNextbtn', true);
     setStepToBeRendered(2);
   }
+
   componentWillUnmount() {
     const {
       stepToBeRendered,
@@ -39,9 +41,11 @@ class TransferRequest extends Component {
     setFieldValue('investmentFlowErrorMessage', null);
     resetFormErrors('INVESTMONEY_FORM');
   }
+
   handleShowTransferErrRequest = () => {
     this.props.investmentStore.setShowTransferRequestErr(false);
   }
+
   render() {
     const { investmentStore, investmentLimitStore, changeInvest } = this.props;
     const {
@@ -54,14 +58,14 @@ class TransferRequest extends Component {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
     const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
-    const getPreviousInvestedAmount =
-      (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
+    const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
     const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
     if (showTransferRequestErr) {
       return (
         <div className="center-align">
           <Header as="h3" textAlign="center">Your investment transaction was not processed.</Header>
-          <p className="mt-30 mb-30">This may have happened because your session expired or your network connection dropped.
+          <p className="mt-30 mb-30">
+This may have happened because your session expired or your network connection dropped.
             We did not complete your investment transaction. Please check your account, and
             try again to complete your investment.
           </p>
@@ -80,13 +84,15 @@ class TransferRequest extends Component {
                 {Helper.CurrencyFormat(investmentAmount, 0)}
               </Table.Cell>
             </Table.Row>
-            {changeInvest &&
+            {changeInvest
+              && (
               <Table.Row>
                 <Table.Cell>Previous Investment:</Table.Cell>
                 <Table.Cell collapsing>
                   {Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
                 </Table.Cell>
               </Table.Row>
+              )
             }
             <Table.Row>
               <Table.Cell>
@@ -116,10 +122,12 @@ class TransferRequest extends Component {
             </Table.Row>
           </Table.Footer>
         </Table>
-        {investmentFlowErrorMessage &&
+        {investmentFlowErrorMessage
+          && (
           <Message error className="mt-30">
             {investmentFlowErrorMessage}
           </Message>
+          )
         }
         <Button.Group widths="2" className="inline mt-30">
           <Button content="Back" type="button" onClick={this.props.cancel} />
@@ -127,7 +135,11 @@ class TransferRequest extends Component {
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from
-          my {bankAndAccountName} to my NextSeed account in the
+          my
+          {' '}
+          {bankAndAccountName}
+          {' '}
+to my NextSeed account in the
           amount equal to the Transfer Requested above. I understand this transfer will
           be initiated within 1-3 business days.
         </p>

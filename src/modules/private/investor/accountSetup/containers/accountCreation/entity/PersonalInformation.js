@@ -11,16 +11,20 @@ export default class PersonalInformation extends Component {
   onLegalDocUrlDrop = (files) => {
     this.props.entityAccountStore.setFileUploadData('PERSONAL_INFO_FRM', 'legalDocUrl', files);
   }
+
   confirmRemoveDoc = (e, name) => {
     this.props.uiStore.setConfirmBox(name);
   }
+
   handleDelLegalDocUrl = () => {
     this.props.entityAccountStore.removeUploadedData('PERSONAL_INFO_FRM', 'legalDocUrl', 'Personal info');
     this.props.uiStore.setConfirmBox('');
   }
+
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   render() {
     const {
       PERSONAL_INFO_FRM,
@@ -63,10 +67,12 @@ export default class PersonalInformation extends Component {
             uploadtitle="Choose a file or drag it here"
             containerclassname="fluid"
           />
-          {errors &&
+          {errors
+            && (
             <Message error className="mt-30">
               <ListErrors errors={[errors.message]} />
             </Message>
+            )
           }
         </Form>
         <Confirm

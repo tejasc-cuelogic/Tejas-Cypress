@@ -25,7 +25,8 @@ const highlights = [
     meta: (
       <Aux>
       Only the top 3% of businesses meet our
-    proprietary financial criteria.<sup>1</sup>
+    proprietary financial criteria.
+        <sup>1</sup>
       </Aux>),
   },
   {
@@ -100,7 +101,11 @@ export default class WhyNextseed extends Component {
           <Container>
             <Responsive maxWidth={767} as={Aux}>
               <Header as="h2">
-               Get access to<br />pre-vetted, local<br />investments.
+               Get access to
+                <br />
+pre-vetted, local
+                <br />
+investments.
               </Header>
               <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
               <Divider section />
@@ -129,13 +134,17 @@ export default class WhyNextseed extends Component {
               </Grid.Column>
             </Grid>
             <div className="center-align mb-50">
-              { !authStore.isUserLoggedIn &&
-                <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+              { !authStore.isUserLoggedIn
+                && <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
               }
             </div>
             <p className="note center-align mb-50">
-              <sup>1</sup>This represents the percent of businesses that began the application
-              process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering
+              <sup>1</sup>
+This represents the percent of businesses that began the application
+              process, passed NextSeed&apos;s objective diligence
+              <Responsive minWidth={992} as="br" />
+              {' '}
+criteria, and launched an offering
               on the platform since NextSeed&apos;s inception.
             </p>
             {/* <Grid className="business-learn-more mb-30">
@@ -160,7 +169,8 @@ export default class WhyNextseed extends Component {
             <section>
               <Container textAlign={isMobile ? 'left' : 'center'}>
                 <Header as="h2" className="mb-30">
-                Don’t just invest through Wall Street and Silicon Valley.{' '}
+                Don’t just invest through Wall Street and Silicon Valley.
+                  {' '}
                   <Responsive as={Aux} minWidth={1199}><br /></Responsive>
                 Be invested in the growth of local communities.
                 </Header>
@@ -169,12 +179,13 @@ export default class WhyNextseed extends Component {
                 restaurants and more.
                 </p>
               </Container>
-              {!isMobile ?
-                <Container>
-                  <Grid centered stackable className="vertical-gutter">
-                    {businesses.map((row, index) => (
-                      <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
-                        {
+              {!isMobile
+                ? (
+                  <Container>
+                    <Grid centered stackable className="vertical-gutter">
+                      {businesses.map((row, index) => (
+                        <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
+                          {
                         row.map(b => (
                           <Grid.Column textAlign="center" width={4}>
                             <NSImage path={b.image} centered />
@@ -183,30 +194,32 @@ export default class WhyNextseed extends Component {
                           </Grid.Column>
                         ))
                       }
-                      </Grid.Row>
-                    ))
-                  }
-                  </Grid>
-                </Container>
-            :
-                <Aux>
-                  <Container>
-                    <NsCarousel {...settings}>
-                      {businesses.map(row => (
-                        row.map(b => (
-                          <Grid.Row>
-                            <Grid.Column className="center-align">
-                              <NSImage path={b.image} centered />
-                              <Header as="h5">{b.title}</Header>
-                              <p>{b.description}</p>
-                            </Grid.Column>
-                          </Grid.Row>
-                        ))
+                        </Grid.Row>
                       ))
-                    }
-                    </NsCarousel>
+                  }
+                    </Grid>
                   </Container>
-                </Aux>
+                )
+                : (
+                  <Aux>
+                    <Container>
+                      <NsCarousel {...settings}>
+                        {businesses.map(row => (
+                          row.map(b => (
+                            <Grid.Row>
+                              <Grid.Column className="center-align">
+                                <NSImage path={b.image} centered />
+                                <Header as="h5">{b.title}</Header>
+                                <p>{b.description}</p>
+                              </Grid.Column>
+                            </Grid.Row>
+                          ))
+                        ))
+                    }
+                      </NsCarousel>
+                    </Container>
+                  </Aux>
+                )
             }
             </section>
             <Divider />

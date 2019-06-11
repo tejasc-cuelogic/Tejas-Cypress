@@ -23,9 +23,11 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       }
     });
   }
+
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
+
   multiClickHandler = (step) => {
     const { params } = this.props.match;
     if (step.formName === 'TRUST_ENTITY_ACCREDITATION_FRM' && this.props.accreditationStore[step.formName].fields.method.value !== 'ASSETS') {
@@ -43,6 +45,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       this.handleStepChange(step.stepToBeRendered);
     }
   }
+
   render() {
     const formArray = [
       { key: 'TRUST_ENTITY_ACCREDITATION_FRM' },

@@ -17,20 +17,25 @@ export default class PreQual extends Component {
     }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.preQualification.managerOverview');
   }
+
   addJustification = (e) => {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('JUSTIFICATIONS_FRM', 'justifications');
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
+
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('JUSTIFICATIONS_FRM');
   }
+
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
+
   render() {
     const {
       JUSTIFICATIONS_FRM, toggleConfirmModal, confirmModal, confirmModalName,
@@ -57,8 +62,8 @@ export default class PreQual extends Component {
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
             Justifications
-            {!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length < 5 &&
-            <Link to={this.props.match.url} className="link" onClick={this.addJustification}><small>+Add Justification</small></Link>
+            {!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length < 5
+            && <Link to={this.props.match.url} className="link" onClick={this.addJustification}><small>+Add Justification</small></Link>
             }
           </Header>
           {
