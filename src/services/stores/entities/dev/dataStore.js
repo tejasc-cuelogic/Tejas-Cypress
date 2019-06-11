@@ -2,6 +2,7 @@
 import { observable, action, toJS } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
+import cleanDeep from 'clean-deep';
 import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -51,7 +52,23 @@ export class DataStore {
   formChange = (e, res, form) => {
     this[form] =
     Validator.onChange(this[form], Validator.pullValues(e, res));
-    console.log(this[form]);
+  };
+  @action
+  formDataChange = (e, res, form, fieldType) => {
+    if (fieldType === 'mask') {
+      if (e.floatValue < 500) {
+        this[form] = Validator.onChange(
+          this[form],
+          { name: res, value: e.floatValue },
+        );
+        this.setFieldValue('countValues', '');
+      } else {
+        const tempobj = { ...this.BULK_STORAGE_DETAILS_SYNC_FRM };
+        tempobj.fields.limit.value = '';
+        tempobj.fields.limit.error = 'The number of users should be within 0 - 500.';
+        this.setFieldValue('BULK_STORAGE_DETAILS_SYNC_FRM', tempobj);
+      }
+    }
   };
 
   @action
@@ -201,7 +218,7 @@ export class DataStore {
 
   @action
   auditBoxFolder = () => {
-    const processData = Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields);
+    const processData = cleanDeep(Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields));
     this.setFieldValue('inProgress', true, 'auditBoxFolder');
     return new Promise((res, rej) => {
       client

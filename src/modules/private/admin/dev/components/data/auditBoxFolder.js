@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import beautify from 'json-beautify';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { FormInput, FormDropDown } from '../../../../../../theme/form';
+import { FormInput, FormDropDown, MaskedInput } from '../../../../../../theme/form';
 
 @inject('dataStore', 'uiStore')
 @withRouter
@@ -24,7 +24,7 @@ export default class AuditBoxFolder extends Component {
   render() {
     const { dataStore } = this.props;
     const {
-      AUDITBOXFOLDER_FRM, formChange, inProgress,
+      AUDITBOXFOLDER_FRM, formChange, inProgress, formDataChange,
     } = dataStore;
     return (
       <Card fluid className="elastic-search">
@@ -33,17 +33,29 @@ export default class AuditBoxFolder extends Component {
           <Card.Description>
             <Form onSubmit={this.onSubmit}>
               <Form.Group className="bottom-aligned">
-                {['waitingTime', 'concurrency', 'queueLimit', 'jobId'].map(field => (
-                  <FormInput
-                    type="text"
+                {['waitingTime', 'concurrency', 'queueLimit'].map(field => (
+                  <MaskedInput
                     key={field}
                     name={field}
+                    allowNegative={false}
+                    label={AUDITBOXFOLDER_FRM.fields[field].label}
+                    number
                     containerwidth="8"
                     showerror
                     fielddata={AUDITBOXFOLDER_FRM.fields[field]}
-                    changed={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
-                  />))
+                    changed={(e, result) => formDataChange(e, result, 'AUDITBOXFOLDER_FRM', 'mask')}
+                    disabled={inProgress.auditBoxFolder}
+                  />
+                  ))
                 }
+                <FormInput
+                  type="text"
+                  name="jobId"
+                  containerwidth="8"
+                  showerror
+                  fielddata={AUDITBOXFOLDER_FRM.fields.jobId}
+                  changed={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
+                />
                 <Form.Field width={8}>
                   <FormDropDown
                     fielddata={AUDITBOXFOLDER_FRM.fields.userType}
