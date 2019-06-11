@@ -61,7 +61,7 @@ export default class IssuerInformation extends React.Component {
             <MaskedInput
               name="dateIncorporation"
               fielddata={formIssuerInfo.fields.dateIncorporation}
-              format="##/##/####"
+              format="##-##-####"
               changed={verifyDateIncorporation}
               dateOfBirth
               showerror
