@@ -592,6 +592,10 @@
         }
         .ui.attached.bottom.button {
             border-radius: 0;
+            position: absolute; 
+            width: 100%;
+            bottom: 0;
+            left: 0;
         }
     }
     >.close{
@@ -631,7 +635,7 @@
             &.scrolling {
                 // max-height: calc(100vh - 12.1em);
                 border-radius: 0;
-                padding-bottom: @50px;
+                margin-bottom: @42px;
                 .ui.attached.bottom.button {
                     border-radius: 0;
                     position: absolute; 
