@@ -580,12 +580,13 @@
         >.header{
             font-size: @12px;
             text-align: center;
-            line-height: 40px;
             color: @neutral-middark;
             position: relative;
-            padding: 0 !important;
+            padding: 22px 0 0!important;
             border-bottom: 0;
+            height: 58px;
             .ui.progress.attached {
+                bottom: -18px;
                 border-radius: 0;
                 background-color: @neutral-darkwhite;
             }
@@ -615,7 +616,7 @@
             color:@neutral-middark;
         }
         @media only screen and (max-width:@largestMobileScreen){
-            top: 15px!important;
+            top: 22px!important;
             right: 15px !important;
             height: auto;
             width: auto;
@@ -633,7 +634,7 @@
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
             &.scrolling {
-                max-height: calc(100vh - 86px);
+                max-height: calc(100vh - 8em);
                 border-radius: 0;
                 margin-bottom: @42px;
                 .ui.attached.bottom.button {
