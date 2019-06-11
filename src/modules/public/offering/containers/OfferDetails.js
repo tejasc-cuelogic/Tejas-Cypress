@@ -46,17 +46,16 @@ class offerDetails extends Component {
     const { currentUser } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
       const oMinData = data ? data[0] : null;
-      if ((currentUser && currentUser.roles.includes('admin'))
-        || oMinData.isAvailablePublicly
-        || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
+      if ((currentUser && currentUser.roles.includes('admin')) ||
+        oMinData.isAvailablePublicly ||
+        oMinData.stage === 'LIVE' ||
+        (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-      } else if (currentUser && currentUser.roles.includes('issuer')) {
-        if (oMinData.issuerId !== currentUser.sub) {
-          this.setState(oMinData.stage === 'CREATION'
-            ? { showPassDialog: true, preLoading: false }
-            : { showPassDialog: false, found: 2, preLoading: false });
-        }
+      } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
+        this.setState(oMinData.stage === 'CREATION' ?
+          { showPassDialog: true, preLoading: false } :
+          { showPassDialog: false, found: 2, preLoading: false });
       } else if (currentUser && currentUser.roles.includes('investor')) {
         const params = {
           userId: currentUser.sub,
@@ -64,7 +63,6 @@ class offerDetails extends Component {
           offeringStage: oMinData.stage,
         };
         this.props.campaignStore.isValidInvestorInOffering(params).then((res) => {
-          console.log('res: ', res);
           if (res) {
             this.setState({ preLoading: false, showPassDialog: false });
             this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
@@ -79,8 +77,6 @@ class offerDetails extends Component {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
           this.props.history.push('/auth/login');
-        } else {
-          console.log('.');
         }
       }
       console.log('checkIn', currentUser && currentUser.sub, oMinData);

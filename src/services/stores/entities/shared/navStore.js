@@ -98,7 +98,8 @@ export class NavStore {
       routes = _.map(routes, r => ({
         ...r,
         subNavigations:
-        _.filter(r.subNavigations, s => (!s.capability || this.canAccessBasedOnCapability(s.capability))),
+        _.filter(r.subNavigations, s => (!s.capability
+          || this.canAccessBasedOnCapability(s.capability))),
       }));
       return routes;
     } catch (err) {

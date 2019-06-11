@@ -35,19 +35,19 @@ export default class OfferingAudit extends Component {
                   name="audit"
                   changed={(e, result) => formChange(e, result, 'OFFERING_REPAYMENT_META_FRM')}
                   defaults
-                  containerwidth="1"
+                  containerwidth="21"
                   containerclassname="ui relaxed list"
                 />
                 <FormInput
                   type="text"
                   name="offeringId"
                   showerror
-                  containerwidth="11"
+                  containerwidth="14"
                   fielddata={OFFERING_REPAYMENT_META_FRM.fields.offeringId}
                   changed={(e, result) => formChange(e, result, 'OFFERING_REPAYMENT_META_FRM')}
                 />
-                <Form.Field width={4}>
-                  <Button primary fluid content="Update the Offering Closure Repayment" disabled={inProgress.offeringRepayment} loading={inProgress.offeringRepayment} />
+                <Form.Field width={16}>
+                  <Button primary content="Update the Offering Closure Repayment" disabled={inProgress.offeringRepayment} loading={inProgress.offeringRepayment} />
                 </Form.Field>
               </Form.Group>
             </Form>
