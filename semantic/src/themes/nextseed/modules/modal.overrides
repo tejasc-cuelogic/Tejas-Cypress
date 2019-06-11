@@ -629,8 +629,9 @@
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
             &.scrolling {
-                max-height: calc(100vh - 12.1em);
+                // max-height: calc(100vh - 12.1em);
                 border-radius: 0;
+                padding-bottom: @50px;
                 .ui.attached.bottom.button {
                     border-radius: 0;
                     position: absolute; 
