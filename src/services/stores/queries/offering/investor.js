@@ -20,6 +20,7 @@ export const getInvestorListForOffering = gql`
       accountType
       credit
       autoDraftAmount
+      earlyBirdEligibility
     }
   }
 `;

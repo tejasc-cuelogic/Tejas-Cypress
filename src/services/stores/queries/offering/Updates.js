@@ -39,6 +39,7 @@ export const getUpdate = gql`
       status
       scope
       content
+      tiers
       approved {
         by
         date

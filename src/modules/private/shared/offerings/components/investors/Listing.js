@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 import React, { Component } from 'react';
-import { Table, Popup, Icon } from 'semantic-ui-react';
+import { Table, Popup, Icon, Label } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { reject, get, find } from 'lodash';
@@ -38,10 +38,11 @@ export default class Listing extends Component {
 
   render() {
     const { offer } = this.props.offeringsStore;
-    const { isAdmin } = this.props.userStore;
+    const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
+    const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
     const referralCode = get(offer, 'referralCode');
-    let computedList = (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
@@ -107,8 +108,12 @@ export default class Listing extends Component {
                       {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                     </Table.Cell>
                   }
-                  {isAdmin ?
+                  {(isIssuer && hardClosedDate) || (isAdmin) ?
                     <Table.Cell>
+                      {data.earlyBirdEligibility ?
+                        <Label color="green" circular empty className="mr-10" />
+                        : ''
+                      }
                       {Helper.CurrencyFormat(data.amount, 0)}
                       {parseInt(data.investmentsCount, 10) > 1 ?
                         <span> ({`${data.investmentsCount} Investments`})</span>
@@ -120,7 +125,7 @@ export default class Listing extends Component {
                           content={
                             <span>
                               {data.credit ? `Credit: ${data.credit}` : ''}
-                              {data.autoDraftAmount && data.credit && <br />}
+                              {data.autoDraftAmount && data.credit ? <br /> : ''}
                               {data.autoDraftAmount ? `Auto Draft: ${data.autoDraftAmount}` : ''}
                             </span>}
                           hoverable
