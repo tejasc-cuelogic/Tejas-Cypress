@@ -22,8 +22,8 @@ export default class AccountDetailsView extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     const investorAccount = this.props.location.pathname.includes('individual') ? 'individual' : this.props.location.pathname.includes('ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', investorAccount);
-    const activeBankInstutationId = accountDetails && accountDetails.plaidInstitutionId ?
-      accountDetails.plaidInstitutionId : null;
+    const activeBankInstutationId = accountDetails && accountDetails.plaidInstitutionId
+      ? accountDetails.plaidInstitutionId : null;
 
     if (activeBankInstutationId) {
       this.props.bankAccountStore.setFieldValue('loadingState', true);
@@ -36,6 +36,7 @@ export default class AccountDetailsView extends Component {
       this.props.bankAccountStore.setPendingeBankPlaidLogo(null);
     }
   }
+
   handleCancelRequest = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setLinkedBankCancelRequestStatus(true);
@@ -54,14 +55,14 @@ export default class AccountDetailsView extends Component {
       accountDetails, match, click, accountType, pendingAccoungDetails, uiStore, accountStore,
     } = this.props;
     const { activeBankPladLogo, pendingBankPladLogo, loadingState } = this.props.bankAccountStore;
-    const pladidLogo = accountType === 'pending' ?
-      pendingBankPladLogo : activeBankPladLogo;
+    const pladidLogo = accountType === 'pending'
+      ? pendingBankPladLogo : activeBankPladLogo;
     let currentStaus = '';
     if (accountType === 'active') {
       currentStaus = (pendingAccoungDetails && pendingAccoungDetails.status !== 'APPROVED') ? 'Inactive (Pending Removal)' : 'Active';
     } else {
-      currentStaus = accountDetails.status ?
-        LINKED_ACCOUND_STATUS[accountDetails.status] : null;
+      currentStaus = accountDetails.status
+        ? LINKED_ACCOUND_STATUS[accountDetails.status] : null;
     }
     if (loadingState) {
       return <InlineLoader />;
@@ -76,12 +77,13 @@ export default class AccountDetailsView extends Component {
           <Grid.Row>
             <Grid.Column width={2} verticalAlign="middle">
               <Item>
-                {pladidLogo ?
-                  <Item.Image size="tiny" src={`data:image/png;base64,${pladidLogo}`} />
-                  :
-                  <div className="ui tiny image">
+                {pladidLogo
+                  ? <Item.Image size="tiny" src={`data:image/png;base64,${pladidLogo}`} />
+                  : (
+<div className="ui tiny image">
                     <NSImage path="banks/default.png" />
-                  </div>
+</div>
+                  )
                 }
               </Item>
             </Grid.Column>
@@ -90,8 +92,8 @@ export default class AccountDetailsView extends Component {
                 <Item.Content>
                   <Item.Extra>Number</Item.Extra>
                   <Item.Header>
-                    {accountDetails && accountDetails.accountNumber ?
-                      Helper.encryptNumberWithX(accountDetails.accountNumber)
+                    {accountDetails && accountDetails.accountNumber
+                      ? Helper.encryptNumberWithX(accountDetails.accountNumber)
                       : null}
                   </Item.Header>
                 </Item.Content>
@@ -125,14 +127,16 @@ export default class AccountDetailsView extends Component {
               </Item>
             </Grid.Column>
             <Grid.Column width={3} textAlign={!isMobile ? 'right' : ''} verticalAlign="middle">
-              {accountType === 'active' ?
-                accountDetails && !accountDetails.pendingUpdate &&
-                <Aux>
+              {accountType === 'active'
+                ? accountDetails && !accountDetails.pendingUpdate
+                && (
+<Aux>
                 {
                   <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
                 }
-                </Aux> :
-                <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
+</Aux>
+                )
+                : <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }
             </Grid.Column>
           </Grid.Row>
@@ -141,4 +145,3 @@ export default class AccountDetailsView extends Component {
     );
   }
 }
-

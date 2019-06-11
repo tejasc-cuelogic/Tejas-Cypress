@@ -52,9 +52,9 @@ export default class TermNotes extends Component {
           </Item.Group>
           <Divider hidden />
           {
-            isUserLoggedIn ?
-            '' :
-            <Button as={Link} to={link} secondary>Apply Now</Button>
+            isUserLoggedIn
+              ? ''
+              : <Button as={Link} to={link} secondary>Apply Now</Button>
           }
           {/* <List horizontal className="learn-more-list mt-20">
             <List.Item>

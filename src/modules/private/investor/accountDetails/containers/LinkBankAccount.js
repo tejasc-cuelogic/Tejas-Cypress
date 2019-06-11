@@ -5,12 +5,14 @@ import { Plaid } from '../../../shared/bankAccount';
 
 export default class LinkBankAccount extends Component {
   state = { action: 'change' };
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const redirectUrl = `/app/account-details/${accountType}/bank-accounts`;
     this.props.history.push(redirectUrl);
   }
+
   render() {
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="small" closeOnDimmerClick={false}>

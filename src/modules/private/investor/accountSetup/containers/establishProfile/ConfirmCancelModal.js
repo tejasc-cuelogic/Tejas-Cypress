@@ -10,9 +10,11 @@ export default class ConfirmCancelModal extends React.Component {
     handleCloseModal = () => {
       this.props.history.push('/app/summary/establish-profile');
     }
+
     handleFinishLater = () => {
       this.props.investorProfileStore.setFinishInvestorProfileLater(true);
     }
+
     render() {
       return (
         <Modal size="mini" open>
@@ -33,4 +35,3 @@ export default class ConfirmCancelModal extends React.Component {
       );
     }
 }
-

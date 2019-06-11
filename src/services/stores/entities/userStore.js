@@ -6,7 +6,9 @@ import { authStore } from '../index';
 
 export class UserStore {
   @observable currentUser;
+
   @observable USR_FRM = Validator.prepareFormObject(NEW_USER);
+
   @observable opt = {};
 
   @action
@@ -71,12 +73,12 @@ export class UserStore {
   }
 
   myAccessForModule(module) {
-    return this.myCapabilities.includes(`${module}_FULL`) ?
-      { asManager: true, level: 'FULL' } : (
-        this.myCapabilities.includes(`${module}_MANAGER`) ?
-          { asManager: true, level: 'MANAGER' } : (
-            this.myCapabilities.includes(`${module}_SUPPORT`) ?
-              { asSupport: true, level: 'SUPPORT' } : {}
+    return this.myCapabilities.includes(`${module}_FULL`)
+      ? { asManager: true, level: 'FULL' } : (
+        this.myCapabilities.includes(`${module}_MANAGER`)
+          ? { asManager: true, level: 'MANAGER' } : (
+            this.myCapabilities.includes(`${module}_SUPPORT`)
+              ? { asSupport: true, level: 'SUPPORT' } : {}
           )
       );
   }
@@ -90,14 +92,17 @@ export class UserStore {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('issuer');
   }
+
   @computed get isAdmin() {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('admin');
   }
+
   getUserEmailAddress() {
     const emailDetails = (this.currentUser && toJS(this.currentUser.email)) || null;
     return emailDetails;
   }
+
   getUserId() {
     return (this.currentUser && toJS(this.currentUser.sub)) || null;
   }

@@ -14,6 +14,7 @@ export default class IncomeQualificationCheck extends Component {
     this.props.accreditationStore.resetAccreditation(INCOME_UPLOAD_DOC_FORM);
     this.props.accreditationStore.resetAccreditation(ASSETS_UPLOAD_DOC_FORM);
   }
+
   render() {
     // const incomeQualChecks = INCOME_QUALIFICATION_CHECK_META.slice();
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;

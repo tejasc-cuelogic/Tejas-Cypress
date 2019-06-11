@@ -13,9 +13,11 @@ export default class BonusRewards extends Component {
   componentWillMount() {
     this.props.updateStore.initRequest();
   }
+
   executeSearch = (e) => {
     this.props.updateStore.setInitiateSrch('keyword', e.target.value);
   }
+
   render() {
     const {
       updateStore, match,
@@ -39,13 +41,13 @@ export default class BonusRewards extends Component {
                 requestState={requestState}
                 filters={filters}
                 more="no"
-                addon={
+                addon={(
                   <Grid.Column width={5} textAlign="right">
-                    <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" size="large" trigger={<Button color="green" size="small">Add new Update</Button>} >
+                    <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" size="large" trigger={<Button color="green" size="small">Add new Update</Button>}>
                       <NewUpdate match={match} refLink={match.url} id="new" />
                     </Modal>
                   </Grid.Column>
-                }
+)}
               />
             </Grid.Row>
           </Grid>

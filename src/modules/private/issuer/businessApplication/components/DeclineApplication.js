@@ -13,14 +13,17 @@ export default class DeclineApplication extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.resetCommentFrm();
   }
+
   handleCloseModal = () => {
     this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers`);
   }
+
   declineApplicationHandler = () => {
     const { match, businessAppReviewStore } = this.props;
     const { applicationId } = match.params;
     businessAppReviewStore.applicationDeclineByIssuer(applicationId).then(() => this.props.history.push('/app/dashboard'));
   }
+
   render() {
     const { uiStore, businessAppReviewStore } = this.props;
     const { APPLICATION_STATUS_COMMENT_FRM, formChange } = businessAppReviewStore;
@@ -36,7 +39,8 @@ export default class DeclineApplication extends Component {
             We're sorry you won't be moving forward with a campaign.
             We'd still love to work with you in the future!
           </p>
-          <p>If you have a minute, we'd greatly appreciate any feedback on what we could do
+          <p>
+If you have a minute, we'd greatly appreciate any feedback on what we could do
             to improve. Please share your thoughts on what you would have preferred to see
             and what the primary reasons are that you have decided not to launch a
             NextSeed campaign.
@@ -49,10 +53,12 @@ export default class DeclineApplication extends Component {
               changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
               containerclassname="secondary"
             />
-            {errors &&
+            {errors
+              && (
               <Message error>
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align">
               <Button.Group>

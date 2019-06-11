@@ -1,16 +1,15 @@
-var
+const
   where = 'client' // Adds files only to the client
 ;
 
 Package.describe({
-  name    : 'semantic:ui-css',
-  summary : 'Semantic UI - CSS Release of Semantic UI',
-  version : '{version}',
-  git     : 'git://github.com/Semantic-Org/Semantic-UI-CSS.git',
+  name: 'semantic:ui-css',
+  summary: 'Semantic UI - CSS Release of Semantic UI',
+  version: '{version}',
+  git: 'git://github.com/Semantic-Org/Semantic-UI-CSS.git',
 });
 
-Package.onUse(function(api) {
-
+Package.onUse((api) => {
   api.versionsFrom('1.0');
 
   api.use('jquery', 'client');
@@ -28,7 +27,6 @@ Package.onUse(function(api) {
 
     // release
     'semantic.css',
-    'semantic.js'
+    'semantic.js',
   ], 'client');
-
 });

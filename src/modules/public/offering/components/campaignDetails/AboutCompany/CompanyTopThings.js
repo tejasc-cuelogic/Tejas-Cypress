@@ -17,9 +17,9 @@ class CompanyTopThings extends Component {
         </Header>
         {campaign && campaign.offering
           && campaign.offering.about
-          && campaign.offering.about.theCompany ?
-            <p className="detail-section"><HtmlEditor readOnly content={campaign.offering.about.theCompany} /></p> :
-            <InlineLoader text={emptyStatement} className="bg-offwhite" />
+          && campaign.offering.about.theCompany
+          ? <p className="detail-section"><HtmlEditor readOnly content={campaign.offering.about.theCompany} /></p>
+          : <InlineLoader text={emptyStatement} className="bg-offwhite" />
         }
       </Aux>
     );

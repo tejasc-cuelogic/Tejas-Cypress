@@ -13,15 +13,18 @@ export default class UpdateInvestmentLimits extends Component {
   submit = (e) => {
     e.stopPropagation();
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);
   }
+
   updateInvestmentLimit = () => {
     this.props.investmentLimitStore.updateInvestmentLimit().then(() => {
       this.props.history.push(this.props.refLink);
     });
   }
+
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
@@ -48,8 +51,8 @@ export default class UpdateInvestmentLimits extends Component {
             </Statistic>
             <Divider clearing hidden />
             <Form error onSubmit={this.submit}>
-              {fields &&
-                ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
+              {fields
+                && ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
                   <MaskedInput
                     key={field}
                     name={field}
@@ -63,10 +66,12 @@ export default class UpdateInvestmentLimits extends Component {
                   />
                 ))
               }
-              {errors &&
+              {errors
+                && (
                 <Message error className="mt-30">
                   <ListErrors errors={[errors]} />
                 </Message>
+                )
               }
               <div className="center-align mt-30">
                 <Button.Group>

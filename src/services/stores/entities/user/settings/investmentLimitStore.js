@@ -12,27 +12,41 @@ import { userDetailsQuery } from '../../../queries/users';
 
 export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
+
   @observable investmentLimit = {};
+
   @observable currentLimit = 0;
+
   @observable investorInvestmentLimit = {};
+
   @observable activeAccounts = null;
+
   @observable currentAccountType = null;
+
   @observable currentAccountId = null;
+
   @observable entityCurrentLimit = 0;
+
   @observable individualIRACurrentLimit = 0;
+
   @observable investedAmount = 0;
+
   @observable investNowHealthCheckDetails = {};
+
   @observable investNowError = false;
+
   @observable investorTotalAmountInvested = 0;
 
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
   }
+
   @action
   setInvestNowErrorStatus = (status) => {
     this.investNowError = status;
   }
+
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
     const accList = filter(this.activeAccounts, (account) => {
@@ -88,8 +102,8 @@ export class InvestmentLimitStore {
   });
 
   @computed get getInvestorAmountInvestedValue() {
-    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
-      this.investorInvestmentLimit.data.getInvestorTotalAmountInvested) || 0;
+    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data
+      && this.investorInvestmentLimit.data.getInvestorTotalAmountInvested) || 0;
   }
 
   @computed get getInvestorAmountInvestedLoading() {
@@ -97,13 +111,13 @@ export class InvestmentLimitStore {
   }
 
   @computed get getCurrentInForAccount() {
-    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
-      this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
+    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data
+      && this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
   }
 
   @computed get getCurrentInvestNowHealthCheck() {
-    return (this.investNowHealthCheckDetails && this.investNowHealthCheckDetails.data &&
-      this.investNowHealthCheckDetails.data.investNowHealthCheck) || null;
+    return (this.investNowHealthCheckDetails && this.investNowHealthCheckDetails.data
+      && this.investNowHealthCheckDetails.data.investNowHealthCheck) || null;
   }
 
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
@@ -124,13 +138,13 @@ export class InvestmentLimitStore {
       // const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
       // limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
       limit = Math
-        .max(limitFloor, Math.floor(limitLowPCT *
-          Math.min((data.annualIncome || 0), data.netWorth || 0)));
+        .max(limitFloor, Math.floor(limitLowPCT
+          * Math.min((data.annualIncome || 0), data.netWorth || 0)));
     }
     // }
     limit = Math.min(limit, maxLimit);
-    const remainingAmount = limit -
-    ((data.cfInvestments || 0) + investedAmtFloat);
+    const remainingAmount = limit
+    - ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
@@ -311,8 +325,8 @@ export class InvestmentLimitStore {
         // dateFilterStop,
         closeDateFilter,
       ).then((data) => {
-        const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0) +
-          this.investedAmount;
+        const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0)
+          + this.investedAmount;
         this.setFieldValue('investedAmount', investedAmount);
       });
     }

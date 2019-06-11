@@ -23,49 +23,55 @@ const TableBody = ({
 }) => (
   <Table.Body>
     {
-    fields.length ?
-    fields.map((formData, index) => (
-      <Table.Row verticalAlign="top">
-        <Table.Cell width={5}>
-          <FormInput
-            containerclassname={isReadonly ? 'display-only' : ''}
-            readOnly={isReadonly}
-            name="contingency"
-            fielddata={formData.contingency}
-            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-            size="small"
-          />
-        </Table.Cell>
-        <Table.Cell>
-          <FormInput
-            containerclassname={isReadonly ? 'display-only' : ''}
-            readOnly={isReadonly}
-            name="acceptance"
-            fielddata={formData.acceptance}
-            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-            size="small"
-          />
-        </Table.Cell>
-        {!isReadonly &&
+    fields.length
+      ? fields.map((formData, index) => (
+        <Table.Row verticalAlign="top">
+          <Table.Cell width={5}>
+            <FormInput
+              containerclassname={isReadonly ? 'display-only' : ''}
+              readOnly={isReadonly}
+              name="contingency"
+              fielddata={formData.contingency}
+              changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+              size="small"
+            />
+          </Table.Cell>
+          <Table.Cell>
+            <FormInput
+              containerclassname={isReadonly ? 'display-only' : ''}
+              readOnly={isReadonly}
+              name="acceptance"
+              fielddata={formData.acceptance}
+              changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+              size="small"
+            />
+          </Table.Cell>
+          {!isReadonly
+        && (
         <Table.Cell collapsing>
-          {fields.length > 1 &&
-          <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)} >
+          {fields.length > 1
+          && (
+          <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
             <Icon className="ns-close-circle" color="grey" />
           </Link>
+          )
           }
         </Table.Cell>
+        )
         }
-      </Table.Row>
-    )) : ''
+        </Table.Row>
+      )) : ''
     }
-    {!isReadonly &&
+    {!isReadonly
+    && (
     <Table.Row>
       <Table.Cell colSpan="3">
-        {fields.length < 5 &&
-        <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
+        {fields.length < 5
+        && <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
         }
       </Table.Cell>
     </Table.Row>
+    )
     }
   </Table.Body>
 );
@@ -79,16 +85,20 @@ export default class Contingencies extends Component {
     }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.contingencies.managerOverview');
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
+
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('CONTINGENCY_FRM');
   }
+
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
+
   render() {
     const {
       CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
@@ -100,10 +110,10 @@ export default class Contingencies extends Component {
       businessApplicationDetailsAdmin, applicationReviewLoading,
     } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
-    const submitted = (review && review.contingencies && review.contingencies &&
-      review.contingencies.submitted) ? review.contingencies.submitted : null;
-    const approved = (review && review.contingencies && review.contingencies &&
-      review.contingencies.approved) ? review.contingencies.approved : null;
+    const submitted = (review && review.contingencies && review.contingencies
+      && review.contingencies.submitted) ? review.contingencies.submitted : null;
+    const approved = (review && review.contingencies && review.contingencies
+      && review.contingencies.approved) ? review.contingencies.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     if (applicationReviewLoading) {

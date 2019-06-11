@@ -8,6 +8,7 @@ import Helper from '../../../../../helper/utility';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
+
   @observable agreements = [
     {
       key: 'cCAgreement',
@@ -50,9 +51,13 @@ export class AgreementsStore {
       refEnum: 'INSTRUCTIONS_1099_2018',
     },
   ];
+
   @observable embedUrl = null;
+
   @observable docLoading = false;
+
   @observable docIdsLoading = false;
+
   @observable alreadySet = false;
 
   @computed get getAgreementsList() {
@@ -94,6 +99,7 @@ export class AgreementsStore {
     });
     this.agreements = [...navList];
   }
+
   @computed get getNavItems() {
     const agreementsList = this.getAgreementsList;
     const navList = [];

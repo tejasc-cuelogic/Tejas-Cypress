@@ -8,14 +8,17 @@ import { FieldError } from '../../shared';
 @observer
 export default class FormInput extends Component {
   state = { showError: false };
+
   triggerError = (val) => {
     this.setState({ showError: val });
   }
+
   change = (e) => {
     const { dataid } = this.props;
     const value = this.props.fielddata.rule.includes('email') ? e.target.value.trim() : e.target.value;
     this.props.changed(e, { name: e.target.name, value, dataid });
   }
+
   render() {
     const { props } = this;
     const {
@@ -37,10 +40,12 @@ export default class FormInput extends Component {
         className={fieldClass}
         error={(!!error && this.state.showError) || (!!error && props.showerror)}
       >
-        {!props.ishidelabel && label !== '' &&
+        {!props.ishidelabel && label !== ''
+          && (
           <label>
             {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
-            {tooltip &&
+            {tooltip
+              && (
               <Popup
                 hoverable={props.hoverable}
                 trigger={<Icon className="ns-help-circle" />}
@@ -49,16 +54,20 @@ export default class FormInput extends Component {
                 className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
                 wide
               />
+              )
             }
-            {props.removed &&
+            {props.removed
+              && (
               <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
                 <Icon className="ns-close-circle" color="grey" />
               </Link>
+              )
             }
           </label>
+          )
         }
-        {props.type === 'password' &&
-          <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
+        {props.type === 'password'
+          && <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
         }
         <Input
           fluid
@@ -85,8 +94,8 @@ export default class FormInput extends Component {
           value={value || ''}
           label={props.prefix || false}
         />
-        {((error && this.state.showError) || (error && props.showerror)) &&
-          <FieldError error={error} />
+        {((error && this.state.showError) || (error && props.showerror))
+          && <FieldError error={error} />
         }
       </Form.Field>
     );

@@ -18,7 +18,7 @@ import Agreement from '../../../../public/offering/components/investNow/agreemen
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
-import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
 @observer
@@ -28,24 +28,27 @@ export default class Portfolio extends Component {
     embedUrl: '',
     inActiveItems: [],
   };
+
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);
     this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
-    if (!this.props.isAdmin ||
-    (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
+    if (!this.props.isAdmin
+    || (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
       this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     }
     this.props.portfolioStore.calculateInvestmentType();
     window.addEventListener('message', this.docuSignListener);
     this.props.portfolioStore.setPortfolioError(false);
   }
+
   docuSignListener = (e) => {
     if (e.data === 'viewing_complete') {
       this.setState({ open: false });
     }
   };
+
   viewLoanAgreement = (aggrementId) => {
     this.props.uiStore.setProgress('viewLoanAgreement');
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
@@ -56,15 +59,18 @@ export default class Portfolio extends Component {
       this.props.uiStore.setProgress(false);
     });
   }
+
   closeModal = () => {
     this.setState({ open: false });
   }
+
   toggleAccordion = (of) => {
     const { inActiveItems } = this.state;
-    const updatedList = inActiveItems.includes(of) ? inActiveItems.filter(i => i !== of) :
-      [...inActiveItems, of];
+    const updatedList = inActiveItems.includes(of) ? inActiveItems.filter(i => i !== of)
+      : [...inActiveItems, of];
     this.setState({ inActiveItems: updatedList });
   }
+
   handleViewInvestment = (id) => {
     if (id) {
       this.props.uiStore.setProgress('portfolio');
@@ -72,11 +78,13 @@ export default class Portfolio extends Component {
       this.props.history.push(redirectURL);
     }
   }
+
   handleInvestNowOnChangeClick = (e, id) => {
     const redirectURL = `${this.props.match.url}/${id}/invest-now`;
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(redirectURL);
   }
+
   routesList = () => {
     const { match } = this.props;
     return (
@@ -99,6 +107,7 @@ export default class Portfolio extends Component {
       </Aux>
     );
   }
+
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
@@ -155,35 +164,37 @@ export default class Portfolio extends Component {
     completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
     return (
       <Aux>
-        {this.props.isAdmin &&
-          <AccountHeader module="Investments" pathname={this.props.location.pathname} />
+        {this.props.isAdmin
+          && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
         <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
-        {(getPieChartData.investmentType.length || getPieChartData.industry.length) ?
-          <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
+        {(getPieChartData.investmentType.length || getPieChartData.industry.length)
+          ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }
         <Header as="h4">My Investments</Header>
-        {pendingSorted.length ?
-          <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
+        {pendingSorted.length
+          ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
         }
-        {activeSorted.length ?
-          <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={activeSorted.length} match={match} /> : null
+        {activeSorted.length
+          ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={activeSorted} listOf="active" listOfCount={activeSorted.length} match={match} /> : null
         }
-        {completedSorted.length ?
-          <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
+        {completedSorted.length
+          ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
         }
-        {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
-        !getInvestorAccounts.investments.active.length &&
-        !getInvestorAccounts.investments.completed.length ?
-          <Aux>
-            <p>No investments or reservations pending.</p>
-            <Card>
-              <Card.Content>
-                <Header as="h4">Browse the latest investment opportunities.</Header>
-                <Button as={Link} target="_blank" to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
-              </Card.Content>
-            </Card>
-          </Aux> : null
+        {getInvestorAccounts && !getInvestorAccounts.investments.pending.length
+        && !getInvestorAccounts.investments.active.length
+        && !getInvestorAccounts.investments.completed.length
+          ? (
+            <Aux>
+              <p>No investments or reservations pending.</p>
+              <Card>
+                <Card.Content>
+                  <Header as="h4">Browse the latest investment opportunities.</Header>
+                  <Button as={Link} target="_blank" to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
+                </Card.Content>
+              </Card>
+            </Aux>
+          ) : null
         }
         {this.routesList()}
         <IframeModal

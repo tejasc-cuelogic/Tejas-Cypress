@@ -1,23 +1,32 @@
 
 import { observable, action, toJS } from 'mobx';
 import { get } from 'lodash';
-import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount } from '../../queries/data';
+import graphql from 'mobx-apollo';
+import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META } from '../../../constants/admin/data';
+import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META } from '../../../constants/admin/data';
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
+
   @observable PROCESS_FULL_ACCOUNT_META_FRM =
   Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
+
   @observable RECREATEGOLDSTAR_FRM =
   Validator.prepareFormObject(RECREATEGOLDSTAR_META);
+
+  @observable ENCRYPTDECRYPTUTILITY_FRM =
+  Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
+
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
     adminProcessCip: false,
+    encryptDecryptValue: false,
   };
+
   @observable outputMsg = null;
 
   @action
@@ -42,8 +51,7 @@ export class DataStore {
 
   @action
   formChange = (e, res, form) => {
-    this[form] =
-    Validator.onChange(this[form], Validator.pullValues(e, res));
+    this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
   };
 
   @action
@@ -127,6 +135,7 @@ export class DataStore {
         rej(error);
       });
   });
+
   @action
   adminProcessCip = () => {
     const processData = Validator.evaluateFormData(this.RECREATEGOLDSTAR_FRM.fields);
@@ -160,6 +169,34 @@ export class DataStore {
           Helper.toast(get(error, 'message'), 'error');
           rej(error);
         });
+    });
+  }
+
+  @action
+  encryptOrDecryptValue = (type) => {
+    const processData = Validator.evaluateFormData(this.ENCRYPTDECRYPTUTILITY_FRM.fields);
+    processData.type = type;
+    this.setFieldValue('inProgress', true, 'encryptOrDecryptValue');
+    this.setFieldValue('outputMsg', null);
+    return new Promise((resolve, reject) => {
+      this.data = graphql({
+        client,
+        query: encryptOrDecryptUtility,
+        variables: processData,
+        fetchPolicy: 'network-only',
+        onFetch: (res) => {
+          if (res && res.encryptOrDecryptValue) {
+            Helper.toast('Your request is processed.', 'success');
+            this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
+            resolve(res.encryptOrDecryptValue);
+          }
+        },
+        onError: () => {
+          this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          reject();
+        },
+      });
     });
   }
 }

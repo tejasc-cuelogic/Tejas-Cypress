@@ -39,6 +39,7 @@ export const getUpdate = gql`
       status
       scope
       content
+      tiers
       approved {
         by
         date
@@ -93,4 +94,3 @@ mutation deleteOfferingUpdate($id: [ID]) {
   deleteOfferingUpdates(id: $id)
 }
 `;
-

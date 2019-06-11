@@ -47,15 +47,18 @@ export default class AccountDetails extends Component {
     errorMsg: '',
     copied: false,
   }
+
   // state = { isActivity: false };
   componentWillMount() {
     if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
     }
   }
+
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);
   }
+
   handleDeleteProfile = () => {
     this.props.userDetailsStore.deleteProfile().then(() => {
       this.props.history.push(this.props.refLink);
@@ -63,6 +66,7 @@ export default class AccountDetails extends Component {
       this.setState({ errorMsg: res });
     });
   }
+
   // activityState = (state) => {
   //   this.setState({ isActivity: state });
   // }
@@ -89,10 +93,9 @@ export default class AccountDetails extends Component {
     if (roles.includes('investor')) {
       roles = [...roles, ...details.roles.map(r => r.name)];
     }
-    const navItems = navMeta.filter(n =>
-      ((!n.accessibleTo || n.accessibleTo.length === 0 ||
-        intersection(n.accessibleTo, roles).length > 0)) &&
-      (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
+    const navItems = navMeta.filter(n => ((!n.accessibleTo || n.accessibleTo.length === 0
+        || intersection(n.accessibleTo, roles).length > 0))
+      && (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
@@ -110,30 +113,41 @@ export default class AccountDetails extends Component {
                 </div>
                 <Item.Content verticalAlign="middle">
                   <Header as="h3">
-                    {details.info && details.info.firstName} {details.info && details.info.lastName}
+                    {details.info && details.info.firstName}
+                    {' '}
+                    {details.info && details.info.lastName}
                     <UserTypeIcon role={details.roles} />
                     <Header.Subheader>
-                      {rolesRaw[0]} -
+                      {rolesRaw[0]}
+                      {' '}
+-
                       <CopyToClipboard
                         text={get(details, 'id')}
                         onCopy={() => this.setState({ copied: true })}
                       >
-                        <span> {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}</span>
+                        <span>
+                          {' '}
+                          {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}
+                        </span>
                       </CopyToClipboard>
                     </Header.Subheader>
                   </Header>
                   <Button.Group floated="right">
-                    {!includes(details.status, 'DELETED') && details.status !== 'ADMIN' &&
-                      <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteProfile} content="Delete Profile" />
+                    {!includes(details.status, 'DELETED') && details.status !== 'ADMIN'
+                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteProfile} content="Delete Profile" />
                     }
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
-                      <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
+                      <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} />
+                      {' '}
+                      {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'}
+                      {' '}
+Profile
                     </Button>
                   </Button.Group>
                 </Item.Content>
               </Item>
-              {this.state.errorMsg &&
-                <p className="negative-text right-align"><small>{this.state.errorMsg}</small></p>
+              {this.state.errorMsg
+                && <p className="negative-text right-align"><small>{this.state.errorMsg}</small></p>
               }
             </Item.Group>
             <Card fluid>
@@ -142,8 +156,8 @@ export default class AccountDetails extends Component {
                 <Switch>
                   {
                     navItems.map((item) => {
-                      const CurrentModule = item.load === false ?
-                        item.component : getModule(item.component);
+                      const CurrentModule = item.load === false
+                        ? item.component : getModule(item.component);
                       return (
                         <Route
                           key={item.to}
@@ -155,7 +169,8 @@ export default class AccountDetails extends Component {
                               {...props}
                               adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                               resourceId={details.id}
-                            />)
+                            />
+                          )
                                 }
                         />
                       );

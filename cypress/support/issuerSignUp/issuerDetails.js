@@ -42,4 +42,4 @@ export const issuerDetails = {
       linkedInUrl: 'http://linkedin.com/username',
     },
   },
-}
+};

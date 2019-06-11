@@ -22,9 +22,11 @@ export default class Employment extends Component {
             containerclassname="three wide button-radio center-align"
             showerror
           />
-          {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' &&
+          {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED'
+          && (
           <div className="field-wrap left-align">
-            <Form.Group widths="equal">{
+            <Form.Group widths="equal">
+              {
               ['employer', 'position'].map(field => (
                 <FormInput
                   key={field}
@@ -36,11 +38,14 @@ export default class Employment extends Component {
               ))}
             </Form.Group>
           </div>
+          )
           }
-          {errors &&
+          {errors
+          && (
           <Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
+          )
           }
         </Form>
       </div>

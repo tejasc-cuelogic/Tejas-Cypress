@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { USER_LIST_META } from '../../../../../constants/user';
 import PrivateLayout from '../../../shared/PrivateLayout';
-import { P1, P3, P5 } from './../components/UserListingSubheader';
+import { P1, P3, P5 } from '../components/UserListingSubheader';
 import UserListing from '../components/manage/UserListing';
 
 @inject('userListingStore', 'userStore', 'portfolioStore', 'transactionStore')
@@ -18,8 +18,7 @@ class Users extends Component {
     this.props.userListingStore.reset();
   }
 
-  setSearchParam = (e, { name, value }, type) =>
-    this.props.userListingStore.setInitiateSrch(name, value, type);
+  setSearchParam = (e, { name, value }, type) => this.props.userListingStore.setInitiateSrch(name, value, type);
 
   toggleSearch = () => this.props.userListingStore.toggleSearch();
 
@@ -36,6 +35,7 @@ class Users extends Component {
       this.props.userListingStore.setInitiateSrch('keyword', e.target.value);
     }
   }
+
   paginate = params => this.props.userListingStore.initRequest(params);
 
   render() {
@@ -47,21 +47,25 @@ class Users extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P1={<P1
-          executeSearch={this.executeSearch}
-          requestState={requestState}
-          filters={filters}
-          toggleSearch={this.toggleSearch}
-          addon={isManager ? <P3 /> : null}
-        />}
-        P2={<P5
-          requestState={requestState}
-          setSearchParam={this.setSearchParam}
-          dateFilter={maskChange}
-          summary={usersSummary}
-          removeFilter={this.removeFilter}
-          filters={filters}
-        />}
+        P1={(
+          <P1
+            executeSearch={this.executeSearch}
+            requestState={requestState}
+            filters={filters}
+            toggleSearch={this.toggleSearch}
+            addon={isManager ? <P3 /> : null}
+          />
+)}
+        P2={(
+          <P5
+            requestState={requestState}
+            setSearchParam={this.setSearchParam}
+            dateFilter={maskChange}
+            summary={usersSummary}
+            removeFilter={this.removeFilter}
+            filters={filters}
+          />
+)}
       >
         <UserListing
           loading={loading}

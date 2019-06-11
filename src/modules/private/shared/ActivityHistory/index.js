@@ -12,6 +12,7 @@ import ActivityFeed from './components/ActivityFeed';
 @observer
 export default class ActivityHistory extends Component {
   state = { defaultFilter: true }
+
   componentWillMount() {
     this.props.activityHistoryStore.reset();
     if (this.props.resourceId) {
@@ -19,18 +20,22 @@ export default class ActivityHistory extends Component {
     }
     this.setState({ defaultFilter: false });
   }
+
   componentWillUnmount() {
     this.props.activityHistoryStore.setFieldValue('activityTypes', []);
     this.props.activityHistoryStore.setFieldValue('requestState', { filters: {} });
   }
-  setSearchParam = (e, { name, value }) =>
-    this.props.activityHistoryStore.setInitiateSrch(name, value, this.props.resourceId);
+
+  setSearchParam = (e, { name, value }) => this.props.activityHistoryStore.setInitiateSrch(name, value, this.props.resourceId);
+
   logActivity = () => this.props.activityHistoryStore.send(this.props.resourceId);
+
   change = (date, field) => {
     if ((date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) || !date.formattedValue) {
       this.props.activityHistoryStore.setInitiateSrch(field, date, this.props.resourceId);
     }
   }
+
   render() {
     const {
       ACTIVITY_FRM, msgEleChange, activities, loading, requestState, activityTypes,
@@ -41,25 +46,33 @@ export default class ActivityHistory extends Component {
         <div className="search-filters more inner-content-spacer">
           <Form>
             <Grid columns={4}>
-              {showFilters && showFilters.includes('activityType') && activityTypes.length > 1 &&
+              {showFilters && showFilters.includes('activityType') && activityTypes.length > 1
+                && (
                 <Grid.Column>
                   <DropdownFilter value={requestState.filters.activityType} keyName="activityType" change={this.setSearchParam} name="Activity Type" options={activityTypes} />
                 </Grid.Column>
+                )
               }
-              {showFilters && showFilters.includes('activityUserType') &&
+              {showFilters && showFilters.includes('activityUserType')
+                && (
                 <Grid.Column>
                   <DropdownFilter value={requestState.filters.activityUserType} keyName="activityUserType" change={this.setSearchParam} name="User Type" options={FILTER_META.activityUserType.filter(i => !i.applicable || i.applicable.length === 0 || i.applicable.includes(this.props.module))} />
                 </Grid.Column>
+                )
               }
-              {showFilters && showFilters.includes('ActivityDate') &&
+              {showFilters && showFilters.includes('ActivityDate')
+                && (
                 <Grid.Column>
                   <DateRangeFilter startDate={requestState.filters.startDate ? moment(requestState.filters.startDate).subtract(1, 'day').format('MM-DD-YYYY') : ''} endDate={requestState.filters.endDate ? moment(requestState.filters.endDate).subtract(1, 'day').format('MM-DD-YYYY') : ''} label="Activity Date" change={this.change} />
                 </Grid.Column>
+                )
               }
-              {showFilters && showFilters.includes('subType') &&
+              {showFilters && showFilters.includes('subType')
+                && (
                 <Grid.Column>
                   <DropdownFilter value={requestState.filters.subType} keyName="subType" change={this.setSearchParam} name="Sub Type" options={FILTER_META.subType} />
                 </Grid.Column>
+                )
               }
             </Grid>
           </Form>

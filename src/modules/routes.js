@@ -25,7 +25,7 @@ import {
   AdminAuthorization,
   BusinessAuthorization,
   // UserAuthorization,
-} from '../modules/shared/Authorization';
+} from './shared/Authorization';
 
 export const publicRoutes = [
   {

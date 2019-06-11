@@ -9,12 +9,15 @@ import { FieldError } from '../../shared';
 @observer
 export default class FormPasswordStrength extends Component {
   state = { showError: false };
+
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
   }
+
   triggerError = (val) => {
     this.setState({ showError: val });
   }
+
   render() {
     const { props } = this;
     const {
@@ -34,10 +37,13 @@ export default class FormPasswordStrength extends Component {
         className={fieldClass}
         error={(!!error && this.state.showError)}
       >
-        {!props.ishidelabel && label !== '' &&
+        {!props.ishidelabel && label !== ''
+          && (
           <label>
-            {props.label || label}{props.asterisk && props.asterisk === 'true' ? '*' : ''}
-            {tooltip &&
+            {props.label || label}
+            {props.asterisk && props.asterisk === 'true' ? '*' : ''}
+            {tooltip
+              && (
               <Popup
                 hoverable={props.hoverable}
                 trigger={<Icon className="ns-help-circle" />}
@@ -46,16 +52,20 @@ export default class FormPasswordStrength extends Component {
                 className="center-align"
                 wide
               />
+              )
             }
-            {props.removed &&
+            {props.removed
+              && (
               <Link to={props.linkto} onClick={e => props.removed(e)}>
                 <Icon className="ns-close-circle" color="grey" />
               </Link>
+              )
             }
           </label>
+          )
         }
-        {props.type === 'password' &&
-          <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
+        {props.type === 'password'
+          && <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
         }
         <ReactPasswordStrength
           key={props.key}
@@ -71,15 +81,14 @@ export default class FormPasswordStrength extends Component {
           defaultValue={value}
           showRequiredError={props.showRequiredError}
         />
-        {props.iconDisplay ?
-          <Icon {...togglePasswordType()} onClick={() => setPwdVisibilityStatus()} />
-          :
-          ''}
-        {error && this.state.showError &&
-          <FieldError error={error} />
+        {props.iconDisplay
+          ? <Icon {...togglePasswordType()} onClick={() => setPwdVisibilityStatus()} />
+          : ''}
+        {error && this.state.showError
+          && <FieldError error={error} />
         }
-        {error && props.showRequiredError &&
-          <FieldError error={error} />
+        {error && props.showRequiredError
+          && <FieldError error={error} />
         }
       </Form.Field>
     );

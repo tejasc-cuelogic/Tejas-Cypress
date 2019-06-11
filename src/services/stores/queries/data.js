@@ -50,3 +50,11 @@ mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
     accountId: $accountId,
   )
 }`;
+export const encryptOrDecryptUtility = gql`
+query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
+  encryptOrDecryptValue(
+   userId: $userId
+   text: $text
+   type: $type
+ )
+}`;

@@ -9,6 +9,7 @@ export default class ManageEvents extends Component {
       // search goes here..
     }
   }
+
   render() {
     const { match } = this.props;
     return (

@@ -22,9 +22,11 @@ export default class VerifyEntityAccreditation extends React.Component {
       }
     });
   }
+
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
+
   multiClickHandler = (step) => {
     const { params } = this.props.match;
     if (step.formName === 'ENTITY_ACCREDITATION_FORM' && this.props.accreditationStore[step.formName].fields.method.value !== 'ASSETS') {
@@ -42,6 +44,7 @@ export default class VerifyEntityAccreditation extends React.Component {
       this.handleStepChange(step.stepToBeRendered);
     }
   }
+
   render() {
     const formArray = [
       { key: 'ENTITY_ACCREDITATION_FORM' },

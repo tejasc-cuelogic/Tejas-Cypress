@@ -19,6 +19,7 @@ export default class Leader extends Component {
       getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
     }
   }
+
   handleSubmitIssuer = (leaderId, approved) => {
     const {
       createOrUpdateOfferingBac,
@@ -27,6 +28,7 @@ export default class Leader extends Component {
     const leaderNumber = this.props.index;
     createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId, approved);
   }
+
   render() {
     const {
       LEADER_FRM,
@@ -41,12 +43,12 @@ export default class Leader extends Component {
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     const isManager = access.asManager;
-    const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
-      leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].submitted) ?
-      leaderShipOfferingBacData[index].submitted : null;
-    const approved = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
-      leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].approved) ?
-      leaderShipOfferingBacData[index].approved : null;
+    const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length
+      && leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].submitted)
+      ? leaderShipOfferingBacData[index].submitted : null;
+    const approved = (leaderShipOfferingBacData && leaderShipOfferingBacData.length
+      && leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].approved)
+      ? leaderShipOfferingBacData[index].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     let leaderId = '';
     if (leaderShipOfferingBac.loading) {

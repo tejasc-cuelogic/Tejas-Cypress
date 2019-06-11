@@ -8,6 +8,7 @@ export default class ProccessingAccountsScreen extends Component {
     return (
       <section className="center-align">
         <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={(processingMsg)} /></h4>
-      </section>);
+      </section>
+    );
   }
 }

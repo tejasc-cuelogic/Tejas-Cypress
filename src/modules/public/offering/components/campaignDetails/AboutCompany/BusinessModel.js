@@ -16,10 +16,10 @@ class BusinessModel extends Component {
           Business Model
           <span className="anchor" id="business-model" />
         </Header>
-        {campaign && campaign.offering && campaign.offering.about &&
-          campaign.offering.about.businessModel ?
-            <HtmlEditor readOnly content={campaign.offering.about.businessModel} /> :
-            <InlineLoader text="No data found" className="bg-offwhite" />
+        {campaign && campaign.offering && campaign.offering.about
+          && campaign.offering.about.businessModel
+          ? <HtmlEditor readOnly content={campaign.offering.about.businessModel} />
+          : <InlineLoader text="No data found" className="bg-offwhite" />
         }
       </Aux>
     );

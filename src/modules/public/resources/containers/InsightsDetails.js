@@ -11,6 +11,7 @@ export default class InsightsDetails extends Component {
   componentWillMount() {
     this.props.articleStore.getArticleDetailsBySlug(this.props.match.params.slug);
   }
+
   render() {
     const { ArticlesDetails, articleLoading } = this.props.articleStore;
     if (articleLoading) {

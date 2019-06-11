@@ -8,11 +8,11 @@ class IframeModal extends React.Component {
       srcUrl, open, close, loading,
     } = this.props;
     return (
-      <Modal open={open} size="large" closeIcon onClose={close} >
+      <Modal open={open} size="large" closeIcon onClose={close}>
         <Modal.Content>
           <div className="pdf-viewer">
-            {(loading || !srcUrl) ? <InlineLoader /> :
-            <iframe width="100%" height="100%" title="agreement" src={srcUrl} />
+            {(loading || !srcUrl) ? <InlineLoader />
+              : <iframe width="100%" height="100%" title="agreement" src={srcUrl} />
             }
           </div>
         </Modal.Content>

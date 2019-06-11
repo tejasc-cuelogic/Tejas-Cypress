@@ -8,37 +8,37 @@ const progressMeta = Helper.Progress();
 const checkStatus = (signupStatus, key, userDetailsStore) => {
   let status = false;
   if (key === 'contact-card') {
-    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
-      signupStatus.phoneVerification === 'DONE') {
+    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING')
+      && signupStatus.phoneVerification === 'DONE') {
       status = 2;
-    } else if (signupStatus.isMigratedFullAccount &&
-      signupStatus.isCipDoneForMigratedUser &&
-      signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed) {
+    } else if (signupStatus.isMigratedFullAccount
+      && signupStatus.isCipDoneForMigratedUser
+      && signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed) {
       status = 2;
     } else {
       status = 1;
     }
   } else if (key === 'cash-dollar') {
     if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount)
-    || (signupStatus.isMigratedFullAccount &&
-    signupStatus.isCipDoneForMigratedUser &&
-    signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed && signupStatus.investorProfileCompleted)) {
+    || (signupStatus.isMigratedFullAccount
+    && signupStatus.isCipDoneForMigratedUser
+    && signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed && signupStatus.investorProfileCompleted)) {
       status = 2;
-    } else if (((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
-    signupStatus.phoneVerification === 'DONE') ||
-    (signupStatus.isMigratedFullAccount && userDetailsStore.isBasicVerDoneForMigratedFullUser)
+    } else if (((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING')
+    && signupStatus.phoneVerification === 'DONE')
+    || (signupStatus.isMigratedFullAccount && userDetailsStore.isBasicVerDoneForMigratedFullUser)
     ) {
       status = 1;
     } else {
       status = 0;
     }
   } else if (key === 'bar-line-chart') {
-    if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount) ||
-      (signupStatus.isMigratedFullAccount &&
-      signupStatus.isCipDoneForMigratedUser &&
-      signupStatus.phoneVerification === 'DONE' &&
-      signupStatus.isEmailConfirmed &&
-      signupStatus.investorProfileCompleted
+    if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount)
+      || (signupStatus.isMigratedFullAccount
+      && signupStatus.isCipDoneForMigratedUser
+      && signupStatus.phoneVerification === 'DONE'
+      && signupStatus.isEmailConfirmed
+      && signupStatus.investorProfileCompleted
       )) {
       status = 1;
     } else {
@@ -52,8 +52,8 @@ const ProgressCard = props => (
   <Card.Group stackable itemsPerRow={3}>
     {
       (isEmpty(props.signupStatus.activeAccounts)
-      || (props.signupStatus.isMigratedFullAccount &&
-        (!props.isBasicVerDoneForMigratedFullUser
+      || (props.signupStatus.isMigratedFullAccount
+        && (!props.isBasicVerDoneForMigratedFullUser
         || !props.signupStatus.investorProfileCompleted)))
       && Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
@@ -64,19 +64,18 @@ const ProgressCard = props => (
         /*
         * Condition added for migrated-user
         */
-        const verificationStatus =
-        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification) ||
-        (props.signupStatus.isMigratedFullAccount &&
-        (props.userDetailsStore.userDetails && props.userDetailsStore.userDetails.cip
+        const verificationStatus = props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification)
+        || (props.signupStatus.isMigratedFullAccount
+        && (props.userDetailsStore.userDetails && props.userDetailsStore.userDetails.cip
         && props.userDetailsStore.userDetails.cip.requestId !== null));
         const isEmailVerified = props.signupStatus.isEmailConfirmed;
         /*
         * Condition added for migrated-user
         */
-        const pathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.route}` :
-        `${props.match.url}/${currentCard.route}`;
-        const altPathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.altRoute}` :
-        `${props.match.url}/${currentCard.altRoute}`;
+        const pathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.route}`
+          : `${props.match.url}/${currentCard.route}`;
+        const altPathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.altRoute}`
+          : `${props.match.url}/${currentCard.altRoute}`;
         return (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
             <Card.Content>
@@ -86,23 +85,24 @@ const ProgressCard = props => (
               </Icon.Group>
               <p><b>{currentCard.label}</b></p>
               {status === 2 ? <p>{currentCard.successMsg}</p> : '' }
-              {status === 0 ?
-                '' :
-                status !== 2 ?
-                  <Button
-                    color="green"
-                    content={currentCard.step === 2 ? 'Create' : 'Continue'}
-                    onClick={() =>
-                      (currentCard.step !== 0 ?
-                        props.history.push(`${pathToRender}`) :
-                        !isEmailVerified ?
-                          props.history.push(currentCard.emailVerificationRoute) :
-                        !verificationStatus
-                          ? props.history.push(`${pathToRender}`) :
-                          props.history.push(`${altPathToRender}`))
+              {status === 0
+                ? ''
+                : status !== 2
+                  ? (
+                    <Button
+                      color="green"
+                      content={currentCard.step === 2 ? 'Create' : 'Continue'}
+                      onClick={() => (currentCard.step !== 0
+                        ? props.history.push(`${pathToRender}`)
+                        : !isEmailVerified
+                          ? props.history.push(currentCard.emailVerificationRoute)
+                          : !verificationStatus
+                            ? props.history.push(`${pathToRender}`)
+                            : props.history.push(`${altPathToRender}`))
                     }
-                  /> :
-                  ''
+                    />
+                  )
+                  : ''
               }
             </Card.Content>
           </Card>
@@ -142,10 +142,11 @@ const ProgressCard = props => (
         </Card>
       ))
     } */}
-    {props.signupStatus.partialAccounts.length === 0 &&
-    !isEmpty(props.signupStatus.roles) &&
-    props.signupStatus.roles.length > 1 &&
-    props.signupStatus.inActiveAccounts.length > 0 &&
+    {props.signupStatus.partialAccounts.length === 0
+    && !isEmpty(props.signupStatus.roles)
+    && props.signupStatus.roles.length > 1
+    && props.signupStatus.inActiveAccounts.length > 0
+      && (
       <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
         <Card.Content>
           <Icon.Group size="huge">
@@ -162,6 +163,7 @@ const ProgressCard = props => (
           </Button.Group>
         </Card.Content>
       </Card>
+      )
     }
   </Card.Group>
 );

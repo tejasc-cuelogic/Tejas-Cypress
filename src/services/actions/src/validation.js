@@ -93,7 +93,7 @@ export class Validation {
    });
  }
 
-  /**
+ /**
   * @desc Validates Entity - Formation Docs on next/submit button
   */
 
@@ -105,6 +105,7 @@ export class Validation {
      FormValidator.setFormError(entityAccountStore[form], key, errors && errors[key][0]);
    });
  }
+
  validateLinkBankForm = () => {
    map(bankAccountStore.formLinkBankManually.fields, (value) => {
      const { key } = value;

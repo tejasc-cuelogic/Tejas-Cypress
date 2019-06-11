@@ -10,6 +10,7 @@ export default class ConfirmLoginModal extends React.Component {
     handleCloseModal = () => {
       this.props.history.push(this.props.refLink);
     }
+
     render() {
       return (
         <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
@@ -20,4 +21,3 @@ export default class ConfirmLoginModal extends React.Component {
       );
     }
 }
-

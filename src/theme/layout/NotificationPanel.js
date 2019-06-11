@@ -26,6 +26,7 @@ const Notifications = {
 @observer
 class notificationPanel extends Component {
   state = { notifications: Notifications };
+
   dismiss = (index, action) => {
     const { notifications } = this.state;
     if (action === 0) {
@@ -37,6 +38,7 @@ class notificationPanel extends Component {
     }
     this.setState({ notifications });
   }
+
   render() {
     const { layoutState } = this.props.uiStore;
     return (
@@ -58,18 +60,32 @@ class notificationPanel extends Component {
                       <Icon className="ns-close-light" />
                     </Button>
                     <Message.Header>
-                      <b>{notification.who}</b> {notification.operation} <b>{notification.what}</b> {notification.from} {' '}
+                      <b>{notification.who}</b>
+                      {' '}
+                      {notification.operation}
+                      {' '}
+                      <b>{notification.what}</b>
+                      {' '}
+                      {notification.from}
+                      {' '}
+                      {' '}
                       <b>{notification.module}</b>
                     </Message.Header>
-                    {notification.money &&
-                      <Header as="h3">${notification.money}</Header>
+                    {notification.money
+                      && (
+                      <Header as="h3">
+$
+                        {notification.money}
+                      </Header>
+                      )
                     }
                     <Link to="/dashboard" className="link">See Details</Link>
                   </Message.Content>
-                  {notification.icon &&
-                    <Icon className={notification.icon} />
+                  {notification.icon
+                    && <Icon className={notification.icon} />
                   }
-                  {notification.confirmDismiss &&
+                  {notification.confirmDismiss
+                    && (
                     <div className="confirm-dismiss">
                       <p>Would you like to remove this notification?</p>
                       <Button.Group fluid>
@@ -81,11 +97,12 @@ class notificationPanel extends Component {
                         </Button>
                       </Button.Group>
                     </div>
+                    )
                   }
                 </Message>
               ))}
             </div>
-            ))
+          ))
         }
       </div>
     );
