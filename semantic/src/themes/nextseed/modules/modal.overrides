@@ -629,7 +629,7 @@
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
             &.scrolling {
-                max-height: calc(100vh - 6.1em);
+                max-height: calc(100vh - 10.1em);
             }
         }
         .field-wrap{
