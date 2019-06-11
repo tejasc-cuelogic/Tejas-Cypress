@@ -66,13 +66,14 @@ class Updates extends Component {
                           : <UserAvatar UserInfo={{}} />
                       }
                       </div>
-                      <Item.Content verticalAlign="middle" className="grey-header" >
-                        {(dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId) ?
-                        get(campaign, 'keyTerms.shorthandBusinessName')
-                        : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info &&
-                          dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo &&
-                            dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
-                        <br /><span>{moment(dataItem.updated.date).format('ll')}</span>
+                      <Item.Content verticalAlign="middle" className="grey-header">
+                        {(dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId)
+                          ? get(campaign, 'keyTerms.shorthandBusinessName')
+                          : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info
+                          && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
+                            && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
+                        <br />
+<span>{moment(dataItem.updated.date).format('ll')}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>

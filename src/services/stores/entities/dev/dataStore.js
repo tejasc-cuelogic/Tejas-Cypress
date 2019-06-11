@@ -16,8 +16,10 @@ export class DataStore {
 
   @observable RECREATEGOLDSTAR_FRM =
   Validator.prepareFormObject(RECREATEGOLDSTAR_META);
+
   @observable ENCRYPTDECRYPTUTILITY_FRM =
   Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
+
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,

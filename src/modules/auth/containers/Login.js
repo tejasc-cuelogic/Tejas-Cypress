@@ -19,14 +19,16 @@ class Login extends Component {
     this.props.authStore.setDefaultPwdType();
     localStorage.removeItem('lastActiveTime');
   }
+
   componentDidUpdate() {
     if (this.props.authStore.isUserLoggedIn) {
       const { authRef } = this.props.uiStore;
       const roles = get(this.props.userStore.currentUser, 'roles');
-      this.props.history.push(authRef || (roles && roles.includes('investor') ?
-        `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+      this.props.history.push(authRef || (roles && roles.includes('investor')
+        ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
     }
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
