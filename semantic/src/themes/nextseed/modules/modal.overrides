@@ -630,6 +630,14 @@
             padding: @30px !important;
             &.scrolling {
                 max-height: calc(100vh - 12.1em);
+                border-radius: 0;
+                .ui.attached.bottom.button {
+                    border-radius: 0;
+                    position: absolute; 
+                    width: 100%;
+                    bottom: 0;
+                    left: 0;
+                }
             }
         }
         .field-wrap{
