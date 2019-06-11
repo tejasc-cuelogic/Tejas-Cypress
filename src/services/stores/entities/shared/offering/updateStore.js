@@ -94,7 +94,17 @@ export class UpdateStore {
 
     @action
     UpdateChange = (e, result) => {
-      this.PBUILDER_FRM = Validator.onChange(this.PBUILDER_FRM, Validator.pullValues(e, result));
+      if (result && result.type === 'checkbox') {
+        const index = this.PBUILDER_FRM.fields.tiers.values.indexOf(result.value);
+        if (index === -1) {
+          this.PBUILDER_FRM.fields.tiers.values.push(result.value);
+        } else {
+          this.PBUILDER_FRM.fields.tiers.values.splice(index, 1);
+        }
+        Validator.validateForm(this.PBUILDER_FRM, false, false, false);
+      } else {
+        this.PBUILDER_FRM = Validator.onChange(this.PBUILDER_FRM, Validator.pullValues(e, result));
+      }
     };
 
     @action
@@ -111,6 +121,7 @@ export class UpdateStore {
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.isEarlyBirdOnly = false;
+      data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       client
         .mutate({
           mutation: id === 'new' ? newUpdate : editUpdate,
@@ -156,6 +167,7 @@ export class UpdateStore {
             this.PBUILDER_FRM.fields[key].value = res.offeringUpdatesById[key];
             return null;
           });
+          this.PBUILDER_FRM.fields.tiers.values = res.offeringUpdatesById.tiers;
           Validator.validateForm(this.PBUILDER_FRM);
         },
       });
