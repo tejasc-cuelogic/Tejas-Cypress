@@ -591,9 +591,6 @@
                 background-color: @neutral-darkwhite;
             }
         }
-        .ui.attached.bottom.button {
-            border-radius: 0;
-        }
     }
     >.close{
         height:30px;
@@ -630,20 +627,8 @@
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
             &.scrolling {
-                max-height: calc(100vh - 7.2em);
                 border-radius: 0;
-                // margin-bottom: @42px;
-                .ui.attached.bottom.button {
-                    border-radius: 0;
-                    position: absolute; 
-                    width: 100%;
-                    bottom: 0;
-                    left: 0;
-                }
-                &.increase-height {
-                    max-height: calc(100vh - 4.2em);
-                    margin-bottom: 0;
-                }
+                max-height: calc(100vh - 58px);
             }
         }
         .field-wrap{
