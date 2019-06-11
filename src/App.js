@@ -45,16 +45,12 @@ const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', 
 @observer
 class App extends Component {
   componentWillMount() {
-    const { authStore, location, history } = this.props;
+    const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
       history.push(location.pathname.replace(/\/+$/, ''));
     }
-    if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
-      const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
-      this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
-      history.push('/password-protected');
-    }
+    this.checkForPasswordProtect();
     authActions.verifySession()
       .then(() => {
         this.checkUserIdleStatus();
@@ -81,6 +77,7 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    this.checkForPasswordProtect();
     if (isMobile) {
       document.activeElement.blur();
     }
@@ -153,7 +150,14 @@ class App extends Component {
       });
     }
   }
-
+  checkForPasswordProtect = () => {
+    const { authStore, location, history } = this.props;
+    if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
+      const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
+      this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
+      history.push('/password-protected');
+    }
+  }
   checkUserIdleStatus = () => {
     if (this.props.authStore.isUserLoggedIn && localStorage.getItem('lastActiveTime')) {
       const idleTime = (new Date().getTime() - localStorage.getItem('lastActiveTime'));

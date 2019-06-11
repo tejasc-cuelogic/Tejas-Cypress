@@ -9,6 +9,7 @@ import { FieldError } from '../../../../../theme/shared';
 import OfferingAudit from './data/OfferingAudit';
 import ProcessFullAccount from './data/processFullAccount';
 import RecreateGoldstar from './data/recreateGoldstar';
+import EncryptDecryptUtility from './data/encryptDecryptUtility';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -99,6 +100,7 @@ User folders will be created in current run.
           <ProcessFullAccount />
           <RecreateGoldstar />
           <OfferingAudit />
+          <EncryptDecryptUtility />
         </Grid.Column>
       </Grid>
     );
