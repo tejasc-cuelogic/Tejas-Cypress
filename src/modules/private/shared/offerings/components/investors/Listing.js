@@ -121,7 +121,7 @@ export default class Listing extends Component {
                           content={
                             <span>
                               {data.credit ? `Credit: ${data.credit}` : ''}
-                              {data.autoDraftAmount && data.credit && <br />}
+                              {data.autoDraftAmount && data.credit ? <br /> : ''}
                               {data.autoDraftAmount ? `Auto Draft: ${data.autoDraftAmount}` : ''}
                             </span>}
                           hoverable
