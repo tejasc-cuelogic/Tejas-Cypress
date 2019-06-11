@@ -627,9 +627,9 @@
         position:relative;
         padding:@50px @64px;
         @media only screen and (max-width : @largestMobileScreen){
-            padding: @30px !important;
+            padding: 0px !important;
             &.scrolling {
-                max-height: calc(100vh - 6.1em);
+                max-height: calc(100vh - 3.1em);
             }
         }
         .field-wrap{

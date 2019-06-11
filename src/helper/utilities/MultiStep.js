@@ -285,45 +285,57 @@ export default class MultiStep extends React.Component {
               />
               )
             }
-            {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
-              || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && !isMobile
+            {this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
+              || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)
               ? (
                 <Aux>
                   {!this.props.steps[this.state.compState].disableNextButton
                     && (
-                    <Button
-                      type="submit"
-                      circular
-                      icon={{ className: 'ns-arrow-right' }}
-                      className={`${(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'} multistep__btn next`}
-                      onClick={this.next}
-                    />
+                      !isMobile
+                        ? (
+                      <Button
+                        type="submit"
+                        circular
+                        icon={{ className: 'ns-arrow-right' }}
+                        className={`${(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'} multistep__btn next`}
+                        onClick={this.next}
+                      />
+                        )
+                        : (
+                        <Button
+                          className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'}
+                          onClick={this.next}
+                          attached="bottom"
+                          primary
+                          content="Next"
+                        />
+                        )
                     )
                   }
                 </Aux>
               )
               : null
             }
+            {/* {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
+                || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && isMobile
+              ? (
+                  <Aux>
+                    {!this.props.steps[this.state.compState].disableNextButton
+                      && (
+                      <Button
+                        className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'}
+                        onClick={this.next}
+                        attached="bottom"
+                        primary
+                        content="Next"
+                      />
+                      )
+                    }
+                  </Aux>
+              )
+              : null
+            } */}
           </Modal.Content>
-          {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
-              || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && isMobile
-            ? (
-                <Aux>
-                  {!this.props.steps[this.state.compState].disableNextButton
-                    && (
-                    <Button
-                      className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'}
-                      onClick={this.next}
-                      attached="bottom"
-                      primary
-                      content="Next"
-                    />
-                    )
-                  }
-                </Aux>
-            )
-            : null
-          }
         </Modal>
       </div>
     );
