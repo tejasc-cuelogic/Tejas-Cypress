@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button, Accordion } from 'semantic-ui-react';
@@ -155,14 +156,14 @@ export class NavItems extends Component {
               onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
               text={
                 <Aux>
-                  {item.title === 'My Account' &&
+                  {item.title === 'My Account' && get(this.props.userDetailsStore.currentUser, 'data.user.info.firstName') &&
                   <UserAvatar
                     UserInfo={{
-                      name: 'c',
+                      name: get(this.props.userDetailsStore.currentUser, 'data.user.info.firstName')[0],
                       className: '',
                       roles: ['issuer'],
                     }}
-                    size="5"
+                    size={10}
                   />}
                   {item.icon && <Icon className={item.icon} />}
                   <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
