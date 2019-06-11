@@ -593,7 +593,7 @@
         }
         .ui.attached.bottom.button {
             border-radius: 0;
-            position: absolute; 
+            position: fixed; 
             width: 100%;
             bottom: 42px;
             left: 0;
