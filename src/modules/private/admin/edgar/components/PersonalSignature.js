@@ -43,7 +43,7 @@ const PersonalSignature = observer(props => (
           <MaskedInput
             name="signatureDate"
             fielddata={personData.signatureDate}
-            format="##/##/####"
+            format="##-##-####"
             changed={date => props.changedDate(null, { name: 'signatureDate', value: date.formattedValue, dataid: personData.id })}
             dateOfBirth
             showerror

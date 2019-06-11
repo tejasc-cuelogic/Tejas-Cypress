@@ -127,7 +127,7 @@ export default class OfferingInformation extends React.Component {
             <MaskedInput
               name="deadlineDate"
               fielddata={formOfferingInfo.fields.deadlineDate}
-              format="##/##/####"
+              format="##-##-####"
               changed={verifyDeadlineDate}
               dateOfBirth
               showerror
