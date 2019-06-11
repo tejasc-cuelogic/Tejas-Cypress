@@ -156,7 +156,7 @@ export default class NewUpdate extends Component {
                   </Card.Content>
                 </Card>
               }
-              {isIssuer && ['STARTUP_PERIOD', 'IN_REPAYMENT', 'LIVE'].includes(offer.stage) ?
+              {isIssuer && ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(offer.stage) ?
                 <Card fluid>
                   <Card.Content>
                     <Header as="h4">Who’s this update for?</Header>
