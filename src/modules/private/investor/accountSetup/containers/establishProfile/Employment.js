@@ -4,6 +4,8 @@ import { Form, Header, Message } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('investorProfileStore', 'uiStore')
 @observer
 export default class Employment extends Component {
@@ -11,10 +13,10 @@ export default class Employment extends Component {
     const { EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
     const { errors } = this.props.uiStore;
     return (
-      <div className="center-align">
+      <div className={isMobile ? '' : 'center-align'}>
         <Header as="h3">What is your employment status?</Header>
-        <p className="mb-40">Please indicate your current employment status</p>
-        <Form error>
+        {!isMobile && <p className="mb-40">Please indicate your current employment status</p>}
+        <Form error className={isMobile ? 'mb-40' : ''}>
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.status}
             name="status"
@@ -24,7 +26,7 @@ export default class Employment extends Component {
           />
           {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED'
           && (
-          <div className="field-wrap left-align">
+          <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
             <Form.Group widths="equal">
               {
               ['employer', 'position'].map(field => (

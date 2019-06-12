@@ -706,7 +706,7 @@
         }
         .ui.error.form {
             @media only screen and (max-width:@largestMobileScreen){
-                padding: 0 @14px;
+                padding: 0;
             }
         }
     }

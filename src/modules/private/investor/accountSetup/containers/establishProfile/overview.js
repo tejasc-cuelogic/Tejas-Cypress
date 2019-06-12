@@ -4,6 +4,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Divider, Button } from 'semantic-ui-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('investorProfileStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -18,7 +20,7 @@ export default class Overview extends Component {
     let overviewInfo = (
       <Aux>
         <Header as="h3">Let’s get started</Header>
-        <Divider section className="small" />
+        {!isMobile && <Divider section className="small" />}
         <p className="mb-50">
           To begin making investments, you will need to complete your investor
           profile by answering a few basic questions.
@@ -29,7 +31,7 @@ export default class Overview extends Component {
       overviewInfo = (
         <Aux>
           <Header as="h3">Please establish your investor profile</Header>
-          <Divider section className="small" />
+          {!isMobile && <Divider section className="small" />}
           <p>
             We
             {"'"}
@@ -53,10 +55,12 @@ re pleased to share that certain new investments will now be facilitated
       );
     }
     return (
-      <div className="center-align">
+      <div className={isMobile ? '' : 'center-align'}>
         {overviewInfo}
-        <Button primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
-        <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
+        <div className="center-align">
+          <Button fluid={isMobile} primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
+          <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
+        </div>
         {!signupStatus.isMigratedFullAccount
           ? (
 <p className="mt-50 note">

@@ -4,6 +4,8 @@ import { Form, Header, Message, Divider } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('investorProfileStore', 'uiStore')
 @observer
 export default class PublicCompanyRel extends Component {
@@ -11,13 +13,13 @@ export default class PublicCompanyRel extends Component {
     const { PUBLIC_COMPANY_REL_FORM, employmentChange } = this.props.investorProfileStore;
     const { errors } = this.props.uiStore;
     return (
-      <div className="center-align">
+      <div className={isMobile ? '' : 'center-align'}>
         {/* <Header as="h3">Public Company Relations</Header> */}
         <Header as="h4">
 Are you (or an immediate family member) a 10% shareholder,
           director or senior officer at a publicly traded U.S. company?
         </Header>
-        <Divider hidden />
+        {!isMobile && <Divider hidden />}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
         <Form error>
           <FormRadioGroup
@@ -26,11 +28,10 @@ Are you (or an immediate family member) a 10% shareholder,
             changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
             containerclassname="three wide button-radio center-align"
             showerror
-            vertical
           />
           {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes'
           && (
-          <div className="field-wrap left-align">
+          <div className={`${isMobile ? 'mt-30 mb-20' : 'field-wrap'} left-align`}>
             <Form.Group widths="equal">
               <FormInput
                 key="publicCompanyTicker"

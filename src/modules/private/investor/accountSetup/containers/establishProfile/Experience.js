@@ -6,6 +6,8 @@ import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -56,11 +58,16 @@ export default class Experience extends Component {
     const { errorMessage } = this.state;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Investment Experience</Header>
-        <p className="center-align mb-40">
-          Confirm your experience and understanding of the investment risks on NextSeed.
-          Select the box that best describes your investment experience to date:
-        </p>
+        {
+          !isMobile ? <Header as="h3" textAlign="center">Investment Experience</Header>
+            : <Header as="h4">Please select the box that best describes your investment experience</Header>
+        }
+        {!isMobile && (
+          <p className="center-align mb-40">
+            Confirm your experience and understanding of the investment risks on NextSeed.
+            Select the box that best describes your investment experience to date:
+          </p>
+        )}
         <Form error={!isInvestmentExperienceValid} onSubmit={this.handleSubmitInvestmentExperience}>
           <FormRadioGroup
             fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
@@ -100,7 +107,7 @@ export default class Experience extends Component {
               </p>
               )
             }
-            <Button primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} />
+            <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} />
             {!isInvestmentExperienceValid
               && (
               <p className="negative-text mt-20">
