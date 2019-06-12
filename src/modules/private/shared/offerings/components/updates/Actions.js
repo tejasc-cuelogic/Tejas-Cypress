@@ -36,12 +36,16 @@ const Actions = observer((props) => {
               content={editForm ? 'Save and Unpublish' : 'Save as draft'}
               disabled={!meta.isValid}
             />
-            <Button
-              primary
-              onClick={() => save('PUBLISHED')}
-              content={editForm ? 'Save and Publish' : 'Publish'}
-              disabled={!meta.isValid}
-            />
+            {id !== 'new'
+            && (
+              <Button
+                primary
+                onClick={() => save('PUBLISHED')}
+                content={editForm ? 'Save and Publish' : 'Publish'}
+                disabled={!meta.isValid}
+              />
+            )
+            }
           </Button.Group>
         )
         : (
