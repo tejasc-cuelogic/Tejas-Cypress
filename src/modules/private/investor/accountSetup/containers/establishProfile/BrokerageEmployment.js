@@ -29,7 +29,10 @@ securities brokerage firm?
           <FormRadioGroup
             fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
             name="brokerageEmployment"
-            changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
+            changed={(e, result) => {
+              employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result);
+              this.props.uiStore.scrollIntoActiveInputFields();
+            }}
             containerclassname="three wide button-radio center-align"
             showerror
           />

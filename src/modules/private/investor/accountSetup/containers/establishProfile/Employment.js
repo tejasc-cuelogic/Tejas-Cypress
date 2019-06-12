@@ -20,7 +20,12 @@ export default class Employment extends Component {
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.status}
             name="status"
-            changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
+            changed={
+              (e, result) => {
+                employmentChange(e, 'EMPLOYMENT_FORM', result);
+                this.props.uiStore.scrollIntoActiveInputFields();
+              }
+            }
             containerclassname="three wide button-radio center-align"
             showerror
           />

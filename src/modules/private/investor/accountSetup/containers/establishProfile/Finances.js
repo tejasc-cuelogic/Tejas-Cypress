@@ -37,7 +37,10 @@ export default class Finances extends Component {
           <FormRadioGroup
             fielddata={FINANCES_FORM.fields.investorProfileType}
             name="investorProfileType"
-            changed={investorProfileChange}
+            changed={(e, result) => {
+              investorProfileChange(e, result);
+              this.props.uiStore.scrollIntoActiveInputFields();
+            }}
             containerclassname="three wide button-radio center-align"
             showerror
           />

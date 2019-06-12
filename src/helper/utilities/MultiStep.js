@@ -66,6 +66,10 @@ export default class MultiStep extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    window.scrollTo(0, 0);
+  }
+
   getClassName(className, i) {
     let currentStatus = this.state.navState.styles[i];
     if (!this.state.navState.styles[i]) {
@@ -238,7 +242,7 @@ export default class MultiStep extends React.Component {
           className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
-          inverted={isMobile}
+          dimmer={isMobile && 'inverted'}
           centered={isMobile && false}
         >
           {!this.props.hideHeader && !isMobile

@@ -25,7 +25,10 @@ Are you (or an immediate family member) a 10% shareholder,
           <FormRadioGroup
             fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel}
             name="publicCompanyRel"
-            changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
+            changed={(e, result) => {
+              employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result);
+              this.props.uiStore.scrollIntoActiveInputFields();
+            }}
             containerclassname="three wide button-radio center-align"
             showerror
           />

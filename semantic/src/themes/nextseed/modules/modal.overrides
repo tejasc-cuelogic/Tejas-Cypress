@@ -18,7 +18,7 @@
         }
     }
     @media only screen and (max-width:@largestMobileScreen){
-        background: @white;
+        // background: @white;
         padding: 0;
     }
 }
@@ -588,6 +588,7 @@
             text-align: center;
             color: @neutral-middark;
             border-bottom: 0;
+            border-radius: 0;
             .ui.progress.attached {
                 bottom: -18px;
                 border-radius: 0;
@@ -638,6 +639,7 @@
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
             position:unset;
+            border-radius: 0;
         }
         .field-wrap{
             h6{
