@@ -2,10 +2,10 @@ export const waitForAPIcall = (operationName) => {
   cy.wait(`@${operationName}`);
 };
 
-export const registerApiCall = (operationName) => {
+export const registerApiCall = (operationName, url = '**/**') => {
   cy.server();
-  cy.route('POST', '**/**').as(operationName);
-};
+  cy.route('POST', url).as(operationName);
+}
 
 export const typeOtpCode = () => {
   cy.get('.react-code-input', { timeout: 100000 }).within(() => {
@@ -27,8 +27,8 @@ export const clickonDashboard = () => {
 };
 
 export const btnClickAndWait = (operationName) => {
-  registerApiCall(operationName);
-  cy.wait(500);
+  registerApiCall(operationName, '/dev/graphql');
+  cy.wait(500)
   cy.get('button.next').click({ force: true });
   cy.wait(`@${operationName}`);
 };
@@ -38,19 +38,18 @@ export const uploadFile = (selector = '') => {
   cy.fixture('images/test-img.png').as('img');
   cy.upload_file('images/test-img.png', 'png', selector || 'input[type=file]');
   cy.wait('@fileUpload');
-};
+  cy.wait(1000);
+}  
 
 export const clickRadioAndNext = (selector, radioVal, operationName) => {
   cy.get(selector).check(radioVal, { force: true });
   btnClickAndWait(operationName);
 };
 
-export const escapeCharFromSel = myid => `.${myid.replace(/(:|\.|\[|\]|,|=|@)/g, '\\$1')}`;
-
 export const enterCodeAndConfirm = () => {
-  typeOtpCode();
   registerApiCall('confirm');
+  typeOtpCode();
+  cy.wait(100);
   cy.get('form').find('button').contains('Confirm').click();
   cy.wait('@confirm');
-  cy.wait(100);
 };

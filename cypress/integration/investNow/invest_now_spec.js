@@ -8,6 +8,16 @@ import {
 } from '../../support/investNow/investNowFlow';
 
 describe('Invest now flow', () => {
+  // before(() => {
+  //   initializeInvestNowFlow();
+  // });
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
   it('Should proceed for invest now flow', () => {
     initializeInvestNowFlow();
   });
