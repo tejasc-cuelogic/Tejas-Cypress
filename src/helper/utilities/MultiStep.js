@@ -234,7 +234,7 @@ export default class MultiStep extends React.Component {
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
-          closeIcon
+          closeIcon={!isMobile}
           className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
@@ -253,17 +253,22 @@ export default class MultiStep extends React.Component {
             </Aux>
             )
             : (
-              <Modal.Header className="text-uppercase sticky-sidebar">
+              <Modal.Header className="text-uppercase">
                 {!this.props.steps[this.state.compState].disablePrevButton
                   && (
                   <Button
                     icon={{ className: 'ns-chevron-left' }}
-                    className={`${this.state.showPreviousBtn ? '' : 'disabled'} multistep__btn prev link-button`}
+                    className={`${this.state.showPreviousBtn ? '' : 'disabled'} multistep__btn prev`}
                     onClick={this.previous}
                   />
                   )
                 }
                 {this.props.steps[this.state.compState].name}
+                <Button
+                  icon={{ className: 'ns-close-light' }}
+                  className="link-button pull-right"
+                  onClick={closeDimmerClickAction}
+                />
                 <Progress percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
               </Modal.Header>
             )

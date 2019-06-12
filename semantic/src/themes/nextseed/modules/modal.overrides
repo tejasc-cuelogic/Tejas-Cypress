@@ -581,14 +581,20 @@
             font-size: @12px;
             text-align: center;
             color: @neutral-middark;
-            position: relative;
+            position: sticky;
             padding: 22px 0 0!important;
             border-bottom: 0;
             height: 58px;
+            top: 0;
+            background: @white;
             .ui.progress.attached {
                 bottom: -18px;
                 border-radius: 0;
                 background-color: @neutral-darkwhite;
+            }
+            .ui.button.link-button {
+                color: @neutral-offdark;
+                margin-right: @15px;
             }
         }
     }
@@ -608,13 +614,13 @@
         @media only screen and (max-width:@largestTabletScreen){
             color:@neutral-middark;
         }
-        @media only screen and (max-width:@largestMobileScreen){
-            top: 22px!important;
-            right: 15px !important;
-            height: auto;
-            width: auto;
-            line-height: 12px;
-        }
+        // @media only screen and (max-width:@largestMobileScreen){
+        //     top: 22px!important;
+        //     right: 15px !important;
+        //     height: auto;
+        //     width: auto;
+        //     line-height: 12px;
+        // }
     }
     .ui.header{
         border:none;
@@ -626,10 +632,7 @@
         padding:@50px @64px;
         @media only screen and (max-width : @largestMobileScreen){
             padding: @30px !important;
-            &.scrolling {
-                border-radius: 0;
-                max-height: calc(100vh - 58px);
-            }
+            position:unset;
         }
         .field-wrap{
             h6{
