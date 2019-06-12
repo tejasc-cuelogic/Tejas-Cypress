@@ -55,7 +55,7 @@ export const ConfirmTransferRequest = () => {
 
 export const generateAgreement = () => {
   cy.wait('@investNowGeneratePurchaseAgreement');
-  cy.wait(20000)
+  cy.wait(500)
   cy.get('.confirm-investment').should('have.length', 1);
   cy.get('.signup-content').find('div:visible').find('.ui.form').find('.ui.stackable.grid')
     .find('.row')
@@ -92,7 +92,7 @@ export const enteringInvestmentAmount = () => {
   registerApiCall('investNowGeneratePurchaseAgreement');
   invalidInvestmentAmount();
   validInvestmentAmount();
-  ConfirmTransferRequest();
+  // ConfirmTransferRequest();
   generateAgreement();
   submitInvestment();
 };
