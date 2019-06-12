@@ -13,12 +13,15 @@ export default class ManageInsights extends Component {
   componentWillMount() {
     this.props.articleStore.getCategoryList(false);
   }
-  setSearchParam = (e, { name, value }) =>
-    this.props.articleStore.setInitiateSrch(name, value);
+
+  setSearchParam = (e, { name, value }) => this.props.articleStore.setInitiateSrch(name, value);
+
   search = (e, name) => {
     this.props.articleStore.setInitiateSrch(name, e.target.value);
   }
+
   toggleSearch = () => this.props.articleStore.toggleSearch();
+
   render() {
     const { match } = this.props;
     const {
@@ -31,26 +34,26 @@ export default class ManageInsights extends Component {
       <PrivateLayout
         refMatch={this.props.refMatch}
         {...this.props}
-        P1={
+        P1={(
           <Search
             {...this.props}
             w={[10]}
             placeholder="Search by keyword or phrase"
             change={e => this.search(e, 'title')}
-            addon={
+            addon={(
               <Grid.Column width={3} textAlign="right" floated="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
                 Add new article
                 </Button>
               </Grid.Column>
-            }
+)}
             toggleSearch={this.toggleSearch}
             filters={filters}
             requestState={requestState}
             more="no"
           />
-        }
-        P2={
+)}
+        P2={(
           <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
             <Form>
               <Grid stackable columns="equal">
@@ -96,7 +99,7 @@ export default class ManageInsights extends Component {
               </Grid>
             </Form>
           </div>
-        }
+)}
       >
         <AllInsights match={match} />
       </PrivateLayout>

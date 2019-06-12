@@ -16,9 +16,13 @@ import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
+
   @observable hasError = false;
+
   @observable statementDate = [];
+
   @observable filters = false;
+
   @observable requestState = {
     search: {},
     page: 1,
@@ -26,25 +30,45 @@ export class TransactionStore {
     skip: 0,
     displayTillIndex: 25,
   };
+
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
+
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
+
   @observable cash = null;
+
   @observable cashAvailable = {};
+
   @observable showConfirmPreview = false;
+
   @observable reSendVerificationCode = null;
+
   @observable transactionOtpRequestId = null;
+
   @observable transactionDisplayPhoneNumber = null;
+
   @observable confirmEmailAdress = '';
+
   @observable paymentHistoryData = [];
+
   @observable investmentsByOffering = [];
+
   @observable investmentOptions = [];
+
   @observable selectedInvestment = '';
+
   @observable validWithdrawAmt = false;
+
   @observable availableWithdrawCash = null;
+
   @observable aggrementId = '';
+
   @observable loanAgreementData = {};
+
   @observable isAdmin = false;
+
   @observable db = [];
+
   @observable apiCall = false;
 
   @action
@@ -55,8 +79,8 @@ export class TransactionStore {
   @action
   initRequest = (props) => {
     this.resetData();
-    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
-      userDetailsStore.currentActiveAccountDetails;
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
+      : userDetailsStore.currentActiveAccountDetails;
     const { userDetails, getDetailsOfUser } = userDetailsStore;
 
     this.data = graphql({
@@ -100,14 +124,16 @@ export class TransactionStore {
   @computed get totalRecords() {
     return this.db.length;
   }
+
   @computed get allPaymentHistoryData() {
-    return this.paymentHistoryData.data &&
-      this.paymentHistoryData.data.getPaymentHistory
+    return this.paymentHistoryData.data
+      && this.paymentHistoryData.data.getPaymentHistory
       ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), ['desc']) : [];
   }
+
   @computed get loading() {
-    return this.data.loading || this.investmentsByOffering.loading ||
-    this.paymentHistoryData.loading || this.loanAgreementData.loading;
+    return this.data.loading || this.investmentsByOffering.loading
+    || this.paymentHistoryData.loading || this.loanAgreementData.loading;
   }
 
   @computed get error() {
@@ -140,6 +166,7 @@ export class TransactionStore {
     this.requestState.search = srchParams;
     this.initiateFilters();
   }
+
   @action
   setData = () => {
     this.setDb(this.accountTransactions);
@@ -190,8 +217,8 @@ export class TransactionStore {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    this.requestState.skip = (skip === pageWiseCount) ?
-      pageWiseCount - this.requestState.perPage : skip;
+    this.requestState.skip = (skip === pageWiseCount)
+      ? pageWiseCount - this.requestState.perPage : skip;
   }
 
 
@@ -272,14 +299,17 @@ export class TransactionStore {
         });
     });
   }
+
   @action
   setInitialLinkValue = (boolValue) => {
     this.showConfirmPreview = boolValue;
   }
+
   @action
   setInitialFundValue = () => {
     Validator.resetFormData(this.TRANSFER_FRM);
   }
+
   @action
   verifyVerificationCodeChange = (value) => {
     this.OTP_VERIFY_META = Validator.onChange(
@@ -287,10 +317,12 @@ export class TransactionStore {
       { name: 'code', value },
     );
   };
+
   @action
   setReSendVerificationCode(value) {
     this.reSendVerificationCode = value;
   }
+
   @action
   requestOtpForManageAddWithdrawTransactions = () => {
     uiStore.setProgress();
@@ -317,6 +349,7 @@ export class TransactionStore {
         });
     });
   }
+
   @action
   requestOtpForManageTransactions = () => {
     uiStore.setProgress();
@@ -354,6 +387,7 @@ export class TransactionStore {
         });
     });
   }
+
   confirmAccountLinking = (setProgress = true) => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -386,18 +420,22 @@ export class TransactionStore {
         });
     });
   }
+
   @action
   resetFormData(form) {
     this[form] = Validator.resetFormData(this[form]);
   }
+
   @action
   setPhoneNumber(phoneNumberVal) {
     this.transactionDisplayPhoneNumber = phoneNumberVal;
   }
+
   @action
   setConfirmEmailAddress(emailVal) {
     this.confirmEmailAdress = emailVal;
   }
+
   @action
   withdrawFunds = (amount, description) => {
     uiStore.setProgress(true);
@@ -438,10 +476,11 @@ export class TransactionStore {
         });
     });
   }
+
   @action
   getInvestorAvailableCash = (includeInFlight = true, isAdmin = false) => {
-    const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails :
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
+      : userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const { userDetails, getDetailsOfUser } = userDetailsStore;
     return new Promise((resolve, reject) => {
       this.cashAvailable = graphql({

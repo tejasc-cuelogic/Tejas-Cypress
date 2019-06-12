@@ -14,6 +14,7 @@ export default class KnowledgeBase extends Component {
       this.props.knowledgeBaseStore.toggleSearch();
     }
   }
+
   render() {
     const { match, refMatch } = this.props;
     return (

@@ -15,7 +15,12 @@ export default class NetWorth extends Component {
     } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">What is your {this.props.isTrust ? 'trust' : ''} net worth?</Header>
+        <Header as="h3" textAlign="center">
+What is your
+          {this.props.isTrust ? 'trust' : ''}
+          {' '}
+net worth?
+        </Header>
         <p className="center-align">{this.props.isTrust ? 'The trust net worth is at least' : 'My net worth is at least'}</p>
         <Form error className="account-type-tab">
           <FormRadioGroup

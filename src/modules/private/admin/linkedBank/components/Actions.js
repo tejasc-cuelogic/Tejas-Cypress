@@ -14,6 +14,7 @@ export default class Actions extends Component {
     const { updateAccountChangeAction, accountId, userId } = this.props;
     updateAccountChangeAction(accountId, userId, action === 'deny').then().catch();
   }
+
   render() {
     const { loadingRequestIds } = this.props.bankAccountStore;
     return (
@@ -28,9 +29,8 @@ export default class Actions extends Component {
             >
               {actions[action].label}
             </Button>
-            ))
-          :
-          <Button disabled className="red" >Locked</Button>
+          ))
+            : <Button disabled className="red">Locked</Button>
           }
         </Button.Group>
       </Table.Cell>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import PrivateLayout from '../../../shared/PrivateLayout';
+import PrivateLayout from '../../PrivateLayout';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { InlineLoader } from '../../../../../theme/shared';
 
@@ -25,6 +25,7 @@ export default class Education extends Component {
       }
     }
   }
+
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;

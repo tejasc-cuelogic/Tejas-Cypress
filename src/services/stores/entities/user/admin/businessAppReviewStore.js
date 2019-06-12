@@ -22,34 +22,61 @@ export class BusinessAppReviewStore {
   @observable PROMOTE_APPLICATION_STATUS_PASSWORD_FRM =
   Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
+
   @observable MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
+
   @observable JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
+
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
+
   @observable PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
+
   @observable BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
+
   @observable CONTINGENCY_FRM = Validator.prepareFormObject(CONTINGENCY);
+
   @observable MISCELLANEOUS_FRM = Validator.prepareFormObject(MISCELLANEOUS);
+
   @observable MODEL_MANAGER_FRM = Validator.prepareFormObject(MODEL_MANAGER);
+
   @observable UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
+
   @observable OFFERS_FRM = Validator.prepareFormObject(OFFERS);
+
   @observable MODEL_INPUTS_FRM = Validator.prepareFormObject(MODEL_INPUTS);
+
   @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
+
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
+
   @observable businessApplicationOffers = null;
+
   @observable confirmModal = false;
+
   @observable confirmModalName = null;
+
   @observable removeIndex = null;
+
   @observable selectedOfferIndex = null;
+
   @observable paBoxFolderId = null;
+
   @observable signPortalAgreementURL = '';
+
   @observable removeFileIdsList = [];
+
   @observable showGeneratePA = false;
+
   @observable inProgress = false;
+
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
+
   @observable amortizationArray = [];
+
   @observable initLoad = [];
+
   @observable expAnnualRevCount = 1;
 
   @action
@@ -155,10 +182,12 @@ export class BusinessAppReviewStore {
       { name: 'ownership', value: values.floatValue }, 'controlPersons', index,
     );
   }
+
   @action
   checkFormValid = (form, multiForm, showErrors) => {
     this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
   }
+
   @action
   setFileUploadData = (form, arrayName, field, files, index = null) => {
     if (typeof files !== 'undefined' && files.length) {
@@ -253,22 +282,23 @@ export class BusinessAppReviewStore {
       { name: field, value: fieldValue },
     );
   }
+
   @action
   assignAdditionalTermsValue = (index) => {
-    this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
-      this.OFFERS_FRM.fields.offer[index].additionalTerms.value ? 'Additional Terms Applied' : 'Add Terms';
+    this.OFFERS_FRM.fields.offer[index].additionalTermsField.value = this.OFFERS_FRM.fields.offer[index].additionalTerms.value ? 'Additional Terms Applied' : 'Add Terms';
   }
+
   @action
   addAdditionalTermsToFormData = (index) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     if (!businessApplicationDetailsAdmin) {
       return false;
     }
-    this.OFFERS_FRM.fields.offer[index].additionalTerms.value =
-    (businessApplicationDetailsAdmin.offers.offer[index] &&
-      businessApplicationDetailsAdmin.offers.offer[index].additionalTerms) || null;
+    this.OFFERS_FRM.fields.offer[index].additionalTerms.value = (businessApplicationDetailsAdmin.offers.offer[index]
+      && businessApplicationDetailsAdmin.offers.offer[index].additionalTerms) || null;
     return false;
   }
+
   @action
   maskChangeWithIndex = (values, form, arrayName = 'data', field, index) => {
     const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' || field === 'companyInceptionDate' ? values.formattedValue : values.floatValue;
@@ -306,8 +336,7 @@ export class BusinessAppReviewStore {
 
   @computed
   get getMaxMaturityValue() {
-    const maxValue =
-    Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => (o.structure.value === 'REVENUE_SHARING_NOTE' ? o.maturity.value : 0) || 0));
+    const maxValue = Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => (o.structure.value === 'REVENUE_SHARING_NOTE' ? o.maturity.value : 0) || 0));
     return maxValue || 0;
   }
 
@@ -353,8 +382,8 @@ export class BusinessAppReviewStore {
 
  @action
   updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '') => {
-    const applicationSource = applStatus ===
-    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    const applicationSource = applStatus
+    === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
     uiStore.setProgress();
     let payload = {
@@ -542,6 +571,7 @@ export class BusinessAppReviewStore {
       ? offerData.offers.offer[this.selectedOfferIndex] : null;
     return offer.structure;
   }
+
   revenueSharing = () => {
     const offerData = this.fetchBusinessApplicationOffers;
     const offer = offerData && offerData.offers && offerData.offers.offer[this.selectedOfferIndex]
@@ -575,6 +605,7 @@ export class BusinessAppReviewStore {
     }
     return [];
   }
+
   paymentChart = () => {
     const offerData = this.fetchBusinessApplicationOffers;
     const offer = offerData.offers.offer[this.selectedOfferIndex];
@@ -588,8 +619,8 @@ export class BusinessAppReviewStore {
       const { schedule, balance } = Calculator.calculate(data);
       const formattedSchedule = [];
       schedule.map((sc, index) => {
-        const previousBalance = index === 0 ? money.floatToAmount(balance.toString()) :
-          money.floatToAmount(schedule[index - 1].remainingBalance);
+        const previousBalance = index === 0 ? money.floatToAmount(balance.toString())
+          : money.floatToAmount(schedule[index - 1].remainingBalance);
         const interestAmount = money.floatToAmount(sc.interest.toString());
         const principalAmount = money.floatToAmount(sc.principal.toString());
         const totalMonthlyPayment = money.floatToAmount(money.add(principalAmount, interestAmount));
@@ -758,8 +789,7 @@ export class BusinessAppReviewStore {
       if (appData && get(appData, 'offers.offer')) {
         appData.offers.offer.map((offer, index) => {
           this.showFormAmortisation(index);
-          this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
-            offer.additionalTerms ? 'Additional Terms Applied' : 'Add Terms';
+          this.OFFERS_FRM.fields.offer[index].additionalTermsField.value = offer.additionalTerms ? 'Additional Terms Applied' : 'Add Terms';
           return null;
         });
         if (appData.offers.expectedAnnualRevenue && appData.offers.expectedAnnualRevenue.length) {
@@ -773,6 +803,7 @@ export class BusinessAppReviewStore {
     }
     return false;
   }
+
   @action
   showFormAmortisation = (index) => {
     const maturity = this.OFFERS_FRM.fields.offer[index].maturity.value || 0;
@@ -785,22 +816,21 @@ export class BusinessAppReviewStore {
       loanTerm: maturity,
     };
     const data = Calculator.calculate(Formdata);
-    const amortizationAmount = data && data.schedule.length ?
-      money.add(
+    const amortizationAmount = data && data.schedule.length
+      ? money.add(
         money.floatToAmount(data.schedule[0].interest),
         money.floatToAmount(data.schedule[0].principal),
       ) : '0.00';
-    const returnedAmount =
-    money.floatToAmount(money.mul(amortizationAmount, money.floatToAmount(maturity)));
+    const returnedAmount = money.floatToAmount(money.mul(amortizationAmount, money.floatToAmount(maturity)));
     this.OFFERS_FRM.fields.offer[index].totalCapital.value = returnedAmount;
     this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = amortizationAmount;
   }
+
   @action
   showSingleOfferForSigned = (data) => {
     let offersToShow = null;
     if (this.fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL') {
-      offersToShow =
-      data.find(obj => obj.isAccepted === true);
+      offersToShow = data.find(obj => obj.isAccepted === true);
       this.OFFERS_FRM = Validator.setFormData(this.OFFERS_FRM, { offer: [offersToShow] });
     }
   }

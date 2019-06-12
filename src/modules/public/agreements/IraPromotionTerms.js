@@ -22,7 +22,11 @@ export default class IraPromotionTerms extends Component {
             <p>
               You will be responsible for any fees charged by GoldStar that don’t meet the above
               requirements, including a $100 account termination fee when closing your IRA. See
-              the <a className="positive-text" href="https://www.goldstartrust.com/Fees.aspx">GoldStar IRA Fee Schedule</a> for more information.
+              the
+              {' '}
+              <a className="positive-text" href="https://www.goldstartrust.com/Fees.aspx">GoldStar IRA Fee Schedule</a>
+              {' '}
+for more information.
             </p>
             <p>
               The value of this promotional fee waiver or any other reward you receive may

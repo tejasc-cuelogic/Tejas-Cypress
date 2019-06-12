@@ -15,18 +15,22 @@ const progressMap = ['viewLoanAgreement', 'portfolio'];
 @observer
 class SidebarLeftPush extends Component {
   toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
+
   toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
+
   render() {
     const { layoutState, showFireworkAnimation } = this.props.uiStore;
     return (
       <Aux>
-        {showFireworkAnimation &&
-        <FireworksAnimation />
+        {showFireworkAnimation
+        && <FireworksAnimation />
         }
-        {progressMap.includes(this.props.uiStore.inProgress) &&
+        {progressMap.includes(this.props.uiStore.inProgress)
+          && (
           <Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
             <Loader active={this.props.uiStore.inProgress} />
           </Dimmer>
+          )
         }
         <Responsive minWidth={1200}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
@@ -65,23 +69,29 @@ const MySidebar = observer(props => (
             <Link to="/" className="logo-wrapper">
               <Logo
                 className="logo"
-                dataSrc={((props.layoutState.leftPanel) ?
-                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoGreenGrey') :
-                  'LogoSmall')}
+                dataSrc={((props.layoutState.leftPanel)
+                  ? (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoGreenGrey')
+                  : 'LogoSmall')}
               />
             </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             <div className="user-picture">
-              {props.UserInfo.avatarUrl ?
-                <Image64
-                  avatar
-                  size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
-                  circular
-                  srcUrl={props.UserInfo.avatarUrl}
-                /> :
-                <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
+              {props.UserInfo.avatarUrl
+                ? (
+                  <Image64
+                    avatar
+                    size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
+                    circular
+                    srcUrl={props.UserInfo.avatarUrl}
+                  />
+                )
+                : <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
-              <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
+              <p>
+                {props.UserInfo.firstName}
+                {' '}
+                {props.UserInfo.lastName}
+              </p>
             </div>
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
@@ -92,8 +102,8 @@ const MySidebar = observer(props => (
     <Sidebar.Pusher
       dimmed={props.mobile && props.layoutState.leftPanelMobile}
       onClick={(props.mobile && props.layoutState.leftPanelMobile) ? props.toggle : undefined}
-      className={`${props.match.url.includes('/business-application') ?
-        'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
+      className={`${props.match.url.includes('/business-application')
+        ? 'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
     >
       {props.mobile && <Icon onClick={props.toggle} className="ns-hamburger" />}
       {props.children}

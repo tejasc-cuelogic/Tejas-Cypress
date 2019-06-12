@@ -23,8 +23,8 @@ export default class ConfirmEmailAddress extends Component {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
 
-    if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
-      !this.props.authStore.isUserLoggedIn) {
+    if (!this.props.authStore.CONFIRM_FRM.fields.email.value
+      && !this.props.authStore.isUserLoggedIn) {
       this.props.history.push(this.props.refLink || '/auth/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
@@ -34,6 +34,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
@@ -41,6 +42,7 @@ export default class ConfirmEmailAddress extends Component {
   componentDidUpdate() {
     this.props.authStore.setUserCredentiansConfirmEmail();
   }
+
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.uiStore.clearErrors();
@@ -70,9 +72,8 @@ export default class ConfirmEmailAddress extends Component {
             if (roles.includes('investor')) {
               this.props.identityStore.setIsOptConfirmed(true);
             } else {
-              const redirectUrl = !roles ? '/auth/login' :
-                SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                  roles.includes(user.role)).path;
+              const redirectUrl = !roles ? '/auth/login'
+                : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
               this.props.history.replace(redirectUrl);
             }
           });
@@ -95,9 +96,8 @@ export default class ConfirmEmailAddress extends Component {
                 }
                 this.props.identityStore.setIsOptConfirmed(true);
               } else {
-                const redirectUrl = !roles ? '/auth/login' :
-                  SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                    roles.includes(user.role)).path;
+                const redirectUrl = !roles ? '/auth/login'
+                  : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
                 this.props.history.replace(redirectUrl);
               }
             })
@@ -149,8 +149,8 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   render() {
-    const changeEmailAddressLink = this.props.refLink ?
-      '/app/account-settings/profile-data/new-email-address' : '/auth/register-investor';
+    const changeEmailAddressLink = this.props.refLink
+      ? '/app/account-settings/profile-data/new-email-address' : '/auth/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,
@@ -180,10 +180,12 @@ export default class ConfirmEmailAddress extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          { (confirmProgress === 'confirm' && inProgress) &&
+          { (confirmProgress === 'confirm' && inProgress)
+          && (
           <Dimmer page active={inProgress}>
             <Loader active={inProgress} />
           </Dimmer>
+          )
          }
           <FormInput
             ishidelabel
@@ -197,10 +199,10 @@ export default class ConfirmEmailAddress extends Component {
             title={CONFIRM_FRM.fields.email.value}
             className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only`}
           />
-          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value)) &&
-            <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
+            && <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
           }
-          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
+          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -214,14 +216,16 @@ export default class ConfirmEmailAddress extends Component {
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
-              {!isEmpty(CONFIRM_FRM.fields.email.value) &&
-                <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+              {!isEmpty(CONFIRM_FRM.fields.email.value)
+                && <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
               }
             </Form.Field>
-            {errors &&
+            {errors
+              && (
               <Message error className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
+              )
             }
             <Button primary size="large" className="very relaxed" content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
           </Form>

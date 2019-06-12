@@ -38,7 +38,8 @@ const GeneralInformation = props => (
         <div className="field-wrap">
           <Header as="h6">
             {props.currentApplicationType === 'business' ? 'Business Address' : 'Entity Address '}
-            {props.currentApplicationType === 'commercial-real-estate' &&
+            {props.currentApplicationType === 'commercial-real-estate'
+            && (
             <Popup
               trigger={<Icon className="ns-help-circle" />}
               content="Enter address of investment location,
@@ -47,6 +48,7 @@ const GeneralInformation = props => (
               className="left-align"
               wide
             />
+            )
           }
           </Header>
           <AutoComplete
@@ -71,7 +73,7 @@ const GeneralInformation = props => (
                   fielddata={props.fields[field]}
                   changed={props.businessAppEleChange}
                 />
-                ))
+              ))
               }
             <MaskedInput
               zipCode

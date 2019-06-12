@@ -9,6 +9,7 @@ export default class ManageAmbassadors extends Component {
       // search goes here..
     }
   }
+
   render() {
     const { match } = this.props;
     return (

@@ -18,6 +18,7 @@ export default class Leadership extends Component {
       this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', false);
     }
   }
+
   addMore = (e, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, 'leadership');
@@ -25,6 +26,7 @@ export default class Leadership extends Component {
     const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     this.props.history.push(`${this.props.match.url}/leader/${leaderCount}`);
   }
+
   render() {
     const { match } = this.props;
     const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
@@ -70,8 +72,8 @@ export default class Leadership extends Component {
           <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <SecondaryMenu secondary vertical match={match} navItems={navItems} />
-              {LEADERSHIP_FRM.fields.leadership.length < 10 &&
-              <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
+              {LEADERSHIP_FRM.fields.leadership.length < 10
+              && <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
               }
               <FaqWidget fullHeading="FAQ" faqs={faqsOfModule} />
             </div>
@@ -81,8 +83,7 @@ export default class Leadership extends Component {
               <Route
                 exact
                 path={match.url}
-                render={props =>
-                  <Leader refLink={match.url} {...props} index={0} />}
+                render={props => <Leader refLink={match.url} {...props} index={0} />}
               />
               {
                 navItems.map((item, index) => (

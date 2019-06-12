@@ -7,7 +7,7 @@ import { Responsive, Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
-import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
+import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
@@ -47,21 +47,24 @@ class Business extends Component {
       this.props.history.replace(`${this.props.match.url}/how-it-works`);
     }
   }
+
   componentWillUpdate() {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/how-it-works`);
     }
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   render() {
     const { location, match, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
         <MetaTagGenerator metaTagsData={metaTagsData} />
-        {location.pathname === '/business/how-it-works' ||
-          location.pathname === '/business' ? <Banner /> :
-          <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
+        {location.pathname === '/business/how-it-works'
+          || location.pathname === '/business' ? <Banner />
+          : <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
         <Visibility
           onUpdate={this.handleUpdate}

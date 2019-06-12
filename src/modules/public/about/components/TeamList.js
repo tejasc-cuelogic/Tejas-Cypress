@@ -25,13 +25,15 @@ class teamList extends Component {
                   </div>
                 </Reveal.Content>
                 <Reveal.Content visible>
-                  <LazyLoad height={100} >
+                  <LazyLoad height={100}>
                     <Image64 avatarPlaceholder srcUrl={member.avatar} alt={member.memberName} />
                   </LazyLoad>
                 </Reveal.Content>
               </Reveal>
-            </Grid.Column>))}
-          { joinColumn &&
+            </Grid.Column>
+          ))}
+          { joinColumn
+          && (
           <Grid.Column verticalAlign="middle" className={`${(teamMembers.length % 2 === 0) && 'centered'}`}>
             <Link to="/about/careers">
               <Header as="h4" textAlign="center">
@@ -42,7 +44,8 @@ class teamList extends Component {
                 </Header.Subheader>
               </Header>
             </Link>
-          </Grid.Column> }
+          </Grid.Column>
+          ) }
         </Grid>
       </Grid.Column>
     );
@@ -50,4 +53,3 @@ class teamList extends Component {
 }
 
 export default teamList;
-

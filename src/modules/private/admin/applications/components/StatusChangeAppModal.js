@@ -19,6 +19,7 @@ export default class StatusChangeAppModal extends Component {
       this.props.businessAppReviewStore.resetPasswordFrm();
     }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     const { match } = this.props;
@@ -26,6 +27,7 @@ export default class StatusChangeAppModal extends Component {
     this.props.uiStore.setErrors(null);
     this.props.history.push(`/app/applications/${params.id}`);
   }
+
   updateApplicationStatus = (e) => {
     e.preventDefault();
     const { match } = this.props;
@@ -37,6 +39,7 @@ export default class StatusChangeAppModal extends Component {
         this.props.history.push(`/app/applications/${params.id}`);
       });
   }
+
   promoteApplication = (e) => {
     e.preventDefault();
     const { match } = this.props;
@@ -89,6 +92,7 @@ export default class StatusChangeAppModal extends Component {
         }
       });
   }
+
   render() {
     const { uiStore, businessAppReviewStore, match } = this.props;
     const {
@@ -110,7 +114,11 @@ export default class StatusChangeAppModal extends Component {
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
+          <Header as="h3">
+            {params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)}
+            {' '}
+Application?
+          </Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error>
@@ -144,6 +152,7 @@ export default class StatusChangeAppModal extends Component {
               <Message error>
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align">
               <Button primary className="very relaxed" content="Submit" disabled={isValid || inProgress} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />

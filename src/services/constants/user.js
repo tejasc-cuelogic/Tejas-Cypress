@@ -21,8 +21,8 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909')) &&
-      moment(value, 'MM/DD/YYYY', true).isValid();
+    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909'))
+      && moment(value, 'MM/DD/YYYY', true).isValid();
   },
   'Invalid Date',
 );
@@ -56,8 +56,10 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <Aux>You can choose your{' '}
-          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA</span>}>
+        <Aux>
+You can choose your
+          {' '}
+          <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
               Manage your MFA contact preferences. All major actions in your account will

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import AddNewCategory from '../categories/components/addNewCategoryModal';
+import AddNewCategory from './components/addNewCategoryModal';
 import ManageCategories from './containers/manageCatories';
 
 export default class Categories extends Component {

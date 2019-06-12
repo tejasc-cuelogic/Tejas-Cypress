@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import bugsnag from '@bugsnag/js';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -35,8 +36,8 @@ useStrict(true);
 
 ReactDOM.render(
   <Provider {...stores}>
-    <BrowserRouter >
-      <ErrorBoundary >
+    <BrowserRouter>
+      <ErrorBoundary>
         <App />
       </ErrorBoundary>
     </BrowserRouter>

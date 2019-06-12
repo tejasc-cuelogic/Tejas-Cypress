@@ -1,6 +1,6 @@
 import React from 'react';
 import queryString from 'query-string';
-import { InlineLoader } from './../../../theme/shared';
+import { InlineLoader } from '../../../theme/shared';
 
 export default class SecureGateway extends React.Component {
   componentWillMount() {
@@ -12,6 +12,7 @@ export default class SecureGateway extends React.Component {
       window.parent.postMessage(parsedHash.event, '*');
     }
   }
+
   render() {
     return (
       <InlineLoader />

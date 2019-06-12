@@ -6,8 +6,11 @@ import Helper from '../../../helper/utility';
 
 export class CommonStore {
   @observable appName = 'NextSeed';
+
   @observable token = window.localStorage.getItem('jwt');
+
   @observable appLoaded = false;
+
   @observable inProgress = false;
 
   constructor() {

@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 
 class SuccessMessage extends React.Component {
   toastId = null;
+
   notify = () => {
     if (!toast.isActive(this.toastId)) {
       this.toastId = toast.success(`${this.props.success}`, {

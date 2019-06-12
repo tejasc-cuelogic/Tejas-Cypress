@@ -22,6 +22,7 @@ class BonusRewards extends Component {
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }
   }
+
   render() {
     const { campaign } = this.props.campaignStore;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
@@ -30,51 +31,69 @@ class BonusRewards extends Component {
     rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
     const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     // const earlyBirdsCount = get(campaign, 'earlyBirdsCount') || 0;
-    const offeringMISC = campaign && campaign.offering && campaign.offering.misc &&
-      campaign.offering.misc.additionalBonusRewardsContent ?
-      campaign.offering.misc.additionalBonusRewardsContent : null;
+    const offeringMISC = campaign && campaign.offering && campaign.offering.misc
+      && campaign.offering.misc.additionalBonusRewardsContent
+      ? campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           <span className="anchor" />
           Bonus Rewards
         </Header>
-        {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) ?
-          <Aux>
-            {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&
-            bonusRewards ?
-              <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
-                {(earlyBird && earlyBird.quantity && isEarlyBirdRewards) ?
-                  <Grid.Column>
-                    <Segment padded className="reward-block">
-                      <Aux>
-                        <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>Early Bird Reward
-                          <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
-                        </Header>
-                        <Header as="h5" className="note">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
-                      </Aux>
-                      <BonusRewardsList
-                        earlyBird
-                        bonusRewards={bonusRewards}
-                        tier={earlyBird.amount}
-                      />
-                    </Segment>
-                  </Grid.Column> : ''
+        {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
+          ? (
+            <Aux>
+              {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
+            && bonusRewards
+                ? (
+                  <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
+                    {(earlyBird && earlyBird.quantity && isEarlyBirdRewards)
+                      ? (
+                        <Grid.Column>
+                          <Segment padded className="reward-block">
+                            <Aux>
+                              <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>
+Early Bird Reward
+                                <Label size="small" color="green" className="text-uppercase pull-right">
+                                  {get(earlyBird, 'available') || 0}
+                                  {' '}
+remaining
+                                </Label>
+                              </Header>
+                              <Header as="h5" className="note">
+First
+                                {earlyBird.quantity}
+                                {' '}
+                                {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''}
+                                {' '}
+will receive:
+                              </Header>
+                            </Aux>
+                            <BonusRewardsList
+                              earlyBird
+                              bonusRewards={bonusRewards}
+                              tier={earlyBird.amount}
+                            />
+                          </Segment>
+                        </Grid.Column>
+                      ) : ''
                 }
-                {rewardsTiers.map(tier => (
-                  <Grid.Column>
-                    <Segment padded className="reward-block">
-                      <Aux>
-                        <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
-                        <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
-                      </Aux>
-                      <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
-                    </Segment>
-                  </Grid.Column>
-                ))}
-              </Grid> : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
+                    {rewardsTiers.map(tier => (
+                      <Grid.Column>
+                        <Segment padded className="reward-block">
+                          <Aux>
+                            <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
+                            <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
+                          </Aux>
+                          <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
+                        </Segment>
+                      </Grid.Column>
+                    ))}
+                  </Grid>
+                ) : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
             }
-            {offeringMISC &&
+              {offeringMISC
+            && (
             <Grid columns="1">
               <Grid.Column>
                 <Segment padded className="reward-block">
@@ -82,10 +101,11 @@ class BonusRewards extends Component {
                 </Segment>
               </Grid.Column>
             </Grid>
+            )
             }
-          </Aux>
-          :
-          <InlineLoader text="No Bonus Rewards" className="bg-offwhite" />
+            </Aux>
+          )
+          : <InlineLoader text="No Bonus Rewards" className="bg-offwhite" />
         }
       </div>
     );

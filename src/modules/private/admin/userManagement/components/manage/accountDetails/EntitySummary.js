@@ -34,7 +34,11 @@ const IndividualSummary = ({ account, investor }) => (
       <Table.Cell>{get(account, 'details.limits.otherContributions') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.limits.otherContributions')) : 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
-      <Table.Cell>Entity{"'"}s Name</Table.Cell>
+      <Table.Cell>
+Entity
+        {"'"}
+s Name
+      </Table.Cell>
       <Table.Cell>{get(account, 'details.name') || 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>

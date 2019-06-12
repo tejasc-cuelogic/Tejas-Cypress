@@ -74,4 +74,3 @@ export const CONFIRM_ACCREDITATION = {
     fileData: '',
   },
 };
-

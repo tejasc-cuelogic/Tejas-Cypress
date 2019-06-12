@@ -9,8 +9,11 @@ import Helper from '../../../../helper/utility';
 
 export class RewardStore {
   @observable data = [];
+
   @observable option = false;
+
   @observable creditAvailable = 0;
+
   @action
   initRequest = () => {
     this.data = graphql({ client: coolClient, query: allRewards });
@@ -26,14 +29,14 @@ export class RewardStore {
   }
 
   @computed get rewards() {
-    const offerings = (this.allData.data && this.allData.data.allOfferings &&
-      toJS(this.allData.data.allOfferings)) || [];
+    const offerings = (this.allData.data && this.allData.data.allOfferings
+      && toJS(this.allData.data.allOfferings)) || [];
     return (this.option) ? offerings.map((o) => {
       const filtered = o;
       filtered.rewards = o.rewards.filter(r => !r.redeemDate && moment().diff(r.expiry) < 0);
       return filtered;
-    }) :
-      offerings;
+    })
+      : offerings;
   }
 
   @action

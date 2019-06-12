@@ -14,7 +14,7 @@ export default class NewsLetter extends Component {
         onClose={() => {
           reset('NEWSLETTER');
           this.props.history.push('/');
-          }
+        }
         }
       >
         <Modal.Header className="center-align signup-header">

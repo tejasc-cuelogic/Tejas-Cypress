@@ -9,9 +9,9 @@ import { InlineLoader } from '../../../../../theme/shared';
 export default class Share extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
-    const socialArray = campaign && campaign.offering && campaign.offering.overview &&
-      campaign.offering.overview.social &&
-      campaign.offering.overview.social.length ? campaign.offering.overview.social : [];
+    const socialArray = campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.social
+      && campaign.offering.overview.social.length ? campaign.offering.overview.social : [];
     const filteredSocialArr = filter(socialArray, o => (
       o.url
     ));
@@ -50,19 +50,22 @@ export default class Share extends Component {
         </Header>
         <Modal.Content>
           {
-            filteredSocialArr.length ?
-              <div className="share-icons center-align">
-                {filteredSocialArr.map(socalObj => (
-                  socalObj.url && socalObj.url !== '' &&
+            filteredSocialArr.length
+              ? (
+                <div className="share-icons center-align">
+                  {filteredSocialArr.map(socalObj => (
+                    socalObj.url && socalObj.url !== ''
+                  && (
                   <a href={`${socalObj.url}`} target="_blank" rel="noopener noreferrer">
                     <Icon name={socalObj.name} circular inverted className={socalObj.class} size="big" />
                     {socalObj.title}
                   </a>
-                ))
+                  )
+                  ))
                 }
-              </div>
-              :
-              <InlineLoader text="No Data Found." className="bg-offwhite" />
+                </div>
+              )
+              : <InlineLoader text="No Data Found." className="bg-offwhite" />
           }
           <Input readOnly action={{ color: 'green', content: 'COPY' }} fluid value="https://nextseed.com/offerings/buffbrew-taproom" />
         </Modal.Content>

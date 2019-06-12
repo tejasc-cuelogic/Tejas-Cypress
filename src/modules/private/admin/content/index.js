@@ -18,6 +18,7 @@ export default class Content extends Component {
       this.props.history.push(`${match.url}/categories`);
     }
   }
+
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], false).subNavigations;
