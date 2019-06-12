@@ -578,23 +578,26 @@
     @media only screen and (max-width:@largestMobileScreen){
         width: 100%;
         >.header{
+            position: sticky;
+            z-index: 1;
+            height: 58px;
+            top: 0;
+            padding: 22px 0 0!important;
+            background: @white;
             font-size: @12px;
             text-align: center;
             color: @neutral-middark;
-            position: sticky;
-            padding: 22px 0 0!important;
             border-bottom: 0;
-            height: 58px;
-            top: 0;
-            background: @white;
             .ui.progress.attached {
                 bottom: -18px;
                 border-radius: 0;
                 background-color: @neutral-darkwhite;
             }
             .ui.button.link-button {
+                position: absolute;
+                right: 15px;
+                margin: 0;
                 color: @neutral-offdark;
-                margin-right: @15px;
             }
         }
     }
