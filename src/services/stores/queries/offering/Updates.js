@@ -88,6 +88,15 @@ mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!) {
   )
 }`;
 
+export const offeringUpdatePublish = gql`
+mutation offeringUpdatePublish($id: ID!) {
+  offeringUpdatePublish(
+    id: $id
+  ) {
+    id
+  }
+}`;
+
 
 export const deleteOfferingUpdate = gql`
 mutation deleteOfferingUpdate($id: [ID]) {
