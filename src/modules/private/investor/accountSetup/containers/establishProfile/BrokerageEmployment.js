@@ -25,7 +25,7 @@ securities brokerage firm?
         </p>
         <Divider hidden /> */}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you.</p>
-        <Form error>
+        <Form error className={isMobile ? ' mb-30' : ''}>
           <FormRadioGroup
             fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
             name="brokerageEmployment"
@@ -35,7 +35,7 @@ securities brokerage firm?
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes'
           && (
-          <div className={`${isMobile ? 'mt-30 mb-20' : 'field-wrap'} left-align`}>
+          <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
             <Form.Group widths="equal">
               <FormInput
                 key="brokerageFirmName"

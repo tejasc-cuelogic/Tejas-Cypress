@@ -21,7 +21,7 @@ Are you (or an immediate family member) a 10% shareholder,
         </Header>
         {!isMobile && <Divider hidden />}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
-        <Form error>
+        <Form error className={isMobile ? ' mb-30' : ''}>
           <FormRadioGroup
             fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel}
             name="publicCompanyRel"
@@ -31,7 +31,7 @@ Are you (or an immediate family member) a 10% shareholder,
           />
           {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes'
           && (
-          <div className={`${isMobile ? 'mt-30 mb-20' : 'field-wrap'} left-align`}>
+          <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
             <Form.Group widths="equal">
               <FormInput
                 key="publicCompanyTicker"
