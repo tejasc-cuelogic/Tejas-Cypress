@@ -253,7 +253,7 @@ export default class MultiStep extends React.Component {
             </Aux>
             )
             : (
-              <Modal.Header className="text-uppercase">
+              <Modal.Header className="text-uppercase sticky-sidebar">
                 {!this.props.steps[this.state.compState].disablePrevButton
                   && (
                   <Button
@@ -273,7 +273,7 @@ export default class MultiStep extends React.Component {
               {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
             </Loader>
           </Dimmer>
-          <Modal.Content scrolling={isMobile} className="multistep">
+          <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
             {!this.props.steps[this.state.compState].disablePrevButton && !isMobile
               && (
