@@ -176,6 +176,28 @@ export class UpdateStore {
     }
 
     @action
+    updateVisibility = (data, isVisible) => {
+      const payload = { ...data };
+      ['refId', 'id', 'approved', '__typename', 'updated', '___id', '___s'].forEach((d) => {
+        delete payload[d];
+      });
+      payload.isVisible = isVisible;
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
+      client
+        .mutate({
+          mutation: editUpdate,
+          variables: {
+            updatesInput: payload,
+            id: data.id,
+          },
+          refetchQueries: [{ query: allUpdates, variables }],
+        })
+        .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
+        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
+      console.log(payload);
+    }
+
+    @action
     getOne = (id) => {
       this.reset();
       this.currentUpdate = graphql({

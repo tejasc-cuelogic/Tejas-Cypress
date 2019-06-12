@@ -7,6 +7,9 @@ export const allUpdates = gql`
     ) {
       id
       title
+      isVisible
+      offeringId
+      isEarlyBirdOnly
       updated {
         date
       }
