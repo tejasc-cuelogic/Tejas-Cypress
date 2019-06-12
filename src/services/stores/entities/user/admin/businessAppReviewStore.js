@@ -6,7 +6,7 @@ import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
 import money from 'money-math';
-import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -19,6 +19,8 @@ import { allOfferingsCompact } from '../../../queries/offerings/manage';
 export class BusinessAppReviewStore {
   @observable APPLICATION_STATUS_COMMENT_FRM =
     Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
+  @observable PROMOTE_APPLICATION_STATUS_PASSWORD_FRM =
+  Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
   @observable MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
   @observable JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
@@ -342,6 +344,11 @@ export class BusinessAppReviewStore {
   @action
   resetCommentFrm = () => {
     this.APPLICATION_STATUS_COMMENT_FRM = Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
+  }
+  @action
+  resetPasswordFrm = () => {
+    this.PROMOTE_APPLICATION_STATUS_PASSWORD_FRM
+    = Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
   }
 
  @action
