@@ -88,13 +88,16 @@ export class UpdateStore {
     }
 
     @action
-    offeringUpdatePublish = (offeringUpdateId) => {
+    offeringUpdatePublish = (offeringUpdateId, data) => {
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
       client
         .mutate({
           mutation: offeringUpdatePublish,
           variables: {
             id: offeringUpdateId,
+            updatesInput: data,
           },
+          refetchQueries: [{ query: allUpdates, variables }],
         })
         .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
         .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
@@ -136,7 +139,7 @@ export class UpdateStore {
       data.isEarlyBirdOnly = false;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
-        this.offeringUpdatePublish(id);
+        this.offeringUpdatePublish(id, data);
         return;
       }
       client
