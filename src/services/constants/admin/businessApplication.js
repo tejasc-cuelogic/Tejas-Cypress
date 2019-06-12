@@ -13,7 +13,7 @@ export const PROMOTE_APPLICATION_STATUS_PASSWORD = {
     value: '',
     label: 'Password',
     error: undefined,
-    rule: 'required',
+    rule: 'required|min:8|max:40',
     placeHolder: 'Password',
   },
   verifyPassword: {

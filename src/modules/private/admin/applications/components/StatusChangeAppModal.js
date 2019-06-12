@@ -70,7 +70,7 @@ export default class StatusChangeAppModal extends Component {
                   this.props.history.push('/app/applications/in-progress');
                 });
             } else {
-              adminActions.createNewUser(userDetails).then(() => {
+              adminActions.createNewUser(userDetails, 'SUPPRESS').then(() => {
                 this.props.businessAppReviewStore
                   .updateApplicationStatus(
                     params.appId,
