@@ -48,32 +48,45 @@ class Overview extends Component {
   }
 
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     return (
       <div className="campaign-content-wrapper">
+        {campaignStatus.hasTopThingToKnow && (
+        <>
         <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
-        <Divider hidden section />
+          <Divider hidden section />
+        </>
+        )}
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
-        {get(campaign, 'updates') && get(campaign, 'updates').length !== 0
+        {campaignStatus.updates && campaignStatus.updates.length !== 0
           && (
-          <LatestUpdates
-            updates={campaign && campaign.updates}
-            refLink={this.props.refLink}
-            isTabletLand={isTabletLand}
-            companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
-            bussinessName={campaign && campaign.keyTerms
-              && campaign.keyTerms.shorthandBusinessName}
-          />
+          <>
+            <LatestUpdates
+              updates={campaign && campaign.updates}
+              refLink={this.props.refLink}
+              isTabletLand={isTabletLand}
+              companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
+              bussinessName={campaign && campaign.keyTerms
+                && campaign.keyTerms.shorthandBusinessName}
+            />
+            <Divider hidden section />
+          </>
           )
         }
-        <Divider hidden section />
-        <Gallery
-          galleryUrl={this.props.match.url}
-          campaign={campaign}
-        />
-        <Divider hidden section />
-        <IssuerStatement campaign={campaign} />
+        {campaignStatus.gallary && campaignStatus.gallary.length && (
+        <>
+          <Gallery
+            galleryUrl={this.props.match.url}
+            campaign={campaign}
+          />
+          <Divider hidden section />
+        </>
+        )}
+        {campaignStatus.issuerStatement && (
+          <IssuerStatement campaign={campaign} />
+        )
+        }
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
       </div>

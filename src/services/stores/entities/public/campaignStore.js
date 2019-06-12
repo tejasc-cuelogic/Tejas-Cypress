@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy, sortBy, includes } from 'lodash';
+import { pickBy, get, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -8,6 +8,7 @@ import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
 // import uiStore from '../shared/uiStore';
@@ -225,6 +226,21 @@ export class CampaignStore {
     campaignStatus.bonusRewards = get(campaign, 'bonusRewards') || [];
     campaignStatus.isEarlyBirdRewards = campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     campaignStatus.isBonusReward = campaignStatus.bonusRewards && campaignStatus.bonusRewards.length;
+    const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.elevatorPitch)
+      || (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.highlight);
+    campaignStatus.hasTopThingToKnow = elevatorPitch;
+    campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery');
+    campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
+    campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
+    campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
+    campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');
+    campaignStatus.history = get(campaign, 'campaign.offering.about.history');
+    campaignStatus.team = get(campaign, 'leadership');
+    campaignStatus.useOfProcceds = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
+    campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
+    campaignStatus.updates = get(campaign, 'updates');
     return campaignStatus;
   }
 
@@ -522,6 +538,52 @@ export class CampaignStore {
       labelBannerSecond = 'Reached Max';
     }
     return labelBannerSecond;
+  }
+
+  modifySubNavs = (navList) => {
+    const newNavList = [];
+    const offeringStage = get(this.campaign, 'stage');
+    navList.forEach((item) => {
+      const tempItem = item;
+      const temNavList = item.subNavigations;
+      console.log('item is here', item);
+      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
+        const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+        if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
+          });
+        } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+          });
+        } else if (existanceResult.length) {
+          remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+        }
+        this.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
+        tempItem.subNavigations = uniqWith(temNavList, isEqual);
+      } else if (item.title === 'Summary') {
+        remove(temNavList, n => (n.title === 'Top Things to Know' && !this.campaignStatus.hasTopThingToKnow)
+        || (n.title === 'Gallery' && !this.campaignStatus.campaignStatusgallary)
+        || (n.title === 'Issuer Statement' && !this.campaignStatus.issuerStatement)
+        || (n.title === 'Updates' && !this.campaignStatus.updates.length));
+      }
+      if (tempItem.to === 'data-room') {
+        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+          newNavList.push(tempItem);
+        }
+      } else {
+        newNavList.push(tempItem);
+      }
+    });
+    window.navss = newNavList;
+    return newNavList;
   }
 }
 
