@@ -4,8 +4,8 @@ export const confirmEmailAddressScreen = () => {
   cy.wait('@confirm');
   cy.wait('@confirm');
   cy.wait(1000);
-  registerApiCall('confirmEmail');
+  registerApiCall('confirmEmailAddress');
   cy.contains('Continue').click();
-  cy.wait('@confirmEmail');
-  cy.wait('@confirmEmail');
+  cy.wait('@confirmEmailAddress');
+  cy.wait('@confirmEmailAddress');
 };
