@@ -78,4 +78,3 @@ query getsharedLink($id: ID, $uploadId: ID, $type: ShareLinkTypeEnum!, $accountT
   sharedLink(id: $id, uploadId: $uploadId, type: $type, accountType: $accountType, expiration: $expiration)
   }
 `;
-

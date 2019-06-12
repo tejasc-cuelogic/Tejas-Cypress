@@ -13,6 +13,7 @@ export default class EncryptDecryptUtility extends Component {
     this.setState({ result: '' });
     this.props.dataStore.resetForm('ENCRYPTDECRYPTUTILITY_FRM');
   }
+
   onSubmit = (e, type) => {
     this.props.dataStore.encryptOrDecryptValue(type).then((res) => {
       this.setState({
@@ -24,6 +25,7 @@ export default class EncryptDecryptUtility extends Component {
       });
     });
   }
+
   render() {
     const { dataStore } = this.props;
     const {
@@ -44,7 +46,8 @@ export default class EncryptDecryptUtility extends Component {
                   showerror
                   fielddata={ENCRYPTDECRYPTUTILITY_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'ENCRYPTDECRYPTUTILITY_FRM')}
-                />))
+                />
+              ))
               }
 
               <Form.Field>
@@ -52,11 +55,13 @@ export default class EncryptDecryptUtility extends Component {
                 <Button secondary content="Decrypt" disabled={!ENCRYPTDECRYPTUTILITY_FRM.meta.isValid} loading={inProgress.encryptOrDecryptValue} onClick={e => this.onSubmit(e, 'DECRYPT')} />
               </Form.Field>
             </Form.Group>
-            {this.state.result ?
+            {this.state.result
+              ? (
               <Aux>
                 <b>Result:</b>
                 <p className="break-text">{this.state.result}</p>
               </Aux>
+              )
               : ''}
           </Form>
         </Card.Content>

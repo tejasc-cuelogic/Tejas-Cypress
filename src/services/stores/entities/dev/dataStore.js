@@ -11,14 +11,19 @@ import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_ME
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
+
   @observable PROCESS_FULL_ACCOUNT_META_FRM =
   Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
+
   @observable RECREATEGOLDSTAR_FRM =
   Validator.prepareFormObject(RECREATEGOLDSTAR_META);
+
   @observable ENCRYPTDECRYPTUTILITY_FRM =
   Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
+
   @observable AUDITBOXFOLDER_FRM =
   Validator.prepareFormObject(AUDITBOXFOLDER_META);
+
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
@@ -26,6 +31,7 @@ export class DataStore {
     encryptDecryptValue: false,
     auditBoxFolder: false,
   };
+
   @observable outputMsg = null;
 
   @action
@@ -50,9 +56,9 @@ export class DataStore {
 
   @action
   formChange = (e, res, form) => {
-    this[form] =
-    Validator.onChange(this[form], Validator.pullValues(e, res));
+    this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
   };
+
   @action
   formDataChange = (e, res, form, fieldType) => {
     if (fieldType === 'mask') {
@@ -152,6 +158,7 @@ export class DataStore {
         rej(error);
       });
   });
+
   @action
   adminProcessCip = () => {
     const processData = Validator.evaluateFormData(this.RECREATEGOLDSTAR_FRM.fields);
@@ -219,6 +226,9 @@ export class DataStore {
   @action
   auditBoxFolder = () => {
     const processData = cleanDeep(Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields));
+    if (Object.keys(processData).length === 0) {
+      return null;
+    }
     this.setFieldValue('inProgress', true, 'auditBoxFolder');
     return new Promise((res, rej) => {
       client

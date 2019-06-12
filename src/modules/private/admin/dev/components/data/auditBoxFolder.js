@@ -13,7 +13,9 @@ export default class AuditBoxFolder extends Component {
   componentWillMount() {
     this.setState({ result: '' });
     this.props.dataStore.resetForm('AUDITBOXFOLDER_FRM');
+    this.props.dataStore.inProgress.auditBoxFolder = false;
   }
+
   onSubmit = () => {
     this.props.dataStore.auditBoxFolder().then((res) => {
       this.setState({ result: res });
@@ -21,6 +23,7 @@ export default class AuditBoxFolder extends Component {
       this.setState({ result: '' });
     });
   }
+
   render() {
     const { dataStore } = this.props;
     const {
@@ -33,6 +36,24 @@ export default class AuditBoxFolder extends Component {
           <Card.Description>
             <Form onSubmit={this.onSubmit}>
               <Form.Group className="bottom-aligned">
+                <FormDropDown
+                  fielddata={AUDITBOXFOLDER_FRM.fields.userType}
+                  selection
+                  containerclassname="dropdown-field mlr-0"
+                  options={AUDITBOXFOLDER_FRM.fields.userType.values}
+                  placeholder="Choose here"
+                  name="userType"
+                  onChange={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
+                  containerwidth="8"
+                />
+                <FormInput
+                  type="text"
+                  name="userId"
+                  showerror
+                  fielddata={AUDITBOXFOLDER_FRM.fields.userId}
+                  changed={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
+                  containerwidth="8"
+                />
                 {['waitingTime', 'concurrency', 'queueLimit'].map(field => (
                   <MaskedInput
                     key={field}
@@ -46,7 +67,7 @@ export default class AuditBoxFolder extends Component {
                     changed={(e, result) => formDataChange(e, result, 'AUDITBOXFOLDER_FRM', 'mask')}
                     disabled={inProgress.auditBoxFolder}
                   />
-                  ))
+                ))
                 }
                 <FormInput
                   type="text"
@@ -56,27 +77,18 @@ export default class AuditBoxFolder extends Component {
                   fielddata={AUDITBOXFOLDER_FRM.fields.jobId}
                   changed={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
                 />
-                <Form.Field width={8}>
-                  <FormDropDown
-                    fielddata={AUDITBOXFOLDER_FRM.fields.userType}
-                    selection
-                    containerclassname="dropdown-field"
-                    options={AUDITBOXFOLDER_FRM.fields.userType.values}
-                    placeholder="Choose here"
-                    name="userType"
-                    onChange={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
-                  />
-                </Form.Field>
                 <Form.Field width={16}>
-                  <Button primary content="Submit" disabled={inProgress.auditBoxFolder} loading={inProgress.auditBoxFolder} />
+                  <Button primary content="Submit" disabled={inProgress.auditBoxFolder || !AUDITBOXFOLDER_FRM.meta.isValid} loading={inProgress.auditBoxFolder} />
                 </Form.Field>
               </Form.Group>
             </Form>
-            {this.state.result ?
-              <Aux>
-                <b>Result:</b>
-                <p className="break-text">{beautify(this.state.result)}</p>
-              </Aux>
+            {this.state.result
+              ? (
+                <Aux>
+                  <b>Result:</b>
+                  <p className="break-text">{beautify(this.state.result)}</p>
+                </Aux>
+              )
               : ''}
           </Card.Description>
         </Card.Content>

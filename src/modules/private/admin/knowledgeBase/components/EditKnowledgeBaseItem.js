@@ -25,6 +25,7 @@ export default class EditKnowledgeBaseItem extends Component {
       });
     }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.replace(this.props.refLink);
@@ -36,6 +37,7 @@ export default class EditKnowledgeBaseItem extends Component {
       this.props.history.push(this.props.refLink);
     });
   }
+
   render() {
     const {
       KNOWLEDGE_BASE_FRM,
@@ -52,62 +54,64 @@ export default class EditKnowledgeBaseItem extends Component {
       <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           {
-            (loading || inProgress) ?
-              <InlineLoader />
-              :
-              <div>
+            (loading || inProgress)
+              ? <InlineLoader />
+              : (
                 <div>
-                  <Header as="h3">
-                    {isNew ? 'Create' : 'Edit'} Knowledge Base
-                    <Actions
-                      save={this.save}
-                      meta={KNOWLEDGE_BASE_FRM.meta}
-                      isPublished={itemStatus === 'PUBLISHED'}
-                      isReview={itemStatus === 'IN_REVIEW'}
-                    />
-                  </Header>
-                </div>
-                <Divider hidden />
-                <Grid>
-                  <Grid.Row>
-                    <Grid.Column width={12}>
-                      <small>Knowledge Base Title</small>
-                      <Form>
-                        <FormInput
-                          ishidelabel
-                          fluid
-                          type="text"
-                          name="title"
-                          fielddata={KNOWLEDGE_BASE_FRM.fields.title}
-                          changed={knowledgeBaseChange}
-                        />
-                        <HtmlEditor
-                          changed={htmlContentChange}
-                          name="content"
-                          content={KNOWLEDGE_BASE_FRM.fields.content.value}
-                        />
-                      </Form>
-                    </Grid.Column>
-                    <Grid.Column width={4}>
-                      <Card fluid>
-                        <Card.Content>
-                          <Header as="h4">
+                  <div>
+                    <Header as="h3">
+                      {isNew ? 'Create' : 'Edit'}
+                      {' '}
+Knowledge Base
+                      <Actions
+                        save={this.save}
+                        meta={KNOWLEDGE_BASE_FRM.meta}
+                        isPublished={itemStatus === 'PUBLISHED'}
+                        isReview={itemStatus === 'IN_REVIEW'}
+                      />
+                    </Header>
+                  </div>
+                  <Divider hidden />
+                  <Grid>
+                    <Grid.Row>
+                      <Grid.Column width={12}>
+                        <small>Knowledge Base Title</small>
+                        <Form>
+                          <FormInput
+                            ishidelabel
+                            fluid
+                            type="text"
+                            name="title"
+                            fielddata={KNOWLEDGE_BASE_FRM.fields.title}
+                            changed={knowledgeBaseChange}
+                          />
+                          <HtmlEditor
+                            changed={htmlContentChange}
+                            name="content"
+                            content={KNOWLEDGE_BASE_FRM.fields.content.value}
+                          />
+                        </Form>
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+                        <Card fluid>
+                          <Card.Content>
+                            <Header as="h4">
                             Tip settings
-                          </Header>
-                          <Form>
-                            <div className="field">
-                              <Header as="label">{KNOWLEDGE_BASE_FRM.fields.userType.label}</Header>
-                              <FormRadioGroup
-                                fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
-                                name="userType"
-                                changed={(e, result) => userTypeChange(e, result)}
-                                readOnly={false}
-                                containerclassname="center-align"
-                                widths="equal"
-                                value={KNOWLEDGE_BASE_FRM.fields.userType.value}
-                              />
-                            </div>
-                            {/* <div className="field">
+                            </Header>
+                            <Form>
+                              <div className="field">
+                                <Header as="label">{KNOWLEDGE_BASE_FRM.fields.userType.label}</Header>
+                                <FormRadioGroup
+                                  fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
+                                  name="userType"
+                                  changed={(e, result) => userTypeChange(e, result)}
+                                  readOnly={false}
+                                  containerclassname="center-align"
+                                  widths="equal"
+                                  value={KNOWLEDGE_BASE_FRM.fields.userType.value}
+                                />
+                              </div>
+                              {/* <div className="field">
                             <FormDropDown
                               fielddata={KNOWLEDGE_BASE_FRM.fields.userType}
                               selection
@@ -119,49 +123,50 @@ export default class EditKnowledgeBaseItem extends Component {
                               onChange={(e, result) => knowledgeBaseChange(e, result)}
                             />
                           </div> */}
-                            <div className="field">
-                              <FormDropDown
-                                fielddata={KNOWLEDGE_BASE_FRM.fields.categoryId}
-                                selection
-                                containerclassname="dropdown-field"
-                                value={KNOWLEDGE_BASE_FRM.fields.categoryId.value}
-                                placeholder="Choose here"
-                                name="categoryId"
-                                options={categoriesDropdown}
-                                onChange={(e, result) => knowledgeBaseChange(e, result)}
+                              <div className="field">
+                                <FormDropDown
+                                  fielddata={KNOWLEDGE_BASE_FRM.fields.categoryId}
+                                  selection
+                                  containerclassname="dropdown-field"
+                                  value={KNOWLEDGE_BASE_FRM.fields.categoryId.value}
+                                  placeholder="Choose here"
+                                  name="categoryId"
+                                  options={categoriesDropdown}
+                                  onChange={(e, result) => knowledgeBaseChange(e, result)}
+                                />
+                              </div>
+                              <div className="field">
+                                <FormDropDown
+                                  fielddata={KNOWLEDGE_BASE_FRM.fields.itemStatus}
+                                  selection
+                                  containerclassname="dropdown-field"
+                                  value={KNOWLEDGE_BASE_FRM.fields.itemStatus.value}
+                                  placeholder="Choose here"
+                                  name="itemStatus"
+                                  options={ITEM_STATUS_VALUES}
+                                  onChange={(e, result) => knowledgeBaseChange(e, result)}
+                                />
+                              </div>
+                              <FormInput
+                                type="number"
+                                name="order"
+                                fielddata={KNOWLEDGE_BASE_FRM.fields.order}
+                                changed={knowledgeBaseChange}
                               />
-                            </div>
-                            <div className="field">
-                              <FormDropDown
-                                fielddata={KNOWLEDGE_BASE_FRM.fields.itemStatus}
-                                selection
-                                containerclassname="dropdown-field"
-                                value={KNOWLEDGE_BASE_FRM.fields.itemStatus.value}
-                                placeholder="Choose here"
-                                name="itemStatus"
-                                options={ITEM_STATUS_VALUES}
-                                onChange={(e, result) => knowledgeBaseChange(e, result)}
+                              <FormInput
+                                type="text"
+                                name="slug"
+                                fielddata={KNOWLEDGE_BASE_FRM.fields.slug}
+                                changed={knowledgeBaseChange}
                               />
-                            </div>
-                            <FormInput
-                              type="number"
-                              name="order"
-                              fielddata={KNOWLEDGE_BASE_FRM.fields.order}
-                              changed={knowledgeBaseChange}
-                            />
-                            <FormInput
-                              type="text"
-                              name="slug"
-                              fielddata={KNOWLEDGE_BASE_FRM.fields.slug}
-                              changed={knowledgeBaseChange}
-                            />
-                          </Form>
-                        </Card.Content>
-                      </Card>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              </div>
+                            </Form>
+                          </Card.Content>
+                        </Card>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </div>
+              )
           }
         </Modal.Content>
       </Modal>

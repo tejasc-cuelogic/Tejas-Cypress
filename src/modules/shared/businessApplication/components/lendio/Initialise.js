@@ -10,7 +10,8 @@ const Initialise = ({ match, isPublic }) => (
     <Divider hidden />
     <p>
       We`ve partnered with Lendio, a leading small business loan marketplace where
-      completing a free application puts you in front of 75+<br />
+      completing a free application puts you in front of 75+
+      <br />
       lenders and helps you get access to capital. Based on the information in your
       application, your business is pre-qualified for access to Lendio!
     </p>

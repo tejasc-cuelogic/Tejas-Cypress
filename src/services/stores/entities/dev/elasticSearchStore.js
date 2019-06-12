@@ -7,20 +7,30 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { STORAGE_DETAILS_SYNC, BULK_STORAGE_DETAILS_SYNC, ES_AUDIT } from '../../../constants/admin/data';
-import uiStore from '../../../stores/entities/shared/uiStore';
+import uiStore from '../shared/uiStore';
 
 export class ElasticSearchStore {
   @observable STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
+
   @observable ES_AUDIT_FRM = Validator.prepareFormObject(ES_AUDIT);
+
   @observable BULK_STORAGE_DETAILS_SYNC_FRM =
     Validator.prepareFormObject(BULK_STORAGE_DETAILS_SYNC);
+
   @observable inProgress = {};
+
   @observable bulkSyncLoader = false;
+
   @observable boxMsg = '';
+
   @observable countValues = [];
+
   @observable esAudit = null;
+
   @observable esAuditOutput = null;
+
   @observable swapIndex = null;
+
   @observable mutations = {
     USERS: ['userDeleteIndices', 'userPopulateIndex'],
     CROWDPAY: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
@@ -135,13 +145,13 @@ export class ElasticSearchStore {
   }
 
   @computed get eSAudit() {
-    return get(this.esAudit, 'data.getESAudit.indices[0]') ?
-      sortBy(toJS(get(this.esAudit, 'data.getESAudit.indices')), ['alias']) : [];
+    return get(this.esAudit, 'data.getESAudit.indices[0]')
+      ? sortBy(toJS(get(this.esAudit, 'data.getESAudit.indices')), ['alias']) : [];
   }
 
   @computed get esAuditParaOutput() {
-    return get(this.esAuditOutput, 'data.getESAudit.indices[0]') ?
-      toJS(get(this.esAuditOutput, 'data.getESAudit.indices[0]')) : [];
+    return get(this.esAuditOutput, 'data.getESAudit.indices[0]')
+      ? toJS(get(this.esAuditOutput, 'data.getESAudit.indices[0]')) : [];
   }
 
   @computed get eSAuditLoading() {
@@ -195,8 +205,7 @@ export class ElasticSearchStore {
 
   @action
   storageDetailsChange = (e, res) => {
-    this.STORAGE_DETAILS_SYNC_FRM =
-      Validator.onChange(this.STORAGE_DETAILS_SYNC_FRM, Validator.pullValues(e, res));
+    this.STORAGE_DETAILS_SYNC_FRM = Validator.onChange(this.STORAGE_DETAILS_SYNC_FRM, Validator.pullValues(e, res));
     this.setFieldValue('boxMsg', '');
   };
 
@@ -217,8 +226,7 @@ export class ElasticSearchStore {
         this.setFieldValue('BULK_STORAGE_DETAILS_SYNC_FRM', tempobj);
       }
     } else {
-      this[formName] =
-        Validator.onChange(this[formName], Validator.pullValues(field, values));
+      this[formName] = Validator.onChange(this[formName], Validator.pullValues(field, values));
     }
   };
 

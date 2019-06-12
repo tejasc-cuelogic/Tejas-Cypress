@@ -19,6 +19,7 @@ export default class ConfirmVerificationCode extends Component {
       this.props.history.push(this.props.refLink);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
@@ -86,10 +87,12 @@ export default class ConfirmVerificationCode extends Component {
               />
               <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={e => this.resendVerification(e)} />
             </Form.Field>
-            {errors &&
+            {errors
+              && (
               <Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTP_VERIFY_META.meta.isValid} />
           </Form>

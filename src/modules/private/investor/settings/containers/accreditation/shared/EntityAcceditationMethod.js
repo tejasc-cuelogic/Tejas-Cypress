@@ -12,6 +12,7 @@ export default class VerifyEntityAccreditation extends Component {
     const { accountType } = this.props.match.params;
     this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
   }
+
   render() {
     const {
       ENTITY_ACCREDITATION_FORM,

@@ -134,6 +134,14 @@ export const AUDITBOXFOLDER_META = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  userId: {
+    key: 'userId',
+    value: '',
+    label: 'User Id',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
   userType: {
     key: 'userType',
     value: '',
@@ -143,6 +151,6 @@ export const AUDITBOXFOLDER_META = {
     ],
     label: 'User Type',
     error: undefined,
-    rule: 'optional',
+    rule: 'required',
   },
 };

@@ -11,11 +11,14 @@ export default class GettingStarted extends Component {
   componentWillMount() {
     this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
   }
+
   handleCloseModal = () => {
     this.props.offeringsStore.initRequest({ stage: 'active' });
     this.props.history.push('/app/dashboard');
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   render() {
     setTimeout(() => {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
@@ -32,7 +35,8 @@ export default class GettingStarted extends Component {
               loading={this.props.uiStore.inProgress}
               primary
               onClick={this.handleCloseModal}
-            >Get Started
+            >
+Get Started
             </Button>
           </div>
           <Divider hidden />

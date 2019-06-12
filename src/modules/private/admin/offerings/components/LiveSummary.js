@@ -7,8 +7,8 @@ import { DataFormatter } from '../../../../../helper';
 const leftSummary = offer => [
   {
     title: 'Business Name',
-    content: (get(offer, 'keyTerms.shorthandBusinessName') ?
-      get(offer, 'keyTerms.shorthandBusinessName') : (
+    content: (get(offer, 'keyTerms.shorthandBusinessName')
+      ? get(offer, 'keyTerms.shorthandBusinessName') : (
         get(offer, 'keyTerms.legalBusinessName') ? get(offer, 'keyTerms.legalBusinessName') : 'N/A'
       )),
   },
@@ -28,7 +28,12 @@ const LiveSummary = ({ offer, refLink }) => (
         <Card fluid className="ba-info-card">
           <Card.Header>
             Information
-            <small className="pull-right"><Link to={`${refLink}/editOffering`}><Icon className="ns-pencil" />Edit</Link></small>
+            <small className="pull-right">
+              <Link to={`${refLink}/editOffering`}>
+                <Icon className="ns-pencil" />
+Edit
+              </Link>
+            </small>
           </Card.Header>
           <Card.Content>
             <Grid columns={3}>
@@ -38,7 +43,8 @@ const LiveSummary = ({ offer, refLink }) => (
                     <Header.Subheader>{item.title}</Header.Subheader>
                     {item.content}
                   </Header>
-                </Grid.Column>))
+                </Grid.Column>
+              ))
                 }
             </Grid>
           </Card.Content>
@@ -48,7 +54,12 @@ const LiveSummary = ({ offer, refLink }) => (
         <Card fluid className="ba-info-card">
           <Card.Header>
             Primary POC
-            <small className="pull-right"><Link to={`${refLink}/editPoc`}><Icon className="ns-pencil" />Edit</Link></small>
+            <small className="pull-right">
+              <Link to={`${refLink}/editPoc`}>
+                <Icon className="ns-pencil" />
+Edit
+              </Link>
+            </small>
           </Card.Header>
           <Card.Content>
             <Grid columns={3}>
@@ -58,7 +69,8 @@ const LiveSummary = ({ offer, refLink }) => (
                     <Header.Subheader>{item.title}</Header.Subheader>
                     {item.content}
                   </Header>
-                </Grid.Column>))
+                </Grid.Column>
+              ))
               }
             </Grid>
           </Card.Content>

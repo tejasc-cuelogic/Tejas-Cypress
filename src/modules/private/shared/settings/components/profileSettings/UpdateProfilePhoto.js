@@ -93,4 +93,3 @@ export default class UpdateProfilePhoto extends Component {
     );
   }
 }
-

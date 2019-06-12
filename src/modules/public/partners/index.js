@@ -10,8 +10,11 @@ export default class Partners extends Component {
         <Container>
           <section className="center-align">
             <Header as="h2">Partners</Header>
-            <p>Looking for additional business services or creative help for your
-              company and campaign?<br />We have a network of preferred vendors and referrals.
+            <p>
+Looking for additional business services or creative help for your
+              company and campaign?
+              <br />
+We have a network of preferred vendors and referrals.
             </p>
           </section>
           <Header as="h3">Accounting</Header>

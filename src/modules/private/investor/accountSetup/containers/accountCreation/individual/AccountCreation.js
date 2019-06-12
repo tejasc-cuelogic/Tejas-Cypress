@@ -15,6 +15,7 @@ export default class AccountCreation extends React.Component {
       this.props.accountStore.setAccTypeChange(0);
     }
   }
+
   handleMultiStepModalclose = () => {
     this.updateUser();
     this.props.history.push('/app/summary');
@@ -23,18 +24,22 @@ export default class AccountCreation extends React.Component {
     this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
+
   handleStepChange = (step) => {
     this.props.individualAccountStore.setStepToBeRendered(step);
     this.props.uiStore.clearErrors();
   }
+
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+
   closeProcessingModal = () => {
     this.props.individualAccountStore.setFieldValue('showProcessingModal', false);
     this.props.history.push('/app/summary');
     this.props.uiStore.resetcreateAccountMessage();
   }
+
   render() {
     const {
       inProgress,
@@ -56,44 +61,43 @@ export default class AccountCreation extends React.Component {
     const {
       stepToBeRendered, createAccount, showProcessingModal,
     } = this.props.individualAccountStore;
-    const steps =
-      [
-        {
-          name: 'Link Bank',
-          component: <Plaid />,
-          // eslint-disable-next-line max-len
-          // isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
-          isDirty: isPlaidDirty,
-          stepToBeRendered: 1,
-          disableNextButton: !linkbankSummary,
-          validForm: isAccountPresent,
-        },
-        {
-          name: 'Add funds',
-          component: <AddFunds />,
-          isValid: formAddFunds.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
-          // Done changes for saving link bank details - Alan's feedback point
-          // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
-          // : stepToBeRendered > 1 ? 'error' : '',
-          validate: validateAddFunds,
-          isDirty: isPlaidDirty,
-          validForm: formAddFunds.meta.isValid,
-          addFunds: true,
-          disableNextButton: true,
-          stepToBeRendered: 2,
-        },
-        {
-          name: 'Summary',
-          component: <Summary />,
-          disableNextButton: true,
-          isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
-        },
-      ];
+    const steps = [
+      {
+        name: 'Link Bank',
+        component: <Plaid />,
+        // eslint-disable-next-line max-len
+        // isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
+        isDirty: isPlaidDirty,
+        stepToBeRendered: 1,
+        disableNextButton: !linkbankSummary,
+        validForm: isAccountPresent,
+      },
+      {
+        name: 'Add funds',
+        component: <AddFunds />,
+        isValid: formAddFunds.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
+        // Done changes for saving link bank details - Alan's feedback point
+        // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
+        // : stepToBeRendered > 1 ? 'error' : '',
+        validate: validateAddFunds,
+        isDirty: isPlaidDirty,
+        validForm: formAddFunds.meta.isValid,
+        addFunds: true,
+        disableNextButton: true,
+        stepToBeRendered: 2,
+      },
+      {
+        name: 'Summary',
+        component: <Summary />,
+        disableNextButton: true,
+        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
+      },
+    ];
     if (showProcessingModal) {
       return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
     }
     return (
-      <div className="step-progress" >
+      <div className="step-progress">
         <MultiStep isAccountCreation loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );

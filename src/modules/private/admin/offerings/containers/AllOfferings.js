@@ -62,24 +62,24 @@ export default class Offerings extends Component {
                 requestState={requestState}
                 filters={filters}
                 more="no"
-                addon={
+                addon={(
                   <Aux>
                     <Grid.Column width={5} textAlign="right" floated="right">
                       <Button.Group floated="right">
-                        {stage === 'creation' &&
-                          <Button color="green" as={Link} to={`${match.url}/new`} loading={inProgressArray.includes('upsert')} content="Create New Offering" />
+                        {stage === 'creation'
+                          && <Button color="green" as={Link} to={`${match.url}/new`} loading={inProgressArray.includes('upsert')} content="Create New Offering" />
                         }
                         <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
                       </Button.Group>
                     </Grid.Column>
                   </Aux>
-                }
+)}
               />
             </Grid.Row>
           </Grid>
         </Form>
-        {!['completed'].includes(stage) ?
-          <Listing stage={stage} />
+        {!['completed'].includes(stage)
+          ? <Listing stage={stage} />
           : <DraggableListing stage={stage} />
         }
       </div>

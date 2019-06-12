@@ -26,28 +26,34 @@ class Banner extends Component {
           <Responsive minWidth={768} as={Aux}>
             <div className="banner-caption">
               <Header as="h2">
-                Build an investment<br />portfolio you care about.
+                Build an investment
+                <br />
+portfolio you care about.
               </Header>
-              { showButton ?
-                <Button
-                  className={`${!isTablet && 'mt-30'} relaxed`}
-                  primary
-                  content="Get Started"
-                  as={Link}
-                  to={redirectUrl}
-                /> : ''
+              { showButton
+                ? (
+                  <Button
+                    className={`${!isTablet && 'mt-30'} relaxed`}
+                    primary
+                    content="Get Started"
+                    as={Link}
+                    to={redirectUrl}
+                  />
+                ) : ''
               }
             </div>
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,000 from 75 investors
+              <b>Jessica Hughes | Citizen Pilates</b>
+              <br />
+Raised $100,000 from 75 investors
             </p>
           </div>
         </Container>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">
-            <Loader active >Loading..</Loader>
+            <Loader active>Loading..</Loader>
           </Dimmer>
         )}
       </section>
@@ -56,4 +62,3 @@ class Banner extends Component {
 }
 
 export default Banner;
-

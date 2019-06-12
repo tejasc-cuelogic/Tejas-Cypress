@@ -53,7 +53,8 @@ class ErrorBoundary extends React.Component {
           </Header>
           <span>
             Hang tight -
-            we&lsquo;ve notified the team, and we&lsquo;re taking you back to the homepage.<br />
+            we&lsquo;ve notified the team, and we&lsquo;re taking you back to the homepage.
+            <br />
             <a href={window.location.origin}>Click here to be redirected now</a>
           </span>
         </div>

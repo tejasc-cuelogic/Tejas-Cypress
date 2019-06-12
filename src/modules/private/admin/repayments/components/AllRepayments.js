@@ -5,8 +5,8 @@ import { inject, observer } from 'mobx-react';
 import { kebabCase } from 'lodash';
 import { Card, Table, Button, Grid, Form } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
-import { InlineLoader, DateTimeFormat } from './../../../../../theme/shared';
-import { ByKeyword } from './../../../../../theme/form/Filters';
+import { InlineLoader, DateTimeFormat } from '../../../../../theme/shared';
+import { ByKeyword } from '../../../../../theme/form/Filters';
 
 @inject('repaymentStore')
 @observer
@@ -14,13 +14,17 @@ export default class AllRepayments extends Component {
   componentWillMount() {
     this.props.repaymentStore.initRequest();
   }
+
   setSearchParam = (e, { name, value }) => this.props.repaymentStore.setInitiateSrch(name, value);
+
   toggleSearch = () => this.props.repaymentStore.toggleSearch();
+
   executeSearch = (e) => {
     if (e.charCode === 13) {
       this.props.repaymentStore.setInitiateSrch('keyword', e.target.value);
     }
   }
+
   render() {
     const { repaymentStore } = this.props;
     const {
@@ -43,13 +47,13 @@ export default class AllRepayments extends Component {
                 requestState={requestState}
                 filters={filters}
                 more="no"
-                addon={
+                addon={(
                   <Grid.Column width={5} textAlign="right">
                     <Button color="green" as={Link} floated="right" to="/app/repayments/new">
                       Add New Repayment
                     </Button>
                   </Grid.Column>
-                }
+)}
               />
             </Grid.Row>
           </Grid>

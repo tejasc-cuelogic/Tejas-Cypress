@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../shared/PrivateLayout';
 import StickyNotification from './components/StickyNotification';
-import ApplicationCard from '../dashboard/application/components/ApplicationCards';
+import ApplicationCard from './application/components/ApplicationCards';
 import ChooseOffer from '../businessApplication/components/ChooseOffer';
 import OfferSigning from '../businessApplication/components/OfferSigning';
 import GettingStarted from '../businessApplication/components/GettingStarted';

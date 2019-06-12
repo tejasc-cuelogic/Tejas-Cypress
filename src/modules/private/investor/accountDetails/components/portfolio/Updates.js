@@ -13,6 +13,7 @@ class Updates extends Component {
   componentWillMount() {
     this.props.updateStore.initRequest();
   }
+
   render() {
     const { updates, loading } = this.props.updateStore;
     const summary = [];
@@ -21,8 +22,8 @@ class Updates extends Component {
         const dateObj = {};
         dateObj.id = index;
         dateObj.title = dataItem.title;
-        dateObj.date = updates[index].updated.date ?
-          moment(updates[index].updated.date).format('ll') : null;
+        dateObj.date = updates[index].updated.date
+          ? moment(updates[index].updated.date).format('ll') : null;
         return summary.push(dateObj);
       });
     }

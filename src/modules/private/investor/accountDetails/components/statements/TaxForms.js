@@ -5,7 +5,7 @@ import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
-import { NsPagination, InlineLoader } from './../../../../../../theme/shared';
+import { NsPagination, InlineLoader } from '../../../../../../theme/shared';
 
 const result = {
   columns: [
@@ -71,8 +71,8 @@ export default class TaxForms extends Component {
                   instructions={instructions}
                 />
               </Card>
-              {totalRecords > 0 && totalRecords > requestState.perPage &&
-              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              {totalRecords > 0 && totalRecords > requestState.perPage
+              && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>
           </Grid.Row>

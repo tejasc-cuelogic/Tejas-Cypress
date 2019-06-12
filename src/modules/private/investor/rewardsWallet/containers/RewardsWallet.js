@@ -11,7 +11,9 @@ export default class RewardsWallet extends Component {
   componentWillMount() {
     this.props.rewardStore.initRequest();
   }
+
   activeOnly = () => this.props.rewardStore.activeOnly();
+
   render() {
     const {
       rewards, loading, error, option,
@@ -19,8 +21,8 @@ export default class RewardsWallet extends Component {
     return (
       <PrivateLayout {...this.props}>
         <Checkbox defaultChecked={option} onClick={this.activeOnly} className="pull-right" label="Show active rewards only" />
-        {loading ? <InlineLoader /> :
-        <RewardList match={this.props.match} rewards={rewards} error={error} />
+        {loading ? <InlineLoader />
+          : <RewardList match={this.props.match} rewards={rewards} error={error} />
         }
       </PrivateLayout>
     );

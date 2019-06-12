@@ -10,6 +10,7 @@ class TeamModal extends Component {
   state = {
     modalOpen: true,
   }
+
   handleClose = () => this.props.history.push(this.props.refLink)
 
   render() {
@@ -25,8 +26,8 @@ class TeamModal extends Component {
         size="large"
         className="team-member-modal"
       >
-        {isMobile &&
-          <Modal.Header>Meet our team</Modal.Header>
+        {isMobile
+          && <Modal.Header>Meet our team</Modal.Header>
         }
         <Modal.Content scrolling={isMobile}>
           <Item.Group>

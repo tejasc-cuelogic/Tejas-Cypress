@@ -20,10 +20,13 @@ export default class Offering extends Component {
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
   }
+
   componentWillUpdate() {
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   render() {
     const { match, offeringsStore } = this.props;
     const { offer, offerLoading } = offeringsStore;
@@ -35,7 +38,14 @@ export default class Offering extends Component {
       <PrivateLayout
         {...this.props}
         offeringSlug={offer.offeringSlug}
-        rightLabel={<Menu.Item position="right"><Link target="_blank" to={`/offerings/preview/${offer.offeringSlug}/overview`}><Icon className="ns-view" /><b>View Offering</b></Link></Menu.Item>}
+        rightLabel={(
+          <Menu.Item position="right">
+            <Link target="_blank" to={`/offerings/preview/${offer.offeringSlug}/overview`}>
+              <Icon className="ns-view" />
+              <b>View Offering</b>
+            </Link>
+          </Menu.Item>
+)}
       >
         <Switch>
           <Route exact path={match.url} component={OfferingModule('overview')} />

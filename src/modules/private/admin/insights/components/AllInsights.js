@@ -27,8 +27,9 @@ export default class AllInsights extends Component {
   componentWillMount() {
     this.props.articleStore.sortArticlesByFilter();
   }
-  globalActionChange = (e, { name, value }) =>
-    this.props.articleStore.setGlobalAction(name, value);
+
+  globalActionChange = (e, { name, value }) => this.props.articleStore.setGlobalAction(name, value);
+
   handleAction = (action, articleId, status) => {
     if (action === 'Delete') {
       this.handleDeleteConfirm(articleId);
@@ -37,17 +38,22 @@ export default class AllInsights extends Component {
       this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
     }
   }
+
   handleDeleteConfirm = (id) => {
     this.props.uiStore.setConfirmBox('Delete', id);
   }
+
   handleDelete = () => {
     this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId);
     this.props.uiStore.setConfirmBox('');
   }
+
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   paginate = params => this.props.articleStore.pageRequest(params);
+
   checkedRecords = (e, result) => {
     if (result && result.type === 'checkbox' && result.checked) {
       this.props.articleStore.addSelectedRecords(result.value);
@@ -119,19 +125,21 @@ export default class AllInsights extends Component {
                     <Table.Cell textAlign="center">
                       <Button.Group>
                         {Object.keys(actions).map(action => (
-                          <Button className="link-button" >
+                          <Button className="link-button">
                             <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id, record.articleStatus)} />
                           </Button>
                         ))}
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>
-                )) :
-                <Table.Row>
-                  <Table.Cell colSpan="7">
-                    <InlineLoader text="No data available." />
-                  </Table.Cell>
-                </Table.Row>}
+                ))
+                  : (
+                    <Table.Row>
+                      <Table.Cell colSpan="7">
+                        <InlineLoader text="No data available." />
+                      </Table.Cell>
+                    </Table.Row>
+                  )}
               </Table.Body>
             </Table>
           </div>

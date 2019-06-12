@@ -11,6 +11,7 @@ import Helper from '../../../helper/utility';
  */
 export class Admin {
   awsCognitoISP = null;
+
   /**
    * @desc Creates New user from parameters that have been stored in store
    */
@@ -140,6 +141,7 @@ export class Admin {
         uiStore.clearLoaderMessage();
       });
   }
+
   /**
    * @desc Maps user attributes in format required by cognito API, method is being executed for new
    *       User, two extra parameters i.e. email and email verified are passed explicitly.

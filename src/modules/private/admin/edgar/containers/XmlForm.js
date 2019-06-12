@@ -26,6 +26,7 @@ export default class XmlForm extends React.Component {
   state = {
     folderId: '',
   }
+
   componentDidMount() {
     this.props.businessStore.setXmlActiveTabName('filer');
     this.props.businessStore.setOfferingId(this.props.match.params.offeringId);
@@ -272,8 +273,8 @@ export default class XmlForm extends React.Component {
     const { formSignatureInfo } = this.props.businessStore;
     businessActions.validateSignatureInfo(formSignatureInfo.fields);
 
-    if (this.props.businessStore.canSubmitSigntureForm &&
-      !_.includes(this.props.businessStore.canSubmitSignaturePersonsForm, false)) {
+    if (this.props.businessStore.canSubmitSigntureForm
+      && !_.includes(this.props.businessStore.canSubmitSignaturePersonsForm, false)) {
       this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('signature')
         .then((data) => {
@@ -374,8 +375,7 @@ export default class XmlForm extends React.Component {
       saveButtonStatus = (!this.props.businessStore.formSignatureInfo.meta.isValid
         || this.props.businessStore.formSignatureInfo.fields.signaturePersons.length === 0);
     } else if (xmlActiveTabName === 'doc') {
-      const documents = _.filter(this.props.businessStore.formDocumentInfo.documentList, document =>
-        document.checked === true);
+      const documents = _.filter(this.props.businessStore.formDocumentInfo.documentList, document => document.checked === true);
       saveButtonStatus = (documents.length === 0);
       if (documents.length === 0) {
         this.props.businessStore.formDocumentInfo.meta.isDirty = false;
@@ -417,16 +417,19 @@ export default class XmlForm extends React.Component {
             XML Form
             <Button.Group floated="right">
               {
-                xmlSubmissionStatus === XML_STATUSES.completed &&
+                xmlSubmissionStatus === XML_STATUSES.completed
+                && (
                 <Button
                   color="green"
                   onClick={this.handleXmlSubmissionCopy}
                 >
                   Copy XML Submission
                 </Button>
+                )
               }
               {
-                xmlSubmissionStatus === XML_STATUSES.draft &&
+                xmlSubmissionStatus === XML_STATUSES.draft
+                && (
                 <Button
                   color="green"
                   disabled={this.checkStepWiseStatus(xmlActiveTabName)}
@@ -434,9 +437,11 @@ export default class XmlForm extends React.Component {
                 >
                   Save
                 </Button>
+                )
               }
               {
-                xmlSubmissionStatus === XML_STATUSES.draft &&
+                xmlSubmissionStatus === XML_STATUSES.draft
+                && (
                 <Button
                   color="red"
                   disabled={!this.props.businessStore.checkStepsStatus}
@@ -444,6 +449,7 @@ export default class XmlForm extends React.Component {
                 >
                   Submit
                 </Button>
+                )
               }
             </Button.Group>
           </Header>

@@ -11,6 +11,7 @@ import userPlaceholder from '../../../assets/images/leader-placeholder.jpg';
 @observer
 class Image64 extends React.Component {
   state = { data: this.props.avatar ? userPlaceholder : this.props.avatarPlaceholder ? emptyImage3 : this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1 };
+
   componentWillMount() {
     const emptyImage = this.props.avatar ? userPlaceholder : this.props.avatarPlaceholder ? emptyImage3 : this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (this.props.srcUrl) {
@@ -29,6 +30,7 @@ class Image64 extends React.Component {
       this.setState({ data: emptyImage });
     }
   }
+
   componentWillReceiveProps() {
     const emptyImage = this.props.avatar ? userPlaceholder : this.props.avatarPlaceholder ? emptyImage3 : this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (this.props.srcUrl) {
@@ -47,11 +49,12 @@ class Image64 extends React.Component {
       this.setState({ data: emptyImage });
     }
   }
+
   render() {
     return this.props.bg ? (
       <div {...this.props} style={{ backgroundImage: `url(${this.state.data})` }} />
-    ) :
-      <Image {...this.props} src={this.state.data} />;
+    )
+      : <Image {...this.props} src={this.state.data} />;
   }
 }
 

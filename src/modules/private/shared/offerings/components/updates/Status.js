@@ -9,7 +9,9 @@ const SMap = {
 
 const Status = ({ status }) => (
   <span className="title-meta">
-    <Label circular empty size="mini" color={SMap[status].color} /> {SMap[status].label}
+    <Label circular empty size="mini" color={SMap[status].color} />
+    {' '}
+    {SMap[status].label}
   </span>
 );
 
