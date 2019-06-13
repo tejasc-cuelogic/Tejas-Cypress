@@ -129,8 +129,9 @@ Application?
               changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
               containerclassname="secondary"
             />
-            {params.action === 'PROMOTE' ?
-              <Aux>
+            {params.action === 'PROMOTE'
+              ? (
+<Aux>
                 <FormInput
                   fluid
                   type="password"
@@ -146,10 +147,12 @@ Application?
                   changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_PASSWORD_FRM')}
                 />
               </Aux>
+              )
               : ''
             }
-            {errors &&
-              <Message error>
+            {errors
+              && (
+<Message error>
                 <ListErrors errors={[errors]} />
               </Message>
               )

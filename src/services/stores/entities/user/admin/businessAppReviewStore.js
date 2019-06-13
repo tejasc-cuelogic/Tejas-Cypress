@@ -19,8 +19,10 @@ import { allOfferingsCompact } from '../../../queries/offerings/manage';
 export class BusinessAppReviewStore {
   @observable APPLICATION_STATUS_COMMENT_FRM =
     Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
+
   @observable PROMOTE_APPLICATION_STATUS_PASSWORD_FRM =
-  Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
+    Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
+
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
 
   @observable MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
@@ -374,10 +376,10 @@ export class BusinessAppReviewStore {
   resetCommentFrm = () => {
     this.APPLICATION_STATUS_COMMENT_FRM = Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
   }
+
   @action
   resetPasswordFrm = () => {
-    this.PROMOTE_APPLICATION_STATUS_PASSWORD_FRM
-    = Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
+    this.PROMOTE_APPLICATION_STATUS_PASSWORD_FRM = Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
   }
 
  @action
