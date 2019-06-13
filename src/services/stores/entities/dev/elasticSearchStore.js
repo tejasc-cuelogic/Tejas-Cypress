@@ -164,7 +164,7 @@ export class ElasticSearchStore {
 
   @action
   submitStorageDetails = () => {
-    uiStore.setProgress();
+    uiStore.setProgress('syncStorageDetails');
     this.setFieldValue('boxMsg', '');
     const userId = get(this.STORAGE_DETAILS_SYNC_FRM, 'fields.userId.value') || null;
     return new Promise((res, rej) => {
@@ -232,8 +232,8 @@ export class ElasticSearchStore {
 
   @action
   submitStorageDetailsinBulk = () => {
-    this.bulkSyncLoader = true;
     this.setFieldValue('countValues', '');
+    this.setFieldValue('bulkSyncLoader', 'syncAllInvestors');
     uiStore.clearErrors();
     const limit = get(this.BULK_STORAGE_DETAILS_SYNC_FRM, 'fields.limit.value') || null;
     return new Promise((res, rej) => {

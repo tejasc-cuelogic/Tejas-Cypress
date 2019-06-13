@@ -51,8 +51,8 @@ export default class EncryptDecryptUtility extends Component {
               }
 
               <Form.Field>
-                <Button primary content="Encrypt" disabled={!ENCRYPTDECRYPTUTILITY_FRM.meta.isValid} loading={inProgress.encryptOrDecryptValue} onClick={e => this.onSubmit(e, 'ENCRYPT')} />
-                <Button secondary content="Decrypt" disabled={!ENCRYPTDECRYPTUTILITY_FRM.meta.isValid} loading={inProgress.encryptOrDecryptValue} onClick={e => this.onSubmit(e, 'DECRYPT')} />
+                <Button primary content="Encrypt" disabled={!ENCRYPTDECRYPTUTILITY_FRM.meta.isValid || inProgress.encryptOrDecryptValue} loading={inProgress.encryptOrDecryptValue === 'ENCRYPT'} onClick={e => this.onSubmit(e, 'ENCRYPT')} />
+                <Button secondary content="Decrypt" disabled={!ENCRYPTDECRYPTUTILITY_FRM.meta.isValid || inProgress.encryptOrDecryptValue} loading={inProgress.encryptOrDecryptValue === 'DECRYPT'} onClick={e => this.onSubmit(e, 'DECRYPT')} />
               </Form.Field>
             </Form.Group>
             {this.state.result

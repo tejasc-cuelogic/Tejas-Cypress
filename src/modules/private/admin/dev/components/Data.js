@@ -54,7 +54,7 @@ export default class Data extends Component {
                     disabled={inProgress}
                   />
                   <Form.Field width={4}>
-                    <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress} loading={inProgress} />
+                    <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress || bulkSyncLoader} loading={inProgress === 'syncStorageDetails'} />
                   </Form.Field>
                 </Form.Group>
               </Form>
@@ -73,7 +73,7 @@ export default class Data extends Component {
                     disabled={bulkSyncLoader}
                   />
                   <Form.Field width={4}>
-                    <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || bulkSyncLoader} loading={bulkSyncLoader} />
+                    <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || bulkSyncLoader || inProgress} loading={bulkSyncLoader === 'syncAllInvestors'} />
                   </Form.Field>
                   { errors
                   && <FieldError error={errors || ''} />

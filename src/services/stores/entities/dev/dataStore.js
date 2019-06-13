@@ -28,7 +28,7 @@ export class DataStore {
     offeringRepayment: false,
     processFullAccount: false,
     adminProcessCip: false,
-    encryptDecryptValue: false,
+    encryptOrDecryptValue: false,
     auditBoxFolder: false,
   };
 
@@ -199,7 +199,7 @@ export class DataStore {
   encryptOrDecryptValue = (type) => {
     const processData = Validator.evaluateFormData(this.ENCRYPTDECRYPTUTILITY_FRM.fields);
     processData.type = type;
-    this.setFieldValue('inProgress', true, 'encryptOrDecryptValue');
+    this.setFieldValue('inProgress', type, 'encryptOrDecryptValue');
     this.setFieldValue('outputMsg', null);
     return new Promise((resolve, reject) => {
       this.data = graphql({
@@ -208,15 +208,19 @@ export class DataStore {
         variables: processData,
         fetchPolicy: 'network-only',
         onFetch: (res) => {
-          if (res && res.encryptOrDecryptValue) {
-            Helper.toast('Your request is processed.', 'success');
+          if (res && res.encryptOrDecryptValue && !this.data.loading) {
+            console.log('Success---');
             this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
+            Helper.toast('Your request is processed.', 'success');
             resolve(res.encryptOrDecryptValue);
           }
         },
-        onError: () => {
+        onError: (error) => {
           this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
-          Helper.toast('Something went wrong, please try again later.', 'error');
+          if (get(error, 'Network error')) {
+            console.log('Error========', error);
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          }
           reject();
         },
       });
@@ -226,9 +230,6 @@ export class DataStore {
   @action
   auditBoxFolder = () => {
     const processData = cleanDeep(Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields));
-    if (Object.keys(processData).length === 0) {
-      return null;
-    }
     this.setFieldValue('inProgress', true, 'auditBoxFolder');
     return new Promise((res, rej) => {
       client
