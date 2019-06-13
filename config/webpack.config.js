@@ -531,6 +531,19 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
+      !(['production', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      && new HtmlWebpackTagsPlugin({
+        // publicPath: 'assets/js/', scripts: 'cypressSri.js', append: true, attributes: { type: 'text/javascript' }}),
+        scripts: [
+          {
+            path: 'assets/js/cypressSri.js',
+            attributes: {
+              integrity: 'sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=',
+              type: 'text/javascript',
+            }
+          }
+        ],
+      }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
@@ -666,19 +679,6 @@ module.exports = (webpackEnv) => {
         publicPathBugSnag,
         appVersion: process.env.CI_PIPELINE_ID,
         overwrite: true,
-      }),
-      !(['production', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
-      && new HtmlWebpackTagsPlugin({
-        // publicPath: 'assets/js/', scripts: 'cypressSri.js', append: true, attributes: { type: 'text/javascript' }}),
-        scripts: [
-          {
-            path: 'assets/js/cypressSri.js',
-            attributes: {
-              integrity: 'sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=',
-              type: 'text/javascript',
-            }
-          }
-        ],
       }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
