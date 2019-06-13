@@ -7,6 +7,8 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
+
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
@@ -89,8 +91,8 @@ export default class Summary extends React.Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Confirm Account</Header>
-        <div className="field-wrap">
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm Account</Header>
+        <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <Table.Body>
@@ -139,7 +141,7 @@ export default class Summary extends React.Component {
           </Message>
           )
         }
-        <p className="center-align grey-header mt-30">
+        <p className={`${isMobile ? '' : 'center-align'} grey-header mt-30`}>
           By continuing, I acknowledge that I have read and agree to the terms of the
           {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>
@@ -161,7 +163,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
         </div>
       </Aux>
     );

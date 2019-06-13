@@ -9,6 +9,8 @@ import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
 @observer
@@ -77,15 +79,15 @@ export default class ManualForm extends Component {
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
-      <div className="center-align">
-        <Header as="h3">Link bank manually</Header>
+      <div className={isMobile ? '' : 'center-align'}>
+        <Header as="h4">Link bank manually</Header>
         <p>
 Enter your bank
           {"'"}
 s routing number and your checking account number.
         </p>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap left-align">
+          <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <MaskedInput
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
@@ -124,9 +126,11 @@ s routing number and your checking account number.
             </Message>
             )
           }
-          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
+          <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
-        <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
+        <div className="center-align">
+          <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
+        </div>
       </div>
     );
   }

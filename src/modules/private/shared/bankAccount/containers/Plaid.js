@@ -11,6 +11,8 @@ import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 import NSImage from '../../../../shared/NSImage';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
 @withRouter
 @observer
@@ -66,11 +68,11 @@ export default class Plaid extends Component {
     } = this.props.bankAccountStore;
     const { errors, inProgress } = this.props.uiStore;
     const { action, refLink } = this.props;
-    const headerText = 'Link bank account';
+    const headerText = 'Next, link your bank account';
     const subHeaderText = action && action === 'change'
       ? 'Select your bank from the list'
-      : `In order to make your first investment, you will need to link your bank and 
-      add funds into your account. Please choose the bank below.`;
+      : `In order to make your first investment,
+      please add funds from an account below.`;
     if (isPlaidBankVerified) {
       this.handleBankSelect(refLink);
       this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
@@ -97,8 +99,8 @@ export default class Plaid extends Component {
     }
     return (
       <Aux>
-        <div className="center-align">
-          <Header as="h3">{headerText}</Header>
+        <div className={isMobile ? '' : 'center-align'}>
+          <Header as="h4">{headerText}</Header>
           <p className="mb-30">{subHeaderText}</p>
           <Form>
             <Input
@@ -175,7 +177,9 @@ export default class Plaid extends Component {
             </Message>
             )
           }
-          <Button color="green" className="link-button" content="Or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+          <div className="center-align mt-30">
+            <Button color="green" className="link-button" content="Or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+          </div>
         </div>
         <div className="center-align mt-30">
           {

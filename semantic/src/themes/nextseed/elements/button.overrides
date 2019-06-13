@@ -194,6 +194,10 @@
         background:@border-light;
         color:@border-color;
         opacity:1 !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            box-shadow: none !important;
+            background: transparent;
+        }
     }
     >.icon{
         width:auto;
