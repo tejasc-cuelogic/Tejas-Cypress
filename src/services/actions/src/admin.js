@@ -15,7 +15,7 @@ export class Admin {
   /**
    * @desc Creates New user from parameters that have been stored in store
    */
-  createNewUser = (userDetails = null) => {
+  createNewUser = (userDetails = null, messageAction = '') => {
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Creating new user');
@@ -41,6 +41,7 @@ export class Admin {
       TemporaryPassword: user.TemporaryPassword,
       Username: user.email.toLowerCase(),
       UserAttributes: attributes,
+      MessageAction: messageAction,
     };
     this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     const dbPushParams = {
@@ -51,6 +52,9 @@ export class Admin {
       roles: toJS(user.role).map(r => r.toUpperCase()),
       capabilities: toJS(user.capabilities),
     };
+    if (params.MessageAction === '') {
+      delete params.MessageAction;
+    }
     return (
       new Promise((res, rej) => {
         this.awsCognitoISP.adminCreateUser(params, (err, data) => {
