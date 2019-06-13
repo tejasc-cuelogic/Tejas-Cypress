@@ -30,17 +30,20 @@ export const validInvestmentAmount = () => {
   clearEnteredAmount();
   cy.get('input[name="investmentAmount"]').type(enterdMaxValidAmount);
   cy.get('input[name="investmentAmount"]').type('{enter}');
-  cy.wait('@investNowGeneratePurchaseAgreement');
+  // cy.wait('@investNowGeneratePurchaseAgreement');
 };
 
 export const ConfirmTransferRequest = () => {
-  cy.wait(400);
-  cy.get('body').then(($body) => {
-    cy.log('body==>', $body);
-    // debugger;
-    const transferRequestModelExsist = $body.find('.multistep-modal').find('.multistep.content').find('.center-align').find('.header').contains('Confirm Transfer Request');
-    if (transferRequestModelExsist) {
-      cy.log('Enter into If block ==>', transferRequestModelExsist);
+  cy.wait('@investNowGeneratePurchaseAgreement');
+  // cy.wait(2000);
+    // cy.get('div.multistep-modal').find('div.multistep.content').find('div.center-align').get('h3').invoke('text')
+    cy.get('.modal').then(($el) => {
+      // const element = cy.wrap($el);
+      const text1 = $el.get('.multistep.content');
+      cy.log('text1===> ', text1);
+      debugger;
+    if (text1) {
+      cy.log('Enter into If block ==>', text1);
       cy.get('.multistep-modal').find('.multistep.content').find('.two.buttons').contains('Confirm')
         .click();
     } else {
@@ -52,7 +55,7 @@ export const ConfirmTransferRequest = () => {
 
 export const generateAgreement = () => {
   cy.wait('@investNowGeneratePurchaseAgreement');
-  cy.wait(20000)
+  cy.wait(500)
   cy.get('.confirm-investment').should('have.length', 1);
   cy.get('.signup-content').find('div:visible').find('.ui.form').find('.ui.stackable.grid')
     .find('.row')
@@ -89,7 +92,7 @@ export const enteringInvestmentAmount = () => {
   registerApiCall('investNowGeneratePurchaseAgreement');
   invalidInvestmentAmount();
   validInvestmentAmount();
-  ConfirmTransferRequest();
+  // ConfirmTransferRequest();
   generateAgreement();
   submitInvestment();
 };
