@@ -632,7 +632,7 @@ module.exports = (webpackEnv) => {
       ]),
       new SriPlugin({
         hashFuncNames: ['sha256'],
-        enabled: isEnvDevelopment,
+        enabled: isEnvProduction,
       }),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
