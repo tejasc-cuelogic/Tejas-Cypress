@@ -13,7 +13,6 @@ export const InvestorFlowProcess = () => {
   fillSignUpFormAndProceed();
   enterCodeAndConfirm();
   confirmEmailAddressScreen();
-  // clickonDashboard();
   fillLegalFormAndProceed();
   enterCodeAndConfirm();
   confirmPhoneNumberScreen();
