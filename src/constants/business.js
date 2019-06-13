@@ -84,7 +84,7 @@ export const PERSONAL_SIGNATURE = {
   signatureDate: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'required|date',
     key: 'signatureDate',
     label: 'Signature Date',
     customErrors: {
@@ -285,7 +285,7 @@ export const ISSUER_INFORMATION = {
     placeHolder: 'Date of Incorporation/Organization',
     label: 'Date of Incorporation/Organization',
     error: undefined,
-    rule: 'required',
+    rule: 'required|date',
     customErrors: {
       required: 'The Date of Incorporation/Organization field is required.',
     },
@@ -557,7 +557,7 @@ export const OFFERING_INFORMATION = {
     label: 'Deadline Date',
     key: 'deadlineDate',
     error: undefined,
-    rule: 'required',
+    rule: 'required|date',
     customErrors: {
       required: 'The Deadline Date field is required.',
     },

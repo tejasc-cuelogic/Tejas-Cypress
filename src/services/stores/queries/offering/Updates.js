@@ -7,6 +7,9 @@ export const allUpdates = gql`
     ) {
       id
       title
+      isVisible
+      offeringId
+      isEarlyBirdOnly
       updated {
         date
       }
@@ -39,6 +42,7 @@ export const getUpdate = gql`
       status
       scope
       content
+      tiers
       approved {
         by
         date
@@ -85,6 +89,16 @@ mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!) {
   sendOfferingUpdateTestEmail(
     offeringUpdateId: $offeringUpdateId
   )
+}`;
+
+export const offeringUpdatePublish = gql`
+mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!) {
+  offeringUpdatePublish(
+    id: $id
+    updatesInput: $updatesInput
+  ) {
+    id
+  }
 }`;
 
 

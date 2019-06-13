@@ -9,6 +9,8 @@ import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 // import userStore from '../userStore';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
 
@@ -72,7 +74,9 @@ class IndividualAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
-            Helper.toast('Individual account submitted successfully.', 'success');
+            if (!isMobile) {
+              Helper.toast('Individual account submitted successfully.', 'success');
+            }
             resolve();
           }
         }).catch((err) => {
@@ -102,7 +106,9 @@ class IndividualAccountStore {
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', true);
       }
-      Helper.toast('Individual account created successfully.', 'success');
+      if (!isMobile) {
+        Helper.toast('Individual account created successfully.', 'success');
+      }
       bankAccountStore.resetStoreData();
       this.isFormSubmitted = true;
       resolve();
@@ -164,7 +170,7 @@ class IndividualAccountStore {
             }
             const { isValid } = bankAccountStore.formAddFunds.meta;
             if (currentStep) {
-              if (currentStep.name === 'Add funds' && isValid) {
+              if (currentStep.name === 'Add funds' && isValid && !isMobile) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
             }

@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
@@ -12,17 +13,20 @@ import { ListErrors } from '../../../theme/shared';
 @observer
 class Login extends Component {
   componentWillMount() {
-    if (this.props.authStore.isUserLoggedIn) {
-      const { authRef } = this.props.uiStore;
-      const { roles } = this.props.userStore.currentUser;
-      this.props.history.push(authRef || (roles && roles.includes('investor')
-        ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
-    }
     this.props.uiStore.clearErrors();
     this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
     localStorage.removeItem('lastActiveTime');
+  }
+
+  componentDidUpdate() {
+    if (this.props.authStore.isUserLoggedIn) {
+      const { authRef } = this.props.uiStore;
+      const roles = get(this.props.userStore.currentUser, 'roles');
+      this.props.history.push(authRef || (roles && roles.includes('investor')
+        ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+    }
   }
 
   componentWillUnmount() {

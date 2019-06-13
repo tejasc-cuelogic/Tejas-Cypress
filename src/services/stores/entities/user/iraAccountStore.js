@@ -15,6 +15,8 @@ import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 class IraAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(IRA_FIN_INFO);
 
@@ -185,7 +187,9 @@ class IraAccountStore {
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
         uiStore.setProgress(false);
-        Helper.toast('IRA account submitted successfully.', 'success');
+        if (!isMobile) {
+          Helper.toast('IRA account submitted successfully.', 'success');
+        }
         resolve();
       })
       .catch((err) => {
@@ -373,7 +377,9 @@ class IraAccountStore {
         })
         .then(action((result) => {
           this.iraAccountId = result.data.upsertInvestorAccount.accountId;
-          accountStore.accountToastMessage(currentStep, actionPerformed, 'formIraAddFunds');
+          if (!isMobile) {
+            accountStore.accountToastMessage(currentStep, actionPerformed, 'formIraAddFunds');
+          }
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);

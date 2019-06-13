@@ -19,6 +19,16 @@ export const common = {
       required: 'This field is required',
     },
   },
+  text: {
+    value: '',
+    label: 'Text',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'This field is required',
+    },
+  },
 };
 export const STORAGE_DETAILS_SYNC = {
   userId: { ...common.userId },
@@ -85,4 +95,9 @@ export const PROCESS_FULL_ACCOUNT_META = {
 export const RECREATEGOLDSTAR_META = {
   userId: { ...common.userId },
   accountId: { ...common.accountId },
+};
+
+export const ENCRYPTDECRYPTUTILITY_META = {
+  userId: { ...common.userId },
+  text: { ...common.text },
 };
