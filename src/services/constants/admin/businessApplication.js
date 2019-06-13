@@ -8,6 +8,25 @@ export const APPLICATION_STATUS_COMMENT = {
     placeHolder: 'Type your comment here...',
   },
 };
+export const PROMOTE_APPLICATION_STATUS_PASSWORD = {
+  TemporaryPassword: {
+    value: '',
+    label: 'Password',
+    error: undefined,
+    rule: 'required|min:8|max:40',
+    placeHolder: 'Password',
+  },
+  verifyPassword: {
+    value: '',
+    label: 'Verify Password',
+    error: undefined,
+    placeHolder: 'Verify Password',
+    rule: 'required|same:TemporaryPassword',
+    customErrors: {
+      same: 'The Password and Verify Password fields must match.',
+    },
+  },
+};
 
 export const MANAGERS = {
   managerOverview: {

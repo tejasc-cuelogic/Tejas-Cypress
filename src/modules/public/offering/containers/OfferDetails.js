@@ -1,7 +1,7 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
+import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
@@ -12,7 +12,6 @@ import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
 
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -90,6 +89,7 @@ class offerDetails extends Component {
   componentWillUnmount() {
     this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
     this.props.navStore.setFieldValue('navStatus', 'main');
+    this.props.campaignStore.setFieldValue('details', {});
   }
 
   getOgDataFromSocial = (obj, type, att) => {
@@ -127,7 +127,7 @@ class offerDetails extends Component {
         delete tempNav[4].subNavigations;
         delete tempNav[4].subPanel;
       }
-      return tempNav;
+      return tempNav.filter(n => n.title !== 'Data Room');
     }
     oldNav.forEach((item) => {
       const tempItem = item;
@@ -159,49 +159,6 @@ class offerDetails extends Component {
     return newNavData;
   }
 
-  modifyInvestmentDetailsSubNav = (navList, offeringStage) => {
-    const newNavList = [];
-    const offeringSecurityType = this.props.campaignStore.offerStructure;
-    navList.forEach((item) => {
-      const tempItem = item;
-      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
-        const temNavList = item.subNavigations;
-        if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
-          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-          temNavList.push({
-            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
-          });
-        } else if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
-          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-          temNavList.push({
-            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
-          });
-        } else {
-          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-        }
-        this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
-        tempItem.subNavigations = uniqWith(temNavList, isEqual);
-      }
-      if (tempItem.to === 'data-room') {
-        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
-          newNavList.push(tempItem);
-        }
-      } else {
-        newNavList.push(tempItem);
-      }
-    });
-    return newNavList;
-  }
-
   handleUpdate = (e, { calculations }) => {
     this.props.navStore.setMobileNavStatus(calculations);
   }
@@ -219,22 +176,20 @@ class offerDetails extends Component {
         />
       );
     }
-    if (!campaignStore.details || campaignStore.details.loading || this.state.preLoading) {
+    if (campaignStore.loading || !campaignStore.campaignStatus.doneComputing || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, navCountData,
+      details, campaign, navCountData, modifySubNavs,
     } = campaignStore;
     let navItems = [];
+    const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
-      navItems = this.removeSubNavs(GetNavMeta(match.url, [], true).subNavigations);
+      navItems = this.removeSubNavs(cloneDeep(tempNavItems));
     } else {
-      navItems = this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
-        .subNavigations, get(campaign, 'legal.dataroom.documents'));
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+      navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
     }
-    const offeringStage = get(campaign, 'stage');
-    navItems = this.modifyInvestmentDetailsSubNav(navItems, offeringStage);
+    navItems = modifySubNavs(navItems);
     if ((details && details.data
       && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
       || this.state.found === 2) {
