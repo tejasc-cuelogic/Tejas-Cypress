@@ -8,7 +8,7 @@ import { UPDATES } from '../../../../constants/offering';
 import { offeringCreationStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
-  sendOfferingUpdateTestEmail,
+  sendOfferingUpdateTestEmail, offeringUpdatePublish,
 } from '../../../queries/offering/Updates';
 
 export class UpdateStore {
@@ -88,6 +88,22 @@ export class UpdateStore {
     }
 
     @action
+    offeringUpdatePublish = (offeringUpdateId, data) => {
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
+      client
+        .mutate({
+          mutation: offeringUpdatePublish,
+          variables: {
+            id: offeringUpdateId,
+            updatesInput: data,
+          },
+          refetchQueries: [{ query: allUpdates, variables }],
+        })
+        .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
+        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
+    }
+
+    @action
     toggleSearch = () => {
       this.filters = !this.filters;
     }
@@ -122,6 +138,10 @@ export class UpdateStore {
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.isEarlyBirdOnly = false;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
+      if (id !== 'new' && status === 'PUBLISHED') {
+        this.offeringUpdatePublish(id, data);
+        return;
+      }
       client
         .mutate({
           mutation: id === 'new' ? newUpdate : editUpdate,
@@ -153,6 +173,28 @@ export class UpdateStore {
         Helper.toast('Update published.', 'success');
       })
         .catch(() => Helper.toast('Error', 'error'));
+    }
+
+    @action
+    updateVisibility = (data, isVisible) => {
+      const payload = { ...data };
+      ['refId', 'id', 'approved', '__typename', 'updated', '___id', '___s'].forEach((d) => {
+        delete payload[d];
+      });
+      payload.isVisible = isVisible;
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
+      client
+        .mutate({
+          mutation: editUpdate,
+          variables: {
+            updatesInput: payload,
+            id: data.id,
+          },
+          refetchQueries: [{ query: allUpdates, variables }],
+        })
+        .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
+        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
+      console.log(payload);
     }
 
     @action
