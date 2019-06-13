@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://1702-cypress-test-framework-poc.s3-website-us-east-1.amazonaws.com",
+  "baseUrl": "http://1895-inject-cypress-js-using-webpack-and-only-for-dev.s3-website-us-east-1.amazonaws.com/",
   "chromeWebSecurity": false,
   "pageTimeoutLoad": 80000
 }
