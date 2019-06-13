@@ -14,6 +14,7 @@ export const legalDetailsMeta = {
   dateOfBirth: ' 02-28-1975',
   ssn: '112223333',
 };
+
 export const fillLegalDetailsForm = (legalDetails = undefined) => {
   const legalDetailObject = legalDetails || legalDetailsMeta;
   cy.wait(2000) // explicit timeout
