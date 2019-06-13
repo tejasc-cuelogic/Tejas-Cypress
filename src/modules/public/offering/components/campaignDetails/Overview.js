@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
-import { get } from 'lodash';
 import { Divider } from 'semantic-ui-react';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import KeyTerms from './Overview/KeyTerms';
@@ -28,6 +27,13 @@ class Overview extends Component {
         block: 'start',
         behavior: 'smooth',
       });
+    } else {
+      const { campaignNavData } = this.props.campaignStore;
+      const navs = (campaignNavData.find(i => i.title === 'Summary')).subNavigations;
+      const sel = navs[0] && navs[0].to;
+      if (sel) {
+        document.querySelector(sel).scrollIntoView(true);
+      }
     }
   }
 
@@ -37,12 +43,13 @@ class Overview extends Component {
   }
 
   handleOnScroll = () => {
-    const { campaign } = this.props.campaignStore;
-    const arr = get(campaign, 'updates') ? get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery', 'issuer-statement'] : ['top-things-to-know', 'investment-highlights', 'gallery', 'issuer-statement'] : [];
-    arr.forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < topsAsPerWindowheight
-        && document.getElementById(item).getBoundingClientRect().top > -1) {
-        this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
+    const { campaignNavData } = this.props.campaignStore;
+    const navs = (campaignNavData.find(i => i.title === 'Summary')).subNavigations;
+    navs.forEach((item) => {
+      if (document.getElementById(item.to.slice(1))
+      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+        this.props.navStore.setFieldValue('currentActiveHash', item.to);
       }
     });
   }
@@ -59,7 +66,7 @@ class Overview extends Component {
         )}
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
-        {campaignStatus.updates && campaignStatus.updates.length !== 0
+        {campaignStatus.updates !== 0
           && (
           <>
             <LatestUpdates
@@ -74,7 +81,7 @@ class Overview extends Component {
           </>
           )
         }
-        {campaignStatus.gallary && campaignStatus.gallary.length && (
+        {campaignStatus.gallary && campaignStatus.gallary !== 0 && (
         <>
           <Gallery
             galleryUrl={this.props.match.url}

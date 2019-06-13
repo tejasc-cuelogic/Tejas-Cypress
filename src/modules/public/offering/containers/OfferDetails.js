@@ -1,7 +1,7 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { get, find, has } from 'lodash';
+import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
@@ -89,6 +89,7 @@ class offerDetails extends Component {
   componentWillUnmount() {
     this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
     this.props.navStore.setFieldValue('navStatus', 'main');
+    this.props.campaignStore.setFieldValue('details', {});
   }
 
   getOgDataFromSocial = (obj, type, att) => {
@@ -126,7 +127,7 @@ class offerDetails extends Component {
         delete tempNav[4].subNavigations;
         delete tempNav[4].subPanel;
       }
-      return tempNav;
+      return tempNav.filter(n => n.title !== 'Data Room');
     }
     oldNav.forEach((item) => {
       const tempItem = item;
@@ -175,19 +176,18 @@ class offerDetails extends Component {
         />
       );
     }
-    if (!campaignStore.details || campaignStore.details.loading || this.state.preLoading) {
+    if (campaignStore.loading || !campaignStore.campaignStatus.doneComputing || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
       details, campaign, navCountData, modifySubNavs,
     } = campaignStore;
     let navItems = [];
+    const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
-      navItems = this.removeSubNavs(GetNavMeta(match.url, [], true).subNavigations);
+      navItems = this.removeSubNavs(cloneDeep(tempNavItems));
     } else {
-      navItems = this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
-        .subNavigations, get(campaign, 'legal.dataroom.documents'));
-      // navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+      navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
     }
     navItems = modifySubNavs(navItems);
     if ((details && details.data
