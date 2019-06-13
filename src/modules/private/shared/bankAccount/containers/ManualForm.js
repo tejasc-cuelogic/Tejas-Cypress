@@ -80,12 +80,11 @@ export default class ManualForm extends Component {
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
       <div className={isMobile ? '' : 'center-align'}>
-        <Header as="h4">Link bank manually</Header>
-        <p>
-Enter your bank
+        <Header as="h4">
+        Enter your bank
           {"'"}
-s routing number and your checking account number.
-        </p>
+s account and routing number
+        </Header>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
           <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <MaskedInput
@@ -129,7 +128,7 @@ s routing number and your checking account number.
           <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
         <div className="center-align">
-          <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
+          <Button color="green" className="link-button mt-30" content="Link bank account automatically" onClick={this.linkAccountDirectly} />
         </div>
       </div>
     );

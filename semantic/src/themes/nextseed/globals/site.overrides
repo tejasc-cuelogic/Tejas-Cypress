@@ -290,6 +290,9 @@ a{
 		color: @primary-one !important;
 	}
 }
+.display-block {
+	display: block !important;
+}
 .green-hover.ui.button.link-button.grey:hover {
 	color: @primary-one !important;
 }

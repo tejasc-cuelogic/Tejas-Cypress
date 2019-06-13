@@ -6,6 +6,8 @@ import { inject, observer } from 'mobx-react';
 import { DropZoneLarge } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'iraAccountStore')
 @observer
 export default class Identity extends Component {
@@ -31,11 +33,11 @@ export default class Identity extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Confirm your identity</Header>
-        <Divider section hidden />
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Confirm your identity</Header>
+        {!isMobile && <Divider section hidden />}
         <Form className="file-uploader-large">
           <div className="field">
-            <label className="center-align">Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
+            <label className={isMobile ? '' : 'center-align'}>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
           </div>
           <DropZoneLarge
             name="identityDoc"
@@ -51,8 +53,8 @@ export default class Identity extends Component {
           </Message>
           )
         }
-        <Divider section hidden />
-        <p className="center-align grey-header mt-30">NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
+        <Divider section={!isMobile} hidden />
+        <p className={`${isMobile ? 'mb-30' : 'center-align'} grey-header mt-30`}>NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this file?"

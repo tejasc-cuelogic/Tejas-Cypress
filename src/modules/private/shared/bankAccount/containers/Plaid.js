@@ -178,7 +178,7 @@ export default class Plaid extends Component {
             )
           }
           <div className="center-align mt-30">
-            <Button color="green" className="link-button" content="Or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+            <Button color="green" className="link-button" content="Link bank account manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
           </div>
         </div>
         <div className="center-align mt-30">

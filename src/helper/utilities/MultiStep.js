@@ -300,8 +300,16 @@ export default class MultiStep extends React.Component {
                 <Aux>
                   {!this.props.steps[this.state.compState].disableNextButton
                     && (
-                      !isMobile
-                        ? (
+                    <>
+                    {isMobile ? (
+                  <Button
+                    className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'}
+                    onClick={this.next}
+                    primary
+                    content="Next"
+                    fluid
+                  />
+                    ) : (
                       <Button
                         type="submit"
                         circular
@@ -309,16 +317,8 @@ export default class MultiStep extends React.Component {
                         className={`${(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'} multistep__btn next`}
                         onClick={this.next}
                       />
-                        )
-                        : (
-                        <Button
-                          className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'active' : 'disabled'}
-                          onClick={this.next}
-                          primary
-                          content="Next"
-                          fluid
-                        />
-                        )
+                    )}
+                    </>
                     )
                   }
                 </Aux>

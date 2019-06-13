@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
 import { FormRadioGroup } from '../../../../../../../theme/form';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('iraAccountStore')
 @observer
@@ -16,19 +19,25 @@ export default class Funding extends Component {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">How would you like to fund your IRA?</Header>
-        <Divider hidden />
-        <p className="center-align tertiary-text">Choose funding option</p>
-        <Divider section hidden />
-        <Form error className="account-type-tab">
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>How would you like to fund your IRA?</Header>
+        {!isMobile
+          && (
+            <Aux>
+              <Divider hidden />
+              <p className="center-align tertiary-text">Choose funding option</p>
+              <Divider section hidden />
+            </Aux>
+          )
+        }
+        <Form error className={isMobile ? '' : 'account-type-tab'}>
           <FormRadioGroup
             fielddata={FUNDING_FRM.fields.fundingType}
             name="fundingType"
             changed={fundingChange}
-            containerclassname="button-radio center-align"
+            containerclassname={`${isMobile ? 'two wide' : ''} button-radio center-align`}
           />
           <Divider section hidden />
-          <div className="option-details">
+          <div className={isMobile ? '' : 'option-details'}>
             {
               FUNDING_FRM.fields.fundingType.value === 0
                 ? (
@@ -42,19 +51,19 @@ export default class Funding extends Component {
                 : FUNDING_FRM.fields.fundingType.value === 1
                   ? (
                     <p className="mt-20 grey-header">
-                    You can transfer funds from your current [Traditional/Roth] IRA
-                    to set up your [Traditional/Roth] IRA account at NextSeed.
+                      You can transfer funds from your current [Traditional/Roth] IRA
+                      to set up your [Traditional/Roth] IRA account at NextSeed.
                       <br />
                       <br />
-                    Note: With a transfer, funds can only be moved between like-types of IRAs.
+                      Note: With a transfer, funds can only be moved between like-types of IRAs.
                     </p>
                   )
                   : FUNDING_FRM.fields.fundingType.value === 2
                     ? (
                       <p className="mt-20 grey-header">
                         {'"'}
-Roll over funds from your 401(k), 403(b), or another qualified account
-                    to fund your NextSeed self-directed IRA
+                        Roll over funds from your 401(k), 403(b), or another qualified account
+                        to fund your NextSeed self-directed IRA
                       </p>
                     )
                     : ''

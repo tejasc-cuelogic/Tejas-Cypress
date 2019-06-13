@@ -8,6 +8,8 @@ import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
@@ -88,8 +90,8 @@ export default class Summary extends Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Verify your information and submit for review</Header>
-        <div className="field-wrap">
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing!</Header>
+        <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very">
               <Table.Body>
@@ -169,10 +171,8 @@ export default class Summary extends Component {
           </Message>
           )
         }
-        <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
-        </div>
-        <p className="center-align mt-30 grey-header">
+        {isMobile && (
+<p className="mb-30 mt-30 grey-header">
           By continuing, I acknowledge that I have read and agree to the terms of the
           {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
@@ -205,6 +205,45 @@ export default class Summary extends Component {
             loading={docLoading}
           />
         </p>
+        )}
+        <div className="center-align mt-30">
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
+        </div>
+        {!isMobile && (
+<p className="center-align mt-30 grey-header">
+          By continuing, I acknowledge that I have read and agree to the terms of the
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+          CrowdPay Custodial Account Agreement
+          </span>
+,
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
+          NextSeed US LLC Member Agreement
+          </span>
+,
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
+          NextSeed Securities LLC Investor Agreement
+          </span>
+, and
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+          Substitute IRS Form W-9 Certification
+          </span>
+.
+          {/* <span className="highlight-text" style={{ cursor: 'pointer' }}
+          onClick={() => this.openModal('membershipAgreement')}>
+          NextSeed Membership Agreement
+          </span>. */}
+          <IframeModal
+            open={this.state.open}
+            close={this.closeModal}
+            srcUrl={embedUrl}
+            loading={docLoading}
+          />
+        </p>
+        )}
       </Aux>
     );
   }

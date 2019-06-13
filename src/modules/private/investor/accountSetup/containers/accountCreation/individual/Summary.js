@@ -91,7 +91,7 @@ export default class Summary extends React.Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm Account</Header>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing! </Header>
         <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>

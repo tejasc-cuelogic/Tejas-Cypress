@@ -91,8 +91,12 @@ export default class AddFunds extends Component {
     return (
       <Aux>
         <div className={isMobile ? '' : 'center-align'}>
-          <Header as="h4">Add funds</Header>
-          <p>How much would you like to deposit into your account today?</p>
+          <Header as="h4">How much would you like to deposit?</Header>
+          <p>
+            We
+          {"'"}
+          ll transfer funds directly from the bank account you just linked.
+          </p>
           <Form error onSubmit={this.handleSubmitForm}>
             <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
               <MaskedInput

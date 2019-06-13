@@ -6,6 +6,8 @@ import { Header, Form, Divider, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('iraAccountStore', 'investmentLimitStore')
 @observer
 export default class FinancialInformation extends React.Component {
@@ -21,14 +23,12 @@ export default class FinancialInformation extends React.Component {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Calculating your investment limit</Header>
-        <p className="center-align">
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
+        <p className={isMobile ? '' : 'center-align'}>
 Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.
-          {' '}
-          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
         </p>
         <Form error>
-          <div className="field-wrap">
+          <div className={isMobile ? '' : 'field-wrap'}>
             {
               ['netWorth', 'income'].map(field => (
                 <MaskedInput
@@ -48,8 +48,9 @@ Your net worth and annual income are used to determine your 12-month investment 
             }
             <Divider hidden />
             <p className="grey-header">
-Your investment limit:
-              <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>
+              {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
+              {isMobile && <br />}
+              <span className={`${isMobile ? '' : 'large ml-10'} ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>
             </p>
@@ -64,6 +65,7 @@ Your investment limit:
             </Message>
             )
           }
+          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
         </Form>
       </Aux>
     );
