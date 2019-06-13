@@ -582,7 +582,8 @@ export class UserDetailsStore {
 
   @action
   maskChange = (values, form, field) => {
-    const fieldValue = field === 'dateOfBirth' ? values.formattedValue : values.floatValue;
+    const valMap = { ssn: 'value', dateOfBirth: 'formattedValue' };
+    const fieldValue = values[valMap[field] || 'floatValue'];
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },

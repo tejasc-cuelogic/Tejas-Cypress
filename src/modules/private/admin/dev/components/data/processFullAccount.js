@@ -28,13 +28,15 @@ export default class ProcessFullAccount extends Component {
           <Form onSubmit={this.onSubmit}>
             <Grid>
               <Grid.Column width="16">
-                <FormCheckbox
-                  name="options"
-                  defaults
-                  fielddata={PROCESS_FULL_ACCOUNT_META_FRM.fields.options}
-                  changed={(e, result) => formChange(e, result, 'PROCESS_FULL_ACCOUNT_META_FRM')}
-                  containerclassname="ui list horizontal"
-                />
+                <div className="bonus-tier-list process-account-list">
+                  <FormCheckbox
+                    name="options"
+                    defaults
+                    fielddata={PROCESS_FULL_ACCOUNT_META_FRM.fields.options}
+                    changed={(e, result) => formChange(e, result, 'PROCESS_FULL_ACCOUNT_META_FRM')}
+                    containerclassname="ui list"
+                  />
+                </div>
               </Grid.Column>
             </Grid>
             <Divider hidden />
