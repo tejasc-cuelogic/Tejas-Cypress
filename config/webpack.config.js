@@ -531,7 +531,7 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
-      !(['production', 'review'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      !(['production', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
       && new HtmlWebpackTagsPlugin({ publicPath: 'assets/js/', tags: 'cypressSri.js', append: true }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
