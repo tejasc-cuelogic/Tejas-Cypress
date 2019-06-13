@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const resolve = require('resolve');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -56,6 +57,7 @@ module.exports = (webpackEnv) => {
   const isEnvProduction = webpackEnv === 'production';
 
   if (isEnvDevelopment) console.log('isEnvDevelopment==>', isEnvDevelopment);
+  console.log('env NODE_ENV==>', process.env.NODE_ENV);
   // Webpack uses `publicPath` to determine where the app is being served from.
   // It requires a trailing slash, or the file assets will get an incorrect path.
   // In development, we always serve from the root. This makes config easier.
@@ -529,6 +531,8 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
+      !(['production', 'review'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      && new HtmlWebpackTagsPlugin({ publicPath: 'assets/js/', tags: 'cypressSri.js', append: true }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
