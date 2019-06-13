@@ -217,10 +217,10 @@ export class DataStore {
         },
         onError: (error) => {
           this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
-          if (get(error, 'Network error')) {
-            console.log('Error========', error);
-            Helper.toast('Something went wrong, please try again later.', 'error');
-          }
+          // if (get(error, 'Network error')) {
+          console.log('Error========', error);
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          // }
           reject();
         },
       });

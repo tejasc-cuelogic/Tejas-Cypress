@@ -193,9 +193,6 @@ h6{
 .text-uppercase {
 	text-transform: uppercase !important;
 }
-.text-lowercase {
-	text-transform: none !important;
-}
 .text-capitalize {
 	text-transform:capitalize !important;
 }
