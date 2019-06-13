@@ -1,5 +1,5 @@
 import { legalDetailsProcess, legalDetailsMeta, fillLegalDetailsForm } from '../../../support/investorSignup/identityVerification';
-const NS_SITE_EMAIL_SUPPORT = 'support@nextseed.com';
+// const NS_SITE_EMAIL_SUPPORT = 'support@nextseed.com';
 
 describe('Legal Details Form', () => {
     it('should verify residential address', () => {
