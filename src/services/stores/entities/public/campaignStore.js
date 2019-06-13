@@ -556,7 +556,7 @@ export class CampaignStore {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
           }
           temNavList.push({
-            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
+            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'revenueSharingSummary',
           });
         } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
           if (existanceResult.length) {
