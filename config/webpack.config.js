@@ -533,7 +533,6 @@ module.exports = (webpackEnv) => {
       )),
       !(['production', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
       && new HtmlWebpackTagsPlugin({
-        // publicPath: 'assets/js/', scripts: 'cypressSri.js', append: true, attributes: { type: 'text/javascript' }}),
         scripts: [
           {
             path: 'assets/js/cypressSri.js',
