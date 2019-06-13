@@ -10,7 +10,7 @@ import { enteringInvestmentAmount } from './enteringInvestmentAmount';
 import { applicationUnlock } from '../common';
 
 export const initializeInvestNowFlow = () => {
-  cy.visit('/', { failOnStatusCode: false });
+  cy.visit('/', { failOnStatusCode: false , timeout: 100000 });
   applicationUnlock();
   OfferingListingFlow();
   OfferingDetailFlow();

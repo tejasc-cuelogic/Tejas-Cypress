@@ -47,9 +47,11 @@ export const clickRadioAndNext = (selector, radioVal, operationName) => {
 };
 
 export const enterCodeAndConfirm = () => {
+  cy.wait(500);
   registerApiCall('confirm');
   typeOtpCode();
   cy.wait(100);
   cy.get('form').find('button').contains('Confirm').click();
   cy.wait('@confirm');
+  cy.wait(500);
 };
