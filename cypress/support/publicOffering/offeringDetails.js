@@ -6,7 +6,7 @@ export const goToOfferingDetailScreen = () => {
   cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg', { timeout: 5000 })
     .should('not.exist');
   cy.get('.campaign-list-wrapper').find('.container').find('.stackable').children()
-    .eq(4)
+    .eq(5)
     .click();
   cy.wait('@getOfferingDetailsBySlug');
 };
