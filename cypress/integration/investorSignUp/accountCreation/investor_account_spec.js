@@ -115,7 +115,7 @@ describe('Account Creation', () => {
           iraAccountCreation();
           break;
         case 'Summary':
-          registerApiCall('submitAccount');
+          registerApiCall('submitAccount', '/dev/graphql');
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
           cy.wait('@submitAccount');
           cy.wait(5000)
@@ -194,7 +194,7 @@ describe('Account Creation', () => {
         entityAccountCreation();
         break;
       case 'Summary':
-        registerApiCall('submitAccount')
+        registerApiCall('submitAccount', '/dev/graphql');
         cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
         cy.wait('@submitAccount');
         cy.wait(5000)
@@ -223,7 +223,7 @@ describe('Account Creation', () => {
     addFunds('15000');
     cy.wait(5000);
     cy.wait(2000);
-    registerApiCall('submitAccount');
+    registerApiCall('submitAccount', '/dev/graphql');
     cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
     cy.wait('@submitAccount');
     cy.wait(5000)
