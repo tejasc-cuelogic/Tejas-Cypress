@@ -160,7 +160,6 @@ export class Auth {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
       this.amplifyLogin(user);
     } catch (err) {
-      console.log('errorMesageLogin', err);
       if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
         await this.resetPassword(lowerCasedEmail, password);
       } else {
@@ -173,10 +172,8 @@ export class Auth {
   }
 
   resetPassword = async (lowerCasedEmail, password) => {
-    console.log('Async function');
     const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
     if (res.data.resetPasswordExpirationDurationForCognitoUser) {
-      console.log('Amplify function');
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
       this.amplifyLogin(user);
     }
