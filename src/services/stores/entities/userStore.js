@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
-import { GqlClient as client } from '../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../api/publicApi';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
 import { authStore } from '../index';
@@ -38,7 +38,7 @@ export class UserStore {
   }
 
   @action resetPasswordExpirationForCognitoUser = emailAddress => new Promise((resolve) => {
-    client
+    clientPublic
       .mutate({
         mutation: resetPasswordExpirationForCognitoUser,
         variables: {

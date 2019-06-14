@@ -154,41 +154,45 @@ export class Auth {
     const lowerCasedEmail = email.toLowerCase();
     client.cache.reset();
     authStore.setNewPasswordRequired(false);
+    authStore.setUserLoggedIn(false);
 
     try {
-      // const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
-      // this.amplifyLogin(user);
-      userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail).then((res) => {
-        if (!res.data.resetPasswordExpirationDurationForCognitoUser) {
-          (async () => {
-            const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
-            this.amplifyLogin(user);
-          })();
-        }
-      });
+      const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+      this.amplifyLogin(user);
     } catch (err) {
-      userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail).then((res) => {
-        if (res.data.resetPasswordExpirationDurationForCognitoUser) {
-          (async () => {
-            const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
-            this.amplifyLogin(user);
-          })();
-        }
-      });
+      console.log('errorMesageLogin', err);
+      if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
+        await this.resetPassword(lowerCasedEmail, password);
+      } else {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      }
     } finally {
       uiStore.setProgress(false);
     }
   }
 
+  resetPassword = async (lowerCasedEmail, password) => {
+    console.log('Async function');
+    const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
+    if (res.data.resetPasswordExpirationDurationForCognitoUser) {
+      console.log('Amplify function');
+      const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+      this.amplifyLogin(user);
+    }
+    return Promise.resolve(true);
+  }
+
   amplifyLogin(user) {
+    console.log('user', user);
     if (user && !user.signInUserSession && user.challengeName && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      authStore.setUserLoggedIn(true);
       if (user.signInUserSession) {
         authStore.setCognitoUserSession(user.signInUserSession);
       }
       if (user.attributes) {
         authStore.setEmail(user.attributes.email.toLowerCase());
       }
+      authStore.setUserLoggedIn(true);
       authStore.setNewPasswordRequired(true);
     }
     if (user && user.signInUserSession) {
