@@ -23,7 +23,7 @@ const navItems = [
 export default class Statements extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
-      const isDev = ['localhost', 'develop', 'dev'.includes(REACT_APP_DEPLOY_ENV);
+      const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
       const navigationItems = isDev || this.props.isAdmin ? navItems : navItems.filter(item => item.to !== 'monthly-statements');
       this.props.history.replace(`${this.props.match.url}/${navigationItems[0].to}`);
     }
