@@ -75,7 +75,7 @@ export default class ConfirmVerificationCode extends Component {
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
                 autoFocus={!isMobile}

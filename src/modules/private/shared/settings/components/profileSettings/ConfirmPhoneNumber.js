@@ -135,7 +135,7 @@ export default class ConfirmPhoneNumber extends Component {
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
                 className="otp-field"
