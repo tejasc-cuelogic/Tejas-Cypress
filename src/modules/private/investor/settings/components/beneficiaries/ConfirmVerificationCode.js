@@ -78,10 +78,10 @@ export default class ConfirmVerificationCode extends Component {
                 filterChars
                 fields={6}
                 type="number"
-                autoFocus={!isMobile}
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                autoFocus={!isMobile || OTP_VERIFY_META.fields.code.value}
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />
