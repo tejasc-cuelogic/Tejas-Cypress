@@ -56,8 +56,6 @@ module.exports = (webpackEnv) => {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
-  if (isEnvDevelopment) console.log('isEnvDevelopment==>', isEnvDevelopment);
-  console.log('env NODE_ENV==>', process.env.NODE_ENV);
   // Webpack uses `publicPath` to determine where the app is being served from.
   // It requires a trailing slash, or the file assets will get an incorrect path.
   // In development, we always serve from the root. This makes config easier.
