@@ -536,11 +536,12 @@ module.exports = (webpackEnv) => {
         scripts: [
           {
             path: 'assets/js/cypressSri.js',
-            // attributes: {
-            //   type: 'text/javascript',
-            // }
+            attributes: {
+              integrity: ''
+            }
           }
         ],
+        append: false
       }),
 
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
