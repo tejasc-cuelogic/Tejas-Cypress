@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import { Table, Icon, Button, Card, Modal, Header } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../../../theme/shared';
@@ -60,7 +59,7 @@ export default class OffersPanel extends Component {
     };
     const offerFields = OFFERS_FRM.fields.offer[0];
     return (
-      <Aux>
+      <>
         <NsCarousel {...settings}>
           {OFFERS_FRM.fields.offer.map((offer, index) => (
             <Card fluid className={`offer-card ${selectedOfferIndex === index ? 'active' : ''}`}>
@@ -101,7 +100,7 @@ export default class OffersPanel extends Component {
                     </Table.Row>
                     {!isReadonly
                       ? (
-                        <Aux>
+                        <>
                           <Table.Row>
                             <Table.Cell>{offerFields.minimumAmount.label}</Table.Cell>
                             <Table.Cell>
@@ -132,7 +131,7 @@ export default class OffersPanel extends Component {
                               />
                             </Table.Cell>
                           </Table.Row>
-                        </Aux>
+                        </>
                       )
                       : (
                         <Table.Row>
@@ -158,7 +157,7 @@ export default class OffersPanel extends Component {
                     </Table.Row>
                     {offer.structure.value === 'TERM_NOTE'
                     && (
-                    <Aux>
+                    <>
                       <Table.Row>
                         <Table.Cell>{offerFields.interestRate.label}</Table.Cell>
                         <Table.Cell>
@@ -188,12 +187,12 @@ export default class OffersPanel extends Component {
                           />
                         </Table.Cell>
                       </Table.Row>
-                    </Aux>
+                    </>
                     )
                     }
                     {offer.structure.value === 'REVENUE_SHARING_NOTE'
                     && (
-                    <Aux>
+                    <>
                       <Table.Row>
                         <Table.Cell>{offerFields.mthRevenueSharing.label}</Table.Cell>
                         <Table.Cell>
@@ -221,7 +220,7 @@ export default class OffersPanel extends Component {
                           />
                         </Table.Cell>
                       </Table.Row>
-                    </Aux>
+                    </>
                     )
                     }
                     <Table.Row>
@@ -343,7 +342,7 @@ export default class OffersPanel extends Component {
             </div>
           </Modal.Content>
         </Modal>
-      </Aux>
+      </>
     );
   }
 }

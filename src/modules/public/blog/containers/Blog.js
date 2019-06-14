@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Divider } from 'semantic-ui-react';
 
 class Blog extends Component {
@@ -24,14 +23,14 @@ class Blog extends Component {
 
   render() {
     return (
-      <Aux>
+      <>
         <Header as="h1">
 NextSeed Blog
           <Header.Subheader>Let your community invest in your success</Header.Subheader>
         </Header>
         <Divider inverted section />
         lll
-      </Aux>
+      </>
     );
   }
 }

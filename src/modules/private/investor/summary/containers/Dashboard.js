@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
 import { get } from 'lodash';
-import Aux from 'react-aux';
 // import money from 'money-math';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
@@ -85,7 +84,7 @@ export default class Dashboard extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Route path="/app/summary/account-creation" component={AccountCreation} />
         <Route exact path="/app/summary/identity-verification/:step" component={IdentityVerification} />
         <Route path="/app/summary/establish-profile" component={EstablishProfile} />
@@ -109,12 +108,12 @@ export default class Dashboard extends Component {
             isInitialAccountProcessing
               ? <ProccessingAccountsScreen />
               : (
-                <Aux>
+                <>
                   <Header as="h4">Portfolio Summary</Header>
                   <SummaryHeader details={summaryDetails(summary)} />
                   {cashMovementData && cashMovementData.length
                     ? (
-                      <Aux>
+                      <>
                         {!isMobile
                           ? (
                             <Card fluid>
@@ -125,24 +124,24 @@ export default class Dashboard extends Component {
                             </Card>
                           ) : null
               }
-                      </Aux>
+                      </>
                     )
                     : (
-                      <Aux>
+                      <>
                         <Card fluid={isMobile}>
                           <Card.Content>
                             <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
                             <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
                           </Card.Content>
                         </Card>
-                      </Aux>
+                      </>
                     )
           }
-                </Aux>
+                </>
               )
           }
         </PrivateLayout>
-      </Aux>
+      </>
     );
   }
 }

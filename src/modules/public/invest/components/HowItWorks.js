@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Button, Container, List, Divider, Item } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
@@ -15,7 +14,7 @@ export default class HowItWorks extends Component {
   render() {
     const { authStore } = this.props;
     return (
-      <Aux>
+      <>
         <section>
           <Container className={isMobile ? 'mt-40' : 'mb-80 mt-80'}>
             <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
@@ -58,10 +57,10 @@ NextSeed collects and processes payments directly
                       </Header>
                     )
                     : (
-                      <Aux>
+                      <>
                         <NSImage path="icons/termnotes.svg" />
                         <Header as="h2">Term Notes</Header>
-                      </Aux>
+                      </>
                     )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
@@ -95,10 +94,10 @@ NextSeed collects and processes payments directly
                       </Header>
                     )
                     : (
-                      <Aux>
+                      <>
                         <NSImage path="icons/applied.svg" />
                         <Header as="h2">Revenue Sharing Notes</Header>
-                      </Aux>
+                      </>
                     )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
@@ -134,10 +133,10 @@ NextSeed collects and processes payments directly
                       </Header>
                     )
                     : (
-                      <Aux>
+                      <>
                         <NSImage path="icons/equity.svg" />
                         <Header as="h2">Preferred Equity</Header>
-                      </Aux>
+                      </>
                     )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
@@ -188,13 +187,13 @@ NextSeed collects and processes payments directly
           <Container className={`${!authStore.isUserLoggedIn && 'mt-50'} center-align`}>
             {!authStore.isUserLoggedIn
             && (
-            <Aux>
+            <>
               <Header as="h2" className="mb-30">Register for an account.</Header>
               <Button.Group vertical={isMobile} className={isMobile ? '' : 'mb-50'}>
                 <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
               <Divider section hidden />
-            </Aux>
+            </>
             )
             }
             <Divider />
@@ -208,7 +207,7 @@ NextSeed collects and processes payments directly
             </List>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

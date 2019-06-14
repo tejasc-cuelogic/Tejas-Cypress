@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
-import Aux from 'react-aux';
 import { filter, find } from 'lodash';
 import { Form, Header, Divider, Step, Label, Button, Icon, Confirm } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
@@ -122,26 +121,26 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-                <Aux>
+                <>
 This campaing is still live, set to close
                   <span className="highlight-text">
                     {' '}
                     {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'}
                     {' '}
                   </span>
-                </Aux>
+                </>
               ) : (
-                <Aux>
+                <>
 This campaing
                   <span className="highlight-text">has succeed</span>
-                </Aux>
+                </>
               )
             }
           </Header>
           <p>
             {hoursToClose > 0
               ? (
-                <Aux>
+                <>
                 Campaign has not reached minimum required amount.
                 MobCycle raised
                   {' '}
@@ -150,10 +149,10 @@ This campaing
 out of required
                   {' '}
                   <b>$100,000</b>
-                </Aux>
+                </>
               )
               : (
-                <Aux>
+                <>
               Campaign has reached minimum required amount. MobCycle raised
                   {' '}
                   <b>$350,000</b>
@@ -162,14 +161,14 @@ from
                   <b>227 investors</b>
                   {' '}
 .
-                </Aux>
+                </>
               )
           }
           </p>
           <Divider section />
           {hoursToClose <= 0
             && (
-            <Aux>
+            <>
               <Step.Group className="campaign-close">
                 {['Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
                   <Step
@@ -187,7 +186,7 @@ from
               </Step.Group>
               {this.state.activeStep === 1
               && (
-              <Aux>
+              <>
                 <Form.Group widths={3}>
                   <MaskedInput
                     name="queueLimit"
@@ -209,12 +208,12 @@ from
                   ))}
                 </Button.Group>
                 <Divider className="doubled" />
-              </Aux>
+              </>
               )
               }
               {this.state.activeStep === 2
                 && (
-                <Aux>
+                <>
                   <Form.Group widths={3}>
                     {['queueLimit', 'notePurchaseDate'].map(field => (
                       <MaskedInput
@@ -240,12 +239,12 @@ from
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
-                </Aux>
+                </>
                 )
               }
               {this.state.activeStep === 3
                 && (
-                <Aux>
+                <>
                   <Form.Group widths={3}>
                     {
                       Object.keys(OFFERING_CLOSE_3.fields).filter(f => f !== 'scope').map(field => (
@@ -282,12 +281,12 @@ from
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
-                </Aux>
+                </>
                 )
               }
               {this.state.activeStep === 4 && false
                 && (
-                <Aux>
+                <>
                   <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
                   <Form>
                     <Form.Group widths={3}>
@@ -319,10 +318,10 @@ from
                   You cannot close the offering if envelopes are still being processed</Button> */}
                   </Button.Group>
                   <Divider className="doubled" />
-                </Aux>
+                </>
                 )
               }
-            </Aux>
+            </>
             )
           }
           <Contingency

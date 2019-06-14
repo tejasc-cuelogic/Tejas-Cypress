@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Menu, Responsive, Dropdown, Icon, Visibility } from 'semantic-ui-react';
 import { matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -46,7 +45,7 @@ export default class MobileDropDownNav extends React.Component {
     } = this.props;
     const { navStatus, campaignHeaderStatus } = navStore;
     return (
-      <Responsive maxWidth={location.pathname.startsWith('/offerings/') ? 991 : 991} as={Aux}>
+      <Responsive maxWidth={location.pathname.startsWith('/offerings/') ? 991 : 991} as={React.Fragment}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
           <Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
             <Dropdown item text={this.activeText()}>

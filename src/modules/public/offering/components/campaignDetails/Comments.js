@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
@@ -152,7 +151,7 @@ on posting.
           )
           : !disablePostComment
               && (
-              <Aux>
+              <>
                 { visiblePost
                   ? (
                     <Form className="public-form mt-30 clearfix" reply>
@@ -166,12 +165,12 @@ on posting.
                     </Form>
                   ) : ''
                 }
-              </Aux>
+              </>
               )
         }
         {comments && commentsMainThreadCount
           ? (
-            <Aux>
+            <>
               <Segment color="green" className="mt-50 offering-comment">
                 {comments
                 && comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
@@ -211,7 +210,7 @@ on posting.
                             )}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
-                            <Aux>
+                            <>
                               <Form className="public-form mt-30" reply>
                                 <FormTextarea
                                   fielddata={MESSAGE_FRM.fields.comment}
@@ -245,7 +244,7 @@ on posting. If you have any technical questions or questions about NextSeed,
                                 <a href="mailto:support@nextseed.com">support@nextseed.com</a>
 .
                               </p>
-                            </Aux>
+                            </>
                           ) : ''}
                         </Comment.Content>
                         {c.threadComment.length !== 0
@@ -291,7 +290,7 @@ on posting. If you have any technical questions or questions about NextSeed,
                                   )}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
-                                  <Aux>
+                                  <>
                                     <Form className="public-form mt-30" reply>
                                       <FormTextarea
                                         fielddata={MESSAGE_FRM.fields.comment}
@@ -325,7 +324,7 @@ on posting. If you have any technical questions or questions about NextSeed,
                                       <a href="mailto:support@nextseed.com">support@nextseed.com</a>
 .
                                     </p>
-                                  </Aux>
+                                  </>
                                 ) : ''}
                               </Comment.Content>
                             </Comment>
@@ -338,7 +337,7 @@ on posting. If you have any technical questions or questions about NextSeed,
                 )))
               }
               </Segment>
-            </Aux>
+            </>
           )
           : (
             <Segment color="green" className="mt-50 offering-comment">

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
@@ -55,7 +54,7 @@ export default class AddNewTier extends Component {
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS')
                   ? (
-                    <Aux>
+                    <>
                       <MaskedInput
                         currency
                         prefix="$"
@@ -69,7 +68,7 @@ export default class AddNewTier extends Component {
                         fielddata={ADD_NEW_TIER_FRM.fields.earlyBirdQuantity}
                         changed={(values, field) => maskChange(values, formName, field)}
                       />
-                    </Aux>
+                    </>
                   )
                   : (
                     <MaskedInput

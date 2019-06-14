@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
@@ -72,12 +71,12 @@ const InvestmentList = (props) => {
                       </Table.Cell>
                       <Table.Cell className="text-capitalize">
                         {
-                          <Aux>
+                          <>
                             {Helper.CurrencyFormat(data.investedAmount, 0)}
                             <p className="date-stamp">
                               <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
                             </p>
-                          </Aux>
+                          </>
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>

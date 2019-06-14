@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
 
@@ -9,7 +8,7 @@ const Actions = observer((props) => {
     edit, editForm, deleteUpdate, id, cancelUpdate, cancelChanges,
   } = props;
   return (
-    <Aux>
+    <>
       {(isManager && !isPublished) || editForm
         ? (
           <Button.Group compact floated="right">
@@ -121,7 +120,7 @@ const Actions = observer((props) => {
         </Button.Group>
         )
       }
-    </Aux>
+    </>
   );
 });
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { map, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Card, Header, Divider, Form, Button } from 'semantic-ui-react';
@@ -99,7 +98,7 @@ Investor Profile
             </dd>
             {INVESTOR_PROFILE_FULL.fields.status.value === 'EMPLOYED'
               && (
-              <Aux>
+              <>
                 <dt className="regular-text">Employer</dt>
                 <dd>
                   <FormInput
@@ -126,7 +125,7 @@ Investor Profile
                     ishidelabel
                   />
                 </dd>
-              </Aux>
+              </>
               )
             }
             <Divider hidden />
@@ -148,7 +147,7 @@ Investor Profile
             </dd>
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
               && (
-              <Aux>
+              <>
                 <dt className="regular-text">Member Firm Name</dt>
                 <dd>
                   <FormInput
@@ -162,7 +161,7 @@ Investor Profile
                     ishidelabel
                   />
                 </dd>
-              </Aux>
+              </>
               )
             }
             <Divider hidden />
@@ -184,7 +183,7 @@ Investor Profile
             </dd>
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
               && (
-              <Aux>
+              <>
                 <dt className="regular-text">Ticker Symbol</dt>
                 <dd>
                   <FormInput
@@ -198,7 +197,7 @@ Investor Profile
                     ishidelabel
                   />
                 </dd>
-              </Aux>
+              </>
               )
             }
             <Divider hidden />
@@ -232,7 +231,7 @@ Investor Profile
               />
             </dd>
             {map(yearValues.annualIncomePreviousYear, (year, key) => (
-              <Aux>
+              <>
                 <dt className="regular-text">
 Annual Income
                   {year}
@@ -249,7 +248,7 @@ Annual Income
                     hidelabel
                   />
                 </dd>
-              </Aux>
+              </>
             ))
             }
             <Divider hidden />

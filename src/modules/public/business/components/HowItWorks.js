@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, Link, withRouter } from 'react-router-dom';
 // Embed
 import { inject, observer } from 'mobx-react';
@@ -97,10 +96,10 @@ class HowItWorks extends Component {
     const isTablet = document.documentElement.clientWidth < 992;
 
     return (
-      <Aux>
+      <>
         <section>
           <Container>
-            <Responsive maxWidth={767} as={Aux}>
+            <Responsive maxWidth={767} as={React.Fragment}>
               <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
               <div className={`${isMobile ? 'left-align' : 'center-align'}`}>
                 <Button.Group size={isMobile && 'tiny'}>
@@ -186,7 +185,7 @@ cost you everything.
               </Container>
             )
             : (
-              <Aux>
+              <>
                 <Container>
                   <NsCarousel {...settings}>
                     {businesses.map(row => (
@@ -203,7 +202,7 @@ cost you everything.
               }
                   </NsCarousel>
                 </Container>
-              </Aux>
+              </>
             )
       }
         </section>
@@ -327,7 +326,7 @@ cost you everything.
           </Container>
         </section>
         <Route path="/business/how-it-works/video" render={props => <VideoModal {...props} videoDetails={nsvideos} />} />
-      </Aux>
+      </>
     );
   }
 }

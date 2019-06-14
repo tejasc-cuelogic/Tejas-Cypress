@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -188,7 +187,7 @@ See the update
                     />
                     <br />
                     {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
-                      <Aux>
+                      <>
                         <Checkbox
                           name="tiers"
                           readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
@@ -198,7 +197,7 @@ See the update
                           label={`$${rewardTier}`}
                         />
                         <br />
-                      </Aux>
+                      </>
                     )) : ''}
                   </Card.Content>
                 </Card>

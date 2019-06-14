@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
@@ -88,7 +87,7 @@ export default class Portfolio extends Component {
   routesList = () => {
     const { match } = this.props;
     return (
-      <Aux>
+      <>
         <Route
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
@@ -104,7 +103,7 @@ export default class Portfolio extends Component {
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
         />
-      </Aux>
+      </>
     );
   }
 
@@ -113,10 +112,10 @@ export default class Portfolio extends Component {
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     if (portfolioStore.loading) {
       return (
-        <Aux>
+        <>
           <InlineLoader />
           {this.routesList()}
-        </Aux>
+        </>
       );
     }
     const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
@@ -163,7 +162,7 @@ export default class Portfolio extends Component {
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
     return (
-      <Aux>
+      <>
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
@@ -185,7 +184,7 @@ export default class Portfolio extends Component {
         && !getInvestorAccounts.investments.active.length
         && !getInvestorAccounts.investments.completed.length
           ? (
-            <Aux>
+            <>
               <p>No investments or reservations pending.</p>
               <Card>
                 <Card.Content>
@@ -193,7 +192,7 @@ export default class Portfolio extends Component {
                   <Button as={Link} target="_blank" to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
                 </Card.Content>
               </Card>
-            </Aux>
+            </>
           ) : null
         }
         {this.routesList()}
@@ -203,7 +202,7 @@ export default class Portfolio extends Component {
           srcUrl={this.state.embedUrl}
           loading={false}
         />
-      </Aux>
+      </>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
@@ -60,7 +59,7 @@ class Business extends Component {
     const { location, match, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {location.pathname === '/business/how-it-works'
           || location.pathname === '/business' ? <Banner />
@@ -92,7 +91,7 @@ class Business extends Component {
             <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
           </Switch>
         </Visibility>
-      </Aux>
+      </>
     );
   }
 }

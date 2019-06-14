@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Visibility } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
@@ -33,7 +32,7 @@ class About extends Component {
     const { match, location, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         {location.pathname === '/about/mission' && <Banner />}
         <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
           <PublicSubNav
@@ -57,7 +56,7 @@ class About extends Component {
             }
           </Switch>
         </Visibility>
-      </Aux>
+      </>
     );
   }
 }

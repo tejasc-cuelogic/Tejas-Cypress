@@ -1,10 +1,9 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { FormRadioGroup, FormCheckbox } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 
 const EntityAndLegal = props => (
-  <Aux>
+  <>
     <FormElementWrap hideFields={props.hideFields} header="What is your company’s entity structure?*">
       <FormRadioGroup
         disabled={props.preQualFormDisabled}
@@ -32,7 +31,7 @@ const EntityAndLegal = props => (
         containerclassname="ui relaxed list"
       />
     </FormElementWrap>
-  </Aux>
+  </>
 );
 
 export default EntityAndLegal;

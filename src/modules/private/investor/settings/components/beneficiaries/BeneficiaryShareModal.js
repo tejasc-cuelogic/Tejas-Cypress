@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-// import Aux from 'react-aux';
 import { Modal, Button, Header, Form, Divider, Message, Table } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { ListErrors, FieldError, InlineLoader } from '../../../../../../theme/shared';

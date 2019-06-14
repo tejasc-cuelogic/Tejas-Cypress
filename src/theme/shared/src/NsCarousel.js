@@ -1,6 +1,5 @@
 /* eslint-disable react/no-did-mount-set-state, no-return-assign */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -57,7 +56,7 @@ export default class NsCarousel extends Component {
       }
       thumbSliderCustomClassToApply = this.props.customThumSliderClass ? 'thumb-location-gallery' : '';
       return (
-        <Aux>
+        <>
           <Slider
             {...settings}
             asNavFor={this.state.nav2}
@@ -79,7 +78,7 @@ export default class NsCarousel extends Component {
               <Image64 bg className="carousel-bg-thumb" srcUrl={i.url} />
             ))}
           </Slider>
-        </Aux>
+        </>
       );
     }
 

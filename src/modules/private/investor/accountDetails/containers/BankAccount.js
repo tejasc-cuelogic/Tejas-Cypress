@@ -3,7 +3,6 @@ import { Route, Link, Switch } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
 import { isEmpty, includes } from 'lodash';
-import Aux from 'react-aux';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
 import ConfirmBankLinking from '../components/bankaccount/ConfirmBankLinking';
 import VerifyBankUpdate from '../components/bankaccount/VerifyBankUpdate';
@@ -61,7 +60,7 @@ export default class BankAccount extends Component {
         />
         {accountType !== 'ira'
           ? (
-            <Aux>
+            <>
               <Header as="h4">Bank Account</Header>
               <Grid>
                 {isEmpty(plaidAccDetails)
@@ -116,7 +115,7 @@ export default class BankAccount extends Component {
                 )
               }
               </Grid>
-            </Aux>
+            </>
           )
           : (
             <section className="center-align">

@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Route, withRouter, Switch, matchPath } from 'react-router-dom';
 import Login from './containers/Login';
 import SignupInitial from './containers/SignupInitial';
@@ -17,7 +16,7 @@ export default class Auth extends React.Component {
     const allowed = ['login', 'register', 'register-investor', 'confirm-email', 'change-password', 'reset-password', 'forgot-password'];
     const { location } = this.props;
     return (
-      <Aux>
+      <>
         {(allowed.find(item => matchPath(location.pathname, { path: `/auth/${item}` })))
         && <section className="modalbg-banner" />}
         <Switch>
@@ -31,7 +30,7 @@ export default class Auth extends React.Component {
           <Route path="/auth/forgot-password" component={ForgotPassword} />
           <Route component={NotFound} />
         </Switch>
-      </Aux>
+      </>
     );
   }
 }

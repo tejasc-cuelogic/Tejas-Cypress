@@ -1,7 +1,6 @@
 /* eslint-disable import/no-dynamic-require, global-require */
 import React from 'react';
 import { Header, Container, Grid, Responsive } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import NSImage from '../../../shared/NSImage';
 
 const featuredOn = [
@@ -13,7 +12,7 @@ const FeaturedOn = () => (
     <Container>
       <Header as="h3" textAlign="center" className="mb-50 grey-header">As seen on</Header>
       <Grid columns={5} doubling verticalAlign="middle" className="vertical-gutter">
-        <Responsive minWidth="768" as={Aux}>
+        <Responsive minWidth="768" as={React.Fragment}>
           {/* {featuredOn.map(row => (
             <Grid.Row> */}
           {featuredOn.map(row => row.map(f => (
@@ -24,7 +23,7 @@ const FeaturedOn = () => (
           {/* </Grid.Row>
           ))} */}
         </Responsive>
-        <Responsive maxWidth="767" as={Aux}>
+        <Responsive maxWidth="767" as={React.Fragment}>
           {featuredOn.map(row => row.map(f => (
             <Grid.Column className="featured-logos" key={f}>
               <NSImage centered path={`featured/${f}.png`} />

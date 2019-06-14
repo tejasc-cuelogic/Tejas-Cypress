@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
@@ -55,7 +54,7 @@ export default class Experience extends Component {
     } = this.props.investorProfileStore;
     const { errorMessage } = this.state;
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">Investment Experience</Header>
         <p className="center-align mb-40">
           Confirm your experience and understanding of the investment risks on NextSeed.
@@ -115,7 +114,7 @@ to
             }
           </div>
         </Form>
-      </Aux>
+      </>
     );
   }
 }

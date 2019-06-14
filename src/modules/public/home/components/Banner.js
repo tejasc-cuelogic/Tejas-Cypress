@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
@@ -23,7 +22,7 @@ class Banner extends Component {
     return (
       <section className="banner business-banner">
         <Container>
-          <Responsive minWidth={768} as={Aux}>
+          <Responsive minWidth={768} as={React.Fragment}>
             <div className="banner-caption">
               <Header as="h2">
                 Build an investment

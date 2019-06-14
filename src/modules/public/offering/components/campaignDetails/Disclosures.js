@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { get, isEmpty } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
@@ -80,20 +79,20 @@ export default class TermsOfUse extends Component {
         {this.dataRoomHeader}
         {isMobile
           ? sortedDocswithBoxLink.map(doc => (
-          <Aux>
+          <>
             <Header as="h4" className="mb-20 grey-header">{doc.name}</Header>
             <Disclosure campaignCreatedBy={campaignCreatedBy} doc={doc} />
-          </Aux>
+          </>
           ))
           : (
-<Aux>
+<>
           <Header as="h4" className="mb-20 grey-header">{dataRoomDocs[index - 1].name}</Header>
           <Disclosure
             campaignCreatedBy={campaignCreatedBy}
             doc={dataRoomDocs[index - 1]}
             fileId={get(dataRoomDocs[index - 1], 'upload.fileHandle.boxFileId')}
           />
-</Aux>
+</>
           )
         }
       </div>

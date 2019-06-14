@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
-import Aux from 'react-aux';
 import startCase from 'lodash/startCase';
 import moment from 'moment';
 import { Card, Grid, Button, Header, Icon, Item, Divider } from 'semantic-ui-react';
@@ -28,7 +27,7 @@ const BeneficiaryList = (props) => {
             </Header>
             { showButton
               ? (
-                <Aux>
+                <>
                   <div className="status">
                     <span className="time-stamp">{`Updated: ${moment(props.updatedDate.date).format('MM-DD-YYYY')}`}</span>
                     <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} />
@@ -86,7 +85,7 @@ const BeneficiaryList = (props) => {
                   }
                   </Item.Group>
                   <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
-                </Aux>
+                </>
               )
               : <p>{headerMsg}</p>
               }

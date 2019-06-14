@@ -1,4 +1,3 @@
-import Aux from 'react-aux';
 import React, { Component } from 'react';
 import { includes } from 'lodash';
 import { Grid, Card } from 'semantic-ui-react';
@@ -59,7 +58,7 @@ export default class MonthlyStatements extends Component {
     const totalRecords = monthlyStatementcount || 0;
     result.rows = monthlyStatements;
     return (
-      <Aux>
+      <>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
@@ -76,7 +75,7 @@ export default class MonthlyStatements extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

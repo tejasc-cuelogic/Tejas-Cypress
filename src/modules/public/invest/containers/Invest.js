@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import Loadable from 'react-loadable';
 import { Visibility, Responsive } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
@@ -70,7 +69,7 @@ class Invest extends Component {
     const { match, location, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner />
           : <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
@@ -101,7 +100,7 @@ class Invest extends Component {
             }
           </Switch>
         </Visibility>
-      </Aux>
+      </>
     );
   }
 }

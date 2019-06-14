@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { includes, uniq, get } from 'lodash';
 import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -336,7 +335,7 @@ class AccountType extends Component {
       return <Spinner loaderMessage="Loading.." />;
     }
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">
           {' '}
           {headerSubheaderObj.header}
@@ -344,10 +343,10 @@ class AccountType extends Component {
         <Form error className="account-type-tab mb-0">
           {investAccTypes.values.length && selectedAccountStatus && (userProfileFullStatus === 'FULL' || userProfileFullStatus === 'BASIC')
             ? (
-              <Aux>
+              <>
                 {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest
                   ? (
-                    <Aux>
+                    <>
                       <p className="center-align">{headerSubheaderObj.subHeader}</p>
                       <FormRadioGroup
                         name="investAccountType"
@@ -355,10 +354,10 @@ class AccountType extends Component {
                         fielddata={investAccTypes}
                         changed={accTypeChanged}
                       />
-                    </Aux>
+                    </>
                   )
                   : (
-                    <Aux>
+                    <>
                       {isDocumentUpload === false
                         ? (
                           <div className="center-align">
@@ -410,7 +409,7 @@ class AccountType extends Component {
                                     </Card.Group>
                                   )
                                   : (
-                                    <Aux>
+                                    <>
                                       {/* <Link to={redirectURL} className="text-link">
                                 <Icon className="ns-arrow-right" color="green" />
                                 Apply for accreditation
@@ -424,7 +423,7 @@ class AccountType extends Component {
                                           content="Confirm Status"
                                         />
                                       </div>
-                                    </Aux>
+                                    </>
                                   )
                                 : userAccredetiationState === 'EXPIRED'
                                   ? (
@@ -448,7 +447,7 @@ class AccountType extends Component {
                             <div className="center-align">
                               {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
                                 ? (
-                                  <Aux>
+                                  <>
                                     <p>
 Please contact
                                       <a href="mailto:support@nextseed.com">support@nextseed.com</a>
@@ -456,41 +455,41 @@ Please contact
 to unlock your account.
                                     </p>
                                     <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                                  </Aux>
+                                  </>
                                 )
                                 : null}
                               {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL')
                                 ? (
-                                  <Aux>
+                                  <>
                                     <Link to={redirectURL} className="text-link">
                                       <Icon className="ns-arrow-right" color="green" />
                               Please finish your account setup.
                                     </Link>
                                     <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                                  </Aux>
+                                  </>
                                 )
                                 : null}
                               {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING')
                                 ? (
-                                  <Aux>
+                                  <>
                                     <p>We&apos;ll notify you through email when your account is set up.</p>
                                     <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                                  </Aux>
+                                  </>
                                 )
                                 : null}
                             </div>
                           )
                   }
-                    </Aux>
+                    </>
                   )
               }
-              </Aux>
+              </>
             )
             : (
               <div className="center-align">
                 {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
                   ? (
-                    <Aux>
+                    <>
                       <p>
 Please contact
                         <a href="mailto:support@nextseed.com">support@nextseed.com</a>
@@ -498,12 +497,12 @@ Please contact
 to unlock your account.
                       </p>
                       <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                    </Aux>
+                    </>
                   )
                   : null}
                 {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
                   ? (
-                    <Aux>
+                    <>
                     Please answer a few basic questions to complete your Investor Profile.
                       {/* <Link to={redirectURL} className="text-link">
                         <Icon className="ns-arrow-right" color="green" />
@@ -520,22 +519,22 @@ to unlock your account.
                           />
                     </div> */}
                       <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
-                    </Aux>
+                    </>
                   )
                   : null}
                 {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow)
                   ? (
-                    <Aux>
+                    <>
                       <p>We&apos;ll notify you through email when your account is set up.</p>
                       <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                    </Aux>
+                    </>
                   )
                   : null}
               </div>
             )
           }
         </Form>
-      </Aux>
+      </>
     );
   }
 }

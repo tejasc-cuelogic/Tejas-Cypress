@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { isArray } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Form, Grid, Table, Button } from 'semantic-ui-react';
@@ -86,7 +85,7 @@ export default class Transactions extends Component {
       );
     }
     return (
-      <Aux>
+      <>
         <Form className="inner-content-spacer">
           <Grid>
             <Grid.Row verticalAlign="middle">
@@ -124,7 +123,7 @@ export default class Transactions extends Component {
                       {
                         offerStructure === 'TERM_NOTE'
                           ? (
-                            <Aux>
+                            <>
                               <Table.Cell>
                                 {Helper.CurrencyFormat(row.interestGrossAmount)}
                               </Table.Cell>
@@ -136,16 +135,16 @@ export default class Transactions extends Component {
                               <Table.Cell>
                                 {`$${row.remainingPrincipalDue}`}
                               </Table.Cell>
-                            </Aux>
+                            </>
                           )
                           : (
-                            <Aux>
+                            <>
                               <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
                               <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
                               <Table.Cell>
                                 {`$${row.remainingAmountDue}`}
                               </Table.Cell>
-                            </Aux>
+                            </>
                           )
                       }
                     </Table.Row>
@@ -162,7 +161,7 @@ export default class Transactions extends Component {
           srcUrl={this.state.embedUrl}
           loading={false}
         />
-      </Aux>
+      </>
     );
   }
 }

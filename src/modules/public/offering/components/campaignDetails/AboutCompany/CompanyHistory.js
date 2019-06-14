@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Header, List, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 @inject('campaignStore')
@@ -11,7 +10,7 @@ class CompanyHistory extends Component {
     const { campaign } = this.props;
     const emptyHistoryStatement = 'History not found';
     return (
-      <Aux>
+      <>
         <Header as="h3" className="anchor-wrap mb-30">
           History
           <span className="anchor" id="history" />
@@ -38,7 +37,7 @@ class CompanyHistory extends Component {
             )
             : <InlineLoader text={emptyHistoryStatement} className="bg-offwhite" />
         }
-      </Aux>
+      </>
     );
   }
 }

@@ -1,11 +1,10 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Popup, Icon } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 
 const InvestmentLimit = props => (
-  <Aux>
+  <>
     <Header as={props.changeInvest ? 'h6' : 'h4'} textAlign={props.changeInvest ? '' : 'center'}>
       Your investment limit:
       {' '}
@@ -45,7 +44,7 @@ by
       )
       : null
     }
-  </Aux>
+  </>
 );
 
 export default InvestmentLimit;

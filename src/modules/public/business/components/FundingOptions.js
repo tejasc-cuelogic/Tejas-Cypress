@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { Header, Container, Menu, Segment, Grid, Responsive, Divider, List } from 'semantic-ui-react';
@@ -33,7 +32,7 @@ export default class FundingOption extends Component {
   render() {
     const { match, location } = this.props;
     return (
-      <Aux>
+      <>
         <section className="funding-option">
           <Container>
             <Grid centered>
@@ -89,7 +88,7 @@ export default class FundingOption extends Component {
             </List>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

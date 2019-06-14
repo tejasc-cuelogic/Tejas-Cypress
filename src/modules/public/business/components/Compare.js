@@ -1,11 +1,10 @@
 import React from 'react';
 import { Container, Table, Header, List, Responsive, Accordion, Icon } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
 const Compare = () => (
-  <Aux>
+  <>
     <section className="compare-section edu-center">
       <Container>
         <Header as="h2" textAlign="center" className="mb-30">See how we stack up.</Header>
@@ -338,7 +337,7 @@ Revenue Sharing 15–25%
         </p>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default Compare;

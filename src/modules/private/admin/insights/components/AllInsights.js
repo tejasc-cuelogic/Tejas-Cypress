@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { join } from 'lodash';
@@ -90,7 +89,7 @@ export default class AllInsights extends Component {
       return <InlineLoader text="No data found." />;
     }
     return (
-      <Aux>
+      <>
         <Card fluid>
           <div className="table-wrapper">
             <Table unstackable striped sortable className="user-list">
@@ -153,7 +152,7 @@ export default class AllInsights extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

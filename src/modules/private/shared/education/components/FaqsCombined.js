@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Input, Form, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { toJS } from 'mobx';
@@ -43,7 +42,7 @@ export default class FaqsCombined extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form>
           <Input
             fluid
@@ -94,7 +93,7 @@ export default class FaqsCombined extends Component {
             <a href="mailto:info@nextseed.com" className="link">info@nextseed.com</a>
           </p>
         </div>
-      </Aux>
+      </>
     );
   }
 }

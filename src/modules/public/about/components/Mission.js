@@ -1,13 +1,12 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Container, Grid, Statistic, Responsive, Divider } from 'semantic-ui-react';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Mission = () => (
-  <Aux>
+  <>
     <section>
       <Container>
-        <Responsive maxWidth={767} as={Aux}>
+        <Responsive maxWidth={767} as={React.Fragment}>
           <Header as="h2">
 Invest in each other.
             <br />
@@ -187,7 +186,7 @@ Data reflects figures from both the NextSeed TX and Reg CF
         </p>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default Mission;

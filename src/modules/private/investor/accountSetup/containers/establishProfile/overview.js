@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Divider, Button } from 'semantic-ui-react';
@@ -16,7 +15,7 @@ export default class Overview extends Component {
     const finraLink = <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>;
     const { signupStatus } = this.props.userDetailsStore;
     let overviewInfo = (
-      <Aux>
+      <>
         <p>
           Investment offerings on
           {' '}
@@ -36,11 +35,11 @@ are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of
           To begin making investments on the platform, you will need to answer a few more
           questions to complete your investor profile.
         </p>
-      </Aux>
+      </>
     );
     if (signupStatus.isMigratedFullAccount) {
       overviewInfo = (
-        <Aux>
+        <>
           <p>
             We
             {"'"}
@@ -60,7 +59,7 @@ re pleased to share that certain new investments will now be facilitated
             investments, please answer the following questions to complete your investor
             profile.
           </p>
-        </Aux>
+        </>
       );
     }
     return (

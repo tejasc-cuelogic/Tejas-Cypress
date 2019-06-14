@@ -2,12 +2,11 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-closing-tag-location */
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Divider, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const TermsOfUse = () => (
-  <Aux>
+  <>
     <Header as="h2">Terms of Use</Header>
     <p>
 Revision Date: April 10, 2019
@@ -854,7 +853,7 @@ s
         Agreement, and (f) “Section” refers to a section of these Terms.
       </p>
     </div>
-  </Aux>
+  </>
 );
 
 export default TermsOfUse;

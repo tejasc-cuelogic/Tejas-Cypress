@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import ChartPieForBonusRewards from './ChartPieForBonusRewards';
 import Helper from '../../../../../../helper/utility';
@@ -23,22 +22,22 @@ class BonusRewards extends Component {
       { name: earlyBirdsCount, value: earlyBirdsCount || 0 },
     ];
     return (
-      <Aux>
+      <>
         <Header as="h3">Bonus Rewards</Header>
         {rewardsTiers && rewardsTiers.length
           ? (!isEarlyBirdExists
             ? (
-              <Aux>
+              <>
                 <NSImage path="illustration.png" className="no-early-bird" />
                 <p className="center-align neutral-text mb-0"><b>Invest more, receive more.</b></p>
                 <p className="early-bird-desc center-align">
                   {`See the bonus rewards ${shorthandBusinessName} is offering for higher
               levels of investment.`}
                 </p>
-              </Aux>
+              </>
             )
             : (
-              <Aux>
+              <>
                 <div className="boanusreward-chart">
                   <ChartPieForBonusRewards
                     title={earlyBirdsCount}
@@ -60,16 +59,16 @@ rewards remaining
                   {' '}
                   {earlyBirdDetails.amount > 0 ? `to invest ${Helper.CurrencyFormat(earlyBirdDetails.amount)}+` : ''}
                 </p>
-              </Aux>
+              </>
             ))
           : (
-            <Aux>
+            <>
               <NSImage path="illustration.png" className="no-early-bird" />
               <p className="center-align neutral-text mb-0"><b>No Bonus Rewards for this Campaign.</b></p>
-            </Aux>
+            </>
           )
         }
-      </Aux>
+      </>
     );
   }
 }

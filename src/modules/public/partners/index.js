@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Container, Header, List, Button, Divider, Responsive } from 'semantic-ui-react';
 
 const isMobile = document.documentElement.clientWidth < 768;
 export default class Partners extends Component {
   render() {
     return (
-      <Aux>
+      <>
         <Container>
           <section className="center-align">
             <Header as="h2">Partners</Header>
@@ -194,7 +193,7 @@ We have a network of preferred vendors and referrals.
           </p>
           <Divider section hidden />
         </Container>
-      </Aux>
+      </>
     );
   }
 }
