@@ -571,6 +571,12 @@ export const createUserMutation = gql`
     }
   }
 `;
+export const resetPasswordExpirationForCognitoUser = gql`
+  mutation _resetPasswordExpirationDurationForCognitoUser($emailAddress: String!) {
+    resetPasswordExpirationDurationForCognitoUser (emailAddress: $emailAddress)
+  }
+`;
+
 
 export const deleteUserMutation = gql`
   mutation deleteUser($id:  ID! ) {

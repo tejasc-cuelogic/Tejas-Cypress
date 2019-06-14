@@ -37,12 +37,12 @@ export default class AuditBoxFolder extends Component {
             <Form onSubmit={this.onSubmit}>
               <Form.Group className="bottom-aligned">
                 <FormDropDown
-                  fielddata={AUDITBOXFOLDER_FRM.fields.userType}
+                  fielddata={AUDITBOXFOLDER_FRM.fields.role}
                   selection
                   containerclassname="dropdown-field mlr-0"
-                  options={AUDITBOXFOLDER_FRM.fields.userType.values}
+                  options={AUDITBOXFOLDER_FRM.fields.role.values}
                   placeholder="Choose here"
-                  name="userType"
+                  name="role"
                   onChange={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
                   containerwidth="8"
                 />

@@ -25,12 +25,14 @@ export const invalidInvestmentAmount = () => {
 };
 
 export const validInvestmentAmount = () => {
+  registerApiCall('investNowGeneratePurchaseAgreement');
   const enterdMaxValidAmount = '1000';
   cy.wait(300);
   clearEnteredAmount();
   cy.get('input[name="investmentAmount"]').type(enterdMaxValidAmount);
   cy.get('input[name="investmentAmount"]').type('{enter}');
-  // cy.wait('@investNowGeneratePurchaseAgreement');
+  cy.wait('@investNowGeneratePurchaseAgreement');
+  cy.wait('@investNowGeneratePurchaseAgreement');
 };
 
 export const ConfirmTransferRequest = () => {
@@ -54,8 +56,8 @@ export const ConfirmTransferRequest = () => {
 };
 
 export const generateAgreement = () => {
-  cy.wait('@investNowGeneratePurchaseAgreement');
-  cy.wait(500)
+  // cy.wait('@investNowGeneratePurchaseAgreement');
+  cy.wait(3000);
   cy.get('.confirm-investment').should('have.length', 1);
   cy.get('.signup-content').find('div:visible').find('.ui.form').find('.ui.stackable.grid')
     .find('.row')
@@ -96,3 +98,25 @@ export const enteringInvestmentAmount = () => {
   generateAgreement();
   submitInvestment();
 };
+
+export const invalidMultipleInvestmentAmount = () => {
+  clearEnteredAmount();
+  cy.get('input[name="investmentAmount"]').type('101');
+  cy.get('input[name="investmentAmount"]').blur();
+  cy.wait(500);
+  cy.get('input[name="investmentAmount"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
+}
+
+export const invalidMinInvestmentAmount = () => {
+  registerApiCall('investNowGeneratePurchaseAgreement');
+  clearEnteredAmount();
+  const minInvestmentAmount = localStorage.getItem('minInvestAmount');
+  const enterdMinValidAmount = '100';
+  const comapirdWithMinInvetment = money.cmp(enterdMinValidAmount, minInvestmentAmount).toString();
+  cy.get('input[name="investmentAmount"]').type(enterdMinValidAmount);
+  cy.get('input[name="investmentAmount"]').type('{enter}');
+  cy.wait(500);
+  if (money.isNegative(comapirdWithMinInvetment)) {
+    cy.get('input[name="investmentAmount"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
+  }
+}
