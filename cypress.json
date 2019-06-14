@@ -1,4 +1,5 @@
 {
-  "baseUrl": "http://1702-cypress-test.s3-website-us-east-1.amazonaws.com",
-  "chromeWebSecurity": false
+  "baseUrl": "http://dev.nextseed.qa/",
+  "chromeWebSecurity": false,
+  "pageTimeoutLoad": 80000
 }

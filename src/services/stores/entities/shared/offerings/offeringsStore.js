@@ -288,7 +288,6 @@ export class OfferingsStore {
       newArr[index].order = index + 1;
     });
     this.setDb(newArr);
-    uiStore.setProgress();
     client
       .mutate({
         mutation: setOrderForOfferings,
@@ -298,9 +297,6 @@ export class OfferingsStore {
         this.initRequest({ stage });
       }).catch(() => {
         Helper.toast('Error while updating order', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
       });
   }
 
@@ -312,13 +308,18 @@ export class OfferingsStore {
     const data = toJS(this.data[this.requestState.stage]);
     return (data && data.data
       && data.data.getOfferings
-      && toJS(sortBy(data.data.getOfferings, ['order']))) || [];
+      && toJS(data.data.getOfferings)) || [];
   }
 
   @computed get totalRecords() {
     return (this.data[this.requestState.stage].data
       && this.data[this.requestState.stage].data.getOfferings
       && this.data[this.requestState.stage].data.getOfferings.count) || 0;
+  }
+
+  @computed get allOfferingsSorted() {
+    return this.db[this.requestState.stage]
+    && this.db[this.requestState.stage].length ? toJS(sortBy(this.db[this.requestState.stage], ['order'])) : [];
   }
 
   @computed get allOfferings() {
