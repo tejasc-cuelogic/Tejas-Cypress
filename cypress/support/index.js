@@ -22,7 +22,4 @@ Cypress.on('window:before:load', (win) => {
 
 Cypress.Cookies.defaults({
   whitelist: 'session_id',
-});
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+})

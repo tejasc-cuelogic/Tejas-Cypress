@@ -10,6 +10,7 @@ import OfferingAudit from './data/OfferingAudit';
 import ProcessFullAccount from './data/processFullAccount';
 import RecreateGoldstar from './data/recreateGoldstar';
 import EncryptDecryptUtility from './data/encryptDecryptUtility';
+import AuditBoxFolder from './data/auditBoxFolder';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -53,7 +54,7 @@ export default class Data extends Component {
                     disabled={inProgress}
                   />
                   <Form.Field width={4}>
-                    <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress} loading={inProgress} />
+                    <Button primary fluid content="Sync Storage Details" disabled={!STORAGE_DETAILS_SYNC_FRM.meta.isValid || inProgress || bulkSyncLoader} loading={inProgress === 'syncStorageDetails'} />
                   </Form.Field>
                 </Form.Group>
               </Form>
@@ -72,7 +73,7 @@ export default class Data extends Component {
                     disabled={bulkSyncLoader}
                   />
                   <Form.Field width={4}>
-                    <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || bulkSyncLoader} loading={bulkSyncLoader} />
+                    <Button primary fluid content="Sync All Investors" disabled={!BULK_STORAGE_DETAILS_SYNC_FRM.meta.isValid || bulkSyncLoader || inProgress} loading={bulkSyncLoader === 'syncAllInvestors'} />
                   </Form.Field>
                   { errors
                   && <FieldError error={errors || ''} />
@@ -101,6 +102,7 @@ User folders will be created in current run.
           <RecreateGoldstar />
           <OfferingAudit />
           <EncryptDecryptUtility />
+          <AuditBoxFolder />
         </Grid.Column>
       </Grid>
     );

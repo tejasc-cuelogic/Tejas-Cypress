@@ -8,9 +8,21 @@ import {
 } from '../../support/investNow/investNowFlow';
 
 describe('Invest now flow', () => {
+  // before(() => {
+  //   initializeInvestNowFlow();
+  // });
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   it('Should proceed for invest now flow', () => {
     initializeInvestNowFlow();
   });
+
   it('Should open login popup if click on Invest Now button and not loged in', () => {
     cy.get('.loader', { timeout: 6000 }).should('not.exist');
     cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
@@ -30,7 +42,7 @@ describe('Invest now flow', () => {
   it('succesfully login as investor with one account', () => {
     proceedWithValidUserLoginAction();
   });
-  it('should successfully CF investment flow', () => {
-    proceedWithValidCFInvestmentAction();
-  });
+  // it('should successfully CF investment flow', () => {
+  //   proceedWithValidCFInvestmentAction();
+  // });
 });

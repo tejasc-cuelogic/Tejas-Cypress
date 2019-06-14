@@ -536,10 +536,9 @@ module.exports = (webpackEnv) => {
         scripts: [
           {
             path: 'assets/js/cypressSri.js',
-            attributes: {
-              integrity: 'sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=',
-              type: 'text/javascript',
-            }
+            // attributes: {
+            //   type: 'text/javascript',
+            // }
           }
         ],
       }),

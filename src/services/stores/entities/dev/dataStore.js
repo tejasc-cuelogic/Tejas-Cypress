@@ -2,11 +2,12 @@
 import { observable, action, toJS } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
-import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility } from '../../queries/data';
+import cleanDeep from 'clean-deep';
+import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META } from '../../../constants/admin/data';
+import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META, AUDITBOXFOLDER_META } from '../../../constants/admin/data';
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
@@ -20,11 +21,15 @@ export class DataStore {
   @observable ENCRYPTDECRYPTUTILITY_FRM =
   Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
 
+  @observable AUDITBOXFOLDER_FRM =
+  Validator.prepareFormObject(AUDITBOXFOLDER_META);
+
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
     adminProcessCip: false,
-    encryptDecryptValue: false,
+    encryptOrDecryptValue: false,
+    auditBoxFolder: false,
   };
 
   @observable outputMsg = null;
@@ -52,6 +57,24 @@ export class DataStore {
   @action
   formChange = (e, res, form) => {
     this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+  };
+
+  @action
+  formDataChange = (e, res, form, fieldType) => {
+    if (fieldType === 'mask') {
+      if (e.floatValue < 500) {
+        this[form] = Validator.onChange(
+          this[form],
+          { name: res, value: e.floatValue },
+        );
+        this.setFieldValue('countValues', '');
+      } else {
+        const tempobj = { ...this.BULK_STORAGE_DETAILS_SYNC_FRM };
+        tempobj.fields.limit.value = '';
+        tempobj.fields.limit.error = 'The number of users should be within 0 - 500.';
+        this.setFieldValue('BULK_STORAGE_DETAILS_SYNC_FRM', tempobj);
+      }
+    }
   };
 
   @action
@@ -176,7 +199,7 @@ export class DataStore {
   encryptOrDecryptValue = (type) => {
     const processData = Validator.evaluateFormData(this.ENCRYPTDECRYPTUTILITY_FRM.fields);
     processData.type = type;
-    this.setFieldValue('inProgress', true, 'encryptOrDecryptValue');
+    this.setFieldValue('inProgress', type, 'encryptOrDecryptValue');
     this.setFieldValue('outputMsg', null);
     return new Promise((resolve, reject) => {
       this.data = graphql({
@@ -185,18 +208,46 @@ export class DataStore {
         variables: processData,
         fetchPolicy: 'network-only',
         onFetch: (res) => {
-          if (res && res.encryptOrDecryptValue) {
-            Helper.toast('Your request is processed.', 'success');
+          if (res && res.encryptOrDecryptValue && !this.data.loading) {
+            console.log('Success---');
             this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
+            Helper.toast('Your request is processed.', 'success');
             resolve(res.encryptOrDecryptValue);
           }
         },
-        onError: () => {
+        onError: (error) => {
           this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
+          // if (get(error, 'Network error')) {
+          console.log('Error========', error);
           Helper.toast('Something went wrong, please try again later.', 'error');
+          // }
           reject();
         },
       });
+    });
+  }
+
+  @action
+  auditBoxFolder = () => {
+    const processData = cleanDeep(Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields));
+    this.setFieldValue('inProgress', true, 'auditBoxFolder');
+    return new Promise((res, rej) => {
+      client
+        .mutate({
+          mutation: auditBoxFolder,
+          variables: processData,
+        })
+        .then(action((result) => {
+          if (result.auditBox) {
+            this.setFieldValue('inProgress', false, 'auditBoxFolder');
+            res(result.auditBox);
+          }
+        }))
+        .catch(() => {
+          this.setFieldValue('inProgress', false, 'auditBoxFolder');
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          rej();
+        });
     });
   }
 }
