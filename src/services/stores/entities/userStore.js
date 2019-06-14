@@ -1,8 +1,10 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
+import { GqlClient as clientPublic } from '../../../api/publicApi';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
 import { authStore } from '../index';
+import { resetPasswordExpirationForCognitoUser } from '../queries/users';
 
 export class UserStore {
   @observable currentUser;
@@ -34,6 +36,19 @@ export class UserStore {
   @action setCurrentUser(user) {
     this.currentUser = user;
   }
+
+  @action resetPasswordExpirationForCognitoUser = emailAddress => new Promise((resolve) => {
+    clientPublic
+      .mutate({
+        mutation: resetPasswordExpirationForCognitoUser,
+        variables: {
+          emailAddress,
+        },
+      })
+      .then((res) => {
+        resolve(res);
+      });
+  });
 
   @computed get capabilitiesMeta() {
     console.log(this.opt);

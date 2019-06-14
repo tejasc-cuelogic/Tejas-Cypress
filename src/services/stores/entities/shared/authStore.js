@@ -366,6 +366,8 @@ export class AuthStore {
     this.resetForm('FORGOT_PASS_FRM', null);
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
+    this.newPasswordRequired = false;
+    this.isUserLoggedIn = false;
   }
 
   @action
