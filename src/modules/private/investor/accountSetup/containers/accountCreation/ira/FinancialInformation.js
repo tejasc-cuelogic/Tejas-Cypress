@@ -58,7 +58,7 @@ Your net worth and annual income are used to determine your 12-month investment 
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000
             && FIN_INFO_FRM.fields.investmentLimit.value !== '')
             && (
-            <Message error className="center-align">
+            <Message error className={isMobile ? '' : 'center-align'}>
               Based on your reported Net Worth and Annual Income, your 12-month investment limit
               under Regulation Crowdfunding is below the $5,000 minimum opening
               deposit for IRA accounts.

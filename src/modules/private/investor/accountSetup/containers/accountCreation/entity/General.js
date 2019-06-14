@@ -6,6 +6,8 @@ import { US_STATES_FOR_INVESTOR, ENTITY_TYPES } from '../../../../../../../const
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../theme/form';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('entityAccountStore', 'uiStore')
 @observer
 export default class General extends Component {
@@ -23,15 +25,15 @@ export default class General extends Component {
     const { errors } = this.props.uiStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">General information</Header>
-        <p className="center-align">
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>General information</Header>
+        <p className={isMobile ? '' : 'center-align'}>
           Let
           {"'"}
 s create your Entity Investment Account. Get started by providing your
           entity information.
         </p>
         <Form error>
-          <div className="field-wrap">
+          <div className={isMobile ? '' : 'field-wrap'}>
             <FormInput
               name="name"
               fielddata={GEN_INFO_FRM.fields.name}
@@ -57,7 +59,7 @@ s create your Entity Investment Account. Get started by providing your
                 onChange={(e, result) => genInfoChange(e, result)}
               />
             </Form.Group>
-            <h6>Registered Address</h6>
+            <Header as={!isMobile ? 'h5' : 'h4'}>Registered Address</Header>
             <AutoComplete
               name="street"
               fielddata={GEN_INFO_FRM.fields.street}
@@ -97,7 +99,7 @@ s create your Entity Investment Account. Get started by providing your
           </div>
           {errors
             && (
-            <Message className="center-align" error>
+            <Message className={isMobile ? '' : 'center-align'} error>
               <ListErrors errors={[errors]} />
             </Message>
             )
