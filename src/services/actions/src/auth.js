@@ -181,7 +181,6 @@ export class Auth {
   }
 
   amplifyLogin(user) {
-    console.log('user', user);
     if (user && !user.signInUserSession && user.challengeName && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
       if (user.signInUserSession) {
         authStore.setCognitoUserSession(user.signInUserSession);
