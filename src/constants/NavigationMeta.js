@@ -232,7 +232,7 @@ export const PRIVATE_NAV = [
       },
       { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
       {
-        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop'],
+        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop', 'dev'],
       },
     ],
   },
@@ -260,7 +260,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Overview', to: 'overview', env: ['localhost', 'develop'] },
+      { title: 'Overview', to: 'overview', env: ['localhost', 'develop', 'dev'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'ᕕ( ᐛ )ᕗ', to: 'completed' },
