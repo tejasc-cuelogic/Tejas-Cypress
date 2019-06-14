@@ -1,19 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
-import Loadable from 'react-loadable';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import MonthlyStatements from '../components/statements/MonthlyStatements';
 import TaxForms from '../components/statements/TaxForms';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/statements/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/statements/${component}`));
 
 const navItems = [
   { title: 'Monthly Statements', to: 'monthly-statements', component: MonthlyStatements },
@@ -41,21 +35,23 @@ export default class Statements extends Component {
             <SecondaryMenu secondary vertical match={match} navItems={navigationItems} />
           </Grid.Column>
           <Grid.Column floated="right" widescreen={12} largeScreen={11} computer={12} tablet={12} mobile={16}>
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                render={props => <DefaultComponent isAdmin={this.props.isAdmin} {...props} />}
-              />
-              {
-                navigationItems.map((item) => {
-                  const CurrentModule = item.component || getModule(item.component);
-                  return (
-                    <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule isAdmin={this.props.isAdmin} {...props} />} />
-                  );
-                })
-              }
-            </Switch>
+            <Suspense fallback={<InlineLoader />}>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  render={props => <DefaultComponent isAdmin={this.props.isAdmin} {...props} />}
+                />
+                {
+                  navigationItems.map((item) => {
+                    const CurrentModule = item.component || getModule(item.component);
+                    return (
+                      <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule isAdmin={this.props.isAdmin} {...props} />} />
+                    );
+                  })
+                }
+              </Switch>
+            </Suspense>
           </Grid.Column>
         </Grid>
       </div>

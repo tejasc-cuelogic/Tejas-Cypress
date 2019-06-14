@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty, includes, get } from 'lodash';
-import Loadable from 'react-loadable';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -12,12 +11,7 @@ import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/manage/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/manage/${component}`));
 
 const navMeta = [
   {
@@ -48,7 +42,6 @@ export default class AccountDetails extends Component {
     copied: false,
   }
 
-  // state = { isActivity: false };
   componentWillMount() {
     if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
@@ -67,9 +60,6 @@ export default class AccountDetails extends Component {
     });
   }
 
-  // activityState = (state) => {
-  //   this.setState({ isActivity: state });
-  // }
   handleCloseModal = () => {
     this.props.bankAccountStore.resetRoutingNum();
     this.props.history.push(this.props.refLink);
@@ -102,8 +92,6 @@ export default class AccountDetails extends Component {
     };
     return (
       <Aux>
-        {/* <Route exact path={`${match.url}/individual/investments/investment-details/:id`}
-      render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} /> */}
         <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
             <Item.Group>
@@ -153,30 +141,32 @@ Profile
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
               <div className="inner-content-spacer">
-                <Switch>
-                  {
-                    navItems.map((item) => {
-                      const CurrentModule = item.load === false
-                        ? item.component : getModule(item.component);
-                      return (
-                        <Route
-                          key={item.to}
-                          path={`${match.url}/${item.to}`}
-                          render={props => (
-                            <CurrentModule
-                              module={item.title === 'Activity' ? 'userDetails' : false}
-                              showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
-                              {...props}
-                              adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
-                              resourceId={details.id}
-                            />
-                          )
-                                }
-                        />
-                      );
-                    })
-                  }
-                </Switch>
+                <Suspense fallback={<InlineLoader />}>
+                  <Switch>
+                    {
+                      navItems.map((item) => {
+                        const CurrentModule = item.load === false
+                          ? item.component : getModule(item.component);
+                        return (
+                          <Route
+                            key={item.to}
+                            path={`${match.url}/${item.to}`}
+                            render={props => (
+                              <CurrentModule
+                                module={item.title === 'Activity' ? 'userDetails' : false}
+                                showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
+                                {...props}
+                                adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
+                                resourceId={details.id}
+                              />
+                            )
+                                  }
+                          />
+                        );
+                      })
+                    }
+                  </Switch>
+                </Suspense>
               </div>
             </Card>
           </Modal.Content>
