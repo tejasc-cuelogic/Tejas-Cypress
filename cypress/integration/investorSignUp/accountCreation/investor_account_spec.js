@@ -118,7 +118,6 @@ describe('Account Creation', () => {
           registerApiCall('submitAccount', '/dev/graphql');
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
           cy.wait('@submitAccount');
-          cy.wait(5000)
           cy.wait('@submitAccount');
           cy.wait(1000);
           cy.get('.modal', { timeout: 10000 }).then(($el) => {
@@ -197,7 +196,6 @@ describe('Account Creation', () => {
         registerApiCall('submitAccount', '/dev/graphql');
         cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
         cy.wait('@submitAccount');
-        cy.wait(5000)
         cy.wait('@submitAccount');
         cy.wait(1000)
         cy.get('.modal', { timeout: 10000 }).then(($el) => {
@@ -226,7 +224,6 @@ describe('Account Creation', () => {
     registerApiCall('submitAccount', '/dev/graphql');
     cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
     cy.wait('@submitAccount');
-    cy.wait(5000)
     cy.wait('@submitAccount');
     cy.wait(1000)
     // cy.get('body').then(($body) => {
