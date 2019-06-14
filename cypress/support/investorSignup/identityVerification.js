@@ -14,6 +14,7 @@ export const legalDetailsMeta = {
   dateOfBirth: ' 02-28-1975',
   ssn: '112223333',
 };
+
 export const fillLegalDetailsForm = (legalDetails = undefined) => {
   const legalDetailObject = legalDetails || legalDetailsMeta;
   cy.wait(2000) // explicit timeout
@@ -46,15 +47,12 @@ export const legalDetailsProcess = () => {
   fillSignUpFormAndProceed();
   enterCodeAndConfirm();
   confirmEmailAddressScreen();
-  let legalData = { ...legalDetailsMeta }
-  legalData.residentalStreet = "3 Greenway Plaza Houston, TX 77046"
-  fillLegalFormAndProceed(legalData);
 }
 
-export const fillLegalFormAndProceed = () => {
+export const fillLegalFormAndProceed = (legalDetails = undefined) => {
   registerApiCall('legal', '/dev/graphql');
   registerApiCall('legalDetails', '/v1/p');
-  fillLegalDetailsForm();
+  fillLegalDetailsForm(legalDetails);
   cy.get('form').find('button').contains('Verify my identity').click();
   cy.wait('@legal');
   cy.wait('@legal');

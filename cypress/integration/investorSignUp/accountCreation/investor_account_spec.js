@@ -43,9 +43,6 @@ describe('Account Creation', () => {
     cy.get(`.multistep-modal > ol.progtrckr > ${progressStep}`).click({ force: true }).invoke('text').then((step) => {
       cy.log('bank step', step.toUpperCase());
       if (step.toUpperCase() === 'LINK BANK') {
-        // if (progressStep === '.progtrckr-done') {
-        //   cy.get('button.link-button').contains('Or link account directly').click();
-        // }
         cy.get('.bank-link:first').click({ force: true });
         cy.wait(5000);
         cy.get(`#plaid-link-iframe-${count}`).then(($iframe) => {
@@ -121,9 +118,10 @@ describe('Account Creation', () => {
           registerApiCall('submitAccount');
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
           cy.wait('@submitAccount');
+          cy.wait(5000)
           cy.wait('@submitAccount');
           cy.wait(1000);
-          cy.get('.modal', { timeout: 1000 }).then(($el) => {
+          cy.get('.modal', { timeout: 10000 }).then(($el) => {
             const element = cy.wrap($el);
             element.get('button.button').contains('Continue').click({ force: true });
           });
@@ -199,10 +197,10 @@ describe('Account Creation', () => {
         registerApiCall('submitAccount')
         cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
         cy.wait('@submitAccount');
-        cy.wait(2000)
+        cy.wait(5000)
         cy.wait('@submitAccount');
         cy.wait(1000)
-        cy.get('.modal', { timeout: 1000 }).then(($el) => {
+        cy.get('.modal', { timeout: 10000 }).then(($el) => {
           const element = cy.wrap($el)
           element.get('button.button').contains('Continue').click({ force: true });
         });
@@ -224,14 +222,18 @@ describe('Account Creation', () => {
     cy.wait(2000);
     addFunds('15000');
     cy.wait(5000);
+    cy.wait(2000);
     registerApiCall('submitAccount');
     cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
     cy.wait('@submitAccount');
+    cy.wait(5000)
     cy.wait('@submitAccount');
-    cy.get('.modal', { timeout: 1000 }).then(($el) => {
-      const element = cy.wrap($el)
-      element.get('button.button').contains('Continue').click({ force: true });
-    });
+    cy.wait(1000)
+    // cy.get('body').then(($body) => {
+    //   if ($body.get('.modal').length > 0) {
+    //     cy.get('.modal').get('button.button').contains('Continue').click({ force: true });
+    //   }
+    // });
     cy.wait(10000);
   });
 

@@ -56,7 +56,6 @@ module.exports = (webpackEnv) => {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
-  if (isEnvDevelopment) console.log('isEnvDevelopment==>', isEnvDevelopment);
   // Webpack uses `publicPath` to determine where the app is being served from.
   // It requires a trailing slash, or the file assets will get an incorrect path.
   // In development, we always serve from the root. This makes config easier.
@@ -530,8 +529,19 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
-      isEnvDevelopment
-      && new HtmlWebpackTagsPlugin({ publicPath: 'assets/js/', tags: 'cypressSri.js', append: true }),
+      !(['production', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      && new HtmlWebpackTagsPlugin({
+        scripts: [
+          {
+            path: 'assets/js/cypressSri.js',
+            attributes: {
+              integrity: ''
+            }
+          }
+        ],
+        append: false
+      }),
+
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line

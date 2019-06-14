@@ -1,4 +1,4 @@
-import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from '../../support/investorSignup/login';
+import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from '../../support/auth/login';
 import { applicationUnlock } from '../../support/common';
 
 describe('Log In', () => {

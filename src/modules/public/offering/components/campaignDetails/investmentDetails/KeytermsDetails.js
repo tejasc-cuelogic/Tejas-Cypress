@@ -40,7 +40,7 @@ class KeyTermsDetails extends Component {
   render() {
     const { KeyTerms } = this.props;
     const {
-      totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
+      totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure, campaignStatus,
     } = this.props.campaignStore;
     const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
     const totalInvestmentAmount = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
@@ -493,7 +493,7 @@ months
               </p>
             </Aux>
           )
-          : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+          : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary
             ? (
               <Aux>
                 <Header as="h3" className="mb-30 anchor-wrap">
