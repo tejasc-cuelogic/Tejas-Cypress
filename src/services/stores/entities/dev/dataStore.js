@@ -13,16 +13,16 @@ export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
 
   @observable PROCESS_FULL_ACCOUNT_META_FRM =
-  Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
+    Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
 
   @observable RECREATEGOLDSTAR_FRM =
-  Validator.prepareFormObject(RECREATEGOLDSTAR_META);
+    Validator.prepareFormObject(RECREATEGOLDSTAR_META);
 
   @observable ENCRYPTDECRYPTUTILITY_FRM =
-  Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
+    Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
 
   @observable AUDITBOXFOLDER_FRM =
-  Validator.prepareFormObject(AUDITBOXFOLDER_META);
+    Validator.prepareFormObject(AUDITBOXFOLDER_META);
 
   @observable inProgress = {
     offeringRepayment: false,
@@ -62,18 +62,11 @@ export class DataStore {
   @action
   formDataChange = (e, res, form, fieldType) => {
     if (fieldType === 'mask') {
-      if (e.floatValue < 500) {
-        this[form] = Validator.onChange(
-          this[form],
-          { name: res, value: e.floatValue },
-        );
-        this.setFieldValue('countValues', '');
-      } else {
-        const tempobj = { ...this.BULK_STORAGE_DETAILS_SYNC_FRM };
-        tempobj.fields.limit.value = '';
-        tempobj.fields.limit.error = 'The number of users should be within 0 - 500.';
-        this.setFieldValue('BULK_STORAGE_DETAILS_SYNC_FRM', tempobj);
-      }
+      this[form] = Validator.onChange(
+        this[form],
+        { name: res, value: e.floatValue },
+      );
+      this.setFieldValue('countValues', '');
     }
   };
 
@@ -228,28 +221,28 @@ export class DataStore {
   }
 
   @action
-  auditBoxFolder = () => {
+  auditBoxFolder = () => new Promise((res, rej) => {
     const processData = cleanDeep(Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields));
     this.setFieldValue('inProgress', true, 'auditBoxFolder');
-    return new Promise((res, rej) => {
-      client
-        .mutate({
-          mutation: auditBoxFolder,
-          variables: processData,
-        })
-        .then(action((result) => {
-          if (result.auditBox) {
-            this.setFieldValue('inProgress', false, 'auditBoxFolder');
-            res(result.auditBox);
-          }
-        }))
-        .catch(() => {
-          this.setFieldValue('inProgress', false, 'auditBoxFolder');
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          rej();
-        });
-    });
-  }
+    client
+      .mutate({
+        mutation: auditBoxFolder,
+        variables: processData,
+      })
+      .then((result) => {
+        Helper.toast('Your request is processed.', 'success');
+        if (result.data.auditBox) {
+          res(result.data.auditBox);
+        }
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        rej();
+      })
+      .finally(() => {
+        this.setFieldValue('inProgress', false, 'auditBoxFolder');
+      });
+  });
 }
 
 export default new DataStore();
