@@ -60,7 +60,7 @@ export default class ResetPassword extends Component {
                 type="number"
                 filterChars
                 name="code"
-                autoFocus={!isMobile || RESET_PASS_FRM.fields.code.value}
+                autoFocus={!isMobile}
                 className="otp-field mt-10"
                 pattern="[0-9]*"
                 inputmode="numeric"

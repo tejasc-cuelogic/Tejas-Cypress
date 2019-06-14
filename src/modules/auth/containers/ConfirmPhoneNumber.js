@@ -182,7 +182,7 @@ export default class ConfirmPhoneNumber extends Component {
               <ReactCodeInput
                 filterChars
                 fields={6}
-                autoFocus={!isMobile || ID_PHONE_VERIFICATION.fields.code.value}
+                autoFocus={!isMobile}
                 type="number"
                 className="otp-field"
                 pattern="[0-9]*"

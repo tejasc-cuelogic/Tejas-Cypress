@@ -88,7 +88,7 @@ please
                 fields={6}
                 type="number"
                 className="otp-field"
-                autoFocus={!isMobile || OTPVerifyMeta.fields.code.value}
+                autoFocus={!isMobile}
                 pattern="[0-9]*"
                 inputmode="numeric"
                 fielddata={OTPVerifyMeta.fields.code}

@@ -140,7 +140,7 @@ export default class ConfirmPhoneNumber extends Component {
                 type="number"
                 className="otp-field"
                 pattern="[0-9]*"
-                autoFocus={!isMobile || ID_PHONE_VERIFICATION.fields.code.value}
+                autoFocus={!isMobile}
                 inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
