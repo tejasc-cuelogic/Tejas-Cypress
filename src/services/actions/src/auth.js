@@ -156,11 +156,25 @@ export class Auth {
     authStore.setNewPasswordRequired(false);
 
     try {
-      const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
-      this.amplifyLogin(user);
+      // const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+      // this.amplifyLogin(user);
+      userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail).then((res) => {
+        if (!res.data.resetPasswordExpirationDurationForCognitoUser) {
+          (async () => {
+            const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+            this.amplifyLogin(user);
+          })();
+        }
+      });
     } catch (err) {
-      uiStore.setErrors(this.simpleErr(err));
-      throw err;
+      userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail).then((res) => {
+        if (res.data.resetPasswordExpirationDurationForCognitoUser) {
+          (async () => {
+            const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+            this.amplifyLogin(user);
+          })();
+        }
+      });
     } finally {
       uiStore.setProgress(false);
     }
