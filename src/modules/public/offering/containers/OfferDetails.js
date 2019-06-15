@@ -78,7 +78,6 @@ class offerDetails extends Component {
           this.props.history.push('/auth/login');
         }
       }
-      console.log('checkIn', currentUser && currentUser.sub, oMinData);
     });
   }
 
