@@ -409,13 +409,15 @@ export class CampaignStore {
     this.totalPayment = money.floatToAmount(totalPayment || '', 2);
     const payChart = [];
     let totalPaid = 0;
-    schedule.forEach((item, index) => {
-      totalPaid = totalPaid + item.interest + item.principal;
-      payChart.push({
-        month: index + 1,
-        'Projected total payment': parseFloat((totalPaid).toFixed(2)),
+    if (schedule && Array.isArray(schedule)) {
+      schedule.forEach((item, index) => {
+        totalPaid = totalPaid + item.interest + item.principal;
+        payChart.push({
+          month: index + 1,
+          'Projected total payment': parseFloat((totalPaid).toFixed(2)),
+        });
       });
-    });
+    }
     this.totalPaymentChart = payChart;
   }
 
@@ -572,11 +574,13 @@ export class CampaignStore {
       }
       if (tempItem.title === 'Summary' || tempItem.title === 'About the Company' || tempItem.title === 'Investment Details') {
         const arr = temNavList;
-        arr.forEach((i) => {
-          if (i.key && !this.campaignStatus[i.key]) {
-            temNavList = temNavList.filter(n => n.title !== i.title);
-          }
-        });
+        if (arr && Array.isArray(arr)) {
+          arr.forEach((i) => {
+            if (i.key && !this.campaignStatus[i.key]) {
+              temNavList = temNavList.filter(n => n.title !== i.title);
+            }
+          });
+        }
       }
       tempItem.subNavigations = temNavList;
       if (tempItem.to === 'data-room') {
