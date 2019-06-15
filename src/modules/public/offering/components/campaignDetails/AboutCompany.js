@@ -32,7 +32,7 @@ class AboutCompany extends Component {
     } else if (!isMobile) {
       const { campaignNavData } = this.props.campaignStore;
       const navs = (campaignNavData.find(i => i.title === 'About the Company')).subNavigations;
-      const sel = navs[0] && navs[0].to;
+      const sel = navs && navs[0] && navs[0].to;
       if (sel) {
         document.querySelector(sel).scrollIntoView(true);
       }
@@ -47,13 +47,15 @@ class AboutCompany extends Component {
   handleOnScroll = () => {
     const { campaignNavData } = this.props.campaignStore;
     const navs = (campaignNavData.find(i => i.title === 'About the Company')).subNavigations;
-    navs.forEach((item) => {
-      if (document.getElementById(item.to.slice(1))
-      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
-      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
-        this.props.navStore.setFieldValue('currentActiveHash', item.to);
-      }
-    });
+    if (navs && Array.isArray(navs)) {
+      navs.forEach((item) => {
+        if (document.getElementById(item.to.slice(1))
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+          this.props.navStore.setFieldValue('currentActiveHash', item.to);
+        }
+      });
+    }
   }
 
   render() {
