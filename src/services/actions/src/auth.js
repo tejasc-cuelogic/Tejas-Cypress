@@ -188,8 +188,8 @@ export class Auth {
       if (user.attributes) {
         authStore.setEmail(user.attributes.email.toLowerCase());
       }
-      authStore.setUserLoggedIn(true);
       authStore.setNewPasswordRequired(true);
+      authStore.setUserLoggedIn(true);
     }
     if (user && user.signInUserSession) {
       authStore.setUserLoggedIn(true);
