@@ -14,7 +14,6 @@ export const openLoginModelPopup = () => {
 export const validInvestorLoginAction = () => {
   // cy.wait(2000);
   registerApiCall('investNowHealthCheck');
-  registerApiCall('userAccreditationQuery');
   clearLoginForm();
   cy.get('input[type="email"]').type(validInvestorHavingOnceAccountCredentials.email);
   cy.get('input[type="password"]').type(validInvestorHavingOnceAccountCredentials.password);
@@ -40,10 +39,7 @@ export const validInvestorLoginAction = () => {
     .find('.center-align')
     .contains('Invest Now')
     .click();
-    cy.wait(['@userAccreditationQuery', '@investNowHealthCheck']);
-  // cy.wait('@userAccreditationQuery');
-  // cy.wait('@investNowHealthCheck');
-  // cy.wait('@investNowHealthCheck');
+  cy.wait('@investNowHealthCheck');
 };
 
 export const openLogingPopupAndAutheticate = () => {

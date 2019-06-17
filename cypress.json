@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://dev.nextseed.qa/",
+  "baseUrl": "https://dev.nextseed.qa/",
   "chromeWebSecurity": false,
   "pageTimeoutLoad": 80000
 }

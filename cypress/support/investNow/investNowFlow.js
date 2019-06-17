@@ -121,6 +121,7 @@ export const checkForValidAmountAndProceed = () => {
 }
 
 export const proceedToGenerateAgreement = () => {
+  // registerApiCall('investNowGeneratePurchaseAgreement');
   generateAgreement();
 }
 
