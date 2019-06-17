@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { mapValues } from 'lodash';
+import { mapValues, get } from 'lodash';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
@@ -35,6 +35,7 @@ export default class ChangePassword extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.uiStore.clearErrors();
     this.props.history.goBack();
   }
 
@@ -86,7 +87,7 @@ export default class ChangePassword extends Component {
             {errors
               && (
               <Message error textAlign="left" className="mt-30">
-                <ListErrors errors={['Incorrect old password']} />
+                <ListErrors errors={get(errors, 'code') === 'NotAuthorizedException' ? ['Incorrect old password'] : [get(errors, 'message')]} />
               </Message>
               )
             }
