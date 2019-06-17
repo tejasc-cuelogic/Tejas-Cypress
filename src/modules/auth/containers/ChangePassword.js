@@ -35,6 +35,7 @@ export default class ChangePassword extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.uiStore.clearErrors();
     this.props.history.goBack();
   }
 
