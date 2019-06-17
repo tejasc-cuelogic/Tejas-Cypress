@@ -161,7 +161,7 @@ export class Auth {
       this.amplifyLogin(user);
     } catch (err) {
       if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
-        await this.resetPassword(lowerCasedEmail, password);
+        await this.resetPasswordExpiration(lowerCasedEmail, password);
       } else {
         uiStore.setErrors(this.simpleErr(err));
         throw err;
@@ -171,7 +171,7 @@ export class Auth {
     }
   }
 
-  resetPassword = async (lowerCasedEmail, password) => {
+  resetPasswordExpiration = async (lowerCasedEmail, password) => {
     const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
     if (res.data.resetPasswordExpirationDurationForCognitoUser) {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
