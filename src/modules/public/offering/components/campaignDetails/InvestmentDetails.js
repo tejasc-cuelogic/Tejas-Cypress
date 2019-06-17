@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
+import { toJS } from 'mobx';
 import { inject } from 'mobx-react';
 import { Header, Divider } from 'semantic-ui-react';
 import KeytermsDetails from './investmentDetails/KeytermsDetails';
@@ -27,6 +28,7 @@ class InvestmentDetails extends Component {
       const navs = (campaignNavData.find(i => i.title === 'Investment Details')).subNavigations;
       const sel = navs && navs[0] && navs[0].to;
       if (sel) {
+        this.props.navStore.setFieldValue('currentActiveHash', sel);
         document.querySelector(sel).scrollIntoView(true);
       }
     }
@@ -39,7 +41,7 @@ class InvestmentDetails extends Component {
 
   handleOnScroll = () => {
     const { campaignNavData } = this.props.campaignStore;
-    const navs = (campaignNavData.find(i => i.title === 'Investment Details')).subNavigations;
+    const navs = toJS((campaignNavData.find(i => i.title === 'Investment Details')).subNavigations);
     if (navs && Array.isArray(navs)) {
       navs.forEach((item) => {
         if (document.getElementById(item.to.slice(1))
