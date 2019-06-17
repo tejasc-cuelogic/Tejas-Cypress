@@ -152,6 +152,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Summary',
         component: <Summary />,
+        disableNextButton: true,
         isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
         // validForm: isValidEntityForm,
         bankSummary: false,
