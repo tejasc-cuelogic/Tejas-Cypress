@@ -243,7 +243,7 @@ export default class MultiStep extends React.Component {
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
           dimmer={isMobile && 'inverted'}
-          centered={isMobile && false}
+          centered={!isMobile}
         >
           {!this.props.hideHeader && !isMobile
             ? (

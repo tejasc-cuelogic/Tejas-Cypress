@@ -5,6 +5,8 @@ import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
 import { DropZone } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('uiStore', 'entityAccountStore')
 @observer
 export default class FormationDocumemts extends Component {
@@ -38,9 +40,9 @@ export default class FormationDocumemts extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Upload required documentation</Header>
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Upload required documentation</Header>
         <Divider hidden />
-        <Form error>
+        <Form error className={isMobile ? 'mb-30' : ''}>
           <DropZone
             name="formationDoc"
             fielddata={FORM_DOCS_FRM.fields.formationDoc}

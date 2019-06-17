@@ -2,11 +2,13 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
-import { Header, Table, Button, Message } from 'semantic-ui-react';
+import { Header, Table, Button, Message, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
@@ -80,8 +82,8 @@ export default class Summary extends Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Verify information and submit for review</Header>
-        <div className="field-wrap">
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Verify information and submit for review</Header>
+        <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <Table.Body>
@@ -176,37 +178,69 @@ s Name
           </Message>
           )
         }
+        <Responsive maxWidth={767}>
+          <p className="grey-header mt-30 mb-0">
+            By continuing, I acknowledge that I have read and agree to the terms of the
+            {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+              CrowdPay Custodial Account Agreement
+            </span>
+  ,
+            {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
+              NextSeed US LLC Member Agreement
+            </span>
+  ,
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
+              NextSeed Securities LLC Investor Agreement
+            </span>
+  , and
+            {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+              Substitute IRS Form W-9 Certification
+            </span>
+  .
+            <IframeModal
+              open={this.state.open}
+              close={this.closeModal}
+              srcUrl={embedUrl}
+              loading={docLoading}
+            />
+          </p>
+        </Responsive>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
+          <Button fluid={isMobile} primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
         </div>
-        <p className="center-align grey-header mt-30 mb-0">
-          By continuing, I acknowledge that I have read and agree to the terms of the
-          {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
-            CrowdPay Custodial Account Agreement
-          </span>
-,
-          {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
-            NextSeed US LLC Member Agreement
-          </span>
-,
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
-            NextSeed Securities LLC Investor Agreement
-          </span>
-, and
-          {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
-            Substitute IRS Form W-9 Certification
-          </span>
-.
-          <IframeModal
-            open={this.state.open}
-            close={this.closeModal}
-            srcUrl={embedUrl}
-            loading={docLoading}
-          />
-        </p>
+        <Responsive minWidth={768}>
+          <p className="center-align grey-header mt-30 mb-0">
+            By continuing, I acknowledge that I have read and agree to the terms of the
+            {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+              CrowdPay Custodial Account Agreement
+            </span>
+  ,
+            {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
+              NextSeed US LLC Member Agreement
+            </span>
+  ,
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
+              NextSeed Securities LLC Investor Agreement
+            </span>
+  , and
+            {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+              Substitute IRS Form W-9 Certification
+            </span>
+  .
+            <IframeModal
+              open={this.state.open}
+              close={this.closeModal}
+              srcUrl={embedUrl}
+              loading={docLoading}
+            />
+          </p>
+        </Responsive>
       </Aux>
     );
   }
