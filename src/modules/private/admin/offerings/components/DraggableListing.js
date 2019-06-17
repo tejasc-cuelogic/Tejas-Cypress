@@ -118,9 +118,9 @@ export default class DraggableListing extends Component {
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    const { allOfferingsList, setOrderForOfferings } = this.props.offeringsStore;
+    const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
     if (oldIndex !== newIndex) {
-      setOrderForOfferings(arrayMove(allOfferingsList, oldIndex, newIndex), this.props.stage);
+      setOrderForOfferings(arrayMove(allOfferingsSorted, oldIndex, newIndex), this.props.stage);
     }
   }
 
@@ -157,7 +157,7 @@ export default class DraggableListing extends Component {
     const {
       uiStore, offeringsStore, stage,
     } = this.props;
-    const { allOfferings, loading } = offeringsStore;
+    const { allOfferingsSorted, loading } = offeringsStore;
     const { confirmBox, inProgress } = uiStore;
     if (loading || inProgress) {
       return <InlineLoader />;
@@ -174,7 +174,7 @@ export default class DraggableListing extends Component {
               <div className="action right-align width-70" />
             </div>
             <SortableList
-              allOfferingsList={allOfferings}
+              allOfferingsList={allOfferingsSorted}
               pressDelay={100}
               handleAction={this.handleAction}
               onSortEnd={e => this.onSortEnd(e)}

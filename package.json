@@ -160,6 +160,8 @@
     "build": "npm-run-all build-assets build-js",
     "build:prod": "npm-run-all build-assets build-js:prod",
     "cypress:open": "./node_modules/.bin/cypress open",
+    "cypress:run-investment": "./node_modules/.bin/cypress run --spec 'cypress/integration/investNow/**/*'",
+    "cypress:run": "./node_modules/.bin/cypress run",
     "lint:js": "./node_modules/.bin/eslint .",
     "lint:js:fix": "./node_modules/.bin/eslint . --fix",
     "test": "$(npm bin)/cypress run",

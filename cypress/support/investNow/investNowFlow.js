@@ -6,7 +6,14 @@ import {
   validInvestorHavingOnceAccountCredentials,
   validInvestorWithIncompleteCIPCredentials,
 } from './investorsCredentailConstant';
-import { enteringInvestmentAmount } from './enteringInvestmentAmount';
+import {
+  enteringInvestmentAmount,
+  invalidMultipleInvestmentAmount,
+  invalidMinInvestmentAmount,
+  validInvestmentAmount,
+  generateAgreement,
+  submitInvestment,
+  } from './enteringInvestmentAmount';
 import { applicationUnlock } from '../common';
 
 export const initializeInvestNowFlow = () => {
@@ -95,3 +102,22 @@ export const proceedWithValidCFInvestmentAction = () => {
   enteringInvestmentAmount();
 };
 
+export const checkEnteredAmountMultiplesValidation = () => {
+  invalidMultipleInvestmentAmount();
+}
+
+export const checkAmountGreaterThanMinInvestmentValidation = () => {
+  invalidMinInvestmentAmount();
+}
+
+export const checkForValidAmountAndProceed = () => {
+  validInvestmentAmount();
+}
+
+export const proceedToGenerateAgreement = () => {
+  generateAgreement();
+}
+
+export const sumbmitingInvestment = () => {
+  submitInvestment();
+}
