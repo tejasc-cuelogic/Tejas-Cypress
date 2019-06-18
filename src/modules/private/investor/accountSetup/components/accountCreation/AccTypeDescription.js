@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
@@ -13,7 +12,7 @@ const AccTypeDescription = observer((props) => {
       { /* Individual */ }
       {isAccExist && value === 0
         && (
-        <Aux>
+        <>
           <p>
             Open a NextSeed investment account to begin investing in local businesses.
             <br />
@@ -34,13 +33,13 @@ GoldStar
 ), which provides FDIC insurance for
             uninvested cash in NextSeed accounts.
           </p>
-        </Aux>
+        </>
         )
       }
       { /* IRA */ }
       {isAccExist && value === 1
         && (
-        <Aux>
+        <>
           <div className="promitional-offer-block center-align mb-20 bg-offwhite">
             <Header as="h5">Promotional Offer</Header>
             <p>
@@ -72,13 +71,13 @@ Questions? Please see our
             determine whether investing in NextSeed offerings through a self-directed IRA is
             right for you.
           </p>
-        </Aux>
+        </>
         )
       }
       { /* Entity */ }
       {isAccExist && value === 2
         && (
-        <Aux>
+        <>
           <p>
             Invest in businesses through an Entity investment account. (Note: Investment limits
             for Entity accounts are treated separately from Individual investment accounts)
@@ -101,7 +100,7 @@ GoldStar
 ), which provides FDIC insurance for
             uninvested cash in NextSeed accounts.
           </p>
-        </Aux>
+        </>
         )
       }
     </div>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Container, Menu, Button } from 'semantic-ui-react';
 import { NavItems } from './NavigationItems';
 import { Logo } from '../shared';
@@ -32,7 +31,7 @@ class PublicSecondaryNav extends Component {
     }
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         <Menu secondary className={`center-align menu-secondary-fixed ${this.state.subnavOnTop ? 'active' : ''}`}>
           <Container fluid>
             <Menu.Item as={Link} to="/" header>
@@ -50,7 +49,7 @@ class PublicSecondaryNav extends Component {
             </Menu.Item>
           </Container>
         </Menu>
-      </Aux>
+      </>
     );
   }
 }

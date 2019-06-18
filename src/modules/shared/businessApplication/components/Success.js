@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput, FormPasswordStrength } from '../../../../theme/form';
@@ -94,7 +93,7 @@ class Success extends Component {
     const { fields } = SIGNUP_FRM;
     const { errors } = this.props.uiStore;
     return (
-      <Aux>
+      <>
         <Grid container>
           <Grid.Column className="issuer-signup">
             <Icon className="ns-paper-plane" size="massive" color="green" />
@@ -190,7 +189,7 @@ class Success extends Component {
         </Dimmer>
         )
         }
-      </Aux>
+      </>
     );
   }
 }

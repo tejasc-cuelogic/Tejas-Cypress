@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
@@ -27,7 +26,7 @@ export default class CampaignHeader extends Component {
       percentBefore, diffForProcessing,
     } = campaignStatus;
     return (
-      <Aux>
+      <>
         <div className="campaign-banner">
           {get(campaign, 'media.heroBackground.url')
             && <Image64 bg className="campaign-details-banner" srcUrl={get(campaign, 'media.heroBackground.url')} />
@@ -101,11 +100,11 @@ export default class CampaignHeader extends Component {
                   <div className="clearfix social-links mt-10">
                     {campaign && get(campaign, 'offering.overview.social')
                       ? campaign.offering.overview.social.map(site => (
-                        <Aux key={site.type}>
+                        <React.Fragment key={site.type}>
                           {site.url
                             && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
                           }
-                        </Aux>
+                        </React.Fragment>
                       )) : ''}
                     <Link to={`${this.props.match.url}/overview/photogallery`} onClick={this.handleViewGallery} className="pull-right">
                       View gallery
@@ -217,7 +216,7 @@ months
                     }
                     {!isClosed
                       && (
-                      <Aux>
+                      <>
                         <Button
                           fluid
                           secondary={!isInProcessing}
@@ -231,7 +230,7 @@ months
                           {' '}
 min investment
                         </small>
-                      </Aux>
+                      </>
                       )
                     }
                   </div>
@@ -240,7 +239,7 @@ min investment
             </Responsive>
           </section>
         </div>
-      </Aux>
+      </>
     );
   }
 }

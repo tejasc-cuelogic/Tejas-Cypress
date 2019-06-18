@@ -1,5 +1,4 @@
 import React, { Component, Suspense, lazy } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
@@ -144,13 +143,13 @@ Edit
                           </Link>
                         )
                         : (
-                          <Aux>
+                          <>
                             <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
                             <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}>
                               <Icon name="save" />
 Update
                             </Link>
-                          </Aux>
+                          </>
                         )
                       }
                     </small>

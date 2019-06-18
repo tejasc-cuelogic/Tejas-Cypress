@@ -2,7 +2,6 @@
 import React from 'react';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { includes } from 'lodash';
 import { Icon, Popup, List, Checkbox } from 'semantic-ui-react';
 
@@ -41,7 +40,7 @@ const FormCheckbox = observer((props) => {
                 onChange={props.changed}
               />
             ) : (
-              <Aux>
+              <>
                 <input type="checkbox" readOnly checked={value.includes(c.value)} value={c.value} onChange={props.changed} {...props} />
                 <label>
                   {c.icon
@@ -60,7 +59,7 @@ const FormCheckbox = observer((props) => {
                   )
                     }
                 </label>
-              </Aux>
+              </>
             )
             }
           </List.Item>

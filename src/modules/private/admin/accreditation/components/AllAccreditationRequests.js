@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import moment from 'moment';
 import { Route, withRouter, Link } from 'react-router-dom';
@@ -100,7 +99,7 @@ export default class AllAccreditationRequests extends Component {
                 }
                 {requestState.search.status === 'CONFIRMED'
                   && (
-                  <Aux>
+                  <>
                     <Table.HeaderCell
                       onClick={this.handleSort('expiration')}
                       sorted={sortOrder.column === 'expiration' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
@@ -113,7 +112,7 @@ export default class AllAccreditationRequests extends Component {
                     >
                       Promotion Credits
                     </Table.HeaderCell>
-                  </Aux>
+                  </>
                   )
                 }
               </Table.Row>
@@ -143,20 +142,20 @@ export default class AllAccreditationRequests extends Component {
                         {ACCREDITATION_METHOD_ENUMS[accreditation.method]}
                         {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') && accreditation.netWorth
                           && (
-                          <Aux>
+                          <>
                             <br />
                             <b>Net Worth: </b>
                             {ACCREDITATION_NETWORTH_LABEL[accreditation.netWorth]}
-                          </Aux>
+                          </>
                           )
                         }
                         {(accreditation.method === 'REVOCABLE_TRUST_ASSETS' || accreditation.method === 'REVOCABLE_TRUST_INCOME') && accreditation.grantorName
                           && (
-                          <Aux>
+                          <>
                             <br />
                             <b>Grantor Name: </b>
                             {accreditation.grantorName}
-                          </Aux>
+                          </>
                           )
                         }
                       </p>
@@ -176,7 +175,7 @@ export default class AllAccreditationRequests extends Component {
                             : 'Verifier'}
                           {accreditation.verifier
                             && (
-                            <Aux>
+                            <>
                               <br />
                               <b>Role: </b>
                               {' '}
@@ -185,7 +184,7 @@ export default class AllAccreditationRequests extends Component {
                               <b>Email: </b>
                               {' '}
                               {accreditation.verifier.email}
-                            </Aux>
+                            </>
                             )
                           }
                         </p>
@@ -194,7 +193,7 @@ export default class AllAccreditationRequests extends Component {
                     }
                     {accreditation.accreditationStatus === 'REQUESTED' && isManager
                       ? (
-                        <Aux>
+                        <>
                           <Actions
                             accountId={accreditation.accountId}
                             userId={accreditation.userId}
@@ -204,7 +203,7 @@ export default class AllAccreditationRequests extends Component {
                             requestDate={accreditation.requestDate}
                             {...this.props}
                           />
-                        </Aux>
+                        </>
                       )
                       : (
                         <Table.Cell>
@@ -217,10 +216,10 @@ export default class AllAccreditationRequests extends Component {
                     }
                     {accreditation.accreditationStatus === 'CONFIRMED'
                       && (
-                      <Aux>
+                      <>
                         <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
                         <Table.Cell>{get(accreditation, 'promotionCredits')}</Table.Cell>
-                      </Aux>
+                      </>
                       )
                     }
                   </Table.Row>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase, get } from 'lodash';
@@ -84,21 +83,21 @@ export default class FinancialInfo extends Component {
                       {
                     account.name === 'ira' && getActiveAccountList.isIndAccExist
                       ? (
-                        <Aux>
+                        <>
                           <Icon color="teal" className="ns-individual-line" />
                           {' '}
 Individual
                           <Icon color="teal" className={`ns-${account.name}-line`} />
                           {' '}
                           {account.name.toUpperCase()}
-                        </Aux>
+                        </>
                       )
                       : (
-                        <Aux>
+                        <>
                           <Icon color="teal" className={`ns-${account.name}-line`} />
                           {' '}
                           {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)}
-                        </Aux>
+                        </>
                       )
                     }
                     </Card.Header>
@@ -160,10 +159,10 @@ Individual
                                 <dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}><b>{this.getStatus(accreditationData[account.name])}</b></dd>
                                 {accreditationData[account.name].status === 'INVALID'
                                   ? (
-                                    <Aux>
+                                    <>
                                       <dt>Message :</dt>
                                       <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
-                                    </Aux>
+                                    </>
                                   ) : ''
                             }
                                 <dt>

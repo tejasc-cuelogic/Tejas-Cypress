@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Popup, Icon, List, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
@@ -29,7 +28,7 @@ export default class BusinessDocumentation extends Component {
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
     return (
-      <Aux>
+      <>
         <FormElementWrap
           hideFields={hideFields}
           header="Statements & Agreements"
@@ -172,7 +171,7 @@ export default class BusinessDocumentation extends Component {
             )
           }
         </FormElementWrap>
-      </Aux>
+      </>
     );
   }
 }

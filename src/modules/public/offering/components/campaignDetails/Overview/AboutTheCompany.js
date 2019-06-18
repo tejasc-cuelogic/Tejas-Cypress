@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, List, Button, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -21,7 +20,7 @@ class AboutTheCompany extends Component {
       || (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.highlight);
     return (
-      <Aux>
+      <>
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Top Things to Know
           <span className="anchor" id="top-things-to-know" />
@@ -29,7 +28,7 @@ class AboutTheCompany extends Component {
         {
           elevatorPitch
             ? (
-              <Aux>
+              <>
                 {campaign && campaign.offering && campaign.offering.overview
                 && campaign.offering.overview.elevatorPitch
                 && (
@@ -50,7 +49,7 @@ class AboutTheCompany extends Component {
                   )
                   : null
               }
-              </Aux>
+              </>
             )
             : <InlineLoader className="bg-offwhite" text="No data found." />
         }
@@ -58,7 +57,7 @@ class AboutTheCompany extends Component {
           Learn More About the Company
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
@@ -138,7 +137,7 @@ export default class AllFaqs extends Component {
       return <InlineLoader text="No data found." />;
     }
     return (
-      <Aux>
+      <>
         {Object.keys(allCategorizedFaqs).map(faqType => (
           <Accordion key={faqType} fluid styled className="card-style">
             <Accordion.Title onClick={() => this.toggleAccordion(faqType, 'activeIndex')} className="text-capitalize">
@@ -181,7 +180,7 @@ export default class AllFaqs extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

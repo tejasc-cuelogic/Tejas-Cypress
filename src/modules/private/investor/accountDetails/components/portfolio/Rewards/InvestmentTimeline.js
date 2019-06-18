@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { findLastIndex, toInteger, get, isNaN, uniqWith, isEqual } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
@@ -41,7 +40,7 @@ class InvestmentTimeline extends Component {
     return (
       rewardsTiers && rewardsTiers.length
         ? (
-          <Aux>
+          <>
             <Header as="h4">{this.props.title}</Header>
             <Grid columns="equal" textAlign="center" className="investment-scale">
               <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
@@ -89,7 +88,7 @@ Your investment
                 ))}
               </Grid.Row>
             </Grid>
-          </Aux>
+          </>
         )
         : <InlineLoader text="Data not found." />
     );

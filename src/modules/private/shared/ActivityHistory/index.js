@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-// import Aux from 'react-aux';
 import moment from 'moment';
 import { Grid, Form } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';

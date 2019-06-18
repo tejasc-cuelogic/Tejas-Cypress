@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Icon, Checkbox, Divider } from 'semantic-ui-react';
@@ -17,9 +16,9 @@ export default class ButtonGroupType2 extends Component {
     const { inProgress, htmlEditorImageLoading } = this.props.uiStore;
     const { canLaunch } = this.state;
     return (
-      <Aux>
+      <>
         {launch && approved && approved.status && (
-          <Aux>
+          <>
             <div className="mb-10">
               <Checkbox
                 label="Launch Sign-Off"
@@ -27,7 +26,7 @@ export default class ButtonGroupType2 extends Component {
               />
             </div>
             <Divider hidden />
-          </Aux>
+          </>
         )}
         <div className="sticky-actions">
           <Button.Group vertical icon size="tiny" className="time-stamp">
@@ -64,7 +63,7 @@ on
           </Button.Group>
           <Button.Group>
             {isManager && submitted ? (
-              <Aux>
+              <>
                 <Button disabled={htmlEditorImageLoading} loading={inProgress === 'support_decline'} type="button" inverted onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
                 {(!approved || (approved && !approved.status))
                 && <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
@@ -73,18 +72,18 @@ on
                 {launch && approved && approved.status && (
                   <Button loading={inProgress} type="button" disabled={!this.state.canLaunch} onClick={launch} color="green" className="relaxed">Launch</Button>
                 )}
-              </Aux>
+              </>
             ) : (!approved || (approved && !approved.status)) && (
-              <Aux>
+              <>
                 {!submitted
                 && <Button loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
                 }
                 <Button disabled={submitted || htmlEditorImageLoading} loading={inProgress === 'support_submitted'} type="button" primary={!submitted} onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
-              </Aux>
+              </>
             )}
           </Button.Group>
         </div>
-      </Aux>
+      </>
     );
   }
 }

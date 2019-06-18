@@ -1,12 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-no-target-blank */
 import React from 'react';
-import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { Header, Divider, List } from 'semantic-ui-react';
 
 const PrivacyPolicy = () => (
-  <Aux>
+  <>
     <Header as="h2">NextSeed Services LLC Privacy Policy</Header>
     <p>Last updated: April 8, 2019</p>
     <Divider section />
@@ -588,7 +587,7 @@ When we
         </List>
       </div>
     </div>
-  </Aux>
+  </>
 );
 
 export default PrivacyPolicy;

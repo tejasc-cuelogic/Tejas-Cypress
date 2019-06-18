@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { get } from 'lodash';
@@ -51,7 +50,7 @@ export default class Congratulation extends React.Component {
       }
     }, 8500);
     return (
-      <Aux>
+      <>
         <Modal open closeIcon closeOnRootNodeClick={false} onClose={this.handleCloseModal}>
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>
@@ -88,7 +87,7 @@ in
             </div>
           </Modal.Content>
         </Modal>
-      </Aux>
+      </>
     );
   }
 }

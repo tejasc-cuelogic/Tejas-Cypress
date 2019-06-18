@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { includes, startCase, get } from 'lodash';
 import { Header, Icon, Button, Divider, Confirm } from 'semantic-ui-react';
@@ -32,7 +31,7 @@ export default class AccountHeader extends Component {
     const freeze = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FROZEN';
     const accountType = includes(this.props.pathname, 'individual') ? 'individual' : includes(this.props.pathname, 'ira') ? 'ira' : 'entity';
     return (
-      <Aux>
+      <>
         <div className="clearfix">
           <span className="pull-left">
             <Header as="h4">
@@ -67,7 +66,7 @@ account
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

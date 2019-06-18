@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get, orderBy } from 'lodash';
 import { Header, Grid, Segment, Label } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -42,7 +41,7 @@ class BonusRewards extends Component {
         </Header>
         {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
           ? (
-            <Aux>
+            <>
               {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
             && bonusRewards
                 ? (
@@ -51,7 +50,7 @@ class BonusRewards extends Component {
                       ? (
                         <Grid.Column>
                           <Segment padded className="reward-block">
-                            <Aux>
+                            <>
                               <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>
 Early Bird Reward
                                 <Label size="small" color="green" className="text-uppercase pull-right">
@@ -68,7 +67,7 @@ First
                                 {' '}
 will receive:
                               </Header>
-                            </Aux>
+                            </>
                             <BonusRewardsList
                               earlyBird
                               bonusRewards={bonusRewards}
@@ -81,10 +80,10 @@ will receive:
                     {rewardsTiers.map(tier => (
                       <Grid.Column>
                         <Segment padded className="reward-block">
-                          <Aux>
+                          <>
                             <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
                             <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
-                          </Aux>
+                          </>
                           <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
                         </Segment>
                       </Grid.Column>
@@ -103,7 +102,7 @@ will receive:
             </Grid>
             )
             }
-            </Aux>
+            </>
           )
           : <InlineLoader text="No Bonus Rewards" className="bg-offwhite" />
         }

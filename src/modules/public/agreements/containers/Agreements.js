@@ -1,5 +1,4 @@
 import React, { Component, Suspense, lazy } from 'react';
-import Aux from 'react-aux';
 import { Grid, Container } from 'semantic-ui-react';
 import { observer, inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
@@ -33,7 +32,7 @@ export default class TermsOfUse extends Component {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         {isMobile
         && <SecondaryMenu secondary vertical match={match} navItems={navItems} />
         }
@@ -77,7 +76,7 @@ export default class TermsOfUse extends Component {
             </Grid>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

@@ -3,7 +3,6 @@ import { Card, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import beautify from 'json-beautify';
 import { withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../theme/form';
 
 @inject('dataStore', 'uiStore')
@@ -37,12 +36,12 @@ export default class AuditBoxFolder extends Component {
             <Form onSubmit={this.onSubmit}>
               <Form.Group className="bottom-aligned">
                 <FormDropDown
-                  fielddata={AUDITBOXFOLDER_FRM.fields.userType}
+                  fielddata={AUDITBOXFOLDER_FRM.fields.role}
                   selection
                   containerclassname="dropdown-field mlr-0"
-                  options={AUDITBOXFOLDER_FRM.fields.userType.values}
+                  options={AUDITBOXFOLDER_FRM.fields.role.values}
                   placeholder="Choose here"
-                  name="userType"
+                  name="role"
                   onChange={(e, result) => formChange(e, result, 'AUDITBOXFOLDER_FRM')}
                   containerwidth="8"
                 />
@@ -84,10 +83,10 @@ export default class AuditBoxFolder extends Component {
             </Form>
             {this.state.result
               ? (
-                <Aux>
+                <>
                   <b>Result:</b>
                   <p className="break-text">{beautify(this.state.result)}</p>
-                </Aux>
+                </>
               )
               : ''}
           </Card.Description>

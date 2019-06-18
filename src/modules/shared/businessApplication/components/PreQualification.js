@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
@@ -84,19 +83,19 @@ export default class PreQualification extends Component {
         <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
           {!hideFields
           && (
-          <Aux>
+          <>
             <Icon className="ns-paper-plane" size="massive" color="green" />
             <FormElementWrap
               as="h1"
               header="Pre-Qualification Application Process"
               subHeader={(
-                <Aux>
+                <>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
                   <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
-                </Aux>
+                </>
 )}
             />
-          </Aux>
+          </>
           )
           }
           {this.props.isPublic
@@ -123,7 +122,7 @@ export default class PreQualification extends Component {
             </div>
             {!isPrequalQulify
             && (
-            <Aux>
+            <>
               <Divider hidden />
               <Button
                 loading={this.props.uiStore.inProgress}
@@ -134,7 +133,7 @@ export default class PreQualification extends Component {
               >
                 Continue
               </Button>
-            </Aux>
+            </>
             )
             }
           </FormElementWrap>
@@ -150,7 +149,7 @@ export default class PreQualification extends Component {
           }
           {!hideFields
           && (
-          <Aux>
+          <>
             <Divider hidden />
             {!preQualFormDisabled
               ? (
@@ -175,7 +174,7 @@ export default class PreQualification extends Component {
               </Button>
               )
             }
-          </Aux>
+          </>
           )
           }
         </Form>

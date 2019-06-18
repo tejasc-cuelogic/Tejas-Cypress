@@ -21,7 +21,8 @@ class Login extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.authStore.isUserLoggedIn) {
+    if (this.props.authStore.isUserLoggedIn
+      && !this.props.authStore.newPasswordRequired) {
       const { authRef } = this.props.uiStore;
       const roles = get(this.props.userStore.currentUser, 'roles');
       this.props.history.push(authRef || (roles && roles.includes('investor')

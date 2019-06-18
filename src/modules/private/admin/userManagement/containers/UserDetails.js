@@ -1,6 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty, includes, get } from 'lodash';
@@ -27,7 +26,7 @@ const navMeta = [
     title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
   },
   {
-    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
+    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop', 'dev'],
   },
   {
     title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
@@ -91,7 +90,9 @@ export default class AccountDetails extends Component {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
     };
     return (
-      <Aux>
+      <>
+        {/* <Route exact path={`${match.url}/individual/investments/investment-details/:id`}
+      render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} /> */}
         <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
             <Item.Group>
@@ -171,7 +172,7 @@ Profile
             </Card>
           </Modal.Content>
         </Modal>
-      </Aux>
+      </>
     );
   }
 }

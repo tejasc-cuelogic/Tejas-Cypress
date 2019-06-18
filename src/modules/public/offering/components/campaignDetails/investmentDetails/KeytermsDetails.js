@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
 import {
@@ -60,7 +59,7 @@ class KeyTermsDetails extends Component {
     const minOfferingAmountD = get(KeyTerms, 'minOfferingAmount506') ? get(KeyTerms, 'minOfferingAmount506') : get(KeyTerms, 'minOfferingAmount506C');
     const maxOfferingAmountD = get(KeyTerms, 'maxOfferingAmount506') ? get(KeyTerms, 'maxOfferingAmount506') : get(KeyTerms, 'maxOfferingAmount506C');
     return (
-      <Aux>
+      <>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
             <p>
@@ -101,7 +100,7 @@ class KeyTermsDetails extends Component {
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
-              <Aux key={type.key}>
+              <React.Fragment key={type.key}>
                 {get(KeyTerms, type.key)
                   ? (
                     <Table.Row verticalAlign="top">
@@ -139,7 +138,7 @@ class KeyTermsDetails extends Component {
                     </Table.Row>
                   ) : ''
                 }
-              </Aux>
+              </React.Fragment>
             ))
             }
             {get(KeyTerms, 'regulation') === 'BD_CF_506C'
@@ -419,7 +418,7 @@ Pre-Money valuation
         <Divider section={!isMobile} hidden />
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
           ? (
-            <Aux>
+            <>
               <Header as="h3" className={`${isTablet && 'mt-40'} mb-30 anchor-wrap`}>
               Total Payment Calculator
                 <span className="anchor" id="total-payment-calculator" />
@@ -491,11 +490,11 @@ months
               made to investors. Payment is not guaranteed or insured and investors may lose
               some or all of the principal invested if the Issuer cannot make its payments.
               </p>
-            </Aux>
+            </>
           )
           : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary
             ? (
-              <Aux>
+              <>
                 <Header as="h3" className="mb-30 anchor-wrap">
                 Revenue Sharing Summary
                   <span className="anchor" id="revenue-sharing-summary" />
@@ -508,11 +507,11 @@ months
                   )
                   : <InlineLoader text="No data available" className="bg-offwhite" />
               }
-              </Aux>
+              </>
             )
             : null
         }
-      </Aux>
+      </>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { toLower } from 'lodash';
 
 const accChars = {
@@ -28,9 +27,9 @@ const UserTypeIcon = (props) => {
     );
   });
   return (
-    <Aux>
+    <>
       {byRoles}
-    </Aux>
+    </>
   );
 };
 

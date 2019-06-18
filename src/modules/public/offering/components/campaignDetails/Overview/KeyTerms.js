@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -25,7 +24,7 @@ class KeyTerms extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
-      <Aux>
+      <>
         <Header as="h3" className={`${isMobile ? 'mb-10' : 'mb-30'} anchor-wrap`}>
           Investment Highlights
           <span className="anchor" id="investment-highlights" />
@@ -76,7 +75,7 @@ Type of Offering
             </Table.Row>
             {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
             && (
-            <Aux>
+            <>
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text">
                   <b>
@@ -97,12 +96,12 @@ Interest Rate
                 }
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
             )
             }
             {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
             && (
-            <Aux>
+            <>
               <Table.Row verticalAlign="top">
                 <Table.Cell>
                   <b>Multiple</b>
@@ -146,7 +145,7 @@ To learn more about how Revenue Sharing works, check out the
                   {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? `${get(campaign, 'keyTerms.revSharePercentage')}${get(campaign, 'keyTerms.revSharePercentage').includes('%') ? '' : '%'}` : '-'}
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
             )
             }
             {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
@@ -170,7 +169,7 @@ To learn more about how Revenue Sharing works, check out the
                 </Table.Row>
               )
               : (
-                <Aux>
+                <>
                   {/* <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Total Round Size{' '}</b>
                   </Table.Cell>
@@ -208,7 +207,7 @@ Share Price
                 </Table.Row>
                 )
                 }
-                </Aux>
+                </>
               )
             }
             <Table.Row verticalAlign="top">
@@ -225,7 +224,7 @@ Share Price
           View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
-      </Aux>
+      </>
     );
   }
 }

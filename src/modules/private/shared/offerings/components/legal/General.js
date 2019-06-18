@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -151,7 +150,7 @@ export default class General extends Component {
               This section will also be public on the offering page.`}
           </p>
           {
-            <Aux>
+            <>
               {/* <MaskedInput
                 displayMode={isReadonly}
                 name="offeringExpenseAmount"
@@ -168,7 +167,7 @@ export default class General extends Component {
                 form={formName}
                 content={GENERAL_FRM.fields.offeringExpenseAmountDescription.value}
               />
-            </Aux>
+            </>
           }
           <Divider section />
           <Header as="h4">Describe Rights of Your Equity Shareholders</Header>
@@ -189,7 +188,7 @@ export default class General extends Component {
             }
           </Header>
           {GENERAL_FRM.fields.security.map((security, index) => (
-            <Aux>
+            <>
               <Header as="h6">
                 {`Security ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.security.length > 1
@@ -219,7 +218,7 @@ export default class General extends Component {
                   changed={(e, result) => formArrayChange(e, result, formName, 'security', index)}
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider section />
           {/* <Button size="small" color="blue" className="link-button" onClick={e =>
@@ -232,7 +231,7 @@ export default class General extends Component {
           </Header>
           <p>Describe any past fund raises in the last 3 years.</p>
           {GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
-            <Aux>
+            <>
               <Header as="h6">
                 {`Other Exempt Offering ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.exemptOfferings.length > 1
@@ -271,7 +270,7 @@ export default class General extends Component {
                   containerclassname="secondary"
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider section />
           {/* <Button size="small" color="blue" className="link-button" onClick={e => this.addMore
@@ -283,7 +282,7 @@ export default class General extends Component {
             }
           </Header>
           {GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
-            <Aux>
+            <>
               <Header as="h6">
                 {`Term ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.materialIndebtedness.length > 1
@@ -331,7 +330,7 @@ export default class General extends Component {
                   containerclassname="secondary"
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider section />
           <Header as="h4">
@@ -346,7 +345,7 @@ In the past year (and looking forward),
             (i.e., affiliated entities, directors or relatives)?
           </p>
           {GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
-            <Aux>
+            <>
               <Header as="h6">
                 {`Transaction ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.affiliatedTransactions.length > 1
@@ -388,7 +387,7 @@ In the past year (and looking forward),
                   containerclassname="secondary"
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider hidden />
           <ButtonGroup

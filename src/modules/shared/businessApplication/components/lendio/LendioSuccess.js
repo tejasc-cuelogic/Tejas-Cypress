@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Icon, Header, Button, Divider } from 'semantic-ui-react';
@@ -29,7 +28,7 @@ export default class LendioSuccess extends Component {
           {
             params.condition && params.condition === 'yes'
               ? (
-                <Aux>
+                <>
                   <p>
                   Your information has been submitted to Lendio.
                   You are now being redirected to Lendio for next steps.
@@ -42,10 +41,10 @@ export default class LendioSuccess extends Component {
                   >
                   Proceed to Lendio
                   </Button>
-                </Aux>
+                </>
               )
               : (
-                <Aux>
+                <>
                   <p>
                   You have selected not to share your information with Lendio.
                   If you have any questions, you can contact us at
@@ -61,7 +60,7 @@ or
                   <Link to="/resources/education-center/business/faq" className="link"><b>FAQ </b></Link>
                   {' '}
 section for more information on our general business requirements.
-                </Aux>
+                </>
               )
           }
         </Grid.Column>

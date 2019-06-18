@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
+import { toJS } from 'mobx';
 import { Divider } from 'semantic-ui-react';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import KeyTerms from './Overview/KeyTerms';
@@ -30,9 +31,9 @@ class Overview extends Component {
     } else {
       const { campaignNavData } = this.props.campaignStore;
       const navs = (campaignNavData.find(i => i.title === 'Summary')).subNavigations;
-      const sel = navs[0] && navs[0].to;
+      const sel = navs && navs[0] && navs[0].to;
       if (sel) {
-        document.querySelector(sel).scrollIntoView(true);
+        this.props.navStore.setFieldValue('currentActiveHash', sel);
       }
     }
   }
@@ -44,14 +45,16 @@ class Overview extends Component {
 
   handleOnScroll = () => {
     const { campaignNavData } = this.props.campaignStore;
-    const navs = (campaignNavData.find(i => i.title === 'Summary')).subNavigations;
-    navs.forEach((item) => {
-      if (document.getElementById(item.to.slice(1))
-      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
-      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
-        this.props.navStore.setFieldValue('currentActiveHash', item.to);
-      }
-    });
+    const navs = toJS((campaignNavData.find(i => i.title === 'Summary')).subNavigations);
+    if (navs && Array.isArray(navs)) {
+      navs.forEach((item) => {
+        if (document.getElementById(item.to.slice(1))
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+          this.props.navStore.setFieldValue('currentActiveHash', item.to);
+        }
+      });
+    }
   }
 
   render() {

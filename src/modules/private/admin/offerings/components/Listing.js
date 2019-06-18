@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -84,10 +83,10 @@ export default class Listing extends Component {
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 {stage !== 'engagement'
                   ? (
-                    <Aux>
+                    <>
                       <Table.HeaderCell>Created Date</Table.HeaderCell>
                       <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
-                    </Aux>
+                    </>
                   )
                   : <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
                 }
@@ -131,7 +130,7 @@ export default class Listing extends Component {
                     </Table.Cell>
                     {stage !== 'engagement'
                       ? (
-                        <Aux>
+                        <>
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                             {offering.offering && offering.offering.launch
@@ -139,7 +138,7 @@ export default class Listing extends Component {
                               ? DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
                           }
                           </Table.Cell>
-                        </Aux>
+                        </>
                       )
                       : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}</Table.Cell>
                     }
@@ -159,7 +158,7 @@ export default class Listing extends Component {
                       <p>
                         {offering.issuerDetails
                           ? (
-                            <Aux>
+                            <>
                               <b>
                                 {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
                               </b>
@@ -167,7 +166,7 @@ export default class Listing extends Component {
                               {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
                               <br />
                               {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
-                            </Aux>
+                            </>
                           )
                           : <b>N/A</b>
                         }

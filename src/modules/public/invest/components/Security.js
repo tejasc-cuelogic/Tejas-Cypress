@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Divider, List, Container, Grid, Image, Responsive } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import secureImage from '../../../../assets/images/secure-horizontal.png';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Security = () => (
-  <Aux>
+  <>
     <section className="content-spacer">
       <Container>
         <Grid padded="vertically">
@@ -66,7 +65,7 @@ NextSeed accounts are provided and held at our partner bank, Happy
         </Grid>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default Security;

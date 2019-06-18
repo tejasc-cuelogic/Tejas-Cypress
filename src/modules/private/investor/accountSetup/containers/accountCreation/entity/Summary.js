@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -79,7 +78,7 @@ export default class Summary extends Component {
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">Verify information and submit for review</Header>
         <div className="field-wrap">
           <div className="table-wrapper">
@@ -207,7 +206,7 @@ s Name
             loading={docLoading}
           />
         </p>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Container, Embed, Grid, Responsive } from 'semantic-ui-react';
 import Image from '../../../../assets/images/video.jpg';
 
@@ -13,7 +12,7 @@ const HowItWorks = () => (
         <Grid.Column tablet={12} computer={12} mobile={16} textAlign="center">
           <p className="mb-30">
             Together, we’re building vibrant, connected and engaged communities around the country.
-            <Responsive minWidth={993} as={Aux}><br /></Responsive>
+            <Responsive minWidth={993} as={React.Fragment}><br /></Responsive>
             Built by experts. Powered by technology. Rooted in community.
           </p>
           <Embed

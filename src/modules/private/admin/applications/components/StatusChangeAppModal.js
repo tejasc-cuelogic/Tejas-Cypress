@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { capitalize } from 'lodash';
-import Aux from 'react-aux';
 import { FormTextarea, FormInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
@@ -131,7 +130,7 @@ Application?
             />
             {params.action === 'PROMOTE'
               ? (
-<Aux>
+<>
                 <FormInput
                   fluid
                   type="password"
@@ -146,7 +145,7 @@ Application?
                   fielddata={PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword}
                   changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_PASSWORD_FRM')}
                 />
-              </Aux>
+              </>
               )
               : ''
             }

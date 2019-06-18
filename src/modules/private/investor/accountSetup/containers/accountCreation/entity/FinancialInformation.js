@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Message, Divider } from 'semantic-ui-react';
@@ -20,7 +19,7 @@ export default class FinancialInformation extends Component {
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">Calculate your investment limit</Header>
         <p className="center-align">
           Your net assets and annual revenue are used to determine your 12-month investment limit.
@@ -67,7 +66,7 @@ Your investment limit:
           )
           }
         </Form>
-      </Aux>
+      </>
     );
   }
 }

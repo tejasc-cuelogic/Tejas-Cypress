@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -63,7 +62,7 @@ Edit profile data
                 </Link>
               )
               : (
-                <Aux>
+                <>
                   <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
                   {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
                   && (
@@ -75,7 +74,7 @@ Update
                   </Link>
                   )
                 }
-                </Aux>
+                </>
               )
             }
             <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
@@ -83,10 +82,10 @@ Update
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'
         && (
-        <Aux>
+        <>
           <LockedInformation details={details} />
           <Divider />
-        </Aux>
+        </>
         )
         }
         <Header as="h6">Personal Info</Header>

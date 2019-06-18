@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Accordion, Icon, List } from 'semantic-ui-react';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../../constants/common';
 
@@ -29,7 +28,7 @@ export default class AccList extends Component {
   }
 
   render() {
-    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     const {
       match, data, module,
       marketing,
@@ -43,7 +42,7 @@ export default class AccList extends Component {
       <Accordion className="splitted">
         {
           data.map(record => (
-            <Aux key={record.id}>
+            <React.Fragment key={record.id}>
               <Accordion.Title
                 active={this.isActive(record, params.subItems)}
                 onClick={this.toggleAction}
@@ -72,7 +71,7 @@ export default class AccList extends Component {
                 ) : 'No record to display.'
                 }
               </Accordion.Content>
-            </Aux>
+            </React.Fragment>
           ))
         }
         {isDev && marketing

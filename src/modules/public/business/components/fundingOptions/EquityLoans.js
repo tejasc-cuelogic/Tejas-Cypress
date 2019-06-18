@@ -1,9 +1,8 @@
 import React from 'react';
 import { Header, Grid, Item } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const EquityLoans = () => (
-  <Aux>
+  <>
     <Header as="h3">Preferred Equity</Header>
     <Grid doubling columns={2}>
       <Grid.Column>
@@ -61,7 +60,7 @@ This may also be best for businesses that are also seeking capital that
         </Item.Group>
       </Grid.Column>
     </Grid>
-  </Aux>
+  </>
 );
 
 export default EquityLoans;

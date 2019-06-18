@@ -107,7 +107,7 @@ export const AUDITBOXFOLDER_META = {
     value: '',
     label: 'Waiting Time',
     error: undefined,
-    rule: 'optional|numeric',
+    rule: 'optional',
     placeHolder: 'Enter here',
   },
   concurrency: {
@@ -115,7 +115,7 @@ export const AUDITBOXFOLDER_META = {
     value: '',
     label: 'Concurrency',
     error: undefined,
-    rule: 'optional|numeric',
+    rule: 'optional',
     placeHolder: 'Enter here',
   },
   queueLimit: {
@@ -123,7 +123,7 @@ export const AUDITBOXFOLDER_META = {
     value: '',
     label: 'Queue Limit',
     error: undefined,
-    rule: 'optional|numeric',
+    rule: 'optional',
     placeHolder: 'Enter here',
   },
   jobId: {
@@ -142,14 +142,14 @@ export const AUDITBOXFOLDER_META = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
-  userType: {
-    key: 'userType',
+  role: {
+    key: 'role',
     value: '',
     values: [
       { key: 'Investor', text: 'Investor', value: 'INVESTOR' },
       { key: 'Issuer', text: 'Issuer', value: 'ISSUER' },
     ],
-    label: 'User Type',
+    label: 'User Role',
     error: undefined,
     rule: 'required',
   },

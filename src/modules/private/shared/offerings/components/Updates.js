@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Form, Grid, Button, Modal } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
@@ -30,7 +29,7 @@ export default class BonusRewards extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
@@ -55,7 +54,7 @@ export default class BonusRewards extends Component {
         <div className={isIssuer ? 'ui card fluid' : ''}>
           <Listing data={updates} count={count} match={match} requestState={requestState} />
         </div>
-      </Aux>
+      </>
     );
   }
 }

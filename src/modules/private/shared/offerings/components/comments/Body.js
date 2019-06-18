@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import Parser from 'html-react-parser';
 import { Link } from 'react-router-dom';
@@ -51,14 +50,14 @@ const Body = props => (
           };
           const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
           return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : get(msg, 'createdUserInfo.id') !== props.currentUserId ? (
-            <Aux>
+            <>
               <Item className="in">
                 <UserAvatar size="mini" UserInfo={userInfo} />
                 <MsgContent
                   classes={classes}
                   body={Parser(msg.comment)}
                   extra={(
-                    <Aux>
+                    <>
                       <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="from"
@@ -69,25 +68,25 @@ const Body = props => (
                         date={msgDate}
                         scope={msg.scope}
                       />
-                    </Aux>
+                    </>
 )}
                   edit={(
                     <div className="comment-actions">
                       {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved
                         ? (
-                          <Aux>
+                          <>
                             <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
                             {' | '}
                             <Link to="/" className="link" loading={props.buttonLoader === msg.id} onClick={e => props.approveComment(e, msg.id)}>Approve</Link>
                             {' | '}
-                          </Aux>
+                          </>
                         )
                         : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved
                       && (
-                      <Aux>
+                      <>
                         <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
                         {' | '}
-                      </Aux>
+                      </>
                       )
                       }
                       {!props.isIssuer
@@ -97,15 +96,15 @@ const Body = props => (
 )}
                 />
               </Item>
-            </Aux>
+            </>
           ) : (
-            <Aux>
+            <>
               <Item className="sent">
                 <MsgContent
                   classes={classes}
                   body={Parser(msg.comment)}
                   extra={(
-                    <Aux>
+                    <>
                       <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="to"
@@ -115,7 +114,7 @@ const Body = props => (
                         date={msgDate}
                         scope={msg.scope}
                       />
-                    </Aux>
+                    </>
 )}
                   edit={
                     ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin)
@@ -124,10 +123,10 @@ const Body = props => (
                       <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
                       {!props.isIssuer
                       && (
-                      <Aux>
+                      <>
                         {' | '}
                         <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
-                      </Aux>
+                      </>
                       )
                       }
                     </div>
@@ -136,7 +135,7 @@ const Body = props => (
                 />
                 <UserAvatar size="mini" UserInfo={userInfo} />
               </Item>
-            </Aux>
+            </>
           ));
         }) : <InlineLoader text="No data found." />
       }

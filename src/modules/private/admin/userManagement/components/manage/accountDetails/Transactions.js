@@ -1,9 +1,8 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Icon, Button, Divider, Table } from 'semantic-ui-react';
 
 const Transactions = () => (
-  <Aux>
+  <>
     <div className="clearfix">
       <span className="pull-left">
         <Header as="h4">
@@ -67,7 +66,7 @@ Transaction #
         </Table.Row>
       </Table.Body>
     </Table>
-  </Aux>
+  </>
 );
 
 export default Transactions;

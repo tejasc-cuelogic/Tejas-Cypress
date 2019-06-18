@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { startCase, get } from 'lodash';
 import { Icon } from 'semantic-ui-react';
@@ -15,10 +14,10 @@ export default class AccTypeTitle extends Component {
   render() {
     const accountType = this.getAccType(this.props.match.url);
     return (
-      <Aux>
+      <>
         <Icon color="green" className={`ns-${accountType.toLowerCase()}-line`} />
         {`${this.props.noText ? '' : accountType} ${this.props.moreText || ''}`}
-      </Aux>
+      </>
     );
   }
 }

@@ -1,6 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
@@ -135,7 +134,7 @@ export default class Leader extends Component {
       || (isManager && approved && approved.status));
     const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     return (
-      <Aux>
+      <>
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
@@ -364,7 +363,7 @@ export default class Leader extends Component {
           </Header>
           {
             LEADERSHIP_EXP_FRM.fields.employer.map((exp, index2) => (
-              <Aux>
+              <>
                 <Header as="h6">
                   {`Business ${index2 + 1}`}
                   {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length > 1
@@ -410,7 +409,7 @@ export default class Leader extends Component {
                     containerclassname="secondary"
                   />
                 </div>
-              </Aux>
+              </>
             ))
           }
           <Divider section />
@@ -445,7 +444,7 @@ export default class Leader extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

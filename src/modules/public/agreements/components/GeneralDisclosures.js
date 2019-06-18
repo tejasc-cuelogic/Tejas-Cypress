@@ -1,13 +1,12 @@
 /* eslint-disable max-len */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Divider } from 'semantic-ui-react';
 
 export default class GeneralDisclosures extends Component {
   render() {
     return (
-      <Aux>
+      <>
         <Header as="h2">General Disclosures</Header>
         <Divider hidden />
         <div className="justify-text legal-desc">
@@ -74,7 +73,7 @@ and
             the trust branch of Happy State Bank headquartered in Amarillo, Texas.
           </p>
         </div>
-      </Aux>
+      </>
     );
   }
 }

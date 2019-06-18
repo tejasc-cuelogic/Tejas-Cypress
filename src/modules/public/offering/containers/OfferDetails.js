@@ -1,6 +1,5 @@
 /* eslint-disable no-lonely-if */
 import React, { Component, Suspense, lazy } from 'react';
-import Aux from 'react-aux';
 import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
@@ -72,7 +71,6 @@ class offerDetails extends Component {
           this.props.history.push('/auth/login');
         }
       }
-      console.log('checkIn', currentUser && currentUser.sub, oMinData);
     });
   }
 
@@ -179,11 +177,13 @@ class offerDetails extends Component {
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
-      navItems = this.removeSubNavs(cloneDeep(tempNavItems));
+      navItems = modifySubNavs(cloneDeep(tempNavItems));
+      navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+      navItems = this.removeSubNavs(navItems);
     } else {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
+      navItems = modifySubNavs(navItems);
     }
-    navItems = modifySubNavs(navItems);
     if ((details && details.data
       && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
       || this.state.found === 2) {
@@ -193,7 +193,7 @@ class offerDetails extends Component {
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     return (
-      <Aux>
+      <>
         {campaign
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
@@ -205,7 +205,7 @@ class offerDetails extends Component {
         } */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
-          <Responsive maxWidth={991} as={Aux}>
+          <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
               <CampaignSideBar navItems={navItems} />
               <MobileDropDownNav
@@ -258,10 +258,10 @@ class offerDetails extends Component {
             </section>
           </Container>
         </div>
-        {/* <Responsive minWidth={768} as={Aux}>
+        {/* <Responsive minWidth={768} as={React.Fragment}>
           <Footer path={location.pathname} campaign={campaign} />
         </Responsive> */}
-      </Aux>
+      </>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -73,12 +72,12 @@ class FinancialInfo extends Component {
     }
 
     return (
-      <Aux>
+      <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest
           && (
-          <Aux>
+          <>
             <Header as="h4" textAlign="center" className="grey-header">
 Your current investment in
               {offerName}
@@ -119,7 +118,7 @@ for how this is calculated. If you believe
               </p>
               )
             }
-          </Aux>
+          </>
           )
         }
         {/* {!this.props.changeInvest && currentInvestmentStatus !== ('BD_506C' || 'BD_506B') && */}
@@ -189,7 +188,7 @@ Total Investment Return: Up to
             </p>
           ))
         }
-      </Aux>
+      </>
     );
   }
 }
