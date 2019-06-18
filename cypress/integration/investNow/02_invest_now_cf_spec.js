@@ -10,7 +10,7 @@ import { openLogingPopupAndAutheticate } from '../../support/investNow/validInve
 
 describe('Invest now CF investment flow', () => {
     before(() => {
-        initializeInvestNowFlow();
+        initializeInvestNowFlow('CF');
     });
 
     beforeEach(() => {
