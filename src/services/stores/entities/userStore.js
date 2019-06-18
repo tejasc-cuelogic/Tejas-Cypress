@@ -81,6 +81,10 @@ export class UserStore {
       );
   }
 
+  @computed get isApplicationManager() {
+    return this.myCapabilities.includes('APPLICATIONS_FULL') || this.myCapabilities.includes('APPLICATIONS_MANAGER');
+  }
+
   @computed get isInvestor() {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('investor');

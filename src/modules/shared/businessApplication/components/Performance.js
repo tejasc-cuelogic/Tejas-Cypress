@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import React, { Component } from 'react';
-import { Grid, Form, Header } from 'semantic-ui-react';
+import { Grid, Form, Header, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore', 'commonStore')
+@inject('businessAppStore', 'commonStore', 'userStore')
 @observer
 export default class Performance extends Component {
   componentWillMount() {
@@ -18,9 +18,14 @@ export default class Performance extends Component {
       BUSINESS_PERF_FRM, formReadOnlyMode, currentApplicationType,
       businessPerfMaskingChange, getBusinessTypeCondtion, getOwnPropertyCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
+      businessAppParitalSubmit, enableSave,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { fields } = BUSINESS_PERF_FRM;
+    let disableFileUpload = true;
+    if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
+      disableFileUpload = false;
+    }
     const statmentConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
@@ -45,7 +50,7 @@ export default class Performance extends Component {
                     <DropZone
                       sharableLink
                       hideFields={hideFields}
-                      disabled={formReadOnlyMode}
+                      disabled={formReadOnlyMode && disableFileUpload}
                       multiple
                       key={field}
                       name={field}
@@ -75,7 +80,7 @@ export default class Performance extends Component {
                 <DropZone
                   sharableLink
                   hideFields={hideFields}
-                  disabled={formReadOnlyMode}
+                  disabled={formReadOnlyMode && disableFileUpload}
                   multiple
                   key="sourcesAndUses"
                   name="sourcesAndUses"
@@ -145,6 +150,19 @@ export default class Performance extends Component {
             hideFields={hideFields}
             isFileUploading={this.props.businessAppStore.isFileUploading}
           />
+          {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager ?
+            <div className="right aligned">
+              <Button
+                inverted
+                type="button"
+                onClick={() => businessAppParitalSubmit(true)}
+                className="align-right right-align"
+                color="green"
+                content="Save"
+                disabled={!enableSave}
+              />
+            </div>
+            : ''}
         </Form>
       </div>
     );

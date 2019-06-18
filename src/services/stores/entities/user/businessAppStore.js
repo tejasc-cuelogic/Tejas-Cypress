@@ -70,6 +70,8 @@ export class BusinessAppStore {
   @observable userExists = false;
   @observable urlParameter = null;
   @observable businessAppDataById = null;
+  @observable applicationIssuerId = null;
+  @observable enableSave = false;
 
   @action
   setFieldvalue = (field, value) => {
@@ -176,6 +178,7 @@ export class BusinessAppStore {
       uiStore.setProgress(loader);
     }
     this.setFieldvalue('applicationId', appId);
+    this.setFieldvalue('applicationIssuerId', userId);
     const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payLoad = {
       applicationId: appId,
@@ -1040,7 +1043,7 @@ export class BusinessAppStore {
   }
 
   @action
-  businessAppParitalSubmit = () => {
+  businessAppParitalSubmit = (isApplicationManager = false) => {
     let data = this.getFormatedBusinessDetailsData;
     let stepName = 'BUSINESS_DETAILS';
     let isPartialDataFlag = true;
@@ -1067,7 +1070,7 @@ export class BusinessAppStore {
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
     let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
-      applicationId: this.currentApplicationId,
+      applicationId: isApplicationManager ? this.applicationId : this.currentApplicationId,
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
       isPartialData: isPartialDataFlag,
       applicationStep: stepName,
@@ -1105,7 +1108,12 @@ export class BusinessAppStore {
           mutation: mutationQuery,
           variables: variableData,
           refetchQueries: [
-            { query: getBusinessApplicationsById, variables: { id: this.currentApplicationId } },
+            {
+              query: getBusinessApplicationsById,
+              variables: {
+                id: isApplicationManager ? this.applicationId : this.currentApplicationId,
+              },
+            },
             { query: getBusinessApplications },
           ],
         })
@@ -1136,6 +1144,7 @@ export class BusinessAppStore {
 
   @action
   businessAppRemoveFiles = (fieldName, formName, index) => {
+    this.enableSave = true;
     if (fieldName === 'resume') {
       const removeFileIds = this[formName].fields.owners[index][fieldName].fileId;
       this[formName].fields.owners[index][fieldName].value = '';
@@ -1172,12 +1181,13 @@ export class BusinessAppStore {
   @action
   businessAppUploadFiles = (files, fieldName, formName, index = null) => {
     if (typeof files !== 'undefined' && files.length) {
+      this.enableSave = true;
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
         const stepName = this.getFileUploadEnum(fieldName, index);
         this.setFieldvalue('isFileUploading', true);
         this.setFormFileArray(formName, fieldName, 'showLoader', true, index);
-        fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
+        fileUpload.setFileUploadData(this.currentApplicationId || this.applicationId, fileData, stepName, 'ISSUER', this.applicationIssuerId || '').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(formName, fieldName, 'fileData', file, index);
@@ -1196,6 +1206,9 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
             this.setFieldvalue('isFileUploading', false);
           });
+        }).then(() => {
+          console.log(this.applicationId);
+          console.log(this.applicationStep);
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);

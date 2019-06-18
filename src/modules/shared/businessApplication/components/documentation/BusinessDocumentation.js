@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Popup, Icon, List, Divider } from 'semantic-ui-react';
+import { Grid, Popup, Icon, List, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
@@ -21,7 +21,13 @@ export default class BusinessDocumentation extends Component {
       getBusinessTypeCondtion,
       getPersonalGuaranteeCondition,
       formReadOnlyMode,
+      businessAppParitalSubmit,
+      enableSave,
     } = this.props.businessAppStore;
+    let disableFileUpload = true;
+    if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
+      disableFileUpload = false;
+    }
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
@@ -57,7 +63,7 @@ export default class BusinessDocumentation extends Component {
                     sharableLink
                     blockDownload={get(userAccess, 'asSupport')}
                     hideFields={hideFields}
-                    disabled={formReadOnlyMode}
+                    disabled={formReadOnlyMode && disableFileUpload}
                     multiple
                     key={field}
                     name={field}
@@ -97,7 +103,7 @@ export default class BusinessDocumentation extends Component {
                   sharableLink
                   blockDownload={get(userAccess, 'asSupport')}
                   hideFields={hideFields}
-                  disabled={formReadOnlyMode}
+                  disabled={formReadOnlyMode && disableFileUpload}
                   multiple
                   asterisk="true"
                   key={field}
@@ -148,7 +154,7 @@ export default class BusinessDocumentation extends Component {
                 sharableLink
                 blockDownload={get(userAccess, 'asSupport')}
                 hideFields={hideFields}
-                disabled={formReadOnlyMode}
+                disabled={formReadOnlyMode && disableFileUpload}
                 asterisk="true"
                 multiple
                 name="personalGuaranteeForm"
@@ -159,6 +165,19 @@ export default class BusinessDocumentation extends Component {
             </div>
           }
         </FormElementWrap>
+        {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager ?
+          <div className="right aligned">
+            <Button
+              inverted
+              type="button"
+              onClick={() => businessAppParitalSubmit(true)}
+              className="align-right right-align"
+              color="green"
+              content="Save"
+              disabled={!enableSave}
+            />
+          </div>
+          : ''}
       </Aux>
     );
   }
