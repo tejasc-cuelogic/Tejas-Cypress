@@ -32,7 +32,7 @@ export const validInvestmentAmount = () => {
   cy.get('input[name="investmentAmount"]').type(enterdMaxValidAmount);
   cy.get('input[name="investmentAmount"]').type('{enter}');
   cy.wait('@investNowGeneratePurchaseAgreement');
-  cy.wait('@investNowGeneratePurchaseAgreement');
+  // cy.wait('@investNowGeneratePurchaseAgreement');
 };
 
 export const ConfirmTransferRequest = () => {
@@ -57,7 +57,7 @@ export const ConfirmTransferRequest = () => {
 
 export const generateAgreement = () => {
   // cy.wait('@investNowGeneratePurchaseAgreement');
-  cy.wait(3000);
+  cy.wait(2000);
   cy.get('.confirm-investment').should('have.length', 1);
   cy.get('.signup-content').find('div:visible').find('.ui.form').find('.ui.stackable.grid')
     .find('.row')
@@ -67,7 +67,17 @@ export const generateAgreement = () => {
     .children()
     .get('input[name="checkboxesLeft"]')
     .parent()
-    .click({ force: true, multiple: true });
+    .click({ multiple: true });
+    cy.wait(500);
+    cy.get('.signup-content').find('div:visible').find('.ui.form').find('.ui.stackable.grid')
+    .find('.row')
+    .get('.eight.wide.column').first()
+    .children()
+    .children()
+    .children()
+    .get('input[value="4"]')
+    .check({force : true});
+    cy.wait(1000);
   cy.get('.signup-content').find('div:visible').find('.ui.form').find('.ui.stackable.grid')
     .find('.row')
     .get('.eight.wide.column').eq(1)
@@ -76,7 +86,7 @@ export const generateAgreement = () => {
     .children()
     .get('input[name="checkboxesRight"]')
     .parent()
-    .click({ force: true, multiple: true });
+    .click({ multiple: true });
 };
 
 export const submitInvestment = () => {

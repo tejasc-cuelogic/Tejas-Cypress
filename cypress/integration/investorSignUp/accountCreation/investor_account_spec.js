@@ -27,7 +27,6 @@ describe('Account Creation', () => {
 
   const manualLinkbankProcess = () => {
     registerApiCall('manualAccount', '/dev/graphql');
-    cy.wait(2000);
     cy.get('input[name="accType"]').check('0', { force: true });
     cy.get('button.next').click();
     cy.wait(2000);
@@ -201,7 +200,6 @@ describe('Account Creation', () => {
 
   it('should successfully link bank with manual process', () => {
     manualLinkbankProcess();
-    cy.wait(1500);
     cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
       cy.log('step value', step);
       assert.equal(step, 'Add funds', ['Should be on add funds'])	
@@ -210,7 +208,6 @@ describe('Account Creation', () => {
 
   it('should successfully link bank with plaid process', () => {
     plaidProcess('.progtrckr-done', '1');
-    cy.wait(1500);
     cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
       cy.log('step value', step);
       assert.equal(step, 'Add funds', ['Should be on add funds'])	
