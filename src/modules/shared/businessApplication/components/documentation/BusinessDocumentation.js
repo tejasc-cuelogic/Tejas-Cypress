@@ -23,6 +23,7 @@ export default class BusinessDocumentation extends Component {
       formReadOnlyMode,
       businessAppParitalSubmit,
       enableSave,
+      businessApplicationDetailsAdmin,
     } = this.props.businessAppStore;
     let disableFileUpload = true;
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
@@ -174,7 +175,7 @@ export default class BusinessDocumentation extends Component {
               className="align-right right-align"
               color="green"
               content="Save"
-              disabled={!enableSave}
+              disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DOC_FRM.meta.isValid : enableSave)}
             />
           </div>
           : ''}

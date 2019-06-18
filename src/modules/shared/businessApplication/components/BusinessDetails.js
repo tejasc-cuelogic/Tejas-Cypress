@@ -62,7 +62,7 @@ export default class BusinessDetails extends Component {
       BUSINESS_DETAILS_FRM, businessDetailsChange, businessAppUploadFiles,
       businessAppRemoveFiles, addMoreForms, businessDetailsMaskingChange,
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
-      businessAppParitalSubmit, enableSave,
+      businessAppParitalSubmit, enableSave, businessApplicationDetailsAdmin,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { docLoading, docIdsLoading } = this.props.agreementsStore;
@@ -349,7 +349,7 @@ export default class BusinessDetails extends Component {
               className="align-right right-align"
               color="green"
               content="Save"
-              disabled={!enableSave}
+              disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DETAILS_FRM.meta.isValid : enableSave)}
             />
           </div>
            : ''}

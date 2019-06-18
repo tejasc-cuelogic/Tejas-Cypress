@@ -18,7 +18,7 @@ export default class Performance extends Component {
       BUSINESS_PERF_FRM, formReadOnlyMode, currentApplicationType,
       businessPerfMaskingChange, getBusinessTypeCondtion, getOwnPropertyCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
-      businessAppParitalSubmit, enableSave,
+      businessAppParitalSubmit, enableSave, businessApplicationDetailsAdmin,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { fields } = BUSINESS_PERF_FRM;
@@ -159,7 +159,7 @@ export default class Performance extends Component {
                 className="align-right right-align"
                 color="green"
                 content="Save"
-                disabled={!enableSave}
+                disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_PERF_FRM.meta.isValid : enableSave)}
               />
             </div>
             : ''}
