@@ -1,5 +1,6 @@
 {
   "baseUrl": "https://dev.nextseed.qa/",
   "chromeWebSecurity": false,
-  "pageTimeoutLoad": 80000
+  "pageTimeoutLoad": 80000,
+  "defaultCommandTimeout": 60000 
 }

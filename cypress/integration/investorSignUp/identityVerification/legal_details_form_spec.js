@@ -3,7 +3,7 @@ import { legalDetailsProcess, legalDetailsMeta, fillLegalDetailsForm } from '../
 
 describe('Legal Details Form', () => {
     it('should verify residential address', () => {
-      // legalDetailsProcess();
+      legalDetailsProcess();
     });
 
     it('should deny business address', () => {
