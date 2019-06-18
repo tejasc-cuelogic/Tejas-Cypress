@@ -44,8 +44,4 @@ describe('Invest now CF investment flow', () => {
     it('Should submit investment and redirect to investment portfolio', () => {
         sumbmitingInvestment();
     });
-
-    // it('should successfully CF investment flow', () => {
-    //     proceedWithValidCFInvestmentAction();
-    // });
 });

@@ -1,33 +1,33 @@
 
 export const proceedForAccreditationRequest = () => {
-    cy.log('Proceed for accreditation...');
+  return new Cypress.Promise((resolve, reject) => {
+    cy.get('.multistep').find('form.form').find('.center-align').get('.mt-30 > .ui').click();
+    cy.get('.loader', { timeout: 6000 }).should('not.exist');
+    cy.get('.multistep').find('h3.ui.center').invoke('text')
+    .then(($headerText) => {
+      if ($headerText.includes('How are you an accredited investor?')) {
+
+      }
+    });
+    resolve();
+  });
 }
 
 
 export const checkRegulationAndAccreditation = () => {
+  return new Cypress.Promise((resolve, reject) => {
     cy.wait(1000);
     cy.get('.multistep').find('h3.ui.center').invoke('text')
-    .then(($text1) => {
-        cy.log('text1===>', $text1);
-        const modelText = cy.wrap($text1).should('eq', 'This investment is only available to accredited investors.');
-        cy.log('modelText===>', modelText);
-    });
-    // .should('eq', 'This investment is only available to accredited investors.');
-    // cy.log('modelText===>', modelText);
-
-    // if (modelText) {
-    //     proceedForAccreditationRequest();
-    // } else {
-    //     cy.log('procced for investment');
-    // }
-    // .then((text1) => {
-    //     cy.log('text1 text1==>', text1);
-    //     const modelHeadingText = expect(text1).to.have.text('This investment is only available to accredited investors.');
-    //     cy.log('modelHeadingText==>', modelHeadingText);
-    //     if (modelHeadingText) {
-    //         proceedForAccreditationRequest();
-    //     } else {
-    //         cy.log('procced for investment');
-    //     }
-    // });
+      .then(($text1) => {
+        if ($text1.includes('This investment is only available to accredited investors.')) {
+          proceedForAccreditationRequest()
+            .then((resp) => {
+              resolve(true);
+            });
+        } else {
+          cy.log('procced for investment ELSE');
+          resolve(true);
+        }
+      });
+  });
 }
