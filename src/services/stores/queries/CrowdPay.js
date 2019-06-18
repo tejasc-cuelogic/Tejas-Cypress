@@ -175,10 +175,11 @@ mutation _crowdPayAccountReview($userId: String!, $accountId: String!, $action: 
 `;
 
 export const crowdPayAccountProcess = gql`
-mutation crowdPayAccountProcess($userId: String!, $accountId: String!) {
+mutation crowdPayAccountProcess($userId: String!, $accountId: String!, $reason:String! ) {
   crowdPayAccountProcess(
     userId: $userId
     accountId: $accountId
+    reason: $reason
   )
 }
 `;

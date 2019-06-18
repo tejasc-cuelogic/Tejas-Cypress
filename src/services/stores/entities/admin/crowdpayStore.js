@@ -234,11 +234,12 @@ export class CrowdpayStore {
       userId,
       accountId,
     };
-    if (ctaAction === 'APPROVE' || ctaAction === 'DECLINE') {
+    if (ctaAction === 'APPROVE' || ctaAction === 'DECLINE' || ctaAction === 'GSPROCESS') {
+      const commentkey = ctaAction === 'GSPROCESS' ? 'reason' : 'comment';
       variables = {
         ...variables,
         action: ctaAction,
-        comment: commentData.justifyDescription,
+        [commentkey]: commentData.justifyDescription,
       };
     } else if (ctaAction === 'CREATEACCOUNT') {
       variables.accountType = types[this.requestState.type];
