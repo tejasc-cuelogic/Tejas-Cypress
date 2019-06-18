@@ -19,6 +19,10 @@ export default class ManualForm extends Component {
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     this.props.bankAccountStore.setShouldValidateAmount();
     this.props.uiStore.clearErrors();
+    const modalEle = document.getElementById('multistep-modal');
+    if (modalEle && isMobile) {
+      modalEle.parentNode.scrollTo(0, 0);
+    }
   }
 
   handleSubmitForm = (e) => {

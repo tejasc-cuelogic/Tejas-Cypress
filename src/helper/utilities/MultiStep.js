@@ -66,10 +66,6 @@ export default class MultiStep extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    window.scrollTo(0, 0);
-  }
-
   getClassName(className, i) {
     let currentStatus = this.state.navState.styles[i];
     if (!this.state.navState.styles[i]) {
@@ -158,12 +154,16 @@ export default class MultiStep extends React.Component {
         this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
       }
+      const modalEle = document.getElementById('multistep-modal');
+      if (modalEle && isMobile) {
+        modalEle.parentNode.scrollTo(0, 0);
+      }
     } else {
       if (this.props.isAccountCreation && isMobile) {
         this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
-          const modalDoc = document.getElementsByClassName('ui page modals dimmer transition visible active');
-          if (modalDoc && isMobile) {
-            setTimeout(() => modalDoc[0].scrollTo(0, 0), 100);
+          const modalEle = document.getElementById('multistep-modal');
+          if (modalEle && isMobile) {
+            setTimeout(() => modalEle.parentNode.scrollTo(0, 0), 100);
           }
         });
       } else {
@@ -242,6 +242,7 @@ export default class MultiStep extends React.Component {
           className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
+          id="multistep-modal"
           dimmer={isMobile && 'inverted'}
           centered={!isMobile}
         >

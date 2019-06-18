@@ -27,6 +27,10 @@ export default class Plaid extends Component {
   componentWillUnmount() {
     this.props.bankAccountStore.setBankListing();
     this.props.bankAccountStore.resetFormData('formBankSearch');
+    const modalEle = document.getElementById('multistep-modal');
+    if (modalEle && isMobile) {
+      modalEle.parentNode.scrollTo(0, 0);
+    }
   }
 
   setBankSummary = () => {
