@@ -4,7 +4,6 @@ import {
   proceedInvalidUserLoginAction,
   // proceedWithIncompleteInvestorCIPAction,
   proceedWithValidUserLoginAction,
-  proceedWithValidCFInvestmentAction,
 } from '../../support/investNow/investNowFlow';
 
 describe('Invest now flow', () => {
@@ -42,7 +41,4 @@ describe('Invest now flow', () => {
   it('succesfully login as investor with one account', () => {
     proceedWithValidUserLoginAction();
   });
-  // it('should successfully CF investment flow', () => {
-  //   proceedWithValidCFInvestmentAction();
-  // });
 });

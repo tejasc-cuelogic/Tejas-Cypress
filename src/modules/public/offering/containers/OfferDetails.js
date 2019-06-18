@@ -78,7 +78,6 @@ class offerDetails extends Component {
           this.props.history.push('/auth/login');
         }
       }
-      console.log('checkIn', currentUser && currentUser.sub, oMinData);
     });
   }
 
@@ -185,11 +184,13 @@ class offerDetails extends Component {
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
-      navItems = this.removeSubNavs(cloneDeep(tempNavItems));
+      navItems = modifySubNavs(cloneDeep(tempNavItems));
+      navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+      navItems = this.removeSubNavs(navItems);
     } else {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
+      navItems = modifySubNavs(navItems);
     }
-    navItems = modifySubNavs(navItems);
     if ((details && details.data
       && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
       || this.state.found === 2) {
