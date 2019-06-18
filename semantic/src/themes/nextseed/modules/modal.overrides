@@ -606,6 +606,14 @@
         &.dimmer-visible{
             justify-content: flex-start !important;
         }
+        .ui.form .search-field input[type=text]{
+            border-bottom: none;
+            border: 1px solid @neutral-darkwhite;
+            border-radius: 4px;
+            ~i.icon{
+                left: 10px; 
+            }
+        }
     }
     >.close{
         height:30px;
@@ -739,6 +747,7 @@
         display:table;
         border-radius:@4px;
         border:@border-light 1px solid;
+        background: @white;
         >span{
             width:100%;
             display:table-cell;
