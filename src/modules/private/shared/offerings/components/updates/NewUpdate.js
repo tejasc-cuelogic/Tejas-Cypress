@@ -186,8 +186,9 @@ See the update
                       value={PBUILDER_FRM.fields.scope.value}
                     />
                     <br />
+                    <Form>
                     {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
-                      <>
+                      <Form.Field>
                         <Checkbox
                           name="tiers"
                           readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
@@ -196,9 +197,9 @@ See the update
                           checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
                           label={`$${rewardTier}`}
                         />
-                        <br />
-                      </>
+                      </Form.Field>
                     )) : ''}
+                    </Form>
                   </Card.Content>
                 </Card>
                 )

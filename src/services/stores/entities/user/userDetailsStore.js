@@ -616,6 +616,7 @@ export class UserDetailsStore {
   @action
   resetStoreData = () => {
     this.currentUser = {};
+    this.userFirstLoad = false;
     this.setPartialInvestmenSession();
   }
 

@@ -32,7 +32,7 @@ const navMeta = [
     title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
   },
   {
-    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
+    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop', 'dev'],
   },
   {
     title: 'Activity', to: 'activity', component: ActivityHistory, load: false,

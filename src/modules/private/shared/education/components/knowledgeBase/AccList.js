@@ -28,7 +28,7 @@ export default class AccList extends Component {
   }
 
   render() {
-    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     const {
       match, data, module,
       marketing,

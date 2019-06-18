@@ -169,7 +169,7 @@ export default class ConfirmPhoneNumber extends Component {
           />
           {!editMode
             && (
-            <Link className="grey-link green-hover" to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
+            <Link className={`grey-link green-hover ${this.props.uiStore.inProgress ? 'disabled' : ''}`} to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
               Change phone number
             </Link>
             )
@@ -180,7 +180,7 @@ export default class ConfirmPhoneNumber extends Component {
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 autoFocus={!isMobile}
                 type="number"
