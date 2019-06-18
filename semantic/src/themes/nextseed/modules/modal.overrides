@@ -603,6 +603,9 @@
                 padding: @14px @14px @14px;
             }
         }
+        &.dimmer-visible{
+            justify-content: flex-start !important;
+        }
     }
     >.close{
         height:30px;
