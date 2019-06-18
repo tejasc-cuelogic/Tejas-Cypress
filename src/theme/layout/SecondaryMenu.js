@@ -126,6 +126,7 @@ class SecondaryMenu extends Component {
                 refMatch={refMatch || match}
                 navItems={navItems}
                 location={location}
+                useIsActive
               />
             )
           }

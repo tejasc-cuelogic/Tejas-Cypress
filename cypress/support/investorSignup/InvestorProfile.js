@@ -16,14 +16,17 @@ export const completeInvestorProfile = () => {
         break;
       case 'Employment Status':
         clickRadioAndNext('input[name="status"]', 'SELF_EMPLOYED', 'upsertProfile');
+        cy.wait(1000);
         completeInvestorProfile();
         break;
       case 'Brokerage Employment':
         clickRadioAndNext('input[name="brokerageEmployment"]', 'no', 'upsertProfile');
+        cy.wait(1000);
         completeInvestorProfile();
         break;
       case 'Public Company Relations':
         clickRadioAndNext('input[name="publicCompanyRel"]', 'no', 'upsertProfile');
+        cy.wait(1000);
         completeInvestorProfile();
         break;
       case 'Financial Information':

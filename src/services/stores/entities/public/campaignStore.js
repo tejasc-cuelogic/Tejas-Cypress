@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy, sortBy, includes } from 'lodash';
+import { pickBy, get, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -8,6 +8,7 @@ import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
 // import uiStore from '../shared/uiStore';
@@ -37,7 +38,7 @@ export class CampaignStore {
 
   @observable docsWithBoxLink = [];
 
-  @observable investmentDetailsSubNavs = [];
+  @observable campaignNavData = [];
 
   @observable totalPayment = 0;
 
@@ -225,6 +226,23 @@ export class CampaignStore {
     campaignStatus.bonusRewards = get(campaign, 'bonusRewards') || [];
     campaignStatus.isEarlyBirdRewards = campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     campaignStatus.isBonusReward = campaignStatus.bonusRewards && campaignStatus.bonusRewards.length;
+    const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.elevatorPitch)
+      || (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.highlight);
+    campaignStatus.hasTopThingToKnow = elevatorPitch;
+    campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
+    campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
+    campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
+    campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
+    campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');
+    campaignStatus.history = get(campaign, 'campaign.offering.about.history');
+    campaignStatus.team = get(campaign, 'leadership');
+    campaignStatus.useOfProcceds = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
+    campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
+    campaignStatus.updates = get(campaign, 'updates') && get(campaign, 'updates').length;
+    campaignStatus.investmentHighlights = true;
+    campaignStatus.doneComputing = (this.details.data && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
     return campaignStatus;
   }
 
@@ -268,7 +286,7 @@ export class CampaignStore {
   }
 
   @computed get loading() {
-    return this.allData.loading;
+    return this.allData.loading || this.details.loading;
   }
 
   @action
@@ -391,13 +409,15 @@ export class CampaignStore {
     this.totalPayment = money.floatToAmount(totalPayment || '', 2);
     const payChart = [];
     let totalPaid = 0;
-    schedule.forEach((item, index) => {
-      totalPaid = totalPaid + item.interest + item.principal;
-      payChart.push({
-        month: index + 1,
-        'Projected total payment': parseFloat((totalPaid).toFixed(2)),
+    if (schedule && Array.isArray(schedule)) {
+      schedule.forEach((item, index) => {
+        totalPaid = totalPaid + item.interest + item.principal;
+        payChart.push({
+          month: index + 1,
+          'Projected total payment': parseFloat((totalPaid).toFixed(2)),
+        });
       });
-    });
+    }
     this.totalPaymentChart = payChart;
   }
 
@@ -522,6 +542,57 @@ export class CampaignStore {
       labelBannerSecond = 'Reached Max';
     }
     return labelBannerSecond;
+  }
+
+  @action
+  modifySubNavs = (navList) => {
+    const newNavList = [];
+    const offeringStage = get(this.campaign, 'stage');
+    navList.forEach((item) => {
+      const tempItem = item;
+      let temNavList = item.subNavigations;
+      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
+        const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+        if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'revenueSharingSummary',
+          });
+        } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+          });
+        } else if (existanceResult.length) {
+          remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+        }
+        tempItem.subNavigations = uniqWith(temNavList, isEqual);
+      }
+      if (tempItem.title === 'Summary' || tempItem.title === 'About the Company' || tempItem.title === 'Investment Details') {
+        const arr = temNavList;
+        if (arr && Array.isArray(arr)) {
+          arr.forEach((i) => {
+            if (i.key && !this.campaignStatus[i.key]) {
+              temNavList = temNavList.filter(n => n.title !== i.title);
+            }
+          });
+        }
+      }
+      tempItem.subNavigations = temNavList;
+      if (tempItem.to === 'data-room') {
+        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+          newNavList.push(tempItem);
+        }
+      } else if (!temNavList || (temNavList && temNavList.length)) {
+        newNavList.push(tempItem);
+      }
+    });
+    this.setFieldValue('campaignNavData', newNavList);
+    return newNavList;
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
+import { toJS } from 'mobx';
 import { inject } from 'mobx-react';
 import { Header, Divider } from 'semantic-ui-react';
 import KeytermsDetails from './investmentDetails/KeytermsDetails';
@@ -23,8 +24,13 @@ class InvestmentDetails extends Component {
         behavior: 'smooth',
       });
     } else if (!isMobile) {
-      const sel = 'use-of-proceeds';
-      document.querySelector(`#${sel}`).scrollIntoView(true);
+      const { campaignNavData } = this.props.campaignStore;
+      const navs = (campaignNavData.find(i => i.title === 'Investment Details')).subNavigations;
+      const sel = navs && navs[0] && navs[0].to;
+      if (sel) {
+        this.props.navStore.setFieldValue('currentActiveHash', sel);
+        document.querySelector(sel).scrollIntoView(true);
+      }
     }
   }
 
@@ -34,23 +40,29 @@ class InvestmentDetails extends Component {
   }
 
   handleOnScroll = () => {
-    const { investmentDetailsSubNavs } = this.props.campaignStore;
-    investmentDetailsSubNavs.forEach((item) => {
-      if (document.getElementById(item.to.slice(1))
-      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 200
-      && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
-        this.props.navStore.setFieldValue('currentActiveHash', item.to);
-      }
-    });
+    const { campaignNavData } = this.props.campaignStore;
+    const navs = toJS((campaignNavData.find(i => i.title === 'Investment Details')).subNavigations);
+    if (navs && Array.isArray(navs)) {
+      navs.forEach((item) => {
+        if (document.getElementById(item.to.slice(1))
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 200
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+          this.props.navStore.setFieldValue('currentActiveHash', item.to);
+        }
+      });
+    }
   }
 
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const emptyContent = 'No data found.';
     const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <Aux>
-        <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} mt-20 anchor-wrap`}>
+        {campaignStatus.useOfProcceds
+        && (
+          <>
+          <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} mt-20 anchor-wrap`}>
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
@@ -70,6 +82,8 @@ class InvestmentDetails extends Component {
           fluid
         /> */}
         <Divider section hidden />
+        </>
+        )}
         <Header as="h3" className="mb-30 anchor-wrap">
           Key Terms
           <span className="anchor" id="key-terms" />
