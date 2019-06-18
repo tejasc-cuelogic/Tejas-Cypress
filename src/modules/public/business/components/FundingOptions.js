@@ -1,17 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import { Header, Container, Menu, Segment, Grid, Responsive, Divider, List } from 'semantic-ui-react';
 import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
 
-const getModule = component => Loadable({
-  loader: () => import(`./fundingOptions/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`./fundingOptions/${component}`));
 
 const navItems = [
   { title: 'Term Notes', to: 'term-notes' },
@@ -60,22 +54,24 @@ export default class FundingOption extends Component {
               slideUpNot
             />
             <Segment attached="bottom" padded>
-              <Switch>
-                <Route
-                  exact
-                  path={match.url}
-                  component={getModule(this.module(navItems[0].title))}
-                />
-                {
-                  navItems.map(item => (
-                    <Route
-                      key={item.to}
-                      path={`${match.url}/${item.to}`}
-                      component={getModule(this.module(item.title))}
-                    />
-                  ))
-                }
-              </Switch>
+              <Suspense fallback={<InlineLoader />}>
+                <Switch>
+                  <Route
+                    exact
+                    path={match.url}
+                    component={getModule(this.module(navItems[0].title))}
+                  />
+                  {
+                    navItems.map(item => (
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        component={getModule(this.module(item.title))}
+                      />
+                    ))
+                  }
+                </Switch>
+              </Suspense>
             </Segment>
             <Divider />
             <List className="learn-more-list">

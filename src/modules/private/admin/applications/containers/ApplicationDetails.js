@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
-import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -11,12 +10,7 @@ import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/details/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/details/${component}`));
 
 @inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
 @observer
@@ -31,7 +25,6 @@ export default class ApplicationDetails extends Component {
     if (this.props.businessAppStore.applicationId !== params.appId) {
       this.props.businessAppStore.fetchAdminApplicationById(params.appId, params.id, params.userId)
         .then(() => {
-          // this.props.businessAppReviewStore.resetForms();
           if (match.isExact) {
             this.props.history.push(`${match.url}/activity-history`);
           }
@@ -233,35 +226,37 @@ Update
           </Grid>
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                component={navItems[0].component || getModule(this.module(navItems[0].title))}
-              />
-              {
-                navItems.map((item) => {
-                  const { params } = match;
-                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
-                  return (
-                    <Route
-                      key={item.to}
-                      path={`${match.url}/${item.to}`}
-                      render={props => (
-                        <CurrentComponent
-                          module={item.title === 'Activity History' ? 'applicationDetails' : false}
-                          showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
-                          resourceId={params.appId}
-                          appType={params.id}
-                          {...props}
-                        />
-                      )
-                      }
-                    />
-                  );
-                })
-              }
-            </Switch>
+            <Suspense fallback={<InlineLoader />}>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={navItems[0].component || getModule(this.module(navItems[0].title))}
+                />
+                {
+                  navItems.map((item) => {
+                    const { params } = match;
+                    const CurrentComponent = (item.component || getModule(this.module(item.title)));
+                    return (
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => (
+                          <CurrentComponent
+                            module={item.title === 'Activity History' ? 'applicationDetails' : false}
+                            showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
+                            resourceId={params.appId}
+                            appType={params.id}
+                            {...props}
+                          />
+                        )
+                        }
+                      />
+                    );
+                  })
+                }
+              </Switch>
+            </Suspense>
           </Card>
         </Modal.Content>
       </Modal>

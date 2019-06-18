@@ -1,19 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import { Modal, Header, Card, Menu, Button, Statistic } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
 import OffersPanel from '../../../shared/offerings/components/shared/OffersPanel';
 
-const getModule = component => Loadable({
-  loader: () => import(`./tabs/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`./tabs/${component}`));
 
 @inject('businessAppReviewStore', 'uiStore')
 @withRouter
@@ -125,18 +119,20 @@ Offer
 )}
                 />
                 <div className="inner-content-spacer">
-                  <Switch>
-                    <Route
-                      exact
-                      path={match.url}
-                      component={getModule(this.module(navItems[0].title))}
-                    />
-                    {
-                    navItems.map(item => (
-                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                    ))
-                  }
-                  </Switch>
+                  <Suspense fallback={<InlineLoader />}>
+                    <Switch>
+                      <Route
+                        exact
+                        path={match.url}
+                        component={getModule(this.module(navItems[0].title))}
+                      />
+                      {
+                      navItems.map(item => (
+                        <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                      ))
+                    }
+                    </Switch>
+                  </Suspense>
                 </div>
                 <Card.Content extra className="center-align">
                   { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? ''
