@@ -81,7 +81,7 @@ const Actions = observer((props) => {
             />
             )
           }
-            {!isPublished
+            {!isPublished && id !== 'new'
             && (
             <Button
               primary
