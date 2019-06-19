@@ -6,7 +6,7 @@ import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 
-@inject('businessAppStore', 'userStore')
+@inject('businessAppStore', 'userStore', 'uiStore')
 @observer
 export default class BusinessDocumentation extends Component {
   componentWillMount() {
@@ -25,15 +25,16 @@ export default class BusinessDocumentation extends Component {
       enableSave,
       businessApplicationDetailsAdmin,
     } = this.props.businessAppStore;
-    let disableFileUpload = true;
-    if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
-      disableFileUpload = false;
-    }
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
+    const { inProgress } = this.props.uiStore;
+    let disableFileUpload = true;
+    if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
+      disableFileUpload = false;
+    }
     return (
       <Aux>
         <FormElementWrap
@@ -176,6 +177,7 @@ export default class BusinessDocumentation extends Component {
               color="green"
               content="Save"
               disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DOC_FRM.meta.isValid : enableSave)}
+              loading={inProgress}
             />
           </div>
           : ''}

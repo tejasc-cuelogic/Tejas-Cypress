@@ -11,7 +11,7 @@ import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../..
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore', 'agreementsStore', 'commonStore', 'userStore')
+@inject('businessAppStore', 'agreementsStore', 'commonStore', 'userStore', 'uiStore')
 @observer
 export default class BusinessDetails extends Component {
   state = {
@@ -67,6 +67,7 @@ export default class BusinessDetails extends Component {
     const { hideFields } = this.props;
     const { docLoading, docIdsLoading } = this.props.agreementsStore;
     let disableFileUpload = true;
+    const { inProgress } = this.props.uiStore;
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
       disableFileUpload = false;
     }
@@ -350,6 +351,7 @@ export default class BusinessDetails extends Component {
               color="green"
               content="Save"
               disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DETAILS_FRM.meta.isValid : enableSave)}
+              loading={inProgress}
             />
           </div>
            : ''}

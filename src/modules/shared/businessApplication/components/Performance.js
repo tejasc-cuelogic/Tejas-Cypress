@@ -6,7 +6,7 @@ import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore', 'commonStore', 'userStore')
+@inject('businessAppStore', 'commonStore', 'userStore', 'uiStore')
 @observer
 export default class Performance extends Component {
   componentWillMount() {
@@ -23,6 +23,7 @@ export default class Performance extends Component {
     const { hideFields } = this.props;
     const { fields } = BUSINESS_PERF_FRM;
     let disableFileUpload = true;
+    const { inProgress } = this.props.uiStore;
     if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
       disableFileUpload = false;
     }
@@ -160,6 +161,7 @@ export default class Performance extends Component {
                 color="green"
                 content="Save"
                 disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_PERF_FRM.meta.isValid : enableSave)}
+                loading={inProgress}
               />
             </div>
             : ''}

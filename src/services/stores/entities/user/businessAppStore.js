@@ -1101,6 +1101,9 @@ export class BusinessAppStore {
       };
       mutationQuery = upsertBusinessApplicationInformationDocumentation;
     }
+    if (isApplicationManager) {
+      variableData.targetIssuerId = this.businessApplicationDetailsAdmin.userId;
+    }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -1120,7 +1123,19 @@ export class BusinessAppStore {
         .then((result) => {
           this.setAppStepsStatus(key, 'status', stepStatus);
           this.businessAppRemoveUploadedFiles();
-          resolve(result);
+          if (isApplicationManager) {
+            if (this.canSubmitApp && this.businessApplicationDetailsAdmin.applicationStage === 'IN_PROGRESS') {
+              this.businessApplicationSubmitAction().then(() => {
+                Helper.toast('Business application submitted successfully!', 'success');
+                this.props.history.push('/app/dashboard');
+                resolve(result);
+              });
+            } else {
+              Helper.toast('Business application updated successfully!', 'success');
+            }
+          } else {
+            resolve(result);
+          }
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
@@ -1129,6 +1144,7 @@ export class BusinessAppStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
+          this.setFieldvalue('enableSave', false);
         });
     });
   }
@@ -1181,7 +1197,6 @@ export class BusinessAppStore {
   @action
   businessAppUploadFiles = (files, fieldName, formName, index = null) => {
     if (typeof files !== 'undefined' && files.length) {
-      this.enableSave = true;
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
         const stepName = this.getFileUploadEnum(fieldName, index);
@@ -1205,10 +1220,8 @@ export class BusinessAppStore {
           }).finally(() => {
             this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
             this.setFieldvalue('isFileUploading', false);
+            this.setFieldvalue('enableSave', true);
           });
-        }).then(() => {
-          console.log(this.applicationId);
-          console.log(this.applicationStep);
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
