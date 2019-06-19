@@ -73,7 +73,7 @@ export default class BusinessDocumentation extends Component {
                     name={field}
                     asterisk="true"
                     fielddata={fields[field]}
-                    ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                    ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                     tooltip={fields[field].tooltip}
                     toolTipClassName="left-align justify-text"
@@ -117,7 +117,7 @@ export default class BusinessDocumentation extends Component {
                   key={field}
                   name={field}
                   fielddata={fields[field]}
-                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                   onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                 />
               ))
@@ -173,15 +173,16 @@ export default class BusinessDocumentation extends Component {
                 multiple
                 name="personalGuaranteeForm"
                 fielddata={fields.personalGuaranteeForm}
-                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                 onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </div>
             )
           }
         </FormElementWrap>
-        {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager ?
-          <div className="right aligned">
+        {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager
+          ? (
+<div className="right aligned">
             <Button
               inverted
               type="button"
@@ -193,6 +194,7 @@ export default class BusinessDocumentation extends Component {
               loading={inProgress}
             />
           </div>
+          )
           : ''}
       </Aux>
     );

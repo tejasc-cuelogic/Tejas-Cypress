@@ -59,7 +59,7 @@ export default class Performance extends Component {
                       name={field}
                       asterisk="true"
                       fielddata={fields[field]}
-                      ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
+                      ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM', null, this.props.userStore.isApplicationManager)}
                       onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
                     />
                   </Grid.Column>
@@ -90,7 +90,7 @@ export default class Performance extends Component {
                   key="sourcesAndUses"
                   name="sourcesAndUses"
                   fielddata={fields.sourcesAndUses}
-                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
+                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM', null, this.props.userStore.isApplicationManager)}
                   onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
                 />
               </Grid.Column>
@@ -159,8 +159,9 @@ export default class Performance extends Component {
             hideFields={hideFields}
             isFileUploading={this.props.businessAppStore.isFileUploading}
           />
-          {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager ?
-            <div className="right aligned">
+          {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager
+            ? (
+<div className="right aligned">
               <Button
                 inverted
                 type="button"
@@ -172,6 +173,7 @@ export default class Performance extends Component {
                 loading={inProgress}
               />
             </div>
+            )
             : ''}
         </Form>
       </div>

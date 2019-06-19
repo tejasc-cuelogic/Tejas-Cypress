@@ -118,7 +118,7 @@ export default class BusinessDetails extends Component {
               asterisk="true"
               name="businessPlan"
               fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
-              ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
+              ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', null, this.props.userStore.isApplicationManager)}
               onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
           </FormElementWrap>
@@ -327,7 +327,7 @@ Owner
                           name="resume"
                           asterisk="true"
                           fielddata={owner.resume}
-                          ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                          ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index, this.props.userStore.isApplicationManager)}
                           onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
                         />
                       </Form.Field>
@@ -360,8 +360,9 @@ Owner
           size="mini"
           className="deletion"
         />
-        {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager ?
-          <div className="right aligned">
+        {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager
+          ? (
+<div className="right aligned">
             <Button
               inverted
               type="button"
@@ -373,7 +374,8 @@ Owner
               loading={inProgress}
             />
           </div>
-           : ''}
+          )
+          : ''}
       </div>
     );
   }
