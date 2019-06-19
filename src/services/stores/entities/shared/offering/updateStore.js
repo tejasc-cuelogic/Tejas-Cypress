@@ -18,6 +18,8 @@ export class UpdateStore {
 
     @observable currentUpdate = {};
 
+    @observable newUpdateId = null;
+
     @observable requestState = {
       skip: 0,
       page: 1,
@@ -130,6 +132,11 @@ export class UpdateStore {
     }
 
     @action
+    setFieldValue = (field, value) => {
+      this[field] = value;
+    }
+
+    @action
     save = (id, status, isManager = false, isAlreadyPublished = false) => {
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       const variables = { offerId: offeringCreationStore.currentOfferingId };
@@ -156,6 +163,9 @@ export class UpdateStore {
             this.approveUpdate(UpdateId);
           } else {
             Helper.toast('Update added.', 'success');
+          }
+          if (id === 'new') {
+            this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
           }
           this.reset();
         })
@@ -209,7 +219,7 @@ export class UpdateStore {
             this.PBUILDER_FRM.fields[key].value = res.offeringUpdatesById[key];
             return null;
           });
-          this.PBUILDER_FRM.fields.tiers.values = res.offeringUpdatesById.tiers;
+          this.PBUILDER_FRM.fields.tiers.values = res.offeringUpdatesById.tiers || [];
           Validator.validateForm(this.PBUILDER_FRM);
         },
       });
@@ -266,6 +276,10 @@ export class UpdateStore {
 
     @computed get loading() {
       return this.data.loading;
+    }
+
+    @computed get offeringUpdateData() {
+      return (this.currentUpdate.data && this.currentUpdate.data.offeringUpdatesById) || null;
     }
 }
 

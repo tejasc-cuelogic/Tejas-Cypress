@@ -5,11 +5,36 @@ import { Button } from 'semantic-ui-react';
 
 const Actions = observer((props) => {
   const {
-    save, meta, isManager, isPending, isPublished,
+    save, meta, isManager, isPending, isPublished, newUpdateId,
     edit, editForm, deleteUpdate, id, cancelUpdate, cancelChanges,
   } = props;
   return (
     <Aux>
+      <Button.Group compact floated="right">
+        <Button
+          inverted
+          color="red"
+          onClick={cancelUpdate}
+          content="Close"
+        />
+        <Button
+          inverted
+          onClick={() => save('DRAFT')}
+          color="green"
+          content="Create"
+          disabled={!meta.isValid}
+        />
+        {newUpdateId
+        && (
+<Button
+  primary
+  onClick={() => save('PENDING')}
+  content={isPending ? 'Awaiting Manager Approval' : 'Submit for Approval'}
+  disabled={!meta.isValid || isPending}
+/>
+        )
+        }
+      </Button.Group>
       {(isManager && !isPublished) || editForm
         ? (
           <Button.Group compact floated="right">

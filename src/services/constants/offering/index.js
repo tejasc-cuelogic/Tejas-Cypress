@@ -1,6 +1,6 @@
 export const UPDATES = {
   title: {
-    value: '', label: 'Title', error: undefined, rule: 'required',
+    value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'Enter update title here...',
   },
   content: {
     value: '', label: 'description', error: undefined, rule: 'required',
