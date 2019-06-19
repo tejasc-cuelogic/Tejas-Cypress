@@ -3,7 +3,7 @@
 ## Cypress Folder Structure
 
 - cypress
-    - testData (named as fixtures in default configuration)
+    - fixtures
 	    - shared
 		    - test.png
 	    - investor
@@ -13,7 +13,7 @@
 		    - issuerPrequal.json
 	    - admin
 		    - offering.json
-    - specs (named as integration default configuration)
+    - integration
 	    - common.utility.js
 	    - module_name
 		    - utility
@@ -27,11 +27,11 @@
 		    - utility
 				  - invet_now.utility.js 
     - plugins
-    - shared (named as support default configuration)
-    - testReports
+    - support
+    - reports
 	    - screenshots
 	    - videos
-	  - README.md
+	- README.md
 
 # `folder details`
 
