@@ -27,7 +27,7 @@
 		    - utility
 				  - invet_now.utility.js 
     - plugins
-    - shared
+    - shared (named as support default configuration)
     - testReports
 	    - screenshots
 	    - videos
