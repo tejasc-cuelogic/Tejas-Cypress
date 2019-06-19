@@ -11,12 +11,10 @@
             position: relative;
         }
         &.dimmer-visible {
-            max-height: 100%;
-            overflow-y: hidden;
-            @media only screen and (min-width:@largestSmallMonitor){
-                padding: @15px @21px;
-                width: 706px;
-            }
+            height: 100%;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
         }
     }
     @media only screen and (max-width:@largestMobileScreen){
