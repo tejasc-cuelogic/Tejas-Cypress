@@ -18,6 +18,9 @@
                 display: flex !important;
                 flex-direction: column;
                 justify-content: center;
+                padding: @15px @21px;
+                width: 706px;
+
             }
 
         }
