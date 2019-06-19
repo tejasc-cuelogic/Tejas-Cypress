@@ -90,7 +90,7 @@ export default class ResetPassword extends Component {
             />
             {errors
               && (
-              <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
               )

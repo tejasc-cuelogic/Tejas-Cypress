@@ -27,11 +27,11 @@ export default class Performance extends Component {
         <Form className="issuer-signup">
           {!hideFields
             && (
-            <FormElementWrap
-              as="h1"
-              header="Performance"
-              subHeader="Quickly, safely and accurately submit your business information."
-            />
+<FormElementWrap
+  as="h1"
+  header="Performance"
+  subHeader="Quickly, safely and accurately submit your business information."
+/>
             )
           }
           <FormElementWrap
@@ -66,10 +66,8 @@ export default class Performance extends Component {
             noDivider={hideFields || formReadOnlyMode}
             header="Sources & Uses"
             subHeader={(
-              <span>
-                Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the
-                {' '}
-                <br />
+<span>
+                Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the <br />
                 proposed NextSeed amount) for your project in addition to the proposed uses of that capital.
               </span>
 )}
@@ -92,16 +90,16 @@ export default class Performance extends Component {
           </FormElementWrap>
           {currentApplicationType === 'business'
             && (
-            <FormElementWrap
-              hideFields={hideFields}
-              noDivider={hideFields || formReadOnlyMode}
-              header="Performance"
-              subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
-            >
+<FormElementWrap
+  hideFields={hideFields}
+  noDivider={hideFields || formReadOnlyMode}
+  header="Performance"
+  subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
+>
               <Grid>
                 {getBusinessTypeCondtion
                   && (
-                  <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+<Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                     <Header as={hideFields ? 'h6' : 'h5'} content="Prior Year" />
                     <div className="field-wrap">
                       {

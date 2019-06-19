@@ -13,10 +13,7 @@ const LegalDetails = observer(({
 }) => (
   <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h3" title={name} className="greeting">
-Welcome
-        {name}
-      </Header>
+      <Header as="h3" title={name} className="greeting">Welcome {name}</Header>
       <p>Let’s create your NextSeed investment account.</p>
       <Divider section />
       <p>
@@ -27,12 +24,7 @@ Welcome
     <Modal.Content className="signup-content">
       <Dimmer className="fullscreen" active={inProgress}>
         <Loader active={inProgress}>
-        Please wait...
-          <br />
-          <br />
-We are verifying your identity.
-          <br />
-This can take up to a minute.
+        Please wait...<br /><br />We are verifying your identity.<br />This can take up to a minute.
         </Loader>
       </Dimmer>
       <Form error onSubmit={onSubmit}>
@@ -125,24 +117,21 @@ This can take up to a minute.
           />
         </Form.Group>
         <p className="note center-align">
-          By selecting
-          {' '}
-          <b>Verify my identity</b>
-, you agree NextSeed may deliver verification
+          By selecting <b>Verify my identity</b>, you agree NextSeed may deliver verification
           codes to you using the phone number you have provided. Codes may be sent using text
           messages, an autodialer, or artificial or prerecorded voice messages to such phone
           number. Your mobile carrier’s messaging and data fees may apply.
         </p>
         {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
           )
         }
         {form.response.qualifiers
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <CipErrors errorsList={form.response.qualifiers} />
           </Message>
           )

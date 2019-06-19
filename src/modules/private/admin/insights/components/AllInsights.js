@@ -134,11 +134,11 @@ export default class AllInsights extends Component {
                   </Table.Row>
                 ))
                   : (
-                    <Table.Row>
-                      <Table.Cell colSpan="7">
-                        <InlineLoader text="No data available." />
-                      </Table.Cell>
-                    </Table.Row>
+<Table.Row>
+                  <Table.Cell colSpan="7">
+                    <InlineLoader text="No data available." />
+                  </Table.Cell>
+                </Table.Row>
                   )}
               </Table.Body>
             </Table>

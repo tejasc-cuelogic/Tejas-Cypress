@@ -24,7 +24,7 @@ export default class ConfirmModal extends Component {
           <Form error onSubmit={this.props.partialSave}>
             {errors
               && (
-              <Message error className="mb-30">
+<Message error className="mb-30">
                 <ListErrors errors={[errors]} />
               </Message>
               )

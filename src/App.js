@@ -191,20 +191,20 @@ class App extends Component {
       <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
         {this.props.authStore.isUserLoggedIn
         && (
-        <IdleTimer
-          ref={(ref) => { this.props.authStore.idleTimer = ref; }}
-          element={document}
-          events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
-          onIdle={this.onIdle}
-          onAction={() => {
-            if (this.props.authStore.idleTimer) {
-              localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
-            }
-          }}
-          debounce={250}
-          timeout={userIdleTime}
-          stopOnIdle
-        />
+<IdleTimer
+  ref={(ref) => { this.props.authStore.idleTimer = ref; }}
+  element={document}
+  events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
+  onIdle={this.onIdle}
+  onAction={() => {
+    if (this.props.authStore.idleTimer) {
+      localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+    }
+  }}
+  debounce={250}
+  timeout={userIdleTime}
+  stopOnIdle
+/>
         )
         }
         <MetaTagGenerator metaTagsData={metaTagsData} />

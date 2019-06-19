@@ -52,8 +52,7 @@ class AvailableCashTransfer extends Component {
             <Grid>
               <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Statistic size="tiny">
-                  <Statistic.Label>
-Available cash
+                  <Statistic.Label>Available cash
                     <Popup
                       trigger={<Icon className="ns-help-circle" />}
                       content="Available cash includes funds that are immediately available for withdrawal. This excludes pending incoming deposits, pending investments, and investment credits."
@@ -91,10 +90,10 @@ Available cash
           exact
           path={`${this.props.match.url}/:action/verify`}
           render={() => (
-            <TransferFundVerifyModal
-              refLink={this.props.refLink}
-              refLinkList={this.props.match.url}
-            />
+<TransferFundVerifyModal
+  refLink={this.props.refLink}
+  refLinkList={this.props.match.url}
+/>
           )
           }
         />

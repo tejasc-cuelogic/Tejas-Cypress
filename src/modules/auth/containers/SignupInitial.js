@@ -60,11 +60,7 @@ class signupInitial extends Component {
           </div>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>
-            <b>Already have an account?</b>
-            {' '}
-            <Link to="/auth/login">Log in</Link>
-          </p>
+          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

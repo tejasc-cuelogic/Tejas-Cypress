@@ -84,13 +84,13 @@ export default class PreQualification extends Component {
         <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
           {!hideFields
           && (
-          <Aux>
+<Aux>
             <Icon className="ns-paper-plane" size="massive" color="green" />
             <FormElementWrap
               as="h1"
               header="Pre-Qualification Application Process"
               subHeader={(
-                <Aux>
+<Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
                   <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
                 </Aux>
@@ -101,7 +101,7 @@ export default class PreQualification extends Component {
           }
           {this.props.isPublic
           && (
-          <FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
+<FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
             <div className="field-wrap">
               <Form.Group widths="equal">
                 {
@@ -123,7 +123,7 @@ export default class PreQualification extends Component {
             </div>
             {!isPrequalQulify
             && (
-            <Aux>
+<Aux>
               <Divider hidden />
               <Button
                 loading={this.props.uiStore.inProgress}
@@ -143,35 +143,33 @@ export default class PreQualification extends Component {
         </Form>
         {isPrequalQulify
         && (
-        <Form onSubmit={this.submit} className="issuer-signup">
+<Form onSubmit={this.submit} className="issuer-signup">
           {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate'
             ? <PreQualRealEstate hideFields={hideFields} applicationType={params.applicationType} />
             : <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
           }
           {!hideFields
           && (
-          <Aux>
+<Aux>
             <Divider hidden />
             {!preQualFormDisabled
               ? (
-                <Button
-                  loading={this.props.uiStore.inProgress}
-                  disabled={!BUSINESS_APP_FRM.meta.isValid
+<Button
+  loading={this.props.uiStore.inProgress}
+  disabled={!BUSINESS_APP_FRM.meta.isValid
                   || (BUSINESS_APP_FRM.meta.isValid && this.props.uiStore.inProgress)}
-                  size="large"
-                  color="green"
-                  className={`${isMobile && 'mb-50'} very relaxed`}
-                >
+  size="large"
+  color="green"
+  className={`${isMobile && 'mb-50'} very relaxed`}
+>
                 Submit
-                </Button>
+              </Button>
               )
               : fetchBusinessApplicationsDataById
               && (
-              <Button as="span" className="time-stamp">
+<Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />
-                Submitted on
-                {' '}
-                {moment(fetchBusinessApplicationsDataById.created && fetchBusinessApplicationsDataById.created.date).format('MM/DD/YYYY')}
+                Submitted on {moment(fetchBusinessApplicationsDataById.created && fetchBusinessApplicationsDataById.created.date).format('MM/DD/YYYY')}
               </Button>
               )
             }

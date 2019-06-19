@@ -76,27 +76,24 @@ export default class CancelInvestment extends Component {
           />
           {!isCancelShowLink
             ? (
-              <Form error onSubmit={this.submit}>
-                {errors
+<Form error onSubmit={this.submit}>
+              {errors
                 && (
-                <Message error className="mt-30">
+<Message error className="mt-30">
                   <ListErrors errors={[errors]} />
                 </Message>
                 )
               }
-                <div className="center-align mt-30">
-                  <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
-                  <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
-                </div>
-              </Form>
+              <div className="center-align mt-30">
+                <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
+                <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
+              </div>
+            </Form>
             )
             : (
-              <div className="center-align mt-30">
-                <Link to="/app/account-details/individual/portfolio" className="back-link">
-                  <Icon className="ns-arrow-right" />
-Go to My Dashboard
-                </Link>
-              </div>
+<div className="center-align mt-30">
+              <Link to="/app/account-details/individual/portfolio" className="back-link"><Icon className="ns-arrow-right" />Go to My Dashboard</Link>
+            </div>
             )
           }
         </Modal.Content>

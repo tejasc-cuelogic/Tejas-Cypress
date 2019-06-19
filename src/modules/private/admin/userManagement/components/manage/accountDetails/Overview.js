@@ -60,7 +60,7 @@ export default class Overview extends Component {
         }
         {get(account, 'details.accountStatus') === 'FROZEN'
         && (
-        <Aux>
+<Aux>
           <LockedInformation account details={account} />
           <Divider />
         </Aux>
@@ -81,7 +81,7 @@ export default class Overview extends Component {
         <Divider />
         {get(account, 'linkedBank.changeRequest')
           && (
-          <Aux>
+<Aux>
             <Header as="h6">Change Bank Account Request</Header>
             <Form.Group widths={2}>
               <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
@@ -99,13 +99,13 @@ export default class Overview extends Component {
             <Table unstackable basic="very" fixed>
               {get(account, 'name') === 'individual'
                 ? (
-                  <IndividualSummary
-                    investor={investor}
-                    account={account}
-                    getRoutingNumber={this.getRoutingNumber}
-                    loading={this.state.loading}
-                    routingNumber={this.props.bankAccountStore.routingNum}
-                  />
+<IndividualSummary
+  investor={investor}
+  account={account}
+  getRoutingNumber={this.getRoutingNumber}
+  loading={this.state.loading}
+  routingNumber={this.props.bankAccountStore.routingNum}
+/>
                 )
                 : get(account, 'name') === 'ira'
                   ? <IraSummary investor={investor} account={account} />
@@ -117,14 +117,14 @@ export default class Overview extends Component {
         </div>
         {cashMovementData && cashMovementData.length
           ? (
-            <Aux>
-              <Card fluid>
-                <Card.Content>
-                  <Header as="h4">Investments and Payments</Header>
-                  <CashMovement data={cashMovementData} />
-                </Card.Content>
-              </Card>
-            </Aux>
+<Aux>
+            <Card fluid>
+              <Card.Content>
+                <Header as="h4">Investments and Payments</Header>
+                <CashMovement data={cashMovementData} />
+              </Card.Content>
+            </Card>
+          </Aux>
           ) : null
         }
       </Form>

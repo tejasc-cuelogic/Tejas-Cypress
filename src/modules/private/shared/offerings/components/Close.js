@@ -122,54 +122,31 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-                <Aux>
-This campaing is still live, set to close
-                  <span className="highlight-text">
-                    {' '}
-                    {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'}
-                    {' '}
-                  </span>
-                </Aux>
-              ) : (
-                <Aux>
-This campaing
-                  <span className="highlight-text">has succeed</span>
-                </Aux>
-              )
+<Aux>This campaing is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
+              </Aux>
+              ) : <Aux>This campaing <span className="highlight-text">has succeed</span></Aux>
             }
           </Header>
           <p>
             {hoursToClose > 0
               ? (
-                <Aux>
+<Aux>
                 Campaign has not reached minimum required amount.
-                MobCycle raised
-                  {' '}
-                  <b> $90,000 </b>
-                  {' '}
-out of required
-                  {' '}
-                  <b>$100,000</b>
-                </Aux>
+                MobCycle raised <b> $90,000 </b> out of required <b>$100,000</b>
+              </Aux>
               )
               : (
-                <Aux>
-              Campaign has reached minimum required amount. MobCycle raised
-                  {' '}
-                  <b>$350,000</b>
-                  {' '}
-from
-                  <b>227 investors</b>
-                  {' '}
-.
-                </Aux>
+<Aux>
+              Campaign has reached minimum required amount. MobCycle raised <b>$350,000</b>
+                {' '}from <b>227 investors</b> .
+              </Aux>
               )
           }
           </p>
           <Divider section />
           {hoursToClose <= 0
             && (
-            <Aux>
+<Aux>
               <Step.Group className="campaign-close">
                 {['Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
                   <Step
@@ -187,7 +164,7 @@ from
               </Step.Group>
               {this.state.activeStep === 1
               && (
-              <Aux>
+<Aux>
                 <Form.Group widths={3}>
                   <MaskedInput
                     name="queueLimit"
@@ -203,8 +180,7 @@ from
                       loading={inProgress === fA.enum}
                       onClick={() => this.closeAction(fA.enum, 1)}
                       primary
-                    >
-                      {fA.label}
+                    >{fA.label}
                     </Button>
                   ))}
                 </Button.Group>
@@ -214,7 +190,7 @@ from
               }
               {this.state.activeStep === 2
                 && (
-                <Aux>
+<Aux>
                   <Form.Group widths={3}>
                     {['queueLimit', 'notePurchaseDate'].map(field => (
                       <MaskedInput
@@ -234,8 +210,7 @@ from
                         loading={inProgress === fA.enum}
                         onClick={() => this.closeAction(fA.enum, 2)}
                         primary
-                      >
-                        {fA.label}
+                      >{fA.label}
                       </Button>
                     ))}
                   </Button.Group>
@@ -245,7 +220,7 @@ from
               }
               {this.state.activeStep === 3
                 && (
-                <Aux>
+<Aux>
                   <Form.Group widths={3}>
                     {
                       Object.keys(OFFERING_CLOSE_3.fields).filter(f => f !== 'scope').map(field => (
@@ -276,8 +251,7 @@ from
                         loading={inProgress === fA.enum}
                         onClick={() => this.closeAction(fA.enum, 3)}
                         primary
-                      >
-                        {fA.label}
+                      >{fA.label}
                       </Button>
                     ))}
                   </Button.Group>
@@ -287,7 +261,7 @@ from
               }
               {this.state.activeStep === 4 && false
                 && (
-                <Aux>
+<Aux>
                   <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
                   <Form>
                     <Form.Group widths={3}>

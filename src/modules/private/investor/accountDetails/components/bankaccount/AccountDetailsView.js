@@ -82,7 +82,7 @@ export default class AccountDetailsView extends Component {
                   : (
 <div className="ui tiny image">
                     <NSImage path="banks/default.png" />
-</div>
+                  </div>
                   )
                 }
               </Item>
@@ -134,7 +134,7 @@ export default class AccountDetailsView extends Component {
                 {
                   <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
                 }
-</Aux>
+                </Aux>
                 )
                 : <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }

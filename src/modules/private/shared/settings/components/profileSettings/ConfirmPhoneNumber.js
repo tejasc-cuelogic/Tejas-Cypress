@@ -148,7 +148,7 @@ export default class ConfirmPhoneNumber extends Component {
             </Form.Field>
             {errors
               && (
-              <Message error className="mb-40">
+<Message error className="mb-40">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
               )

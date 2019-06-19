@@ -74,7 +74,7 @@ describe('Account Creation', () => {
       cy.get('button').contains('Confirm').click();
       cy.wait('@addFunds');
     });
-  };
+  }
 
   const iraAccountCreation = () => {
     cy.wait(1500);

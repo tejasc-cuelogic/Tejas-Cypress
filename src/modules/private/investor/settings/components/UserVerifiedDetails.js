@@ -50,10 +50,8 @@ const userVerifiedDetails = ({
         <dd>{legalDetails.legalAddress.zipCode}</dd> */}
       </dl>
       <p className="note">
-        If any of this information needs to be updated, please contact support at
-        {' '}
-        <a href="mailto:support@nextseed.com">Support@Nextseed.com</a>
-.
+        If any of this information needs to be updated, please contact support at{' '}
+        <a href="mailto:support@nextseed.com">Support@Nextseed.com</a>.
       </p>
     </Card>
   );

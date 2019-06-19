@@ -39,13 +39,13 @@ export default class AccountCreation extends Component {
             exact
             path={this.props.match.url}
             render={props => (
-              <AccountTypes
-                form={INVESTMENT_ACC_TYPES}
-                close={this.handleCloseModal}
-                renderAccType={this.renderAccType}
-                handleAccTypeChange={setInvestmentAccType}
-                {...props}
-              />
+<AccountTypes
+  form={INVESTMENT_ACC_TYPES}
+  close={this.handleCloseModal}
+  renderAccType={this.renderAccType}
+  handleAccTypeChange={setInvestmentAccType}
+  {...props}
+/>
             )}
           />
           <Route exact path={`${this.props.match.url}/individual`} component={IndividualAccCreation} />

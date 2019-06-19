@@ -56,9 +56,7 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <Aux>
-You can choose your
-          {' '}
+        <Aux>You can choose your{' '}
           <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>

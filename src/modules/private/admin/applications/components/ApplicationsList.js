@@ -91,7 +91,7 @@ export default class ApplicationsList extends Component {
                     (application.applicationStatus || application.prequalStatus)
                     !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
                     && (
-                    <Table.Row verticalAlign="top">
+<Table.Row verticalAlign="top">
                       <Table.Cell singleLine>
                         <Header as="h6">
                           <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
@@ -103,10 +103,9 @@ export default class ApplicationsList extends Component {
                         </Header>
                         <div className="table-info-wrap">
                           <p>
-                            <span>
-                              {application.primaryPOC
-                                ? `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}`
-                                : `${application.firstName} ${application.lastName}`
+                            <span>{application.primaryPOC
+                              ? `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}`
+                              : `${application.firstName} ${application.lastName}`
                               }
                             </span>
                             <span>
@@ -122,16 +121,12 @@ export default class ApplicationsList extends Component {
                           </p>
                           <p>
                             <span>
-                              Started
-                              {' '}
+                              Started{' '}
                               <b>
                                 {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${application.created.date}` ? moment(` ${application.created.date}`).format('MM/DD/YYYY') : '-')}
                               </b>
                             </span>
-                            <span>
-Updated
-                              <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
-                            </span>
+                            <span>Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b></span>
                           </p>
                         </div>
                       </Table.Cell>
@@ -140,7 +135,7 @@ Updated
                           <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
                           {application.comments && application.comments.length
                             && (
-                            <Item.Content>
+<Item.Content>
                               <Item.Description>
                                 {application.comments[application.comments.length - 1].text}
                               </Item.Description>
@@ -168,11 +163,11 @@ Updated
                     )
                   ))
                   : (
-                    <Table.Row>
-                      <Table.Cell colSpan="6">
-                        <InlineLoader text="No data available." />
-                      </Table.Cell>
-                    </Table.Row>
+<Table.Row>
+                    <Table.Cell colSpan="6">
+                      <InlineLoader text="No data available." />
+                    </Table.Cell>
+                  </Table.Row>
                   )
                 }
               </Table.Body>

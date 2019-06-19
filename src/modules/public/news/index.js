@@ -106,10 +106,7 @@ class News extends Component {
               <Logo centered dataSrc="LogoBlack" />
             </Link>
           </section>
-          <Header as="h2" className="center-align mt-0">
-Small business investing,
-            <span className="highlight-text">made easy.</span>
-          </Header>
+          <Header as="h2" className="center-align mt-0">Small business investing, <span className="highlight-text">made easy.</span></Header>
           <section>
             <Grid stackable doubling centered relaxed="very" className="mb-30">
               <Grid.Row>
@@ -191,7 +188,7 @@ Small business investing,
                       />
                       {errors
                         && (
-                        <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
                           <ListErrors errors={[customError]} />
                         </Message>
                         )
@@ -222,8 +219,7 @@ Small business investing,
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">Receive</Header>
-                  <p>
-NextSeed collects and processes payments directly
+                  <p>NextSeed collects and processes payments directly
                       into your investment account.
                   </p>
                 </Grid.Column>
@@ -234,8 +230,7 @@ NextSeed collects and processes payments directly
         <section className="bg-offwhite">
           <Container textAlign={isMobile ? 'left' : 'center'} className="mt-30">
             <Header as="h2" className="mb-30">
-            Build an investment portfolio
-              {' '}
+            Build an investment portfolio{' '}
               <Responsive as={Aux} minWidth={1199}><br /></Responsive>
             you care about.
             </Header>
@@ -247,36 +242,36 @@ NextSeed collects and processes payments directly
           </Container>
           {!isMobile
             ? (
-              <Container className="mb-30">
-                <Grid centered stackable className="vertical-gutter">
-                  {businesses.map(b => (
-                    <Grid.Column textAlign="center" width={5}>
-                      <NSImage path={b.image} centered />
-                      <Header as="h5">{b.title}</Header>
-                      <p>{b.description}</p>
-                    </Grid.Column>
-                  ))
+<Container className="mb-30">
+              <Grid centered stackable className="vertical-gutter">
+                {businesses.map(b => (
+                  <Grid.Column textAlign="center" width={5}>
+                    <NSImage path={b.image} centered />
+                    <Header as="h5">{b.title}</Header>
+                    <p>{b.description}</p>
+                  </Grid.Column>
+                ))
               }
-                </Grid>
-              </Container>
+              </Grid>
+            </Container>
             )
             : (
-              <Aux>
-                <Container className="mb-30">
-                  <NsCarousel {...settings}>
-                    {businesses.map(b => (
-                      <Grid.Row>
-                        <Grid.Column className="center-align">
-                          <NSImage path={b.image} centered />
-                          <Header as="h5">{b.title}</Header>
-                          <p>{b.description}</p>
-                        </Grid.Column>
-                      </Grid.Row>
-                    ))
+<Aux>
+              <Container className="mb-30">
+                <NsCarousel {...settings}>
+                  {businesses.map(b => (
+                    <Grid.Row>
+                      <Grid.Column className="center-align">
+                        <NSImage path={b.image} centered />
+                        <Header as="h5">{b.title}</Header>
+                        <p>{b.description}</p>
+                      </Grid.Column>
+                    </Grid.Row>
+                  ))
                 }
-                  </NsCarousel>
-                </Container>
-              </Aux>
+                </NsCarousel>
+              </Container>
+            </Aux>
             )
         }
         </section>

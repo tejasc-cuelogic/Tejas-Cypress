@@ -25,7 +25,7 @@ export default class Track extends Component {
                     </p>
                     {!authStore.isUserLoggedIn
                     && (
-                    <Aux>
+<Aux>
                       <Responsive as={Aux} minWidth={768}>
                         <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
                       </Responsive>

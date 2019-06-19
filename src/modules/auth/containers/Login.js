@@ -114,7 +114,7 @@ class Login extends Component {
             </Form.Field>
             {errors
               && (
-              <Message error className="mt-30">
+<Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
               )
@@ -125,11 +125,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>
-            <b>Don&#39;t have an account?</b>
-            {' '}
-            <Link to="/auth/register">Sign up</Link>
-          </p>
+          <p><b>Don&#39;t have an account?</b> <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

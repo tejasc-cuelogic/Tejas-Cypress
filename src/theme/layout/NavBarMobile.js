@@ -64,40 +64,40 @@ export default class NavBarMobile extends Component {
               </div>
               {location.pathname.startsWith('/business-application/')
                 ? (
-                  <NavigationItems
-                    {...this.props}
-                    isMobBussinessApp
-                    isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
-                  />
+<NavigationItems
+  {...this.props}
+  isMobBussinessApp
+  isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
+/>
                 )
                 : (
-                  <div
-                    className={`public-header-section ${visible ? 'active' : ''}
+<div
+  className={`public-header-section ${visible ? 'active' : ''}
                   ${navStatus === 'sub' ? 'slide-up' : ''}`}
-                  >
-                    {navTitle === 'Home' || (location.pathname.startsWith('/offerings'))
-                      ? (
-                        <Logo
-                          dataSrc="LogoGreenGrey"
-                          className="mobile-header-logo"
-                        />
-                      )
-                      : <Header as="h5">{navTitle}</Header>
-                  }
-                    {!currentUser ? (
-                      <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
-                        {stepInRoute.title}
-                      </Link>
-                    ) : (
-                      <Link
-                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                        className="sign-in neutral-text"
-                      >
-                      Dashboard
-                      </Link>
+>
+                  {navTitle === 'Home' || (location.pathname.startsWith('/offerings'))
+                    ? (
+<Logo
+  dataSrc="LogoGreenGrey"
+  className="mobile-header-logo"
+/>
                     )
+                    : <Header as="h5">{navTitle}</Header>
                   }
-                  </div>
+                  {!currentUser ? (
+                    <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
+                      {stepInRoute.title}
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                      className="sign-in neutral-text"
+                    >
+                      Dashboard
+                    </Link>
+                  )
+                  }
+                </div>
                 )
               }
             </Aux>
@@ -144,9 +144,9 @@ export default class NavBarMobile extends Component {
                     </Menu.Item>
                   ))
                     : (
-                      <Menu.Item className="btn-item">
-                        <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
-                      </Menu.Item>
+<Menu.Item className="btn-item">
+                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
+                  </Menu.Item>
                     )
                   }
                 </div>

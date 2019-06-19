@@ -95,9 +95,7 @@ export default class EditArticle extends Component {
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
-              {isNew ? 'Create' : 'Edit'}
-              {' '}
-Article
+              {isNew ? 'Create' : 'Edit'} Article
               <Actions
                 save={this.save}
                 meta={ARTICLE_FRM.meta}
@@ -202,32 +200,32 @@ Article
                 </Card>
                 {isNew ? ''
                   : (
-                    <Card fluid>
-                      <Card.Content>
-                        <Header as="h4">Thumbnail</Header>
-                        <Form className="cropper-wrap tombstone-img">
-                          {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
-                            <div className="file-uploader attached">
-                              <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
-                              <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
-                            </div>
-                          ) : (
-                            <ImageCropper
-                              fieldData={ARTICLE_FRM.fields.featuredImage}
-                              setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
-                              verifyExtension={handleVerifyFileExtension}
-                              handelReset={() => this.handleresetProfilePhoto('featuredImage')}
-                              verifyImageDimension={this.handelImageDeimension}
-                              field={ARTICLE_FRM.fields.featuredImage}
-                              modalUploadAction={this.uploadMedia}
-                              name="featuredImage"
-                              cropInModal
-                              aspect={3 / 2}
-                            />
-                          )}
-                        </Form>
-                      </Card.Content>
-                    </Card>
+<Card fluid>
+                  <Card.Content>
+                    <Header as="h4">Thumbnail</Header>
+                    <Form className="cropper-wrap tombstone-img">
+                      {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
+                        <div className="file-uploader attached">
+                          <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                          <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
+                        </div>
+                      ) : (
+                        <ImageCropper
+                          fieldData={ARTICLE_FRM.fields.featuredImage}
+                          setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
+                          verifyExtension={handleVerifyFileExtension}
+                          handelReset={() => this.handleresetProfilePhoto('featuredImage')}
+                          verifyImageDimension={this.handelImageDeimension}
+                          field={ARTICLE_FRM.fields.featuredImage}
+                          modalUploadAction={this.uploadMedia}
+                          name="featuredImage"
+                          cropInModal
+                          aspect={3 / 2}
+                        />
+                      )}
+                    </Form>
+                  </Card.Content>
+                </Card>
                   )}
               </Grid.Column>
             </Grid.Row>
