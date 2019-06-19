@@ -75,13 +75,13 @@ export default class ConfirmVerificationCode extends Component {
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
-                autoFocus={!isMobile}
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                autoFocus={!isMobile}
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />

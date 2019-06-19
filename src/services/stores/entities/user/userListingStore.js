@@ -51,6 +51,8 @@ export class UserListingStore {
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
     let deletedAccountStatus = [];
+    const allAccountTypes = ['ADMIN', 'ISSUER', 'IRA', 'INDIVIDUAL', 'ENTITY'];
+    const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'FROZEN', 'LOCKED', 'UNLOCKED'];
     if (isDeleted) {
       if (accountType && accountType.length && !accountStatus) {
         accountType.forEach((s) => {
@@ -68,8 +70,8 @@ export class UserListingStore {
     }
     let params = {
       search: keyword,
-      accountType,
-      accountStatus: isDeleted ? deletedAccountStatus : accountStatus,
+      accountType: !accountType && !accountStatus && !deletedAccountStatus.length ? allAccountTypes : accountType,
+      accountStatus: isDeleted ? deletedAccountStatus : !accountStatus ? allAccountStatus : accountStatus,
       page: reqParams ? reqParams.page : 1,
       limit: getAllUsers ? 100 : this.requestState.perPage,
     };
