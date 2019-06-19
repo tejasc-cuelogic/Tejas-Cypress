@@ -14,8 +14,7 @@ import NeedHelpModal from '../../../../shared/businessApplication/components/Nee
 import LendioSuccess from '../../../../shared/businessApplication/components/lendio/LendioSuccess';
 import { HeaderButtons } from '../../../../shared/businessApplication/components/HeaderButtons';
 
-const pathPrefix = '../../../../shared/businessApplication/components';
-const getModule = component => lazy(() => import(`${pathPrefix}/${component}`));
+const getModule = component => lazy(() => import(`../../../../shared/businessApplication/components/${component}`));
 
 @inject('businessAppStore', 'uiStore', 'navStore')
 @withRouter
