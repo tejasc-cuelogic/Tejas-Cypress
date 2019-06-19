@@ -45,8 +45,8 @@
 - We can add common utility as per requirements but it needs to ignore that file as spec by adding `"ignoreTestFiles": "*.utility.js", ` in cypress.json
  
 `plugins`: This folder contains any third party plugins required
-
-`support`:  
+- test spec for multiple `viewport` there is a plugin proved https://github.com/andrewmcoupe/cy-view
+- there are more plugin to match custom requirements
 
 `screenshots`:   This folder contains below
 - All the test spec wise screenshots taken whenever any tests spec were failed
