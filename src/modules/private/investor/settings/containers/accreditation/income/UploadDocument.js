@@ -11,12 +11,15 @@ export default class UploadDocument extends Component {
   onFileDrop = (files, field) => {
     this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income', '', '', '', this.props.match.params.accountId);
   }
+
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   confirmRemoveDoc = (e, name) => {
     this.props.uiStore.setConfirmBox(name);
   }
+
   handleDelDoc = (field) => {
     this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field, null, this.props.accountType, this.props.match.params.accountId);
   }
@@ -54,8 +57,8 @@ export default class UploadDocument extends Component {
             changed={(e, result) => formChange(e, result, 'INCOME_UPLOAD_DOC_FORM')}
             defaults
             disabled={
-              (INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear.fileId === '' ||
-                INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '')}
+              (INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear.fileId === ''
+                || INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '')}
             containerclassname="ui relaxed list"
           />
           <div className="center-align">

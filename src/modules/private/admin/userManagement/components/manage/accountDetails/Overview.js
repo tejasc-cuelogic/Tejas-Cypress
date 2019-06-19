@@ -24,6 +24,7 @@ export default class Overview extends Component {
     availableCashL: false,
     totalBalanceL: false,
   }
+
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setFieldValue } = this.props.userDetailsStore;
@@ -37,6 +38,7 @@ export default class Overview extends Component {
     }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
     this.props.portfolioStore.getSummary(true);
   }
+
   getRoutingNumber = (e, accountId, userId) => {
     e.stopPropagation();
     this.setState({ loading: true });
@@ -45,6 +47,7 @@ export default class Overview extends Component {
       this.setState({ loading: false });
     }).catch(() => this.setState({ loading: false }));
   }
+
   render() {
     const { getChartData } = this.props.portfolioStore;
     const investor = this.props.userDetailsStore.getDetailsOfUser;
@@ -52,14 +55,16 @@ export default class Overview extends Component {
     const cashMovementData = getChartData('cashMovement');
     return (
       <Form>
-        {this.props.isAdmin &&
-          <AccountHeader showFreezeCTA pathname={this.props.location.pathname} />
+        {this.props.isAdmin
+          && <AccountHeader showFreezeCTA pathname={this.props.location.pathname} />
         }
-        {get(account, 'details.accountStatus') === 'FROZEN' &&
+        {get(account, 'details.accountStatus') === 'FROZEN'
+        && (
         <Aux>
           <LockedInformation account details={account} />
           <Divider />
         </Aux>
+        )
         }
         <Header as="h6">Balances</Header>
         <Form.Group widths={2}>
@@ -74,7 +79,8 @@ export default class Overview extends Component {
           <Form.Input fluid label="GoldStar Contact Id" placeholder="GoldStar Contact Id" value={get(account, 'details.goldstar.contactId') || 'N/A'} readOnly className="display-only" />
         </Form.Group>
         <Divider />
-        {get(account, 'linkedBank.changeRequest') &&
+        {get(account, 'linkedBank.changeRequest')
+          && (
           <Aux>
             <Header as="h6">Change Bank Account Request</Header>
             <Form.Group widths={2}>
@@ -85,36 +91,41 @@ export default class Overview extends Component {
             </Form.Group>
             <Divider />
           </Aux>
+          )
         }
         <Header as="h6">Opening Summary</Header>
         <div className="bg-offwhite">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
-              {get(account, 'name') === 'individual' ?
-                <IndividualSummary
-                  investor={investor}
-                  account={account}
-                  getRoutingNumber={this.getRoutingNumber}
-                  loading={this.state.loading}
-                  routingNumber={this.props.bankAccountStore.routingNum}
-                /> :
-                get(account, 'name') === 'ira' ?
-                  <IraSummary investor={investor} account={account} /> :
-                get(account, 'name') === 'entity' ?
-                  <EntitySummary investor={investor} account={account} /> : null
+              {get(account, 'name') === 'individual'
+                ? (
+                  <IndividualSummary
+                    investor={investor}
+                    account={account}
+                    getRoutingNumber={this.getRoutingNumber}
+                    loading={this.state.loading}
+                    routingNumber={this.props.bankAccountStore.routingNum}
+                  />
+                )
+                : get(account, 'name') === 'ira'
+                  ? <IraSummary investor={investor} account={account} />
+                  : get(account, 'name') === 'entity'
+                    ? <EntitySummary investor={investor} account={account} /> : null
               }
             </Table>
           </div>
         </div>
-        {cashMovementData && cashMovementData.length ?
-          <Aux>
-            <Card fluid>
-              <Card.Content>
-                <Header as="h4">Investments and Payments</Header>
-                <CashMovement data={cashMovementData} />
-              </Card.Content>
-            </Card>
-          </Aux> : null
+        {cashMovementData && cashMovementData.length
+          ? (
+            <Aux>
+              <Card fluid>
+                <Card.Content>
+                  <Header as="h4">Investments and Payments</Header>
+                  <CashMovement data={cashMovementData} />
+                </Card.Content>
+              </Card>
+            </Aux>
+          ) : null
         }
       </Form>
     );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Grid, Header, Divider, Icon } from 'semantic-ui-react';
-import { USER_TYPES_META } from './../../../constants/user';
+import { USER_TYPES_META } from '../../../constants/user';
 
 const GetBtn = ({ type }) => {
   const BtnMeta = {
@@ -21,10 +21,12 @@ class signupInitial extends Component {
     this.props.authStore.resetForm('SIGNUP_FRM');
     console.log(this.props.uiStore.authRef);
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
+
   render() {
     const userTypes = USER_TYPES_META.slice();
     const { SIGNUP_FRM, signupChange } = this.props.authStore;
@@ -58,7 +60,11 @@ class signupInitial extends Component {
           </div>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
+          <p>
+            <b>Already have an account?</b>
+            {' '}
+            <Link to="/auth/login">Log in</Link>
+          </p>
         </Modal.Actions>
       </Modal>
     );

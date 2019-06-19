@@ -19,6 +19,7 @@ export default class Agreement extends React.Component {
     showError: false,
     showAgreementPdf: false,
   }
+
   componentWillMount() {
     const {
       stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm, setFieldValue,
@@ -40,9 +41,11 @@ export default class Agreement extends React.Component {
     }
     setFieldValue('investmentFlowErrorMessage', null);
   }
+
   componentWillUnmount() {
     this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
   }
+
   handleCloseModal = (e) => {
     if (!this.state.showDocuSign && !this.state.showAgreementPdf) {
       this.props.investmentStore.resetData();
@@ -59,6 +62,7 @@ export default class Agreement extends React.Component {
       this.props.history.push(`${this.props.refLink}/overview`);
     }
   }
+
   submit = () => {
     if (this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
       this.setState({ showError: false });
@@ -73,15 +77,18 @@ export default class Agreement extends React.Component {
       this.setState({ showError: true });
     }
   }
+
   handleCancelAgreement = (e) => {
     e.preventDefault();
     this.setState({ open: true });
   }
+
   handleCancel = (e) => {
     e.preventDefault();
     this.props.history.push('agreement');
     this.setState({ open: false });
   }
+
   handleConfirm = () => {
     // const { agreementDetails } = this.props.investmentStore;
     // const { cancelAgreement } = this.props.portfolioStore;
@@ -91,10 +98,12 @@ export default class Agreement extends React.Component {
     this.props.history.push(`${this.props.refLink}/invest-now`);
     this.setState({ open: false });
   }
+
   docuSignHandeler = (event, state) => {
     event.preventDefault();
     this.setState({ showDocuSign: state });
   }
+
   agreementPDFLoader = (event, state, agreementKey, agreementType) => {
     event.preventDefault();
     if (state === true) {
@@ -104,6 +113,7 @@ export default class Agreement extends React.Component {
     }
     this.setState({ showAgreementPdf: state });
   }
+
   render() {
     const {
       AGREEMENT_DETAILS_FORM,
@@ -122,8 +132,8 @@ export default class Agreement extends React.Component {
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
     const { currentInvestmentStatus } = this.props.accreditationStore;
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
-    const regulationCheck = this.props.changeInvestment && investmentRegulation ?
-      investmentRegulation : currentInvestmentStatus;
+    const regulationCheck = this.props.changeInvestment && investmentRegulation
+      ? investmentRegulation : currentInvestmentStatus;
       // regulationCheck === ('BD_506C' || 'BD_506B')
     // const regualtionTypeStatement =
     // regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
@@ -136,10 +146,9 @@ export default class Agreement extends React.Component {
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
           <Modal.Content className="center-align">
             <Header as="h3">Confirm cancellation</Header>
-            {this.props.changeInvestment ?
-              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
-              :
-              <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
+            {this.props.changeInvestment
+              ? <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(previouslyInvestedAmount)} in this offering will remain in place.`}</p>
+              : <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
             }
             <div className="center-align">
               <Button.Group widths="2" className="inline">
@@ -162,14 +171,16 @@ export default class Agreement extends React.Component {
             </div>
             <div style={{ display: this.state.showAgreementPdf ? 'block' : 'none' }}>
               <div className="pdf-viewer">
-                {(docLoading || !embedUrl) ? <InlineLoader /> :
-                <iframe
-                  width="100%"
-                  height="100%"
-                  title="agreement"
-                  src={embedUrl}
-                  ref={(c) => { this.iframeComponent = c; }}
-                />
+                {(docLoading || !embedUrl) ? <InlineLoader />
+                  : (
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      title="agreement"
+                      src={embedUrl}
+                      ref={(c) => { this.iframeComponent = c; }}
+                    />
+                  )
                 }
               </div>
               <div className="center-align mt-20">
@@ -178,13 +189,22 @@ export default class Agreement extends React.Component {
             </div>
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
-                Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                Let&#39;s confirm your investment.
+                <br />
+You are investing
+                <span className="positive-text">
+                  {' '}
+                  {Helper.CurrencyFormat(investmentAmount, 0)}
+                </span>
+                {' '}
+in
+                {businessName}
+.
               </Header>
               <Form
-                error={(this.state.showError &&
-                  !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) ||
-                   investmentFlowErrorMessage}
+                error={(this.state.showError
+                  && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid)
+                   || investmentFlowErrorMessage}
               >
                 <Grid stackable>
                   <Grid.Row>
@@ -198,52 +218,91 @@ export default class Agreement extends React.Component {
                           changed={setCheckbox}
                           customLabel={(
                             <Aux>
-                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
+                              I have reviewed and agree to the terms of the
+                              {' '}
+                              <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>
+.
                             </Aux>
                           )}
                           conditionalCustomLabel={(
-                            startsWith(offeringRegulationType, 'BD_') ?
-                              <Aux>
-                                I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                            startsWith(offeringRegulationType, 'BD_')
+                              ? (
+                                <Aux>
+                                I have reviewed NextSeed’s
+                                  {' '}
+                                  <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>
+, understand that
                                 the entire amount of my investment may be lost,
                                 and confirm that I am in a
                                 financial condition to bear the loss.
                                 I have read and agree to the terms of
-                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
-                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
-                                and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
-                              </Aux>
-                              :
-                              <Aux>
+                                the
+                                  {' '}
+                                  <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>
+,
+                                the
+                                  {' '}
+                                  <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>
+,
+                                and
+                                  {' '}
+                                  <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
+                                </Aux>
+                              )
+                              : (
                                 <Aux>
-                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  <Aux>
+                                  I have reviewed NextSeed’s
+                                    {' '}
+                                    <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>
+, understand that
                                   the entire amount of my investment may be lost,
                                   and confirm that I am in a
                                   financial condition to bear the loss.
                                   I have read and agree to the terms of
-                                  the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
-                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
-                                  and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
+                                  the
+                                    {' '}
+                                    <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>
+,
+                                the
+                                    {' '}
+                                    <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>
+,
+                                  and
+                                    {' '}
+                                    <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
+                                  </Aux>
                                 </Aux>
-                              </Aux>
+                              )
                           )}
                           customUpdateLimitLabel={(
-                            regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
-                              <Aux>
+                            regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck)
+                              ? (
+                                <Aux>
                                 I hereby certify that I have a reasonable expectation that I will
                                  continue to meet or exceed the requirements to be considered an
                                   accredited investor.
-                              </Aux>
-                              :
-                              <Aux>
-                                I confirm that I am complying with my <b>annual investment limit</b> {' '}
-                                {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
-                              </Aux>
+                                </Aux>
+                              )
+                              : (
+                                <Aux>
+                                I confirm that I am complying with my
+                                  {' '}
+                                  <b>annual investment limit</b>
+                                  {' '}
+                                  {' '}
+                                  {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
+                                </Aux>
+                              )
                           )}
                           customRegulationLabel={(
                             <Aux>
-                              I understand that investing in securities sold in reliance on {' '}
-                              {regualtionTypeStatement} involves risks and I should not invest
+                              I understand that investing in securities sold in reliance on
+                              {' '}
+                              {' '}
+                              {regualtionTypeStatement}
+                              {' '}
+involves risks and I should not invest
                                 any funds unless I can afford to lose the entire amount.
                             </Aux>
                           )}
@@ -260,14 +319,16 @@ export default class Agreement extends React.Component {
                     <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
                   </Button.Group>
                 </div>
-                {!this.state.showError && investmentFlowErrorMessage &&
+                {!this.state.showError && investmentFlowErrorMessage
+                  && (
                   <Message error className="mt-30 bottom-error">
                     {investmentFlowErrorMessage}
                   </Message>
+                  )
                 }
-                {this.state.showError &&
-                  !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid &&
-                  <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
+                {this.state.showError
+                  && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid
+                  && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
                 }
               </Form>
             </div>

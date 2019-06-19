@@ -10,6 +10,7 @@ export default class Faqs extends Component {
   componentWillMount() {
     this.props.articleStore.getCategoryListByTypes(false, ['INV_FAQ', 'ISSUER_FAQ']);
   }
+
   render() {
     const { match, refMatch } = this.props;
     return (

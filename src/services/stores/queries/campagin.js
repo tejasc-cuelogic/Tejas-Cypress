@@ -40,6 +40,8 @@ query getOfferingList($filters: OfferingFilterInputType){
         regulation
         minOfferingAmountCF
         maxOfferingAmountCF
+        minOfferingAmount506
+        maxOfferingAmount506
         minOfferingAmount506C
         maxOfferingAmount506C
         offeringDisclaimer
@@ -124,6 +126,8 @@ export const campaignDetailsQuery = gql`
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506
+      maxOfferingAmount506
       minOfferingAmount506C
       maxOfferingAmount506C
       minInvestAmt
@@ -370,6 +374,8 @@ query getOfferingById($id: ID) {
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506
+      maxOfferingAmount506
       minOfferingAmount506C
       maxOfferingAmount506C
       industry

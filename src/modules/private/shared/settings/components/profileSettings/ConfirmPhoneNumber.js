@@ -19,8 +19,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone
         && userDetailsStore.userDetails.phone.number) {
-        const fieldValue =
-        Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
+        const fieldValue = Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
         this.props.identityStore.phoneNumberChange(fieldValue);
       }
     }
@@ -29,9 +28,11 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
+
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     const setMfaMode = !this.props.userDetailsStore.userDetails.phone;
@@ -55,6 +56,7 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => {});
     }
   }
+
   handleChangePhoneNumber = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(true);
@@ -62,6 +64,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.clearErrors();
     }
   }
+
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
     this.props.identityStore.startPhoneVerification('', undefined, isMobile);
@@ -69,6 +72,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.setEditMode(false);
     }
   }
+
   handleCloseModal = () => {
     this.props.uiStore.setDashboardWizardStep();
     if (this.props.refLink) {
@@ -77,12 +81,14 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
+
   handleContinue = () => {
     if (this.props.refLink) {
       this.props.history.push(this.props.refLink);
     }
     this.props.identityStore.setIsOptConfirmed(false);
   }
+
   render() {
     const {
       ID_VERIFICATION_FRM,
@@ -121,29 +127,31 @@ export default class ConfirmPhoneNumber extends Component {
             className="display-only"
             phoneNumberDisplayMode
           />
-          {editMode ?
-            <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link> :
-            <Link className="grey-link green-hover" to="/app/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
+          {editMode
+            ? <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link>
+            : <Link className="grey-link green-hover" to="/app/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
                 className="otp-field"
-                autoFocus={!isMobile}
                 pattern="[0-9]*"
+                autoFocus={!isMobile}
                 inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
             </Form.Field>
-            {errors &&
+            {errors
+              && (
               <Message error className="mb-40">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
+              )
             }
             <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || (errors && errors.message)} />
           </Form>

@@ -61,12 +61,15 @@ class News extends Component {
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.setUserRole('investor');
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+
   handleIsEmailExist = (email) => {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
@@ -87,6 +90,7 @@ class News extends Component {
       });
     }
   };
+
   render() {
     const {
       SIGNUP_FRM, signupChange, pwdInputType, currentScore,
@@ -102,7 +106,10 @@ class News extends Component {
               <Logo centered dataSrc="LogoBlack" />
             </Link>
           </section>
-          <Header as="h2" className="center-align mt-0">Small business investing, <span className="highlight-text">made easy.</span></Header>
+          <Header as="h2" className="center-align mt-0">
+Small business investing,
+            <span className="highlight-text">made easy.</span>
+          </Header>
           <section>
             <Grid stackable doubling centered relaxed="very" className="mb-30">
               <Grid.Row>
@@ -182,10 +189,12 @@ class News extends Component {
                         changed={signupChange}
                         containerclassname="secondary"
                       />
-                      {errors &&
+                      {errors
+                        && (
                         <Message error textAlign="left" className="mt-30">
                           <ListErrors errors={[customError]} />
                         </Message>
+                        )
                       }
                       <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
                     </Form>
@@ -213,7 +222,8 @@ class News extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">Receive</Header>
-                  <p>NextSeed collects and processes payments directly
+                  <p>
+NextSeed collects and processes payments directly
                       into your investment account.
                   </p>
                 </Grid.Column>
@@ -224,7 +234,8 @@ class News extends Component {
         <section className="bg-offwhite">
           <Container textAlign={isMobile ? 'left' : 'center'} className="mt-30">
             <Header as="h2" className="mb-30">
-            Build an investment portfolio{' '}
+            Build an investment portfolio
+              {' '}
               <Responsive as={Aux} minWidth={1199}><br /></Responsive>
             you care about.
             </Header>
@@ -234,36 +245,39 @@ class News extends Component {
             craft breweries and a variety of growing concepts.
             </p>
           </Container>
-          {!isMobile ?
-            <Container className="mb-30">
-              <Grid centered stackable className="vertical-gutter">
-                {businesses.map(b => (
-                  <Grid.Column textAlign="center" width={5}>
-                    <NSImage path={b.image} centered />
-                    <Header as="h5">{b.title}</Header>
-                    <p>{b.description}</p>
-                  </Grid.Column>
-                ))
-              }
-              </Grid>
-            </Container>
-        :
-            <Aux>
+          {!isMobile
+            ? (
               <Container className="mb-30">
-                <NsCarousel {...settings}>
+                <Grid centered stackable className="vertical-gutter">
                   {businesses.map(b => (
-                    <Grid.Row>
-                      <Grid.Column className="center-align">
-                        <NSImage path={b.image} centered />
-                        <Header as="h5">{b.title}</Header>
-                        <p>{b.description}</p>
-                      </Grid.Column>
-                    </Grid.Row>
+                    <Grid.Column textAlign="center" width={5}>
+                      <NSImage path={b.image} centered />
+                      <Header as="h5">{b.title}</Header>
+                      <p>{b.description}</p>
+                    </Grid.Column>
                   ))
-                }
-                </NsCarousel>
+              }
+                </Grid>
               </Container>
-            </Aux>
+            )
+            : (
+              <Aux>
+                <Container className="mb-30">
+                  <NsCarousel {...settings}>
+                    {businesses.map(b => (
+                      <Grid.Row>
+                        <Grid.Column className="center-align">
+                          <NSImage path={b.image} centered />
+                          <Header as="h5">{b.title}</Header>
+                          <p>{b.description}</p>
+                        </Grid.Column>
+                      </Grid.Row>
+                    ))
+                }
+                  </NsCarousel>
+                </Container>
+              </Aux>
+            )
         }
         </section>
         <section>

@@ -1,7 +1,7 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
+import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
@@ -12,7 +12,6 @@ import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
 
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -21,7 +20,7 @@ import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 // import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
-import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
+import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
 const getModule = component => Loadable({
@@ -41,21 +40,21 @@ class offerDetails extends Component {
     preLoading: true,
     found: 0,
   }
+
   componentWillMount() {
     const { currentUser } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
       const oMinData = data ? data[0] : null;
-      if ((currentUser && currentUser.roles.includes('admin')) ||
-        oMinData.isAvailablePublicly ||
-        (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
+      if ((currentUser && currentUser.roles.includes('admin'))
+        || oMinData.isAvailablePublicly
+        || oMinData.stage === 'LIVE'
+        || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-      } else if (currentUser && currentUser.roles.includes('issuer')) {
-        if (oMinData.issuerId !== currentUser.sub) {
-          this.setState(oMinData.stage === 'CREATION' ?
-            { showPassDialog: true, preLoading: false } :
-            { showPassDialog: false, found: 2, preLoading: false });
-        }
+      } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
+        this.setState(oMinData.stage === 'CREATION'
+          ? { showPassDialog: true, preLoading: false }
+          : { showPassDialog: false, found: 2, preLoading: false });
       } else if (currentUser && currentUser.roles.includes('investor')) {
         const params = {
           userId: currentUser.sub,
@@ -63,7 +62,6 @@ class offerDetails extends Component {
           offeringStage: oMinData.stage,
         };
         this.props.campaignStore.isValidInvestorInOffering(params).then((res) => {
-          console.log('res: ', res);
           if (res) {
             this.setState({ preLoading: false, showPassDialog: false });
             this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
@@ -78,34 +76,38 @@ class offerDetails extends Component {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
           this.props.history.push('/auth/login');
-        } else {
-          console.log('.');
         }
       }
-      console.log('checkIn', currentUser && currentUser.sub, oMinData);
     });
   }
+
   componentDidMount() {
     window.scrollTo(0, 0);
   }
+
   componentWillUnmount() {
     this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
     this.props.navStore.setFieldValue('navStatus', 'main');
+    this.props.campaignStore.setFieldValue('details', {});
   }
+
   getOgDataFromSocial = (obj, type, att) => {
     const data = find(obj, o => o.type === type);
     return get(data, att) || '';
   };
+
   authPreviewOffer = (isAuthenticated) => {
     if (isAuthenticated) {
       this.setState({ showPassDialog: false });
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
+
   handleViewGallery = (e) => {
     e.preventDefault();
     this.props.history.push(`${this.props.match.url}/photogallery`);
   }
+
   addRemoveUpdatesSubnav = (oldNav, updates) => {
     const tempNav = [...oldNav];
     if (updates && updates.length === 0 && tempNav[0].subNavigations.length === 5) {
@@ -115,6 +117,7 @@ class offerDetails extends Component {
     }
     return tempNav;
   }
+
   addDataRoomSubnavs = (oldNav, dataRoomDocs) => {
     let tempNav = [];
     if (!dataRoomDocs) {
@@ -123,7 +126,7 @@ class offerDetails extends Component {
         delete tempNav[4].subNavigations;
         delete tempNav[4].subPanel;
       }
-      return tempNav;
+      return tempNav.filter(n => n.title !== 'Data Room');
     }
     oldNav.forEach((item) => {
       const tempItem = item;
@@ -142,6 +145,7 @@ class offerDetails extends Component {
     });
     return tempNav;
   }
+
   removeSubNavs = (oldNav) => {
     const newNavData = [];
     oldNav.forEach((item) => {
@@ -153,83 +157,43 @@ class offerDetails extends Component {
     });
     return newNavData;
   }
-  modifyInvestmentDetailsSubNav = (navList, offeringStage) => {
-    const newNavList = [];
-    const offeringSecurityType = this.props.campaignStore.offerStructure;
-    navList.forEach((item) => {
-      const tempItem = item;
-      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
-        const temNavList = item.subNavigations;
-        if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
-          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-          temNavList.push({
-            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
-          });
-        } else if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
-          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-          temNavList.push({
-            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
-          });
-        } else {
-          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-        }
-        this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
-        tempItem.subNavigations = uniqWith(temNavList, isEqual);
-      }
-      if (tempItem.to === 'data-room') {
-        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
-          newNavList.push(tempItem);
-        }
-      } else {
-        newNavList.push(tempItem);
-      }
-    });
-    return newNavList;
-  }
+
   handleUpdate = (e, { calculations }) => {
     this.props.navStore.setMobileNavStatus(calculations);
   }
+
   render() {
     const {
       match, campaignStore, location,
     } = this.props;
     if (this.state.showPassDialog) {
-      return (<DevPassProtected
-        previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
-        offerPreview
-        authPreviewOffer={this.authPreviewOffer}
-      />);
+      return (
+        <DevPassProtected
+          previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
+          offerPreview
+          authPreviewOffer={this.authPreviewOffer}
+        />
+      );
     }
-    if (!campaignStore.details || campaignStore.details.loading || this.state.preLoading) {
+    if (campaignStore.loading || !campaignStore.campaignStatus.doneComputing || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, navCountData,
+      details, campaign, navCountData, modifySubNavs,
     } = campaignStore;
     let navItems = [];
+    const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
-      navItems = this.removeSubNavs(GetNavMeta(match.url, [], true).subNavigations);
+      navItems = modifySubNavs(cloneDeep(tempNavItems));
+      navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+      navItems = this.removeSubNavs(navItems);
     } else {
-      navItems =
-        this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
-          .subNavigations, get(campaign, 'legal.dataroom.documents'));
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+      navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
+      navItems = modifySubNavs(navItems);
     }
-    const offeringStage = get(campaign, 'stage');
-    navItems =
-      this.modifyInvestmentDetailsSubNav(navItems, offeringStage);
-    if ((details && details.data &&
-      details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) ||
-      this.state.found === 2) {
+    if ((details && details.data
+      && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
+      || this.state.found === 2) {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
@@ -237,11 +201,11 @@ class offerDetails extends Component {
     const isBonusReward = bonusRewards && bonusRewards.length;
     return (
       <Aux>
-        {campaign &&
-          <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
+        {campaign
+          && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
-        {!isMobile &&
-          <CampaignHeader {...this.props} />
+        {!isMobile
+          && <CampaignHeader {...this.props} />
         }
         {/* {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />
@@ -267,10 +231,12 @@ class offerDetails extends Component {
           <Container>
             <section>
               <Grid>
-                {!isMobile &&
+                {!isMobile
+                  && (
                   <Grid.Column width={4}>
                     <CampaignSideBar navItems={navItems} />
                   </Grid.Column>
+                  )
                 }
                 <Grid.Column computer={12} mobile={16}>
                   <Switch>

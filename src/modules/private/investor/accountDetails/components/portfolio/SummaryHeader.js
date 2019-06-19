@@ -12,9 +12,9 @@ import Helper from '../../../../../../helper/utility';
   2: date representation
 */
 
-const showValue = props => ((props.type === 1) && (props.title !== 'TNAR') ?
-  (Helper.MoneyMathDisplayCurrency(props.content, props.fraction)) : (props.type === 1) && (props.title === 'TNAR') ? (props.content !== 'N/A') ? `${props.content} %` : `${props.content}` :
-    (((props.type === 2) ? `date ${props.content}` : props.content)));
+const showValue = props => ((props.type === 1) && (props.title !== 'TNAR')
+  ? (Helper.MoneyMathDisplayCurrency(props.content, props.fraction)) : (props.type === 1) && (props.title === 'TNAR') ? (props.content !== 'N/A') ? `${props.content} %` : `${props.content}`
+    : (((props.type === 2) ? `date ${props.content}` : props.content)));
 
 const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h3">
@@ -31,12 +31,12 @@ const SummaryTitle = props => ((props.details.businessName) ? (
 
 const SummaryHeader = props => (
   <Aux>
-    {props.details.title !== false && props.details.businessName &&
-      <SummaryTitle {...props} />
+    {props.details.title !== false && props.details.businessName
+      && <SummaryTitle {...props} />
     }
     <Card fluid className={props.details.className || ''}>
-      {props.details.title !== false && !props.details.businessName &&
-        <SummaryTitle {...props} />
+      {props.details.title !== false && !props.details.businessName
+        && <SummaryTitle {...props} />
       }
       <Grid stackable doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
         {
@@ -46,7 +46,8 @@ const SummaryHeader = props => (
                 <Statistic size="mini" className={row.status}>
                   <Statistic.Label>
                     {row.title}
-                    {row.info &&
+                    {row.info
+                      && (
                       <Popup
                         trigger={<Icon className="ns-help-circle" />}
                         content={row.info}
@@ -54,11 +55,12 @@ const SummaryHeader = props => (
                         wide
                         hoverable
                       />
+                      )
                     }
                   </Statistic.Label>
                   <Statistic.Value>{showValue(row)}</Statistic.Value>
-                  {row.title === 'Total Balance' &&
-                    <Statistic.Label as={Link} className={props.details.isAccountFrozen ? 'disabled' : ''}to={`/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Statistic.Label>
+                  {row.title === 'Total Balance'
+                    && <Statistic.Label as={Link} className={props.details.isAccountFrozen ? 'disabled' : ''} to={`/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Statistic.Label>
                   }
                 </Statistic>
               </Card.Content>

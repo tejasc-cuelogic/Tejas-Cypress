@@ -12,6 +12,7 @@ export default class General extends Component {
   componentWillMount() {
     this.props.uiStore.setErrors(null);
   }
+
   render() {
     const {
       GEN_INFO_FRM,
@@ -24,7 +25,9 @@ export default class General extends Component {
       <Aux>
         <Header as="h3" textAlign="center">General information</Header>
         <p className="center-align">
-          Let{"'"}s create your Entity Investment Account. Get started by providing your
+          Let
+          {"'"}
+s create your Entity Investment Account. Get started by providing your
           entity information.
         </p>
         <Form error>
@@ -92,10 +95,12 @@ export default class General extends Component {
               />
             </Form.Group>
           </div>
-          {errors &&
+          {errors
+            && (
             <Message className="center-align" error>
               <ListErrors errors={[errors]} />
             </Message>
+            )
           }
         </Form>
       </Aux>

@@ -12,6 +12,7 @@ export default class BusinessDocumentation extends Component {
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
+
   render() {
     const {
       BUSINESS_DOC_FRM,
@@ -40,11 +41,12 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Statements & Agreements"
-          subHeader={
+          subHeader={(
             <span>
               Provide the most recent 6 months of bank statements for
               your business accounts. For new entities, provide if
-              statements are available.<br />
+              statements are available.
+              <br />
               Also provide the lease for your location. If only an LOIwith the landlord
               is currently available, please upload the LOI for review purposes.
               <Popup
@@ -55,7 +57,7 @@ export default class BusinessDocumentation extends Component {
                 wide
               />
             </span>
-          }
+)}
         >
           <Grid stackable columns="equal">
             {
@@ -86,16 +88,20 @@ export default class BusinessDocumentation extends Component {
           header="Tax Returns"
           subHeader="Tax returns are used as part of NextSeed’s diligence process."
         >
-          {!hideFields &&
+          {!hideFields
+            && (
             <List bulleted>
               <List.Item>
-                <b>For new entities</b>, please submit your personal tax returns and, if
+                <b>For new entities</b>
+, please submit your personal tax returns and, if
                 available, tax returns of a different business entity that you currently own.
               </List.Item>
               <List.Item>
-                <b>For existing entities</b>, please submit tax returns for the entity.
+                <b>For existing entities</b>
+, please submit tax returns for the entity.
               </List.Item>
             </List>
+            )
           }
           <Divider hidden />
           <div className="or-divider">
@@ -144,13 +150,19 @@ export default class BusinessDocumentation extends Component {
             changed={businessDocChange}
             containerclassname="button-radio"
           />
-          {getPersonalGuaranteeCondition &&
+          {getPersonalGuaranteeCondition
+            && (
             <div>
-              {!hideFields &&
+              {!hideFields
+              && (
               <p>
-                Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
+                Please
+                {' '}
+                <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>
+, fill out and upload the
                 Personal Guarantee Form along with any supporting documentation
               </p>
+              )
               }
               <DropZone
                 sharableLink
@@ -165,6 +177,7 @@ export default class BusinessDocumentation extends Component {
                 onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </div>
+            )
           }
         </FormElementWrap>
         {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager ?

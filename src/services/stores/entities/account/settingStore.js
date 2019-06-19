@@ -6,6 +6,7 @@ import { DataFormatter } from '../../../../helper';
 
 export class SettingStore {
   @observable settingsInfo = [];
+
   @observable includeData = [];
 
   @observable

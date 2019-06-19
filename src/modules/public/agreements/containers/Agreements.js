@@ -32,19 +32,22 @@ export default class TermsOfUse extends Component {
       }
     }
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
-        {isMobile &&
-        <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+        {isMobile
+        && <SecondaryMenu secondary vertical match={match} navItems={navItems} />
         }
         <section>
           <Container>
             <Grid className="legal-section">
-              {!isMobile &&
+              {!isMobile
+                && (
                 <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
                   <div className="sticky-sidebar legal-sidebar">
                     <SecondaryMenu
@@ -56,6 +59,7 @@ export default class TermsOfUse extends Component {
                     />
                   </div>
                 </Grid.Column>
+                )
               }
               <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
                 <Switch>

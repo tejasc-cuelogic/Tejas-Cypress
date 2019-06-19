@@ -11,7 +11,7 @@ import Transactions from './Transactions';
 import Updates from './Updates';
 import Comments from './Comments';
 import OfferingCreation from './OfferingCreation';
-import ActivityHistory from '../../../shared/ActivityHistory';
+import ActivityHistory from '../../ActivityHistory';
 
 const OfferingModule = (to) => {
   let module = null;

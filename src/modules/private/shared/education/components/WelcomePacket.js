@@ -16,6 +16,7 @@ export default class WelcomePacket extends Component {
       });
     }
   }
+
   render() {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
@@ -24,8 +25,8 @@ export default class WelcomePacket extends Component {
           <Grid.Row>
             <Grid.Column className="welcome-packet">
               <div className="pdf-viewer">
-                {(docLoading || !embedUrl) ? <InlineLoader /> :
-                <iframe width="100%" height="100%" title="agreement" allowFullScreen="true" src={embedUrl} />}
+                {(docLoading || !embedUrl) ? <InlineLoader />
+                  : <iframe width="100%" height="100%" title="agreement" allowFullScreen="true" src={embedUrl} />}
               </div>
             </Grid.Column>
           </Grid.Row>

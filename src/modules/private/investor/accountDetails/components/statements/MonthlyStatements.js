@@ -5,7 +5,7 @@ import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
-import { InlineLoader, NsPagination } from './../../../../../../theme/shared';
+import { InlineLoader, NsPagination } from '../../../../../../theme/shared';
 
 const result = {
   columns: [
@@ -21,6 +21,7 @@ export default class MonthlyStatements extends Component {
   state = {
     pdfLoading: false,
   }
+
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
     this.props.statementStore.resetPagination();
@@ -69,8 +70,8 @@ export default class MonthlyStatements extends Component {
                   result={result}
                 />
               </Card>
-              {totalRecords > 0 && totalRecords > requestState.perPage &&
-              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              {totalRecords > 0 && totalRecords > requestState.perPage
+              && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>
           </Grid.Row>

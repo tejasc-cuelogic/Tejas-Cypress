@@ -80,12 +80,33 @@ export const CAMPAIGN_REGULATION_DETAILED = {
     BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
   },
   TOOLTIP: {
-    FP_TX: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    FP_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_506C: <span>Regulation D 506(C) offerings allow Accredited Investors to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_506B: <span>Regulation B 506(B) offerings allow Accredited Investors to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_CF_506C: <span>Parallel offerings are raising money under two different regulations. A portion of this raise is being conducted under <a target="_blank" href="/resources/education-center/investor/making-a-reg-d-investment">Reg D 506(C)</a> and a portion is being raised under <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Regulation Crowdfunding</a></span>,
+    FP_TX: <span>
+Regulation Crowdfunding offerings allow everyone to invest.
+      <a target="_blank" href="/resources/education-center">Learn more</a>
+    </span>,
+    FP_CF: <span>
+Regulation Crowdfunding offerings allow everyone to invest.
+      <a target="_blank" href="/resources/education-center">Learn more</a>
+    </span>,
+    BD_CF: <span>
+Regulation Crowdfunding offerings allow everyone to invest.
+      <a target="_blank" href="/resources/education-center">Learn more</a>
+    </span>,
+    BD_506C: <span>
+Regulation D 506(C) offerings allow Accredited Investors to invest.
+      <a target="_blank" href="/resources/education-center">Learn more</a>
+    </span>,
+    BD_506B: <span>
+Regulation B 506(B) offerings allow Accredited Investors to invest.
+      <a target="_blank" href="/resources/education-center">Learn more</a>
+    </span>,
+    BD_CF_506C: <span>
+Parallel offerings are raising money under two different regulations. A portion of this raise is being conducted under
+      <a target="_blank" href="/resources/education-center/investor/making-a-reg-d-investment">Reg D 506(C)</a>
+      {' '}
+and a portion is being raised under
+      <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Regulation Crowdfunding</a>
+    </span>,
   },
 };
 export const CAMPAIGN_REGULATION_ABREVIATION = {

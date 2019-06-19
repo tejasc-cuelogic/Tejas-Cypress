@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Verification from './shared/Verification';
 import PopulateAccreditationSteps from './PopulateAccreditationSteps';
-import { NET_WORTH, INCOME_QAL } from './../../../../../../services/constants/investmentLimit';
+import { NET_WORTH, INCOME_QAL } from '../../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
 @withRouter
@@ -26,9 +26,11 @@ export default class Accreditation extends React.Component {
       }
     });
   }
+
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
+
   multiClickHandler = (step) => {
     const { params } = this.props.match;
     if (step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') {
@@ -45,6 +47,7 @@ export default class Accreditation extends React.Component {
       this.handleStepChange(step.stepToBeRendered);
     }
   }
+
   render() {
     const {
       ACCREDITATION_FORM,
@@ -58,8 +61,8 @@ export default class Accreditation extends React.Component {
         key: 'VERIFICATION',
         component: <Verification step={3} refLink={this.props.refLink} type={1} />,
       },
-    ] : ACCREDITATION_FORM.fields.method.value === 'INCOME' ?
-      [
+    ] : ACCREDITATION_FORM.fields.method.value === 'INCOME'
+      ? [
         { key: 'ACCREDITATION_FORM' },
         { key: 'INCOME_EVIDENCE_FORM' },
         {
@@ -75,8 +78,8 @@ export default class Accreditation extends React.Component {
           key: 'VERIFICATION',
           component: <Verification step={3} refLink={this.props.refLink} type={1} />,
         },
-      ] :
-        [
+      ]
+        : [
           { key: 'ACCREDITATION_FORM' },
           { key: 'NETWORTH_QAL_FORM', enableNextBtn: true },
           { key: 'INCOME_EVIDENCE_FORM' },

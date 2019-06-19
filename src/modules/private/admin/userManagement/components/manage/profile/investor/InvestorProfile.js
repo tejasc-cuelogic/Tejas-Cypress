@@ -8,9 +8,11 @@ import { FormInput, MaskedInput } from '../../../../../../../../theme/form';
 @observer
 export default class InvestorProfile extends Component {
   state = { displayMode: true };
+
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_INVESTOR_PROFILE', 'investorProfileData');
   }
+
   render() {
     const { USER_INVESTOR_PROFILE, formChange } = this.props.userDetailsStore;
     const formName = 'USER_INVESTOR_PROFILE';
@@ -19,7 +21,13 @@ export default class InvestorProfile extends Component {
       <Form>
         <Header as="h4">
           Investor Profile
-          <Link to={this.props.match.url} className="link pull-right"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
+          <Link to={this.props.match.url} className="link pull-right">
+            <small>
+              <Icon className="ns-pencil" />
+              {' '}
+Edit profile data
+            </small>
+          </Link>
         </Header>
         <Header as="h6">Employment</Header>
         <Form.Group widths={3}>

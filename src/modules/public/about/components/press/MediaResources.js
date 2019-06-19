@@ -5,7 +5,12 @@ const MediaResources = ({ title, resources }) => (
   <List link relaxed="very">
     <List.Header>{title}</List.Header>
     <Divider />
-    {resources.map(r => <List.Item as="a"><Icon className="ns-download" />{r}</List.Item>)}
+    {resources.map(r => (
+      <List.Item as="a">
+        <Icon className="ns-download" />
+        {r}
+      </List.Item>
+    ))}
   </List>
 );
 

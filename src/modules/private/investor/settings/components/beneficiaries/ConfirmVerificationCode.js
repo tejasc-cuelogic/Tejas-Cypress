@@ -19,6 +19,7 @@ export default class ConfirmVerificationCode extends Component {
       this.props.history.push(this.props.refLink);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
@@ -74,22 +75,24 @@ export default class ConfirmVerificationCode extends Component {
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
-                autoFocus={!isMobile}
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                autoFocus={!isMobile}
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />
               <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={e => this.resendVerification(e)} />
             </Form.Field>
-            {errors &&
+            {errors
+              && (
               <Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTP_VERIFY_META.meta.isValid} />
           </Form>

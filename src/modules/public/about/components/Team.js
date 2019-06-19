@@ -3,9 +3,9 @@ import Aux from 'react-aux';
 import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid } from 'semantic-ui-react';
-import TeamModal from '../components/TeamModal';
+import TeamModal from './TeamModal';
 import { InlineLoader } from '../../../../theme/shared';
-import TeamList from '../components/TeamList';
+import TeamList from './TeamList';
 
 // const isTablet = document.documentElement.clientWidth < 992;
 @inject('teamStore')
@@ -14,6 +14,7 @@ class team extends Component {
   componentWillMount() {
     this.props.teamStore.initRequest();
   }
+
   render() {
     const { teamMembers, loading } = this.props.teamStore;
     const teamInfo = (
@@ -47,7 +48,8 @@ class team extends Component {
             props => <TeamModal refLink={this.props.match.url} {...props} />
           }
         />
-      </Grid>);
+      </Grid>
+    );
     return (
       <Aux>
         {loading ? (<InlineLoader />)

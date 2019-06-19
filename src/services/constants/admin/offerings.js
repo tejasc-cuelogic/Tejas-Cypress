@@ -172,6 +172,20 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
+  minOfferingAmount506: {
+    value: null,
+    label: 'Minimum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  maxOfferingAmount506: {
+    value: null,
+    label: 'Maximum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
   legalBusinessType: {
     value: '',
     label: 'Legal Business Type',
@@ -1464,7 +1478,12 @@ export const GENERAL = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Type your text here...',
-      tooltip: (<span>See this link <a href="https://www.sec.gov/smallbusiness/exemptofferings" target="_blank" rel="noopener noreferrer">https://www.sec.gov/smallbusiness/exemptofferings</a> for more information from the SEC</span>),
+      tooltip: (<span>
+See this link
+        <a href="https://www.sec.gov/smallbusiness/exemptofferings" target="_blank" rel="noopener noreferrer">https://www.sec.gov/smallbusiness/exemptofferings</a>
+        {' '}
+for more information from the SEC
+                </span>),
     },
     securitiesOffered: {
       label: 'Securities Offered',

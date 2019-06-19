@@ -15,12 +15,15 @@ export default class Documentation extends Component {
     }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.documentation.managerOverview');
   }
+
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('DOCUMENTATION_FRM');
   }
+
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
+
   render() {
     const { DOCUMENTATION_FRM, formChange, inProgress } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
@@ -29,10 +32,10 @@ export default class Documentation extends Component {
       businessApplicationDetailsAdmin, applicationReviewLoading,
     } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
-    const submitted = (review && review.documentation && review.documentation &&
-      review.documentation.submitted) ? review.documentation.submitted : null;
-    const approved = (review && review.documentation && review.documentation &&
-      review.documentation.approved) ? review.documentation.approved : null;
+    const submitted = (review && review.documentation && review.documentation
+      && review.documentation.submitted) ? review.documentation.submitted : null;
+    const approved = (review && review.documentation && review.documentation
+      && review.documentation.approved) ? review.documentation.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
       && !isManager) || (isManager && approved && approved.status));
     if (applicationReviewLoading) {

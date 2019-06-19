@@ -19,6 +19,16 @@ export const common = {
       required: 'This field is required',
     },
   },
+  text: {
+    value: '',
+    label: 'Text',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'This field is required',
+    },
+  },
 };
 export const STORAGE_DETAILS_SYNC = {
   userId: { ...common.userId },
@@ -85,4 +95,62 @@ export const PROCESS_FULL_ACCOUNT_META = {
 export const RECREATEGOLDSTAR_META = {
   userId: { ...common.userId },
   accountId: { ...common.accountId },
+};
+
+export const ENCRYPTDECRYPTUTILITY_META = {
+  userId: { ...common.userId },
+  text: { ...common.text },
+};
+export const AUDITBOXFOLDER_META = {
+  waitingTime: {
+    key: 'waitingTime',
+    value: '',
+    label: 'Waiting Time',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  concurrency: {
+    key: 'concurrency',
+    value: '',
+    label: 'Concurrency',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  queueLimit: {
+    key: 'queueLimit',
+    value: '',
+    label: 'Queue Limit',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  jobId: {
+    key: 'jobId',
+    value: '',
+    label: 'Job Id',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  userId: {
+    key: 'userId',
+    value: '',
+    label: 'User Id',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  role: {
+    key: 'role',
+    value: '',
+    values: [
+      { key: 'Investor', text: 'Investor', value: 'INVESTOR' },
+      { key: 'Issuer', text: 'Issuer', value: 'ISSUER' },
+    ],
+    label: 'User Role',
+    error: undefined,
+    rule: 'required',
+  },
 };

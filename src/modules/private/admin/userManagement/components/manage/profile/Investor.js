@@ -23,6 +23,7 @@ export default class Investor extends Component {
       this.props.history.push(`${this.props.match.url}/basic`);
     }
   }
+
   getUserStorageDetails = (e) => {
     e.preventDefault();
     const userId = get(this.props.userDetailsStore.getDetailsOfUser, 'id');
@@ -38,6 +39,7 @@ export default class Investor extends Component {
         .catch(() => this.props.uiStore.removeOneFromProgressArray('getStorageDetails'));
     }
   }
+
   render() {
     const { getActiveAccountList } = this.props.investmentLimitStore;
     const { inProgressArray } = this.props.uiStore;

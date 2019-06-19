@@ -50,3 +50,27 @@ mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
     accountId: $accountId,
   )
 }`;
+export const encryptOrDecryptUtility = gql`
+query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
+  encryptOrDecryptValue(
+   userId: $userId
+   text: $text
+   type: $type
+ )
+}`;
+export const auditBoxFolder = gql`
+mutation _auditBox($role:UserRoleEnum!, $userId: String, $jobId: String, $waitingTime: Int, $concurrency: Int,$queueLimit: Int) {
+  auditBox(
+    role: $role,
+    userId: $userId
+    jobId: $jobId
+    waitingTime: $waitingTime
+    concurrency: $concurrency
+    queueLimit: $queueLimit
+  ){
+    activityType
+    subType
+    activityTitle
+    activity
+  }
+}`;

@@ -1,35 +1,30 @@
-/*******************************
+/** *****************************
           Build Task
-*******************************/
+****************************** */
 
-var
-  gulp         = require('gulp'),
+const
+  gulp = require('gulp');
 
-  // gulp dependencies
-  chmod        = require('gulp-chmod'),
-  gulpif       = require('gulp-if'),
+// gulp dependencies
+const chmod = require('gulp-chmod');
+const gulpif = require('gulp-if');
 
-  // config
-  config       = require('../config/user'),
-  tasks        = require('../config/tasks'),
+// config
+const config = require('../config/user');
+const tasks = require('../config/tasks');
 
-  // shorthand
-  globs        = config.globs,
-  assets       = config.paths.assets,
-  output       = config.paths.output,
-  source       = config.paths.source,
+// shorthand
+const { globs } = config;
+const { assets } = config.paths;
+const { output } = config.paths;
+const { source } = config.paths;
 
-  log          = tasks.log
-;
-
-module.exports = function(callback) {
-
+const { log } = tasks;
+module.exports = function (callback) {
   console.info('Building assets');
 
   // copy assets
-  return gulp.src(source.themes + '/**/assets/**/*.*')
+  return gulp.src(`${source.themes}/**/assets/**/*.*`)
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
-    .pipe(gulp.dest(output.themes))
-  ;
-
+    .pipe(gulp.dest(output.themes));
 };

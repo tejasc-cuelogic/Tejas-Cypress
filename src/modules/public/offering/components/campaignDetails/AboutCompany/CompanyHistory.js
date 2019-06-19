@@ -17,8 +17,9 @@ class CompanyHistory extends Component {
           <span className="anchor" id="history" />
         </Header>
         {
-          campaign && campaign.offering && campaign.offering.about &&
-            campaign.offering.about.history && campaign.offering.about.history.length ?
+          campaign && campaign.offering && campaign.offering.about
+            && campaign.offering.about.history && campaign.offering.about.history.length
+            ? (
               <List className="history-section">
                 {
                 campaign.offering.about.history.map(data => (
@@ -34,8 +35,8 @@ class CompanyHistory extends Component {
                 ))
               }
               </List>
-            :
-              <InlineLoader text={emptyHistoryStatement} className="bg-offwhite" />
+            )
+            : <InlineLoader text={emptyHistoryStatement} className="bg-offwhite" />
         }
       </Aux>
     );

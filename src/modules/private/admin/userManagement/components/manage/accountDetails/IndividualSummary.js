@@ -26,11 +26,11 @@ const IndividualSummary = ({
       <Table.Cell>Linked Bank: </Table.Cell>
       <Table.Cell>
         {get(account, 'details.linkedBank.bankName') ? `${get(account, 'details.linkedBank.bankName')} (${get(account, 'details.linkedBank.accountNumber')}) ` : 'N/A'}
-        {get(account, 'details.linkedBank.bankName') ? loading ?
-          'Loading...' :
-          routingNumber ||
-          <Button color="blue" onClick={e => getRoutingNumber(e, get(account, 'details.accountId'), get(investor, 'id'))} className="link-button"> Click for Routing # </Button>
-        : ''}
+        {get(account, 'details.linkedBank.bankName') ? loading
+          ? 'Loading...'
+          : routingNumber
+          || <Button color="blue" onClick={e => getRoutingNumber(e, get(account, 'details.accountId'), get(investor, 'id'))} className="link-button"> Click for Routing # </Button>
+          : ''}
       </Table.Cell>
     </Table.Row>
     <Table.Row>

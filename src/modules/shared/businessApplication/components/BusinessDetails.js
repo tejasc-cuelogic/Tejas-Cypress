@@ -48,6 +48,7 @@ export default class BusinessDetails extends Component {
       currentIndex: index,
     });
   }
+
   handleLearnMore = () => {
     const { getBoxLink, setField, agreements } = this.props.agreementsStore;
     setField('docLoading', true);
@@ -77,33 +78,36 @@ export default class BusinessDetails extends Component {
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
-          {!hideFields &&
+          {!hideFields
+            && (
             <FormElementWrap
               as="h1"
               header={`${currentApplicationType === 'business' ? 'Business' : 'Real Estate'} Details`}
               subHeader="Quickly, safely and accurately submit your business information."
             />
+            )
           }
           <FormElementWrap
             hideFields={hideFields}
             header="Business Plan"
-            subHeader={
+            subHeader={(
               <Aux>
                 The business plan is intended to describe the who, what, when, where,
                 how and why of your project.*
-                {!hideFields && currentApplicationType === 'business' ?
-                  <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
-                  :
-                  <Popup
-                    trigger={<Icon className="ns-help-circle" />}
-                    content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
-                    position="top center"
-                    className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
-                    wide
-                  />
+                {!hideFields && currentApplicationType === 'business'
+                  ? <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
+                  : (
+                    <Popup
+                      trigger={<Icon className="ns-help-circle" />}
+                      content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
+                      position="top center"
+                      className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
+                      wide
+                    />
+                  )
                 }
               </Aux>
-            }
+)}
           >
             <DropZone
               sharableLink
@@ -123,16 +127,20 @@ export default class BusinessDetails extends Component {
             header="Existing Debt"
             subHeader="What are the outstanding debt obligations for the business?"
           >
-            {BUSINESS_DETAILS_FRM.fields.debts.length &&
-            BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
+            {BUSINESS_DETAILS_FRM.fields.debts.length
+            && BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
               <Grid>
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                   <div className="field-wrap">
-                    <Header as={hideFields ? 'h6' : 'h5'} className="mb-20">Existing Debt {index + 1}
-                      {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
+                    <Header as={hideFields ? 'h6' : 'h5'} className="mb-20">
+Existing Debt
+                      {index + 1}
+                      {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1
+                        && (
                         <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
+                        )
                       }
                     </Header>
                     <Form.Group widths="equal">
@@ -180,11 +188,11 @@ export default class BusinessDetails extends Component {
                   </div>
                 </Grid.Column>
               </Grid>
-              ))
+            ))
             }
             <Divider hidden />
-            {!hideFields &&
-              <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+            {!hideFields
+              && <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
             }
           </FormElementWrap>
           <FormElementWrap
@@ -193,11 +201,14 @@ export default class BusinessDetails extends Component {
             header="Owners"
             subHeader="Please list all individuals with at least 20% ownership."
           >
-            {!hideFields &&
+            {!hideFields
+              && (
               <Accordion>
                 <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
                   <Icon className="ns-chevron-up" />
-                  {this.state.legalNoteToggle ? 'Hide' : 'Show'} legal note
+                  {this.state.legalNoteToggle ? 'Hide' : 'Show'}
+                  {' '}
+legal note
                 </Accordion.Title>
                 <Accordion.Content active={this.state.legalNoteToggle}>
                   <p>
@@ -213,23 +224,29 @@ export default class BusinessDetails extends Component {
                     information herein is true, complete and accurate. You agree to immediately
                     notify NextSeed Management LLC if any of such information changes materially in
                     the 60 days after the date of this application. A fascimile, electronic or
-                    other copy of this authorization shall be as valid as the original.<br />
+                    other copy of this authorization shall be as valid as the original.
+                    <br />
                     NOTE: This will not impact your credit score. All information you provide
                     to us is strictly confidential and we will never disclose it to anyone
                     without your express consent unless required by applicable law or regulation
                   </p>
                 </Accordion.Content>
               </Accordion>
+              )
             }
-            {BUSINESS_DETAILS_FRM.fields.owners.length &&
-            BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
+            {BUSINESS_DETAILS_FRM.fields.owners.length
+            && BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
               <Grid>
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                  <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
-                    {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
+                  <Header as={hideFields ? 'h6' : 'h5'}>
+Owner
+                    {index + 1}
+                    {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1
+                      && (
                       <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
+                      )
                     }
                   </Header>
                   <div className="field-wrap">
@@ -318,13 +335,15 @@ export default class BusinessDetails extends Component {
                   </div>
                 </Grid.Column>
               </Grid>
-              ))
+            ))
             }
-            {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
+            {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5
+              && (
               <Aux>
                 <Divider hidden />
                 <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               </Aux>
+              )
             }
           </FormElementWrap>
           <AppNavigation

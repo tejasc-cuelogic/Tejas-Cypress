@@ -12,12 +12,15 @@ export default class CrowdPay extends Component {
   componentWillMount() {
     this.props.bankAccountStore.initRequest();
   }
-  setSearchParam = (e, { name, value }) =>
-    this.props.bankAccountStore.setInitiateSrch(name, value);
+
+  setSearchParam = (e, { name, value }) => this.props.bankAccountStore.setInitiateSrch(name, value);
+
   toggleSearch = () => this.props.bankAccountStore.toggleSearch();
+
   executeSearch = (e) => {
     this.props.bankAccountStore.setInitiateSrch('keyword', e.target.value);
   }
+
   dateFilterStart = (date) => {
     if (date) {
       this.props.bankAccountStore.setInitiateSrch('startDate', date);
@@ -29,6 +32,7 @@ export default class CrowdPay extends Component {
       this.props.bankAccountStore.setInitiateSrch('endDate', date);
     }
   }
+
   render() {
     // match
     const {
@@ -39,7 +43,7 @@ export default class CrowdPay extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P1={
+        P1={(
           <Aux>
             <ByKeyword
               change={this.executeSearch}
@@ -57,7 +61,7 @@ export default class CrowdPay extends Component {
               containerclassname="ui list horizontal"
             />
           </Aux>
-        }
+)}
       >
         <AllRequests {...this.props} />
       </PrivateLayout>

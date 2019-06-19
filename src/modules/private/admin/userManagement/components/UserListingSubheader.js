@@ -10,7 +10,9 @@ export const P2 = props => (
   <Grid.Column width={3} textAlign="center">
     <span className="filter-count">{Object.keys(props.requestState.search).length}</span>
     <Button icon color="blue" onClick={props.toggleSearch} className="link-button">
-      Filters <Icon className="ns-caret-down" />
+      Filters
+      {' '}
+      <Icon className="ns-caret-down" />
     </Button>
   </Grid.Column>
 );

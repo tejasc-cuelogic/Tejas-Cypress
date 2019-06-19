@@ -44,31 +44,57 @@ import { fileUpload } from '../../../actions';
 export class BusinessAppStore {
   @observable BUSINESS_APP_FRM_BASIC =
   Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
+
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+
   @observable NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
+
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
+
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
+
   @observable BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
+
   @observable BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
+
   @observable BUSINESS_APP_STATUS = '';
+
   @observable preQualFormDisabled = false;
+
   @observable formReadOnlyMode = false;
+
   @observable BUSINESS_APP_STEP_URL = 'new/pre-qualification';
+
   @observable BUSINESS_APPLICATION_DATA = null;
+
   @observable isPartialData = null;
+
   @observable applicationId = null;
+
   @observable currentApplicationType = 'business';
+
   @observable applicationStep = null;
+
   @observable businessApplicationsList = null;
+
   @observable currentApplicationId = null;
+
   @observable businessApplicationsDataById = null;
+
   @observable isFetchedData = null;
+
   @observable removeFileIdsList = [];
+
   @observable appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: null }, { path: 'performance', status: null }, { path: 'documentation', status: null }];
+
   @observable isFileUploading = false;
+
   @observable isPrequalQulify = false;
+
   @observable userExists = false;
+
   @observable urlParameter = null;
+
   @observable businessAppDataById = null;
   @observable applicationIssuerId = null;
   @observable enableSave = false;
@@ -86,15 +112,14 @@ export class BusinessAppStore {
   @action
   businessDocChange = (e, res) => {
     this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, Validator.pullValues(e, res));
-    this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
-      Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
-      this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
+    this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value
+      ? Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length
+      && this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   };
 
   @computed get getInvestmentTypeTooltip() {
     const { fields } = this.BUSINESS_APP_FRM;
-    const field = fields.investmentType.values.find(investmentType =>
-      investmentType.value === fields.investmentType.value);
+    const field = fields.investmentType.values.find(investmentType => investmentType.value === fields.investmentType.value);
     return field ? field.tooltip : null;
   }
 
@@ -102,17 +127,16 @@ export class BusinessAppStore {
   checkFormisValid = (step, showErrors = false) => {
     let status = false;
     if (step === 'business-details') {
-      this.BUSINESS_DETAILS_FRM =
-        Validator.validateForm(this.BUSINESS_DETAILS_FRM, true, showErrors);
+      this.BUSINESS_DETAILS_FRM = Validator.validateForm(this.BUSINESS_DETAILS_FRM, true, showErrors);
       status = this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (step === 'performance') {
       this.BUSINESS_PERF_FRM = Validator.validateForm(this.BUSINESS_PERF_FRM, false, showErrors);
       status = this.BUSINESS_PERF_FRM.meta.isValid;
     } else if (step === 'documentation') {
       this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM, false, showErrors);
-      status = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
-        Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
-          this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
+      status = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value
+        ? Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length
+          && this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
       this.BUSINESS_DOC_FRM.meta.isValid = status;
     }
     return status;
@@ -202,8 +226,8 @@ export class BusinessAppStore {
           } = data.businessApplicationsDetailsAdmin;
           businessAppAdminStore
             .setBusinessDetails(
-              ((businessGeneralInfo && businessGeneralInfo.businessName) ||
-              (prequalDetails.businessGeneralInfo.businessName)),
+              ((businessGeneralInfo && businessGeneralInfo.businessName)
+              || (prequalDetails.businessGeneralInfo.businessName)),
               signupCode, utmSource,
             );
           this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
@@ -245,12 +269,12 @@ export class BusinessAppStore {
       this.setFieldvalue('isPrequalQulify', true);
     }
     this.step = 'performace';
-    const data = outputData ? outputData : !isPartialApp ? this.fetchBusinessApplicationsDataById :
-      this.fetchPrequalBusinessApplicationsDataById;
+    const data = outputData ? outputData : !isPartialApp ? this.fetchBusinessApplicationsDataById
+      : this.fetchPrequalBusinessApplicationsDataById;
     if (data) {
       if (!isPartialApp) {
-        if ((data.applicationStatus || data.prequalStatus) ===
-          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+        if ((data.applicationStatus || data.prequalStatus)
+          === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
           this.setPrequalDetails(data);
         } else {
           this.setPrequalDetails(data.prequalDetails);
@@ -258,13 +282,13 @@ export class BusinessAppStore {
           this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
           this.setDocumentationDetails(data.businessDocumentation);
         }
-        if (((data.applicationStatus || data.prequalStatus) ===
-          BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) ||
-          ((data.applicationStatus || data.prequalStatus) ===
-          BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
+        if (((data.applicationStatus || data.prequalStatus)
+          === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED)
+          || ((data.applicationStatus || data.prequalStatus)
+          === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
           this.formReadOnlyMode = true;
-        } else if ((data.applicationStatus || data.prequalStatus) ===
-          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+        } else if ((data.applicationStatus || data.prequalStatus)
+          === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
           this.appStepsStatus[0].status = 'IN_PROGRESS';
         }
         this.setFieldvalue('currentApplicationType', data.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
@@ -314,27 +338,23 @@ export class BusinessAppStore {
       data.legalConfirmations.forEach((ele) => {
         this.BUSINESS_APP_FRM.fields.legalConfirmation.value.push(ele.value && ele.label);
       });
-      this.BUSINESS_APP_FRM.fields.phoneNumber.value =
-        data.businessGeneralInfo.contactDetails.phone.number;
+      this.BUSINESS_APP_FRM.fields.phoneNumber.value = data.businessGeneralInfo.contactDetails.phone.number;
       if (this.currentApplicationType === 'business') {
         ['businessModel', 'businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
           const field = ['nextYearCogSold', 'nextYearGrossSales', 'nextYearNetIncome', 'nextYearOperatingExpenses'];
-          this.BUSINESS_APP_FRM.fields[field[key]].value =
-            data.performanceSnapshot.nextYearSnapshot[ele];
+          this.BUSINESS_APP_FRM.fields[field[key]].value = data.performanceSnapshot.nextYearSnapshot[ele];
         });
         if (this.getBusinessTypeCondtion) {
           ['ageYears', 'ageMonths'].forEach((ele, key) => {
             const field = ['businessAgeYears', 'businessAgeMonths'];
-            this.BUSINESS_APP_FRM.fields[field[key]].value =
-              data.existingBusinessInfo[ele];
+            this.BUSINESS_APP_FRM.fields[field[key]].value = data.existingBusinessInfo[ele];
           });
           ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
             const field = ['previousYearCogSold', 'previousYearGrossSales', 'previousYearNetIncome', 'previousYearOperatingExpenses'];
-            this.BUSINESS_APP_FRM.fields[field[key]].value =
-              data.performanceSnapshot.pastYearSnapshot[ele];
+            this.BUSINESS_APP_FRM.fields[field[key]].value = data.performanceSnapshot.pastYearSnapshot[ele];
           });
         }
       } else {
@@ -398,8 +418,8 @@ export class BusinessAppStore {
   setPerformanceDetails = (data, prequalData) => {
     if (data) {
       this.appStepsStatus[2].status = data.stepStatus;
-      if (data.financialStatements.fiveYearProjection &&
-        data.financialStatements.fiveYearProjection.length) {
+      if (data.financialStatements.fiveYearProjection
+        && data.financialStatements.fiveYearProjection.length) {
         this.setFileObjectToForm(data.financialStatements.fiveYearProjection, 'BUSINESS_PERF_FRM', 'fiveYearProjection');
       }
       if (data.sourcesAndUses && data.sourcesAndUses.length) {
@@ -424,8 +444,7 @@ export class BusinessAppStore {
         if (this.getBusinessTypeCondtion) {
           ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
             const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
-            this.BUSINESS_PERF_FRM.fields[field[key]].value =
-            data.performance.pastYearSnapshot[ele];
+            this.BUSINESS_PERF_FRM.fields[field[key]].value = data.performance.pastYearSnapshot[ele];
             this.BUSINESS_PERF_FRM.fields[field[key]].rule = 'required';
           });
         } else {
@@ -438,14 +457,12 @@ export class BusinessAppStore {
       if (this.currentApplicationType === 'business') {
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
           const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
-          this.BUSINESS_PERF_FRM.fields[field[key]].value =
-          prequalData.performanceSnapshot.nextYearSnapshot[ele];
+          this.BUSINESS_PERF_FRM.fields[field[key]].value = prequalData.performanceSnapshot.nextYearSnapshot[ele];
         });
         if (this.getBusinessTypeCondtion) {
           ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
             const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
-            this.BUSINESS_PERF_FRM.fields[field[key]].value =
-            prequalData.performanceSnapshot.pastYearSnapshot[ele];
+            this.BUSINESS_PERF_FRM.fields[field[key]].value = prequalData.performanceSnapshot.pastYearSnapshot[ele];
           });
         } else {
           ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
@@ -500,9 +517,9 @@ export class BusinessAppStore {
       });
     }
     this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
-    this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
-      (this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
-      this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
+    this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value
+      ? (this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length
+      && this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   }
 
   @computed get fetchBusinessApplicationsDataById() {
@@ -546,6 +563,7 @@ export class BusinessAppStore {
       index,
     );
   }
+
   @action
   businessDetailsMaskingChange = (field, values, subFormName = '', index = -1) => {
     if (subFormName) {
@@ -594,8 +612,8 @@ export class BusinessAppStore {
   };
 
   @computed get getBusinessTypeCondtion() {
-    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value &&
-      this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW);
   }
 
@@ -604,8 +622,8 @@ export class BusinessAppStore {
   }
 
   @computed get getFranchiseCondition() {
-    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value &&
-      this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.FRANCHISE);
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value
+      && this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.FRANCHISE);
   }
 
   @computed get canSubmitApp() {
@@ -665,8 +683,8 @@ export class BusinessAppStore {
         yearsOfExp: item.yearsOfExp.value ? this.getValidDataForInt(item.yearsOfExp) : null,
         ssn: this.getValidDataForString(item.ssn),
         dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM/DD/YYYY') : null,
-        companyOwnerShip: item.companyOwnerShip.value ?
-          this.getValidDataForInt(item.companyOwnerShip, 1) : null,
+        companyOwnerShip: item.companyOwnerShip.value
+          ? this.getValidDataForInt(item.companyOwnerShip, 1) : null,
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),
         title: this.getValidDataForString(item.title),
         resume: [
@@ -741,8 +759,8 @@ export class BusinessAppStore {
           data.businessTaxReturn.value,
           this.BUSINESS_DOC_FRM.fields.businessTaxReturn,
         ),
-        personalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === true ?
-          this.getFilesArray(
+        personalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === true
+          ? this.getFilesArray(
             data.personalGuaranteeForm.value,
             this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
           ) : [],
@@ -966,11 +984,11 @@ export class BusinessAppStore {
           const applicationId = id;
           this.setFieldvalue('isFetchedData', null);
           this.setFieldvalue('applicationId', applicationId);
-          if (this.BUSINESS_APP_STATUS ===
-              BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
+          if (this.BUSINESS_APP_STATUS
+              === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${this.currentApplicationType}/${applicationId}/success`);
-          } else if (this.BUSINESS_APP_STATUS ===
-              BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+          } else if (this.BUSINESS_APP_STATUS
+              === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
             const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_FAILED) ? `${this.currentApplicationType}/${applicationId}/failed` : `${this.currentApplicationType}/${applicationId}/failed/lendio`;
             this.setFieldvalue('BUSINESS_APP_STEP_URL', url);
             resolve(true);
@@ -1062,9 +1080,9 @@ export class BusinessAppStore {
     } else if (this.applicationStep === 'documentation') {
       stepName = 'DOCUMENTATION';
       this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
-      isPartialDataFlag = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
-        !(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
-          this.BUSINESS_DOC_FRM.meta.isValid) : !this.BUSINESS_DOC_FRM.meta.isValid;
+      isPartialDataFlag = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value
+        ? !(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length
+          && this.BUSINESS_DOC_FRM.meta.isValid) : !this.BUSINESS_DOC_FRM.meta.isValid;
       key = 3;
     }
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
@@ -1264,8 +1282,7 @@ export class BusinessAppStore {
     } else if (getField === 'showLoader' || getField === 'error') {
       this[formName].fields[field][getField] = value;
     } else {
-      this[formName].fields[field][getField] =
-      [...this[formName].fields[field][getField],
+      this[formName].fields[field][getField] = [...this[formName].fields[field][getField],
         value];
     }
   }
@@ -1324,11 +1341,9 @@ export class BusinessAppStore {
   };
 
   @computed get notificationCard() {
-    const card = find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e =>
-      find(this.fetchBusinessApplication, a => (a.applicationStatus === e.applicationStatus ||
-        (a.applicationStage && a.applicationStage === e.applicationStage)))) ||
-      find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e =>
-        find(get(offeringsStore, 'data.data.getOfferings') || [], a => e.offeringStage.includes(a.stage)));
+    const card = find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e => find(this.fetchBusinessApplication, a => (a.applicationStatus === e.applicationStatus
+        || (a.applicationStage && a.applicationStage === e.applicationStage))))
+      || find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e => find(get(offeringsStore, 'data.data.getOfferings') || [], a => e.offeringStage.includes(a.stage)));
     if (!card) {
       return BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus.find(a => a.applicationStage === 'IN_PROGRESS');
     }

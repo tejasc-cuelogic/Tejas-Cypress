@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown, FormCheckbox, MaskedInput } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
-import NotFound from '../../../../shared/NotFound';
+import NotFound from '../../../NotFound';
 import { LENDING_PARTNER_LENDIO } from '../../../../../constants/business';
 import { LENDIO } from '../../../../../services/constants/businessApplication';
 import Helper from '../../../../../helper/utility';
@@ -26,6 +26,7 @@ export default class Application extends Component {
       });
     }
   }
+
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppLendioStore.businessLendioPreQual(this.props.match.params.id)
@@ -67,7 +68,8 @@ export default class Application extends Component {
           <Header as="h1">NextSeed has partnered with Lendio</Header>
           <p>
             Lendio is a leading small business loan marketplace where
-            completing one free application will put you in front of 75+ lenders.<br />
+            completing one free application will put you in front of 75+ lenders.
+            <br />
             The loan matching service is free with no obligation
           </p>
           <List horizontal className="feature-list">
@@ -140,13 +142,18 @@ export default class Application extends Component {
             </FormElementWrap>
             <Header as="h3">Submit your application to Lendio</Header>
             <p>
-              Do you give Lendio and their <a href="https://www.lendio.com/agreements/partner-list/" rel="noopener noreferrer" target="_blank" className="link"><b>partners</b></a> permission to
+              Do you give Lendio and their
+              {' '}
+              <a href="https://www.lendio.com/agreements/partner-list/" rel="noopener noreferrer" target="_blank" className="link"><b>partners</b></a>
+              {' '}
+permission to
               contact you at the number and email you provided, including via email, phone, text
               message and cell phone, including the use of automated dialing equipment or
               pre-recorded calls and messages? Your consent is not a condition of
               receiving services from Lendio. If you decline to move forward, none of
               your information will be sent to Lendio.
-              <br /><br />
+              <br />
+              <br />
               <small>
                 <b>As an official partner, NextSeed may be compensated through Lendio</b>
               </small>

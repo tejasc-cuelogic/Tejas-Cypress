@@ -31,10 +31,12 @@ const LegalDocuments = observer(({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      {inProgress &&
+      {inProgress
+        && (
         <Dimmer active={inProgress}>
           <Loader active={inProgress} />
         </Dimmer>
+        )
       }
       <Form error onSubmit={onSubmit} className="file-uploader-inline">
         <Form.Field className="mb-30">
@@ -76,10 +78,12 @@ const LegalDocuments = observer(({
             containerclassname="fluid"
           />
         </Form.Field>
-        {errors &&
+        {errors
+          && (
           <Message error textAlign="left" className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
+          )
         }
         <div className="center-align mt-30">
           <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={!form.meta.isValid} />

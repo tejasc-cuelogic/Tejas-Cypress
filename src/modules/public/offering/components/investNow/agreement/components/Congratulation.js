@@ -17,20 +17,24 @@ export default class Congratulation extends React.Component {
       this.props.campaignStore.setFieldValue('showFireworkAnimation', true);
     }
   }
+
   componentWillUnmount() {
     this.props.accreditationStore.resetUserAccreditatedStatus();
   }
+
   handleCloseModal = () => {
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push('overview');
   }
+
   handleCloseModalWithRefferalLink = (e) => {
     e.preventDefault();
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push('/app/referrals');
   }
+
   render() {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { investmentAmount, investAccTypes } = this.props.investmentStore;
@@ -52,7 +56,14 @@ export default class Congratulation extends React.Component {
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>
             <Header as="h3">
-              You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span> in { businessName}.
+              You have invested
+              {' '}
+              <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span>
+              {' '}
+in
+              {' '}
+              { businessName}
+.
             </Header>
           </Modal.Header>
           <Modal.Content className="signup-content center-align">

@@ -11,6 +11,7 @@ export default class ConfirmLoginModal extends React.Component {
     handleCloseModal = () => {
       this.props.history.push(this.props.refLink);
     }
+
     handleLogin = () => {
       const isInvestNow = this.props.history.location.pathname.includes('invest');
       this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}/${isInvestNow ? 'invest-now' : ''}` });
@@ -19,6 +20,7 @@ export default class ConfirmLoginModal extends React.Component {
         this.props.history.push('/auth/login');
       });
     }
+
     render() {
       const isInvestNow = this.props.history.location.pathname.includes('invest');
       return (
@@ -32,4 +34,3 @@ export default class ConfirmLoginModal extends React.Component {
       );
     }
 }
-

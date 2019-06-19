@@ -19,8 +19,8 @@ const EntityAndLegal = props => (
       hideFields={props.hideFields}
       noDivider
       header="Legal Confirmation"
-      subHeader={!props.hideFields ?
-        'Please check all that apply. Note some of these items are not disqualifying conditions, but a NextSeed representative may follow up to verify any applicable details.'
+      subHeader={!props.hideFields
+        ? 'Please check all that apply. Note some of these items are not disqualifying conditions, but a NextSeed representative may follow up to verify any applicable details.'
         : ''}
     >
       <FormCheckbox

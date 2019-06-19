@@ -2,6 +2,7 @@ import { observable, computed, action } from 'mobx';
 
 export class HelloWorldStore {
   @observable data = [];
+
   @observable details = 'This is just a hello world page details!';
 
   @action

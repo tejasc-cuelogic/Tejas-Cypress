@@ -29,6 +29,7 @@ export default class AccountDetails extends Component {
       this.props.history.replace(`${this.props.match.url}/portfolio`);
     }
   }
+
   render() {
     const { match } = this.props;
     const {
@@ -40,15 +41,19 @@ export default class AccountDetails extends Component {
     const isAccProcessing = processingAccounts.includes(accType);
     const isAccPartial = partialAccounts.includes(accType);
     const navItems = isAccProcessing ? [] : GetNavMeta(match.url).subNavigations;
-    const processing = includes(this.props.location.pathname, 'transactions') ?
-      (<div className="content-spacer">
+    const processing = includes(this.props.location.pathname, 'transactions')
+      ? (
+<div className="content-spacer">
         <section className="center-align">
           <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={(processingMsg)} /></h4>
         </section>
-       </div>) :
-      (<section className="center-align">
+       </div>
+      )
+      : (
+<section className="center-align">
         <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={(processingMsg)} /></h4>
-      </section>);
+      </section>
+      );
     return (
       <PrivateLayout {...this.props}>
         { isAccPartial ? <AccountSetup /> : isAccProcessing ? processing : (

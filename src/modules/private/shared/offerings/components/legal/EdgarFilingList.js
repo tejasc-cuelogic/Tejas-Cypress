@@ -8,7 +8,7 @@ import XmlSubmission from '../../../../admin/edgar/components/XmlSubmission';
 import Helper from '../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { businessActions } from '../../../../../../services/actions';
-import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
+import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
 @withRouter
 @inject('businessStore', 'offeringCreationStore', 'uiStore', 'commonStore', 'offeringsStore')
@@ -17,6 +17,7 @@ export default class EdgarFilingList extends Component {
   state = {
     showLoader: false,
   }
+
   confirmDelete = (e, {
     entity, refid, subrefid, lockedstatus, submissions,
   }) => {
@@ -96,6 +97,7 @@ export default class EdgarFilingList extends Component {
         });
     }
   }
+
   handleDocumentsLink = (e, { folderId }) => {
     const { offer } = this.props.offeringsStore;
     const params = {

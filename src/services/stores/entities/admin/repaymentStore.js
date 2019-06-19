@@ -5,8 +5,11 @@ import { allRepayments, allRepaymentDetails } from '../../queries/Repayment';
 
 export class RepaymentStore {
     @observable data = [];
+
     @observable details = [];
+
     @observable filters = false;
+
     @observable summary = {
       title: false,
       summary: [
@@ -21,6 +24,7 @@ export class RepaymentStore {
         { title: 'Investor Repaid', content: 'N/A', type: 0 },
       ],
     };
+
     @observable requestState = {
       search: {},
     };

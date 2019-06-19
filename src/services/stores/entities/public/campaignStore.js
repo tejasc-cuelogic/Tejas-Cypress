@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy, sortBy, includes } from 'lodash';
+import { pickBy, get, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -8,6 +8,7 @@ import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore } from '../../index';
 // import uiStore from '../shared/uiStore';
@@ -16,23 +17,41 @@ import { DataFormatter } from '../../../../helper';
 
 export class CampaignStore {
   @observable data = [];
+
   @observable details = {};
+
   @observable option = false;
+
   @observable campaignSideBarShow = true;
+
   @observable selectedReadMore = {};
+
   @observable selectedReadLess = {};
+
   @observable RECORDS_TO_DISPLAY = 12;
+
   @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
+
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
+
   @observable gallarySelectedImageIndex = null;
+
   @observable docsWithBoxLink = [];
-  @observable investmentDetailsSubNavs = [];
+
+  @observable campaignNavData = [];
+
   @observable totalPayment = 0;
+
   @observable principalAmt = 0;
+
   @observable totalPaymentChart = [];
+
   @observable showFireworkAnimation = false;
+
   @observable earlyBirdCheck = null;
+
   @observable isInvestBtnClicked = false;
+
   @observable isFetchedError = false;
 
 
@@ -49,21 +68,20 @@ export class CampaignStore {
       filters.referralCode = referralCode;
     }
     return new Promise((resolve) => {
-      this.data =
-        graphql({
-          client: clientPublic,
-          query: referralCode ? getOfferingsReferral : allOfferings,
-          variables: { filters },
-          onFetch: (data) => {
-            if (data && !this.data.loading) {
-              const offering = data.getOfferingList.length && data.getOfferingList[0];
-              resolve(offering);
-            }
-          },
-          onError: (err) => {
-            console.log(err);
-          },
-        });
+      this.data = graphql({
+        client: clientPublic,
+        query: referralCode ? getOfferingsReferral : allOfferings,
+        variables: { filters },
+        onFetch: (data) => {
+          if (data && !this.data.loading) {
+            const offering = data.getOfferingList.length && data.getOfferingList[0];
+            resolve(offering);
+          }
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      });
     });
   }
 
@@ -112,8 +130,8 @@ export class CampaignStore {
   }
 
   @computed get getEarlyBirdCheck() {
-    return this.earlyBirdCheck && this.earlyBirdCheck.data &&
-      this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
+    return this.earlyBirdCheck && this.earlyBirdCheck.data
+      && this.earlyBirdCheck.data.checkEarlyBirdByInvestorAccountAndOfferingId;
   }
 
   @computed get earlyBirdLoading() {
@@ -121,8 +139,8 @@ export class CampaignStore {
   }
 
   @computed get OfferingList() {
-    return (this.allData.data && this.allData.data.getOfferingList &&
-      toJS(this.allData.data.getOfferingList)) || [];
+    return (this.allData.data && this.allData.data.getOfferingList
+      && toJS(this.allData.data.getOfferingList)) || [];
   }
 
   @computed get active() {
@@ -145,9 +163,11 @@ export class CampaignStore {
     const offeringList = this.completedList.slice();
     return offeringList.splice(0, this.completedToDisplay);
   }
+
   @computed get completedList() {
     return sortBy(this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
   }
+
   @action
   loadMoreRecord = (type) => {
     const offeringsList = type === 'completedToDisplay' ? this.completedList : this.orderedActiveList;
@@ -163,10 +183,10 @@ export class CampaignStore {
   }
 
   @computed get campaign() {
-    if (this.details.data && this.details.data.getOfferingDetailsBySlug &&
-      this.details.data.getOfferingDetailsBySlug[0]) {
+    if (this.details.data && this.details.data.getOfferingDetailsBySlug
+      && this.details.data.getOfferingDetailsBySlug[0]) {
       return toJS(this.details.data.getOfferingDetailsBySlug[0]);
-    } else if (this.details.data && this.details.data.getOfferingDetailsById) {
+    } if (this.details.data && this.details.data.getOfferingDetailsById) {
       return toJS(this.details.data.getOfferingDetailsById);
     }
     return {};
@@ -182,11 +202,11 @@ export class CampaignStore {
     campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
-    const minOfferingD = get(campaign, 'keyTerms.minOfferingAmount506C') || 0;
-    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.minOfferingAmount506C'), minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    const minOfferingD = get(campaign, 'keyTerms.minOfferingAmount506') && get(campaign, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.minOfferingAmount506') : get(campaign, 'keyTerms.minOfferingAmount506C') ? get(campaign, 'keyTerms.minOfferingAmount506C') : '0.00';
+    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
-    const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506C') || 0;
-    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(get(campaign, 'keyTerms.maxOfferingAmount506C'), maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
+    const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506') && get(campaign, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.maxOfferingAmount506') : get(campaign, 'keyTerms.maxOfferingAmount506C') ? get(campaign, 'keyTerms.maxOfferingAmount506C') : '0.00';
+    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(maxOfferingD, maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
     campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
@@ -194,20 +214,35 @@ export class CampaignStore {
     const formatedMaxOfferingAmount = money.floatToAmount(campaignStatus.maxOffering);
     const maxReachedCompairedAmount = money.cmp(formatedRaisedAmount, formatedMaxOfferingAmount);
     const formatedReachedMaxCompairAmountValue = money.floatToAmount(maxReachedCompairedAmount);
-    const minMaxOffering = campaignStatus.minFlagStatus ?
-      campaignStatus.maxOffering : campaignStatus.minOffering;
-    campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue) ||
-      money.isPositive(formatedReachedMaxCompairAmountValue));
+    const minMaxOffering = campaignStatus.minFlagStatus
+      ? campaignStatus.maxOffering : campaignStatus.minOffering;
+    campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue)
+      || money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
     campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}` : '--';
     campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
     campaignStatus.isCreation = get(campaign, 'stage') === 'CREATION';
     campaignStatus.earlyBird = get(campaign, 'earlyBird') || null;
     campaignStatus.bonusRewards = get(campaign, 'bonusRewards') || [];
-    campaignStatus.isEarlyBirdRewards =
-      campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
-    campaignStatus.isBonusReward =
-      campaignStatus.bonusRewards && campaignStatus.bonusRewards.length;
+    campaignStatus.isEarlyBirdRewards = campaignStatus.bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
+    campaignStatus.isBonusReward = campaignStatus.bonusRewards && campaignStatus.bonusRewards.length;
+    const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.elevatorPitch)
+      || (campaign && campaign.offering && campaign.offering.overview
+      && campaign.offering.overview.highlight);
+    campaignStatus.hasTopThingToKnow = elevatorPitch;
+    campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
+    campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
+    campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
+    campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
+    campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');
+    campaignStatus.history = get(campaign, 'campaign.offering.about.history');
+    campaignStatus.team = get(campaign, 'leadership');
+    campaignStatus.useOfProcceds = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
+    campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
+    campaignStatus.updates = get(campaign, 'updates') && get(campaign, 'updates').length;
+    campaignStatus.investmentHighlights = true;
+    campaignStatus.doneComputing = (this.details.data && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
     return campaignStatus;
   }
 
@@ -227,21 +262,20 @@ export class CampaignStore {
     const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
-    this.earlyBirdCheck =
-      graphql({
-        client,
-        query: checkIfEarlyBirdExist,
-        variables: { offeringId, accountId },
-        // onFetch: (data) => {
-        //   if (data && !this.earlyBirdCheck.loading) {
-        //     uiStore.setProgress(false);
-        //   }
-        // },
-        // onError: (err) => {
-        //   console.log(err);
-        //   uiStore.setProgress(false);
-        // },
-      });
+    this.earlyBirdCheck = graphql({
+      client,
+      query: checkIfEarlyBirdExist,
+      variables: { offeringId, accountId },
+      // onFetch: (data) => {
+      //   if (data && !this.earlyBirdCheck.loading) {
+      //     uiStore.setProgress(false);
+      //   }
+      // },
+      // onError: (err) => {
+      //   console.log(err);
+      //   uiStore.setProgress(false);
+      // },
+    });
   }
 
   @computed
@@ -252,8 +286,9 @@ export class CampaignStore {
   }
 
   @computed get loading() {
-    return this.allData.loading;
+    return this.allData.loading || this.details.loading;
   }
+
   @action
   setInitialStateForReadMoreAndReadLess(updatesData) {
     if (updatesData.length) {
@@ -261,12 +296,15 @@ export class CampaignStore {
       this.selectedReadLess = updatesData.map(() => true);
     }
   }
+
   @computed get curretnStatusForReadMore() {
     return this.selectedReadMore;
   }
+
   @computed get curretnStatusForReadLess() {
     return this.selectedReadLess;
   }
+
   @action
   handleReadMoreReadLess(index) {
     const newReadMoreStatus = [...this.selectedReadMore];
@@ -284,8 +322,8 @@ export class CampaignStore {
 
   @computed get dataRoomDocs() {
     return this.campaign && this.campaign.legal && this.campaign.legal.dataroom
-      && this.campaign.legal.dataroom.documents ?
-      this.campaign.legal.dataroom.documents : [];
+      && this.campaign.legal.dataroom.documents
+      ? this.campaign.legal.dataroom.documents : [];
   }
 
   @action
@@ -310,17 +348,18 @@ export class CampaignStore {
       .findIndex(x => x.upload.fileId === vale);
 
   @computed get sortedDocswithBoxLink() {
-    return this.docsWithBoxLink.sort((a, b) =>
-      (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
+    return this.docsWithBoxLink.sort((a, b) => (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
   }
+
   @computed get commentsMainThreadCount() {
     const comments = get(this.campaign, 'comments') || [];
     const issuerId = this.campaign && this.campaign.issuerId;
     const filtered = comments.filter(c => ((c.createdUserInfo && c.createdUserInfo.id === issuerId
-      && c.approved) ||
-      (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC');
+      && c.approved)
+      || (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC');
     return filtered.length;
   }
+
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
@@ -329,6 +368,7 @@ export class CampaignStore {
       resolve(res.data.getBoxEmbedLink);
     }).catch(() => { this.setFieldValue('isFetchedError', true); Helper.toast('Something went wrong. Please try again in some time.', 'error'); });
   });
+
   @computed get navCountData() {
     const res = { updates: 0, comments: 0 };
     let sum = 0;
@@ -338,9 +378,9 @@ export class CampaignStore {
       // eslint-disable-next-line arrow-body-style
       if (comments) {
         comments.map((c) => {
-          if (c.scope === 'PUBLIC' &&
-            ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') ||
-              (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
+          if (c.scope === 'PUBLIC'
+            && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor')
+              || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
             sum = sum + 1 + (get(c, 'threadComment.length') || 0);
           }
           return null;
@@ -369,13 +409,15 @@ export class CampaignStore {
     this.totalPayment = money.floatToAmount(totalPayment || '', 2);
     const payChart = [];
     let totalPaid = 0;
-    schedule.forEach((item, index) => {
-      totalPaid = totalPaid + item.interest + item.principal;
-      payChart.push({
-        month: index + 1,
-        'Projected total payment': parseFloat((totalPaid).toFixed(2)),
+    if (schedule && Array.isArray(schedule)) {
+      schedule.forEach((item, index) => {
+        totalPaid = totalPaid + item.interest + item.principal;
+        payChart.push({
+          month: index + 1,
+          'Projected total payment': parseFloat((totalPaid).toFixed(2)),
+        });
       });
-    });
+    }
     this.totalPaymentChart = payChart;
   }
 
@@ -389,9 +431,9 @@ export class CampaignStore {
     offeringDetailsList.map((offeringDetails) => {
       const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
       const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
-      const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506C') || '0.00';
+      const minimumOfferingAmountRegD = get(offeringKeyTermDetails, 'minOfferingAmount506') && get(offeringKeyTermDetails, 'minOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'minOfferingAmount506') : get(offeringKeyTermDetails, 'minOfferingAmount506C') ? get(offeringKeyTermDetails, 'minOfferingAmount506C') : '0.00';
       const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
-      const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506C') || '0.00';
+      const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
       // regulation === ('BD_506C' || 'BD_506B')
       const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : includes(['BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
@@ -407,56 +449,51 @@ export class CampaignStore {
         number: 7,
         format: 'days',
       };
-      const launchDaysToRemainsForNewLable =
-        DataFormatter.diffDaysForLauch(
-          launchDate || null,
-          false, true, true, customAddinggDaysDateObj,
-        );
+      const launchDaysToRemainsForNewLable = DataFormatter.diffDaysForLauch(
+        launchDate || null,
+        false, true, true, customAddinggDaysDateObj,
+      );
       const customAddingHoursDateObject = {
         number: 48,
         format: 'Hours',
       };
-      const launchDaysToRemains =
-        DataFormatter.diffDaysForLauch(
-          launchDate || null,
-          false, true, true, customAddingHoursDateObject,
-        );
+      const launchDaysToRemains = DataFormatter.diffDaysForLauch(
+        launchDate || null,
+        false, true, true, customAddingHoursDateObject,
+      );
       const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
       const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
       const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
       if (regulation === 'BD_CF_506C' && !isInProcessing) {
-        if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
-          closeDaysToRemains === null) &&
-          launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+        if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
+          || closeDaysToRemains === null)
+          && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
           resultObject.isBannerShow = true;
           resultObject.bannerFirstText = 'NEW';
         }
-        resultObject.bannerSecondText =
-          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         return parallelOfferingsArr.push(resultObject);
-      } else if (launchDate && (launchDaysToRemains < closeDaysToRemains ||
-        closeDaysToRemains === null) &&
-        launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
+      } if (launchDate && (launchDaysToRemains < closeDaysToRemains
+        || closeDaysToRemains === null)
+        && launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
         resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'NEW';
-        resultObject.bannerSecondText =
-          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         return newOfferingsArr.push(resultObject);
-      } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+      } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
         const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.bannerFirstText = labelBannerFirst;
-        resultObject.bannerSecondText =
-          this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         return closingOfferingsArr.push(resultObject);
-      } else if (isInProcessing) {
+      } if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'Processing';
         // resultObject.bannerSecondText =
@@ -465,13 +502,12 @@ export class CampaignStore {
         resultObject.processingDate = moment(closingDate).unix() || null;
         return processingOfferingsArr.push(resultObject);
       }
-      if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains ||
-        closeDaysToRemains === null) &&
-        launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+      if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
+        || closeDaysToRemains === null)
+        && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
         resultObject.bannerFirstText = 'NEW';
       }
-      resultObject.bannerSecondText =
-        this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+      resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
       resultObject.isBannerShow = !!(resultObject.bannerFirstText || resultObject.bannerSecondText);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
@@ -496,15 +532,67 @@ export class CampaignStore {
     ];
     return sortedResultObject;
   }
+
   generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent) => {
     let labelBannerSecond = null;
-    if (money.isNegative(amountCompairResult) &&
-      !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
+    if (money.isNegative(amountCompairResult)
+      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
     }
     return labelBannerSecond;
+  }
+
+  @action
+  modifySubNavs = (navList) => {
+    const newNavList = [];
+    const offeringStage = get(this.campaign, 'stage');
+    navList.forEach((item) => {
+      const tempItem = item;
+      let temNavList = item.subNavigations;
+      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
+        const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+        if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'revenueSharingSummary',
+          });
+        } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+          });
+        } else if (existanceResult.length) {
+          remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+        }
+        tempItem.subNavigations = uniqWith(temNavList, isEqual);
+      }
+      if (tempItem.title === 'Summary' || tempItem.title === 'About the Company' || tempItem.title === 'Investment Details') {
+        const arr = temNavList;
+        if (arr && Array.isArray(arr)) {
+          arr.forEach((i) => {
+            if (i.key && !this.campaignStatus[i.key]) {
+              temNavList = temNavList.filter(n => n.title !== i.title);
+            }
+          });
+        }
+      }
+      tempItem.subNavigations = temNavList;
+      if (tempItem.to === 'data-room') {
+        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+          newNavList.push(tempItem);
+        }
+      } else if (!temNavList || (temNavList && temNavList.length)) {
+        newNavList.push(tempItem);
+      }
+    });
+    this.setFieldValue('campaignNavData', newNavList);
+    return newNavList;
   }
 }
 

@@ -14,15 +14,17 @@ const LegalIdentityQuestions = observer(({
   onSubmit,
   identityQuestionAnswerChange,
 }) => (
-  <Modal size="mini" open closeIcon onClose={() => close()} closeOnDimmerClick={false} >
+  <Modal size="mini" open closeIcon onClose={() => close()} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">We need to confirm your identity</Header>
       <Divider />
       <p>
         We were unable to match your information with the
         address you provided. (
-        <i>Note: This may happen if you recently relocated or you entered your address incorrectly
-        </i>)
+        <i>
+Note: This may happen if you recently relocated or you entered your address incorrectly
+        </i>
+)
       </p>
     </Modal.Header>
 
@@ -44,15 +46,19 @@ const LegalIdentityQuestions = observer(({
             />
           ))}
         </Grid>
-        {errors && errors.message &&
+        {errors && errors.message
+          && (
           <Message error className="mt-30">
             <ListErrors errors={[errors.message]} />
           </Message>
+          )
         }
-        {errors && !errors.message &&
+        {errors && !errors.message
+          && (
           <Message error className="mt-30">
             <ListErrors errors={[errors]} />
           </Message>
+          )
         }
         <div className="center-align mt-30">
           <Button loading={inProgress} color="green" size="large" className="relaxed" disabled={!form.meta.isValid || inProgress}>Verify my identity</Button>

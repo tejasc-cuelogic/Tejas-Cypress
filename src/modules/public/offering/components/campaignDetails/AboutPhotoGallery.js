@@ -11,16 +11,19 @@ class AboutPhotoGallery extends Component {
   state = {
     activeSlide: 0,
   };
+
   handleClose = () => {
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', null);
     this.props.history.goBack();
   }
+
   handlePagination = (newIndex) => {
     if (this.props.campaignStore.gallarySelectedImageIndex !== null) {
       this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', null);
     }
     this.setState({ activeSlide: newIndex });
   }
+
   render() {
     const { campaign, gallarySelectedImageIndex } = this.props.campaignStore;
     const settings = {
@@ -31,8 +34,8 @@ class AboutPhotoGallery extends Component {
       arrows: true,
       adaptiveHeight: true,
     };
-    const galleryArray = campaign && campaign.media && campaign.media.gallery &&
-      campaign.media.gallery.length ? campaign.media.gallery : [];
+    const galleryArray = campaign && campaign.media && campaign.media.gallery
+      && campaign.media.gallery.length ? campaign.media.gallery : [];
     return (
       <Modal
         open
@@ -55,11 +58,15 @@ class AboutPhotoGallery extends Component {
               >
                 {galleryArray.length ? galleryArray.map(data => (
                   <div className="about-carousel">
-                    <div className="carousel-counter">{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
+                    <div className="carousel-counter">
+                      {gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}
+/
+                      {galleryArray.length}
+                    </div>
                     <Image64 srcUrl={data.url} />
                   </div>
-                  )) :
-                <NSImage path="gallery-placeholder-16-9.jpg" />
+                ))
+                  : <NSImage path="gallery-placeholder-16-9.jpg" />
                 }
               </NsCarousel>
             </Container>
