@@ -26,7 +26,7 @@ export const checkRegulationAndAccreditation = () => {
             });
         } else {
           cy.log('procced for investment ELSE');
-          resolve(true);
+          resolve(false);
         }
       });
   });

@@ -25,20 +25,16 @@ describe('Invest now 506C investment flow', () => {
   it('Should check and proceed for accreditation', () => {
     checkRegulationAndAccreditation()
       .then((res) => {
-        if (res) {
+        if (res === false) {
+          this.skip();
+        } else {
           cy.log('promise res==>', res);
-          isAccreditationStep = res;
         }
       });
   });
 
-  if (isAccreditationStep) {
-    it('Should proceed for Accreditation process', () => {
-      cy.log('Accredetation....');
-    });
-  } else {
-    it('Should proceed for investment', () => {
-      cy.log('Investment....');
-    });
-  }
+  it('Should proceed for investment', () => {
+    cy.log('Investment....');
+  });
+
 });
