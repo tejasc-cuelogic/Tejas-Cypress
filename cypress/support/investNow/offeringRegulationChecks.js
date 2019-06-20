@@ -4,15 +4,35 @@ export const proceedForAccreditationRequest = () => {
     cy.get('.multistep').find('form.form').find('.center-align').get('.mt-30 > .ui').click();
     cy.get('.loader', { timeout: 6000 }).should('not.exist');
     cy.get('.multistep').find('h3.ui.center').invoke('text')
-    .then(($headerText) => {
-      if ($headerText.includes('How are you an accredited investor?')) {
-
-      }
-    });
-    resolve();
+      .then(($headerText) => {
+        cy.log('headerText==>', $headerText);
+        if ($headerText.includes('How are you an accredited investor?')) {
+          applyForAccreditation();
+          resolve();
+        } else if ($headerText.includes('NetWorth')) {
+          applyForAccreditation();
+          resolve();
+        }
+      });
+      resolve();
   });
 }
 
+export const applyForAccreditation = () => {
+  if (cy.get('.multistep-modal').find('.progtrckr').get('li').its('length').should('eq', 3)) {
+    cy.log('Networth flow...');
+  } else if (cy.get('.multistep-modal').find('.progtrckr').get('li').its('length').should('eq', 2)) {
+    cy.get('.multistep').find('h3.ui.center').invoke('text')
+    .then(($header) => {
+      if ($headerText.includes('Income')) {
+        cy.get('.multistep').find('form.ui.form').find('.ui.one').eq(1).click();
+        cy.get('.multistep').get('button[type="submit"].next.active').click();
+      }
+    });
+  } else {
+    cy.log('Initial starting flow');
+  }
+}
 
 export const checkRegulationAndAccreditation = () => {
   return new Cypress.Promise((resolve, reject) => {

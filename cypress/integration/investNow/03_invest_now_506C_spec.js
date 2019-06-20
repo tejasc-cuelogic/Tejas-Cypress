@@ -26,6 +26,7 @@ describe('Invest now 506C investment flow', () => {
     checkRegulationAndAccreditation()
       .then((res) => {
         if (res === false) {
+          cy.log('goint to skip it....');
           this.skip();
         } else {
           cy.log('promise res==>', res);
