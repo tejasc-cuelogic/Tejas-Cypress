@@ -10,7 +10,7 @@ import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../..
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore', 'agreementsStore', 'commonStore')
+@inject('businessAppStore', 'agreementsStore', 'commonStore', 'userStore', 'uiStore')
 @observer
 export default class BusinessDetails extends Component {
   state = {
@@ -62,9 +62,15 @@ export default class BusinessDetails extends Component {
       BUSINESS_DETAILS_FRM, businessDetailsChange, businessAppUploadFiles,
       businessAppRemoveFiles, addMoreForms, businessDetailsMaskingChange,
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
+      businessAppParitalSubmit, enableSave, businessApplicationDetailsAdmin,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { docLoading, docIdsLoading } = this.props.agreementsStore;
+    let disableFileUpload = true;
+    const { inProgress } = this.props.uiStore;
+    if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
+      disableFileUpload = false;
+    }
     if (docLoading || docIdsLoading) {
       return <InlineLoader />;
     }
@@ -106,12 +112,12 @@ export default class BusinessDetails extends Component {
               sharableLink
               toolTipClassName="left-align justify-text"
               hideFields={hideFields}
-              disabled={formReadOnlyMode}
+              disabled={formReadOnlyMode && disableFileUpload}
               multiple
               asterisk="true"
               name="businessPlan"
               fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
-              ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
+              ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', null, this.props.userStore.isApplicationManager)}
               onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
           </FormElementWrap>
@@ -316,11 +322,11 @@ Owner
                         <DropZone
                           sharableLink
                           hideFields={hideFields}
-                          disabled={formReadOnlyMode}
+                          disabled={formReadOnlyMode && disableFileUpload}
                           name="resume"
                           asterisk="true"
                           fielddata={owner.resume}
-                          ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                          ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index, this.props.userStore.isApplicationManager)}
                           onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
                         />
                       </Form.Field>
@@ -353,6 +359,22 @@ Owner
           size="mini"
           className="deletion"
         />
+        {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager
+          ? (
+<div className="right aligned">
+            <Button
+              inverted
+              type="button"
+              onClick={() => businessAppParitalSubmit(true)}
+              className="align-right right-align"
+              color="green"
+              content="Save"
+              disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DETAILS_FRM.meta.isValid : enableSave)}
+              loading={inProgress}
+            />
+          </div>
+          )
+          : ''}
       </div>
     );
   }

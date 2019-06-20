@@ -153,9 +153,10 @@ for how this is calculated. If you believe
           ? (
             <p className="mt-10">
 Your investment will be
-              {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'}
+              {getDiffInvestmentLimitAmount > 0 ? ' increased' : ' decreased'}
               {' '}
 by
+{' '}
               <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span>
             </p>
           ) : ''
