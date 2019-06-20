@@ -14,24 +14,28 @@ export const proceedForAccreditationRequest = () => {
           resolve();
         }
       });
-      resolve();
+    resolve();
   });
 }
 
 export const applyForAccreditation = () => {
-  if (cy.get('.multistep-modal').find('.progtrckr').get('li').its('length').should('eq', 3)) {
-    cy.log('Networth flow...');
-  } else if (cy.get('.multistep-modal').find('.progtrckr').get('li').its('length').should('eq', 2)) {
-    cy.get('.multistep').find('h3.ui.center').invoke('text')
-    .then(($header) => {
-      if ($headerText.includes('Income')) {
-        cy.get('.multistep').find('form.ui.form').find('.ui.one').eq(1).click();
-        cy.get('.multistep').get('button[type="submit"].next.active').click();
+  cy.get('.multistep-modal').find('.progtrckr').get('li').its('length')
+    .then((size) => {
+      cy.log('SIZE OBTAINED IS==>', size);
+      if (size === 3) {
+        cy.log('Networth flow...');
+      } else if (size === 2) {
+        cy.get('.multistep').find('h3.ui.center').invoke('text')
+          .then(($headerText) => {
+            if ($headerText.includes('Income')) {
+              cy.get('.multistep').find('form.ui.form').find('.ui.one').find('.column').eq(1).click();
+              cy.get('.multistep').get('button[type="submit"].next.active').click();
+            }
+          });
+      } else {
+        cy.log('Initial starting flow');
       }
     });
-  } else {
-    cy.log('Initial starting flow');
-  }
 }
 
 export const checkRegulationAndAccreditation = () => {
