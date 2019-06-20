@@ -78,6 +78,7 @@ export class TeamStore {
 
   @action
   getOne = (id) => {
+    uiStore.setProgress();
     this.currentUpdate = graphql({
       client: clientPrivate,
       query: getTeamMemberById,
@@ -86,6 +87,7 @@ export class TeamStore {
         if (res && res.getTeamMemberById) {
           this.setFormData(res.getTeamMemberById);
         }
+        uiStore.setProgress(false);
       },
     });
   }
@@ -159,7 +161,7 @@ export class TeamStore {
   }
 
   @action
-  deleteTeamMemberById = (id) => {
+  deleteTeamMemberById = id => new Promise((resolve, reject) => {
     uiStore.setProgress();
     clientPrivate
       .mutate({
@@ -169,10 +171,14 @@ export class TeamStore {
         },
         refetchQueries: [{ query: allTeamMembers }],
       })
-      .then(() => Helper.toast('Team Member deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting team member ', 'error'))
-      .finally(() => uiStore.setProgress(false));
-  }
+      .then(() => {
+        Helper.toast('Team Member deleted successfully.', 'success');
+        resolve();
+      }).catch(() => {
+        Helper.toast('Error while deleting team member ', 'error');
+        reject();
+      }).finally(() => uiStore.setProgress(false));
+  });
 
   @action
   setConfirmBox = (entity, refId) => {
@@ -354,13 +360,12 @@ export class TeamStore {
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
     let resultArray = [];
+    this.setDb(this.data.data.teamMembers);
     if (keyword) {
       resultArray = ClientDb.filterData('memberName', keyword, 'likenocase');
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
-    } else {
-      this.setDb(this.data.data.teamMembers);
     }
   }
 

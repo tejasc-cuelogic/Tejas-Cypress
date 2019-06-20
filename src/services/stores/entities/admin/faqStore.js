@@ -126,7 +126,7 @@ export class FaqStore {
     this.globalAction = '';
   }
 
-  deleteRecords = (id) => {
+  deleteRecords = id => new Promise((resolve, reject) => {
     uiStore.setProgress();
     clientPrivate.mutate({
       mutation: deleteFaq,
@@ -136,14 +136,14 @@ export class FaqStore {
       refetchQueries: [{ query: faqs }],
     }).then(() => {
       this.resetSelectedRecords();
-      uiStore.setProgress(false);
       Helper.toast('Records deleted successfully.', 'success');
+      resolve();
     }).catch(() => {
       this.resetSelectedRecords();
-      uiStore.setProgress(false);
       Helper.toast('Error while deleting records.', 'error');
-    });
-  }
+      reject();
+    }).finally(() => uiStore.setProgress(false));
+  });
 
   @action
   setDb = (data) => {
@@ -312,7 +312,9 @@ export class FaqStore {
   @action
   save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
     uiStore.setProgress();
-    this.FAQ_FRM.fields.itemStatus.value = status;
+    if (status) {
+      this.FAQ_FRM.fields.itemStatus.value = status;
+    }
     let data = this.getFaqFormData();
     data = id === 'new' ? data : { ...data, id };
     clientPrivate
