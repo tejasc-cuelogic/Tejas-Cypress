@@ -646,6 +646,12 @@ export class UserDetailsStore {
     return false;
   }
 
+  @computed get isLegaLVerificationDone() {
+    return (this.validAccStatus
+      .includes(this.signupStatus.idVerification)
+    && this.signupStatus.phoneVerification === 'DONE');
+  }
+
   @action
   setSignUpDataForMigratedUser = (userDetails) => {
     if (userDetails.info) {
