@@ -9,7 +9,7 @@ import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
 
 
-@inject('articleStore', 'userStore')
+@inject('articleStore', 'userStore', 'uiStore')
 @withRouter
 @observer
 export default class EditArticle extends Component {
@@ -87,7 +87,8 @@ export default class EditArticle extends Component {
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
     const articleStatus = this.props.match.params.status;
-    if (!categoriesDropdown) {
+    const { inProgress } = this.props.uiStore;
+    if (!categoriesDropdown || inProgress) {
       return <InlineLoader />;
     }
     return (

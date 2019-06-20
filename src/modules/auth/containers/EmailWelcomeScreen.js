@@ -53,7 +53,7 @@ In the next couple of steps, we'll ask you to
             This will be used to confirm your identity when
             any future changes are being requested in your account.
           </p>
-          <Button className="mt-80 mb-80 relaxed very" primary as={Link} to="/auth/confirm-email">Continue</Button>
+          <Button className="mt-80 mb-80 relaxed very" primary as={Link} to="/confirm-email">Continue</Button>
         </Modal.Content>
       </Modal>
     );
