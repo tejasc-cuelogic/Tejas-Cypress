@@ -15,8 +15,7 @@ class LegalDetails extends React.Component {
   componentWillMount() {
     if ((this.props.userDetailsStore.signupStatus.isMigratedFullAccount
       && this.props.match.url !== this.props.userDetailsStore.pendingStep)
-      || this.props.userDetailsStore.validAccStatus
-        .includes(this.props.userDetailsStore.signupStatus.idVerification)) {
+      || this.props.userDetailsStore.isLegaLVerificationDone) {
       this.props.history.push('/app/summary');
     }
   }

@@ -51,10 +51,10 @@ class Login extends Component {
             } else {
               this.props.authStore.setCredentials(userCredentials);
               this.props.authStore.resetForm('LOGIN_FRM');
-              const { signupStatus, pendingStep } = this.props.userDetailsStore;
+              const { isLegaLVerificationDone, pendingStep } = this.props.userDetailsStore;
               const roles = get(this.props.userStore.currentUser, 'roles');
               const redirectUrl = roles && roles.includes('investor')
-                && !signupStatus.investorProfileCompleted
+                && !isLegaLVerificationDone
                 ? pendingStep : this.props.uiStore.authRef;
               this.props.uiStore.removeOneFromProgressArray('login');
               this.props.history.push(redirectUrl || '/');
