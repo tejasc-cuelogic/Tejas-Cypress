@@ -200,17 +200,21 @@ describe('Account Creation', () => {
 
   it('should successfully link bank with manual process', () => {
     manualLinkbankProcess();
-    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-      cy.log('step value', step);
-      assert.equal(step, 'Add funds', ['Should be on add funds'])	
+    cy.get('input[name="value"]').then(() => {
+      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
+        cy.log('step value', step);
+        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
+      });
     });
   });
 
   it('should successfully link bank with plaid process', () => {
     plaidProcess('.progtrckr-done', '1');
-    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-      cy.log('step value', step);
-      assert.equal(step, 'Add funds', ['Should be on add funds'])	
+    cy.get('input[name="value"]').then(() => {
+      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
+        cy.log('step value', step);
+        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
+      });
     });
   });
 
