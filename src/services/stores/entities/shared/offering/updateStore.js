@@ -149,7 +149,6 @@ export class UpdateStore {
     save = (id, status, isManager = false, isAlreadyPublished = false) => {
       uiStore.setProgress(true);
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
@@ -164,7 +163,6 @@ export class UpdateStore {
           mutation: id === 'new' ? newUpdate : editUpdate,
           variables: id === 'new' ? { updatesInput: data }
             : { ...{ updatesInput: data }, id },
-          refetchQueries: [{ query: allUpdates, variables }],
         })
         .then((res) => {
           if (isManager && !isAlreadyPublished && status !== 'DRAFT') {
@@ -287,14 +285,12 @@ export class UpdateStore {
     @action
     deleteOfferingUpdates = (id) => {
       uiStore.setProgress(true);
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
       client
         .mutate({
           mutation: deleteOfferingUpdate,
           variables: {
             id: [id],
           },
-          refetchQueries: [{ query: allUpdates, variables }],
         }).then(() => {
           Helper.toast('Update deleted.', 'success');
           uiStore.setProgress(false);
