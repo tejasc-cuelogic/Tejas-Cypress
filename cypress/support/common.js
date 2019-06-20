@@ -52,6 +52,7 @@ export const enterCodeAndConfirm = () => {
   typeOtpCode();
   cy.wait(100);
   cy.get('form').find('button').contains('Confirm').click();
+
   cy.wait('@confirm');
   cy.wait(500);
 };
