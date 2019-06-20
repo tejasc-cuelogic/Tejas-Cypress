@@ -8,7 +8,7 @@ import { InlineLoader } from '../../../../../../theme/shared';
 import Actions from './Actions';
 import Status from './Status';
 
-@inject('updateStore', 'userStore', 'offeringsStore')
+@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {
@@ -24,13 +24,14 @@ export default class NewUpdate extends Component {
   initiateFlow = (id) => {
     if (id !== 'new') {
       this.props.updateStore.getOne(id);
-    } else {
+    } else if (!this.props.updateStore.newUpdateId) {
       this.props.updateStore.reset();
     }
   }
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.updateStore.setFieldValue('newUpdateId', null);
     this.props.history.replace(this.props.refLink);
   };
 
@@ -43,16 +44,17 @@ export default class NewUpdate extends Component {
   }
 
   deleteUpdate = () => {
-    this.props.updateStore.deleteOfferingUpdates(this.props.match.params);
+    this.props.updateStore.deleteOfferingUpdates(this.props.match.params.id || this.props.updateStore.newUpdateId);
     this.props.history.push(this.props.refLink);
   }
 
-  save = (status) => {
+  save = (id, status) => {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const { offeringUpdateData } = this.props.updateStore;
-    this.props.updateStore.save(this.props.match.params.id || 'new', status, isManager, offeringUpdateData && offeringUpdateData.status === 'PUBLISHED');
+    this.props.updateStore.save(id, status, isManager, offeringUpdateData && offeringUpdateData.status === 'PUBLISHED');
     if (status !== 'DRAFT') {
+      this.props.updateStore.setFieldValue('newUpdateId', null);
       this.props.history.push(this.props.refLink);
     }
   }
@@ -70,13 +72,13 @@ export default class NewUpdate extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const { offer } = this.props.offeringsStore;
-    // const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     const isReadonly = !isManager && (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
-    if (loadingCurrentUpdate) {
+    const { inProgress } = this.props.uiStore;
+    if (loadingCurrentUpdate || inProgress) {
       return <InlineLoader />;
     }
     return (
-      <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={() => this.cancelUpdate} centered={false}>
+      <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <Header as="h3">
             {isNew ? 'New' : 'Edit'}
@@ -89,12 +91,13 @@ export default class NewUpdate extends Component {
               save={this.save}
               meta={PBUILDER_FRM.meta}
               isManager={isManager}
-              isPending={this.props.status === 'PENDING'}
-              isPublished={this.props.status === 'PUBLISHED'}
+              isDraft={PBUILDER_FRM.fields.status.value === 'DRAFT'}
+              isPending={PBUILDER_FRM.fields.status.value === 'PENDING'}
+              isPublished={PBUILDER_FRM.fields.status.value === 'PUBLISHED'}
               editForm={this.state.editForm}
               edit={this.edit}
               deleteUpdate={this.showConfirmModal}
-              id={this.props.match.params.action.id}
+              id={this.props.match.params.id}
               cancelUpdate={this.handleCloseModal}
               newUpdateId={newUpdateId}
             />
@@ -143,7 +146,7 @@ export default class NewUpdate extends Component {
                         </Modal>
                       </List.Item>
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew} content="Send test email to me" onClick={() => sendTestEmail(this.props.id)} />
+                        <Button color="green" className="link-button" disabled={isNew} content="Send test email to me" onClick={() => sendTestEmail(this.props.match.params.id)} />
                       </List.Item>
                     </List>
                   </Card.Content>

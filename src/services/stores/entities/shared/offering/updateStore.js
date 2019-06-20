@@ -5,7 +5,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES } from '../../../../constants/offering';
-import { offeringCreationStore } from '../../../index';
+import { offeringCreationStore, uiStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
   sendOfferingUpdateTestEmail, offeringUpdatePublish,
@@ -39,6 +39,7 @@ export class UpdateStore {
         client,
         query: allUpdates,
         variables,
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.offeringUpdatesByOfferId) {
             this.requestState.page = 1;
@@ -119,15 +120,17 @@ export class UpdateStore {
         } else {
           this.PBUILDER_FRM.fields.tiers.values.splice(index, 1);
         }
+        this.PBUILDER_FRM.meta.isDirty = true;
         Validator.validateForm(this.PBUILDER_FRM, false, false, false);
       } else {
-        this.PBUILDER_FRM = Validator.onChange(this.PBUILDER_FRM, Validator.pullValues(e, result));
+        this.PBUILDER_FRM = Validator.onChange(this.PBUILDER_FRM, Validator.pullValues(e, result), true);
       }
     };
 
     @action
     FChange = (field, value) => {
       this.PBUILDER_FRM.fields[field].value = value;
+      this.PBUILDER_FRM.meta.isDirty = true;
       Validator.validateForm(this.PBUILDER_FRM);
     }
 
@@ -138,6 +141,7 @@ export class UpdateStore {
 
     @action
     save = (id, status, isManager = false, isAlreadyPublished = false) => {
+      uiStore.setProgress(true);
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       const variables = { offerId: offeringCreationStore.currentOfferingId };
       data.status = status;
@@ -165,11 +169,17 @@ export class UpdateStore {
             Helper.toast('Update added.', 'success');
           }
           if (id === 'new') {
+            this.setFieldValue('PBUILDER_FRM.fields.status.value', status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
+          } else {
+            this.reset();
           }
-          this.reset();
+          uiStore.setProgress(false);
         })
-        .catch(res => Helper.toast(`${res} Error`, 'error'));
+        .catch((res) => {
+          Helper.toast(`${res} Error`, 'error');
+          uiStore.setProgress(false);
+        });
     }
 
     @action
@@ -215,14 +225,19 @@ export class UpdateStore {
         query: getUpdate,
         variables: { id },
         onFetch: (res) => {
-          Object.keys(this.PBUILDER_FRM.fields).map((key) => {
-            this.PBUILDER_FRM.fields[key].value = res.offeringUpdatesById[key];
-            return null;
-          });
-          this.PBUILDER_FRM.fields.tiers.values = res.offeringUpdatesById.tiers || [];
-          Validator.validateForm(this.PBUILDER_FRM);
+          this.setFormData(res.offeringUpdatesById);
         },
       });
+    }
+
+    @action
+    setFormData = (offeringUpdatesById) => {
+      Object.keys(this.PBUILDER_FRM.fields).map((key) => {
+        this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        return null;
+      });
+      this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
+      Validator.validateForm(this.PBUILDER_FRM);
     }
 
     @action
@@ -261,6 +276,7 @@ export class UpdateStore {
 
     @action
     deleteOfferingUpdates = (id) => {
+      uiStore.setProgress(true);
       const variables = { offerId: offeringCreationStore.currentOfferingId };
       client
         .mutate({
@@ -271,6 +287,10 @@ export class UpdateStore {
           refetchQueries: [{ query: allUpdates, variables }],
         }).then(() => {
           Helper.toast('Update deleted.', 'success');
+          uiStore.setProgress(false);
+        }).catch(() => {
+          Helper.toast('Something went wrong.', 'error');
+          uiStore.setProgress(false);
         });
     }
 

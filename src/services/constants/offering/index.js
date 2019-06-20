@@ -9,7 +9,7 @@ export const UPDATES = {
     value: '', label: 'lastUpdate', error: undefined, rule: 'optional',
   },
   status: {
-    value: 'PENDING', label: 'Status', error: undefined, rule: 'required',
+    value: 'DRAFT', label: 'Status', error: undefined, rule: 'required',
   },
   tiers: {
     value: [],
