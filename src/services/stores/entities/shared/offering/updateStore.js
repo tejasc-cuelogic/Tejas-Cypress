@@ -86,8 +86,14 @@ export class UpdateStore {
             offeringUpdateId,
           },
         })
-        .then(() => { Helper.toast('Email sent ', 'success'); })
-        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
+        .then(() => {
+          Helper.toast('Email sent ', 'success');
+          uiStore.setProgress(false);
+        })
+        .catch(() => {
+          Helper.toast('Something went wrong, please try again later. ', 'error');
+          uiStore.setProgress(false);
+        });
     }
 
     @action
