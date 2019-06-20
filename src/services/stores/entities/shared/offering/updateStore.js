@@ -270,6 +270,10 @@ export class UpdateStore {
       return this.currentUpdate.loading;
     }
 
+    @computed get currentUpdates() {
+      return this.currentUpdate.data.offeringUpdatesById || [];
+    }
+
     @computed get count() {
       return (this.db && this.db.length) || 0;
     }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
+import moment  from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -65,7 +66,7 @@ export default class NewUpdate extends Component {
 
   render() {
     const {
-      PBUILDER_FRM, UpdateChange, FChange,
+      PBUILDER_FRM, UpdateChange, FChange, currentUpdates,
       loadingCurrentUpdate, sendTestEmail, newUpdateId,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new';
@@ -105,7 +106,7 @@ export default class NewUpdate extends Component {
           <Divider hidden />
           <Grid>
             <Grid.Row>
-              <Grid.Column width={12}>
+              <Grid.Column width={11}>
                 <Form onSubmit={this.save}>
                   <FormInput
                     readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
@@ -125,7 +126,7 @@ export default class NewUpdate extends Component {
                   />
                 </Form>
               </Grid.Column>
-              <Grid.Column width={4}>
+              <Grid.Column width={5}>
                 <Card fluid>
                   <Card.Content>
                     <List relaxed>
@@ -216,6 +217,31 @@ export default class NewUpdate extends Component {
                     </Card.Content>
                   </Card>
                   )
+              }
+              {currentUpdates && currentUpdates.status === 'PUBLISHED'
+                && (
+                  <Card fluid>
+                    <Card.Content>
+                    <List relaxed>
+                        <List.Item>
+                          {currentUpdates.updated.date
+                            && `Submitted on ${moment(currentUpdates.updated.date).format('MM/DD/YY')} by ${currentUpdates.updated.by}`
+                          }
+                        </List.Item>
+                        <List.Item>
+                          {currentUpdates.updated.date
+                            && `Approved on ${moment(currentUpdates.updated.date).format('MM/DD/YY')} by ${currentUpdates.updated.by}`
+                          }
+                        </List.Item>
+                        <List.Item>
+                          {currentUpdates.updated.date
+                            && `Published on ${moment(currentUpdates.updated.date).format('MM/DD/YY')} by ${currentUpdates.updated.by}`
+                          }
+                        </List.Item>
+                      </List>
+                    </Card.Content>
+                  </Card>
+                )
               }
               </Grid.Column>
             </Grid.Row>

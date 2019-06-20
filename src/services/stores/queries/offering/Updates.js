@@ -47,6 +47,10 @@ export const getUpdate = gql`
         by
         date
       }
+      updated {
+        by
+        date
+      }
     }
   }
 `;
