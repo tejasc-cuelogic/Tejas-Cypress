@@ -11,6 +11,13 @@ export const UPDATES = {
   status: {
     value: 'PENDING', label: 'Status', error: undefined, rule: 'required',
   },
+  tiers: {
+    value: [],
+    values: [],
+    error: undefined,
+    rule: 'optional',
+    key: 0,
+  },
   scope: {
     value: 'PUBLIC',
     values: [{ label: 'Public', value: 'PUBLIC' }, { label: 'Investors Only', value: 'INVESTORS' }],

@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import moment from 'moment';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
-import { InlineLoader, NsPagination } from './../../../../../theme/shared';
+import { InlineLoader, NsPagination } from '../../../../../theme/shared';
 import Actions from './Actions';
 import ConfirmModel from './ConfirmModel';
 import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../services/constants/accreditation';
@@ -21,10 +21,12 @@ export default class AllAccreditationRequests extends Component {
       this.props.accreditationStore.initRequest();
     }
   }
+
   handleSort = clickedColumn => () => {
     const { setSortingOrder, sortOrder } = this.props.accreditationStore;
     setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
+
   handleDocumentsLink = (e, folderId) => {
     e.preventDefault();
     const params = {
@@ -36,7 +38,9 @@ export default class AllAccreditationRequests extends Component {
       window.open(shareLink);
     });
   }
+
   paginate = params => this.props.accreditationStore.initRequest(params);
+
   render() {
     const { match, accreditationStore, commonStore } = this.props;
     const { inProgress } = commonStore;
@@ -80,20 +84,22 @@ export default class AllAccreditationRequests extends Component {
                 >
                   Type
                 </Table.HeaderCell>
-                {isManager &&
-                  <Table.HeaderCell>Method</Table.HeaderCell>
+                {isManager
+                  && <Table.HeaderCell>Method</Table.HeaderCell>
                 }
-                {!get(requestState, 'search.status') || requestState.search.status === 'REQUESTED' ?
-                  <Table.HeaderCell textAlign="center" />
-                  :
-                  <Table.HeaderCell
-                    onClick={this.handleSort('reviewed.date')}
-                    sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
-                  >
+                {!get(requestState, 'search.status') || requestState.search.status === 'REQUESTED'
+                  ? <Table.HeaderCell textAlign="center" />
+                  : (
+                    <Table.HeaderCell
+                      onClick={this.handleSort('reviewed.date')}
+                      sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                    >
                     Status
-                  </Table.HeaderCell>
+                    </Table.HeaderCell>
+                  )
                 }
-                {requestState.search.status === 'CONFIRMED' &&
+                {requestState.search.status === 'CONFIRMED'
+                  && (
                   <Aux>
                     <Table.HeaderCell
                       onClick={this.handleSort('expiration')}
@@ -108,6 +114,7 @@ export default class AllAccreditationRequests extends Component {
                       Promotion Credits
                     </Table.HeaderCell>
                   </Aux>
+                  )
                 }
               </Table.Row>
             </Table.Header>
@@ -117,8 +124,8 @@ export default class AllAccreditationRequests extends Component {
                 <Table.Row>
                   <Table.Cell textAlign="center" colSpan={7}>No accreditation requests to display !</Table.Cell>
                 </Table.Row>
-                ) :
-                accreditations.map(accreditation => (
+              )
+                : accreditations.map(accreditation => (
                   <Table.Row key={accreditation.id}>
                     <Table.Cell>
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
@@ -132,60 +139,89 @@ export default class AllAccreditationRequests extends Component {
                       {accreditation.accountType && accreditation.accountType.includes('IRA') && <Icon size="large" className="ns-ira-line" color="green" />}
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
-                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') && accreditation.netWorth &&
-                          <Aux><br /><b>Net Worth: </b>
+                      <p>
+                        {ACCREDITATION_METHOD_ENUMS[accreditation.method]}
+                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') && accreditation.netWorth
+                          && (
+                          <Aux>
+                            <br />
+                            <b>Net Worth: </b>
                             {ACCREDITATION_NETWORTH_LABEL[accreditation.netWorth]}
                           </Aux>
+                          )
                         }
-                        {(accreditation.method === 'REVOCABLE_TRUST_ASSETS' || accreditation.method === 'REVOCABLE_TRUST_INCOME') && accreditation.grantorName &&
-                          <Aux><br /><b>Grantor Name: </b>
+                        {(accreditation.method === 'REVOCABLE_TRUST_ASSETS' || accreditation.method === 'REVOCABLE_TRUST_INCOME') && accreditation.grantorName
+                          && (
+                          <Aux>
+                            <br />
+                            <b>Grantor Name: </b>
                             {accreditation.grantorName}
                           </Aux>
+                          )
                         }
                       </p>
                     </Table.Cell>
-                    {isManager &&
+                    {isManager
+                      && (
                       <Table.Cell>
-                        <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ?
-                          accreditation.assetsUpload[0].fileInfo &&
-                          accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
-                          (inProgress === accreditation.assetsUpload[0]
-                            .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p> :
-                            <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" >{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
-                            )
-                            : <p className="note">N/A</p>
-                          : 'Verifier'}
-                          {accreditation.verifier &&
+                        <p>
+                          {accreditation.assetsUpload && accreditation.assetsUpload.length
+                            ? accreditation.assetsUpload[0].fileInfo
+                          && accreditation.assetsUpload[0].fileInfo[0].fileHandle
+                              ? (inProgress === accreditation.assetsUpload[0]
+                                .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p>
+                                : <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank">{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
+                              )
+                              : <p className="note">N/A</p>
+                            : 'Verifier'}
+                          {accreditation.verifier
+                            && (
                             <Aux>
-                              <br /><b>Role: </b> {accreditation.verifier.role}
-                              <br /><b>Email: </b> {accreditation.verifier.email}
+                              <br />
+                              <b>Role: </b>
+                              {' '}
+                              {accreditation.verifier.role}
+                              <br />
+                              <b>Email: </b>
+                              {' '}
+                              {accreditation.verifier.email}
                             </Aux>
+                            )
                           }
                         </p>
                       </Table.Cell>
+                      )
                     }
-                    {accreditation.accreditationStatus === 'REQUESTED' && isManager ?
-                      <Aux>
-                        <Actions
-                          accountId={accreditation.accountId}
-                          userId={accreditation.userId}
-                          accountType={get(accreditation, 'accountType[0]')}
-                          emailVerifier={emailVerifier}
-                          accreditation={accreditation}
-                          requestDate={accreditation.requestDate}
-                          {...this.props}
-                        />
-                      </Aux> :
-                      <Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}</p>
-                      </Table.Cell>
+                    {accreditation.accreditationStatus === 'REQUESTED' && isManager
+                      ? (
+                        <Aux>
+                          <Actions
+                            accountId={accreditation.accountId}
+                            userId={accreditation.userId}
+                            accountType={get(accreditation, 'accountType[0]')}
+                            emailVerifier={emailVerifier}
+                            accreditation={accreditation}
+                            requestDate={accreditation.requestDate}
+                            {...this.props}
+                          />
+                        </Aux>
+                      )
+                      : (
+                        <Table.Cell>
+                          <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
+                            <b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>
+                            {get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}
+                          </p>
+                        </Table.Cell>
+                      )
                     }
-                    {accreditation.accreditationStatus === 'CONFIRMED' &&
+                    {accreditation.accreditationStatus === 'CONFIRMED'
+                      && (
                       <Aux>
                         <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
                         <Table.Cell>{get(accreditation, 'promotionCredits')}</Table.Cell>
                       </Aux>
+                      )
                     }
                   </Table.Row>
                 ))
@@ -194,8 +230,8 @@ export default class AllAccreditationRequests extends Component {
           </Table>
           <Route path={`${match.url}/:action/:userId/:requestDate/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
         </div>
-        {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        {totalRecords > 0
+          && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
         }
       </Card>
     );

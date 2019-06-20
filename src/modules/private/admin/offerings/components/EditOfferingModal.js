@@ -10,9 +10,11 @@ export default class EditOffering extends React.Component {
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
     this.props.offeringCreationStore.setFormData('CLOSURE_SUMMARY_FRM', 'closureSummary');
   }
+
     handleCloseModal = () => {
       this.props.history.push(this.props.refLink);
     }
+
     handleSubmitForm = () => {
       const {
         updateOffering,
@@ -21,6 +23,7 @@ export default class EditOffering extends React.Component {
       updateOffering(currentOfferingId, null, 'editForm');
       this.props.history.push(this.props.refLink);
     }
+
     render() {
       const {
         KEY_TERMS_FRM,
@@ -54,7 +57,7 @@ export default class EditOffering extends React.Component {
                 dateOfBirth
               />
               <div className="center-align">
-                <Button className="relaxed" disabled={!(KEY_TERMS_FRM.meta.isValid)} primary >Save Changes</Button>
+                <Button className="relaxed" disabled={!(KEY_TERMS_FRM.meta.isValid)} primary>Save Changes</Button>
               </div>
             </Form>
           </Modal.Content>
@@ -62,4 +65,3 @@ export default class EditOffering extends React.Component {
       );
     }
 }
-

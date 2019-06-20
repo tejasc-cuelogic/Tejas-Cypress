@@ -15,8 +15,8 @@ import { Spinner } from '../../../../../theme/shared';
 @observer
 class FinancialInfo extends Component {
   componentWillMount() {
-    if (this.props.changeInvest &&
-      !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
+    if (this.props.changeInvest
+      && !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
       const { getInvestNowHealthCheck } = this.props.investmentLimitStore;
       const { match } = this.props;
       const offeringId = match && match.params && match.params.offeringId;
@@ -33,6 +33,7 @@ class FinancialInfo extends Component {
     //     .getInvestorTotalAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
     // }
   }
+
   render() {
     const {
       investmentAmount,
@@ -50,12 +51,12 @@ class FinancialInfo extends Component {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     const { match, refLink, offeringDetails } = this.props;
-    const currentInvestmentLimit = getCurrentInvestNowHealthCheck &&
-      getCurrentInvestNowHealthCheck.investmentLimit ?
-      getCurrentInvestNowHealthCheck.investmentLimit : 0;
-    const currentInvestedAmount = getCurrentInvestNowHealthCheck &&
-      getCurrentInvestNowHealthCheck.previousAmountInvested ?
-      getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
+    const currentInvestmentLimit = getCurrentInvestNowHealthCheck
+      && getCurrentInvestNowHealthCheck.investmentLimit
+      ? getCurrentInvestNowHealthCheck.investmentLimit : 0;
+    const currentInvestedAmount = getCurrentInvestNowHealthCheck
+      && getCurrentInvestNowHealthCheck.previousAmountInvested
+      ? getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
     // const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const offeringId = get(this.props, 'match.params.offeringId') ? get(this.props, 'match.params.offeringId') : get(getInvestorAccountById, 'offering.id') ? get(getInvestorAccountById, 'offering.id') : offeringDetails && offeringDetails.id;
     const { currentInvestmentStatus, userDetails } = this.props.accreditationStore;
@@ -66,8 +67,8 @@ class FinancialInfo extends Component {
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
-    if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading ||
-      this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
+    if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
+      || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
 
@@ -75,14 +76,23 @@ class FinancialInfo extends Component {
       <Aux>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
-        {this.props.changeInvest &&
+        {this.props.changeInvest
+          && (
           <Aux>
-            <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
+            <Header as="h4" textAlign="center" className="grey-header">
+Your current investment in
+              {offerName}
+:
+              <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span>
+            </Header>
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
-            {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent &&
+            {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
+              && (
               <p>
-                Your investment limit: {' '}
+                Your investment limit:
+                {' '}
+                {' '}
                 {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
                 <Popup
                   wide
@@ -92,8 +102,14 @@ class FinancialInfo extends Component {
                       Under Regulation Crowdfunding, you have a limit as to how much you may invest
                       in Reg CF offerings over a 12-month period.
                        This limit is calculated based on your
-            annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
-            your limit is innacurate, please update your <Link to="/app/account-settings/profile-data">Investor Profile</Link>
+            annual income and net worth.
+                      {' '}
+                      <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link>
+                      {' '}
+for how this is calculated. If you believe
+            your limit is innacurate, please update your
+                      {' '}
+                      <Link to="/app/account-settings/profile-data">Investor Profile</Link>
                     </span>
                   )}
                   position="top center"
@@ -101,11 +117,14 @@ class FinancialInfo extends Component {
                 />
                 <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
               </p>
+              )
             }
           </Aux>
+          )
         }
         {/* {!this.props.changeInvest && currentInvestmentStatus !== ('BD_506C' || 'BD_506B') && */}
-        {!this.props.changeInvest && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) &&
+        {!this.props.changeInvest && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus)
+          && (
           <InvestmentLimit
             changeInvest={this.props.changeInvest}
             match={this.props.match}
@@ -114,6 +133,7 @@ class FinancialInfo extends Component {
             setStepToBeRendered={setStepToBeRendered}
             diffLimitAmount={getDiffInvestmentLimitAmount}
           />
+          )
         }
         <Form error size="huge">
           <MaskedInput
@@ -129,15 +149,27 @@ class FinancialInfo extends Component {
             allowNegative={false}
           />
         </Form>
-        {this.props.changeInvest && getDiffInvestmentLimitAmount &&
-          INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00' ?
-            <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
+        {this.props.changeInvest && getDiffInvestmentLimitAmount
+          && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
+          ? (
+            <p className="mt-10">
+Your investment will be
+              {getDiffInvestmentLimitAmount > 0 ? ' increased' : ' decreased'}
+              {' '}
+by
+{' '}
+              <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span>
+            </p>
+          ) : ''
         }
         <Divider hidden />
         {// isValidInvestAmtInOffering &&
-          estReturnVal && estReturnVal !== '-' &&
-            investmentAmount ?
-              <Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
+          estReturnVal && estReturnVal !== '-'
+            && investmentAmount
+            ? (
+              <Header as="h4">
+Total Investment Return: Up to
+                {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
                 <Popup
                   wide
                   trigger={<Icon className="ns-help-circle" color="green" />}
@@ -145,14 +177,17 @@ class FinancialInfo extends Component {
                   position="top center"
                 />
               </Header>
-            :
-            null
+            )
+            : null
         }
         {
           // isValidInvestAmtInOffering &&
-          validBonusRewards && validBonusRewards.length > 0 &&
-          validBonusRewards.map(reward => (
-            <p className="grey-header">+ {reward.title}</p>
+          validBonusRewards && validBonusRewards.length > 0
+          && validBonusRewards.map(reward => (
+            <p className="grey-header">
++
+              {reward.title}
+            </p>
           ))
         }
       </Aux>

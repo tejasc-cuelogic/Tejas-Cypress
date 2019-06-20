@@ -11,9 +11,11 @@ import { Logo, FieldError } from '../../../theme/shared';
 @observer
 class DevPassProtected extends Component {
   state = { password: '', error: '' };
+
   componentWillMount() {
     this.setState({ password: '', error: '' });
   }
+
   submit = () => {
     activityActions.devAppLogin({ password: this.state.password })
       .then(() => {
@@ -28,6 +30,7 @@ class DevPassProtected extends Component {
         this.setState({ error: 'Entered password is invalid, please try again.' });
       });
   }
+
   authPreviewOffer = () => {
     if (this.state.password === this.props.previewPassword) {
       this.props.authPreviewOffer(true, this.state.password);
@@ -35,6 +38,7 @@ class DevPassProtected extends Component {
       this.setState({ error: 'Entered password is invalid, please try again.' });
     }
   }
+
   render() {
     return (
       <Aux>

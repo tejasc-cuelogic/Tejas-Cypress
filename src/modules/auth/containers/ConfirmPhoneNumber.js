@@ -25,20 +25,24 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+
   setConfirmPhoneFormData = () => {
     const { userDetailsStore, identityStore } = this.props;
-    if (userDetailsStore.userDetails.phone &&
-      userDetailsStore.userDetails.phone.number) {
+    if (userDetailsStore.userDetails.phone
+      && userDetailsStore.userDetails.phone.number) {
       const fieldValue = userDetailsStore.userDetails.phone.number;
       identityStore.phoneNumberChange(fieldValue);
     }
   }
+
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     this.props.identityStore.setReSendVerificationCode(false);
@@ -58,6 +62,7 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => { });
     }
   }
+
   handleChangePhoneNumber = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(true);
@@ -65,6 +70,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.clearErrors();
     }
   }
+
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
@@ -77,6 +83,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.setEditMode(false);
     }
   }
+
   handleCloseModal = () => {
     if (this.props.refLink) {
       this.props.history.replace(this.props.refLink);
@@ -86,6 +93,7 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
+
   cancelChangePhoneNo = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(false);
@@ -120,7 +128,7 @@ export default class ConfirmPhoneNumber extends Component {
     const dataLoading = !reSendVerificationCode && this.props.uiStore.inProgress;
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
       return <MigratedUserPhoneNumber />;
-    } else if (isOptConfirmed) {
+    } if (isOptConfirmed) {
       return <SuccessScreen successMsg="Your phone number has been confirmed." handleContinue={this.handleContinue} />;
     }
     return (
@@ -138,10 +146,12 @@ export default class ConfirmPhoneNumber extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {dataLoading &&
+          {dataLoading
+            && (
             <Dimmer active={dataLoading}>
               <Loader active={dataLoading} />
             </Dimmer>
+            )
            }
           <MaskedInput
             hidelabel
@@ -157,17 +167,20 @@ export default class ConfirmPhoneNumber extends Component {
             className="display-only"
             phoneNumberDisplayMode
           />
-          {!editMode &&
-            <Link className="grey-link green-hover" to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
+          {!editMode
+            && (
+            <Link className={`grey-link green-hover ${this.props.uiStore.inProgress ? 'disabled' : ''}`} to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
               Change phone number
             </Link>
+            )
           }
           <Form className="mb-20" error onSubmit={this.handleConfirmPhoneNumber}>
-            {!editMode &&
+            {!editMode
+            && (
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 autoFocus={!isMobile}
                 type="number"
@@ -180,8 +193,10 @@ export default class ConfirmPhoneNumber extends Component {
               />
               <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
             </Form.Field>
+            )
             }
-            {editMode &&
+            {editMode
+              && (
               <div className="mt-30 mb-30">
                 <Header as="h6">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
                 <FormRadioGroup
@@ -191,19 +206,23 @@ export default class ConfirmPhoneNumber extends Component {
                   containerclassname="button-radio center-align"
                 />
               </div>
+              )
             }
-            {errors &&
+            {errors
+              && (
               <Message error textAlign="left" className="mb-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
+              )
             }
-            {!editMode ?
-              <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} />
-              :
-              <Button.Group widths="2" className="inline">
-                <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                <Button type="button" loading={reSendVerificationCode && this.props.uiStore.inProgress} disabled={errors || !ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
-              </Button.Group>
+            {!editMode
+              ? <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} />
+              : (
+                <Button.Group widths="2" className="inline">
+                  <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
+                  <Button type="button" loading={reSendVerificationCode && this.props.uiStore.inProgress} disabled={errors || !ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
+                </Button.Group>
+              )
             }
           </Form>
         </Modal.Content>

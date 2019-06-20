@@ -11,11 +11,17 @@ import { uiStore } from '../../../index';
 
 export class BusinessAppStore {
   @observable businessApplicationsList = [];
+
   @observable summary = { 'prequal-failed': 0, 'in-progress': 0, completed: 0 };
+
   @observable backup = [];
+
   @observable columnTitle = '';
+
   @observable applicationType = 'prequal-failed';
+
   @observable totalRecords = 0;
+
   @observable requestState = {
     lek: { 'page-1': null },
     filters: false,
@@ -26,6 +32,7 @@ export class BusinessAppStore {
   };
 
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
+
   @observable BUSINESS_DETAILS_EDIT_FRM = Validator.prepareFormObject(BUSINESS_DETAILS_EDIT_META);
 
   @action
@@ -83,9 +90,9 @@ export class BusinessAppStore {
   }
 
   @computed get getBusinessApplication() {
-    return (this.businessApplicationsList && this.businessApplicationsList.data &&
-      this.businessApplicationsList.data.businessApplicationsAdmin &&
-      toJS(this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications)
+    return (this.businessApplicationsList && this.businessApplicationsList.data
+      && this.businessApplicationsList.data.businessApplicationsAdmin
+      && toJS(this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications)
     ) || [];
   }
 
@@ -97,8 +104,7 @@ export class BusinessAppStore {
     if (!noFilter) {
       // this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] :
       // section === 'completed' ? ['NEW', 'REVIEWING'] : [];
-      this.requestState.search =
-      { ...this.requestState.search, applicationStatus: this.filterApplicationStatus.value };
+      this.requestState.search = { ...this.requestState.search, applicationStatus: this.filterApplicationStatus.value };
     } else {
       this.filterApplicationStatus.value = this.requestState.search.applicationStatus;
     }
@@ -133,8 +139,7 @@ export class BusinessAppStore {
   updateApplicationStatusCount = (data) => {
     const { values } = this.filterApplicationStatus;
     forEach(values, (v, k) => {
-      const count = filter(data, app =>
-        app.status === v.value).length;
+      const count = filter(data, app => app.status === v.value).length;
       values[k].label = `${values[k].label} (${count})`;
     });
   }
@@ -144,8 +149,7 @@ export class BusinessAppStore {
     const { applicationStatus } = this.requestState.search;
     const { data } = this.businessApplicationsList;
     if (applicationStatus && applicationStatus.length && data && data.businessApplicationsAdmin) {
-      data.businessApplicationsAdmin.businessApplications = filter(this.backup, app =>
-        includes(toJS(applicationStatus), app.applicationStatus));
+      data.businessApplicationsAdmin.businessApplications = filter(this.backup, app => includes(toJS(applicationStatus), app.applicationStatus));
     } else if (data && data.businessApplicationsAdmin) {
       data.businessApplicationsAdmin.businessApplications = this.backup;
     }
@@ -153,8 +157,8 @@ export class BusinessAppStore {
 
   @action
   initRequest = (props) => {
-    const { first, page, noFilter } = props ||
-      {
+    const { first, page, noFilter } = props
+      || {
         first: this.requestState.perPage,
         page: this.requestState.page,
         noFilter: false,
@@ -173,8 +177,8 @@ export class BusinessAppStore {
       limit: this.requestState.perPage,
       search: keyword,
     };
-    filterParams = this.requestState.lek[`page-${this.requestState.page}`] ?
-      { ...filterParams, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...filterParams };
+    filterParams = this.requestState.lek[`page-${this.requestState.page}`]
+      ? { ...filterParams, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...filterParams };
     this.businessApplicationsList = graphql({
       client,
       query: getBusinessApplicationAdmin,

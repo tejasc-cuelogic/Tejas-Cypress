@@ -101,7 +101,8 @@ export default class EdgarForm extends React.Component {
                       width={data.width || 8}
                       key={`${key}_${data.name}`}
                       disabled={data.name === 'name_of_business'}
-                    />))
+                    />
+                  ))
                   }
                 </Grid>
                 <Divider hidden section />

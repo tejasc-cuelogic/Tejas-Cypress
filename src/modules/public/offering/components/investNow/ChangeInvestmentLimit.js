@@ -14,16 +14,17 @@ class ChangeInvestmentLimit extends Component {
   componentWillMount = () => {
     this.props.investmentStore.setInvestmentLimitData();
   }
+
   changeInvestmentLimit = () => {
     const { uiStore } = this.props;
     uiStore.setProgress();
-    const offeringId =
-      this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
+    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
       Helper.toast('Investment limit changed successfully.', 'success');
       this.handleCloseModal();
     });
   }
+
   handleCloseModal = () => {
     if (this.props.changeInvestment) {
       const redirectPath = this.props.match.url.includes('agreement') ? `${this.props.refLink}/${this.props.match.params.offeringId}/agreement` : `${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`;
@@ -34,10 +35,12 @@ class ChangeInvestmentLimit extends Component {
     const { resetForm, INVESTMENT_LIMITS_FORM } = this.props.investmentStore;
     resetForm(INVESTMENT_LIMITS_FORM);
   }
+
   change = (values, name) => {
     this.props.investmentStore.investmentLimitChange(values, name);
     this.forceUpdate();
   }
+
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
@@ -64,8 +67,8 @@ class ChangeInvestmentLimit extends Component {
           </Statistic>
           <Divider clearing hidden />
           <Form error onSubmit={this.submit}>
-            {fields &&
-              ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
+            {fields
+              && ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
                 <MaskedInput
                   key={field}
                   name={field}
@@ -80,10 +83,12 @@ class ChangeInvestmentLimit extends Component {
                 />
               ))
             }
-            {errors &&
+            {errors
+              && (
               <Message error className="mt-30">
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button.Group>

@@ -7,12 +7,16 @@ const Transactions = () => (
     <div className="clearfix">
       <span className="pull-left">
         <Header as="h4">
-          <Icon className="ns-individual-line" color="green" />Individual Transactions
+          <Icon className="ns-individual-line" color="green" />
+Individual Transactions
         </Header>
       </span>
       <span className="pull-right">
         <Button.Group compact size="tiny">
-          <Button secondary><Icon className="ns-freeze" />Freeze account</Button>
+          <Button secondary>
+            <Icon className="ns-freeze" />
+Freeze account
+          </Button>
         </Button.Group>
       </span>
     </div>
@@ -22,7 +26,11 @@ const Transactions = () => (
         <Table.HeaderCell>Date</Table.HeaderCell>
         <Table.HeaderCell>Amount</Table.HeaderCell>
         <Table.HeaderCell>Type</Table.HeaderCell>
-        <Table.HeaderCell>Goldstar<br />Transaction #</Table.HeaderCell>
+        <Table.HeaderCell>
+Goldstar
+          <br />
+Transaction #
+        </Table.HeaderCell>
         <Table.HeaderCell>Status</Table.HeaderCell>
         <Table.HeaderCell collapsing />
       </Table.Header>

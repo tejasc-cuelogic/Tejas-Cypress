@@ -12,9 +12,9 @@ import { DataFormatter } from '../../../../../helper';
   2: date representation
 */
 
-const showValue = props => ((props.type === 1) ?
-  (Helper.CurrencyFormat(props.content)) :
-  ((props.type === 2) ? `date ${props.content}` : props.content));
+const showValue = props => ((props.type === 1)
+  ? (Helper.CurrencyFormat(props.content))
+  : ((props.type === 2) ? `date ${props.content}` : props.content));
 
 const summary = offer => [
   {
@@ -50,13 +50,15 @@ const CreationSummary = ({ offer }) => (
                 <Statistic size="mini" className={row.status}>
                   <Statistic.Label>
                     {row.title}
-                    {row.info &&
+                    {row.info
+                      && (
                       <Popup
                         trigger={<Icon className="ns-help-circle" />}
                         content={row.info}
                         position="top center"
                         className="center-align"
                       />
+                      )
                     }
                   </Statistic.Label>
                   <Statistic.Value>{showValue(row)}</Statistic.Value>

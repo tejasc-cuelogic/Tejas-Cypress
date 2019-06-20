@@ -15,8 +15,8 @@ const MessagesList = props => (
           className={props.current.id === msg.id ? 'active' : ''}
         >
           <Item.Extra>
-            {msg.messageDetails.read === '1' &&
-              <Label size="mini" color="red" horizontal>New</Label>
+            {msg.messageDetails.read === '1'
+              && <Label size="mini" color="red" horizontal>New</Label>
             }
             <DateTimeFormat fromNow datetime={msg.updatedAt} />
           </Item.Extra>

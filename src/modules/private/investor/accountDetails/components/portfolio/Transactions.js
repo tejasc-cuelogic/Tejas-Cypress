@@ -37,18 +37,22 @@ export default class Transactions extends Component {
     open: false,
     embedUrl: '',
   };
+
   componentDidMount() {
     const { getInvestmentsByOfferingId } = this.props.transactionStore;
     const { isAdmin } = this.props;
     getInvestmentsByOfferingId(isAdmin);
     window.addEventListener('message', this.docuSignListener);
   }
+
   setSearchParam = (e, { value }) => this.props.transactionStore.setInvestment(value);
+
   docuSignListener = (e) => {
     if (e.data === 'viewing_complete') {
       this.setState({ open: false });
     }
   };
+
   handleViewLoanAgreement = () => {
     this.props.transactionStore.getDocuSignViewURL().then((res) => {
       this.setState({
@@ -57,9 +61,11 @@ export default class Transactions extends Component {
       });
     });
   }
+
   closeModal = () => {
     this.setState({ open: false });
   }
+
   render() {
     const {
       investmentOptions,
@@ -84,27 +90,31 @@ export default class Transactions extends Component {
         <Form className="inner-content-spacer">
           <Grid>
             <Grid.Row verticalAlign="middle">
-              {investmentOptions.length > 1 &&
+              {investmentOptions.length > 1
+                && (
                 <Grid.Column width={4}>
                   <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select Investment" options={investmentOptions} />
                 </Grid.Column>
+                )
               }
-              {aggrementId &&
+              {aggrementId
+                && (
                 <Grid.Column floated="right" align="right" width={4}>
                   <Button onClick={this.handleViewLoanAgreement} className="link-button highlight-text">View Loan Agreement</Button>
                 </Grid.Column>
+                )
               }
             </Grid.Row>
           </Grid>
         </Form>
         <div className="table-wrapper">
-          {!allPaymentHistoryData.length ?
-            <InlineLoader text="No Payments." />
-          :
-            <Table unstackable singleLine className="investment-details" textAlign="right">
-              <THeader columns={finalResult.columns} />
-              <Table.Body>
-                {
+          {!allPaymentHistoryData.length
+            ? <InlineLoader text="No Payments." />
+            : (
+              <Table unstackable singleLine className="investment-details" textAlign="right">
+                <THeader columns={finalResult.columns} />
+                <Table.Body>
+                  {
                   allPaymentHistoryData.map(row => (
                     <Table.Row key={Helper.guid()}>
                       <Table.Cell collapsing textAlign="left">
@@ -112,33 +122,38 @@ export default class Transactions extends Component {
                       </Table.Cell>
                       <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.grossTotalAmount)}</Table.Cell>
                       {
-                        offerStructure === 'TERM_NOTE' ?
-                          <Aux>
-                            <Table.Cell>
-                              {Helper.CurrencyFormat(row.interestGrossAmount)}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {Helper.CurrencyFormat(row.principalGrossAmount)}
-                            </Table.Cell>
-                            <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
-                            <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
-                            <Table.Cell>
-                              {`$${row.remainingPrincipalDue}`}
-                            </Table.Cell>
-                          </Aux> :
-                          <Aux>
-                            <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
-                            <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
-                            <Table.Cell>
-                              {`$${row.remainingAmountDue}`}
-                            </Table.Cell>
-                          </Aux>
+                        offerStructure === 'TERM_NOTE'
+                          ? (
+                            <Aux>
+                              <Table.Cell>
+                                {Helper.CurrencyFormat(row.interestGrossAmount)}
+                              </Table.Cell>
+                              <Table.Cell>
+                                {Helper.CurrencyFormat(row.principalGrossAmount)}
+                              </Table.Cell>
+                              <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
+                              <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
+                              <Table.Cell>
+                                {`$${row.remainingPrincipalDue}`}
+                              </Table.Cell>
+                            </Aux>
+                          )
+                          : (
+                            <Aux>
+                              <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
+                              <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
+                              <Table.Cell>
+                                {`$${row.remainingAmountDue}`}
+                              </Table.Cell>
+                            </Aux>
+                          )
                       }
                     </Table.Row>
                   ))
                 }
-              </Table.Body>
-            </Table>
+                </Table.Body>
+              </Table>
+            )
           }
         </div>
         <IframeModal

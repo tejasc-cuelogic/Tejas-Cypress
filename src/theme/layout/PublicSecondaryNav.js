@@ -13,11 +13,14 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 
 class PublicSecondaryNav extends Component {
   state = { subnavOnTop: false };
+
   module = name => DataFormatter.upperCamelCase(name);
+
   handleUpdate = (e, { calculations }) => {
     const { percentagePassed, topVisible } = calculations;
     this.setState({ subnavOnTop: percentagePassed > 0 && !topVisible });
   }
+
   render() {
     const {
       location, refLoc, match,

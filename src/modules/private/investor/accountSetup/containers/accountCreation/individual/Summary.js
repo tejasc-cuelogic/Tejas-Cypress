@@ -14,6 +14,7 @@ export default class Summary extends React.Component {
   state = {
     open: false,
   };
+
   componentWillMount() {
     const {
       getLegalDocsFileIds, alreadySet,
@@ -29,6 +30,7 @@ export default class Summary extends React.Component {
     const { userDetails } = this.props.userDetailsStore;
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
+
   handleCreateAccount = () => {
     const {
       isCipExpired,
@@ -58,6 +60,7 @@ export default class Summary extends React.Component {
       }).catch(() => { });
     }
   }
+
   openModal = (type) => {
     const { getBoxEmbedLink } = this.props.agreementsStore;
     getBoxEmbedLink(type);
@@ -65,9 +68,11 @@ export default class Summary extends React.Component {
       open: true,
     });
   }
+
   closeModal = () => {
     this.setState({ open: false });
   }
+
   render() {
     const { errors } = this.props.uiStore;
     const {
@@ -79,8 +84,8 @@ export default class Summary extends React.Component {
       accountAttributes,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
-    const bankAccountNumber = !isEmpty(plaidAccDetails) ?
-      plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
+    const bankAccountNumber = !isEmpty(plaidAccDetails)
+      ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
@@ -93,47 +98,61 @@ export default class Summary extends React.Component {
                   <Table.Cell>Investor: </Table.Cell>
                   <Table.Cell>{`${get(userDetails, 'info.firstName') || ''} ${get(userDetails, 'info.lastName') || ''} `}</Table.Cell>
                 </Table.Row>
-                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
+                  && (
                   <Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
+                  )
                 }
                 <Table.Row>
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {!isEmpty(routingNum) &&
+                {!isEmpty(routingNum)
+                  && (
                   <Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       {routingNum || ''}
                     </Table.Cell>
                   </Table.Row>
+                  )
                 }
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
-                      Helper.CurrencyFormat(0) :
-                      Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount)
+                      ? Helper.CurrencyFormat(0)
+                      : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
           </div>
         </div>
-        {errors &&
+        {errors
+          && (
           <Message error className="center-align">
             <ListErrors errors={[errors.message]} />
           </Message>
+          )
         }
         <p className="center-align grey-header mt-30">
-          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>.
+          By continuing, I acknowledge that I have read and agree to the terms of the
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>
+,
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>
+,
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>
+, and
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>
+.
           <IframeModal
             open={this.state.open}
             close={this.closeModal}

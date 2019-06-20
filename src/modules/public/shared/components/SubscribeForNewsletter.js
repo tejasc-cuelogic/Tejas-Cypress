@@ -53,10 +53,13 @@ const ThanksNote = props => (
 @observer
 export default class SubscribeForNewsletter extends Component {
   state = { dialog: false };
+
   componentWillUnmount() {
     this.setState({ dialog: false });
   }
+
   closeModal = () => this.setState({ dialog: false });
+
   submit = () => {
     this.props.authStore.subscribeToNewsletter().then(() => {
       this.setState({ dialog: true });
@@ -64,6 +67,7 @@ export default class SubscribeForNewsletter extends Component {
       document.getElementsByName('emailAddress')[0].value = '';
     });
   }
+
   render() {
     const { NEWSLETTER_FRM, newsLetterChange } = this.props.authStore;
     const { inProgress } = this.props.uiStore;

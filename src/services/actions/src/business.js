@@ -3,8 +3,7 @@ import moment from 'moment';
 import shortid from 'shortid';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../api/gqlApi';
-import {
-  getXmlDetails,
+import { getXmlDetails,
   filerInformationMutation,
   issuerInformationMutation,
   offeringInformationMutation,
@@ -22,7 +21,7 @@ import {
   XML_STATUSES,
 } from '../../../constants/business';
 import ApiService from '../../../api/restApi';
-import { validationActions } from '../../../services/actions';
+import { validationActions } from '..';
 import Helper from '../../../helper/utility';
 
 export class Business {
@@ -246,8 +245,8 @@ export class Business {
     }
     const params = { field: 'created', sort: 'desc' };
     const payload = {
-      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description folderId created` +
-        ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus xmlSubmissionStatus lockedStatus} } } }',
+      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description folderId created`
+        + ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus xmlSubmissionStatus lockedStatus} } } }',
       variables: { orderByBusinessFilings: params, orderByBusinessFilingSubmission: params },
     };
     ApiService.post(GRAPHQL, payload)
@@ -325,8 +324,8 @@ export class Business {
     uiStore.setActionLoader('Fetching Edgar data');
     uiStore.addMoreInProgressArray('fetchEdgarDetails');
     const payload = {
-      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
-        `filingId: "${filingId}") { filingPayload } }`,
+      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", `
+        + `filingId: "${filingId}") { filingPayload } }`,
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
@@ -360,8 +359,8 @@ export class Business {
     uiStore.setLoaderMessage('Fetching details');
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
-      query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: ' +
-        '$offeringId, filingId: $filingId) { folderId } }',
+      query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: '
+        + '$offeringId, filingId: $filingId) { folderId } }',
       variables: {
         offeringId,
         filingId,
@@ -594,7 +593,7 @@ export class Business {
     const formattedData = {};
     const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      formattedData[key] = dateKeys.includes(key) ? moment(data.value).format('MM/DD/YYYY') : data.value;
+      formattedData[key] = dateKeys.includes(key) ? moment(data.value).format('MM-DD-YYYY') : data.value;
     });
     return formattedData;
   }
@@ -609,7 +608,7 @@ export class Business {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
-      personData.signatureDate = moment(person.signatureDate.value).format('MM/DD/YYYY');
+      personData.signatureDate = moment(person.signatureDate.value).format('MM-DD-YYYY');
       formattedData.signaturePersons.push(personData);
     });
     return formattedData;
@@ -671,14 +670,14 @@ export class Business {
       });
       _.map(data.payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setIssuerInfo(key, moment(value).format('MM/DD/YYYY'));
+          businessStore.setIssuerInfo(key, moment(value).format('MM-DD-YYYY'));
         } else {
           businessStore.setIssuerInfo(key, (value || ''));
         }
       });
       _.map(data.payload.offeringInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setOfferingInfo(key,  moment(value).format('MM/DD/YYYY'));
+          businessStore.setOfferingInfo(key,  moment(value).format('MM-DD-YYYY'));
         } else {
           businessStore.setOfferingInfo(key, (value || ''))
         }
@@ -699,7 +698,7 @@ export class Business {
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
-              businessStore.changePersonalSignature(key, id, value ? moment(value).format('MM/DD/YYYY') : moment().format('MM/DD/YYYY'), false);
+              businessStore.changePersonalSignature(key, id, value ? moment(value).format('MM-DD-YYYY') : moment().format('MM-DD-YYYY'), false);
             } else {
               businessStore.changePersonalSignature(key, id, value, false);
             }

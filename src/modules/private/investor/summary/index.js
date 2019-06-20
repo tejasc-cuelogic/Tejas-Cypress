@@ -16,14 +16,15 @@ export default class Summary extends Component {
     return (
       <Route
         component={
-           ((processingAccLength === 0 &&
-            partialAccLength >= 0 &&
-            frozenAccLength === 0 &&
-            activeAccLength === 0) ||
-            (signupStatus.isMigratedFullAccount ||
-            !isBasicVerDoneForMigratedFullUser ||
-            !signupStatus.investorProfileCompleted))
-          ? AccountSetup : Dashboard}
-      />);
+           ((processingAccLength === 0
+            && partialAccLength >= 0
+            && frozenAccLength === 0
+            && activeAccLength === 0)
+            || (signupStatus.isMigratedFullAccount
+            || !isBasicVerDoneForMigratedFullUser
+            || !signupStatus.investorProfileCompleted))
+             ? AccountSetup : Dashboard}
+      />
+    );
   }
 }

@@ -28,23 +28,39 @@ import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../c
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
+
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
+
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
+
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
+
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+
   @observable CLOSURE_SUMMARY_FRM = Validator.prepareFormObject(CLOSURE_SUMMARY);
+
   @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
+
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
+
   @observable CLOSING_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ close: [] }, false, true, false, { close: CONTINGENCIES.data });
+
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
+
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
+
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
+
   @observable OFFERING_CLOSE_1 = Validator.prepareFormObject(OFFERING_CLOSE_1);
+
   @observable OFFERING_CLOSE_2 = Validator.prepareFormObject(OFFERING_CLOSE_2);
+
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
+
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
+
   @observable LEADERSHIP_FRM =
     Validator.prepareFormObject(
       LEADERSHIP,
@@ -53,9 +69,13 @@ export class OfferingCreationStore {
       false,
       { leadership: LEADERSHIP.leadership },
     );
+
   @observable LEADERSHIP_EXP_FRM = Validator.prepareFormObject(LEADERSHIP_EXP);
+
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
+
   @observable ISSUER_FRM = Validator.prepareFormObject(ISSUER);
+
   @observable AFFILIATED_ISSUER_FRM =
     Validator.prepareFormObject(
       AFFILIATED_ISSUER,
@@ -64,29 +84,53 @@ export class OfferingCreationStore {
       false,
       { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
     );
+
   @observable LEADER_FRM = Validator.prepareFormObject(LEADER);
+
   @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
+
   @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
+
   @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
+
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
+
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
+
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
+
   @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
+
   @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
+
   @observable contingencyFormSelected = undefined;
+
   @observable confirmModal = false;
+
   @observable confirmModalName = null;
+
   @observable removeIndex = null;
+
   @observable initLoad = [];
+
   @observable currentOfferingId = null;
+
   @observable issuerOfferingBac = {};
+
   @observable affiliatedIssuerOfferingBac = {};
+
   @observable offeringFilingList = {};
+
   @observable filingListApiRes = {};
+
   @observable leadershipOfferingBac = {};
+
   @observable bonusRewardsTiers = {};
+
   @observable bonusRewards = {};
+
   @observable tierTobeUnlinked = {};
+
   @observable leadershipExperience = {
     0: LEADERSHIP_EXP.employer,
     1: LEADERSHIP_EXP.employer,
@@ -99,12 +143,17 @@ export class OfferingCreationStore {
     8: LEADERSHIP_EXP.employer,
     9: LEADERSHIP_EXP.employer,
   };
+
   @observable requestState = {
     search: {},
   };
+
   @observable removeFileIdsList = [];
+
   @observable removeFileNamesList = [];
+
   @observable isUploadingFile = false;
+
   @observable isListingPage = false;
 
   @action
@@ -134,22 +183,19 @@ export class OfferingCreationStore {
   setDefaultTiers = () => {
     DEFAULT_TIERS.map((tier) => {
       if (this.bonusRewardsTiers.data && this.bonusRewardsTiers.data.getBonusRewardTiers) {
-        const isExisted =
-          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+        const isExisted = find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
         }
       } else {
         this.bonusRewardsTiers.data = {};
         this.bonusRewardsTiers.data.getBonusRewardTiers = [];
-        const isExisted =
-          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+        const isExisted = find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
         }
       }
-      this.bonusRewardsTiers.data.getBonusRewardTiers =
-        orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
+      this.bonusRewardsTiers.data.getBonusRewardTiers = orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
       return this.bonusRewardsTiers;
     });
   }
@@ -265,18 +311,19 @@ export class OfferingCreationStore {
       },
     };
   }
+
   @action
   resetAffiliatedIssuerForm = () => {
-    this.AFFILIATED_ISSUER_FRM =
-      Validator.prepareFormObject(
-        AFFILIATED_ISSUER,
-        false,
-        true,
-        false,
-        { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
-      );
+    this.AFFILIATED_ISSUER_FRM = Validator.prepareFormObject(
+      AFFILIATED_ISSUER,
+      false,
+      true,
+      false,
+      { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+    );
     this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
   }
+
   @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
@@ -407,6 +454,7 @@ export class OfferingCreationStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       });
   }
+
   @action
   setContingencyFormSelected = (formName) => {
     this.contingencyFormSelected = formName;
@@ -516,8 +564,7 @@ export class OfferingCreationStore {
   @action
   maskChange = (values, form, field) => {
     const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate'];
-    const fieldValue =
-      (cMap.includes(field)) ? values.formattedValue : values.floatValue;
+    const fieldValue = (cMap.includes(field)) ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -527,10 +574,22 @@ export class OfferingCreationStore {
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
     const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate'], field) ? values.value : values.floatValue;
-    this[form] = Validator.onArrayFieldChange(
-      this[form],
-      { name: field, value: fieldValue }, subForm, index,
-    );
+    if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fieldValue }, subForm, index,
+      );
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: `${field}C`, value: fieldValue }, subForm, index,
+      );
+    } else if (!includes(['minOfferingAmount506C', 'maxOfferingAmount506C'], field)) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fieldValue }, subForm, index,
+      );
+    }
+
     if (form === 'LEADERSHIP_EXP_FRM') {
       this.leadershipExperience[index2] = this[form];
     }
@@ -825,12 +884,11 @@ export class OfferingCreationStore {
     }
     if (form === 'LEADERSHIP_FRM') {
       forEach(offer.leadership, (emp, key) => {
-        this.LEADERSHIP_EXP_FRM =
-          Validator.setFormData(
-            this.LEADERSHIP_EXP_FRM,
-            offer.leadership[key],
-            ref, keepAtLeastOne,
-          );
+        this.LEADERSHIP_EXP_FRM = Validator.setFormData(
+          this.LEADERSHIP_EXP_FRM,
+          offer.leadership[key],
+          ref, keepAtLeastOne,
+        );
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
     } else if (form === 'RISK_FACTORS_FRM') {
@@ -854,8 +912,7 @@ export class OfferingCreationStore {
     const currentForm = this[form];
     forEach(currentForm.fields, (field, key) => {
       if (has(field, 'defaultValue') && form === 'RISK_FACTORS_FRM') {
-        this[form].fields[key].defaultValue =
-          DataFormatter.stringTemplateFormatting(field.defaultValue, data);
+        this[form].fields[key].defaultValue = DataFormatter.stringTemplateFormatting(field.defaultValue, data);
       }
     });
   }
@@ -973,6 +1030,7 @@ export class OfferingCreationStore {
     };
     activityHistoryStore.createActivityHistory(payload);
   }
+
   addNewOffer = () => {
     const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
     uiStore.addMoreInProgressArray('upsert');
@@ -1049,7 +1107,7 @@ export class OfferingCreationStore {
   mergeCustomize = (objValue, srcValue, key, object, source, stack) => {
     if (OFFERING_CREATION_ARRAY_KEY_LIST.includes(key)) {
       return srcValue;
-    } else if (srcValue === undefined || srcValue === null || srcValue === '') {
+    } if (srcValue === undefined || srcValue === null || srcValue === '') {
       return null;
     }
   };
@@ -1075,11 +1133,9 @@ export class OfferingCreationStore {
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
         payloadData[keyName].documentation = {};
         payloadData[keyName].documentation.issuer = {};
-        payloadData[keyName].documentation.issuer =
-          Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation.issuer = Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
         payloadData[keyName].documentation.admin = {};
-        payloadData[keyName].documentation.admin =
-          Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation.admin = Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
         const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
         const finalDataRoomDocs = [];
         dataRoomDocs.map((data, index) => {
@@ -1094,8 +1150,7 @@ export class OfferingCreationStore {
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
-        payloadData[keyName].overview =
-        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        payloadData[keyName].overview = Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
@@ -1118,8 +1173,7 @@ export class OfferingCreationStore {
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
-          const employer =
-            Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
+          const employer = Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
           return { ...leadership, ...{ employer: employer.employer } };
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
@@ -1195,8 +1249,8 @@ export class OfferingCreationStore {
       payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
     }
     if (keyName !== 'BonusRewardTier' && keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
-      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
-        keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
+      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey]
+        : keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
         if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
           payLoadDataOld.approved = {
@@ -1249,8 +1303,8 @@ export class OfferingCreationStore {
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
               leaders.push(mergeWith(
-                toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
-                  index ? getOfferingById[keyName][index] : {}),
+                toJS(getOfferingById[keyName] && getOfferingById[keyName].length
+                  > index ? getOfferingById[keyName][index] : {}),
                 payloadData[keyName][index],
                 this.mergeCustomize,
               ));
@@ -1311,8 +1365,8 @@ export class OfferingCreationStore {
   }
 
   @computed get issuerOfferingBacData() {
-    return (this.issuerOfferingBac && this.issuerOfferingBac.data &&
-      toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
+    return (this.issuerOfferingBac && this.issuerOfferingBac.data
+      && toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
@@ -1331,8 +1385,8 @@ export class OfferingCreationStore {
   }
 
   @computed get affiliatedIssuerOfferingBacData() {
-    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data &&
-      toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
+    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data
+      && toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
@@ -1346,8 +1400,8 @@ export class OfferingCreationStore {
         if (res && res.getOfferingBac) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
-          if (leadersCount !==
-            this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
+          if (leadersCount
+            !== this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
             this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
           }
         }
@@ -1356,8 +1410,8 @@ export class OfferingCreationStore {
   }
 
   @computed get leaderShipOfferingBacData() {
-    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data &&
-      toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
+    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data
+      && toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
   }
 
   createOrUpdateOfferingBac = (
@@ -1580,8 +1634,7 @@ export class OfferingCreationStore {
       tierFieldObj.seqNum = index;
       tiersArray.push(tierFieldObj);
     });
-    this.ADD_NEW_BONUS_REWARD_FRM.fields =
-      { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
+    this.ADD_NEW_BONUS_REWARD_FRM.fields = { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
   };
 
   @computed get isCheckedAtLeastOneTiers() {
@@ -1620,8 +1673,8 @@ export class OfferingCreationStore {
 
   @computed
   get allBonusRewards() {
-    return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards &&
-      orderBy(toJS(this.bonusRewards.data.getBonusRewards), 'created.date', 'asc')) || [];
+    return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards
+      && orderBy(toJS(this.bonusRewards.data.getBonusRewards), 'created.date', 'asc')) || [];
   }
 
   @computed
@@ -1693,8 +1746,8 @@ export class OfferingCreationStore {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     const tiers = [];
     map(fields, ((field) => {
-      if ((field.key) &&
-      field.value.length && field.value.includes(field.key)) {
+      if ((field.key)
+      && field.value.length && field.value.includes(field.key)) {
         tiers.push(field.key);
       }
     }));
@@ -1704,8 +1757,8 @@ export class OfferingCreationStore {
         title: fields.name.value,
         description: fields.description.value,
         rewardStatus: 'In Review',
-        earlyBirdQuantity: fields.isEarlyBirds.value.length ?
-          earlyBirdQty : 0,
+        earlyBirdQuantity: fields.isEarlyBirds.value.length
+          ? earlyBirdQty : 0,
         expirationDate: fields.expirationDate.value ? moment(new Date(fields.expirationDate.value)).toISOString() : '',
         tiers,
       },

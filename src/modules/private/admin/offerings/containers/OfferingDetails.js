@@ -27,6 +27,7 @@ export default class OfferingDetails extends Component {
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
   }
+
   componentDidMount() {
     window.onpopstate = this.handleCloseModal;
   }
@@ -49,7 +50,7 @@ export default class OfferingDetails extends Component {
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
-    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     navItems = navStore.filterByAccess(
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
@@ -69,16 +70,22 @@ export default class OfferingDetails extends Component {
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
             <Header as="h3">
-              {((offer.keyTerms && offer.keyTerms.shorthandBusinessName) ?
-                offer.keyTerms.shorthandBusinessName : (
-                (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
-              ))}
+              {((offer.keyTerms && offer.keyTerms.shorthandBusinessName)
+                ? offer.keyTerms.shorthandBusinessName : (
+                  (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
+                ))}
               <Header.Subheader className="mt-10">
                 <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}/overview`}>
-                  <Icon className="ns-view" /><b>Preview the offering page</b>
+                  <Icon className="ns-view" />
+                  <b>Preview the offering page</b>
                 </Link>
-                {offer.stage === 'CREATION' &&
-                  <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
+                {offer.stage === 'CREATION'
+                  && (
+                  <Link to={`${match.url}/editPoc`} className="pull-right">
+                    <Icon className="ns-pencil" />
+Edit
+                  </Link>
+                  )
                 }
               </Header.Subheader>
             </Header>
@@ -91,13 +98,13 @@ export default class OfferingDetails extends Component {
                   navItems.map((item) => {
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
-                      return (
-                        <Route
-                          key={item.to}
-                          path={`${match.url}/${item.to}`}
-                          render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
-                        />
-                      );
+                    return (
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
+                      />
+                    );
                   })
                 }
               </Switch>

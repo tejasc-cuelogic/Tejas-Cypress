@@ -15,8 +15,8 @@ const checkStatus = (signupStatus, userDetailsStore) => {
   const accCreation = signupStatus.partialAccounts.concat(signupStatus.inActiveAccounts);
   const accName = AccCreationHelper.eleToUpperCaseInArray(accCreation);
   if ((signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING'
-  && !signupStatus.isMigratedFullAccount) ||
-  (signupStatus.isMigratedFullAccount
+  && !signupStatus.isMigratedFullAccount)
+  || (signupStatus.isMigratedFullAccount
     && !userDetailsStore.isBasicVerDoneForMigratedFullUser)) {
     stepinfo.title = 'Please verify your identity in order to proceed';
   } else if (signupStatus.phoneVerification !== 'DONE') {

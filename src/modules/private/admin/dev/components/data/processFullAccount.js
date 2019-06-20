@@ -11,9 +11,11 @@ export default class ProcessFullAccount extends Component {
   componentWillMount() {
     this.props.dataStore.resetForm('PROCESS_FULL_ACCOUNT_META_FRM');
   }
+
   onSubmit = () => {
     this.props.dataStore.processFullInvestorAccountMeta();
   }
+
   render() {
     const { dataStore } = this.props;
     const {
@@ -26,13 +28,15 @@ export default class ProcessFullAccount extends Component {
           <Form onSubmit={this.onSubmit}>
             <Grid>
               <Grid.Column width="16">
-                <FormCheckbox
-                  name="options"
-                  defaults
-                  fielddata={PROCESS_FULL_ACCOUNT_META_FRM.fields.options}
-                  changed={(e, result) => formChange(e, result, 'PROCESS_FULL_ACCOUNT_META_FRM')}
-                  containerclassname="ui list horizontal"
-                />
+                <div className="bonus-tier-list process-account-list">
+                  <FormCheckbox
+                    name="options"
+                    defaults
+                    fielddata={PROCESS_FULL_ACCOUNT_META_FRM.fields.options}
+                    changed={(e, result) => formChange(e, result, 'PROCESS_FULL_ACCOUNT_META_FRM')}
+                    containerclassname="ui list"
+                  />
+                </div>
               </Grid.Column>
             </Grid>
             <Divider hidden />
@@ -42,14 +46,15 @@ export default class ProcessFullAccount extends Component {
                   type="text"
                   key={field}
                   name={field}
-                  containerwidth="6"
+                  containerwidth="8"
                   showerror
                   fielddata={PROCESS_FULL_ACCOUNT_META_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, 'PROCESS_FULL_ACCOUNT_META_FRM')}
-                />))
+                />
+              ))
               }
-              <Form.Field width={4}>
-                <Button primary fluid content="Submit" disabled={!PROCESS_FULL_ACCOUNT_META_FRM.meta.isValid || inProgress.processFullAccount} loading={inProgress.processFullAccount} />
+              <Form.Field width={16}>
+                <Button primary content="Submit" disabled={!PROCESS_FULL_ACCOUNT_META_FRM.meta.isValid || inProgress.processFullAccount} loading={inProgress.processFullAccount} />
               </Form.Field>
             </Form.Group>
           </Form>

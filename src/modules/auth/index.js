@@ -18,8 +18,8 @@ export default class Auth extends React.Component {
     const { location } = this.props;
     return (
       <Aux>
-        {(allowed.find(item => matchPath(location.pathname, { path: `/auth/${item}` }))) &&
-        <section className="modalbg-banner" />}
+        {(allowed.find(item => matchPath(location.pathname, { path: `/auth/${item}` })))
+        && <section className="modalbg-banner" />}
         <Switch>
           <Route path="/auth/login" component={Login} />
           <Route path="/auth/register/:type?" component={SignupInitial} />

@@ -17,13 +17,16 @@ class Home extends Component {
   componentWillMount() {
     this.props.campaignStore.initRequest(['active']);
   }
+
   componentWillReceiveProps() {
     this.props.campaignStore.initRequest(['active']);
   }
+
   handleExploreBtn = () => {
     this.props.history.push('/offerings');
     window.scrollTo(0, 0);
   }
+
   render() {
     const {
       active, loading,
@@ -50,7 +53,7 @@ class Home extends Component {
           loading={loading}
           explore
           campaigns={active.splice(0, 6)}
-          heading={
+          heading={(
             <Aux>
               <Header as="h2" textAlign="center">Latest Campaigns</Header>
               <p className="mb-30 center-align">
@@ -58,7 +61,7 @@ class Home extends Component {
                 The next big thing may be inviting you to participate.
               </p>
             </Aux>
-          }
+)}
         />
         <div className="center-align mb-50">
           <Button secondary content="Explore Campaigns" onClick={this.handleExploreBtn} />

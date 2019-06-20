@@ -10,54 +10,68 @@ const Actions = observer((props) => {
   } = props;
   return (
     <Aux>
-      {(isManager && !isPublished) || editForm ?
-        <Button.Group compact floated="right">
-          <Button
-            inverted
-            color="red"
-            onClick={editForm ? cancelChanges : cancelUpdate}
-            content="Cancel"
-          />
-          {id !== 'new' &&
+      {(isManager && !isPublished) || editForm
+        ? (
+          <Button.Group compact floated="right">
+            <Button
+              inverted
+              color="red"
+              onClick={editForm ? cancelChanges : cancelUpdate}
+              content="Cancel"
+            />
+            {id !== 'new'
+            && (
             <Button
               inverted
               color="red"
               onClick={deleteUpdate}
               content="Delete"
             />
+            )
           }
-          <Button
-            inverted
-            onClick={() => save('DRAFT')}
-            color="green"
-            content={editForm ? 'Save and Unpublish' : 'Save as draft'}
-            disabled={!meta.isValid}
-          />
-          <Button
-            primary
-            onClick={() => save('PUBLISHED')}
-            content={editForm ? 'Save and Publish' : 'Publish'}
-            disabled={!meta.isValid}
-          />
-        </Button.Group> :
-        <Button.Group compact floated="right">
-          {!isManager &&
+            <Button
+              inverted
+              onClick={() => save('DRAFT')}
+              color="green"
+              content={editForm ? 'Save and Unpublish' : 'Save as draft'}
+              disabled={!meta.isValid}
+            />
+            {id !== 'new'
+            && (
+              <Button
+                primary
+                onClick={() => save('PUBLISHED')}
+                content={editForm ? 'Save and Publish' : 'Publish'}
+                disabled={!meta.isValid}
+              />
+            )
+            }
+          </Button.Group>
+        )
+        : (
+          <Button.Group compact floated="right">
+            {!isManager
+            && (
             <Button
               inverted
               color="red"
               onClick={cancelUpdate}
               content="Cancel"
             />
+            )
           }
-          {id !== 'new' && !isPublished &&
+            {id !== 'new' && !isPublished
+            && (
             <Button
               inverted
               color="red"
               onClick={deleteUpdate}
               content="Delete"
             />
+            )
           }
-          {!isPending && !isPublished &&
+            {!isPending && !isPublished
+            && (
             <Button
               inverted
               onClick={() => save('DRAFT')}
@@ -65,18 +79,23 @@ const Actions = observer((props) => {
               content="Save as draft"
               disabled={!meta.isValid}
             />
+            )
           }
-          {!isPublished &&
+            {!isPublished && id !== 'new'
+            && (
             <Button
               primary
               onClick={() => save('PENDING')}
               content={isPending ? 'Awaiting Manager Approval' : 'Submit for Approval'}
               disabled={!meta.isValid || isPending}
             />
+            )
           }
-        </Button.Group>
+          </Button.Group>
+        )
       }
-      {isManager && isPublished && !editForm &&
+      {isManager && isPublished && !editForm
+        && (
         <Button.Group compact floated="right">
           <Button
             inverted
@@ -84,13 +103,15 @@ const Actions = observer((props) => {
             onClick={cancelUpdate}
             content="Cancel"
           />
-          {id !== 'new' &&
+          {id !== 'new'
+            && (
             <Button
               inverted
               color="red"
               onClick={deleteUpdate}
               content="Delete"
             />
+            )
           }
           <Button
             primary
@@ -98,6 +119,7 @@ const Actions = observer((props) => {
             content="Edit"
           />
         </Button.Group>
+        )
       }
     </Aux>
   );

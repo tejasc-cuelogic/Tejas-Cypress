@@ -14,6 +14,7 @@ import Actions from './Actions';
 @observer
 export default class EditArticle extends Component {
   state = { displayMode: false };
+
   componentWillMount() {
     const { id } = this.props.match.params;
 
@@ -28,24 +29,30 @@ export default class EditArticle extends Component {
       });
     }
   }
+
   onDrop = (files, name) => {
     const { id } = this.props.match.params;
     this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files, id);
   }
+
   setData = (attr, value, fieldName) => {
     this.props.articleStore.setThumbnail(attr, value, fieldName);
   }
+
   uploadMedia = (name) => {
     const { id } = this.props.match.params;
     this.props.articleStore.uploadMedia(name, 'ARTICLE_FRM', id);
   }
+
   handleDelDoc = () => {
     const { id } = this.props.match.params;
     this.props.articleStore.removeMedia('featuredImage', id);
   }
+
   handleresetProfilePhoto = (field) => {
     this.props.articleStore.resetThumbnail(field);
   }
+
   handelImageDeimension = (width, height, field) => {
     if (width < 200 || height < 200) {
       const attr = 'error';
@@ -53,6 +60,7 @@ export default class EditArticle extends Component {
       this.props.articleStore.setThumbnail(attr, errorMsg, field);
     }
   }
+
   handleCloseModal = () => {
     if (this.props.match.params.id !== 'new') {
       this.props.articleStore.reset();
@@ -66,6 +74,7 @@ export default class EditArticle extends Component {
     });
     // this.handleCloseModal();
   }
+
   render() {
     const { displayMode } = this.state;
     const {
@@ -87,7 +96,9 @@ export default class EditArticle extends Component {
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
-              {isNew ? 'Create' : 'Edit'} Article
+              {isNew ? 'Create' : 'Edit'}
+              {' '}
+Article
               <Actions
                 save={this.save}
                 meta={ARTICLE_FRM.meta}
@@ -174,48 +185,51 @@ export default class EditArticle extends Component {
                             name={field}
                             fielddata={ARTICLE_FRM.fields[field]}
                             onChange={(e, result) => articleChange(e, result)}
-                          />))
+                          />
+                        ))
                       }
                       <Checkbox
                         name="isFeatured"
                         value={ARTICLE_FRM.fields.isFeatured.value}
                         onChange={(e, result) => articleChange(e, result)}
                         checked={
-                          ARTICLE_FRM.fields.isFeatured &&
-                          ARTICLE_FRM.fields.isFeatured.value
+                          ARTICLE_FRM.fields.isFeatured
+                          && ARTICLE_FRM.fields.isFeatured.value
                         }
                         label="Featured Insight"
                       />
                     </Form>
                   </Card.Content>
                 </Card>
-                {isNew ? '' :
-                <Card fluid>
-                  <Card.Content>
-                    <Header as="h4">Thumbnail</Header>
-                    <Form className="cropper-wrap tombstone-img">
-                      {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
-                        <div className="file-uploader attached">
-                          <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
-                          <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
-                        </div>
-                      ) : (
-                        <ImageCropper
-                          fieldData={ARTICLE_FRM.fields.featuredImage}
-                          setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
-                          verifyExtension={handleVerifyFileExtension}
-                          handelReset={() => this.handleresetProfilePhoto('featuredImage')}
-                          verifyImageDimension={this.handelImageDeimension}
-                          field={ARTICLE_FRM.fields.featuredImage}
-                          modalUploadAction={this.uploadMedia}
-                          name="featuredImage"
-                          cropInModal
-                          aspect={3 / 2}
-                        />
-                      )}
-                    </Form>
-                  </Card.Content>
-                </Card>}
+                {isNew ? ''
+                  : (
+                    <Card fluid>
+                      <Card.Content>
+                        <Header as="h4">Thumbnail</Header>
+                        <Form className="cropper-wrap tombstone-img">
+                          {ARTICLE_FRM.fields.featuredImage.preSignedUrl ? (
+                            <div className="file-uploader attached">
+                              <Button onClick={fieldName => this.handleDelDoc(fieldName)} circular icon={{ className: 'ns-close-light' }} />
+                              <Image64 srcUrl={ARTICLE_FRM.fields.featuredImage.preSignedUrl} />
+                            </div>
+                          ) : (
+                            <ImageCropper
+                              fieldData={ARTICLE_FRM.fields.featuredImage}
+                              setData={(attr, value) => this.setData(attr, value, 'featuredImage')}
+                              verifyExtension={handleVerifyFileExtension}
+                              handelReset={() => this.handleresetProfilePhoto('featuredImage')}
+                              verifyImageDimension={this.handelImageDeimension}
+                              field={ARTICLE_FRM.fields.featuredImage}
+                              modalUploadAction={this.uploadMedia}
+                              name="featuredImage"
+                              cropInModal
+                              aspect={3 / 2}
+                            />
+                          )}
+                        </Form>
+                      </Card.Content>
+                    </Card>
+                  )}
               </Grid.Column>
             </Grid.Row>
           </Grid>

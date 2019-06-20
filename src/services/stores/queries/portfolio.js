@@ -32,6 +32,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             investmentMultiple
             interestRate
             regulation
+            minOfferingAmount506
+            maxOfferingAmount506
             minOfferingAmount506C
             maxOfferingAmount506C
             minOfferingAmountCF
@@ -68,6 +70,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             investmentMultiple
             interestRate
             regulation
+            minOfferingAmount506
+            maxOfferingAmount506
             minOfferingAmount506C
             maxOfferingAmount506C
             minOfferingAmountCF
@@ -104,6 +108,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             investmentMultiple
             interestRate
             regulation
+            minOfferingAmount506
+            maxOfferingAmount506
             minOfferingAmount506C
             maxOfferingAmount506C
             minOfferingAmountCF

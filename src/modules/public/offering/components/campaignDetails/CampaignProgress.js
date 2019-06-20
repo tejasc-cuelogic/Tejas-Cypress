@@ -17,7 +17,11 @@ export default class CampaignProgress extends Component {
   renderLegend = () => (
     <p>
       <h4>{Helper.CurrencyFormat(this.props.data.collected, 0)}</h4>
-      <span>of {Helper.CurrencyFormat(this.props.data.needed, 0)} {this.props.amountType}
+      <span>
+of
+        {Helper.CurrencyFormat(this.props.data.needed, 0)}
+        {' '}
+        {this.props.amountType}
         <Popup
           trigger={<Icon name="help circle" color="grey" />}
           content="Lorem Ipsum"
@@ -26,6 +30,7 @@ export default class CampaignProgress extends Component {
       </span>
     </p>
   );
+
   render() {
     const data = this.props.amountType === 'min' ? [...dataRefMin] : [...dataRef];
     data[0].amount = this.props.amountType === 'min' ? (this.props.data.collected <= this.props.maxOffering ? this.props.data.collected : this.props.maxOffering) : this.props.data.needed;

@@ -150,6 +150,10 @@ h6{
 .pl-60{
 	padding-left: @60px !important;
 }
+.mlr-0{
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
 .pull-left{
 	float:left !important;
 }
@@ -188,6 +192,9 @@ h6{
 }
 .text-uppercase {
 	text-transform: uppercase !important;
+}
+.text-lowercase {
+	text-transform: none !important;
 }
 .text-capitalize {
 	text-transform:capitalize !important;
@@ -238,6 +245,9 @@ h6{
 }
 .underline-text {
 	text-decoration: underline !important;
+}
+.break-text {
+	word-break: break-all;
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){

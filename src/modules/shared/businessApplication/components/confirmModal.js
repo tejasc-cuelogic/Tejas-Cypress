@@ -22,10 +22,12 @@ export default class ConfirmModal extends Component {
         <Modal.Content className="center-align relaxed">
           <Header as="h3" className="mb-30">Do you want to save your progress?</Header>
           <Form error onSubmit={this.props.partialSave}>
-            {errors &&
+            {errors
+              && (
               <Message error className="mb-30">
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <Button.Group vertical>
               <Button primary className="very relaxed mb-10" content="Yes, save it" loading={inProgress} />

@@ -18,15 +18,19 @@ export default class ConfirmOTPModal extends Component {
   componentDidMount() {
     Helper.otpShield();
   }
+
   getMaskedPhoneNumber = () => {
     const number = this.props.maskedPhoneNumber;
     return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';
   }
+
   getOTPEmailAddress = () => this.props.otpConfirmemailAddress;
+
   handleCloseModal = (e) => {
     e.preventDefault();
     this.props.history.push(this.props.refLinkListVal);
   }
+
   render() {
     const { props } = this;
     const {
@@ -49,24 +53,29 @@ export default class ConfirmOTPModal extends Component {
           <Header as="h3">Please confirm with the code</Header>
           <Divider section className="small" />
           <p>
-            To proceed with <b>{headerMessageToShow}</b> please
+            To proceed with
+            {' '}
+            <b>{headerMessageToShow}</b>
+            {' '}
+please
             check the verification code in the message we sent to:
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {mfaMode && mfaMode === 'PHONE' ?
-            <p className="display-only">{formattedPhoneNumber}</p>
-            :
-            <FormInput
-              ishidelabel
-              type="email"
-              size="huge"
-              name="email"
-              fielddata={{ value: this.getOTPEmailAddress() }}
-              readOnly
-              displayMode
-              className="display-only"
-            />
+          {mfaMode && mfaMode === 'PHONE'
+            ? <p className="display-only">{formattedPhoneNumber}</p>
+            : (
+              <FormInput
+                ishidelabel
+                type="email"
+                size="huge"
+                name="email"
+                fielddata={{ value: this.getOTPEmailAddress() }}
+                readOnly
+                displayMode
+                className="display-only"
+              />
+            )
           }
           <p>
             <Link to="/app/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link>
@@ -75,7 +84,7 @@ export default class ConfirmOTPModal extends Component {
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
                 className="otp-field"
@@ -87,10 +96,12 @@ export default class ConfirmOTPModal extends Component {
               />
               <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" onClick={e => resendVerification(e)} />
             </Form.Field>
-            {errors &&
+            {errors
+              && (
               <Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <Button type="submit" primary size="large" className="very relaxed" content="Submit to approval" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
           </Form>

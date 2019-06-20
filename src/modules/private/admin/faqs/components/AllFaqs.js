@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Button, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
-import { InlineLoader } from './../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -25,7 +25,7 @@ const SortableItem = SortableElement(({
     <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
-          <Button className="link-button" >
+          <Button className="link-button">
             <Icon className={`ns-${actions[action].icon}`} onClick={() => handleAction(actions[action].label, faq.id, faq.itemStatus)} />
           </Button>
         ))}
@@ -57,18 +57,22 @@ const SortableList = SortableContainer(({
 @observer
 export default class AllFaqs extends Component {
   state = { activeIndex: 0, innerActiveIndex: [] }
+
   componentWillMount() {
     this.props.faqStore.initRequest(); // load data
   }
+
   componentWillUnmount() {
     this.props.faqStore.reset();
   }
+
   onSortEnd = ({ oldIndex, newIndex }, faqType, categorizedFaqs) => {
     const { allCategorizedFaqs, setFaqOrder } = this.props.faqStore;
     if (oldIndex !== newIndex) {
       setFaqOrder(arrayMove(allCategorizedFaqs[faqType][categorizedFaqs], oldIndex, newIndex));
     }
   }
+
   handleAction = (action, faqId, status) => {
     if (action === 'Delete') {
       this.props.faqStore.setConfirmBox(action, faqId);
@@ -76,18 +80,22 @@ export default class AllFaqs extends Component {
       this.props.history.push(`${this.props.match.url}/${faqId}/${status}`);
     }
   }
-  globalActionChange = (e, { name, value }) =>
-    this.props.faqStore.setGlobalAction(name, value);
+
+  globalActionChange = (e, { name, value }) => this.props.faqStore.setGlobalAction(name, value);
+
   deleteFaq = () => {
     this.props.faqStore.deleteRecords(this.props.faqStore.confirmBox.refId).then(() => {
       this.props.faqStore.setConfirmBox('');
       this.props.history.replace(this.props.refLink);
     });
   }
+
   handleDeleteCancel = () => {
     this.props.faqStore.setConfirmBox('');
   }
+
   paginate = params => this.props.faqStore.pageRequest(params);
+
   checkedRecords = (e, result) => {
     if (result && result.type === 'checkbox' && result.checked) {
       this.props.faqStore.addSelectedRecord(result.value);
@@ -95,17 +103,18 @@ export default class AllFaqs extends Component {
       this.props.faqStore.removeUnSelectedRecord(result.value);
     }
   }
+
   checkAll = (e, result) => {
     this.props.faqStore.checkUncheckAll(result.checked);
   }
+
   toggleAccordion = (index, field) => {
     let stateChange = [];
     const newIndex = this.state[field] === index ? -1 : index;
     if (field === 'activeIndex') {
       stateChange = { activeIndex: newIndex };
     } else if (this.state.innerActiveIndex.includes(index)) {
-      this.state.innerActiveIndex =
-        this.state.innerActiveIndex.filter(innerIndex => innerIndex !== index);
+      this.state.innerActiveIndex = this.state.innerActiveIndex.filter(innerIndex => innerIndex !== index);
     } else {
       this.state.innerActiveIndex.push(newIndex);
       stateChange = { ...this.state };
@@ -114,6 +123,7 @@ export default class AllFaqs extends Component {
     // { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
     this.setState(stateChange);
   }
+
   render() {
     const { activeIndex, innerActiveIndex } = this.state;
     const {

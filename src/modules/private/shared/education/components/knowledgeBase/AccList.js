@@ -9,6 +9,7 @@ import { REACT_APP_DEPLOY_ENV } from '../../../../../../constants/common';
 @observer
 export default class AccList extends Component {
   state = { activeIndex: 0 };
+
   toggleAction = (e, titleProps) => {
     const { index, refItem } = titleProps;
     const { activeIndex } = this.state;
@@ -17,6 +18,7 @@ export default class AccList extends Component {
       this.props.educationStore.getOne(this.props.module, refItem);
     }
   }
+
   isActive = (record, key) => {
     let currId = this.props.location.pathname.split('/')[4];
     if (this.props.educationStore.selected) {
@@ -25,8 +27,9 @@ export default class AccList extends Component {
     const ids = record[key].map(item => item.slug);
     return this.state.activeIndex === record.id || record.slug || ids.includes(currId);
   }
+
   render() {
-    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     const {
       match, data, module,
       marketing,
@@ -72,15 +75,17 @@ export default class AccList extends Component {
             </Aux>
           ))
         }
-        {isDev && marketing ?
-          <Accordion.Title
-            refItem="faq"
-            onClick={this.toggleAction}
-            as={NavLink}
-            to={`${match.url}/faq`}
-          >
+        {isDev && marketing
+          ? (
+            <Accordion.Title
+              refItem="faq"
+              onClick={this.toggleAction}
+              as={NavLink}
+              to={`${match.url}/faq`}
+            >
             FAQ
-          </Accordion.Title> : ''
+            </Accordion.Title>
+          ) : ''
         }
       </Accordion>
     );

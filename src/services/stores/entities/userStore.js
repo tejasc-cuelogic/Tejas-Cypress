@@ -1,12 +1,16 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
+import { GqlClient as clientPublic } from '../../../api/publicApi';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
 import { authStore } from '../index';
+import { resetPasswordExpirationForCognitoUser } from '../queries/users';
 
 export class UserStore {
   @observable currentUser;
+
   @observable USR_FRM = Validator.prepareFormObject(NEW_USER);
+
   @observable opt = {};
 
   @action
@@ -32,6 +36,19 @@ export class UserStore {
   @action setCurrentUser(user) {
     this.currentUser = user;
   }
+
+  @action resetPasswordExpirationForCognitoUser = emailAddress => new Promise((resolve) => {
+    clientPublic
+      .mutate({
+        mutation: resetPasswordExpirationForCognitoUser,
+        variables: {
+          emailAddress,
+        },
+      })
+      .then((res) => {
+        resolve(res);
+      });
+  });
 
   @computed get capabilitiesMeta() {
     console.log(this.opt);
@@ -71,14 +88,18 @@ export class UserStore {
   }
 
   myAccessForModule(module) {
-    return this.myCapabilities.includes(`${module}_FULL`) ?
-      { asManager: true, level: 'FULL' } : (
-        this.myCapabilities.includes(`${module}_MANAGER`) ?
-          { asManager: true, level: 'MANAGER' } : (
-            this.myCapabilities.includes(`${module}_SUPPORT`) ?
-              { asSupport: true, level: 'SUPPORT' } : {}
+    return this.myCapabilities.includes(`${module}_FULL`)
+      ? { asManager: true, level: 'FULL' } : (
+        this.myCapabilities.includes(`${module}_MANAGER`)
+          ? { asManager: true, level: 'MANAGER' } : (
+            this.myCapabilities.includes(`${module}_SUPPORT`)
+              ? { asSupport: true, level: 'SUPPORT' } : {}
           )
       );
+  }
+
+  @computed get isApplicationManager() {
+    return this.myCapabilities.includes('APPLICATIONS_FULL') || this.myCapabilities.includes('APPLICATIONS_MANAGER');
   }
 
   @computed get isInvestor() {
@@ -90,14 +111,17 @@ export class UserStore {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('issuer');
   }
+
   @computed get isAdmin() {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('admin');
   }
+
   getUserEmailAddress() {
     const emailDetails = (this.currentUser && toJS(this.currentUser.email)) || null;
     return emailDetails;
   }
+
   getUserId() {
     return (this.currentUser && toJS(this.currentUser.sub)) || null;
   }

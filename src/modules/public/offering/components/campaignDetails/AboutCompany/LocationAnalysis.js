@@ -18,9 +18,9 @@ class LocationAnalysis extends Component {
         </Header>
         {campaign && campaign.offering
           && campaign.offering.about
-          && campaign.offering.about.locationAnalysis ?
-            <HtmlEditor readOnly content={campaign.offering.about.locationAnalysis} /> :
-            <InlineLoader text="No data found" className="bg-offwhite" />
+          && campaign.offering.about.locationAnalysis
+          ? <HtmlEditor readOnly content={campaign.offering.about.locationAnalysis} />
+          : <InlineLoader text="No data found" className="bg-offwhite" />
         }
       </Aux>
     );

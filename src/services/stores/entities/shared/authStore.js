@@ -17,27 +17,46 @@ import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '.
 
 export class AuthStore {
   @observable hasSession = false;
+
   @observable isUserLoggedIn = false;
+
   @observable newPasswordRequired = false;
+
   @observable cognitoUserSession = null;
+
   @observable isOfferPreviewUrl = false;
+
   @observable capabilities = [];
+
   @observable userId = null;
+
   @observable devAuth = {
     required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
+
   @observable LOGIN_FRM = Validator.prepareFormObject(LOGIN);
+
   @observable SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
+
   @observable CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
+
   @observable CHANGE_PASS_FRM = Validator.prepareFormObject(CHANGE_PASS);
+
   @observable FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
+
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
+
   @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
+
   @observable confirmProgress = false;
+
   @observable pwdInputType = 'password';
+
   @observable currentScore = 0;
+
   @observable idleTimer = null;
+
   @observable checkEmail = false;
 
   @action
@@ -89,8 +108,7 @@ export class AuthStore {
       cookie.save('ROLE_VALUE', result.value, { maxAge: 1200 });
     }
     if (e.password || e.password === '') {
-      this.SIGNUP_FRM =
-        Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
+      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
       if (this.SIGNUP_FRM.fields.password.value === this.SIGNUP_FRM.fields.verify.value) {
         this.SIGNUP_FRM.fields.verify.error = undefined;
       }
@@ -130,8 +148,7 @@ export class AuthStore {
         score: 'score',
       };
       const newObj = this.renameKeys(ojbNew, e);
-      this.CHANGE_PASS_FRM =
-        Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValuesForCangePassword(newObj, res));
+      this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValuesForCangePassword(newObj, res));
     } else {
       this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
     }
@@ -148,8 +165,7 @@ export class AuthStore {
   @action
   resetPassChange = (e, res) => {
     if (e.password || e.password === '') {
-      this.RESET_PASS_FRM =
-        Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
+      this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
     } else {
       this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, typeof e === 'string' ? { name: 'code', value: e } : Validator.pullValues(e, res));
     }
@@ -209,8 +225,8 @@ export class AuthStore {
     if (this.isUserLoggedIn) {
       const { password, email } = this.CONFIRM_FRM.fields;
       const userCredentials = {
-        email: email.value || localStorage.getItem('changedEmail') ||
-          get(userDetailsStore, 'userDetails.email.address') || '',
+        email: email.value || localStorage.getItem('changedEmail')
+          || get(userDetailsStore, 'userDetails.email.address') || '',
         password: password.value,
         givenName: get(userDetailsStore, 'userDetails.info.firstName') || '',
       };
@@ -236,10 +252,11 @@ export class AuthStore {
   resetForm = (form, targetedFields = undefined) => {
     Validator.resetFormData(this[form], targetedFields);
   }
+
   @computed
   get canSubmitConfirmEmail() {
-    return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error &&
-      !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
+    return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error
+      && !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
   @action
@@ -349,6 +366,8 @@ export class AuthStore {
     this.resetForm('FORGOT_PASS_FRM', null);
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
+    this.newPasswordRequired = false;
+    this.isUserLoggedIn = false;
   }
 
   @action

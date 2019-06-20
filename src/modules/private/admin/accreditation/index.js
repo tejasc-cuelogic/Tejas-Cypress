@@ -12,22 +12,27 @@ export default class CrowdPay extends Component {
   componentWillMount() {
     this.props.accreditationStore.initRequest();
   }
+
   componentWillUnmount() {
     this.props.accreditationStore.resetFilters();
   }
-  setSearchParam = (e, { name, value }) =>
-    this.props.accreditationStore.setInitiateSrch(name, value);
+
+  setSearchParam = (e, { name, value }) => this.props.accreditationStore.setInitiateSrch(name, value);
+
   toggleSearch = () => this.props.accreditationStore.toggleSearch();
+
   executeSearch = (e) => {
     if (e.charCode === 13) {
       this.props.accreditationStore.setInitiateSrch('keyword', e.target.value);
     }
   }
+
   change = (date, field) => {
     if ((date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) || date.value === '') {
       this.props.accreditationStore.setInitiateSrch(field, date);
     }
   }
+
   render() {
     const {
       requestState, filters, FILTER_FRM,
@@ -35,7 +40,7 @@ export default class CrowdPay extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P1={
+        P1={(
           <ByKeyword
             executeSearch={this.executeSearch}
             w={[8]}
@@ -44,8 +49,8 @@ export default class CrowdPay extends Component {
             requestState={requestState}
             filters={filters}
           />
-        }
-        P2={
+)}
+        P2={(
           <Filters
             requestState={requestState}
             filters={filters}
@@ -54,7 +59,7 @@ export default class CrowdPay extends Component {
             change={this.change}
             FILTER_FRM={FILTER_FRM}
           />
-        }
+)}
       >
         <AllAccreditationRequests {...this.props} />
       </PrivateLayout>

@@ -22,6 +22,7 @@ export default class AccountCreation extends React.Component {
     }
     this.props.investmentLimitStore.getInvestedAmount();
   }
+
   handleMultiStepModalclose = () => {
     this.updateUser();
     this.props.history.push('/app/summary');
@@ -30,13 +31,16 @@ export default class AccountCreation extends React.Component {
     this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
+
   handleStepChange = (step) => {
     this.props.entityAccountStore.setStepToBeRendered(step);
     this.props.uiStore.clearErrors();
   }
+
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+
   closeProcessingModal = () => {
     const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
     this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
@@ -48,6 +52,7 @@ export default class AccountCreation extends React.Component {
       this.props.uiStore.resetcreateAccountMessage();
     }
   }
+
   render() {
     const {
       inProgress,
@@ -71,93 +76,92 @@ export default class AccountCreation extends React.Component {
       isPlaidDirty, linkbankSummary, bankSummarySubmit,
       stepbankSummary, setLinkBankSummary, showAddFunds,
     } = this.props.bankAccountStore;
-    const steps =
-      [
-        {
-          name: 'Financial info',
-          component: <FinancialInformation />,
-          isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
-          isDirty: FIN_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityForm,
-          form: 'FIN_INFO_FRM',
-          stepToBeRendered: 1,
-          validForm: FIN_INFO_FRM.meta.isValid,
-          disableKeyDown: true,
-          bankSummary: false,
-        },
-        {
-          name: 'General',
-          component: <General />,
-          isValid: GEN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
-          isDirty: GEN_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityForm,
-          form: 'GEN_INFO_FRM',
-          stepToBeRendered: 2,
-          disableKeyDown: true,
-          validForm: GEN_INFO_FRM.meta.isValid,
-          bankSummary: false,
-        },
-        {
-          name: 'Trust Status',
-          component: <FinancilInfo />,
-          isValid: TRUST_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
-          isDirty: TRUST_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityForm,
-          form: 'TRUST_INFO_FRM',
-          stepToBeRendered: 3,
-          disableKeyDown: true,
-          validForm: TRUST_INFO_FRM.meta.isValid,
-          bankSummary: false,
-        },
-        {
-          name: 'Personal info',
-          component: <PersonalInformation />,
-          isValid: PERSONAL_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
-          isDirty: PERSONAL_INFO_FRM.meta.isDirty,
-          validate: validationActions.validateEntityForm,
-          form: 'PERSONAL_INFO_FRM',
-          validForm: PERSONAL_INFO_FRM.meta.isValid,
-          disableKeyDown: true,
-          stepToBeRendered: 4,
-          bankSummary: false,
-        },
-        {
-          name: 'Formation doc',
-          component: <FormationDocuments />,
-          isValid: FORM_DOCS_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
-          isDirty: FORM_DOCS_FRM.meta.isDirty,
-          validate: validationActions.validateEntityForm,
-          form: 'FORM_DOCS_FRM',
-          validForm: FORM_DOCS_FRM.meta.isValid,
-          stepToBeRendered: 5,
-          disableKeyDown: true,
-          bankSummary: false,
-        },
-        {
-          name: 'Link bank',
-          component: <Plaid />,
-          isValid: (formEntityAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 5 ? 'error' : '',
-          isDirty: isPlaidDirty,
-          validate: validationActions.validateLinkBankForm,
-          disableNextButton: !linkbankSummary,
-          validForm: isAccountPresent,
-          disableKeyDown: true,
-          bankSummary: linkbankSummary,
-          stepToBeRendered: 6,
-        },
-        {
-          name: 'Summary',
-          component: <Summary />,
-          isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
-          // validForm: isValidEntityForm,
-          bankSummary: false,
-        },
-      ];
+    const steps = [
+      {
+        name: 'Financial info',
+        component: <FinancialInformation />,
+        isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
+        isDirty: FIN_INFO_FRM.meta.isDirty,
+        validate: validationActions.validateEntityForm,
+        form: 'FIN_INFO_FRM',
+        stepToBeRendered: 1,
+        validForm: FIN_INFO_FRM.meta.isValid,
+        disableKeyDown: true,
+        bankSummary: false,
+      },
+      {
+        name: 'General',
+        component: <General />,
+        isValid: GEN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
+        isDirty: GEN_INFO_FRM.meta.isDirty,
+        validate: validationActions.validateEntityForm,
+        form: 'GEN_INFO_FRM',
+        stepToBeRendered: 2,
+        disableKeyDown: true,
+        validForm: GEN_INFO_FRM.meta.isValid,
+        bankSummary: false,
+      },
+      {
+        name: 'Trust Status',
+        component: <FinancilInfo />,
+        isValid: TRUST_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
+        isDirty: TRUST_INFO_FRM.meta.isDirty,
+        validate: validationActions.validateEntityForm,
+        form: 'TRUST_INFO_FRM',
+        stepToBeRendered: 3,
+        disableKeyDown: true,
+        validForm: TRUST_INFO_FRM.meta.isValid,
+        bankSummary: false,
+      },
+      {
+        name: 'Personal info',
+        component: <PersonalInformation />,
+        isValid: PERSONAL_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
+        isDirty: PERSONAL_INFO_FRM.meta.isDirty,
+        validate: validationActions.validateEntityForm,
+        form: 'PERSONAL_INFO_FRM',
+        validForm: PERSONAL_INFO_FRM.meta.isValid,
+        disableKeyDown: true,
+        stepToBeRendered: 4,
+        bankSummary: false,
+      },
+      {
+        name: 'Formation doc',
+        component: <FormationDocuments />,
+        isValid: FORM_DOCS_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
+        isDirty: FORM_DOCS_FRM.meta.isDirty,
+        validate: validationActions.validateEntityForm,
+        form: 'FORM_DOCS_FRM',
+        validForm: FORM_DOCS_FRM.meta.isValid,
+        stepToBeRendered: 5,
+        disableKeyDown: true,
+        bankSummary: false,
+      },
+      {
+        name: 'Link bank',
+        component: <Plaid />,
+        isValid: (formEntityAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 5 ? 'error' : '',
+        isDirty: isPlaidDirty,
+        validate: validationActions.validateLinkBankForm,
+        disableNextButton: !linkbankSummary,
+        validForm: isAccountPresent,
+        disableKeyDown: true,
+        bankSummary: linkbankSummary,
+        stepToBeRendered: 6,
+      },
+      {
+        name: 'Summary',
+        component: <Summary />,
+        isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
+        // validForm: isValidEntityForm,
+        bankSummary: false,
+      },
+    ];
     if (showProcessingModal) {
       return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
     }
     return (
-      <div className="step-progress" >
+      <div className="step-progress">
         <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );

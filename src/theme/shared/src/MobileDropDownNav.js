@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { Menu, Responsive, Dropdown, Icon, Visibility } from 'semantic-ui-react';
 import { matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { NavItems } from '../../../theme/layout/NavigationItems';
+import { NavItems } from '../../layout/NavigationItems';
 
 @inject('campaignStore', 'navStore')
 @observer
@@ -11,6 +11,7 @@ export default class MobileDropDownNav extends React.Component {
   state = {
     title: '',
   }
+
   activeText = () => {
     const { navItems, location, refMatch } = this.props;
     const active = navItems.find((i) => {
@@ -31,11 +32,14 @@ export default class MobileDropDownNav extends React.Component {
     }
     return title;
   }
+
   toggleCampaignSideBar = () => {
     this.props.campaignStore.setFieldValue('campaignSideBarShow', !this.props.campaignStore.campaignSideBarShow);
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }
+
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
+
   render() {
     const {
       navItems, location, className, navStore, slideUpNot, useIsActive, id,
@@ -50,8 +54,8 @@ export default class MobileDropDownNav extends React.Component {
                 <NavItems sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />
               </Dropdown.Menu>
             </Dropdown>
-            {location.pathname.startsWith('/offerings/') &&
-              <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
+            {location.pathname.startsWith('/offerings/')
+              && <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
             }
           </Menu>
           <div className="animate-placeholder" />

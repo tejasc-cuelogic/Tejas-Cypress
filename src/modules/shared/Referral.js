@@ -6,7 +6,9 @@ import NotFound from './NotFound';
 @inject('campaignStore', 'authStore', 'commonStore', 'userStore')
 @observer
 export default class Referral extends React.Component {
-  state = { found: 0 }; // 0: not started, 1: loading, 2: found, 3: not found
+  state = { found: 0 };
+
+  // 0: not started, 1: loading, 2: found, 3: not found
   componentWillMount() {
     const { referralCode } = this.props.match.params;
     this.props.campaignStore.initRequest(['active'], referralCode).then((data) => {
@@ -24,6 +26,7 @@ export default class Referral extends React.Component {
       }
     });
   }
+
   render() {
     const { found } = this.state;
     return (

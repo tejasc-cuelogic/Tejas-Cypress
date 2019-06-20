@@ -14,9 +14,11 @@ export default class BonusRewards extends Component {
   componentWillMount() {
     this.props.offeringInvestorStore.initRequest(this.props.offeringId);
   }
+
   executeSearch = (e) => {
     this.props.offeringInvestorStore.setInitiateSrch('keyword', e.target.value);
   }
+
   populateCsvData = () => {
     const { investorListsForCsvExport } = this.props.offeringInvestorStore;
     const { offer } = this.props.offeringsStore;
@@ -28,6 +30,7 @@ export default class BonusRewards extends Component {
     };
     Helper.downloadCSV(params);
   }
+
   render() {
     const { requestState, investorLists } = this.props.offeringInvestorStore;
     const { isIssuer, isAdmin } = this.props.userStore;
@@ -45,7 +48,8 @@ export default class BonusRewards extends Component {
                 // addon={
                 // }
               />
-              {isAdmin &&
+              {isAdmin
+              && (
               <Grid.Column floated="right" width={3} className="right-align">
                 <Button
                   primary
@@ -56,6 +60,7 @@ export default class BonusRewards extends Component {
                   disabled={!investorLists.length}
                 />
               </Grid.Column>
+              )
               }
             </Grid.Row>
           </Grid>

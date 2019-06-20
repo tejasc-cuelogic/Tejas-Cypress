@@ -12,7 +12,9 @@ import {
 
 export class AccountStore {
   @observable INVESTMENT_ACC_TYPES = FormValidator.prepareFormObject(ACC_TYPE);
+
   @observable showAccountFrozenModal = false;
+
   @observable ACC_TYPE_MAPPING = {
     0: {
       store: individualAccountStore,
@@ -30,6 +32,7 @@ export class AccountStore {
       name: 'entity',
     },
   };
+
   @action
   setInvestmentAccType = (e, result) => {
     this.INVESTMENT_ACC_TYPES = FormValidator.onChange(
@@ -60,8 +63,8 @@ export class AccountStore {
       { name: this.ACC_TYPE_MAPPING[accountValue].name },
     );
     const { accountId } = this.ACC_TYPE_MAPPING[accountValue];
-    return this.ACC_TYPE_MAPPING[accountValue].store[accountId] ||
-      get(accountDetails, 'details.accountId');
+    return this.ACC_TYPE_MAPPING[accountValue].store[accountId]
+      || get(accountDetails, 'details.accountId');
   }
 
   @action

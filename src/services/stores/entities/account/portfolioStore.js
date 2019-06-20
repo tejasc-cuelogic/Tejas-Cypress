@@ -9,17 +9,29 @@ import Helper from '../../../../helper/utility';
 
 export class PortfolioStore {
   @observable investmentLists = null;
+
   @observable pieChartDataEval = null;
+
   @observable pieChartData = null;
+
   @observable accSummary = null;
+
   @observable currentOfferingId = null;
+
   @observable isCancelShowLink = false;
+
   @observable investmentDetails = null;
+
   @observable canceledInvestmentDetails = null;
+
   @observable PayOffData = null;
+
   @observable currentAcccountType = null;
+
   @observable isAdmin = false;
+
   @observable portfolioError = false;
+
   @observable apiCall = false;
 
   @action
@@ -87,6 +99,7 @@ export class PortfolioStore {
       },
     });
   }
+
   @action
   calculateInvestmentType() {
     this.resetPiechartValues();
@@ -175,8 +188,8 @@ export class PortfolioStore {
   @action
   getInvestorAccountPortfolio = (accountType) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
-      userDetailsStore.currentActiveAccountDetails;
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
+      : userDetailsStore.currentActiveAccountDetails;
     const { userDetails, getDetailsOfUser } = userDetailsStore;
     this.investmentLists = graphql({
       client,
@@ -205,17 +218,16 @@ export class PortfolioStore {
   }
 
   @computed get getInvestorAccounts() {
-    return (this.investmentLists && this.investmentLists.data &&
-      this.investmentLists.data.getInvestorAccountPortfolio &&
-      toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
+    return (this.investmentLists && this.investmentLists.data
+      && this.investmentLists.data.getInvestorAccountPortfolio
+      && toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
   }
 
   @computed get getInvestorAccountById() {
     const accounts = this.getInvestorAccounts;
     let offering = null;
     if (accounts) {
-      offering =
-        accounts.investments.pending.find(acc => acc.offering.id === this.currentOfferingId);
+      offering = accounts.investments.pending.find(acc => acc.offering.id === this.currentOfferingId);
     }
     return offering;
   }
@@ -223,6 +235,7 @@ export class PortfolioStore {
   @computed get loading() {
     return this.investmentLists.loading;
   }
+
   @action
   getInvestorDetails = (accountType, offeringId, isAdmin = false) => new Promise((resolve) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
@@ -255,11 +268,13 @@ export class PortfolioStore {
       fetchPolicy: 'network-only',
     });
   });
+
   @computed get getInvestor() {
-    return (this.investmentDetails && this.investmentDetails.data &&
-      this.investmentDetails.data.getInvestmentDetails &&
-      toJS(this.investmentDetails.data.getInvestmentDetails)) || null;
+    return (this.investmentDetails && this.investmentDetails.data
+      && this.investmentDetails.data.getInvestmentDetails
+      && toJS(this.investmentDetails.data.getInvestmentDetails)) || null;
   }
+
   @computed get loadingInvestDetails() {
     return this.investmentDetails.loading;
   }
@@ -299,18 +314,22 @@ export class PortfolioStore {
         });
     });
   }
+
   @action
   setInitialLinkValue = (boolValue) => {
     this.isCancelShowLink = boolValue;
   }
+
   @action
   setInvestmentDetailsForCancelRequest = (detailObject) => {
     this.canceledInvestmentDetails = detailObject;
   }
+
   @action
   currentAccoutType = (type) => {
     this.currentAcccountType = type;
   }
+
   @action
   resetPortfolioData = () => {
     this.setFieldValue('investmentLists', null);

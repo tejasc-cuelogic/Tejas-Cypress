@@ -26,6 +26,7 @@ class Disclosure extends Component {
       });
     }
   }
+
   render() {
     const { doc, campaignCreatedBy } = this.props;
     if (!doc || this.state.loading) {
@@ -36,9 +37,9 @@ class Disclosure extends Component {
     if (doc.accreditedOnly
       && (!this.props.userStore.currentUser
       || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
-      || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles &&
-      this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated &&
-      !this.props.accreditationStore.isUserAccreditated))) {
+      || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
+      && this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated
+      && !this.props.accreditationStore.isUserAccreditated))) {
       return (
         <section className="no-updates center-align bg-offwhite padded">
           <Header as="h3" className="mb-20 mt-50">
@@ -46,9 +47,9 @@ class Disclosure extends Component {
           </Header>
           <p>Please confirm your accredited investor status to access the Data Room.</p>
           {
-            !this.props.userStore.currentUser ?
-              <Button as={Link} to={`/auth/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" /> :
-              <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+            !this.props.userStore.currentUser
+              ? <Button as={Link} to={`/auth/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" />
+              : <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
           }
         </section>
       );

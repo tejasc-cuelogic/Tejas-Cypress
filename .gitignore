@@ -16,12 +16,15 @@ npm-debug.log
 .eslintrc
 
 src/assets/app.css
+# cypress screenshots and videos
+cypress/screenshots/*
+cypress/videos/*
 
 # semantic ui based theme (less)
 src/assets/semantic/*
 
 # Ignore ESLint file
-.eslintrc
+# .eslintrc
 
 .editorconfig
 
@@ -37,3 +40,5 @@ package-lock.json
 
 Env.txt
 *.bak
+
+*.out

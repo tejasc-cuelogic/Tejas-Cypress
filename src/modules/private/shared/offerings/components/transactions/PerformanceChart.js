@@ -24,6 +24,7 @@ const data = [
 
 export default class PerformanceChart extends Component {
   formatY = item => Helper.CurrencyFormat(item);
+
   render() {
     return (
       <ResponsiveContainer height={320}>

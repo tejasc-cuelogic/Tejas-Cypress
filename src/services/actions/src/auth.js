@@ -41,8 +41,11 @@ import Helper from '../../../helper/utility';
  */
 export class Auth {
   defaultRole = 'investor';
+
   userPool = null;
+
   cognitoUser = null;
+
   constructor() {
     Amplify.configure({
       Auth: {
@@ -127,8 +130,7 @@ export class Auth {
       IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
       Logins: {},
     };
-    identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] =
-      jwtToken;
+    identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] = jwtToken;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
     return AWS.config.credentials.refresh((error) => {
@@ -152,21 +154,34 @@ export class Auth {
     const lowerCasedEmail = email.toLowerCase();
     client.cache.reset();
     authStore.setNewPasswordRequired(false);
+    authStore.setUserLoggedIn(false);
 
     try {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
       this.amplifyLogin(user);
     } catch (err) {
-      uiStore.setErrors(this.simpleErr(err));
-      throw err;
+      if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
+        await this.resetPasswordExpiration(lowerCasedEmail, password);
+      } else {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      }
     } finally {
       uiStore.setProgress(false);
     }
   }
 
+  resetPasswordExpiration = async (lowerCasedEmail, password) => {
+    const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
+    if (res.data.resetPasswordExpirationDurationForCognitoUser) {
+      const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+      this.amplifyLogin(user);
+    }
+    return Promise.resolve(true);
+  }
+
   amplifyLogin(user) {
     if (user && !user.signInUserSession && user.challengeName && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      authStore.setUserLoggedIn(true);
       if (user.signInUserSession) {
         authStore.setCognitoUserSession(user.signInUserSession);
       }
@@ -174,6 +189,7 @@ export class Auth {
         authStore.setEmail(user.attributes.email.toLowerCase());
       }
       authStore.setNewPasswordRequired(true);
+      authStore.setUserLoggedIn(true);
     }
     if (user && user.signInUserSession) {
       authStore.setUserLoggedIn(true);
@@ -377,6 +393,7 @@ export class Auth {
       window.analytics.reset();
     }
   }
+
   shutdownIntercom = () => {
     try {
       if (window.Intercom) {
@@ -407,6 +424,7 @@ export class Auth {
     this.segmentTrackLogout(logoutType);
     this.clearMobxStore();
   }
+
   /**
    * @desc Logs out user and clears all tokens stored in browser's local storage
    * @return null

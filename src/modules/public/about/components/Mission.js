@@ -8,14 +8,21 @@ const Mission = () => (
     <section>
       <Container>
         <Responsive maxWidth={767} as={Aux}>
-          <Header as="h2">Invest in each other.<br /> Grow together.</Header>
+          <Header as="h2">
+Invest in each other.
+            <br />
+            {' '}
+Grow together.
+          </Header>
           <Divider section />
         </Responsive>
         <Grid centered stackable>
           <Grid.Row>
             <Grid.Column textAlign={isMobile ? 'left' : 'center'}>
               <Header as="h2">
-              Our mission is to connect businesses and <Responsive minWidth={992} as="br" />
+              Our mission is to connect businesses and
+                {' '}
+                <Responsive minWidth={992} as="br" />
               individuals to build vibrant communities.
               </Header>
             </Grid.Column>
@@ -37,9 +44,13 @@ const Mission = () => (
               <p>
                 The team behind NextSeed created the first registered funding portal with the
                 Securities & Exchange Commission (SEC) and became a member of the Financial
-                Industry Regulatory Authority{' '}
-                (<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
-                {' '}The portal closed the first-ever regulation crowdfunding offering in the country.
+                Industry Regulatory Authority
+                {' '}
+                (
+                <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
+).
+                {' '}
+The portal closed the first-ever regulation crowdfunding offering in the country.
                 Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered
                 broker-dealer and FINRA member.
               </p>
@@ -61,7 +72,12 @@ const Mission = () => (
           <Grid.Row>
             <Grid.Column width={16}>
               <Header as="h2" className="mb-10" textAlign="center">
-                We{"'"}ve built our brand and our platform <Responsive minWidth={992} as="br" />on three core values.
+                We
+                {"'"}
+ve built our brand and our platform
+                {' '}
+                <Responsive minWidth={992} as="br" />
+on three core values.
               </Header>
             </Grid.Column>
           </Grid.Row>
@@ -80,11 +96,15 @@ const Mission = () => (
               <Statistic size={isMobile ? 'small' : 'large'} className="basic">
                 <Statistic.Value>Top 3%</Statistic.Value>
                 <Statistic.Label className="mb-30">
-                Business applicants approved and launched campaigns <sup>1</sup>
+                Business applicants approved and launched campaigns
+                  {' '}
+                  <sup>1</sup>
                 </Statistic.Label>
                 <Statistic.Value>90%+</Statistic.Value>
                 <Statistic.Label>
-                Campaigns meet fundraising goals <sup>2</sup>
+                Campaigns meet fundraising goals
+                  {' '}
+                  <sup>2</sup>
                 </Statistic.Label>
               </Statistic>
             </Grid.Column>
@@ -127,27 +147,42 @@ const Mission = () => (
               <Statistic size={isMobile ? 'small' : 'large'} className="basic">
                 <Statistic.Value>$8.9 million</Statistic.Value>
                 <Statistic.Label className="mb-30">
-                  Invested in women and minority-owned businesses <sup>3</sup>
+                  Invested in women and minority-owned businesses
+                  {' '}
+                  <sup>3</sup>
                 </Statistic.Label>
                 <Statistic.Value>80%</Statistic.Value>
                 <Statistic.Label>
-                  Issuers are women and minority-owned businesses <sup>4</sup>
+                  Issuers are women and minority-owned businesses
+                  {' '}
+                  <sup>4</sup>
                 </Statistic.Label>
               </Statistic>
             </Grid.Column>
           </Grid.Row>
         </Grid>
         <p className="note mt-30 center-align">
-          <sup>1</sup> This calculates the percent of businesses that began the application
-          process, passed NextSeed{"'"}s objective diligence <Responsive minWidth={992} as="br" />
-          criteria, and launched an offering on the platform since NextSeed{"'"}s inception.
+          <sup>1</sup>
+          {' '}
+This calculates the percent of businesses that began the application
+          process, passed NextSeed
+          {"'"}
+s objective diligence
+          <Responsive minWidth={992} as="br" />
+          criteria, and launched an offering on the platform since NextSeed
+          {"'"}
+s inception.
         </p>
         <p className="note center-align">
-          <sup>2</sup> Historical figures only. Past performance of one business is not a
+          <sup>2</sup>
+          {' '}
+Historical figures only. Past performance of one business is not a
           guarantee of future results of another business.
         </p>
         <p className="mb-50 note center-align">
-          <sup>3,4</sup> Data reflects figures from both the NextSeed TX and Reg CF
+          <sup>3,4</sup>
+          {' '}
+Data reflects figures from both the NextSeed TX and Reg CF
            Platforms as of October 2018.
         </p>
       </Container>

@@ -27,7 +27,7 @@ const SortableItem = SortableElement(({
     <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
-          <Button className="link-button" >
+          <Button className="link-button">
             <Icon className={`ns-${actions[action].icon}`} onClick={() => handleAction(actions[action].label, knowledgeBase.id, knowledgeBase.itemStatus)} />
           </Button>
         ))}
@@ -59,11 +59,13 @@ const SortableList = SortableContainer(({
 @observer
 export default class AllKnowledgeBaseItems extends Component {
   state = { activeIndex: 0, innerActiveIndex: [] }
+
   componentWillMount() {
     this.props.knowledgeBaseStore.resetPagination();
     this.props.knowledgeBaseStore.resetSearch();
     this.props.knowledgeBaseStore.initRequest(); // load data
   }
+
   onSortEnd = ({ oldIndex, newIndex }, userType, category) => {
     const { allCategorizedKnowledgeBase, setKnowledgeBaseOrder } = this.props.knowledgeBaseStore;
     if (oldIndex !== newIndex) {
@@ -71,8 +73,8 @@ export default class AllKnowledgeBaseItems extends Component {
       setKnowledgeBaseOrder(arrayMove(allCategorizedKnowledgeBase[userType][category], oldIndex, newIndex));
     }
   }
-  globalActionChange = (e, { name, value }) =>
-    this.props.knowledgeBaseStore.setGlobalAction(name, value);
+
+  globalActionChange = (e, { name, value }) => this.props.knowledgeBaseStore.setGlobalAction(name, value);
 
   handleAction = (action, articleId, status) => {
     if (action === 'Delete') {
@@ -81,6 +83,7 @@ export default class AllKnowledgeBaseItems extends Component {
       this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
     }
   }
+
   deleteKnowledgeBase = () => {
     const { deleteKBById, setConfirmBox } = this.props.knowledgeBaseStore;
     deleteKBById(this.props.knowledgeBaseStore.confirmBox.refId).then(() => {
@@ -88,6 +91,7 @@ export default class AllKnowledgeBaseItems extends Component {
       this.props.history.replace(this.props.refLink);
     });
   }
+
   handleDeleteCancel = () => {
     this.props.knowledgeBaseStore.setConfirmBox('');
   }
@@ -101,6 +105,7 @@ export default class AllKnowledgeBaseItems extends Component {
       this.props.knowledgeBaseStore.removeSelectedRecords(result.value);
     }
   }
+
   toggleAccordion = (index, field) => {
     let stateChange = { ...this.state };
     const newIndex = this.state[field] === index ? -1 : index;
@@ -115,6 +120,7 @@ export default class AllKnowledgeBaseItems extends Component {
     }
     this.setState(stateChange);
   }
+
   checkedAllRecords = (e, result) => {
     this.props.knowledgeBaseStore.selectRecordsOnPage(result.checked);
   }

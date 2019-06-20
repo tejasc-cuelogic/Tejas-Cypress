@@ -94,11 +94,11 @@ mutation helpAndQuestion($question: HelpAndQuestionInput!) {
 export const upsertBusinessApplicationInformationBusinessDetails = gql`
 mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum, $businessDetails: BusinessDetailsInput) {
+  $businessGoal: BusinessGoalEnum, $businessDetails: BusinessDetailsInput, $targetIssuerId: ID) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
     applicationStep: $applicationStep, applicationType: $applicationType,
-    businessGoal: $businessGoal, businessDetails: $businessDetails) {
+    businessGoal: $businessGoal, businessDetails: $businessDetails, targetIssuerId: $targetIssuerId) {
       applicationId
       applicationStatus
   }
@@ -108,11 +108,11 @@ mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID
 export const upsertBusinessApplicationInformationPerformance = gql`
 mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum, $businessPerformance: businessPerformanceInput) {
+  $businessGoal: BusinessGoalEnum, $businessPerformance: businessPerformanceInput, $targetIssuerId: ID) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
     applicationStep: $applicationStep, applicationType: $applicationType,
-    businessGoal: $businessGoal, businessPerformance: $businessPerformance) {
+    businessGoal: $businessGoal, businessPerformance: $businessPerformance, targetIssuerId: $targetIssuerId) {
       applicationId
       applicationStatus
   }
@@ -122,11 +122,11 @@ mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
 export const upsertBusinessApplicationInformationDocumentation = gql`
 mutation _upsertBusinessApplicationInformationDocumentation($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum, $businessDocumentation: BusinessDocumentationInput) {
+  $businessGoal: BusinessGoalEnum, $businessDocumentation: BusinessDocumentationInput, $targetIssuerId: ID) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
     applicationStep: $applicationStep, applicationType: $applicationType,
-    businessGoal: $businessGoal, businessDocumentation: $businessDocumentation) {
+    businessGoal: $businessGoal, businessDocumentation: $businessDocumentation, targetIssuerId: $targetIssuerId) {
       applicationId
       applicationStatus
   }

@@ -7,19 +7,23 @@ import { FieldError } from '../../shared';
 @observer
 export default class AutoComplete extends Component {
   state = { showError: false };
+
   componentDidMount() {
     if (document.getElementsByClassName('pac-container')[0]) {
       document.getElementById('addressField').appendChild(document.getElementsByClassName('pac-container')[0]);
     }
   }
+
   componentWillUpdate() {
     if (document.getElementsByClassName('pac-container')[0]) {
       document.getElementById('addressField').appendChild(document.getElementsByClassName('pac-container')[0]);
     }
   }
+
   triggerError = (val) => {
     this.setState({ showError: val });
   }
+
   render() {
     const { props } = this;
     const {
@@ -49,8 +53,8 @@ export default class AutoComplete extends Component {
         {/* {props.readOnly ?
           <p className="address-line">{value}</p> :
         } */}
-        {((error && this.state.showError) || (error && props.showerror)) &&
-          <FieldError error={error} />
+        {((error && this.state.showError) || (error && props.showerror))
+          && <FieldError error={error} />
         }
       </Form.Field>
     );

@@ -7,7 +7,7 @@ import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
-import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
@@ -18,6 +18,7 @@ export default class ManualForm extends Component {
     this.props.bankAccountStore.setShouldValidateAmount();
     this.props.uiStore.clearErrors();
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.resetAddFundsForm();
@@ -58,8 +59,7 @@ export default class ManualForm extends Component {
       linkBankManuallyChange,
       accountTypeChange,
       linkbankSummary,
-    }
-      = this.props.bankAccountStore;
+    } = this.props.bankAccountStore;
     if (showAddFunds) {
       return <AddFunds />;
     }
@@ -72,13 +72,18 @@ export default class ManualForm extends Component {
           <Loader active={inProgress}>
           Please wait...
           </Loader>
-        </Dimmer>);
+        </Dimmer>
+      );
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
       <div className="center-align">
         <Header as="h3">Link bank manually</Header>
-        <p>Enter your bank{"'"}s routing number and your checking account number.</p>
+        <p>
+Enter your bank
+          {"'"}
+s routing number and your checking account number.
+        </p>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
           <div className="field-wrap left-align">
             <MaskedInput
@@ -110,10 +115,14 @@ export default class ManualForm extends Component {
               </Aux>
             </Form.Field>
           </div>
-          {errors &&
+          {errors
+            && (
             <Message error className="mb-30">
-              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
+              {' '}
+              {/* <ListErrors errors={[errors.message]} /> */}
             </Message>
+            )
           }
           <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
