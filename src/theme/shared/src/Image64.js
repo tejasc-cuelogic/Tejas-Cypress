@@ -10,20 +10,24 @@ import userPlaceholder from '../../../assets/images/leader-placeholder.jpg';
 function Image64(props) {
   const [data, setData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
 
-  useEffect(async () => {
+  async function getImage() {
     const emptyImage = props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (props.srcUrl) {
       const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${props.srcUrl}`;
       try {
         const result = await apiService.getRemoteFile(imgUrl);
-        setData(result.includes('data:') ? (result || emptyImage) : (imgUrl || emptyImage));
+        setData(result.text.includes('data:') ? (result.text || emptyImage) : (imgUrl || emptyImage));
       } catch (e) {
         setData(emptyImage);
       }
     } else {
       setData(emptyImage);
     }
-  });
+  }
+
+  useEffect(() => {
+    getImage();
+  }, []);
 
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />
