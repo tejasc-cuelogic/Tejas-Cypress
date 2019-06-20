@@ -12,7 +12,7 @@ export default class ChangePassword extends Component {
   componentWillMount() {
     const loginData = mapValues(this.props.authStore.LOGIN_FRM.fields, f => f.value);
     if (this.props.refModule !== 'security' && loginData.email === '') {
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     }
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.resetForm('CHANGE_PASS_FRM');
@@ -25,7 +25,7 @@ export default class ChangePassword extends Component {
     authActions[method](this.props.refModule)
       .then(() => {
         authActions.logout('updatedPassword').then(() => {
-          this.props.history.push('/auth/login');
+          this.props.history.push('/login');
         });
       })
       .catch((err) => {
