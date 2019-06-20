@@ -105,7 +105,7 @@ export default class NewUpdate extends Component {
           <Divider hidden />
           <Grid>
             <Grid.Row>
-              <Grid.Column width={11}>
+              <Grid.Column width={12}>
                 <Form onSubmit={this.save}>
                   <FormInput
                     readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
@@ -125,7 +125,7 @@ export default class NewUpdate extends Component {
                   />
                 </Form>
               </Grid.Column>
-              <Grid.Column width={5}>
+              <Grid.Column width={4}>
                 <Card fluid>
                   <Card.Content>
                     <List relaxed>
