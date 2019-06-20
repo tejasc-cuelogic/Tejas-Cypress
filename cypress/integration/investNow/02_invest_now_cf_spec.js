@@ -1,3 +1,11 @@
+// import {
+//     initializeInvestNowFlow,
+//     checkEnteredAmountMultiplesValidation,
+//     checkAmountGreaterThanMinInvestmentValidation,
+//     checkForValidAmountAndProceed,
+//     proceedToGenerateAgreement,
+//     sumbmitingInvestment,
+// } from '../../support/investNow/investNowFlow';
 import {
     initializeInvestNowFlow,
     checkEnteredAmountMultiplesValidation,
@@ -5,8 +13,8 @@ import {
     checkForValidAmountAndProceed,
     proceedToGenerateAgreement,
     sumbmitingInvestment,
-} from '../../support/investNow/investNowFlow';
-import { openLogingPopupAndAutheticate } from '../../support/investNow/validInvestorLoginForInvestment';
+} from './utility/investNowFlow.utility';
+import { openLogingPopupAndAutheticate } from './utility/validInvestorLoginForInvestment.utility';
 
 describe('Invest now CF investment flow', () => {
     before(() => {

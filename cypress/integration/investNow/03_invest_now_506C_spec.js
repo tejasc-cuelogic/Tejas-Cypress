@@ -1,8 +1,8 @@
 import {
   initializeInvestNowFlow,
-} from '../../support/investNow/investNowFlow';
-import { openLogingPopupAndAutheticate } from '../../support/investNow/validInvestorLoginForInvestment';
-import { checkRegulationAndAccreditation } from '../../support/investNow/offeringRegulationChecks';
+} from './utility/investNowFlow.utility';
+import { openLogingPopupAndAutheticate } from './utility/validInvestorLoginForInvestment.utility';
+import { checkRegulationAndAccreditation } from './utility/offeringRegulationChecks.utility';
 
 describe('Invest now 506C investment flow', () => {
   let isAccreditationStep = false;
