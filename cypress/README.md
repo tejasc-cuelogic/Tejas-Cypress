@@ -63,10 +63,7 @@
   "pageTimeoutLoad": 80000,
   "defaultCommandTimeout": 60000,
   "ignoreTestFiles": "*.utility.js", 
-  "fixturesFolder": "cypress/testData",
-  "integrationFolder": "cypress/specs",
-  "screenshotsFolder": "cypress/testReports/screenshots",
-  "videosFolder": "cypress/testReports/videos",
-  "supportFile": "cypress/shared/index.js",
+  "screenshotsFolder": "cypress/reports/screenshots",
+  "videosFolder": "cypress/reports/videos",
   "videoUploadOnPasses": false
 }
