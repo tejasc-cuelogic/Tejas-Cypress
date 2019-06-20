@@ -137,7 +137,9 @@ class App extends Component {
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
       authActions.logout('timeout').then(() => {
-        this.props.history.push('/login');
+        if (this.props.location.pathname.includes('/app/')) {
+          this.props.history.push('/login');
+        }
       });
     }
   }
