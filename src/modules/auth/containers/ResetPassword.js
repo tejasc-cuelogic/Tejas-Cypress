@@ -29,7 +29,7 @@ export default class ResetPassword extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    authActions.setNewPassword().then(() => this.props.history.push('/auth/login'));
+    authActions.setNewPassword().then(() => this.props.history.push('/login'));
   }
 
   handleCloseModal = (e) => {

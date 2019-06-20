@@ -37,7 +37,7 @@ class Comments extends Component {
     if (!isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
       this.props.uiStore.setAuthRef(this.props.refLink);
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     } else {
       this.props.history.push(`${this.props.match.url}/postComment/NEW`);
     }
@@ -50,7 +50,7 @@ class Comments extends Component {
     if (!isUserLoggedIn) {
       this.props.uiStore.setAuthRef(`${this.props.refLink}/comments`);
       this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}/comments` });
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.history.push(`${this.props.refLink}/confirm-comment-login`);
     }

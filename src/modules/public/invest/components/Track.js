@@ -27,11 +27,11 @@ export default class Track extends Component {
                     && (
                     <Aux>
                       <Responsive as={Aux} minWidth={768}>
-                        <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                        <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
                       </Responsive>
                       <Responsive as={Aux} maxWidth={767}>
                         <div className="center-align">
-                          <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                          <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
                         </div>
                       </Responsive>
                     </Aux>
