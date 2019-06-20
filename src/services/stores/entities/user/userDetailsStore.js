@@ -507,7 +507,7 @@ export class UserDetailsStore {
       if (this.userDetails.email
         && (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
-        routingUrl = '/auth/welcome-email';
+        routingUrl = '/welcome-email';
       } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
         routingUrl = '/app/summary/identity-verification/0';
       } else if ((get(this.userDetails, 'cip.requestId'))) {

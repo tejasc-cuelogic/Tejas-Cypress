@@ -20,7 +20,7 @@ export default class Private extends React.Component {
     // }
     if (!this.props.authStore.isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     }
   }
 

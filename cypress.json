@@ -1,7 +1,10 @@
 {
-  "baseUrl": "https://dev.nextseed.qa/",
-  "chromeWebSecurity": false,
-  "pageTimeoutLoad": 80000,
-  "defaultCommandTimeout": 60000, 
-  "requestTimeout": 10000
+"baseUrl": "https://dev.nextseed.qa/",
+"chromeWebSecurity": false,
+"pageTimeoutLoad": 80000,
+"defaultCommandTimeout": 60000,
+"ignoreTestFiles": "*.utility.js",
+"screenshotsFolder": "cypress/reports/screenshots",
+"videosFolder": "cypress/reports/videos",
+"videoUploadOnPasses": false
 }
