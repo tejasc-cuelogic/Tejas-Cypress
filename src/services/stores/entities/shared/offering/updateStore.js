@@ -227,7 +227,7 @@ export class UpdateStore {
           },
           refetchQueries: [{ query: allUpdates, variables }],
         })
-        .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
+        .then(() => { Helper.toast(`Offering update is ${!isVisible ? 'visible' : 'invisible'}`, 'success'); })
         .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
       console.log(payload);
     }
