@@ -24,12 +24,12 @@ export const getJSONDataFromFixtures = async (path = '', props = undefined) => {
 };
 
 export const clearFormInput = (inputArr = []) => {
-  // if (inputArr.length > 0) {
-  //   forEach(inputArr, (props) => {
-  //     cy.get(`input[${props.key}=${props.value}]`).clear();
-  //   });
-  // }
-  cy.get('input[type="email"]').clear();
-  cy.get('input[type="password"]').clear();
+  if (inputArr.length > 0) {
+    forEach(inputArr, (props) => {
+      cy.get(`input[${props.key.replace(/["']/g, "")}=${props.value}]`).clear();
+    });
+  }
+  // cy.get('input[type="email"]').clear();
+  // cy.get('input[type="password"]').clear();
 };
 

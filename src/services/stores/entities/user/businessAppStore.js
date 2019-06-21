@@ -1222,7 +1222,7 @@ export class BusinessAppStore {
         const stepName = this.getFileUploadEnum(fieldName, index);
         this.setFieldvalue('isFileUploading', true);
         this.setFormFileArray(formName, fieldName, 'showLoader', true, index);
-        fileUpload.setFileUploadData(this.currentApplicationId || this.applicationId, fileData, stepName, 'ISSUER', isApplicationManager ? this.applicationIssuerId : '').then((result) => {
+        fileUpload.setFileUploadData(!isApplicationManager ? this.currentApplicationId : this.applicationId, fileData, stepName, 'ISSUER', isApplicationManager ? this.applicationIssuerId : '').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => { // eslint-disable-line max-len
             this.setFormFileArray(formName, fieldName, 'fileData', file, index);
