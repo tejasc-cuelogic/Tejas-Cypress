@@ -218,7 +218,7 @@ Minimum amount of funding is $50,000. For requirements on different levels of fu
       { label: 'LLC', icon: 'ns-business', value: 'LLC' },
       { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
       { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
-      { label: 'Other use of fund', value: 'OTHER' },
+      { label: 'Other use of funds', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
