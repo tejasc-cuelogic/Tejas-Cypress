@@ -45,6 +45,7 @@ export const FILTER_META = {
   accountType: [
     { text: 'Admin', value: 'ADMIN' },
     { text: 'Business', value: 'ISSUER' },
+    { text: 'Investor', value: 'INVESTOR' },
     { text: 'IRA', value: 'IRA' },
     { text: 'Individual', value: 'INDIVIDUAL' },
     { text: 'Entity', value: 'ENTITY' },
