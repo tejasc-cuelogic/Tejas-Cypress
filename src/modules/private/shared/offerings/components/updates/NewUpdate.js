@@ -44,8 +44,10 @@ export default class NewUpdate extends Component {
   }
 
   deleteUpdate = () => {
-    this.props.updateStore.deleteOfferingUpdates(this.props.match.params.id || this.props.updateStore.newUpdateId);
-    this.props.history.push(this.props.refLink);
+    this.props.updateStore.deleteOfferingUpdates(this.props.match.params.id || this.props.updateStore.newUpdateId)
+      .then(() => {
+        this.props.history.push(this.props.refLink);
+      });
   }
 
   save = (id, status) => {

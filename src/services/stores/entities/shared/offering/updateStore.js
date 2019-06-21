@@ -294,7 +294,7 @@ export class UpdateStore {
     }
 
     @action
-    deleteOfferingUpdates = (id) => {
+    deleteOfferingUpdates = id => new Promise((resolve, reject) => {
       uiStore.setProgress(true);
       client
         .mutate({
@@ -305,12 +305,14 @@ export class UpdateStore {
         }).then(() => {
           Helper.toast('Update deleted.', 'success');
           this.setFieldValue('newUpdateId', null);
+          resolve();
           uiStore.setProgress(false);
         }).catch(() => {
           Helper.toast('Something went wrong.', 'error');
+          reject();
           uiStore.setProgress(false);
         });
-    }
+    });
 
     @computed get loading() {
       return this.data.loading;
