@@ -103,7 +103,7 @@ export default class CampaignHeader extends Component {
                       ? campaign.offering.overview.social.map(site => (
                         <Aux key={site.type}>
                           {site.url
-                            && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
+                            && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
                           }
                         </Aux>
                       )) : ''}

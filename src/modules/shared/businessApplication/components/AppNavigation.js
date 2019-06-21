@@ -26,7 +26,7 @@ export default class AppNavigation extends Component {
     } = this.props.businessAppStore;
     if (where >= 0) {
       // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
-      this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
+      this.submitSaveContinue();
       this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       // }
     } else {
@@ -34,8 +34,8 @@ export default class AppNavigation extends Component {
     }
   }
 
-  submitSaveContinue = (stepUrl) => {
-    this.props.businessAppStore.businessAppParitalSubmit(stepUrl);
+  submitSaveContinue = () => {
+    this.props.businessAppStore.businessAppParitalSubmit();
   }
 
   submit = (e) => {
