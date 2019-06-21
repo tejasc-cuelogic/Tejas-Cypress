@@ -304,6 +304,7 @@ export class UpdateStore {
           },
         }).then(() => {
           Helper.toast('Update deleted.', 'success');
+          this.setFieldValue('newUpdateId', null);
           uiStore.setProgress(false);
         }).catch(() => {
           Helper.toast('Something went wrong.', 'error');
