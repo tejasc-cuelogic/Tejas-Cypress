@@ -175,7 +175,7 @@ export class UpdateStore {
           if (id === 'new') {
             this.setFieldValue('PBUILDER_FRM.fields.status.value', status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
-          } else {
+          } else if (status !== 'DRAFT') {
             this.reset();
           }
           uiStore.setProgress(false);
