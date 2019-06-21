@@ -488,7 +488,7 @@ export class CampaignStore {
         return newOfferingsArr.push(resultObject);
       } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
         // const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
-        const labelBannerFirst = closeDaysToRemains !== 0 ? closeDaysToRemainsInHours <= 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left` : 'Processing';
+        const labelBannerFirst = closeDaysToRemains !== 0 ? closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left` : 'Processing';
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.bannerFirstText = labelBannerFirst;
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
