@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
+import ActivityHistory from '../../../ActivityHistory';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Actions from './Actions';
 import Status from './Status';
@@ -76,6 +77,8 @@ export default class NewUpdate extends Component {
     const { offer } = this.props.offeringsStore;
     const isReadonly = !isManager && (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
     const { inProgress } = this.props.uiStore;
+    const { id } = this.props.match.params;
+    console.log(id);
     if (loadingCurrentUpdate || inProgress) {
       return <InlineLoader />;
     }
@@ -173,37 +176,39 @@ export default class NewUpdate extends Component {
                 }
                 {['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(offer.stage)
                   ? (
-  <Card fluid>
-                    <Card.Content>
-                      <Header as="h4">Who’s this update for?</Header>
-                      <FormRadioGroup
-                        readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                        fielddata={PBUILDER_FRM.fields.scope}
-                        name="scope"
-                        changed={(e, result) => UpdateChange(e, result)}
-                        widths="equal"
-                        value={PBUILDER_FRM.fields.scope.value}
-                      />
-                      <br />
-                      <Form>
-                      {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
-                        <Form.Field>
-                          <Checkbox
-                            name="tiers"
-                            readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                            value={rewardTier}
-                            onChange={(e, result) => UpdateChange(e, result)}
-                            checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
-                            label={`$${rewardTier}`}
-                          />
-                        </Form.Field>
-                      )) : ''}
-                      </Form>
-                    </Card.Content>
-                  </Card>
+                  <>
+                    <Card fluid>
+                      <Card.Content>
+                        <Header as="h4">Who’s this update for?</Header>
+                        <FormRadioGroup
+                          readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                          fielddata={PBUILDER_FRM.fields.scope}
+                          name="scope"
+                          changed={(e, result) => UpdateChange(e, result)}
+                          widths="equal"
+                          value={PBUILDER_FRM.fields.scope.value}
+                        />
+                        <br />
+                        <Form>
+                          {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
+                            <Form.Field>
+                              <Checkbox
+                                name="tiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                value={rewardTier}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
+                                label={`$${rewardTier}`}
+                              />
+                            </Form.Field>
+                          )) : ''}
+                        </Form>
+                      </Card.Content>
+                    </Card>
+                  </>
                   )
                   : (
-  <Card fluid>
+                  <Card fluid>
                     <Card.Content>
                       <Header as="h4">NextSeed Tips</Header>
                       <List bulleted relaxed>
@@ -221,6 +226,19 @@ export default class NewUpdate extends Component {
               }
               </Grid.Column>
             </Grid.Row>
+            {(id || newUpdateId)
+              && (
+                <Grid.Row>
+                  <Grid.Column width={16}>
+                    <Header as="h4">Acitivity History</Header>
+                    <div className="sticky-sidebar">
+                      <Card fluid>
+                        <ActivityHistory showFilters={['activityType', 'activityUserType', 'ActivityDate', 'subType']} resourceId={id || newUpdateId} />
+                      </Card>
+                    </div>
+                  </Grid.Column>
+                </Grid.Row>
+              )}
           </Grid>
           <Confirm
             header="Confirm"
