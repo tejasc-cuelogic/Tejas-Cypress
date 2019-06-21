@@ -31,6 +31,14 @@ const OtherInformation = ({ details }) => (
               <Table.Cell>User Status: </Table.Cell>
               <Table.Cell>{get(details, 'status')}</Table.Cell>
             </Table.Row>
+            {get(details, 'wpUserId')
+            && (
+              <Table.Row>
+                <Table.Cell>WP User ID: </Table.Cell>
+                <Table.Cell>{get(details, 'wpUserId')}</Table.Cell>
+              </Table.Row>
+            )
+            }
           </Table.Body>
         </Table>
       </div>

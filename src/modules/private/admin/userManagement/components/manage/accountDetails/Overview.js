@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { includes, get } from 'lodash';
 import moment from 'moment';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Header, Form, Divider, Table, Card } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import AccountHeader from './AccountHeader';
@@ -12,6 +13,17 @@ import EntitySummary from './EntitySummary';
 import Helper from '../../../../../../../helper/utility';
 import LockedInformation from '../profile/LockedInformation';
 import CashMovement from '../../../../../investor/summary/components/CashMovement';
+
+const CopyToClipboardAccountId = ({ account }) => (
+  <CopyToClipboard
+    text={get(account, 'details.accountId')}
+    onCopy={() => Helper.toast('Investor account uuid copied to clipboard.', 'success')}
+  >
+    <span className="text-lowercase">
+      {get(account, 'details.accountId')}
+    </span>
+  </CopyToClipboard>
+);
 
 @inject('userDetailsStore', 'bankAccountStore', 'transactionStore', 'portfolioStore')
 @withRouter
@@ -105,12 +117,13 @@ export default class Overview extends Component {
                     getRoutingNumber={this.getRoutingNumber}
                     loading={this.state.loading}
                     routingNumber={this.props.bankAccountStore.routingNum}
+                    CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
                   />
                 )
                 : get(account, 'name') === 'ira'
-                  ? <IraSummary investor={investor} account={account} />
+                  ? <IraSummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} />
                   : get(account, 'name') === 'entity'
-                    ? <EntitySummary investor={investor} account={account} /> : null
+                    ? <EntitySummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} /> : null
               }
             </Table>
           </div>

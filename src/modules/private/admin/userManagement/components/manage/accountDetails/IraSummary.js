@@ -5,7 +5,7 @@ import moment from 'moment';
 import Helper from '../../../../../../../helper/utility';
 
 
-const IndividualSummary = ({ account, investor }) => (
+const IndividualSummary = ({ account, investor, CopyToClipboardAccountId }) => (
   <Table.Body>
     <Table.Row>
       <Table.Cell>Account Creation Date: </Table.Cell>
@@ -14,6 +14,12 @@ const IndividualSummary = ({ account, investor }) => (
     <Table.Row>
       <Table.Cell>Account Status: </Table.Cell>
       <Table.Cell>{get(account, 'details.accountStatus') || 'N/A'}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Account ID: </Table.Cell>
+      <Table.Cell>
+        {CopyToClipboardAccountId}
+      </Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Investor: </Table.Cell>

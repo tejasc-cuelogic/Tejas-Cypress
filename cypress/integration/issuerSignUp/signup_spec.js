@@ -4,17 +4,17 @@ import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails,
 
 describe('Issuer Sign Up', () => {
   beforeEach(() => {
-    cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-    applicationUnlock();
-    if (cy.get('a').contains('Sign Up')) {
-      cy.get('a').contains('Sign Up').click();
-    } else {
-      cy.get('a').contains('Log In').click();
-      cy.get('a').contains('Sign Up').click({ force: true });
-    }
+    // cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
+    // applicationUnlock();
+    // if (cy.get('a').contains('Sign Up')) {
+    //   cy.get('a').contains('Sign Up').click();
+    // } else {
+    //   cy.get('a').contains('Log In').click();
+    //   cy.get('a').contains('Sign Up').click({ force: true });
+    // }
   });
 
-  it ('should able to submit business application and login', () => {
+  it.skip('should able to submit business application and login', () => {
     issuerSignUp();
     fillBasicDetails(issuerDetails.basicDetails);
     cy.get('input[value="B2C"]').click();

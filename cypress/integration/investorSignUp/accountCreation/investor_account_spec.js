@@ -1,4 +1,4 @@
-import { InvestorFlowProcess } from '../../../support/investorSignup/investorFlow';
+import { InvestorFlowProcess } from './utility/investorAccount.utlity';
 import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile } from '../../../support/common';
 
 export const GeneralInfoMeta = {
@@ -38,7 +38,7 @@ describe('Account Creation', () => {
     cy.wait('@manualAccount');
   };
   const plaidProcess = (progressStep, count) => {
-    cy.wait(2000);
+    cy.get('.dimmer-visible').should('not.be.visible')
     cy.get(`.multistep-modal > ol.progtrckr > ${progressStep}`).click({ force: true }).invoke('text').then((step) => {
       cy.log('bank step', step.toUpperCase());
       if (step.toUpperCase() === 'LINK BANK') {
@@ -77,7 +77,7 @@ describe('Account Creation', () => {
   };
 
   const iraAccountCreation = () => {
-    cy.wait(1500);
+    cy.get('.dimmer-visible').should('not.be.visible')
     registerApiCall('upsertInvestorAccount', '/dev/graphql');
     cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
       cy.log('step value', text);
@@ -125,7 +125,7 @@ describe('Account Creation', () => {
   };
 
   const entityAccountCreation = () => {
-    cy.wait(1500);
+    cy.get('.dimmer-visible').should('not.be.visible')
     registerApiCall('upsertInvestorAccount', '/dev/graphql');
     cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
@@ -200,17 +200,21 @@ describe('Account Creation', () => {
 
   it('should successfully link bank with manual process', () => {
     manualLinkbankProcess();
-    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-      cy.log('step value', step);
-      assert.equal(step, 'Add funds', ['Should be on add funds'])	
+    cy.get('input[name="value"]').then(() => {
+      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
+        cy.log('step value', step);
+        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
+      });
     });
   });
 
   it('should successfully link bank with plaid process', () => {
     plaidProcess('.progtrckr-done', '1');
-    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-      cy.log('step value', step);
-      assert.equal(step, 'Add funds', ['Should be on add funds'])	
+    cy.get('input[name="value"]').then(() => {
+      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
+        cy.log('step value', step);
+        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
+      });
     });
   });
 

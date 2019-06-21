@@ -1,4 +1,4 @@
-import { legalDetailsProcess, legalDetailsMeta, fillLegalDetailsForm } from '../../../support/investorSignup/identityVerification';
+import { legalDetailsProcess, legalDetailsMeta, fillLegalDetailsForm } from './utility/identityVerification.utlity';
 // const NS_SITE_EMAIL_SUPPORT = 'support@nextseed.com';
 
 describe('Legal Details Form', () => {
