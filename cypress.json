@@ -5,6 +5,5 @@
 "defaultCommandTimeout": 60000,
 "ignoreTestFiles": "*.utility.js",
 "screenshotsFolder": "cypress/reports/screenshots",
-"videosFolder": "cypress/reports/videos",
-"videoUploadOnPasses": false
+"videosFolder": "cypress/reports/videos"
 }
