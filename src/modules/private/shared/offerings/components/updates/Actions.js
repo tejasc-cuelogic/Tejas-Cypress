@@ -15,7 +15,7 @@ const Actions = observer((props) => {
           inverted
           color="red"
           onClick={cancelUpdate}
-          content="Close"
+          content="Cancel"
         />
         {!isManager
           && (
