@@ -7,6 +7,23 @@ export const registerApiCall = (operationName, url = '**/**') => {
   cy.route('POST', url).as(operationName);
 }
 
+export const apiRequest = (requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve) => {
+  cy.request(
+    {
+      url: requestParams.url,
+      method: requestParams.method,
+      body: {
+        query: requestParams.query,
+      },
+      failOnStatusCode: false,
+      headers,
+    }
+  ).then((result) => {
+    console.log('Successfully send request', result);
+    resolve(result);
+  });
+});
+
 export const typeOtpCode = () => {
   cy.get('.react-code-input', { timeout: 100000 }).within(() => {
     // eslint-disable-next-line no-plusplus
@@ -39,7 +56,7 @@ export const uploadFile = (selector = '') => {
   cy.upload_file('images/test-img.png', 'png', selector || 'input[type=file]');
   cy.wait('@fileUpload');
   cy.wait(1000);
-}  
+}
 
 export const clickRadioAndNext = (selector, radioVal, operationName) => {
   cy.get(selector).check(radioVal, { force: true });
