@@ -97,8 +97,10 @@ export default class AllTeam extends Component {
   }
 
   deleteTeamMember = () => {
-    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId);
-    this.props.teamStore.setConfirmBox('');
+    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId).then(() => {
+      this.props.teamStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
 
   handleAction = (id) => {

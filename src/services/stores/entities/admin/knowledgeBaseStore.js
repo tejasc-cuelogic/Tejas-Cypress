@@ -327,7 +327,7 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  deleteKBById = (id) => {
+  deleteKBById = id => new Promise((resolve, reject) => {
     uiStore.setProgress();
     client
       .mutate({
@@ -335,12 +335,15 @@ export class KnowledgeBaseStore {
         variables: {
           id,
         },
-        refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
       })
-      .then(() => Helper.toast('Knowledge base item deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting knowledge base ', 'error'))
-      .finally(() => uiStore.setProgress());
-  }
+      .then(() => {
+        Helper.toast('Knowledge base item deleted successfully.', 'success');
+        resolve();
+      }).catch(() => {
+        Helper.toast('Error while deleting knowledge base ', 'error');
+        reject();
+      }).finally(() => uiStore.setProgress(false));
+  });
 
   @action
   setConfirmBox = (entity, refId) => {
