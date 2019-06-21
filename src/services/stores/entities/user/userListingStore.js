@@ -51,7 +51,7 @@ export class UserListingStore {
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
     let deletedAccountStatus = [];
-    const allAccountTypes = ['ADMIN', 'ISSUER', 'IRA', 'INDIVIDUAL', 'ENTITY'];
+    const allAccountTypes = ['ADMIN', 'ISSUER', 'INVESTOR', 'IRA', 'INDIVIDUAL', 'ENTITY'];
     const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'FROZEN', 'LOCKED', 'UNLOCKED'];
     if (isDeleted) {
       if (accountType && accountType.length && !accountStatus) {
