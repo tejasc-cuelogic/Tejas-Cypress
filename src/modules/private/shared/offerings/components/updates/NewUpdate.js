@@ -81,10 +81,10 @@ export default class NewUpdate extends Component {
       <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <Header as="h3">
-            {isNew ? 'New' : 'Edit'}
+            {isNew && !newUpdateId ? 'New' : 'Edit'}
             {' '}
   Update
-            {!isNew
+            {!(isNew && !newUpdateId)
               && <Status status={PBUILDER_FRM.fields.status.value} />
             }
             <Actions

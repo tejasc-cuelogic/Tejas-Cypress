@@ -173,17 +173,28 @@ export class UpdateStore {
             Helper.toast('Update added.', 'success');
           }
           if (id === 'new') {
-            this.setFieldValue('PBUILDER_FRM.fields.status.value', status);
+            this.setStatus(status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
           } else if (status !== 'DRAFT') {
             this.reset();
           }
+          this.setFormIsDirty(false);
           uiStore.setProgress(false);
         })
         .catch((res) => {
           Helper.toast(`${res} Error`, 'error');
           uiStore.setProgress(false);
         });
+    }
+
+    @action
+    setStatus = (status) => {
+      this.PBUILDER_FRM.fields.status.value = status;
+    }
+
+    @action
+    setFormIsDirty = (isDirty) => {
+      this.PBUILDER_FRM.meta.isDirty = isDirty;
     }
 
     @action

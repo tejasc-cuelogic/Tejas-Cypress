@@ -46,7 +46,7 @@ const Actions = observer((props) => {
                       primary
                       onClick={() => save(newUpdateId || id, 'PENDING')}
                       content="Submit"
-                      disabled={!(meta.isValid && meta.isDirty)}
+                      disabled={!meta.isValid}
                     />
                   </>
                 )
