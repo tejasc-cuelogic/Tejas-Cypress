@@ -143,7 +143,7 @@ class InvestorSignup extends Component {
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
           </Form>
         </Modal.Content>
