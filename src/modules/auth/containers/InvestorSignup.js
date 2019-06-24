@@ -77,7 +77,7 @@ class InvestorSignup extends Component {
             {' '}
             {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'an Investor' : 'Business Owner'}
           </Header>
-          <Link to="/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
+          <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {/* <Form>
@@ -143,7 +143,7 @@ class InvestorSignup extends Component {
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
           </Form>
         </Modal.Content>
