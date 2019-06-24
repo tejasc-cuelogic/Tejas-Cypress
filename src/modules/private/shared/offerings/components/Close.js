@@ -237,7 +237,7 @@ from
                 (
                   <Aux>
                     <Form.Group widths={3}>
-                      {['nsPayment', 'investorFee', 'maturityDate', 'hardCloseDate', 'interestRate', 'revSharePercentage', 'multiple', 'anticipatedPaymentStartDate', 'gsFees', 'nsFee'].map(field => (
+                      {['investorFee', 'maturityDate', 'hardCloseDate', 'interestRate', 'revSharePercentage', 'multiple', 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
                           <MaskedInput
                             key={field}
                             name={field}
