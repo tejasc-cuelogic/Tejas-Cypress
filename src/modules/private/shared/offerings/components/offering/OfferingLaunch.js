@@ -122,16 +122,6 @@ uploaded on
         <Divider section />
         <Header as="h4">Escrow Key</Header>
         <Form.Group widths="equal">
-          {
-            ['escrowKey', 'escrowNumber'].map(field => (
-              <FormInput
-                displayMode={isReadonly}
-                name={field}
-                fielddata={COMPANY_LAUNCH_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
-              />
-            ))
-          }
           <MaskedInput
             displayMode={isReadonly}
             name="gsFees"

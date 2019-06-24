@@ -745,20 +745,6 @@ export const COMPANY_LAUNCH = {
     rule: 'optional',
     placeHolder: '4/3/2018',
   },
-  escrowKey: {
-    value: '',
-    label: 'Escrow Key',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  escrowNumber: {
-    value: '',
-    label: 'Escrow Number',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
   gsFees: {
     value: '',
     label: 'GoldStar Fees',
@@ -2626,11 +2612,11 @@ const LIMIT = {
   rule: 'required',
 };
 
-export const OFFERING_CLOSE_1 = {
+export const OFFERING_CLOSE_2 = {
   queueLimit: { ...LIMIT },
 };
 
-export const OFFERING_CLOSE_2 = {
+export const OFFERING_CLOSE_3 = {
   queueLimit: { ...LIMIT },
   notePurchaseDate: {
     value: '',
@@ -2643,29 +2629,31 @@ export const OFFERING_CLOSE_2 = {
   },
 };
 
-export const OFFERING_CLOSE_3 = {
-  queueLimit: { ...LIMIT },
+export const OFFERING_CLOSE_1 = {
   nsPayment: {
-    value: null,
+    value: '',
     label: 'NS Payment',
     error: undefined,
-    objRefOutput: 'payload',
-    rule: 'numeric',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
+    rule: 'optional',
     placeHolder: 'Up to $',
   },
   investorFee: {
-    value: null,
+    value: '',
     label: 'Investor Fee',
     error: undefined,
-    objRefOutput: 'payload',
-    rule: 'numeric',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
+    rule: 'optional',
     placeHolder: 'Up to $',
   },
   maturityDate: {
     value: '',
     label: 'Maturity Date',
     error: undefined,
-    objRefOutput: 'payload',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
     rule: 'optional',
     placeHolder: 'MM/DD/YYYY',
   },
@@ -2673,40 +2661,76 @@ export const OFFERING_CLOSE_3 = {
     value: '',
     label: 'Hard Close Date',
     error: undefined,
-    objRefOutput: 'payload',
+    objRefOutput: 'closureSummary',
+    objRef: 'closureSummary',
     rule: 'optional',
     placeHolder: 'MM/DD/YYYY',
   },
   interestRate: {
-    value: null,
+    value: '',
     label: 'Interest Rate',
     error: undefined,
-    objRefOutput: 'payload',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
     rule: 'optional',
     placeHolder: 'Enter here',
   },
   revSharePercentage: {
-    value: null,
+    value: '',
     label: 'Revenue Sharing Percentage',
-    objRefOutput: 'payload',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
   },
   multiple: {
-    value: null,
+    value: '',
     label: 'Investment Multiple',
     error: undefined,
-    objRefOutput: 'payload',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
     rule: 'optional',
     placeHolder: 'Enter here',
   },
-  scope: {
-    value: 'ADMIN',
-    label: 'Scope',
+  accountNumber: {
+    value: '',
+    label: 'Issuer Linked Bank Account Number',
     error: undefined,
-    objRefOutput: 'payload',
-    rule: 'string',
-    placeHolder: 'Choose here',
+    objRefOutput: 'linkedBank',
+    objRef: 'linkedBank',
+    rule: 'optional',
+    placeHolder: 'Enter here',
   },
+  routingNumber: {
+    value: '',
+    label: 'Issuer Linked Bank Routing Number',
+    error: undefined,
+    objRefOutput: 'linkedBank',
+    objRef: 'linkedBank',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  bankName: {
+    value: '',
+    label: 'Issuer Linked Bank Name',
+    error: undefined,
+    objRefOutput: 'linkedBank',
+    objRef: 'linkedBank',
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  accountHolderName: {
+    value: '',
+    label: 'Issuer Linked Bank Account Holder Name',
+    error: undefined,
+    objRefOutput: 'linkedBank',
+    objRef: 'linkedBank',
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+};
+
+export const OFFERING_CLOSE_4 = {
+  queueLimit: { ...LIMIT },
 };

@@ -11,7 +11,7 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
-  OFFERING_CLOSE_1, OFFERING_CLOSE_2, OFFERING_CLOSE_3,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
@@ -58,6 +58,8 @@ export class OfferingCreationStore {
   @observable OFFERING_CLOSE_2 = Validator.prepareFormObject(OFFERING_CLOSE_2);
 
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
+
+  @observable OFFERING_CLOSE_4 = Validator.prepareFormObject(OFFERING_CLOSE_4);
 
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
 
@@ -941,6 +943,7 @@ export class OfferingCreationStore {
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
       DATA_ROOM_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
+      OFFERING_CLOSE_1: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -1095,6 +1098,7 @@ export class OfferingCreationStore {
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        console.log('Error', err);
         Helper.toast('Something went wrong.', 'error');
         rej();
       })
@@ -1874,6 +1878,20 @@ export class OfferingCreationStore {
       'documents',
       index,
     );
+  }
+
+  getClosureObject = () => {
+    let obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
+    let { getOfferingById } = offeringsStore.offerData.data;
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
+    obj.closureSummary = mergeWith(
+      toJS(getOfferingById.closureSummary),
+      obj.closureSummary,
+      this.mergeCustomize,
+    );
+    obj = omitDeep(obj, ['__typename', 'fileHandle']);
+    obj = cleanDeep(obj);
+    return obj;
   }
 
   @action

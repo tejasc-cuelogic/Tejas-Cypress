@@ -95,6 +95,12 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+        accountHolderName
+      }
       leadDetails {
         id
         email {
@@ -402,8 +408,6 @@ export const getOfferingDetails = gql`
           terminationDate
           expectedOpsDate
           issuerApprovedDate
-          escrowKey
-          escrowNumber
           edgarLink
           submitted {
             aliasId: id
