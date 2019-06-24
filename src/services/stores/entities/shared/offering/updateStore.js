@@ -190,7 +190,7 @@ export class UpdateStore {
           } else if (status !== 'DRAFT') {
             this.reset();
           }
-          Helper.toast(id !== 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
+          Helper.toast(id === 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
           this.setFormIsDirty(false);
           uiStore.setProgress(false);
           resolve();
