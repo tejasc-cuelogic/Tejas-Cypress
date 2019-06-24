@@ -265,9 +265,7 @@ from
                           <MaskedInput
                             key={field}
                             name={field}
-                            number={['interestRate', 'revSharePercentage'].includes(field)}
-                            currency={['nsPayment', 'investorFee', 'multiple'].includes(field)}
-                            dateOfBirth={['maturityDate', 'hardCloseDate'].includes(field)}
+                            number
                             fielddata={OFFERING_CLOSE_1.fields[field]}
                             changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
                           />
