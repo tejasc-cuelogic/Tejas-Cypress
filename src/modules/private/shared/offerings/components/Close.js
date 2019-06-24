@@ -22,7 +22,7 @@ const closingActions = {
   ENUM8: { label: 'Finalize Notes', ref: 3, enum: 'FINALIZE_NOTES' },
   ENUM9: { label: 'Close', ref: 4, enum: 'close' },
   ENUM10: {
-    label: 'Hard Close Notification', ref: 4, enum: 'HARD_CLOSE_NOTIFICATION', confirm: true,
+    label: 'Hard Close Notification', ref: 4, enum: 'HARD_CLOSE_NOTIFICATION',
   },
 };
 
@@ -76,7 +76,7 @@ export default class Close extends Component {
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
     } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION') {
-      this.setState({ openModal: true });
+      this.setState({ openModal: true, action: status });
     } else {
       if (status === 'close' || status === 'update') {
         this.handleUpdateOffering(status);
@@ -94,7 +94,34 @@ export default class Close extends Component {
   }
 
   handleHardOrSoftClose = (type) => {
-    console.log(type);
+    const { offer } = this.props.offeringsStore;
+    const { offeringClose } = this.props.offeringCreationStore;
+    switch (type) {
+      case 'Cancel':
+        this.handleCloseModal();
+        break;
+      case 'Send to Test Email':
+        offeringClose({
+          offeringId: offer.id,
+          process: this.state.action,
+          scope: 'ADMIN',
+        }, this.state.activeStep);
+        this.handleCloseModal();
+        break;
+      case 'Send to Investors':
+        offeringClose({
+          offeringId: offer.id,
+          process: this.state.action,
+          scope: 'INVESTOR',
+        }, this.state.activeStep);
+        this.handleCloseModal();
+        break;
+      default: break;
+    }
+  }
+
+  handleCloseModal = () => {
+    this.setState({ openModal: false });
   }
 
   handleUpdateOffering = (status) => {
@@ -395,10 +422,10 @@ from
             OfferingClose
           />
         </div>
-        <Modal open={this.state.openModal} closeIcon size="tiny">
-        <Modal.Header>
-          {this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
-        </Modal.Header>
+        <Modal open={this.state.openModal} closeIcon size="tiny" onClose={this.handleCloseModal}>
+          <Modal.Header>
+            {this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
+          </Modal.Header>
           <Modal.Content className="pb-20">
             Please select notification action to perform.
           </Modal.Content>
