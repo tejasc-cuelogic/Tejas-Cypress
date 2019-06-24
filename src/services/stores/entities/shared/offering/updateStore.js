@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy } from 'lodash';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
@@ -264,7 +265,7 @@ export class UpdateStore {
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
-      this.PBUILDER_FRM.fields.updatedDate.value = offeringUpdatesById.updated.date;
+      this.PBUILDER_FRM.fields.updatedDate.value = moment(offeringUpdatesById.updated.date).format('MM/DD/YYYY');
       Validator.validateForm(this.PBUILDER_FRM);
     }
 
