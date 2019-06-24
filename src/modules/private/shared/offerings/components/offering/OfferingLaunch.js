@@ -120,7 +120,7 @@ uploaded on
           }
         </Form.Group>
         <Divider section />
-        <Header as="h4">Escrow Key</Header>
+        <Header as="h4">GoldStar</Header>
         <Form.Group widths="equal">
           {['isin', 'contactId', 'escrowAccount', 'sinkFundAccount'].map(field => (
             <MaskedInput
