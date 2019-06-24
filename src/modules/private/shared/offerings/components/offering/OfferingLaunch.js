@@ -122,14 +122,16 @@ uploaded on
         <Divider section />
         <Header as="h4">Escrow Key</Header>
         <Form.Group widths="equal">
-          <MaskedInput
-            displayMode={isReadonly}
-            name="gsFees"
-            fielddata={COMPANY_LAUNCH_FRM.fields.gsFees}
-            changed={(values, name) => maskChange(values, formName, name)}
-            currency
-            prefix="$"
-          />
+          {['isin', 'contactId', 'escrowAccount', 'sinkFundAccount'].map(field => (
+            <MaskedInput
+              displayMode={isReadonly}
+              name={field}
+              fielddata={COMPANY_LAUNCH_FRM.fields[field]}
+              changed={(values, name) => maskChange(values, formName, name)}
+              number
+            />
+          ))
+          }
         </Form.Group>
         <Header as="h4">Edgar Link</Header>
         <FormInput

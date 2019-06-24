@@ -137,7 +137,7 @@ export default class Close extends Component {
       }
       updateOfferingMutation(
         currentOfferingId, payload, status === 'close' ? 'CLOSEOFFERING' : false,
-        true, 'Offering Closed successfully.', false, res, rej,
+        true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej,
       );
     })
       .then(() => {

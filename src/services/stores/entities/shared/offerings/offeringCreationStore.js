@@ -884,6 +884,11 @@ export class OfferingCreationStore {
     if (form === 'KEY_TERMS_FRM') {
       this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
     }
+    if (form === 'COMPANY_LAUNCH_FRM' && get(offer, 'goldstar')) {
+      ['contactId', 'escrowAccount', 'isin', 'sinkFundAccount'].forEach((f) => {
+        this.COMPANY_LAUNCH_FRM.fields[f].value = get(offer, `goldstar.${f}`);
+      });
+    }
     if (form === 'LEADERSHIP_FRM') {
       forEach(offer.leadership, (emp, key) => {
         this.LEADERSHIP_EXP_FRM = Validator.setFormData(
@@ -1171,6 +1176,10 @@ export class OfferingCreationStore {
           );
           payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
           payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
+        if (get(payloadData, 'offering.launch.goldstar')) {
+          payloadData.goldstar = { ...get(payloadData, 'offering.launch.goldstar') };
+          payloadData.offering.launch.goldstar = undefined;
         }
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };

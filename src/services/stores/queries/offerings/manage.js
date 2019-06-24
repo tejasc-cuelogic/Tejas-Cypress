@@ -95,6 +95,12 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      goldstar {
+        isin
+        contactId
+        escrowAccount
+        sinkFundAccount
+      }
       linkedBank {
         accountNumber
         routingNumber
@@ -420,7 +426,6 @@ export const getOfferingDetails = gql`
             date
             status
           }
-          gsFees
         }
       }
       legal {
