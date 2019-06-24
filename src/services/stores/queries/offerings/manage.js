@@ -402,8 +402,6 @@ export const getOfferingDetails = gql`
           terminationDate
           expectedOpsDate
           issuerApprovedDate
-          escrowKey
-          escrowNumber
           edgarLink
           submitted {
             aliasId: id

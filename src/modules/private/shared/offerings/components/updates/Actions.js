@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 
 const Actions = observer((props) => {
   const {
-    save, meta, isManager, isPublished, newUpdateId,
+    save, meta, isManager, isPublished,
     deleteUpdate, id, cancelUpdate, isDraft,
   } = props;
   return (
@@ -20,7 +20,7 @@ const Actions = observer((props) => {
         {!isManager
           && (
             <>
-              {newUpdateId || id
+              {id
                 ? (
                   <>
                     {isDraft
@@ -37,14 +37,14 @@ const Actions = observer((props) => {
                     }
                     <Button
                       inverted
-                      onClick={() => save(newUpdateId || id, 'DRAFT')}
+                      onClick={() => save(id, 'DRAFT')}
                       color="green"
                       content="Save"
                       disabled={!(meta.isValid && meta.isDirty)}
                     />
                     <Button
                       primary
-                      onClick={() => save(newUpdateId || id, 'PENDING')}
+                      onClick={() => save(id, 'PENDING')}
                       content="Submit"
                       disabled={!meta.isValid}
                     />
@@ -66,7 +66,7 @@ const Actions = observer((props) => {
         {isManager
           && (
             <>
-              {id || newUpdateId
+              {id
                 ? (
                     <>
                       <Button
@@ -77,7 +77,7 @@ const Actions = observer((props) => {
                       />
                       <Button
                         inverted
-                        onClick={() => save(id || newUpdateId, 'DRAFT')}
+                        onClick={() => save(id, 'DRAFT')}
                         color="green"
                         content="Save"
                         disabled={!(meta.isValid && meta.isDirty)}
@@ -86,7 +86,7 @@ const Actions = observer((props) => {
                         && (
                           <Button
                             primary
-                            onClick={() => save(id || newUpdateId, 'PUBLISHED')}
+                            onClick={() => save(id, 'PUBLISHED')}
                             content="Publish"
                             disabled={!meta.isValid}
                           />

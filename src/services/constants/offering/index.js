@@ -24,6 +24,9 @@ export const UPDATES = {
     error: undefined,
     rule: 'optional',
   },
+  updatedDate: {
+    value: '', label: 'Updated Date', error: undefined, rule: 'optional', placeHolder: 'Updated Date',
+  },
 };
 
 export const OFFERING_STAGE = {

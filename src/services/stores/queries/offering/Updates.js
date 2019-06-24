@@ -88,6 +88,7 @@ mutation _offeringUpdatesApprovedByInfo($id: ID!) {
   }
 }
 `;
+
 export const sendOfferingUpdateTestEmail = gql`
 mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!) {
   sendOfferingUpdateTestEmail(
@@ -104,7 +105,6 @@ mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!) {
     id
   }
 }`;
-
 
 export const deleteOfferingUpdate = gql`
 mutation deleteOfferingUpdate($id: [ID]) {

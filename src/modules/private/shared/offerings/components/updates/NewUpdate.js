@@ -4,10 +4,12 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
+import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
 import ActivityHistory from '../../../ActivityHistory';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Actions from './Actions';
 import Status from './Status';
+import Helper from '../../../../../../helper/utility';
 
 @inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
@@ -20,12 +22,13 @@ export default class NewUpdate extends Component {
 
   componentWillMount() {
     this.initiateFlow(this.props.match.params.id);
+    this.props.updateStore.setFieldValue('newUpdateId', null);
   }
 
   initiateFlow = (id) => {
     if (id !== 'new') {
       this.props.updateStore.getOne(id);
-    } else if (!this.props.updateStore.newUpdateId) {
+    } else {
       this.props.updateStore.reset();
     }
   }
@@ -52,14 +55,18 @@ export default class NewUpdate extends Component {
   }
 
   save = (id, status) => {
-    const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const isManager = access.asManager;
-    const { offeringUpdateData } = this.props.updateStore;
-    this.props.updateStore.save(id, status, isManager, offeringUpdateData && offeringUpdateData.status === 'PUBLISHED');
-    if (status !== 'DRAFT') {
-      this.props.updateStore.setFieldValue('newUpdateId', null);
-      this.props.history.push(this.props.refLink);
-    }
+    this.props.updateStore.save(id, status)
+      .then(() => {
+        if (status !== 'DRAFT') {
+          this.props.updateStore.setFieldValue('newUpdateId', null);
+          this.props.history.push(this.props.refLink);
+        } else {
+          this.props.history.push(`${this.props.refLink}/edit/${this.props.match.params.id || this.props.updateStore.newUpdateId}`);
+        }
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong');
+      });
   }
 
   edit = () => {
@@ -68,8 +75,8 @@ export default class NewUpdate extends Component {
 
   render() {
     const {
-      PBUILDER_FRM, UpdateChange, FChange,
-      loadingCurrentUpdate, sendTestEmail, newUpdateId,
+      PBUILDER_FRM, UpdateChange, FChange, maskChange,
+      loadingCurrentUpdate, sendTestEmail,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -78,7 +85,6 @@ export default class NewUpdate extends Component {
     const isReadonly = !isManager && (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
     const { inProgress } = this.props.uiStore;
     const { id } = this.props.match.params;
-    console.log(id);
     if (loadingCurrentUpdate || inProgress) {
       return <InlineLoader />;
     }
@@ -86,10 +92,10 @@ export default class NewUpdate extends Component {
       <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <Header as="h3">
-            {isNew && !newUpdateId ? 'New' : 'Edit'}
+            {isNew ? 'New' : 'Edit'}
             {' '}
   Update
-            {!(isNew && !newUpdateId)
+            {!isNew
               && <Status status={PBUILDER_FRM.fields.status.value} />
             }
             <Actions
@@ -104,7 +110,6 @@ export default class NewUpdate extends Component {
               deleteUpdate={this.showConfirmModal}
               id={this.props.match.params.id}
               cancelUpdate={this.handleCloseModal}
-              newUpdateId={newUpdateId}
             />
           </Header>
           <Divider hidden />
@@ -205,6 +210,21 @@ export default class NewUpdate extends Component {
                         </Form>
                       </Card.Content>
                     </Card>
+                    <Card fluid>
+                      <Card.Content>
+                        <Form>
+                          <MaskedInput
+                            readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                            ishidelabel
+                            fluid
+                            name="updatedDate"
+                            fielddata={PBUILDER_FRM.fields.updatedDate}
+                            changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
+                            dateOfBirth
+                          />
+                        </Form>
+                      </Card.Content>
+                    </Card>
                   </>
                   )
                   : (
@@ -226,14 +246,14 @@ export default class NewUpdate extends Component {
               }
               </Grid.Column>
             </Grid.Row>
-            {(id || newUpdateId)
+            {id && isManager
               && (
                 <Grid.Row>
                   <Grid.Column width={16}>
                     <Header as="h4">Acitivity History</Header>
                     <div className="sticky-sidebar">
                       <Card fluid>
-                        <ActivityHistory showFilters={['activityType', 'activityUserType', 'ActivityDate', 'subType']} resourceId={id || newUpdateId} />
+                        <ActivityHistory showFilters={['activityType', 'activityUserType', 'ActivityDate']} resourceId={id} />
                       </Card>
                     </div>
                   </Grid.Column>

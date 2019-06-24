@@ -97,7 +97,7 @@ export class UpdateStore {
     }
 
     @action
-    offeringUpdatePublish = (offeringUpdateId, data) => {
+    offeringUpdatePublish = (offeringUpdateId, data) => new Promise((resolve, reject) => {
       const variables = { offerId: offeringCreationStore.currentOfferingId };
       client
         .mutate({
@@ -108,9 +108,15 @@ export class UpdateStore {
           },
           refetchQueries: [{ query: allUpdates, variables }],
         })
-        .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
-        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
-    }
+        .then(() => {
+          Helper.toast('Offering Published Successfully ', 'success');
+          resolve();
+        })
+        .catch(() => {
+          Helper.toast('Something went wrong, please try again later. ', 'error');
+          reject();
+        });
+    });
 
     @action
     toggleSearch = () => {
@@ -134,6 +140,15 @@ export class UpdateStore {
     };
 
     @action
+    maskChange = (values, form, field) => {
+      const fieldValue = values.formattedValue;
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: fieldValue },
+      );
+    }
+
+    @action
     FChange = (field, value) => {
       this.PBUILDER_FRM.fields[field].value = value;
       this.PBUILDER_FRM.meta.isDirty = true;
@@ -146,8 +161,9 @@ export class UpdateStore {
     }
 
     @action
-    save = (id, status, isManager = false, isAlreadyPublished = false) => {
+    save = (id, status) => new Promise((resolve) => {
       uiStore.setProgress(true);
+      this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
@@ -155,8 +171,10 @@ export class UpdateStore {
       data.isEarlyBirdOnly = false;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
-        this.offeringUpdatePublish(id, data);
-        return;
+        this.offeringUpdatePublish(id, data).then(() => {
+          uiStore.setProgress(false);
+          resolve();
+        });
       }
       client
         .mutate({
@@ -165,27 +183,22 @@ export class UpdateStore {
             : { ...{ updatesInput: data }, id },
         })
         .then((res) => {
-          if (isManager && !isAlreadyPublished && status !== 'DRAFT') {
-            const UpdateId = res.data.createOfferingUpdates
-              ? res.data.createOfferingUpdates.id : res.data.updateOfferingUpdatesInfo.id;
-            this.approveUpdate(UpdateId);
-          } else {
-            Helper.toast('Update added.', 'success');
-          }
           if (id === 'new') {
             this.setStatus(status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
           } else if (status !== 'DRAFT') {
             this.reset();
           }
+          Helper.toast(id !== 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
           this.setFormIsDirty(false);
           uiStore.setProgress(false);
+          resolve();
         })
         .catch((res) => {
           Helper.toast(`${res} Error`, 'error');
           uiStore.setProgress(false);
         });
-    }
+    });
 
     @action
     setStatus = (status) => {
@@ -199,11 +212,9 @@ export class UpdateStore {
 
     @action
     approveUpdate = (id) => {
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
       client.mutate({
         mutation: approveUpdate,
         variables: { id },
-        refetchQueries: [{ query: allUpdates, variables }],
       }).then(() => {
         Helper.toast('Update published.', 'success');
       })
@@ -239,6 +250,7 @@ export class UpdateStore {
         client,
         query: getUpdate,
         variables: { id },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           this.setFormData(res.offeringUpdatesById);
         },
@@ -252,6 +264,7 @@ export class UpdateStore {
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
+      this.PBUILDER_FRM.fields.updatedDate.value = offeringUpdatesById.updated.date;
       Validator.validateForm(this.PBUILDER_FRM);
     }
 
