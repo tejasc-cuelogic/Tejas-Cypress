@@ -237,13 +237,13 @@ from
                 (
                   <Aux>
                     <Form.Group widths={3}>
-                      {['nsPayment', 'investorFee', 'maturityDate', 'hardCloseDate', 'interestRate', 'revSharePercentage', 'multiple'].map(field => (
+                      {['nsPayment', 'investorFee', 'maturityDate', 'hardCloseDate', 'interestRate', 'revSharePercentage', 'multiple', 'anticipatedPaymentStartDate', 'gsFees', 'nsFee'].map(field => (
                           <MaskedInput
                             key={field}
                             name={field}
                             number={['interestRate', 'revSharePercentage'].includes(field)}
-                            currency={['nsPayment', 'investorFee', 'multiple'].includes(field)}
-                            dateOfBirth={['maturityDate', 'hardCloseDate'].includes(field)}
+                            currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
+                            dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
                             fielddata={OFFERING_CLOSE_1.fields[field]}
                             changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
                           />

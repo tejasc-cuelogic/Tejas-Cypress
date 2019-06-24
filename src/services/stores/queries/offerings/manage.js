@@ -890,7 +890,10 @@ export const getOfferingDetails = gql`
           nsPayment
           investorFee
           maturityDate
+          anticipatedPaymentStartDate
         }
+        gsFees
+        nsFee
         repayment {
           startDate
           completeDate
