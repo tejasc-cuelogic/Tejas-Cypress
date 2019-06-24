@@ -120,26 +120,18 @@ uploaded on
           }
         </Form.Group>
         <Divider section />
-        <Header as="h4">Escrow Key</Header>
+        <Header as="h4">GoldStar</Header>
         <Form.Group widths="equal">
-          {
-            ['escrowKey', 'escrowNumber'].map(field => (
-              <FormInput
-                displayMode={isReadonly}
-                name={field}
-                fielddata={COMPANY_LAUNCH_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
-              />
-            ))
+          {['isin', 'contactId', 'escrowAccount', 'sinkFundAccount'].map(field => (
+            <MaskedInput
+              displayMode={isReadonly}
+              name={field}
+              fielddata={COMPANY_LAUNCH_FRM.fields[field]}
+              changed={(values, name) => maskChange(values, formName, name)}
+              number
+            />
+          ))
           }
-          <MaskedInput
-            displayMode={isReadonly}
-            name="gsFees"
-            fielddata={COMPANY_LAUNCH_FRM.fields.gsFees}
-            changed={(values, name) => maskChange(values, formName, name)}
-            currency
-            prefix="$"
-          />
         </Form.Group>
         <Header as="h4">Edgar Link</Header>
         <FormInput
