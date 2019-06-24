@@ -462,7 +462,7 @@ export class CampaignStore {
         false, true, true, customAddingHoursDateObject,
       );
       const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
-      const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHours(closingDate);
+      const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHours(closingDate, true);
       const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
       const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
@@ -488,7 +488,7 @@ export class CampaignStore {
         return newOfferingsArr.push(resultObject);
       } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
         // const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
-        const labelBannerFirst = closeDaysToRemains !== 0 ? closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left` : 'Processing';
+        const labelBannerFirst = closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.bannerFirstText = labelBannerFirst;
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
