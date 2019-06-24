@@ -422,27 +422,25 @@ from
             OfferingClose
           />
         </div>
-        <Modal open={this.state.openModal} closeIcon size="small" onClose={this.handleCloseModal}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3">
-          {this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
-          </Header>
-        </Modal.Header>
-          <Modal.Content>
-          <Divider />
-          Please confirm
-            <Divider />
-            <Button.Group className="mt-50">
+        <Modal open={this.state.openModal} closeIcon size="tiny" onClose={this.handleCloseModal}>
+          <Modal.Header>
+            {this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
+          </Modal.Header>
+          <Modal.Content className="pb-20">
+            Please select notification action to perform.
+          </Modal.Content>
+          <Modal.Actions>
+            <Button.Group className="actions">
             {['Cancel', 'Send to Test Email', 'Send to Investors'].map(item => (
               <Button
                 onClick={() => this.handleHardOrSoftClose(item)}
-                primary
+                primary={item !== 'Cancel'}
                 content={item}
               />
             ))
             }
             </Button.Group>
-          </Modal.Content>
+          </Modal.Actions>
         </Modal>
         <Confirm
           open={this.state.open}
