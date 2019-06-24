@@ -85,15 +85,11 @@ class DataFormatter {
     return { diff: diff < 0 ? 0 : diff, diffType: 'Days', diffText: `${diff < 0 ? 0 : diff} Days` };
   }
 
-  getDateDifferenceInHours = (timeStamp2) => {
+  getDateDifferenceInHours = (timeStamp2, isDayEnd = false) => {
     const startDate = moment();
-    const endDate = moment(timeStamp2);
-    const resultHours1 = moment.duration(endDate.diff(startDate, 'hours', true));
-    const resultHours = Math.round(resultHours1);
-    if (resultHours <= 0) {
-      return 0;
-    }
-    return resultHours;
+    const endDate = isDayEnd ? moment(`${timeStamp2} 23:59:59`) : moment(timeStamp2);
+    const resultHours = moment.duration(endDate.diff(startDate)).asHours();
+    return Math.round(resultHours);
   }
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {

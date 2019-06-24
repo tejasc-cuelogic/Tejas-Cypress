@@ -141,6 +141,9 @@ h6{
 .ml-10 {
 	margin-left: @10px !important;
 }
+.pb-20{
+	padding-bottom: @20px !important;
+}
 .pt-0{
 	padding-top:0 !important;
 }
