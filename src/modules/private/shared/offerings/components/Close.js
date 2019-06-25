@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Aux from 'react-aux';
 import { filter, find, get } from 'lodash';
-import { Form, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
+import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { MaskedInput, FormInput } from '../../../../../theme/form';
@@ -184,11 +184,11 @@ minimum required amount.
                 {' '}
                 raised
                 {' '}
-                  <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'))}</b>
+                  <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'), 0)}</b>
                   {' '}
 out of required
                   {' '}
-                  <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0)}</b>
+                  <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0, 0)}</b>
                 </Aux>
           </p>
           <Divider section />
@@ -387,9 +387,11 @@ out of required
               }
             </Aux>
             ) : offerStatus.isFailed ? (
-              <div>
-                This campaign has Failed
-              </div>
+              <Card fluid className="center-align ba-info-card">
+                <Card.Header>
+                  This campaign has Failed
+                </Card.Header>
+              </Card>
             ) : null
           }
           <Contingency
