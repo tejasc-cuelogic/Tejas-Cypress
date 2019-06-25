@@ -170,7 +170,7 @@ export default class Close extends Component {
               ? (
 <Aux>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
               </Aux>
-              ) : <Aux>This campaign <span className="highlight-text">has succeed</span></Aux>
+              ) : <Aux>This campaign <span className="highlight-text"> has succeed</span></Aux>
             }
           </Header>
           <p>
