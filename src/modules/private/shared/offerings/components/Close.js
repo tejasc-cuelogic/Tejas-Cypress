@@ -218,7 +218,7 @@ from
             && (
 <Aux>
               <Step.Group className="campaign-close">
-                {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
+                {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize Closure'].map((item, index) => (
                   <Step
                     style={{ background: 'none', textDecoration: 'none' }}
                     onClick={() => this.toggleStep(index + 1)}
@@ -373,7 +373,7 @@ from
               {this.state.activeStep === 5 && false
                 && (
 <Aux>
-                  <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
+                  <Header as="h4" className="mt-40 mb-30">Finalize Closure</Header>
                   <Form>
                     <Form.Group widths={3}>
                       {['date', 'amount', 'currentRepaidAmount', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
