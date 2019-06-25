@@ -21,10 +21,8 @@ const LegalIdentityQuestions = observer(({
       <p>
         We were unable to match your information with the
         address you provided. (
-        <i>
-Note: This may happen if you recently relocated or you entered your address incorrectly
-        </i>
-)
+        <i>Note: This may happen if you recently relocated or you entered your address incorrectly
+        </i>)
       </p>
     </Modal.Header>
 
@@ -48,14 +46,14 @@ Note: This may happen if you recently relocated or you entered your address inco
         </Grid>
         {errors && errors.message
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={[errors.message]} />
           </Message>
           )
         }
         {errors && !errors.message
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={[errors]} />
           </Message>
           )

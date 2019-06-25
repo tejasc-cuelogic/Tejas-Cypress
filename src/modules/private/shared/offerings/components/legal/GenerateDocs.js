@@ -62,7 +62,7 @@ export default class GenerateDocs extends Component {
           />
           {!isEmpty(offeringFilingList)
             && (
-            <Aux>
+<Aux>
               <Header as="h4">Upload Final Signed Docs</Header>
               {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
                 <DropZone

@@ -14,15 +14,15 @@ const ActivityFeed = ({ loading, activities }) => (
             <Feed.Label>
               {a.createdUserInfo
                 ? (
-                  <UserAvatar
-                    UserInfo={{
-                      firstName: get(a.createdUserInfo, 'info.firstName') || '',
-                      lastName: get(a.createdUserInfo, 'info.lastName') || '',
-                      avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
-                      roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
-                    }}
-                    base64url
-                  />
+<UserAvatar
+  UserInfo={{
+    firstName: get(a.createdUserInfo, 'info.firstName') || '',
+    lastName: get(a.createdUserInfo, 'info.lastName') || '',
+    avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
+    roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
+  }}
+  base64url
+/>
                 )
                 : <NSImage path="logo-icon.svg" />
               }

@@ -52,7 +52,7 @@ export default class PreQualRealEstate extends Component {
           <Divider hidden />
           {!hideFields && getInvestmentTypeTooltip
           && (
-          <p>
+<p>
             {getInvestmentTypeTooltip}
           </p>
           )}

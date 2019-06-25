@@ -58,11 +58,7 @@ class AboutPhotoGallery extends Component {
               >
                 {galleryArray.length ? galleryArray.map(data => (
                   <div className="about-carousel">
-                    <div className="carousel-counter">
-                      {gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}
-/
-                      {galleryArray.length}
-                    </div>
+                    <div className="carousel-counter">{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
                     <Image64 srcUrl={data.url} />
                   </div>
                 ))

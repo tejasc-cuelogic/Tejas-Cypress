@@ -24,9 +24,8 @@ export default class Employment extends Component {
           />
           {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED'
           && (
-          <div className="field-wrap left-align">
-            <Form.Group widths="equal">
-              {
+<div className="field-wrap left-align">
+            <Form.Group widths="equal">{
               ['employer', 'position'].map(field => (
                 <FormInput
                   key={field}
@@ -42,7 +41,7 @@ export default class Employment extends Component {
           }
           {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
           )

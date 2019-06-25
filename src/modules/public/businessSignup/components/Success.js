@@ -16,8 +16,7 @@ class Success extends Component {
         </p>
         <p>
           Thanks for submitting Tstbsn`s application, Jane Doee! A NextSeed representative
-          will be reaching out to you shortly.
-          <Responsive minWidth={768} as="br" />
+          will be reaching out to you shortly.<Responsive minWidth={768} as="br" />
           In the meantime, please set up a user account to continue with your application.
         </p>
         <Divider section hidden />

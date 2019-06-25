@@ -97,21 +97,16 @@ export default class OfferingLaunch extends Component {
                 <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
                 {legalDocs && legalDocs[document] && legalDocs[document].fileName
                   ? (
-                    <Aux>
-                      <div className="display-only">
-                        <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}>
-                          <Icon className="ns-file" />
-                          <b>{legalDocs[document].fileName}</b>
-                        </Link>
-                      </div>
-                      <p>
-uploaded on
-                        {' '}
-                        {
+<Aux>
+                    <div className="display-only">
+                      <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
+                    </div>
+                    <p>uploaded on{' '}
+                      {
                         moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
                       }
-                      </p>
-                    </Aux>
+                    </p>
+                  </Aux>
                   )
                   : <div>Not Uploaded</div>
                 }

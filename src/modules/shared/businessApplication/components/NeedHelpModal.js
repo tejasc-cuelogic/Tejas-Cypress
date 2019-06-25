@@ -68,7 +68,7 @@ export default class NeedHelpModal extends Component {
             />
             {errors
               && (
-              <Message error>
+<Message error>
                 <ListErrors errors={[errors]} />
               </Message>
               )

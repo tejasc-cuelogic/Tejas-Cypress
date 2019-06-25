@@ -109,7 +109,7 @@ export default class AddFunds extends Component {
             </div>
             {errors
               && (
-              <Message error className="mb-30">
+<Message error className="mb-30">
                 <ListErrors errors={[errors.message]} />
               </Message>
               )

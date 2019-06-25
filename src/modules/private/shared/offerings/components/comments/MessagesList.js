@@ -15,30 +15,30 @@ const MessagesList = props => (
         >
           {props.threadUsersList(msg.threadComments).length === 0 && !props.isIssuer
             ? (
-              <Item.Extra>
-                <Label size="mini" color="red" horizontal circular>Response Needed</Label>
-              </Item.Extra>
+<Item.Extra>
+              <Label size="mini" color="red" horizontal circular>Response Needed</Label>
+            </Item.Extra>
             ) : null
           }
           {props.threadMsgCount(msg.threadComments)
             ? (
-              <Item.Extra>
-                <Label size="mini" color="blue" circular>{props.threadMsgCount(msg.threadComments)}</Label>
-              </Item.Extra>
+<Item.Extra>
+              <Label size="mini" color="blue" circular>{props.threadMsgCount(msg.threadComments)}</Label>
+            </Item.Extra>
             ) : null
           }
           <div className="ui image">
             {props.threadUsersList(msg.threadComments).length === 1 && (get(msg, 'createdUserInfo.id') !== get(props.threadUsersList(msg.threadComments), '[0].createdUserInfo.id'))
               && (
-              <UserAvatar
-                size="mini"
-                UserInfo={{
-                  firstName: get(msg, 'createdUserInfo.info.firstName'),
-                  lastName: get(msg, 'createdUserInfo.info.lastName'),
-                  avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-                  roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
-                }}
-              />
+<UserAvatar
+  size="mini"
+  UserInfo={{
+    firstName: get(msg, 'createdUserInfo.info.firstName'),
+    lastName: get(msg, 'createdUserInfo.info.lastName'),
+    avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
+    roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
+  }}
+/>
               )
             }
             {props.threadUsersList(msg.threadComments).length > 0
@@ -53,15 +53,15 @@ const MessagesList = props => (
                 }}
               />
               )) : (
-                <UserAvatar
-                  size="mini"
-                  UserInfo={{
-                    firstName: get(msg, 'createdUserInfo.info.firstName'),
-                    lastName: get(msg, 'createdUserInfo.info.lastName'),
-                    avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
-                    roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
-                  }}
-                />
+<UserAvatar
+  size="mini"
+  UserInfo={{
+    firstName: get(msg, 'createdUserInfo.info.firstName'),
+    lastName: get(msg, 'createdUserInfo.info.lastName'),
+    avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
+    roles: get(msg, 'createdUserInfo.roles') ? get(msg, 'createdUserInfo.roles').map(r => r.scope) : [],
+  }}
+/>
               )}
           </div>
           <List.Content>
@@ -76,9 +76,9 @@ const MessagesList = props => (
     }
     {!props.passedProcessingDate && props.messages.length
       ? (
-        <div className="sticky-wrap">
-          <Button color="blue" size="small" className="link-button" content="Post new Comment" onClick={props.newPostComment} />
-        </div>
+<div className="sticky-wrap">
+        <Button color="blue" size="small" className="link-button" content="Post new Comment" onClick={props.newPostComment} />
+      </div>
       ) : null
     }
   </List>

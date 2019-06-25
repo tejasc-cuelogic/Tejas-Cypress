@@ -44,27 +44,27 @@ export default class ManageKnowledgeBase extends Component {
         refMatch={this.props.refMatch}
         {...this.props}
         P1={(
-          <Search
-            {...this.props}
-            name="keyword"
-            w={[10]}
-            placeholder="Search by keyword or phrase"
-            addon={(
-              <Grid.Column width={6} textAlign="right">
+<Search
+  {...this.props}
+  name="keyword"
+  w={[10]}
+  placeholder="Search by keyword or phrase"
+  addon={(
+<Grid.Column width={6} textAlign="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
                   New KB Article
                 </Button>
               </Grid.Column>
 )}
-            executeSearch={this.executeSearch}
-            toggleSearch={this.toggleSearch}
-            filters={filters}
-            setSearchParam={this.setSearchParam}
-            removeFilter={this.removeFilter}
-            requestState={requestState}
-            change={e => this.onFilterChange(e)}
-            more="no"
-          />
+  executeSearch={this.executeSearch}
+  toggleSearch={this.toggleSearch}
+  filters={filters}
+  setSearchParam={this.setSearchParam}
+  removeFilter={this.removeFilter}
+  requestState={requestState}
+  change={e => this.onFilterChange(e)}
+  more="no"
+/>
 )}
       >
         <AllKnowledgeBaseItems match={match} />

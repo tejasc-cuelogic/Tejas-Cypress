@@ -50,36 +50,36 @@ export default class TransferFunds extends Component {
       <div>
         { !isEmpty(linkedBank) && accountType !== 'ira'
           ? (
-            <Aux>
-              <Header as="h4">Transfer funds</Header>
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
-                    <AvailableCashTransfer
-                      match={this.props.match}
-                      isAccountFrozen={isAccountFrozen}
-                      cash={cashAmount || '0.00'}
-                      setFieldValue={setFieldValue}
-                      showAccountFrozenModal={showAccountFrozenModal}
-                    />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Aux>
+<Aux>
+            <Header as="h4">Transfer funds</Header>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
+                  <AvailableCashTransfer
+                    match={this.props.match}
+                    isAccountFrozen={isAccountFrozen}
+                    cash={cashAmount || '0.00'}
+                    setFieldValue={setFieldValue}
+                    showAccountFrozenModal={showAccountFrozenModal}
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Aux>
           ) : accountType === 'ira'
             ? (
-              <section className="center-align">
-                <h4 style={{ color: '#31333d7d' }}>
-                  <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
-                </h4>
-              </section>
+<section className="center-align">
+              <h4 style={{ color: '#31333d7d' }}>
+                <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
+              </h4>
+            </section>
             )
             : (
-              <section className="center-align">
-                <h4 style={{ color: '#31333d7d' }}>
-                  <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
-                </h4>
-              </section>
+<section className="center-align">
+              <h4 style={{ color: '#31333d7d' }}>
+                <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
+              </h4>
+            </section>
             )
         }
       </div>

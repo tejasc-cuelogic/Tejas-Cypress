@@ -25,7 +25,7 @@ export default class Details extends Component {
       <Aux>
         {this.props.match.params && this.props.match.params.slug !== 'faq' && !this.props.location.pathname.includes('/app/')
         && (
-        <Form>
+<Form>
           <Input
             fluid
             onChange={this.search}

@@ -89,10 +89,10 @@ export default class KnowledgeBase extends Component {
               <Route
                 path={`${match.url}/faq`}
                 render={props => (
-                  <Aux>
-                    {isMobile && <Divider hidden />}
-                    <FaqsCombined marketing={marketing} params={match.params} {...props} />
-                  </Aux>
+                    <Aux>
+                      {isMobile && <Divider hidden />}
+                      <FaqsCombined marketing={marketing} params={match.params} {...props} />
+                    </Aux>
                 )
                 }
               />

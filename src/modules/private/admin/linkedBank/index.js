@@ -44,7 +44,7 @@ export default class CrowdPay extends Component {
       <PrivateLayout
         {...this.props}
         P1={(
-          <Aux>
+<Aux>
             <ByKeyword
               change={this.executeSearch}
               w={[8]}

@@ -18,13 +18,13 @@ class UpdateDetails extends Component {
     return (
       update
         ? (
-          <Aux>
-            <Header as="h4">
-              {update.title}
-              <Header.Subheader className="mt-half">{calculatedDate}</Header.Subheader>
-            </Header>
-            <HtmlEditor readOnly content={(update.content || '')} />
-          </Aux>
+<Aux>
+          <Header as="h4">
+            {update.title}
+            <Header.Subheader className="mt-half">{calculatedDate}</Header.Subheader>
+          </Header>
+          <HtmlEditor readOnly content={(update.content || '')} />
+        </Aux>
         )
         : <InlineLoader text="No data found." />
     );
