@@ -1,5 +1,4 @@
 
-
 const fs = require('fs');
 const isWsl = require('is-wsl');
 const path = require('path');
@@ -52,7 +51,7 @@ const publicPathBugSnag = paths.servedPath;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function (webpackEnv) {
+module.exports = (webpackEnv) => {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -672,6 +671,14 @@ module.exports = function (webpackEnv) {
         // The formatter is invoked directly in WebpackDevServerUtils during development
         formatter: isEnvProduction ? typescriptFormatter : undefined,
       }),
+      process.env.REACT_APP_BUG_SNAG_KEY
+      && !(['localhost'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      && new BugsnagSourceMapUploaderPlugin({
+        apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+        publicPathBugSnag,
+        appVersion: process.env.CI_PIPELINE_ID,
+        overwrite: true,
+      }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
@@ -690,14 +697,3 @@ module.exports = function (webpackEnv) {
     performance: false,
   };
 };
-
-if (process.env.REACT_APP_BUG_SNAG_KEY && !(['localhost'].includes(process.env.REACT_APP_DEPLOY_ENV))) {
-  // It's a good idea to only run this plugin when you're building a bundle
-  // that will be released, rather than for every development build
-  module.exports.plugins.push(new BugsnagSourceMapUploaderPlugin({
-    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
-    publicPathBugSnag,
-    appVersion: process.env.CI_PIPELINE_ID,
-    overwrite: true,
-  }));
-}
