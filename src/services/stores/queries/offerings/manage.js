@@ -893,7 +893,6 @@ export const getOfferingDetails = gql`
           anticipatedPaymentStartDate
         }
         gsFees
-        nsFee
         repayment {
           startDate
           completeDate
