@@ -37,12 +37,7 @@ export default class AddNewContingency extends React.Component {
     } = this.props.offeringCreationStore;
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
-        <Modal.Header>
-Add New
-          {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'}
-          {' '}
-Contingency
-        </Modal.Header>
+        <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
         <Modal.Content>
           <Form onSubmit={() => this.handleSubmitForm()}>
             {

@@ -270,11 +270,10 @@ export default class KeyTerms extends Component {
           </Header>
           {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
             <Aux>
-              <Header as="h6">
-                {`Term ${index + 1}`}
+              <Header as="h6">{`Term ${index + 1}`}
                 {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1
                 && (
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
                 )

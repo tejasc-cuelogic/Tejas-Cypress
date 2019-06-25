@@ -63,7 +63,7 @@ export default class Offerings extends Component {
                 filters={filters}
                 more="no"
                 addon={(
-                  <Aux>
+<Aux>
                     <Grid.Column width={5} textAlign="right" floated="right">
                       <Button.Group floated="right">
                         {stage === 'creation'

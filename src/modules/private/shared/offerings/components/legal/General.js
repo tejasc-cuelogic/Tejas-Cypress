@@ -190,11 +190,10 @@ export default class General extends Component {
           </Header>
           {GENERAL_FRM.fields.security.map((security, index) => (
             <Aux>
-              <Header as="h6">
-                {`Security ${index + 1}`}
+              <Header as="h6">{`Security ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.security.length > 1
                 && (
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
                 )
@@ -233,11 +232,10 @@ export default class General extends Component {
           <p>Describe any past fund raises in the last 3 years.</p>
           {GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
             <Aux>
-              <Header as="h6">
-                {`Other Exempt Offering ${index + 1}`}
+              <Header as="h6">{`Other Exempt Offering ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.exemptOfferings.length > 1
                 && (
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
                 )
@@ -284,11 +282,10 @@ export default class General extends Component {
           </Header>
           {GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
             <Aux>
-              <Header as="h6">
-                {`Term ${index + 1}`}
+              <Header as="h6">{`Term ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.materialIndebtedness.length > 1
                 && (
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
                 )
@@ -340,18 +337,16 @@ export default class General extends Component {
             && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'affiliatedTransactions')}><small>+ Add New Affiliated Party</small></Link>
             }
           </Header>
-          <p>
-In the past year (and looking forward),
+          <p>In the past year (and looking forward),
             has the business entered into any transactions with affiliated parties
             (i.e., affiliated entities, directors or relatives)?
           </p>
           {GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
             <Aux>
-              <Header as="h6">
-                {`Transaction ${index + 1}`}
+              <Header as="h6">{`Transaction ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.affiliatedTransactions.length > 1
                 && (
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
                 )

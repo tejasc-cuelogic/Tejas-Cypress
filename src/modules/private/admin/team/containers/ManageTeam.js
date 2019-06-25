@@ -27,18 +27,18 @@ export default class ManageTeam extends Component {
         refMatch={this.props.refMatch}
         {...this.props}
         P1={(
-          <Search
-            change={this.executeSearch}
-            w={[11]}
-            placeholder="Search by keyword or phrase"
-            requestState={requestState}
-            more="no"
-            addon={(
-              <Grid.Column width={5} textAlign="right">
+<Search
+  change={this.executeSearch}
+  w={[11]}
+  placeholder="Search by keyword or phrase"
+  requestState={requestState}
+  more="no"
+  addon={(
+<Grid.Column width={5} textAlign="right">
                 <Button color="green" onClick={this.handleAddNewMember} floated="right"> + Add new team member</Button>
               </Grid.Column>
 )}
-          />
+/>
 )}
       >
         <AllTeam match={match} />

@@ -77,13 +77,13 @@ export default class AddNewBonusReward extends Component {
             <Form onSubmit={() => this.handleBonusReward(get(earlyBird, 'quantity'), isEditForm)}>
               {earlyBird
               && (
-              <FormCheckbox
-                fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds}
-                name="isEarlyBirds"
-                changed={(e, result) => formChange(e, result, formName)}
-                defaults
-                containerclassname="ui relaxed list"
-              />
+<FormCheckbox
+  fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds}
+  name="isEarlyBirds"
+  changed={(e, result) => formChange(e, result, formName)}
+  defaults
+  containerclassname="ui relaxed list"
+/>
               )
               }
               <div className="bonus-tier-list">

@@ -77,14 +77,14 @@ export default class AccList extends Component {
         }
         {isDev && marketing
           ? (
-            <Accordion.Title
-              refItem="faq"
-              onClick={this.toggleAction}
-              as={NavLink}
-              to={`${match.url}/faq`}
-            >
+<Accordion.Title
+  refItem="faq"
+  onClick={this.toggleAction}
+  as={NavLink}
+  to={`${match.url}/faq`}
+>
             FAQ
-            </Accordion.Title>
+          </Accordion.Title>
           ) : ''
         }
       </Accordion>

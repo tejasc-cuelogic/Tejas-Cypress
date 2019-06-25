@@ -62,20 +62,20 @@ export default class BeneficiaryShareModal extends Component {
                 {
                   BENEFICIARY_META.fields.beneficiary.length
                     ? BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
-                      <Table.Row>
-                        <Table.Cell>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</Table.Cell>
-                        <Table.Cell>
-                          <MaskedInput
-                            percentage
-                            showErrorOnField
-                            tooltip={beneficiary.share.tooltip}
-                            type="text"
-                            name="share"
-                            fielddata={beneficiary.share}
-                            changed={values => beneficiaryShareChange(values, index)}
-                          />
-                        </Table.Cell>
-                      </Table.Row>
+                    <Table.Row>
+                      <Table.Cell>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</Table.Cell>
+                      <Table.Cell>
+                        <MaskedInput
+                          percentage
+                          showErrorOnField
+                          tooltip={beneficiary.share.tooltip}
+                          type="text"
+                          name="share"
+                          fielddata={beneficiary.share}
+                          changed={values => beneficiaryShareChange(values, index)}
+                        />
+                      </Table.Cell>
+                    </Table.Row>
                     ))
                     : <InlineLoader />
                 }
@@ -83,7 +83,7 @@ export default class BeneficiaryShareModal extends Component {
             </Table>
             {errors
               && (
-              <Message error className="mt-30">
+<Message error className="mt-30">
                 <ListErrors errors={[errors]} />
               </Message>
               )

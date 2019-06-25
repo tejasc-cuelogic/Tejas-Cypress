@@ -182,7 +182,7 @@ export default class ConfirmEmailAddress extends Component {
         <Modal.Content className="signup-content center-align">
           { (confirmProgress === 'confirm' && inProgress)
           && (
-          <Dimmer page active={inProgress}>
+<Dimmer page active={inProgress}>
             <Loader active={inProgress} />
           </Dimmer>
           )
@@ -222,7 +222,7 @@ export default class ConfirmEmailAddress extends Component {
             </Form.Field>
             {errors
               && (
-              <Message error className="mb-40">
+<Message error className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
               )

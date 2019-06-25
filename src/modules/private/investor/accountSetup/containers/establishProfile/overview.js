@@ -18,18 +18,11 @@ export default class Overview extends Component {
     let overviewInfo = (
       <Aux>
         <p>
-          Investment offerings on
-          {' '}
-          <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
-          {' '}
-are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of
-          {' '}
-          {finraLink}
-)
-          and NextSeed Securities LLC (SEC-registered broker-dealer & member of
-          {' '}
-          {finraLink}
-).
+          Investment offerings on <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
+          {' '}are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of{' '}
+          {finraLink})
+          and NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
+          {finraLink}).
         </p>
         <Divider hidden />
         <p>
@@ -42,16 +35,10 @@ are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of
       overviewInfo = (
         <Aux>
           <p>
-            We
-            {"'"}
-re pleased to share that certain new investments will now be facilitated
-            by NextSeed Securities LLC (SEC-registered broker-dealer & member of
-            {' '}
-            {finraLink}
-),
-            an affiliate of NextSeed US LLC (SEC-registered Funding Portal & member of
-            {finraLink}
-).
+            We{"'"}re pleased to share that certain new investments will now be facilitated
+            by NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
+            {finraLink}),
+            an affiliate of NextSeed US LLC (SEC-registered Funding Portal & member of {finraLink}).
           </p>
           <Divider hidden />
           <p>

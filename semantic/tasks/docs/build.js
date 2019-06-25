@@ -1,68 +1,69 @@
-/** *****************************
+/*******************************
            Build Docs
-****************************** */
+*******************************/
 
-const
-  gulp = require('gulp');
+var
+  gulp         = require('gulp'),
 
-// node dependencies
-const console = require('better-console');
-const fs = require('fs');
-const map = require('map-stream');
+  // node dependencies
+  console      = require('better-console'),
+  fs           = require('fs'),
+  map          = require('map-stream'),
 
-// gulp dependencies
-const autoprefixer = require('gulp-autoprefixer');
-const chmod = require('gulp-chmod');
-const clone = require('gulp-clone');
-const flatten = require('gulp-flatten');
-const gulpif = require('gulp-if');
-const header = require('gulp-header');
-const less = require('gulp-less');
-const minifyCSS = require('gulp-clean-css');
-const plumber = require('gulp-plumber');
-const print = require('gulp-print').default;
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
-const uglify = require('gulp-uglify');
+  // gulp dependencies
+  autoprefixer = require('gulp-autoprefixer'),
+  chmod        = require('gulp-chmod'),
+  clone        = require('gulp-clone'),
+  flatten      = require('gulp-flatten'),
+  gulpif       = require('gulp-if'),
+  header       = require('gulp-header'),
+  less         = require('gulp-less'),
+  minifyCSS    = require('gulp-clean-css'),
+  plumber      = require('gulp-plumber'),
+  print        = require('gulp-print').default,
+  rename       = require('gulp-rename'),
+  replace      = require('gulp-replace'),
+  uglify       = require('gulp-uglify'),
 
-// user config
-let config = require('../config/docs');
+  // user config
+  config       = require('../config/docs'),
 
-// install config
-const tasks = require('../config/tasks');
-const configSetup = require('../config/project/config');
-const install = require('../config/project/install');
+  // install config
+  tasks        = require('../config/tasks'),
+  configSetup  = require('../config/project/config'),
+  install      = require('../config/project/install'),
 
-// metadata parsing
-const metadata = require('./metadata');
+  // metadata parsing
+  metadata     = require('./metadata'),
 
-// shorthand
-let globs;
-let assets;
-let output;
-let source;
+  // shorthand
+  globs,
+  assets,
+  output,
+  source,
 
-const { banner } = tasks;
-const { comments } = tasks.regExp;
-const { log } = tasks;
-const { settings } = tasks
+  banner       = tasks.banner,
+  comments     = tasks.regExp.comments,
+  log          = tasks.log,
+  settings     = tasks.settings
 ;
 
 // add internal tasks (concat release)
 require('../collections/internal')(gulp);
 
-module.exports = function (callback) {
-  let
-    stream;
-  let compressedStream;
-  let uncompressedStream
+module.exports = function(callback) {
+
+  var
+    stream,
+    compressedStream,
+    uncompressedStream
   ;
 
   // use a different config
   config = configSetup.addDerivedValues(config);
 
   // shorthand
-  globs = config.globs;
+  globs  = config.globs;
   assets = config.paths.assets;
   output = config.paths.output;
   source = config.paths.source;
@@ -78,8 +79,8 @@ module.exports = function (callback) {
   console.info('Building Metadata');
   gulp.src(config.paths.template.eco + globs.eco)
     .pipe(map(metadata.parser))
-    .on('end', () => {
-      fs.writeFile(`${output.metadata}/metadata.json`, JSON.stringify(metadata.result, null, 2));
+    .on('end', function() {
+      fs.writeFile(output.metadata + '/metadata.json', JSON.stringify(metadata.result, null, 2));
     })
   ;
 
@@ -111,13 +112,13 @@ module.exports = function (callback) {
 
   console.info('Building Semantic for docs');
 
-  if (!install.isSetup()) {
+  if( !install.isSetup() ) {
     console.error('Cannot build files. Run "gulp install" to set-up Semantic');
     return;
   }
 
   // unified css stream
-  stream = gulp.src(`${source.definitions}/**/${globs.components}.less`)
+  stream = gulp.src(source.definitions + '/**/' + globs.components + '.less')
     .pipe(plumber())
     .pipe(less(settings.less))
     .pipe(autoprefixer(settings.prefix))
@@ -126,7 +127,7 @@ module.exports = function (callback) {
 
   // two concurrent streams from same source to concat release
   uncompressedStream = stream.pipe(clone());
-  compressedStream = stream.pipe(clone());
+  compressedStream   = stream.pipe(clone());
 
   uncompressedStream
     .pipe(plumber())
@@ -139,9 +140,11 @@ module.exports = function (callback) {
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
     .pipe(gulp.dest(output.uncompressed))
     .pipe(print(log.created))
-    .on('end', () => {
+    .on('end', function() {
       gulp.start('package uncompressed docs css');
-    });
+    })
+  ;
+
   compressedStream
     .pipe(plumber())
     .pipe(clone())
@@ -152,20 +155,20 @@ module.exports = function (callback) {
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
     .pipe(gulp.dest(output.compressed))
     .pipe(print(log.created))
-    .on('end', () => {
+    .on('end', function() {
       callback();
       gulp.start('package compressed docs css');
     })
   ;
 
   // copy assets
-  gulp.src(`${source.themes}/**/assets/**/*.*`)
+  gulp.src(source.themes + '/**/assets/**/*.*')
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
     .pipe(gulp.dest(output.themes))
   ;
 
   // copy source javascript
-  gulp.src(`${source.definitions}/**/${globs.components}.js`)
+  gulp.src(source.definitions + '/**/' + globs.components + '.js')
     .pipe(plumber())
     .pipe(flatten())
     .pipe(gulp.dest(output.uncompressed))
@@ -177,8 +180,10 @@ module.exports = function (callback) {
     .pipe(gulp.dest(output.compressed))
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
     .pipe(print(log.created))
-    .on('end', () => {
+    .on('end', function() {
       gulp.start('package compressed docs js');
       gulp.start('package uncompressed docs js');
-    });
+    })
+  ;
+
 };

@@ -33,20 +33,20 @@ export default class Verification extends Component {
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest'
         ? <VerificationForm clicked={this.submit} /> : isEntity
           ? (
-            <AssetsUploadDocument
-              accountType={params.accountType}
-              clicked={this.submit}
-              isEntity={isEntity}
-            />
+<AssetsUploadDocument
+  accountType={params.accountType}
+  clicked={this.submit}
+  isEntity={isEntity}
+/>
           )
           : (ACCREDITATION_FORM.fields.method.value === 'INCOME')
             ? <IncomeUploadDocument accountType={params.accountType} clicked={this.submit} />
             : (
-              <AssetsUploadDocument
-                accountType={params.accountType}
-                clicked={this.submit}
-                isEntity={isEntity}
-              />
+<AssetsUploadDocument
+  accountType={params.accountType}
+  clicked={this.submit}
+  isEntity={isEntity}
+/>
             )
     );
   }

@@ -18,33 +18,33 @@ const Actions = observer((props) => {
       />
       { isReview
         ? (
-          <Button
-            inverted
-            onClick={() => save('PUBLISHED')}
-            color="green"
-            content="Publish"
-            disabled={!meta.isValid}
-          />
+<Button
+  inverted
+  onClick={() => save('PUBLISHED')}
+  color="green"
+  content="Publish"
+  disabled={!meta.isValid}
+/>
         )
         : (isPublished
           ? (
-            <Aux>
-              <Button
-                inverted
-                onClick={() => save('PUBLISHED')}
-                color="green"
-                content="Save and Publish"
-                disabled={!meta.isValid}
-              />
-            </Aux>
-          )
-          : (
+<Aux>
             <Button
-              primary
-              onClick={() => save('IN_REVIEW')}
-              content="Submit for Review"
+              inverted
+              onClick={() => save('PUBLISHED')}
+              color="green"
+              content="Save and Publish"
               disabled={!meta.isValid}
             />
+          </Aux>
+          )
+          : (
+<Button
+  primary
+  onClick={() => save('IN_REVIEW')}
+  content="Submit for Review"
+  disabled={!meta.isValid}
+/>
           ))
       }
     </Button.Group>

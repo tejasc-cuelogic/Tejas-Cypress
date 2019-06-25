@@ -46,7 +46,7 @@ export default class Report extends Component {
                 placeholder="Search by name"
                 more="no"
                 addon={(
-                  <Aux>
+<Aux>
                     <Grid.Column width={6}>
                       <DropdownFilter value={requestState.search.amount} name="Investment amount" change={this.setSearchParam} options={[]} />
                     </Grid.Column>
@@ -65,10 +65,7 @@ export default class Report extends Component {
           }
           <Header as="h4">
             Bonus rewards
-            <Header.Subheader>
-For more information about bonus rewards, check out our
-              <Link to="/">Resource Article.</Link>
-            </Header.Subheader>
+            <Header.Subheader>For more information about bonus rewards, check out our <Link to="/">Resource Article.</Link></Header.Subheader>
           </Header>
           <RewardList listOf="Early bird reward" data={rewards} />
         </div>

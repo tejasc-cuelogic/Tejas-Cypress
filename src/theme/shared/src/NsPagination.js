@@ -57,11 +57,11 @@ export default class NsPagination extends Component {
         <Menu.Menu position="right">
           {recPerPage
             && (
-            <Select
-              value={first}
-              options={stateOptions}
-              onChange={this.changeRecordsPerPage}
-            />
+<Select
+  value={first}
+  options={stateOptions}
+  onChange={this.changeRecordsPerPage}
+/>
             )
           }
           <Menu.Item

@@ -206,10 +206,7 @@ const BUSINESS_PREQUAL_COMMON = {
     rule: 'required',
     customErrors: { required: 'required' },
     placeHolder: 'e.g. $50,000',
-    tooltip: (<span>
-Minimum amount of funding is $50,000. For requirements on different levels of funding,
-      <a href="/business" target="_blank">click here.</a>
-              </span>),
+    tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a href="/business" target="_blank">click here.</a></span>),
   },
   businessEntityStructure: {
     value: '',
@@ -670,12 +667,7 @@ export const LENDIO_PRE_QUAL = {
         label: 'I agree to the conditions above.', value: 'agreeConditions',
       },
       {
-        label: (<span>
-I agree to send data to
-          <a href="https://www.lendio.com/" rel="noopener noreferrer" target="_blank" className="link"><b>Lendio</b></a>
-, our partner.
-                </span>),
-        value: 'sendDataToLendio',
+        label: (<span>I agree to send data to <a href="https://www.lendio.com/" rel="noopener noreferrer" target="_blank" className="link"><b>Lendio</b></a>, our partner.</span>), value: 'sendDataToLendio',
       },
     ],
     error: undefined,
@@ -740,41 +732,25 @@ export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
     {
       congratulations: '',
       header: 'You have been pre-qualified for a NextSeed campaign',
-      message: <span>
-Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at
-        <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>
-.
-               </span>,
+      message: <span>Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
     },
     {
       congratulations: '',
       header: 'You’re almost there',
-      message: <span>
-Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at
-        <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>
-.
-               </span>,
+      message: <span>Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStage: 'IN_PROGRESS',
     },
     {
       congratulations: 'Congratulations!',
       header: 'We’re reviewing your application',
-      message: <span>
-Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at
-        <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>
-.
-               </span>,
+      message: <span>Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStatus: 'APPLICATION_SUBMITTED',
     },
     {
       congratulations: 'Congratulations!',
       header: 'You’ve received an offer!',
-      message: <span>
-We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at
-        <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>
-.
-               </span>,
+      message: <span>We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at <a href="mailto:apply@nextseedsecurities.com">apply@nextseedsecurities.com</a>.</span>,
       applicationStatus: 'APPLICATION_OFFERED',
     },
   ],

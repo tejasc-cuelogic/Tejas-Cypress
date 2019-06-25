@@ -18,13 +18,13 @@ const FormLabelInput = observer((props) => {
         {label}
         {tooltip
           && (
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
           )
         }
       </label>

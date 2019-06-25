@@ -58,9 +58,7 @@ export default class FaqDetails extends Component {
         <Modal.Content className="transaction-details">
           <div>
             <Header as="h3">
-              {isNew ? 'Create' : 'Edit'}
-              {' '}
-FAQ
+              {isNew ? 'Create' : 'Edit'} FAQ
               <Actions
                 save={this.save}
                 meta={FAQ_FRM.meta}

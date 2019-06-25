@@ -1493,12 +1493,7 @@ export const GENERAL = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Type your text here...',
-      tooltip: (<span>
-See this link
-        <a href="https://www.sec.gov/smallbusiness/exemptofferings" target="_blank" rel="noopener noreferrer">https://www.sec.gov/smallbusiness/exemptofferings</a>
-        {' '}
-for more information from the SEC
-                </span>),
+      tooltip: (<span>See this link <a href="https://www.sec.gov/smallbusiness/exemptofferings" target="_blank" rel="noopener noreferrer">https://www.sec.gov/smallbusiness/exemptofferings</a> for more information from the SEC</span>),
     },
     securitiesOffered: {
       label: 'Securities Offered',

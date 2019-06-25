@@ -40,7 +40,7 @@ class Gallery extends Component {
         </div>
         {get(campaign, 'media.gallery')
           && (
-          <Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
+<Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
             View Gallery
             <Icon size="small" className="ns-chevron-right right" color="white" />
           </Button>

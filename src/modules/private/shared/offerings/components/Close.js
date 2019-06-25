@@ -168,26 +168,15 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-                <Aux>
-This campaing is still live, set to close
-                  <span className="highlight-text">
-                    {' '}
-                    {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'}
-                    {' '}
-                  </span>
-                </Aux>
-              ) : (
-                <Aux>
-This campaing
-                  <span className="highlight-text">has succeed</span>
-                </Aux>
-              )
+<Aux>This campaing is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
+              </Aux>
+              ) : <Aux>This campaing <span className="highlight-text">has succeed</span></Aux>
             }
           </Header>
           <p>
             {hoursToClose > 0
               ? (
-                <Aux>
+<Aux>
                 Campaign has not reached minimum required amount.
                 {' '}
                 {get(offer, 'keyTerms.shorthandBusinessName')}
@@ -214,10 +203,8 @@ from
                   {' '}
                   {get(offer, 'closureSummary.totalInvestorCount') || 0}
                   {' '}
-                  investors
+                  investors.
                   </b>
-                  {' '}
-.
                 </Aux>
               )
           }
@@ -225,7 +212,7 @@ from
           <Divider section />
           {hoursToClose <= 0
             && (
-            <Aux>
+<Aux>
               <Step.Group className="campaign-close">
                 {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
                   <Step
@@ -315,8 +302,7 @@ from
                       loading={inProgress === fA.enum}
                       onClick={() => this.closeAction(fA.enum, 2)}
                       primary
-                    >
-                      {fA.label}
+                    >{fA.label}
                     </Button>
                   ))}
                 </Button.Group>
@@ -326,7 +312,7 @@ from
               }
               {this.state.activeStep === 3
                 && (
-                <Aux>
+<Aux>
                   <Form.Group widths={3}>
                     {['queueLimit', 'notePurchaseDate'].map(field => (
                       <MaskedInput
@@ -346,8 +332,7 @@ from
                         loading={inProgress === fA.enum}
                         onClick={() => this.closeAction(fA.enum, 3)}
                         primary
-                      >
-                        {fA.label}
+                      >{fA.label}
                       </Button>
                     ))}
                   </Button.Group>
@@ -383,7 +368,7 @@ from
               }
               {this.state.activeStep === 5 && false
                 && (
-                <Aux>
+<Aux>
                   <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
                   <Form>
                     <Form.Group widths={3}>

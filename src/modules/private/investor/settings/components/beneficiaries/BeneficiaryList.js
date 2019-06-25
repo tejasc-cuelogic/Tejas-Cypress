@@ -28,65 +28,61 @@ const BeneficiaryList = (props) => {
             </Header>
             { showButton
               ? (
-                <Aux>
-                  <div className="status">
-                    <span className="time-stamp">{`Updated: ${moment(props.updatedDate.date).format('MM-DD-YYYY')}`}</span>
-                    <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} />
-                    {' '}
-                    <span className="capitalize">{`${status}`}</span>
-                  </div>
-                  <p>{headerMsg}</p>
-                  <Divider hidden />
-                  <Item.Group>
-                    {
+<Aux>
+                <div className="status">
+                  <span className="time-stamp">{`Updated: ${moment(props.updatedDate.date).format('MM-DD-YYYY')}`}</span>
+                  <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} /> <span className="capitalize">{`${status}`}</span>
+                </div>
+                <p>{headerMsg}</p>
+                <Divider hidden />
+                <Item.Group>
+                  {
                     props.beneficiaries.recipients
                       ? props.beneficiaries.recipients.map(beneficiary => (
-                        <Item>
-                          <Grid stackable celled="internally" padded="horizontally">
-                            <Grid.Row>
-                              <Grid.Column width={8}>
-                                <Card.Content>
-                                  <dl className="dl-horizontal">
-                                    <dt>Names</dt>
-                                    <dd>{`${beneficiary.firstName} ${beneficiary.lastName}`}</dd>
-                                    <dt>DOB</dt>
-                                    <dd>
-                                      <DateTimeFormat
-                                        format="MM/DD/YYYY"
-                                        datetime={moment(beneficiary.dob, 'MM/DD/YYYY')}
-                                      />
-                                    </dd>
-                                    <dt>Relationship</dt>
-                                    <dd>{beneficiary.relationship}</dd>
-                                  </dl>
-                                </Card.Content>
-                              </Grid.Column>
-                              <Grid.Column width={8}>
-                                <Card.Content>
-                                  <dl className="dl-horizontal">
-                                    <dt>Legal Address</dt>
-                                    <dd>
-                                      {`${beneficiary.address.street}`}
-,
-                                      {`${beneficiary.address.city} ${beneficiary.address.state} ${beneficiary.address.zipCode}`}
-                                    </dd>
-                                  </dl>
-                                </Card.Content>
-                                <Card.Content>
-                                  <dl className="dl-horizontal">
-                                    <dt>Share</dt>
-                                    <dd>{`${beneficiary.shares}%`}</dd>
-                                  </dl>
-                                </Card.Content>
-                              </Grid.Column>
-                            </Grid.Row>
-                          </Grid>
-                        </Item>
+                      <Item>
+                        <Grid stackable celled="internally" padded="horizontally">
+                          <Grid.Row>
+                            <Grid.Column width={8}>
+                              <Card.Content>
+                                <dl className="dl-horizontal">
+                                  <dt>Names</dt>
+                                  <dd>{`${beneficiary.firstName} ${beneficiary.lastName}`}</dd>
+                                  <dt>DOB</dt>
+                                  <dd>
+                                    <DateTimeFormat
+                                      format="MM/DD/YYYY"
+                                      datetime={moment(beneficiary.dob, 'MM/DD/YYYY')}
+                                    />
+                                  </dd>
+                                  <dt>Relationship</dt>
+                                  <dd>{beneficiary.relationship}</dd>
+                                </dl>
+                              </Card.Content>
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                              <Card.Content>
+                                <dl className="dl-horizontal">
+                                  <dt>Legal Address</dt>
+                                  <dd>
+                                    {`${beneficiary.address.street}`}, {`${beneficiary.address.city} ${beneficiary.address.state} ${beneficiary.address.zipCode}`}
+                                  </dd>
+                                </dl>
+                              </Card.Content>
+                              <Card.Content>
+                                <dl className="dl-horizontal">
+                                  <dt>Share</dt>
+                                  <dd>{`${beneficiary.shares}%`}</dd>
+                                </dl>
+                              </Card.Content>
+                            </Grid.Column>
+                          </Grid.Row>
+                        </Grid>
+                      </Item>
                       )) : <EmptyDataSet title="No data available for beneficiaries." />
                   }
-                  </Item.Group>
-                  <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
-                </Aux>
+                </Item.Group>
+                <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
+              </Aux>
               )
               : <p>{headerMsg}</p>
               }

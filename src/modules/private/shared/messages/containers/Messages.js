@@ -44,7 +44,7 @@ export default class Messages extends Component {
       <PrivateLayout
         {...this.props}
         P3={(
-          <Grid.Column width={3} textAlign="right">
+<Grid.Column width={3} textAlign="right">
             <Button as={Link} to={`${match.url}/new`} color="green" floated="right">
               Create new message
             </Button>
