@@ -16,11 +16,11 @@ const isMobile = document.documentElement.clientWidth < 992;
 @observer
 export default class TermsOfUse extends Component {
   dataRoomHeader = (
-      <Header as="h3" className="mt-20 mb-30 anchor-wrap">
-        Data Room
-        <span className="anchor" />
-      </Header>
-  );
+    <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      Data Room
+      <span className="anchor" />
+    </Header>
+  )
 
   componentWillMount() {
     const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
@@ -93,7 +93,7 @@ export default class TermsOfUse extends Component {
             doc={dataRoomDocs[index - 1]}
             fileId={get(dataRoomDocs[index - 1], 'upload.fileHandle.boxFileId')}
           />
-</Aux>
+        </Aux>
           )
         }
       </div>

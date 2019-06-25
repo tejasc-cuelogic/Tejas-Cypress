@@ -34,7 +34,7 @@ class teamList extends Component {
           ))}
           { joinColumn
           && (
-          <Grid.Column verticalAlign="middle" className={`${(teamMembers.length % 2 === 0) && 'centered'}`}>
+<Grid.Column verticalAlign="middle" className={`${(teamMembers.length % 2 === 0) && 'centered'}`}>
             <Link to="/about/careers">
               <Header as="h4" textAlign="center">
                 Join our team

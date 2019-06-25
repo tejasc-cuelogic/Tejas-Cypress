@@ -13,10 +13,7 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 const AddMore = ({
   addMore, formName, arrayName, title,
 }) => (
-  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)}>
-+
-    {title}
-  </Button>
+  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)}>+ {title}</Button>
 );
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
@@ -103,7 +100,7 @@ export default class BusinessPlan extends Component {
                   {`Control Person ${index + 1}`}
                   {!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length > 1
                   && (
-                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                   )
@@ -209,45 +206,45 @@ export default class BusinessPlan extends Component {
                   {
                     BUSINESS_PLAN_FRM.fields.sources.length
                       ? BUSINESS_PLAN_FRM.fields.sources.map((source, index) => (
-                        <Table.Row key={source} verticalAlign="top">
-                          <Table.Cell width={8}>
-                            <FormInput
-                              containerclassname={isReadonly ? 'display-only' : ''}
-                              readOnly={isReadonly}
-                              name="name"
-                              fielddata={source.name}
-                              changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'sources', index)}
-                              size="small"
-                            />
-                          </Table.Cell>
-                          <Table.Cell width={8}>
-                            <MaskedInput
-                              containerclassname={isReadonly ? 'display-only' : ''}
-                              readOnly={isReadonly}
-                              prefix="$"
-                              currency
-                              name="amount"
-                              fielddata={source.amount}
-                              changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'sources', field, index)}
-                              hidelabel
-                              size="small"
-                            />
-                          </Table.Cell>
-                          {!isReadonly
+                      <Table.Row key={source} verticalAlign="top">
+                        <Table.Cell width={8}>
+                          <FormInput
+                            containerclassname={isReadonly ? 'display-only' : ''}
+                            readOnly={isReadonly}
+                            name="name"
+                            fielddata={source.name}
+                            changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'sources', index)}
+                            size="small"
+                          />
+                        </Table.Cell>
+                        <Table.Cell width={8}>
+                          <MaskedInput
+                            containerclassname={isReadonly ? 'display-only' : ''}
+                            readOnly={isReadonly}
+                            prefix="$"
+                            currency
+                            name="amount"
+                            fielddata={source.amount}
+                            changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'sources', field, index)}
+                            hidelabel
+                            size="small"
+                          />
+                        </Table.Cell>
+                        {!isReadonly
                         && (
-                        <Table.Cell collapsing>
+<Table.Cell collapsing>
                           <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'sources')}>
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
                         </Table.Cell>
                         )
                         }
-                        </Table.Row>
+                      </Table.Row>
                       )) : ''
                   }
                   {!isReadonly
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell colSpan="3">
                       <AddMore addMore={this.addMore} arrayName="sources" formName="BUSINESS_PLAN_FRM" title="Add Source" />
                     </Table.Cell>
@@ -277,45 +274,45 @@ export default class BusinessPlan extends Component {
                   {
                   BUSINESS_PLAN_FRM.fields.uses.length
                     ? BUSINESS_PLAN_FRM.fields.uses.map((use, index) => (
-                      <Table.Row key={use[index]} verticalAlign="top">
-                        <Table.Cell width={8}>
-                          <FormInput
-                            containerclassname={isReadonly ? 'display-only' : ''}
-                            readOnly={isReadonly}
-                            name="name"
-                            fielddata={use.name}
-                            changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'uses', index)}
-                            size="small"
-                          />
-                        </Table.Cell>
-                        <Table.Cell width={8}>
-                          <MaskedInput
-                            containerclassname={isReadonly ? 'display-only' : ''}
-                            readOnly={isReadonly}
-                            prefix="$"
-                            currency
-                            name="amount"
-                            fielddata={use.amount}
-                            changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'uses', field, index)}
-                            hidelabel
-                            size="small"
-                          />
-                        </Table.Cell>
-                        {!isReadonly
+                    <Table.Row key={use[index]} verticalAlign="top">
+                      <Table.Cell width={8}>
+                        <FormInput
+                          containerclassname={isReadonly ? 'display-only' : ''}
+                          readOnly={isReadonly}
+                          name="name"
+                          fielddata={use.name}
+                          changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'uses', index)}
+                          size="small"
+                        />
+                      </Table.Cell>
+                      <Table.Cell width={8}>
+                        <MaskedInput
+                          containerclassname={isReadonly ? 'display-only' : ''}
+                          readOnly={isReadonly}
+                          prefix="$"
+                          currency
+                          name="amount"
+                          fielddata={use.amount}
+                          changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'uses', field, index)}
+                          hidelabel
+                          size="small"
+                        />
+                      </Table.Cell>
+                      {!isReadonly
                       && (
-                      <Table.Cell collapsing>
+<Table.Cell collapsing>
                         <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'uses')}>
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
                       )
                       }
-                      </Table.Row>
+                    </Table.Row>
                     )) : ''
                   }
                   {!isReadonly
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell colSpan="3">
                       <AddMore addMore={this.addMore} arrayName="uses" formName="BUSINESS_PLAN_FRM" title="Add Use" />
                     </Table.Cell>

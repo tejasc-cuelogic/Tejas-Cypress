@@ -62,19 +62,19 @@ export default class Creation extends Component {
         <Route path={`${match.url}/edit-bonus-reward/:rewardId/:tier`} render={props => <AddNewBonusReward isReadOnly={isReadOnly} refLink={match.url} isEditForm {...props} />} />
         {!isReadOnly
         && (
-        <div className="clearfix">
+<div className="clearfix">
           <Button as={Link} to={`${match.url}/add-new-tier`} floated="right" primary content="Add new rewards tier" />
         </div>
         )
         }
         {earlyBird && get(earlyBird, 'quantity') !== 0
           && (
-          <div className="reward-tier">
+<div className="reward-tier">
             <Header as="h4">
               {`Early bird - First ${get(earlyBird, 'quantity')} investments of ${Helper.CurrencyFormat(get(earlyBird, 'amount'))} or more`}
               {this.isDeleteTier(get(earlyBird, 'amount'), true) && !isReadOnly
               && (
-              <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', get(earlyBird, 'amount'), get(earlyBird, 'quantity'))}>
+<Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', get(earlyBird, 'amount'), get(earlyBird, 'quantity'))}>
                 <Icon className="ns-trash" />
               </Button>
               )
@@ -83,14 +83,13 @@ export default class Creation extends Component {
             <BonusRewardsList isReadOnly={isReadOnly} refLink={match.url} isEarlyBird tier={get(earlyBird, 'amount')} />
             {!isReadOnly
             && (
-            <Button
-              size="small"
-              color="blue"
-              as={Link}
-              to={`${match.url}/add-new-bonus-reward`}
-              className="link-button"
-            >
-+ Add bonus reward
+<Button
+  size="small"
+  color="blue"
+  as={Link}
+  to={`${match.url}/add-new-bonus-reward`}
+  className="link-button"
+>+ Add bonus reward
             </Button>
             )
             }
@@ -104,7 +103,7 @@ export default class Creation extends Component {
                 {`Invest ${Helper.CurrencyFormat(tier)} or more`}
                 {this.isDeleteTier(tier) && !isReadOnly
                 && (
-                <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', tier, 0)}>
+<Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', tier, 0)}>
                   <Icon className="ns-trash" />
                 </Button>
                 )
@@ -113,14 +112,13 @@ export default class Creation extends Component {
               <BonusRewardsList isReadOnly={isReadOnly} refLink={match.url} tier={tier} />
               {!isReadOnly
               && (
-              <Button
-                size="small"
-                color="blue"
-                as={Link}
-                to={`${match.url}/add-new-bonus-reward`}
-                className="link-button"
-              >
-+ Add bonus reward
+<Button
+  size="small"
+  color="blue"
+  as={Link}
+  to={`${match.url}/add-new-bonus-reward`}
+  className="link-button"
+>+ Add bonus reward
               </Button>
               )
               }

@@ -419,10 +419,10 @@ export default class XmlForm extends React.Component {
               {
                 xmlSubmissionStatus === XML_STATUSES.completed
                 && (
-                <Button
-                  color="green"
-                  onClick={this.handleXmlSubmissionCopy}
-                >
+<Button
+  color="green"
+  onClick={this.handleXmlSubmissionCopy}
+>
                   Copy XML Submission
                 </Button>
                 )
@@ -430,11 +430,11 @@ export default class XmlForm extends React.Component {
               {
                 xmlSubmissionStatus === XML_STATUSES.draft
                 && (
-                <Button
-                  color="green"
-                  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
-                  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
-                >
+<Button
+  color="green"
+  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
+  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
+>
                   Save
                 </Button>
                 )
@@ -442,11 +442,11 @@ export default class XmlForm extends React.Component {
               {
                 xmlSubmissionStatus === XML_STATUSES.draft
                 && (
-                <Button
-                  color="red"
-                  disabled={!this.props.businessStore.checkStepsStatus}
-                  onClick={this.handleXmlSubmissionSubmit}
-                >
+<Button
+  color="red"
+  disabled={!this.props.businessStore.checkStepsStatus}
+  onClick={this.handleXmlSubmissionSubmit}
+>
                   Submit
                 </Button>
                 )

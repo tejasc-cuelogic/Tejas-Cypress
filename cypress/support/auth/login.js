@@ -17,4 +17,4 @@ export const goToLoginScreen = () => {
 export const clearLoginForm = () => {
   cy.get('input[type="email"]').clear();
   cy.get('input[type="password"]').clear();
-};
+}

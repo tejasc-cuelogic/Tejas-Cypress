@@ -111,8 +111,7 @@ export default class Insights extends Component {
                     to="#"
                     onClick={() => this.requestAllArticles(true, false)}
                     className={this.state.sortAsc ? 'active' : ''}
-                  >
-Newest
+                  >Newest
                   </Dropdown.Item>
                   <Dropdown.Item
                     key="oldest"
@@ -120,8 +119,7 @@ Newest
                     to="#"
                     onClick={() => this.requestAllArticles(true, true)}
                     className={this.state.sortAsc ? '' : 'active'}
-                  >
-Oldest
+                  >Oldest
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

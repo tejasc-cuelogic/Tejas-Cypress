@@ -44,41 +44,39 @@ export default class BeneficiaryPreviewModal extends Component {
           {
             BENEFICIARY_META.fields.beneficiary.length
               ? BENEFICIARY_META.fields.beneficiary.map(beneficiary => (
-                <Grid stackable celled="internally" padded="horizontally">
-                  <Grid.Row>
-                    <Grid.Column width={16}>
-                      <Card.Content>
-                        <dl className="dl-horizontal">
-                          <dt>Full Name</dt>
-                          <dd>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</dd>
-                          <dt>Date of birth</dt>
-                          <dd>
-                            <DateTimeFormat
-                              format="MM/DD/YYYY"
-                              datetime={moment(beneficiary.dob.value, 'MM/DD/YYYY')}
-                            />
-                          </dd>
-                          <dt>Relationship</dt>
-                          <dd>{beneficiary.relationship.value}</dd>
-                          <dt>Legal Address</dt>
-                          <dd>
-                            {`${beneficiary.residentalStreet.value}`}
-,
-                            {`${beneficiary.city.value} ${beneficiary.state.value} ${beneficiary.zipCode.value}`}
-                          </dd>
-                          <dt>Shares %</dt>
-                          <dd>{`${beneficiary.share.value}%`}</dd>
-                        </dl>
-                      </Card.Content>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
+              <Grid stackable celled="internally" padded="horizontally">
+                <Grid.Row>
+                  <Grid.Column width={16}>
+                    <Card.Content>
+                      <dl className="dl-horizontal">
+                        <dt>Full Name</dt>
+                        <dd>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</dd>
+                        <dt>Date of birth</dt>
+                        <dd>
+                          <DateTimeFormat
+                            format="MM/DD/YYYY"
+                            datetime={moment(beneficiary.dob.value, 'MM/DD/YYYY')}
+                          />
+                        </dd>
+                        <dt>Relationship</dt>
+                        <dd>{beneficiary.relationship.value}</dd>
+                        <dt>Legal Address</dt>
+                        <dd>
+                          {`${beneficiary.residentalStreet.value}`}, {`${beneficiary.city.value} ${beneficiary.state.value} ${beneficiary.zipCode.value}`}
+                        </dd>
+                        <dt>Shares %</dt>
+                        <dd>{`${beneficiary.share.value}%`}</dd>
+                      </dl>
+                    </Card.Content>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
               ))
               : <InlineLoader />
           }
           {errors
             && (
-            <Message error>
+<Message error>
               <ListErrors errors={[errors]} />
             </Message>
             )

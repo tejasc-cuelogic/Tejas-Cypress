@@ -34,8 +34,7 @@ class CaseStudies extends Component {
 
     return (
       <Aux>
-        <Header as="h1">
-NextSeed Case Studies
+        <Header as="h1">NextSeed Case Studies
           <Header.Subheader>Have a look at our Case Studies</Header.Subheader>
         </Header>
         <Divider inverted section />

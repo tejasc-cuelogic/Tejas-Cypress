@@ -54,19 +54,19 @@ export default class ManageTransactions extends Component {
         subNav
         subNavAddon={{ data: this.representAddon(summary) }}
         P1={(
-          <ByKeyword
-            {...this.props}
-            w={[8]}
-            filters={filters}
-            change={this.executeSearch}
-            requestState={requestState}
-            placeholder="Search by User / Transaction ID / CP Account  Account ID"
-            toggleSearch={this.toggleSearch}
-            enableSearch
-          />
+<ByKeyword
+  {...this.props}
+  w={[8]}
+  filters={filters}
+  change={this.executeSearch}
+  requestState={requestState}
+  placeholder="Search by User / Transaction ID / CP Account  Account ID"
+  toggleSearch={this.toggleSearch}
+  enableSearch
+/>
 )}
         P2={(
-          <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
+<div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
             <Form>
               <Grid stackable>
                 <Grid.Row>

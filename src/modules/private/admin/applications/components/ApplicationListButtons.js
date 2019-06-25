@@ -22,7 +22,7 @@ export default class ApplicationListButtons extends Component {
           {appStatus
           === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
           && (
-          <Aux>
+<Aux>
             {!stashed
             && <Button color="green" as={Link} to={`${this.props.refLink}/${appId}/${userId}/${appStatus}/STASH/confirm`}>Stash</Button>
             }
@@ -34,7 +34,7 @@ export default class ApplicationListButtons extends Component {
           }
           {deleted
           && (
-          <Aux>
+<Aux>
             <Button as={Link} to={`${this.props.refLink}/${appId}/${userId || 'new'}/${appStatus}/RESTORE/confirm`} color="blue">Restore</Button>
             <Button as={Link} to={`${this.props.refLink}/${appId}/${userId || 'new'}/${appStatus}/REMOVED/confirm`} color="red">Remove</Button>
           </Aux>

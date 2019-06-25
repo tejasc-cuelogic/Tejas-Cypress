@@ -22,27 +22,27 @@ export default class Beneficiaries extends Component {
     const beneficiaryList = beneficiaries ? beneficiaries.map(beneficiary => (
       beneficiary.beneficiary
         ? (
-          <BeneficiaryList
-            accountId={beneficiary.accountId}
-            updatedDate={beneficiary.updated.date ? beneficiary.updated.date
-              : beneficiary.created.date}
-            key={beneficiary.accountId}
-            title={beneficiary.type}
-            match={this.props.match}
-            beneficiaries={beneficiary.beneficiary}
-            loading={bLoading}
-            curLocation={this.props.location}
-          />
+<BeneficiaryList
+  accountId={beneficiary.accountId}
+  updatedDate={beneficiary.updated.date ? beneficiary.updated.date
+    : beneficiary.created.date}
+  key={beneficiary.accountId}
+  title={beneficiary.type}
+  match={this.props.match}
+  beneficiaries={beneficiary.beneficiary}
+  loading={bLoading}
+  curLocation={this.props.location}
+/>
         )
         : (beneficiary.status === 'FULL'
           ? (
-            <NoBeneficiary
-              accountId={beneficiary.accountId}
-              match={this.props.match}
-              title={beneficiary.type}
-              key={beneficiary.accountId}
-              curLocation={this.props.location}
-            />
+<NoBeneficiary
+  accountId={beneficiary.accountId}
+  match={this.props.match}
+  title={beneficiary.type}
+  key={beneficiary.accountId}
+  curLocation={this.props.location}
+/>
           ) : null)
     )) : <EmptyDataSet title="No data available for beneficiaries." />;
     return (

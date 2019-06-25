@@ -89,18 +89,18 @@ const ProgressCard = props => (
                 ? ''
                 : status !== 2
                   ? (
-                    <Button
-                      color="green"
-                      content={currentCard.step === 2 ? 'Create' : 'Continue'}
-                      onClick={() => (currentCard.step !== 0
-                        ? props.history.push(`${pathToRender}`)
-                        : !isEmailVerified
-                          ? props.history.push(currentCard.emailVerificationRoute)
-                          : !verificationStatus
-                            ? props.history.push(`${pathToRender}`)
-                            : props.history.push(`${altPathToRender}`))
+<Button
+  color="green"
+  content={currentCard.step === 2 ? 'Create' : 'Continue'}
+  onClick={() => (currentCard.step !== 0
+    ? props.history.push(`${pathToRender}`)
+    : !isEmailVerified
+      ? props.history.push(currentCard.emailVerificationRoute)
+      : !verificationStatus
+        ? props.history.push(`${pathToRender}`)
+        : props.history.push(`${altPathToRender}`))
                     }
-                    />
+/>
                   )
                   : ''
               }
@@ -147,7 +147,7 @@ const ProgressCard = props => (
     && props.signupStatus.roles.length > 1
     && props.signupStatus.inActiveAccounts.length > 0
       && (
-      <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+<Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
         <Card.Content>
           <Icon.Group size="huge">
             <Icon className="ns-bar-line-chart" />

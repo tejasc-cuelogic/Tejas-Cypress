@@ -28,12 +28,7 @@ const LiveSummary = ({ offer, refLink }) => (
         <Card fluid className="ba-info-card">
           <Card.Header>
             Information
-            <small className="pull-right">
-              <Link to={`${refLink}/editOffering`}>
-                <Icon className="ns-pencil" />
-Edit
-              </Link>
-            </small>
+            <small className="pull-right"><Link to={`${refLink}/editOffering`}><Icon className="ns-pencil" />Edit</Link></small>
           </Card.Header>
           <Card.Content>
             <Grid columns={3}>
@@ -54,12 +49,7 @@ Edit
         <Card fluid className="ba-info-card">
           <Card.Header>
             Primary POC
-            <small className="pull-right">
-              <Link to={`${refLink}/editPoc`}>
-                <Icon className="ns-pencil" />
-Edit
-              </Link>
-            </small>
+            <small className="pull-right"><Link to={`${refLink}/editPoc`}><Icon className="ns-pencil" />Edit</Link></small>
           </Card.Header>
           <Card.Content>
             <Grid columns={3}>

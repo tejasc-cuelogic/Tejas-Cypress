@@ -25,33 +25,33 @@ const TableBody = ({
     {
     fields.length
       ? fields.map((formData, index) => (
-        <Table.Row verticalAlign="top">
-          <Table.Cell width={5}>
-            <FormInput
-              containerclassname={isReadonly ? 'display-only' : ''}
-              readOnly={isReadonly}
-              name="contingency"
-              fielddata={formData.contingency}
-              changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-              size="small"
-            />
-          </Table.Cell>
-          <Table.Cell>
-            <FormInput
-              containerclassname={isReadonly ? 'display-only' : ''}
-              readOnly={isReadonly}
-              name="acceptance"
-              fielddata={formData.acceptance}
-              changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-              size="small"
-            />
-          </Table.Cell>
-          {!isReadonly
+      <Table.Row verticalAlign="top">
+        <Table.Cell width={5}>
+          <FormInput
+            containerclassname={isReadonly ? 'display-only' : ''}
+            readOnly={isReadonly}
+            name="contingency"
+            fielddata={formData.contingency}
+            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+            size="small"
+          />
+        </Table.Cell>
+        <Table.Cell>
+          <FormInput
+            containerclassname={isReadonly ? 'display-only' : ''}
+            readOnly={isReadonly}
+            name="acceptance"
+            fielddata={formData.acceptance}
+            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+            size="small"
+          />
+        </Table.Cell>
+        {!isReadonly
         && (
-        <Table.Cell collapsing>
+<Table.Cell collapsing>
           {fields.length > 1
           && (
-          <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
+<Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
             <Icon className="ns-close-circle" color="grey" />
           </Link>
           )
@@ -59,12 +59,12 @@ const TableBody = ({
         </Table.Cell>
         )
         }
-        </Table.Row>
+      </Table.Row>
       )) : ''
     }
     {!isReadonly
     && (
-    <Table.Row>
+<Table.Row>
       <Table.Cell colSpan="3">
         {fields.length < 5
         && <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>

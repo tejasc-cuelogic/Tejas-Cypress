@@ -25,8 +25,7 @@ class Blog extends Component {
   render() {
     return (
       <Aux>
-        <Header as="h1">
-NextSeed Blog
+        <Header as="h1">NextSeed Blog
           <Header.Subheader>Let your community invest in your success</Header.Subheader>
         </Header>
         <Divider inverted section />

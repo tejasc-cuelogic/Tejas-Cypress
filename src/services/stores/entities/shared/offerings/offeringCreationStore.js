@@ -1590,11 +1590,14 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step) => {
+  offeringClose = (params, step, scope) => {
     uiStore.setProgress(params.process);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
     if (formData.payload) {
+      if (scope) {
+        formData.payload.scope = scope;
+      }
       if (formData.payload.notePurchaseDate) {
         formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
       }
@@ -1604,6 +1607,8 @@ export class OfferingCreationStore {
       if (formData.payload.hardCloseDate) {
         formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
       }
+    } else if (!formData.payload && scope) {
+      formData.payload = { scope };
     }
     client
       .mutate({
