@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -50,19 +50,21 @@ Your net worth and annual income are used to determine your 12-month investment 
             <p className="grey-header">
               {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
               {isMobile && <br />}
-              <span className={`${isMobile ? '' : 'large ml-10'} ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>
-                {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
-              </span>
+              <b>
+                <span className={`${isMobile ? '' : 'large ml-10'} ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>
+                  {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
+                </span>
+              </b>
             </p>
           </div>
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000
             && FIN_INFO_FRM.fields.investmentLimit.value !== '')
             && (
-            <Message error className={isMobile ? '' : 'center-align'}>
+            <p className={`${isMobile ? '' : 'center-align'} error`}>
               Based on your reported Net Worth and Annual Income, your 12-month investment limit
               under Regulation Crowdfunding is below the $5,000 minimum opening
               deposit for IRA accounts.
-            </Message>
+            </p>
             )
           }
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>

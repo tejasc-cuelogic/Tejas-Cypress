@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
@@ -97,27 +97,29 @@ export default class Experience extends Component {
           </Message>
           )
           }
-          <div className="center-align mt-20">
+          <div className={`${isMobile ? '' : 'center-align'} mt-20`}>
             {!isInvestmentExperienceValid
               && (
               <p className="negative-text mb-20">
-                NextSeed investments are suitable for experienced investors who are
-                comfortable with long-term risk. Please confirm that you fit this
-                profile in order to proceed.
+                NextSeed investments are suitable for experienced investors who are comfortable
+                with long-term risk.
               </p>
               )
             }
             <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} />
             {!isInvestmentExperienceValid
               && (
-              <p className="negative-text mt-20">
-                Otherwise, please reference our
-                {' '}
-                <Link to="/resources/education-center">Education Center</Link>
-                {' '}
-to
-                learn more about investing on NextSeed.
-              </p>
+                // <p className="negative-text mt-20">
+                // Otherwise, please reference our
+                // {' '}
+                // <Link to="/resources/education-center">Education Center</Link>
+                // {' '}
+                // to
+                // learn more about investing on NextSeed.
+                // </p>
+                <p className="negative-text mt-20">
+                  Please confirm that you fit this profile in order to proceed.
+                </p>
               )
             }
           </div>

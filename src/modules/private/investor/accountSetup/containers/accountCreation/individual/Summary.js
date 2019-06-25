@@ -33,6 +33,11 @@ export default class Summary extends React.Component {
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
 
+  handleStepChange = (step) => {
+    this.props.individualAccountStore.setStepToBeRendered(step);
+    this.props.uiStore.clearErrors();
+  }
+
   handleCreateAccount = () => {
     const {
       isCipExpired,
@@ -128,6 +133,9 @@ export default class Summary extends React.Component {
                     {[-1, ''].includes(accountAttributes.initialDepositAmount)
                       ? Helper.CurrencyFormat(0)
                       : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                      <span className="pull-right">
+                        <Button className="link-button highlight-text" onClick={() => this.handleStepChange(1)}>Change</Button>
+                      </span>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>

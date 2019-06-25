@@ -8,6 +8,7 @@ import InputMask from 'react-input-mask';
 import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const NumberFormatWrapped = props => (
   <div className={props.wrapperClass}>
     <NumberFormat {...props} />
@@ -48,7 +49,7 @@ export default class MaskedInput extends Component {
                 hoverable={props.hoverable}
                 trigger={<Icon className="ns-help-circle" />}
                 // content={tooltip}
-                position="top center"
+                position={isMobile ? 'bottom center' : 'top center'}
                 className={props.containerClassname}
                 wide
               >

@@ -584,6 +584,7 @@
     will-change:auto;
     @media only screen and (max-width:@largestMobileScreen){
         width: 100%;
+        padding-bottom: @80px;
         >.header{
             position: sticky;
             z-index: 1;

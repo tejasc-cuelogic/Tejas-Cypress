@@ -19,7 +19,7 @@ export default class Funding extends Component {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>How would you like to fund your IRA?</Header>
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>How would you like to fund your [Traditional/Roth] IRA?</Header>
         {!isMobile
           && (
             <Aux>

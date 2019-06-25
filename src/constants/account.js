@@ -320,7 +320,7 @@ export const IRA_FUNDING = {
     key: 'fundingType',
     values: [
       {
-        label: 'Check',
+        label: 'Checking Account',
         value: 0,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Check!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
@@ -334,7 +334,7 @@ export const IRA_FUNDING = {
         rawValue: 'iraTransfer',
       },
       {
-        label: 'Direct Rollover',
+        label: 'Rollover',
         value: 2,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Direct Rollover!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
