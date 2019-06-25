@@ -159,7 +159,7 @@ export default class Close extends Component {
     } = this.props.offeringCreationStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
-    const { offer } = this.props.offeringsStore;
+    const { offer, offerStatus } = this.props.offeringsStore;
     const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
@@ -176,16 +176,20 @@ export default class Close extends Component {
           <p>
             {hoursToClose > 0
               ? (
-<Aux>
-                Campaign has not reached minimum required amount.
+                <Aux>
+                Campaign
+{' '}
+{offerStatus.collected > offerStatus.minOffering ? 'reached' : 'has not reached'}
+{' '}
+minimum required amount.
                 {' '}
                 {get(offer, 'keyTerms.shorthandBusinessName')}
                 {' '}
-                  <b> $90,000 </b>
+                  <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'))}</b>
                   {' '}
 out of required
                   {' '}
-                  <b>$100,000</b>
+                  <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0)}</b>
                 </Aux>
               )
               : (
