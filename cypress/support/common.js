@@ -33,10 +33,10 @@ export const btnClickAndWait = (operationName) => {
   cy.wait(`@${operationName}`);
 };
 
-export const uploadFile = (selector = '') => {
-  registerApiCall('fileUpload');
+export const uploadFile = (selector, url = '**/**') => {
+  registerApiCall('fileUpload', url);
   cy.fixture('images/test-img.png').as('img');
-  cy.upload_file('images/test-img.png', 'png', selector || 'input[type=file]');
+  cy.upload_file('images/test-img.png', 'png', selector);
   cy.wait('@fileUpload');
   cy.wait(1000);
 }  
