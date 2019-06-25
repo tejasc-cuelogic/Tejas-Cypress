@@ -10,7 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class PreferredEquity extends Component {
   render() {
     const { isUserLoggedIn } = this.props.authStore;
-    const link = '/auth/register/applynow';
+    const link = '/register/applynow';
     return (
       <Aux>
         <Header as="h3">Preferred Equity</Header>

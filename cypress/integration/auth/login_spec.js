@@ -1,4 +1,4 @@
-import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from '../../support/auth/login';
+import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from './utility/login.utility';
 import { applicationUnlock } from '../../support/common';
 
 describe('Log In', () => {

@@ -312,7 +312,7 @@ export class NavigationItems extends Component {
                 <Aux>
                   {logInSignUp.map(route => (
                     <Menu.Item className="menu-button">
-                      <Button as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`}>{route.title}</Button>
+                      <Button as={Link} onClick={this.setAuthRef} to={`/${route.to}`} className={`${route.className}`}>{route.title}</Button>
                     </Menu.Item>
                   ))}
                 </Aux>

@@ -1,11 +1,11 @@
-import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../common';
+import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../../../../support/common';
 
 const handleOverviewStep = () => {
   cy.get('div.multistep > .center-align > button').contains('Continue').click({ force: true });
 };
 
 export const completeInvestorProfile = () => {
-  cy.wait(500)
+  cy.get('.dimmer-visible').should('not.be.visible')
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
     // eslint-disable-next-line default-case

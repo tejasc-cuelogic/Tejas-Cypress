@@ -73,7 +73,7 @@ class News extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
-      this.props.history.push('/auth/change-password');
+      this.props.history.push('/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
@@ -84,7 +84,7 @@ class News extends Component {
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
           this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
-            this.props.history.push('/auth/confirm-email');
+            this.props.history.push('/confirm-email');
           });
         }
       });
@@ -282,7 +282,7 @@ class News extends Component {
                 <Grid.Column width={10} textAlign="center">
                   <Header as="h2">Start investing today</Header>
                   <Button.Group vertical={isMobile}>
-                    <Button as={Link} to="/auth/register-investor" primary>Sign Up Free</Button>
+                    <Button as={Link} to="/register-investor" primary>Sign Up Free</Button>
                   </Button.Group>
                 </Grid.Column>
               </Grid.Row>

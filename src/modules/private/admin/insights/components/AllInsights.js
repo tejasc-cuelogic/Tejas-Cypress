@@ -44,8 +44,10 @@ export default class AllInsights extends Component {
   }
 
   handleDelete = () => {
-    this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId);
-    this.props.uiStore.setConfirmBox('');
+    this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId).then(() => {
+      this.props.uiStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
 
   handleDeleteCancel = () => {

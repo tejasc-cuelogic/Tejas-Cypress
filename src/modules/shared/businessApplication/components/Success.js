@@ -79,9 +79,8 @@ class Success extends Component {
           const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
         }
-      }).catch((er) => {
+      }).catch(() => {
         this.setState({ showProgressLoader: false });
-        Helper.toast(er.message === 'Incorrect username or password.' ? 'Something went wrong while saving filer information, Please try again.' : er.message, 'error');
       });
   }
 

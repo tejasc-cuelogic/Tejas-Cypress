@@ -43,7 +43,10 @@ export default class Agreement extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+    const redirectURL = this.props.history.location.pathname;
+    if (!redirectURL.includes('change-investment-limit') && !redirectURL.includes('agreement')) {
+      this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+    }
   }
 
   handleCloseModal = (e) => {
@@ -134,7 +137,7 @@ export default class Agreement extends React.Component {
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const regulationCheck = this.props.changeInvestment && investmentRegulation
       ? investmentRegulation : currentInvestmentStatus;
-      // regulationCheck === ('BD_506C' || 'BD_506B')
+    // regulationCheck === ('BD_506C' || 'BD_506B')
     // const regualtionTypeStatement =
     // regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
     // 'Regulation D 506C' : 'Regulation Crowdfunding';
@@ -195,7 +198,7 @@ export default class Agreement extends React.Component {
               <Form
                 error={(this.state.showError
                   && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid)
-                   || investmentFlowErrorMessage}
+                  || investmentFlowErrorMessage}
               >
                 <Grid stackable>
                   <Grid.Row>
@@ -227,7 +230,6 @@ export default class Agreement extends React.Component {
                               </Aux>
                               )
                               : (
-<Aux>
                                 <Aux>
                                   I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
                                   the entire amount of my investment may be lost,
@@ -238,7 +240,6 @@ export default class Agreement extends React.Component {
                                 the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
                                   and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
                                 </Aux>
-                              </Aux>
                               )
                           )}
                           customUpdateLimitLabel={(
@@ -279,9 +280,9 @@ export default class Agreement extends React.Component {
                 </div>
                 {!this.state.showError && investmentFlowErrorMessage
                   && (
-<Message error className="mt-30 bottom-error">
-                    {investmentFlowErrorMessage}
-                  </Message>
+                    <Message error className="mt-30 bottom-error">
+                      {investmentFlowErrorMessage}
+                    </Message>
                   )
                 }
                 {this.state.showError

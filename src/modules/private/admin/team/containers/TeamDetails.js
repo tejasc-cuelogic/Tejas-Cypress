@@ -75,7 +75,7 @@ export default class TeamDetails extends Component {
     //   { key: 'LIVE', value: 'LIVE', text: 'LIVE' },
     // ];
 
-    if (loading) {
+    if (loading || inProgress) {
       return <InlineLoader />;
     }
     return (

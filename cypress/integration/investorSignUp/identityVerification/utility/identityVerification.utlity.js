@@ -1,6 +1,5 @@
-import { registerApiCall, enterCodeAndConfirm, applicationUnlock } from '../common';
-import { fillSignUpFormAndProceed } from './signUp';
-import { confirmEmailAddressScreen } from './ConfirmEmail';
+import { registerApiCall, enterCodeAndConfirm, applicationUnlock } from '../../../../support/common';
+import { fillSignUpFormAndProceed, confirmEmailAddressScreen } from '../../basicSignUp/utility/basicSignup.utlity';
 
 export const legalDetailsMeta = {
   salutation: 'Mr.',

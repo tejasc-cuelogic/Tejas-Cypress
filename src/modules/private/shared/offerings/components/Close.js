@@ -3,22 +3,26 @@ import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Aux from 'react-aux';
 import { filter, find } from 'lodash';
-import { Form, Header, Divider, Step, Label, Button, Icon, Confirm } from 'semantic-ui-react';
+import { Form, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
-import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
-import { MaskedInput, FormDropDown } from '../../../../../theme/form';
+// import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
+import { MaskedInput, FormInput } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 
 const closingActions = {
-  ENUM1: { label: 'Soft Close Notification', ref: 1, enum: 'SOFT_CLOSE_NOTIFICATION' },
-  ENUM2: { label: 'Confirm Balances', ref: 1, enum: 'CHECK_BALANCE' },
-  ENUM3: { label: 'Issue Credits', ref: 1, enum: 'ISSUE_CREDITS' },
-  ENUM4: { label: 'Fund Escrow', ref: 1, enum: 'FUND_ESCROW' },
-  ENUM5: { label: 'Process Notes', ref: 2, enum: 'PROCESS_NOTES' },
-  ENUM6: { label: 'Finalize Notes', ref: 2, enum: 'FINALIZE_NOTES' },
-  ENUM7: { label: 'Close', ref: 3, enum: 'save' },
-  ENUM8: {
-    label: 'Hard Close Notification', ref: 3, enum: 'HARD_CLOSE_NOTIFICATION', confirm: true,
+  ENUM1: { label: 'save', ref: 1, enum: 'update' },
+  ENUM2: { label: 'Soft Close Notification', ref: 2, enum: 'SOFT_CLOSE_NOTIFICATION' },
+  ENUM3: { label: 'Confirm Balances', ref: 2, enum: 'CHECK_BALANCE' },
+  ENUM4: { label: 'Issue Credits', ref: 2, enum: 'ISSUE_CREDITS' },
+  ENUM5: { label: 'Fund Escrow', ref: 2, enum: 'FUND_ESCROW' },
+  ENUM6: {
+    label: 'Verify Escrow', ref: 3, enum: 'VERIFY_SECURITY_TRANSACTION',
+  },
+  ENUM7: { label: 'Process Notes', ref: 3, enum: 'PROCESS_NOTES' },
+  ENUM8: { label: 'Finalize Notes', ref: 3, enum: 'FINALIZE_NOTES' },
+  ENUM9: { label: 'Close', ref: 4, enum: 'close' },
+  ENUM10: {
+    label: 'Hard Close Notification', ref: 4, enum: 'HARD_CLOSE_NOTIFICATION',
   },
 };
 
@@ -26,6 +30,7 @@ const closingActions = {
 @observer
 export default class Close extends Component {
   state = {
+    openModal: false,
     activeStep: 1,
     confirmContentTxt: 'Are all transactions cleared?  Has it been at least 6 business days since the last deposit for any investment?',
     cancelButtonTxt: 'No, it has not',
@@ -37,6 +42,7 @@ export default class Close extends Component {
 
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_FRM', 'closureSummary');
+    this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_1');
   }
 
   submitStep = () => {
@@ -46,7 +52,7 @@ export default class Close extends Component {
   }
 
   showConfirmBox = (meta) => {
-    if (this.state.activeStep === 3) {
+    if (this.state.activeStep === 4) {
       this.setState({
         confirmContentTxt: `Are you sure you want to proceed with the ${meta.label}`,
         cancelButtonTxt: 'No, go back',
@@ -69,9 +75,11 @@ export default class Close extends Component {
     const confirmFor = find(closingActions, a => a.enum === status && a.confirm === true);
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
+    } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION') {
+      this.setState({ openModal: true, action: status });
     } else {
-      if (status === 'save') {
-        this.handleCloseOffering();
+      if (status === 'close' || status === 'update') {
+        this.handleUpdateOffering(status);
       } else {
         await offeringClose(
           {
@@ -85,19 +93,57 @@ export default class Close extends Component {
     }
   }
 
-  handleCloseOffering = () => {
+  handleHardOrSoftClose = (type) => {
+    const { offer } = this.props.offeringsStore;
+    const { offeringClose } = this.props.offeringCreationStore;
+    switch (type) {
+      case 'Cancel':
+        this.handleCloseModal();
+        break;
+      case 'Send to Test Email':
+        offeringClose({
+          offeringId: offer.id,
+          process: this.state.action,
+          scope: 'ADMIN',
+        }, this.state.activeStep);
+        this.handleCloseModal();
+        break;
+      case 'Send to Investors':
+        offeringClose({
+          offeringId: offer.id,
+          process: this.state.action,
+          scope: 'INVESTOR',
+        }, this.state.activeStep);
+        this.handleCloseModal();
+        break;
+      default: break;
+    }
+  }
+
+  handleCloseModal = () => {
+    this.setState({ openModal: false });
+  }
+
+  handleUpdateOffering = (status) => {
     const {
       updateOfferingMutation,
       currentOfferingId,
+      getClosureObject,
     } = this.props.offeringCreationStore;
     new Promise((res, rej) => {
+      let payload = { stage: 'STARTUP_PERIOD' };
+      if (status === 'update') {
+        payload = getClosureObject();
+      }
       updateOfferingMutation(
-        currentOfferingId, { stage: 'STARTUP_PERIOD' }, 'CLOSEOFFERING',
-        true, 'Offering Closed successfully.', false, res, rej,
+        currentOfferingId, payload, status === 'close' ? 'CLOSEOFFERING' : false,
+        true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej,
       );
     })
       .then(() => {
-        this.props.history.push(`/app/offerings/completed/edit/${currentOfferingId}/overview`);
+        if (status === 'close') {
+          this.props.history.push(`/app/offerings/completed/edit/${currentOfferingId}/overview`);
+        }
       });
   }
 
@@ -107,9 +153,10 @@ export default class Close extends Component {
       OFFERING_CLOSE_1,
       OFFERING_CLOSE_2,
       OFFERING_CLOSE_3,
+      OFFERING_CLOSE_4,
       CLOSING_CONTITNGENCIES_FRM,
       maskChange,
-      formArrayChange,
+      formArrayChange, formChange,
     } = this.props.offeringCreationStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
@@ -148,7 +195,7 @@ export default class Close extends Component {
             && (
 <Aux>
               <Step.Group className="campaign-close">
-                {['Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
+                {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
                   <Step
                     style={{ background: 'none', textDecoration: 'none' }}
                     onClick={() => this.toggleStep(index + 1)}
@@ -164,21 +211,77 @@ export default class Close extends Component {
               </Step.Group>
               {this.state.activeStep === 1
               && (
-<Aux>
+                (
+                  <Aux>
+                    <Form.Group widths={3}>
+                      {['investorFee', 'maturityDate', 'hardCloseDate', 'interestRate', 'revSharePercentage', 'multiple', 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
+                          <MaskedInput
+                            key={field}
+                            name={field}
+                            number={['interestRate', 'revSharePercentage'].includes(field)}
+                            currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
+                            dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
+                            fielddata={OFFERING_CLOSE_1.fields[field]}
+                            changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                          />
+                      ))
+                      }
+                    </Form.Group>
+                    <Header as="h4">Linked Bank</Header>
+                    <Form.Group widths={3}>
+                      {['bankName', 'accountHolderName'].map(field => (
+                        <FormInput
+                          key={field}
+                          name={field}
+                          fielddata={OFFERING_CLOSE_1.fields[field]}
+                          changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_1')}
+                        />
+                      ))
+                      }
+                      {['accountNumber', 'routingNumber'].map(field => (
+                          <MaskedInput
+                            key={field}
+                            name={field}
+                            number
+                            fielddata={OFFERING_CLOSE_1.fields[field]}
+                            changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                          />
+                      ))
+                      }
+                    </Form.Group>
+                    <Button.Group className="mt-50">
+                      {filter(closingActions, a => a.ref === 1).map(fA => (
+                        <Button
+                          loading={inProgress === fA.enum}
+                          onClick={() => this.closeAction(fA.enum, 1)}
+                          primary
+                        >
+                          {fA.label}
+                        </Button>
+                      ))}
+                    </Button.Group>
+                    <Divider className="doubled" />
+                  </Aux>
+                )
+              )
+              }
+              {this.state.activeStep === 2
+              && (
+              <Aux>
                 <Form.Group widths={3}>
                   <MaskedInput
                     name="queueLimit"
                     containerwidth="4"
-                    fielddata={OFFERING_CLOSE_1.fields.queueLimit}
-                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                    fielddata={OFFERING_CLOSE_2.fields.queueLimit}
+                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
                     number
                   />
                 </Form.Group>
                 <Button.Group className="mt-50">
-                  {filter(closingActions, a => a.ref === 1).map(fA => (
+                  {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
-                      onClick={() => this.closeAction(fA.enum, 1)}
+                      onClick={() => this.closeAction(fA.enum, 2)}
                       primary
                     >{fA.label}
                     </Button>
@@ -188,7 +291,7 @@ export default class Close extends Component {
               </Aux>
               )
               }
-              {this.state.activeStep === 2
+              {this.state.activeStep === 3
                 && (
 <Aux>
                   <Form.Group widths={3}>
@@ -196,54 +299,13 @@ export default class Close extends Component {
                       <MaskedInput
                         name={field}
                         containerwidth="4"
-                        fielddata={OFFERING_CLOSE_2.fields[field]}
-                        changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
+                        fielddata={OFFERING_CLOSE_3.fields[field]}
+                        changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
                         dateOfBirth={field === 'notePurchaseDate'}
                         number={field === 'queueLimit'}
                       />
                     ))
                     }
-                  </Form.Group>
-                  <Button.Group className="mt-50">
-                    {filter(closingActions, a => a.ref === 2).map(fA => (
-                      <Button
-                        loading={inProgress === fA.enum}
-                        onClick={() => this.closeAction(fA.enum, 2)}
-                        primary
-                      >{fA.label}
-                      </Button>
-                    ))}
-                  </Button.Group>
-                  <Divider className="doubled" />
-                </Aux>
-                )
-              }
-              {this.state.activeStep === 3
-                && (
-<Aux>
-                  <Form.Group widths={3}>
-                    {
-                      Object.keys(OFFERING_CLOSE_3.fields).filter(f => f !== 'scope').map(field => (
-                        <MaskedInput
-                          key={field}
-                          name={field}
-                          number={['queueLimit', 'interestRate', 'revSharePercentage'].includes(field)}
-                          currency={['nsPayment', 'investorFee', 'multiple'].includes(field)}
-                          dateOfBirth={['maturityDate', 'hardCloseDate'].includes(field)}
-                          fielddata={OFFERING_CLOSE_3.fields[field]}
-                          changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
-                        />
-                      ))
-                    }
-                    <FormDropDown
-                      fielddata={OFFERING_CLOSE_3.fields.scope}
-                      selection
-                      value={OFFERING_CLOSE_3.fields.scope.value}
-                      placeholder="Choose here"
-                      name="scope"
-                      options={SCOPE_VALUES}
-                      onChange={(e, result) => formArrayChange(e, result, 'OFFERING_CLOSE_3')}
-                    />
                   </Form.Group>
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
@@ -259,7 +321,33 @@ export default class Close extends Component {
                 </Aux>
                 )
               }
-              {this.state.activeStep === 4 && false
+              {this.state.activeStep === 4
+                && (
+                  <>
+                  <Form.Group widths={3}>
+                    <MaskedInput
+                      name="queueLimit"
+                      containerwidth="4"
+                      fielddata={OFFERING_CLOSE_4.fields.queueLimit}
+                      changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
+                      number
+                    />
+                </Form.Group>
+                <Button.Group className="mt-50">
+                {filter(closingActions, a => a.ref === 4).map(fA => (
+                  <Button
+                    loading={inProgress === fA.enum}
+                    onClick={() => this.closeAction(fA.enum, 4)}
+                    primary
+                  >
+                    {fA.label}
+                  </Button>
+                ))}
+              </Button.Group>
+                  </>
+                )
+              }
+              {this.state.activeStep === 5 && false
                 && (
 <Aux>
                   <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
@@ -281,7 +369,7 @@ export default class Close extends Component {
                   </Form>
                   <Button.Group className="mt-50">
                     <Button primary>Save draft</Button>
-                    <Button color="red" onClick={this.handleCloseOffering}>Close offering </Button>
+                    <Button color="red" onClick={this.handleUpdateOffering}>Close offering </Button>
                   </Button.Group>
                   <Divider hidden fitted clearing />
                   <Button.Group>
@@ -307,6 +395,26 @@ export default class Close extends Component {
             OfferingClose
           />
         </div>
+        <Modal open={this.state.openModal} closeIcon size="tiny" onClose={this.handleCloseModal}>
+          <Modal.Header>
+            {this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
+          </Modal.Header>
+          <Modal.Content className="pb-20">
+            Please select notification action to perform.
+          </Modal.Content>
+          <Modal.Actions>
+            <Button.Group className="actions">
+            {['Cancel', 'Send to Test Email', 'Send to Investors'].map(item => (
+              <Button
+                onClick={() => this.handleHardOrSoftClose(item)}
+                primary={item !== 'Cancel'}
+                content={item}
+              />
+            ))
+            }
+            </Button.Group>
+          </Modal.Actions>
+        </Modal>
         <Confirm
           open={this.state.open}
           header="Please confirm"

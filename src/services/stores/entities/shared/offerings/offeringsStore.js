@@ -225,6 +225,9 @@ export class OfferingsStore {
   updateOfferingList = (id, payload, key) => {
     const db = { ...toJS(this.db) };
     const data = { ...toJS(this.data) };
+    if (Object.keys(db).length === 0 && Object.keys(data).length === 0) {
+      return;
+    }
     const offerIndex = findIndex(db[this.requestState.stage], o => o.id === id);
     const offerIndexInData = findIndex(data[this.requestState.stage].data.getOfferings, o => o.id === id);
     if (key === 'CLOSEOFFERING') {

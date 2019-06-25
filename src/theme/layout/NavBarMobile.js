@@ -84,18 +84,18 @@ export default class NavBarMobile extends Component {
                     )
                     : <Header as="h5">{navTitle}</Header>
                   }
-                  {!currentUser ? (
-                    <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
-                      {stepInRoute.title}
-                    </Link>
-                  ) : (
-                    <Link
-                      to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                      className="sign-in neutral-text"
-                    >
+                    {!currentUser ? (
+                      <Link onClick={this.setAuthRef} to={`/${stepInRoute.to}`} className="sign-in neutral-text">
+                        {stepInRoute.title}
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                        className="sign-in neutral-text"
+                      >
                       Dashboard
                     </Link>
-                  )
+                    )
                   }
                 </div>
                 )
@@ -140,7 +140,7 @@ export default class NavBarMobile extends Component {
                 <div className="public-action-nav mt-20">
                   {!currentUser ? logInSignUp.map(route => (
                     <Menu.Item className="btn-item">
-                      <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
+                      <Button fluid as={Link} onClick={this.setAuthRef} to={`/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
                     </Menu.Item>
                   ))
                     : (

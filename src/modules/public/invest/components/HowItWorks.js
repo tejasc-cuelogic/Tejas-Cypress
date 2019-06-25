@@ -190,7 +190,7 @@ export default class HowItWorks extends Component {
 <Aux>
               <Header as="h2" className="mb-30">Register for an account.</Header>
               <Button.Group vertical={isMobile} className={isMobile ? '' : 'mb-50'}>
-                <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
               <Divider section hidden />
             </Aux>
