@@ -17,7 +17,7 @@ const Actions = observer((props) => {
           onClick={cancelUpdate}
           content="Cancel"
         />
-        {!isManager
+        {!isManager && !isPublished
           && (
             <>
               {id
@@ -60,7 +60,7 @@ const Actions = observer((props) => {
                   />
                 )
               }
-          </>
+            </>
           )
         }
         {isManager
