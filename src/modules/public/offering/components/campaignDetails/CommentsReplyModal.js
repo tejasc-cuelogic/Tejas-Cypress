@@ -48,13 +48,9 @@ class CommentsReplyModal extends Component {
           <Comment.Group className="comments-modal">
             {!messageType && message
               && (
-              <Comment className="issuer-comment">
+<Comment className="issuer-comment">
                 <Comment.Content>
-                  <Comment.Author>
-                    {get(message, 'createdUserInfo.info.firstName')}
-                    {' '}
-                    {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}
-                  </Comment.Author>
+                  <Comment.Author>{get(message, 'createdUserInfo.info.firstName')} {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}</Comment.Author>
                   <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(date).format('ll')}</span></Comment.Metadata>
                   <Comment.Text className="mt-20">
                     {this.state.readMore === message.id
@@ -75,16 +71,9 @@ class CommentsReplyModal extends Component {
                 questions require more thorough analyses and will take additional time.
               </p>
               <p>
-                See our
-                {' '}
-                <Link to={`${this.props.refLink}/community-guidelines`}>community guidelines</Link>
-                {' '}
-on posting. If you have any
+                See our <Link to={`${this.props.refLink}/community-guidelines`}>community guidelines</Link> on posting. If you have any
                 technical questions or questions about NextSeed, please
-                email
-                {' '}
-                <a href="mailto:support@nextseed.com">support@nextseed.com</a>
-.
+                email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
               </p>
               <Form className="public-form mt-30" reply>
                 <FormTextarea

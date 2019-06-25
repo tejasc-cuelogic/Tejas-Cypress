@@ -48,23 +48,23 @@ class Users extends Component {
       <PrivateLayout
         {...this.props}
         P1={(
-          <P1
-            executeSearch={this.executeSearch}
-            requestState={requestState}
-            filters={filters}
-            toggleSearch={this.toggleSearch}
-            addon={isManager ? <P3 /> : null}
-          />
+<P1
+  executeSearch={this.executeSearch}
+  requestState={requestState}
+  filters={filters}
+  toggleSearch={this.toggleSearch}
+  addon={isManager ? <P3 /> : null}
+/>
 )}
         P2={(
-          <P5
-            requestState={requestState}
-            setSearchParam={this.setSearchParam}
-            dateFilter={maskChange}
-            summary={usersSummary}
-            removeFilter={this.removeFilter}
-            filters={filters}
-          />
+<P5
+  requestState={requestState}
+  setSearchParam={this.setSearchParam}
+  dateFilter={maskChange}
+  summary={usersSummary}
+  removeFilter={this.removeFilter}
+  filters={filters}
+/>
 )}
       >
         <UserListing

@@ -113,22 +113,15 @@ export default class AccountDetails extends Component {
                 </div>
                 <Item.Content verticalAlign="middle">
                   <Header as="h3">
-                    {details.info && details.info.firstName}
-                    {' '}
-                    {details.info && details.info.lastName}
+                    {details.info && details.info.firstName} {details.info && details.info.lastName}
                     <UserTypeIcon role={details.roles} />
                     <Header.Subheader>
-                      {rolesRaw[0]}
-                      {' '}
--
+                      {rolesRaw[0]} -
                       <CopyToClipboard
                         text={get(details, 'id')}
                         onCopy={() => this.setState({ copied: true })}
                       >
-                        <span className="text-lowercase">
-                          {' '}
-                          {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}
-                        </span>
+                        <span> {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}</span>
                       </CopyToClipboard>
                     </Header.Subheader>
                   </Header>
@@ -137,11 +130,7 @@ export default class AccountDetails extends Component {
                       && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteProfile} content="Delete Profile" />
                     }
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
-                      <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} />
-                      {' '}
-                      {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'}
-                      {' '}
-Profile
+                      <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                     </Button>
                   </Button.Group>
                 </Item.Content>

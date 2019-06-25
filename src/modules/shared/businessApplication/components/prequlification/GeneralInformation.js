@@ -40,14 +40,14 @@ const GeneralInformation = props => (
             {props.currentApplicationType === 'business' ? 'Business Address' : 'Entity Address '}
             {props.currentApplicationType === 'commercial-real-estate'
             && (
-            <Popup
-              trigger={<Icon className="ns-help-circle" />}
-              content="Enter address of investment location,
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content="Enter address of investment location,
               not of owner or entity."
-              position="top center"
-              className="left-align"
-              wide
-            />
+  position="top center"
+  className="left-align"
+  wide
+/>
             )
           }
           </Header>

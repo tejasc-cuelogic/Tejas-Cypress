@@ -76,8 +76,7 @@ export default class Dashboard extends Component {
   <span>
         Are you an accredited investor? Go through the steps to verify your status
         today, and for a limited time, we will add a $100 credit to your account.
-    <br />
-    <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+    <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
   </span>,
       header: 'Earn $100 by verifying your accredited investor status',
     };
@@ -96,49 +95,49 @@ export default class Dashboard extends Component {
           }
           P5={userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
             ? (
-              <StickyNotification
-                {...this.props}
-                notificationCard={notificationCard}
-                multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
-                accountId={get(multipleUserAccounts, 'accountId') || null}
-                accountType={get(multipleUserAccounts, 'accountType') || null}
-              />
+<StickyNotification
+  {...this.props}
+  notificationCard={notificationCard}
+  multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+  accountId={get(multipleUserAccounts, 'accountId') || null}
+  accountType={get(multipleUserAccounts, 'accountType') || null}
+/>
             ) : ''}
         >
           {
             isInitialAccountProcessing
               ? <ProccessingAccountsScreen />
               : (
-                <Aux>
-                  <Header as="h4">Portfolio Summary</Header>
-                  <SummaryHeader details={summaryDetails(summary)} />
-                  {cashMovementData && cashMovementData.length
-                    ? (
-                      <Aux>
-                        {!isMobile
-                          ? (
-                            <Card fluid>
-                              <Card.Content>
-                                <Header as="h4">Investments and Payments</Header>
-                                <CashMovement data={cashMovementData} />
-                              </Card.Content>
-                            </Card>
-                          ) : null
+<Aux>
+                <Header as="h4">Portfolio Summary</Header>
+                <SummaryHeader details={summaryDetails(summary)} />
+                {cashMovementData && cashMovementData.length
+                  ? (
+<Aux>
+                    {!isMobile
+                      ? (
+<Card fluid>
+                        <Card.Content>
+                          <Header as="h4">Investments and Payments</Header>
+                          <CashMovement data={cashMovementData} />
+                        </Card.Content>
+                      </Card>
+                      ) : null
               }
-                      </Aux>
-                    )
-                    : (
-                      <Aux>
-                        <Card fluid={isMobile}>
-                          <Card.Content>
-                            <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
-                            <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
-                          </Card.Content>
-                        </Card>
-                      </Aux>
-                    )
+                  </Aux>
+                  )
+                  : (
+<Aux>
+                    <Card fluid={isMobile}>
+                      <Card.Content>
+                        <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
+                        <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
+                      </Card.Content>
+                    </Card>
+                  </Aux>
+                  )
           }
-                </Aux>
+              </Aux>
               )
           }
         </PrivateLayout>

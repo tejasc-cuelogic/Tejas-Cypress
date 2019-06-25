@@ -48,13 +48,13 @@ const SummaryHeader = props => (
                     {row.title}
                     {row.info
                       && (
-                      <Popup
-                        trigger={<Icon className="ns-help-circle" />}
-                        content={row.info}
-                        position="top center"
-                        wide
-                        hoverable
-                      />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={row.info}
+  position="top center"
+  wide
+  hoverable
+/>
                       )
                     }
                   </Statistic.Label>

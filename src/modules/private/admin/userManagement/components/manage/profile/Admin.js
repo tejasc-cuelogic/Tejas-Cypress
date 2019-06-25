@@ -41,24 +41,23 @@ export default class Admin extends Component {
     return (
       <Form>
         <Header as="h4">
-          User
-          {"'"}
-s profile data
+          User{"'"}s profile data
         </Header>
         <Header as="h6">
           Personal info
           {displayMode
             ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={() => this.toggleDisplayMode(false)}><small>Edit information</small></Link>
             : (
-              <Button.Group floated="right" size="mini" compact>
-                <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={() => this.toggleDisplayMode(true)} />
-                <Button
-                  primary
-                  onClick={this.updateUserData}
-                >
+<Button.Group floated="right" size="mini" compact>
+              <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={() => this.toggleDisplayMode(true)} />
+              <Button
+                primary
+                onClick={this.updateUserData}
+                // disabled={!USER_BASIC.meta.isValid} // temporary disabled
+              >
                 Update
-                </Button>
-              </Button.Group>
+              </Button>
+            </Button.Group>
             )
           }
         </Header>
@@ -100,22 +99,22 @@ s profile data
             <label>Capabilities</label>
             {displayMode
               ? (
-                <div className="ui fluid input">
-                  {USER_BASIC.fields.capabilities.value.join(', ')}
-                </div>
+<div className="ui fluid input">
+                {USER_BASIC.fields.capabilities.value.join(', ')}
+              </div>
               )
               : (
-                <FormDropDown
-                  name="capabilities"
-                  fielddata={USER_BASIC.fields.capabilities}
-                  options={capabilitiesMeta}
-                  search
-                  multiple
-                  selection
-                  fluid
-                  containerclassname="dropdown-field"
-                  onChange={(e, res) => userEleChange(e, res, 'dropdown')}
-                />
+<FormDropDown
+  name="capabilities"
+  fielddata={USER_BASIC.fields.capabilities}
+  options={capabilitiesMeta}
+  search
+  multiple
+  selection
+  fluid
+  containerclassname="dropdown-field"
+  onChange={(e, res) => userEleChange(e, res, 'dropdown')}
+/>
               )
             }
           </div>

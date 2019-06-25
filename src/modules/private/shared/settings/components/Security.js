@@ -59,22 +59,14 @@ export default class Security extends Component {
                         <Table compact="very" basic="very" className="no-border mb-20">
                           <Table.Body>
                             <Table.Row>
-                              <Table.Cell collapsing>
-                                <b>E-mail</b>
-                                {' '}
-                                {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }
-                              </Table.Cell>
+                              <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
                               <Table.Cell collapsing>
                                 {userDetails.email && userDetails.email.address}
                               </Table.Cell>
                               <Table.Cell><Link className="link" to="/app/account-settings/security/new-email-address">Update Email</Link></Table.Cell>
                             </Table.Row>
                             <Table.Row>
-                              <Table.Cell collapsing>
-                                <b>Phone</b>
-                                {' '}
-                                {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }
-                              </Table.Cell>
+                              <Table.Cell collapsing><b>Phone</b> {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
                               <Table.Cell collapsing>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}</Table.Cell>
                               <Table.Cell><Link className="link" to="/app/account-settings/security/new-phone-number">Update Phone</Link></Table.Cell>
                             </Table.Row>

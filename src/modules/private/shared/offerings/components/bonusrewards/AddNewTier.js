@@ -43,49 +43,49 @@ export default class AddNewTier extends Component {
             <div className="featured-section">
               {(!earlyBird || earlyBird.quantity === 0)
                 && (
-                <FormCheckbox
-                  fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
-                  name="isEarlyBirds"
-                  changed={(e, result) => formChange(e, result, formName, true)}
-                  defaults
-                  containerclassname="ui relaxed list"
-                />
+<FormCheckbox
+  fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
+  name="isEarlyBirds"
+  changed={(e, result) => formChange(e, result, formName, true)}
+  defaults
+  containerclassname="ui relaxed list"
+/>
                 )
               }
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS')
                   ? (
-                    <Aux>
-                      <MaskedInput
-                        currency
-                        prefix="$"
-                        name="amountForEarlyBird"
-                        fielddata={ADD_NEW_TIER_FRM.fields.amountForEarlyBird}
-                        changed={(values, field) => maskChange(values, formName, field)}
-                      />
-                      <MaskedInput
-                        number
-                        name="earlyBirdQuantity"
-                        fielddata={ADD_NEW_TIER_FRM.fields.earlyBirdQuantity}
-                        changed={(values, field) => maskChange(values, formName, field)}
-                      />
-                    </Aux>
-                  )
-                  : (
+<Aux>
                     <MaskedInput
-                      maxlength={12}
                       currency
                       prefix="$"
-                      name="amountForThisTier"
-                      fielddata={ADD_NEW_TIER_FRM.fields.amountForThisTier}
+                      name="amountForEarlyBird"
+                      fielddata={ADD_NEW_TIER_FRM.fields.amountForEarlyBird}
                       changed={(values, field) => maskChange(values, formName, field)}
                     />
+                    <MaskedInput
+                      number
+                      name="earlyBirdQuantity"
+                      fielddata={ADD_NEW_TIER_FRM.fields.earlyBirdQuantity}
+                      changed={(values, field) => maskChange(values, formName, field)}
+                    />
+                  </Aux>
+                  )
+                  : (
+<MaskedInput
+  maxlength={12}
+  currency
+  prefix="$"
+  name="amountForThisTier"
+  fielddata={ADD_NEW_TIER_FRM.fields.amountForThisTier}
+  changed={(values, field) => maskChange(values, formName, field)}
+/>
                   )
               }
             </div>
             {this.state.showError
               && (
-              <Message error className="mt-30">
+<Message error className="mt-30">
                 <ListErrors errors={['The entered tier is already existed.']} />
               </Message>
               )

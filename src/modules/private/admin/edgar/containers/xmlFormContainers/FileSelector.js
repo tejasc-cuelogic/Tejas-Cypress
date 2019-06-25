@@ -33,8 +33,7 @@ export default class FileSelector extends React.Component {
     return (
       <div>
         <Card fluid className="form-card">
-          <Header as="h5">
-Uploads to include as attachments to the XML Generation
+          <Header as="h5">Uploads to include as attachments to the XML Generation
             <a
               href={(`${BOX_URL_TO_CONSIDER}folder/${this.props.folderId}`)}
               target="_blank"

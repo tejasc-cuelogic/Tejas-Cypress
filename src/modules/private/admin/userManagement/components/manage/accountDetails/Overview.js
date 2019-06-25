@@ -72,7 +72,7 @@ export default class Overview extends Component {
         }
         {get(account, 'details.accountStatus') === 'FROZEN'
         && (
-        <Aux>
+<Aux>
           <LockedInformation account details={account} />
           <Divider />
         </Aux>
@@ -93,7 +93,7 @@ export default class Overview extends Component {
         <Divider />
         {get(account, 'linkedBank.changeRequest')
           && (
-          <Aux>
+<Aux>
             <Header as="h6">Change Bank Account Request</Header>
             <Form.Group widths={2}>
               <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
@@ -130,14 +130,14 @@ export default class Overview extends Component {
         </div>
         {cashMovementData && cashMovementData.length
           ? (
-            <Aux>
-              <Card fluid>
-                <Card.Content>
-                  <Header as="h4">Investments and Payments</Header>
-                  <CashMovement data={cashMovementData} />
-                </Card.Content>
-              </Card>
-            </Aux>
+<Aux>
+            <Card fluid>
+              <Card.Content>
+                <Header as="h4">Investments and Payments</Header>
+                <CashMovement data={cashMovementData} />
+              </Card.Content>
+            </Card>
+          </Aux>
           ) : null
         }
       </Form>

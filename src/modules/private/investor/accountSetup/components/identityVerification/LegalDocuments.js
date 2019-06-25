@@ -33,7 +33,7 @@ const LegalDocuments = observer(({
     <Modal.Content className="signup-content">
       {inProgress
         && (
-        <Dimmer active={inProgress}>
+<Dimmer active={inProgress}>
           <Loader active={inProgress} />
         </Dimmer>
         )
@@ -80,7 +80,7 @@ const LegalDocuments = observer(({
         </Form.Field>
         {errors
           && (
-          <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
           )

@@ -41,7 +41,7 @@ class Overview extends Component {
           </span>
           {isPreviewLinkShow
             && (
-            <span className="pull-right">
+<span className="pull-right">
               <Link target="_blank" to={`/offerings/${campaign.offeringSlug}/overview`} className="pull-right">View offering page</Link>
             </span>
             )
@@ -56,157 +56,154 @@ class Overview extends Component {
                   <Table.Body>
                     { keyTerms && keyTerms.shorthandBusinessName
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell width={5}>Issuer</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.shorthandBusinessName
-                              ? keyTerms.shorthandBusinessName
-                              : 'N/A'
+<Table.Row verticalAlign="top">
+                        <Table.Cell width={5}>Issuer</Table.Cell>
+                        <Table.Cell>
+                          {keyTerms && keyTerms.shorthandBusinessName
+                            ? keyTerms.shorthandBusinessName
+                            : 'N/A'
                           }
-                          </Table.Cell>
-                        </Table.Row>
+                        </Table.Cell>
+                      </Table.Row>
                       ) : ''
                     }
                     { keyTerms && keyTerms.securities
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Securities</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.securities
-                              ? CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
-                              : 'N/A'
+<Table.Row verticalAlign="top">
+                        <Table.Cell>Securities</Table.Cell>
+                        <Table.Cell>
+                          {keyTerms && keyTerms.securities
+                            ? CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
+                            : 'N/A'
                           }
-                          </Table.Cell>
-                        </Table.Row>
+                        </Table.Cell>
+                      </Table.Row>
                       ) : ''
                     }
                     { offering && offering.launch && offering.launch.targetDate
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
-                          <Table.Cell>
-                            {offering && offering.launch
+<Table.Row verticalAlign="top">
+                        <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
+                        <Table.Cell>
+                          {offering && offering.launch
                             && offering.launch.targetDate
-                              ? moment(offering.launch.targetDate).format('ll')
-                              : 'N/A'
+                            ? moment(offering.launch.targetDate).format('ll')
+                            : 'N/A'
                           }
-                          </Table.Cell>
-                        </Table.Row>
+                        </Table.Cell>
+                      </Table.Row>
                       ) : ''
                     }
                     { get(campaign, 'closureSummary.keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple')
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>
-                            {overviewToDisplay && overviewToDisplay === 'REVENUE'
-                              ? 'Investment Multiple'
-                              : 'Interest Rate'
-                          }
-                          </Table.Cell>
+<Table.Row verticalAlign="top">
+                        <Table.Cell>
                           {overviewToDisplay && overviewToDisplay === 'REVENUE'
-                            ? (
-                              <Table.Cell>
-                                {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? `${get(campaign, 'closureSummary.keyTerms.multiple')}x` : 'N/A'}
-                                {' '}
-                                <HtmlEditor
-                                  readOnly
-                                  content={(keyTerms && keyTerms.investmentMultipleSummary
-                                    ? keyTerms.investmentMultipleSummary : '')}
-                                />
-                              </Table.Cell>
-                            )
-                            : (
-                              <Table.Cell>
-                                {campaign && get(campaign, 'closureSummary.keyTerms.interestRate')
-                                  ? `${get(campaign, 'closureSummary.keyTerms.interestRate')}%` : 'N/A'
+                            ? 'Investment Multiple'
+                            : 'Interest Rate'
+                          }
+                        </Table.Cell>
+                        {overviewToDisplay && overviewToDisplay === 'REVENUE'
+                          ? (
+<Table.Cell>
+                            {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? `${get(campaign, 'closureSummary.keyTerms.multiple')}x` : 'N/A'}{' '}
+                            <HtmlEditor
+                              readOnly
+                              content={(keyTerms && keyTerms.investmentMultipleSummary
+                                ? keyTerms.investmentMultipleSummary : '')}
+                            />
+                          </Table.Cell>
+                          )
+                          : (
+<Table.Cell>
+                            {campaign && get(campaign, 'closureSummary.keyTerms.interestRate')
+                              ? `${get(campaign, 'closureSummary.keyTerms.interestRate')}%` : 'N/A'
                             }
-                              </Table.Cell>
-                            )
+                          </Table.Cell>
+                          )
                         }
-                        </Table.Row>
+                      </Table.Row>
                       ) : ''
                     }
                     {keyTerms && keyTerms.frequencyOfPayments
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Payments</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.frequencyOfPayments
-                              ? keyTerms.frequencyOfPayments : 'N/A'}
-                          </Table.Cell>
-                        </Table.Row>
+<Table.Row verticalAlign="top">
+                        <Table.Cell>Payments</Table.Cell>
+                        <Table.Cell>
+                          {keyTerms && keyTerms.frequencyOfPayments
+                            ? keyTerms.frequencyOfPayments : 'N/A'}
+                        </Table.Cell>
+                      </Table.Row>
                       ) : ''
                     }
                     {overviewToDisplay && overviewToDisplay === 'REVENUE' && get(campaign, 'closureSummary.keyTerms.revSharePercentage')
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Revenue Sharing Percentage</Table.Cell>
-                          <Table.Cell>
-                            {campaign && get(campaign, 'closureSummary.keyTerms.revSharePercentage')
-                              ? get(campaign, 'closureSummary.keyTerms.revSharePercentage').includes('%')
-                                ? get(campaign, 'closureSummary.keyTerms.revSharePercentage') : `${get(campaign, 'closureSummary.keyTerms.revSharePercentage')}%`
-                              : 'N/A'}
-                            <HtmlEditor
-                              readOnly
-                              content={(keyTerms && keyTerms.revSharePercentageDescription
-                                ? keyTerms.revSharePercentageDescription : '')}
-                            />
-                          </Table.Cell>
-                        </Table.Row>
+<Table.Row verticalAlign="top">
+                        <Table.Cell>Revenue Sharing Percentage</Table.Cell>
+                        <Table.Cell>
+                          {campaign && get(campaign, 'closureSummary.keyTerms.revSharePercentage')
+                            ? get(campaign, 'closureSummary.keyTerms.revSharePercentage').includes('%')
+                              ? get(campaign, 'closureSummary.keyTerms.revSharePercentage') : `${get(campaign, 'closureSummary.keyTerms.revSharePercentage')}%`
+                            : 'N/A'}
+                          <HtmlEditor
+                            readOnly
+                            content={(keyTerms && keyTerms.revSharePercentageDescription
+                              ? keyTerms.revSharePercentageDescription : '')}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
                       )
                       : ''
                     }
                     { maturityMonth
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell width={5}>
-Maturity
-                            {' '}
-                            <Popup
-                              trigger={<Icon name="help circle" color="green" />}
-                              content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                              position="top center"
-                            />
-                          </Table.Cell>
-                          <Table.Cell>
-                            {maturityMonth
-                              ? `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
-                              : 'N/A'
+<Table.Row verticalAlign="top">
+                        <Table.Cell width={5}>Maturity{' '}
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                            position="top center"
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          {maturityMonth
+                            ? `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                            : 'N/A'
                           }
-                          </Table.Cell>
-                        </Table.Row>
+                        </Table.Cell>
+                      </Table.Row>
                       ) : ''
                     }
                     { keyTerms && keyTerms.securityInterest
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Security Interest</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.securityInterest
-                              ? keyTerms.securityInterest
-                              : 'N/A'
+<Table.Row verticalAlign="top">
+                        <Table.Cell>Security Interest</Table.Cell>
+                        <Table.Cell>
+                          {keyTerms && keyTerms.securityInterest
+                            ? keyTerms.securityInterest
+                            : 'N/A'
                           }
-                          </Table.Cell>
-                        </Table.Row>
+                        </Table.Cell>
+                      </Table.Row>
                       ) : ''
                     }
                     { keyTerms && keyTerms.securitiesOwnershipPercentage
                       ? (
-                        <Table.Row verticalAlign="top">
-                          <Table.Cell>Ownership % Represented by Securities</Table.Cell>
-                          <Table.Cell>
-                            {keyTerms && keyTerms.securitiesOwnershipPercentage
-                              ? `${keyTerms.securitiesOwnershipPercentage}%
+<Table.Row verticalAlign="top">
+                        <Table.Cell>Ownership % Represented by Securities</Table.Cell>
+                        <Table.Cell>
+                          {keyTerms && keyTerms.securitiesOwnershipPercentage
+                            ? `${keyTerms.securitiesOwnershipPercentage}%
                             equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
-                              : 'N/A'
+                            : 'N/A'
                           }
-                          </Table.Cell>
-                        </Table.Row>
+                        </Table.Cell>
+                      </Table.Row>
                       ) : ''
                     }
                     {edgarLink
                     && (
-                    <Table.Row>
+<Table.Row>
                       <Table.Cell colSpan="2">
                         <Button onClick={() => window.open(edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`, '_blank')} primary content="View Form C Filing" />
                       </Table.Cell>
@@ -220,39 +217,39 @@ Maturity
             { get(campaign, 'closureSummary.keyTerms.businessOpenDate')
             || get(offering, 'closureSummary.repayment.completeDate')
               ? (
-                <Grid.Column width={4} floated="right">
-                  <Header as="h4">Key Dates & Values</Header>
-                  <Statistic.Group size="mini" className="vertical">
-                    { get(campaign, 'closureSummary.keyTerms.businessOpenDate')
-                      ? (
-                        <Statistic>
-                          <Statistic.Label>Business Open Date</Statistic.Label>
-                          <Statistic.Value>
-                            {get(campaign, 'closureSummary.keyTerms.businessOpenDate')
-                              ? moment(get(campaign, 'closureSummary.keyTerms.businessOpenDate')).format('MMM Do YYYY')
-                              : 'N/A'
+<Grid.Column width={4} floated="right">
+                <Header as="h4">Key Dates & Values</Header>
+                <Statistic.Group size="mini" className="vertical">
+                  { get(campaign, 'closureSummary.keyTerms.businessOpenDate')
+                    ? (
+<Statistic>
+                      <Statistic.Label>Business Open Date</Statistic.Label>
+                      <Statistic.Value>
+                        {get(campaign, 'closureSummary.keyTerms.businessOpenDate')
+                          ? moment(get(campaign, 'closureSummary.keyTerms.businessOpenDate')).format('MMM Do YYYY')
+                          : 'N/A'
                         }
-                          </Statistic.Value>
-                        </Statistic>
-                      ) : ''
+                      </Statistic.Value>
+                    </Statistic>
+                    ) : ''
                   }
-                    {get(offering, 'closureSummary.repayment.completeDate') && (
+                  {get(offering, 'closureSummary.repayment.completeDate') && (
                     <Statistic>
                       <Statistic.Label>Payoff Date</Statistic.Label>
                       <Statistic.Value>
                         {moment(get(offering, 'closureSummary.repayment.completeDate').format('MMM Do YYYY')) || 'N/A'}
                       </Statistic.Value>
                     </Statistic>
-                    )}
-                  </Statistic.Group>
-                </Grid.Column>
+                  )}
+                </Statistic.Group>
+              </Grid.Column>
               ) : ''
             }
           </Grid>
         </div>
         {chartData.length > 0
           && (
-          <Aux>
+<Aux>
             <Divider />
             <div className="inner-content-spacer payoff-chart">
               <Header as="h4">Payments</Header>

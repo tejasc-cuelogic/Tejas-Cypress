@@ -119,7 +119,7 @@ export class NavItems extends Component {
                   || (this.isActive(item.to, location, app, item.subNavigations))
                 }
                 content={(
-                  <Menu.Menu>
+<Menu.Menu>
                     {item.subNavigations.map(sn => (
                       sn.external ? (
                         <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
@@ -154,7 +154,7 @@ export class NavItems extends Component {
               // disabled={isMobile && item.title === 'How NextSeed Works'}
               onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
               text={(
-                <Aux>
+<Aux>
                   {item.icon && <Icon className={item.icon} />}
                   <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
                 </Aux>
@@ -180,9 +180,9 @@ export class NavItems extends Component {
             </Dropdown>
           ) : (item.isMenuHeader && hasMoreThanOneAcc)
             ? (
-              <Menu.Item className="menu-header">
-                <Menu.Header>{item.title}</Menu.Header>
-              </Menu.Item>
+<Menu.Item className="menu-header">
+              <Menu.Header>{item.title}</Menu.Header>
+            </Menu.Item>
             )
             : (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader)
               ? null
@@ -265,7 +265,7 @@ export class NavigationItems extends Component {
         <Container fluid>
           {!isMobBussinessApp
             && (
-            <Menu.Item as={Link} to="/" header>
+<Menu.Item as={Link} to="/" header>
               <Logo
                 alt="NextSeed.com"
                 dataSrc={getLogo(location.pathname)}
@@ -278,33 +278,33 @@ export class NavigationItems extends Component {
           <Menu.Menu position="right">
             {!location.pathname.includes('/business-application')
               && (
-              <NavItems
-                refLoc="public"
-                currentUser={currentUser}
-                location={location}
-                navItems={
+<NavItems
+  refLoc="public"
+  currentUser={currentUser}
+  location={location}
+  navItems={
                   isMobile ? PUBLIC_NAV.filter(nav => nav.header !== false)
                     : PUBLIC_NAV.filter(nav => nav.header !== false && nav.title !== 'Legal')
                   }
-              />
+/>
               )
             }
           </Menu.Menu>
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/')
             ? (
-              <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
-                <Button.Group>
-                  <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
-                  {isPrequalQulify
+<Menu.Item position={isMobBussinessApp ? 'right' : ''}>
+              <Button.Group>
+                <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
+                {isPrequalQulify
                   && (
-                  <SubmitButton
-                    canSubmitApp={canSubmitApp}
-                    click={preQualSubmit}
-                    loading={loading}
-                  />
+<SubmitButton
+  canSubmitApp={canSubmitApp}
+  click={preQualSubmit}
+  loading={loading}
+/>
                   )}
-                </Button.Group>
-              </Menu.Item>
+              </Button.Group>
+            </Menu.Item>
             )
             : !location.pathname.includes('/business-application')
             && (
@@ -325,8 +325,7 @@ export class NavigationItems extends Component {
                     loading={this.props.userDetailsStore.currentUser.loading}
                     disabled={this.props.userDetailsStore.currentUser.loading}
                     secondary
-                  >
-Dashboard
+                  >Dashboard
                   </Button>
                 </Menu.Item>
               ))}

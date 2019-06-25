@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Aux from 'react-aux';
-import { filter, find } from 'lodash';
-import { Form, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
+import { filter, find, get } from 'lodash';
+import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { MaskedInput, FormInput } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
+import Helper from '../../../../../helper/utility';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -38,6 +39,7 @@ export default class Close extends Component {
     open: false,
     action: '',
     confirmed: false,
+    inProgress: false,
   }
 
   componentWillMount() {
@@ -104,16 +106,14 @@ export default class Close extends Component {
         offeringClose({
           offeringId: offer.id,
           process: this.state.action,
-          scope: 'ADMIN',
-        }, this.state.activeStep);
+        }, this.state.activeStep, 'ADMIN');
         this.handleCloseModal();
         break;
       case 'Send to Investors':
         offeringClose({
           offeringId: offer.id,
           process: this.state.action,
-          scope: 'INVESTOR',
-        }, this.state.activeStep);
+        }, this.state.activeStep, 'INVESTOR');
         this.handleCloseModal();
         break;
       default: break;
@@ -135,15 +135,19 @@ export default class Close extends Component {
       if (status === 'update') {
         payload = getClosureObject();
       }
+      this.setState({ inProgress: status });
       updateOfferingMutation(
         currentOfferingId, payload, status === 'close' ? 'CLOSEOFFERING' : false,
         true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej,
       );
     })
       .then(() => {
+        this.setState({ inProgress: false });
         if (status === 'close') {
           this.props.history.push(`/app/offerings/completed/edit/${currentOfferingId}/overview`);
         }
+      }).catch(() => {
+        this.setState({ inProgress: false });
       });
   }
 
@@ -160,7 +164,7 @@ export default class Close extends Component {
     } = this.props.offeringCreationStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
-    const { offer } = this.props.offeringsStore;
+    const { offer, offerStatus } = this.props.offeringsStore;
     const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
@@ -169,56 +173,35 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-                <Aux>
-This campaing is still live, set to close
-                  <span className="highlight-text">
-                    {' '}
-                    {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'}
-                    {' '}
-                  </span>
-                </Aux>
-              ) : (
-                <Aux>
-This campaing
-                  <span className="highlight-text">has succeed</span>
-                </Aux>
-              )
+<Aux>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
+              </Aux>
+              ) : <Aux>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></Aux>
             }
           </Header>
           <p>
-            {hoursToClose > 0
-              ? (
                 <Aux>
-                Campaign has not reached minimum required amount.
-                MobCycle raised
-                  {' '}
-                  <b> $90,000 </b>
+                Campaign has
+{!offerStatus.isFailed ? ' reached' : ' not reached'}
+{' '}
+minimum required amount.
+                {' '}
+                {get(offer, 'keyTerms.shorthandBusinessName')}
+                {' '}
+                raised
+                {' '}
+                  <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'), 0)}</b>
                   {' '}
 out of required
                   {' '}
-                  <b>$100,000</b>
+                  <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0, 0)}</b>
                 </Aux>
-              )
-              : (
-                <Aux>
-              Campaign has reached minimum required amount. MobCycle raised
-                  {' '}
-                  <b>$350,000</b>
-                  {' '}
-from
-                  <b>227 investors</b>
-                  {' '}
-.
-                </Aux>
-              )
-          }
           </p>
           <Divider section />
-          {hoursToClose <= 0
-            && (
-            <Aux>
+          {hoursToClose <= 0 && !offerStatus.isFailed
+            ? (
+<Aux>
               <Step.Group className="campaign-close">
-                {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize closure'].map((item, index) => (
+                {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize Closure'].map((item, index) => (
                   <Step
                     style={{ background: 'none', textDecoration: 'none' }}
                     onClick={() => this.toggleStep(index + 1)}
@@ -275,7 +258,7 @@ from
                     <Button.Group className="mt-50">
                       {filter(closingActions, a => a.ref === 1).map(fA => (
                         <Button
-                          loading={inProgress === fA.enum}
+                          loading={this.state.inProgress === fA.enum}
                           onClick={() => this.closeAction(fA.enum, 1)}
                           primary
                         >
@@ -306,8 +289,7 @@ from
                       loading={inProgress === fA.enum}
                       onClick={() => this.closeAction(fA.enum, 2)}
                       primary
-                    >
-                      {fA.label}
+                    >{fA.label}
                     </Button>
                   ))}
                 </Button.Group>
@@ -317,7 +299,7 @@ from
               }
               {this.state.activeStep === 3
                 && (
-                <Aux>
+<Aux>
                   <Form.Group widths={3}>
                     {['queueLimit', 'notePurchaseDate'].map(field => (
                       <MaskedInput
@@ -337,8 +319,7 @@ from
                         loading={inProgress === fA.enum}
                         onClick={() => this.closeAction(fA.enum, 3)}
                         primary
-                      >
-                        {fA.label}
+                      >{fA.label}
                       </Button>
                     ))}
                   </Button.Group>
@@ -374,8 +355,8 @@ from
               }
               {this.state.activeStep === 5 && false
                 && (
-                <Aux>
-                  <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
+<Aux>
+                  <Header as="h4" className="mt-40 mb-30">Finalize Closure</Header>
                   <Form>
                     <Form.Group widths={3}>
                       {['date', 'amount', 'currentRepaidAmount', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
@@ -410,7 +391,13 @@ from
                 )
               }
             </Aux>
-            )
+            ) : offerStatus.isFailed ? (
+              <Card fluid className="center-align ba-info-card">
+                <Card.Header>
+                  This campaign has Failed
+                </Card.Header>
+              </Card>
+            ) : null
           }
           <Contingency
             formArrayChange={formArrayChange}

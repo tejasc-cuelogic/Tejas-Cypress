@@ -58,12 +58,12 @@ class Offering extends Component {
         </section>
         {!loading
           && (
-          <CampaignList
-            loading={loading}
-            campaigns={completed}
-            locked={3}
-            heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
-          />
+<CampaignList
+  loading={loading}
+  campaigns={completed}
+  locked={3}
+  heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
+/>
           )
         }
         {completedList && completedList.length > RECORDS_TO_DISPLAY

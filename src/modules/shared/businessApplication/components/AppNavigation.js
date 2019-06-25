@@ -66,13 +66,13 @@ export default class AppNavigation extends Component {
       <Aux>
         {!this.props.hideFields
           && (
-          <div className="navigation-buttons">
+<div className="navigation-buttons">
             {!formReadOnlyMode
               && (
-              <Aux>
+<Aux>
                 {this.state.step > 0
                   && (
-                  <div className="pull-left">
+<div className="pull-left">
                     <Button type="button" circular icon className="multistep__btn prev" disabled={isFileUploading} onClick={() => this.actualSubmit(-1)}>
                       <Icon className="ns-arrow-left" />
                     </Button>
@@ -90,12 +90,12 @@ export default class AppNavigation extends Component {
                     </Aux>
                   )
                     : (
-                      <Aux>
-                        {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
+<Aux>
+                      {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
                     primary className="very relaxed" content={isFileUploading
                     ? 'File operation in process' : 'Save'} /> */}
-                        <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
-                      </Aux>
+                      <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
+                    </Aux>
                     )
                   }
                 </div>

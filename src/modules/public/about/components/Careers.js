@@ -11,8 +11,7 @@ const Careers = () => (
         <Grid centered>
           <Grid.Column textAlign={isMobile ? 'left' : 'center'} computer={12} tablet={12} mobile={16}>
             <Header as="h2">
-              Democratize finance. Create change.
-              <Responsive minWidth={992} as="br" />
+              Democratize finance. Create change.<Responsive minWidth={992} as="br" />
               Join our team.
             </Header>
             <p className="mt-30">

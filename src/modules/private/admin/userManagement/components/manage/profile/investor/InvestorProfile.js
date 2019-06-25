@@ -21,13 +21,7 @@ export default class InvestorProfile extends Component {
       <Form>
         <Header as="h4">
           Investor Profile
-          <Link to={this.props.match.url} className="link pull-right">
-            <small>
-              <Icon className="ns-pencil" />
-              {' '}
-Edit profile data
-            </small>
-          </Link>
+          <Link to={this.props.match.url} className="link pull-right"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
         </Header>
         <Header as="h6">Employment</Header>
         <Form.Group widths={3}>

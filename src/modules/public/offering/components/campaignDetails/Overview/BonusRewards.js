@@ -28,42 +28,32 @@ class BonusRewards extends Component {
         {rewardsTiers && rewardsTiers.length
           ? (!isEarlyBirdExists
             ? (
-              <Aux>
-                <NSImage path="illustration.png" className="no-early-bird" />
-                <p className="center-align neutral-text mb-0"><b>Invest more, receive more.</b></p>
-                <p className="early-bird-desc center-align">
-                  {`See the bonus rewards ${shorthandBusinessName} is offering for higher
+<Aux>
+              <NSImage path="illustration.png" className="no-early-bird" />
+              <p className="center-align neutral-text mb-0"><b>Invest more, receive more.</b></p>
+              <p className="early-bird-desc center-align">
+                {`See the bonus rewards ${shorthandBusinessName} is offering for higher
               levels of investment.`}
-                </p>
-              </Aux>
+              </p>
+            </Aux>
             )
             : (
-              <Aux>
-                <div className="boanusreward-chart">
-                  <ChartPieForBonusRewards
-                    title={earlyBirdsCount}
-                    data={bonusDetails}
-                    colors={COLORS}
-                  />
-                </div>
-                <p className="center-align neutral-text mb-0">
-                  <b>
-                    <span className="primary-text">Early Bird</span>
-                    {' '}
-rewards remaining
-                  </b>
-                </p>
-                <p className="early-bird-desc center-align">
-                First
-                  {' '}
-                  {earlyBirdDetails.quantity}
-                  {' '}
-                  {earlyBirdDetails.amount > 0 ? `to invest ${Helper.CurrencyFormat(earlyBirdDetails.amount)}+` : ''}
-                </p>
-              </Aux>
+<Aux>
+              <div className="boanusreward-chart">
+                <ChartPieForBonusRewards
+                  title={earlyBirdsCount}
+                  data={bonusDetails}
+                  colors={COLORS}
+                />
+              </div>
+              <p className="center-align neutral-text mb-0"><b><span className="primary-text">Early Bird</span> rewards remaining</b></p>
+              <p className="early-bird-desc center-align">
+                First {earlyBirdDetails.quantity} {earlyBirdDetails.amount > 0 ? `to invest ${Helper.CurrencyFormat(earlyBirdDetails.amount)}+` : ''}
+              </p>
+            </Aux>
             ))
           : (
-            <Aux>
+<Aux>
               <NSImage path="illustration.png" className="no-early-bird" />
               <p className="center-align neutral-text mb-0"><b>No Bonus Rewards for this Campaign.</b></p>
             </Aux>
