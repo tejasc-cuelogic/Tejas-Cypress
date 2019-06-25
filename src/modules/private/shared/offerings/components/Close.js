@@ -39,6 +39,7 @@ export default class Close extends Component {
     open: false,
     action: '',
     confirmed: false,
+    inProgress: false,
   }
 
   componentWillMount() {
@@ -134,15 +135,19 @@ export default class Close extends Component {
       if (status === 'update') {
         payload = getClosureObject();
       }
+      this.setState({ inProgress: status });
       updateOfferingMutation(
         currentOfferingId, payload, status === 'close' ? 'CLOSEOFFERING' : false,
         true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej,
       );
     })
       .then(() => {
+        this.setState({ inProgress: false });
         if (status === 'close') {
           this.props.history.push(`/app/offerings/completed/edit/${currentOfferingId}/overview`);
         }
+      }).catch(() => {
+        this.setState({ inProgress: false });
       });
   }
 
@@ -253,7 +258,7 @@ out of required
                     <Button.Group className="mt-50">
                       {filter(closingActions, a => a.ref === 1).map(fA => (
                         <Button
-                          loading={inProgress === fA.enum}
+                          loading={this.state.inProgress === fA.enum}
                           onClick={() => this.closeAction(fA.enum, 1)}
                           primary
                         >
