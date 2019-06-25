@@ -17,8 +17,8 @@ npm-debug.log
 
 src/assets/app.css
 # cypress screenshots and videos
-cypress/screenshots/*
-cypress/videos/*
+cypress/reports/screenshots/*
+cypress/reports/videos/*
 
 # semantic ui based theme (less)
 src/assets/semantic/*
