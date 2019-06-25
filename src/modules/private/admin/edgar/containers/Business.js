@@ -32,7 +32,7 @@ class Business extends Component {
       <PrivateLayout
         {...this.props}
         P1={(
-          <Grid.Column width={5}>
+<Grid.Column width={5}>
             <Form inverted>
               <Input fluid inverted icon="ns-search" iconPosition="left" placeholder="Type Business’s name, description" />
             </Form>

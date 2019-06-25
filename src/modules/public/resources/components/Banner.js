@@ -7,12 +7,11 @@ const Banner = props => (
     <Responsive minWidth={768} as={Aux}>
       <Container>
         <div className="banner-caption">
-          <Header as="h2">
-            {props.title}
+          <Header as="h2">{props.title}
             {
             props.type
             && (
-            <Aux>
+<Aux>
               <br />
               <span className="primary-text">{props.subtitle}</span>
             </Aux>

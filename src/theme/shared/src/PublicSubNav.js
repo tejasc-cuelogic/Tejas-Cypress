@@ -29,10 +29,7 @@ export default class PublicSubNav extends Component {
                   secondary
                   className={`menu-secondary ${(moreProps && moreProps.onlyNav) ? '' : 'center-align'}`}
                 >
-                  <Menu.Item header>
-                    {title}
-:
-                  </Menu.Item>
+                  <Menu.Item header>{title}:</Menu.Item>
                   <NavItems sub refLoc="public" location={location} navItems={navItems} />
                 </Menu.Menu>
               </Container>

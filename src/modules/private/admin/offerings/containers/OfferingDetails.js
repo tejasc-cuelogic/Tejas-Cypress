@@ -76,16 +76,10 @@ export default class OfferingDetails extends Component {
                 ))}
               <Header.Subheader className="mt-10">
                 <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}/overview`}>
-                  <Icon className="ns-view" />
-                  <b>Preview the offering page</b>
+                  <Icon className="ns-view" /><b>Preview the offering page</b>
                 </Link>
                 {offer.stage === 'CREATION'
-                  && (
-                  <Link to={`${match.url}/editPoc`} className="pull-right">
-                    <Icon className="ns-pencil" />
-Edit
-                  </Link>
-                  )
+                  && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
                 }
               </Header.Subheader>
             </Header>
@@ -99,11 +93,11 @@ Edit
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
                     return (
-                      <Route
-                        key={item.to}
-                        path={`${match.url}/${item.to}`}
-                        render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
-                      />
+                        <Route
+                          key={item.to}
+                          path={`${match.url}/${item.to}`}
+                          render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
+                        />
                     );
                   })
                 }

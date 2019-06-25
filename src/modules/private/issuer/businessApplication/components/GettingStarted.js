@@ -35,8 +35,7 @@ export default class GettingStarted extends Component {
               loading={this.props.uiStore.inProgress}
               primary
               onClick={this.handleCloseModal}
-            >
-Get Started
+            >Get Started
             </Button>
           </div>
           <Divider hidden />

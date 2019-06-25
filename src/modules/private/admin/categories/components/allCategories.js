@@ -130,13 +130,7 @@ export default class AllCategories extends Component {
           <Accordion fluid styled className="card-style">
             <Accordion.Title onClick={() => this.toggleAccordianContent(index)} className="text-capitalize">
               <Icon className={activeIndex === index ? 'ns-chevron-up' : 'ns-chevron-down'} />
-              {category.title}
-              {' '}
-              <small>
-                {category.categories.length}
-                {' '}
-elements
-              </small>
+              {category.title} <small>{category.categories.length} elements</small>
               <Button onClick={() => this.openModal('new', category.title, category.type, index)} className="link-button pull-right"><small>+ Add Category</small></Button>
             </Accordion.Title>
             <Accordion.Content active={activeIndex === index} className="categories-acc">

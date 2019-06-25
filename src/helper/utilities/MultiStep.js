@@ -208,7 +208,7 @@ export default class MultiStep extends React.Component {
         <Aux>
           {this.props.steps[i].name
             && (
-            <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
+<li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
               {this.props.steps[i].name}
             </li>
             )
@@ -241,7 +241,7 @@ export default class MultiStep extends React.Component {
         >
           {!this.props.hideHeader
             && (
-            <Aux>
+<Aux>
               <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
               <ol className="progtrckr">
                 {!this.props.steps[this.state.compState].isHideLabel
@@ -260,27 +260,27 @@ export default class MultiStep extends React.Component {
             {this.props.steps[this.state.compState].component}
             {!this.props.steps[this.state.compState].disablePrevButton
               && (
-              <Button
-                circular
-                icon={{ className: 'ns-arrow-left' }}
-                className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
-                onClick={this.previous}
-              />
+<Button
+  circular
+  icon={{ className: 'ns-arrow-left' }}
+  className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
+  onClick={this.previous}
+/>
               )
             }
             {this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
               || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)
               ? (
-                <Aux>
+<Aux>
                   {!this.props.steps[this.state.compState].disableNextButton
                     && (
-                    <Button
-                      type="submit"
-                      circular
-                      icon={{ className: 'ns-arrow-right' }}
-                      className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
-                      onClick={this.next}
-                    />
+<Button
+  type="submit"
+  circular
+  icon={{ className: 'ns-arrow-right' }}
+  className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
+  onClick={this.next}
+/>
                     )
                   }
                 </Aux>

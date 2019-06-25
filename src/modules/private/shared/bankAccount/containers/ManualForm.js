@@ -79,11 +79,7 @@ export default class ManualForm extends Component {
     return (
       <div className="center-align">
         <Header as="h3">Link bank manually</Header>
-        <p>
-Enter your bank
-          {"'"}
-s routing number and your checking account number.
-        </p>
+        <p>Enter your bank{"'"}s routing number and your checking account number.</p>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
           <div className="field-wrap left-align">
             <MaskedInput
@@ -117,10 +113,8 @@ s routing number and your checking account number.
           </div>
           {errors
             && (
-            <Message error className="mb-30">
-              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
-              {' '}
-              {/* <ListErrors errors={[errors.message]} /> */}
+<Message error className="mb-30">
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
             </Message>
             )
           }

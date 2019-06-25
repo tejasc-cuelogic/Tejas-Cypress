@@ -95,6 +95,18 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      goldstar {
+        isin
+        contactId
+        escrowAccount
+        sinkFundAccount
+      }
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+        accountHolderName
+      }
       leadDetails {
         id
         email {
@@ -414,7 +426,6 @@ export const getOfferingDetails = gql`
             date
             status
           }
-          gsFees
         }
       }
       legal {
@@ -879,7 +890,10 @@ export const getOfferingDetails = gql`
           nsPayment
           investorFee
           maturityDate
+          anticipatedPaymentStartDate
         }
+        gsFees
+        nsFee
         repayment {
           startDate
           completeDate

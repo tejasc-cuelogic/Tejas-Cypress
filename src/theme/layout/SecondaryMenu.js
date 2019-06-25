@@ -37,22 +37,22 @@ const NavItems = ({
           {item.showIcon
             ? stepsStatus[key].status === 'IN_PROGRESS'
               ? (
-                <Popup
-                  trigger={(
-                    <Icon
-                      name={item.icon[stepsStatus[key].status]}
-                      color={item.icon_color[stepsStatus[key].status]}
-                    />
+<Popup
+  trigger={(
+<Icon
+  name={item.icon[stepsStatus[key].status]}
+  color={item.icon_color[stepsStatus[key].status]}
+/>
 )}
-                  content={item.toolTipTitle || ''}
-                  position="top center"
-                />
+  content={item.toolTipTitle || ''}
+  position="top center"
+/>
               )
               : (
-                <Icon
-                  color={item.icon_color[stepsStatus[key].status]}
-                  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
-                />
+<Icon
+  color={item.icon_color[stepsStatus[key].status]}
+  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
+/>
               )
             : null
           }

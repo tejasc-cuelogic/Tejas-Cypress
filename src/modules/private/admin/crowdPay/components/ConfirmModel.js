@@ -42,10 +42,7 @@ export default class ConfirmModel extends Component {
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Header className="signup-header">
-          <Header textAlign="center" as="h3">
-          Mark as &nbsp;
-            {ACTION_MAPPING[actionValue].msg}
-          </Header>
+          <Header textAlign="center" as="h3">Mark as {ACTION_MAPPING[actionValue].msg}</Header>
         </Modal.Header>
         <Modal.Content>
           <Form>

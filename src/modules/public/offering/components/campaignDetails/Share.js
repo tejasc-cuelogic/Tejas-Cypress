@@ -52,18 +52,18 @@ export default class Share extends Component {
           {
             filteredSocialArr.length
               ? (
-                <div className="share-icons center-align">
-                  {filteredSocialArr.map(socalObj => (
-                    socalObj.url && socalObj.url !== ''
+<div className="share-icons center-align">
+                {filteredSocialArr.map(socalObj => (
+                  socalObj.url && socalObj.url !== ''
                   && (
-                  <a href={`${socalObj.url}`} target="_blank" rel="noopener noreferrer">
+<a href={`${socalObj.url}`} target="_blank" rel="noopener noreferrer">
                     <Icon name={socalObj.name} circular inverted className={socalObj.class} size="big" />
                     {socalObj.title}
                   </a>
                   )
-                  ))
+                ))
                 }
-                </div>
+              </div>
               )
               : <InlineLoader text="No Data Found." className="bg-offwhite" />
           }

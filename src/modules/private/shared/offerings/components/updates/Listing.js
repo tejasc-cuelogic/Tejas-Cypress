@@ -46,12 +46,7 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell>{capitalize(record.scope)}</Table.Cell>
                     <Table.Cell><DateTimeFormat datetime={record.updated.date} /></Table.Cell>
-                    <Table.Cell className={`status ${kebabCase(record.status)}`}>
-                      {' '}
-                      <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} />
-                      {' '}
-                      {capitalize(record.status)}
-                    </Table.Cell>
+                    <Table.Cell className={`status ${kebabCase(record.status)}`}> <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} /> {capitalize(record.status)}</Table.Cell>
                     <Table.Cell textAlign="right">{record.status === 'PUBLISHED' ? 'Update is published' : record.status === 'DRAFT' ? 'Saved To Draft' : 'Sent update for review'}</Table.Cell>
                     {isManager
                     && (

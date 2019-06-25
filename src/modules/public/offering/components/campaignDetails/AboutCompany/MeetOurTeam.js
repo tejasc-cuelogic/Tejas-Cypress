@@ -26,12 +26,12 @@ class MeetOurTeam extends Component {
         </Header>
         {meetTeamOjb.length
           ? (
-            <Aux>
-              <Item.Group className="meet-team">
-                {meetTeamOjb.map(data => (
-                  data.isPublic
+<Aux>
+            <Item.Group className="meet-team">
+              {meetTeamOjb.map(data => (
+                data.isPublic
                   && (
-                  <Item>
+<Item>
                     <Item.Content>
                       <div className={`campaign-avatar ${isMobile && 'mobile-avatar'}`}>
                         <div className="avatar-image team-avatar">
@@ -50,12 +50,12 @@ class MeetOurTeam extends Component {
                           }
                           {data && data.social
                             && (
-                            <Item.Extra>
+<Item.Extra>
                               <div>
                                 {data && data.social && Object.keys(data.social).map(key => (
                                   data.social[key]
                                     && (
-                                    <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+<a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
                                       <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
                                     </a>
                                     )
@@ -68,7 +68,7 @@ class MeetOurTeam extends Component {
                       </div>
                       {data.bio
                         && (
-                        <Item.Description className="avatar-description mt-30">
+<Item.Description className="avatar-description mt-30">
                           <HtmlEditor readOnly content={data.bio} />
                         </Item.Description>
                         )
@@ -76,9 +76,9 @@ class MeetOurTeam extends Component {
                     </Item.Content>
                   </Item>
                   )
-                ))}
-              </Item.Group>
-            </Aux>
+              ))}
+            </Item.Group>
+          </Aux>
           )
           : <InlineLoader text={emptyStatement} className="bg-offwhite" />
         }

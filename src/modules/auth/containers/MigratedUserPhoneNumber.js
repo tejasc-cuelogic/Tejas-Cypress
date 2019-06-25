@@ -65,10 +65,7 @@ export default class MigratedUserPhoneNumber extends Component {
             />
             <Divider hidden />
             <p className="note center-align">
-              By selecting
-              {' '}
-              <b>Confirm</b>
-, you agree NextSeed may deliver verification codes
+              By selecting <b>Confirm</b>, you agree NextSeed may deliver verification codes
               to you using the phone number you have provided. Codes may be sent using text
               messages, an autodialer, or artificial or prerecorded voice messages to such
               phone number. Your mobile carrier’s messaging and data fees may apply.
@@ -78,7 +75,7 @@ export default class MigratedUserPhoneNumber extends Component {
           </Form>
           { errors
             && (
-            <Message error textAlign="left" className="mb-30">
+<Message error textAlign="left" className="mb-30">
               <ListErrors errors={errors.message ? [errors.message] : [errors]} />
             </Message>
             )

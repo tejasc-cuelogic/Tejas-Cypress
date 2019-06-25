@@ -100,13 +100,7 @@ export const AGREEMENT_DETAILS_INFO = {
         ),
         label: (
           <Aux>
-            I confirm that I am complying with my
-            {' '}
-            <b>annual investment limit</b>
-            {' '}
-(
-            <Link to="/offerings/live-test-new-vp/agreement/change-investment-limit">update</Link>
-)
+            I confirm that I am complying with my <b>annual investment limit</b> (<Link to="/offerings/live-test-new-vp/agreement/change-investment-limit">update</Link>)
           </Aux>
         ),
         value: '4',
@@ -131,23 +125,12 @@ export const AGREEMENT_DETAILS_INFO = {
       {
         label: (
           <Aux>
-            I have reviewed NextSeed’s
-            {' '}
-            <Link to="/app/resources/welcome-packet">educational materials</Link>
-, understand that
+            I have reviewed NextSeed’s <Link to="/app/resources/welcome-packet">educational materials</Link>, understand that
             the entire amount of my investment may be lost, and confirm that I am in a
             financial condition to bear the loss. I have read and agree to the terms of
-            the
-            {' '}
-            <a href="/">CrowdPay Custodial Account Agreement</a>
-,
-            the
-            {' '}
-            <a href="/">Substitute IRS Form W-9 Certification</a>
-,
-            and
-            {' '}
-            <a href="/">NextSeed Securities LLC Investor Agreement</a>
+            the <a href="/">CrowdPay Custodial Account Agreement</a>,
+            the <a href="/">Substitute IRS Form W-9 Certification</a>,
+            and <a href="/">NextSeed Securities LLC Investor Agreement</a>
           </Aux>
         ),
         value: '6',

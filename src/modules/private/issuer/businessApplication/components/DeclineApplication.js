@@ -39,8 +39,7 @@ export default class DeclineApplication extends Component {
             We're sorry you won't be moving forward with a campaign.
             We'd still love to work with you in the future!
           </p>
-          <p>
-If you have a minute, we'd greatly appreciate any feedback on what we could do
+          <p>If you have a minute, we'd greatly appreciate any feedback on what we could do
             to improve. Please share your thoughts on what you would have preferred to see
             and what the primary reasons are that you have decided not to launch a
             NextSeed campaign.
@@ -55,7 +54,7 @@ If you have a minute, we'd greatly appreciate any feedback on what we could do
             />
             {errors
               && (
-              <Message error>
+<Message error>
                 <ListErrors errors={[errors]} />
               </Message>
               )

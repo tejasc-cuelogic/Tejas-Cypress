@@ -176,13 +176,13 @@ export default class Agreement extends React.Component {
               <div className="pdf-viewer">
                 {(docLoading || !embedUrl) ? <InlineLoader />
                   : (
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      title="agreement"
-                      src={embedUrl}
-                      ref={(c) => { this.iframeComponent = c; }}
-                    />
+<iframe
+  width="100%"
+  height="100%"
+  title="agreement"
+  src={embedUrl}
+  ref={(c) => { this.iframeComponent = c; }}
+/>
                   )
                 }
               </div>
@@ -192,17 +192,8 @@ export default class Agreement extends React.Component {
             </div>
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
-                Let&#39;s confirm your investment.
-                <br />
-                You are investing
-                <span className="positive-text">
-                  {' '}
-                  {Helper.CurrencyFormat(investmentAmount, 0)}
-                </span>
-                {' '}
-                in
-                {businessName}
-                .
+                Let&#39;s confirm your investment.<br />You are investing
+                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
               </Header>
               <Form
                 error={(this.state.showError
@@ -221,92 +212,57 @@ export default class Agreement extends React.Component {
                           changed={setCheckbox}
                           customLabel={(
                             <Aux>
-                              I have reviewed and agree to the terms of the
-                              {' '}
-                              <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>
-                              .
+                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
                             </Aux>
                           )}
                           conditionalCustomLabel={(
                             startsWith(offeringRegulationType, 'BD_')
                               ? (
-                                <Aux>
-                                  I have reviewed NextSeed’s
-                                  {' '}
-                                  <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>
-                                  , understand that
-                                                                  the entire amount of my investment may be lost,
-                                                                  and confirm that I am in a
-                                                                  financial condition to bear the loss.
-                                                                  I have read and agree to the terms of
-                                                                  the
-                                  {' '}
-                                  <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>
-                                  ,
-                                                                  the
-                                  {' '}
-                                  <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>
-                                  ,
-                                                                  and
-                                  {' '}
-                                  <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
-                                </Aux>
+<Aux>
+                                I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                the entire amount of my investment may be lost,
+                                and confirm that I am in a
+                                financial condition to bear the loss.
+                                I have read and agree to the terms of
+                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
+                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
+                                and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
+                              </Aux>
                               )
                               : (
                                 <Aux>
-                                  <Aux>
-                                    I have reviewed NextSeed’s
-                                    {' '}
-                                    <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>
-                                    , understand that
-                                                                      the entire amount of my investment may be lost,
-                                                                      and confirm that I am in a
-                                                                      financial condition to bear the loss.
-                                                                      I have read and agree to the terms of
-                                                                      the
-                                    {' '}
-                                    <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>
-                                    ,
-                                                                    the
-                                    {' '}
-                                    <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>
-                                    ,
-                                                                      and
-                                    {' '}
-                                    <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
-                                  </Aux>
+                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  the entire amount of my investment may be lost,
+                                  and confirm that I am in a
+                                  financial condition to bear the loss.
+                                  I have read and agree to the terms of
+                                  the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
+                                the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
+                                  and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>
                                 </Aux>
                               )
                           )}
                           customUpdateLimitLabel={(
                             regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck)
                               ? (
-                                <Aux>
-                                  I hereby certify that I have a reasonable expectation that I will
-                                   continue to meet or exceed the requirements to be considered an
-                                    accredited investor.
-                                </Aux>
+<Aux>
+                                I hereby certify that I have a reasonable expectation that I will
+                                 continue to meet or exceed the requirements to be considered an
+                                  accredited investor.
+                              </Aux>
                               )
                               : (
-                                <Aux>
-                                  I confirm that I am complying with my
-                                  {' '}
-                                  <b>annual investment limit</b>
-                                  {' '}
-                                  {' '}
-                                  {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
-                                </Aux>
+<Aux>
+                                I confirm that I am complying with my <b>annual investment limit</b> {' '}
+                                {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
+                              </Aux>
                               )
                           )}
                           customRegulationLabel={(
                             <Aux>
-                              I understand that investing in securities sold in reliance on
-                              {' '}
-                              {' '}
-                              {regualtionTypeStatement}
-                              {' '}
-                              involves risks and I should not invest
-                                                              any funds unless I can afford to lose the entire amount.
+                              I understand that investing in securities sold in reliance on {' '}
+                              {regualtionTypeStatement} involves risks and I should not invest
+                                any funds unless I can afford to lose the entire amount.
                             </Aux>
                           )}
                           tooltipHardDisable={(regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck))}

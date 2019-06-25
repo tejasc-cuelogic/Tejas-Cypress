@@ -41,24 +41,24 @@ export default class CrowdPay extends Component {
       <PrivateLayout
         {...this.props}
         P1={(
-          <ByKeyword
-            executeSearch={this.executeSearch}
-            w={[8]}
-            placeholder="Search by Investor or CrowdPay #"
-            toggleSearch={this.toggleSearch}
-            requestState={requestState}
-            filters={filters}
-          />
+<ByKeyword
+  executeSearch={this.executeSearch}
+  w={[8]}
+  placeholder="Search by Investor or CrowdPay #"
+  toggleSearch={this.toggleSearch}
+  requestState={requestState}
+  filters={filters}
+/>
 )}
         P2={(
-          <Filters
-            requestState={requestState}
-            filters={filters}
-            setSearchParam={this.setSearchParam}
-            executeSearch={this.executeSearch}
-            change={this.change}
-            FILTER_FRM={FILTER_FRM}
-          />
+<Filters
+  requestState={requestState}
+  filters={filters}
+  setSearchParam={this.setSearchParam}
+  executeSearch={this.executeSearch}
+  change={this.change}
+  FILTER_FRM={FILTER_FRM}
+/>
 )}
       >
         <AllAccreditationRequests {...this.props} />

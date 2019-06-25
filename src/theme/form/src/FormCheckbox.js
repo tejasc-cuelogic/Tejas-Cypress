@@ -26,7 +26,7 @@ const FormCheckbox = observer((props) => {
                 value={c.value}
                 {...props}
                 label={(
-                  <label>
+<label>
                     {c.customLabel ? customLabel
                       : c.conditionalCustomLabel ? conditionalCustomLabel
                         : c.customUpdateLimitLabel ? customUpdateLimitLabel
@@ -50,13 +50,13 @@ const FormCheckbox = observer((props) => {
                   {c.customLabel ? customLabel : c.label}
                   {tooltip
                   && (
-                  <Popup
-                    trigger={<Icon className="ns-help-circle" />}
-                    content={tooltip}
-                    position="top center"
-                    className="center-align"
-                    wide
-                  />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
                   )
                     }
                 </label>

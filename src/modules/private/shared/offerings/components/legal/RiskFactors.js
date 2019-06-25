@@ -19,7 +19,7 @@ const FormData = observer(({
       readOnly={isReadonly}
       name={checkboxField}
       label={(
-        <label>
+<label>
           <Header as="h4">{form.fields[checkboxField].label}</Header>
         </label>
 )}
@@ -88,14 +88,14 @@ export default class RiskFactors extends Component {
             Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector
               && this.validateRiskFactorField(get(offer, 'keyTerms'), RISK_FACTORS_FRM.fields[f]))
               .map(field => (
-                <FormData
-                  isReadonly={isReadonly}
-                  formName={formName}
-                  form={RISK_FACTORS_FRM}
-                  formChange={formChange}
-                  checkboxField={RISK_FACTORS_FRM.fields[field].refSelector}
-                  descriptionField={field}
-                />
+              <FormData
+                isReadonly={isReadonly}
+                formName={formName}
+                form={RISK_FACTORS_FRM}
+                formChange={formChange}
+                checkboxField={RISK_FACTORS_FRM.fields[field].refSelector}
+                descriptionField={field}
+              />
               ))
           }
           <Divider hidden />

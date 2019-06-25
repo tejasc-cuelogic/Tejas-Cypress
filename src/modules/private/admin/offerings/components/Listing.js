@@ -84,10 +84,10 @@ export default class Listing extends Component {
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 {stage !== 'engagement'
                   ? (
-                    <Aux>
-                      <Table.HeaderCell>Created Date</Table.HeaderCell>
-                      <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
-                    </Aux>
+<Aux>
+                    <Table.HeaderCell>Created Date</Table.HeaderCell>
+                    <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
+                  </Aux>
                   )
                   : <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
                 }
@@ -112,11 +112,10 @@ export default class Listing extends Component {
                 : offerings.map(offering => (
                   <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      <b>
-                        {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-                          ? offering.keyTerms.shorthandBusinessName : (
-                            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-                          ))}
+                      <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+                        ? offering.keyTerms.shorthandBusinessName : (
+                          (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+                        ))}
                       </b>
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
@@ -131,21 +130,21 @@ export default class Listing extends Component {
                     </Table.Cell>
                     {stage !== 'engagement'
                       ? (
-                        <Aux>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                            {offering.offering && offering.offering.launch
+<Aux>
+                        <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
+                        <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                          {offering.offering && offering.offering.launch
                           && offering.offering.launch.targetDate
-                              ? DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
+                            ? DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
                           }
-                          </Table.Cell>
-                        </Aux>
+                        </Table.Cell>
+                      </Aux>
                       )
                       : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}</Table.Cell>
                     }
                     {stage === 'live'
                       && (
-                      <Table.Cell>
+<Table.Cell>
                         {offering.closureSummary && offering.closureSummary.processingDate
                           ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                         }
@@ -159,15 +158,15 @@ export default class Listing extends Component {
                       <p>
                         {offering.issuerDetails
                           ? (
-                            <Aux>
-                              <b>
-                                {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
-                              </b>
-                              <br />
-                              {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
-                              <br />
-                              {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
-                            </Aux>
+<Aux>
+                            <b>
+                              {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
+                            </b>
+                            <br />
+                            {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
+                            <br />
+                            {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
+                          </Aux>
                           )
                           : <b>N/A</b>
                         }
@@ -184,9 +183,9 @@ export default class Listing extends Component {
                         {Object.keys(actions).map(action => (
                           action.label === 'Delete' && stage === 'engagement' ? ''
                             : (
-                              <Button icon className="link-button">
-                                <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
-                              </Button>
+<Button icon className="link-button">
+                            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
+                          </Button>
                             )
                         ))}
                       </Button.Group>
