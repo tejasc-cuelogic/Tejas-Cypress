@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Aux from 'react-aux';
-import { filter, find } from 'lodash';
+import { filter, find, get } from 'lodash';
 import { Form, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { MaskedInput, FormInput } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
+import Helper from '../../../../../helper/utility';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -104,16 +105,14 @@ export default class Close extends Component {
         offeringClose({
           offeringId: offer.id,
           process: this.state.action,
-          scope: 'ADMIN',
-        }, this.state.activeStep);
+        }, this.state.activeStep, 'ADMIN');
         this.handleCloseModal();
         break;
       case 'Send to Investors':
         offeringClose({
           offeringId: offer.id,
           process: this.state.action,
-          scope: 'INVESTOR',
-        }, this.state.activeStep);
+        }, this.state.activeStep, 'INVESTOR');
         this.handleCloseModal();
         break;
       default: break;
@@ -190,8 +189,9 @@ This campaing
               ? (
                 <Aux>
                 Campaign has not reached minimum required amount.
-                MobCycle raised
-                  {' '}
+                {' '}
+                {get(offer, 'keyTerms.shorthandBusinessName')}
+                {' '}
                   <b> $90,000 </b>
                   {' '}
 out of required
@@ -201,12 +201,21 @@ out of required
               )
               : (
                 <Aux>
-              Campaign has reached minimum required amount. MobCycle raised
+              Campaign has reached minimum required amount.
+              {' '}
+              {get(offer, 'keyTerms.shorthandBusinessName')}
+              {' '}
+              raised
                   {' '}
-                  <b>$350,000</b>
+                  <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'))}</b>
                   {' '}
 from
-                  <b>227 investors</b>
+                  <b>
+                  {' '}
+                  {get(offer, 'closureSummary.totalInvestorCount') || 0}
+                  {' '}
+                  investors
+                  </b>
                   {' '}
 .
                 </Aux>
