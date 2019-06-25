@@ -763,7 +763,7 @@ export const COMPANY_LAUNCH = {
   },
   contactId: {
     value: '',
-    label: 'GoldStar ContactId',
+    label: 'GoldStar Contact ID',
     error: undefined,
     rule: 'optional',
     objRefOutput: 'goldstar',
@@ -2729,8 +2729,8 @@ export const OFFERING_CLOSE_1 = {
   gsFees: {
     value: '',
     label: 'Goldstar Fees',
-    objRefOutput: 'closureSummary',
-    objRef: 'closureSummary',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
