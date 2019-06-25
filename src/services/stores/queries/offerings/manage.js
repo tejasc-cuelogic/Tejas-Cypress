@@ -98,8 +98,8 @@ export const getOfferingDetails = gql`
       goldstar {
         isin
         contactId
-        escrowAccount
-        sinkFundAccount
+        esAccountNumber
+        sfAccountNumber
       }
       linkedBank {
         accountNumber

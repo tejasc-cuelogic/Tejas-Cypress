@@ -770,7 +770,7 @@ export const COMPANY_LAUNCH = {
     objRef: 'goldstar',
     placeHolder: 'Enter here',
   },
-  escrowAccount: {
+  esAccountNumber: {
     value: '',
     label: 'GoldStar Escrow Account Number',
     error: undefined,
@@ -779,7 +779,7 @@ export const COMPANY_LAUNCH = {
     objRef: 'goldstar',
     placeHolder: 'Enter here',
   },
-  sinkFundAccount: {
+  sfAccountNumber: {
     value: '',
     label: 'GoldStar Sink Fund Account Number',
     error: undefined,
