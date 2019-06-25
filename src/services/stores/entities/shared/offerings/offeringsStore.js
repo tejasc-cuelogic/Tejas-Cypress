@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, mapValues, values, map, sortBy, remove, findIndex } from 'lodash';
+import money from 'money-math';
+import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
@@ -370,6 +371,17 @@ export class OfferingsStore {
 
   @action resetInitLoad() {
     this.initLoad = [];
+  }
+
+  @computed get offerStatus() {
+    const offerStatus = {};
+    const { offer } = this;
+    offerStatus.collected = get(offer, 'closureSummary.totalInvestmentAmount') || 0;
+    const offeringRegulation = get(offer, 'keyTerms.regulation');
+    const minOffering = get(offer, 'keyTerms.minOfferingAmountCF') || 0;
+    const minOfferingD = get(offer, 'keyTerms.minOfferingAmount506') && get(offer, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.minOfferingAmount506') : get(offer, 'keyTerms.minOfferingAmount506C') ? get(offer, 'keyTerms.minOfferingAmount506C') : '0.00';
+    offerStatus.minOffering = get(offer, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    return offerStatus;
   }
 }
 
