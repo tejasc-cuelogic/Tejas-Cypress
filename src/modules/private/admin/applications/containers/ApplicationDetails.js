@@ -120,11 +120,7 @@ export default class ApplicationDetails extends Component {
         <Modal.Content className="transaction-details">
           <Header as="h3">
             {businessName}
-            <span className="title-meta">
-              {' '}
-Status:
-              <b>{appStepStatus}</b>
-            </span>
+            <span className="title-meta">  Status: <b>{appStepStatus}</b></span>
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
@@ -142,22 +138,14 @@ Status:
                     {(applicationStatus || prequalStatus)
                     !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                     && (
-                    <small className="pull-right">
+<small className="pull-right">
                       {this.state.displayOnly
-                        ? (
-                          <Link to="/" onClick={this.editBusinessDetails}>
-                            <Icon className="ns-pencil" />
-Edit
-                          </Link>
-                        )
+                        ? <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
                         : (
-                          <Aux>
-                            <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
-                            <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}>
-                              <Icon name="save" />
-Update
-                            </Link>
-                          </Aux>
+<Aux>
+                          <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
+                          <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}><Icon name="save" />Update</Link>
+                        </Aux>
                         )
                       }
                     </small>
@@ -193,9 +181,7 @@ Update
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Name</Header.Subheader>
-                          {firstName || primaryPOC.firstName}
-                          {' '}
-                          {lastName || primaryPOC.lastName}
+                          {firstName || primaryPOC.firstName} {lastName || primaryPOC.lastName}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
@@ -217,7 +203,7 @@ Update
               {(applicationStatus || prequalStatus)
               === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                 && (
-                <Grid.Column>
+<Grid.Column>
                   <Card fluid className="ba-info-card">
                     <Card.Header>Failed Reason</Card.Header>
                     <Card.Content>
@@ -249,13 +235,13 @@ Update
                       key={item.to}
                       path={`${match.url}/${item.to}`}
                       render={props => (
-                        <CurrentComponent
-                          module={item.title === 'Activity History' ? 'applicationDetails' : false}
-                          showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
-                          resourceId={params.appId}
-                          appType={params.id}
-                          {...props}
-                        />
+<CurrentComponent
+  module={item.title === 'Activity History' ? 'applicationDetails' : false}
+  showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
+  resourceId={params.appId}
+  appType={params.id}
+  {...props}
+/>
                       )
                       }
                     />

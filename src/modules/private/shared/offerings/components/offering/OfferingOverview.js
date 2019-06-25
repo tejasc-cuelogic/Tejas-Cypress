@@ -106,8 +106,7 @@ export default class OfferingOverview extends Component {
           && <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
         }
         <Divider section />
-        <Header as="h4">
-Social Media
+        <Header as="h4">Social Media
           <Header.Subheader>
             Links to social media profiles where investors can learn more about offering
           </Header.Subheader>
@@ -124,8 +123,7 @@ Social Media
           ))
         }
         <Divider section />
-        <Header as="h4">
-Social media share links
+        <Header as="h4">Social media share links
           <Header.Subheader>
             Share links that go on the user’s social media to share the offering
           </Header.Subheader>
@@ -183,8 +181,7 @@ Social media share links
           containerclassname="secondary"
         />
         <Divider section />
-        <Header as="h4">
-Google
+        <Header as="h4">Google
           <Header.Subheader>
             Google metadata that shows up when people search for the offering
           </Header.Subheader>

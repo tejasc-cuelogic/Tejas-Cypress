@@ -106,7 +106,7 @@ export const proceedWithValidUserLoginAction = () => {
 
 export const proceedWithValidCFInvestmentAction = () => {
   enteringInvestmentAmount();
-};
+}
 
 export const checkEnteredAmountMultiplesValidation = () => {
   invalidMultipleInvestmentAmount();

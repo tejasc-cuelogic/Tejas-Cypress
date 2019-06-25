@@ -173,7 +173,6 @@ export class IdentityStore {
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
-      status: this.userCipStatus !== '' ? this.userCipStatus : this.cipStatus,
       dateOfBirth: fields.dateOfBirth.value,
       ssn: fields.ssn.value,
       legalAddress: {
@@ -233,10 +232,8 @@ export class IdentityStore {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.softFailId;
       legalCip.failType = 'FAIL_WITH_QUESTIONS';
-      // omitDeep, cleanDeep
       legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
         : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-      // [...cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
     } else if (this.checkIncorrectAns(response) && response.hardFailId) {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.hardFailId;
@@ -250,8 +247,6 @@ export class IdentityStore {
       if (response.qualifiers && response.qualifiers !== null) {
         legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
           : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-      // [...cip.failReason,
-        // ...omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
       }
     }
     const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });

@@ -12,14 +12,14 @@ const Actions = observer((props) => {
     <Aux>
       {(isManager && !isPublished) || editForm
         ? (
-          <Button.Group compact floated="right">
-            <Button
-              inverted
-              color="red"
-              onClick={editForm ? cancelChanges : cancelUpdate}
-              content="Cancel"
-            />
-            {id !== 'new'
+<Button.Group compact floated="right">
+          <Button
+            inverted
+            color="red"
+            onClick={editForm ? cancelChanges : cancelUpdate}
+            content="Cancel"
+          />
+          {id !== 'new'
             && (
             <Button
               inverted
@@ -49,7 +49,7 @@ const Actions = observer((props) => {
           </Button.Group>
         )
         : (
-          <Button.Group compact floated="right">
+<Button.Group compact floated="right">
             {!isManager
             && (
             <Button
@@ -60,7 +60,7 @@ const Actions = observer((props) => {
             />
             )
           }
-            {id !== 'new' && !isPublished
+          {id !== 'new' && !isPublished
             && (
             <Button
               inverted
@@ -70,7 +70,7 @@ const Actions = observer((props) => {
             />
             )
           }
-            {!isPending && !isPublished
+          {!isPending && !isPublished
             && (
             <Button
               inverted
@@ -91,12 +91,12 @@ const Actions = observer((props) => {
             />
             )
           }
-          </Button.Group>
+        </Button.Group>
         )
       }
       {isManager && isPublished && !editForm
         && (
-        <Button.Group compact floated="right">
+<Button.Group compact floated="right">
           <Button
             inverted
             color="red"

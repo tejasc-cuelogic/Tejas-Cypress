@@ -168,11 +168,11 @@ class offerDetails extends Component {
     } = this.props;
     if (this.state.showPassDialog) {
       return (
-        <DevPassProtected
-          previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
-          offerPreview
-          authPreviewOffer={this.authPreviewOffer}
-        />
+<DevPassProtected
+  previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
+  offerPreview
+  authPreviewOffer={this.authPreviewOffer}
+/>
       );
     }
     if (campaignStore.loading || !campaignStore.campaignStatus.doneComputing || this.state.preLoading) {
@@ -233,7 +233,7 @@ class offerDetails extends Component {
               <Grid>
                 {!isMobile
                   && (
-                  <Grid.Column width={4}>
+<Grid.Column width={4}>
                     <CampaignSideBar navItems={navItems} />
                   </Grid.Column>
                   )

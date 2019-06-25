@@ -20,7 +20,7 @@ class CompanyHistory extends Component {
           campaign && campaign.offering && campaign.offering.about
             && campaign.offering.about.history && campaign.offering.about.history.length
             ? (
-              <List className="history-section">
+<List className="history-section">
                 {
                 campaign.offering.about.history.map(data => (
                   <List.Item className="mb-30">

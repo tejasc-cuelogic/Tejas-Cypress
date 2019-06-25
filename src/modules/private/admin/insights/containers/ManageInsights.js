@@ -35,26 +35,26 @@ export default class ManageInsights extends Component {
         refMatch={this.props.refMatch}
         {...this.props}
         P1={(
-          <Search
-            {...this.props}
-            w={[10]}
-            placeholder="Search by keyword or phrase"
-            change={e => this.search(e, 'title')}
-            addon={(
-              <Grid.Column width={3} textAlign="right" floated="right">
+<Search
+  {...this.props}
+  w={[10]}
+  placeholder="Search by keyword or phrase"
+  change={e => this.search(e, 'title')}
+  addon={(
+<Grid.Column width={3} textAlign="right" floated="right">
                 <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
                 Add new article
                 </Button>
               </Grid.Column>
 )}
-            toggleSearch={this.toggleSearch}
-            filters={filters}
-            requestState={requestState}
-            more="no"
-          />
+  toggleSearch={this.toggleSearch}
+  filters={filters}
+  requestState={requestState}
+  more="no"
+/>
 )}
         P2={(
-          <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
+<div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
             <Form>
               <Grid stackable columns="equal">
                 <Grid.Row>

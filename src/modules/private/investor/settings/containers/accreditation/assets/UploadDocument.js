@@ -49,13 +49,13 @@ export default class UploadDocument extends Component {
           />
           {!this.props.isEntity
             && (
-            <FormCheckbox
-              fielddata={ASSETS_UPLOAD_DOC_FORM.fields.isAccepted}
-              name="isAccepted"
-              changed={(e, result) => formChange(e, result, 'ASSETS_UPLOAD_DOC_FORM')}
-              defaults
-              containerclassname="ui relaxed list"
-            />
+<FormCheckbox
+  fielddata={ASSETS_UPLOAD_DOC_FORM.fields.isAccepted}
+  name="isAccepted"
+  changed={(e, result) => formChange(e, result, 'ASSETS_UPLOAD_DOC_FORM')}
+  defaults
+  containerclassname="ui relaxed list"
+/>
             )
           }
           <Divider hidden />

@@ -34,29 +34,13 @@ export default class CampaignSecondaryMenu extends Component {
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
               {!isMobile
                 && (
-                <Aux>
-                  <List.Item>
-                    {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                    {' '}
-Investors
-                  </List.Item>
+<Aux>
+                  <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
                   {!isClosed && diff > 0
-                    && (
-                    <List.Item>
-                      {diff}
-                      {' '}
-days left
-                    </List.Item>
-                    )
+                    && <List.Item>{diff} days left</List.Item>
                   }
                   {isClosed && get(campaign, 'closureSummary.repayment.count')
-                    ? (
-                      <List.Item>
-                        {get(campaign, 'closureSummary.repayment.count')}
-                        {' '}
-Payments made
-                      </List.Item>
-                    )
+                    ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
                     : (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
                   }
                 </Aux>

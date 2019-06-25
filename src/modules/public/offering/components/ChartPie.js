@@ -8,13 +8,7 @@ export default class ChartPie extends Component {
       <ul className="chartLegends">
         {
           payload.map(entry => (
-            <li style={{ color: entry.color }} key={`item-${entry.value}`}>
-              <span>
-                {entry.icon}
-                {' '}
-                {entry.value}
-              </span>
-            </li>
+            <li style={{ color: entry.color }} key={`item-${entry.value}`}><span>{entry.icon} {entry.value}</span></li>
           ))
         }
       </ul>
