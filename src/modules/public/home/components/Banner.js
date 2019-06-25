@@ -18,7 +18,7 @@ class Banner extends Component {
     const { stepInRoute } = this.props.navStore;
     const showButton = (!isUserLoggedIn || (isUserLoggedIn && isInvestor));
     const isFullInvestor = isInvestor && get(signupStatus, 'activeAccounts') && get(signupStatus, 'activeAccounts').length;
-    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `auth/${get(stepInRoute, 'to')}`;
+    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `${get(stepInRoute, 'to')}`;
 
     return (
       <section className="banner business-banner">

@@ -21,7 +21,7 @@ export default class ForgotPassword extends Component {
   onSubmit = (event) => {
     event.preventDefault();
     authActions.resetPassword()
-      .then(() => this.props.history.push('/auth/reset-password'));
+      .then(() => this.props.history.push('/reset-password'));
   }
 
   handleCloseModal = (e) => {
@@ -70,7 +70,7 @@ export default class ForgotPassword extends Component {
           <p>
             <b>Back to</b>
             {' '}
-            <Link to="/auth/login">Log in</Link>
+            <Link to="/login">Log in</Link>
           </p>
         </Modal.Actions>
       </Modal>

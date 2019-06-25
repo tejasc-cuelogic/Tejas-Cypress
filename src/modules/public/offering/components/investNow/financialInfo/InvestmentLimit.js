@@ -37,9 +37,10 @@ for how this is calculated. If you believe
       ? (
         <p>
 Your investment will be
-          {props.diffLimitAmount > 0 ? 'increased' : 'decreased'}
+          {props.diffLimitAmount > 0 ? ' increased' : ' decreased'}
           {' '}
 by
+{' '}
           <span className="negative-text">{Helper.CurrencyFormat(props.diffLimitAmount || 0, 0)}</span>
         </p>
       )
