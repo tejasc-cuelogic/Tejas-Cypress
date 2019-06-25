@@ -770,7 +770,7 @@ export const COMPANY_LAUNCH = {
     objRef: 'goldstar',
     placeHolder: 'Enter here',
   },
-  esAccountNumber : {
+  esAccountNumber: {
     value: '',
     label: 'GoldStar Escrow Account Number',
     error: undefined,
