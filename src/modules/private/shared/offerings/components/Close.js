@@ -185,6 +185,8 @@ minimum required amount.
                 {' '}
                 {get(offer, 'keyTerms.shorthandBusinessName')}
                 {' '}
+                raised
+                {' '}
                   <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'))}</b>
                   {' '}
 out of required
