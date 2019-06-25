@@ -11,7 +11,7 @@ import {
   deleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore, uiStore } from '../../../index';
-import { ClientDb } from '../../../../../helper';
+import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -377,10 +377,13 @@ export class OfferingsStore {
     const offerStatus = {};
     const { offer } = this;
     offerStatus.collected = get(offer, 'closureSummary.totalInvestmentAmount') || 0;
+    const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
+    offerStatus.hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     const offeringRegulation = get(offer, 'keyTerms.regulation');
     const minOffering = get(offer, 'keyTerms.minOfferingAmountCF') || 0;
     const minOfferingD = get(offer, 'keyTerms.minOfferingAmount506') && get(offer, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.minOfferingAmount506') : get(offer, 'keyTerms.minOfferingAmount506C') ? get(offer, 'keyTerms.minOfferingAmount506C') : '0.00';
     offerStatus.minOffering = parseFloat(get(offer, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering);
+    offerStatus.isFailed = !(offerStatus.collected >= offerStatus.minOffering);
     return offerStatus;
   }
 }

@@ -170,16 +170,13 @@ export default class Close extends Component {
               ? (
 <Aux>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
               </Aux>
-              ) : <Aux>This campaign <span className="highlight-text"> has succeed</span></Aux>
+              ) : <Aux>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></Aux>
             }
           </Header>
           <p>
-            {hoursToClose > 0
-              ? (
                 <Aux>
-                Campaign
-{' '}
-{offerStatus.collected > offerStatus.minOffering ? 'reached' : 'has not reached'}
+                Campaign has
+{!offerStatus.isFailed ? ' reached' : ' not reached'}
 {' '}
 minimum required amount.
                 {' '}
@@ -193,31 +190,10 @@ out of required
                   {' '}
                   <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0)}</b>
                 </Aux>
-              )
-              : (
-                <Aux>
-              Campaign has reached minimum required amount.
-              {' '}
-              {get(offer, 'keyTerms.shorthandBusinessName')}
-              {' '}
-              raised
-                  {' '}
-                  <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'))}</b>
-                  {' '}
-from
-                  <b>
-                  {' '}
-                  {get(offer, 'closureSummary.totalInvestorCount') || 0}
-                  {' '}
-                  investors.
-                  </b>
-                </Aux>
-              )
-          }
           </p>
           <Divider section />
-          {hoursToClose <= 0
-            && (
+          {hoursToClose <= 0 && !offerStatus.isFailed
+            ? (
 <Aux>
               <Step.Group className="campaign-close">
                 {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize Closure'].map((item, index) => (
@@ -410,7 +386,11 @@ from
                 )
               }
             </Aux>
-            )
+            ) : offerStatus.isFailed ? (
+              <div>
+                This campaign has Failed
+              </div>
+            ) : null
           }
           <Contingency
             formArrayChange={formArrayChange}
