@@ -763,7 +763,7 @@ export const COMPANY_LAUNCH = {
   },
   contactId: {
     value: '',
-    label: 'GoldStar ContactId',
+    label: 'GoldStar Contact ID',
     error: undefined,
     rule: 'optional',
     objRefOutput: 'goldstar',
