@@ -168,9 +168,9 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-<Aux>This campaing is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
+<Aux>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
               </Aux>
-              ) : <Aux>This campaing <span className="highlight-text">has succeed</span></Aux>
+              ) : <Aux>This campaign <span className="highlight-text">has succeed</span></Aux>
             }
           </Header>
           <p>
