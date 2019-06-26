@@ -3,7 +3,6 @@ import { Grid, Card, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
-import Aux from 'react-aux';
 import { FormInput, MaskedInput } from '../../../../../theme/form';
 import { FieldError } from '../../../../../theme/shared';
 import OfferingAudit from './data/OfferingAudit';
@@ -82,10 +81,10 @@ export default class Data extends Component {
               </Form>
               { countValues && countValues.storageDetailsForInvestor
               && (
-<Aux>
+              <>
                 <p className="hightlight-text"><b>{get(countValues, 'storageDetailsForInvestor.count') || 0}</b> Users does not have folder structure created.</p>
                 <p className="hightlight-text"><b>{get(countValues, 'storageDetailsForInvestor.createdCount') || 0}</b> User folders will be created in current run.</p>
-              </Aux>
+              </>
               )
               }
             </Card.Content>

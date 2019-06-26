@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
@@ -29,7 +28,7 @@ class Offering extends Component {
       completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY,
     } = this.props.campaignStore;
     return (
-      <Aux>
+      <>
         <Banner />
         <Responsive maxWidth={767} as={Container}>
           <Header as="h2" className="mt-30">
@@ -70,7 +69,7 @@ class Offering extends Component {
         && completedToDisplay < completedList.length
         && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
         }
-      </Aux>
+      </>
     );
   }
 }

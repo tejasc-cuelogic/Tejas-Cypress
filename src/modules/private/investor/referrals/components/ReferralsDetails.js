@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import bugsnag from '@bugsnag/js';
 import bugsnagReact from '@bugsnag/plugin-react';
-import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -197,7 +196,7 @@ export default class ReferralsDetails extends Component {
     }
 
     return (
-      <Aux>
+      <>
         {summaryHeader}
         <br />
         <Container textAlign="center">
@@ -259,7 +258,7 @@ export default class ReferralsDetails extends Component {
           </p>
 
         </Container>
-      </Aux>
+      </>
     );
   }
 }

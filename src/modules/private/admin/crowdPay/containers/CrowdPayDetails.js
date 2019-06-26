@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 
 @inject('helloWorldStore')
 @withRouter
@@ -11,7 +10,7 @@ export default class CrowdPayDetails extends Component {
   render() {
     const { currentRecord } = this.props.helloWorldStore;
     return (
-      <Aux>
+      <>
         <Card.Group stackable itemsPerRow={1}>
           <Card fluid>
             <Card.Content>
@@ -21,7 +20,7 @@ export default class CrowdPayDetails extends Component {
             </Card.Content>
           </Card>
         </Card.Group>
-      </Aux>
+      </>
     );
   }
 }

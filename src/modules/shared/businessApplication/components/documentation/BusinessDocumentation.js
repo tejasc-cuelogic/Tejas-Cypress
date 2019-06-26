@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Popup, Icon, List, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
@@ -37,7 +36,7 @@ export default class BusinessDocumentation extends Component {
       disableFileUpload = false;
     }
     return (
-      <Aux>
+      <>
         <FormElementWrap
           hideFields={hideFields}
           header="Statements & Agreements"
@@ -190,7 +189,7 @@ export default class BusinessDocumentation extends Component {
           </div>
           )
           : ''}
-      </Aux>
+      </>
     );
   }
 }

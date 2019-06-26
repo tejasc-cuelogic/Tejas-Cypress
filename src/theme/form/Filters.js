@@ -1,6 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
-import Aux from 'react-aux';
 import { toJS } from 'mobx';
 import { Grid, Input, Dropdown, Form, Label, Icon, List, Button } from 'semantic-ui-react';
 import moment from 'moment';
@@ -45,13 +44,13 @@ export const DropdownFilterWithHeader = props => (
 >
           <Dropdown.Menu>
             {_.map(props.options, rec => (
-              <Aux>
+              <>
                 {rec.title
                   ? (
-<Aux>
+<>
                     <Dropdown.Header content={rec.title} key={rec.title} />
                     <Dropdown.Divider />
-                  </Aux>
+                  </>
                   ) : ''}
                 {
                   rec.options.map(el => (
@@ -65,7 +64,7 @@ export const DropdownFilterWithHeader = props => (
                     </Dropdown.Item>
                   ))
                 }
-              </Aux>
+              </>
             ))}
           </Dropdown.Menu>
         </Dropdown>
@@ -80,7 +79,7 @@ export const ByKeyword = ({
   w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon,
   more, enableSearch, change, addLabel, name, showLabel,
 }) => (
-  <Aux>
+  <>
     <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
       <Form>
         <Form.Field inverted>
@@ -96,15 +95,15 @@ export const ByKeyword = ({
 <Grid.Column width={3} textAlign="center">
         <span className="filter-count">{requestState && requestState.search ? Object.keys(requestState.search).length : 0}</span>
         <Button icon color="blue" onClick={toggleSearch} className="link-button">
-          {filters ? <Aux>Hide Filters <Icon className="ns-caret-up" /></Aux>
-            : <Aux>Show Filters <Icon className="ns-caret-down" /></Aux>
+          {filters ? <>Hide Filters <Icon className="ns-caret-up" /></>
+            : <>Show Filters <Icon className="ns-caret-down" /></>
           }
         </Button>
       </Grid.Column>
       )
     }
     {addon}
-  </Aux>
+  </>
 );
 
 export const DateRangeFilter = props => (

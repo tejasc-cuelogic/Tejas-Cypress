@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Form, Header, Message, Divider, Responsive } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
@@ -17,7 +16,7 @@ export default class BrokerageEmployment extends Component {
         <Divider hidden />
         <p>
           Do you (or an immediate family member) work for a US-based{' '}
-          <Responsive as={Aux} minWidth={1200}><br /></Responsive>securities brokerage firm?
+          <Responsive as={React.Fragment} minWidth={1200}><br /></Responsive>securities brokerage firm?
         </p>
         <Divider hidden />
         <p className="mb-40">

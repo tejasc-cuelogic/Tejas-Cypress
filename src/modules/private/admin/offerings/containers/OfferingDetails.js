@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { find, get } from 'lodash';
-import Aux from 'react-aux';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -66,7 +65,7 @@ export default class OfferingDetails extends Component {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));
     }
     return (
-      <Aux>
+      <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
             <Header as="h3">
@@ -107,7 +106,7 @@ export default class OfferingDetails extends Component {
         </Modal>
         <Route path={`${match.url}/editPoc`} render={props => <EditPoc stage={offer.stage} refLink={match.url} {...props} />} />
         <Route path={`${match.url}/editOffering`} render={props => <EditOffering refLink={match.url} {...props} />} />
-      </Aux>
+      </>
     );
   }
 }

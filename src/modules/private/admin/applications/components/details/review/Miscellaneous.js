@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Header, Table, Icon, Item, Form, Confirm, Button, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
@@ -10,12 +9,12 @@ import ButtonGroup from './ButtonGroup';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
 const SectionHeader = ({ header, subheader }) => (
-  <Aux>
+  <>
     <Header as="h4">
       {header}
     </Header>
     {subheader && <p>{subheader}</p> }
-  </Aux>
+  </>
 );
 
 const UploadedDocument = ({
@@ -46,9 +45,9 @@ const TableHeader = ({ labels, isReadonly }) => (
     <Table.Row>
       {
         labels.map(data => (
-          <Aux>
+          <>
             <Table.HeaderCell>{data}</Table.HeaderCell>
-          </Aux>
+          </>
         ))
       }
       {!isReadonly && <Table.HeaderCell /> }
@@ -131,7 +130,7 @@ export default class Miscellaneous extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form size="small" onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
           <SectionHeader header="Social Media" />
@@ -235,14 +234,14 @@ export default class Miscellaneous extends Component {
               {
               UPLOADED_DOCUMENTS_FRM.fields.data.length
                 ? UPLOADED_DOCUMENTS_FRM.fields.data.map((document, index) => (
-                <Aux>
-                  <UploadedDocument
-                    match={this.props.match}
-                    index={index}
-                    toggleConfirmModal={this.toggleConfirmModal}
-                    document={document.document}
-                  />
-                </Aux>
+                  <>
+                    <UploadedDocument
+                      match={this.props.match}
+                      index={index}
+                      toggleConfirmModal={this.toggleConfirmModal}
+                      document={document.document}
+                    />
+                  </>
                 ))
                 : <p>No documents to show</p>
               }
@@ -269,7 +268,7 @@ export default class Miscellaneous extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

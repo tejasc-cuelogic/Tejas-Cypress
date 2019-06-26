@@ -5,7 +5,6 @@ import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Icon, Responsive, Button, Popup, Dimmer, Loader, Confirm } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
-import Aux from 'react-aux';
 import { isArray } from 'lodash';
 import { FieldError } from '../../shared';
 import { NEXTSEED_BOX_URL } from '../../../constants/common';
@@ -102,7 +101,7 @@ export default class DropZone extends Component {
             <div className={hideFields ? 'downloadable file-uploader attached' : 'file-uploader attached'}>
               {!this.props.disabled
                 && (
-<Aux>
+                <>
                   <Responsive
                     as={Button}
                     minWidth={768}
@@ -120,7 +119,7 @@ export default class DropZone extends Component {
                     className="pull-right"
                     onClick={e => this.toggleConfirm(e, this.props.name, key)}
                   />
-                </Aux>
+                </>
                 )
               }
               {(hideFields && !blockDownload) ? inProgress === fileId[key] ? '...Loading'
@@ -133,7 +132,7 @@ export default class DropZone extends Component {
 <div className={hideFields ? 'downloadable file-uploader attached' : 'file-uploader attached'}>
               {!this.props.disabled
                 && (
-<Aux>
+                <>
                   <Responsive
                     as={Button}
                     minWidth={768}
@@ -151,7 +150,7 @@ export default class DropZone extends Component {
                     className="pull-right"
                     onClick={e => this.toggleConfirm(e, this.props.name)}
                   />
-                </Aux>
+                </>
                 )
               }
               {(hideFields && !blockDownload) ? inProgress === fileId ? '...Loading'

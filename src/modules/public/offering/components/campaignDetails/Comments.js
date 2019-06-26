@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
@@ -144,7 +143,7 @@ class Comments extends Component {
           )
           : !disablePostComment
               && (
-<Aux>
+              <>
                 { visiblePost
                   ? (
 <Form className="public-form mt-30 clearfix" reply>
@@ -158,14 +157,14 @@ class Comments extends Component {
                   </Form>
                   ) : ''
                 }
-              </Aux>
+              </>
               )
         }
         {comments && commentsMainThreadCount
           ? (
-<Aux>
-            <Segment color="green" className="mt-50 offering-comment">
-              {comments
+            <>
+              <Segment color="green" className="mt-50 offering-comment">
+                {comments
                 && comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
                   && c.approved)
                   || (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC' && (
@@ -202,7 +201,7 @@ class Comments extends Component {
                             )}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
-                            <Aux>
+                            <>
                               <Form className="public-form mt-30" reply>
                                 <FormTextarea
                                   fielddata={MESSAGE_FRM.fields.comment}
@@ -228,7 +227,7 @@ class Comments extends Component {
                               <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
                                 please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
                               </p>
-                            </Aux>
+                            </>
                           ) : ''}
                         </Comment.Content>
                         {c.threadComment.length !== 0
@@ -273,7 +272,7 @@ class Comments extends Component {
                                   )}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
-                                  <Aux>
+                                  <>
                                     <Form className="public-form mt-30" reply>
                                       <FormTextarea
                                         fielddata={MESSAGE_FRM.fields.comment}
@@ -299,7 +298,7 @@ class Comments extends Component {
                                     <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
                                       please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
                                     </p>
-                                  </Aux>
+                                  </>
                                 ) : ''}
                               </Comment.Content>
                             </Comment>
@@ -311,8 +310,8 @@ class Comments extends Component {
                     </Comment.Group>
                 )))
               }
-            </Segment>
-          </Aux>
+              </Segment>
+            </>
           )
           : (
 <Segment color="green" className="mt-50 offering-comment">

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Button, Container, List, Divider, Item } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
@@ -15,7 +14,7 @@ export default class HowItWorks extends Component {
   render() {
     const { authStore } = this.props;
     return (
-      <Aux>
+      <>
         <section>
           <Container className={isMobile ? 'mt-40' : 'mb-80 mt-80'}>
             <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
@@ -57,10 +56,10 @@ export default class HowItWorks extends Component {
                     </Header>
                     )
                     : (
-<Aux>
-                      <NSImage path="icons/termnotes.svg" />
-                      <Header as="h2">Term Notes</Header>
-                    </Aux>
+                      <>
+                        <NSImage path="icons/termnotes.svg" />
+                        <Header as="h2">Term Notes</Header>
+                      </>
                     )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
@@ -94,10 +93,10 @@ export default class HowItWorks extends Component {
                     </Header>
                     )
                     : (
-<Aux>
-                      <NSImage path="icons/applied.svg" />
-                      <Header as="h2">Revenue Sharing Notes</Header>
-                    </Aux>
+                      <>
+                        <NSImage path="icons/applied.svg" />
+                        <Header as="h2">Revenue Sharing Notes</Header>
+                      </>
                     )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
@@ -133,10 +132,10 @@ export default class HowItWorks extends Component {
                     </Header>
                     )
                     : (
-<Aux>
-                      <NSImage path="icons/equity.svg" />
-                      <Header as="h2">Preferred Equity</Header>
-                    </Aux>
+                      <>
+                        <NSImage path="icons/equity.svg" />
+                        <Header as="h2">Preferred Equity</Header>
+                      </>
                     )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
@@ -187,13 +186,13 @@ export default class HowItWorks extends Component {
           <Container className={`${!authStore.isUserLoggedIn && 'mt-50'} center-align`}>
             {!authStore.isUserLoggedIn
             && (
-<Aux>
+            <>
               <Header as="h2" className="mb-30">Register for an account.</Header>
               <Button.Group vertical={isMobile} className={isMobile ? '' : 'mb-50'}>
                 <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
               <Divider section hidden />
-            </Aux>
+            </>
             )
             }
             <Divider />
@@ -207,7 +206,7 @@ export default class HowItWorks extends Component {
             </List>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

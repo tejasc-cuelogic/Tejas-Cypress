@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Grid } from 'semantic-ui-react';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import ChartPie from './ChartPie';
@@ -8,7 +7,7 @@ const isTablet = document.documentElement.clientWidth < 992;
 const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
 
 const PortfolioAllocations = ({ pieChart, isAdmin }) => (
-  <Aux>
+  <>
     <Header as="h4">Portfolio Allocations</Header>
     <Grid celled={isTablet ? undefined : 'internally'}>
       <Grid.Row>
@@ -20,7 +19,7 @@ const PortfolioAllocations = ({ pieChart, isAdmin }) => (
         </Grid.Column>
       </Grid.Row>
     </Grid>
-  </Aux>
+  </>
 );
 
 export default PortfolioAllocations;

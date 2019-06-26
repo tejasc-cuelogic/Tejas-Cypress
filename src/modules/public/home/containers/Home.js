@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Container, Divider, Header, Button, Responsive } from 'semantic-ui-react';
@@ -33,9 +32,9 @@ class Home extends Component {
     } = this.props.campaignStore;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
-      <Aux>
+      <>
         <Banner />
-        <Responsive maxWidth={767} as={Aux}>
+        <Responsive maxWidth={767} as={React.Fragment}>
           <Container>
             <section>
               <Header as="h2">Build an investment portfolio you care about.</Header>
@@ -43,7 +42,7 @@ class Home extends Component {
             <Divider fitted />
           </Container>
         </Responsive>
-        <Responsive as={Aux} fireOnMount onUpdate={this.handleOnUpdate}>
+        <Responsive as={React.Fragment} fireOnMount onUpdate={this.handleOnUpdate}>
           <HowItWorksSummary isMobile={isMobile} />
         </Responsive>
         <Divider fitted as={Container} />
@@ -54,13 +53,13 @@ class Home extends Component {
           explore
           campaigns={active.splice(0, 6)}
           heading={(
-<Aux>
+            <>
               <Header as="h2" textAlign="center">Latest Campaigns</Header>
               <p className="mb-30 center-align">
                 Browse the newest investment opportunities on NextSeed.
                 The next big thing may be inviting you to participate.
               </p>
-            </Aux>
+            </>
 )}
         />
         <div className="center-align mb-50">
@@ -78,7 +77,7 @@ class Home extends Component {
           </Container>
         </section>
         <Route path="/subscribe/newsletter" component={NewsLetter} />
-      </Aux>
+      </>
     );
   }
 }
