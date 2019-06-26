@@ -117,7 +117,7 @@ export default class OfferingLaunch extends Component {
         <Divider section />
         <Header as="h4">GoldStar</Header>
         <Form.Group widths="equal">
-          {['isin', 'contactId', 'escrowAccount', 'sinkFundAccount'].map(field => (
+          {['isin', 'contactId', 'esAccountNumber', 'sfAccountNumber'].map(field => (
             <MaskedInput
               displayMode={isReadonly}
               name={field}
