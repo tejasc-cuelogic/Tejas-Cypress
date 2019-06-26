@@ -5,6 +5,7 @@ import _ from 'lodash';
 import Aux from 'react-aux';
 import { Menu, Icon, Button } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
+import DeleteUser from './DeleteUser';
 import { NavItems } from './NavigationItems';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 
@@ -61,6 +62,7 @@ export class SidebarNav extends Component {
             </Menu.Item>
             )
         }
+        <DeleteUser />
       </Aux>
     );
   }

@@ -125,6 +125,19 @@ export class UserStore {
   getUserId() {
     return (this.currentUser && toJS(this.currentUser.sub)) || null;
   }
+
+  deleteUser = () => new Promise((resolve) => {
+    // client
+    //   .mutate({ mutation: deleteUser, variables: { userId } })
+    //   .then((res) => resolve(res))
+    //   .catch(() => {
+    //     Helper.toast('Something went wrong, please try again later.', 'error');
+    //     reject();
+    //   });
+    setTimeout(() => {
+      resolve({ message: 'Please confirm to delete user account.' });
+    }, 2000);
+  });
 }
 
 export default new UserStore();
