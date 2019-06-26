@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { isEmpty, find, get } from 'lodash';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Table, Message, Button, Confirm } from 'semantic-ui-react';
@@ -127,11 +126,11 @@ export default class EdgarFilingList extends Component {
       );
     }
     return (
-      <Aux>
+      <>
         <Header as="h4">Edgar Filing</Header>
         {
           offeringFilingList.map(filing => (
-            <Aux>
+            <>
               <Table basic compact className="form-table">
                 <Table.Header>
                   <Table.Row>
@@ -179,7 +178,7 @@ export default class EdgarFilingList extends Component {
                   boxFolderLink={(`${BOX_URL_TO_CONSIDER}folder/${filing.folderId}`)}
                 />
               </Table>
-            </Aux>
+            </>
           ))
         }
         <Confirm
@@ -191,7 +190,7 @@ export default class EdgarFilingList extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

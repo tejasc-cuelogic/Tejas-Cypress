@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { includes } from 'lodash';
 import { Header, Card, Grid, Form, Divider } from 'semantic-ui-react';
@@ -48,7 +47,7 @@ export default class Transactions extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         {this.props.isAdmin
           && <AccountHeader module="Transactions" pathname={this.props.location.pathname} />
         }
@@ -93,7 +92,7 @@ export default class Transactions extends Component {
             </Grid.Row>
           </Grid>
         </div>
-      </Aux>
+      </>
     );
   }
 }

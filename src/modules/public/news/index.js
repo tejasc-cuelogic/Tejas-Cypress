@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Container, Header, Grid, Item, Message, Responsive, Button, Segment, Form, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -99,7 +98,7 @@ class News extends Component {
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
-      <Aux>
+      <>
         <Container>
           <section className="center-align">
             <Link to="/">
@@ -231,7 +230,7 @@ class News extends Component {
           <Container textAlign={isMobile ? 'left' : 'center'} className="mt-30">
             <Header as="h2" className="mb-30">
             Build an investment portfolio{' '}
-              <Responsive as={Aux} minWidth={1199}><br /></Responsive>
+              <Responsive as={React.Fragment} minWidth={1199}><br /></Responsive>
             you care about.
             </Header>
             <p className={isMobile ? 'mb-40' : 'mb-50'}>
@@ -256,7 +255,7 @@ class News extends Component {
             </Container>
             )
             : (
-<Aux>
+<>
               <Container className="mb-30">
                 <NsCarousel {...settings}>
                   {businesses.map(b => (
@@ -271,7 +270,7 @@ class News extends Component {
                 }
                 </NsCarousel>
               </Container>
-            </Aux>
+            </>
             )
         }
         </section>
@@ -289,7 +288,7 @@ class News extends Component {
             </Grid>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

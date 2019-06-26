@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Button, Form, Grid, Modal, Divider } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form';
@@ -73,7 +72,7 @@ export default class SubscribeForNewsletter extends Component {
     const { inProgress } = this.props.uiStore;
     const { dialog } = this.state;
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit} className={this.props.className}>
           {this.props.modal ? (
             <SubscribeFields
@@ -92,7 +91,7 @@ export default class SubscribeForNewsletter extends Component {
           )}
         </Form>
         {dialog && <ThanksNote closeModal={this.closeModal} />}
-      </Aux>
+      </>
     );
   }
 }

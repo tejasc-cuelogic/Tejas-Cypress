@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 
 @withRouter
@@ -8,9 +7,9 @@ import { withRouter } from 'react-router-dom';
 class Layout extends Component {
   render() {
     return (
-      <Aux>
+      <>
         {this.props.children}
-      </Aux>
+      </>
     );
   }
 }

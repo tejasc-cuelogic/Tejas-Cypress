@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Item, Icon } from 'semantic-ui-react';
 import { filter } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
@@ -19,17 +18,17 @@ class MeetOurTeam extends Component {
       o.isPublic
     ));
     return (
-      <Aux>
+      <>
         <Header as="h3" className="anchor-wrap mb-30">
           Meet the Team
           <span className="anchor" id="team" />
         </Header>
         {meetTeamOjb.length
           ? (
-<Aux>
-            <Item.Group className="meet-team">
-              {meetTeamOjb.map(data => (
-                data.isPublic
+            <>
+              <Item.Group className="meet-team">
+                {meetTeamOjb.map(data => (
+                  data.isPublic
                   && (
 <Item>
                     <Item.Content>
@@ -76,13 +75,13 @@ class MeetOurTeam extends Component {
                     </Item.Content>
                   </Item>
                   )
-              ))}
-            </Item.Group>
-          </Aux>
+                ))}
+              </Item.Group>
+            </>
           )
           : <InlineLoader text={emptyStatement} className="bg-offwhite" />
         }
-      </Aux>
+      </>
     );
   }
 }

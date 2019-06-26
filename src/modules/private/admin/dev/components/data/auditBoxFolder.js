@@ -3,7 +3,6 @@ import { Card, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import beautify from 'json-beautify';
 import { withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../theme/form';
 
 @inject('dataStore', 'uiStore')
@@ -84,10 +83,10 @@ export default class AuditBoxFolder extends Component {
             </Form>
             {this.state.result
               ? (
-                <Aux>
+                <>
                   <b>Result:</b>
                   <p className="break-text">{beautify(this.state.result)}</p>
-                </Aux>
+                </>
               )
               : ''}
           </Card.Description>

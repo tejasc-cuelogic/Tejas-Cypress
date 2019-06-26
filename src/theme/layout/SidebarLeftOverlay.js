@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
@@ -21,7 +20,7 @@ class SidebarLeftPush extends Component {
   render() {
     const { layoutState, showFireworkAnimation } = this.props.uiStore;
     return (
-      <Aux>
+      <>
         {showFireworkAnimation
         && <FireworksAnimation />
         }
@@ -38,7 +37,7 @@ class SidebarLeftPush extends Component {
         <Responsive maxWidth={1199}>
           <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
         </Responsive>
-      </Aux>
+      </>
     );
   }
 }
@@ -47,7 +46,7 @@ export default SidebarLeftPush;
 const MySidebar = observer(props => (
   <Sidebar.Pushable>
     {!props.match.url.includes('/business-application') ? (
-      <Aux>
+      <>
         <Sidebar
           as={Menu}
           animation={props.desktop ? 'push' : 'overlay'}
@@ -92,7 +91,7 @@ const MySidebar = observer(props => (
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>
         </Sidebar>
-      </Aux>
+      </>
     ) : <SidebarNav roles={props.UserInfo.roles} onlyMount />
     }
     <Sidebar.Pusher

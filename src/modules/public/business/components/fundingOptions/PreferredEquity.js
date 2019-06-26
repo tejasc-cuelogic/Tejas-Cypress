@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Grid, Item, Divider, Button, Responsive } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -12,7 +11,7 @@ export default class PreferredEquity extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const link = '/register/applynow';
     return (
-      <Aux>
+      <>
         <Header as="h3">Preferred Equity</Header>
         <Grid doubling columns={2} relaxed="very">
           <Grid.Column>
@@ -36,7 +35,7 @@ export default class PreferredEquity extends Component {
                 </Item.Content>
               </Item>
             </Item.Group>
-            <Responsive minWidth={993} as={Aux}>
+            <Responsive minWidth={993} as={React.Fragment}>
               <Divider hidden />
               {
             isUserLoggedIn
@@ -72,7 +71,7 @@ export default class PreferredEquity extends Component {
                 </Item.Content>
               </Item>
             </Item.Group>
-            <Responsive maxWidth={992} as={Aux}>
+            <Responsive maxWidth={992} as={React.Fragment}>
               {
             isUserLoggedIn
               ? ''
@@ -81,7 +80,7 @@ export default class PreferredEquity extends Component {
             </Responsive>
           </Grid.Column>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

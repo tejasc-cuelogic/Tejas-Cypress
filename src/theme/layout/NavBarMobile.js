@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
 import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
@@ -49,10 +48,10 @@ export default class NavBarMobile extends Component {
     }
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
-      <Aux>
+      <>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
           {hasHeader && (
-            <Aux>
+            <>
               <div
                 className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo`}
                 onClick={!visible ? onToggle : false}
@@ -100,7 +99,7 @@ export default class NavBarMobile extends Component {
                 </div>
                 )
               }
-            </Aux>
+            </>
           )}
           <Sidebar
             as={Menu}
@@ -168,7 +167,7 @@ export default class NavBarMobile extends Component {
             && <Footer path={location.pathname} />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-      </Aux>
+      </>
     );
   }
 }

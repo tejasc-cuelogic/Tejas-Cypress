@@ -1,10 +1,9 @@
 import React from 'react';
 import { get } from 'lodash';
 import { Table, Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const SaasquatchInformation = ({ details }) => (
-  <Aux>
+  <>
     <Header as="h6">Saasquatch Information</Header>
     <div className="bg-offwhite">
       <div className="table-wrapper">
@@ -34,7 +33,7 @@ const SaasquatchInformation = ({ details }) => (
         </Table>
       </div>
     </div>
-  </Aux>
+  </>
 );
 
 export default SaasquatchInformation;

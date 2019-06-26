@@ -1,11 +1,10 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Container, Grid, Button, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Careers = () => (
-  <Aux>
+  <>
     <section>
       <Container>
         <Grid centered>
@@ -34,7 +33,7 @@ const Careers = () => (
         </Grid>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default Careers;
