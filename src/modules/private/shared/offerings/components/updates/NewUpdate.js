@@ -170,7 +170,7 @@ export default class NewUpdate extends Component {
                       <List.Item>
                         <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id)} />
                       </List.Item>
-                      {isManager
+                      {isManager && ['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
                         && (
                           <FormRadioGroup
                             readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}

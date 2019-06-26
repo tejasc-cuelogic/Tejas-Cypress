@@ -8,7 +8,7 @@ const Actions = observer((props) => {
     deleteUpdate, id, cancelUpdate, isDraft,
   } = props;
   return (
-    <Aux>
+    <>
       <Button.Group compact floated="right">
         <Button
           inverted
@@ -108,7 +108,7 @@ const Actions = observer((props) => {
           )
         }
       </Button.Group>
-    </Aux>
+    </>
   );
 });
 
