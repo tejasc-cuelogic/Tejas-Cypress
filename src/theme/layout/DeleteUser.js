@@ -24,6 +24,10 @@ export default class DeleteUser extends React.Component {
     this.setState({ modalOpen: false });
   }
 
+  handleDeleteUser = () => {
+    console.log('del here');
+  }
+
   render() {
     const { inProgress } = this.props.uiStore;
     return (
@@ -55,7 +59,7 @@ export default class DeleteUser extends React.Component {
               <div className="center-align mt-30">
                 <Button.Group>
                   <Button onClick={this.closeModal} type="button">Cancel</Button>
-                  <Button content="Delete" color="red" />
+                  <Button content="Delete" color="red" onClick={this.handleDeleteUser()} />
                 </Button.Group>
               </div>
           </Modal.Content>
