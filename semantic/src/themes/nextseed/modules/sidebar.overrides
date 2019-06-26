@@ -6,6 +6,12 @@
 .pushable {
 	&:not(body) {
 		transform: none;
+		position: relative;
+		width: 1680px;
+		margin: auto;
+	}
+	.ui.push.sidebar {
+		z-index: 100;
 	}
 	>.sidebar ~ .pusher{
 		transition:all .5s ease;
@@ -350,3 +356,9 @@
 	}
 }
 
+.public-pages > .pushable {
+	width: 100%;
+	.ui.push.sidebar {
+		z-index: 102;
+	}
+}

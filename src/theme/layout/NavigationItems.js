@@ -10,7 +10,7 @@ import { SubmitButton } from '../../modules/shared/businessApplication/component
 
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
-@inject('navStore', 'uiStore', 'userDetailsStore')
+@inject('navStore', 'uiStore', 'userDetailsStore', 'userStore')
 @observer
 export class NavItems extends Component {
   state = {
@@ -96,7 +96,7 @@ export class NavItems extends Component {
       location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
     const app = (isApp) ? 'app' : '';
-    const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
+    const myNavItems = this.props.navItems.filter(n => (n.title === 'My Account' ? this.props.userStore.isInvestor : n.noNav !== true));
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map((item, key) => (
@@ -169,7 +169,7 @@ export class NavItems extends Component {
                       key={sn.to}
                       className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
                       as={NavLink}
-                      onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
+                      onClick={sn.title === 'Log out' ? this.handleLogOut : isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
                       to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                     >
                       {sn.title}
@@ -322,7 +322,7 @@ export class NavigationItems extends Component {
                     </Menu.Item>
                   ))}
                 </Aux>
-              ) : !this.props.userStore.isInvestor && (
+              ) : (
                 <Menu.Item
                   className="menu-button"
                   onClick={this.handleDashboardBtn}

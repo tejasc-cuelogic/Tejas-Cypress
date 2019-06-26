@@ -8,7 +8,7 @@ import NotFound from '../../shared/NotFound';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const overrideContainerClass = ['account-details/:accountType/transactions'];
-@inject('uiStore', 'navStore')
+@inject('uiStore', 'navStore', 'userStore')
 @observer
 class PrivateLayout extends Component {
   render() {

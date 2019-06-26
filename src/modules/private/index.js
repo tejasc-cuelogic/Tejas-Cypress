@@ -8,6 +8,7 @@ import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
 import { InlineLoader } from '../../theme/shared';
 import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
+import NsHeader from '../../theme/layout/Header';
 import NotFound from '../shared/NotFound';
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore')
@@ -67,11 +68,23 @@ export default class Private extends React.Component {
     };
     const routes = this.getPrivateRoutes(UserInfo.roles);
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    const { location } = this.props;
     if (userFirstLoad === false) {
       return <InlineLoader />;
     }
     if (this.props.authStore.isUserLoggedIn) {
       return (
+        <>
+        <NsHeader
+          location={location}
+          stepInRoute={this.props.navStore.stepInRoute}
+          currentUser={this.props.userStore.currentUser}
+          handleLogOut={this.handleLogOut}
+          // canSubmitApp={isValid}
+          // isPrequalQulify={isPrequalQulify}
+          // preQualSubmit={this.preQualSubmit}
+          // loading={inProgress}
+        />
         <SidebarLeftOverlay
           match={match}
           UserInfo={UserInfo}
@@ -94,6 +107,7 @@ export default class Private extends React.Component {
               : <Route component={InlineLoader} />}
           </Switch>
         </SidebarLeftOverlay>
+        </>
       );
     }
     return null;
