@@ -29,6 +29,15 @@ export const UPDATES = {
   },
 };
 
+export const TEMPLATE = {
+  type: {
+    value: 'LIVE',
+    values: [{ label: 'Live', value: 'LIVE' }, { label: 'Full', value: 'FULL' }],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 export const OFFERING_STAGE = {
   CREATION: 'CREATION',
   LIVE: 'LIVE',

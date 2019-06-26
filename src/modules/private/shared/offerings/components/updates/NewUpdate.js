@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
+import { get } from 'lodash';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
 import ActivityHistory from '../../../ActivityHistory';
-import { InlineLoader } from '../../../../../../theme/shared';
+import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/shared';
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
 
-@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
+@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {
@@ -75,16 +76,19 @@ export default class NewUpdate extends Component {
 
   render() {
     const {
-      PBUILDER_FRM, UpdateChange, FChange, maskChange,
-      loadingCurrentUpdate, sendTestEmail,
+      PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate,
+      loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM, currentUpdate,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const { offer } = this.props.offeringsStore;
     const isReadonly = !isManager && (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
-    const { inProgress } = this.props.uiStore;
+    const { inProgress, loaderMessage } = this.props.uiStore;
     const { id } = this.props.match.params;
+    const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
+    const { userDetails } = this.props.userDetailsStore;
+    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: userDetails.info.avatar.url } : '';
     if (loadingCurrentUpdate || inProgress) {
       return <InlineLoader />;
     }
@@ -146,18 +150,38 @@ export default class NewUpdate extends Component {
                           trigger={(
                             <Button color="green" className="link-button">
                               <Icon className="ns-view" />
-  See the update
+                                See the update
                             </Button>
-  )}
+                          )}
                         >
                           <Modal.Content>
+                            <div className="ui image avatar-image">
+                              {companyAvatarUrl && companyAvatarUrl.length
+                                ? <Image64 srcUrl={companyAvatarUrl} circular />
+                                : <UserAvatar UserInfo={userInfo} />
+                              }
+                              {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') : get(offer, 'keyTerms.shorthandBusinessName')}
+                            </div>
+                            <Header as="h4">{PBUILDER_FRM.fields.title.value}</Header>
                             <HtmlEditor readOnly content={(PBUILDER_FRM.fields.content.value || '')} />
                           </Modal.Content>
                         </Modal>
                       </List.Item>
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew} content="Send test email to me" onClick={() => sendTestEmail(this.props.match.params.id)} />
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id)} />
                       </List.Item>
+                      {isManager
+                        && (
+                          <FormRadioGroup
+                            readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                            fielddata={TEMPLATE_FRM.fields.type}
+                            name="type"
+                            changed={(e, result) => selectTemplate(e, result)}
+                            widths="equal"
+                            value={TEMPLATE_FRM.fields.type.value}
+                          />
+                        )
+                      }
                     </List>
                   </Card.Content>
                 </Card>
@@ -193,10 +217,9 @@ export default class NewUpdate extends Component {
                           widths="equal"
                           value={PBUILDER_FRM.fields.scope.value}
                         />
-                        <br />
                         <Form>
                           {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
-                            <Form.Field>
+                            <Form.Field key={rewardTier}>
                               <Checkbox
                                 name="tiers"
                                 readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}

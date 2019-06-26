@@ -13,7 +13,9 @@ import NewUpdate from './updates/NewUpdate';
 @observer
 export default class BonusRewards extends Component {
   componentWillMount() {
-    this.props.updateStore.initRequest();
+    if (this.props.match.isExact) {
+      this.props.updateStore.initRequest();
+    }
   }
 
   executeSearch = (e) => {
@@ -57,7 +59,7 @@ export default class BonusRewards extends Component {
           </Grid>
         </Form>
         <Switch>
-          <Route exact path={`${match.url}`} render={props => <Listing data={updates} count={count} match={match} requestState={requestState} {...props} />} />
+          <Route exact path={match.url} render={props => <Listing data={updates} count={count} match={match} requestState={requestState} {...props} />} />
           <Route exact path={`${match.url}/:action?/:id?`} render={props => <NewUpdate match={match} refLink={match.url} {...props} />} />
         </Switch>
       </Aux>

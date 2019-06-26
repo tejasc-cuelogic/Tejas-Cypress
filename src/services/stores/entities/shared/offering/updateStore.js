@@ -5,7 +5,7 @@ import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
-import { UPDATES } from '../../../../constants/offering';
+import { UPDATES, TEMPLATE } from '../../../../constants/offering';
 import { offeringCreationStore, uiStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
@@ -32,6 +32,8 @@ export class UpdateStore {
     @observable db;
 
     @observable PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
+
+    @observable TEMPLATE_FRM = Validator.prepareFormObject(TEMPLATE);
 
     @action
     initRequest = () => {
@@ -80,6 +82,7 @@ export class UpdateStore {
 
     @action
     sendTestEmail = (offeringUpdateId) => {
+      uiStore.setLoaderMessage('...Sending Test Email');
       client
         .mutate({
           mutation: sendOfferingUpdateTestEmail,
@@ -88,10 +91,12 @@ export class UpdateStore {
           },
         })
         .then(() => {
+          uiStore.setLoaderMessage('');
           Helper.toast('Email sent ', 'success');
           uiStore.setProgress(false);
         })
         .catch(() => {
+          uiStore.setLoaderMessage('');
           Helper.toast('Something went wrong, please try again later. ', 'error');
           uiStore.setProgress(false);
         });
@@ -99,15 +104,13 @@ export class UpdateStore {
 
     @action
     offeringUpdatePublish = (offeringUpdateId, data) => new Promise((resolve, reject) => {
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
       client
         .mutate({
           mutation: offeringUpdatePublish,
           variables: {
             id: offeringUpdateId,
-            updatesInput: data,
+            updatesInput: { ...data, type: this.TEMPLATE_FRM.fields.type.value },
           },
-          refetchQueries: [{ query: allUpdates, variables }],
         })
         .then(() => {
           Helper.toast('Offering Published Successfully ', 'success');
@@ -138,6 +141,11 @@ export class UpdateStore {
       } else {
         this.PBUILDER_FRM = Validator.onChange(this.PBUILDER_FRM, Validator.pullValues(e, result), true);
       }
+    };
+
+    @action
+    selectTemplate = (e, result) => {
+      this.TEMPLATE_FRM = Validator.onChange(this.TEMPLATE_FRM, Validator.pullValues(e, result), true);
     };
 
     @action
@@ -241,7 +249,6 @@ export class UpdateStore {
         })
         .then(() => { Helper.toast(`Offering update is ${!isVisible ? 'visible' : 'invisible'}`, 'success'); })
         .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
-      console.log(payload);
     }
 
     @action
@@ -253,7 +260,9 @@ export class UpdateStore {
         variables: { id },
         fetchPolicy: 'network-only',
         onFetch: (res) => {
-          this.setFormData(res.offeringUpdatesById);
+          if (res) {
+            this.setFormData(res.offeringUpdatesById);
+          }
         },
       });
     }
