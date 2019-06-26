@@ -1,6 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
@@ -120,7 +119,7 @@ export default class Contingency extends Component {
     const { offer } = this.props.offeringsStore;
     const contingenciesData = offer && offer.contingencies;
     return (
-      <Aux>
+      <>
         <Header as="h4">
           {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
           {this.props.OfferingClose && <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" />}
@@ -179,7 +178,7 @@ export default class Contingency extends Component {
               <Button.Group compact size="small">
                 {access.asManager
                   && (
-<Aux>
+                  <>
                     <Modal size="small" trigger={<Button onClick={() => this.setDataForEditContingency(form, dataKey, index)} inverted color="blue" content="Edit" />} closeIcon>
                       <Modal.Header>Edit Contingency</Modal.Header>
                       <Modal.Content>
@@ -200,7 +199,7 @@ export default class Contingency extends Component {
                       </Modal.Content>
                     </Modal>
                     <Button type="button" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, formName)} />
-                  </Aux>
+                  </>
                   )
                 }
                 <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null, formName)} />
@@ -219,15 +218,15 @@ export default class Contingency extends Component {
           </div>
           ))
           : (
-<Aux>
-          {!this.props.OfferingClose
+            <>
+              {!this.props.OfferingClose
             && (
 <div className="featured-section collapsed-checkbox">
               No data found
             </div>
             )
           }
-        </Aux>
+            </>
           )
       }
         <Confirm
@@ -239,7 +238,7 @@ export default class Contingency extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get, startCase } from 'lodash';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../../../helper/utility';
@@ -27,18 +26,18 @@ export default class AccreditationsLimits extends Component {
       <Form>
         {getActiveAccountList && getActiveAccountList.accountList.length
         && getActiveAccountList.accountList.map(account => (
-          <Aux>
+          <>
             <Header as="h4">
               {account.name === 'ira' && getActiveAccountList.isIndAccExist
                 ? (
-<Aux>
+<>
                   <Icon color="teal" className="ns-individual-line" /><Icon color="teal" className={`ns-${account.name}-line`} /> Individual & {account.name.toUpperCase()} Limits
-                </Aux>
+                </>
                 )
                 : (
-<Aux>
+<>
                   <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)} Limits
-                </Aux>
+                </>
                 )
               }
               <Link to={this.props.match.url} className="link pull-right"><small><Icon className="ns-pencil" /> Edit</small></Link>
@@ -53,7 +52,7 @@ export default class AccreditationsLimits extends Component {
             <Divider />
             {(get(accreditationData[account.name], 'status'))
             && (
-<Aux>
+<>
               <Header as="h6">
                 Accreditation
                 <Header.Subheader>Verify accreditation submission</Header.Subheader>
@@ -79,10 +78,10 @@ export default class AccreditationsLimits extends Component {
                     // eslint-disable-next-line jsx-a11y/label-has-for
                     ? <div className="field display-only"><label>Income evidence doc</label><div className="ui fluid input">{get(accreditationData[account.name], 'assetsUpload[0].fileInfo[0].fileHandle.boxFolderId') ? (<a href={`${NEXTSEED_BOX_URL}folder/${get(accreditationData[account.name], 'assetsUpload[0].fileInfo[0].fileHandle.boxFolderId')}`} className="link" rel="noopener noreferrer" target="_blank">Uploads</a>) : 'N/A'}</div></div>
                     : (
-<Aux>
+<>
                       <Form.Input fluid label="Role" placeholder="Role" value={get(accreditationData[account.name], 'verifier.role') || 'N/A'} title={get(accreditationData[account.name], 'verifier.role') || 'N/A'} readOnly className="display-only" />
                       <Form.Input fluid label="Email" placeholder="Email" value={get(accreditationData[account.name], 'verifier.email') || 'N/A'} title={get(accreditationData[account.name], 'verifier.email') || 'N/A'} readOnly className="display-only" />
-                    </Aux>
+                    </>
                     )
                   }
                 </Form.Group>
@@ -96,10 +95,10 @@ export default class AccreditationsLimits extends Component {
                 }
               </div>
               <Divider />
-            </Aux>
+            </>
             )
             }
-          </Aux>
+          </>
         ))}
       </Form>
     );

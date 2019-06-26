@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Icon, Button, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
@@ -31,11 +30,11 @@ const SortableItem = SortableElement(({
     <div className="balance-half">
       {teamMember && teamMember.social
         ? teamMember.social.map(site => (
-          <Aux>
+          <>
             {site.url
               && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
             }
-          </Aux>
+          </>
         )) : ''}
     </div>
     <div className="balance width-70 center-align">
@@ -140,7 +139,7 @@ export default class AllTeam extends Component {
       return <InlineLoader text="No data found." />;
     }
     return (
-      <Aux>
+      <>
         <div className="ui card fluid">
           <div className="ui basic table">
             <div className="row-wrap striped-table thead">
@@ -177,7 +176,7 @@ export default class AllTeam extends Component {
             className="deletion"
           />
         </div>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -25,7 +24,7 @@ class KeyTerms extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
-      <Aux>
+      <>
         <Header as="h3" className={`${isMobile ? 'mb-10' : 'mb-30'} anchor-wrap`}>
           Investment Highlights
           <span className="anchor" id="investment-highlights" />
@@ -71,7 +70,7 @@ class KeyTerms extends Component {
             </Table.Row>
             {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
             && (
-<Aux>
+            <>
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
@@ -88,12 +87,12 @@ class KeyTerms extends Component {
                 }
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
             )
             }
             {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
             && (
-<Aux>
+            <>
               <Table.Row verticalAlign="top">
                 <Table.Cell><b>Multiple</b>{' '}
                   <Popup
@@ -120,7 +119,7 @@ class KeyTerms extends Component {
                   {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? `${get(campaign, 'keyTerms.revSharePercentage')}${get(campaign, 'keyTerms.revSharePercentage').includes('%') ? '' : '%'}` : '-'}
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
             )
             }
             {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
@@ -142,8 +141,8 @@ class KeyTerms extends Component {
               </Table.Row>
               )
               : (
-<Aux>
-                {/* <Table.Row verticalAlign="top">
+                <>
+                  {/* <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Total Round Size{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
@@ -176,7 +175,7 @@ class KeyTerms extends Component {
                 </Table.Row>
                 )
                 }
-              </Aux>
+                </>
               )
             }
             <Table.Row verticalAlign="top">
@@ -193,7 +192,7 @@ class KeyTerms extends Component {
           View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
-      </Aux>
+      </>
     );
   }
 }

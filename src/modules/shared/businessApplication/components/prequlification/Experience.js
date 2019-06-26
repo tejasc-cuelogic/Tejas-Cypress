@@ -1,9 +1,8 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { MaskedInput } from '../../../../../theme/form';
 
 const Experience = props => (
-  <Aux>
+  <>
     {
       ['industryExperience', 'estimatedCreditScore'].map(field => (
         <MaskedInput
@@ -39,7 +38,7 @@ const Experience = props => (
         />
       ))
     }
-  </Aux>
+  </>
 );
 
 export default Experience;

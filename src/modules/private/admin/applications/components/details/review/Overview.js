@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Confirm } from 'semantic-ui-react';
@@ -73,7 +72,7 @@ export default class Overview extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} formName="OVERVIEW_FRM" submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
           <Header as="h4">
@@ -127,7 +126,7 @@ export default class Overview extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

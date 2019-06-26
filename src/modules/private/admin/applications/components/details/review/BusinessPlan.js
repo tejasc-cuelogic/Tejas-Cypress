@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
@@ -74,7 +73,7 @@ export default class BusinessPlan extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           <Header as="h4">Location feasibility</Header>
@@ -95,7 +94,7 @@ export default class BusinessPlan extends Component {
           </Header>
           {
             BUSINESS_PLAN_FRM.fields.controlPersons.map((controlPerson, index) => (
-              <Aux>
+              <>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
                   {!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length > 1
@@ -173,12 +172,12 @@ export default class BusinessPlan extends Component {
                     </Form.Field>
                   </Form.Group>
                 </div>
-              </Aux>
+              </>
             ))
           }
           <Divider section />
           {['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
-            <Aux>
+            <>
               <FormTextarea
                 containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
                 readOnly={isReadonly}
@@ -188,7 +187,7 @@ export default class BusinessPlan extends Component {
                 changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
               />
               <Divider section />
-            </Aux>
+            </>
           ))}
           <Header as="h4">Sources and Uses Chart</Header>
           <Grid columns={2}>
@@ -361,7 +360,7 @@ export default class BusinessPlan extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

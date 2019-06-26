@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
@@ -23,10 +22,10 @@ const highlights = [
     title: 'Pre-vetted opportunities',
     icon: 'icons/prevetted.svg',
     meta: (
-      <Aux>
+      <>
       Only the top 3% of businesses meet our
     proprietary financial criteria.<sup>1</sup>
-      </Aux>),
+      </>),
   },
   {
     title: 'Flexible amounts',
@@ -95,10 +94,10 @@ export default class WhyNextseed extends Component {
   render() {
     const { authStore } = this.props;
     return (
-      <Aux>
+      <>
         <section className="why-nextseed-section">
           <Container>
-            <Responsive maxWidth={767} as={Aux}>
+            <Responsive maxWidth={767} as={React.Fragment}>
               <Header as="h2">
                Get access to<br />pre-vetted, local<br />investments.
               </Header>
@@ -161,7 +160,7 @@ export default class WhyNextseed extends Component {
               <Container textAlign={isMobile ? 'left' : 'center'}>
                 <Header as="h2" className="mb-30">
                 Don’t just invest through Wall Street and Silicon Valley.{' '}
-                  <Responsive as={Aux} minWidth={1199}><br /></Responsive>
+                  <Responsive as={React.Fragment} minWidth={1199}><br /></Responsive>
                 Be invested in the growth of local communities.
                 </Header>
                 <p className={isMobile ? 'mb-40' : 'mb-50'}>
@@ -191,7 +190,7 @@ export default class WhyNextseed extends Component {
                 </Container>
                 )
                 : (
-<Aux>
+<>
                   <Container>
                     <NsCarousel {...settings}>
                       {businesses.map(row => (
@@ -208,7 +207,7 @@ export default class WhyNextseed extends Component {
                     }
                     </NsCarousel>
                   </Container>
-                </Aux>
+                </>
                 )
             }
             </section>
@@ -223,7 +222,7 @@ export default class WhyNextseed extends Component {
             </List>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

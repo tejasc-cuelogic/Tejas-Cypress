@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
@@ -82,7 +81,7 @@ export default class AddWithdrawFund extends Component {
     const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
     return (
-      <Aux>
+      <>
         {!cashAvailable.loading
           && (
 <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
@@ -129,7 +128,7 @@ export default class AddWithdrawFund extends Component {
                 }
                 {showConfirmPreview
                   ? (
-<Aux>
+<>
                     <div className="field fund-amount">
                       {match.params.action === 'withdraw'
                         ? <label>Withdrawal amount</label>
@@ -143,7 +142,7 @@ export default class AddWithdrawFund extends Component {
                       <Header as="h5" className="text-capitalize">
                         {match.params.action === 'withdraw'
                           ? (
-<Aux>
+<>
                             <Header.Subheader>From</Header.Subheader>
                             {currentActiveAccountDetails
                             && currentActiveAccountDetails.name
@@ -151,10 +150,10 @@ export default class AddWithdrawFund extends Component {
                             <Divider hidden />
                             <Header.Subheader>To</Header.Subheader>
                             {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
-                          </Aux>
+                          </>
                           )
                           : (
-<Aux>
+<>
                             <Header.Subheader>From</Header.Subheader>
                             {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                             <Divider hidden />
@@ -162,11 +161,11 @@ export default class AddWithdrawFund extends Component {
                             {currentActiveAccountDetails
                             && currentActiveAccountDetails.name
                               ? currentActiveAccountDetails.name : null} Account
-                          </Aux>
+                          </>
                           )}
                       </Header>
                     </Statistic>
-                  </Aux>
+                  </>
                   )
                   : null
                 }
@@ -195,7 +194,7 @@ export default class AddWithdrawFund extends Component {
           </Modal>
           )
         }
-      </Aux>
+      </>
     );
   }
 }

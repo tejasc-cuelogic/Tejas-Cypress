@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -32,7 +31,7 @@ class Overview extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
-      <Aux>
+      <>
         <div className="inner-content-spacer bg-offwhite">
           <span className="pull-left">
             <Header as="h5">
@@ -249,16 +248,16 @@ class Overview extends Component {
         </div>
         {chartData.length > 0
           && (
-<Aux>
+          <>
             <Divider />
             <div className="inner-content-spacer payoff-chart">
               <Header as="h4">Payments</Header>
               <PayOffChart chartData={chartData} />
             </div>
-          </Aux>
+          </>
           )
         }
-      </Aux>
+      </>
     );
   }
 }

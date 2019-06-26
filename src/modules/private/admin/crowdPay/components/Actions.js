@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Table, Button } from 'semantic-ui-react';
 import { capitalize } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
 
 @inject('crowdpayStore')
@@ -38,13 +37,13 @@ export default class Actions extends Component {
     || (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN && declined);
     const urlPara = `${refLink}/${userId}/${accountId}`;
     return (
-      <Aux>
+      <>
         <Table.Cell collapsing textAlign="center">
           <Button.Group vertical compact size="mini">
             {!isDeclined
               ? (
-<Aux>
-                {!approved && type === 'review'
+                <>
+                  {!approved && type === 'review'
                 && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.openModal(e, userId, accountId, 'APPROVE', 'Crowdpay account is approved successfully.')} as={Link} to={`${urlPara}/APPROVE`} color="green">Approve</Button>
                 }
                   {type !== 'review' && type !== 'individual' && !isGsProcess && !isAccProcess
@@ -74,19 +73,19 @@ export default class Actions extends Component {
                 {type !== 'review' && isGsProcess
                   && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
                 }
-              </Aux>
+                </>
               )
               : (
-<Aux>
-                <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'RESTORE', 'Crowdpay account is restored successfully.')} as={Link} to={`${urlPara}/RESTORE`} color="blue">Restore</Button>
-                <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'DELETE', 'Crowdpay account is deleted successfully.')} as={Link} to={`${urlPara}/DELETE`} color="red">Delete</Button>
-              </Aux>
+                <>
+                  <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'RESTORE', 'Crowdpay account is restored successfully.')} as={Link} to={`${urlPara}/RESTORE`} color="blue">Restore</Button>
+                  <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'DELETE', 'Crowdpay account is deleted successfully.')} as={Link} to={`${urlPara}/DELETE`} color="red">Delete</Button>
+                </>
               )
             }
           </Button.Group>
         </Table.Cell>
 
-      </Aux>
+      </>
     );
   }
 }

@@ -4,7 +4,6 @@ import { Header, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { includes, isEmpty, get } from 'lodash';
 import money from 'money-math';
-import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -50,22 +49,22 @@ export default class TransferFunds extends Component {
       <div>
         { !isEmpty(linkedBank) && accountType !== 'ira'
           ? (
-<Aux>
-            <Header as="h4">Transfer funds</Header>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
-                  <AvailableCashTransfer
-                    match={this.props.match}
-                    isAccountFrozen={isAccountFrozen}
-                    cash={cashAmount || '0.00'}
-                    setFieldValue={setFieldValue}
-                    showAccountFrozenModal={showAccountFrozenModal}
-                  />
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Aux>
+            <>
+              <Header as="h4">Transfer funds</Header>
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
+                    <AvailableCashTransfer
+                      match={this.props.match}
+                      isAccountFrozen={isAccountFrozen}
+                      cash={cashAmount || '0.00'}
+                      setFieldValue={setFieldValue}
+                      showAccountFrozenModal={showAccountFrozenModal}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </>
           ) : accountType === 'ira'
             ? (
 <section className="center-align">

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Route, Link } from 'react-router-dom';
 import { get } from 'lodash';
@@ -32,9 +31,9 @@ export default class CampaignSideBar extends Component {
       earlyBird, isEarlyBirdRewards, bonusRewards,
     } = campaignStatus;
     return (
-      <Aux>
+      <>
         <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
-          <Responsive maxWidth={991} as={Aux}>
+          <Responsive maxWidth={991} as={React.Fragment}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
@@ -161,7 +160,7 @@ export default class CampaignSideBar extends Component {
               }
               {!isClosed
                 && (
-<Aux>
+                <>
                   <Button
                     compact
                     fluid={isMobile}
@@ -174,23 +173,23 @@ export default class CampaignSideBar extends Component {
                   <p>
                     {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                   </p>
-                </Aux>
+                </>
                 )
               }
             </div>
           </Responsive>
           {!isMobile
             && (
-<Aux>
+            <>
               <Menu vertical>
                 <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
               </Menu>
-            </Aux>
+            </>
             )
           }
           <Route path={`${this.props.match.url}/share`} component={share} />
         </div>
-      </Aux>
+      </>
     );
   }
 }
