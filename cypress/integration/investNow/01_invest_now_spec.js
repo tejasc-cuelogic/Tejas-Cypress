@@ -35,9 +35,7 @@ describe('Invest now flow', () => {
   it.skip('Invalid user type login action', () => {
     proceedInvalidUserLoginAction();
   });
-  // it('Investor with incomplete CIP information', () => {
-  //   proceedWithIncompleteInvestorCIPAction();
-  // });
+
   it.skip('succesfully login as investor with one account', () => {
     proceedWithValidUserLoginAction();
   });
