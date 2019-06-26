@@ -25,15 +25,17 @@ export default class OfferingLaunch extends Component {
     const successMsg = isApproved && isApproved.status === 'manager_approved' ? null : undefined;
     updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, successMsg, isApproved);
   }
+
   handleFileLink = (fileId) => {
     this.props.commonStore.getBoxFileDetails(fileId).then((response) => {
-      const boxFileId = response && response.getFileDetails &&
-      response.getFileDetails.boxFileId;
+      const boxFileId = response && response.getFileDetails
+      && response.getFileDetails.boxFileId;
       if (boxFileId) {
         window.open(`${NEXTSEED_BOX_URL}file/${boxFileId}`, '_blank');
       }
     });
   }
+
   launch = () => {
     const {
       updateOfferingMutation,
@@ -49,6 +51,7 @@ export default class OfferingLaunch extends Component {
         this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
       });
   }
+
   render() {
     const {
       COMPANY_LAUNCH_FRM,
@@ -61,13 +64,13 @@ export default class OfferingLaunch extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const stage = offer ? offer.stage : '';
-    const submitted = (offer && offer.offering && offer.offering.launch &&
-      offer.offering.launch.submitted) ? offer.offering.launch.submitted : null;
-    const approved = (offer && offer.offering && offer.offering.launch &&
-      offer.offering.launch.approved) ? offer.offering.launch.approved : null;
+    const submitted = (offer && offer.offering && offer.offering.launch
+      && offer.offering.launch.submitted) ? offer.offering.launch.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.launch
+      && offer.offering.launch.approved) ? offer.offering.launch.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
-    const legalDocs = offer && offer.legal && offer.legal.documentation &&
-    offer.legal.documentation.admin;
+    const legalDocs = offer && offer.legal && offer.legal.documentation
+    && offer.legal.documentation.admin;
     return (
       <Form>
         <Header as="h4">Launch Timeline</Header>
@@ -92,8 +95,9 @@ export default class OfferingLaunch extends Component {
             ['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'disclosure', 'securityAgreement', 'personalGuarantee'].map(document => (
               <div className="field">
                 <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
-                {legalDocs && legalDocs[document] && legalDocs[document].fileName ?
-                  <Aux>
+                {legalDocs && legalDocs[document] && legalDocs[document].fileName
+                  ? (
+<Aux>
                     <div className="display-only">
                       <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
@@ -102,34 +106,27 @@ export default class OfferingLaunch extends Component {
                         moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
                       }
                     </p>
-                  </Aux> :
-                  <div>Not Uploaded</div>
+                  </Aux>
+                  )
+                  : <div>Not Uploaded</div>
                 }
               </div>
             ))
           }
         </Form.Group>
         <Divider section />
-        <Header as="h4">Escrow Key</Header>
+        <Header as="h4">GoldStar</Header>
         <Form.Group widths="equal">
-          {
-            ['escrowKey', 'escrowNumber'].map(field => (
-              <FormInput
-                displayMode={isReadonly}
-                name={field}
-                fielddata={COMPANY_LAUNCH_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
-              />
-            ))
+          {['isin', 'contactId', 'esAccountNumber', 'sfAccountNumber'].map(field => (
+            <MaskedInput
+              displayMode={isReadonly}
+              name={field}
+              fielddata={COMPANY_LAUNCH_FRM.fields[field]}
+              changed={(values, name) => maskChange(values, formName, name)}
+              number
+            />
+          ))
           }
-          <MaskedInput
-            displayMode={isReadonly}
-            name="gsFees"
-            fielddata={COMPANY_LAUNCH_FRM.fields.gsFees}
-            changed={(values, name) => maskChange(values, formName, name)}
-            currency
-            prefix="$"
-          />
         </Form.Group>
         <Header as="h4">Edgar Link</Header>
         <FormInput

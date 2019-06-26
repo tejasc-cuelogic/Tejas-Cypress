@@ -39,8 +39,8 @@ export default class BeneficiaryShareModal extends Component {
       beneficiaryShareChange,
     } = this.props.beneficiaryStore;
     const { errors } = this.props.uiStore;
-    const showError = BENEFICIARY_META.fields.beneficiary.length ?
-      BENEFICIARY_META.fields.beneficiary[0].share.error : false;
+    const showError = BENEFICIARY_META.fields.beneficiary.length
+      ? BENEFICIARY_META.fields.beneficiary[0].share.error : false;
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -50,8 +50,8 @@ export default class BeneficiaryShareModal extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.submit}>
-            {showError &&
-              <FieldError error="The sum of percentages must be 100" icon="warning circle" />
+            {showError
+              && <FieldError error="The sum of percentages must be 100" icon="warning circle" />
             }
             <Table unstackable singleLine className="investment-details">
               <Table.Header>
@@ -60,8 +60,8 @@ export default class BeneficiaryShareModal extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  BENEFICIARY_META.fields.beneficiary.length ?
-                  BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
+                  BENEFICIARY_META.fields.beneficiary.length
+                    ? BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
                     <Table.Row>
                       <Table.Cell>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</Table.Cell>
                       <Table.Cell>
@@ -76,18 +76,20 @@ export default class BeneficiaryShareModal extends Component {
                         />
                       </Table.Cell>
                     </Table.Row>
-                  )) :
-                  <InlineLoader />
+                    ))
+                    : <InlineLoader />
                 }
               </Table.Body>
             </Table>
-            {errors &&
-              <Message error className="mt-30">
+            {errors
+              && (
+<Message error className="mt-30">
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
-              <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
+              <Button as={Link} to={this.props.refLink} color="red">Cancel</Button>
               <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
             </div>
           </Form>

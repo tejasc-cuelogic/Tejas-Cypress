@@ -15,6 +15,7 @@ class LatestUpdates extends Component {
     e.preventDefault();
     this.props.history.push(`${this.props.refLink}/updates`);
   }
+
   render() {
     const {
       updates, companyAvatarUrl, bussinessName,
@@ -32,8 +33,8 @@ class LatestUpdates extends Component {
             <Item.Content>
               <div className="campaign-avatar">
                 <div className="ui image avatar-image">
-                  {companyAvatarUrl && companyAvatarUrl.length ?
-                    <Image64 srcUrl={companyAvatarUrl} circular />
+                  {companyAvatarUrl && companyAvatarUrl.length
+                    ? <Image64 srcUrl={companyAvatarUrl} circular />
                     : <UserAvatar UserInfo={{}} />
                 }
                 </div>
@@ -46,23 +47,26 @@ class LatestUpdates extends Component {
                   <Item.Header>
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
-                  {update &&
-                    <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
+                  {update
+                    && <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
                   }
                 </div>
               </div>
               <Divider hidden />
-              {update ?
-                <Aux>
+              {update
+                ? (
+<Aux>
                   <Item.Description className="avatar-description">
                     <Header as="h4" className="grey-header">{update.title}</Header>
                     <HtmlEditor readOnly content={update.content || ''} />
                   </Item.Description>
                 </Aux>
-                  :
-                <Aux>
+                )
+                : (
+<Aux>
                   <Item.Description className="neutral-text"><b>No updates yet</b></Item.Description>
                 </Aux>
+                )
               }
             </Item.Content>
           </Item>

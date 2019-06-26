@@ -10,6 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
 class Footer extends Component {
   state = { fShowHide: false };
+
   componentWillMount() {
     if (this.props.path === '/') {
       this.setState({ fShowHide: true });
@@ -17,6 +18,7 @@ class Footer extends Component {
       this.setState({ fShowHide: false });
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.path === '/') {
       this.setState({ fShowHide: true });
@@ -24,6 +26,7 @@ class Footer extends Component {
       this.setState({ fShowHide: false });
     }
   }
+
   toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {

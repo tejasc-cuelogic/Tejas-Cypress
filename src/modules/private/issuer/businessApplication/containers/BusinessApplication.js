@@ -61,6 +61,7 @@ export default class BusinessApplication extends Component {
       this.props.history.push('/app/dashboard');
     });
   }
+
   submitHandler = (isRedirect = true) => {
     if (this.props.businessAppStore.formReadOnlyMode) {
       return;
@@ -83,6 +84,7 @@ export default class BusinessApplication extends Component {
     });
     // }
   }
+
   submit = (e) => {
     e.preventDefault();
     this.submitHandler();
@@ -102,6 +104,7 @@ export default class BusinessApplication extends Component {
           });
       });
   }
+
   navCustomClick = () => this.submitHandler(false);
 
   checkIncludes = (paths, pathname) => paths.some(val => pathname.includes(val));
@@ -127,8 +130,8 @@ export default class BusinessApplication extends Component {
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
-        P0={
-          <Link to="/app/dashboard">
+        P0={(
+<Link to="/app/dashboard">
             <Logo
               alt="NextSeed.com"
               dataSrc={logoUrl}
@@ -137,23 +140,23 @@ export default class BusinessApplication extends Component {
               size="small"
             />
           </Link>
-        }
+)}
         buttonWidth={6}
-        P4={
-          <HeaderButtons
-            disabled={formReadOnlyMode}
-            saveContinue={this.saveContinue}
-            submitApp={this.submit}
-            showSubNav={showSubNav}
-            canSubmitApp={canSubmitApp}
-            ButtonTextToggle={ButtonTextToggle}
-            preQualSubmit={this.preQualSubmit}
-            inProgress={inProgress}
-            isFileUploading={isFileUploading}
-            preQualPage={preQualPage}
-            isValid={BUSINESS_APP_FRM.meta.isValid}
-          />
-        }
+        P4={(
+<HeaderButtons
+  disabled={formReadOnlyMode}
+  saveContinue={this.saveContinue}
+  submitApp={this.submit}
+  showSubNav={showSubNav}
+  canSubmitApp={canSubmitApp}
+  ButtonTextToggle={ButtonTextToggle}
+  preQualSubmit={this.preQualSubmit}
+  inProgress={inProgress}
+  isFileUploading={isFileUploading}
+  preQualPage={preQualPage}
+  isValid={BUSINESS_APP_FRM.meta.isValid}
+/>
+)}
       >
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />

@@ -11,8 +11,8 @@ const ToggleEdit = props => (
           <Button onClick={() => props.setEditCard(0)} className="negative">Cancel</Button>
           <Button onClick={props.save} circular color="green" size="mini" to=""><Icon name="check" />Save</Button>
         </Aux>
-      ) :
-        <Button onClick={() => props.setEditCard(props.card)}><Icon name="pencil" />Edit</Button>
+      )
+        : <Button onClick={() => props.setEditCard(props.card)}><Icon name="pencil" />Edit</Button>
       }
     </div>
   </Aux>

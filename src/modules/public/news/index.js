@@ -61,16 +61,19 @@ class News extends Component {
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.setUserRole('investor');
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+
   handleIsEmailExist = (email) => {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
-      this.props.history.push('/auth/change-password');
+      this.props.history.push('/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
@@ -81,12 +84,13 @@ class News extends Component {
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
           this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
-            this.props.history.push('/auth/confirm-email');
+            this.props.history.push('/confirm-email');
           });
         }
       });
     }
   };
+
   render() {
     const {
       SIGNUP_FRM, signupChange, pwdInputType, currentScore,
@@ -182,10 +186,12 @@ class News extends Component {
                         changed={signupChange}
                         containerclassname="secondary"
                       />
-                      {errors &&
-                        <Message error textAlign="left" className="mt-30">
+                      {errors
+                        && (
+<Message error textAlign="left" className="mt-30">
                           <ListErrors errors={[customError]} />
                         </Message>
+                        )
                       }
                       <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
                     </Form>
@@ -234,8 +240,9 @@ class News extends Component {
             craft breweries and a variety of growing concepts.
             </p>
           </Container>
-          {!isMobile ?
-            <Container className="mb-30">
+          {!isMobile
+            ? (
+<Container className="mb-30">
               <Grid centered stackable className="vertical-gutter">
                 {businesses.map(b => (
                   <Grid.Column textAlign="center" width={5}>
@@ -247,8 +254,9 @@ class News extends Component {
               }
               </Grid>
             </Container>
-        :
-            <Aux>
+            )
+            : (
+<Aux>
               <Container className="mb-30">
                 <NsCarousel {...settings}>
                   {businesses.map(b => (
@@ -264,6 +272,7 @@ class News extends Component {
                 </NsCarousel>
               </Container>
             </Aux>
+            )
         }
         </section>
         <section>
@@ -273,7 +282,7 @@ class News extends Component {
                 <Grid.Column width={10} textAlign="center">
                   <Header as="h2">Start investing today</Header>
                   <Button.Group vertical={isMobile}>
-                    <Button as={Link} to="/auth/register-investor" primary>Sign Up Free</Button>
+                    <Button as={Link} to="/register-investor" primary>Sign Up Free</Button>
                   </Button.Group>
                 </Grid.Column>
               </Grid.Row>

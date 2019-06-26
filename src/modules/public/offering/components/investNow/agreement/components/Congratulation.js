@@ -17,20 +17,24 @@ export default class Congratulation extends React.Component {
       this.props.campaignStore.setFieldValue('showFireworkAnimation', true);
     }
   }
+
   componentWillUnmount() {
     this.props.accreditationStore.resetUserAccreditatedStatus();
   }
+
   handleCloseModal = () => {
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push('overview');
   }
+
   handleCloseModalWithRefferalLink = (e) => {
     e.preventDefault();
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push('/app/referrals');
   }
+
   render() {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { investmentAmount, investAccTypes } = this.props.investmentStore;

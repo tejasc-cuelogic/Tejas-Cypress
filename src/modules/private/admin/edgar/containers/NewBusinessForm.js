@@ -100,8 +100,8 @@ export default class NewBusinessForm extends React.Component {
     const { newOfferingInformation, editBusinessMode } = this.props.businessStore;
     return (
       <div>
-        {!this.props.businessid &&
-          <Button primary floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
+        {!this.props.businessid
+          && <Button primary floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
         }
         <Modal
           size="small"
@@ -112,8 +112,9 @@ export default class NewBusinessForm extends React.Component {
         >
           <Modal.Header>{editBusinessMode === false ? 'Add New Business' : 'Edit Business'}</Modal.Header>
           <Modal.Content>
-            {editBusinessMode === false &&
-            <Form error>
+            {editBusinessMode === false
+            && (
+<Form error>
               <Form.Input
                 loading={this.props.uiStore.asyncCheckLoader}
                 placeholder={newOfferingInformation.businessName.label}
@@ -140,8 +141,8 @@ export default class NewBusinessForm extends React.Component {
                 <Button
                   primary
                   disabled={
-                    !this.props.businessStore.canSubmitNewOfferingForm ||
-                      this.props.uiStore.submitButtonDisabled
+                    !this.props.businessStore.canSubmitNewOfferingForm
+                      || this.props.uiStore.submitButtonDisabled
                   }
                   onClick={this.handleSubmitForm}
                 >
@@ -149,9 +150,11 @@ export default class NewBusinessForm extends React.Component {
                 </Button>
               </div>
             </Form>
+            )
             }
-            {editBusinessMode &&
-            <Form error>
+            {editBusinessMode
+            && (
+<Form error>
               <Form.Input
                 placeholder="Business Name"
                 className="column"
@@ -177,8 +180,8 @@ export default class NewBusinessForm extends React.Component {
                 <Button
                   primary
                   disabled={
-                    !((this.state.name.value !== '' && this.state.desc.value !== '') ||
-                      this.props.uiStore.submitButtonDisabled)
+                    !((this.state.name.value !== '' && this.state.desc.value !== '')
+                      || this.props.uiStore.submitButtonDisabled)
                   }
                   onClick={this.handleEditBusiness}
                 >
@@ -186,6 +189,7 @@ export default class NewBusinessForm extends React.Component {
                 </Button>
               </div>
             </Form>
+            )
             }
           </Modal.Content>
         </Modal>

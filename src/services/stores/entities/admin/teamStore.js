@@ -13,9 +13,13 @@ import { fileUpload } from '../../../actions';
 
 export class TeamStore {
   @observable data = [];
+
   @observable db;
+
   @observable TEAM_FRM = Validator.prepareFormObject(TEAM);
+
   @observable editMode = false;
+
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -25,21 +29,25 @@ export class TeamStore {
     search: {
     },
   };
+
   @observable confirmBox = {
     entity: '',
     refId: '',
   };
+
   @observable removeFileIdsList = [];
 
   @action
   initRequest = (isPrivate = false) => {
-    uiStore.setProgress();
+    if (isPrivate) {
+      uiStore.setProgress();
+    }
     const query = allTeamMembers;
     const client = isPrivate ? clientPrivate : clientPublic;
     this.data = graphql({
       client,
       query,
-      fetchPolicy: 'network-only',
+      fetchPolicy: isPrivate ? 'network-only' : undefined,
       onFetch: (res) => {
         if (res && res.teamMembers) {
           this.setDb(res.teamMembers);
@@ -60,8 +68,8 @@ export class TeamStore {
   }
 
   @computed get teamMembers() {
-    return (this.db && this.db.length &&
-      sortBy(toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)), ['order'])) || [];
+    return (this.db && this.db.length
+      && sortBy(toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)), ['order'])) || [];
   }
 
   @computed get loading() {
@@ -70,6 +78,7 @@ export class TeamStore {
 
   @action
   getOne = (id) => {
+    uiStore.setProgress();
     this.currentUpdate = graphql({
       client: clientPrivate,
       query: getTeamMemberById,
@@ -78,9 +87,11 @@ export class TeamStore {
         if (res && res.getTeamMemberById) {
           this.setFormData(res.getTeamMemberById);
         }
+        uiStore.setProgress(false);
       },
     });
   }
+
   @action
   maskChange = (values, form, field) => {
     const fieldValue = Math.abs(values.floatValue);
@@ -89,6 +100,7 @@ export class TeamStore {
       { name: field, value: fieldValue },
     );
   }
+
   @action
   setFormData = (formData) => {
     Object.keys(this.TEAM_FRM.fields).map(action((key) => {
@@ -149,7 +161,7 @@ export class TeamStore {
   }
 
   @action
-  deleteTeamMemberById = (id) => {
+  deleteTeamMemberById = id => new Promise((resolve, reject) => {
     uiStore.setProgress();
     clientPrivate
       .mutate({
@@ -159,10 +171,15 @@ export class TeamStore {
         },
         refetchQueries: [{ query: allTeamMembers }],
       })
-      .then(() => Helper.toast('Team Member deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting team member ', 'error'))
-      .finally(() => uiStore.setProgress(false));
-  }
+      .then(() => {
+        Helper.toast('Team Member deleted successfully.', 'success');
+        resolve();
+      }).catch(() => {
+        Helper.toast('Error while deleting team member ', 'error');
+        reject();
+      }).finally(() => uiStore.setProgress(false));
+  });
+
   @action
   setConfirmBox = (entity, refId) => {
     this.confirmBox.entity = entity;
@@ -193,10 +210,12 @@ export class TeamStore {
       .catch(res => Helper.toast(`${res} Error`, 'error'))
       .finally(() => uiStore.setProgress(false));
   }
+
   @action
   setProfilePhoto(attr, value, field) {
     this.TEAM_FRM.fields[field][attr] = value;
   }
+
   @action
   uploadProfilePhoto = (name, form = 'TEAM_FRM') => {
     const fileObj = {
@@ -308,6 +327,7 @@ export class TeamStore {
       },
     };
   }
+
   @action
   filterTeamMembersByName = (teamMemberName) => {
     const query = filteredTeamMembers;
@@ -335,19 +355,20 @@ export class TeamStore {
     this.requestState.search[keyword] = value;
     this.initiateFilters();
   }
+
   @action
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
     let resultArray = [];
+    this.setDb(this.data.data.teamMembers);
     if (keyword) {
       resultArray = ClientDb.filterData('memberName', keyword, 'likenocase');
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
-    } else {
-      this.setDb(this.data.data.teamMembers);
     }
   }
+
   @action
   setTeamMemberOrder = (newArr) => {
     const teamDetails = [];

@@ -9,11 +9,12 @@ import { Image64, InlineLoader } from '../../../../../theme/shared';
 import Actions from './Actions';
 
 
-@inject('articleStore', 'userStore')
+@inject('articleStore', 'userStore', 'uiStore')
 @withRouter
 @observer
 export default class EditArticle extends Component {
   state = { displayMode: false };
+
   componentWillMount() {
     const { id } = this.props.match.params;
 
@@ -28,24 +29,30 @@ export default class EditArticle extends Component {
       });
     }
   }
+
   onDrop = (files, name) => {
     const { id } = this.props.match.params;
     this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files, id);
   }
+
   setData = (attr, value, fieldName) => {
     this.props.articleStore.setThumbnail(attr, value, fieldName);
   }
+
   uploadMedia = (name) => {
     const { id } = this.props.match.params;
     this.props.articleStore.uploadMedia(name, 'ARTICLE_FRM', id);
   }
+
   handleDelDoc = () => {
     const { id } = this.props.match.params;
     this.props.articleStore.removeMedia('featuredImage', id);
   }
+
   handleresetProfilePhoto = (field) => {
     this.props.articleStore.resetThumbnail(field);
   }
+
   handelImageDeimension = (width, height, field) => {
     if (width < 200 || height < 200) {
       const attr = 'error';
@@ -53,6 +60,7 @@ export default class EditArticle extends Component {
       this.props.articleStore.setThumbnail(attr, errorMsg, field);
     }
   }
+
   handleCloseModal = () => {
     if (this.props.match.params.id !== 'new') {
       this.props.articleStore.reset();
@@ -66,6 +74,7 @@ export default class EditArticle extends Component {
     });
     // this.handleCloseModal();
   }
+
   render() {
     const { displayMode } = this.state;
     const {
@@ -78,7 +87,8 @@ export default class EditArticle extends Component {
     } = this.props.articleStore;
     const isNew = this.props.match.params.id === 'new';
     const articleStatus = this.props.match.params.status;
-    if (!categoriesDropdown) {
+    const { inProgress } = this.props.uiStore;
+    if (!categoriesDropdown || inProgress) {
       return <InlineLoader />;
     }
     return (
@@ -173,23 +183,25 @@ export default class EditArticle extends Component {
                             name={field}
                             fielddata={ARTICLE_FRM.fields[field]}
                             onChange={(e, result) => articleChange(e, result)}
-                          />))
+                          />
+                        ))
                       }
                       <Checkbox
                         name="isFeatured"
                         value={ARTICLE_FRM.fields.isFeatured.value}
                         onChange={(e, result) => articleChange(e, result)}
                         checked={
-                          ARTICLE_FRM.fields.isFeatured &&
-                          ARTICLE_FRM.fields.isFeatured.value
+                          ARTICLE_FRM.fields.isFeatured
+                          && ARTICLE_FRM.fields.isFeatured.value
                         }
                         label="Featured Insight"
                       />
                     </Form>
                   </Card.Content>
                 </Card>
-                {isNew ? '' :
-                <Card fluid>
+                {isNew ? ''
+                  : (
+<Card fluid>
                   <Card.Content>
                     <Header as="h4">Thumbnail</Header>
                     <Form className="cropper-wrap tombstone-img">
@@ -214,7 +226,8 @@ export default class EditArticle extends Component {
                       )}
                     </Form>
                   </Card.Content>
-                </Card>}
+                </Card>
+                  )}
               </Grid.Column>
             </Grid.Row>
           </Grid>

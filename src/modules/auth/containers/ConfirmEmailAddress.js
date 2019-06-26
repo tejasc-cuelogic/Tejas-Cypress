@@ -23,9 +23,9 @@ export default class ConfirmEmailAddress extends Component {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
 
-    if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
-      !this.props.authStore.isUserLoggedIn) {
-      this.props.history.push(this.props.refLink || '/auth/login');
+    if (!this.props.authStore.CONFIRM_FRM.fields.email.value
+      && !this.props.authStore.isUserLoggedIn) {
+      this.props.history.push(this.props.refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
@@ -34,6 +34,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
@@ -41,6 +42,7 @@ export default class ConfirmEmailAddress extends Component {
   componentDidUpdate() {
     this.props.authStore.setUserCredentiansConfirmEmail();
   }
+
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.uiStore.clearErrors();
@@ -59,7 +61,7 @@ export default class ConfirmEmailAddress extends Component {
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
     && !this.props.userStore.currentUser) {
-      this.props.history.push('/auth/register-investor');
+      this.props.history.push('/register-investor');
     } else {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
@@ -70,9 +72,8 @@ export default class ConfirmEmailAddress extends Component {
             if (roles.includes('investor')) {
               this.props.identityStore.setIsOptConfirmed(true);
             } else {
-              const redirectUrl = !roles ? '/auth/login' :
-                SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                  roles.includes(user.role)).path;
+              const redirectUrl = !roles ? '/login'
+                : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
               this.props.history.replace(redirectUrl);
             }
           });
@@ -95,9 +96,8 @@ export default class ConfirmEmailAddress extends Component {
                 }
                 this.props.identityStore.setIsOptConfirmed(true);
               } else {
-                const redirectUrl = !roles ? '/auth/login' :
-                  SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                    roles.includes(user.role)).path;
+                const redirectUrl = !roles ? '/login'
+                  : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
                 this.props.history.replace(redirectUrl);
               }
             })
@@ -149,8 +149,8 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   render() {
-    const changeEmailAddressLink = this.props.refLink ?
-      '/app/account-settings/profile-data/new-email-address' : '/auth/register-investor';
+    const changeEmailAddressLink = this.props.refLink
+      ? '/app/account-settings/profile-data/new-email-address' : '/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,
@@ -161,7 +161,7 @@ export default class ConfirmEmailAddress extends Component {
     const { isOptConfirmed } = this.props.identityStore;
     const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
     if (errors && errors.code === 'NotAuthorizedException') {
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
       return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
     }
@@ -180,10 +180,12 @@ export default class ConfirmEmailAddress extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          { (confirmProgress === 'confirm' && inProgress) &&
-          <Dimmer page active={inProgress}>
+          { (confirmProgress === 'confirm' && inProgress)
+          && (
+<Dimmer page active={inProgress}>
             <Loader active={inProgress} />
           </Dimmer>
+          )
          }
           <FormInput
             ishidelabel
@@ -197,10 +199,10 @@ export default class ConfirmEmailAddress extends Component {
             title={CONFIRM_FRM.fields.email.value}
             className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only`}
           />
-          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value)) &&
-            <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
+            && <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
           }
-          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
+          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -214,14 +216,16 @@ export default class ConfirmEmailAddress extends Component {
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
-              {!isEmpty(CONFIRM_FRM.fields.email.value) &&
-                <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+              {!isEmpty(CONFIRM_FRM.fields.email.value)
+                && <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
               }
             </Form.Field>
-            {errors &&
-              <Message error className="mb-40">
+            {errors
+              && (
+<Message error className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
+              )
             }
             <Button primary size="large" className="very relaxed" content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
           </Form>

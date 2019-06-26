@@ -19,8 +19,9 @@ export default class AccountType extends Component {
             changed={trustInfoChange}
             containerclassname="button-radio center-align"
           />
-          {TRUST_INFO_FRM.fields.isTrust.value &&
-          <div className="field-wrap">
+          {TRUST_INFO_FRM.fields.isTrust.value
+          && (
+<div className="field-wrap">
             <MaskedInput
               name="trustDate"
               fielddata={TRUST_INFO_FRM.fields.trustDate}
@@ -30,6 +31,7 @@ export default class AccountType extends Component {
               showerror
             />
           </div>
+          )
           }
         </Form>
       </div>

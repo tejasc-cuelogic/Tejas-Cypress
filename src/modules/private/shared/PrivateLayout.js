@@ -23,9 +23,9 @@ class PrivateLayout extends Component {
           <Grid columns="equal" stackable>
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
-                {!this.props.P0 ?
-                  <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header> :
-                  this.props.P0
+                {!this.props.P0
+                  ? <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+                  : this.props.P0
                 }
               </Grid.Column>
               {!this.props.P4 ? (
@@ -34,18 +34,19 @@ class PrivateLayout extends Component {
                   onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} />
                   <span className="unread-count">3</span> */}
                 </span>
-                ) : (
+              ) : (
                   <Grid.Column only="large screen" width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
-                )
+              )
               }
             </Grid.Row>
           </Grid>
         </div>
-        {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav) &&
-          <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
+        {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav)
+          && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
-        {this.props.P1 &&
-          <div className="search-filters">
+        {this.props.P1
+          && (
+<div className="search-filters">
             <Form>
               <Grid stackable>
                 <Grid.Row>
@@ -54,6 +55,7 @@ class PrivateLayout extends Component {
               </Grid>
             </Form>
           </div>
+          )
         }
         {this.props.P2}
         {this.props.P3}

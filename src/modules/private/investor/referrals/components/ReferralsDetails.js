@@ -8,7 +8,7 @@ import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
-import { InlineLoader } from './../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 
@@ -147,7 +147,7 @@ export default class ReferralsDetails extends Component {
       <div className="fluid ui big action input">
         <input id="myReferralLink" type="text" style={codeBoxStyle} value={this.state.myShareLink} readOnly />
         <CopyToClipboard text={this.state.myShareLink} onCopy={() => Helper.toast('Referral link copied! Happy sharing.', 'success')}>
-          <button className="ui teal right labeled icon button">
+          <button type="button" className="ui teal right labeled icon button">
             <i className="copy icon" />
             Copy
           </button>

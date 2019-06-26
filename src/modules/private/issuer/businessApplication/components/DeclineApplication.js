@@ -13,14 +13,17 @@ export default class DeclineApplication extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.resetCommentFrm();
   }
+
   handleCloseModal = () => {
     this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers`);
   }
+
   declineApplicationHandler = () => {
     const { match, businessAppReviewStore } = this.props;
     const { applicationId } = match.params;
     businessAppReviewStore.applicationDeclineByIssuer(applicationId).then(() => this.props.history.push('/app/dashboard'));
   }
+
   render() {
     const { uiStore, businessAppReviewStore } = this.props;
     const { APPLICATION_STATUS_COMMENT_FRM, formChange } = businessAppReviewStore;
@@ -49,10 +52,12 @@ export default class DeclineApplication extends Component {
               changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
               containerclassname="secondary"
             />
-            {errors &&
-              <Message error>
+            {errors
+              && (
+<Message error>
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align">
               <Button.Group>

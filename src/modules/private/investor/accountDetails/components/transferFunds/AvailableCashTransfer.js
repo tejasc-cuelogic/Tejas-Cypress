@@ -89,10 +89,12 @@ class AvailableCashTransfer extends Component {
         <Route
           exact
           path={`${this.props.match.url}/:action/verify`}
-          render={() => (<TransferFundVerifyModal
-            refLink={this.props.refLink}
-            refLinkList={this.props.match.url}
-          />)
+          render={() => (
+<TransferFundVerifyModal
+  refLink={this.props.refLink}
+  refLinkList={this.props.match.url}
+/>
+          )
           }
         />
       </Aux>

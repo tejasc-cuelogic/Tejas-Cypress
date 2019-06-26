@@ -18,11 +18,12 @@ class AddNewCategory extends Component {
       this.props.categoryStore.reset();
     }
   }
+
     handleClose = () => {
-      this.props.categoryStore.currentCategoryIndex =
-      this.props.categoryStore.selectedCategoryState.index;
+      this.props.categoryStore.currentCategoryIndex = this.props.categoryStore.selectedCategoryState.index;
       this.props.history.push(this.props.refLink);
     }
+
     addCategory = () => {
       const { saveCategories } = this.props.categoryStore;
       saveCategories(this.props.match.params.id, 'defaultPublished').then(() => {
@@ -60,8 +61,8 @@ class AddNewCategory extends Component {
                 fielddata={CATEGORY_DETAILS_FRM.fields.categoryName}
                 changed={(e, result) => formChange(e, result, 'CATEGORY_DETAILS_FRM')}
               />
-              {errors &&
-                <FieldError error={errors} />
+              {errors
+                && <FieldError error={errors} />
               }
               <FormTextarea
                 key="description"
@@ -73,7 +74,7 @@ class AddNewCategory extends Component {
                 <Button primary disabled={!CATEGORY_DETAILS_FRM.meta.isValid} onClick={() => this.addCategory()} content={id === 'new' ? 'Add Category' : 'Update Category'} />
               </div>
             </Form>
-          </Modal.Content >
+          </Modal.Content>
         </Modal>
       );
     }

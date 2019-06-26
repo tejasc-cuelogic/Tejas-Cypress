@@ -9,7 +9,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class RevenueSharingNotes extends Component {
   render() {
     const { isUserLoggedIn } = this.props.authStore;
-    const link = '/auth/register/applynow';
+    const link = '/register/applynow';
     return (
       <Grid reversed="computer" doubling columns={2} relaxed="very">
         <Grid.Column>
@@ -51,9 +51,9 @@ export default class RevenueSharingNotes extends Component {
           </Item.Group>
           <Divider hidden />
           {
-            isUserLoggedIn ?
-            '' :
-            <Button as={Link} to={link} secondary>Apply Now</Button>
+            isUserLoggedIn
+              ? ''
+              : <Button as={Link} to={link} secondary>Apply Now</Button>
           }
           {/* <List horizontal relaxed className="learn-more-list mt-20">
         <List.Item>

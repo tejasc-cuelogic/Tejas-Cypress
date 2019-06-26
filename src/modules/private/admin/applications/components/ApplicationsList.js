@@ -23,8 +23,8 @@ export default class ApplicationsList extends Component {
       fetchBusinessApplicationsByStatus(match.params.applicationType);
     }
   }
-  setSearchParam = (e, { name, value }) =>
-    this.props.businessAppAdminStore.setInitiateSrch(name, value);
+
+  setSearchParam = (e, { name, value }) => this.props.businessAppAdminStore.setInitiateSrch(name, value);
 
   executeSearch = (e) => {
     if (e.charCode === 13) {
@@ -86,35 +86,36 @@ export default class ApplicationsList extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {getBusinessApplication.length ?
-                  getBusinessApplication.map(application => (
-                    (application.applicationStatus || application.prequalStatus) !==
-                    BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED &&
-                    <Table.Row verticalAlign="top">
+                {getBusinessApplication.length
+                  ? getBusinessApplication.map(application => (
+                    (application.applicationStatus || application.prequalStatus)
+                    !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
+                    && (
+<Table.Row verticalAlign="top">
                       <Table.Cell singleLine>
                         <Header as="h6">
                           <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
-                            {application.prequalDetails ?
-                              application.prequalDetails.businessGeneralInfo.businessName
+                            {application.prequalDetails
+                              ? application.prequalDetails.businessGeneralInfo.businessName
                               : application.businessGeneralInfo.businessName}
                           </Link>
                           <AppStatusLabel application={application} />
                         </Header>
                         <div className="table-info-wrap">
                           <p>
-                            <span>{application.primaryPOC ?
-                              `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}` :
-                              `${application.firstName} ${application.lastName}`
+                            <span>{application.primaryPOC
+                              ? `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}`
+                              : `${application.firstName} ${application.lastName}`
                               }
                             </span>
                             <span>
-                              {application.primaryPOC && application.primaryPOC.email ?
-                                `${application.primaryPOC.email}` : `${application.email}`
+                              {application.primaryPOC && application.primaryPOC.email
+                                ? `${application.primaryPOC.email}` : `${application.email}`
                               }
                             </span>
                             <span>
-                              {application.primaryPOC && application.primaryPOC.phone ?
-                                `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
+                              {application.primaryPOC && application.primaryPOC.phone
+                                ? `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
                               }
                             </span>
                           </p>
@@ -132,8 +133,9 @@ export default class ApplicationsList extends Component {
                       <Table.Cell>
                         <Item>
                           <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
-                          {application.comments && application.comments.length &&
-                            <Item.Content>
+                          {application.comments && application.comments.length
+                            && (
+<Item.Content>
                               <Item.Description>
                                 {application.comments[application.comments.length - 1].text}
                               </Item.Description>
@@ -146,6 +148,7 @@ export default class ApplicationsList extends Component {
                                 </b>
                               </Item.Extra>
                             </Item.Content>
+                            )
                           }
                         </Item>
                       </Table.Cell>
@@ -157,12 +160,15 @@ export default class ApplicationsList extends Component {
                         application={application}
                       />
                     </Table.Row>
-                  )) :
-                  <Table.Row>
+                    )
+                  ))
+                  : (
+<Table.Row>
                     <Table.Cell colSpan="6">
                       <InlineLoader text="No data available." />
                     </Table.Cell>
                   </Table.Row>
+                  )
                 }
               </Table.Body>
             </Table>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header } from 'semantic-ui-react';
-import HtmlEditor from '../../../../../../modules/shared/HtmlEditor';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 class IssuerStatement extends Component {
@@ -10,11 +10,12 @@ class IssuerStatement extends Component {
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
     this.props.history.push(`${this.props.galleryUrl.replace(/\/$/, '')}/photogallery`);
   }
+
   render() {
     const { campaign } = this.props;
-    const offeirngDisclaimer = campaign && campaign.keyTerms &&
-      campaign.keyTerms.offeringDisclaimer ?
-      campaign.keyTerms.offeringDisclaimer : null;
+    const offeirngDisclaimer = campaign && campaign.keyTerms
+      && campaign.keyTerms.offeringDisclaimer
+      ? campaign.keyTerms.offeringDisclaimer : null;
     // const shorthandBusinessName = campaign && campaign.keyTerms &&
     //   campaign.keyTerms.shorthandBusinessName ?
     //   campaign.keyTerms.shorthandBusinessName : '';
@@ -24,13 +25,14 @@ class IssuerStatement extends Component {
           Issuer Statement
           <span className="anchor" id="issuer-statement" />
         </Header>
-        {offeirngDisclaimer ?
-          <p className="mb-40 copyright-info">
+        {offeirngDisclaimer
+          ? (
+<p className="mb-40 copyright-info">
             {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
             <HtmlEditor readOnly content={(offeirngDisclaimer)} />
           </p>
-          :
-          <InlineLoader text="No Data Found" className="bg-offwhite" />
+          )
+          : <InlineLoader text="No Data Found" className="bg-offwhite" />
         }
       </Aux>
     );

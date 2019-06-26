@@ -11,6 +11,7 @@ export default class Overview extends Component {
   handleChangeStep = () => {
     this.props.investorProfileStore.setStepToBeRendered(1);
   }
+
   render() {
     const finraLink = <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>;
     const { signupStatus } = this.props.userDetailsStore;

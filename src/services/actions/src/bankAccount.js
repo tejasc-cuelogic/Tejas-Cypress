@@ -4,7 +4,7 @@ import {
 import apiService from '../../../api/restApi';
 import { bankAccountStore, accountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
-import { validationActions } from '../../../services/actions';
+import { validationActions } from '..';
 
 
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
@@ -73,8 +73,8 @@ export class BankAccount {
         bankAccountStore.setLinkBankSummary(false);
         uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        const renderStep = accountValue !== 0 ?
-          accountStore.ACC_TYPE_MAPPING[accountValue].location : 0;
+        const renderStep = accountValue !== 0
+          ? accountStore.ACC_TYPE_MAPPING[accountValue].location : 0;
         accountStore.ACC_TYPE_MAPPING[accountValue].store
           .setStepToBeRendered(renderStep);
       },

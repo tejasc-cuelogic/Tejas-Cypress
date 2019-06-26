@@ -9,12 +9,12 @@
   "settings": {
     "react": {
       "version": "detect"
-      // React version. "detect" automatically picks the version you have installed.
     }
   },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/prefer-default-export": "off",
+    "react/jsx-one-expression-per-line": "off",
     "no-nested-ternary": "off",
     "no-bitwise": "off",
     "react/prop-types": "off",
@@ -27,6 +27,25 @@
         "aspects": ["noHref", "invalidHref", "preferButton"]
       }
     ],
-    "no-underscore-dangle": ["error", { "allow": ["_id", "_allUsersMeta"] }]
+    "no-underscore-dangle": ["error", { "allow": ["_id", "_allUsersMeta"] }],
+    "no-self-assign": ["error", {"props": false}],
+    "object-curly-newline": ["error", { "consistent": true }],
+    "react/destructuring-assignment": [0 , "always"],
+    "import/no-cycle": 0,
+    "max-len": 0,
+    "react/jsx-indent": 0,
+    "jsx-a11y/label-has-associated-control": [0],
+    "react/jsx-closing-tag-location": 0,
+    "react/no-access-state-in-setstate": 0,
+    "jsx-a11y/label-has-for": [0],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "jsx-a11y/click-events-have-key-events": [0],
+    "jsx-a11y/no-noninteractive-element-interactions": [0],
+    "react/no-this-in-sfc": [0]
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
   }
 }

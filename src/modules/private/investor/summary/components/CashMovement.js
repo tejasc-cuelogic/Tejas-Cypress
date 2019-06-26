@@ -7,6 +7,7 @@ import Helper from '../../../../../helper/utility';
 
 export default class CashMovement extends Component {
   formatY = item => Helper.CurrencyFormat(item);
+
   render() {
     const { data } = this.props;
     if (!data || data.length === 0) {

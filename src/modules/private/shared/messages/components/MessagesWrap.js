@@ -21,6 +21,7 @@ export default class MessagesWrap extends Component {
     this.props.messageStore.deleteMessage(this.props.match.params.id);
     this.props.uiStore.setConfirmBox('', '', '', false);
   }
+
   render() {
     const { uiStore, messageStore } = this.props;
     const { thread, tError, tLoading } = messageStore;

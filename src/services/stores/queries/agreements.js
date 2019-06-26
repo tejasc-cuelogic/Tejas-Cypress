@@ -25,4 +25,3 @@ query _getlegalDocsFileIds{
   }
 }
 `;
-

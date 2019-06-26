@@ -10,7 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class PreferredEquity extends Component {
   render() {
     const { isUserLoggedIn } = this.props.authStore;
-    const link = '/auth/register/applynow';
+    const link = '/register/applynow';
     return (
       <Aux>
         <Header as="h3">Preferred Equity</Header>
@@ -39,9 +39,9 @@ export default class PreferredEquity extends Component {
             <Responsive minWidth={993} as={Aux}>
               <Divider hidden />
               {
-            isUserLoggedIn ?
-            '' :
-            <Button as={Link} to={link} secondary>Apply Now</Button>
+            isUserLoggedIn
+              ? ''
+              : <Button as={Link} to={link} secondary>Apply Now</Button>
           }
             </Responsive>
           </Grid.Column>
@@ -74,9 +74,9 @@ export default class PreferredEquity extends Component {
             </Item.Group>
             <Responsive maxWidth={992} as={Aux}>
               {
-            isUserLoggedIn ?
-            '' :
-            <Button as={Link} to={link} secondary>Apply Now</Button>
+            isUserLoggedIn
+              ? ''
+              : <Button as={Link} to={link} secondary>Apply Now</Button>
           }
             </Responsive>
           </Grid.Column>

@@ -15,16 +15,20 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 @observer
 export default class CampaignList extends Component {
   state = { filters: false };
+
   componentWillMount() {
     this.props.accreditationStore.resetUserAccreditatedStatus();
   }
+
   componentWillUnmount() {
     this.props.campaignStore.resetDisplayCounts();
   }
+
   toggleFilters = () => {
     const { filters } = this.state;
     this.setState({ filters: filters === false });
   }
+
   renderBaners = (offering) => {
     const resultFound = get(offering, 'isBannerShow');
     if (resultFound) {
@@ -32,17 +36,18 @@ export default class CampaignList extends Component {
       const bannerSecond = get(offering, 'bannerSecondText');
       return (
         <Label.Group size="small">
-          {bannerFirst &&
-          <Label color="blue">{bannerFirst}</Label>
+          {bannerFirst
+          && <Label color="blue">{bannerFirst}</Label>
           }
-          {bannerSecond &&
-          <Label color="green">{bannerSecond}</Label>
+          {bannerSecond
+          && <Label color="green">{bannerSecond}</Label>
           }
         </Label.Group>
       );
     }
     return null;
   }
+
   render() {
     const { campaigns, loading } = this.props;
     return (
@@ -53,9 +58,10 @@ export default class CampaignList extends Component {
         <section className="campaign-list-wrapper">
           <Container>
             {this.props.heading}
-            {loading ? <InlineLoader /> :
-              campaigns && campaigns.length ?
-                <Grid doubling columns={3} stackable>
+            {loading ? <InlineLoader />
+              : campaigns && campaigns.length
+                ? (
+<Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
                     <Grid.Column key={offering.id}>
                       <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}/overview`}>
@@ -64,9 +70,9 @@ export default class CampaignList extends Component {
                             <Image64
                               bg
                               centered
-                              srcUrl={offering && offering.media && offering.media.tombstoneImage &&
-                                offering.media.tombstoneImage.url ?
-                                offering.media.tombstoneImage.url : null
+                              srcUrl={offering && offering.media && offering.media.tombstoneImage
+                                && offering.media.tombstoneImage.url
+                                ? offering.media.tombstoneImage.url : null
                               }
                               alt={`${offering.keyTerms.shorthandBusinessName} poster`}
                             />
@@ -82,25 +88,25 @@ export default class CampaignList extends Component {
                                 {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_REGULATION_ABREVIATION[offering.keyTerms.regulation] : '-'}
                               </span>
                             </div>
-                            <Card.Header>{offering && offering.keyTerms &&
-                              offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
+                            <Card.Header>{offering && offering.keyTerms
+                              && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
                             }
                             </Card.Header>
                             <Card.Meta>
-                              {offering && offering.keyTerms && offering.keyTerms.city ?
-                                offering.keyTerms.city : '-'
+                              {offering && offering.keyTerms && offering.keyTerms.city
+                                ? offering.keyTerms.city : '-'
                               },{' '}
-                              {offering && offering.keyTerms && offering.keyTerms.state ?
-                                offering.keyTerms.state : '-'
+                              {offering && offering.keyTerms && offering.keyTerms.state
+                                ? offering.keyTerms.state : '-'
                               }
                             </Card.Meta>
                             <Card.Description>
                               <HtmlEditor
                                 readOnly
-                                content={(offering && offering.offering &&
-                                  offering.offering.overview &&
-                                  offering.offering.overview.tombstoneDescription ?
-                                  offering.offering.overview.tombstoneDescription : '')}
+                                content={(offering && offering.offering
+                                  && offering.offering.overview
+                                  && offering.offering.overview.tombstoneDescription
+                                  ? offering.offering.overview.tombstoneDescription : '')}
                               />
                             </Card.Description>
                           </Card.Content>
@@ -116,9 +122,9 @@ export default class CampaignList extends Component {
                             </List>
                           </Card.Content>
                           <Message attached="bottom" color="teal">
-                            Offered by {offering && offering.regulation ?
-                              CAMPAIGN_OFFERED_BY[offering.regulation] :
-                              CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
+                            Offered by {offering && offering.regulation
+                            ? CAMPAIGN_OFFERED_BY[offering.regulation]
+                            : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
                           </Message>
                         </Aux>
                         {offering.stage === 'LOCK' && (
@@ -141,7 +147,8 @@ export default class CampaignList extends Component {
                       </Card>
                     </Grid.Column>
                   ))}
-                </Grid> : <InlineLoader text="No data found." />
+                </Grid>
+                ) : <InlineLoader text="No data found." />
             }
           </Container>
           {this.state.filters && <div className="overlay" />}

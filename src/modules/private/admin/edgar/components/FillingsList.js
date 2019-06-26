@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Accordion, Icon, Card, Button, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import { DateTimeFormat } from './../../../../../theme/shared';
+import { DateTimeFormat } from '../../../../../theme/shared';
 import XmlSubmission from './XmlSubmission';
 
 const FillingsList = observer((props) => {

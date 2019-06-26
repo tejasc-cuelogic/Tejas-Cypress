@@ -6,7 +6,7 @@ import { mapValues } from 'lodash';
 import { Label } from 'semantic-ui-react';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllCrowdPay from './components/AllCrowdPay';
-import { InlineLoader } from './../../../../theme/shared';
+import { InlineLoader } from '../../../../theme/shared';
 import { ByKeyword } from '../../../../theme/form/Filters';
 import Filters from './components/Filters';
 
@@ -22,8 +22,11 @@ export default class CrowdPay extends Component {
       this.props.history.push(`${this.props.match.url}/review`);
     }
   }
+
   setSearchParam = (e, { name, value }) => this.props.crowdpayStore.setInitiateSrch(name, value);
+
   toggleSearch = () => this.props.crowdpayStore.toggleSearch();
+
   executeSearch = (e) => {
     this.props.crowdpayStore.setInitiateSrch('keyword', e.target.value);
   }
@@ -33,6 +36,7 @@ export default class CrowdPay extends Component {
     this.props.crowdpayStore.setInitiateSrch(field, date);
     // }
   }
+
   representAddon = summary => mapValues(summary, s => (
     <Label circular color="red" size="mini">{s}</Label>
   ));
@@ -51,27 +55,27 @@ export default class CrowdPay extends Component {
         {...this.props}
         subNav
         // subNavAddon={{ data: this.representAddon(summary) }}
-        P1={
-          <ByKeyword
-            w={[8]}
-            placeholder="Search by Name or E-mail address"
-            toggleSearch={this.toggleSearch}
-            requestState={requestState}
-            filters={filters}
-            change={this.executeSearch}
-          />
-        }
-        P2={
-          <Filters
-            requestState={requestState}
-            filters={filters}
-            setSearchParam={this.setSearchParam}
-            executeSearch={this.executeSearch}
-            change={this.change}
-            FILTER_FRM={FILTER_FRM}
-            fChange={fChange}
-          />
-        }
+        P1={(
+<ByKeyword
+  w={[8]}
+  placeholder="Search by Name or E-mail address"
+  toggleSearch={this.toggleSearch}
+  requestState={requestState}
+  filters={filters}
+  change={this.executeSearch}
+/>
+)}
+        P2={(
+<Filters
+  requestState={requestState}
+  filters={filters}
+  setSearchParam={this.setSearchParam}
+  executeSearch={this.executeSearch}
+  change={this.change}
+  FILTER_FRM={FILTER_FRM}
+  fChange={fChange}
+/>
+)}
       >
         <Route path={`${match.url}/:type`} component={AllCrowdPay} />
       </PrivateLayout>

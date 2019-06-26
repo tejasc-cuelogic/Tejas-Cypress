@@ -11,14 +11,17 @@ export default class EmailWelcomeScreen extends Component {
   componentWillMount() {
     this.props.authStore.resetForm('FORGOT_PASS_FRM');
   }
+
   componentWillUnmount() {
     // Do not reset authStore here; required
     this.props.uiStore.reset();
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.uiStore.authRef || '/');
   };
+
   render() {
     const { userDetails } = this.props.userDetailsStore;
     return (
@@ -40,7 +43,7 @@ export default class EmailWelcomeScreen extends Component {
             This will be used to confirm your identity when
             any future changes are being requested in your account.
           </p>
-          <Button className="mt-80 mb-80 relaxed very" primary as={Link} to="/auth/confirm-email">Continue</Button>
+          <Button className="mt-80 mb-80 relaxed very" primary as={Link} to="/confirm-email">Continue</Button>
         </Modal.Content>
       </Modal>
     );

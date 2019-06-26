@@ -17,15 +17,18 @@ export default class ForgotPassword extends Component {
     // Do not reset authStore here; required
     this.props.uiStore.reset();
   }
+
   onSubmit = (event) => {
     event.preventDefault();
     authActions.resetPassword()
-      .then(() => this.props.history.push('/auth/reset-password'));
+      .then(() => this.props.history.push('/reset-password'));
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
+
   render() {
     const { FORGOT_PASS_FRM, forgotPassChange } = this.props.authStore;
     const { inProgress, errors } = this.props.uiStore;
@@ -51,10 +54,12 @@ export default class ForgotPassword extends Component {
                 />
               ))
             }
-            {errors &&
-              <Message error textAlign="left" className="mt-30">
+            {errors
+              && (
+<Message error textAlign="left" className="mt-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
+              )
             }
             <div className="mt-30 center-align">
               <Button primary size="large" className="very relaxed" content="Send verification code" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
@@ -62,7 +67,7 @@ export default class ForgotPassword extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Back to</b> <Link to="/auth/login">Log in</Link></p>
+          <p><b>Back to</b> <Link to="/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

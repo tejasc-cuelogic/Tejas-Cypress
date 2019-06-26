@@ -50,10 +50,12 @@ export default class PreQualRealEstate extends Component {
             changed={businessAppEleChange}
           />
           <Divider hidden />
-          {!hideFields && getInvestmentTypeTooltip &&
-          <p>
+          {!hideFields && getInvestmentTypeTooltip
+          && (
+<p>
             {getInvestmentTypeTooltip}
-          </p>}
+          </p>
+          )}
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="Real Estate Type*" subHeader="Select all the Real Estate types that apply.">
           <FormCheckbox

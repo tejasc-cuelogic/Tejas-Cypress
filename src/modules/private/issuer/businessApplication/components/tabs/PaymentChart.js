@@ -43,9 +43,9 @@ export default class PaymentChart extends Component {
       <Aux>
         <Header as="h4">{offerStructure === 'TERM_NOTE' ? 'Amortization Schedule Example' : 'Revenue Share Repayment Example'}</Header>
         <div className="table-wrapper-vertical">
-          {payment && payment.length ?
-            <FillTable result={offerStructure === 'TERM_NOTE' ? TERMNOTEMETA : REVENUESHARINGMETA} />
-          : <p>No Offers Added</p>
+          {payment && payment.length
+            ? <FillTable result={offerStructure === 'TERM_NOTE' ? TERMNOTEMETA : REVENUESHARINGMETA} />
+            : <p>No Offers Added</p>
         }
         </div>
       </Aux>

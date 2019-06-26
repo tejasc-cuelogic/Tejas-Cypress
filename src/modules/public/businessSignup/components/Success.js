@@ -20,7 +20,7 @@ class Success extends Component {
           In the meantime, please set up a user account to continue with your application.
         </p>
         <Divider section hidden />
-        <Button as={Link} to="/auth/login" size="large" color="green" className="very relaxed">Proceed</Button>
+        <Button as={Link} to="/login" size="large" color="green" className="very relaxed">Proceed</Button>
       </Grid.Column>
     );
   }

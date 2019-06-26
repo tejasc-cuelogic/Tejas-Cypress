@@ -9,6 +9,7 @@ export default class AllAmbassadors extends Component {
   componentWillMount() {
     this.props.helloWorldStore.initRequest(); // load data
   }
+
   render() {
     const { match, helloWorldStore } = this.props;
     const { allRecords } = helloWorldStore;

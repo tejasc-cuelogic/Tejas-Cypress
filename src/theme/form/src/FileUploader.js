@@ -8,11 +8,12 @@ const FileUploader = observer((props) => {
   const { label, error, value } = props.fielddata;
   return (
     <div className="file-uploader-wrap">
-      {label &&
-        <label>{label}</label>
+      {label
+        && <label>{label}</label>
       }
-      {!value &&
-        <div className="file-uploader">
+      {!value
+        && (
+<div className="file-uploader">
           <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
           <input
             multiple={props.multiple}
@@ -21,9 +22,10 @@ const FileUploader = observer((props) => {
             onChange={e => props.uploadDocument(e.target.name, e.target.files)}
           />
         </div>
+        )
       }
-      {value &&
-        value.map(item => (
+      {value
+        && value.map(item => (
           <div className="file-uploader attached">
             <Responsive
               as={Button}
@@ -46,8 +48,8 @@ const FileUploader = observer((props) => {
           </div>
         ))
       }
-      {error &&
-        <FieldError error={error} />
+      {error
+        && <FieldError error={error} />
       }
     </div>
   );

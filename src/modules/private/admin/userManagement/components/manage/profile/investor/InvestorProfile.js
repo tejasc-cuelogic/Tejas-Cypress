@@ -8,9 +8,11 @@ import { FormInput, MaskedInput } from '../../../../../../../../theme/form';
 @observer
 export default class InvestorProfile extends Component {
   state = { displayMode: true };
+
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_INVESTOR_PROFILE', 'investorProfileData');
   }
+
   render() {
     const { USER_INVESTOR_PROFILE, formChange } = this.props.userDetailsStore;
     const formName = 'USER_INVESTOR_PROFILE';

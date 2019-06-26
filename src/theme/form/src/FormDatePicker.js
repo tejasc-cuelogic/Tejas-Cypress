@@ -6,20 +6,21 @@ import DatePicker from 'react-datepicker';
 import NumberFormat from 'react-number-format';
 import { FieldError } from '../../shared';
 
-const FormDatePicker = observer(props =>
-  (
+const FormDatePicker = observer(props => (
     <Form.Field width={props.containerwidth || false}>
       {props.fielddata ? (
         <label>
           {props.fielddata.label}
-          {props.tooltip &&
-            <Popup
-              trigger={<Icon className="ns-help-circle" />}
-              content={props.tooltip}
-              position="top center"
-              className="center-align"
-              wide
-            />
+          {props.tooltip
+            && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={props.tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+            )
           }
         </label>
       ) : (null)}
@@ -37,10 +38,10 @@ const FormDatePicker = observer(props =>
         maxDate={props.maxdate}
         selected={props.selected}
       />
-      {props.fielddata && props.fielddata.error &&
-        <FieldError error={props.fielddata.error} />
+      {props.fielddata && props.fielddata.error
+        && <FieldError error={props.fielddata.error} />
       }
     </Form.Field>
-  ));
+));
 
 export default FormDatePicker;

@@ -17,6 +17,7 @@ export default class Overview extends Component {
     totalEarnedCredit: 0,
     totalReferredUsers: 0,
   };
+
   componentWillMount() {
     this.props.referralsStore
       .getUserReferralDetails(this.props.userDetailsStore.selectedUserId, false)
@@ -29,6 +30,7 @@ export default class Overview extends Component {
         });
       });
   }
+
   render() {
     const { detailsOfUser } = this.props.userDetailsStore;
     const { inProgress } = this.props.uiStore;

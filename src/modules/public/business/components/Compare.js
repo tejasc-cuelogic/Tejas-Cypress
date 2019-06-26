@@ -295,8 +295,8 @@ const Compare = () => (
             <List.Content as="a">Is my business a good fit for NextSeed?</List.Content>
           </List.Item>
           <List.Item>
-            {!isMobile &&
-              <List.Header>&nbsp;</List.Header>
+            {!isMobile
+              && <List.Header>&nbsp;</List.Header>
             }
             <List.Icon className="ns-arrow-right" color="green" />
             <List.Content as="a">Does my business qualify for NextSeed?</List.Content>

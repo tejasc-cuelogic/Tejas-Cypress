@@ -12,9 +12,11 @@ export default class EditOffering extends React.Component {
     this.props.uiStore.clearErrors();
     this.props.offeringCreationStore.setFormData('POC_DETAILS_FRM', '');
   }
+
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
+
   handleSubmitForm = () => {
     const {
       updateOffering,
@@ -24,6 +26,7 @@ export default class EditOffering extends React.Component {
       this.props.history.push(this.props.refLink);
     });
   }
+
   render() {
     const { stage } = this.props;
     const {
@@ -37,10 +40,10 @@ export default class EditOffering extends React.Component {
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header>Edit information</Modal.Header>
         <Modal.Content>
-          {loading ?
-            <InlineLoader />
-            :
-            <Form error onSubmit={() => this.handleSubmitForm()}>
+          {loading
+            ? <InlineLoader />
+            : (
+<Form error onSubmit={() => this.handleSubmitForm()}>
               {['issuerId', 'id'].map(field => (field === 'issuerId' || (stage === 'CREATION' && field === 'id')) && (
                 <FormDropDown
                   search
@@ -54,27 +57,31 @@ export default class EditOffering extends React.Component {
                   options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
                 />
               ))}
-              {stage === 'CREATION' &&
-              <MaskedInput
-                name="targetDate"
-                fielddata={POC_DETAILS_FRM.fields.targetDate}
-                changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
-                dateOfBirth
-              />
+              {stage === 'CREATION'
+              && (
+<MaskedInput
+  name="targetDate"
+  fielddata={POC_DETAILS_FRM.fields.targetDate}
+  changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
+  dateOfBirth
+/>
+              )
               }
-              {errors &&
-                <Message error textAlign="left" className="mt-30">
+              {errors
+                && (
+<Message error textAlign="left" className="mt-30">
                   <ListErrors errors={errors.message ? [errors.message] : [errors]} />
                 </Message>
+                )
               }
               <div className="center-align mt-30">
                 <Button primary className="relaxed" content="Save Changes" loading={inProgress} disabled={!POC_DETAILS_FRM.meta.isValid} />
               </div>
             </Form>
+            )
           }
         </Modal.Content>
       </Modal>
     );
   }
 }
-

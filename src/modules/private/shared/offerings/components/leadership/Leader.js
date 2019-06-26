@@ -33,19 +33,24 @@ export default class Leader extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setLeadershipExpData(this.props.index);
   }
+
   onFileDrop = (files, name, index) => {
     this.props.offeringCreationStore.uploadFileToS3('LEADERSHIP_FRM', name, files, 'leadership', index);
   }
+
   setData = (attr, value, fieldName, index) => {
     this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, value, fieldName, index);
   }
+
   handleDelDoc = (field) => {
     this.props.offeringCreationStore.removeUploadedDataMultiple('LEADERSHIP_FRM', field, this.props.index || 0, 'leadership', true);
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
+
   removeData = (confirmModalName, arrayName = 'leadership') => {
     this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
     if (arrayName === 'leadership') {
@@ -53,14 +58,17 @@ export default class Leader extends Component {
       this.handleFormSubmit(null, 'Leader has been deleted successfully.');
     }
   }
+
   handleFormSubmit = (isApproved = null, successMsg) => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
   }
+
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
   }
+
   handleVerifyFileSize = (fileSize, field) => {
     if (fileSize > PROFILE_PHOTO_BYTES) {
       const leaderNumber = this.props.index;
@@ -70,6 +78,7 @@ export default class Leader extends Component {
       this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, errorMsg, field, index);
     }
   }
+
   handleVerifyFileExtension = (fileExt) => {
     if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
       const leaderNumber = this.props.index;
@@ -79,9 +88,11 @@ export default class Leader extends Component {
       this.props.offeringCreationStore.setLeadershipProfilePhoto(field, errorMsg, '', index);
     }
   }
+
   handleresetProfilePhoto = (field, index) => {
     this.props.offeringCreationStore.resetLeadershipProfilePhoto(field, index);
   }
+
   handelImageDeimension = (width, height, field) => {
     if (width < 200 || height < 200) {
       const leaderNumber = this.props.index;
@@ -91,14 +102,16 @@ export default class Leader extends Component {
       this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, errorMsg, field, index);
     }
   }
+
   uploadMedia = (name) => {
     const leaderNumber = this.props.index;
     const index = leaderNumber || 0;
     this.props.offeringCreationStore.uploadMediaForLeadership(name, 'LEADERSHIP_FRM', index);
   }
+
   editorChange =
-  (field, value, form, index) =>
-    this.props.offeringCreationStore.rtEditorChange(field, value, form, 'leadership', index);
+  (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'leadership', index);
+
   render() {
     const leaderNumber = this.props.index;
     const formName = 'LEADERSHIP_FRM';
@@ -112,24 +125,26 @@ export default class Leader extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.leadership && offer.leadership[index] &&
-      offer.leadership[index].submitted) ? offer.leadership[index].submitted : null;
-    const approved = (offer && offer.leadership && offer.leadership[index] &&
-      offer.leadership[index].approved) ? offer.leadership[index].approved : null;
-    const issuerSubmitted = (offer && offer.leadership && offer.leadership[index] &&
-      offer.leadership[index].issuerSubmitted) ? offer.leadership[index].issuerSubmitted : null;
-    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
-      (isManager && approved && approved.status));
+    const submitted = (offer && offer.leadership && offer.leadership[index]
+      && offer.leadership[index].submitted) ? offer.leadership[index].submitted : null;
+    const approved = (offer && offer.leadership && offer.leadership[index]
+      && offer.leadership[index].approved) ? offer.leadership[index].approved : null;
+    const issuerSubmitted = (offer && offer.leadership && offer.leadership[index]
+      && offer.leadership[index].issuerSubmitted) ? offer.leadership[index].issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
+      || (isManager && approved && approved.status));
     const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     return (
       <Aux>
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
-            {!isReadonly && leaderCount > 1 &&
-              <Button.Group size="mini" floated="right">
+            {!isReadonly && leaderCount > 1
+              && (
+<Button.Group size="mini" floated="right">
                 <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
               </Button.Group>
+              )
             }
           </Header>
           <FormCheckbox
@@ -266,8 +281,8 @@ export default class Leader extends Component {
                   <label>Headshot image</label>
                   {LEADERSHIP_FRM.fields.leadership[index].headshot.value ? (
                     <div className="file-uploader attached">
-                      {!isReadonly &&
-                        <Button onClick={() => this.handleDelDoc('headshot')} circular icon={{ className: 'ns-close-light' }} />
+                      {!isReadonly
+                        && <Button onClick={() => this.handleDelDoc('headshot')} circular icon={{ className: 'ns-close-light' }} />
                       }
                       <Image64
                         srcUrl={LEADERSHIP_FRM.fields.leadership[index].headshot.preSignedUrl}
@@ -298,8 +313,8 @@ export default class Leader extends Component {
                   <label>Hero image</label>
                   {LEADERSHIP_FRM.fields.leadership[index].heroImage.value ? (
                     <div className="file-uploader attached">
-                      {!isReadonly &&
-                      <Button onClick={() => this.handleDelDoc('heroImage')} circular icon={{ className: 'ns-close-light' }} />
+                      {!isReadonly
+                      && <Button onClick={() => this.handleDelDoc('heroImage')} circular icon={{ className: 'ns-close-light' }} />
                       }
                       <Image64
                         srcUrl={LEADERSHIP_FRM.fields.leadership[index].heroImage.preSignedUrl}
@@ -343,8 +358,8 @@ export default class Leader extends Component {
           <Divider section />
           <Header as="h4">
             Experience
-            {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length < 5 &&
-              <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'LEADERSHIP_EXP_FRM', 'employer')}><small>+ Add another business</small></Link>
+            {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length < 5
+              && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'LEADERSHIP_EXP_FRM', 'employer')}><small>+ Add another business</small></Link>
             }
           </Header>
           {
@@ -352,10 +367,12 @@ export default class Leader extends Component {
               <Aux>
                 <Header as="h6">
                   {`Business ${index2 + 1}`}
-                  {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length > 1 &&
-                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
+                  {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length > 1
+                    && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
+                    )
                   }
                 </Header>
                 <div className="featured-section">

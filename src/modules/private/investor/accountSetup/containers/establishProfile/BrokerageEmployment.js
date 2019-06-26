@@ -31,8 +31,9 @@ export default class BrokerageEmployment extends Component {
             containerclassname="three wide button-radio center-align"
             showerror
           />
-          {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes' &&
-          <div className="field-wrap left-align">
+          {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes'
+          && (
+<div className="field-wrap left-align">
             <Form.Group widths="equal">
               <FormInput
                 key="brokerageFirmName"
@@ -43,11 +44,14 @@ export default class BrokerageEmployment extends Component {
               />
             </Form.Group>
           </div>
+          )
           }
-          {errors &&
-          <Message error className="mt-30">
+          {errors
+          && (
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
+          )
           }
         </Form>
       </div>

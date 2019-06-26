@@ -10,9 +10,9 @@ import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
 import StickyNotification from '../components/stickyNotification';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
-import AccountCreation from './../../accountSetup/containers/accountCreation';
-import IdentityVerification from './../../accountSetup/containers/identityVerification';
-import EstablishProfile from './../../accountSetup/containers/establishProfile';
+import AccountCreation from '../../accountSetup/containers/accountCreation';
+import IdentityVerification from '../../accountSetup/containers/identityVerification';
+import EstablishProfile from '../../accountSetup/containers/establishProfile';
 import Helper from '../../../../../helper/utility';
 import ProccessingAccountsScreen from '../components/processingAccountsScreen';
 
@@ -61,6 +61,7 @@ export default class Dashboard extends Component {
       this.props.portfolioStore.getSummary();
     }
   }
+
   render() {
     const { summaryLoading, summary, getChartData } = this.props.portfolioStore;
     const cashMovementData = getChartData('cashMovement');
@@ -68,8 +69,8 @@ export default class Dashboard extends Component {
       multipleUserAccounts, userAccreditationStatus,
       signupStatus,
     } = this.props.userDetailsStore;
-    const isInitialAccountProcessing = signupStatus.activeAccounts.length === 0 &&
-    signupStatus.processingAccounts.length > 0;
+    const isInitialAccountProcessing = signupStatus.activeAccounts.length === 0
+    && signupStatus.processingAccounts.length > 0;
     const notificationCard = {
       message:
   <span>
@@ -92,33 +93,41 @@ export default class Dashboard extends Component {
           P4={
             <Button secondary as={Link} to="/offerings" content={isInitialAccountProcessing ? 'Browse Offerings' : 'Invest Now'} />
           }
-          P5={userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts') ?
-            <StickyNotification
-              {...this.props}
-              notificationCard={notificationCard}
-              multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
-              accountId={get(multipleUserAccounts, 'accountId') || null}
-              accountType={get(multipleUserAccounts, 'accountType') || null}
-            /> : ''}
+          P5={userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
+            ? (
+<StickyNotification
+  {...this.props}
+  notificationCard={notificationCard}
+  multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+  accountId={get(multipleUserAccounts, 'accountId') || null}
+  accountType={get(multipleUserAccounts, 'accountType') || null}
+/>
+            ) : ''}
         >
           {
-            isInitialAccountProcessing ?
-              <ProccessingAccountsScreen /> :
-              <Aux>
+            isInitialAccountProcessing
+              ? <ProccessingAccountsScreen />
+              : (
+<Aux>
                 <Header as="h4">Portfolio Summary</Header>
                 <SummaryHeader details={summaryDetails(summary)} />
-                {cashMovementData && cashMovementData.length ?
-                  <Aux>
-                    {!isMobile ?
-                      <Card fluid>
+                {cashMovementData && cashMovementData.length
+                  ? (
+<Aux>
+                    {!isMobile
+                      ? (
+<Card fluid>
                         <Card.Content>
                           <Header as="h4">Investments and Payments</Header>
                           <CashMovement data={cashMovementData} />
                         </Card.Content>
-                      </Card> : null
+                      </Card>
+                      ) : null
               }
-                  </Aux> :
-                  <Aux>
+                  </Aux>
+                  )
+                  : (
+<Aux>
                     <Card fluid={isMobile}>
                       <Card.Content>
                         <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
@@ -126,8 +135,10 @@ export default class Dashboard extends Component {
                       </Card.Content>
                     </Card>
                   </Aux>
+                  )
           }
               </Aux>
+              )
           }
         </PrivateLayout>
       </Aux>

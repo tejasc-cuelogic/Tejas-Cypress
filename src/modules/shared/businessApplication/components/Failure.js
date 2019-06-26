@@ -24,8 +24,8 @@ export default class Failure extends Component {
             section for more information on our general business requirements.
           </p>
           <Divider section hidden />
-          {reason && reason === 'lendio' &&
-            <Initialise isPublic={isPublic} {...this.props} />
+          {reason && reason === 'lendio'
+            && <Initialise isPublic={isPublic} {...this.props} />
           }
         </Grid.Column>
       </Grid>

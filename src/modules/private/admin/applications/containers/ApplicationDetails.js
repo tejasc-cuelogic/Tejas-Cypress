@@ -25,6 +25,7 @@ export default class ApplicationDetails extends Component {
   state = {
     displayOnly: true,
   }
+
   componentWillMount() {
     const { match } = this.props;
     const { params } = match;
@@ -38,10 +39,13 @@ export default class ApplicationDetails extends Component {
         });
     }
   }
+
   componentDidMount() {
     window.onpopstate = this.handleCloseModal;
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     const { params } = this.props.match;
@@ -52,21 +56,25 @@ export default class ApplicationDetails extends Component {
     this.props.businessAppReviewStore.resetForm('OFFERS_FRM');
     window.onpopstate = null;
   };
+
   editBusinessDetails = (e) => {
     e.preventDefault();
     this.setState({ displayOnly: !this.state.displayOnly });
   }
+
   updateBusinessDetails = (e, appId, appUserId) => {
     e.preventDefault();
     this.props.businessAppAdminStore.updateBusinessDetails(appId, appUserId).then(() => {
       this.setState({ displayOnly: !this.state.displayOnly });
     });
   }
+
   cancelBusinessDetails = (e, businessName, signupCode) => {
     e.preventDefault();
     this.setState({ displayOnly: !this.state.displayOnly });
     this.props.businessAppAdminStore.setBusinessDetails(businessName, signupCode);
   }
+
   render() {
     const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
@@ -86,8 +94,8 @@ export default class ApplicationDetails extends Component {
       { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
       { title: 'Pre-qualification', to: 'pre-qualification' },
     ];
-    if ((applicationStatus || prequalStatus) !==
-    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+    if ((applicationStatus || prequalStatus)
+    !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
       navItems = [
         ...navItems,
         { title: 'Business Details', to: 'business-details' },
@@ -95,18 +103,17 @@ export default class ApplicationDetails extends Component {
         { title: 'Documentation', to: 'documentation' },
       ];
     }
-    if (!deleted && !stashed && ((applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ||
-    (applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED || (applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
+    if (!deleted && !stashed && ((applicationStatus || prequalStatus)
+    === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
+    || (applicationStatus || prequalStatus)
+    === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED || (applicationStatus || prequalStatus)
+    === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
       navItems = [
         ...navItems,
         { title: 'Review', to: 'review' },
       ];
     }
-    const { businessName, contactDetails } =
-    businessGeneralInfo || prequalDetails.businessGeneralInfo;
+    const { businessName, contactDetails } = businessGeneralInfo || prequalDetails.businessGeneralInfo;
     const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnDimmerClick={false} onClose={this.handleCloseModal} centered={false}>
@@ -117,9 +124,9 @@ export default class ApplicationDetails extends Component {
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
-            {(applicationStatus || prequalStatus) ===
-            BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-            <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/prequal-failed/${id}/new/${prequalStatus}/PROMOTE/confirm`} />
+            {(applicationStatus || prequalStatus)
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+            && <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/prequal-failed/${id}/new/${prequalStatus}/PROMOTE/confirm`} />
             }
           </Header>
           <Grid columns="equal">
@@ -128,18 +135,21 @@ export default class ApplicationDetails extends Component {
                 <Card fluid className="ba-info-card">
                   <Card.Header>
                     Information
-                    {(applicationStatus || prequalStatus) !==
-                    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-                    <small className="pull-right">
-                      {this.state.displayOnly ?
-                        <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
-                      :
-                        <Aux>
+                    {(applicationStatus || prequalStatus)
+                    !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+                    && (
+<small className="pull-right">
+                      {this.state.displayOnly
+                        ? <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
+                        : (
+<Aux>
                           <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
                           <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}><Icon name="save" />Update</Link>
                         </Aux>
+                        )
                       }
                     </small>
+                    )
                     }
                   </Card.Header>
                   <Card.Content>
@@ -190,19 +200,21 @@ export default class ApplicationDetails extends Component {
                   </Card.Content>
                 </Card>
               </Grid.Column>
-              {(applicationStatus || prequalStatus) ===
-              BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-                <Grid.Column>
+              {(applicationStatus || prequalStatus)
+              === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+                && (
+<Grid.Column>
                   <Card fluid className="ba-info-card">
                     <Card.Header>Failed Reason</Card.Header>
                     <Card.Content>
-                      {(failReasons.length || prequalDetails.failReasons.length) ?
-                        <List as="ol">{(failReasons || prequalDetails.failReasons).map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
+                      {(failReasons.length || prequalDetails.failReasons.length)
+                        ? <List as="ol">{(failReasons || prequalDetails.failReasons).map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
                         : <p>-</p>
                       }
                     </Card.Content>
                   </Card>
                 </Grid.Column>
+                )
               }
             </Grid.Row>
           </Grid>
@@ -222,14 +234,15 @@ export default class ApplicationDetails extends Component {
                     <Route
                       key={item.to}
                       path={`${match.url}/${item.to}`}
-                      render={props =>
-                        (<CurrentComponent
-                          module={item.title === 'Activity History' ? 'applicationDetails' : false}
-                          showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
-                          resourceId={params.appId}
-                          appType={params.id}
-                          {...props}
-                        />)
+                      render={props => (
+<CurrentComponent
+  module={item.title === 'Activity History' ? 'applicationDetails' : false}
+  showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
+  resourceId={params.appId}
+  appType={params.id}
+  {...props}
+/>
+                      )
                       }
                     />
                   );

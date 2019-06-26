@@ -16,13 +16,16 @@ export default class EstablishProfile extends Component {
       this.props.history.push('/app/summary');
     }
   }
+
   handleCloseNestedModal = () => {
     this.props.history.push('/app/summary/establish-profile');
   }
+
   handleFormSubmit = () => {
     this.props.investorProfileStore.submitFieldsForm();
     this.props.history.push('/app/summary/establish-profile');
   }
+
   render() {
     return (
       <div>

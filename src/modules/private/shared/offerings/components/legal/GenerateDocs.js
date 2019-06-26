@@ -21,16 +21,20 @@ export default class GenerateDocs extends Component {
     // setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
     // setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
+
   onFileDrop = (files, field, stepName) => {
     this.props.offeringCreationStore.setFileUploadData('ADMIN_DOCUMENTATION_FRM', field, files, '', null, stepName, true);
   }
+
   handleDelDoc = (field, stepName) => {
     this.props.offeringCreationStore.removeUploadedData('ADMIN_DOCUMENTATION_FRM', '', field, null, stepName, true);
   }
+
   createBusinessFiling = (e) => {
     e.stopPropagation();
     this.props.offeringCreationStore.generateBusinessFiling();
   }
+
   render() {
     const { inProgress } = this.props.uiStore;
     const {
@@ -56,18 +60,17 @@ export default class GenerateDocs extends Component {
             loading={filingListApiRes.loading}
             offeringDetails={offer}
           />
-          {!isEmpty(offeringFilingList) &&
-            <Aux>
+          {!isEmpty(offeringFilingList)
+            && (
+<Aux>
               <Header as="h4">Upload Final Signed Docs</Header>
               {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
                 <DropZone
                   size="small"
                   name="term"
                   fielddata={ADMIN_DOCUMENTATION_FRM.fields[field]}
-                  ondrop={files =>
-                    this.onFileDrop(files, field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
-                  onremove={() =>
-                    this.handleDelDoc(field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
+                  ondrop={files => this.onFileDrop(files, field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
+                  onremove={() => this.handleDelDoc(field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
                   uploadtitle="Upload"
                 />
                 // <div className="field-wrap">
@@ -75,6 +78,7 @@ export default class GenerateDocs extends Component {
               ))
               }
             </Aux>
+            )
           }
         </Form>
       </div>

@@ -26,6 +26,7 @@ export default class ImageCropper extends Component {
       close: true,
     };
   }
+
   onChange = (e) => {
     e.preventDefault();
     this.props.handelReset();
@@ -53,8 +54,8 @@ export default class ImageCropper extends Component {
       crop: makeAspectCrop({
         x: 0,
         y: 0,
-        aspect: this.props.aspect ?
-          this.props.aspect === 'none' ? null : this.props.aspect : 1 / 1,
+        aspect: this.props.aspect
+          ? this.props.aspect === 'none' ? null : this.props.aspect : 1 / 1,
         width: cropWidthPer,
       }, image.width / image.height),
       image,
@@ -126,8 +127,9 @@ export default class ImageCropper extends Component {
     const { field, cropInModal, disabled } = this.props;
     return (
       <Aux>
-        { field.src && !field.error ? cropInModal ?
-          <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
+        { field.src && !field.error ? cropInModal
+          ? (
+<Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
             <Modal.Content>
               <Header as="h3">Crop image for {field.label}</Header>
               <ReactCrop
@@ -143,27 +145,30 @@ export default class ImageCropper extends Component {
               <Button primary disabled={(this.props.aspect === 'none' && !this.state.crop.width)} content="Upload" onClick={() => this.modalUpload(this.props.name, field)} />
             </Modal.Actions>
           </Modal>
-          :
-          <ReactCrop
-            {...this.state}
-            src={field.src}
-            onImageLoaded={this.onImageLoaded}
-            onComplete={this.onCropComplete}
-            onChange={this.onCropChange}
-            crop={this.state.crop}
-          />
-          :
-          <Aux>
+          )
+          : (
+<ReactCrop
+  {...this.state}
+  src={field.src}
+  onImageLoaded={this.onImageLoaded}
+  onComplete={this.onCropComplete}
+  onChange={this.onCropChange}
+  crop={this.state.crop}
+/>
+          )
+          : (
+<Aux>
             <div className="file-uploader">
               <div className="file-uploader-inner">
                 <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
               </div>
               <input disabled={disabled} type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             </div>
-            {field.error &&
-              <FieldError error={field.error} />
+            {field.error
+              && <FieldError error={field.error} />
             }
           </Aux>
+          )
         }
       </Aux>
     );

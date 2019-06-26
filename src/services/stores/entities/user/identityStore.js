@@ -17,17 +17,29 @@ import { US_STATES_FOR_INVESTOR, FILE_UPLOAD_STEPS } from '../../../../constants
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
+
   @observable ID_VERIFICATION_DOCS_FRM = FormValidator.prepareFormObject(IDENTITY_DOCUMENTS);
+
   @observable ID_VERIFICATION_QUESTIONS = FormValidator.prepareFormObject([]);
+
   @observable ID_PHONE_VERIFICATION = FormValidator.prepareFormObject(PHONE_VERIFICATION);
+
   @observable ID_PROFILE_INFO = FormValidator.prepareFormObject(UPDATE_PROFILE_INFO);
+
   @observable submitVerificationsDocs = false;
+
   @observable reSendVerificationCode = false;
+
   @observable confirmMigratedUserPhoneNumber = false;
+
   @observable requestOtpResponse = {};
+
   @observable userCipStatus = '';
+
   @observable isOptConfirmed = false;
+
   @observable sendOtpToMigratedUser = [];
+
   @observable signUpLoading = false;
 
   @action
@@ -57,6 +69,7 @@ export class IdentityStore {
   @action setCipStatus = (status) => {
     this.userCipStatus = status;
   }
+
   @action
   setSubmitVerificationDocs(status) {
     this.submitVerificationsDocs = status;
@@ -160,7 +173,6 @@ export class IdentityStore {
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
-      status: this.userCipStatus !== '' ? this.userCipStatus : this.cipStatus,
       dateOfBirth: fields.dateOfBirth.value,
       ssn: fields.ssn.value,
       legalAddress: {
@@ -212,33 +224,29 @@ export class IdentityStore {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.passId;
       if (response.key && Helper.matchRegexWithString(/\bcorrect(?![-])\b/, response.message)) {
-        legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }] :
-          this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
+        legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }]
+          : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
         legalCip.failType = 'FAIL_WITH_QUESTIONS';
       }
     } else if (response.message === 'FAIL' && response.questions) {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.softFailId;
       legalCip.failType = 'FAIL_WITH_QUESTIONS';
-      // omitDeep, cleanDeep
-      legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])] :
-        this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-      // [...cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+      legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
+        : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
     } else if (this.checkIncorrectAns(response) && response.hardFailId) {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.hardFailId;
       legalCip.failType = 'FAIL_WITH_UPLOADS';
-      legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }] :
-        this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
+      legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }]
+        : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
     } else {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
       legalCip.failType = 'FAIL_WITH_UPLOADS';
       if (response.qualifiers && response.qualifiers !== null) {
-        legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])] :
-          this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-      // [...cip.failReason,
-        // ...omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+        legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
+          : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
       }
     }
     const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
@@ -288,6 +296,7 @@ export class IdentityStore {
     const cipStatus = identityHelper.getCipStatus(key, questions);
     return cipStatus;
   }
+
   @action
   verifyUserIdentity = () => {
     this.ID_VERIFICATION_FRM.response = {};
@@ -304,9 +313,9 @@ export class IdentityStore {
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
           // TODO optimize signUpLoading call
-          if (data.data.verifyCIPIdentity.passId ||
-            data.data.verifyCIPIdentity.softFailId ||
-            data.data.verifyCIPIdentity.hardFailId) {
+          if (data.data.verifyCIPIdentity.passId
+            || data.data.verifyCIPIdentity.softFailId
+            || data.data.verifyCIPIdentity.hardFailId) {
             this.updateUserInfo().then(() => {
               this.setFieldValue('signUpLoading', false);
               resolve();
@@ -485,8 +494,8 @@ export class IdentityStore {
           /* eslint-disable no-underscore-dangle */
           this.setVerifyIdentityResponse(result.data.verifyCIPAnswers);
           // eslint-disable-next-line no-unused-expressions
-          result.data.verifyCIPAnswers.__typename === 'UserCIPPass' ?
-            this.setCipStatus('PASS') : this.setCipStatus('HARD_FAIL');
+          result.data.verifyCIPAnswers.__typename === 'UserCIPPass'
+            ? this.setCipStatus('PASS') : this.setCipStatus('HARD_FAIL');
           this.updateUserInfo();
           uiStore.setProgress(false);
           this.setFieldValue('signUpLoading', false);
@@ -506,8 +515,7 @@ export class IdentityStore {
 
   @computed
   get formattedIdentityQuestionsAnswers() {
-    const formattedIdentityQuestionsAnswers =
-      flatMap(this.ID_VERIFICATION_QUESTIONS.fields, n => [{ type: n.key, text: n.value }]);
+    const formattedIdentityQuestionsAnswers = flatMap(this.ID_VERIFICATION_QUESTIONS.fields, n => [{ type: n.key, text: n.value }]);
     return formattedIdentityQuestionsAnswers;
   }
 
@@ -853,8 +861,7 @@ export class IdentityStore {
     }
     if (legalDetails && legalDetails.legalAddress) {
       fields.city.value = legalDetails.legalAddress.city;
-      const selectedState =
-        find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
+      const selectedState = find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
       if (selectedState) {
         fields.state.value = selectedState.value;
       }
@@ -973,6 +980,7 @@ export class IdentityStore {
         }));
     });
   }
+
   @action
   validateForm = (form) => {
     FormValidator.validateForm(this[form], false, true);

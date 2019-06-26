@@ -11,6 +11,7 @@ export default class ConfirmModal extends Component {
   componentWillMount() {
     this.props.transactionsStore.resetModalForm();
   }
+
   handleBack = () => {
     const {
       statusType,
@@ -18,6 +19,7 @@ export default class ConfirmModal extends Component {
     this.props.transactionsStore.pageReload = false;
     this.props.history.push(`${this.props.refLink}/${statusType}`);
   }
+
   handleConfirm = () => {
     const {
       requestId, statusType,
@@ -31,6 +33,7 @@ export default class ConfirmModal extends Component {
         this.props.history.push(`${this.props.refLink}/${statusType}`);
       });
   }
+
   render() {
     const { formChange, TRANSACTION_FAILURE, btnLoader } = this.props.transactionsStore;
     const { statusType, requestId } = this.props.match.params;

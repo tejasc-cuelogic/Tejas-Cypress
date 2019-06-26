@@ -15,20 +15,22 @@ export const ApplicationListStepColumn = (props) => {
   const documentationClass = documentationStepTitle === 'Completed' ? 'done' : documentationStepTitle === 'Continue' ? 'current' : '';
   return (
     <Table.Cell singleLine>
-      {(applicationStatus || prequalStatus) ===
-      BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ?
-        (failReasons.length || prequalDetails.failReasons.length ?
-          <List as="ol">{(failReasons || prequalDetails.failReasons).map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
-        : <p>-</p>
+      {(applicationStatus || prequalStatus)
+      === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+        ? (failReasons.length || prequalDetails.failReasons.length
+          ? <List as="ol">{(failReasons || prequalDetails.failReasons).map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
+          : <p>-</p>
         )
-        : (applicationStatus || prequalStatus) ===
-      BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
-        <List as="ol" className="step-list">
+        : (applicationStatus || prequalStatus)
+      === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
+        && (
+<List as="ol" className="step-list">
           <List.Item as="li" className="done">Completed</List.Item>
           <List.Item as="li" className={detailsClass}>{detailsStepTitle}</List.Item>
           <List.Item as="li" className={performanceClass}>{performanceStepTitle}</List.Item>
           <List.Item as="li" className={documentationClass}>{documentationStepTitle}</List.Item>
         </List>
+        )
       }
     </Table.Cell>
   );

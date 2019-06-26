@@ -7,14 +7,17 @@ import { FieldError } from '../../shared';
 @observer
 export default class FormTextarea extends Component {
   state = { showError: false };
+
   componentWillMount() {
     if (this.props.defaultValue && (this.props.fielddata.value === '' || this.props.fielddata.value === undefined)) {
       this.props.changed({}, { name: this.props.name, value: this.props.defaultValue });
     }
   }
+
   triggerError = (val) => {
     this.setState({ showError: val });
   }
+
   render() {
     const { props } = this;
     const {
@@ -29,42 +32,50 @@ export default class FormTextarea extends Component {
     const classes = `${props.containerclassname || ''} ${props.readOnly ? 'display-only' : ''}`;
     return (
       <Form.Field className={classes} error={(!!error && this.state.showError)}>
-        {!props.hidelabel && label !== '' &&
-          <label>
+        {!props.hidelabel && label !== ''
+          && (
+<label>
             {props.label || label}
-            {tooltip &&
-              <Popup
-                trigger={<Icon className="ns-help-circle" />}
-                content={tooltip}
-                position="top center"
-                className="center-align"
-                wide
-              />
+            {tooltip
+              && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+              )
             }
-            {props.removed &&
-              <Link to={props.linkto} onClick={e => props.removed(e)}>
+            {props.removed
+              && (
+<Link to={props.linkto} onClick={e => props.removed(e)}>
                 <Icon className="ns-close-circle" color="grey" />
               </Link>
+              )
             }
           </label>
+          )
         }
-        {props.readOnly ?
-          <p className={value ? 'commet-area' : 'not-applicable'}>{value || 'N/A'}</p> :
-          <TextArea
-            {...props}
-            value={value === '' ? props.clear ? '' : undefined : value}
-            label={label}
-            placeholder={(displayMode || readOnly) ? '' : placeHolder}
-            defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
-            onChange={(e) => {
-              props.changed(e, { name: e.target.name, value: e.target.value });
-              this.triggerError(false);
-            }}
-            onBlur={() => this.triggerError(true)}
-          />
+        {props.readOnly
+          ? <p className={value ? 'commet-area' : 'not-applicable'}>{value || 'N/A'}</p>
+          : (
+<TextArea
+  {...props}
+  value={value === '' ? props.clear ? '' : undefined : value}
+  label={label}
+  placeholder={(displayMode || readOnly) ? '' : placeHolder}
+  defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
+  onChange={(e) => {
+    props.changed(e, { name: e.target.name, value: e.target.value });
+    this.triggerError(false);
+  }}
+  onBlur={() => this.triggerError(true)}
+/>
+          )
         }
-        {error && this.state.showError &&
-          <FieldError error={error} />
+        {error && this.state.showError
+          && <FieldError error={error} />
         }
       </Form.Field>
     );

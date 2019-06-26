@@ -17,10 +17,12 @@ class HowItWorks extends Component {
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
   }
+
   handleFundingOptBtn = () => {
     this.props.history.push('/business/funding-options/term-notes');
     window.scrollTo(0, 0);
   }
+
   render() {
     // const amount = this.props.offeringsStore.totalAmountRaised;
     const nsvideos = {
@@ -159,8 +161,9 @@ class HowItWorks extends Component {
           <Container textAlign={isMobile ? 'left' : 'center'}>
             <Header as="h2" className={isMobile ? 'mb-40' : 'mb-80'}>We work with Main Street businesses.</Header>
           </Container>
-          {!isMobile ?
-            <Container>
+          {!isMobile
+            ? (
+<Container>
               <Grid centered stackable relaxed={isTablet ? '' : 'very'}>
                 {businesses.map((row, index) => (
                   <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
@@ -174,16 +177,17 @@ class HowItWorks extends Component {
                   ))
                 }
                   </Grid.Row>
-            ))
+                ))
             }
               </Grid>
             </Container>
-        :
-            <Aux>
+            )
+            : (
+<Aux>
               <Container>
                 <NsCarousel {...settings}>
                   {businesses.map(row => (
-                row.map(b => (
+                    row.map(b => (
                   <Grid.Row>
                     <Grid.Column className="center-align">
                       <NSImage path={b.image} centered />
@@ -191,12 +195,13 @@ class HowItWorks extends Component {
                       <p>{b.description}</p>
                     </Grid.Column>
                   </Grid.Row>
-                ))
-              ))
+                    ))
+                  ))
               }
                 </NsCarousel>
               </Container>
             </Aux>
+            )
       }
         </section>
         <Divider fitted as={Container} />
@@ -221,7 +226,7 @@ class HowItWorks extends Component {
                     </Item.Content>
                   </Item>
                 </Item.Group>
-          ))
+              ))
           }
             </NsCarousel>
           </Container>

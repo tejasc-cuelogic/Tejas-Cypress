@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown, FormCheckbox, MaskedInput } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
-import NotFound from '../../../../shared/NotFound';
+import NotFound from '../../../NotFound';
 import { LENDING_PARTNER_LENDIO } from '../../../../../constants/business';
 import { LENDIO } from '../../../../../services/constants/businessApplication';
 import Helper from '../../../../../helper/utility';
@@ -26,6 +26,7 @@ export default class Application extends Component {
       });
     }
   }
+
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppLendioStore.businessLendioPreQual(this.props.match.params.id)

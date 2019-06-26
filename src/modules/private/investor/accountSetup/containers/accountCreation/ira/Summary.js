@@ -15,6 +15,7 @@ export default class Summary extends Component {
   state = {
     open: false,
   };
+
   componentWillMount() {
     const {
       getLegalDocsFileIds, alreadySet,
@@ -30,6 +31,7 @@ export default class Summary extends Component {
       this.props.bankAccountStore.setLoaderForAccountBlank();
     }
   }
+
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
@@ -48,6 +50,7 @@ export default class Summary extends Component {
       });
     }
   }
+
   openModal = (type) => {
     const { getBoxEmbedLink } = this.props.agreementsStore;
     getBoxEmbedLink(type);
@@ -55,9 +58,11 @@ export default class Summary extends Component {
       open: true,
     });
   }
+
   closeModal = () => {
     this.setState({ open: false });
   }
+
   render() {
     const {
       FIN_INFO_FRM,
@@ -78,8 +83,8 @@ export default class Summary extends Component {
       plaidAccDetails, formLinkBankManually,
       accountAttributes, routingNum,
     } = this.props.bankAccountStore;
-    const bankAccountNumber = !isEmpty(plaidAccDetails) ?
-      plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
+    const bankAccountNumber = !isEmpty(plaidAccDetails)
+      ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
@@ -98,61 +103,69 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Net Worth:</Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
-                    FIN_INFO_FRM.fields.netWorth.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value
+                    ? FIN_INFO_FRM.fields.netWorth.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Annual Income:</Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value ?
-                    FIN_INFO_FRM.fields.income.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value
+                    ? FIN_INFO_FRM.fields.income.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Identification:</Table.Cell>
                   <Table.Cell>
-                    {IDENTITY_FRM.fields.identityDoc.value ?
-                      <span>Uploaded</span> :
-                      <span className="negative-text">Not Uploaded</span>}
+                    {IDENTITY_FRM.fields.identityDoc.value
+                      ? <span>Uploaded</span>
+                      : <span className="negative-text">Not Uploaded</span>}
                   </Table.Cell>
                 </Table.Row>
-                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
-                  <Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
+                  && (
+<Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
+                  )
                 }
-                {fundingOption && fundingOption.value === 0 &&
-                  <Table.Row>
+                {fundingOption && fundingOption.value === 0
+                  && (
+<Table.Row>
                     <Table.Cell>Bank Account:</Table.Cell>
                     <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                   </Table.Row>
+                  )
                 }
 
-                { !isEmpty(routingNum) &&
-                  <Table.Row>
+                { !isEmpty(routingNum)
+                  && (
+<Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       { routingNum || '' }
                     </Table.Cell>
                   </Table.Row>
+                  )
                 }
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
-                    Helper.CurrencyFormat(0) :
-                    Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount)
+                      ? Helper.CurrencyFormat(0)
+                      : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
           </div>
         </div>
-        {errors &&
-          <Message error>
+        {errors
+          && (
+<Message error>
             <ListErrors errors={[errors.message]} />
           </Message>
+          )
         }
         <div className="center-align mt-30">
           <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />

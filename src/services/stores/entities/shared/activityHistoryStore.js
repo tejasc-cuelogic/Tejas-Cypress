@@ -11,9 +11,13 @@ import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../cons
 
 export class ActivityHistoryStore {
   @observable ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
+
   @observable requestState = { filters: {} };
+
   @observable data = [];
+
   @observable message = {};
+
   @observable activityTypes = [];
 
   @action
@@ -28,10 +32,10 @@ export class ActivityHistoryStore {
     let filterParams = { resourceId, orderBy: { field: 'activityDate', sort: 'desc' } };
     filterParams = activityType ? { ...filterParams, activityType } : { ...filterParams };
     filterParams = subType ? { ...filterParams, subType } : { ...filterParams };
-    filterParams = activityUserType ? { ...filterParams, scope: activityUserType } :
-      { ...filterParams };
-    filterParams = (startDate || endDate) ? { ...filterParams, startDate, endDate } :
-      { ...filterParams };
+    filterParams = activityUserType ? { ...filterParams, scope: activityUserType }
+      : { ...filterParams };
+    filterParams = (startDate || endDate) ? { ...filterParams, startDate, endDate }
+      : { ...filterParams };
     this.data = graphql({
       client,
       query: allActivities,
@@ -49,8 +53,8 @@ export class ActivityHistoryStore {
   setInitiateSrch = (name, value, resourceId) => {
     if (name === 'startDate' || name === 'endDate') {
       this.requestState.filters[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, true, name, true) : undefined;
-      if ((this.requestState.filters.startDate && this.requestState.filters.endDate) ||
-      (!this.requestState.filters.startDate && !this.requestState.filters.endDate)) {
+      if ((this.requestState.filters.startDate && this.requestState.filters.endDate)
+      || (!this.requestState.filters.startDate && !this.requestState.filters.endDate)) {
         this.initRequest(resourceId);
       }
     } else {
@@ -119,14 +123,16 @@ export class ActivityHistoryStore {
       this.activityTypes = uniqWith(tempArr, isEqual);
     }
   }
+
   @action
   setFieldValue = (field, val) => {
     this[field] = val;
   }
+
   @computed get activities() {
-    return (this.allData.data && this.allData.data.filterActivityHistories &&
-      this.allData.data.filterActivityHistories.activityHistory.length &&
-      toJS(this.allData.data.filterActivityHistories.activityHistory)) || [];
+    return (this.allData.data && this.allData.data.filterActivityHistories
+      && this.allData.data.filterActivityHistories.activityHistory.length
+      && toJS(this.allData.data.filterActivityHistories.activityHistory)) || [];
   }
 
   @computed get error() {

@@ -67,15 +67,17 @@ export default class AddBeneficiary extends Component {
       <Aux>
         <Form onSubmit={this.submit}>
           {
-            BENEFICIARY_META.fields.beneficiary.length ?
-              BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
+            BENEFICIARY_META.fields.beneficiary.length
+              ? BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
                 <Aux>
                   <Header as="h5">
                     {`Beneficiary ${index + 1}`}
-                    {BENEFICIARY_META.fields.beneficiary.length > 1 &&
-                      <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
+                    {BENEFICIARY_META.fields.beneficiary.length > 1
+                      && (
+<Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
+                      )
                     }
                   </Header>
                   <div className="field-wrap">
@@ -130,13 +132,13 @@ export default class AddBeneficiary extends Component {
                     </Form.Group>
                   </div>
                 </Aux>
-              )) :
-              <InlineLoader />
+              ))
+              : <InlineLoader />
           }
-          {BENEFICIARY_META.fields.beneficiary.length !== MAX_BENEFICIARY_LIMIT &&
-            <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
+          {BENEFICIARY_META.fields.beneficiary.length !== MAX_BENEFICIARY_LIMIT
+            && <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           }
-          <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
+          <Button as={Link} to={this.props.refLink} color="red">Cancel</Button>
           <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
         </Form>
         <Confirm

@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { capitalize } from 'lodash';
-import { FormTextarea } from '../../../../../theme/form';
+import Aux from 'react-aux';
+import { FormTextarea, FormInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
 import Helper from '../../../../../helper/utility';
@@ -14,7 +15,11 @@ import Helper from '../../../../../helper/utility';
 export default class StatusChangeAppModal extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.resetCommentFrm();
+    if (this.props.match.params.action === 'PROMOTE') {
+      this.props.businessAppReviewStore.resetPasswordFrm();
+    }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     const { match } = this.props;
@@ -22,6 +27,7 @@ export default class StatusChangeAppModal extends Component {
     this.props.uiStore.setErrors(null);
     this.props.history.push(`/app/applications/${params.id}`);
   }
+
   updateApplicationStatus = (e) => {
     e.preventDefault();
     const { match } = this.props;
@@ -33,6 +39,7 @@ export default class StatusChangeAppModal extends Component {
         this.props.history.push(`/app/applications/${params.id}`);
       });
   }
+
   promoteApplication = (e) => {
     e.preventDefault();
     const { match } = this.props;
@@ -42,13 +49,15 @@ export default class StatusChangeAppModal extends Component {
       .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
         const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
+        const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM } = this.props.businessAppReviewStore;
         if (prequalData) {
           const userDetails = {
             givenName: prequalData.firstName,
             familyName: prequalData.lastName,
             email: prequalData.email,
-            TemporaryPassword: 'nextseed',
-            verifyPassword: 'nextseed',
+            TemporaryPassword:
+              PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.TemporaryPassword.value,
+            verifyPassword: PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword.value,
             role: ['issuer'],
           };
           adminActions.checkEmailExists(userDetails.email).then((userId) => {
@@ -64,7 +73,7 @@ export default class StatusChangeAppModal extends Component {
                   this.props.history.push('/app/applications/in-progress');
                 });
             } else {
-              adminActions.createNewUser(userDetails).then(() => {
+              adminActions.createNewUser(userDetails, 'SUPPRESS').then(() => {
                 this.props.businessAppReviewStore
                   .updateApplicationStatus(
                     params.appId,
@@ -83,13 +92,25 @@ export default class StatusChangeAppModal extends Component {
         }
       });
   }
+
   render() {
     const { uiStore, businessAppReviewStore, match } = this.props;
-    const { APPLICATION_STATUS_COMMENT_FRM, formChange } = businessAppReviewStore;
+    const {
+      APPLICATION_STATUS_COMMENT_FRM,
+      formChange,
+      PROMOTE_APPLICATION_STATUS_PASSWORD_FRM,
+    } = businessAppReviewStore;
     const { fields } = APPLICATION_STATUS_COMMENT_FRM;
     const { inProgress } = uiStore;
     const { errors } = uiStore;
     const { params } = match;
+    let isValid = true;
+    if (this.props.match.params.action === 'PROMOTE') {
+      isValid = !(APPLICATION_STATUS_COMMENT_FRM.meta.isValid
+        && PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.meta.isValid);
+    } else {
+      isValid = !APPLICATION_STATUS_COMMENT_FRM.meta.isValid;
+    }
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -104,13 +125,36 @@ export default class StatusChangeAppModal extends Component {
               changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
               containerclassname="secondary"
             />
-            {errors &&
-              <Message error>
+            {params.action === 'PROMOTE'
+              ? (
+<Aux>
+                <FormInput
+                  fluid
+                  type="password"
+                  name="TemporaryPassword"
+                  fielddata={PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.TemporaryPassword}
+                  changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_PASSWORD_FRM')}
+                />
+                <FormInput
+                  fluid
+                  type="password"
+                  name="verifyPassword"
+                  fielddata={PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword}
+                  changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_PASSWORD_FRM')}
+                />
+              </Aux>
+              )
+              : ''
+            }
+            {errors
+              && (
+<Message error>
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align">
-              <Button primary className="very relaxed" content="Submit" disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid || inProgress} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
+              <Button primary className="very relaxed" content="Submit" disabled={isValid || inProgress} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
             </div>
           </Form>
         </Modal.Content>

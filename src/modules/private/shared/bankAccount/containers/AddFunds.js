@@ -14,17 +14,21 @@ export default class AddFunds extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setDepositMoneyNow(true);
   }
+
   componentDidMount() {
     // this.props.bankAccountStore.validateForm('formAddFunds');
   }
+
   componentWillUnmount() {
     this.props.bankAccountStore.resetShowAddFunds();
   }
+
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.validateAddFunds();
     this.props.bankAccountStore.setDepositMoneyNow(false);
     this.renderStep();
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setDepositMoneyNow(true);
@@ -94,7 +98,7 @@ export default class AddFunds extends Component {
                 name="value"
                 type="tel"
                 currency
-                placeholder="$ 15,000"
+                placeholder="$ 5,000"
                 fielddata={addFundsByAccType.fields.value}
                 changed={values => addFundChange(values, 'value')}
                 maxLength={addFundsByAccType.maxLength}
@@ -103,15 +107,17 @@ export default class AddFunds extends Component {
                 allowNegative={false}
               />
             </div>
-            {errors &&
-              <Message error className="mb-30">
+            {errors
+              && (
+<Message error className="mb-30">
                 <ListErrors errors={[errors.message]} />
               </Message>
+              )
             }
             <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent} />
           </Form>
-          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) &&
-            <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
+            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
           }
         </div>
       </Aux>

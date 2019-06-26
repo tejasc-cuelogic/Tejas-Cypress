@@ -129,8 +129,8 @@ export default class WhyNextseed extends Component {
               </Grid.Column>
             </Grid>
             <div className="center-align mb-50">
-              { !authStore.isUserLoggedIn &&
-                <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+              { !authStore.isUserLoggedIn
+                && <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" secondary>Sign Up Free</Button>
               }
             </div>
             <p className="note center-align mb-50">
@@ -169,8 +169,9 @@ export default class WhyNextseed extends Component {
                 restaurants and more.
                 </p>
               </Container>
-              {!isMobile ?
-                <Container>
+              {!isMobile
+                ? (
+<Container>
                   <Grid centered stackable className="vertical-gutter">
                     {businesses.map((row, index) => (
                       <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
@@ -188,8 +189,9 @@ export default class WhyNextseed extends Component {
                   }
                   </Grid>
                 </Container>
-            :
-                <Aux>
+                )
+                : (
+<Aux>
                   <Container>
                     <NsCarousel {...settings}>
                       {businesses.map(row => (
@@ -207,6 +209,7 @@ export default class WhyNextseed extends Component {
                     </NsCarousel>
                   </Container>
                 </Aux>
+                )
             }
             </section>
             <Divider />

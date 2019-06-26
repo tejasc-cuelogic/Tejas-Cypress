@@ -30,18 +30,20 @@ const RewardList = props => props.rewards.map(offering => (
                   <Table.Cell>{r.status}</Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={r.expiry} /></Table.Cell>
                   <Table.Cell textAlign="center">
-                    {r.redeemDate ?
-                      <DateTimeFormat datetime={r.redeemDate} /> :
-                      (moment().diff(r.expiry) < 0 ?
-                        <Button
-                          as={Link}
-                          to={`${props.match.url}/redeem/${r.id}`}
-                          size="tiny"
-                          color="green"
-                          className="ghost-button"
-                          content="Redeem"
-                        /> :
-                        'Expired'
+                    {r.redeemDate
+                      ? <DateTimeFormat datetime={r.redeemDate} />
+                      : (moment().diff(r.expiry) < 0
+                        ? (
+<Button
+  as={Link}
+  to={`${props.match.url}/redeem/${r.id}`}
+  size="tiny"
+  color="green"
+  className="ghost-button"
+  content="Redeem"
+/>
+                        )
+                        : 'Expired'
                       )
                     }
                   </Table.Cell>

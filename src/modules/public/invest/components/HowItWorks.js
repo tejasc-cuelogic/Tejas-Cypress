@@ -49,16 +49,19 @@ export default class HowItWorks extends Component {
             <Grid stackable doubling columns={3} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
               <Grid.Column>
                 <div className={`${isMobile ? 'mb-20' : ''} flex-content`}>
-                  {!isMobile ?
-                    <Header as="h3">
+                  {!isMobile
+                    ? (
+<Header as="h3">
                       <NSImage path="icons/termnotes.svg" />
                       <span>Term Notes</span>
                     </Header>
-                    :
-                    <Aux>
+                    )
+                    : (
+<Aux>
                       <NSImage path="icons/termnotes.svg" />
                       <Header as="h2">Term Notes</Header>
                     </Aux>
+                    )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
                     <Item>
@@ -83,16 +86,19 @@ export default class HowItWorks extends Component {
               </Grid.Column>
               <Grid.Column>
                 <div className={`${isMobile ? 'mb-20' : ''} flex-content`}>
-                  {!isMobile ?
-                    <Header as="h3">
+                  {!isMobile
+                    ? (
+<Header as="h3">
                       <NSImage path="icons/applied.svg" />
                       <span>Revenue Sharing Notes</span>
                     </Header>
-                    :
-                    <Aux>
+                    )
+                    : (
+<Aux>
                       <NSImage path="icons/applied.svg" />
                       <Header as="h2">Revenue Sharing Notes</Header>
                     </Aux>
+                    )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
                     <Item>
@@ -119,16 +125,19 @@ export default class HowItWorks extends Component {
               </Grid.Column>
               <Grid.Column>
                 <div className="flex-content">
-                  {!isMobile ?
-                    <Header as="h3">
+                  {!isMobile
+                    ? (
+<Header as="h3">
                       <NSImage path="icons/equity.svg" />
                       <span>Preferred Equity</span>
                     </Header>
-                    :
-                    <Aux>
+                    )
+                    : (
+<Aux>
                       <NSImage path="icons/equity.svg" />
                       <Header as="h2">Preferred Equity</Header>
                     </Aux>
+                    )
                   }
                   <Item.Group relaxed="very" className={!isMobile && 'question-list'}>
                     <Item>
@@ -176,14 +185,16 @@ export default class HowItWorks extends Component {
         </section>
         <section>
           <Container className={`${!authStore.isUserLoggedIn && 'mt-50'} center-align`}>
-            {!authStore.isUserLoggedIn &&
-            <Aux>
+            {!authStore.isUserLoggedIn
+            && (
+<Aux>
               <Header as="h2" className="mb-30">Register for an account.</Header>
               <Button.Group vertical={isMobile} className={isMobile ? '' : 'mb-50'}>
-                <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
               <Divider section hidden />
             </Aux>
+            )
             }
             <Divider />
             <List className="learn-more-list">

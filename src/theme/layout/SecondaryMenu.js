@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
-import { MobileDropDownNav } from '../../theme/shared';
+import { MobileDropDownNav } from '../shared';
 
 // const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
   <Aux key={item.to}>
-    {(item.subNavigations) ?
-      (
+    {(item.subNavigations)
+      ? (
         <Dropdown
           item
           key={item.to}
@@ -34,24 +34,27 @@ const NavItems = ({
         </Dropdown>
       ) : (
         <Menu.Item key={item.to} onClick={navCustomClick} as={NavLink} to={`${match.url}/${item.to}`}>
-          {item.showIcon ?
-            stepsStatus[key].status === 'IN_PROGRESS' ?
-              <Popup
-                trigger={
-                  <Icon
-                    name={item.icon[stepsStatus[key].status]}
-                    color={item.icon_color[stepsStatus[key].status]}
-                  />}
-                content={item.toolTipTitle || ''}
-                position="top center"
-              />
-              :
-              <Icon
-                color={item.icon_color[stepsStatus[key].status]}
-                name={item.icon[stepsStatus[key].status] || 'ns-circle'}
-              />
-            :
-            null
+          {item.showIcon
+            ? stepsStatus[key].status === 'IN_PROGRESS'
+              ? (
+<Popup
+  trigger={(
+<Icon
+  name={item.icon[stepsStatus[key].status]}
+  color={item.icon_color[stepsStatus[key].status]}
+/>
+)}
+  content={item.toolTipTitle || ''}
+  position="top center"
+/>
+              )
+              : (
+<Icon
+  color={item.icon_color[stepsStatus[key].status]}
+  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
+/>
+              )
+            : null
           }
           {addon && addon.pos === 'left' && addon.data[item.to]}
           {item.title}
@@ -68,7 +71,9 @@ class SecondaryMenu extends Component {
       this.props.history.replace(`${this.props.match.url}/${name}`);
     }
   };
+
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
+
   render() {
     const {
       navItems, match, refMatch, location, vertical,
@@ -79,8 +84,8 @@ class SecondaryMenu extends Component {
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
-          {heading &&
-            <Header as="h6">{heading}</Header>
+          {heading
+            && <Header as="h6">{heading}</Header>
           }
           <Menu
             className={className || ''}
@@ -105,22 +110,25 @@ class SecondaryMenu extends Component {
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={Aux}>
-          {match.url === '/agreements/legal' ?
-            <MobileDropDownNav
-              inverted
-              refMatch={refMatch || match}
-              navItems={navItems}
-              location={location}
-              className="legal-menu"
-            />
-            :
-            <MobileDropDownNav
-              className="private-secondary-menu"
-              refMatch={refMatch || match}
-              navItems={navItems}
-              location={location}
-              // options={mobNavItems}
-            />
+          {match.url === '/agreements/legal'
+            ? (
+              <MobileDropDownNav
+                inverted
+                refMatch={refMatch || match}
+                navItems={navItems}
+                location={location}
+                className="legal-menu"
+              />
+            )
+            : (
+              <MobileDropDownNav
+                className="private-secondary-menu"
+                refMatch={refMatch || match}
+                navItems={navItems}
+                location={location}
+                useIsActive
+              />
+            )
           }
         </Responsive>
       </Aux>

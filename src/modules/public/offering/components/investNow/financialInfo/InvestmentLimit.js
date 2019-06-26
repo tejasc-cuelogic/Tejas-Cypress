@@ -25,8 +25,8 @@ const InvestmentLimit = props => (
       />
       <Link to={props.changeInvest ? 'change-investment-limit' : `${props.match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
     </Header>
-    {props.changeInvest ?
-      <p>Your investment will be {props.diffLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(props.diffLimitAmount || 0, 0)}</span></p>
+    {props.changeInvest
+      ? <p>Your investment will be {props.diffLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(props.diffLimitAmount || 0, 0)}</span></p>
       : null
     }
   </Aux>

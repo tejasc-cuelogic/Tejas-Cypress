@@ -14,6 +14,7 @@ export default class Insights extends Component {
   state = {
     sortAsc: false,
   };
+
   componentWillMount() {
     if (this.props.match.params && this.props.match.params.id) {
       const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
@@ -24,6 +25,7 @@ export default class Insights extends Component {
       this.props.articleStore.getCategoryList(true);
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
       const id = nextProps.match.params.id === 'all' ? null : nextProps.match.params.id;
@@ -31,6 +33,7 @@ export default class Insights extends Component {
         .requestAllArticles(true, this.state.sortAsc, id);
     }
   }
+
   activeText = () => {
     const { InsightCategories } = this.props.articleStore;
     const { location } = this.props;
@@ -44,12 +47,14 @@ export default class Insights extends Component {
     }
     return 'All';
   }
+
   requestAllArticles = (isPublic, sortBy) => {
     this.setState({
       sortAsc: sortBy,
     });
     this.props.articleStore.requestAllArticles(isPublic, this.state.sortAsc);
   }
+
   render() {
     const {
       InsightCategories,
@@ -60,15 +65,14 @@ export default class Insights extends Component {
       slidesToShow: isMobile ? '1' : 3,
       slidesToScroll: isMobile ? '1' : 3,
     };
-    const sliderInsightFeaturedArticles =
-        InsightFeaturedArticles && InsightFeaturedArticles.length ?
-          InsightFeaturedArticles.slice(0, 5) : [];
+    const sliderInsightFeaturedArticles = InsightFeaturedArticles && InsightFeaturedArticles.length
+      ? InsightFeaturedArticles.slice(0, 5) : [];
     return (
       <Aux>
         <NsCarousel {...settings}>
           {
-            sliderInsightFeaturedArticles &&
-            sliderInsightFeaturedArticles.map(i => (
+            sliderInsightFeaturedArticles
+            && sliderInsightFeaturedArticles.map(i => (
               <div className="insight-image-wrapper">
                 <Image64
                   centered
@@ -92,8 +96,8 @@ export default class Insights extends Component {
           <Container>
             <Menu.Menu secondary className="menu-secondary">
               <Menu.Item as={Link} to="/resources/insights/category/all">All</Menu.Item>
-              {InsightCategories &&
-                InsightCategories.map(item => (
+              {InsightCategories
+                && InsightCategories.map(item => (
                   <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
                 ))}
             </Menu.Menu>
@@ -126,8 +130,8 @@ export default class Insights extends Component {
           <Dropdown item text={this.activeText()}>
             <Dropdown.Menu>
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
-              {InsightCategories &&
-                InsightCategories.map(item => (
+              {InsightCategories
+                && InsightCategories.map(item => (
                   <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
                 ))}
             </Dropdown.Menu>

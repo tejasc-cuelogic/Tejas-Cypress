@@ -18,7 +18,7 @@ class Banner extends Component {
     const { stepInRoute } = this.props.navStore;
     const showButton = (!isUserLoggedIn || (isUserLoggedIn && isInvestor));
     const isFullInvestor = isInvestor && get(signupStatus, 'activeAccounts') && get(signupStatus, 'activeAccounts').length;
-    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `auth/${get(stepInRoute, 'to')}`;
+    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `${get(stepInRoute, 'to')}`;
 
     return (
       <section className="banner business-banner">
@@ -28,14 +28,16 @@ class Banner extends Component {
               <Header as="h2">
                 Build an investment<br />portfolio you care about.
               </Header>
-              { showButton ?
-                <Button
-                  className={`${!isTablet && 'mt-30'} relaxed`}
-                  primary
-                  content="Get Started"
-                  as={Link}
-                  to={redirectUrl}
-                /> : ''
+              { showButton
+                ? (
+<Button
+  className={`${!isTablet && 'mt-30'} relaxed`}
+  primary
+  content="Get Started"
+  as={Link}
+  to={redirectUrl}
+/>
+                ) : ''
               }
             </div>
           </Responsive>
@@ -47,7 +49,7 @@ class Banner extends Component {
         </Container>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">
-            <Loader active >Loading..</Loader>
+            <Loader active>Loading..</Loader>
           </Dimmer>
         )}
       </section>
@@ -56,4 +58,3 @@ class Banner extends Component {
 }
 
 export default Banner;
-

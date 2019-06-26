@@ -7,7 +7,7 @@ import money from 'money-math';
 import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
-import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const NO_PERMISSION_MSG = `Please contact
   <a href="mailto:support@nextseed.com">support@nextseed.com</a>
@@ -29,6 +29,7 @@ export default class TransferFunds extends Component {
     }
     this.props.uiStore.clearErrors();
   }
+
   render() {
     const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
@@ -47,8 +48,9 @@ export default class TransferFunds extends Component {
     });
     return (
       <div>
-        { !isEmpty(linkedBank) && accountType !== 'ira' ?
-          <Aux>
+        { !isEmpty(linkedBank) && accountType !== 'ira'
+          ? (
+<Aux>
             <Header as="h4">Transfer funds</Header>
             <Grid>
               <Grid.Row>
@@ -63,18 +65,22 @@ export default class TransferFunds extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-          </Aux> : accountType === 'ira' ?
-            <section className="center-align">
+          </Aux>
+          ) : accountType === 'ira'
+            ? (
+<section className="center-align">
               <h4 style={{ color: '#31333d7d' }}>
                 <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
               </h4>
             </section>
-          :
-            <section className="center-align">
+            )
+            : (
+<section className="center-align">
               <h4 style={{ color: '#31333d7d' }}>
                 <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
               </h4>
             </section>
+            )
         }
       </div>
     );

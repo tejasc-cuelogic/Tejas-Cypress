@@ -13,6 +13,7 @@ export default class ManageMultiFactorAuth extends Component {
       this.props.multiFactorAuthStore.initialiseMfaMode();
     }
   }
+
   submit = (e) => {
     e.preventDefault();
     this.props.multiFactorAuthStore.updateMfaModeType().then(() => {
@@ -24,6 +25,7 @@ export default class ManageMultiFactorAuth extends Component {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);
   }
+
   render() {
     const {
       MFA_MODE_TYPE_META,

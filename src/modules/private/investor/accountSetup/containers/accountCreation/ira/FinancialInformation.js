@@ -16,6 +16,7 @@ export default class FinancialInformation extends React.Component {
     }
     this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
   }
+
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
@@ -45,18 +46,20 @@ export default class FinancialInformation extends React.Component {
             }
             <Divider hidden />
             <p className="grey-header">Your investment limit:
-              <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`} >
+              <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>
             </p>
           </div>
-          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 &&
-            FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
-            <Message error className="center-align">
+          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000
+            && FIN_INFO_FRM.fields.investmentLimit.value !== '')
+            && (
+<Message error className="center-align">
               Based on your reported Net Worth and Annual Income, your 12-month investment limit
               under Regulation Crowdfunding is below the $5,000 minimum opening
               deposit for IRA accounts.
             </Message>
+            )
           }
         </Form>
       </Aux>

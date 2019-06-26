@@ -6,13 +6,19 @@ import Helper from '../../../../../../../helper/utility';
 
 
 const IndividualSummary = ({
-  account, investor,
+  account, investor, CopyToClipboardAccountId,
   loading, routingNumber, getRoutingNumber,
 }) => (
   <Table.Body>
     <Table.Row>
       <Table.Cell>Account Creation Date: </Table.Cell>
       <Table.Cell>{get(account, 'details.created.date') ? moment(get(account, 'details.created.date')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Account ID: </Table.Cell>
+      <Table.Cell>
+        {CopyToClipboardAccountId}
+      </Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Account Status: </Table.Cell>
@@ -26,11 +32,11 @@ const IndividualSummary = ({
       <Table.Cell>Linked Bank: </Table.Cell>
       <Table.Cell>
         {get(account, 'details.linkedBank.bankName') ? `${get(account, 'details.linkedBank.bankName')} (${get(account, 'details.linkedBank.accountNumber')}) ` : 'N/A'}
-        {get(account, 'details.linkedBank.bankName') ? loading ?
-          'Loading...' :
-          routingNumber ||
-          <Button color="blue" onClick={e => getRoutingNumber(e, get(account, 'details.accountId'), get(investor, 'id'))} className="link-button"> Click for Routing # </Button>
-        : ''}
+        {get(account, 'details.linkedBank.bankName') ? loading
+          ? 'Loading...'
+          : routingNumber
+          || <Button color="blue" onClick={e => getRoutingNumber(e, get(account, 'details.accountId'), get(investor, 'id'))} className="link-button"> Click for Routing # </Button>
+          : ''}
       </Table.Cell>
     </Table.Row>
     <Table.Row>

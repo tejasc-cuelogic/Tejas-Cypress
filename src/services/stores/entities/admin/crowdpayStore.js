@@ -19,11 +19,15 @@ const types = {
 
 export class CrowdpayStore {
   @observable data = [];
+
   @observable filters = false;
+
   @observable isApiHit = false;
+
   @observable summary = {
     review: 0, individual: 0, ira: 0, entity: 0,
   };
+
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -32,10 +36,15 @@ export class CrowdpayStore {
     displayTillIndex: 10,
     search: { accountType: null },
   };
+
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+
   @observable CONFIRM_CROWDPAY_FRM = Validator.prepareFormObject(CONFIRM_CROWDPAY);
+
   @observable db;
+
   @observable loadingCrowdPayIds = [];
+
   getMutation = {
     GSPROCESS: crowdPayAccountProcess,
     EMAIL: crowdPayAccountNotifyGs,
@@ -75,8 +84,7 @@ export class CrowdpayStore {
       this.setDb(this.getCrowdPayData);
       this.initiateFilters(false);
     }
-    this.loadingCrowdPayIds =
-    lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
+    this.loadingCrowdPayIds = lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
 
   @action
@@ -91,14 +99,13 @@ export class CrowdpayStore {
   @action
   initialFilters = (defaultFilter) => {
     if (defaultFilter) {
-      this.requestState.search.accountStatus =
-        CROWDPAY_FILTERS[this.requestState.type].initialFilters;
+      this.requestState.search.accountStatus = CROWDPAY_FILTERS[this.requestState.type].initialFilters;
     }
     if (this.requestState.type !== 'review') {
       ClientDb.filterData('accountType', CROWDPAY_FILTERS[this.requestState.type].accountType);
     }
-    const filter = defaultFilter ? CROWDPAY_FILTERS[this.requestState.type].initialFilters :
-      CROWDPAY_FILTERS[this.requestState.type].initialStatus;
+    const filter = defaultFilter ? CROWDPAY_FILTERS[this.requestState.type].initialFilters
+      : CROWDPAY_FILTERS[this.requestState.type].initialStatus;
     this.db = ClientDb.filterData('accountStatus', filter, 'like');
     uiStore.setProgress(false);
   }
@@ -227,11 +234,12 @@ export class CrowdpayStore {
       userId,
       accountId,
     };
-    if (ctaAction === 'APPROVE' || ctaAction === 'DECLINE') {
+    if (ctaAction === 'APPROVE' || ctaAction === 'DECLINE' || ctaAction === 'GSPROCESS') {
+      const commentkey = ctaAction === 'GSPROCESS' ? 'reason' : 'comment';
       variables = {
         ...variables,
         action: ctaAction,
-        comment: commentData.justifyDescription,
+        [commentkey]: commentData.justifyDescription,
       };
     } else if (ctaAction === 'CREATEACCOUNT') {
       variables.accountType = types[this.requestState.type];
@@ -319,8 +327,8 @@ export class CrowdpayStore {
   }
 
   @computed get accounts() {
-    return (this.db && this.db.length &&
-      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return (this.db && this.db.length
+      && this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get count() {
@@ -348,6 +356,7 @@ export class CrowdpayStore {
     this.requestState.search = { accountType: null };
     this.FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   }
+
   @computed get loading() {
     return this.data.loading;
   }

@@ -18,8 +18,9 @@ export default class ManagerOverview extends Component {
       title, applicationStatus,
     } = this.props;
     return (
-      ((!isManager && isReadonly && approved && approved.status) || (isManager && submitted)) ?
-        <Aux>
+      ((!isManager && isReadonly && approved && approved.status) || (isManager && submitted))
+        ? (
+<Aux>
           <Header as="h4">
             Manager
             {/* {!isReadonly && isManager && submitted &&
@@ -34,8 +35,9 @@ export default class ManagerOverview extends Component {
             readOnly={isReadonly}
             containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
           />
-          {approved && approved.status && submitted &&
-          <div className="sticky-actions at-top">
+          {approved && approved.status && submitted
+          && (
+<div className="sticky-actions at-top">
             <Button.Group vertical icon size="tiny" className="time-stamp">
               <Button as="span" className="time-stamp">
                 <Icon className="ns-circle" color="green" />{' '}
@@ -47,22 +49,28 @@ export default class ManagerOverview extends Component {
               </Button>
             </Button.Group>
             {isManager && approved && approved.status && applicationStatus
-            !== BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL &&
-            <Button.Group>
+            !== BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL
+            && (
+<Button.Group>
               <Button inverted className="relaxed" color="red" content="Decline" loading={inProgress === 'REVIEW_DECLINED'} onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'SUPPORT_DECLINE')} />
               <Button primary className="relaxed" content="Edit" loading={inProgress === 'REVIEW_APPROVED'} onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_EDIT')} />
             </Button.Group>
+            )
             }
           </div>
+          )
           }
-          {!isReadonly && isManager && submitted &&
-            <div className="sticky-actions at-top">
+          {!isReadonly && isManager && submitted
+            && (
+<div className="sticky-actions at-top">
               <Button.Group vertical icon size="tiny" className="time-stamp">
-                {submitted &&
-                  <Button as="span" className="time-stamp">
+                {submitted
+                  && (
+<Button as="span" className="time-stamp">
                     <Icon className="ns-circle" color="green" />{' '}
                     Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
                   </Button>
+                  )
                 }
               </Button.Group>
               <Button.Group>
@@ -72,9 +80,11 @@ export default class ManagerOverview extends Component {
                 <Button primary className="relaxed" content={title || 'Approve'} loading={inProgress === 'REVIEW_APPROVED'} disabled={!MANAGERS_FRM.meta.isValid} onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_APPROVE')} />
               </Button.Group>
             </div>
+            )
           }
           <Divider section />
-        </Aux> : null
+        </Aux>
+        ) : null
     );
   }
 }

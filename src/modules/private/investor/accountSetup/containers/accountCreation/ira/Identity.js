@@ -12,16 +12,20 @@ export default class Identity extends Component {
   onIdentityDocDrop = (files) => {
     this.props.iraAccountStore.setFileUploadData('identityDoc', files);
   }
+
   onIdentityDocRemove = () => {
     this.props.iraAccountStore.removeUploadedData('identityDoc');
     this.props.uiStore.setConfirmBox('');
   }
+
   confirmRemoveDoc = (name) => {
     this.props.uiStore.setConfirmBox(name);
   }
+
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   render() {
     const { IDENTITY_FRM } = this.props.iraAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
@@ -40,10 +44,12 @@ export default class Identity extends Component {
             onremove={this.confirmRemoveDoc}
           />
         </Form>
-        {errors &&
-          <Message error className="mt-30">
+        {errors
+          && (
+<Message error className="mt-30">
             <ListErrors errors={[errors.message]} />
           </Message>
+          )
         }
         <Divider section hidden />
         <p className="center-align grey-header mt-30">NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>

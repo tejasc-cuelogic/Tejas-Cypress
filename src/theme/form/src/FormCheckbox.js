@@ -21,46 +21,47 @@ const FormCheckbox = observer((props) => {
           <List.Item className="ui checkbox">
             {props.defaults ? (
               <Checkbox
-                checked={value ?
-                  (Array.isArray(toJS(value)) ? value.includes(c.value) : c.value) : false}
+                checked={value
+                  ? (Array.isArray(toJS(value)) ? value.includes(c.value) : c.value) : false}
                 value={c.value}
                 {...props}
-                label={
-                  <label>
-                    {c.customLabel ? customLabel :
-                      c.conditionalCustomLabel ? conditionalCustomLabel :
-                        c.customUpdateLimitLabel ? customUpdateLimitLabel :
-                        c.customRegulationLabel ? customRegulationLabel : c.label}
-                    {c.value === '4' && c.tooltip && !tooltipHardDisable && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) ?
-                      <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
-                      :
-                      c.tooltip && !tooltipHardDisable && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) &&
-                      <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
+                label={(
+<label>
+                    {c.customLabel ? customLabel
+                      : c.conditionalCustomLabel ? conditionalCustomLabel
+                        : c.customUpdateLimitLabel ? customUpdateLimitLabel
+                          : c.customRegulationLabel ? customRegulationLabel : c.label}
+                    {c.value === '4' && c.tooltip && !tooltipHardDisable && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus)
+                      ? <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
+                      : c.tooltip && !tooltipHardDisable && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus)
+                      && <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                     }
                   </label>
-                }
+)}
                 onChange={props.changed}
               />
             ) : (
               <Aux>
                 <input type="checkbox" readOnly checked={value.includes(c.value)} value={c.value} onChange={props.changed} {...props} />
                 <label>
-                  {c.icon &&
-                  <Icon className={c.icon} />
+                  {c.icon
+                  && <Icon className={c.icon} />
                     }
                   {c.customLabel ? customLabel : c.label}
-                  {tooltip &&
-                  <Popup
-                    trigger={<Icon className="ns-help-circle" />}
-                    content={tooltip}
-                    position="top center"
-                    className="center-align"
-                    wide
-                  />
+                  {tooltip
+                  && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+                  )
                     }
                 </label>
               </Aux>
-              )
+            )
             }
           </List.Item>
         ))

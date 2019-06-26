@@ -11,6 +11,7 @@ export default class Funding extends Component {
     const { value, values } = this.props.iraAccountStore.FUNDING_FRM.fields.fundingType;
     return find(values, v => v.value === value) ? find(values, v => v.value === value).description : '';
   };
+
   render() {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
     return (
@@ -29,28 +30,31 @@ export default class Funding extends Component {
           <Divider section hidden />
           <div className="option-details">
             {
-              FUNDING_FRM.fields.fundingType.value === 0 ?
-                <p className="mt-20 grey-header">
+              FUNDING_FRM.fields.fundingType.value === 0
+                ? (
+<p className="mt-20 grey-header">
                   Set up a new self-directed IRA with
                   an initial deposit from an external checking account.
                   Annual contribution limits apply.
                   {/* <a target="_blank" rel="noopener noreferrer" href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">Check the IRS website for the latest rules</a> */}
                 </p>
-                :
-                FUNDING_FRM.fields.fundingType.value === 1 ?
-                  <p className="mt-20 grey-header">
+                )
+                : FUNDING_FRM.fields.fundingType.value === 1
+                  ? (
+<p className="mt-20 grey-header">
                     You can transfer funds from your current [Traditional/Roth] IRA
                     to set up your [Traditional/Roth] IRA account at NextSeed.<br /><br />
                     Note: With a transfer, funds can only be moved between like-types of IRAs.
                   </p>
-                :
-                FUNDING_FRM.fields.fundingType.value === 2 ?
-                  <p className="mt-20 grey-header" >
+                  )
+                  : FUNDING_FRM.fields.fundingType.value === 2
+                    ? (
+<p className="mt-20 grey-header">
                     {'"'}Roll over funds from your 401(k), 403(b), or another qualified account
                     to fund your NextSeed self-directed IRA
                   </p>
-                :
-                ''
+                    )
+                    : ''
             }
           </div>
           <Divider section hidden />

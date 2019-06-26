@@ -14,14 +14,14 @@ const userVerifiedDetails = ({
     }
     return false;
   };
-  const isUserVerified = () => (signupStatus.isWpUser ? setupComplete() :
-    isIdentityVerified(legalDetails.status));
+  const isUserVerified = () => (signupStatus.isWpUser ? setupComplete()
+    : isIdentityVerified(legalDetails.status));
 
   if (legalDetails === null || !isUserVerified()) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
-        <Link to="/app/summary/identity-verification/0" ><b>Verify Identity</b></Link>
+        <Link to="/app/summary/identity-verification/0"><b>Verify Identity</b></Link>
       </Card>
     );
   }

@@ -20,8 +20,7 @@ export default class ManageTransactions extends Component {
     }
   }
 
-  setSearchParam = (e, { name, value }) =>
-    this.props.transactionsStore.setInitiateSrch({ value }, name);
+  setSearchParam = (e, { name, value }) => this.props.transactionsStore.setInitiateSrch({ value }, name);
 
   setAmountParams = (e, name) => {
     if (['minAmount', 'maxAmount'].includes(name)) {
@@ -33,7 +32,9 @@ export default class ManageTransactions extends Component {
       this.props.transactionsStore.setInitiateSrch(valueObj, name);
     }
   }
+
   toggleSearch = () => this.props.transactionsStore.toggleSearch();
+
   executeSearch = (e) => {
     this.props.transactionsStore.setInitiateSrch({ value: e.target.value }, 'keyword');
   }
@@ -41,6 +42,7 @@ export default class ManageTransactions extends Component {
   representAddon = summary => mapValues(summary, s => (
     <Label circular color="red" size="mini">{s}</Label>
   ));
+
   render() {
     const { match } = this.props;
     const {
@@ -51,18 +53,20 @@ export default class ManageTransactions extends Component {
         {...this.props}
         subNav
         subNavAddon={{ data: this.representAddon(summary) }}
-        P1={<ByKeyword
-          {...this.props}
-          w={[8]}
-          filters={filters}
-          change={this.executeSearch}
-          requestState={requestState}
-          placeholder="Search by User / Transaction ID / CP Account  Account ID"
-          toggleSearch={this.toggleSearch}
-          enableSearch
-        />}
-        P2={
-          <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
+        P1={(
+<ByKeyword
+  {...this.props}
+  w={[8]}
+  filters={filters}
+  change={this.executeSearch}
+  requestState={requestState}
+  placeholder="Search by User / Transaction ID / CP Account  Account ID"
+  toggleSearch={this.toggleSearch}
+  enableSearch
+/>
+)}
+        P2={(
+<div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
             <Form>
               <Grid stackable>
                 <Grid.Row>
@@ -78,7 +82,8 @@ export default class ManageTransactions extends Component {
                 </Grid.Row>
               </Grid>
             </Form>
-          </div>}
+          </div>
+)}
       >
         <Switch>
           <Route exact path={`${match.url}/:statusType/`} component={AllTransactions} />

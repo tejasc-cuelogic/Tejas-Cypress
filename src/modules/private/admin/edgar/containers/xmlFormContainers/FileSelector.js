@@ -5,7 +5,7 @@ import { Grid, GridColumn, Checkbox, Card, Header } from 'semantic-ui-react';
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
-import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
+import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
 @inject('businessStore', 'offeringsStore')
 @withRouter

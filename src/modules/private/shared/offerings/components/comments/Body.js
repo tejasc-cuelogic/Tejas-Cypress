@@ -22,13 +22,15 @@ const Extra = ({
 }) => (
   <Item.Extra>
     <span className="time-stamp">{date}</span>
-    {scope === 'PUBLIC' && approved ?
-      <Label basic size="small" className="approve">
+    {scope === 'PUBLIC' && approved
+      ? (
+<Label basic size="small" className="approve">
         Approved
         <Icon className="ns-check-circle" color="green" />
       </Label>
-    : (scope === 'PUBLIC' && !approved) ? showApproval ? <Label circular basic size="mini" color="green">Approval Pending</Label> : null
-    : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleITo : OFFERING_COMMENTS_SCOPE[scope].titleIFrom : direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleTo : OFFERING_COMMENTS_SCOPE[scope].titleFrom : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
+      )
+      : (scope === 'PUBLIC' && !approved) ? showApproval ? <Label circular basic size="mini" color="green">Approval Pending</Label> : null
+        : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleITo : OFFERING_COMMENTS_SCOPE[scope].titleIFrom : direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleTo : OFFERING_COMMENTS_SCOPE[scope].titleFrom : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
     }
   </Item.Extra>
 );
@@ -36,8 +38,8 @@ const Extra = ({
 const Body = props => (
   <div className="message-body">
     <Item.Group className="messages comments">
-      {props.thread && props.thread.length ?
-        props.thread.map((msg) => {
+      {props.thread && props.thread.length
+        ? props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
           const msgDate = moment(date).format('ll');
           const userFullName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
@@ -55,37 +57,41 @@ const Body = props => (
                 <MsgContent
                   classes={classes}
                   body={Parser(msg.comment)}
-                  extra={
-                    <Aux>
+                  extra={(
+<Aux>
                       <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="from"
-                        showApproval={!props.isIssuer &&
-                          get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId}
+                        showApproval={!props.isIssuer
+                          && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId}
                         approved={msg.approved}
                         isIssuer={props.isIssuer}
                         date={msgDate}
                         scope={msg.scope}
                       />
                     </Aux>
-                  }
-                  edit={
-                    <div className="comment-actions">
-                      {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved ?
-                        <Aux>
+)}
+                  edit={(
+<div className="comment-actions">
+                      {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved
+                        ? (
+<Aux>
                           <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
                           <Link to="/" className="link" loading={props.buttonLoader === msg.id} onClick={e => props.approveComment(e, msg.id)}>Approve</Link>{' | '}
                         </Aux>
-                      : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved &&
-                      <Aux>
+                        )
+                        : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved
+                      && (
+<Aux>
                         <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
                       </Aux>
+                      )
                       }
-                      {!props.isIssuer &&
-                        <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
+                      {!props.isIssuer
+                        && <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
                       }
                     </div>
-                  }
+)}
                 />
               </Item>
             </Aux>
@@ -95,8 +101,8 @@ const Body = props => (
                 <MsgContent
                   classes={classes}
                   body={Parser(msg.comment)}
-                  extra={
-                    <Aux>
+                  extra={(
+<Aux>
                       <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="to"
@@ -107,17 +113,21 @@ const Body = props => (
                         scope={msg.scope}
                       />
                     </Aux>
-                  }
+)}
                   edit={
-                    ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin) &&
-                    <div className="comment-actions">
+                    ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin)
+                    && (
+<div className="comment-actions">
                       <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
-                      {!props.isIssuer &&
-                      <Aux>{' | '}
+                      {!props.isIssuer
+                      && (
+<Aux>{' | '}
                         <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
                       </Aux>
+                      )
                       }
                     </div>
+                    )
                   }
                 />
                 <UserAvatar size="mini" UserInfo={userInfo} />

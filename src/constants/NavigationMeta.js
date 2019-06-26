@@ -232,7 +232,7 @@ export const PRIVATE_NAV = [
       },
       { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
       {
-        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop'],
+        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop', 'dev'],
       },
     ],
   },
@@ -260,7 +260,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Overview', to: 'overview', env: ['localhost', 'develop'] },
+      { title: 'Overview', to: 'overview', env: ['localhost', 'develop', 'dev'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'ᕕ( ᐛ )ᕗ', to: 'completed' },
@@ -509,19 +509,19 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true, defaultActive: true,
+            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true, defaultActive: true, key: 'hasTopThingToKnow',
           },
           {
-            title: 'Investment Highlights', to: '#investment-highlights', useRefLink: true,
+            title: 'Investment Highlights', to: '#investment-highlights', useRefLink: true, key: 'investmentHighlights',
           },
           {
-            title: 'Updates', to: '#updates', useRefLink: true,
+            title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
           },
           {
-            title: 'Gallery', to: '#gallery', useRefLink: true,
+            title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
           },
           {
-            title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true,
+            title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true, key: 'issuerStatement',
           },
         ],
       },
@@ -533,19 +533,19 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Overview', to: '#company-description', useRefLink: true, defaultActive: true,
+            title: 'Overview', to: '#company-description', useRefLink: true, defaultActive: true, key: 'companyDescription',
           },
           {
-            title: 'Business Model', to: '#business-model', useRefLink: true,
+            title: 'Business Model', to: '#business-model', useRefLink: true, key: 'businessModel',
           },
           {
-            title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
+            title: 'Location Analysis', to: '#location-analysis', useRefLink: true, key: 'localAnalysis',
           },
           {
-            title: 'History', to: '#history', useRefLink: true,
+            title: 'History', to: '#history', useRefLink: true, key: 'history',
           },
           {
-            title: 'Team', to: '#team', useRefLink: true,
+            title: 'Team', to: '#team', useRefLink: true, key: 'team',
           },
         ],
       },
@@ -557,7 +557,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true,
+            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true, key: 'useOfProcceds',
           },
           {
             title: 'Key Terms', to: '#key-terms', useRefLink: true,

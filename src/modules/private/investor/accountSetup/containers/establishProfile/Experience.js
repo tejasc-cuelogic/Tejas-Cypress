@@ -11,6 +11,7 @@ import { ListErrors } from '../../../../../../theme/shared';
 @observer
 export default class Experience extends Component {
   state = { errorMessage: '' };
+
   handleSubmitInvestmentExperience = () => {
     const {
       validateInvestmentExperience,
@@ -19,8 +20,8 @@ export default class Experience extends Component {
       isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
     validateInvestmentExperience();
-    if (INVESTMENT_EXP_FORM.meta.isValid &&
-      this.props.investorProfileStore.isInvestmentExperienceValid) {
+    if (INVESTMENT_EXP_FORM.meta.isValid
+      && this.props.investorProfileStore.isInvestmentExperienceValid) {
       if (isValidInvestorProfileForm) {
         this.props.uiStore.setErrors(undefined);
         const currentStep = {
@@ -30,8 +31,8 @@ export default class Experience extends Component {
         };
         updateInvestorProfileData(currentStep).then(() => {
           const { signupStatus, userStatus } = this.props.userDetailsStore;
-          if (signupStatus.isMigratedFullAccount ||
-            (userStatus && userStatus.includes('FULL'))) {
+          if (signupStatus.isMigratedFullAccount
+            || (userStatus && userStatus.includes('FULL'))) {
             this.props.history.push('/app/summary');
             setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
@@ -44,6 +45,7 @@ export default class Experience extends Component {
       }
     }
   }
+
   render() {
     const {
       INVESTMENT_EXP_FORM,
@@ -81,25 +83,31 @@ export default class Experience extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          {errorMessage &&
-          <Message error className="mt-20">
+          {errorMessage
+          && (
+<Message error className="mt-20">
             <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
           </Message>
+          )
           }
           <div className="center-align mt-20">
-            {!isInvestmentExperienceValid &&
-              <p className="negative-text mb-20">
+            {!isInvestmentExperienceValid
+              && (
+<p className="negative-text mb-20">
                 NextSeed investments are suitable for experienced investors who are
                 comfortable with long-term risk. Please confirm that you fit this
                 profile in order to proceed.
               </p>
+              )
             }
             <Button primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} />
-            {!isInvestmentExperienceValid &&
-              <p className="negative-text mt-20">
+            {!isInvestmentExperienceValid
+              && (
+<p className="negative-text mt-20">
                 Otherwise, please reference our <Link to="/resources/education-center">Education Center</Link> to
                 learn more about investing on NextSeed.
               </p>
+              )
             }
           </div>
         </Form>

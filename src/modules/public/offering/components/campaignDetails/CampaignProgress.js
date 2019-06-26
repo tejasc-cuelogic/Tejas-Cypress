@@ -26,6 +26,7 @@ export default class CampaignProgress extends Component {
       </span>
     </p>
   );
+
   render() {
     const data = this.props.amountType === 'min' ? [...dataRefMin] : [...dataRef];
     data[0].amount = this.props.amountType === 'min' ? (this.props.data.collected <= this.props.maxOffering ? this.props.data.collected : this.props.maxOffering) : this.props.data.needed;

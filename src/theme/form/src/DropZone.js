@@ -17,35 +17,42 @@ const DropZone = observer((props) => {
   } = props.fielddata;
   return (
     <div className={`file-uploader-wrap ${props.containerclassname}`}>
-      {label &&
-        <label>
+      {label
+        && (
+<label>
           {label}
-          {props.tooltip &&
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={props.tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
+          {props.tooltip
+          && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={props.tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+          )
           }
         </label>
+        )
       }
-      { !props.disabled && (!value || props.multiple) ?
-        <div className="file-uploader">
+      { !props.disabled && (!value || props.multiple)
+        ? (
+<div className="file-uploader">
           <Dimmer active={showLoader}>
             <Loader />
           </Dimmer>
           <Dropzone {...props} onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
             <Icon className="ns-upload" /> {props.uploadtitle ? <span>{props.uploadtitle}</span> : <span>Upload document{props.multiple ? 's' : ''}</span>}
           </Dropzone>
-        </div> : null
+        </div>
+        ) : null
       }
-      {(isArray(toJS(value)) && value.length) ?
-        value.map((item, key) => (
+      {(isArray(toJS(value)) && value.length)
+        ? value.map((item, key) => (
           <div className="file-uploader attached">
-            {!props.disabled &&
-              <Aux>
+            {!props.disabled
+              && (
+<Aux>
                 <Responsive
                   as={Button}
                   minWidth={768}
@@ -64,13 +71,16 @@ const DropZone = observer((props) => {
                   onClick={e => props.onremove(e, props.name, key)}
                 />
               </Aux>
+              )
             }
             <span title={item}>{item}</span>
           </div>
-        )) : !isArray(toJS(value)) && value &&
-        <div className="file-uploader attached">
-          {!props.disabled &&
-            <Aux>
+        )) : !isArray(toJS(value)) && value
+        && (
+<div className="file-uploader attached">
+          {!props.disabled
+            && (
+<Aux>
               <Responsive
                 as={Button}
                 minWidth={768}
@@ -89,12 +99,14 @@ const DropZone = observer((props) => {
                 onClick={e => props.onremove(e, props.name)}
               />
             </Aux>
+            )
           }
           <span title={value}>{value}</span>
         </div>
+        )
       }
-      {error &&
-        <FieldError error={error} />
+      {error
+        && <FieldError error={error} />
       }
     </div>
   );

@@ -54,10 +54,12 @@ export default class Finances extends Component {
               ))}
             </Form.Group>
           </div>
-          {errors &&
-          <Message error className="mt-30">
+          {errors
+          && (
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
+          )
           }
         </Form>
       </div>

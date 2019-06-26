@@ -14,6 +14,7 @@ export default class LinkbankSummary extends React.Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     this.props.bankAccountStore.fetchRoutingNumber();
   }
+
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     this.props.bankAccountStore.fetchRoutingNumber();
@@ -27,8 +28,8 @@ export default class LinkbankSummary extends React.Component {
       changeLinkbank,
       routingNum,
     } = this.props.bankAccountStore;
-    const bankAccountNumber = !isEmpty(plaidAccDetails) ?
-      plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
+    const bankAccountNumber = !isEmpty(plaidAccDetails)
+      ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
       <Aux>
         <Header as="h3" textAlign="center">Linked Bank</Header>
@@ -37,23 +38,27 @@ export default class LinkbankSummary extends React.Component {
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <Table.Body>
-                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
-                  <Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
+                  && (
+<Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
+                  )
                 }
                 <Table.Row>
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                { !isEmpty(routingNum) &&
-                  <Table.Row>
+                { !isEmpty(routingNum)
+                  && (
+<Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       { routingNum || '' }
                     </Table.Cell>
                   </Table.Row>
+                  )
                 }
               </Table.Body>
             </Table>

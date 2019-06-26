@@ -19,14 +19,17 @@ export default class AccountCreation extends Component {
       this.props.accountStore.setAccTypeChange(accType.value);
     }
   }
+
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
   }
+
   renderAccType = () => {
     const { investmentAccType } = this.props.accountStore;
     this.props.bankAccountStore.resetStoreData();
     this.props.history.push(`${this.props.match.url}/${investmentAccType}`);
   }
+
   render() {
     const { INVESTMENT_ACC_TYPES, setInvestmentAccType } = this.props.accountStore;
     return (
@@ -35,14 +38,15 @@ export default class AccountCreation extends Component {
           <Route
             exact
             path={this.props.match.url}
-            render={props =>
-              (<AccountTypes
-                form={INVESTMENT_ACC_TYPES}
-                close={this.handleCloseModal}
-                renderAccType={this.renderAccType}
-                handleAccTypeChange={setInvestmentAccType}
-                {...props}
-              />)}
+            render={props => (
+<AccountTypes
+  form={INVESTMENT_ACC_TYPES}
+  close={this.handleCloseModal}
+  renderAccType={this.renderAccType}
+  handleAccTypeChange={setInvestmentAccType}
+  {...props}
+/>
+            )}
           />
           <Route exact path={`${this.props.match.url}/individual`} component={IndividualAccCreation} />
           <Route exact path={`${this.props.match.url}/ira`} component={IraAccCreation} />

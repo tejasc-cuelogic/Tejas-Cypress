@@ -172,4 +172,3 @@ query insightArticlesListByFilter($categoryId: String, $articleStatus: ArticleSt
   }
 }
 `;
-

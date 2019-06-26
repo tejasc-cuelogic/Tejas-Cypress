@@ -34,6 +34,7 @@ export default class AccountDetails extends Component {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
   }
+
   getUserStorageDetails = (e) => {
     e.preventDefault();
     const userId = get(this.props.userDetailsStore.getDetailsOfUser, 'id');
@@ -47,6 +48,7 @@ export default class AccountDetails extends Component {
       });
     }
   }
+
   render() {
     const { match } = this.props;
     const { inProgress } = this.props.uiStore;

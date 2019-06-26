@@ -11,6 +11,7 @@ class Banner extends Component {
   componentWillMount() {
     this.props.offeringsStore.getTotalAmount();
   }
+
   redirectTo = (action = '') => {
     if (this.props.authStore.isUserLoggedIn && !this.props.userStore.isIssuer) {
       this.props.history.push(`${this.props.match.url}/confirm-login`);
@@ -22,6 +23,7 @@ class Banner extends Component {
       this.props.history.push('/business-application/commercial-real-estate');
     }
   }
+
   render() {
     const { clientWidth } = document.documentElement;
     const isTablet = clientWidth >= 768 && clientWidth < 992;
@@ -53,4 +55,3 @@ class Banner extends Component {
 }
 
 export default Banner;
-

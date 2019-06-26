@@ -28,7 +28,7 @@ const UploadedDocument = ({
           <Icon className="ns-file" color="blue" />{document.fileName}
         </Link>
         <span>Attached: {document.attachedDate} by {document.byUser}</span>
-        <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, 'UPLOADED_DOCUMENTS_FRM')} >
+        <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, 'UPLOADED_DOCUMENTS_FRM')}>
           <Icon className="ns-close-circle" color="grey" />
         </Link>
       </Item.Header>
@@ -59,7 +59,7 @@ const TableHeader = ({ labels, isReadonly }) => (
 const RemoveIcon = ({
   match, index, toggleConfirmModal, formName, arrayName,
 }) => (
-  <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName, arrayName)} >
+  <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName, arrayName)}>
     <Icon className="ns-close-circle" color="grey" />
   </Link>
 );
@@ -83,26 +83,33 @@ export default class Miscellaneous extends Component {
     }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.miscellaneous.managerOverview');
   }
+
   onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadData('MISCELLANEOUS_FRM', 'otherDocs', name, files, index);
   }
+
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore(formName, arrayName);
   }
+
   handleDelDoc = (field, index) => {
     this.props.businessAppReviewStore.removeUploadedData('MISCELLANEOUS_FRM', field, index, 'otherDocs');
   }
+
   toggleConfirmModal = (e, index, formName, arrayName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName, arrayName);
   }
+
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('MISCELLANEOUS_FRM');
   }
+
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
+
   render() {
     const {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
@@ -114,10 +121,10 @@ export default class Miscellaneous extends Component {
       businessApplicationDetailsAdmin, applicationReviewLoading,
     } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
-    const submitted = (review && review.miscellaneous && review.miscellaneous &&
-      review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
-    const approved = (review && review.miscellaneous && review.miscellaneous &&
-      review.miscellaneous.approved) ? review.miscellaneous.approved : null;
+    const submitted = (review && review.miscellaneous && review.miscellaneous
+      && review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
+    const approved = (review && review.miscellaneous && review.miscellaneous
+      && review.miscellaneous.approved) ? review.miscellaneous.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     if (applicationReviewLoading) {
@@ -132,8 +139,8 @@ export default class Miscellaneous extends Component {
             <TableHeader isReadonly={isReadonly} labels={['Label', 'URL']} />
             <Table.Body>
               {
-                MISCELLANEOUS_FRM.fields.socialMedia.length ?
-                MISCELLANEOUS_FRM.fields.socialMedia.map((socialMedia, index) => (
+                MISCELLANEOUS_FRM.fields.socialMedia.length
+                  ? MISCELLANEOUS_FRM.fields.socialMedia.map((socialMedia, index) => (
                   <Table.Row>
                     <Table.Cell width={3}>
                       <Dropdown
@@ -158,18 +165,20 @@ export default class Miscellaneous extends Component {
                         changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
                       />
                     </Table.Cell>
-                    {!isReadonly &&
-                    <Table.Cell collapsing>
-                      {MISCELLANEOUS_FRM.fields.socialMedia.length > 1 &&
-                      <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'socialMedia')} />
+                    {!isReadonly
+                    && (
+<Table.Cell collapsing>
+                      {MISCELLANEOUS_FRM.fields.socialMedia.length > 1
+                      && <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'socialMedia')} />
                       }
                     </Table.Cell>
+                    )
                     }
                   </Table.Row>
-                )) : ''
+                  )) : ''
               }
-              {!isReadonly && MISCELLANEOUS_FRM.fields.socialMedia.length < 5 &&
-              <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" title="Add social media" />
+              {!isReadonly && MISCELLANEOUS_FRM.fields.socialMedia.length < 5
+              && <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" title="Add social media" />
               }
             </Table.Body>
           </Table>
@@ -178,8 +187,8 @@ export default class Miscellaneous extends Component {
             <TableHeader isReadonly={isReadonly} labels={['Label', 'Comment']} />
             <Table.Body>
               {
-              MISCELLANEOUS_FRM.fields.otherDocs.length ?
-              MISCELLANEOUS_FRM.fields.otherDocs.map((document, index) => (
+              MISCELLANEOUS_FRM.fields.otherDocs.length
+                ? MISCELLANEOUS_FRM.fields.otherDocs.map((document, index) => (
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5}>
                     <FormInput
@@ -203,18 +212,20 @@ export default class Miscellaneous extends Component {
                       uploadtitle="Choose document to upload"
                     />
                   </Table.Cell>
-                  {!isReadonly &&
-                  <Table.Cell collapsing>
-                    {MISCELLANEOUS_FRM.fields.otherDocs.length > 1 &&
-                    <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'otherDocs')} />
+                  {!isReadonly
+                  && (
+<Table.Cell collapsing>
+                    {MISCELLANEOUS_FRM.fields.otherDocs.length > 1
+                    && <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'otherDocs')} />
                     }
                   </Table.Cell>
+                  )
                   }
                 </Table.Row>
-              )) : ''
+                )) : ''
               }
-              {!isReadonly && MISCELLANEOUS_FRM.fields.otherDocs.length < 5 &&
-              <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" title="Add new document" />
+              {!isReadonly && MISCELLANEOUS_FRM.fields.otherDocs.length < 5
+              && <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" title="Add new document" />
               }
             </Table.Body>
           </Table>
@@ -222,8 +233,8 @@ export default class Miscellaneous extends Component {
           <div className="featured-section mb-20">
             <Item.Group relaxed="very">
               {
-              UPLOADED_DOCUMENTS_FRM.fields.data.length ?
-              UPLOADED_DOCUMENTS_FRM.fields.data.map((document, index) => (
+              UPLOADED_DOCUMENTS_FRM.fields.data.length
+                ? UPLOADED_DOCUMENTS_FRM.fields.data.map((document, index) => (
                 <Aux>
                   <UploadedDocument
                     match={this.props.match}
@@ -232,8 +243,8 @@ export default class Miscellaneous extends Component {
                     document={document.document}
                   />
                 </Aux>
-              )) :
-              <p>No documents to show</p>
+                ))
+                : <p>No documents to show</p>
               }
             </Item.Group>
           </div>
@@ -250,8 +261,8 @@ export default class Miscellaneous extends Component {
         </Form>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${confirmModalName === 'socialMedia' ? 'social media' :
-          'document'}?`}
+          content={`Are you sure you want to remove this ${confirmModalName === 'socialMedia' ? 'social media'
+            : 'document'}?`}
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => removeData('MISCELLANEOUS_FRM', confirmModalName)}

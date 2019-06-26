@@ -353,6 +353,9 @@ ol.ui.list.step-list{
         }
     }
 }
+.process-account-list {
+    column-count: 3 !important;
+}
 
 .ui.bulleted.list .list>.item,
 .ui.bulleted.list>.item,

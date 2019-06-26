@@ -24,11 +24,13 @@ export default class Report extends Component {
   setSearchParam = (e, { name, value }) => {
     this.props.offeringCreationStore.setInitiateSrch(name, value);
   }
+
   executeSearch = (e) => {
     if (e.charCode === 13) {
       this.props.offeringCreationStore.setInitiateSrch('keyword', e.target.value);
     }
   }
+
   render() {
     const { requestState } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
@@ -43,8 +45,8 @@ export default class Report extends Component {
                 w={[7]}
                 placeholder="Search by name"
                 more="no"
-                addon={
-                  <Aux>
+                addon={(
+<Aux>
                     <Grid.Column width={6}>
                       <DropdownFilter value={requestState.search.amount} name="Investment amount" change={this.setSearchParam} options={[]} />
                     </Grid.Column>
@@ -52,14 +54,14 @@ export default class Report extends Component {
                       <Button primary floated="right">Manage PIN</Button>
                     </Grid.Column>
                   </Aux>
-                }
+)}
               />
             </Grid.Row>
           </Grid>
         </Form>
         <div className={offer.stage !== 'CREATION' ? 'inner-content-spacer' : ''}>
-          {isIssuer &&
-            <Divider hidden />
+          {isIssuer
+            && <Divider hidden />
           }
           <Header as="h4">
             Bonus rewards

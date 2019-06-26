@@ -16,14 +16,16 @@ const FormLabelInput = observer((props) => {
     <Form.Field>
       <label>
         {label}
-        {tooltip &&
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
+        {tooltip
+          && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+          )
         }
       </label>
       <Input
@@ -36,8 +38,8 @@ const FormLabelInput = observer((props) => {
         placeholder={(displayMode || readOnly) ? '' : placeHolder}
         onChange={props.changed}
       />
-      {error &&
-        <FieldError error={error} />
+      {error
+        && <FieldError error={error} />
       }
     </Form.Field>
   );

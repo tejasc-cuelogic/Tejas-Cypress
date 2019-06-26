@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Icon, Button, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
-import { InlineLoader, NsPagination, UserAvatar } from './../../../../../theme/shared';
+import { InlineLoader, NsPagination, UserAvatar } from '../../../../../theme/shared';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
@@ -29,11 +29,11 @@ const SortableItem = SortableElement(({
       {teamMember.title}
     </div>
     <div className="balance-half">
-      {teamMember && teamMember.social ?
-        teamMember.social.map(site => (
+      {teamMember && teamMember.social
+        ? teamMember.social.map(site => (
           <Aux>
-            {site.url &&
-              <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
+            {site.url
+              && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
             }
           </Aux>
         )) : ''}
@@ -43,13 +43,13 @@ const SortableItem = SortableElement(({
     </div>
     <div className="action width-130 right-align">
       <Button.Group>
-        <Button icon className="link-button" >
+        <Button icon className="link-button">
           <Icon className="ns-pencil" onClick={() => handleEdit(teamMember.id)} />
         </Button>
         <Button className="link-button">
           <Icon onClick={() => save(teamMember)} color="blue" name={teamMember.isPublished ? 'ns-view' : 'ns-no-view'} />
         </Button>
-        <Button icon className="link-button" >
+        <Button icon className="link-button">
           <Icon className="ns-trash" onClick={() => handleAction(teamMember.id)} />
         </Button>
       </Button.Group>
@@ -84,35 +84,45 @@ export default class AllTeam extends Component {
   componentWillMount() {
     this.props.teamStore.initRequest(true);
   }
+
   componentWillUnmount() {
     this.props.teamStore.reset();
   }
+
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { teamMembers, setTeamMemberOrder } = this.props.teamStore;
     if (oldIndex !== newIndex) {
       setTeamMemberOrder(arrayMove(teamMembers, oldIndex, newIndex));
     }
   }
+
   deleteTeamMember = () => {
-    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId);
-    this.props.teamStore.setConfirmBox('');
+    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId).then(() => {
+      this.props.teamStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
+
   handleAction = (id) => {
     this.props.teamStore.setConfirmBox('Delete', id);
   }
+
   handleDeleteCancel = () => {
     this.props.teamStore.setConfirmBox('');
   }
+
   paginate = params => this.props.teamStore.pageRequest(params);
 
   handleEdit = (id) => {
     const { match } = this.props;
     this.props.history.push(`${match.url}/${id}`);
   }
+
   save = (teamMember) => {
     this.props.teamStore.save(teamMember.id, teamMember);
     this.props.history.push(this.props.refLink);
   }
+
   render() {
     const {
       teamMembers,
@@ -154,8 +164,8 @@ export default class AllTeam extends Component {
               useDragHandle
             />
           </div>
-          {totalRecords > 0 &&
-            <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+          {totalRecords > 0
+            && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
           }
           <Confirm
             header="Confirm"

@@ -17,20 +17,25 @@ export default class OffersPanel extends Component {
     showModal: false,
     modalIndex: 0,
   }
+
   formChangeWithIndex = (e, result, form, arrayName, index) => {
     this.props.formChangeWithIndex(e, result, form, arrayName, index);
   }
+
   maskChangeWithIndex = (values, form, arrayName, field, index) => {
     this.props.maskChangeWithIndex(values, form, arrayName, field, index);
   }
+
   addAssignedTerms = (index) => {
     this.setState({ showModal: false });
     this.props.assignAdditionalTermsValue(index);
   }
+
   closeModal = (index) => {
     this.setState({ showModal: false });
     this.props.addAdditionalTermsToFormData(index);
   }
+
   openModal = (e, index) => {
     e.stopPropagation();
     if (!this.props.isReadonly) {
@@ -38,6 +43,7 @@ export default class OffersPanel extends Component {
       this.setState({ modalIndex: index });
     }
   }
+
   render() {
     const {
       OFFERS_FRM, isReadonly, match, selectOffer, selectedOfferIndex, refModule,
@@ -61,10 +67,12 @@ export default class OffersPanel extends Component {
               <Card.Content>
                 <Card.Header>
                   Offer {String.fromCharCode('A'.charCodeAt() + index)}
-                  {!isReadonly && OFFERS_FRM.fields.offer.length > 1 &&
-                  <Link to={match.url} onClick={e => toggleConfirmModal(e, index, 'offer')} className="pull-right">
+                  {!isReadonly && OFFERS_FRM.fields.offer.length > 1
+                  && (
+<Link to={match.url} onClick={e => toggleConfirmModal(e, index, 'offer')} className="pull-right">
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  )
                   }
                 </Card.Header>
               </Card.Content>
@@ -89,8 +97,9 @@ export default class OffersPanel extends Component {
                         />
                       </Table.Cell>
                     </Table.Row>
-                    {!isReadonly ?
-                      <Aux>
+                    {!isReadonly
+                      ? (
+<Aux>
                         <Table.Row>
                           <Table.Cell>{offerFields.minimumAmount.label}</Table.Cell>
                           <Table.Cell>
@@ -121,11 +130,14 @@ export default class OffersPanel extends Component {
                             />
                           </Table.Cell>
                         </Table.Row>
-                      </Aux> :
-                      <Table.Row>
+                      </Aux>
+                      )
+                      : (
+<Table.Row>
                         <Table.Cell>Maximum Offering Amount</Table.Cell>
                         <Table.Cell>{`${Helper.CurrencyFormat(offer.minimumAmount.value)} - ${Helper.CurrencyFormat(offer.amount.value)}`}</Table.Cell>
                       </Table.Row>
+                      )
                       }
                     <Table.Row>
                       <Table.Cell>{offerFields.maturity.label}</Table.Cell>
@@ -142,8 +154,9 @@ export default class OffersPanel extends Component {
                         />
                       </Table.Cell>
                     </Table.Row>
-                    {offer.structure.value === 'TERM_NOTE' &&
-                    <Aux>
+                    {offer.structure.value === 'TERM_NOTE'
+                    && (
+<Aux>
                       <Table.Row>
                         <Table.Cell>{offerFields.interestRate.label}</Table.Cell>
                         <Table.Cell>
@@ -174,9 +187,11 @@ export default class OffersPanel extends Component {
                         </Table.Cell>
                       </Table.Row>
                     </Aux>
+                    )
                     }
-                    {offer.structure.value === 'REVENUE_SHARING_NOTE' &&
-                    <Aux>
+                    {offer.structure.value === 'REVENUE_SHARING_NOTE'
+                    && (
+<Aux>
                       <Table.Row>
                         <Table.Cell>{offerFields.mthRevenueSharing.label}</Table.Cell>
                         <Table.Cell>
@@ -205,6 +220,7 @@ export default class OffersPanel extends Component {
                         </Table.Cell>
                       </Table.Row>
                     </Aux>
+                    )
                     }
                     <Table.Row>
                       <Table.Cell>{offerFields.personalGuarantee.label}</Table.Cell>
@@ -252,8 +268,9 @@ export default class OffersPanel extends Component {
                         />
                       </Table.Cell>
                     </Table.Row>
-                    {offer.structure.value === 'TERM_NOTE' &&
-                    <Table.Row>
+                    {offer.structure.value === 'TERM_NOTE'
+                    && (
+<Table.Row>
                       <Table.Cell>{offerFields.totalCapital.label}</Table.Cell>
                       <Table.Cell>
                         <MaskedInput
@@ -268,28 +285,31 @@ export default class OffersPanel extends Component {
                         />
                       </Table.Cell>
                     </Table.Row>
+                    )
                     }
-                    {((!isReadonly) || (isReadonly && offer.additionalTerms.value)) &&
-                      <Table.Row>
+                    {((!isReadonly) || (isReadonly && offer.additionalTerms.value))
+                      && (
+<Table.Row>
                         <Table.Cell>{offerFields.additionalTerms.label}</Table.Cell>
                         <Table.Cell>
-                          {isReadonly && offer.additionalTerms.value &&
-                            <Button type="button" size="small" color="blue" className="link-button" onClick={() => selectOffer('selectedOfferIndex', index, 1)} >{offer.additionalTermsField.value}</Button>
+                          {isReadonly && offer.additionalTerms.value
+                            && <Button type="button" size="small" color="blue" className="link-button" onClick={() => selectOffer('selectedOfferIndex', index, 1)}>{offer.additionalTermsField.value}</Button>
                           }
-                          {!isReadonly &&
-                            <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.openModal(e, index)} >{offer.additionalTermsField.value}</Button>
+                          {!isReadonly
+                            && <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.openModal(e, index)}>{offer.additionalTermsField.value}</Button>
                           }
                         </Table.Cell>
                       </Table.Row>
+                      )
                     }
                   </Table.Body>
                 </Table>
               </div>
               {this.props.refModule !== 'admin' && (
                 <Card.Content extra className="center-align">
-                  {selectedOfferIndex !== index ?
-                    <Button primary className="relaxed" content="View Offer" onClick={() => selectOffer('selectedOfferIndex', index)} />
-                  : <Button as="span" className="time-stamp">See details below</Button>
+                  {selectedOfferIndex !== index
+                    ? <Button primary className="relaxed" content="View Offer" onClick={() => selectOffer('selectedOfferIndex', index)} />
+                    : <Button as="span" className="time-stamp">See details below</Button>
                   }
                 </Card.Content>
               )}
@@ -319,7 +339,7 @@ export default class OffersPanel extends Component {
             <div className="right-align mt-30">
               <Button content="Save Terms" color="green" onClick={() => this.addAssignedTerms(this.state.modalIndex)} />
             </div>
-          </Modal.Content >
+          </Modal.Content>
         </Modal>
       </Aux>
     );

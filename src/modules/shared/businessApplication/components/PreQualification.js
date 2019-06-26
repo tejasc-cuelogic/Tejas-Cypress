@@ -9,7 +9,7 @@ import { FormInput } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import PreQualBusiness from './prequlification/PreQualBusiness';
 import PreQualRealEstate from './prequlification/PreQualRealEstate';
-import NotFound from '../../../shared/NotFound';
+import NotFound from '../../NotFound';
 import { DataFormatter } from '../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -26,6 +26,7 @@ export default class PreQualification extends Component {
       this.props.businessAppStore.setFieldvalue('currentApplicationType', params.applicationType);
     }
   }
+
   submit = (e) => {
     e.preventDefault();
     if (this.props.isPublic) {
@@ -50,6 +51,7 @@ export default class PreQualification extends Component {
         });
     }
   }
+
   prequalBasicSubmit = (e) => {
     e.preventDefault();
     const { params } = this.props.match;
@@ -57,8 +59,8 @@ export default class PreQualification extends Component {
       this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
         .then(() => {
           this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
-          const sel = params.applicationType === 'commercial-real-estate' ? 'cre-scroll' :
-            'application-scroll';
+          const sel = params.applicationType === 'commercial-real-estate' ? 'cre-scroll'
+            : 'application-scroll';
           document.querySelector(`.${sel}`).scrollIntoView({
             top: 0,
             behavior: 'smooth',
@@ -66,6 +68,7 @@ export default class PreQualification extends Component {
         });
     }
   }
+
   render() {
     const {
       BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, preQualFormDisabled, businessAppEleChange,
@@ -79,23 +82,26 @@ export default class PreQualification extends Component {
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
-          {!hideFields &&
-          <Aux>
+          {!hideFields
+          && (
+<Aux>
             <Icon className="ns-paper-plane" size="massive" color="green" />
             <FormElementWrap
               as="h1"
               header="Pre-Qualification Application Process"
-              subHeader={
-                <Aux>
+              subHeader={(
+<Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
                   <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
                 </Aux>
-              }
+)}
             />
           </Aux>
+          )
           }
-          {this.props.isPublic &&
-          <FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
+          {this.props.isPublic
+          && (
+<FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
             <div className="field-wrap">
               <Form.Group widths="equal">
                 {
@@ -115,8 +121,9 @@ export default class PreQualification extends Component {
                 }
               </Form.Group>
             </div>
-            {!isPrequalQulify &&
-            <Aux>
+            {!isPrequalQulify
+            && (
+<Aux>
               <Divider hidden />
               <Button
                 loading={this.props.uiStore.inProgress}
@@ -128,39 +135,49 @@ export default class PreQualification extends Component {
                 Continue
               </Button>
             </Aux>
+            )
             }
           </FormElementWrap>
+          )
           }
         </Form>
-        {isPrequalQulify &&
-        <Form onSubmit={this.submit} className="issuer-signup">
-          {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
-            <PreQualRealEstate hideFields={hideFields} applicationType={params.applicationType} /> :
-            <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
+        {isPrequalQulify
+        && (
+<Form onSubmit={this.submit} className="issuer-signup">
+          {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate'
+            ? <PreQualRealEstate hideFields={hideFields} applicationType={params.applicationType} />
+            : <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
           }
-          {!hideFields &&
-          <Aux>
+          {!hideFields
+          && (
+<Aux>
             <Divider hidden />
-            {!preQualFormDisabled ?
-              <Button
-                loading={this.props.uiStore.inProgress}
-                disabled={!BUSINESS_APP_FRM.meta.isValid ||
-                  (BUSINESS_APP_FRM.meta.isValid && this.props.uiStore.inProgress)}
-                size="large"
-                color="green"
-                className={`${isMobile && 'mb-50'} very relaxed`}
-              >
+            {!preQualFormDisabled
+              ? (
+<Button
+  loading={this.props.uiStore.inProgress}
+  disabled={!BUSINESS_APP_FRM.meta.isValid
+                  || (BUSINESS_APP_FRM.meta.isValid && this.props.uiStore.inProgress)}
+  size="large"
+  color="green"
+  className={`${isMobile && 'mb-50'} very relaxed`}
+>
                 Submit
               </Button>
-            : fetchBusinessApplicationsDataById &&
-              <Button as="span" className="time-stamp">
+              )
+              : fetchBusinessApplicationsDataById
+              && (
+<Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />
                 Submitted on {moment(fetchBusinessApplicationsDataById.created && fetchBusinessApplicationsDataById.created.date).format('MM/DD/YYYY')}
               </Button>
+              )
             }
           </Aux>
+          )
           }
         </Form>
+        )
         }
       </div>
     );

@@ -17,11 +17,8 @@ export default class IdentityVerification extends Component {
   componentWillMount() {
     this.props.identityStore.setCipDetails();
     this.props.uiStore.setErrors(null);
-    if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount &&
-      this.props.match.url !== this.props.userDetailsStore.pendingStep) {
-      this.props.history.push('/app/summary');
-    }
   }
+
   onPhotoIdDrop = (files) => {
     this.props.identityStore.setFileUploadData('photoId', files);
   }
@@ -194,47 +191,50 @@ export default class IdentityVerification extends Component {
     const { step } = this.props.match.params;
     return (
       <div>
-        {step === '0' ?
-          <LegalDetails
-            form={ID_VERIFICATION_FRM}
-            name={givenName}
-            inProgress={signUpLoading}
-            close={this.handleCloseModal}
-            change={personalInfoChange}
-            maskChange={personalInfoMaskedChange}
-            autoComplete={setAddressFieldsForUserVerification}
-            onSubmit={this.handleVerifyUserIdentity}
-            errors={errors}
-          />
-          :
-          step === '1' ?
-            <LegalDocuments
-              form={ID_VERIFICATION_DOCS_FRM}
-              confirmBox={confirmBox}
-              inProgress={inProgress || signUpLoading}
-              close={this.handleCloseModal}
-              onPhotoIdDrop={this.onPhotoIdDrop}
-              onProofOfResidenceDrop={this.onProofOfResidenceDrop}
-              confirmRemoveDoc={this.confirmRemoveDoc}
-              handleDelCancel={this.handleDelCancel}
-              handleDelDoc={this.handleDelDoc}
-              submitVerificationsDocs={submitVerificationsDocs}
-              onSubmit={this.handleUploadDocuments}
-              errors={errors}
-            />
-            :
-            step === '2' ?
-              <LegalIdentityQuestions
-                form={ID_VERIFICATION_QUESTIONS}
-                inProgress={inProgress}
-                close={this.handleCloseModal}
-                identityQuestionAnswerChange={identityQuestionAnswerChange}
-                onSubmit={this.handleSubmitIdentityQuestions}
-                errors={errors}
-              />
-              :
-              step === '3' ?
-                <ConfirmPhoneNumber />
+        {step === '0'
+          ? (
+<LegalDetails
+  form={ID_VERIFICATION_FRM}
+  name={givenName}
+  inProgress={signUpLoading}
+  close={this.handleCloseModal}
+  change={personalInfoChange}
+  maskChange={personalInfoMaskedChange}
+  autoComplete={setAddressFieldsForUserVerification}
+  onSubmit={this.handleVerifyUserIdentity}
+  errors={errors}
+/>
+          )
+          : step === '1'
+            ? (
+<LegalDocuments
+  form={ID_VERIFICATION_DOCS_FRM}
+  confirmBox={confirmBox}
+  inProgress={inProgress || signUpLoading}
+  close={this.handleCloseModal}
+  onPhotoIdDrop={this.onPhotoIdDrop}
+  onProofOfResidenceDrop={this.onProofOfResidenceDrop}
+  confirmRemoveDoc={this.confirmRemoveDoc}
+  handleDelCancel={this.handleDelCancel}
+  handleDelDoc={this.handleDelDoc}
+  submitVerificationsDocs={submitVerificationsDocs}
+  onSubmit={this.handleUploadDocuments}
+  errors={errors}
+/>
+            )
+            : step === '2'
+              ? (
+<LegalIdentityQuestions
+  form={ID_VERIFICATION_QUESTIONS}
+  inProgress={inProgress}
+  close={this.handleCloseModal}
+  identityQuestionAnswerChange={identityQuestionAnswerChange}
+  onSubmit={this.handleSubmitIdentityQuestions}
+  errors={errors}
+/>
+              )
+              : step === '3'
+                ? <ConfirmPhoneNumber />
                 : null
         }
       </div>

@@ -10,6 +10,7 @@ export default class AddNewContingency extends React.Component {
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
+
   handleSubmitForm = () => {
     const {
       addMore,
@@ -27,6 +28,7 @@ export default class AddNewContingency extends React.Component {
     updateOffering(currentOfferingId, fields, 'contingencies');
     this.props.history.push(this.props.refLink);
   }
+
   render() {
     const {
       ADD_NEW_CONTINGENCY_FRM,
@@ -48,7 +50,7 @@ export default class AddNewContingency extends React.Component {
               ))
             }
             <div className="center-align">
-              <Button className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
+              <Button className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid}>Add Contingency</Button>
             </div>
           </Form>
         </Modal.Content>

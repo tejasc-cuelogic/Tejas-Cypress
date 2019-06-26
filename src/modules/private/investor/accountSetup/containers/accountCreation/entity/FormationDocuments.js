@@ -11,22 +11,28 @@ export default class FormationDocumemts extends Component {
   onFormationDocDrop = (files) => {
     this.props.entityAccountStore.setFileUploadData('FORM_DOCS_FRM', 'formationDoc', files);
   }
+
   onOperatingAgreementDocDrop = (files) => {
     this.props.entityAccountStore.setFileUploadData('FORM_DOCS_FRM', 'operatingAgreementDoc', files);
   }
+
   onEinVerificationDocDrop = (files) => {
     this.props.entityAccountStore.setFileUploadData('FORM_DOCS_FRM', 'einVerificationDoc', files);
   }
+
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   confirmRemoveDoc = (e, name) => {
     this.props.uiStore.setConfirmBox(name);
   }
+
   handleDelDoc = (field) => {
     this.props.entityAccountStore.removeUploadedData('FORM_DOCS_FRM', field, 'Formation doc');
     this.props.uiStore.setConfirmBox('');
   }
+
   render() {
     const { FORM_DOCS_FRM } = this.props.entityAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
@@ -59,10 +65,12 @@ export default class FormationDocumemts extends Component {
             containerclassname="fluid"
             uploadtitle="Choose a file or drag it here"
           />
-          {errors &&
-            <Message error className="mt-30">
+          {errors
+            && (
+<Message error className="mt-30">
               <ListErrors errors={[errors.message]} />
             </Message>
+            )
           }
         </Form>
         <Confirm

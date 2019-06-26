@@ -23,17 +23,19 @@ export default class Track extends Component {
                       <Responsive as={Aux} minWidth={1200}><br /></Responsive>
                        easy-to-use dashboard.
                     </p>
-                    {!authStore.isUserLoggedIn &&
-                    <Aux>
+                    {!authStore.isUserLoggedIn
+                    && (
+<Aux>
                       <Responsive as={Aux} minWidth={768}>
-                        <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                        <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
                       </Responsive>
                       <Responsive as={Aux} maxWidth={767}>
                         <div className="center-align">
-                          <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                          <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
                         </div>
                       </Responsive>
                     </Aux>
+                    )
                     }
                   </div>
                 </Grid.Column>

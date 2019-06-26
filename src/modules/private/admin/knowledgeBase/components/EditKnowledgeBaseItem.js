@@ -25,6 +25,7 @@ export default class EditKnowledgeBaseItem extends Component {
       });
     }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.replace(this.props.refLink);
@@ -36,6 +37,7 @@ export default class EditKnowledgeBaseItem extends Component {
       this.props.history.push(this.props.refLink);
     });
   }
+
   render() {
     const {
       KNOWLEDGE_BASE_FRM,
@@ -52,10 +54,10 @@ export default class EditKnowledgeBaseItem extends Component {
       <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} size="large" closeIcon>
         <Modal.Content className="transaction-details">
           {
-            (loading || inProgress) ?
-              <InlineLoader />
-              :
-              <div>
+            (loading || inProgress)
+              ? <InlineLoader />
+              : (
+<div>
                 <div>
                   <Header as="h3">
                     {isNew ? 'Create' : 'Edit'} Knowledge Base
@@ -162,6 +164,7 @@ export default class EditKnowledgeBaseItem extends Component {
                   </Grid.Row>
                 </Grid>
               </div>
+              )
           }
         </Modal.Content>
       </Modal>

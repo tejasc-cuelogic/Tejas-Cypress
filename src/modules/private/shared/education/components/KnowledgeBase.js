@@ -4,8 +4,8 @@ import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input, Breadcrumb, Divider } from 'semantic-ui-react';
 import { toJS } from 'mobx';
-import AccList from '../components/knowledgeBase/AccList';
-import Details from '../components/knowledgeBase/Details';
+import AccList from './knowledgeBase/AccList';
+import Details from './knowledgeBase/Details';
 import FaqsCombined from './FaqsCombined';
 import { InlineLoader } from '../../../../../theme/shared';
 
@@ -24,12 +24,14 @@ export default class KnowledgeBase extends Component {
     }
     this.props.educationStore.initRequest('KnowledgeBase', props, categoryType);
   }
+
   search = (e) => {
     this.props.educationStore.setSrchParam(e.target.value);
     if (this.props.location.pathname !== '/app/resources/knowledge-base') {
       this.props.history.replace('/app/resources/knowledge-base');
     }
   }
+
   render() {
     const { match, location, marketing } = this.props;
     const {
@@ -86,13 +88,12 @@ export default class KnowledgeBase extends Component {
               />
               <Route
                 path={`${match.url}/faq`}
-                render={props =>
-                  (
+                render={props => (
                     <Aux>
                       {isMobile && <Divider hidden />}
                       <FaqsCombined marketing={marketing} params={match.params} {...props} />
                     </Aux>
-                  )
+                )
                 }
               />
               <Route

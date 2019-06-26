@@ -8,15 +8,23 @@ import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class NavStore {
   @observable NAV_ITEMS = [...PRIVATE_NAV];
+
   @observable params = {
     roles: [], currentNav: [], appStatus: null, specificNav: null,
   };
+
   @observable navStatus = 'main';
+
   @observable subNavStatus = '';
+
   @observable navMeta = [];
+
   @observable specificNavMeta = [];
+
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
+
   @observable currentActiveHash = null;
+
   @observable campaignHeaderStatus = false;
 
   constructor() {
@@ -24,15 +32,17 @@ export class NavStore {
       userDetailsStore.getUser(userStore.currentUser.sub);
     }
   }
+
   @action
   setFieldValue = (key, val) => {
     this[key] = val;
   }
+
   canAccessBasedOnCapability = (capab) => {
     const rest = capab.substring(0, capab.lastIndexOf('_'));
     const last = capab.substring(capab.lastIndexOf('_') + 1, capab.length);
-    const capabilityCheck = (last !== 'ANY') ? [capab] :
-      [`${rest}_FULL`, `${rest}_MANAGER`, `${rest}_SUPPORT`];
+    const capabilityCheck = (last !== 'ANY') ? [capab]
+      : [`${rest}_FULL`, `${rest}_MANAGER`, `${rest}_SUPPORT`];
     return _.intersection(userStore.myCapabilities, capabilityCheck).length > 0;
   }
 
@@ -66,8 +76,8 @@ export class NavStore {
         localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
       const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
-      if (userDetailsStore.userFirstLoad !== true &&
-        (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
+      if (userDetailsStore.userFirstLoad !== true
+        && (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {
           permitted = JSON.parse(pInvestorInfo).permitted || permitted;
         } else {
@@ -79,17 +89,17 @@ export class NavStore {
       }
       let routes = _.filter(
         navigationItems,
-        n => ((!n.accessibleTo || n.accessibleTo.length === 0 ||
-          _.intersection(n.accessibleTo, permitted).length > 0) &&
-        (!n.env || n.env.length === 0 ||
-          _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0) &&
-          (!n.capability || this.canAccessBasedOnCapability(n.capability))),
+        n => ((!n.accessibleTo || n.accessibleTo.length === 0
+          || _.intersection(n.accessibleTo, permitted).length > 0)
+        && (!n.env || n.env.length === 0
+          || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)
+          && (!n.capability || this.canAccessBasedOnCapability(n.capability))),
       );
       routes = _.map(routes, r => ({
         ...r,
         subNavigations:
-        _.filter(r.subNavigations, s =>
-          (!s.capability || this.canAccessBasedOnCapability(s.capability))),
+        _.filter(r.subNavigations, s => (!s.capability
+          || this.canAccessBasedOnCapability(s.capability))),
       }));
       return routes;
     } catch (err) {
@@ -104,11 +114,11 @@ export class NavStore {
   }
 
   @action
-  filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor ||
-      (sN.accessFor.includes(typeof phase === 'number' ? (phase <= 4 ? phase : 4) : phase) && !exclude.includes(sN.to))));
+  filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor
+      || (sN.accessFor.includes(typeof phase === 'number' ? (phase <= 4 ? phase : 4) : phase) && !exclude.includes(sN.to))));
 
-  businessName = b => ((b.keyTerms && b.keyTerms.shorthandBusinessName) ?
-    b.keyTerms.shorthandBusinessName : (
+  businessName = b => ((b.keyTerms && b.keyTerms.shorthandBusinessName)
+    ? b.keyTerms.shorthandBusinessName : (
       (b.keyTerms && b.keyTerms.legalBusinessName) ? b.keyTerms.legalBusinessName : 'N/A'
     ));
 
@@ -118,11 +128,11 @@ export class NavStore {
     navItems.forEach((navitem) => {
       const nItem = toJS(navitem);
       if (nItem.subNavigations) {
-        const newSubNav = nItem.subNavigations.filter(n => ((!n.accessibleTo ||
-          n.accessibleTo.length === 0 ||
-          _.intersection(n.accessibleTo, this.params.roles).length > 0)) && (!n.env ||
-            n.env.length === 0 ||
-            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
+        const newSubNav = nItem.subNavigations.filter(n => ((!n.accessibleTo
+          || n.accessibleTo.length === 0
+          || _.intersection(n.accessibleTo, this.params.roles).length > 0)) && (!n.env
+            || n.env.length === 0
+            || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
         nItem.subNavigations = [...newSubNav];
         if (userStore.isInvestor && ['Individual', 'IRA', 'Entity'].includes(nItem.title)) {
           if (statementStore.getTaxFormCountInNav(nItem.title.toLocaleLowerCase()) === 0) {
@@ -166,8 +176,8 @@ export class NavStore {
   }
 
   @computed get stepInRoute() {
-    return this.everLogsIn ? { to: 'login', title: 'Log In' } :
-      { to: 'register', title: 'Sign Up' };
+    return this.everLogsIn ? { to: 'login', title: 'Log In' }
+      : { to: 'register', title: 'Sign Up' };
   }
 
   @computed get specificNavs() {
@@ -177,10 +187,10 @@ export class NavStore {
       nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
-          (!n.env || n.env.length === 0 ||
-            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo
+          || n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0)
+          && (!n.env || n.env.length === 0
+            || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
       }
     }
     return nav;
@@ -194,10 +204,10 @@ export class NavStore {
       const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
-        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo ||
-          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
-          (!n.env || n.env.length === 0 ||
-            _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
+        nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo
+          || n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0)
+          && (!n.env || n.env.length === 0
+            || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)));
         if (nav.title === 'Application' && key === 'appStatus') {
           nav.subNavigations = this.filterByAccess(nav.subNavigations, appStatus);
         }
@@ -206,12 +216,12 @@ export class NavStore {
     }
     const acctiveAccountList = userDetailsStore.getActiveAccounts;
     const { accStatus } = userDetailsStore.signupStatus;
-    if (this.navMeta && this.navMeta.subNavigations &&
-        ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
+    if (this.navMeta && this.navMeta.subNavigations
+        && ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
       this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
     }
-    if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations &&
-      statementStore.getTaxFormCountInNav(this.navMeta.title.toLocaleLowerCase()) === 0) {
+    if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations
+      && statementStore.getTaxFormCountInNav(this.navMeta.title.toLocaleLowerCase()) === 0) {
       this.navMeta.subNavigations = _.filter(
         this.navMeta.subNavigations,
         subNavigation => subNavigation.component !== 'Statements',
@@ -233,6 +243,7 @@ export class NavStore {
       }
     }
   }
+
   @action
   setMobileNavStatus(calculations) {
     const {

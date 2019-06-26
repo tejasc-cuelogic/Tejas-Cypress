@@ -21,6 +21,7 @@ export default class AccountSetup extends Component {
     const { currentActiveAccount } = this.props.userDetailsStore;
     this.props.history.push(`/app/summary/account-creation/${currentActiveAccount}`);
   }
+
   render() {
     const { currentActiveAccount } = this.props.userDetailsStore;
     const msg = 'You\'re almost there! Continue setting up your NextSeed Investment Account to join the community and get access to local opportunities';

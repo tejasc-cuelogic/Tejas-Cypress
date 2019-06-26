@@ -16,27 +16,33 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
     this.props.offeringCreationStore.setFormData('CLOSURE_SUMMARY_FRM', 'closureSummary.keyTerms');
   }
+
   onProFormasDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'KEY_TERMS_PROFORMAS', false, true);
   }
+
   handleDelDoc = (field) => {
     this.props.offeringCreationStore.removeUploadedDataMultiple('KEY_TERMS_FRM', field, null, '');
   }
+
   handleFormSubmit = (isApproved = null) => {
     const { KEY_TERMS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, KEY_TERMS_FRM.fields, 'keyTerms', null, true, undefined, isApproved);
   }
+
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
+
   editorChange =
-  (field, value, form, index) =>
-    this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
+  (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
+
   render() {
     const {
       KEY_TERMS_FRM, CLOSURE_SUMMARY_FRM, formArrayChange, maskArrayChange,
@@ -46,10 +52,10 @@ export default class KeyTerms extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.keyTerms && offer.keyTerms.submitted) ?
-      offer.keyTerms.submitted : null;
-    const approved = (offer && offer.keyTerms && offer.keyTerms.approved) ?
-      offer.keyTerms.approved : null;
+    const submitted = (offer && offer.keyTerms && offer.keyTerms.submitted)
+      ? offer.keyTerms.submitted : null;
+    const approved = (offer && offer.keyTerms && offer.keyTerms.approved)
+      ? offer.keyTerms.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     let MODIFIED_REGULATION_VALUES = null;
     if (KEY_TERMS_FRM && KEY_TERMS_FRM.fields && KEY_TERMS_FRM.fields.regulation
@@ -105,7 +111,7 @@ export default class KeyTerms extends Component {
               options={SECURITIES_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
-            {['minOfferingAmountCF', 'maxOfferingAmountCF', 'minOfferingAmount506C', 'maxOfferingAmount506C'].map(field => (
+            {['minOfferingAmountCF', 'maxOfferingAmountCF'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
                 name={field}
@@ -115,6 +121,22 @@ export default class KeyTerms extends Component {
                 prefix="$"
               />
             ))}
+            <MaskedInput
+              displayMode={isReadonly}
+              name="minOfferingAmount506"
+              fielddata={KEY_TERMS_FRM.fields.minOfferingAmount506 && KEY_TERMS_FRM.fields.minOfferingAmount506.value && KEY_TERMS_FRM.fields.minOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.minOfferingAmount506 : KEY_TERMS_FRM.fields.minOfferingAmount506C}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
+            />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="maxOfferingAmount506"
+              fielddata={KEY_TERMS_FRM.fields.maxOfferingAmount506 && KEY_TERMS_FRM.fields.maxOfferingAmount506.value && KEY_TERMS_FRM.fields.maxOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.maxOfferingAmount506 : KEY_TERMS_FRM.fields.maxOfferingAmount506C}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
+            />
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
@@ -242,17 +264,19 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Header as="h4">
             Additional Key Terms
-            {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
+            {!isReadonly
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
             }
           </Header>
           {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
             <Aux>
               <Header as="h6">{`Term ${index + 1}`}
-                {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1 &&
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')} >
+                {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1
+                && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
+                )
                 }
               </Header>
               <div className="featured-section">

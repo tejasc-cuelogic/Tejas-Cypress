@@ -13,6 +13,7 @@ export default class TeamDetails extends Component {
   state = {
     displayOnly: true,
   }
+
   componentWillMount() {
     const { match, teamStore } = this.props;
     const { id } = match.params;
@@ -21,6 +22,7 @@ export default class TeamDetails extends Component {
       this.props.teamStore.getOne(id);
     }
   }
+
   onFileDrop = (files, name) => {
     this.props.teamStore.uploadFileToS3('TEAM_FRM', name, files);
   }
@@ -28,28 +30,35 @@ export default class TeamDetails extends Component {
   handleDelDoc = (field) => {
     this.props.teamStore.removeUploadedDataMultiple('TEAM_FRM', field);
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);
   };
+
   save = () => {
     this.props.teamStore.save(this.props.match.params.id);
     this.props.history.push(this.props.refLink);
   }
+
   toogleField = () => {
     this.setState({ displayOnly: !this.state.displayOnly });
   }
+
   deleteTeamMember = () => {
     this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId);
     this.props.teamStore.setConfirmBox('');
     this.props.history.push(this.props.refLink);
   }
+
   handleAction = () => {
     this.props.teamStore.setConfirmBox('Delete', this.props.match.params.id);
   }
+
   handleDeleteCancel = () => {
     this.props.teamStore.setConfirmBox('');
   }
+
   render() {
     const {
       loading,
@@ -66,7 +75,7 @@ export default class TeamDetails extends Component {
     //   { key: 'LIVE', value: 'LIVE', text: 'LIVE' },
     // ];
 
-    if (loading) {
+    if (loading || inProgress) {
       return <InlineLoader />;
     }
     return (
@@ -80,8 +89,8 @@ export default class TeamDetails extends Component {
                   {TEAM_FRM.fields.memberName.value}
                 </Header>
                 <Button.Group floated="right">
-                  {this.props.match.params.id !== 'new' ?
-                    <Button color="red" className="relaxed" content="Delete" onClick={() => this.handleAction()} />
+                  {this.props.match.params.id !== 'new'
+                    ? <Button color="red" className="relaxed" content="Delete" onClick={() => this.handleAction()} />
                     : ''
                   }
                   <Button color="green" className="relaxed" content="Save" disabled={!TEAM_FRM.meta.isValid} onClick={this.save} />

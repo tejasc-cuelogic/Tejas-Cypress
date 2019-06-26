@@ -37,6 +37,7 @@ export default class Filters extends Component {
   setProp = (c) => {
     this.slider = c;
   }
+
   toggleColor = (index) => {
     const { BusinessTypes } = this.state;
     BusinessTypes[index].color = BusinessTypes[index].color === 'green' ? null : 'green';
@@ -48,12 +49,15 @@ export default class Filters extends Component {
     MoreOptions.color = MoreOptions.color === 'green' ? null : 'green';
     this.setState({ MoreOptions });
   }
+
   next = () => {
     this.slider.slickNext();
   }
+
   previous = () => {
     this.slider.slickPrev();
   }
+
   clearAll = () => {
     const {
       BusinessTypes,
@@ -80,15 +84,18 @@ export default class Filters extends Component {
       FundingTypes,
     });
   }
+
   togglecheckbox = (arrayName, index) => {
     const obj = this.state[arrayName];
     obj[index].checkStatus = obj[index].checkStatus === false;
     this.setState({ obj });
   }
+
   done = () => {
     this.setState({ activeSlide: 0 });
     this.props.toggleFilters();
   }
+
   render() {
     const BusinessTypesComp = (
       <Aux>
@@ -101,7 +108,8 @@ export default class Filters extends Component {
             </List.Item>
           ))}
         </List>
-      </Aux>);
+      </Aux>
+    );
     const InvestAndFundingTypeComp = (
       <Aux>
         <Header as="h6" dividing className="text-uppercase">
@@ -141,7 +149,8 @@ export default class Filters extends Component {
             }
           </Form>
         </div>
-      </Aux>);
+      </Aux>
+    );
     const OtherFiltersComp = (
       <Aux>
         <Header as="h6" dividing className={`${isMobile && 'mt-80'} text-uppercase`}>
@@ -162,7 +171,8 @@ export default class Filters extends Component {
             }
           </Form>
         </div>
-      </Aux>);
+      </Aux>
+    );
     return (
       <Aux>
         <div className="filter-menu">
@@ -174,16 +184,18 @@ export default class Filters extends Component {
               </Menu.Item>
               {this.props.status ? (
                 <Menu.Menu position="right">
-                  {isMobile ?
-                    <Menu.Item name="clear all" onClick={this.clearAll}>CLEAR ALL</Menu.Item> :
-                    <Menu.Item name="clear all">
+                  {isMobile
+                    ? <Menu.Item name="clear all" onClick={this.clearAll}>CLEAR ALL</Menu.Item>
+                    : (
+<Menu.Item name="clear all">
                       <NSImage path="icons/icon_close.png" className="closeIcon" onClick={this.props.toggleFilters} />
                     </Menu.Item>
+                    )
                   }
                 </Menu.Menu>
-                ) : (
+              ) : (
                   <Menu.Item name="3 Results Found" position="right" />
-                )
+              )
               }
             </Menu>
           </Container>
@@ -191,8 +203,9 @@ export default class Filters extends Component {
             <div className="offer-filter">
               <div className="offer-filter-container">
                 <Container>
-                  {!isMobile ?
-                    <Grid stackable columns={3}>
+                  {!isMobile
+                    ? (
+<Grid stackable columns={3}>
                       <Grid.Column className="donut-chart">
                         {BusinessTypesComp}
                       </Grid.Column>
@@ -206,8 +219,10 @@ export default class Filters extends Component {
                           <Button basic onClick={this.clearAll}>Clear All</Button>
                         </Button.Group>
                       </Grid.Column>
-                    </Grid> :
-                    <div className="carousel">
+                    </Grid>
+                    )
+                    : (
+<div className="carousel">
                       <Slider ref={c => this.setProp(c)} {...this.settings}>
                         <Aux>
                           {BusinessTypesComp}
@@ -218,8 +233,9 @@ export default class Filters extends Component {
                         </Aux>
                       </Slider>
                       <div className="filter-buttons mt-10">
-                        {this.state.activeSlide === 1 ?
-                          <Button.Group>
+                        {this.state.activeSlide === 1
+                          ? (
+<Button.Group>
                             <Button
                               onClick={this.previous}
                               floated="left"
@@ -236,8 +252,10 @@ export default class Filters extends Component {
                             >
                               UPDATE
                             </Button>
-                          </Button.Group> :
-                          <Button.Group>
+                          </Button.Group>
+                          )
+                          : (
+<Button.Group>
                             <Button
                               onClick={this.next}
                               floated="right"
@@ -247,9 +265,11 @@ export default class Filters extends Component {
                               <Icon className="ns-arrow-right right" color="grey" />
                             </Button>
                           </Button.Group>
+                          )
                         }
                       </div>
                     </div>
+                    )
                   }
                 </Container>
               </div>

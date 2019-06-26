@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
 import { businessActions } from '../../../../../services/actions';
-import NewBusinessForm from '../containers/NewBusinessForm';
+import NewBusinessForm from './NewBusinessForm';
 import { Spinner } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 

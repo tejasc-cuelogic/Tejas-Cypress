@@ -24,8 +24,8 @@ export default class AccountSetup extends Component {
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
-    if (signupStatus.activeAccounts.length !== 0 &&
-      signupStatus.investorProfileCompleted) {
+    if (signupStatus.activeAccounts.length !== 0
+      && signupStatus.investorProfileCompleted) {
       this.props.portfolioStore.getSummary();
     }
     this.props.uiStore.clearErrors();
@@ -33,8 +33,7 @@ export default class AccountSetup extends Component {
 
   navToAccTypes = (step) => {
     if (step) {
-      const accValue =
-      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === step);
+      const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === step);
       this.props.accountStore.setAccTypeChange(accValue);
       this.props.history.push(`${this.props.match.url}/account-creation/${step}`);
     } else {
@@ -53,21 +52,25 @@ export default class AccountSetup extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P5={!signupStatus.finalStatus ? !currentUser.loading ?
-          <StickyNotification
-            signupStatus={signupStatus}
-            userDetailsStore={this.props.userDetailsStore}
-          /> : <InlineLoader /> : ''}
+        P5={!signupStatus.finalStatus ? !currentUser.loading
+          ? (
+<StickyNotification
+  signupStatus={signupStatus}
+  userDetailsStore={this.props.userDetailsStore}
+/>
+          ) : <InlineLoader /> : ''}
       >
         <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
-        {!currentUser.loading ?
-          <ProgressCard
-            {...this.props}
-            isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
-            signupStatus={signupStatus}
-            getStepStatus={getStepStatus}
-            navToAccTypes={this.navToAccTypes}
-          /> : <InlineLoader />
+        {!currentUser.loading
+          ? (
+<ProgressCard
+  {...this.props}
+  isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
+  signupStatus={signupStatus}
+  getStepStatus={getStepStatus}
+  navToAccTypes={this.navToAccTypes}
+/>
+          ) : <InlineLoader />
 
         }
         <Switch>

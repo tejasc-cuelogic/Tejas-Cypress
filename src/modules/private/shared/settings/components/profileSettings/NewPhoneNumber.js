@@ -20,12 +20,14 @@ export default class NewPhoneNumber extends Component {
       identityStore.phoneTypeChange('TEXT');
     }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
+
   handleChangePhoneNumber = () => {
     const { resetFormData, ID_VERIFICATION_FRM } = this.props.identityStore;
     resetFormData('ID_PHONE_VERIFICATION');
@@ -39,6 +41,7 @@ export default class NewPhoneNumber extends Component {
     })
       .catch(() => {});
   }
+
   render() {
     const {
       ID_VERIFICATION_FRM,
@@ -72,10 +75,12 @@ export default class NewPhoneNumber extends Component {
                 changed={(e, result) => personalInfoChange(e, result)}
               />
             </div>
-            {errors &&
-              <Message error className="mt-20">
+            {errors
+              && (
+<Message error className="mt-20">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button primary size="large" className="very relaxed" content="Change Phone Number" loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} />

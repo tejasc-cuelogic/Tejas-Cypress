@@ -3,17 +3,17 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Route, Switch, matchPath } from 'react-router-dom';
 import { Responsive } from 'semantic-ui-react';
-import { publicRoutes } from './../../modules/routes';
-import NavBarMobile from './../../theme/layout/NavBarMobile';
+import { publicRoutes } from '../routes';
+import NavBarMobile from '../../theme/layout/NavBarMobile';
 import { authActions } from '../../services/actions';
-import Header from './../../theme/layout/Header';
-import Footer from './../../theme/layout/Footer';
+import Header from '../../theme/layout/Header';
+import Footer from '../../theme/layout/Footer';
 import Auth from '../auth';
 import NotFound from '../shared/NotFound';
 // import Referral from '../shared/Referral';
 import RedirectManager from '../shared/RedirectManager';
 import Helper from '../../helper/utility';
-import Firework from '../public/offering/components/investNow/agreement/components/FireworkAnimation';
+import Firework from './offering/components/investNow/agreement/components/FireworkAnimation';
 
 @inject('uiStore', 'navStore', 'userStore', 'businessAppStore', 'campaignStore')
 @observer
@@ -21,29 +21,32 @@ export default class Public extends React.Component {
   state = {
     visible: false,
   };
+
   componentWillMount() {
     this.props.navStore.setNavStatus({}, 'main');
   }
+
   componentWillUpdate() {
     this.props.navStore.setNavStatus({}, 'main');
   }
-  getRoutes = () => (
+
+  getRoutes = (isAuthLocation = false) => (
     <Switch>
       {publicRoutes.map(route => (
         <Route
           exact={route.exact ? route.exact : false}
           path={route.path}
-          component={route.auth ?
-            route.auth(route.component, this.props) : route.component}
+          component={route.auth
+            ? route.auth(route.component, this.props) : route.component}
           key={route.path}
         />
       ))}
-      <Route path="/auth" component={Auth} />
       <Route path="/password-protected" component={NotFound} />
-      <Route exact path="/:fromUrl" component={RedirectManager} />
+      <Route exact path="/:fromUrl/:fromUrl2?" component={isAuthLocation ? Auth : RedirectManager} />
       <Route component={NotFound} />
     </Switch>
   );
+
   handleLogOut = (isToggle = false) => {
     authActions.logout()
       .then(() => {
@@ -53,6 +56,7 @@ export default class Public extends React.Component {
         }
       });
   }
+
   preQualSubmit = (e) => {
     e.preventDefault();
     this.props.businessAppStore.businessPreQualificationFormSumbit(true).then(() => {
@@ -61,11 +65,14 @@ export default class Public extends React.Component {
       this.props.history.push(`/business-application/${url}`);
     });
   }
+
   handleToggle = () => this.setState({ visible: !this.state.visible });
+
   handlePusher = () => {
     const { visible } = this.state;
     if (visible) this.setState({ visible: false });
   };
+
   render() {
     const { location, match } = this.props;
     const { BUSINESS_APP_FRM, isPrequalQulify } = this.props.businessAppStore;
@@ -77,10 +84,12 @@ export default class Public extends React.Component {
     const NoHeader = ['/invest/get-started'];
     const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
+    const authAllowed = ['login', 'register', 'register-investor', 'confirm-email', 'change-password', 'reset-password', 'forgot-password', 'welcome-email'];
+    const isAuthLocation = (authAllowed.find(item => matchPath(location.pathname, { path: `/${item}` })));
     return (
       <Aux>
-        {this.props.campaignStore.showFireworkAnimation &&
-          <Firework />
+        {this.props.campaignStore.showFireworkAnimation
+          && <Firework />
         }
         <Responsive minWidth={992} as={Aux}>
           {hasHeader && (
@@ -95,7 +104,7 @@ export default class Public extends React.Component {
               loading={inProgress}
             />
           )}
-          {this.getRoutes()}
+          {this.getRoutes(isAuthLocation)}
           <Footer path={location.pathname} />
         </Responsive>
         <Responsive maxWidth={991} as={Aux}>
@@ -109,7 +118,7 @@ export default class Public extends React.Component {
             isMobile
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
-            publicContent={this.getRoutes()}
+            publicContent={this.getRoutes(isAuthLocation)}
             hasHeader={hasHeader}
           />
         </Responsive>

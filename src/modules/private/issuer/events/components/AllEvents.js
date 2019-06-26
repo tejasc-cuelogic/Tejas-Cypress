@@ -9,6 +9,7 @@ export default class AllEvents extends Component {
   componentWillMount() {
     this.props.helloWorldStore.initRequest(); // load data
   }
+
   render() {
     const { match, helloWorldStore } = this.props;
     const { allRecords } = helloWorldStore;

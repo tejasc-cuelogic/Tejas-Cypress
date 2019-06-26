@@ -11,21 +11,24 @@ const Actions = observer((props) => {
     <Button.Group compact floated="right">
       <Button
         inverted
-        onClick={() => save('DRAFT', true)}
+        onClick={() => save()}
         color="green"
-        content={isPublished ? 'Save and Unpublish' : 'Save as draft'}
+        content="Save"
         disabled={!meta.isValid}
       />
-      { isReview ?
-        <Button
-          inverted
-          onClick={() => save('PUBLISHED')}
-          color="green"
-          content="Publish"
-          disabled={!meta.isValid}
-        /> :
-        (isPublished ?
-          <Aux>
+      { isReview
+        ? (
+<Button
+  inverted
+  onClick={() => save('PUBLISHED')}
+  color="green"
+  content="Publish"
+  disabled={!meta.isValid}
+/>
+        )
+        : (isPublished
+          ? (
+<Aux>
             <Button
               inverted
               onClick={() => save('PUBLISHED')}
@@ -34,13 +37,15 @@ const Actions = observer((props) => {
               disabled={!meta.isValid}
             />
           </Aux>
-          :
-          <Button
-            primary
-            onClick={() => save('IN_REVIEW')}
-            content="Submit for Review"
-            disabled={!meta.isValid}
-          />)
+          )
+          : (
+<Button
+  primary
+  onClick={() => save('IN_REVIEW')}
+  content="Submit for Review"
+  disabled={!meta.isValid}
+/>
+          ))
       }
     </Button.Group>
   );

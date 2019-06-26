@@ -32,24 +32,27 @@ export const DropdownFilterWithHeader = props => (
   <Form.Field className="dropdown-field">
     <label>{props.label || props.name}</label>
     {
-      props.options && props.options !== null ?
-        <Dropdown
-          text={props.value || 'Select Filter'}
-          className={props.className}
-          name={props.keyName || camelCase(props.name)}
-          onChange={props.change}
-          value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
-          placeholder={props.placeHolder || 'Select Filter'}
-          selection
-        >
+      props.options && props.options !== null
+        ? (
+<Dropdown
+  text={props.value || 'Select Filter'}
+  className={props.className}
+  name={props.keyName || camelCase(props.name)}
+  onChange={props.change}
+  value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
+  placeholder={props.placeHolder || 'Select Filter'}
+  selection
+>
           <Dropdown.Menu>
             {_.map(props.options, rec => (
               <Aux>
-                {rec.title ?
-                  <Aux>
+                {rec.title
+                  ? (
+<Aux>
                     <Dropdown.Header content={rec.title} key={rec.title} />
                     <Dropdown.Divider />
-                  </Aux> : ''}
+                  </Aux>
+                  ) : ''}
                 {
                   rec.options.map(el => (
                     <Dropdown.Item
@@ -65,7 +68,8 @@ export const DropdownFilterWithHeader = props => (
               </Aux>
             ))}
           </Dropdown.Menu>
-        </Dropdown> : null
+        </Dropdown>
+        ) : null
     }
 
     <div className="dropdown-effect">{props.label || props.name}</div>
@@ -82,20 +86,22 @@ export const ByKeyword = ({
         <Form.Field inverted>
           {addLabel ? <label>{addLabel || addLabel}</label> : ''}
           {fLabel && <label className={showLabel ? '' : 'invisible'}>{placeholder}</label>}
-          {!enableSearch &&
-          <Input fluid onChange={change} name={name} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />}
+          {!enableSearch
+          && <Input fluid onChange={change} name={name} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />}
         </Form.Field>
       </Form>
     </Grid.Column>
-    {more !== 'no' &&
-      <Grid.Column width={3} textAlign="center">
+    {more !== 'no'
+      && (
+<Grid.Column width={3} textAlign="center">
         <span className="filter-count">{requestState && requestState.search ? Object.keys(requestState.search).length : 0}</span>
         <Button icon color="blue" onClick={toggleSearch} className="link-button">
-          {filters ? <Aux>Hide Filters <Icon className="ns-caret-up" /></Aux> :
-          <Aux>Show Filters <Icon className="ns-caret-down" /></Aux>
+          {filters ? <Aux>Hide Filters <Icon className="ns-caret-up" /></Aux>
+            : <Aux>Show Filters <Icon className="ns-caret-down" /></Aux>
           }
         </Button>
       </Grid.Column>
+      )
     }
     {addon}
   </Aux>

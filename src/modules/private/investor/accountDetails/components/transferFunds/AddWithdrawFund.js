@@ -17,6 +17,7 @@ import Helper from '../../../../../../helper/utility';
 @observer
 export default class AddWithdrawFund extends Component {
   state = { isActivebutton: true };
+
   componentWillMount() {
     const { setInitialLinkValue, setInitialFundValue, cash } = this.props.transactionStore;
     if (!cash) {
@@ -25,7 +26,9 @@ export default class AddWithdrawFund extends Component {
     setInitialLinkValue(false);
     setInitialFundValue();
   }
+
   goBack = () => this.props.history.replace(this.props.refLink);
+
   transfer = (e) => {
     e.preventDefault();
     const { showConfirmPreview, setInitialLinkValue } = this.props.transactionStore;
@@ -44,10 +47,12 @@ export default class AddWithdrawFund extends Component {
       setInitialLinkValue(true);
     }
   }
+
   cancelTransfer = () => {
     const { setInitialLinkValue } = this.props.transactionStore;
     setInitialLinkValue(false);
   }
+
   transactionAddFund = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.addFunds(transferAmount, transferDescription).then(() => {
       this.setState({ isActivebutton: true });
@@ -55,6 +60,7 @@ export default class AddWithdrawFund extends Component {
       this.props.history.replace(this.props.refLink);
     });
   }
+
   transactionWithdrawFunds = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.withdrawFunds(transferAmount, transferDescription).then(() => {
       this.setState({ isActivebutton: true });
@@ -62,6 +68,7 @@ export default class AddWithdrawFund extends Component {
       this.props.history.replace(this.props.refLink);
     });
   }
+
   render() {
     const { match, transactionStore } = this.props;
     const {
@@ -70,15 +77,15 @@ export default class AddWithdrawFund extends Component {
     } = transactionStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
     const linkBankDetials = (get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') && get(currentActiveAccountDetails, 'details.linkedBank.pendingUpdate')) ? get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') : get(currentActiveAccountDetails, 'details.linkedBank') || null;
-    const accountType =
-    linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
+    const accountType = linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
     const { errors } = this.props.uiStore;
     const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
     return (
       <Aux>
-        {!cashAvailable.loading &&
-          <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
+        {!cashAvailable.loading
+          && (
+<Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
             <Modal.Header className="signup-header">
               <Header as="h3"><AccTypeTitle noText />
                 {headingTitle}
@@ -86,8 +93,9 @@ export default class AddWithdrawFund extends Component {
             </Modal.Header>
             <Modal.Content>
               <Form error onSubmit={this.transfer} size="massive">
-                {!showConfirmPreview && match.params.action === 'withdraw' &&
-                  <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
+                {!showConfirmPreview && match.params.action === 'withdraw'
+                  && (
+<div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
                     <MaskedInput
                       readOnly="readonly"
                       hoverable
@@ -100,27 +108,31 @@ export default class AddWithdrawFund extends Component {
                       fielddata={{ value: cash }}
                     />
                   </div>
+                  )
                 }
-                {!showConfirmPreview &&
-                  <MaskedInput
-                    readOnly={showConfirmPreview ? 'readonly' : false}
-                    hoverable
-                    label={match.params.action === 'add' ? '' : labelForWithdrawInput}
-                    key="amount"
-                    prefix="$ "
-                    name="amount"
-                    containerclassname="fund-amount"
-                    currency
-                    allowNegative={false}
-                    fielddata={TRANSFER_FRM.fields.amount}
-                    changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
-                  />
+                {!showConfirmPreview
+                  && (
+<MaskedInput
+  readOnly={showConfirmPreview ? 'readonly' : false}
+  hoverable
+  label={match.params.action === 'add' ? '' : labelForWithdrawInput}
+  key="amount"
+  prefix="$ "
+  name="amount"
+  containerclassname="fund-amount"
+  currency
+  allowNegative={false}
+  fielddata={TRANSFER_FRM.fields.amount}
+  changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
+/>
+                  )
                 }
-                {showConfirmPreview ?
-                  <Aux>
+                {showConfirmPreview
+                  ? (
+<Aux>
                     <div className="field fund-amount">
-                      {match.params.action === 'withdraw' ?
-                        <label>Withdrawal amount</label>
+                      {match.params.action === 'withdraw'
+                        ? <label>Withdrawal amount</label>
                         : ''
                       }
                       <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
@@ -129,42 +141,47 @@ export default class AddWithdrawFund extends Component {
                     </div>
                     <Statistic className="mt-10 mb-10">
                       <Header as="h5" className="text-capitalize">
-                        {match.params.action === 'withdraw' ?
-                          <Aux>
+                        {match.params.action === 'withdraw'
+                          ? (
+<Aux>
                             <Header.Subheader>From</Header.Subheader>
-                            {currentActiveAccountDetails &&
-                            currentActiveAccountDetails.name ?
-                              currentActiveAccountDetails.name : null} Account
+                            {currentActiveAccountDetails
+                            && currentActiveAccountDetails.name
+                              ? currentActiveAccountDetails.name : null} Account
                             <Divider hidden />
                             <Header.Subheader>To</Header.Subheader>
                             {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
-                          </Aux> :
-                          <Aux>
+                          </Aux>
+                          )
+                          : (
+<Aux>
                             <Header.Subheader>From</Header.Subheader>
                             {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                             <Divider hidden />
                             <Header.Subheader>To</Header.Subheader>
-                            {currentActiveAccountDetails &&
-                            currentActiveAccountDetails.name ?
-                              currentActiveAccountDetails.name : null} Account
-                          </Aux>}
+                            {currentActiveAccountDetails
+                            && currentActiveAccountDetails.name
+                              ? currentActiveAccountDetails.name : null} Account
+                          </Aux>
+                          )}
                       </Header>
                     </Statistic>
                   </Aux>
-                  :
-                  null
+                  )
+                  : null
                 }
-                {!showConfirmPreview ? errors &&
-                  <Message error className="mt-30">
+                {!showConfirmPreview ? errors
+                  && (
+<Message error className="mt-30">
                     <ListErrors errors={[errors]} />
                   </Message>
-                  :
-                  null
+                  )
+                  : null
                 }
                 <div className="center-align mt-30">
                   <Button.Group>
-                    {showConfirmPreview ?
-                      <Button onClick={this.cancelTransfer} content="Cancel" /> : null
+                    {showConfirmPreview
+                      ? <Button onClick={this.cancelTransfer} content="Cancel" /> : null
                     }
                     <Button
                       primary
@@ -176,6 +193,7 @@ export default class AddWithdrawFund extends Component {
               </Form>
             </Modal.Content>
           </Modal>
+          )
         }
       </Aux>
     );

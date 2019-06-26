@@ -20,6 +20,7 @@ export default class AccountCreation extends React.Component {
       this.props.accountStore.setAccTypeChange(1);
     }
   }
+
   handleMultiStepModalclose = () => {
     this.updateUser();
     this.props.history.push('/app/summary');
@@ -28,13 +29,16 @@ export default class AccountCreation extends React.Component {
     this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
+
   handleStepChange = (step) => {
     this.props.iraAccountStore.setStepToBeRendered(step);
     this.props.uiStore.clearErrors();
   }
+
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+
   closeProcessingModal = () => {
     const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
     this.props.iraAccountStore.setFieldValue('showProcessingModal', false);
@@ -46,6 +50,7 @@ export default class AccountCreation extends React.Component {
       this.props.uiStore.resetcreateAccountMessage();
     }
   }
+
   render() {
     let steps = [];
     const {
@@ -72,8 +77,7 @@ export default class AccountCreation extends React.Component {
       setLinkBankSummary,
     } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
-      steps =
-      [
+      steps = [
         {
           name: 'Financial info',
           component: <FinancialInformation />,
@@ -142,8 +146,7 @@ export default class AccountCreation extends React.Component {
         },
       ];
     } else {
-      steps =
-      [
+      steps = [
         {
           name: 'Financial info',
           component: <FinancialInformation />,

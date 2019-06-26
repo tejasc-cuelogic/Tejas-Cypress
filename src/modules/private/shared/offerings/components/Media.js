@@ -15,12 +15,15 @@ import ButtonGroup from './ButtonGroup';
 @observer
 export default class Media extends Component {
   state = { ConfirmModal: false, imageType: '', index: undefined }
+
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('MEDIA_FRM', 'media');
   }
+
   setData = (attr, value, fieldName) => {
     this.props.offeringCreationStore.setProfilePhoto(attr, value, fieldName);
   }
+
   handleresetProfilePhoto = (field) => {
     this.props.offeringCreationStore.resetProfilePhoto(field);
   }
@@ -56,20 +59,25 @@ export default class Media extends Component {
       this.props.offeringCreationStore.setProfilePhoto(attr, errorMsg, field);
     }
   }
+
   showConfirmModal = (imageType, index) => {
     this.setState({ imageType, index, ConfirmModal: true });
   }
+
   handleRemoveConfirm = () => {
     this.removeMedia(this.state.imageType, this.state.index);
     this.setState({ ConfirmModal: false });
   }
+
   handleRemoveCancel = () => {
     this.setState({ ConfirmModal: false, index: undefined });
   }
+
   handleFormSubmit = (isApproved = null) => {
     const { MEDIA_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, MEDIA_FRM.fields, 'media', null, true, undefined, isApproved);
   }
+
   render() {
     const { MEDIA_FRM, formChange } = this.props.offeringCreationStore;
     const { match } = this.props;
@@ -77,14 +85,14 @@ export default class Media extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.media &&
-      offer.media.submitted) ? offer.media.submitted : null;
-    const approved = (offer && offer.media &&
-      offer.media.approved) ? offer.media.approved : null;
-    const issuerSubmitted = (offer && offer.media &&
-      offer.media.issuerSubmitted) ? offer.media.issuerSubmitted : null;
-    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
-      (isManager && approved && approved.status));
+    const submitted = (offer && offer.media
+      && offer.media.submitted) ? offer.media.submitted : null;
+    const approved = (offer && offer.media
+      && offer.media.approved) ? offer.media.approved : null;
+    const issuerSubmitted = (offer && offer.media
+      && offer.media.issuerSubmitted) ? offer.media.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
+      || (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : 'ui card fluid form-card'}>
         <Grid columns={2} stackable>
@@ -94,8 +102,8 @@ export default class Media extends Component {
               <Form className="cropper-wrap hero-img">
                 {MEDIA_FRM.fields[field].preSignedUrl ? (
                   <div className="file-uploader attached">
-                    {!isReadonly &&
-                      <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
+                    {!isReadonly
+                      && <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
                     }
                     <Image64 srcUrl={MEDIA_FRM.fields[field].preSignedUrl} />
                   </div>
@@ -114,9 +122,10 @@ export default class Media extends Component {
                     cropInModal
                     aspect={16 / 9}
                   />
-              )}
+                )}
               </Form>
-            </Grid.Column>))
+            </Grid.Column>
+          ))
         }
           <Grid.Column>
             <Form className="comment-input video-url" onSubmit={this.handleFormSubmit}>
@@ -151,8 +160,8 @@ export default class Media extends Component {
               <Form className="cropper-wrap tombstone-img">
                 {MEDIA_FRM.fields[field].preSignedUrl ? (
                   <div className="file-uploader attached">
-                    {!isReadonly &&
-                      <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
+                    {!isReadonly
+                      && <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
                     }
                     <Image64 srcUrl={MEDIA_FRM.fields[field].preSignedUrl} />
                   </div>
@@ -171,9 +180,10 @@ export default class Media extends Component {
                     cropInModal
                     aspect={3 / 2}
                   />
-              )}
+                )}
               </Form>
-            </Grid.Column>))
+            </Grid.Column>
+          ))
           }
         </Grid>
         <Divider section />
@@ -216,20 +226,21 @@ export default class Media extends Component {
         <Header as="h4">Gallery</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
-            {MEDIA_FRM.fields.gallery.preSignedUrl &&
-              MEDIA_FRM.fields.gallery.preSignedUrl.length &&
-              MEDIA_FRM.fields.gallery.preSignedUrl.map((url, i) => (
+            {MEDIA_FRM.fields.gallery.preSignedUrl
+              && MEDIA_FRM.fields.gallery.preSignedUrl.length
+              && MEDIA_FRM.fields.gallery.preSignedUrl.map((url, i) => (
                 <List.Item key={`gallery${url}`}>
                   <div className="file-uploader attached">
-                    {!isReadonly &&
-                      <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
+                    {!isReadonly
+                      && <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
                     }
                     <Image64 srcUrl={url} />
                   </div>
                 </List.Item>
               ))}
-            {!isReadonly &&
-            <List.Item>
+            {!isReadonly
+            && (
+<List.Item>
               <ImageCropper
                 disabled={isReadonly}
                 fieldData={MEDIA_FRM.fields.gallery}
@@ -245,6 +256,7 @@ export default class Media extends Component {
                 aspect="none"
               />
             </List.Item>
+            )
             }
           </List>
         </Form>
@@ -256,8 +268,8 @@ export default class Media extends Component {
               <Form className="cropper-wrap headshot-img">
                 {MEDIA_FRM.fields[field].preSignedUrl ? (
                   <div className="file-uploader attached">
-                    {!isReadonly &&
-                      <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
+                    {!isReadonly
+                      && <Button onClick={() => this.showConfirmModal(field)} circular icon={{ className: 'ns-close-light' }} />
                     }
                     <Image64 srcUrl={MEDIA_FRM.fields[field].preSignedUrl} />
                   </div>
@@ -276,9 +288,10 @@ export default class Media extends Component {
                     cropInModal
                     aspect={1 / 1}
                   />
-              )}
+                )}
               </Form>
-            </Grid.Column>))
+            </Grid.Column>
+          ))
               }
         </Grid>
         <Divider section />

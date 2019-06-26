@@ -14,6 +14,7 @@ export default class UserInvestorDetails extends Component {
   state = {
     displayOnly: true,
   }
+
   componentWillMount() {
     const { investorProfileData } = this.props;
     const { setInvestorDetailInfo } = this.props.investorProfileStore;
@@ -24,6 +25,7 @@ export default class UserInvestorDetails extends Component {
       setInvestorDetailInfo(investorProfileData);
     }
   }
+
   toogleField = (e) => {
     e.preventDefault();
     const { investorProfileData } = this.props;
@@ -40,12 +42,14 @@ export default class UserInvestorDetails extends Component {
     setIsInvestmentExperienceValidStatus(true);
     this.setState({ displayOnly: !this.state.displayOnly });
   }
+
   handleSubmit = (e) => {
     e.preventDefault();
     const { updateInvestorEditProfileData } = this.props.investorProfileStore;
     updateInvestorEditProfileData();
     this.setState({ displayOnly: !this.state.displayOnly });
   }
+
   render() {
     const formName = 'INVESTOR_PROFILE_FULL';
     const {
@@ -59,10 +63,10 @@ export default class UserInvestorDetails extends Component {
       <Card fluid className="form-card">
         <Form>
           <Header as="h5">Investor Profile
-            {!this.props.isAdmin && (this.state.displayOnly ?
-              <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={this.toogleField}><small>Edit information</small></Link>
-              :
-              <Button.Group floated="right" size="mini" compact>
+            {!this.props.isAdmin && (this.state.displayOnly
+              ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={this.toogleField}><small>Edit information</small></Link>
+              : (
+<Button.Group floated="right" size="mini" compact>
                 <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={this.toogleField} />
                 <Button
                   primary
@@ -71,7 +75,8 @@ export default class UserInvestorDetails extends Component {
                 >
                   Update
                 </Button>
-              </Button.Group>)
+              </Button.Group>
+              ))
             }
           </Header>
           <dl className="dl-horizontal">
@@ -91,8 +96,9 @@ export default class UserInvestorDetails extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </dd>
-            {INVESTOR_PROFILE_FULL.fields.status.value === 'EMPLOYED' &&
-              <Aux>
+            {INVESTOR_PROFILE_FULL.fields.status.value === 'EMPLOYED'
+              && (
+<Aux>
                 <dt className="regular-text">Employer</dt>
                 <dd>
                   <FormInput
@@ -120,6 +126,7 @@ export default class UserInvestorDetails extends Component {
                   />
                 </dd>
               </Aux>
+              )
             }
             <Divider hidden />
             <dt>Brokerage employment</dt>
@@ -138,8 +145,9 @@ export default class UserInvestorDetails extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </dd>
-            {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes' &&
-              <Aux>
+            {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
+              && (
+<Aux>
                 <dt className="regular-text">Member Firm Name</dt>
                 <dd>
                   <FormInput
@@ -154,6 +162,7 @@ export default class UserInvestorDetails extends Component {
                   />
                 </dd>
               </Aux>
+              )
             }
             <Divider hidden />
             <dt>Public Company Relations</dt>
@@ -172,8 +181,9 @@ export default class UserInvestorDetails extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </dd>
-            {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes' &&
-              <Aux>
+            {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
+              && (
+<Aux>
                 <dt className="regular-text">Ticker Symbol</dt>
                 <dd>
                   <FormInput
@@ -188,6 +198,7 @@ export default class UserInvestorDetails extends Component {
                   />
                 </dd>
               </Aux>
+              )
             }
             <Divider hidden />
             <dt>Financial status</dt>
@@ -266,18 +277,22 @@ export default class UserInvestorDetails extends Component {
             />
           ))
           }
-          {!this.state.displayOnly && !isInvestmentExperienceValid &&
-            <p className="negative-text">
+          {!this.state.displayOnly && !isInvestmentExperienceValid
+            && (
+<p className="negative-text">
               NextSeed investments are suitable for experienced investors
               are comfortable with long-term risk.
               Please confirm that you fit this profile in order to proceed.
             </p>
+            )
           }
-          {!this.state.displayOnly && !isInvestmentExperienceValid &&
-            <p className="negative-text">
+          {!this.state.displayOnly && !isInvestmentExperienceValid
+            && (
+<p className="negative-text">
               Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center </Link>
               to learn more about investing on NextSeed.
             </p>
+            )
           }
         </Form>
       </Card>

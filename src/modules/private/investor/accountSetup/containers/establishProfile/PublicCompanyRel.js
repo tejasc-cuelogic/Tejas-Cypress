@@ -26,8 +26,9 @@ export default class PublicCompanyRel extends Component {
             containerclassname="three wide button-radio center-align"
             showerror
           />
-          {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes' &&
-          <div className="field-wrap left-align">
+          {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes'
+          && (
+<div className="field-wrap left-align">
             <Form.Group widths="equal">
               <FormInput
                 key="publicCompanyTicker"
@@ -38,11 +39,14 @@ export default class PublicCompanyRel extends Component {
               />
             </Form.Group>
           </div>
+          )
           }
-          {errors &&
-          <Message error className="mt-30">
+          {errors
+          && (
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
+          )
           }
         </Form>
       </div>

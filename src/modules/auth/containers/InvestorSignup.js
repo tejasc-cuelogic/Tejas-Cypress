@@ -18,16 +18,19 @@ class InvestorSignup extends Component {
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+
   handleIsEmailExist = (email) => {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
-      this.props.history.push('/auth/change-password');
+      this.props.history.push('/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.uiStore.setProgress();
@@ -40,12 +43,13 @@ class InvestorSignup extends Component {
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
           this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
-            this.props.history.push('/auth/confirm-email');
+            this.props.history.push('/confirm-email');
           });
         }
       });
     }
   };
+
   render() {
     const {
       SIGNUP_FRM, signupChange, pwdInputType, currentScore,
@@ -71,7 +75,7 @@ class InvestorSignup extends Component {
             Sign up as {' '}
             {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'an Investor' : 'Business Owner'}
           </Header>
-          <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
+          <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {/* <Form>
@@ -129,18 +133,20 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
-            {errors &&
-              <Message error textAlign="left" className="mt-30">
+            {errors
+              && (
+<Message error textAlign="left" className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
+          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

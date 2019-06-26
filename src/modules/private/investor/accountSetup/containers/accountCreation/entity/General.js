@@ -12,6 +12,7 @@ export default class General extends Component {
   componentWillMount() {
     this.props.uiStore.setErrors(null);
   }
+
   render() {
     const {
       GEN_INFO_FRM,
@@ -92,10 +93,12 @@ export default class General extends Component {
               />
             </Form.Group>
           </div>
-          {errors &&
-            <Message className="center-align" error>
+          {errors
+            && (
+<Message className="center-align" error>
               <ListErrors errors={[errors]} />
             </Message>
+            )
           }
         </Form>
       </Aux>

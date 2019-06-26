@@ -11,8 +11,9 @@ const LockedInformation = ({ details, account }) => (
       <div className="table-wrapper">
         <Table unstackable basic="very" fixed>
           <Table.Body>
-            {account ?
-              <Aux>
+            {account
+              ? (
+<Aux>
                 <Table.Row>
                   <Table.Cell>Account Status: </Table.Cell>
                   <Table.Cell>{get(details, 'details.accountStatus') || 'N/A'}</Table.Cell>
@@ -33,8 +34,10 @@ const LockedInformation = ({ details, account }) => (
                   <Table.Cell>Previous Status: </Table.Cell>
                   <Table.Cell>{get(details, 'details.frozen.previousStatus') || 'NA'}</Table.Cell>
                 </Table.Row>
-              </Aux> :
-              <Aux>
+              </Aux>
+              )
+              : (
+<Aux>
                 <Table.Row>
                   <Table.Cell>User Status: </Table.Cell>
                   <Table.Cell>{get(details, 'locked.lock') || 'N/A'}</Table.Cell>
@@ -52,6 +55,7 @@ const LockedInformation = ({ details, account }) => (
                   <Table.Cell>{get(details, 'locked.comment') || 'NA'}</Table.Cell>
                 </Table.Row>
               </Aux>
+              )
             }
           </Table.Body>
         </Table>

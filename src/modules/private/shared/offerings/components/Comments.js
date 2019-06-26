@@ -13,10 +13,12 @@ export default class Comments extends Component {
   componentWillMount() {
     this.props.messageStore.initRequest();
   }
+
   messageSelectHandler = (currentMessageId) => {
     this.props.messageStore.setDataValue('currentMessageId', currentMessageId);
     this.props.messageStore.resetMessageForm();
   }
+
   render() {
     const {
       match, messageStore, userStore, offeringsStore,
@@ -35,20 +37,22 @@ export default class Comments extends Component {
     }
     return (
       <Card fluid className="messages comments">
-        {messages.length ?
-          <MessagesList
-            passedProcessingDate={passedProcessingDate}
-            threadMsgCount={threadMsgCount}
-            newPostComment={newPostComment}
-            threadUsersList={threadUsersList}
-            messageSelectHandler={this.messageSelectHandler}
-            match={match}
-            messages={messages}
-            currentMessageId={currentMessageId}
-            loading={loading}
-            error={error}
-            isIssuer={isIssuer}
-          /> : null
+        {messages.length
+          ? (
+<MessagesList
+  passedProcessingDate={passedProcessingDate}
+  threadMsgCount={threadMsgCount}
+  newPostComment={newPostComment}
+  threadUsersList={threadUsersList}
+  messageSelectHandler={this.messageSelectHandler}
+  match={match}
+  messages={messages}
+  currentMessageId={currentMessageId}
+  loading={loading}
+  error={error}
+  isIssuer={isIssuer}
+/>
+          ) : null
         }
         <MessagesWrap
           passedProcessingDate={passedProcessingDate}

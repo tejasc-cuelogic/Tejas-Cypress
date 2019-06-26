@@ -25,18 +25,24 @@ export default class ChooseOffer extends Component {
       this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
     });
   }
+
   getBusinessName = res => ((res && res.prequalDetails) ? res.prequalDetails.businessGeneralInfo.businessName : '');
+
   signPortalAgreement = () => {
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.signPortalAgreement().then(() => {
       this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
     });
   }
+
   declineApplication = () => this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers/decline`);
+
   module = name => DataFormatter.upperCamelCase(name);
+
   handleCloseModal = () => {
     this.props.history.push('/app/dashboard');
   }
+
   handleSetField = (field, value, location = null) => {
     this.props.businessAppReviewStore.setFieldvalue(field, value);
     if (location) {
@@ -45,6 +51,7 @@ export default class ChooseOffer extends Component {
       this.props.history.push(`${this.props.match.url}/general-conditions`);
     }
   }
+
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
@@ -81,9 +88,10 @@ export default class ChooseOffer extends Component {
             signing the Portal Agreement to formalize our partnership and initiate the preparation
             of your crowdfunding campaign.
           </p>
-          {offerLoading ?
-            <InlineLoader /> :
-            <div className="ui form mt-20">
+          {offerLoading
+            ? <InlineLoader />
+            : (
+<div className="ui form mt-20">
               <OffersPanel
                 OFFERS_FRM={OFFERS_FRM}
                 formChangeWithIndex={formChangeWithIndex}
@@ -95,9 +103,11 @@ export default class ChooseOffer extends Component {
                 selectedOfferIndex={selectedOfferIndex}
               />
             </div>
+            )
           }
-          {selectedOfferIndex !== null && !offerLoading ?
-            <Card fluid>
+          {selectedOfferIndex !== null && !offerLoading
+            ? (
+<Card fluid>
               <SecondaryMenu
                 inverted
                 match={match}
@@ -119,14 +129,17 @@ export default class ChooseOffer extends Component {
                 </Switch>
               </div>
               <Card.Content extra className="center-align">
-                { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? '' :
-                <Button.Group>
+                { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? ''
+                  : (
+<Button.Group>
                   <Button color="red" disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
                   <Button primary disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
                 </Button.Group>
+                  )
                 }
               </Card.Content>
-            </Card> : null
+            </Card>
+            ) : null
           }
         </Modal.Content>
       </Modal>

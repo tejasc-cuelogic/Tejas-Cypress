@@ -11,7 +11,9 @@ export default class BonusRewards extends Component {
   componentWillMount() {
     this.props.rewardStore.initRequest();
   }
+
   activeOnly = () => this.props.rewardStore.activeOnly();
+
   render() {
     const {
       rewards, loading, error, option,
@@ -24,8 +26,8 @@ export default class BonusRewards extends Component {
           className="pull-right"
           label="Show active rewards only"
         />
-        {loading ? <InlineLoader /> :
-        <RewardList match={this.props.match} rewards={rewards} error={error} admin />
+        {loading ? <InlineLoader />
+          : <RewardList match={this.props.match} rewards={rewards} error={error} admin />
         }
       </Aux>
     );

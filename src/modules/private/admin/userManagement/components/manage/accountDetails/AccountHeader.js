@@ -10,14 +10,17 @@ import { withRouter } from 'react-router-dom';
 @observer
 export default class AccountHeader extends Component {
   state = { showModal: false };
+
   toggleConfirmModal = (e, action) => {
     e.preventDefault();
     this.props.history.push(`${this.props.pathname}/${action}`);
   }
+
   freezeAccountToggle = (userId, accountId, freeze) => {
     this.props.userDetailsStore.freezeAccountToggle(userId, accountId, freeze);
     this.setState({ showModal: false });
   }
+
   render() {
     const { inProgress } = this.props.uiStore;
     const loadingVal = Boolean(inProgress);
@@ -36,12 +39,14 @@ export default class AccountHeader extends Component {
               <Icon className={`ns-${accountType.toLocaleLowerCase()}-line`} color="green" />{(accountType === 'ira') ? accountType.toUpperCase() : startCase(accountType)} {this.props.module || ''}
             </Header>
           </span>
-          {this.props.showFreezeCTA &&
-          <span className="pull-right">
+          {this.props.showFreezeCTA
+          && (
+<span className="pull-right">
             <Button.Group compact size="tiny">
               <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
             </Button.Group>
           </span>
+          )
           }
         </div>
         <Divider hidden />

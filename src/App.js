@@ -17,6 +17,7 @@ import { userIdleTime } from './constants/common';
 /**
  * Main App
  */
+
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Gain access to exclusive investments in local businesses. Join investors from all over the country and build a portfolio with this alternative asset class.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -44,16 +45,12 @@ const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', 
 @observer
 class App extends Component {
   componentWillMount() {
-    const { authStore, location, history } = this.props;
+    const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
       history.push(location.pathname.replace(/\/+$/, ''));
     }
-    if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
-      const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
-      this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
-      history.push('/password-protected');
-    }
+    this.checkForPasswordProtect();
     authActions.verifySession()
       .then(() => {
         this.checkUserIdleStatus();
@@ -65,7 +62,7 @@ class App extends Component {
         }
       })
       .catch((err) => {
-        console.log('Catch error in app.js verifySession ', err);
+        console.log('Catch error in app.js verifySession. ', err);
       });
   }
 
@@ -80,6 +77,7 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    this.checkForPasswordProtect();
     if (isMobile) {
       document.activeElement.blur();
     }
@@ -104,7 +102,7 @@ class App extends Component {
         // console.log('Browser tab is hidden');
       } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
         authActions.forceLogout('timeout').then(() => {
-          this.props.history.push('/auth/login');
+          this.props.history.push('/login');
         });
       }
     });
@@ -135,13 +133,17 @@ class App extends Component {
     //   window.analytics.page();
     // }
   }
+
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
       authActions.logout('timeout').then(() => {
-        this.props.history.push('/auth/login');
+        if (this.props.location.pathname.includes('/app/')) {
+          this.props.history.push('/login');
+        }
       });
     }
   }
+
   onRouteChanged = ({ oldLocation, newLocation }) => {
     if (window.analytics) {
       window.analytics.page(document.title, {
@@ -150,6 +152,16 @@ class App extends Component {
       });
     }
   }
+
+  checkForPasswordProtect = () => {
+    const { authStore, location, history } = this.props;
+    if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
+      const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
+      this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
+      history.push('/password-protected');
+    }
+  }
+
   checkUserIdleStatus = () => {
     if (this.props.authStore.isUserLoggedIn && localStorage.getItem('lastActiveTime')) {
       const idleTime = (new Date().getTime() - localStorage.getItem('lastActiveTime'));
@@ -160,7 +172,9 @@ class App extends Component {
       localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
     }
   }
+
   checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));
+
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
   render() {
@@ -177,25 +191,27 @@ class App extends Component {
     }
     return (
       <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
-        {this.props.authStore.isUserLoggedIn &&
-        <IdleTimer
-          ref={(ref) => { this.props.authStore.idleTimer = ref; }}
-          element={document}
-          events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
-          onIdle={this.onIdle}
-          onAction={() => {
-            if (this.props.authStore.idleTimer) {
-              localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
-            }
-          }}
-          debounce={250}
-          timeout={userIdleTime}
-          stopOnIdle
-        />
+        {this.props.authStore.isUserLoggedIn
+        && (
+<IdleTimer
+  ref={(ref) => { this.props.authStore.idleTimer = ref; }}
+  element={document}
+  events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
+  onIdle={this.onIdle}
+  onAction={() => {
+    if (this.props.authStore.idleTimer) {
+      localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+    }
+  }}
+  debounce={250}
+  timeout={userIdleTime}
+  stopOnIdle
+/>
+        )
         }
         <MetaTagGenerator metaTagsData={metaTagsData} />
-        {this.props.authStore.devPasswdProtection ?
-          <Route exact path="/password-protected" component={DevPassProtected} /> : (
+        {this.props.authStore.devPasswdProtection
+          ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
               <Switch>
                 <Route exact path="/app/*" component={Private} />
@@ -205,8 +221,8 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {this.props.uiStore.devBanner &&
-          <DevBanner toggle={this.playDevBanner} />
+        {this.props.uiStore.devBanner
+          && <DevBanner toggle={this.playDevBanner} />
         }
       </div>
     );

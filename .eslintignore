@@ -1,1 +1,9 @@
 **/*{.,-}min.js
+/node_modules/**
+/build/**
+/cypress/**
+/src/assets/semantic/**
+/semantic/**
+/src/assets/js/**
+/config/**
+/scripts/**

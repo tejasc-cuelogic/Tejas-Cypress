@@ -11,11 +11,14 @@ export default class GettingStarted extends Component {
   componentWillMount() {
     this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
   }
+
   handleCloseModal = () => {
     this.props.offeringsStore.initRequest({ stage: 'active' });
     this.props.history.push('/app/dashboard');
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   render() {
     setTimeout(() => {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', false);

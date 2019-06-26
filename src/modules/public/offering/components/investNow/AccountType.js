@@ -25,9 +25,9 @@ class AccountType extends Component {
       frozenAccounts,
       inprogressAccounts,
     } = this.props.userDetailsStore.signupStatus;
-    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
-      [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
-        activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0)
+      ? [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0)
+        ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     prepareAccountTypes(accountToConsider);
     const {
       setPartialInvestmenSession,
@@ -66,8 +66,8 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (this.props.changeInvest || (accountToConsider &&
-      accountToConsider.length === 1 && isDocumentUpload === true)) {
+    } else if (this.props.changeInvest || (accountToConsider
+      && accountToConsider.length === 1 && isDocumentUpload === true)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
@@ -82,8 +82,8 @@ class AccountType extends Component {
         const isParallelOfferingModelToShow = !!(offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus));
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
-          if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId &&
-            !isParallelOfferingModelToShow && userStatus === 'FULL') {
+          if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId
+            && !isParallelOfferingModelToShow && userStatus === 'FULL') {
             setStepToBeRendered(1);
           }
         });
@@ -102,6 +102,7 @@ class AccountType extends Component {
       });
     }
   }
+
   componentDidMount() {
     const {
       setStepToBeRendered,
@@ -125,9 +126,9 @@ class AccountType extends Component {
     const { activeAccounts, inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     const userInfoDetails = this.props.userDetailsStore.userDetails;
     const userStatus = userInfoDetails && userInfoDetails.status;
-    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
-      [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
-        activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0)
+      ? [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0)
+        ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     prepareAccountTypes(accountToConsider);
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
@@ -164,6 +165,7 @@ class AccountType extends Component {
       }
     }
   }
+
   componentDidUpdate() {
     const {
       setStepToBeRendered,
@@ -205,9 +207,11 @@ class AccountType extends Component {
       }
     }
   }
+
   radioChnaged = (e, res) => {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
   }
+
   handlUpdateExpiration = (e) => {
     e.preventDefault();
     const { updateAccreditationExpiray } = this.props.accreditationStore;
@@ -215,12 +219,14 @@ class AccountType extends Component {
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(this.props.refLink);
   }
+
   handlBackToOffering = (e) => {
     e.preventDefault();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     this.props.history.push(this.props.refLink);
   }
+
   handleInvestmentWihoutAccreditation = (e) => {
     e.preventDefault();
     const {
@@ -230,6 +236,7 @@ class AccountType extends Component {
     setFieldValue('disableNextbtn', false);
     setStepToBeRendered(1);
   }
+
   render() {
     const {
       activeAccounts,
@@ -255,8 +262,8 @@ class AccountType extends Component {
     }
     const offeringReuglation = get(offeringDetailObj, 'keyTerms.regulation');
     const offeringTitle = get(offeringDetailObj, 'keyTerms.shorthandBusinessName');
-    const offeringRegulationDMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmount506C');
-    const offeringRegulationDMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmount506C');
+    const offeringRegulationDMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmount506') ? get(offeringDetailObj, 'keyTerms.minOfferingAmount506') : get(offeringDetailObj, 'keyTerms.minOfferingAmount506C');
+    const offeringRegulationDMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmount506') ? get(offeringDetailObj, 'keyTerms.maxOfferingAmount506') : get(offeringDetailObj, 'keyTerms.maxOfferingAmount506C');
     const OfferingRegulationCFMinAmount = get(offeringDetailObj, 'keyTerms.minOfferingAmountCF');
     const OfferingRegulationCFMaxAmount = get(offeringDetailObj, 'keyTerms.maxOfferingAmountCF');
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
@@ -296,18 +303,18 @@ class AccountType extends Component {
     } else {
       setPartialInvestmenSession();
     }
-    if ((isRegulationCheck && (!accreditationData.ira)) || (!selectedAccountStatus) ||
-      (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0) ||
-      (showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length === 1) ||
-      this.props.inProgress) {
+    if ((isRegulationCheck && (!accreditationData.ira)) || (!selectedAccountStatus)
+      || (!showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length > 0)
+      || (showAccountList && !getCurrentInvestNowHealthCheck && activeAccounts.length === 1)
+      || this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
     }
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     const { currentUser } = this.props.userStore;
     let redirectURL = '';
     if (!showAccountList || investAccTypes.values.length <= 1 || this.props.changeInvest) {
-      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') && userProfileFullStatus !== 'FULL' ?
-        `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
+      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') && userProfileFullStatus !== 'FULL'
+        ? `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     if ((isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) || this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
@@ -332,10 +339,12 @@ class AccountType extends Component {
       <Aux>
         <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
         <Form error className="account-type-tab mb-0">
-          {investAccTypes.values.length && selectedAccountStatus && (userProfileFullStatus === 'FULL' || userProfileFullStatus === 'BASIC') ?
-            <Aux>
-              {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest ?
-                <Aux>
+          {investAccTypes.values.length && selectedAccountStatus && (userProfileFullStatus === 'FULL' || userProfileFullStatus === 'BASIC')
+            ? (
+<Aux>
+              {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest
+                ? (
+<Aux>
                   <p className="center-align">{headerSubheaderObj.subHeader}</p>
                   <FormRadioGroup
                     name="investAccountType"
@@ -344,10 +353,12 @@ class AccountType extends Component {
                     changed={accTypeChanged}
                   />
                 </Aux>
-                :
-                <Aux>
-                  {isDocumentUpload === false ?
-                    <div className="center-align">
+                )
+                : (
+<Aux>
+                  {isDocumentUpload === false
+                    ? (
+<div className="center-align">
                       <p>
                         There is a technical issue with this offering.
                         The NextSeed team has been notified and will
@@ -356,15 +367,17 @@ class AccountType extends Component {
                       </p>
                       <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                     </div>
-                    :
-                    selectedAccountStatus === 'FULL' ?
-                      <div className="center-align">
-                        {headerSubheaderObj.subHeader ?
-                          <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
+                    )
+                    : selectedAccountStatus === 'FULL'
+                      ? (
+<div className="center-align">
+                        {headerSubheaderObj.subHeader
+                          ? <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
                         }
-                        {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' ?
-                          offeringReuglation && offeringReuglation === 'BD_CF_506C' ?
-                            <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
+                        {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING'
+                          ? offeringReuglation && offeringReuglation === 'BD_CF_506C'
+                            ? (
+<Card.Group itemsPerRow={isMobile ? '1' : '2'}>
                               <Card>
                                 <Card.Content>
                                   <Header as="h5" color="green">Yes, let’s get you verified.</Header>
@@ -391,8 +404,9 @@ class AccountType extends Component {
                                 </Card.Content>
                               </Card>
                             </Card.Group>
-                            :
-                            <Aux>
+                            )
+                            : (
+<Aux>
                               {/* <Link to={redirectURL} className="text-link">
                                 <Icon className="ns-arrow-right" color="green" />
                                 Apply for accreditation
@@ -407,9 +421,10 @@ class AccountType extends Component {
                                 />
                               </div>
                             </Aux>
-                          :
-                          userAccredetiationState === 'EXPIRED' ?
-                            <Form error>
+                            )
+                          : userAccredetiationState === 'EXPIRED'
+                            ? (
+<Form error>
                               <FormCheckbox
                                 fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
                                 name="financialStatus"
@@ -420,53 +435,61 @@ class AccountType extends Component {
                               <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
                               <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
                             </Form>
-                            :
-                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                            )
+                            : <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         }
                       </div>
-                      :
-                      <div className="center-align">
-                        {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
-                          <Aux>
+                      )
+                      : (
+<div className="center-align">
+                        {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                          ? (
+<Aux>
                             <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
                             <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                           </Aux>
-                          :
-                          null}
-                        {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL') ?
-                          <Aux>
+                          )
+                          : null}
+                        {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL')
+                          ? (
+<Aux>
                             <Link to={redirectURL} className="text-link">
                               <Icon className="ns-arrow-right" color="green" />
                               Please finish your account setup.
                             </Link>
                             <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                           </Aux>
-                          :
-                          null}
-                        {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING') ?
-                          <Aux>
+                          )
+                          : null}
+                        {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING')
+                          ? (
+<Aux>
                             <p>We&apos;ll notify you through email when your account is set up.</p>
                             <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                           </Aux>
-                          :
-                          null}
+                          )
+                          : null}
                       </div>
+                      )
                   }
                 </Aux>
+                )
               }
             </Aux>
-            :
-            <div className="center-align">
-              {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
-                <Aux>
+            )
+            : (
+<div className="center-align">
+              {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                ? (
+<Aux>
                   <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
                   <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                 </Aux>
-                :
-                null}
+                )
+                : null}
               {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
-                ?
-                  <Aux>
+                ? (
+<Aux>
                     Please answer a few basic questions to complete your Investor Profile.
                     {/* <Link to={redirectURL} className="text-link">
                         <Icon className="ns-arrow-right" color="green" />
@@ -484,16 +507,18 @@ class AccountType extends Component {
                     </div> */}
                     <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
                   </Aux>
-                :
-                null}
-              {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
-                <Aux>
+                )
+                : null}
+              {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow)
+                ? (
+<Aux>
                   <p>We&apos;ll notify you through email when your account is set up.</p>
                   <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                 </Aux>
-                :
-                null}
+                )
+                : null}
             </div>
+            )
           }
         </Form>
       </Aux>

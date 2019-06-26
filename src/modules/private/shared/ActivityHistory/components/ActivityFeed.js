@@ -1,36 +1,38 @@
 import React from 'react';
 import { get } from 'lodash';
 import { Feed, Transition } from 'semantic-ui-react';
-import { InlineLoader, UserAvatar } from '../../../../../theme/shared/';
+import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import DateTimeFormat from '../../../../../theme/shared/src/DateTimeFormat';
 import NSImage from '../../../../shared/NSImage';
 
 const ActivityFeed = ({ loading, activities }) => (
   <Transition.Group animation="glow" className="activities" as={Feed} duration={900}>
     {loading ? <InlineLoader /> : (
-      activities.length === 0 ? <InlineLoader text="No activity to display" /> :
-        activities.map(a => (
+      activities.length === 0 ? <InlineLoader text="No activity to display" />
+        : activities.map(a => (
           <Feed.Event>
             <Feed.Label>
-              {a.createdUserInfo ?
-                <UserAvatar
-                  UserInfo={{
-                    firstName: get(a.createdUserInfo, 'info.firstName') || '',
-                    lastName: get(a.createdUserInfo, 'info.lastName') || '',
-                    avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
-                    roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
-                  }}
-                  base64url
-                /> :
-                <NSImage path="logo-icon.svg" />
+              {a.createdUserInfo
+                ? (
+<UserAvatar
+  UserInfo={{
+    firstName: get(a.createdUserInfo, 'info.firstName') || '',
+    lastName: get(a.createdUserInfo, 'info.lastName') || '',
+    avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
+    roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
+  }}
+  base64url
+/>
+                )
+                : <NSImage path="logo-icon.svg" />
               }
             </Feed.Label>
             <Feed.Content>
               <Feed.Meta>
-                { a.createdUserInfo ?
-                `${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} 
+                { a.createdUserInfo
+                  ? `${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} 
                 ${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName}`
-                : 'NextSeed Notifications' }
+                  : 'NextSeed Notifications' }
                 <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>

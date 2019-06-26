@@ -14,6 +14,7 @@ export default class Settings extends Component {
     const { setSettingsInfo } = this.props.settingStore;
     setSettingsInfo(accountType);
   }
+
   render() {
     const { settingsInfo } = this.props.settingStore;
     const { match } = this.props;
@@ -31,8 +32,8 @@ export default class Settings extends Component {
                         <Table.Row>
                           <Table.Cell><b>{row.label}</b></Table.Cell>
                           <Table.Cell>
-                            {(row.label === 'Annual Income') || (row.label === 'Net Worth') || (row.label === 'Entity net assets') || (row.label === 'Other CF Investments') ?
-                              (Helper.CurrencyFormat(row.value)) : (row.value)}
+                            {(row.label === 'Annual Income') || (row.label === 'Net Worth') || (row.label === 'Entity net assets') || (row.label === 'Other CF Investments')
+                              ? (Helper.CurrencyFormat(row.value)) : (row.value)}
                           </Table.Cell>
                         </Table.Row>
                       ))}

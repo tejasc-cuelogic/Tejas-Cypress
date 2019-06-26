@@ -95,6 +95,18 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      goldstar {
+        isin
+        contactId
+        esAccountNumber
+        sfAccountNumber
+      }
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+        accountHolderName
+      }
       leadDetails {
         id
         email {
@@ -158,8 +170,10 @@ export const getOfferingDetails = gql`
         revSharePercentage
         interestRate
         minOfferingAmountCF
-        minOfferingAmount506C
+        minOfferingAmount506
         maxOfferingAmountCF
+        maxOfferingAmount506
+        minOfferingAmount506C
         maxOfferingAmount506C
         legalBusinessType
         nsMinFees
@@ -400,8 +414,6 @@ export const getOfferingDetails = gql`
           terminationDate
           expectedOpsDate
           issuerApprovedDate
-          escrowKey
-          escrowNumber
           edgarLink
           submitted {
             aliasId: id
@@ -414,7 +426,6 @@ export const getOfferingDetails = gql`
             date
             status
           }
-          gsFees
         }
       }
       legal {
@@ -876,6 +887,11 @@ export const getOfferingDetails = gql`
           revSharePercentage
           interestRate
           businessOpenDate
+          nsPayment
+          investorFee
+          maturityDate
+          anticipatedPaymentStartDate
+          gsFees
         }
         repayment {
           startDate
@@ -886,6 +902,9 @@ export const getOfferingDetails = gql`
         totalCommittedAmount
         totalInvestorCount
         totalInvestmentAmount
+        totalInvestmentAmountCf
+        totalInvestmentAmount506C
+        totalInvestmentAmount506B
         failedDate
       }
       bonusRewards{
@@ -1132,7 +1151,7 @@ query getTotalAmount{
     amountRaisedUS
     amountRaisedTX
     totalInvestorsUS
-  }  
+  }
   }
   `;
 

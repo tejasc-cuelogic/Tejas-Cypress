@@ -5,11 +5,11 @@ import { Card, Grid, Header, Divider, Label, Button, Table } from 'semantic-ui-r
 import ChangePassword from '../../../../auth/containers/ChangePassword';
 import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
-import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmEmailAddress';
-import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
+import ConfirmEmailAddress from '../../../../auth/containers/ConfirmEmailAddress';
+import ConfirmPhoneNumber from './profileSettings/ConfirmPhoneNumber';
 import Helper from '../../../../../helper/utility';
-import { securitySections } from './../../../../../services/constants/user';
-import ManageMultiFactorAuth from '../components/profileSettings/ManageMultiFactorAuth';
+import { securitySections } from '../../../../../services/constants/user';
+import ManageMultiFactorAuth from './profileSettings/ManageMultiFactorAuth';
 
 @inject('userDetailsStore')
 @withRouter
@@ -24,8 +24,7 @@ export default class Security extends Component {
         <Route exact path={`${match.url}/change-password`} render={props => <ChangePassword refModule="security" {...props} />} />
         <Route
           path={`${this.props.match.url}/confirm`}
-          render={props =>
-            <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
+          render={props => <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
         />
         <Route exact path={`${match.url}/mfa`} render={() => <ManageMultiFactorAuth refLink={this.props.match.url} />} />
         <Route path={`${this.props.match.url}/new-email-address`} render={() => <NewEmailAddress refLink={this.props.match.url} />} />

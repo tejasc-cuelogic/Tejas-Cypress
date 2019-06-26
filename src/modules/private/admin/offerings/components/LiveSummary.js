@@ -7,8 +7,8 @@ import { DataFormatter } from '../../../../../helper';
 const leftSummary = offer => [
   {
     title: 'Business Name',
-    content: (get(offer, 'keyTerms.shorthandBusinessName') ?
-      get(offer, 'keyTerms.shorthandBusinessName') : (
+    content: (get(offer, 'keyTerms.shorthandBusinessName')
+      ? get(offer, 'keyTerms.shorthandBusinessName') : (
         get(offer, 'keyTerms.legalBusinessName') ? get(offer, 'keyTerms.legalBusinessName') : 'N/A'
       )),
   },
@@ -38,7 +38,8 @@ const LiveSummary = ({ offer, refLink }) => (
                     <Header.Subheader>{item.title}</Header.Subheader>
                     {item.content}
                   </Header>
-                </Grid.Column>))
+                </Grid.Column>
+              ))
                 }
             </Grid>
           </Card.Content>
@@ -58,7 +59,8 @@ const LiveSummary = ({ offer, refLink }) => (
                     <Header.Subheader>{item.title}</Header.Subheader>
                     {item.content}
                   </Header>
-                </Grid.Column>))
+                </Grid.Column>
+              ))
               }
             </Grid>
           </Card.Content>

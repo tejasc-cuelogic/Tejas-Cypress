@@ -53,6 +53,7 @@ export default class Review extends Component {
   representAddon = summary => mapValues(summary, s => (
     s !== '' && <Icon color={s === 'ns-check-circle' ? 'green' : 'orange'} name={s} />
   ));
+
   render() {
     const { match, businessAppReviewStore, appType } = this.props;
     const {
@@ -73,13 +74,15 @@ export default class Review extends Component {
                 navItems={navItems}
               />
               <Divider hidden />
-              {showGeneratePA &&
-              <Button.Group size="mini">
+              {showGeneratePA
+              && (
+<Button.Group size="mini">
                 <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
-                {paBoxFolderId &&
-                <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
+                {paBoxFolderId
+                && <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
                 }
               </Button.Group>
+              )
               }
             </div>
           </Grid.Column>
@@ -94,11 +97,12 @@ export default class Review extends Component {
                       exact={false}
                       key={item.to}
                       path={`${match.url}/${item.to}`}
-                      render={props =>
-                        (<CurrentComponent
-                          appType={appType}
-                          {...props}
-                        />)
+                      render={props => (
+<CurrentComponent
+  appType={appType}
+  {...props}
+/>
+                      )
                       }
                     />
                   );

@@ -24,12 +24,14 @@ export default class NewEmailAddress extends Component {
     })
       .catch(() => { });
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.history.push(this.props.refLink);
   }
+
   render() {
     const { CONFIRM_FRM, confirmFormChange } = this.props.authStore;
     const { errors } = this.props.uiStore;
@@ -54,10 +56,12 @@ export default class NewEmailAddress extends Component {
               error={!!CONFIRM_FRM.fields.email.error}
             />
             <FieldError error={CONFIRM_FRM.fields.email.error} />
-            {errors &&
-              <Message error className="mt-30">
+            {errors
+              && (
+<Message error className="mt-30">
                 <ListErrors errors={[errors.message]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button primary size="large" className="very relaxed" content="Change Email Address" disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value) || this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} />

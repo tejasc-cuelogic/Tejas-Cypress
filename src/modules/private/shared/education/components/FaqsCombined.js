@@ -10,6 +10,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class FaqsCombined extends Component {
   state = { activeIndex: 0, innerActiveIndex: 0 }
+
   componentWillMount() {
     const props = { isMkt: this.props.marketing, params: this.props.params };
     const { currentUser } = this.props.userStore;
@@ -21,17 +22,20 @@ export default class FaqsCombined extends Component {
     }
     this.props.educationStore.initRequest('Faq', props, categoryType);
   }
+
   toggleAccordion = (index, field) => {
     const newIndex = this.state[field] === index ? -1 : index;
     const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
     this.setState(stateChange);
   }
+
   search = (e) => {
     this.props.educationStore.setSrchParam(e.target.value);
     if (this.props.location.pathname !== '/resources/education-center/investor/faq') {
       this.props.history.replace('/resources/education-center/investor/faq');
     }
   }
+
   render() {
     const { faqs, loading, searchParam } = this.props.educationStore;
     const { activeIndex, innerActiveIndex } = this.state;
@@ -52,16 +56,16 @@ export default class FaqsCombined extends Component {
           />
         </Form>
         <div className="mt-30">
-          {faqs &&
-          faqs.map((faq, key) => (
-            <Accordion key={faq.slug} className="faq-accordion" >
+          {faqs
+          && faqs.map((faq, key) => (
+            <Accordion key={faq.slug} className="faq-accordion">
               <Accordion.Title active={activeIndex === key} index={key} onClick={() => this.toggleAccordion(key, 'activeIndex')}>
                 {faq.categoryName}
                 <Icon className="ns-chevron-down" />
               </Accordion.Title>
               <Accordion.Content active={activeIndex === key}>
-                {faq.faqItems &&
-                faq.faqItems.map((faqItem, index) => (
+                {faq.faqItems
+                && faq.faqItems.map((faqItem, index) => (
                   <Accordion key={faqItem.slug}>
                     <Accordion.Title
                       active={innerActiveIndex === index}

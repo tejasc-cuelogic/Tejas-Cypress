@@ -11,8 +11,9 @@ const AccTypeDescription = observer((props) => {
   return (
     <div className="option-details">
       { /* Individual */ }
-      {isAccExist && value === 0 &&
-        <Aux>
+      {isAccExist && value === 0
+        && (
+<Aux>
           <p>
             Open a NextSeed investment account to begin investing in local businesses.<br /><br />
             An initial deposit can be quickly and securely completed by linking your checking
@@ -27,10 +28,12 @@ const AccTypeDescription = observer((props) => {
             uninvested cash in NextSeed accounts.
           </p>
         </Aux>
+        )
       }
       { /* IRA */ }
-      {isAccExist && value === 1 &&
-        <Aux>
+      {isAccExist && value === 1
+        && (
+<Aux>
           <div className="promitional-offer-block center-align mb-20 bg-offwhite">
             <Header as="h5">Promotional Offer</Header>
             <p>
@@ -58,10 +61,12 @@ const AccTypeDescription = observer((props) => {
             right for you.
           </p>
         </Aux>
+        )
       }
       { /* Entity */ }
-      {isAccExist && value === 2 &&
-        <Aux>
+      {isAccExist && value === 2
+        && (
+<Aux>
           <p>
             Invest in businesses through an Entity investment account. (Note: Investment limits
             for Entity accounts are treated separately from Individual investment accounts)
@@ -81,6 +86,7 @@ const AccTypeDescription = observer((props) => {
             uninvested cash in NextSeed accounts.
           </p>
         </Aux>
+        )
       }
     </div>
   );
