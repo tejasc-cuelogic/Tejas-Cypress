@@ -51,12 +51,12 @@ const CreationSummary = ({ offer }) => (
                     {row.title}
                     {row.info
                       && (
-                      <Popup
-                        trigger={<Icon className="ns-help-circle" />}
-                        content={row.info}
-                        position="top center"
-                        className="center-align"
-                      />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={row.info}
+  position="top center"
+  className="center-align"
+/>
                       )
                     }
                   </Statistic.Label>

@@ -73,7 +73,7 @@ export default class AddBeneficiary extends Component {
                     {`Beneficiary ${index + 1}`}
                     {BENEFICIARY_META.fields.beneficiary.length > 1
                       && (
-                      <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
+<Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
                       )

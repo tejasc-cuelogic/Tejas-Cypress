@@ -24,16 +24,9 @@ const UploadedDocument = ({
     <Item.Content>
       <Item.Header>
         <Link to="/">
-          <Icon className="ns-file" color="blue" />
-          {document.fileName}
+          <Icon className="ns-file" color="blue" />{document.fileName}
         </Link>
-        <span>
-Attached:
-          {document.attachedDate}
-          {' '}
-by
-          {document.byUser}
-        </span>
+        <span>Attached: {document.attachedDate} by {document.byUser}</span>
         <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, 'UPLOADED_DOCUMENTS_FRM')}>
           <Icon className="ns-close-circle" color="grey" />
         </Link>
@@ -75,10 +68,7 @@ const AddMore = ({
 }) => (
   <Table.Row>
     <Table.Cell colSpan="3">
-      <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)}>
-+
-        {title}
-      </Button>
+      <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)}>+ {title}</Button>
     </Table.Cell>
   </Table.Row>
 );
@@ -150,40 +140,40 @@ export default class Miscellaneous extends Component {
               {
                 MISCELLANEOUS_FRM.fields.socialMedia.length
                   ? MISCELLANEOUS_FRM.fields.socialMedia.map((socialMedia, index) => (
-                    <Table.Row>
-                      <Table.Cell width={3}>
-                        <Dropdown
-                          className={isReadonly ? 'display-only secondary' : 'secondary'}
-                          readOnly={isReadonly}
-                          name="label"
-                          placeholder="eg. Facebook"
-                          fluid
-                          selection
-                          value={socialMedia.label.value}
-                          options={SOCIAL_MEDIA_LABELS}
-                          onChange={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <FormInput
-                          containerclassname={isReadonly ? 'display-only' : ''}
-                          readOnly={isReadonly}
-                          type="text"
-                          name="url"
-                          fielddata={socialMedia.url}
-                          changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
-                        />
-                      </Table.Cell>
-                      {!isReadonly
+                  <Table.Row>
+                    <Table.Cell width={3}>
+                      <Dropdown
+                        className={isReadonly ? 'display-only secondary' : 'secondary'}
+                        readOnly={isReadonly}
+                        name="label"
+                        placeholder="eg. Facebook"
+                        fluid
+                        selection
+                        value={socialMedia.label.value}
+                        options={SOCIAL_MEDIA_LABELS}
+                        onChange={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <FormInput
+                        containerclassname={isReadonly ? 'display-only' : ''}
+                        readOnly={isReadonly}
+                        type="text"
+                        name="url"
+                        fielddata={socialMedia.url}
+                        changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
+                      />
+                    </Table.Cell>
+                    {!isReadonly
                     && (
-                    <Table.Cell collapsing>
+<Table.Cell collapsing>
                       {MISCELLANEOUS_FRM.fields.socialMedia.length > 1
                       && <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'socialMedia')} />
                       }
                     </Table.Cell>
                     )
                     }
-                    </Table.Row>
+                  </Table.Row>
                   )) : ''
               }
               {!isReadonly && MISCELLANEOUS_FRM.fields.socialMedia.length < 5
@@ -198,39 +188,39 @@ export default class Miscellaneous extends Component {
               {
               MISCELLANEOUS_FRM.fields.otherDocs.length
                 ? MISCELLANEOUS_FRM.fields.otherDocs.map((document, index) => (
-                  <Table.Row verticalAlign="top">
-                    <Table.Cell width={5}>
-                      <FormInput
-                        containerclassname={isReadonly ? 'display-only' : ''}
-                        readOnly={isReadonly}
-                        name="label"
-                        fielddata={document.label}
-                        changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'otherDocs', index)}
-                      />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <DropZone
-                        size="small"
-                        hideFields={isReadonly}
-                        className={isReadonly ? 'display-only secondary' : 'secondary'}
-                        disabled={isReadonly}
-                        name="docDetails"
-                        fielddata={document.docDetails}
-                        ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={field => this.handleDelDoc(field, index)}
-                        uploadtitle="Choose document to upload"
-                      />
-                    </Table.Cell>
-                    {!isReadonly
+                <Table.Row verticalAlign="top">
+                  <Table.Cell width={5}>
+                    <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      readOnly={isReadonly}
+                      name="label"
+                      fielddata={document.label}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'otherDocs', index)}
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <DropZone
+                      size="small"
+                      hideFields={isReadonly}
+                      className={isReadonly ? 'display-only secondary' : 'secondary'}
+                      disabled={isReadonly}
+                      name="docDetails"
+                      fielddata={document.docDetails}
+                      ondrop={(files, name) => this.onFileDrop(files, name, index)}
+                      onremove={field => this.handleDelDoc(field, index)}
+                      uploadtitle="Choose document to upload"
+                    />
+                  </Table.Cell>
+                  {!isReadonly
                   && (
-                  <Table.Cell collapsing>
+<Table.Cell collapsing>
                     {MISCELLANEOUS_FRM.fields.otherDocs.length > 1
                     && <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'otherDocs')} />
                     }
                   </Table.Cell>
                   )
                   }
-                  </Table.Row>
+                </Table.Row>
                 )) : ''
               }
               {!isReadonly && MISCELLANEOUS_FRM.fields.otherDocs.length < 5

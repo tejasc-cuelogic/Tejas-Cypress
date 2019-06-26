@@ -30,7 +30,7 @@ class MeetOurTeam extends Component {
                 {meetTeamOjb.map(data => (
                   data.isPublic
                   && (
-                  <Item>
+<Item>
                     <Item.Content>
                       <div className={`campaign-avatar ${isMobile && 'mobile-avatar'}`}>
                         <div className="avatar-image team-avatar">
@@ -49,12 +49,12 @@ class MeetOurTeam extends Component {
                           }
                           {data && data.social
                             && (
-                            <Item.Extra>
+<Item.Extra>
                               <div>
                                 {data && data.social && Object.keys(data.social).map(key => (
                                   data.social[key]
                                     && (
-                                    <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+<a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
                                       <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
                                     </a>
                                     )
@@ -67,7 +67,7 @@ class MeetOurTeam extends Component {
                       </div>
                       {data.bio
                         && (
-                        <Item.Description className="avatar-description mt-30">
+<Item.Description className="avatar-description mt-30">
                           <HtmlEditor readOnly content={data.bio} />
                         </Item.Description>
                         )

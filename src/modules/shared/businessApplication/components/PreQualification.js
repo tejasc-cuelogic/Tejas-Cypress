@@ -100,7 +100,7 @@ export default class PreQualification extends Component {
           }
           {this.props.isPublic
           && (
-          <FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
+<FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
             <div className="field-wrap">
               <Form.Group widths="equal">
                 {
@@ -142,7 +142,7 @@ export default class PreQualification extends Component {
         </Form>
         {isPrequalQulify
         && (
-        <Form onSubmit={this.submit} className="issuer-signup">
+<Form onSubmit={this.submit} className="issuer-signup">
           {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate'
             ? <PreQualRealEstate hideFields={hideFields} applicationType={params.applicationType} />
             : <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
@@ -153,24 +153,22 @@ export default class PreQualification extends Component {
             <Divider hidden />
             {!preQualFormDisabled
               ? (
-                <Button
-                  loading={this.props.uiStore.inProgress}
-                  disabled={!BUSINESS_APP_FRM.meta.isValid
+<Button
+  loading={this.props.uiStore.inProgress}
+  disabled={!BUSINESS_APP_FRM.meta.isValid
                   || (BUSINESS_APP_FRM.meta.isValid && this.props.uiStore.inProgress)}
-                  size="large"
-                  color="green"
-                  className={`${isMobile && 'mb-50'} very relaxed`}
-                >
+  size="large"
+  color="green"
+  className={`${isMobile && 'mb-50'} very relaxed`}
+>
                 Submit
-                </Button>
+              </Button>
               )
               : fetchBusinessApplicationsDataById
               && (
-              <Button as="span" className="time-stamp">
+<Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />
-                Submitted on
-                {' '}
-                {moment(fetchBusinessApplicationsDataById.created && fetchBusinessApplicationsDataById.created.date).format('MM/DD/YYYY')}
+                Submitted on {moment(fetchBusinessApplicationsDataById.created && fetchBusinessApplicationsDataById.created.date).format('MM/DD/YYYY')}
               </Button>
               )
             }

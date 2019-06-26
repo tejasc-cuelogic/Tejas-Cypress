@@ -45,7 +45,7 @@ export default class Identity extends Component {
         </Form>
         {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={[errors.message]} />
           </Message>
           )

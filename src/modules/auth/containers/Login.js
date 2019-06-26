@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
@@ -22,7 +22,8 @@ class Login extends Component {
 
   componentDidUpdate() {
     if (this.props.authStore.isUserLoggedIn
-      && !this.props.authStore.newPasswordRequired) {
+      && !this.props.authStore.newPasswordRequired
+      && this.props.userDetailsStore.userFirstLoad) {
       const { authRef } = this.props.uiStore;
       const roles = get(this.props.userStore.currentUser, 'roles');
       this.props.history.push(authRef || (roles && roles.includes('investor')
@@ -45,11 +46,18 @@ class Login extends Component {
         authActions.login()
           .then(() => {
             if (this.props.authStore.newPasswordRequired) {
-              this.props.history.push('/auth/change-password');
+              this.props.uiStore.removeOneFromProgressArray('login');
+              this.props.history.push('/change-password');
             } else {
               this.props.authStore.setCredentials(userCredentials);
               this.props.authStore.resetForm('LOGIN_FRM');
-              this.props.history.push(this.props.uiStore.authRef || '/');
+              const { isLegaLVerificationDone, pendingStep } = this.props.userDetailsStore;
+              const roles = get(this.props.userStore.currentUser, 'roles');
+              const redirectUrl = roles && roles.includes('investor')
+                && !isLegaLVerificationDone
+                ? pendingStep : this.props.uiStore.authRef;
+              this.props.uiStore.removeOneFromProgressArray('login');
+              this.props.history.push(redirectUrl || '/');
             }
           }).catch((err) => {
             console.log(err);
@@ -67,10 +75,22 @@ class Login extends Component {
   }
 
   render() {
+    const { errors, inProgress, inProgressArray } = this.props.uiStore;
+    if (this.props.authStore.isUserLoggedIn
+        && !this.props.userDetailsStore.userFirstLoad
+        && (isEmpty(inProgressArray) || !inProgressArray.includes('login'))
+        && !this.props.authStore.newPasswordRequired
+    ) {
+      return (
+        <Dimmer active className="fullscreen">
+          <Loader active />
+        </Dimmer>
+      );
+    }
     const {
       LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
-    const { errors, inProgress } = this.props.uiStore;
+
     let customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
 
@@ -81,8 +101,9 @@ class Login extends Component {
     if (errors && errors.code === 'UserNotConfirmedException') {
       const { email, password } = this.props.authStore.LOGIN_FRM.fields;
       this.props.authStore.setCredentials({ email: email.value, password: password.value });
-      this.props.history.push('/auth/confirm-email');
+      this.props.history.push('/confirm-email');
     }
+
     return (
       <Modal size="mini" open closeIcon closeOnDimmerClick={false} onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">
@@ -110,26 +131,22 @@ class Login extends Component {
               ))
             }
             <Form.Field>
-              <Link to="/auth/forgot-password">Forgot password?</Link>
+              <Link to="/forgot-password">Forgot password?</Link>
             </Form.Field>
             {errors
               && (
-              <Message error className="mt-30">
+<Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
+              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress || !isEmpty(inProgressArray)} disabled={!LOGIN_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>
-            <b>Don&#39;t have an account?</b>
-            {' '}
-            <Link to="/auth/register">Sign up</Link>
-          </p>
+          <p><b>Don&#39;t have an account?</b> <Link to="/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

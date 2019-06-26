@@ -33,7 +33,7 @@ class PrivateHOC extends Component {
                   <span className="unread-count">3</span> */}
                 </span>
               ) : (
-                <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
+                  <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
               )
               }
             </Grid.Row>

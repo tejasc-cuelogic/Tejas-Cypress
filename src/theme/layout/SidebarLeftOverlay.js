@@ -26,7 +26,7 @@ class SidebarLeftPush extends Component {
         }
         {progressMap.includes(this.props.uiStore.inProgress)
           && (
-          <Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
+<Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
             <Loader active={this.props.uiStore.inProgress} />
           </Dimmer>
           )
@@ -77,20 +77,16 @@ const MySidebar = observer(props => (
             <div className="user-picture">
               {props.UserInfo.avatarUrl
                 ? (
-                  <Image64
-                    avatar
-                    size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
-                    circular
-                    srcUrl={props.UserInfo.avatarUrl}
-                  />
+<Image64
+  avatar
+  size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
+  circular
+  srcUrl={props.UserInfo.avatarUrl}
+/>
                 )
                 : <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
-              <p>
-                {props.UserInfo.firstName}
-                {' '}
-                {props.UserInfo.lastName}
-              </p>
+              <p>{props.UserInfo.firstName} {props.UserInfo.lastName}</p>
             </div>
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} {...props} />
           </Scrollbars>

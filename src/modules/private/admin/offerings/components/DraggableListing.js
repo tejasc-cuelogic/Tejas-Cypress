@@ -30,9 +30,7 @@ const SortableItem = SortableElement(({
             ))}
         </b>
         <br />
-        {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`}
-        {' '}
-        {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+        {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
       </a>
     </div>
     <div className="balance width-130">
@@ -46,17 +44,9 @@ const SortableItem = SortableElement(({
       }
     </div>
     <div className="balance width-250">
-      Create:
-      {' '}
-      {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}
-      <br />
-      Launched:
-      {' '}
-      {get(offering, 'offering.launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'offering.launch.targetDate')} /> : 'N/A'}
-      <br />
-      Closed:
-      {' '}
-      {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
+      Create: {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}<br />
+      Launched: {get(offering, 'offering.launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'offering.launch.targetDate')} /> : 'N/A'}<br />
+      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
     </div>
     <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
       <p className="overflow-text">

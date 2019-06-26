@@ -20,9 +20,9 @@ const NoBeneficiary = (props) => {
             <Divider hidden />
             { showButton
               ? (
-                <Card.Description>
-                  <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} primary content="Add new beneficiary" />
-                </Card.Description>
+<Card.Description>
+                <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} primary content="Add new beneficiary" />
+              </Card.Description>
               )
               : null
             }

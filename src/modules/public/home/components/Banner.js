@@ -17,7 +17,7 @@ class Banner extends Component {
     const { stepInRoute } = this.props.navStore;
     const showButton = (!isUserLoggedIn || (isUserLoggedIn && isInvestor));
     const isFullInvestor = isInvestor && get(signupStatus, 'activeAccounts') && get(signupStatus, 'activeAccounts').length;
-    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `auth/${get(stepInRoute, 'to')}`;
+    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `${get(stepInRoute, 'to')}`;
 
     return (
       <section className="banner business-banner">
@@ -25,28 +25,24 @@ class Banner extends Component {
           <Responsive minWidth={768} as={React.Fragment}>
             <div className="banner-caption">
               <Header as="h2">
-                Build an investment
-                <br />
-portfolio you care about.
+                Build an investment<br />portfolio you care about.
               </Header>
               { showButton
                 ? (
-                  <Button
-                    className={`${!isTablet && 'mt-30'} relaxed`}
-                    primary
-                    content="Get Started"
-                    as={Link}
-                    to={redirectUrl}
-                  />
+<Button
+  className={`${!isTablet && 'mt-30'} relaxed`}
+  primary
+  content="Get Started"
+  as={Link}
+  to={redirectUrl}
+/>
                 ) : ''
               }
             </div>
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Jessica Hughes | Citizen Pilates</b>
-              <br />
-Raised $100,000 from 75 investors
+              <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,000 from 75 investors
             </p>
           </div>
         </Container>

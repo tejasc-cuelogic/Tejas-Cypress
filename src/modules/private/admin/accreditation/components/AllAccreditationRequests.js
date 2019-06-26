@@ -89,12 +89,12 @@ export default class AllAccreditationRequests extends Component {
                 {!get(requestState, 'search.status') || requestState.search.status === 'REQUESTED'
                   ? <Table.HeaderCell textAlign="center" />
                   : (
-                    <Table.HeaderCell
-                      onClick={this.handleSort('reviewed.date')}
-                      sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
-                    >
+<Table.HeaderCell
+  onClick={this.handleSort('reviewed.date')}
+  sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+>
                     Status
-                    </Table.HeaderCell>
+                  </Table.HeaderCell>
                   )
                 }
                 {requestState.search.status === 'CONFIRMED'
@@ -138,8 +138,7 @@ export default class AllAccreditationRequests extends Component {
                       {accreditation.accountType && accreditation.accountType.includes('IRA') && <Icon size="large" className="ns-ira-line" color="green" />}
                     </Table.Cell>
                     <Table.Cell>
-                      <p>
-                        {ACCREDITATION_METHOD_ENUMS[accreditation.method]}
+                      <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
                         {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') && accreditation.netWorth
                           && (
                           <>
@@ -162,28 +161,21 @@ export default class AllAccreditationRequests extends Component {
                     </Table.Cell>
                     {isManager
                       && (
-                      <Table.Cell>
-                        <p>
-                          {accreditation.assetsUpload && accreditation.assetsUpload.length
-                            ? accreditation.assetsUpload[0].fileInfo
+<Table.Cell>
+                        <p>{accreditation.assetsUpload && accreditation.assetsUpload.length
+                          ? accreditation.assetsUpload[0].fileInfo
                           && accreditation.assetsUpload[0].fileInfo[0].fileHandle
-                              ? (inProgress === accreditation.assetsUpload[0]
-                                .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p>
-                                : <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank">{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
-                              )
-                              : <p className="note">N/A</p>
-                            : 'Verifier'}
+                            ? (inProgress === accreditation.assetsUpload[0]
+                              .fileInfo[0].fileHandle.boxFolderId ? <p> Loading... </p>
+                              : <a onClick={e => this.handleDocumentsLink(e, accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId)} href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank">{inProgress === accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId ? 'Loading...' : 'Share Link'}</a>
+                            )
+                            : <p className="note">N/A</p>
+                          : 'Verifier'}
                           {accreditation.verifier
                             && (
                             <>
-                              <br />
-                              <b>Role: </b>
-                              {' '}
-                              {accreditation.verifier.role}
-                              <br />
-                              <b>Email: </b>
-                              {' '}
-                              {accreditation.verifier.email}
+                              <br /><b>Role: </b> {accreditation.verifier.role}
+                              <br /><b>Email: </b> {accreditation.verifier.email}
                             </>
                             )
                           }
@@ -206,12 +198,9 @@ export default class AllAccreditationRequests extends Component {
                         </>
                       )
                       : (
-                        <Table.Cell>
-                          <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
-                            <b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>
-                            {get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}
-                          </p>
-                        </Table.Cell>
+<Table.Cell>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}</p>
+                      </Table.Cell>
                       )
                     }
                     {accreditation.accreditationStatus === 'CONFIRMED'

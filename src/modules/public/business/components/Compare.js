@@ -32,11 +32,7 @@ const Compare = () => (
               <Table.Cell>
               Total Cost APR1
               </Table.Cell>
-              <Table.Cell>
-Term Loans 10–18%
-                <br />
-Revenue Sharing Notes 15–25%
-              </Table.Cell>
+              <Table.Cell>Term Loans 10–18%<br />Revenue Sharing Notes 15–25%</Table.Cell>
               <Table.Cell>7–15%</Table.Cell>
               <Table.Cell>50%</Table.Cell>
               <Table.Cell>30%+</Table.Cell>
@@ -55,12 +51,7 @@ Revenue Sharing Notes 15–25%
               Security
               </Table.Cell>
               <Table.Cell>Flexible collateral terms</Table.Cell>
-              <Table.Cell>
-Personal guarantee &
-                <br />
-                {' '}
-asset collateral required
-              </Table.Cell>
+              <Table.Cell>Personal guarantee &<br /> asset collateral required</Table.Cell>
               <Table.Cell>Daily cash withdrawl</Table.Cell>
               <Table.Cell>Variable</Table.Cell>
             </Table.Row>
@@ -68,12 +59,7 @@ asset collateral required
               <Table.Cell>
               Capital Base
               </Table.Cell>
-              <Table.Cell>
-Community, potential fans
-                <br />
-                {' '}
-and customers
-              </Table.Cell>
+              <Table.Cell>Community, potential fans<br /> and customers</Table.Cell>
               <Table.Cell>Bank</Table.Cell>
               <Table.Cell>Institutional lenders</Table.Cell>
               <Table.Cell>Typically accredited investors</Table.Cell>
@@ -92,12 +78,9 @@ and customers
               Marketing Benefits
               </Table.Cell>
               <Table.Cell>
-              Smart army of advocates
-                <br />
-              Community events
-                <br />
-              Social media
-                <br />
+              Smart army of advocates<br />
+              Community events<br />
+              Social media<br />
               Targeted marketing
               </Table.Cell>
               <Table.Cell>None</Table.Cell>
@@ -144,13 +127,7 @@ and customers
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                  <Table.HeaderCell className="highlight-text">
-                    <b>
-Term Loans 10–18%
-                      <br />
-Revenue Sharing 15–25%
-                    </b>
-                  </Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>Term Loans 10–18%<br />Revenue Sharing 15–25%</b></Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -262,13 +239,7 @@ Revenue Sharing 15–25%
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                  <Table.HeaderCell className="highlight-text">
-                    <b>
-5–10%  sucess fee
-                      <br />
-(all inclusive)
-                    </b>
-                  </Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>5–10%  sucess fee<br />(all inclusive)</b></Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>

@@ -28,11 +28,7 @@ export default class AccountSetup extends Component {
       <div className={includes(this.props.location.pathname, 'transactions') ? 'content-spacer' : ''}>
         {
           <>
-            <Header as="h4">
-              {currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)}
-              {' '}
-Investment Account
-            </Header>
+            <Header as="h4">{currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Investment Account</Header>
             <p>{msg}</p>
             <Card fluid={isMobile}>
               <Card.Content className="mt-10 mb-10">

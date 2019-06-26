@@ -32,22 +32,22 @@ class AboutTheCompany extends Component {
                 {campaign && campaign.offering && campaign.offering.overview
                 && campaign.offering.overview.elevatorPitch
                 && (
-                <div className="detail-section mt-10">
+<div className="detail-section mt-10">
                   <HtmlEditor readOnly content={campaign.offering.overview.elevatorPitch} />
                 </div>
                 )
               }
-                {campaign && campaign.offering && campaign.offering.overview
+              {campaign && campaign.offering && campaign.offering.overview
                 && campaign.offering.overview.highlight
-                  ? (
-                    <List bulleted relaxed="very">
-                      {campaign.offering.overview.highlight.map(field => (
-                        <List.Item className="mb-half">{field}</List.Item>
-                      ))
+                ? (
+<List bulleted relaxed="very">
+                    {campaign.offering.overview.highlight.map(field => (
+                      <List.Item className="mb-half">{field}</List.Item>
+                    ))
                     }
-                    </List>
-                  )
-                  : null
+                  </List>
+                )
+                : null
               }
               </>
             )

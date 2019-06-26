@@ -39,7 +39,7 @@ export default class LinkbankSummary extends React.Component {
               <Table.Body>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
@@ -51,7 +51,7 @@ export default class LinkbankSummary extends React.Component {
                 </Table.Row>
                 { !isEmpty(routingNum)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       { routingNum || '' }

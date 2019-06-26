@@ -5,7 +5,7 @@ const FormElementWrap = props => (
   <>
     {props.header
       && (
-      <Header as={props.hideFields ? 'h4' : props.as || 'h3'}>
+<Header as={props.hideFields ? 'h4' : props.as || 'h3'}>
         {props.header}
         {props.subHeader && !props.hideFields
           && <Header.Subheader>{props.subHeader}</Header.Subheader>

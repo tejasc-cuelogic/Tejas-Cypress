@@ -64,10 +64,7 @@ export default class Report extends Component {
           }
           <Header as="h4">
             Bonus rewards
-            <Header.Subheader>
-For more information about bonus rewards, check out our
-              <Link to="/">Resource Article.</Link>
-            </Header.Subheader>
+            <Header.Subheader>For more information about bonus rewards, check out our <Link to="/">Resource Article.</Link></Header.Subheader>
           </Header>
           <RewardList listOf="Early bird reward" data={rewards} />
         </div>

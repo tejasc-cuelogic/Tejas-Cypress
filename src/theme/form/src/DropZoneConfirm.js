@@ -68,17 +68,17 @@ export default class DropZone extends Component {
       <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label
           && (
-          <label>
+<label>
             {(this.props.asterisk && this.props.asterisk === 'true' ? `${label}*` : label)}
             {this.props.tooltip
             && (
-            <Popup
-              trigger={<Icon className="ns-help-circle" />}
-              content={this.props.tooltip}
-              position="top center"
-              className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
-              wide
-            />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={this.props.tooltip}
+  position="top center"
+  className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
+  wide
+/>
             )
             }
           </label>
@@ -86,21 +86,14 @@ export default class DropZone extends Component {
         }
         { !this.props.disabled && (!value || this.props.multiple)
           ? (
-            <div className="file-uploader">
-              <Dimmer active={showLoader}>
-                <Loader size={size} />
-              </Dimmer>
-              <Dropzone {...this.props} multiple={this.props.multiple || false} onDrop={files => this.props.ondrop(files, this.props.name)} className="test" style={{}}>
-                <Icon className="ns-upload" />
-                {' '}
-                {this.props.uploadtitle ? <span>{this.props.uploadtitle}</span> : (
-                  <span>
-Upload document
-                    {this.props.multiple ? 's' : ''}
-                  </span>
-                )}
-              </Dropzone>
-            </div>
+<div className="file-uploader">
+            <Dimmer active={showLoader}>
+              <Loader size={size} />
+            </Dimmer>
+            <Dropzone {...this.props} multiple={this.props.multiple || false} onDrop={files => this.props.ondrop(files, this.props.name)} className="test" style={{}}>
+              <Icon className="ns-upload" /> {this.props.uploadtitle ? <span>{this.props.uploadtitle}</span> : <span>Upload document{this.props.multiple ? 's' : ''}</span>}
+            </Dropzone>
+          </div>
           ) : null
         }
         {(isArray(toJS(value)) && value.length)
@@ -130,19 +123,14 @@ Upload document
                 )
               }
               {(hideFields && !blockDownload) ? inProgress === fileId[key] ? '...Loading'
-                : (
-                  <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId[key])} title={item}>
-                    <Icon className="ns-file" />
-                    {item}
-                  </Link>
-                )
+                : <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId[key])} title={item}><Icon className="ns-file" />{item}</Link>
                 : <span title={item}>{item}</span>
               }
             </div>
           )) : !isArray(toJS(value)) && value
             ? (
-              <div className={hideFields ? 'downloadable file-uploader attached' : 'file-uploader attached'}>
-                {!this.props.disabled
+<div className={hideFields ? 'downloadable file-uploader attached' : 'file-uploader attached'}>
+              {!this.props.disabled
                 && (
                 <>
                   <Responsive
@@ -165,19 +153,14 @@ Upload document
                 </>
                 )
               }
-                {(hideFields && !blockDownload) ? inProgress === fileId ? '...Loading'
-                  : (
-                    <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId)} title={value}>
-                      <Icon className="ns-file" />
-                      {value}
-                    </Link>
-                  )
-                  : <span title={value}>{value}</span>
+              {(hideFields && !blockDownload) ? inProgress === fileId ? '...Loading'
+                : <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId)} title={value}><Icon className="ns-file" />{value}</Link>
+                : <span title={value}>{value}</span>
               }
-              </div>
+            </div>
             ) : hideFields
             && (
-            <div className="downloadable file-uploader attached">
+<div className="downloadable file-uploader attached">
               <p>No files uploaded yet.</p>
             </div>
             )

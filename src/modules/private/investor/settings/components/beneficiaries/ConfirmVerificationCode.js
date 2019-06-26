@@ -89,7 +89,7 @@ export default class ConfirmVerificationCode extends Component {
             </Form.Field>
             {errors
               && (
-              <Message error className="mb-40">
+<Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
               )

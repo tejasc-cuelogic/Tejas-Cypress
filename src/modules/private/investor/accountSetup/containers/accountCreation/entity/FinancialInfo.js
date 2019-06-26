@@ -21,7 +21,7 @@ export default class AccountType extends Component {
           />
           {TRUST_INFO_FRM.fields.isTrust.value
           && (
-          <div className="field-wrap">
+<div className="field-wrap">
             <MaskedInput
               name="trustDate"
               fielddata={TRUST_INFO_FRM.fields.trustDate}

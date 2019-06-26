@@ -118,7 +118,7 @@ export class NavItems extends Component {
                   || (this.isActive(item.to, location, app, item.subNavigations))
                 }
                 content={(
-                  <Menu.Menu>
+<Menu.Menu>
                     {item.subNavigations.map(sn => (
                       sn.external ? (
                         <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
@@ -179,9 +179,9 @@ export class NavItems extends Component {
             </Dropdown>
           ) : (item.isMenuHeader && hasMoreThanOneAcc)
             ? (
-              <Menu.Item className="menu-header">
-                <Menu.Header>{item.title}</Menu.Header>
-              </Menu.Item>
+<Menu.Item className="menu-header">
+              <Menu.Header>{item.title}</Menu.Header>
+            </Menu.Item>
             )
             : (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader)
               ? null
@@ -264,7 +264,7 @@ export class NavigationItems extends Component {
         <Container fluid>
           {!isMobBussinessApp
             && (
-            <Menu.Item as={Link} to="/" header>
+<Menu.Item as={Link} to="/" header>
               <Logo
                 alt="NextSeed.com"
                 dataSrc={getLogo(location.pathname)}
@@ -277,33 +277,33 @@ export class NavigationItems extends Component {
           <Menu.Menu position="right">
             {!location.pathname.includes('/business-application')
               && (
-              <NavItems
-                refLoc="public"
-                currentUser={currentUser}
-                location={location}
-                navItems={
+<NavItems
+  refLoc="public"
+  currentUser={currentUser}
+  location={location}
+  navItems={
                   isMobile ? PUBLIC_NAV.filter(nav => nav.header !== false)
                     : PUBLIC_NAV.filter(nav => nav.header !== false && nav.title !== 'Legal')
                   }
-              />
+/>
               )
             }
           </Menu.Menu>
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/')
             ? (
-              <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
-                <Button.Group>
-                  <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
-                  {isPrequalQulify
+<Menu.Item position={isMobBussinessApp ? 'right' : ''}>
+              <Button.Group>
+                <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
+                {isPrequalQulify
                   && (
-                  <SubmitButton
-                    canSubmitApp={canSubmitApp}
-                    click={preQualSubmit}
-                    loading={loading}
-                  />
+<SubmitButton
+  canSubmitApp={canSubmitApp}
+  click={preQualSubmit}
+  loading={loading}
+/>
                   )}
-                </Button.Group>
-              </Menu.Item>
+              </Button.Group>
+            </Menu.Item>
             )
             : !location.pathname.includes('/business-application')
             && (
@@ -311,7 +311,7 @@ export class NavigationItems extends Component {
                 <>
                   {logInSignUp.map(route => (
                     <Menu.Item className="menu-button">
-                      <Button as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`}>{route.title}</Button>
+                      <Button as={Link} onClick={this.setAuthRef} to={`/${route.to}`} className={`${route.className}`}>{route.title}</Button>
                     </Menu.Item>
                   ))}
                 </>
@@ -324,8 +324,7 @@ export class NavigationItems extends Component {
                     loading={this.props.userDetailsStore.currentUser.loading}
                     disabled={this.props.userDetailsStore.currentUser.loading}
                     secondary
-                  >
-Dashboard
+                  >Dashboard
                   </Button>
                 </Menu.Item>
               ))}

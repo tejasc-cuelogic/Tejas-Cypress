@@ -125,7 +125,7 @@ export default class BusinessApplication extends Component {
         appStepsStatus={appStepsStatus}
         {...this.props}
         P0={(
-          <Link to="/app/dashboard">
+<Link to="/app/dashboard">
             <Logo
               alt="NextSeed.com"
               dataSrc={logoUrl}
@@ -137,19 +137,19 @@ export default class BusinessApplication extends Component {
 )}
         buttonWidth={6}
         P4={(
-          <HeaderButtons
-            disabled={formReadOnlyMode}
-            saveContinue={this.saveContinue}
-            submitApp={this.submit}
-            showSubNav={showSubNav}
-            canSubmitApp={canSubmitApp}
-            ButtonTextToggle={ButtonTextToggle}
-            preQualSubmit={this.preQualSubmit}
-            inProgress={inProgress}
-            isFileUploading={isFileUploading}
-            preQualPage={preQualPage}
-            isValid={BUSINESS_APP_FRM.meta.isValid}
-          />
+<HeaderButtons
+  disabled={formReadOnlyMode}
+  saveContinue={this.saveContinue}
+  submitApp={this.submit}
+  showSubNav={showSubNav}
+  canSubmitApp={canSubmitApp}
+  ButtonTextToggle={ButtonTextToggle}
+  preQualSubmit={this.preQualSubmit}
+  inProgress={inProgress}
+  isFileUploading={isFileUploading}
+  preQualPage={preQualPage}
+  isValid={BUSINESS_APP_FRM.meta.isValid}
+/>
 )}
       >
         <Suspense fallback={<InlineLoader />}>

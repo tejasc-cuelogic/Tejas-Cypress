@@ -54,22 +54,22 @@ export default class AccountSetup extends Component {
         {...this.props}
         P5={!signupStatus.finalStatus ? !currentUser.loading
           ? (
-            <StickyNotification
-              signupStatus={signupStatus}
-              userDetailsStore={this.props.userDetailsStore}
-            />
+<StickyNotification
+  signupStatus={signupStatus}
+  userDetailsStore={this.props.userDetailsStore}
+/>
           ) : <InlineLoader /> : ''}
       >
         <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading
           ? (
-            <ProgressCard
-              {...this.props}
-              isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
-              signupStatus={signupStatus}
-              getStepStatus={getStepStatus}
-              navToAccTypes={this.navToAccTypes}
-            />
+<ProgressCard
+  {...this.props}
+  isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
+  signupStatus={signupStatus}
+  getStepStatus={getStepStatus}
+  navToAccTypes={this.navToAccTypes}
+/>
           ) : <InlineLoader />
 
         }

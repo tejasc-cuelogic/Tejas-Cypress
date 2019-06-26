@@ -140,7 +140,7 @@ export default class Leader extends Component {
             {`Leader ${index + 1}`}
             {!isReadonly && leaderCount > 1
               && (
-              <Button.Group size="mini" floated="right">
+<Button.Group size="mini" floated="right">
                 <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
               </Button.Group>
               )
@@ -368,7 +368,7 @@ export default class Leader extends Component {
                   {`Business ${index2 + 1}`}
                   {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length > 1
                     && (
-                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
                     )

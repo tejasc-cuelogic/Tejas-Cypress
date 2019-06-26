@@ -32,31 +32,17 @@ export default class ButtonGroupType2 extends Component {
           <Button.Group vertical icon size="tiny" className="time-stamp">
             {submitted
               && (
-              <Button as="span" className="time-stamp">
-                <Icon className="ns-circle" color="green" />
-                {' '}
-                Submitted by
-                {' '}
-                {submitted.by}
-                {' '}
-on
-                {' '}
-                {moment(submitted.date).format('MM/DD/YYYY')}
+<Button as="span" className="time-stamp">
+                <Icon className="ns-circle" color="green" />{' '}
+                Submitted by {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
               </Button>
               )
             }
             {approved && approved.status
               && (
-              <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
-                {' '}
-                Approved by
-                {' '}
-                {approved.by}
-                {' '}
-on
-                {' '}
-                {moment(approved.date).format('MM/DD/YYYY')}
+<Button as="span" className="time-stamp">
+                <Icon className="ns-check-circle" color="green" />{' '}
+                Approved by {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
               </Button>
               )
             }

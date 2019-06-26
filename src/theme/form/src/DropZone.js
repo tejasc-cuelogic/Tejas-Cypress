@@ -18,17 +18,17 @@ const DropZone = observer((props) => {
     <div className={`file-uploader-wrap ${props.containerclassname}`}>
       {label
         && (
-        <label>
+<label>
           {label}
           {props.tooltip
           && (
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={props.tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={props.tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
           )
           }
         </label>
@@ -36,21 +36,14 @@ const DropZone = observer((props) => {
       }
       { !props.disabled && (!value || props.multiple)
         ? (
-          <div className="file-uploader">
-            <Dimmer active={showLoader}>
-              <Loader />
-            </Dimmer>
-            <Dropzone {...props} onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
-              <Icon className="ns-upload" />
-              {' '}
-              {props.uploadtitle ? <span>{props.uploadtitle}</span> : (
-                <span>
-Upload document
-                  {props.multiple ? 's' : ''}
-                </span>
-              )}
-            </Dropzone>
-          </div>
+<div className="file-uploader">
+          <Dimmer active={showLoader}>
+            <Loader />
+          </Dimmer>
+          <Dropzone {...props} onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
+            <Icon className="ns-upload" /> {props.uploadtitle ? <span>{props.uploadtitle}</span> : <span>Upload document{props.multiple ? 's' : ''}</span>}
+          </Dropzone>
+        </div>
         ) : null
       }
       {(isArray(toJS(value)) && value.length)
@@ -83,7 +76,7 @@ Upload document
           </div>
         )) : !isArray(toJS(value)) && value
         && (
-        <div className="file-uploader attached">
+<div className="file-uploader attached">
           {!props.disabled
             && (
             <>

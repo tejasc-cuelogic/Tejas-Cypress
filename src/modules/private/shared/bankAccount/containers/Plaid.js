@@ -117,7 +117,7 @@ export default class Plaid extends Component {
             </Dimmer> */}
             {typeof bankListing !== 'undefined' && bankListing.length === 0
               && (
-              <Grid column={1} textAlign="center">
+<Grid column={1} textAlign="center">
                 <Grid.Column>No results found.</Grid.Column>
               </Grid>
               )
@@ -169,7 +169,7 @@ export default class Plaid extends Component {
           </div>
           {errors
             && (
-            <Message error>
+<Message error>
               <ListErrors errors={[errors.message]} />
             </Message>
             )

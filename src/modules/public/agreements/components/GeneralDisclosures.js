@@ -22,21 +22,13 @@ export default class GeneralDisclosures extends Component {
             NextSeed nor any of its officers, directors, agents and employees makes any warranty,
             express or implied, of any kind whatsoever related to the adequacy, accuracy or
             completeness of any information on this site or the use of information on this site.
-            By accessing this site and any pages thereof, you agree to be bound by the
-            {' '}
-            <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>
-            {' '}
-and
-            <Link className="positive-text" to="/agreements/legal/privacy-policy">Privacy Policy</Link>
-.
+            By accessing this site and any pages thereof, you agree to be bound by the <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>
+            {' '}and <Link className="positive-text" to="/agreements/legal/privacy-policy">Privacy Policy</Link>.
           </p>
           <p>
             All securities-related activity on this site is conducted by NextSeed Securities, LLC
             (“NextSeed Securities”), an affiliate of NextSeed and a SEC-registered broker-dealer and
-            member
-            {' '}
-            <a className="positive-text" href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
-/SIPC, unless otherwise specifically indicated as being conducted by
+            member <a className="positive-text" href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>/SIPC, unless otherwise specifically indicated as being conducted by
             NextSeed US LLC (“NextSeed Funding Portal”), another affiliate of NextSeed and a
             SEC-registered Funding Portal and member FINRA, both located at 3 Greenway Plaza, Ste
             110, Houston TX 77046. NextSeed Securities and NextSeed Funding Portal does not make

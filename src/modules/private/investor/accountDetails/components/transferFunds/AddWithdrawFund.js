@@ -84,10 +84,9 @@ export default class AddWithdrawFund extends Component {
       <>
         {!cashAvailable.loading
           && (
-          <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
+<Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
             <Modal.Header className="signup-header">
-              <Header as="h3">
-                <AccTypeTitle noText />
+              <Header as="h3"><AccTypeTitle noText />
                 {headingTitle}
               </Header>
             </Modal.Header>
@@ -95,7 +94,7 @@ export default class AddWithdrawFund extends Component {
               <Form error onSubmit={this.transfer} size="massive">
                 {!showConfirmPreview && match.params.action === 'withdraw'
                   && (
-                  <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
+<div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
                     <MaskedInput
                       readOnly="readonly"
                       hoverable
@@ -112,76 +111,67 @@ export default class AddWithdrawFund extends Component {
                 }
                 {!showConfirmPreview
                   && (
-                  <MaskedInput
-                    readOnly={showConfirmPreview ? 'readonly' : false}
-                    hoverable
-                    label={match.params.action === 'add' ? '' : labelForWithdrawInput}
-                    key="amount"
-                    prefix="$ "
-                    name="amount"
-                    containerclassname="fund-amount"
-                    currency
-                    allowNegative={false}
-                    fielddata={TRANSFER_FRM.fields.amount}
-                    changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
-                  />
+<MaskedInput
+  readOnly={showConfirmPreview ? 'readonly' : false}
+  hoverable
+  label={match.params.action === 'add' ? '' : labelForWithdrawInput}
+  key="amount"
+  prefix="$ "
+  name="amount"
+  containerclassname="fund-amount"
+  currency
+  allowNegative={false}
+  fielddata={TRANSFER_FRM.fields.amount}
+  changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
+/>
                   )
                 }
                 {showConfirmPreview
                   ? (
-                    <>
-                      <div className="field fund-amount">
-                        {match.params.action === 'withdraw'
-                          ? <label>Withdrawal amount</label>
-                          : ''
+<>
+                    <div className="field fund-amount">
+                      {match.params.action === 'withdraw'
+                        ? <label>Withdrawal amount</label>
+                        : ''
                       }
-                        <Header as="h4" className="mt-10">
-                          {Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
-                          <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
-                        </Header>
-                      </div>
-                      <Statistic className="mt-10 mb-10">
-                        <Header as="h5" className="text-capitalize">
-                          {match.params.action === 'withdraw'
-                            ? (
-                              <>
-                                <Header.Subheader>From</Header.Subheader>
-                                {currentActiveAccountDetails
+                      <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
+                        <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
+                      </Header>
+                    </div>
+                    <Statistic className="mt-10 mb-10">
+                      <Header as="h5" className="text-capitalize">
+                        {match.params.action === 'withdraw'
+                          ? (
+<>
+                            <Header.Subheader>From</Header.Subheader>
+                            {currentActiveAccountDetails
                             && currentActiveAccountDetails.name
-                                  ? currentActiveAccountDetails.name : null}
-                                {' '}
-Account
-                                <Divider hidden />
-                                <Header.Subheader>To</Header.Subheader>
-                                {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`}
-                                {' '}
-                                <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
-                              </>
-                            )
-                            : (
-                              <>
-                                <Header.Subheader>From</Header.Subheader>
-                                {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`}
-                                {' '}
-                                <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
-                                <Divider hidden />
-                                <Header.Subheader>To</Header.Subheader>
-                                {currentActiveAccountDetails
+                              ? currentActiveAccountDetails.name : null} Account
+                            <Divider hidden />
+                            <Header.Subheader>To</Header.Subheader>
+                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
+                          </>
+                          )
+                          : (
+<>
+                            <Header.Subheader>From</Header.Subheader>
+                            {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
+                            <Divider hidden />
+                            <Header.Subheader>To</Header.Subheader>
+                            {currentActiveAccountDetails
                             && currentActiveAccountDetails.name
-                                  ? currentActiveAccountDetails.name : null}
-                                {' '}
-Account
-                              </>
-                            )}
-                        </Header>
-                      </Statistic>
-                    </>
+                              ? currentActiveAccountDetails.name : null} Account
+                          </>
+                          )}
+                      </Header>
+                    </Statistic>
+                  </>
                   )
                   : null
                 }
                 {!showConfirmPreview ? errors
                   && (
-                  <Message error className="mt-30">
+<Message error className="mt-30">
                     <ListErrors errors={[errors]} />
                   </Message>
                   )

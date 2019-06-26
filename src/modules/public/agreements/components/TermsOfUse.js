@@ -8,38 +8,18 @@ import { Link } from 'react-router-dom';
 const TermsOfUse = () => (
   <>
     <Header as="h2">Terms of Use</Header>
-    <p>
-Revision Date: April 10, 2019
-<br />
-Questions or Comments: info@nextseed.com
-</p>
+    <p>Revision Date: April 10, 2019 <br />Questions or Comments: info@nextseed.com</p>
     <Divider section />
     <div className="justify-text legal-desc">
       <Header as="h5">INTRODUCTION</Header>
       <p>
         Welcome to the NextSeed financial platform. Except as otherwise indicated in these terms
-        of use (these
-{' '}
-<b>“Terms”</b>
-) or elsewhere on the Website (as defined below), the
-        NextSeed service and network (collectively, the
-{' '}
-<b>“Service”</b>
-) are operated by
-        NextSeed Services LLC, a Delaware limited liability company (
-<b>“NextSeed,” “we,” </b>
-        or
-{' '}
-<b>“us”</b>
-). Our Privacy Policy is incorporated by reference in these Terms. By
+        of use (these <b>“Terms”</b>) or elsewhere on the Website (as defined below), the
+        NextSeed service and network (collectively, the <b>“Service”</b>) are operated by
+        NextSeed Services LLC, a Delaware limited liability company (<b>“NextSeed,” “we,” </b>
+        or <b>“us”</b>). Our Privacy Policy is incorporated by reference in these Terms. By
         accessing or using the web site at www.nextseed.com, including any subdomain thereof
-        (the
-{' '}
-<b>“Website”</b>
-), you (the
-{' '}
-<b>“User”</b>
-) signify that you have read, understand
+        (the <b>“Website”</b>), you (the <b>“User”</b>) signify that you have read, understand
         and agree to be bound by these Terms), regardless of whether you are a registered member
         of the Service. In addition to these Terms, you may enter into other agreements with
         us or others that will govern your use of the Service or related services offered by
@@ -47,7 +27,7 @@ Questions or Comments: info@nextseed.com
         you enter into applicable to specific aspects of the Service, the other agreement
         shall take precedence in relation to the specific aspects of the Service to which it
         applies.
-</p>
+      </p>
       <p>
         As used herein, “Users” means anyone who accesses or uses the Site. For any terms
         herein applicable to all Users, all investor members, or business and other entity
@@ -77,15 +57,13 @@ Questions or Comments: info@nextseed.com
         such entities, is intended solely for authorized representatives of entities that are
         in good standing in each jurisdiction in which such entity is registered to conduct
         business, and persons otherwise authorized by such entities to act in furtherance of
-        such entity
-{"'"}
-s use of the Website or Service. By using the Service or the Website
+        such entity{"'"}s use of the Website or Service. By using the Service or the Website
         on behalf of an entity, you represent and warrant that you are duly authorized in
         accordance with the foregoing by the entity on behalf of which you are acting, that
         you have the power and authority to enter into binding agreements on behalf of such
         entity, and that, to the best of your knowledge, such entity is in good standing in each
         jurisdiction in which it is registered to conduct business.
-</p>
+      </p>
       <p>
         NextSeed may, in its sole discretion, refuse to offer the Website to any person or
         entity and change its eligibility criteria at any time, so long as the refusal or change
@@ -99,16 +77,8 @@ s use of the Website or Service. By using the Service or the Website
       <Header as="h5">ACCOUNT AND LOGIN CREDENTIALS</Header>
       <p>
         To access certain features of the Website or the Service, you must set up an account
-        (an
-{' '}
-<b>“Account”</b>
-) by providing the information required (
-<b>“Account Information”</b>
-) and creating
-        a user name and password (your
-{' '}
-<b>“Credentials”</b>
-). Each User may establish only one Account.
+        (an <b>“Account”</b>) by providing the information required (<b>“Account Information”</b>) and creating
+        a user name and password (your <b>“Credentials”</b>). Each User may establish only one Account.
         If there is more than one individual associated with a User, such as a joint owners or
         employees, then each such individual must establish separate Credentials if directed
         by NextSeed. You represent and warrant to NextSeed and to each other User that your
@@ -119,7 +89,7 @@ s use of the Website or Service. By using the Service or the Website
         your Credentials. You agree to notify NextSeed immediately if you believe the
         confidentiality of your Credentials has been compromised or if you suspect unauthorized
         use of your account.
-<b>
+        <b>
           You agree that NextSeed will not be liable for any loss or damage arising from
           unauthorized use of your Credentials.
         </b>
@@ -130,29 +100,19 @@ s use of the Website or Service. By using the Service or the Website
         agree to (a) provide accurate, current and complete information about the entity,
         yourself and any other principals or authorized representatives of such entity as may
         be prompted by any registration forms on the Website or otherwise requested by
-        NextSeed (
-<b>“Entity Registration Data”</b>
-), including the entity
-{"'"}
-s full legal name,
+        NextSeed (<b>“Entity Registration Data”</b>), including the entity{"'"}s full legal name,
         (b) provide such materials as NextSeed may request to establish or verify your or any other
-        person
-{"'"}
-s identity or authority to enter into binding agreements on behalf of the
-        entity, or to establish or verify the entity
-{"'"}
-s legal existence, good standing, and
+        person{"'"}s identity or authority to enter into binding agreements on behalf of the
+        entity, or to establish or verify the entity{"'"}s legal existence, good standing, and
         eligibility to use the Website or Service, (c) maintain the security of any Credentials
         issued for use by or on behalf of the entity, (d) maintain and promptly update the Entity
         Registration Data, and any other information provided to NextSeed by you or anyone else
         acting on behalf of the entity, to keep it accurate, current, and complete, (e) promptly
         notify NextSeed regarding any material changes to information or circumstances impacting
-        the entity
-{"'"}
-s legal existence, good standing, or eligibility for continued use of the
+        the entity{"'"}s legal existence, good standing, or eligibility for continued use of the
         Website or any Service, and (f) be fully responsible for all use of any Account opened on
         behalf of the entity and for any actions that take place using such Account.
-</p>
+      </p>
       <p>
         You agree that NextSeed may disclose your Account Information and other information it
         may have about you to fully cooperate with any law enforcement authorities or legal
@@ -170,13 +130,9 @@ s legal existence, good standing, or eligibility for continued use of the
         Certain fees may be assessed to your Account. In addition to such fees as may be
         expressly provided for on the Website, your Account will be subject (as applicable) to
         such additional fees as may be provided for in any (a) Investor Agreement between you
-        and NextSeed Securities, LLC (
-<b>“NextSeed Securities”</b>
-) or (b) Membership Agreement
-        between you and NextSeed US LLC (
-<b>“NextSeed Funding Portal”</b>
-).
-</p>
+        and NextSeed Securities, LLC (<b>“NextSeed Securities”</b>) or (b) Membership Agreement
+        between you and NextSeed US LLC (<b>“NextSeed Funding Portal”</b>).
+      </p>
       <Header as="h5">PROPRIETARY RIGHTS; LICENSE TO USE WEBSITE AND CONTENT</Header>
       <p>
         All content on the Website, including designs, text, graphics, pictures, video,
@@ -185,19 +141,14 @@ s legal existence, good standing, or eligibility for continued use of the
         reserved. Except as otherwise expressly provided otherwise in these Terms, no Website
         Content may be modified, copied, distributed, framed, reproduced, republished, downloaded,
         displayed, posted, transmitted, or sold in any form or by any means, in whole or in part,
-        without NextSeed
-{"'"}
-s express prior written consent; provided, however, that the foregoing
+        without NextSeed{"'"}s express prior written consent; provided, however, that the foregoing
         shall not apply to your own User Content (as defined below) that you legally post on the
         Website. Provided that you are eligible for use of the Website, you are granted a limited,
         revocable, non-exclusive, non-transferrable license to access and use the Website and to
         download or print a copy of any portion of the Website Content solely for legally permitted
-        activities related to the Website and the Services (the
-{' '}
-<b>“Purpose”</b>
-), and subject to
+        activities related to the Website and the Services (the <b>“Purpose”</b>), and subject to
         the terms, conditions and restrictions stated in these Terms.
-</p>
+      </p>
       <p>
         For Users that are entities, or persons acting on behalf of entities, the limited license
         to access and use the Website granted above shall be deemed granted to the entity member
@@ -222,10 +173,7 @@ s express prior written consent; provided, however, that the foregoing
       <p>
         From time to time, you may post certain information, such as text, pictures, videos,
         questions, comments, suggestions, website addresses, and links to other website/articles
-        (collectively,
-{' '}
-<b>“User Content”</b>
-) on to the Website. By posting User Content to
+        (collectively, <b>“User Content”</b>) on to the Website. By posting User Content to
         any part of the Site, you automatically grant, and you represent and warrant that you
         have the right to grant, to NextSeed an irrevocable, perpetual, non-exclusive,
         transferable, fully paid, worldwide license (with the right to sublicense) to use, copy,
@@ -243,7 +191,7 @@ s express prior written consent; provided, however, that the foregoing
         attribution to your User Content as part of the publicity at its discretion. You may
         remove your User Content from the Website at any time. If you choose to remove your
         User Content, the license granted above will not expire.
-</p>
+      </p>
       <p>
         You are solely responsible for your User Content. You understand and agree that NextSeed
         may, but is not obligated to, review and delete or remove (with or without notice) any
@@ -279,30 +227,22 @@ s express prior written consent; provided, however, that the foregoing
       <p>
         NextSeed is not a registered broker-dealer nor a registered Funding Portal. All
         securities-related activity is conducted by either (a) NextSeed Securities, an affiliate
-        of NextSeed and a registered broker dealer and member of
-{' '}
-<a className="positive-text" href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
+        of NextSeed and a registered broker dealer and member of <a className="positive-text" href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
         /SIPC or (b) NextSeed Funding Portal, an affiliate of NextSeed and a registered
         Funding Portal member of FINRA. The provision of brokerage services offered by
         NextSeed Securities is governed by the Investor Agreements entered into between
-        NextSeed Securities and each User (as applicable), the form of which is linked
-{' '}
-        <Link to="/agreements/legal/legal-documents/securities_investor_agreement " className="positive-text">here</Link>
-.
+        NextSeed Securities and each User (as applicable), the form of which is linked{' '}
+        <Link to="/agreements/legal/legal-documents/securities_investor_agreement " className="positive-text">here</Link>.
         Please note that, in addition to our Privacy Policy, the use of your information by
         NextSeed Securities (as applicable) is governed by the NextSeed Securities, LLC
-        Privacy Policy, a copy of which is linked
-<Link to="/agreements/legal/legal-documents/securities_privacy_policy" className="positive-text">here</Link>
-.
+        Privacy Policy, a copy of which is linked <Link to="/agreements/legal/legal-documents/securities_privacy_policy" className="positive-text">here</Link>.
         The provision of Funding Portal services offered by NextSeed Funding Portal is
         governed by the Membership Agreements entered into between NextSeed Funding Portal and
-        each User (as applicable), the form of which is linked
-<Link to="/agreements/legal/legal-documents/membership_agreement" className="positive-text">here</Link>
-.
+        each User (as applicable), the form of which is linked <Link to="/agreements/legal/legal-documents/membership_agreement" className="positive-text">here</Link>.
         NextSeed Securities does not make investment recommendations
         and no communication, through the Website or in any other medium should be construed
         as a recommendation for any security offered on or off the Website.
-</p>
+      </p>
       <p>
         You agree that your Account will be self-directed and that you are solely responsible
         for all purchases, orders, investment decisions, and instructions placed in your Account.
@@ -324,24 +264,19 @@ s express prior written consent; provided, however, that the foregoing
         Investment overviews on the Website contain summaries of the purpose and principal
         business terms of the investment opportunities. Such summaries are intended for
         informational purposes only and do not purport to be comprehensive. The information
-        contained on the Website has been prepared without reference to any particular User
-{"'"}
-s
+        contained on the Website has been prepared without reference to any particular User{"'"}s
         investment requirements or financial situation
-</p>
+      </p>
       <Header as="h5">ISSUER CONTENT</Header>
       <p>
-        Each User that is offering securities on the Website (an
-{' '}
-<b>“Issuer”</b>
-) is solely
+        Each User that is offering securities on the Website (an <b>“Issuer”</b>) is solely
         responsible for the material such Issuer posts on the Website and, by posting such
         material, represents that (a) it has complied in all material respects with all applicable
         rules and regulations, and (b) such information will not contain any untrue statement of
         a material fact or omit to state a material fact required to be stated or necessary to
         make such statements not misleading in light of the circumstances under which they are
         made.
-</p>
+      </p>
       <p>
         NextSeed has not taken any steps to verify the adequacy, accuracy, or completeness of
         any Issuer materials. Neither NextSeed nor any of its officers, directors, agents, or
@@ -357,42 +292,31 @@ s
         administrative authority, agency or commission or any judicial or arbitral body, or any
         governing body duly authorized to exercise any administrative, judicial, executive,
         legislative, police, regulatory or taxing authority power or authority of any of the
-        foregoing (
-<b>“Applicable Law”</b>
-). Each authorized representative of an Issuer
+        foregoing (<b>“Applicable Law”</b>). Each authorized representative of an Issuer
         accessing the Website hereby represents and warrants, on behalf of such Issuer,
         that its use of the Website is, and shall be at all times, in compliance with
         Applicable Law.
-</p>
+      </p>
       <Header as="h5">ADDITIONAL SECURITIES MATTERS </Header>
       <p>
         The securities offered on the Website have not been registered under the Securities Act
-        of 1933 (the
-{' '}
-<b>“Securities Act”</b>
-), and are offered in reliance on the registration
+        of 1933 (the <b>“Securities Act”</b>), and are offered in reliance on the registration
         exemptions provided by Section 4(a)(2) of the Securities Act, Rule 506 of Regulation D
         promulgated thereunder, Regulation A, or Regulation CF. Securities sold through private
         placements are restricted and not publicly traded, and are therefore illiquid. Neither
         the U.S. Securities and Exchange Commission nor any state securities commission or other
         regulatory authority has approved, passed upon, or endorsed the merits of any offering on
         the Website.
-</p>
+      </p>
       <p>
         You may not become a beneficial owner of 20% or more of any issuer’s outstanding voting
-        equity securities (an
-{' '}
-<b>“Issuer Covered Person”</b>
-) without becoming subject to certain
-        “bad actor” disqualifying events described in Rule 506(d) (a
-{' '}
-<b>“Disqualifying Event”</b>
-).
+        equity securities (an <b>“Issuer Covered Person”</b>) without becoming subject to certain
+        “bad actor” disqualifying events described in Rule 506(d) (a <b>“Disqualifying Event”</b>).
         You represent that you are not subject to a Disqualifying Event and that you will promptly
         notify NextSeed in writing should any Disqualifying Events be applicable to you.
         NextSeed is not liable or responsible for making Rule 506(e) disclosures, nor for
         determining whether any Issuer Covered Person is subject to a Disqualifying Event.
-</p>
+      </p>
       <p>
         Notwithstanding anything to the contrary in these Terms, nothing in these Terms shall be
         deemed to be a waiver, and we will not assert there has been a waiver, that would not be
@@ -407,12 +331,9 @@ s
         address that you have registered on the Website, all documents, communications, notices,
         periodic reports (not less frequently than quarterly), contracts, and agreements arising
         from or relating in any way to your or our rights, obligations or services under this
-        Agreement (each, a
-{' '}
-<b>“Disclosure”</b>
-).  The foregoing consent to transact business
+        Agreement (each, a <b>“Disclosure”</b>).  The foregoing consent to transact business
         online and electronically applies to any transactions to which Disclosures relate.
-</p>
+      </p>
       <p>
         All notices, requests, demands, required Disclosures, and other communications from
         NextSeed to you will either be transmitted to you by email to the email address you have
@@ -425,10 +346,7 @@ s
       </p>
       <p>
         You further consent and agree to receive electronically all future tax informational
-        returns and forms from the Issuers (the
-{' '}
-<b>“Tax Statements”</b>
-) unless you notify us that
+        returns and forms from the Issuers (the <b>“Tax Statements”</b>) unless you notify us that
         you do not consent to electronic delivery or if you withdraw your consent at a later
         time. NextSeed will not provide Tax Statements (either directly or indirectly) to you
         electronically if you (a) provide a notice that you do not consent to electronic
@@ -444,7 +362,7 @@ s
         corrected documents and accompanying notices. When your tax documents are ready, we will
         send an email notification containing a web link to the document available after you log
         in.
-</p>
+      </p>
       <p>
         You agree to keep a working email address and other current contact information and will
         update your account information immediately if your email address or other contact
@@ -487,12 +405,10 @@ s
         any telephone network or lines, computer online systems, servers or providers, computer
         equipment, software, failure of email or players on account of technical problems or
         traffic congestion on the internet or on the Website or combination thereof, including
-        injury or damage to Users or to any other person
-{"'"}
-s or entity’s computer related to or
+        injury or damage to Users or to any other person{"'"}s or entity’s computer related to or
         resulting from participating or downloading materials in connection with the Website or
         the Service.
-</p>
+      </p>
       <p>
         NextSeed does not guarantee the accuracy of any User Content. Although we provide rules for
         User conduct and postings, we do not control and are not responsible for what Users post
@@ -509,18 +425,12 @@ s or entity’s computer related to or
       </p>
       <p>
         AS BETWEEN YOU AND NEXTSEED, ALL USER CONTENT (INCLUDING THIRD PARTY CONTENT THAT IS
-        REFERENCED IN THE USER CONTENT) IS PROVIDED
-{' '}
-<b>“AS IS”</b>
-{' '}
-WITH NO REPRESENTATION OR
+        REFERENCED IN THE USER CONTENT) IS PROVIDED <b>“AS IS”</b> WITH NO REPRESENTATION OR
         WARRANTY OF ANY KIND, AND YOUR USE OF THE USER CONTENT IS AT YOUR SOLE RISK.
-</p>
+      </p>
       <p>
         EXCEPT FOR THE COMMITMENTS EXPRESSLY STATED IN THESE TERMS AND THE PRIVACY POLICY, THE
-        WEBSITE AND NEXTSEED CONTENT ARE PROVIDED
-{' '}
-<b>“AS IS.”</b>
+        WEBSITE AND NEXTSEED CONTENT ARE PROVIDED <b>“AS IS.”</b>
       </p>
       <p>
         NEXTSEED DISCLAIMS ANY IMPLIED WARRANTIES, INCLUDING ANY WARRRANTIES OF MERCHANTABILITY,
@@ -541,10 +451,7 @@ WITH NO REPRESENTATION OR
       <p>
         You agree to indemnify and hold harmless NextSeed, NextSeed’s affiliates and each of their
         respective employees, contractors, directors, owners, suppliers, licensors, and
-        representatives (the
-{' '}
-<b>“NextSeed Indemnitees”</b>
-) from all liabilities, claims, losses,
+        representatives (the <b>“NextSeed Indemnitees”</b>) from all liabilities, claims, losses,
         damages, and expenses, including reasonable attorneys’ fees, that arise from or relate to:
         (a) your use of the Website in violation of these Terms, including the breach of any
         representation or warranty; (b) your reliance on any User Content; and (c) any third party
@@ -555,17 +462,16 @@ WITH NO REPRESENTATION OR
         party claim, then you agree to assist and cooperate in asserting any available defenses and
         pay expenses and other amounts for which you are responsible under this paragraph, as
         incurred.
-</p>
+      </p>
       <Header as="h5">LIMITATION OF LIABILITY</Header>
       <p>
         THE FOLLOWING LIMITATIONS OF LIABILITY APPLY TO THE EXTENT PERMITTED BY APPLICABLE LAW:
-        <br />
-NEITHER NEXTSEED NOR ITS AFFILIATES, NOR ANY USER OR ITS AFFILIATES, OR ANY OF THEIR
+        <br />NEITHER NEXTSEED NOR ITS AFFILIATES, NOR ANY USER OR ITS AFFILIATES, OR ANY OF THEIR
         RESPECTIVE EMPLOYEES, CONTRACTORS, DIRECTORS, SUPPLIERS, OWNERS, LICENSORS OR
         REPRESENTATIVES IS LIABLE FOR ANY INCIDENTAL, CONSEQUENTIAL, INDIRECT OR PUNITIVE DAMAGES
         ARISING OUT OF YOUR ACCESS TO, OR USE OF, THE SITE, THE SERVICES, THE USER CONTENT OR THE
         NEXTSEED CONTENT.
-</p>
+      </p>
       <p>
         THE MAXIMUM AGGREGATE LIABILITY OF NEXTSEED AND ITS AFFILIATES AND THEIR RESPECTIVE
         EMPLOYEES, CONTRACTORS, DIRECTORS, SUPPLIERS, OWNERS, LICENSORS OR REPRESENTATIVES TO A
@@ -671,60 +577,42 @@ NEITHER NEXTSEED NOR ITS AFFILIATES, NOR ANY USER OR ITS AFFILIATES, OR ANY OF T
       </List>
       <p>
         Our agent for notice of claims of copyright infringement on this Website can be reached as
-        follows:
-{' '}
-<br />
-        By Mail:
-{' '}
-<br />
-        NextSeed Services LLC
-{' '}
-<br />
-        PO Box 540341
-{' '}
-<br />
-        77254, TX
-{' '}
-<br />
+        follows: <br />
+        By Mail: <br />
+        NextSeed Services LLC <br />
+        PO Box 540341 <br />
+        77254, TX <br />
         By Email: dmca@nextseed.com
       </p>
       <p>
         In accordance with the Digital Millennium Copyright Act and other applicable law, NextSeed
-        has adopted a policy of terminating, in appropriate circumstances and at NextSeed
-{"'"}
-s
+        has adopted a policy of terminating, in appropriate circumstances and at NextSeed{"'"}s
         sole discretion, the memberships of Users who are deemed to be repeat infringers.
         NextSeed may also at its sole  discretion limit access to the Website or terminate the
         memberships of any Users who infringe any intellectual property rights of others, whether
         or not there is any repeat infringement.
-</p>
+      </p>
       <Header as="h5">GENERAL</Header>
       <p>
-        <i>Governing Law</i>
-<br />
+        <i>Governing Law</i><br />
         These Terms are governed by and interpreted under the laws of the State of Delaware
         without giving effect to any conflicts of law principles that would require the application
         of the law of a different jurisdiction.
       </p>
       <p>
-        <i>Dispute Resolution</i>
-<br />
+        <i>Dispute Resolution</i><br />
         In the event of any claim, controversy, or alleged dispute between you and NextSeed or
-        its affiliates (
-<b>“Dispute”</b>
-), you hereby agree to attempt in good faith to amicably
+        its affiliates (<b>“Dispute”</b>), you hereby agree to attempt in good faith to amicably
         resolve any Dispute at least 30 days before instituting any legal proceeding. Each party
         agrees to submit any Dispute for resolution by final binding arbitration after serving
         written notice, which notice shall set forth in detail the controversy, question, claim,
         or alleged breach along with your attempt to resolve such Dispute. Upon such notice and
         attempt to resolve, the party may then commence an arbitration proceeding pursuant to the
-        rules of the American Arbitration Association (
-<b>“AAA”</b>
-) to be held in Houston, Texas,
+        rules of the American Arbitration Association (<b>“AAA”</b>) to be held in Houston, Texas,
         before an arbitrator to be selected by the AAA. Any such arbitration may only be commenced
         within one year after the party requesting arbitration obtains knowledge of the cause of
         action forming the basis of the controversy or claim accrued.
-</p>
+      </p>
       <p>
         In any arbitration and subject to the ultimate discretion of the presiding arbitrator,
         each side will be limited to a maximum of one day of argument (including rebuttal), and
@@ -741,11 +629,9 @@ s
       <p>
         Notwithstanding the foregoing, you agree that the following matters shall not, at the
         election of NextSeed, be subject to binding arbitration: (a) any Dispute related to, or
-        arising from allegations of criminal activity; (b) any Dispute concerning NextSeed
-{"'"}
-s
+        arising from allegations of criminal activity; (b) any Dispute concerning NextSeed{"'"}s
         intellectual property rights; and (c) any claim for injunctive relief.
-</p>
+      </p>
       <p>
         Any Dispute not subject to arbitration shall be decided by a court of competent
         jurisdiction within Harris County, Texas. Each party hereby waives any claim that such
@@ -760,8 +646,7 @@ s
         LEGAL COUNSEL.
       </p>
       <p>
-        <i>Electronic Communication Privacy Act</i>
-<br />
+        <i>Electronic Communication Privacy Act</i><br />
         Electronic Communication Privacy Act Notice (18usc 2701-2711): NextSeed makes no guaranty
         of confidentiality or privacy of any communication or information transmitted on the
         Website or any website linked to the Website. NextSeed will not be liable for the
@@ -771,8 +656,7 @@ s
         connected with your use of the Website.
       </p>
       <p>
-        <i>Severability</i>
-<br />
+        <i>Severability</i><br />
         If any provision of these Terms is found to be unenforceable or invalid, that provision
         will be limited or eliminated to the minimum extent necessary so that these Terms will
         otherwise remain in full force and effect and enforceable. If for any reason a court or
@@ -781,29 +665,25 @@ s
         permissible and the other provisions of these Terms will remain in full force and effect.
       </p>
       <p>
-        <i>Force Majeure</i>
-<br />
+        <i>Force Majeure</i><br />
         NextSeed shall not be liable for any failure to provide the Website where such failure
         results from any cause beyond our reasonable control, including mechanical, electronic,
         or communications failure or degradation.
       </p>
       <p>
-        <i>Assignment</i>
-<br />
+        <i>Assignment</i><br />
         Your Account is personal to you, and is not assignable, transferable, or sublicensable
         by you except with our prior written consent. NextSeed may assign, transfer, or delegate
         any of its rights and obligations hereunder without consent.
       </p>
       <p>
-        <i>Agency</i>
-<br />
+        <i>Agency</i><br />
         No agency, partnership, joint venture, or employment relationship is created as a result
         of this Agreement and neither party has any authority of any kind to bind the other in any
         respect.
       </p>
       <p>
-        <i>Notices</i>
-<br />
+        <i>Notices</i><br />
         Unless otherwise specified is these Terms, all notices under these Terms will be in writing
         and will be deemed to have been duly given when received, if personally delivered or sent
         by certified or registered mail, return receipt requested; when receipt is electronically
@@ -812,16 +692,14 @@ s
         sent to support@nextseed.com.
       </p>
       <p>
-        <i>No Waiver</i>
-<br />
+        <i>No Waiver</i><br />
         NextSeed’s failure to enforce any right or provision of these Terms will not constitute a
         waiver of future enforcement of that right or provision. The waiver of any such right or
         provision will be effective only if in writing and signed by a duly authorized
         representative of NextSeed.
       </p>
       <p>
-        <i>US Jurisdiction Only</i>
-<br />
+        <i>US Jurisdiction Only</i><br />
         We make no representation that the Website is operated in accordance with the laws or
         regulations of, or governed by, nations other than those of the United States. If you are
         located outside of the United States, your use this Website at your own risk and initiative
@@ -836,15 +714,13 @@ s
         information on this site available to you.
       </p>
       <p>
-        <i>Other Agreements</i>
-<br />
+        <i>Other Agreements</i><br />
         These Terms are the entire agreement between you and NextSeed with respect to your use of
         the Website and the Services. These Terms supersede any prior Terms or agreement regarding
         the Website and the Services prior to the Effective Date above.
       </p>
       <p>
-        <i>Interpretation</i>
-<br />
+        <i>Interpretation</i><br />
         In the interpretation of these Terms, except where the context otherwise requires, (a)
         “including” or “include” does not denote or imply any limitation, (b) “or” has the
         inclusive meaning “and/or,” (c) “$” refers to U.S. doll ars, (d) the singular includes the

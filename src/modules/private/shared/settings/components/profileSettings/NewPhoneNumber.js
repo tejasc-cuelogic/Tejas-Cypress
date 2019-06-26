@@ -77,7 +77,7 @@ export default class NewPhoneNumber extends Component {
             </div>
             {errors
               && (
-              <Message error className="mt-20">
+<Message error className="mt-20">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
               )

@@ -81,12 +81,12 @@ export default class ElasticSearch extends Component {
                             </>
                           )
                       }
-                        {this.renderTitle(get(es[e], 'indexName'))}
-                        <Header.Subheader>{get(es[e], 'created.date') ? moment(get(es[e], 'created.date')).fromNow() : ''}</Header.Subheader>
-                      </Header>
+                      {this.renderTitle(get(es[e], 'indexName'))}
+                      <Header.Subheader>{get(es[e], 'created.date') ? moment(get(es[e], 'created.date')).fromNow() : ''}</Header.Subheader>
+                    </Header>
                     ))}
-                  </Card.Content>
-                </Card>
+                </Card.Content>
+              </Card>
               )) : <InlineLoader text="No Data Found" />
             }
           </Grid.Column>

@@ -35,11 +35,11 @@ export default class NsPaginationType2 extends Component {
       <Menu pagination text {...this.props}>
         {recPerPage
           && (
-          <Select
-            value={first}
-            options={stateOptions}
-            onChange={this.changeRecordsPerPage}
-          />
+<Select
+  value={first}
+  options={stateOptions}
+  onChange={this.changeRecordsPerPage}
+/>
           )
         }
         <Menu.Item
@@ -50,9 +50,7 @@ export default class NsPaginationType2 extends Component {
           <Icon className="ns-chevron-left" color="green" />
         </Menu.Item>
         <Menu.Item>
-          Page :
-          {' '}
-          {currentPageNo}
+          Page : {currentPageNo}
         </Menu.Item>
         <Menu.Item
           icon

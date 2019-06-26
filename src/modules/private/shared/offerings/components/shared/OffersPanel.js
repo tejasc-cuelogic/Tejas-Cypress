@@ -65,12 +65,10 @@ export default class OffersPanel extends Component {
             <Card fluid className={`offer-card ${selectedOfferIndex === index ? 'active' : ''}`}>
               <Card.Content>
                 <Card.Header>
-                  Offer
-                  {' '}
-                  {String.fromCharCode('A'.charCodeAt() + index)}
+                  Offer {String.fromCharCode('A'.charCodeAt() + index)}
                   {!isReadonly && OFFERS_FRM.fields.offer.length > 1
                   && (
-                  <Link to={match.url} onClick={e => toggleConfirmModal(e, index, 'offer')} className="pull-right">
+<Link to={match.url} onClick={e => toggleConfirmModal(e, index, 'offer')} className="pull-right">
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                   )
@@ -100,44 +98,44 @@ export default class OffersPanel extends Component {
                     </Table.Row>
                     {!isReadonly
                       ? (
-                        <>
-                          <Table.Row>
-                            <Table.Cell>{offerFields.minimumAmount.label}</Table.Cell>
-                            <Table.Cell>
-                              <MaskedInput
-                                containerclassname={isReadonly ? 'display-only' : ''}
-                                readOnly={isReadonly}
-                                prefix="$"
-                                currency
-                                name="minimumAmount"
-                                fielddata={offer.minimumAmount}
-                                changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
-                                hidelabel
-                              />
-                            </Table.Cell>
-                          </Table.Row>
-                          <Table.Row>
-                            <Table.Cell>{offerFields.amount.label}</Table.Cell>
-                            <Table.Cell>
-                              <MaskedInput
-                                containerclassname={isReadonly ? 'display-only' : ''}
-                                readOnly={isReadonly}
-                                prefix="$"
-                                currency
-                                name="amount"
-                                fielddata={offer.amount}
-                                changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
-                                hidelabel
-                              />
-                            </Table.Cell>
-                          </Table.Row>
-                        </>
+<>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.minimumAmount.label}</Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              containerclassname={isReadonly ? 'display-only' : ''}
+                              readOnly={isReadonly}
+                              prefix="$"
+                              currency
+                              name="minimumAmount"
+                              fielddata={offer.minimumAmount}
+                              changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                              hidelabel
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.amount.label}</Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              containerclassname={isReadonly ? 'display-only' : ''}
+                              readOnly={isReadonly}
+                              prefix="$"
+                              currency
+                              name="amount"
+                              fielddata={offer.amount}
+                              changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                              hidelabel
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      </>
                       )
                       : (
-                        <Table.Row>
-                          <Table.Cell>Maximum Offering Amount</Table.Cell>
-                          <Table.Cell>{`${Helper.CurrencyFormat(offer.minimumAmount.value)} - ${Helper.CurrencyFormat(offer.amount.value)}`}</Table.Cell>
-                        </Table.Row>
+<Table.Row>
+                        <Table.Cell>Maximum Offering Amount</Table.Cell>
+                        <Table.Cell>{`${Helper.CurrencyFormat(offer.minimumAmount.value)} - ${Helper.CurrencyFormat(offer.amount.value)}`}</Table.Cell>
+                      </Table.Row>
                       )
                       }
                     <Table.Row>
@@ -271,7 +269,7 @@ export default class OffersPanel extends Component {
                     </Table.Row>
                     {offer.structure.value === 'TERM_NOTE'
                     && (
-                    <Table.Row>
+<Table.Row>
                       <Table.Cell>{offerFields.totalCapital.label}</Table.Cell>
                       <Table.Cell>
                         <MaskedInput
@@ -290,7 +288,7 @@ export default class OffersPanel extends Component {
                     }
                     {((!isReadonly) || (isReadonly && offer.additionalTerms.value))
                       && (
-                      <Table.Row>
+<Table.Row>
                         <Table.Cell>{offerFields.additionalTerms.label}</Table.Cell>
                         <Table.Cell>
                           {isReadonly && offer.additionalTerms.value

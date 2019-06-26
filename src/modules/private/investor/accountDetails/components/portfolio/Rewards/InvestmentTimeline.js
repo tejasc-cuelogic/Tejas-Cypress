@@ -40,33 +40,30 @@ class InvestmentTimeline extends Component {
     return (
       rewardsTiers && rewardsTiers.length
         ? (
-          <>
-            <Header as="h4">{this.props.title}</Header>
-            <Grid columns="equal" textAlign="center" className="investment-scale">
-              <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
-                <span className="investment-progress" style={{ width: `${progress}%` }} />
-                <div className="amount" style={{ left: `${progress}%` }}>
-Your investment
-                  <span>{Helper.CurrencyFormat(myInvestment)}</span>
-                </div>
-              </div>
-              <Grid.Row>
-                {rewardsTiers.map((tier, index) => (
-                  <Grid.Column
-                    className={`${((rewardsTiers[index + 1] && toInteger(tier) <= toInteger(myInvestment) && rewardsTiers[index + 1] >= toInteger(myInvestment)) || toInteger(tier) === toInteger(myInvestment)) ? 'crossed' : ''}`}
-                    key={`m_${tier}`}
+<>
+          <Header as="h4">{this.props.title}</Header>
+          <Grid columns="equal" textAlign="center" className="investment-scale">
+            <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
+              <span className="investment-progress" style={{ width: `${progress}%` }} />
+              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(myInvestment)}</span></div>
+            </div>
+            <Grid.Row>
+              {rewardsTiers.map((tier, index) => (
+                <Grid.Column
+                  className={`${((rewardsTiers[index + 1] && toInteger(tier) <= toInteger(myInvestment) && rewardsTiers[index + 1] >= toInteger(myInvestment)) || toInteger(tier) === toInteger(myInvestment)) ? 'crossed' : ''}`}
+                  key={`m_${tier}`}
+                >
+                  <Popup
+                    trigger={<span>{Helper.CurrencyFormat(tier)}</span>}
+                    position="bottom center"
+                    className="reward-info"
+                    wide
                   >
-                    <Popup
-                      trigger={<span>{Helper.CurrencyFormat(tier)}</span>}
-                      position="bottom center"
-                      className="reward-info"
-                      wide
-                    >
-                      {bonusRewards
+                    {bonusRewards
                       && bonusRewards.map(reward => (
                         reward.tiers.includes(tier)
                         && (
-                        <Popup.Content>
+<Popup.Content>
                           <Header as="h4" className="mb-half">
                             <HtmlEditor
                               readOnly
@@ -83,12 +80,12 @@ Your investment
                         )
                       ))
                     }
-                    </Popup>
-                  </Grid.Column>
-                ))}
-              </Grid.Row>
-            </Grid>
-          </>
+                  </Popup>
+                </Grid.Column>
+              ))}
+            </Grid.Row>
+          </Grid>
+        </>
         )
         : <InlineLoader text="Data not found." />
     );

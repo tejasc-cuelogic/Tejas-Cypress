@@ -30,15 +30,11 @@ const Actions = (props) => {
     <>
       {props.additionalActions && additionalFileIdRef && (
         <Link to="/" style={{ textTransform: 'none' }} onClick={e => props.download(e, additionalFileIdRef)} className="action">
-          <Icon className="ns-file" />
-          {' '}
-Instructions&nbsp;&nbsp;&nbsp;
+          <Icon className="ns-file" /> Instructions&nbsp;&nbsp;&nbsp;
         </Link>
       )}
       <Link to="/" className="action" onClick={e => props.download(e, props.actions.fileId)}>
-        <Icon className={`ns-file ${props[0]}`} />
-        {' '}
-        {props.label || 'PDF'}
+        <Icon className={`ns-file ${props[0]}`} /> {props.label || 'PDF'}
       </Link>
     </>
   );

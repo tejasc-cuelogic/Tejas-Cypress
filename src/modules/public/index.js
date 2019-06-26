@@ -29,7 +29,7 @@ export default class Public extends React.Component {
     this.props.navStore.setNavStatus({}, 'main');
   }
 
-  getRoutes = () => (
+  getRoutes = (isAuthLocation = false) => (
     <Switch>
       {publicRoutes.map(route => (
         <Route
@@ -40,9 +40,8 @@ export default class Public extends React.Component {
           key={route.path}
         />
       ))}
-      <Route path="/auth" component={Auth} />
       <Route path="/password-protected" component={NotFound} />
-      <Route exact path="/:fromUrl" component={RedirectManager} />
+      <Route exact path="/:fromUrl/:fromUrl2?" component={isAuthLocation ? Auth : RedirectManager} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -84,6 +83,8 @@ export default class Public extends React.Component {
     const NoHeader = ['/invest/get-started'];
     const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
+    const authAllowed = ['login', 'register', 'register-investor', 'confirm-email', 'change-password', 'reset-password', 'forgot-password', 'welcome-email'];
+    const isAuthLocation = (authAllowed.find(item => matchPath(location.pathname, { path: `/${item}` })));
     return (
       <>
         {this.props.campaignStore.showFireworkAnimation
@@ -102,7 +103,7 @@ export default class Public extends React.Component {
               loading={inProgress}
             />
           )}
-          {this.getRoutes()}
+          {this.getRoutes(isAuthLocation)}
           <Footer path={location.pathname} />
         </Responsive>
         <Responsive maxWidth={991} as={React.Fragment}>
@@ -116,7 +117,7 @@ export default class Public extends React.Component {
             isMobile
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
-            publicContent={this.getRoutes()}
+            publicContent={this.getRoutes(isAuthLocation)}
             hasHeader={hasHeader}
           />
         </Responsive>

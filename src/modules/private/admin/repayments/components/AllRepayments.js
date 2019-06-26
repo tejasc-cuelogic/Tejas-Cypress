@@ -47,7 +47,7 @@ export default class AllRepayments extends Component {
                 filters={filters}
                 more="no"
                 addon={(
-                  <Grid.Column width={5} textAlign="right">
+<Grid.Column width={5} textAlign="right">
                     <Button color="green" as={Link} floated="right" to="/app/repayments/new">
                       Add New Repayment
                     </Button>

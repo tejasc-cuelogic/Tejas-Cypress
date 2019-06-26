@@ -21,9 +21,7 @@ export default class FinancialInformation extends React.Component {
     return (
       <>
         <Header as="h3" textAlign="center">Calculating your investment limit</Header>
-        <p className="center-align">
-Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.
-          {' '}
+        <p className="center-align">Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.{' '}
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
         </p>
         <Form error>
@@ -46,8 +44,7 @@ Your net worth and annual income are used to determine your 12-month investment 
               ))
             }
             <Divider hidden />
-            <p className="grey-header">
-Your investment limit:
+            <p className="grey-header">Your investment limit:
               <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>
@@ -56,7 +53,7 @@ Your investment limit:
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000
             && FIN_INFO_FRM.fields.investmentLimit.value !== '')
             && (
-            <Message error className="center-align">
+<Message error className="center-align">
               Based on your reported Net Worth and Annual Income, your 12-month investment limit
               under Regulation Crowdfunding is below the $5,000 minimum opening
               deposit for IRA accounts.

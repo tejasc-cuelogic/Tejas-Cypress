@@ -97,7 +97,7 @@ export default class AddFunds extends Component {
                 name="value"
                 type="tel"
                 currency
-                placeholder="$ 15,000"
+                placeholder="$ 5,000"
                 fielddata={addFundsByAccType.fields.value}
                 changed={values => addFundChange(values, 'value')}
                 maxLength={addFundsByAccType.maxLength}
@@ -108,7 +108,7 @@ export default class AddFunds extends Component {
             </div>
             {errors
               && (
-              <Message error className="mb-30">
+<Message error className="mb-30">
                 <ListErrors errors={[errors.message]} />
               </Message>
               )

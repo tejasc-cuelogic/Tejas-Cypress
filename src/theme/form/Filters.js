@@ -33,26 +33,26 @@ export const DropdownFilterWithHeader = props => (
     {
       props.options && props.options !== null
         ? (
-          <Dropdown
-            text={props.value || 'Select Filter'}
-            className={props.className}
-            name={props.keyName || camelCase(props.name)}
-            onChange={props.change}
-            value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
-            placeholder={props.placeHolder || 'Select Filter'}
-            selection
-          >
-            <Dropdown.Menu>
-              {_.map(props.options, rec => (
-                <>
-                  {rec.title
-                    ? (
-                      <>
-                        <Dropdown.Header content={rec.title} key={rec.title} />
-                        <Dropdown.Divider />
-                      </>
-                    ) : ''}
-                  {
+<Dropdown
+  text={props.value || 'Select Filter'}
+  className={props.className}
+  name={props.keyName || camelCase(props.name)}
+  onChange={props.change}
+  value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
+  placeholder={props.placeHolder || 'Select Filter'}
+  selection
+>
+          <Dropdown.Menu>
+            {_.map(props.options, rec => (
+              <>
+                {rec.title
+                  ? (
+<>
+                    <Dropdown.Header content={rec.title} key={rec.title} />
+                    <Dropdown.Divider />
+                  </>
+                  ) : ''}
+                {
                   rec.options.map(el => (
                     <Dropdown.Item
                       key={el.value}
@@ -60,15 +60,14 @@ export const DropdownFilterWithHeader = props => (
                       onClick={e => props.change(e, { name: props.keyName, value: el.value })}
                       value={el.value}
                       active={el.value === props.value}
-                    >
-                      {el.text}
+                    >{el.text}
                     </Dropdown.Item>
                   ))
                 }
-                </>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+              </>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
         ) : null
     }
 
@@ -93,21 +92,11 @@ export const ByKeyword = ({
     </Grid.Column>
     {more !== 'no'
       && (
-      <Grid.Column width={3} textAlign="center">
+<Grid.Column width={3} textAlign="center">
         <span className="filter-count">{requestState && requestState.search ? Object.keys(requestState.search).length : 0}</span>
         <Button icon color="blue" onClick={toggleSearch} className="link-button">
-          {filters ? (
-            <>
-Hide Filters
-              <Icon className="ns-caret-up" />
-            </>
-          )
-            : (
-              <>
-Show Filters
-                <Icon className="ns-caret-down" />
-              </>
-            )
+          {filters ? <>Hide Filters <Icon className="ns-caret-up" /></>
+            : <>Show Filters <Icon className="ns-caret-down" /></>
           }
         </Button>
       </Grid.Column>

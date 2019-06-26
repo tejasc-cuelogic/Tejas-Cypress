@@ -15,10 +15,8 @@ export default class BrokerageEmployment extends Component {
         <Header as="h3">Brokerage employment</Header>
         <Divider hidden />
         <p>
-          Do you (or an immediate family member) work for a US-based
-          {' '}
-          <Responsive as={React.Fragment} minWidth={1200}><br /></Responsive>
-securities brokerage firm?
+          Do you (or an immediate family member) work for a US-based{' '}
+          <Responsive as={React.Fragment} minWidth={1200}><br /></Responsive>securities brokerage firm?
         </p>
         <Divider hidden />
         <p className="mb-40">
@@ -34,7 +32,7 @@ securities brokerage firm?
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes'
           && (
-          <div className="field-wrap left-align">
+<div className="field-wrap left-align">
             <Form.Group widths="equal">
               <FormInput
                 key="brokerageFirmName"
@@ -49,7 +47,7 @@ securities brokerage firm?
           }
           {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
           )

@@ -24,7 +24,7 @@ export const ApplicationListStepColumn = (props) => {
         : (applicationStatus || prequalStatus)
       === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
         && (
-        <List as="ol" className="step-list">
+<List as="ol" className="step-list">
           <List.Item as="li" className="done">Completed</List.Item>
           <List.Item as="li" className={detailsClass}>{detailsStepTitle}</List.Item>
           <List.Item as="li" className={performanceClass}>{performanceStepTitle}</List.Item>

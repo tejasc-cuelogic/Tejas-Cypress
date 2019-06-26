@@ -26,20 +26,20 @@ const InvestmentList = (props) => {
         {!investments || !investments.length
           ? <InlineLoader text="No data available" />
           : (
-            <div className="table-wrapper">
-              <Table unstackable singleLine className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`} selectable={props.listOf !== 'pending'}>
-                <Table.Header>
-                  <Table.Row>
-                    {
+<div className="table-wrapper">
+            <Table unstackable singleLine className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`} selectable={props.listOf !== 'pending'}>
+              <Table.Header>
+                <Table.Row>
+                  {
                     listHeader.map(cell => (
                       <Table.HeaderCell key={cell.split(' ')[0]}>{cell}</Table.HeaderCell>
                     ))
                   }
-                    <Table.HeaderCell />
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {
+                  <Table.HeaderCell />
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {
                   investments.map(data => (
                     <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : ''); } }}>
                       <Table.Cell>
@@ -49,9 +49,7 @@ const InvestmentList = (props) => {
                             <Link className={isMobile ? 'disable-click' : ''} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                           )}
                           <p className="date-stamp">
-                            {get(data, 'offering.keyTerms.city') || ''}
-                            {' '}
-                            {get(data, 'offering.keyTerms.state') || ''}
+                            {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
                           </p>
                         </div>
                       </Table.Cell>
@@ -86,9 +84,7 @@ const InvestmentList = (props) => {
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' && (
                           <Button.Group size="mini" compact>
-                            {viewAgreement && data.agreementId}
-                            {' '}
-                            {
+                            {viewAgreement && data.agreementId} {
                               <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                             }
                             {!props.isAccountFrozen && (!((DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) <= 0) && !get(data, 'offering.closureSummary.hardCloseDate')) || !get(data, 'offering.closureSummary.processingDate'))
@@ -99,12 +95,12 @@ const InvestmentList = (props) => {
                             }
                             {get(data.offering, 'closureSummary.processingDate') && (DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 0 || DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2)
                               && (
-                              <Button
-                                disabled
-                                content={get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2
-                                  ? STAGES.LOCK.label : 'Processing'}
-                                color="red"
-                              />
+<Button
+  disabled
+  content={get(data.offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) <= 2
+    ? STAGES.LOCK.label : 'Processing'}
+  color="red"
+/>
                               )
                             }
                           </Button.Group>
@@ -113,17 +109,17 @@ const InvestmentList = (props) => {
                     </Table.Row>
                   ))
                 }
-                </Table.Body>
-                <Table.Footer>
-                  <Table.Row>
-                    <Table.HeaderCell colSpan="2" />
-                    <Table.HeaderCell>Total:</Table.HeaderCell>
-                    <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
-                    <Table.HeaderCell colSpan="3" />
-                  </Table.Row>
-                </Table.Footer>
-              </Table>
-            </div>
+              </Table.Body>
+              <Table.Footer>
+                <Table.Row>
+                  <Table.HeaderCell colSpan="2" />
+                  <Table.HeaderCell>Total:</Table.HeaderCell>
+                  <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
+                  <Table.HeaderCell colSpan="3" />
+                </Table.Row>
+              </Table.Footer>
+            </Table>
+          </div>
           )
         }
       </Accordion.Content>

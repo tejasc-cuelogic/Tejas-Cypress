@@ -78,9 +78,8 @@ class Success extends Component {
           const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
         }
-      }).catch((er) => {
+      }).catch(() => {
         this.setState({ showProgressLoader: false });
-        Helper.toast(er.message === 'Incorrect username or password.' ? 'Something went wrong while saving filer information, Please try again.' : er.message, 'error');
       });
   }
 
@@ -113,38 +112,38 @@ class Success extends Component {
             </p>
             {this.props.isPublic
               && (
-              <Form error>
+<Form error>
                 <Grid>
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                     {!userExists
                       ? ['email', 'password', 'verify'].map(field => (
                         (field === 'password')
                           ? (
-                            <FormPasswordStrength
-                              key="password"
-                              name="password"
-                              type="password"
-                              userInputs={[fields.email.value]}
-                              iconDisplay
-                              minLength={8}
-                              minScore={4}
-                              tooShortWord="Weak"
-                              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-                              changed={signupChange}
-                              fielddata={fields[field]}
-                            />
+<FormPasswordStrength
+  key="password"
+  name="password"
+  type="password"
+  userInputs={[fields.email.value]}
+  iconDisplay
+  minLength={8}
+  minScore={4}
+  tooShortWord="Weak"
+  scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+  inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+  changed={signupChange}
+  fielddata={fields[field]}
+/>
                           )
                           : (
-                            <FormInput
-                              key={field}
-                              readOnly={field === 'email'}
+<FormInput
+  key={field}
+  readOnly={field === 'email'}
                             // icon={field !== 'email' ? togglePasswordType(field) : null}
-                              type={field !== 'email' ? pwdInputType : 'text'}
-                              name={field}
-                              fielddata={fields[field]}
-                              changed={signupChange}
-                            />
+  type={field !== 'email' ? pwdInputType : 'text'}
+  name={field}
+  fielddata={fields[field]}
+  changed={signupChange}
+/>
                           )
                       ))
                       : ['email', 'password'].map(field => (
@@ -161,7 +160,7 @@ class Success extends Component {
                     }
                     {errors
                       && (
-                      <Message error className="mt-30">
+<Message error className="mt-30">
                         <ListErrors errors={[errors.message]} />
                       </Message>
                       )
@@ -177,7 +176,7 @@ class Success extends Component {
         </Grid>
         {this.state.showProgressLoader
         && (
-        <Dimmer active className="fullscreen">
+<Dimmer active className="fullscreen">
           <Loader size="large">
             <Header as="h3">
               Please wait...

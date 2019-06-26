@@ -49,28 +49,28 @@ export default class Actions extends Component {
                   {type !== 'review' && type !== 'individual' && !isGsProcess && !isAccProcess
                   && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.openModal(e, userId, accountId, 'GSPROCESS', 'Crowdpay account successfully processed for gold star.')} as={Link} to={`${urlPara}/GSPROCESS`} color={isGsProcess ? 'gray' : 'green'}>{isGsProcess ? 'Processing' : 'GS Process'}</Button>
                 }
-                  {!isAccProcess
+                {!isAccProcess
                   && (
-                  <Button
-                    disabled={loadingCrowdPayIds.includes(accountId)}
-                    onClick={
+<Button
+  disabled={loadingCrowdPayIds.includes(accountId)}
+  onClick={
                       e => (type === 'review' ? this.openModal(e, userId, accountId, 'DECLINE', 'Crowdpay account is declined successfully.') : this.ctaHandler(e, userId, accountId, 'DECLINE_A', '.'))
                     }
-                    as={Link}
-                    to={`${urlPara}/DECLINE`}
-                    color="red"
-                  >
+  as={Link}
+  to={`${urlPara}/DECLINE`}
+  color="red"
+>
                     Decline
                   </Button>
                   )
                 }
-                  {!isAccProcess && type === 'individual'
+                {!isAccProcess && type === 'individual'
                   && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
                 }
-                  {(type === 'individual' || type === 'ira') && isAccProcess
+                {(type === 'individual' || type === 'ira') && isAccProcess
                   && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
                 }
-                  {type !== 'review' && isGsProcess
+                {type !== 'review' && isGsProcess
                   && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
                 }
                 </>

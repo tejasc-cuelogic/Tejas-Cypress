@@ -81,7 +81,7 @@ export default class AccountDetailsView extends Component {
                   : (
 <div className="ui tiny image">
                     <NSImage path="banks/default.png" />
-</div>
+                  </div>
                   )
                 }
               </Item>

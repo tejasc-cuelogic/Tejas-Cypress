@@ -68,7 +68,7 @@ export default class PersonalInformation extends Component {
           />
           {errors
             && (
-            <Message error className="mt-30">
+<Message error className="mt-30">
               <ListErrors errors={[errors.message]} />
             </Message>
             )

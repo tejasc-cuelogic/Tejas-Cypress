@@ -11,18 +11,14 @@ const Banner = () => (
       <Responsive minWidth={768} as={React.Fragment}>
         <div className="banner-caption">
           <Header as="h2">
-            Get access to pre-vetted,
-            <br />
-local investments.
+            Get access to pre-vetted,<br />local investments.
           </Header>
           <Button as={Link} to="/offerings" secondary className={!isTablet && 'mt-30'}>Explore Campaigns</Button>
         </div>
       </Responsive>
       <div className="banner-meta">
         <p>
-          <b>Ian Tucker | Poitín</b>
-          <br />
-Raised $224,700 from 182 investors
+          <b>Ian Tucker | Poitín</b><br />Raised $224,700 from 182 investors
         </p>
       </div>
     </Container>

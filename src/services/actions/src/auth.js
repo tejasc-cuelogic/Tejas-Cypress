@@ -155,19 +155,20 @@ export class Auth {
     client.cache.reset();
     authStore.setNewPasswordRequired(false);
     authStore.setUserLoggedIn(false);
+    uiStore.addMoreInProgressArray('login');
 
     try {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
-      this.amplifyLogin(user);
+      await this.amplifyLogin(user);
     } catch (err) {
       if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
         await this.resetPasswordExpiration(lowerCasedEmail, password);
       } else {
+        uiStore.removeOneFromProgressArray('login');
+        uiStore.setProgress(false);
         uiStore.setErrors(this.simpleErr(err));
         throw err;
       }
-    } finally {
-      uiStore.setProgress(false);
     }
   }
 
@@ -175,12 +176,12 @@ export class Auth {
     const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
     if (res.data.resetPasswordExpirationDurationForCognitoUser) {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
-      this.amplifyLogin(user);
+      await this.amplifyLogin(user);
     }
     return Promise.resolve(true);
   }
 
-  amplifyLogin(user) {
+  amplifyLogin = user => new Promise((res) => {
     if (user && !user.signInUserSession && user.challengeName && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
       if (user.signInUserSession) {
         authStore.setCognitoUserSession(user.signInUserSession);
@@ -190,12 +191,12 @@ export class Auth {
       }
       authStore.setNewPasswordRequired(true);
       authStore.setUserLoggedIn(true);
+      res();
     }
     if (user && user.signInUserSession) {
       authStore.setUserLoggedIn(true);
       localStorage.removeItem('lastActiveTime');
       localStorage.removeItem('defaultNavExpanded');
-
       // Extract JWT from token
       const { idToken } = user.signInUserSession;
       commonStore.setToken(idToken.jwtToken);
@@ -221,7 +222,7 @@ export class Auth {
             },
           });
         }
-        // res();
+        res();
       });
       AWS.config.region = AWS_REGION;
       // Check if currentUser has admin role, if user has admin role set admin access to user
@@ -229,7 +230,7 @@ export class Auth {
         this.setAWSAdminAccess(user.signInUserSession.idToken.jwtToken);
       }
     }
-  }
+  });
 
   /**
    * @desc Registers new user. Fetches required data from authStore.

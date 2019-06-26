@@ -47,28 +47,28 @@ export default class ActivityHistory extends Component {
             <Grid columns={4}>
               {showFilters && showFilters.includes('activityType') && activityTypes.length > 1
                 && (
-                <Grid.Column>
+<Grid.Column>
                   <DropdownFilter value={requestState.filters.activityType} keyName="activityType" change={this.setSearchParam} name="Activity Type" options={activityTypes} />
                 </Grid.Column>
                 )
               }
               {showFilters && showFilters.includes('activityUserType')
                 && (
-                <Grid.Column>
+<Grid.Column>
                   <DropdownFilter value={requestState.filters.activityUserType} keyName="activityUserType" change={this.setSearchParam} name="User Type" options={FILTER_META.activityUserType.filter(i => !i.applicable || i.applicable.length === 0 || i.applicable.includes(this.props.module))} />
                 </Grid.Column>
                 )
               }
               {showFilters && showFilters.includes('ActivityDate')
                 && (
-                <Grid.Column>
+<Grid.Column>
                   <DateRangeFilter startDate={requestState.filters.startDate ? moment(requestState.filters.startDate).subtract(1, 'day').format('MM-DD-YYYY') : ''} endDate={requestState.filters.endDate ? moment(requestState.filters.endDate).subtract(1, 'day').format('MM-DD-YYYY') : ''} label="Activity Date" change={this.change} />
                 </Grid.Column>
                 )
               }
               {showFilters && showFilters.includes('subType')
                 && (
-                <Grid.Column>
+<Grid.Column>
                   <DropdownFilter value={requestState.filters.subType} keyName="subType" change={this.setSearchParam} name="Sub Type" options={FILTER_META.subType} />
                 </Grid.Column>
                 )

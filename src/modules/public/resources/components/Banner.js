@@ -6,8 +6,7 @@ const Banner = props => (
     <Responsive minWidth={768} as={React.Fragment}>
       <Container>
         <div className="banner-caption">
-          <Header as="h2">
-            {props.title}
+          <Header as="h2">{props.title}
             {
             props.type
             && (

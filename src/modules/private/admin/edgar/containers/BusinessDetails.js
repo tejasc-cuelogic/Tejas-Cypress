@@ -149,8 +149,7 @@ export default class BusinessDetails extends React.Component {
                 onClick={this.editBusinessModal}
               >
                 <Icon name="ns-pencil" />
-              </Button>
-              {' '}
+              </Button>{' '}
               <Button
                 icon
                 circular

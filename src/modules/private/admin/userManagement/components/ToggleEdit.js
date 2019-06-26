@@ -14,12 +14,7 @@ Save
           </Button>
         </>
       )
-        : (
-          <Button onClick={() => props.setEditCard(props.card)}>
-            <Icon name="pencil" />
-Edit
-          </Button>
-        )
+        : <Button onClick={() => props.setEditCard(props.card)}><Icon name="pencil" />Edit</Button>
       }
     </div>
   </>

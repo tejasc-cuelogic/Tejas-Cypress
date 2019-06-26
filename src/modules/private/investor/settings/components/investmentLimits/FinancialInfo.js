@@ -75,130 +75,121 @@ export default class FinancialInfo extends Component {
       <Grid>
         {getActiveAccountList && getActiveAccountList.accountList.length
           ? getActiveAccountList.accountList.map(account => (
-            <Grid.Row>
-              <Grid.Column widescreen={12} largeScreen={16} computer={16} tablet={16} mobile={16}>
-                <Card fluid>
-                  <Card.Content>
-                    <Card.Header className="with-icon">
-                      {
+          <Grid.Row>
+            <Grid.Column widescreen={12} largeScreen={16} computer={16} tablet={16} mobile={16}>
+              <Card fluid>
+                <Card.Content>
+                  <Card.Header className="with-icon">
+                    {
                     account.name === 'ira' && getActiveAccountList.isIndAccExist
                       ? (
-                        <>
-                          <Icon color="teal" className="ns-individual-line" />
-                          {' '}
-Individual
-                          <Icon color="teal" className={`ns-${account.name}-line`} />
-                          {' '}
-                          {account.name.toUpperCase()}
-                        </>
+<>
+                        <Icon color="teal" className="ns-individual-line" /> Individual
+                        <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name.toUpperCase()}
+                      </>
                       )
                       : (
-                        <>
-                          <Icon color="teal" className={`ns-${account.name}-line`} />
-                          {' '}
-                          {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)}
-                        </>
+<>
+                        <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)}
+                      </>
                       )
                     }
-                    </Card.Header>
-                  </Card.Content>
-                  <Divider horizontal className="only-border" />
-                  <Grid celled="internally" padded="horizontally">
-                    <Grid.Row>
-                      <Grid.Column computer={8} tablet={8} mobile={16}>
-                        <Card.Content>
-                          <Header as="h5">Regulation Crowdfunding Limits</Header>
-                          <p className="intro-text">
-                            {account.name === 'entity' ? `The total amount you can invest in Regulation
+                  </Card.Header>
+                </Card.Content>
+                <Divider horizontal className="only-border" />
+                <Grid celled="internally" padded="horizontally">
+                  <Grid.Row>
+                    <Grid.Column computer={8} tablet={8} mobile={16}>
+                      <Card.Content>
+                        <Header as="h5">Regulation Crowdfunding Limits</Header>
+                        <p className="intro-text">
+                          {account.name === 'entity' ? `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on the
                             entity's annual revenue and net assets. ` : `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on your income
                             and net worth. `
                           }
-                            <Link target="_blank" to="/app/resources/faq">See FAQ on investment limits</Link>
-                          </p>
-                          <Statistic size="tiny">
-                            <Statistic.Label>
+                          <Link target="_blank" to="/app/resources/faq">See FAQ on investment limits</Link>
+                        </p>
+                        <Statistic size="tiny">
+                          <Statistic.Label>
                             Your current investment limit
-                              <Popup
-                                trigger={<Icon className="ns-help-circle" />}
-                                content="Your current investment limit as of today"
-                                position="top center"
-                                className="left-align"
-                              />
-                            </Statistic.Label>
-                            <Statistic.Value>
-                              {account.name === 'entity'
-                                ? typeof entityCurrentLimit === 'string'
-                                  ? Helper.MoneyMathDisplayCurrency(entityCurrentLimit, false)
-                                  : Helper.CurrencyFormat(entityCurrentLimit, 0)
-                                : typeof individualIRACurrentLimit === 'string'
-                                  ? Helper.MoneyMathDisplayCurrency(individualIRACurrentLimit, false)
-                                  : Helper.CurrencyFormat(individualIRACurrentLimit, 0)
+                            <Popup
+                              trigger={<Icon className="ns-help-circle" />}
+                              content="Your current investment limit as of today"
+                              position="top center"
+                              className="left-align"
+                            />
+                          </Statistic.Label>
+                          <Statistic.Value>
+                            {account.name === 'entity'
+                              ? typeof entityCurrentLimit === 'string'
+                                ? Helper.MoneyMathDisplayCurrency(entityCurrentLimit, false)
+                                : Helper.CurrencyFormat(entityCurrentLimit, 0)
+                              : typeof individualIRACurrentLimit === 'string'
+                                ? Helper.MoneyMathDisplayCurrency(individualIRACurrentLimit, false)
+                                : Helper.CurrencyFormat(individualIRACurrentLimit, 0)
                             }
-                            </Statistic.Value>
-                          </Statistic>
-                          <Divider clearing hidden />
-                          <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name, account.details.accountId)} inverted color="green" content="Update investment limits" />
-                        </Card.Content>
-                      </Grid.Column>
-                      <Grid.Column computer={8} tablet={8} mobile={16}>
-                        {accreditationData[account.name]
+                          </Statistic.Value>
+                        </Statistic>
+                        <Divider clearing hidden />
+                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name, account.details.accountId)} inverted color="green" content="Update investment limits" />
+                      </Card.Content>
+                    </Grid.Column>
+                    <Grid.Column computer={8} tablet={8} mobile={16}>
+                      {accreditationData[account.name]
                       && accreditationData[account.name].status
-                          ? (
-                            <Card.Content>
-                              <Header as="h5">
+                        ? (
+<Card.Content>
+                          <Header as="h5">
                             Accredited Investor Status
-                                {/* <Link as={Button} to="/" className="link" onClick={e =>
+                            {/* <Link as={Button} to="/" className="link" onClick={e =>
                              this.handleVerifyAccreditation
                             (e, account.name, account.details.accountId)}><small>Update
                              accreditation</small></Link> */}
-                              </Header>
-                              <dl className="dl-horizontal">
-                                <dt>Status :</dt>
-                                <dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}><b>{this.getStatus(accreditationData[account.name])}</b></dd>
-                                {accreditationData[account.name].status === 'INVALID'
-                                  ? (
-                                    <>
-                                      <dt>Message :</dt>
-                                      <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
-                                    </>
-                                  ) : ''
+                          </Header>
+                          <dl className="dl-horizontal">
+                            <dt>Status :</dt>
+                            <dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}><b>{this.getStatus(accreditationData[account.name])}</b></dd>
+                            {accreditationData[account.name].status === 'INVALID'
+                              ? (
+<>
+                                <dt>Message :</dt>
+                                <dd>{get(accreditationData[account.name], 'reviewed.message') || 'N/A'}</dd>
+                              </>
+                              ) : ''
                             }
-                                <dt>
-                                  {`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}
-Date :
-                                </dt>
-                                <dd>{this.getDate(accreditationData[account.name])}</dd>
-                              </dl>
-                              <Divider hidden />
-                              {accreditationData[account.name].status === 'INVALID'
-                                ? (
-                                  <Card.Description>
-                                    <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Accreditation" />
-                                  </Card.Description>
-                                ) : ''
+                            <dt>{`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'Requested ' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'Expiration ' : ''}`}Date :</dt>
+                            <dd>{this.getDate(accreditationData[account.name])}</dd>
+                          </dl>
+                          <Divider hidden />
+                          {accreditationData[account.name].status === 'INVALID'
+                            ? (
+<Card.Description>
+                              <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Accreditation" />
+                            </Card.Description>
+                            ) : ''
                           }
-                            </Card.Content>
-                          )
-                          : (
-                            <Card.Content>
-                              <Header as="h4">Accredited Investor Status</Header>
-                              <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
-                              <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor" className="intro-text highlight-text">What is an accredited investor?</Link>
-                              <Divider hidden />
-                              <Card.Description>
-                                <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Status" />
-                              </Card.Description>
-                            </Card.Content>
-                          )
+                        </Card.Content>
+                        )
+                        : (
+<Card.Content>
+                          <Header as="h4">Accredited Investor Status</Header>
+                          <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
+                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor" className="intro-text highlight-text">What is an accredited investor?</Link>
+                          <Divider hidden />
+                          <Card.Description>
+                            <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Status" />
+                          </Card.Description>
+                        </Card.Content>
+                        )
                       }
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Card>
+            </Grid.Column>
+          </Grid.Row>
           )) : <EmptyDataSet title="No data available for investment limits." />
         }
       </Grid>

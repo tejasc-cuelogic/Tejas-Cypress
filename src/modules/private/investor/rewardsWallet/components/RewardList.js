@@ -33,14 +33,14 @@ const RewardList = props => props.rewards.map(offering => (
                       ? <DateTimeFormat datetime={r.redeemDate} />
                       : (moment().diff(r.expiry) < 0
                         ? (
-                          <Button
-                            as={Link}
-                            to={`${props.match.url}/redeem/${r.id}`}
-                            size="tiny"
-                            color="green"
-                            className="ghost-button"
-                            content="Redeem"
-                          />
+<Button
+  as={Link}
+  to={`${props.match.url}/redeem/${r.id}`}
+  size="tiny"
+  color="green"
+  className="ghost-button"
+  content="Redeem"
+/>
                         )
                         : 'Expired'
                       )

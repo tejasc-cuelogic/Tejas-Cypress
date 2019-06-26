@@ -85,8 +85,10 @@ export default class AllKnowledgeBaseItems extends Component {
 
   deleteKnowledgeBase = () => {
     const { deleteKBById, setConfirmBox } = this.props.knowledgeBaseStore;
-    deleteKBById(this.props.knowledgeBaseStore.confirmBox.refId);
-    setConfirmBox('');
+    deleteKBById(this.props.knowledgeBaseStore.confirmBox.refId).then(() => {
+      setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
 
   handleDeleteCancel = () => {
@@ -124,6 +126,7 @@ export default class AllKnowledgeBaseItems extends Component {
 
   render() {
     const { knowledgeBaseStore } = this.props;
+    const { inProgress } = this.props.uiStore;
     const {
       loading,
       confirmBox,
@@ -131,7 +134,7 @@ export default class AllKnowledgeBaseItems extends Component {
       allCategorizedKnowledgeBase,
     } = knowledgeBaseStore;
     const { activeIndex, innerActiveIndex } = this.state;
-    if (loading || categoryLoading) {
+    if (loading || categoryLoading || inProgress) {
       return <InlineLoader />;
     }
     if (Object.keys(allCategorizedKnowledgeBase).length === 0) {

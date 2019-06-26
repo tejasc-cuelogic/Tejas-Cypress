@@ -41,59 +41,47 @@ class BonusRewards extends Component {
         </Header>
         {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
           ? (
-            <>
-              {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
+<>
+            {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
             && bonusRewards
-                ? (
-                  <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
-                    {(earlyBird && earlyBird.quantity && isEarlyBirdRewards)
-                      ? (
-                        <Grid.Column>
-                          <Segment padded className="reward-block">
-                            <>
-                              <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>
-Early Bird Reward
-                                <Label size="small" color="green" className="text-uppercase pull-right">
-                                  {get(earlyBird, 'available') || 0}
-                                  {' '}
-remaining
-                                </Label>
-                              </Header>
-                              <Header as="h5" className="note">
-First
-                                {earlyBird.quantity}
-                                {' '}
-                                {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''}
-                                {' '}
-will receive:
-                              </Header>
-                            </>
-                            <BonusRewardsList
-                              earlyBird
-                              bonusRewards={bonusRewards}
-                              tier={earlyBird.amount}
-                            />
-                          </Segment>
-                        </Grid.Column>
-                      ) : ''
+              ? (
+<Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
+                {(earlyBird && earlyBird.quantity && isEarlyBirdRewards)
+                  ? (
+<Grid.Column>
+                    <Segment padded className="reward-block">
+                      <>
+                        <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>Early Bird Reward
+                          <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
+                        </Header>
+                        <Header as="h5" className="note">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
+                      </>
+                      <BonusRewardsList
+                        earlyBird
+                        bonusRewards={bonusRewards}
+                        tier={earlyBird.amount}
+                      />
+                    </Segment>
+                  </Grid.Column>
+                  ) : ''
                 }
-                    {rewardsTiers.map(tier => (
-                      <Grid.Column>
-                        <Segment padded className="reward-block">
-                          <>
-                            <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
-                            <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
-                          </>
-                          <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
-                        </Segment>
-                      </Grid.Column>
-                    ))}
-                  </Grid>
-                ) : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
+                {rewardsTiers.map(tier => (
+                  <Grid.Column>
+                    <Segment padded className="reward-block">
+                      <>
+                        <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
+                        <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
+                      </>
+                      <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
+                    </Segment>
+                  </Grid.Column>
+                ))}
+              </Grid>
+              ) : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
             }
-              {offeringMISC
+            {offeringMISC
             && (
-            <Grid columns="1">
+<Grid columns="1">
               <Grid.Column>
                 <Segment padded className="reward-block">
                   <HtmlEditor readOnly content={offeringMISC} />

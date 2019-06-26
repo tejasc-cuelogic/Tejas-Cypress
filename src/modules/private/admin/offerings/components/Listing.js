@@ -111,11 +111,10 @@ export default class Listing extends Component {
                 : offerings.map(offering => (
                   <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      <b>
-                        {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-                          ? offering.keyTerms.shorthandBusinessName : (
-                            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-                          ))}
+                      <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+                        ? offering.keyTerms.shorthandBusinessName : (
+                          (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+                        ))}
                       </b>
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
@@ -144,7 +143,7 @@ export default class Listing extends Component {
                     }
                     {stage === 'live'
                       && (
-                      <Table.Cell>
+<Table.Cell>
                         {offering.closureSummary && offering.closureSummary.processingDate
                           ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                         }
@@ -183,9 +182,9 @@ export default class Listing extends Component {
                         {Object.keys(actions).map(action => (
                           action.label === 'Delete' && stage === 'engagement' ? ''
                             : (
-                              <Button icon className="link-button">
-                                <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
-                              </Button>
+<Button icon className="link-button">
+                            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
+                          </Button>
                             )
                         ))}
                       </Button.Group>

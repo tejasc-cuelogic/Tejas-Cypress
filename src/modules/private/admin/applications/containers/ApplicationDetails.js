@@ -112,11 +112,7 @@ export default class ApplicationDetails extends Component {
         <Modal.Content className="transaction-details">
           <Header as="h3">
             {businessName}
-            <span className="title-meta">
-              {' '}
-Status:
-              <b>{appStepStatus}</b>
-            </span>
+            <span className="title-meta">  Status: <b>{appStepStatus}</b></span>
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
@@ -134,14 +130,9 @@ Status:
                     {(applicationStatus || prequalStatus)
                     !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                     && (
-                    <small className="pull-right">
+<small className="pull-right">
                       {this.state.displayOnly
-                        ? (
-                          <Link to="/" onClick={this.editBusinessDetails}>
-                            <Icon className="ns-pencil" />
-Edit
-                          </Link>
-                        )
+                        ? <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
                         : (
                           <>
                             <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
@@ -185,9 +176,7 @@ Update
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Name</Header.Subheader>
-                          {firstName || primaryPOC.firstName}
-                          {' '}
-                          {lastName || primaryPOC.lastName}
+                          {firstName || primaryPOC.firstName} {lastName || primaryPOC.lastName}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
@@ -209,7 +198,7 @@ Update
               {(applicationStatus || prequalStatus)
               === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                 && (
-                <Grid.Column>
+<Grid.Column>
                   <Card fluid className="ba-info-card">
                     <Card.Header>Failed Reason</Card.Header>
                     <Card.Content>

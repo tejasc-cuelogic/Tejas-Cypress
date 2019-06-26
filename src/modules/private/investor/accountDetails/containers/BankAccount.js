@@ -65,7 +65,7 @@ export default class BankAccount extends Component {
               <Grid>
                 {isEmpty(plaidAccDetails)
                 && (
-                <Grid.Row>
+<Grid.Row>
                   <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
                     <Card fluid>
                       <Card.Content>
@@ -81,9 +81,9 @@ export default class BankAccount extends Component {
                 </Grid.Row>
                 )
               }
-                {!isEmpty(plaidAccDetails)
+              {!isEmpty(plaidAccDetails)
                 && (
-                <Grid.Row>
+<Grid.Row>
                   <Grid.Column
                     widescreen={12}
                     largeScreen={16}
@@ -101,12 +101,12 @@ export default class BankAccount extends Component {
                       />
                       {plaidAccDetails.pendingUpdate
                         && (
-                        <AccountDetailsView
-                          accountDetails={pendingAccoungDetails}
-                          click={this.handleLinkBankInterface}
-                          match={this.props.match}
-                          accountType="pending"
-                        />
+<AccountDetailsView
+  accountDetails={pendingAccoungDetails}
+  click={this.handleLinkBankInterface}
+  match={this.props.match}
+  accountType="pending"
+/>
                         )
                       }
                     </Card>
@@ -118,9 +118,9 @@ export default class BankAccount extends Component {
             </>
           )
           : (
-            <section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={NO_PERMISSION_MSG} /></h4>
-            </section>
+<section className="center-align">
+            <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={NO_PERMISSION_MSG} /></h4>
+          </section>
           )
         }
       </div>

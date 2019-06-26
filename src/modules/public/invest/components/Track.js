@@ -30,7 +30,7 @@ export default class Track extends Component {
                       </Responsive>
                       <Responsive as={React.Fragment} maxWidth={767}>
                         <div className="center-align">
-                          <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                          <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
                         </div>
                       </Responsive>
                     </>

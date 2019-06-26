@@ -43,8 +43,10 @@ export default class AllInsights extends Component {
   }
 
   handleDelete = () => {
-    this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId);
-    this.props.uiStore.setConfirmBox('');
+    this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId).then(() => {
+      this.props.uiStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
 
   handleDeleteCancel = () => {
@@ -133,11 +135,11 @@ export default class AllInsights extends Component {
                   </Table.Row>
                 ))
                   : (
-                    <Table.Row>
-                      <Table.Cell colSpan="7">
-                        <InlineLoader text="No data available." />
-                      </Table.Cell>
-                    </Table.Row>
+<Table.Row>
+                  <Table.Cell colSpan="7">
+                    <InlineLoader text="No data available." />
+                  </Table.Cell>
+                </Table.Row>
                   )}
               </Table.Body>
             </Table>

@@ -25,7 +25,7 @@ export default class AppNavigation extends Component {
     } = this.props.businessAppStore;
     if (where >= 0) {
       // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
-      this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
+      this.submitSaveContinue();
       this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       // }
     } else {
@@ -33,8 +33,8 @@ export default class AppNavigation extends Component {
     }
   }
 
-  submitSaveContinue = (stepUrl) => {
-    this.props.businessAppStore.businessAppParitalSubmit(stepUrl);
+  submitSaveContinue = () => {
+    this.props.businessAppStore.businessAppParitalSubmit();
   }
 
   submit = (e) => {
@@ -65,13 +65,13 @@ export default class AppNavigation extends Component {
       <>
         {!this.props.hideFields
           && (
-          <div className="navigation-buttons">
+<div className="navigation-buttons">
             {!formReadOnlyMode
               && (
               <>
                 {this.state.step > 0
                   && (
-                  <div className="pull-left">
+<div className="pull-left">
                     <Button type="button" circular icon className="multistep__btn prev" disabled={isFileUploading} onClick={() => this.actualSubmit(-1)}>
                       <Icon className="ns-arrow-left" />
                     </Button>
@@ -89,12 +89,12 @@ export default class AppNavigation extends Component {
                     </>
                   )
                     : (
-                      <>
-                        {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
+<>
+                      {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
                     primary className="very relaxed" content={isFileUploading
                     ? 'File operation in process' : 'Save'} /> */}
-                        <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
-                      </>
+                      <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
+                    </>
                     )
                   }
                 </div>

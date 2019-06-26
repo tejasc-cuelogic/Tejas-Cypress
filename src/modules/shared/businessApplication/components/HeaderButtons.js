@@ -19,19 +19,19 @@ export const HeaderButtons = props => (
     {!props.disabled
       ? (!props.showSubNav && !props.preQualPage
         ? (
-          <Button.Group>
-            <Button inverted onClick={props.saveContinue} disabled={props.isFileUploading || props.disabled} color="green">{props.isFileUploading ? 'File operation in process' : 'Continue later'}</Button>
-            <SubmitButton
-              loading={props.inProgress}
-              click={props.submitApp}
-              canSubmitApp={!props.isFileUploading}
-              readOnlyForm={props.disabled}
-              buttonText={props.ButtonTextToggle}
-            />
-          </Button.Group>
+<Button.Group>
+        <Button inverted onClick={props.saveContinue} disabled={props.isFileUploading || props.disabled} color="green">{props.isFileUploading ? 'File operation in process' : 'Continue later'}</Button>
+        <SubmitButton
+          loading={props.inProgress}
+          click={props.submitApp}
+          canSubmitApp={!props.isFileUploading}
+          readOnlyForm={props.disabled}
+          buttonText={props.ButtonTextToggle}
+        />
+      </Button.Group>
         ) : props.preQualPage
       && (
-      <Button.Group>
+<Button.Group>
         <Button as={Link} loading={props.inProgress} to="/app/dashboard" inverted color="red">Cancel</Button>
         <SubmitButton
           loading={props.inProgress}
@@ -42,9 +42,9 @@ export const HeaderButtons = props => (
       )
       )
       : (
-        <Button.Group>
-          <Button as={Link} to="/app/dashboard" inverted color="red">Back to Dashboard</Button>
-        </Button.Group>
+<Button.Group>
+        <Button as={Link} to="/app/dashboard" inverted color="red">Back to Dashboard</Button>
+      </Button.Group>
       )
     }
   </>

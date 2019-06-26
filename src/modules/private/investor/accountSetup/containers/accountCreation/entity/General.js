@@ -24,9 +24,7 @@ export default class General extends Component {
       <>
         <Header as="h3" textAlign="center">General information</Header>
         <p className="center-align">
-          Let
-          {"'"}
-s create your Entity Investment Account. Get started by providing your
+          Let{"'"}s create your Entity Investment Account. Get started by providing your
           entity information.
         </p>
         <Form error>
@@ -96,7 +94,7 @@ s create your Entity Investment Account. Get started by providing your
           </div>
           {errors
             && (
-            <Message className="center-align" error>
+<Message className="center-align" error>
               <ListErrors errors={[errors]} />
             </Message>
             )

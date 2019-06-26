@@ -44,7 +44,7 @@ class XmlSubmission extends Component {
                     xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed
                     && xmlSubmission.xmlSubmissionDownloadUrl
                     && (
-                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" rel="noopener noreferrer" download className="ui button icon link-button">
+<a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" rel="noopener noreferrer" download className="ui button icon link-button">
                       <Icon name="download" />
                     </a>
                     )
@@ -57,12 +57,12 @@ class XmlSubmission extends Component {
                   {
                     xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft
                     && (
-                    <Button
-                      icon
-                      className="link-button disabled"
-                      href={xmlSubmission.xmlSubmissionDownloadUrl}
-                      download
-                    >
+<Button
+  icon
+  className="link-button disabled"
+  href={xmlSubmission.xmlSubmissionDownloadUrl}
+  download
+>
                       <Icon name="download" />
                     </Button>
                     )
@@ -122,8 +122,7 @@ class XmlSubmission extends Component {
       <Table.Body active={this.props.active} key="xml_key">
         <Table.Row textAlign="center">
           <Table.Cell colSpan="6">
-            No XML Submissions are present for this filing,
-            {' '}
+            No XML Submissions are present for this filing,{' '}
             <span style={{ cursor: 'pointer' }} onClick={this.createNewSubmission} className="highlight-text">Click here to create a new submission.</span>
           </Table.Cell>
         </Table.Row>

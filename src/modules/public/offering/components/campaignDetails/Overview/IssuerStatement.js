@@ -26,10 +26,10 @@ class IssuerStatement extends Component {
         </Header>
         {offeirngDisclaimer
           ? (
-            <p className="mb-40 copyright-info">
-              {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
-              <HtmlEditor readOnly content={(offeirngDisclaimer)} />
-            </p>
+<p className="mb-40 copyright-info">
+            {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
+            <HtmlEditor readOnly content={(offeirngDisclaimer)} />
+          </p>
           )
           : <InlineLoader text="No Data Found" className="bg-offwhite" />
         }

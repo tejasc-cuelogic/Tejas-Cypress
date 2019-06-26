@@ -1,4 +1,4 @@
-import { InvestorFlowProcess } from '../../../support/investorSignup/investorFlow';
+import { InvestorFlowProcess } from './utility/investorAccount.utlity';
 import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile } from '../../../support/common';
 
 export const GeneralInfoMeta = {
@@ -37,8 +37,9 @@ describe('Account Creation', () => {
     cy.get('button.button').contains('Confirm').click();
     cy.wait('@manualAccount');
   };
+
   const plaidProcess = (progressStep, count) => {
-    cy.wait(2000);
+    cy.get('.dimmer-visible').should('not.be.visible')
     cy.get(`.multistep-modal > ol.progtrckr > ${progressStep}`).click({ force: true }).invoke('text').then((step) => {
       cy.log('bank step', step.toUpperCase());
       if (step.toUpperCase() === 'LINK BANK') {
@@ -74,10 +75,41 @@ describe('Account Creation', () => {
       cy.get('button').contains('Confirm').click();
       cy.wait('@addFunds');
     });
-  };
+  }
+
+  const entityGeneralStep = () => {
+    cy.get('input[name="name"]').type(GeneralInfoMeta.name);
+    cy.get('input[name="taxId"]').type(`${GeneralInfoMeta.taxId}${Math.floor((Math.random() * 100000000) + 1)}`);
+    cy.get('div[name="entityType"]')
+      .click()
+      .get(`div[role="option"]:contains(${GeneralInfoMeta.entityType})`)
+      .click();
+    cy.get('input[name="street"]').type(GeneralInfoMeta.residentalStreet);
+    cy.get('input[name="city"]').type(GeneralInfoMeta.city);
+    cy.get('div[name="state"]')
+      .click()
+      .get(`div[role="option"]:contains(${GeneralInfoMeta.state})`)
+      .click();
+    cy.get('input[name="city"]').type(GeneralInfoMeta.city);
+    cy.get('input[name="zipCode"]').type(GeneralInfoMeta.zipCode);
+    btnClickAndWait('upsertInvestorAccount');
+    cy.wait('@upsertInvestorAccount');
+  }
+
+  const entityFormationDocStep = () => {
+    cy.get('.dimmer-visible').should('not.be.visible')
+    uploadFile('input[name="formationDoc"]', '/dev/graphql');
+    cy.get('.dimmer-visible').should('not.be.visible')
+    uploadFile('input[name="operatingAgreementDoc"]', '/dev/graphql');
+    cy.get('.dimmer-visible').should('not.be.visible')
+    uploadFile('input[name="einVerificationDoc"]', '/dev/graphql');
+    cy.get('.dimmer-visible').should('not.be.visible')
+    btnClickAndWait('upsertInvestorAccount');
+    registerApiCall('upsertInvestorAccount');
+  }
 
   const iraAccountCreation = () => {
-    cy.wait(1500);
+    cy.get('.dimmer-visible').should('not.be.visible')
     registerApiCall('upsertInvestorAccount', '/dev/graphql');
     cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
       cy.log('step value', text);
@@ -103,9 +135,8 @@ describe('Account Creation', () => {
           iraAccountCreation();
           break;
         case 'Identity':
-          uploadFile();
+          uploadFile('div.test > input[type="file"]', '/dev/graphql');
           cy.wait('@fileUpload');
-          cy.wait(1000);
           iraAccountCreation();
           break;
         case 'Summary':
@@ -113,7 +144,6 @@ describe('Account Creation', () => {
           cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
           cy.wait('@submitAccount');
           cy.wait('@submitAccount');
-          cy.wait(1000);
           cy.get('.modal', { timeout: 10000 }).then(($el) => {
             const element = cy.wrap($el);
             element.get('button.button').contains('Continue').click({ force: true });
@@ -125,7 +155,7 @@ describe('Account Creation', () => {
   };
 
   const entityAccountCreation = () => {
-    cy.wait(1500);
+    cy.get('.dimmer-visible').should('not.be.visible')
     registerApiCall('upsertInvestorAccount', '/dev/graphql');
     cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
@@ -138,22 +168,7 @@ describe('Account Creation', () => {
         entityAccountCreation();
         break;
       case 'General':
-        cy.get('input[name="name"]').type(GeneralInfoMeta.name);
-        cy.get('input[name="taxId"]').type(`${GeneralInfoMeta.taxId}${Math.floor((Math.random() * 100000000) + 1)}`);
-        cy.get('div[name="entityType"]')
-          .click()
-          .get(`div[role="option"]:contains(${GeneralInfoMeta.entityType})`)
-          .click();
-        cy.get('input[name="street"]').type(GeneralInfoMeta.residentalStreet);
-        cy.get('input[name="city"]').type(GeneralInfoMeta.city);
-        cy.get('div[name="state"]')
-          .click()
-          .get(`div[role="option"]:contains(${GeneralInfoMeta.state})`)
-          .click();
-        cy.get('input[name="city"]').type(GeneralInfoMeta.city);
-        cy.get('input[name="zipCode"]').type(GeneralInfoMeta.zipCode);
-        btnClickAndWait('upsertInvestorAccount');
-        cy.wait('@upsertInvestorAccount');
+        entityGeneralStep();
         entityAccountCreation();
         break;
       case 'Trust Status':
@@ -167,12 +182,7 @@ describe('Account Creation', () => {
         entityAccountCreation();
         break;
       case 'Formation doc':
-        uploadFile('input[name="formationDoc"]');
-        uploadFile('input[name="operatingAgreementDoc"]');
-        uploadFile('input[name="einVerificationDoc"]');
-        btnClickAndWait('upsertInvestorAccount');
-        registerApiCall('upsertInvestorAccount');
-        cy.wait(2000);
+        entityFormationDocStep();
         entityAccountCreation();
         break;
       case 'Link bank':
@@ -187,7 +197,6 @@ describe('Account Creation', () => {
         cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
         cy.wait('@submitAccount');
         cy.wait('@submitAccount');
-        cy.wait(1000)
         cy.get('.modal', { timeout: 5000 }).then(($el) => {
           const element = cy.wrap($el)
           element.get('button.button').contains('Continue').click({ force: true });
@@ -200,17 +209,21 @@ describe('Account Creation', () => {
 
   it('should successfully link bank with manual process', () => {
     manualLinkbankProcess();
-    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-      cy.log('step value', step);
-      assert.equal(step, 'Add funds', ['Should be on add funds'])	
+    cy.get('input[name="value"]').then(() => {
+      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
+        cy.log('step value', step);
+        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
+      });
     });
   });
 
   it('should successfully link bank with plaid process', () => {
     plaidProcess('.progtrckr-done', '1');
-    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-      cy.log('step value', step);
-      assert.equal(step, 'Add funds', ['Should be on add funds'])	
+    cy.get('input[name="value"]').then(() => {
+      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
+        cy.log('step value', step);
+        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
+      });
     });
   });
 

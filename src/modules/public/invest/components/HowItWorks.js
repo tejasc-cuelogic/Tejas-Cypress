@@ -32,8 +32,7 @@ export default class HowItWorks extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">Receive</Header>
-                  <p>
-NextSeed collects and processes payments directly
+                  <p>NextSeed collects and processes payments directly
                      into your investment account.
                   </p>
                 </Grid.Column>
@@ -51,10 +50,10 @@ NextSeed collects and processes payments directly
                 <div className={`${isMobile ? 'mb-20' : ''} flex-content`}>
                   {!isMobile
                     ? (
-                      <Header as="h3">
-                        <NSImage path="icons/termnotes.svg" />
-                        <span>Term Notes</span>
-                      </Header>
+<Header as="h3">
+                      <NSImage path="icons/termnotes.svg" />
+                      <span>Term Notes</span>
+                    </Header>
                     )
                     : (
                       <>
@@ -88,10 +87,10 @@ NextSeed collects and processes payments directly
                 <div className={`${isMobile ? 'mb-20' : ''} flex-content`}>
                   {!isMobile
                     ? (
-                      <Header as="h3">
-                        <NSImage path="icons/applied.svg" />
-                        <span>Revenue Sharing Notes</span>
-                      </Header>
+<Header as="h3">
+                      <NSImage path="icons/applied.svg" />
+                      <span>Revenue Sharing Notes</span>
+                    </Header>
                     )
                     : (
                       <>
@@ -127,10 +126,10 @@ NextSeed collects and processes payments directly
                 <div className="flex-content">
                   {!isMobile
                     ? (
-                      <Header as="h3">
-                        <NSImage path="icons/equity.svg" />
-                        <span>Preferred Equity</span>
-                      </Header>
+<Header as="h3">
+                      <NSImage path="icons/equity.svg" />
+                      <span>Preferred Equity</span>
+                    </Header>
                     )
                     : (
                       <>
@@ -190,7 +189,7 @@ NextSeed collects and processes payments directly
             <>
               <Header as="h2" className="mb-30">Register for an account.</Header>
               <Button.Group vertical={isMobile} className={isMobile ? '' : 'mb-50'}>
-                <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                <Button as={Link} to="/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
               <Divider section hidden />
             </>

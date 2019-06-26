@@ -16,11 +16,7 @@ const Security = () => (
                 <Grid.Column>
                   <Header as="h5">Your funds stay safe and sound.</Header>
                   <p>
-                    The uninvested cash  in your account
-                    {' '}
-                    <sup>1</sup>
-                    {' '}
-is FDIC-insured up
+                    The uninvested cash  in your account <sup>1</sup> is FDIC-insured up
                     to $250,000.
                   </p>
                   <Header as="h5">Keep your information protected.</Header>
@@ -45,9 +41,7 @@ is FDIC-insured up
                 </Grid.Column> */}
               </Grid>
               <p className={`note mt-50 ${isMobile ? '' : 'mb-50'}`}>
-                <sup>1</sup>
-                {' '}
-NextSeed accounts are provided and held at our partner bank, Happy
+                <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
                 State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
                 insurance for uninvested cash in NextSeed accounts.
               </p>

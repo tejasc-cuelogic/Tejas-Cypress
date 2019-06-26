@@ -253,10 +253,7 @@ export default class ReferralsDetails extends Component {
         <Container textAlign="center">
           <p>
             <em>
-              Full referral program terms and conditions may be found
-              {' '}
-              <Link className="positive-text" to="/agreements/referral-program-terms-and-conditions/">here</Link>
-.
+              Full referral program terms and conditions may be found <Link className="positive-text" to="/agreements/referral-program-terms-and-conditions/">here</Link>.
             </em>
           </p>
 

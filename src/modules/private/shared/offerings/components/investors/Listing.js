@@ -106,7 +106,7 @@ export default class Listing extends Component {
                   <Table.Cell>{data.state}</Table.Cell>
                   {isAdmin
                     && (
-                    <Table.Cell>
+<Table.Cell>
                       {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                     </Table.Cell>
                     )
@@ -122,10 +122,7 @@ export default class Listing extends Component {
                         {parseInt(data.investmentsCount, 10) > 1
                           ? (
                             <span>
-                              {' '}
-(
                               {`${data.investmentsCount} Investments`}
-)
                             </span>
                           )
                           : null}

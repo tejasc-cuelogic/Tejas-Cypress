@@ -49,7 +49,7 @@ export default class BonusRewards extends Component {
               />
               {isAdmin
               && (
-              <Grid.Column floated="right" width={3} className="right-align">
+<Grid.Column floated="right" width={3} className="right-align">
                 <Button
                   primary
                   className="relaxed"

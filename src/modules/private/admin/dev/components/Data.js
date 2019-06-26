@@ -82,16 +82,8 @@ export default class Data extends Component {
               { countValues && countValues.storageDetailsForInvestor
               && (
               <>
-                <p className="hightlight-text">
-                  <b>{get(countValues, 'storageDetailsForInvestor.count') || 0}</b>
-                  {' '}
-Users does not have folder structure created.
-                </p>
-                <p className="hightlight-text">
-                  <b>{get(countValues, 'storageDetailsForInvestor.createdCount') || 0}</b>
-                  {' '}
-User folders will be created in current run.
-                </p>
+                <p className="hightlight-text"><b>{get(countValues, 'storageDetailsForInvestor.count') || 0}</b> Users does not have folder structure created.</p>
+                <p className="hightlight-text"><b>{get(countValues, 'storageDetailsForInvestor.createdCount') || 0}</b> User folders will be created in current run.</p>
               </>
               )
               }

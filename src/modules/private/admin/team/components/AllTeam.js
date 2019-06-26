@@ -32,7 +32,7 @@ const SortableItem = SortableElement(({
         ? teamMember.social.map(site => (
           <>
             {site.url
-              && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
+              && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
             }
           </>
         )) : ''}
@@ -96,8 +96,10 @@ export default class AllTeam extends Component {
   }
 
   deleteTeamMember = () => {
-    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId);
-    this.props.teamStore.setConfirmBox('');
+    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId).then(() => {
+      this.props.teamStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
 
   handleAction = (id) => {
