@@ -885,7 +885,7 @@ export class OfferingCreationStore {
       this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
     }
     if (form === 'COMPANY_LAUNCH_FRM' && get(offer, 'goldstar')) {
-      ['contactId', 'esAccountNumber ', 'isin', 'sfAccountNumber'].forEach((f) => {
+      ['contactId', 'esAccountNumber', 'isin', 'sfAccountNumber'].forEach((f) => {
         this.COMPANY_LAUNCH_FRM.fields[f].value = get(offer, `goldstar.${f}`);
       });
     }
