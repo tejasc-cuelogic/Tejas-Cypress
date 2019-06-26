@@ -97,10 +97,11 @@ mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!) {
 }`;
 
 export const offeringUpdatePublish = gql`
-mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!) {
+mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!) {
   offeringUpdatePublish(
     id: $id
     updatesInput: $updatesInput
+    emailTemplate: $emailTemplate
   ) {
     id
   }

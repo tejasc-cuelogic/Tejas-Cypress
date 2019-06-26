@@ -109,7 +109,8 @@ export class UpdateStore {
           mutation: offeringUpdatePublish,
           variables: {
             id: offeringUpdateId,
-            updatesInput: { ...data, type: this.TEMPLATE_FRM.fields.type.value },
+            emailTemplate: this.TEMPLATE_FRM.fields.type.value,
+            updatesInput: data,
           },
         })
         .then(() => {
