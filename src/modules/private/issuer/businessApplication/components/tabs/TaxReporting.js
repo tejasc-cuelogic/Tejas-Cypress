@@ -1,9 +1,8 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header } from 'semantic-ui-react';
 
 const GeneralConditions = () => (
-  <Aux>
+  <>
     <Header as="h4">Tax reporting related service provided by Nextseed</Header>
     <p>From the closing of your crowdfunding campaign to Maturity, your investors will receive
       relevant tax forms horn NextSeed  and GoldStar related to Me interest income they receive
@@ -24,7 +23,7 @@ const GeneralConditions = () => (
     <p>For other types of deals, K-1 or other forms will be provided in lieu of 1099 forms
       as applicable.
     </p>
-  </Aux>
+  </>
 );
 
 export default GeneralConditions;

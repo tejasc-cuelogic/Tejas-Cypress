@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const Actions = observer((props) => {
   const {
@@ -28,7 +27,7 @@ const Actions = observer((props) => {
         )
         : (isPublished
           ? (
-<Aux>
+          <>
             <Button
               inverted
               onClick={() => save('PUBLISHED')}
@@ -36,7 +35,7 @@ const Actions = observer((props) => {
               content="Save and Publish"
               disabled={!meta.isValid}
             />
-          </Aux>
+          </>
           )
           : (
 <Button

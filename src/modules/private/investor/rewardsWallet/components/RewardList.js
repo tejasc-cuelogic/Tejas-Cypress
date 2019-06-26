@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link, Route } from 'react-router-dom';
 import moment from 'moment';
 import { Container, Header, Table, Card, Button } from 'semantic-ui-react';
@@ -7,7 +6,7 @@ import { DateTimeFormat } from '../../../../../theme/shared';
 import Redeem from './Redeem';
 
 const RewardList = props => props.rewards.map(offering => (
-  <Aux>
+  <>
     <Header as="h4">{offering.name}</Header>
     <Container as={!props.admin ? Card : false} fluid>
       <div className="table-wrapper">
@@ -56,7 +55,7 @@ const RewardList = props => props.rewards.map(offering => (
       </div>
     </Container>
     <Route exact path={`${props.match.url}/redeem/:id`} component={Redeem} />
-  </Aux>
+  </>
 ));
 
 export default RewardList;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Grid, Card, Button, Confirm, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { map, capitalize, get } from 'lodash';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { Route, withRouter } from 'react-router-dom';
 import ActivityHistory from '../../../shared/ActivityHistory';
@@ -59,33 +58,33 @@ export default class ElasticSearch extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Grid>
           <Grid.Column width={5}>
             {eSAudit.length
               ? map(eSAudit, es => (
-              <Card fluid className="elastic-search">
-                <Card.Content>
-                  <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Audit ${this.renderTitle(es.alias)} Indices`, 'AUDIT')} loading={inProgress === `${es.alias}_AUDIT`} content="Audit" primary />
-                  <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Swap ${this.renderTitle(es.alias)} Indices`, 'SWAP')} loading={inProgress === `${es.alias}_SWAP`} content="Swap" color="blue" />
-                  <Header as="h5" className="mt-half">{`${this.renderTitle(es.alias)} Indices`}</Header>
-                </Card.Content>
-                <Card.Content>
-                  {map(['index_a', 'index_b'], e => (
-                    <Header as="h5">
-                      {get(es, 'active') === get(es[e], 'indexName')
-                        ? <Button floated="right" compact disabled content="Primary" />
-                        : (
-<Aux>
-                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />
-                          <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Delete ${this.renderTitle(es.alias)} Indices`, 'DELETE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
-                        </Aux>
-                        )
+                <Card fluid className="elastic-search">
+                  <Card.Content>
+                    <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Audit ${this.renderTitle(es.alias)} Indices`, 'AUDIT')} loading={inProgress === `${es.alias}_AUDIT`} content="Audit" primary />
+                    <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Swap ${this.renderTitle(es.alias)} Indices`, 'SWAP')} loading={inProgress === `${es.alias}_SWAP`} content="Swap" color="blue" />
+                    <Header as="h5" className="mt-half">{`${this.renderTitle(es.alias)} Indices`}</Header>
+                  </Card.Content>
+                  <Card.Content>
+                    {map(['index_a', 'index_b'], e => (
+                      <Header as="h5">
+                        {get(es, 'active') === get(es[e], 'indexName')
+                          ? <Button floated="right" compact disabled content="Primary" />
+                          : (
+                            <>
+                              <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Populate ${this.renderTitle(es.alias)} Indices`, 'POPULATE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_POPULATE`} content="Generate" color="blue" />
+                              <Button floated="right" compact onClick={() => this.toggleConfirmModal(es.alias, `Delete ${this.renderTitle(es.alias)} Indices`, 'DELETE', get(es[e], 'indexName'))} loading={inProgress === `${es.alias}_DELETE`} content="Delete" color="red" />
+                            </>
+                          )
                       }
                       {this.renderTitle(get(es[e], 'indexName'))}
                       <Header.Subheader>{get(es[e], 'created.date') ? moment(get(es[e], 'created.date')).fromNow() : ''}</Header.Subheader>
                     </Header>
-                  ))}
+                    ))}
                 </Card.Content>
               </Card>
               )) : <InlineLoader text="No Data Found" />
@@ -112,7 +111,7 @@ export default class ElasticSearch extends Component {
           />
         </Grid>
         <Route exact path={`${match.url}/:auditAlias`} component={EsAudit} />
-      </Aux>
+      </>
     );
   }
 }

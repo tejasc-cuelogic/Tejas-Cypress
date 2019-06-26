@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../../theme/shared';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
@@ -10,7 +9,7 @@ class CompanyTopThings extends Component {
       campaign, emptyStatement,
     } = this.props;
     return (
-      <Aux>
+      <>
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Company Description
           <span className="anchor" id="company-description" />
@@ -21,7 +20,7 @@ class CompanyTopThings extends Component {
           ? <p className="detail-section"><HtmlEditor readOnly content={campaign.offering.about.theCompany} /></p>
           : <InlineLoader text={emptyStatement} className="bg-offwhite" />
         }
-      </Aux>
+      </>
     );
   }
 }

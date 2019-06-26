@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
@@ -44,7 +43,7 @@ export default class ApplicationsList extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form>
           <Grid>
             <Grid.Row verticalAlign="bottom">
@@ -174,7 +173,7 @@ export default class ApplicationsList extends Component {
             </Table>
           </div>
         </Card>
-      </Aux>
+      </>
     );
   }
 }

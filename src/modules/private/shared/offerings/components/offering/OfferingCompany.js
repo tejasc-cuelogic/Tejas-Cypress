@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
@@ -59,7 +58,7 @@ export default class OfferingCompany extends Component {
     const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
       || (isManager && approved && approved.status));
     return (
-      <Aux>
+      <>
         <Form>
           <Header as="h4">About the Company</Header>
           <HtmlEditor
@@ -72,7 +71,7 @@ export default class OfferingCompany extends Component {
           />
           {
             ['businessModel', 'locationAnalysis'].map(field => (
-              <Aux>
+              <>
                 <Divider section />
                 <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
                 <HtmlEditor
@@ -83,7 +82,7 @@ export default class OfferingCompany extends Component {
                   form="OFFERING_COMPANY_FRM"
                   content={OFFERING_COMPANY_FRM.fields[field].value}
                 />
-              </Aux>
+              </>
             ))
           }
           <Divider section />
@@ -95,7 +94,7 @@ export default class OfferingCompany extends Component {
           </Header>
           {
             OFFERING_COMPANY_FRM.fields.history.map((history, index) => (
-              <Aux>
+              <>
                 <Header as="h6">{`Milestone ${index + 1}`}
                   {!isReadonly && OFFERING_COMPANY_FRM.fields.history.length > 1
                     && (
@@ -120,7 +119,7 @@ export default class OfferingCompany extends Component {
                     containerclassname="secondary"
                   />
                 </div>
-              </Aux>
+              </>
             ))
           }
           <Divider hidden />
@@ -143,7 +142,7 @@ export default class OfferingCompany extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

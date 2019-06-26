@@ -3,7 +3,6 @@ import { Card, Button, Form, Header, Table } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
 import { FormInput, FormCheckbox } from '../../../../../../theme/form';
 
 @inject('dataStore')
@@ -53,7 +52,7 @@ export default class OfferingAudit extends Component {
             </Form>
             {outputMsg
               && (
-<Aux>
+              <>
                 <Header as="h6">Output:</Header>
                 {get(outputMsg, 'type') === 'error'
                   ? <p className="negative-text">{get(outputMsg, 'data')}</p> : get(outputMsg, 'data[0]')
@@ -81,7 +80,7 @@ export default class OfferingAudit extends Component {
                     </div>
                     ) : null
                 }
-              </Aux>
+              </>
               )
             }
           </Card.Description>
