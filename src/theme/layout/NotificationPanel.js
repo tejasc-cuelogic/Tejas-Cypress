@@ -60,24 +60,11 @@ class notificationPanel extends Component {
                       <Icon className="ns-close-light" />
                     </Button>
                     <Message.Header>
-                      <b>{notification.who}</b>
-                      {' '}
-                      {notification.operation}
-                      {' '}
-                      <b>{notification.what}</b>
-                      {' '}
-                      {notification.from}
-                      {' '}
-                      {' '}
+                      <b>{notification.who}</b> {notification.operation} <b>{notification.what}</b> {notification.from} {' '}
                       <b>{notification.module}</b>
                     </Message.Header>
                     {notification.money
-                      && (
-                      <Header as="h3">
-$
-                        {notification.money}
-                      </Header>
-                      )
+                      && <Header as="h3">${notification.money}</Header>
                     }
                     <Link to="/dashboard" className="link">See Details</Link>
                   </Message.Content>
@@ -86,7 +73,7 @@ $
                   }
                   {notification.confirmDismiss
                     && (
-                    <div className="confirm-dismiss">
+<div className="confirm-dismiss">
                       <p>Would you like to remove this notification?</p>
                       <Button.Group fluid>
                         <Button onClick={() => this.dismiss(key, 2)} compact color="red">

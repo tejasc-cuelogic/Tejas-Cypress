@@ -10,17 +10,10 @@ export default class AccreditedIncentiveTerms extends Component {
           <Divider hidden />
           <div className="justify-text legal-desc">
             <p>
-              The “NextSeed Accredited Investor Verification Program” (
-              <b>“AIV Program”</b>
-) allows
+              The “NextSeed Accredited Investor Verification Program” (<b>“AIV Program”</b>) allows
               NextSeed members that have completed the setup of their NextSeed accounts by linking
-              their external bank account to their NextSeed account (a
-              {' '}
-              <b>“NextSeed Member”</b>
-)
-              to earn promotional coupon credits (
-              <b>“Investment Credits“</b>
-) toward future
+              their external bank account to their NextSeed account (a <b>“NextSeed Member”</b>)
+              to earn promotional coupon credits (<b>“Investment Credits“</b>) toward future
               investments on NextSeed by verifying their accredited investor status on NextSeed.
               Participation in the AIV Program is subject to the terms and conditions described
               herein and any other terms that NextSeed may impose.
@@ -46,22 +39,17 @@ export default class AccreditedIncentiveTerms extends Component {
               Investment Credits may only be redeemed on NextSeed. Investment Credits will
               automatically appear as Investment Credits on your account page. The Investment
               Credits will automatically be applied to your next investment. Your existing
-              investments or commitments will not be affected in any way.
-              {' '}
+              investments or commitments will not be affected in any way.{' '}
               <b>
                 If unused within five years from the date the Investment Credits are awarded,
-                the Investment Credits will expire.
-                {' '}
+                the Investment Credits will expire.{' '}
               </b>
               Investment Credits are coupons issued for promotional purposes
               only; they have no cash value and may not be transferred or exchanged for cash.
             </p>
             <p>
               If for any reason you believe that there is a discrepancy regarding your balance
-              of Investment Credits, please contact
-              {' '}
-              <a className="positive-text" href="mailto:support@nextseed.com">support@nextseed.com</a>
-. NextSeed may require
+              of Investment Credits, please contact <a className="positive-text" href="mailto:support@nextseed.com">support@nextseed.com</a>. NextSeed may require
               you to submit additional information in order to make a determination regarding
               your Investment Credit balance. All decisions regarding your Investment Credit
               balance will be final and at NextSeed’s sole discretion.

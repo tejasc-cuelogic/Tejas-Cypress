@@ -76,7 +76,7 @@ export default class AllCrowdPay extends Component {
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 {type === 'review'
                   && (
-                  <Aux>
+<Aux>
                     <Table.HeaderCell>Account Type</Table.HeaderCell>
                     <Table.HeaderCell>Brokerage / Public Company</Table.HeaderCell>
                   </Aux>
@@ -113,21 +113,14 @@ export default class AllCrowdPay extends Component {
                     <Table.Cell>
                       <p>
                         <Link to={`/app/users/${account.userId}/profile-data`}>
-                          <b>
-                            {account.firstName}
-                            {' '}
-                            {account.lastName}
-                          </b>
+                          <b>{account.firstName} {account.lastName}</b>
                         </Link>
-                        <br />
-                        {account.email}
-                        <br />
-                        {account.phone ? Helper.phoneNumberFormatter(account.phone) : ''}
+                        <br />{account.email}<br />{account.phone ? Helper.phoneNumberFormatter(account.phone) : ''}
                       </p>
                     </Table.Cell>
                     {type === 'review'
                       && (
-                      <Aux>
+<Aux>
                         <Table.Cell>
                           <Icon className={`ns-${lowerCase(account.accountType)}-line`} color="green" size="large" />
                         </Table.Cell>
@@ -148,7 +141,7 @@ export default class AllCrowdPay extends Component {
                     {type !== 'review'
                     // <Table.Cell className={`status ${kebabCase(account.accountStatus)}`}>
                     && (
-                    <Table.Cell className="status">
+<Table.Cell className="status">
                       {/* <Icon className="ns-warning-circle" /> */}
                       {statusDetails[account.accountStatus]}
                     </Table.Cell>
@@ -156,7 +149,7 @@ export default class AllCrowdPay extends Component {
                     }
                     {(type !== 'review' && type === 'individual')
                     && (
-                    <Table.Cell>
+<Table.Cell>
                       {get(account, 'cip.failReason')
                         ? <List as="ol">{(account.cip.failReason).map(obj => <List.Item as="li" value="-">{obj.message}</List.Item>)}</List>
                         : <p>-</p>
@@ -166,65 +159,65 @@ export default class AllCrowdPay extends Component {
                     }
                     {type === 'individual'
                     && (
-                    <Table.Cell>
+<Table.Cell>
                       {account.processing && account.processing.gs && account.processing.gs.date ? moment.unix(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     )
                     }
                     {type === 'ira'
                       ? (
-                        <Table.Cell>
-                          {account.legalDetails && account.legalDetails.verificationDocs
+<Table.Cell>
+                        {account.legalDetails && account.legalDetails.verificationDocs
                         && account.legalDetails.verificationDocs.addressProof
                         && account.legalDetails.verificationDocs.addressProof.fileHandle
-                            ? (
-                              <a href={`${NEXTSEED_BOX_URL}folder/${account.legalDetails.verificationDocs.addressProof.fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank">
+                          ? (
+<a href={`${NEXTSEED_BOX_URL}folder/${account.legalDetails.verificationDocs.addressProof.fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank">
                             View Documents
-                              </a>
-                            )
-                            : <p className="intro-text">N/A</p>
+                          </a>
+                          )
+                          : <p className="intro-text">N/A</p>
                         }
-                        </Table.Cell>
+                      </Table.Cell>
                       )
                       : type !== 'entity'
                         ? (
-                          <Table.Cell>
-                            { type === 'review'
-                              ? get(account, 'storageDetails.rootFolder.id')
-                                ? (
-                                  <Aux>
-                                    <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.rootFolder.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
+<Table.Cell>
+                          { type === 'review'
+                            ? get(account, 'storageDetails.rootFolder.id')
+                              ? (
+<Aux>
+                                <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.rootFolder.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
                                   View Documents
-                                    </a>
-                                  </Aux>
-                                )
-                                : <p className="intro-text">N/A</p>
-                              : get(account, 'storageDetails.Profile.CIP.id')
-                                ? (
-                                  <Aux>
-                                    <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.Profile.CIP.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
+                                </a>
+                              </Aux>
+                              )
+                              : <p className="intro-text">N/A</p>
+                            : get(account, 'storageDetails.Profile.CIP.id')
+                              ? (
+<Aux>
+                              <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.Profile.CIP.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
                                 View Documents
-                                    </a>
-                                  </Aux>
-                                )
-                                : <p className="intro-text">N/A</p>
+                              </a>
+                            </Aux>
+                              )
+                              : <p className="intro-text">N/A</p>
 
                           }
-                          </Table.Cell>
+                        </Table.Cell>
                         ) : null
                     }
                     {(type !== 'review')
                     && (
-                    <Table.Cell>
+<Table.Cell>
                       { get(account, 'processing.gs.id')
                         ? (this.state.GsAccountNum[get(account, 'accountId')] && this.state.GsAccountNum[get(account, 'accountId')].decGsAccNumber
                           ? this.state.GsAccountNum[get(account, 'accountId')].decGsAccNumber
                           : this.state.GsAccountNum[get(account, 'accountId')] && this.state.GsAccountNum[get(account, 'accountId')].loading
                             ? <p>Loading...</p>
                             : (
-                              <Button color="blue" onClick={e => this.getGsAccountNumber(e, get(account, 'accountId'), get(account, 'userId'))} className="link-button">
+<Button color="blue" onClick={e => this.getGsAccountNumber(e, get(account, 'accountId'), get(account, 'userId'))} className="link-button">
                           Click for GS Account #
-                              </Button>
+                        </Button>
                             )
                         ) : 'N/A'
                       }

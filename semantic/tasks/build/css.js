@@ -1,70 +1,73 @@
-/** *****************************
+/*******************************
           Build Task
-****************************** */
+*******************************/
 
-const
-  gulp = require('gulp');
+var
+  gulp         = require('gulp'),
 
-// node dependencies
-const console = require('better-console');
-const fs = require('fs');
+  // node dependencies
+  console      = require('better-console'),
+  fs           = require('fs'),
 
-// gulp dependencies
-const autoprefixer = require('gulp-autoprefixer');
-const chmod = require('gulp-chmod');
-const clone = require('gulp-clone');
-const flatten = require('gulp-flatten');
-const gulpif = require('gulp-if');
-const less = require('gulp-less');
-const minifyCSS = require('gulp-clean-css');
-const plumber = require('gulp-plumber');
-const print = require('gulp-print').default;
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
-const runSequence = require('run-sequence');
+  // gulp dependencies
+  autoprefixer = require('gulp-autoprefixer'),
+  chmod        = require('gulp-chmod'),
+  clone        = require('gulp-clone'),
+  flatten      = require('gulp-flatten'),
+  gulpif       = require('gulp-if'),
+  less         = require('gulp-less'),
+  minifyCSS    = require('gulp-clean-css'),
+  plumber      = require('gulp-plumber'),
+  print        = require('gulp-print').default,
+  rename       = require('gulp-rename'),
+  replace      = require('gulp-replace'),
+  runSequence  = require('run-sequence'),
 
-// config
-const config = require('../config/user');
-const tasks = require('../config/tasks');
-const install = require('../config/project/install');
+  // config
+  config       = require('../config/user'),
+  tasks        = require('../config/tasks'),
+  install      = require('../config/project/install'),
 
-// shorthand
-const { globs } = config;
-const { assets } = config.paths;
-const { output } = config.paths;
-const { source } = config.paths;
+  // shorthand
+  globs        = config.globs,
+  assets       = config.paths.assets,
+  output       = config.paths.output,
+  source       = config.paths.source,
 
-const { banner } = tasks;
-const { comments } = tasks.regExp;
-const { log } = tasks;
-const { settings } = tasks
+  banner       = tasks.banner,
+  comments     = tasks.regExp.comments,
+  log          = tasks.log,
+  settings     = tasks.settings
 ;
 
 // add internal tasks (concat release)
 require('../collections/internal')(gulp);
 
-module.exports = function (callback) {
-  let
-    tasksCompleted = 0;
-  const maybeCallback = function () {
-    tasksCompleted++;
-    if (tasksCompleted === 2) {
-      callback();
-    }
-  };
+module.exports = function(callback) {
 
-  let stream;
-  let compressedStream;
-  let uncompressedStream;
+  var
+    tasksCompleted = 0,
+    maybeCallback  = function() {
+      tasksCompleted++;
+      if(tasksCompleted === 2) {
+        callback();
+      }
+    },
+
+    stream,
+    compressedStream,
+    uncompressedStream
+  ;
+
   console.info('Building CSS');
 
-  if (!install.isSetup()) {
+  if( !install.isSetup() ) {
     console.error('Cannot build files. Run "gulp install" to set-up Semantic');
     return;
   }
 
   // unified css stream
-  stream = gulp.src(`${source.definitions}/**/${globs.components}.less`)
+  stream = gulp.src(source.definitions + '/**/' + globs.components + '.less')
     .pipe(plumber(settings.plumber.less))
     .pipe(less(settings.less))
     .pipe(autoprefixer(settings.prefix))
@@ -78,7 +81,7 @@ module.exports = function (callback) {
 
   // two concurrent streams from same source to concat release
   uncompressedStream = stream.pipe(clone());
-  compressedStream = stream.pipe(clone());
+  compressedStream   = stream.pipe(clone());
 
   // uncompressed component css
   uncompressedStream
@@ -87,7 +90,7 @@ module.exports = function (callback) {
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
     .pipe(gulp.dest(output.uncompressed))
     .pipe(print(log.created))
-    .on('end', () => {
+    .on('end', function() {
       runSequence('package uncompressed css', maybeCallback);
     })
   ;
@@ -102,7 +105,9 @@ module.exports = function (callback) {
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
     .pipe(gulp.dest(output.compressed))
     .pipe(print(log.created))
-    .on('end', () => {
+    .on('end', function() {
       runSequence('package compressed css', maybeCallback);
-    });
+    })
+  ;
+
 };

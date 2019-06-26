@@ -72,12 +72,10 @@ class InvestorSignup extends Component {
       >
         <Modal.Header className="center-align signup-header">
           <Header as="h3" className="mb-0">
-            Sign up as
-            {' '}
-            {' '}
+            Sign up as {' '}
             {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'an Investor' : 'Business Owner'}
           </Header>
-          <Link to="/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
+          <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {/* <Form>
@@ -137,22 +135,18 @@ class InvestorSignup extends Component {
             />
             {errors
               && (
-              <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>
-            <b>Already have an account?</b>
-            {' '}
-            <Link to="/login">Log in</Link>
-          </p>
+          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

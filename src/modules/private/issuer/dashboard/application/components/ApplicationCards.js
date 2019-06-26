@@ -50,16 +50,10 @@ export default class ApplicationCards extends Component {
         <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
           <Card fluid>
             <Card.Content>
-              <Header as="h4">
-                <Icon className="ns-paper-plane" color="green" />
-                {' '}
-Create new application
-              </Header>
+              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
             </Card.Content>
             <Card.Content>
-              <p>
-Want to launch a new campaign?
-                <br />
+              <p>Want to launch a new campaign?<br />
                 Let&#39;s get started with an application for your project.
               </p>
               <Divider hidden />
@@ -70,13 +64,9 @@ Want to launch a new campaign?
             ? fetchBusinessApplication.map(application => (
               application.applicationStatus !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
                 && (
-                <Card fluid key={application.applicationId}>
+<Card fluid key={application.applicationId}>
                   <Card.Content>
-                    <Header as="h4">
-                      <Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} />
-                      {' '}
-                      {application.prequalDetails.businessGeneralInfo.businessName}
-                    </Header>
+                    <Header as="h4"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
                   </Card.Content>
                   <Card.Content>
                     <dl className="dl-horizontal">
@@ -104,7 +94,7 @@ Want to launch a new campaign?
                       || application.applicationStatus
                       === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
                       && (
-                      <Button inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)}>
+<Button inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)}>
                         { application.applicationStatus
                         === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'View Offer' : 'Sign agreement'
                       }

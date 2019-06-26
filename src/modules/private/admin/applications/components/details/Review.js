@@ -76,7 +76,7 @@ export default class Review extends Component {
               <Divider hidden />
               {showGeneratePA
               && (
-              <Button.Group size="mini">
+<Button.Group size="mini">
                 <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
                 {paBoxFolderId
                 && <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
@@ -98,10 +98,10 @@ export default class Review extends Component {
                       key={item.to}
                       path={`${match.url}/${item.to}`}
                       render={props => (
-                        <CurrentComponent
-                          appType={appType}
-                          {...props}
-                        />
+<CurrentComponent
+  appType={appType}
+  {...props}
+/>
                       )
                       }
                     />

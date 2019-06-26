@@ -51,9 +51,9 @@ export default class Overview extends Component {
           </Form.Group>
           { isIssuer ? ''
             : (
-              <div className="clearfix">
-                <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
-              </div>
+<div className="clearfix">
+            <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
+          </div>
             )
           }
           {isLaunchContingency

@@ -31,9 +31,7 @@ export default class RevenueSharingNotes extends Component {
               How does it work?
                 </Header>
                 <Item.Description>
-              With revenue sharing notes, you
-                  {"'"}
-re sharing a percentage of gross monthly revenues
+              With revenue sharing notes, you{"'"}re sharing a percentage of gross monthly revenues
               until you fulfill a total payment back to investors. The structure gives you the
               flexibility you need to succeed.
                 </Item.Description>

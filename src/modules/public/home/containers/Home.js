@@ -54,7 +54,7 @@ class Home extends Component {
           explore
           campaigns={active.splice(0, 6)}
           heading={(
-            <Aux>
+<Aux>
               <Header as="h2" textAlign="center">Latest Campaigns</Header>
               <p className="mb-30 center-align">
                 Browse the newest investment opportunities on NextSeed.

@@ -13,23 +13,23 @@ const HeaderCheckbox = observer((props) => {
       {
         values.length > 0
           ? values.map(c => (
-            <List.Item className="ui checkbox">
-              <Checkbox
-                checked={value.includes(c.value)}
-                value={c.value}
-                label={(
-                  <label>
-                    <Header as="h4">
-                      {header}
-                      <Header.Subheader>
-                        {subheader}
-                      </Header.Subheader>
-                    </Header>
-                  </label>
+          <List.Item className="ui checkbox">
+            <Checkbox
+              checked={value.includes(c.value)}
+              value={c.value}
+              label={(
+<label>
+                  <Header as="h4">
+                    {header}
+                    <Header.Subheader>
+                      {subheader}
+                    </Header.Subheader>
+                  </Header>
+                </label>
 )}
-                onChange={changed}
-              />
-            </List.Item>
+              onChange={changed}
+            />
+          </List.Item>
           ))
           : null
       }
