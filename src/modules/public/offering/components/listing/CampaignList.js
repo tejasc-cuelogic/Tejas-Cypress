@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
 import { Container, Card, List, Grid, Message, Label } from 'semantic-ui-react';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
@@ -51,7 +50,7 @@ export default class CampaignList extends Component {
   render() {
     const { campaigns, loading } = this.props;
     return (
-      <Aux>
+      <>
         {/* {this.props.filters &&
           <Filters toggleFilters={this.toggleFilters} status={this.state.filters} />
         } */}
@@ -80,7 +79,7 @@ export default class CampaignList extends Component {
                         </div>
                         {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
                         {/* <Icon name="heart" /> "heart outline" for unliked campaigns */}
-                        <Aux>
+                        <>
                           <Card.Content>
                             <div className="tags mb-10">
                               {offering && offering.keyTerms && offering.keyTerms.industry ? capitalize(offering.keyTerms.industry.split('_').join(' ')) : '-'}
@@ -126,7 +125,7 @@ export default class CampaignList extends Component {
                             ? CAMPAIGN_OFFERED_BY[offering.regulation]
                             : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
                           </Message>
-                        </Aux>
+                        </>
                         {offering.stage === 'LOCK' && (
                           <Card.Content className="card-hidden">
                             <div className="lock-image">
@@ -153,7 +152,7 @@ export default class CampaignList extends Component {
           </Container>
           {this.state.filters && <div className="overlay" />}
         </section>
-      </Aux>
+      </>
     );
   }
 }

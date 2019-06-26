@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import Banner from '../components/Banner';
 import Summary from '../components/Summary';
@@ -18,7 +17,7 @@ export default class EducationCenter extends Component {
   render() {
     const { match, location } = this.props;
     return (
-      <Aux>
+      <>
         <Banner
           title="Education Center"
           subtitle={this.find(location) === 'investor' ? 'For Investors' : this.find(location) === 'business' ? 'For Business' : null}
@@ -28,7 +27,7 @@ export default class EducationCenter extends Component {
           <Route exact path={match.url} render={() => <Summary refUrl={match.url} />} />
           <Route path={`${match.url}/:for`} component={EducationCenterDetails} />
         </Switch>
-      </Aux>
+      </>
     );
   }
 }

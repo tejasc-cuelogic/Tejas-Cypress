@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
 

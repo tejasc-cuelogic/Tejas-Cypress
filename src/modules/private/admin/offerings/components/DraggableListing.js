@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -53,15 +52,15 @@ const SortableItem = SortableElement(({
       <p className="overflow-text">
         {offering.issuerDetails
           ? (
-<Aux>
-            <b>
-              {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
-            </b>
-            <br />
-            {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
-            <br />
-            {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
-          </Aux>
+            <>
+              <b>
+                {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
+              </b>
+              <br />
+              {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
+              <br />
+              {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
+            </>
           )
           : <b>N/A</b>
         }
@@ -154,7 +153,7 @@ export default class DraggableListing extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <div className="ui card fluid">
           <div className="ui basic table">
             <div className="row-wrap striped-table thead">
@@ -184,7 +183,7 @@ export default class DraggableListing extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

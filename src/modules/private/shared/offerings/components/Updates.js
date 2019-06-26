@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Form, Grid, Button } from 'semantic-ui-react';
@@ -38,7 +37,7 @@ export default class BonusRewards extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
@@ -62,7 +61,7 @@ export default class BonusRewards extends Component {
           <Route exact path={match.url} render={props => <Listing data={updates} count={count} match={match} requestState={requestState} {...props} />} />
           <Route exact path={`${match.url}/:action?/:id?`} render={props => <NewUpdate match={match} refLink={match.url} {...props} />} />
         </Switch>
-      </Aux>
+      </>
     );
   }
 }

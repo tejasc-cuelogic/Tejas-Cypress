@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { Header, Grid, Container, Item } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
@@ -7,7 +6,7 @@ import NSImage from '../../../shared/NSImage';
 // const isMobile = document.documentElement.clientWidth < 768;
 
 const AllInclusive = () => (
-  <Aux>
+  <>
     <section className="content-spacer">
       <Container>
         <Grid relaxed padded="vertically">
@@ -111,7 +110,7 @@ const AllInclusive = () => (
         </Grid>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default AllInclusive;

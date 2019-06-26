@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -126,7 +125,7 @@ export default class ImageCropper extends Component {
     // const { profilePhoto } = this.props.fieldData.fields;
     const { field, cropInModal, disabled } = this.props;
     return (
-      <Aux>
+      <>
         { field.src && !field.error ? cropInModal
           ? (
 <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
@@ -157,7 +156,7 @@ export default class ImageCropper extends Component {
 />
           )
           : (
-<Aux>
+<>
             <div className="file-uploader">
               <div className="file-uploader-inner">
                 <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
@@ -167,10 +166,10 @@ export default class ImageCropper extends Component {
             {field.error
               && <FieldError error={field.error} />
             }
-          </Aux>
+            </>
           )
         }
-      </Aux>
+      </>
     );
   }
 }

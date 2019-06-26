@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
@@ -99,7 +98,7 @@ export default class ManualForm extends Component {
               showerror
             />
             <Form.Field>
-              <Aux>
+              <>
                 {
                   <FormRadioGroup
                     fielddata={formLinkBankManually.fields.accountType}
@@ -108,7 +107,7 @@ export default class ManualForm extends Component {
                     value={formLinkBankManually.fields.value}
                   />
                 }
-              </Aux>
+              </>
             </Form.Field>
           </div>
           {errors

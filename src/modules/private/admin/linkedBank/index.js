@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllRequests from './components/AllRequests';
 import { ByKeyword } from '../../../../theme/form/Filters';
@@ -44,7 +43,7 @@ export default class CrowdPay extends Component {
       <PrivateLayout
         {...this.props}
         P1={(
-<Aux>
+          <>
             <ByKeyword
               change={this.executeSearch}
               w={[8]}
@@ -60,7 +59,7 @@ export default class CrowdPay extends Component {
               defaults
               containerclassname="ui list horizontal"
             />
-          </Aux>
+          </>
 )}
       >
         <AllRequests {...this.props} />

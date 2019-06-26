@@ -1,11 +1,10 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Container, Grid, Divider, Segment } from 'semantic-ui-react';
 import MediaResources from './press/MediaResources';
 import NSImage from '../../../shared/NSImage';
 
 const Press = () => (
-  <Aux>
+  <>
     <section className="press-news">
       <Container>
         <Header as="h2">In the news</Header>
@@ -103,7 +102,7 @@ Quisque interdum elit sapien,
         </Grid>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default Press;

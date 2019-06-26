@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
-import Aux from 'react-aux';
 import { filter, find, get } from 'lodash';
 import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
@@ -173,13 +172,13 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-<Aux>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
-              </Aux>
-              ) : <Aux>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></Aux>
+<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
+              </>
+              ) : <>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></>
             }
           </Header>
           <p>
-                <Aux>
+                <>
                 Campaign has
 {!offerStatus.isFailed ? ' reached' : ' not reached'}
 {' '}
@@ -194,12 +193,12 @@ minimum required amount.
 out of required
                   {' '}
                   <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0, 0)}</b>
-                </Aux>
+                </>
           </p>
           <Divider section />
           {hoursToClose <= 0 && !offerStatus.isFailed
             ? (
-<Aux>
+<>
               <Step.Group className="campaign-close">
                 {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize Closure'].map((item, index) => (
                   <Step
@@ -218,7 +217,7 @@ out of required
               {this.state.activeStep === 1
               && (
                 (
-                  <Aux>
+                  <>
                     <Form.Group widths={3}>
                       {['investorFee', 'maturityDate', 'hardCloseDate', 'interestRate', 'revSharePercentage', 'multiple', 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
                           <MaskedInput
@@ -267,13 +266,13 @@ out of required
                       ))}
                     </Button.Group>
                     <Divider className="doubled" />
-                  </Aux>
+                  </>
                 )
               )
               }
               {this.state.activeStep === 2
               && (
-              <Aux>
+              <>
                 <Form.Group widths={3}>
                   <MaskedInput
                     name="queueLimit"
@@ -294,12 +293,12 @@ out of required
                   ))}
                 </Button.Group>
                 <Divider className="doubled" />
-              </Aux>
+              </>
               )
               }
               {this.state.activeStep === 3
                 && (
-<Aux>
+<>
                   <Form.Group widths={3}>
                     {['queueLimit', 'notePurchaseDate'].map(field => (
                       <MaskedInput
@@ -324,7 +323,7 @@ out of required
                     ))}
                   </Button.Group>
                   <Divider className="doubled" />
-                </Aux>
+                </>
                 )
               }
               {this.state.activeStep === 4
@@ -355,7 +354,7 @@ out of required
               }
               {this.state.activeStep === 5 && false
                 && (
-<Aux>
+<>
                   <Header as="h4" className="mt-40 mb-30">Finalize Closure</Header>
                   <Form>
                     <Form.Group widths={3}>
@@ -387,10 +386,10 @@ out of required
                   You cannot close the offering if envelopes are still being processed</Button> */}
                   </Button.Group>
                   <Divider className="doubled" />
-                </Aux>
+                </>
                 )
               }
-            </Aux>
+            </>
             ) : offerStatus.isFailed ? (
               <Card fluid className="center-align ba-info-card">
                 <Card.Header>

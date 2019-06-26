@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { MaskedInput, FormRadioGroup } from '../../../../../../../theme/form';
@@ -14,7 +13,7 @@ export default class Inputs extends Component {
       maskChange,
     } = this.props.businessAppReviewStore;
     return (
-      <Aux>
+      <>
         <Header as="h4">Inputs</Header>
         <Form>
           <Form.Group widths={3}>
@@ -90,7 +89,7 @@ export default class Inputs extends Component {
             ))}
           </Form.Group>
         </Form>
-      </Aux>
+      </>
     );
   }
 }

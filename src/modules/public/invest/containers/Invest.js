@@ -1,22 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import Loadable from 'react-loadable';
 import { Visibility, Responsive } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/${component}`));
+
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -70,7 +64,7 @@ class Invest extends Component {
     const { match, location, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner />
           : <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
@@ -88,20 +82,22 @@ class Invest extends Component {
             navItems={navItems}
             title="Investing"
           />
-          <Switch>
-            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-            {
-              navItems.map(item => (
-                <Route
-                  key={item.to}
-                  path={`${match.url}/${item.to}`}
-                  component={getModule(this.module(item.title))}
-                />
-              ))
-            }
-          </Switch>
+          <Suspense fallback={<InlineLoader />}>
+            <Switch>
+              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+              {
+                navItems.map(item => (
+                  <Route
+                    key={item.to}
+                    path={`${match.url}/${item.to}`}
+                    component={getModule(this.module(item.title))}
+                  />
+                ))
+              }
+            </Switch>
+          </Suspense>
         </Visibility>
-      </Aux>
+      </>
     );
   }
 }
