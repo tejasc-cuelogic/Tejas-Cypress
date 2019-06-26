@@ -1,7 +1,7 @@
 import { OfferingListingFlow } from '../../offerings/offeringListing.utility';
 import { OfferingDetailFlow, Offering506CDetailFlow } from '../../offerings/offeringDetails.utility';
 import { inValidEmailCredentials, clearLoginForm } from '../../auth/utility/login.utility';
-import { applicationUnlock, getJSONDataFromFixtures } from '../../common.utility';
+import { applicationUnlock, getJSONDataFromFixtures, clearFormInput } from '../../common.utility';
 import {
   enteringInvestmentAmount,
   invalidMultipleInvestmentAmount,
@@ -32,7 +32,11 @@ export const initializeInvestNowFlow = async (investmentType = 'CF') => {
 
 export const proceedInvalidLoginAction = async () => {
   // const inValidEmailCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidEmailCredentials');
-  clearLoginForm();
+  let inputFieldObj = [
+    { key: 'type', value: "email"}
+  ];
+  clearFormInput(inputFieldObj);
+  // clearLoginForm();
   cy.get('input[type="email"]').type(inValidEmailCredentials.email);
   cy.get('input[type="email"]').blur();
   cy.wait(500);
@@ -41,7 +45,12 @@ export const proceedInvalidLoginAction = async () => {
 
 export const proceedInvalidUserLoginAction = async () => {
   const inValidUserCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidUserCredentials');
-  clearLoginForm();
+  let inputFieldObj = [
+    { key: 'type', value: "email"},
+    { key: 'type', value: "password"}
+  ];
+  clearFormInput(inputFieldObj);
+  // clearLoginForm();
   cy.get('input[type="email"]').type(inValidUserCredentials.email);
   cy.get('input[type="password"]').type(inValidUserCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });

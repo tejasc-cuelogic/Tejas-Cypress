@@ -75,7 +75,7 @@ class offerDetails extends Component {
         } else if (oMinData.stage !== 'CREATION' && oMinData.isAvailablePublicly !== true) {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
-          this.props.history.push('/auth/login');
+          this.props.history.push('/login');
         }
       }
     });

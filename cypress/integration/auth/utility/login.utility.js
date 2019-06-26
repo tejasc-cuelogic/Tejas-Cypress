@@ -18,3 +18,4 @@ export const loginCredentials = {
     cy.get('input[type="email"]').clear();
     cy.get('input[type="password"]').clear();
   };
+

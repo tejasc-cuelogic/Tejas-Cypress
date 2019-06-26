@@ -14,7 +14,11 @@ export const validInvestorLoginAction = () => {
   const validInvestorHavingOnceAccountCredentials = await getJSONDataFromFixtures('investor/user.json', 'validInvestorHavingOnceAccountCredentials');
   // cy.wait(2000);
   registerApiCall('investNowHealthCheck');
-  clearFormInput();
+  let inputFieldObj = [
+    { key: 'type', value: "email"},
+    { key: 'type', value: "password"}
+  ];
+  clearFormInput(inputFieldObj);
   cy.get('input[type="email"]').type(validInvestorHavingOnceAccountCredentials.email);
   cy.get('input[type="password"]').type(validInvestorHavingOnceAccountCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
