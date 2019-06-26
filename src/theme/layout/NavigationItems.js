@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Container, Icon, Menu, Dropdown, Label, Button, Accordion } from 'semantic-ui-react';
+import { Container, Icon, Menu, Dropdown, Label, Button, Accordion, Divider } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
@@ -190,10 +190,15 @@ export class NavItems extends Component {
               || (item.to !== 'updates')
                 ? (item.title === 'Bonus Rewards' && this.props.isBonusReward)
               || (item.title !== 'Bonus Rewards') ? (
+                <>
+                {(item.title === 'Account Settings')
+                && (
+                <Divider />)
+                }
                 <Menu.Item
                   key={item.to}
                   name={item.to}
-                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
+                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}`}
                   as={NavLink}
                   onClick={isMobile ? this.mobileMenuClick : this.doNothing}
                   to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
@@ -205,6 +210,7 @@ export class NavItems extends Component {
                     ? <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
                   }
                 </Menu.Item>
+                </>
                   ) : '' : ''
               )}
       </Aux>

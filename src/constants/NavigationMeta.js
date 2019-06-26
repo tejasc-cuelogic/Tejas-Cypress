@@ -59,7 +59,7 @@ export const PRIVATE_NAV = [
     subPanel: 0,
   },
   {
-    title: 'INVESTMENT ACCOUNTS',
+    title: 'Accounts',
     accessibleTo: ['ira', 'individual', 'entity'],
     to: 'summary',
     path: 'investor/summary',

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav } from './SidebarNav';
-import { UserAvatar, Logo, Image64 } from '../shared';
+import { UserAvatar, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
 const progressMap = ['viewLoanAgreement', 'portfolio'];
@@ -66,14 +65,6 @@ const MySidebar = observer(props => (
             renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
             renderView={p => <div {...p} className="view" />}
           >
-            <Link to="/" className="logo-wrapper">
-              <Logo
-                className="logo"
-                dataSrc={((props.layoutState.leftPanel)
-                  ? (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoGreenGrey')
-                  : 'LogoSmall')}
-              />
-            </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             <div className="user-picture">
               {props.UserInfo.avatarUrl

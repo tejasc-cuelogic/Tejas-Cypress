@@ -2311,8 +2311,8 @@ p.check-extra-info{
 	&.issuer{
 		background-color:@fullBlack;
 	}
-	&.investor{
-		background-color:@highlight-tertiary;
+	&.investor .sb-avatar__text{
+		color: @neutral-offdark;
 	}
 }
 
