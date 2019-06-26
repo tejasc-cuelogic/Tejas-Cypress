@@ -1,10 +1,14 @@
 import { observable, action, computed, toJS } from 'mobx';
+import { get } from 'lodash';
+import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../helper';
 import { GqlClient as clientPublic } from '../../../api/publicApi';
+import { GqlClient as client } from '../../../api/gqlApi';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
 import { authStore } from '../index';
-import { resetPasswordExpirationForCognitoUser } from '../queries/users';
+import Helper from '../../../helper/utility';
+import { resetPasswordExpirationForCognitoUser, investorAccountDeleteProcess } from '../queries/users';
 
 export class UserStore {
   @observable currentUser;
@@ -12,6 +16,8 @@ export class UserStore {
   @observable USR_FRM = Validator.prepareFormObject(NEW_USER);
 
   @observable opt = {};
+
+  @observable deleteUserMeta = null;
 
   @action
   userEleChange = (e, res, type) => {
@@ -126,17 +132,52 @@ export class UserStore {
     return (this.currentUser && toJS(this.currentUser.sub)) || null;
   }
 
-  deleteUser = () => new Promise((resolve) => {
-    // client
-    //   .mutate({ mutation: deleteUser, variables: { userId } })
-    //   .then((res) => resolve(res))
-    //   .catch(() => {
-    //     Helper.toast('Something went wrong, please try again later.', 'error');
-    //     reject();
-    //   });
-    setTimeout(() => {
-      resolve({ message: 'Please confirm to delete user account.' });
-    }, 2000);
+  @computed get deleteUserLoading() {
+    return this.deleteUserMeta && this.deleteUserMeta.loading;
+  }
+
+  @computed get getDeleteUserData() {
+    return (this.deleteUserMeta && this.deleteUserMeta.data && toJS(this.deleteUserMeta.data.investorAccountDeleteProcess)) || null;
+  }
+
+  @computed get getDeleteUserMeta() {
+    const deletedUserMeta = this.getDeleteUserData;
+    const data = {
+      message: 'Something went wrong please try again later.',
+      validAgreement: false,
+      totalBalance: '0',
+      availableBalance: '0',
+      isValidForDelete: false,
+    };
+    if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'totalBalance') === 0) {
+      data.message = 'Are you sure you want to delete your user account?';
+      data.isValidForDelete = true;
+    } else if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') === 0 && get(deletedUserMeta, 'totalBalance') > 0) {
+      data.message = 'There are pending transfer requests on your account.  You must wait for the transaction to post before you can delete your account.';
+    } else if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') > 0) {
+      data.message = 'You currently have a $XXX,XXX.XX balance on your account.  You must initiate a withdraw and wait for the cash to post before you can delete your account.';
+    } else if (get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'totalBalance') === 0) {
+      data.message = 'You are unable to delete your account at this time.  Please contact support@nextseed.com if you have any additional questions';
+    }
+    return data;
+  }
+
+  @action
+  getUserDeleteMeta = () => {
+    this.deleteUserMeta = graphql({
+      client,
+      query: investorAccountDeleteProcess,
+      fetchPolicy: 'network-only',
+    });
+  };
+
+  softDeleteUser = () => new Promise((res) => {
+    client
+      .mutate({ mutation: resetPasswordExpirationForCognitoUser })
+      .then(() => res())
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      });
   });
 }
 
