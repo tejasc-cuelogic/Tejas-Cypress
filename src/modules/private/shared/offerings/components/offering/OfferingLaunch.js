@@ -117,12 +117,14 @@ export default class OfferingLaunch extends Component {
         <Header as="h4">GoldStar</Header>
         <Form.Group widths="equal">
           {['isin', 'contactId', 'esAccountNumber', 'sfAccountNumber'].map(field => (
-            <MaskedInput
+            <FormInput
               displayMode={isReadonly}
+              key={field}
+              type="text"
               name={field}
               fielddata={COMPANY_LAUNCH_FRM.fields[field]}
-              changed={(values, name) => maskChange(values, formName, name)}
-              number
+              changed={(e, result) => formChange(e, result, formName)}
+              showerror
             />
           ))
           }
