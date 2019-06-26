@@ -1,14 +1,15 @@
 import React from 'react';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
-import { Menu, Button, Modal, Header, Divider } from 'semantic-ui-react';
-import { InlineLoader } from '../shared';
+import { Menu, Button, Modal, Header, Divider, Message } from 'semantic-ui-react';
+import { InlineLoader, ListErrors } from '../shared';
 
-@inject('userStore')
+@inject('userStore', 'userDetailsStore')
 @observer
 export default class DeleteUser extends React.Component {
   state = {
     modalOpen: false,
+    failMessage: false,
   }
 
   toggleModal = () => {
@@ -21,8 +22,7 @@ export default class DeleteUser extends React.Component {
   }
 
   handleDeleteUser = () => {
-    // this.props.userStore.softDeleteUser();
-    console.log('del here');
+    this.props.userDetailsStore.deleteProfile(true).then(() => this.setState({ failMessage: false })).catch(msg => this.setState({ failMessage: msg }));
   }
 
   render() {
@@ -53,6 +53,13 @@ export default class DeleteUser extends React.Component {
               <Header as="h4">{get(getDeleteUserMeta, 'message')}</Header>
             )
             }
+            {this.state.failMessage
+            && (
+              <Message error className="mt-30">
+                <ListErrors errors={[this.state.failMessage]} />
+              </Message>
+            )
+          }
               <div className="center-align mt-30">
                 <Button.Group>
                   <Button onClick={this.closeModal} type="button">Cancel</Button>

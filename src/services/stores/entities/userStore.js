@@ -7,7 +7,6 @@ import { GqlClient as client } from '../../../api/gqlApi';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
 import { authStore } from '../index';
-import Helper from '../../../helper/utility';
 import { resetPasswordExpirationForCognitoUser, investorAccountDeleteProcess } from '../queries/users';
 
 export class UserStore {
@@ -170,15 +169,6 @@ export class UserStore {
       fetchPolicy: 'network-only',
     });
   };
-
-  softDeleteUser = () => new Promise((res) => {
-    client
-      .mutate({ mutation: resetPasswordExpirationForCognitoUser })
-      .then(() => res())
-      .catch(() => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-      });
-  });
 }
 
 export default new UserStore();

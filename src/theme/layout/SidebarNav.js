@@ -61,7 +61,10 @@ export class SidebarNav extends Component {
             </Menu.Item>
             )
         }
-        <DeleteUser />
+        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') && (
+          <DeleteUser />
+        )
+        }
       </>
     );
   }

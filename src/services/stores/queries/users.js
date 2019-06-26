@@ -658,8 +658,8 @@ mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!,
  }`;
 
 export const investorAccountDeleteProcess = gql`
-query investorAccountDeleteProcess() {
-  investorAccountDeleteProcess() {
+query investorAccountDeleteProcess {
+  investorAccountDeleteProcess {
     totalBalance
     availableBalance
     validAgreement
