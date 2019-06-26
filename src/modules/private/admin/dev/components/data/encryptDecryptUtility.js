@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Card, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
@@ -57,10 +56,10 @@ export default class EncryptDecryptUtility extends Component {
             </Form.Group>
             {this.state.result
               ? (
-              <Aux>
+              <>
                 <b>Result:</b>
                 <p className="break-text">{this.state.result}</p>
-              </Aux>
+              </>
               )
               : ''}
           </Form>

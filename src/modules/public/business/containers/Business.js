@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-import Aux from 'react-aux';
+import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import { Responsive, Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -11,12 +9,7 @@ import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/${component}`));
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn how small business entrepreneurs are using debt crowdfunding on NextSeed to retain ownership in their breweries, restaurants, bars, fitness studios, and more.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -60,7 +53,7 @@ class Business extends Component {
     const { location, match, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {location.pathname === '/business/how-it-works'
           || location.pathname === '/business' ? <Banner />
@@ -78,21 +71,23 @@ class Business extends Component {
             navItems={navItems}
             title="Fundraising"
           />
-          <Switch>
-            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-            {
-              navItems.map(item => (
-                <Route
-                  key={item.to}
-                  path={`${match.url}/${item.to}`}
-                  component={getModule(this.module(item.title))}
-                />
-              ))
-            }
-            <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
-          </Switch>
+          <Suspense fallback={<InlineLoader />}>
+            <Switch>
+              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+              {
+                navItems.map(item => (
+                  <Route
+                    key={item.to}
+                    path={`${match.url}/${item.to}`}
+                    component={getModule(this.module(item.title))}
+                  />
+                ))
+              }
+              <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
+            </Switch>
+          </Suspense>
         </Visibility>
-      </Aux>
+      </>
     );
   }
 }

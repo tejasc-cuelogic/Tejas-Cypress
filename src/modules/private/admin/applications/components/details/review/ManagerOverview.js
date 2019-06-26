@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { Header, Button, Divider, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
@@ -20,8 +19,8 @@ export default class ManagerOverview extends Component {
     return (
       ((!isManager && isReadonly && approved && approved.status) || (isManager && submitted))
         ? (
-<Aux>
-          <Header as="h4">
+          <>
+            <Header as="h4">
             Manager
             {/* {!isReadonly && isManager && submitted &&
               <Button primary size="mini" floated="right" className="relaxed"
@@ -82,8 +81,8 @@ export default class ManagerOverview extends Component {
             </div>
             )
           }
-          <Divider section />
-        </Aux>
+            <Divider section />
+          </>
         ) : null
     );
   }

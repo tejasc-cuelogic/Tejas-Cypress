@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../../theme/form';
@@ -64,7 +63,7 @@ export default class AfIssuer extends Component {
       ? affiliatedIssuerOfferingBacData[issuerNumber].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
-      <Aux>
+      <>
         <Form className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
@@ -83,7 +82,7 @@ export default class AfIssuer extends Component {
           />
           {
             ['certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
-              <Aux>
+              <>
                 <FormTextarea
                   readOnly={isReadonly}
                   key={field}
@@ -92,7 +91,7 @@ export default class AfIssuer extends Component {
                   changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                   containerclassname="secondary"
                 />
-              </Aux>
+              </>
             ))
           }
           <Divider section />
@@ -141,7 +140,7 @@ export default class AfIssuer extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

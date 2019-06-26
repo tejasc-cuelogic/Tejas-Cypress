@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button, Accordion } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
@@ -100,7 +99,7 @@ export class NavItems extends Component {
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map((item, key) => (
-      <Aux>
+      <>
         {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (
           <Accordion as={Menu} vertical fluid>
             <Menu.Item>
@@ -154,10 +153,10 @@ export class NavItems extends Component {
               // disabled={isMobile && item.title === 'How NextSeed Works'}
               onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
               text={(
-<Aux>
+                <>
                   {item.icon && <Icon className={item.icon} />}
                   <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
-                </Aux>
+                </>
 )}
             >
               <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
@@ -207,7 +206,7 @@ export class NavItems extends Component {
                 </Menu.Item>
                   ) : '' : ''
               )}
-      </Aux>
+      </>
     ));
   }
 }
@@ -309,13 +308,13 @@ export class NavigationItems extends Component {
             : !location.pathname.includes('/business-application')
             && (
               !currentUser ? (
-                <Aux>
+                <>
                   {logInSignUp.map(route => (
                     <Menu.Item className="menu-button">
                       <Button as={Link} onClick={this.setAuthRef} to={`/${route.to}`} className={`${route.className}`}>{route.title}</Button>
                     </Menu.Item>
                   ))}
-                </Aux>
+                </>
               ) : (
                 <Menu.Item
                   className="menu-button"

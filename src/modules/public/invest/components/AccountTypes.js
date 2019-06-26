@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Container, Grid, List, Divider } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const AccountTypes = () => (
-  <Aux>
+  <>
     <section className="content-spacer">
       <Container>
         <Grid relaxed padded="vertically">
@@ -63,7 +62,7 @@ const AccountTypes = () => (
         </Grid>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default AccountTypes;

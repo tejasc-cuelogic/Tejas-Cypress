@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
-import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../../../theme/shared';
 import HtmlEditor from '../../../../../../shared/HtmlEditor';
 
@@ -18,13 +17,13 @@ class UpdateDetails extends Component {
     return (
       update
         ? (
-<Aux>
-          <Header as="h4">
-            {update.title}
-            <Header.Subheader className="mt-half">{calculatedDate}</Header.Subheader>
-          </Header>
-          <HtmlEditor readOnly content={(update.content || '')} />
-        </Aux>
+          <>
+            <Header as="h4">
+              {update.title}
+              <Header.Subheader className="mt-half">{calculatedDate}</Header.Subheader>
+            </Header>
+            <HtmlEditor readOnly content={(update.content || '')} />
+          </>
         )
         : <InlineLoader text="No data found." />
     );

@@ -1,10 +1,8 @@
 /* eslint-disable no-lonely-if */
-import React, { Component } from 'react';
-import Aux from 'react-aux';
+import React, { Component, Suspense, lazy } from 'react';
 import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import { Responsive, Container, Grid, Visibility } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
@@ -23,12 +21,7 @@ import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/campaignDetails/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/campaignDetails/${component}`));
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore')
@@ -200,7 +193,7 @@ class offerDetails extends Component {
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     return (
-      <Aux>
+      <>
         {campaign
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
@@ -212,7 +205,7 @@ class offerDetails extends Component {
         } */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
-          <Responsive maxWidth={991} as={Aux}>
+          <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
               <CampaignSideBar navItems={navItems} />
               <MobileDropDownNav
@@ -239,34 +232,36 @@ class offerDetails extends Component {
                   )
                 }
                 <Grid.Column computer={12} mobile={16}>
-                  <Switch>
-                    <Route exact path={match.url} component={getModule(navItems[0].component)} />
-                    {
-                      navItems.map((item) => {
-                        const CurrentComponent = getModule(item.component);
-                        return (
-                          <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
-                        );
-                      })
-                    }
-                    <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
-                    <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
-                    <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
-                    <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
-                    <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
-                    <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
-                    <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
-                    <Route component={NotFound} />
-                  </Switch>
+                  <Suspense fallback={<InlineLoader />}>
+                    <Switch>
+                      <Route exact path={match.url} component={getModule(navItems[0].component)} />
+                      {
+                        navItems.map((item) => {
+                          const CurrentComponent = getModule(item.component);
+                          return (
+                            <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+                          );
+                        })
+                      }
+                      <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
+                      <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
+                      <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
+                      <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                      <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
+                      <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
+                      <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
+                      <Route component={NotFound} />
+                    </Switch>
+                  </Suspense>
                 </Grid.Column>
               </Grid>
             </section>
           </Container>
         </div>
-        {/* <Responsive minWidth={768} as={Aux}>
+        {/* <Responsive minWidth={768} as={React.Fragment}>
           <Footer path={location.pathname} campaign={campaign} />
         </Responsive> */}
-      </Aux>
+      </>
     );
   }
 }

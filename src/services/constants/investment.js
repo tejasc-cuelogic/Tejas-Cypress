@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Popup, List } from 'semantic-ui-react';
 
@@ -99,9 +98,9 @@ export const AGREEMENT_DETAILS_INFO = {
           </Popup.Content>
         ),
         label: (
-          <Aux>
+          <>
             I confirm that I am complying with my <b>annual investment limit</b> (<Link to="/offerings/live-test-new-vp/agreement/change-investment-limit">update</Link>)
-          </Aux>
+          </>
         ),
         value: '4',
         customUpdateLimitLabel: true,
@@ -115,23 +114,23 @@ export const AGREEMENT_DETAILS_INFO = {
     values: [
       {
         label: (
-          <Aux>
+          <>
             I have reviewed and agree to the terms of the Note Purchase Agreement.
-          </Aux>
+          </>
         ),
         value: '5',
         customLabel: true,
       },
       {
         label: (
-          <Aux>
+          <>
             I have reviewed NextSeed’s <Link to="/app/resources/welcome-packet">educational materials</Link>, understand that
             the entire amount of my investment may be lost, and confirm that I am in a
             financial condition to bear the loss. I have read and agree to the terms of
             the <a href="/">CrowdPay Custodial Account Agreement</a>,
             the <a href="/">Substitute IRS Form W-9 Certification</a>,
             and <a href="/">NextSeed Securities LLC Investor Agreement</a>
-          </Aux>
+          </>
         ),
         value: '6',
         conditionalCustomLabel: true,

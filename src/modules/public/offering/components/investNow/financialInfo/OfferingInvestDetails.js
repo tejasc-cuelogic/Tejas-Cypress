@@ -1,10 +1,9 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Grid, Statistic, Icon } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 
 const OfferingInvestDetails = props => (
-  <Aux>
+  <>
     <div className="featured-section investment-details">
       <Grid columns={2} divided relaxed="very">
         <Grid.Row>
@@ -30,7 +29,7 @@ const OfferingInvestDetails = props => (
         </Grid.Row>
       </Grid>
     </div>
-  </Aux>
+  </>
 );
 
 export default OfferingInvestDetails;

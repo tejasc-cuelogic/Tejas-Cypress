@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid } from 'semantic-ui-react';
@@ -51,11 +50,11 @@ class team extends Component {
       </Grid>
     );
     return (
-      <Aux>
+      <>
         {loading ? (<InlineLoader />)
           : teamMembers.length === 0 ? <section className="center-align"><h3 style={{ color: '#31333d7d' }}>No Records to Display</h3></section>
             : teamInfo}
-      </Aux>
+      </>
     );
   }
 }

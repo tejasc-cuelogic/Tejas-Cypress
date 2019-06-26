@@ -1,9 +1,8 @@
 import React from 'react';
 import { Header, Grid, Item } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const EquityLoans = () => (
-  <Aux>
+  <>
     <Header as="h3">Preferred Equity</Header>
     <Grid doubling columns={2}>
       <Grid.Column>
@@ -57,7 +56,7 @@ const EquityLoans = () => (
         </Item.Group>
       </Grid.Column>
     </Grid>
-  </Aux>
+  </>
 );
 
 export default EquityLoans;

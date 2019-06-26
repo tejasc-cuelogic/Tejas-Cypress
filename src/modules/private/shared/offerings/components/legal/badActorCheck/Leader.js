@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
@@ -60,7 +59,7 @@ export default class Leader extends Component {
         <Header as="h4">Control Person Diligence</Header>
         {
           ['controlPersonQuestionnaire', 'residenceTenYears'].map(field => (
-            <Aux>
+            <>
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
@@ -69,7 +68,7 @@ export default class Leader extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                 containerclassname="secondary"
               />
-            </Aux>
+            </>
           ))
         }
         <Divider section />

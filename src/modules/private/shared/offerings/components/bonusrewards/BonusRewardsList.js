@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Button } from 'semantic-ui-react';
@@ -17,7 +16,7 @@ export default class BonusRewardsList extends Component {
       return <InlineLoader text="Loading Bonus Rewards List..." />;
     }
     return (
-      <Aux>
+      <>
         {
           bonusRewards
           && bonusRewards.map((reward) => {
@@ -39,7 +38,7 @@ export default class BonusRewardsList extends Component {
             return null;
           })
         }
-      </Aux>
+      </>
     );
   }
 }
