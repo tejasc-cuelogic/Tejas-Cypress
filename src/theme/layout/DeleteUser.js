@@ -50,7 +50,7 @@ export default class DeleteUser extends React.Component {
           <Modal.Content>
             {get(getDeleteUserMeta, 'message')
             && (
-              <Header as="h4">{get(getDeleteUserMeta, 'message')}</Header>
+              <Header as="h5">{get(getDeleteUserMeta, 'message')}</Header>
             )
             }
             {this.state.failMessage
