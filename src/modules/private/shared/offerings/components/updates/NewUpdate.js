@@ -96,9 +96,7 @@ export default class NewUpdate extends Component {
       <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <Header as="h3">
-            {isNew ? 'New' : 'Edit'}
-            {' '}
-  Update
+            {isNew ? 'New ' : 'Edit '} Update
             {!isNew
               && <Status status={PBUILDER_FRM.fields.status.value} />
             }
@@ -170,39 +168,9 @@ export default class NewUpdate extends Component {
                       <List.Item>
                         <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id)} />
                       </List.Item>
-                      {isManager && ['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
-                        && (
-                          <FormRadioGroup
-                            readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                            fielddata={TEMPLATE_FRM.fields.type}
-                            name="type"
-                            changed={(e, result) => selectTemplate(e, result)}
-                            widths="equal"
-                            value={TEMPLATE_FRM.fields.type.value}
-                          />
-                        )
-                      }
                     </List>
                   </Card.Content>
                 </Card>
-                {this.props.match.url.includes('engagement')
-                  && (
-                  <Card fluid>
-                    <Card.Content>
-                      <h4>Who’s this update for?</h4>
-                      <Form.Group inline>
-                        <FormRadioGroup
-                          containerclassname={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly ? 'display-only' : ''}
-                          readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                          fielddata={PBUILDER_FRM.fields.scope}
-                          name="scope"
-                          changed={UpdateChange}
-                        />
-                      </Form.Group>
-                    </Card.Content>
-                  </Card>
-                  )
-                }
                 {['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(offer.stage)
                   ? (
                   <>
@@ -254,20 +222,55 @@ export default class NewUpdate extends Component {
                   </>
                   )
                   : (
-                  <Card fluid>
-                    <Card.Content>
-                      <Header as="h4">NextSeed Tips</Header>
-                      <List bulleted relaxed>
-                        <List.Item>How is construction / build-out on your project going?</List.Item>
-                        <List.Item>
-                          Any potential hurdles you want to share with your investors?
-                        </List.Item>
-                        <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
-                        <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
-                      </List>
-                      <Link to="/"><b>Helpful Tips on Sending Updates</b></Link>
-                    </Card.Content>
-                  </Card>
+                    <>
+                    {isManager
+                      && (
+                        <Card fluid>
+                          <Card.Content>
+                            <Form>
+                              <MaskedInput
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                ishidelabel
+                                fluid
+                                name="updatedDate"
+                                fielddata={PBUILDER_FRM.fields.updatedDate}
+                                changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
+                                dateOfBirth
+                              />
+                              {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
+                                && (
+                                    <div className="field">
+                                      <Header as="label">{TEMPLATE_FRM.fields.type.label}</Header>
+                                      <FormRadioGroup
+                                        readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                        fielddata={TEMPLATE_FRM.fields.type}
+                                        name="type"
+                                        changed={(e, result) => selectTemplate(e, result)}
+                                        widths="equal"
+                                        value={TEMPLATE_FRM.fields.type.value}
+                                      />
+                                    </div>
+                                )
+                              }
+                            </Form>
+                          </Card.Content>
+                        </Card>
+                      )}
+                      <Card fluid>
+                        <Card.Content>
+                          <Header as="h4">NextSeed Tips</Header>
+                          <List bulleted relaxed>
+                            <List.Item>How is construction / build-out on your project going?</List.Item>
+                            <List.Item>
+                              Any potential hurdles you want to share with your investors?
+                            </List.Item>
+                            <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
+                            <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
+                          </List>
+                          <Link to="/"><b>Helpful Tips on Sending Updates</b></Link>
+                        </Card.Content>
+                      </Card>
+                    </>
                   )
               }
               </Grid.Column>

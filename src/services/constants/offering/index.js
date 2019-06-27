@@ -31,6 +31,7 @@ export const UPDATES = {
 
 export const TEMPLATE = {
   type: {
+    label: 'Template Type',
     value: 'LIVE',
     values: [{ label: 'Live', value: 'LIVE' }, { label: 'Full', value: 'FULL' }],
     error: undefined,
