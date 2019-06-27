@@ -20,7 +20,7 @@ export const uploadFile = (selector = '') => {
 
 export const getJSONDataFromFixtures = async (path = '', props = undefined) => {
   const extractedData = await cy.fixture(path);
-  return props ? extractedData[props] : null;
+  return props ? extractedData[props] : extractedData ? extractedData : null;
 };
 
 export const clearFormInput = (inputArr = []) => {
