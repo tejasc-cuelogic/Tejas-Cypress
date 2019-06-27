@@ -1,8 +1,8 @@
 import React from 'react';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
-import { Menu, Button, Modal, Header, Divider, Message } from 'semantic-ui-react';
-import { InlineLoader, ListErrors } from '../shared';
+import { Button, Modal, Header, Divider, Message } from 'semantic-ui-react';
+import { InlineLoader, ListErrors } from '../../../../../../theme/shared';
 
 @inject('userStore', 'userDetailsStore')
 @observer
@@ -33,9 +33,7 @@ export default class DeleteUser extends React.Component {
         open={this.state.modalOpen}
         onClose={this.closeModal}
         trigger={(
-            <Menu.Item className="btn-item mt-10">
-              <Button color="red" fluid basic compact onClick={() => this.toggleModal(true)} content="Delete User" />
-            </Menu.Item>
+            <Button color="green" inverted onClick={() => this.toggleModal(true)} content="Delete" />
           )}
         size="tiny"
         closeOnDimmerClick={false}

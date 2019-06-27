@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { Menu, Icon, Button } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
-import DeleteUser from './DeleteUser';
 import { NavItems } from './NavigationItems';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 
@@ -60,10 +59,6 @@ export class SidebarNav extends Component {
               <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Open New Account" />
             </Menu.Item>
             )
-        }
-        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') && (
-          <DeleteUser />
-        )
         }
       </>
     );
