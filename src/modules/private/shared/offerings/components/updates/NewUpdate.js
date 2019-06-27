@@ -158,7 +158,7 @@ export default class NewUpdate extends Component {
                                 ? <Image64 srcUrl={companyAvatarUrl} circular />
                                 : <UserAvatar UserInfo={userInfo} />
                               }
-                              {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') : get(offer, 'keyTerms.shorthandBusinessName')}
+                              {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
                             </div>
                             <Header as="h4">{PBUILDER_FRM.fields.title.value}</Header>
                             <HtmlEditor readOnly content={(PBUILDER_FRM.fields.content.value || '')} />
