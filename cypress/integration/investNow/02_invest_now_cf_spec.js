@@ -37,19 +37,19 @@ describe('Invest now CF investment flow', () => {
     checkEnteredAmountMultiplesValidation();
   });
 
-  it.skip('Should show validation error if investment amount is less than minimum investment amount', () => {
+  it('Should show validation error if investment amount is less than minimum investment amount', () => {
     checkAmountGreaterThanMinInvestmentValidation();
   });
 
-  it.skip('Should enter valid amount and proceed', () => {
+  it('Should enter valid amount and proceed', () => {
     checkForValidAmountAndProceed();
   });
 
-  it.skip('Should generate agreement and show agreement model popup', () => {
+  it('Should generate agreement and show agreement model popup', () => {
     proceedToGenerateAgreement();
   });
 
-  it.skip('Should submit investment and redirect to investment portfolio', () => {
+  it('Should submit investment and redirect to investment portfolio', () => {
     sumbmitingInvestment();
   });
 });
