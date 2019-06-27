@@ -1,4 +1,7 @@
 import { API_ROOT } from '../../src/constants/common';
+import Amplify from '@aws-amplify/core';
+import AmplifyAuth from '@aws-amplify/auth';
+import { awsConfig } from './../fixtures/aws';
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -72,5 +75,14 @@ Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
     });
   });
 });
+
+const amplifyLogin = async (username, password) => {
+  Amplify.configure({
+    Auth: awsConfig,
+  });
+  return await AmplifyAuth.signIn({ username, password});
+};
+
+Cypress.Commands.add('login', amplifyLogin);
 
 // UTILS

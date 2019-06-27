@@ -7,7 +7,7 @@ export const registerApiCall = (operationName, url = '**/**') => {
   cy.route('POST', url).as(operationName);
 }
 
-export const apiRequest = (requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve) => {
+export const apiRequest = (operationName, requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve) => {
   cy.request(
     {
       url: requestParams.url,
@@ -18,8 +18,9 @@ export const apiRequest = (requestParams, headers = { "content-type": 'applicati
       failOnStatusCode: false,
       headers,
     }
-  ).then((result) => {
-    console.log('Successfully send request', result);
+  )
+  .as(operationName)
+  .then((result) => {
     resolve(result);
   });
 });
