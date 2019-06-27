@@ -1,7 +1,9 @@
+import React from 'react';
 import { observable, action, computed, toJS } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../helper';
+import Helper from '../../../helper/utility';
 import { GqlClient as clientPublic } from '../../../api/publicApi';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { NEW_USER } from '../../../constants/user';
@@ -141,11 +143,9 @@ export class UserStore {
 
   @computed get getDeleteUserMeta() {
     const deletedUserMeta = this.getDeleteUserData;
+    const commonMsg = (<p>You are unable to delete your account at this time.  Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any additional questions</p>);
     const data = {
-      message: 'Something went wrong please try again later.',
-      validAgreement: false,
-      totalBalance: '0',
-      availableBalance: '0',
+      message: commonMsg,
       isValidForDelete: false,
     };
     if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'totalBalance') === 0) {
@@ -154,9 +154,9 @@ export class UserStore {
     } else if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') === 0 && get(deletedUserMeta, 'totalBalance') > 0) {
       data.message = 'There are pending transfer requests on your account.  You must wait for the transaction to post before you can delete your account.';
     } else if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') > 0) {
-      data.message = 'You currently have a $XXX,XXX.XX balance on your account.  You must initiate a withdraw and wait for the cash to post before you can delete your account.';
-    } else if (get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'totalBalance') === 0) {
-      data.message = 'You are unable to delete your account at this time.  Please contact support@nextseed.com if you have any additional questions';
+      data.message = `You currently have a ${Helper.CurrencyFormat(get(deletedUserMeta, 'availableBalance'))} balance on your account.  You must initiate a withdraw and wait for the cash to post before you can delete your account.`;
+    } else if (get(deletedUserMeta, 'validAgreement')) {
+      data.message = commonMsg;
     }
     return data;
   }
