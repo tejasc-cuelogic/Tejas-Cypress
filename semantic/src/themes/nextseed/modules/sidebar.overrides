@@ -7,15 +7,13 @@
 	&:not(body) {
 		transform: none;
 		position: relative;
-		width: 1680px;
-		margin: auto;
 	}
 	.ui.push.sidebar {
 		z-index: 100;
 	}
 	>.sidebar ~ .pusher{
 		transition:all .5s ease;
-		height:100vh;
+		height: calc(100vh - 72px);
 		overflow-y:auto;
 		background-color:@neutral-offwhite;
 		.ui.vertical.segment.content{
@@ -66,9 +64,12 @@
 }
 .ui.sidebar.menu{
 	&.vertical{
-		padding:@10px 0;
+		padding:0;
 		visibility:visible;
 		transition:all .5s ease;
+		position: fixed;
+		margin-top: 72px !important;
+		height: calc(100vh - 72px) !important;
 		.ns-scrollbar{
 			.view{
 				padding:0 @15px;
@@ -168,6 +169,11 @@
 			}
 			&.menu-header:hover{
 				background-color:transparent;
+			}
+		}
+		&.admin, &.issuer{
+			.user-picture p{
+				color: @white;
 			}
 		}
 	}

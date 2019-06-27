@@ -19,12 +19,12 @@ class PrivateLayout extends Component {
     }
     return (
       <Aux>
-        <div className="page-header-section">
+        <div className={`page-header-section ${this.props.userStore.isInvestor ? 'investor' : ''}`}>
           <Grid columns="equal" stackable>
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
                 {!this.props.P0
-                  ? <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+                  ? <Header as={this.props.userStore.isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
                   : this.props.P0
                 }
               </Grid.Column>

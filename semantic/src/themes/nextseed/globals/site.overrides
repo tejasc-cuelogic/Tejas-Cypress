@@ -1454,6 +1454,12 @@ div.login-form {
 			padding:0 @20px @14px;
 		}
 	}
+	&.investor{
+		background: transparent;
+		h3.ui.header{
+			position:relative;
+		}
+	}
 	h1.ui.header{
 		font-size:@30px;
 		line-height:@42px;
@@ -2305,12 +2311,12 @@ p.check-extra-info{
 		font-weight:@fontMedium;
 		border-radius:100%;
 	}
-	&.admin{
-		background-color:@highlight-primary;
-	}
-	&.issuer{
-		background-color:@fullBlack;
-	}
+	// &.admin{
+	// 	background-color:@highlight-primary;
+	// }
+	// &.issuer{
+	// 	background-color:@fullBlack;
+	// }
 	&.investor .sb-avatar__text{
 		color: @neutral-offdark;
 	}

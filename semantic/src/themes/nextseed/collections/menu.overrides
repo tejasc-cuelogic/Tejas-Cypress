@@ -2,11 +2,7 @@
          Theme Overrides
 *******************************/
 .header-wrap{
-    max-width: 1680px;
-    margin: auto;
     .ui.menu{
-        max-width: 1680px;
-        left: auto;
         height:@primaryHeaderHeight;
         border:none;
         border-radius:0;
@@ -584,7 +580,32 @@ footer .ui.text.menu{
             width: 100%;
         }
 	}
-	//Public Mobile View End
+    //Public Mobile View End
+    &.attached:not(.tabular){
+        border:none;
+    }
+    &[class*="bottom attached"]{
+        margin-bottom:0;
+    }
+    &.secondary-menu{
+        margin:0;
+        background-color:transparent;
+        a.item{
+            padding:@16px @20px;
+            &:before{
+                display: none;
+            }
+            &:hover, &.active{
+                background-color:@neutral-midwhite;
+            }
+            >.icon{
+                color:@neutral-offdark;
+            }
+            &.done >.icon{
+                color:@primary-one;
+            }
+        }
+    }
 }
 .transaction-details .ui.inverted.menu .item{
     padding:@16px @25px;
@@ -596,35 +617,6 @@ footer .ui.text.menu{
         color:@link-color !important;
     }
 }
-
-.ui.menu{
-    &.attached:not(.tabular){
-        border:none;
-    }
-    &[class*="bottom attached"]{
-        margin-bottom:0;
-    }
-    &.secondary-menu{
-        margin:0;
-        background-color:@neutral-darkwhite;
-        a.item{
-            padding:@16px @20px;
-            &:before{
-                background-color:@neutral-darkwhite;
-            }
-            &:hover, &.active{
-                background-color:@neutral-offwhite;
-            }
-            >.icon{
-                color:@neutral-offdark;
-            }
-            &.done >.icon{
-                color:@primary-one;
-            }
-        }
-    }
-}
-
 .business-application{
     .ui.inverted.menu .item{
         &:hover, &:active, &:focus, &.active{
@@ -635,8 +627,6 @@ footer .ui.text.menu{
         background-color: transparent;
     }
 }
-
-
 .public-header-nav{
     padding:@47px 0 @20px;
 }
@@ -783,3 +773,14 @@ footer .ui.text.menu{
     max-width: 1680px;
     margin: auto !important;
 }
+
+/*Public page header start*/
+.public-pages .header-wrap{
+    max-width: 1680px;
+    margin: auto;
+    .ui.menu{
+        max-width: 1680px;
+        left: auto;
+    }
+}
+/*Public page header end*/
