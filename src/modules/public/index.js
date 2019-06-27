@@ -14,6 +14,7 @@ import NotFound from '../shared/NotFound';
 import RedirectManager from '../shared/RedirectManager';
 import Helper from '../../helper/utility';
 import Firework from './offering/components/investNow/agreement/components/FireworkAnimation';
+import { Spinner } from '../../theme/shared';
 
 @inject('uiStore', 'navStore', 'userStore', 'businessAppStore', 'campaignStore')
 @observer
@@ -23,7 +24,14 @@ export default class Public extends React.Component {
   };
 
   componentWillMount() {
+    this.props.uiStore.addMoreInProgressArray('publicLoading');
     this.props.navStore.setNavStatus({}, 'main');
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.uiStore.removeOneFromProgressArray('publicLoading');
+    }, 500);
   }
 
   componentWillUpdate() {
@@ -86,6 +94,9 @@ export default class Public extends React.Component {
     const { visible } = this.state;
     const authAllowed = ['login', 'register', 'register-investor', 'confirm-email', 'change-password', 'reset-password', 'forgot-password', 'welcome-email'];
     const isAuthLocation = (authAllowed.find(item => matchPath(location.pathname, { path: `/${item}` })));
+    if (this.props.uiStore.inProgressArray.includes('publicLoading')) {
+      return <Spinner loaderMessage="Loading..." />;
+    }
     return (
       <Aux>
         {this.props.campaignStore.showFireworkAnimation

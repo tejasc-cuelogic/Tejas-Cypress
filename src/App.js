@@ -190,7 +190,7 @@ class App extends Component {
       );
     }
     return (
-      <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
+      <div className={((!matchPath(location.pathname, { path: '/app' })) && !this.props.uiStore.inProgressArray.includes('publicLoading')) ? 'public-pages' : ''}>
         {this.props.authStore.isUserLoggedIn
         && (
 <IdleTimer
