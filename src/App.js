@@ -15,7 +15,7 @@ import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 import { userIdleTime } from './constants/common';
 /**
- * Main App test
+ * Main App
  */
 
 const metaTagsData = [
