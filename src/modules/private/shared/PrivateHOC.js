@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
@@ -14,7 +13,7 @@ class PrivateHOC extends Component {
       return <NotFound />;
     }
     return (
-      <Aux>
+      <>
         <div className="page-header-section">
           <Grid columns="equal" stackable>
             <Grid.Row>
@@ -34,7 +33,7 @@ class PrivateHOC extends Component {
                   <span className="unread-count">3</span> */}
                 </span>
               ) : (
-                <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
+                  <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
               )
               }
             </Grid.Row>
@@ -47,7 +46,7 @@ class PrivateHOC extends Component {
         <div className="content-spacer">
           {this.props.children}
         </div>
-      </Aux>
+      </>
     );
   }
 }

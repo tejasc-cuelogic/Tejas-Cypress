@@ -69,15 +69,7 @@ export default class AllRequests extends Component {
                 : changeRequests.map((req, index) => (
                   <Table.Row key={`${req.userId}_${index}`}>
                     <Table.Cell>
-                      <Link to={`/app/users/${req.userId}/profile-data`}>
-                        <p>
-                          <b>
-                            {req.firstName}
-                            {' '}
-                            {req.lastName}
-                          </b>
-                        </p>
-                      </Link>
+                      <Link to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
                       {get(req, 'linkedBank.changeRequest.dateRequested') ? moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')).format('MM/DD/YYYY') : 'N/A'}
@@ -88,8 +80,7 @@ export default class AllRequests extends Component {
                       }
                     </Table.Cell>
                     <Table.Cell>
-                      <p>
-                        {req.linkedBank && req.linkedBank.changeRequest
+                      <p>{req.linkedBank && req.linkedBank.changeRequest
                         && req.linkedBank.changeRequest.plaidAccessToken ? 'Plaid' : 'Manual'}
                       </p>
                     </Table.Cell>

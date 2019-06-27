@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Header, Form, Table, Button } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
@@ -13,7 +12,7 @@ export default class Variables extends Component {
       maskChange,
     } = this.props.businessAppReviewStore;
     return (
-      <Aux>
+      <>
         <Header as="h4">Rate Scale</Header>
         <Form>
           <Form.Group widths={3}>
@@ -142,7 +141,7 @@ export default class Variables extends Component {
             <Button disabled={!MODEL_VARIABLES_FRM.meta.isValid} primary className="relaxed" type="button">Save & Update Results</Button>
           </div>
         </Form>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 import Helper from '../utility';
@@ -205,15 +204,15 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       return (
-        <Aux>
+        <>
           {this.props.steps[i].name
             && (
-            <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
+<li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
               {this.props.steps[i].name}
             </li>
             )
           }
-        </Aux>
+        </>
       );
     });
   }
@@ -241,14 +240,14 @@ export default class MultiStep extends React.Component {
         >
           {!this.props.hideHeader
             && (
-            <Aux>
+            <>
               <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
               <ol className="progtrckr">
                 {!this.props.steps[this.state.compState].isHideLabel
                   && this.renderSteps()
                 }
               </ol>
-            </Aux>
+            </>
             )
           }
           <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
@@ -260,30 +259,30 @@ export default class MultiStep extends React.Component {
             {this.props.steps[this.state.compState].component}
             {!this.props.steps[this.state.compState].disablePrevButton
               && (
-              <Button
-                circular
-                icon={{ className: 'ns-arrow-left' }}
-                className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
-                onClick={this.previous}
-              />
+<Button
+  circular
+  icon={{ className: 'ns-arrow-left' }}
+  className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
+  onClick={this.previous}
+/>
               )
             }
             {this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
               || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)
               ? (
-                <Aux>
+                <>
                   {!this.props.steps[this.state.compState].disableNextButton
                     && (
-                    <Button
-                      type="submit"
-                      circular
-                      icon={{ className: 'ns-arrow-right' }}
-                      className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
-                      onClick={this.next}
-                    />
+<Button
+  type="submit"
+  circular
+  icon={{ className: 'ns-arrow-right' }}
+  className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
+  onClick={this.next}
+/>
                     )
                   }
-                </Aux>
+                </>
               )
               : null
             }

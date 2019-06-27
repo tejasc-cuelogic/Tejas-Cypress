@@ -30,13 +30,13 @@ export default class ManageFaqs extends Component {
         refMatch={this.props.refMatch}
         {...this.props}
         P1={(
-          <Search
-            {...this.props}
-            w={[9]}
-            placeholder="Search by keyword or phrase"
-            executeSearch={this.search}
-            addon={(
-              <Grid.Column width={7} textAlign="right">
+<Search
+  {...this.props}
+  w={[9]}
+  placeholder="Search by keyword or phrase"
+  executeSearch={this.search}
+  addon={(
+<Grid.Column width={7} textAlign="right">
                 <Button color="basic" as={Link} to={`${match.url}/new/DRAFT`}>
                   Add FAQ
                 </Button>
@@ -45,11 +45,11 @@ export default class ManageFaqs extends Component {
                 </Button>
               </Grid.Column>
 )}
-            name="keyword"
-            change={this.onFilterChange}
-            toggleSearch={this.toggleSearch}
-            more="no"
-          />
+  name="keyword"
+  change={this.onFilterChange}
+  toggleSearch={this.toggleSearch}
+  more="no"
+/>
 )}
       >
         <AllFaqs match={match} {...this.props} />

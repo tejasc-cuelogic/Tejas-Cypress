@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import snakeCase from 'lodash/snakeCase';
-import Aux from 'react-aux';
 import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
@@ -21,16 +20,16 @@ const SummaryTitle = props => ((props.details.businessName) ? (
     {props.details.businessName}
   </Header>
 ) : !props.isAdmin && (
-  <Aux>
+  <>
     <Card.Content>
       <Card.Header className="with-icon"><AccTypeTitle /></Card.Header>
     </Card.Content>
     <Divider horizontal className="only-border" />
-  </Aux>
+  </>
 ));
 
 const SummaryHeader = props => (
-  <Aux>
+  <>
     {props.details.title !== false && props.details.businessName
       && <SummaryTitle {...props} />
     }
@@ -48,13 +47,13 @@ const SummaryHeader = props => (
                     {row.title}
                     {row.info
                       && (
-                      <Popup
-                        trigger={<Icon className="ns-help-circle" />}
-                        content={row.info}
-                        position="top center"
-                        wide
-                        hoverable
-                      />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={row.info}
+  position="top center"
+  wide
+  hoverable
+/>
                       )
                     }
                   </Statistic.Label>
@@ -69,7 +68,7 @@ const SummaryHeader = props => (
         }
       </Grid>
     </Card>
-  </Aux>
+  </>
 );
 
 export default SummaryHeader;

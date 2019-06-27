@@ -11,7 +11,7 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
-  OFFERING_CLOSE_1, OFFERING_CLOSE_2, OFFERING_CLOSE_3,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
@@ -58,6 +58,8 @@ export class OfferingCreationStore {
   @observable OFFERING_CLOSE_2 = Validator.prepareFormObject(OFFERING_CLOSE_2);
 
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
+
+  @observable OFFERING_CLOSE_4 = Validator.prepareFormObject(OFFERING_CLOSE_4);
 
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
 
@@ -882,6 +884,11 @@ export class OfferingCreationStore {
     if (form === 'KEY_TERMS_FRM') {
       this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
     }
+    if (form === 'COMPANY_LAUNCH_FRM' && get(offer, 'goldstar')) {
+      ['contactId', 'esAccountNumber', 'isin', 'sfAccountNumber'].forEach((f) => {
+        this.COMPANY_LAUNCH_FRM.fields[f].value = get(offer, `goldstar.${f}`);
+      });
+    }
     if (form === 'LEADERSHIP_FRM') {
       forEach(offer.leadership, (emp, key) => {
         this.LEADERSHIP_EXP_FRM = Validator.setFormData(
@@ -941,6 +948,7 @@ export class OfferingCreationStore {
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
       DATA_ROOM_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
+      OFFERING_CLOSE_1: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -1095,6 +1103,7 @@ export class OfferingCreationStore {
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        console.log('Error', err);
         Helper.toast('Something went wrong.', 'error');
         rej();
       })
@@ -1167,6 +1176,10 @@ export class OfferingCreationStore {
           );
           payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
           payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
+        }
+        if (get(payloadData, 'offering.launch.goldstar')) {
+          payloadData.goldstar = { ...get(payloadData, 'offering.launch.goldstar') };
+          payloadData.offering.launch.goldstar = undefined;
         }
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
@@ -1577,11 +1590,14 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step) => {
+  offeringClose = (params, step, scope) => {
     uiStore.setProgress(params.process);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
     if (formData.payload) {
+      if (scope) {
+        formData.payload.scope = scope;
+      }
       if (formData.payload.notePurchaseDate) {
         formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
       }
@@ -1591,6 +1607,8 @@ export class OfferingCreationStore {
       if (formData.payload.hardCloseDate) {
         formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
       }
+    } else if (!formData.payload && scope) {
+      formData.payload = { scope };
     }
     client
       .mutate({
@@ -1874,6 +1892,20 @@ export class OfferingCreationStore {
       'documents',
       index,
     );
+  }
+
+  getClosureObject = () => {
+    let obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
+    let { getOfferingById } = offeringsStore.offerData.data;
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
+    obj.closureSummary = mergeWith(
+      toJS(getOfferingById.closureSummary),
+      obj.closureSummary,
+      this.mergeCustomize,
+    );
+    obj = omitDeep(obj, ['__typename', 'fileHandle']);
+    obj = cleanDeep(obj);
+    return obj;
   }
 
   @action

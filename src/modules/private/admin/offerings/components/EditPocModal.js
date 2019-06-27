@@ -43,8 +43,8 @@ export default class EditOffering extends React.Component {
           {loading
             ? <InlineLoader />
             : (
-              <Form error onSubmit={() => this.handleSubmitForm()}>
-                {['issuerId', 'id'].map(field => (field === 'issuerId' || (stage === 'CREATION' && field === 'id')) && (
+<Form error onSubmit={() => this.handleSubmitForm()}>
+              {['issuerId', 'id'].map(field => (field === 'issuerId' || (stage === 'CREATION' && field === 'id')) && (
                 <FormDropDown
                   search
                   name={field}
@@ -56,28 +56,28 @@ export default class EditOffering extends React.Component {
                   onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
                   options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
                 />
-                ))}
-                {stage === 'CREATION'
+              ))}
+              {stage === 'CREATION'
               && (
-              <MaskedInput
-                name="targetDate"
-                fielddata={POC_DETAILS_FRM.fields.targetDate}
-                changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
-                dateOfBirth
-              />
+<MaskedInput
+  name="targetDate"
+  fielddata={POC_DETAILS_FRM.fields.targetDate}
+  changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
+  dateOfBirth
+/>
               )
               }
-                {errors
+              {errors
                 && (
-                <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
                   <ListErrors errors={errors.message ? [errors.message] : [errors]} />
                 </Message>
                 )
               }
-                <div className="center-align mt-30">
-                  <Button primary className="relaxed" content="Save Changes" loading={inProgress} disabled={!POC_DETAILS_FRM.meta.isValid} />
-                </div>
-              </Form>
+              <div className="center-align mt-30">
+                <Button primary className="relaxed" content="Save Changes" loading={inProgress} disabled={!POC_DETAILS_FRM.meta.isValid} />
+              </div>
+            </Form>
             )
           }
         </Modal.Content>

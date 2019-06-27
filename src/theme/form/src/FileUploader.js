@@ -13,11 +13,8 @@ const FileUploader = observer((props) => {
       }
       {!value
         && (
-        <div className="file-uploader">
-          <Icon className="ns-upload" />
-          {' '}
-Choose a file
-          <span>or drag it here</span>
+<div className="file-uploader">
+          <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
           <input
             multiple={props.multiple}
             name={props.name}

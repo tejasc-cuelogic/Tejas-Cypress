@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { withRouter, Link } from 'react-router-dom';
@@ -142,7 +141,7 @@ export default class AllKnowledgeBaseItems extends Component {
       return <InlineLoader text="No data found." />;
     }
     return (
-      <Aux>
+      <>
         {Object.keys(allCategorizedKnowledgeBase).map(userType => (
           <Accordion key={userType} fluid styled className="card-style">
             <Accordion.Title onClick={() => this.toggleAccordion(userType, 'activeIndex')} className="text-capitalize">
@@ -182,7 +181,7 @@ export default class AllKnowledgeBaseItems extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

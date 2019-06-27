@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Message, Divider } from 'semantic-ui-react';
@@ -20,11 +19,10 @@ export default class FinancialInformation extends Component {
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">Calculate your investment limit</Header>
         <p className="center-align">
-          Your net assets and annual revenue are used to determine your 12-month investment limit.
-          {' '}
+          Your net assets and annual revenue are used to determine your 12-month investment limit.{' '}
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
         </p>
         <Form error>
@@ -44,8 +42,7 @@ export default class FinancialInformation extends Component {
               />
             ))}
             <Divider hidden />
-            <p className="grey-header">
-Your investment limit:
+            <p className="grey-header">Your investment limit:
               <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>
@@ -56,18 +53,15 @@ Your investment limit:
           </div>
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '')
           && (
-          <Message error className="center-align">
+<Message error className="center-align">
             Based on your entity&apos;s net assets and annual income, your 12-month investment
-            limit is
-            {' '}
-            {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
-.
+            limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
             This is below the $5,000 minimum opening deposit.
           </Message>
           )
           }
         </Form>
-      </Aux>
+      </>
     );
   }
 }

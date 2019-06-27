@@ -1,6 +1,5 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
-import Aux from 'react-aux';
 import React from 'react';
 import { Popup } from 'semantic-ui-react';
 
@@ -56,9 +55,7 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <Aux>
-You can choose your
-          {' '}
+        <>You can choose your{' '}
           <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
@@ -66,7 +63,7 @@ You can choose your
               require additional confirmation with a code sent to your phone or email address.
             </Popup.Content>
           </Popup>
-        </Aux>
+        </>
       ),
     descriptionNotAvailable: '',
     action: ['mfa', 'Select Your Active MFA'],

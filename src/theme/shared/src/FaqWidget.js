@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Card, Header, Accordion, Icon } from 'semantic-ui-react';
 
 class FaqWidget extends React.Component {
@@ -23,19 +22,18 @@ class FaqWidget extends React.Component {
             <Accordion className="faq-acc">
               {
                 faqs.map(faq => (
-                  <Aux key={faq.id}>
+                  <React.Fragment key={faq.id}>
                     <Accordion.Title
                       active={activeIndex === faq.id}
                       index={faq.id}
                       onClick={this.toggleAction}
                     >
-                      <Icon name="dropdown" />
-                      {faq.title}
+                      <Icon name="dropdown" />{faq.title}
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === faq.id}>
                       <p>{faq.description}</p>
                     </Accordion.Content>
-                  </Aux>
+                  </React.Fragment>
                 ))
               }
             </Accordion>

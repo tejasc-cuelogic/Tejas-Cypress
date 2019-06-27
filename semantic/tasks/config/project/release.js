@@ -1,32 +1,33 @@
-/** *****************************
+/*******************************
          Release Config
-****************************** */
+*******************************/
 
-const
-  requireDotFile = require('require-dot-file');
-
-let config;
-let npmPackage;
-let version
+var
+  requireDotFile = require('require-dot-file'),
+  config,
+  npmPackage,
+  version
 ;
 
 
-/** *****************************
+/*******************************
          Derived Values
-****************************** */
+*******************************/
 
 try {
   config = requireDotFile('semantic.json');
-} catch (error) {}
+}
+catch(error) {}
 
 
 try {
   npmPackage = require('../../../package.json');
-} catch (error) {
+}
+catch(error) {
   // generate fake package
   npmPackage = {
     name: 'Unknown',
-    version: 'x.x',
+    version: 'x.x'
   };
 }
 
@@ -37,15 +38,15 @@ version = (npmPackage && npmPackage.version !== undefined && npmPackage.name == 
 ;
 
 
-/** *****************************
+/*******************************
              Export
-****************************** */
+*******************************/
 
 module.exports = {
 
-  title: 'Semantic UI',
-  repository: 'https://github.com/Semantic-Org/Semantic-UI',
-  url: 'http://www.semantic-ui.com/',
+  title      : 'Semantic UI',
+  repository : 'https://github.com/Semantic-Org/Semantic-UI',
+  url        : 'http://www.semantic-ui.com/',
 
   banner: ''
     + ' /*' + '\n'
@@ -59,6 +60,6 @@ module.exports = {
     + ' *' + '\n'
     + ' */' + '\n',
 
-  version,
+  version    : version
 
 };

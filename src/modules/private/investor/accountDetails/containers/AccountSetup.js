@@ -3,7 +3,6 @@ import { observer, inject } from 'mobx-react';
 import { Header, Card, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { includes, capitalize } from 'lodash';
-import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('userDetailsStore', 'uiStore')
@@ -28,12 +27,8 @@ export default class AccountSetup extends Component {
     return (
       <div className={includes(this.props.location.pathname, 'transactions') ? 'content-spacer' : ''}>
         {
-          <Aux>
-            <Header as="h4">
-              {currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)}
-              {' '}
-Investment Account
-            </Header>
+          <>
+            <Header as="h4">{currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Investment Account</Header>
             <p>{msg}</p>
             <Card fluid={isMobile}>
               <Card.Content className="mt-10 mb-10">
@@ -41,7 +36,7 @@ Investment Account
                 <Button fluid color="green" content="Continue" onClick={() => this.renderAccType()} />
               </Card.Content>
             </Card>
-          </Aux>
+          </>
         }
       </div>
     );

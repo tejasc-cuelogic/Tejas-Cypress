@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Menu, Dropdown, Responsive } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { Link, NavLink, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { NsCarousel, InlineLoader, Image64 } from '../../../../theme/shared';
@@ -68,7 +67,7 @@ export default class Insights extends Component {
     const sliderInsightFeaturedArticles = InsightFeaturedArticles && InsightFeaturedArticles.length
       ? InsightFeaturedArticles.slice(0, 5) : [];
     return (
-      <Aux>
+      <>
         <NsCarousel {...settings}>
           {
             sliderInsightFeaturedArticles
@@ -111,8 +110,7 @@ export default class Insights extends Component {
                     to="#"
                     onClick={() => this.requestAllArticles(true, false)}
                     className={this.state.sortAsc ? 'active' : ''}
-                  >
-Newest
+                  >Newest
                   </Dropdown.Item>
                   <Dropdown.Item
                     key="oldest"
@@ -120,8 +118,7 @@ Newest
                     to="#"
                     onClick={() => this.requestAllArticles(true, true)}
                     className={this.state.sortAsc ? '' : 'active'}
-                  >
-Oldest
+                  >Oldest
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -144,7 +141,7 @@ Oldest
             {loading ? <InlineLoader /> : <InsightArticlesList />}
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

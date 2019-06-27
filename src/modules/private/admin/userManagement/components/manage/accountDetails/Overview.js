@@ -5,7 +5,6 @@ import { includes, get } from 'lodash';
 import moment from 'moment';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Header, Form, Divider, Table, Card } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import AccountHeader from './AccountHeader';
 import IndividualSummary from './IndividualSummary';
 import IraSummary from './IraSummary';
@@ -72,10 +71,10 @@ export default class Overview extends Component {
         }
         {get(account, 'details.accountStatus') === 'FROZEN'
         && (
-        <Aux>
+        <>
           <LockedInformation account details={account} />
           <Divider />
-        </Aux>
+        </>
         )
         }
         <Header as="h6">Balances</Header>
@@ -93,7 +92,7 @@ export default class Overview extends Component {
         <Divider />
         {get(account, 'linkedBank.changeRequest')
           && (
-          <Aux>
+          <>
             <Header as="h6">Change Bank Account Request</Header>
             <Form.Group widths={2}>
               <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
@@ -102,7 +101,7 @@ export default class Overview extends Component {
               <Form.Input fluid label="Status" placeholder="Status" value={get(account, 'details.linkedBank.changeRequest.status') || 'N/A'} readOnly className="display-only" />
             </Form.Group>
             <Divider />
-          </Aux>
+          </>
           )
         }
         <Header as="h6">Opening Summary</Header>
@@ -130,14 +129,14 @@ export default class Overview extends Component {
         </div>
         {cashMovementData && cashMovementData.length
           ? (
-            <Aux>
+            <>
               <Card fluid>
                 <Card.Content>
                   <Header as="h4">Investments and Payments</Header>
                   <CashMovement data={cashMovementData} />
                 </Card.Content>
               </Card>
-            </Aux>
+            </>
           ) : null
         }
       </Form>

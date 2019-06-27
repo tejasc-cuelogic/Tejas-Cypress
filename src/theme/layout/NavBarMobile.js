@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
 import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
@@ -49,10 +48,10 @@ export default class NavBarMobile extends Component {
     }
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
-      <Aux>
+      <>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
           {hasHeader && (
-            <Aux>
+            <>
               <div
                 className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo`}
                 onClick={!visible ? onToggle : false}
@@ -64,25 +63,25 @@ export default class NavBarMobile extends Component {
               </div>
               {location.pathname.startsWith('/business-application/')
                 ? (
-                  <NavigationItems
-                    {...this.props}
-                    isMobBussinessApp
-                    isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
-                  />
+<NavigationItems
+  {...this.props}
+  isMobBussinessApp
+  isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
+/>
                 )
                 : (
-                  <div
-                    className={`public-header-section ${visible ? 'active' : ''}
+<div
+  className={`public-header-section ${visible ? 'active' : ''}
                   ${navStatus === 'sub' ? 'slide-up' : ''}`}
-                  >
-                    {navTitle === 'Home' || (location.pathname.startsWith('/offerings'))
-                      ? (
-                        <Logo
-                          dataSrc="LogoGreenGrey"
-                          className="mobile-header-logo"
-                        />
-                      )
-                      : <Header as="h5">{navTitle}</Header>
+>
+                  {navTitle === 'Home' || (location.pathname.startsWith('/offerings'))
+                    ? (
+<Logo
+  dataSrc="LogoGreenGrey"
+  className="mobile-header-logo"
+/>
+                    )
+                    : <Header as="h5">{navTitle}</Header>
                   }
                     {!currentUser ? (
                       <Link onClick={this.setAuthRef} to={`/${stepInRoute.to}`} className="sign-in neutral-text">
@@ -94,13 +93,13 @@ export default class NavBarMobile extends Component {
                         className="sign-in neutral-text"
                       >
                       Dashboard
-                      </Link>
+                    </Link>
                     )
                   }
-                  </div>
+                </div>
                 )
               }
-            </Aux>
+            </>
           )}
           <Sidebar
             as={Menu}
@@ -144,9 +143,9 @@ export default class NavBarMobile extends Component {
                     </Menu.Item>
                   ))
                     : (
-                      <Menu.Item className="btn-item">
-                        <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
-                      </Menu.Item>
+<Menu.Item className="btn-item">
+                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
+                  </Menu.Item>
                     )
                   }
                 </div>
@@ -168,7 +167,7 @@ export default class NavBarMobile extends Component {
             && <Footer path={location.pathname} />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Table, Button } from 'semantic-ui-react';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
@@ -22,22 +21,22 @@ export default class ApplicationListButtons extends Component {
           {appStatus
           === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
           && (
-          <Aux>
+          <>
             {!stashed
             && <Button color="green" as={Link} to={`${this.props.refLink}/${appId}/${userId}/${appStatus}/STASH/confirm`}>Stash</Button>
             }
             {stashed
             && <Button as={Link} to={`${this.props.refLink}/${appId}/${userId}/${appStatus}/UNSTASH/confirm`} color="green" inverted>Unstash</Button>
             }
-          </Aux>
+          </>
           )
           }
           {deleted
           && (
-          <Aux>
+          <>
             <Button as={Link} to={`${this.props.refLink}/${appId}/${userId || 'new'}/${appStatus}/RESTORE/confirm`} color="blue">Restore</Button>
             <Button as={Link} to={`${this.props.refLink}/${appId}/${userId || 'new'}/${appStatus}/REMOVED/confirm`} color="red">Remove</Button>
-          </Aux>
+          </>
           )
           }
           {!deleted

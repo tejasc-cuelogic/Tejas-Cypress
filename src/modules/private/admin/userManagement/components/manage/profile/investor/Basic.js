@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -53,29 +52,14 @@ export default class Basic extends Component {
           Basic Profile Info
           <Button.Group floated="right">
             {this.state.displayMode
-              ? (
-                <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10">
-                  <small>
-                    <Icon className="ns-pencil" />
-                    {' '}
-Edit profile data
-                  </small>
-                </Link>
-              )
+              ? <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
               : (
-                <Aux>
-                  <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
-                  {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
-                  && (
-                  <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}>
-                    <small>
-                      <Icon name="save" />
-Update
-                    </small>
-                  </Link>
-                  )
+              <>
+                <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
+                {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
+                  && <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
                 }
-                </Aux>
+              </>
               )
             }
             <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
@@ -83,10 +67,10 @@ Update
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'
         && (
-        <Aux>
+        <>
           <LockedInformation details={details} />
           <Divider />
-        </Aux>
+        </>
         )
         }
         <Header as="h6">Personal Info</Header>
@@ -133,23 +117,23 @@ Update
           }
           {displayMode
             ? (
-              <FormInput
-                key="ssn"
-                name="ssn"
-                fielddata={USER_BASIC.fields.ssn}
-                changed={(e, result) => formChange(e, result, formName)}
-                displayMode={displayMode}
-              />
+<FormInput
+  key="ssn"
+  name="ssn"
+  fielddata={USER_BASIC.fields.ssn}
+  changed={(e, result) => formChange(e, result, formName)}
+  displayMode={displayMode}
+/>
             )
             : (
-              <MaskedInput
-                name="ssn"
-                fielddata={USER_BASIC.fields.ssn}
-                ssn
-                changed={(values, field) => maskChange(values, formName, field)}
-                displayMode={displayMode}
-                showerror
-              />
+<MaskedInput
+  name="ssn"
+  fielddata={USER_BASIC.fields.ssn}
+  ssn
+  changed={(values, field) => maskChange(values, formName, field)}
+  displayMode={displayMode}
+  showerror
+/>
             )
           }
           <MaskedInput

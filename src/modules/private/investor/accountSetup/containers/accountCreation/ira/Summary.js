@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { isEmpty, find } from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
@@ -87,7 +86,7 @@ export default class Summary extends Component {
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">Verify your information and submit for review</Header>
         <div className="field-wrap">
           <div className="table-wrapper">
@@ -103,16 +102,14 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Net Worth:</Table.Cell>
-                  <Table.Cell>
-                    {Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value
-                      ? FIN_INFO_FRM.fields.netWorth.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value
+                    ? FIN_INFO_FRM.fields.netWorth.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Annual Income:</Table.Cell>
-                  <Table.Cell>
-                    {Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value
-                      ? FIN_INFO_FRM.fields.income.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value
+                    ? FIN_INFO_FRM.fields.income.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -125,7 +122,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
@@ -133,7 +130,7 @@ export default class Summary extends Component {
                 }
                 {fundingOption && fundingOption.value === 0
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Bank Account:</Table.Cell>
                     <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                   </Table.Row>
@@ -142,7 +139,7 @@ export default class Summary extends Component {
 
                 { !isEmpty(routingNum)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       { routingNum || '' }
@@ -164,7 +161,7 @@ export default class Summary extends Component {
         </div>
         {errors
           && (
-          <Message error>
+<Message error>
             <ListErrors errors={[errors.message]} />
           </Message>
           )
@@ -173,27 +170,19 @@ export default class Summary extends Component {
           <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
         <p className="center-align mt-30 grey-header">
-          By continuing, I acknowledge that I have read and agree to the terms of the
-          {' '}
+          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
           CrowdPay Custodial Account Agreement
-          </span>
-,
-          {' '}
+          </span>,{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
           NextSeed US LLC Member Agreement
-          </span>
-,
-          {' '}
+          </span>,{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
           NextSeed Securities LLC Investor Agreement
-          </span>
-, and
-          {' '}
+          </span>, and {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
           Substitute IRS Form W-9 Certification
-          </span>
-.
+          </span>.
           {/* <span className="highlight-text" style={{ cursor: 'pointer' }}
           onClick={() => this.openModal('membershipAgreement')}>
           NextSeed Membership Agreement
@@ -205,7 +194,7 @@ export default class Summary extends Component {
             loading={docLoading}
           />
         </p>
-      </Aux>
+      </>
     );
   }
 }
