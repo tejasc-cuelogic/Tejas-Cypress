@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
 
@@ -9,17 +8,17 @@ const Actions = observer((props) => {
     edit, editForm, deleteUpdate, id, cancelUpdate, cancelChanges,
   } = props;
   return (
-    <Aux>
+    <>
       {(isManager && !isPublished) || editForm
         ? (
-          <Button.Group compact floated="right">
-            <Button
-              inverted
-              color="red"
-              onClick={editForm ? cancelChanges : cancelUpdate}
-              content="Cancel"
-            />
-            {id !== 'new'
+<Button.Group compact floated="right">
+          <Button
+            inverted
+            color="red"
+            onClick={editForm ? cancelChanges : cancelUpdate}
+            content="Cancel"
+          />
+          {id !== 'new'
             && (
             <Button
               inverted
@@ -49,7 +48,7 @@ const Actions = observer((props) => {
           </Button.Group>
         )
         : (
-          <Button.Group compact floated="right">
+<Button.Group compact floated="right">
             {!isManager
             && (
             <Button
@@ -60,7 +59,7 @@ const Actions = observer((props) => {
             />
             )
           }
-            {id !== 'new' && !isPublished
+          {id !== 'new' && !isPublished
             && (
             <Button
               inverted
@@ -70,7 +69,7 @@ const Actions = observer((props) => {
             />
             )
           }
-            {!isPending && !isPublished
+          {!isPending && !isPublished
             && (
             <Button
               inverted
@@ -91,12 +90,12 @@ const Actions = observer((props) => {
             />
             )
           }
-          </Button.Group>
+        </Button.Group>
         )
       }
       {isManager && isPublished && !editForm
         && (
-        <Button.Group compact floated="right">
+<Button.Group compact floated="right">
           <Button
             inverted
             color="red"
@@ -121,7 +120,7 @@ const Actions = observer((props) => {
         </Button.Group>
         )
       }
-    </Aux>
+    </>
   );
 });
 

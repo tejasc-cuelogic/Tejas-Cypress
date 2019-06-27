@@ -11,10 +11,7 @@ const FrozenAccountModal = props => (
     <Modal.Content className="center-align mt-30">
       <Header as="h3" textAlign="center">This investment account is frozen.</Header>
       <p>
-        Please contact
-        {' '}
-        <a href="mailto:support@nextseed.com">support@nextseed.com</a>
-&nbsp;
+        Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>&nbsp;
         for further information.
       </p>
       <Divider hidden />

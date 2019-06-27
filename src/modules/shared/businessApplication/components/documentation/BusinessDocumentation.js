@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Popup, Icon, List, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
@@ -37,16 +36,15 @@ export default class BusinessDocumentation extends Component {
       disableFileUpload = false;
     }
     return (
-      <Aux>
+      <>
         <FormElementWrap
           hideFields={hideFields}
           header="Statements & Agreements"
           subHeader={(
-            <span>
+<span>
               Provide the most recent 6 months of bank statements for
               your business accounts. For new entities, provide if
-              statements are available.
-              <br />
+              statements are available.<br />
               Also provide the lease for your location. If only an LOIwith the landlord
               is currently available, please upload the LOI for review purposes.
               <Popup
@@ -90,15 +88,13 @@ export default class BusinessDocumentation extends Component {
         >
           {!hideFields
             && (
-            <List bulleted>
+<List bulleted>
               <List.Item>
-                <b>For new entities</b>
-, please submit your personal tax returns and, if
+                <b>For new entities</b>, please submit your personal tax returns and, if
                 available, tax returns of a different business entity that you currently own.
               </List.Item>
               <List.Item>
-                <b>For existing entities</b>
-, please submit tax returns for the entity.
+                <b>For existing entities</b>, please submit tax returns for the entity.
               </List.Item>
             </List>
             )
@@ -152,14 +148,11 @@ export default class BusinessDocumentation extends Component {
           />
           {getPersonalGuaranteeCondition
             && (
-            <div>
+<div>
               {!hideFields
               && (
-              <p>
-                Please
-                {' '}
-                <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>
-, fill out and upload the
+<p>
+                Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
                 Personal Guarantee Form along with any supporting documentation
               </p>
               )
@@ -196,7 +189,7 @@ export default class BusinessDocumentation extends Component {
           </div>
           )
           : ''}
-      </Aux>
+      </>
     );
   }
 }

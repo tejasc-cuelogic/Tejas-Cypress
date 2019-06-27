@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Form } from 'semantic-ui-react';
@@ -63,7 +62,7 @@ export default class Offerings extends Component {
                 filters={filters}
                 more="no"
                 addon={(
-                  <Aux>
+                  <>
                     <Grid.Column width={5} textAlign="right" floated="right">
                       <Button.Group floated="right">
                         {stage === 'creation'
@@ -72,7 +71,7 @@ export default class Offerings extends Component {
                         <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
                       </Button.Group>
                     </Grid.Column>
-                  </Aux>
+                  </>
 )}
               />
             </Grid.Row>

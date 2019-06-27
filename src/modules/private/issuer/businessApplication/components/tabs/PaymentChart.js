@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header } from 'semantic-ui-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
@@ -40,7 +39,7 @@ export default class PaymentChart extends Component {
       REVENUESHARINGMETA.rows = payment;
     }
     return (
-      <Aux>
+      <>
         <Header as="h4">{offerStructure === 'TERM_NOTE' ? 'Amortization Schedule Example' : 'Revenue Share Repayment Example'}</Header>
         <div className="table-wrapper-vertical">
           {payment && payment.length
@@ -48,7 +47,7 @@ export default class PaymentChart extends Component {
             : <p>No Offers Added</p>
         }
         </div>
-      </Aux>
+      </>
     );
   }
 }

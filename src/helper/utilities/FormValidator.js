@@ -3,7 +3,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach } from 'lodash';
+import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -479,24 +479,27 @@ class FormValidator {
   };
 
   evaluateObjectRef = (objRef, inputData, key, value) => {
-    let tempRef = inputData;
-    const rejObjects = objRef.split('.');
-    if (rejObjects.length === 1) {
-      tempRef = { ...inputData, [rejObjects[0]]: { ...inputData[[rejObjects[0]]], [key]: value } };
-    } else if (rejObjects.length === 2) {
-      tempRef = {
-        ...inputData,
-        [rejObjects[0]]: { [rejObjects[1]]: { ...inputData[[rejObjects[1]]], [key]: value } },
-      };
-    } else if (rejObjects.length === 3) {
-      tempRef = {
-        ...inputData,
-        [rejObjects[0]]: {
-          [rejObjects[1]]: { [rejObjects[2]]: { ...inputData[[rejObjects[2]]], [key]: value } },
-        },
-      };
-    }
+    const tempRef = inputData;
+    set(tempRef, `${objRef}.${key}`, value);
     return tempRef;
+    // let tempRef = inputData;
+    // const rejObjects = objRef.split('.');
+    // if (rejObjects.length === 1) {
+    //   tempRef = { ...inputData, [rejObjects[0]]: { ...inputData[[rejObjects[0]]], [key]: value } };
+    // } else if (rejObjects.length === 2) {
+    //   tempRef = {
+    //     ...inputData,
+    //     [rejObjects[0]]: { [rejObjects[1]]: { ...inputData[[rejObjects[1]]], [key]: value } },
+    //   };
+    // } else if (rejObjects.length === 3) {
+    //   tempRef = {
+    //     ...inputData,
+    //     [rejObjects[0]]: {
+    //       [rejObjects[1]]: { [rejObjects[2]]: { ...inputData[[rejObjects[2]]], [key]: value } },
+    //     },
+    //   };
+    // }
+    // return tempRef;
   }
 
   evalS3FileObj = (fileData) => {

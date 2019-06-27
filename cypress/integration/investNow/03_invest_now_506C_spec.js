@@ -18,6 +18,14 @@ describe('Invest now 506C investment flow', () => {
     cy.saveLocalStorage();
   });
 
+  it('Should open login popup if click on Invest Now button and not loged in', () => {
+    cy.get('.loader', { timeout: 6000 }).should('not.exist');
+    cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
+      .find('.center-align')
+      .contains('Invest Now')
+      .click();
+  });
+
   it('Should be login with valid investor and proceed for 506C investment', () => {
     openLogingPopupAndAutheticate();
   });
@@ -34,7 +42,7 @@ describe('Invest now 506C investment flow', () => {
       });
   });
 
-  it('Should proceed for investment', () => {
+  it.skip('Should proceed for investment', () => {
     cy.log('Investment....');
   });
 

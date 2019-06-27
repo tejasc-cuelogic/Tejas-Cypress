@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import Aux from 'react-aux';
 import { Label, Item } from 'semantic-ui-react';
 import NSImage from '../../../../shared/NSImage';
 
@@ -35,23 +34,23 @@ const Body = props => (
           const diff = moment(d2, D_FORMAT).diff(moment(d1, D_FORMAT), 'days');
           const time = moment(msg.updatedAt).format('h:mm A');
           return (msg.messageDetails.from !== props.current ? (
-            <Aux>
+            <>
               <DateSeparator index={index} diff={diff} date={d2} />
               <Item className={`${d2} in ${d1} ${diff}`}>
                 <Avatar />
                 <MsgContent body={msg.body} />
                 <Extra time={time} />
               </Item>
-            </Aux>
+            </>
           ) : (
-            <Aux>
+            <>
               <DateSeparator index={index} diff={diff} date={d2} />
               <Item className={`${d2} sent ${d1} ${diff}`}>
                 <Extra sent time={time} read={msg.messageDetails.read} />
                 <MsgContent body={msg.body} />
                 <Avatar />
               </Item>
-            </Aux>
+            </>
           ));
         })
       }

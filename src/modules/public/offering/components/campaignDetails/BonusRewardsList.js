@@ -9,7 +9,7 @@ const BonusRewardsList = ({ bonusRewards, tier, earlyBird }) => (
         ((!earlyBird && reward.tiers.includes(tier))
         || (earlyBird && reward.earlyBirdQuantity > 0))
         && (
-        <List.Item as="li">
+<List.Item as="li">
           <List.Header><HtmlEditor readOnly content={reward.title || ''} /></List.Header>
           <List.Description>
             <p className="detail-section">

@@ -1,9 +1,10 @@
 import { OfferingListingFlow } from '../../offerings/offeringListing.utility';
 import { OfferingDetailFlow, Offering506CDetailFlow } from '../../offerings/offeringDetails.utility';
-import { inValidEmailCredentials, clearLoginForm } from '../../auth/utility/login.utility';
+// import { inValidEmailCredentials, clearLoginForm } from '../../auth/utility/login.utility';
 import { applicationUnlock, getJSONDataFromFixtures, clearFormInput } from '../../common.utility';
 import {
   enteringInvestmentAmount,
+  checkAndStoreInvestmentProcess,
   invalidMultipleInvestmentAmount,
   invalidMinInvestmentAmount,
   validInvestmentAmount,
@@ -31,9 +32,9 @@ export const initializeInvestNowFlow = async (investmentType = 'CF') => {
 };
 
 export const proceedInvalidLoginAction = async () => {
-  // const inValidEmailCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidEmailCredentials');
+  const inValidEmailCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidEmailCredentials');
   let inputFieldObj = [
-    { key: 'type', value: "email"}
+    { key: 'type', value: "email" }
   ];
   clearFormInput(inputFieldObj);
   // clearLoginForm();
@@ -46,8 +47,8 @@ export const proceedInvalidLoginAction = async () => {
 export const proceedInvalidUserLoginAction = async () => {
   const inValidUserCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidUserCredentials');
   let inputFieldObj = [
-    { key: 'type', value: "email"},
-    { key: 'type', value: "password"}
+    { key: 'type', value: "email" },
+    { key: 'type', value: "password" }
   ];
   clearFormInput(inputFieldObj);
   // clearLoginForm();
@@ -69,7 +70,12 @@ export const proceedWithIncompleteInvestorCIPAction = async () => {
   cy.wait(2000);
   cy.get('div.modals').find('.transition .content').get('button').contains('Login as an Investor')
     .click();
-  clearLoginForm();
+  let inputFieldObj = [
+    { key: 'type', value: "email" },
+    { key: 'type', value: "password" }
+  ];
+  clearFormInput(inputFieldObj);
+  // clearLoginForm();
   cy.get('input[type="email"]').type(validInvestorWithIncompleteCIPCredentials.email);
   cy.get('input[type="password"]').type(validInvestorWithIncompleteCIPCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
@@ -91,7 +97,12 @@ export const proceedWithValidUserLoginAction = async () => {
   cy.wait(2000);
   cy.get('div.modals').find('.transition .content').get('button').contains('Login as an Investor')
     .click();
-  clearLoginForm();
+  // clearLoginForm();
+  let inputFieldObj = [
+    { key: 'type', value: "email" },
+    { key: 'type', value: "password" }
+  ];
+  clearFormInput(inputFieldObj);
   cy.get('input[type="email"]').type(validInvestorHavingOnceAccountCredentials.email);
   cy.get('input[type="password"]').type(validInvestorHavingOnceAccountCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
@@ -123,6 +134,7 @@ export const proceedWithValidCFInvestmentAction = () => {
 };
 
 export const checkEnteredAmountMultiplesValidation = () => {
+  checkAndStoreInvestmentProcess();
   invalidMultipleInvestmentAmount();
 };
 

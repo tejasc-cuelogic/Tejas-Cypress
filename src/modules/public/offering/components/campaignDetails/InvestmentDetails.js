@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { toJS } from 'mobx';
 import { inject } from 'mobx-react';
@@ -58,7 +57,7 @@ class InvestmentDetails extends Component {
     const emptyContent = 'No data found.';
     const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
-      <Aux>
+      <>
         {campaignStatus.useOfProcceds
         && (
           <>
@@ -93,7 +92,7 @@ class InvestmentDetails extends Component {
           KeyTerms={campaign && campaign.keyTerms}
           {...this.props}
         />
-      </Aux>
+      </>
     );
   }
 }

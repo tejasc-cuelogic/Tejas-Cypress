@@ -16,11 +16,11 @@ describe('Invest now flow', () => {
     cy.saveLocalStorage();
   });
 
-  it.skip('Should proceed for invest now flow', () => {
+  it('Should proceed for invest now flow', () => {
     initializeInvestNowFlow();
   });
 
-  it.skip('Should open login popup if click on Invest Now button and not loged in', () => {
+  it('Should open login popup if click on Invest Now button and not loged in', () => {
     cy.get('.loader', { timeout: 6000 }).should('not.exist');
     cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
       .find('.center-align')
@@ -28,15 +28,15 @@ describe('Invest now flow', () => {
       .click();
   });
 
-  it.skip('Invalid login credentails action', () => {
+  it('Invalid login credentails action', () => {
     proceedInvalidLoginAction();
   });
 
-  it.skip('Invalid user type login action', () => {
+  it('Invalid user type login action', () => {
     proceedInvalidUserLoginAction();
   });
 
-  it.skip('succesfully login as investor with one account', () => {
+  it('succesfully login as investor with one account', () => {
     proceedWithValidUserLoginAction();
   });
 

@@ -38,10 +38,7 @@ export default class ConfirmModel extends Component {
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Header className="signup-header">
-          <Header textAlign="center" as="h3">
-Mark as
-            {actionValue === 'CONFIRMED' ? 'approved' : 'declined'}
-          </Header>
+          <Header textAlign="center" as="h3">Mark as {actionValue === 'CONFIRMED' ? 'approved' : 'declined'}</Header>
         </Modal.Header>
         <Modal.Content>
           <Form>
@@ -53,22 +50,22 @@ Mark as
             />
             {actionValue === 'CONFIRMED'
               ? (
-                <MaskedInput
-                  name="expiration"
-                  placeholder="3/4/2018"
-                  fielddata={CONFIRM_ACCREDITATION_FRM.fields.expiration}
-                  format="##/##/####"
-                  changed={(values, field) => maskChange(values, 'CONFIRM_ACCREDITATION_FRM', field)}
-                  dateOfBirth
-                />
+<MaskedInput
+  name="expiration"
+  placeholder="3/4/2018"
+  fielddata={CONFIRM_ACCREDITATION_FRM.fields.expiration}
+  format="##/##/####"
+  changed={(values, field) => maskChange(values, 'CONFIRM_ACCREDITATION_FRM', field)}
+  dateOfBirth
+/>
               )
               : (
-                <FormTextarea
-                  containerclassname="secondary"
-                  name="declinedMessage"
-                  fielddata={CONFIRM_ACCREDITATION_FRM.fields.declinedMessage}
-                  changed={(e, result) => formChange(e, result, 'CONFIRM_ACCREDITATION_FRM')}
-                />
+<FormTextarea
+  containerclassname="secondary"
+  name="declinedMessage"
+  fielddata={CONFIRM_ACCREDITATION_FRM.fields.declinedMessage}
+  changed={(e, result) => formChange(e, result, 'CONFIRM_ACCREDITATION_FRM')}
+/>
               )
             }
             <DropZone

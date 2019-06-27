@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { get } from 'lodash';
@@ -51,19 +50,12 @@ export default class Congratulation extends React.Component {
       }
     }, 8500);
     return (
-      <Aux>
+      <>
         <Modal open closeIcon closeOnRootNodeClick={false} onClose={this.handleCloseModal}>
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>
             <Header as="h3">
-              You have invested
-              {' '}
-              <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span>
-              {' '}
-in
-              {' '}
-              { businessName}
-.
+              You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span> in { businessName}.
             </Header>
           </Modal.Header>
           <Modal.Content className="signup-content center-align">
@@ -88,7 +80,7 @@ in
             </div>
           </Modal.Content>
         </Modal>
-      </Aux>
+      </>
     );
   }
 }

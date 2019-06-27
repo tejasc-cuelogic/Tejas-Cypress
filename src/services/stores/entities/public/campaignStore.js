@@ -197,7 +197,7 @@ export class CampaignStore {
     const campaignStatus = {};
     const closingDate = get(campaign, 'closureSummary.processingDate') && get(campaign, 'closureSummary.processingDate') !== 'Invalid date' ? get(campaign, 'closureSummary.processingDate') : null;
     campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
-    campaignStatus.diffForProcessing = DataFormatter.diffDays(closingDate || null, false, true);
+    campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHours(closingDate, true);
     campaignStatus.isInProcessing = campaignStatus.diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
@@ -462,16 +462,17 @@ export class CampaignStore {
         false, true, true, customAddingHoursDateObject,
       );
       const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
-      const isInProcessing = closeDaysToRemains <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
+      const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHours(closingDate, true);
+      const isInProcessing = closeDaysToRemainsInHours <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
       const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
       if (regulation === 'BD_CF_506C' && !isInProcessing) {
         if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
           || closeDaysToRemains === null)
           && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
-          resultObject.isBannerShow = true;
           resultObject.bannerFirstText = 'NEW';
         }
+        resultObject.isBannerShow = true;
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
@@ -486,7 +487,8 @@ export class CampaignStore {
         resultObject.processingDate = moment(closingDate).unix() || null;
         return newOfferingsArr.push(resultObject);
       } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
-        const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
+        // const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
+        const labelBannerFirst = closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.bannerFirstText = labelBannerFirst;
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get, includes } from 'lodash';
 import InvestmentTimeline from './Rewards/InvestmentTimeline';
 import RewardList from './Rewards/RewardList';
@@ -32,7 +31,7 @@ class BonusRewards extends Component {
       <div className="inner-content-spacer">
         <InvestmentTimeline title="Your investment" {...props} />
         {rewardList.length > 0 &&
-        <Aux>
+        <>
         <Header as="h4">Your rewards</Header>
         <p className="neutral-text mb-30">{metaTitle}</p>
           {getEarlyBirdCheck ?
@@ -40,7 +39,7 @@ class BonusRewards extends Component {
             : earlyBirdLoading ? <InlineLoader /> : ''
           }
         <RewardList title="Your investment" match={props.match} list={rewardList} />
-        </Aux>
+        </>
         }
         <Route exact path={`${props.match.url}/redeem/:id`} component={Redeem} />
       </div>

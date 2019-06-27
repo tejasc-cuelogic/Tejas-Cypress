@@ -1,6 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
@@ -135,13 +134,13 @@ export default class Leader extends Component {
       || (isManager && approved && approved.status));
     const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     return (
-      <Aux>
+      <>
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
             {!isReadonly && leaderCount > 1
               && (
-              <Button.Group size="mini" floated="right">
+<Button.Group size="mini" floated="right">
                 <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
               </Button.Group>
               )
@@ -364,12 +363,12 @@ export default class Leader extends Component {
           </Header>
           {
             LEADERSHIP_EXP_FRM.fields.employer.map((exp, index2) => (
-              <Aux>
+              <>
                 <Header as="h6">
                   {`Business ${index2 + 1}`}
                   {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length > 1
                     && (
-                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
                     )
@@ -410,7 +409,7 @@ export default class Leader extends Component {
                     containerclassname="secondary"
                   />
                 </div>
-              </Aux>
+              </>
             ))
           }
           <Divider section />
@@ -445,7 +444,7 @@ export default class Leader extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

@@ -1,7 +1,6 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Icon, Popup, Form } from 'semantic-ui-react';
 import { FieldError } from '../../shared';
 
@@ -46,13 +45,13 @@ const FormRadioGroup = observer((props) => {
                       {radio.label}
                       {radio.tooltip
                         && (
-                        <Popup
-                          trigger={<Icon className="ns-help-circle" />}
-                          content={radio.tooltip}
-                          position="top center"
-                          className="center-align"
-                          wide
-                        />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={radio.tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
                         )
                       }
                     </label>
@@ -65,7 +64,7 @@ const FormRadioGroup = observer((props) => {
       );
     }
     return (
-      <Aux>
+      <>
         <Form.Group widths={props.widths} inline className={props.containerclassname || false}>
           {
             values.map(radio => (
@@ -85,7 +84,7 @@ const FormRadioGroup = observer((props) => {
         {error && props.showerror
           && <FieldError className={props.classname || false} error={error} />
         }
-      </Aux>
+      </>
     );
   }
 
@@ -102,13 +101,13 @@ const FormRadioGroup = observer((props) => {
               {radio.label}
               {tooltip
                 && (
-                <Popup
-                  trigger={<Icon className="ns-help-circle" />}
-                  content={tooltip}
-                  position="top center"
-                  className="center-align"
-                  wide
-                />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
                 )
               }
             </label>

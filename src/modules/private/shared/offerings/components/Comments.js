@@ -39,19 +39,19 @@ export default class Comments extends Component {
       <Card fluid className="messages comments">
         {messages.length
           ? (
-            <MessagesList
-              passedProcessingDate={passedProcessingDate}
-              threadMsgCount={threadMsgCount}
-              newPostComment={newPostComment}
-              threadUsersList={threadUsersList}
-              messageSelectHandler={this.messageSelectHandler}
-              match={match}
-              messages={messages}
-              currentMessageId={currentMessageId}
-              loading={loading}
-              error={error}
-              isIssuer={isIssuer}
-            />
+<MessagesList
+  passedProcessingDate={passedProcessingDate}
+  threadMsgCount={threadMsgCount}
+  newPostComment={newPostComment}
+  threadUsersList={threadUsersList}
+  messageSelectHandler={this.messageSelectHandler}
+  match={match}
+  messages={messages}
+  currentMessageId={currentMessageId}
+  loading={loading}
+  error={error}
+  isIssuer={isIssuer}
+/>
           ) : null
         }
         <MessagesWrap

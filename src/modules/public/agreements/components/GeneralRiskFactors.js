@@ -1,12 +1,11 @@
 /* eslint-disable no-irregular-whitespace */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Divider } from 'semantic-ui-react';
 
 export default class GeneralRiskFactors extends Component {
   render() {
     return (
-      <Aux>
+      <>
         <Header as="h2">Risk of Investing</Header>
         <Divider hidden />
         <p>
@@ -264,7 +263,7 @@ export default class GeneralRiskFactors extends Component {
           considered debt instruments or equity instruments for U.S. federal income tax
           purposes.
         </p>
-      </Aux>
+      </>
     );
   }
 }

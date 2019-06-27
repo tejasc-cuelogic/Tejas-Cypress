@@ -50,8 +50,7 @@ class AddNewCategory extends Component {
           size="mini"
         >
           <Modal.Header className="center-align signup-header">
-            <Header as="h4">
-              {id === 'new' ? `Add New ${selectedCategoryState.title} Category` : `Update ${selectedCategoryState.title} Category`}
+            <Header as="h4">{id === 'new' ? `Add New ${selectedCategoryState.title} Category` : `Update ${selectedCategoryState.title} Category`}
             </Header>
           </Modal.Header>
           <Modal.Content className="signup-content">

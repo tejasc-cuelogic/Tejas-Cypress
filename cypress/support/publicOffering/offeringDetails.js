@@ -23,7 +23,7 @@ export const OfferingDetailFlow = () => {
   goToCFOfferingDetailScreen();
 };
 
-export const Offering506CDetailFlow = ()=> {
+export const Offering506CDetailFlow = () => {
   registerApiCall('getOfferingDetailsBySlug');
   goTo506COfferingDetailScreen();
 }

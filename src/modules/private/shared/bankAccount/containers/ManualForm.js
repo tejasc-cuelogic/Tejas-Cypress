@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
@@ -79,11 +78,7 @@ export default class ManualForm extends Component {
     return (
       <div className="center-align">
         <Header as="h3">Link bank manually</Header>
-        <p>
-Enter your bank
-          {"'"}
-s routing number and your checking account number.
-        </p>
+        <p>Enter your bank{"'"}s routing number and your checking account number.</p>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
           <div className="field-wrap left-align">
             <MaskedInput
@@ -103,7 +98,7 @@ s routing number and your checking account number.
               showerror
             />
             <Form.Field>
-              <Aux>
+              <>
                 {
                   <FormRadioGroup
                     fielddata={formLinkBankManually.fields.accountType}
@@ -112,15 +107,13 @@ s routing number and your checking account number.
                     value={formLinkBankManually.fields.value}
                   />
                 }
-              </Aux>
+              </>
             </Form.Field>
           </div>
           {errors
             && (
-            <Message error className="mb-30">
-              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
-              {' '}
-              {/* <ListErrors errors={[errors.message]} /> */}
+<Message error className="mb-30">
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
             </Message>
             )
           }

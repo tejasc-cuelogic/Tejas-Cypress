@@ -1,6 +1,5 @@
 import React from 'react';
 import snakeCase from 'lodash/snakeCase';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { Card, Grid, Popup, Statistic, Icon } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
@@ -40,7 +39,7 @@ const summary = offer => [
 ];
 
 const CreationSummary = ({ offer }) => (
-  <Aux>
+  <>
     <Card fluid>
       <Grid doubling celled columns={summary(offer).length} className="custom-divided">
         {
@@ -52,12 +51,12 @@ const CreationSummary = ({ offer }) => (
                     {row.title}
                     {row.info
                       && (
-                      <Popup
-                        trigger={<Icon className="ns-help-circle" />}
-                        content={row.info}
-                        position="top center"
-                        className="center-align"
-                      />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={row.info}
+  position="top center"
+  className="center-align"
+/>
                       )
                     }
                   </Statistic.Label>
@@ -69,7 +68,7 @@ const CreationSummary = ({ offer }) => (
         }
       </Grid>
     </Card>
-  </Aux>
+  </>
 );
 
 export default CreationSummary;

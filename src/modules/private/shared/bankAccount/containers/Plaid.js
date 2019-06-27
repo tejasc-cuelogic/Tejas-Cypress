@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
 import { Header, Button, Image, Grid, Form, Input, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
@@ -96,7 +95,7 @@ export default class Plaid extends Component {
       );
     }
     return (
-      <Aux>
+      <>
         <div className="center-align">
           <Header as="h3">{headerText}</Header>
           <p className="mb-30">{subHeaderText}</p>
@@ -118,7 +117,7 @@ export default class Plaid extends Component {
             </Dimmer> */}
             {typeof bankListing !== 'undefined' && bankListing.length === 0
               && (
-              <Grid column={1} textAlign="center">
+<Grid column={1} textAlign="center">
                 <Grid.Column>No results found.</Grid.Column>
               </Grid>
               )
@@ -170,7 +169,7 @@ export default class Plaid extends Component {
           </div>
           {errors
             && (
-            <Message error>
+<Message error>
               <ListErrors errors={[errors.message]} />
             </Message>
             )
@@ -183,7 +182,7 @@ export default class Plaid extends Component {
             && <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
           }
         </div>
-      </Aux>
+      </>
     );
   }
 }

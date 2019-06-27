@@ -85,9 +85,7 @@ export default class NewUpdate extends Component {
     return (
       <Modal.Content className="transaction-details">
         <Header as="h3">
-          {isNew ? 'New' : 'Edit'}
-          {' '}
-Update
+          {isNew ? 'New' : 'Edit'} Update
           {!isNew
             && <Status status={PBUILDER_FRM.fields.status.value} />
           }
@@ -136,12 +134,9 @@ Update
                       <Modal
                         closeOnDimmerClick={false}
                         closeIcon
-                        trigger={(
-                          <Button color="green" className="link-button">
-                            <Icon className="ns-view" />
-See the update
-                          </Button>
-)}
+                        trigger={
+                          <Button color="green" className="link-button"><Icon className="ns-view" />See the update</Button>
+                        }
                       >
                         <Modal.Content>
                           <HtmlEditor readOnly content={(PBUILDER_FRM.fields.content.value || '')} />
@@ -156,7 +151,7 @@ See the update
               </Card>
               {this.props.match.url.includes('engagement')
                 && (
-                <Card fluid>
+<Card fluid>
                   <Card.Content>
                     <h4>Who’s this update for?</h4>
                     <Form.Group inline>

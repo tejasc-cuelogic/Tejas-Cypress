@@ -18,22 +18,16 @@ const DropZone = observer((props) => {
       }
       {!value
       && (
-      <div className="file-uploader">
+<div className="file-uploader">
         <Dropzone onDrop={props.ondrop} className="test" style={{}}>
-          <div>
-            <Icon className="ns-upload" />
-            {' '}
-Choose a file
-            {' '}
-            <span>or drag it here</span>
-          </div>
+          <div><Icon className="ns-upload" /> Choose a file <span>or drag it here</span></div>
         </Dropzone>
       </div>
       )
       }
       {value
       && (
-      <div className="file-uploader attached">
+<div className="file-uploader attached">
         <Responsive
           as={Button}
           minWidth={768}
@@ -57,7 +51,7 @@ Choose a file
       }
       {error
         && (
-        <div className="center-align">
+<div className="center-align">
           <FieldError error={error} />
         </div>
         )

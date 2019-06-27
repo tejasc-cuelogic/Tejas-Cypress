@@ -1,55 +1,55 @@
-// import {
-//     initializeInvestNowFlow,
-//     checkEnteredAmountMultiplesValidation,
-//     checkAmountGreaterThanMinInvestmentValidation,
-//     checkForValidAmountAndProceed,
-//     proceedToGenerateAgreement,
-//     sumbmitingInvestment,
-// } from '../../support/investNow/investNowFlow';
 import {
-    initializeInvestNowFlow,
-    checkEnteredAmountMultiplesValidation,
-    checkAmountGreaterThanMinInvestmentValidation,
-    checkForValidAmountAndProceed,
-    proceedToGenerateAgreement,
-    sumbmitingInvestment,
+  initializeInvestNowFlow,
+  checkEnteredAmountMultiplesValidation,
+  checkAmountGreaterThanMinInvestmentValidation,
+  checkForValidAmountAndProceed,
+  proceedToGenerateAgreement,
+  sumbmitingInvestment,
 } from './utility/investNowFlow.utility';
 import { openLogingPopupAndAutheticate } from './utility/validInvestorLoginForInvestment.utility';
 
 describe('Invest now CF investment flow', () => {
-    before(() => {
-        // initializeInvestNowFlow('CF');
-    });
+  before(() => {
+    initializeInvestNowFlow('CF');
+  });
 
-    beforeEach(() => {
-        cy.restoreLocalStorage();
-    });
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
 
-    afterEach(() => {
-        cy.saveLocalStorage();
-    });
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
 
-    it.skip('Should be login with valid investor and proceed for CF investment', () => {
-        openLogingPopupAndAutheticate();
-    });
+  it('Should open login popup if click on Invest Now button and not loged in', () => {
+    cy.get('.loader', { timeout: 6000 }).should('not.exist');
+    cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
+      .find('.center-align')
+      .contains('Invest Now')
+      .click();
+  });
 
-    it.skip('Should show validation error if investment amount is not in mulitple of 100', () => {
-        checkEnteredAmountMultiplesValidation();
-    });
+  it('Should be login with valid investor and proceed for CF investment', () => {
+    openLogingPopupAndAutheticate();
+  });
 
-    it.skip('Should show validation error if investment amount is less than minimum investment amount', () => {
-        checkAmountGreaterThanMinInvestmentValidation();
-    });
+  it('Should show validation error if investment amount is not in mulitple of 100', () => {
+    checkEnteredAmountMultiplesValidation();
+  });
 
-    it.skip('Should enter valid amount and proceed', () => {
-        checkForValidAmountAndProceed();
-    });
+  it.skip('Should show validation error if investment amount is less than minimum investment amount', () => {
+    checkAmountGreaterThanMinInvestmentValidation();
+  });
 
-    it.skip('Should generate agreement and show agreement model popup', () => {
-        proceedToGenerateAgreement();
-    });
+  it.skip('Should enter valid amount and proceed', () => {
+    checkForValidAmountAndProceed();
+  });
 
-    it.skip('Should submit investment and redirect to investment portfolio', () => {
-        sumbmitingInvestment();
-    });
+  it.skip('Should generate agreement and show agreement model popup', () => {
+    proceedToGenerateAgreement();
+  });
+
+  it.skip('Should submit investment and redirect to investment portfolio', () => {
+    sumbmitingInvestment();
+  });
 });

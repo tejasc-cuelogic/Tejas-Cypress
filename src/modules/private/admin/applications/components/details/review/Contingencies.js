@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Icon, Button, Form, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
@@ -25,33 +24,33 @@ const TableBody = ({
     {
     fields.length
       ? fields.map((formData, index) => (
-        <Table.Row verticalAlign="top">
-          <Table.Cell width={5}>
-            <FormInput
-              containerclassname={isReadonly ? 'display-only' : ''}
-              readOnly={isReadonly}
-              name="contingency"
-              fielddata={formData.contingency}
-              changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-              size="small"
-            />
-          </Table.Cell>
-          <Table.Cell>
-            <FormInput
-              containerclassname={isReadonly ? 'display-only' : ''}
-              readOnly={isReadonly}
-              name="acceptance"
-              fielddata={formData.acceptance}
-              changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-              size="small"
-            />
-          </Table.Cell>
-          {!isReadonly
+      <Table.Row verticalAlign="top">
+        <Table.Cell width={5}>
+          <FormInput
+            containerclassname={isReadonly ? 'display-only' : ''}
+            readOnly={isReadonly}
+            name="contingency"
+            fielddata={formData.contingency}
+            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+            size="small"
+          />
+        </Table.Cell>
+        <Table.Cell>
+          <FormInput
+            containerclassname={isReadonly ? 'display-only' : ''}
+            readOnly={isReadonly}
+            name="acceptance"
+            fielddata={formData.acceptance}
+            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+            size="small"
+          />
+        </Table.Cell>
+        {!isReadonly
         && (
-        <Table.Cell collapsing>
+<Table.Cell collapsing>
           {fields.length > 1
           && (
-          <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
+<Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
             <Icon className="ns-close-circle" color="grey" />
           </Link>
           )
@@ -59,12 +58,12 @@ const TableBody = ({
         </Table.Cell>
         )
         }
-        </Table.Row>
+      </Table.Row>
       )) : ''
     }
     {!isReadonly
     && (
-    <Table.Row>
+<Table.Row>
       <Table.Cell colSpan="3">
         {fields.length < 5
         && <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
@@ -120,7 +119,7 @@ export default class Contingencies extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
           <Header as="h5">
@@ -157,7 +156,7 @@ export default class Contingencies extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

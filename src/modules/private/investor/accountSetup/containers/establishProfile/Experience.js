@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
@@ -55,7 +54,7 @@ export default class Experience extends Component {
     } = this.props.investorProfileStore;
     const { errorMessage } = this.state;
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">Investment Experience</Header>
         <p className="center-align mb-40">
           Confirm your experience and understanding of the investment risks on NextSeed.
@@ -85,7 +84,7 @@ export default class Experience extends Component {
           />
           {errorMessage
           && (
-          <Message error className="mt-20">
+<Message error className="mt-20">
             <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
           </Message>
           )
@@ -93,7 +92,7 @@ export default class Experience extends Component {
           <div className="center-align mt-20">
             {!isInvestmentExperienceValid
               && (
-              <p className="negative-text mb-20">
+<p className="negative-text mb-20">
                 NextSeed investments are suitable for experienced investors who are
                 comfortable with long-term risk. Please confirm that you fit this
                 profile in order to proceed.
@@ -103,19 +102,15 @@ export default class Experience extends Component {
             <Button primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} />
             {!isInvestmentExperienceValid
               && (
-              <p className="negative-text mt-20">
-                Otherwise, please reference our
-                {' '}
-                <Link to="/resources/education-center">Education Center</Link>
-                {' '}
-to
+<p className="negative-text mt-20">
+                Otherwise, please reference our <Link to="/resources/education-center">Education Center</Link> to
                 learn more about investing on NextSeed.
               </p>
               )
             }
           </div>
         </Form>
-      </Aux>
+      </>
     );
   }
 }

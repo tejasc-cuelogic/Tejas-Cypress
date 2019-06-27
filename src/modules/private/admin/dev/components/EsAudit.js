@@ -37,69 +37,53 @@ export default class EsAudit extends Component {
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">
-            {capitalize(auditAlias)}
-            {' '}
-ES Audit
-          </Header>
+          <Header as="h3">{capitalize(auditAlias)} ES Audit</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {esAuditParaOutputLoading
             ? <InlineLoader />
             : (
-              <Form error onSubmit={this.onSubmit}>
-                <Form.Group className="bottom-aligned mb-40">
-                  <FormInput
-                    containerwidth={10}
-                    name="random"
-                    fielddata={ES_AUDIT_FRM.fields.random}
-                    changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
-                  />
-                  <Form.Field width={4}>
-                    <Button primary content="Submit" />
-                  </Form.Field>
-                </Form.Group>
-                <Grid>
-                  <Grid.Row columns={2}>
-                    <Grid.Column>
-                      <Header as="h6">
-                        {this.renderTitle(get(esAuditParaOutput, 'index_a.indexName') || '')}
-                        {' '}
-: (Count:
-                        {get(esAuditParaOutput, 'index_a.count') || 0}
-                        {' '}
-                        <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).fromNow() : ''}</span>
-)
-                      </Header>
-                      {!get(esAuditParaOutput, 'index_a.record') && !get(esAuditParaOutput, 'index_b.record')
-                    && <InlineLoader text="No Data Found" />
-                    }
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Header as="h6">
-                        {this.renderTitle(get(esAuditParaOutput, 'index_b.indexName') || '')}
-                        {' '}
-: (Count:
-                        {get(esAuditParaOutput, 'index_b.count') || 0}
-                        {' '}
-                        <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).fromNow() : ''}</span>
-)
-                      </Header>
-                      {!get(esAuditParaOutput, 'index_a.record') && !get(esAuditParaOutput, 'index_b.record')
-                    && <InlineLoader text="No Data Found" />
-                    }
-                    </Grid.Column>
-                  </Grid.Row>
-                  {(get(esAuditParaOutput, 'index_a.record') || get(esAuditParaOutput, 'index_b.record'))
-                && (
-                <ReactDiffViewer
-                  oldValue={beautify(get(esAuditParaOutput, 'index_a.record') || '', null, 2)}
-                  newValue={beautify(get(esAuditParaOutput, 'index_b.record') || '', null, 2)}
-                  splitView
+<Form error onSubmit={this.onSubmit}>
+              <Form.Group className="bottom-aligned mb-40">
+                <FormInput
+                  containerwidth={10}
+                  name="random"
+                  fielddata={ES_AUDIT_FRM.fields.random}
+                  changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
                 />
+                <Form.Field width={4}>
+                  <Button primary content="Submit" />
+                </Form.Field>
+              </Form.Group>
+              <Grid>
+                <Grid.Row columns={2}>
+                  <Grid.Column>
+                    <Header as="h6">
+                      {this.renderTitle(get(esAuditParaOutput, 'index_a.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).fromNow() : ''}</span>)
+                    </Header>
+                    {!get(esAuditParaOutput, 'index_a.record') && !get(esAuditParaOutput, 'index_b.record')
+                    && <InlineLoader text="No Data Found" />
+                    }
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Header as="h6">
+                      {this.renderTitle(get(esAuditParaOutput, 'index_b.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).fromNow() : ''}</span>)
+                    </Header>
+                    {!get(esAuditParaOutput, 'index_a.record') && !get(esAuditParaOutput, 'index_b.record')
+                    && <InlineLoader text="No Data Found" />
+                    }
+                  </Grid.Column>
+                </Grid.Row>
+                {(get(esAuditParaOutput, 'index_a.record') || get(esAuditParaOutput, 'index_b.record'))
+                && (
+<ReactDiffViewer
+  oldValue={beautify(get(esAuditParaOutput, 'index_a.record') || '', null, 2)}
+  newValue={beautify(get(esAuditParaOutput, 'index_b.record') || '', null, 2)}
+  splitView
+/>
                 )}
-                </Grid>
-              </Form>
+              </Grid>
+            </Form>
             )
           }
         </Modal.Content>

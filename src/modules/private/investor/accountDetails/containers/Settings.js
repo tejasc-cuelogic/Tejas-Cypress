@@ -48,8 +48,7 @@ export default class Settings extends Component {
               <Card.Content>
                 <Header as="h6">Want to update information?</Header>
                 <Card.Description>
-                  <p>
-If any of this information needs to be updated.
+                  <p>If any of this information needs to be updated.
                   please contact support through the message center.
                   </p>
                   <p><Link to={match.url}>Contact us now</Link></p>

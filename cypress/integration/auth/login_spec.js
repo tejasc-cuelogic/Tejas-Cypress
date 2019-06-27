@@ -26,7 +26,7 @@ describe('Log In', () => {
       cy.get('a').contains('Forgot password?')
         .invoke('attr', 'href')
         .then((href) => {
-          cy.log('href', href);
+          cy.log('href', href)
           cy.visit(href, { failOnStatusCode: false });
         });
     });
@@ -37,7 +37,7 @@ describe('Log In', () => {
     cy.get('.signup-actions').get('a').contains('Sign up')
       .invoke('attr', 'href')
       .then((href) => {
-        cy.log('href', href);
+        cy.log('href', href)
         cy.visit(href, { failOnStatusCode: false });
       });
   });
