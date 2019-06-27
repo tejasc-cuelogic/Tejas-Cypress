@@ -589,14 +589,25 @@ footer .ui.text.menu{
     }
     &.secondary-menu{
         margin:0;
-        background-color:transparent;
+        background-color:@neutral-darkwhite;
+        &.investor{
+            background-color:transparent;
+            a.item{
+                &:before{
+                    display: none;
+                }
+                &:hover, &.active{
+                    background-color:@neutral-midwhite;
+                }  
+            }
+        }
         a.item{
             padding:@16px @20px;
             &:before{
-                display: none;
+                background-color:@neutral-darkwhite;
             }
             &:hover, &.active{
-                background-color:@neutral-midwhite;
+                background-color:@neutral-offwhite;
             }
             >.icon{
                 color:@neutral-offdark;
