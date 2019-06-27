@@ -138,7 +138,8 @@
 				}
 			}
 			&.ui.dropdown>.text{
-				min-width:~"calc(100% - 27px)";
+				min-width:~"calc(100% - 30px)";
+				max-width:~"calc(100% - 30px)";
 			}
 			&:first-child:before, &:before{
 				display:none;
@@ -163,7 +164,7 @@
 				&:hover, &:focus, &.active{
 					background:@neutral-offwhite;
 					.icon:not(.dropdown){
-						color:@primary-one;
+						color:@neutral;
 					}
 				}
 			}

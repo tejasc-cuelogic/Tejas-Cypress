@@ -42,7 +42,7 @@ class PrivateLayout extends Component {
           </Grid>
         </div>
         {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav)
-          && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
+          && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className={`${this.props.userStore.isInvestor ? 'investor' : ''} secondary-menu`} navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
         {this.props.P1
           && (

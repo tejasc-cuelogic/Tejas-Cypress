@@ -191,7 +191,7 @@ export class NavItems extends Component {
                 ? (item.title === 'Bonus Rewards' && this.props.isBonusReward)
               || (item.title !== 'Bonus Rewards') ? (
                 <>
-                {(item.title === 'Account Settings')
+                {(item.title === 'Account Settings' && this.props.userStore.isInvestor)
                 && (
                 <Divider />)
                 }
