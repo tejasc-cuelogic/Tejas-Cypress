@@ -1,18 +1,8 @@
-// import { proceedWithValidUserLoginAction } from './investNowFlow';
-// import { clearLoginForm } from '../auth/login';
 import { registerApiCall, getJSONDataFromFixtures, clearFormInput } from '../../common.utility';
 
-export const openLoginModelPopup = () => {
-  cy.get('.loader', { timeout: 6000 }).should('not.exist');
-  cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
-    .find('.center-align')
-    .contains('Invest Now')
-    .click();
-}
-
-export const validInvestorLoginAction = () => {
+export const validInvestorLoginAction = async () => {
   const validInvestorHavingOnceAccountCredentials = await getJSONDataFromFixtures('investor/user.json', 'validInvestorHavingOnceAccountCredentials');
-  // cy.wait(2000);
+  cy.log('validInvestorHavingOnceAccountCredentials ==>', validInvestorHavingOnceAccountCredentials);
   registerApiCall('investNowHealthCheck');
   let inputFieldObj = [
     { key: 'type', value: "email"},
@@ -31,7 +21,6 @@ export const validInvestorLoginAction = () => {
     .get('small')
     .invoke('text')
     .then((text1) => {
-      cy.log('minAmount===>', text1);
       const splitArr = text1.split(' ');
       const amountArr = splitArr[0].split('$');
       const minInvestAmount = amountArr[1];
@@ -47,6 +36,5 @@ export const validInvestorLoginAction = () => {
 };
 
 export const openLogingPopupAndAutheticate = () => {
-  openLoginModelPopup();
   validInvestorLoginAction();
 }

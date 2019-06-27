@@ -3,6 +3,10 @@
         "email": "v2+admin@nextseed.com",
         "password": "nextseedTest"
     },
+    "inValidEmailCredentials": {
+        "email": "test001nextseed.com",
+        "password": "nextseed01test"
+    },
     "validInvestorHavingOnceAccountCredentials": {
         "email": "jackdemerse2017+15@gmail.com",
         "password": "Jack@12345"
