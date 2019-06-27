@@ -41,7 +41,7 @@ export const fillNextYearProjection = (nextYearProjection) => {
 
 export const fillBusinessDetails = (businessDetails) => {
   uploadFile('input[name="businessPlan"]');
-  cy.wait(5000);
+  cy.get('.loader', { timeout: 6000 }).should('not.exist');
   fillExistingDebt(businessDetails.existingDebt);
   fillOwnerInfo(businessDetails.owner);
 }
@@ -68,7 +68,7 @@ export const fillOwnerInfo = (owner) => {
     cy.get('input[name="ssn"]').type(owner.ssn);
     cy.get('input[name="linkedInUrl"]').type(owner.linkedInUrl);
     uploadFile('input[name="resume"]');
-    cy.wait(5000);
+    cy.get('.loader', { timeout: 6000 }).should('not.exist');
 }
 
 export const fillExistingDebt = (existingDebt) => {
