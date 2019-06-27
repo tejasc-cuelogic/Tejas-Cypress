@@ -181,7 +181,7 @@ export class NavItems extends Component {
           ) : (item.isMenuHeader && hasMoreThanOneAcc)
             ? (
 <Menu.Item className="menu-header">
-              <Menu.Header>{item.title}</Menu.Header>
+              <Menu.Header>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</Menu.Header>
             </Menu.Item>
             )
             : (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader)
@@ -205,7 +205,7 @@ export class NavItems extends Component {
                 >
                   {item.icon && <Icon className={item.icon} />}
                   {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
-                  {item.title !== 'Updates' ? <span>{item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
+                  {item.title !== 'Updates' ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
                   {(item.to === 'updates' || item.to === 'comments') && this.props.countData
                     ? <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
                   }
