@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -11,7 +10,7 @@ class BusinessModel extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     return (
-      <Aux>
+      <>
         <Header as="h3" className="anchor-wrap mb-30">
           Business Model
           <span className="anchor" id="business-model" />
@@ -21,7 +20,7 @@ class BusinessModel extends Component {
           ? <HtmlEditor readOnly content={campaign.offering.about.businessModel} />
           : <InlineLoader text="No data found" className="bg-offwhite" />
         }
-      </Aux>
+      </>
     );
   }
 }

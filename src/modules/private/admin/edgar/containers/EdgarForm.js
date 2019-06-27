@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Form, Button, Grid, Divider, Icon, Card, Responsive } from 'semantic-ui-react';
@@ -65,7 +64,7 @@ export default class EdgarForm extends React.Component {
       );
     }
     return (
-      <Aux>
+      <>
         <div className="page-header-section">
           <Grid>
             <Grid.Row>
@@ -122,7 +121,7 @@ export default class EdgarForm extends React.Component {
             </Card.Content>
           </Card>
         </div>
-      </Aux>
+      </>
     );
   }
 }

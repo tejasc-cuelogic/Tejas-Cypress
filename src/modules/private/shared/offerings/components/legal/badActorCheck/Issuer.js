@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
@@ -49,7 +48,7 @@ export default class Issuer extends Component {
         <Form>
           {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
-              <Aux>
+              <>
                 {field === 'issuerDiligence'
                   && <Header as="h4">{ISSUER_FRM.fields[field].label}</Header>
                 }
@@ -62,7 +61,7 @@ export default class Issuer extends Component {
                   changed={(e, result) => formChange(e, result, formName)}
                   containerclassname="secondary"
                 />
-              </Aux>
+              </>
             ))
           }
           <Divider section />

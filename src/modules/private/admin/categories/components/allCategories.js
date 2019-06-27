@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
-import Aux from 'react-aux';
 import { Accordion, Icon, Button, Confirm } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 
@@ -125,7 +124,7 @@ export default class AllCategories extends Component {
       return <InlineLoader text="No data found." />;
     }
     return (
-      <Aux>
+      <>
         {categories && categories.length && categories.map((category, index) => (
           <Accordion fluid styled className="card-style">
             <Accordion.Title onClick={() => this.toggleAccordianContent(index)} className="text-capitalize">
@@ -160,7 +159,7 @@ export default class AllCategories extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

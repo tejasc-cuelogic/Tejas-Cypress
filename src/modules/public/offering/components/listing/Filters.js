@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Container, Grid, Menu, Header, Checkbox, Form, Icon, Popup, List, Button } from 'semantic-ui-react';
 import Slider from 'react-slick';
 import { BUSINESS_INDUSTRIES } from '../../../../../services/constants/offering';
@@ -98,7 +97,7 @@ export default class Filters extends Component {
 
   render() {
     const BusinessTypesComp = (
-      <Aux>
+      <>
         <Header as="h6" dividing className="text-uppercase">Business Type</Header>
         <List relaxed="very">
           {this.state.BusinessTypes.map((item, index) => (
@@ -108,10 +107,10 @@ export default class Filters extends Component {
             </List.Item>
           ))}
         </List>
-      </Aux>
+      </>
     );
     const InvestAndFundingTypeComp = (
-      <Aux>
+      <>
         <Header as="h6" dividing className="text-uppercase">
           Investment Options
         </Header>
@@ -149,10 +148,10 @@ export default class Filters extends Component {
             }
           </Form>
         </div>
-      </Aux>
+      </>
     );
     const OtherFiltersComp = (
-      <Aux>
+      <>
         <Header as="h6" dividing className={`${isMobile && 'mt-80'} text-uppercase`}>
           More Options
         </Header>
@@ -171,10 +170,10 @@ export default class Filters extends Component {
             }
           </Form>
         </div>
-      </Aux>
+      </>
     );
     return (
-      <Aux>
+      <>
         <div className="filter-menu">
           <Container>
             <Menu text>
@@ -224,13 +223,13 @@ export default class Filters extends Component {
                     : (
 <div className="carousel">
                       <Slider ref={c => this.setProp(c)} {...this.settings}>
-                        <Aux>
+                        <>
                           {BusinessTypesComp}
-                        </Aux>
-                        <Aux>
+                        </>
+                        <>
                           {InvestAndFundingTypeComp}
                           {OtherFiltersComp}
-                        </Aux>
+                        </>
                       </Slider>
                       <div className="filter-buttons mt-10">
                         {this.state.activeSlide === 1
@@ -277,7 +276,7 @@ export default class Filters extends Component {
           )
           }
         </div>
-      </Aux>
+      </>
     );
   }
 }

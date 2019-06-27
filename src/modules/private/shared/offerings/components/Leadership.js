@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Grid, Button, List } from 'semantic-ui-react';
 import { Switch, Route } from 'react-router-dom';
@@ -41,7 +40,7 @@ export default class Leadership extends Component {
         id: 1,
         title: 'Who does a “Control Person” include?',
         description: (
-          <Aux>
+          <>
             <List ordered>
               <List.Item>
                 An officer, director, general partner or managing member of the company
@@ -61,7 +60,7 @@ export default class Leadership extends Component {
               </List.Item>
               <List.Item>Any control person of the person described in (5).</List.Item>
             </List>
-          </Aux>
+          </>
         ),
       },
     ];

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input, Breadcrumb, Divider } from 'semantic-ui-react';
@@ -42,7 +41,7 @@ export default class KnowledgeBase extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         {marketing && (
           <Breadcrumb className="mb-20">
             <Breadcrumb.Divider icon={{ className: 'ns-chevron-left' }} />
@@ -89,10 +88,10 @@ export default class KnowledgeBase extends Component {
               <Route
                 path={`${match.url}/faq`}
                 render={props => (
-                    <Aux>
-                      {isMobile && <Divider hidden />}
-                      <FaqsCombined marketing={marketing} params={match.params} {...props} />
-                    </Aux>
+                  <>
+                    {isMobile && <Divider hidden />}
+                    <FaqsCombined marketing={marketing} params={match.params} {...props} />
+                  </>
                 )
                 }
               />
@@ -103,7 +102,7 @@ export default class KnowledgeBase extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

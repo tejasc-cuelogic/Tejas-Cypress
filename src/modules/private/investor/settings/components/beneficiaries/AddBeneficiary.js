@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { FormInput, AutoComplete, MaskedInput } from '../../../../../../theme/form';
@@ -64,12 +63,12 @@ export default class AddBeneficiary extends Component {
       beneficiaryModal,
     } = this.props.beneficiaryStore;
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           {
             BENEFICIARY_META.fields.beneficiary.length
               ? BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
-                <Aux>
+                <>
                   <Header as="h5">
                     {`Beneficiary ${index + 1}`}
                     {BENEFICIARY_META.fields.beneficiary.length > 1
@@ -131,7 +130,7 @@ export default class AddBeneficiary extends Component {
                       }
                     </Form.Group>
                   </div>
-                </Aux>
+                </>
               ))
               : <InlineLoader />
           }
@@ -153,7 +152,7 @@ export default class AddBeneficiary extends Component {
         <Route path={`${this.props.match.url}/confirm`} render={() => <BeneficiaryShareModal refLink={this.props.match.url} />} />
         <Route path={`${this.props.match.url}/preview`} render={() => <BeneficiaryPreviewModal refLink={this.props.match.url} />} />
         <Route path={`${this.props.match.url}/verify`} render={() => <ConfirmVerificationCode refLink={this.props.refLink} refLinkList={this.props.match.url} />} />
-      </Aux>
+      </>
     );
   }
 }
