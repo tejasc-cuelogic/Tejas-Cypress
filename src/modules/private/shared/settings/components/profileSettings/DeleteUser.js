@@ -35,7 +35,7 @@ export default class DeleteUser extends React.Component {
         trigger={(
             <Button color="green" inverted onClick={() => this.toggleModal(true)} content="Delete" />
           )}
-        size="tiny"
+        size="mini"
         closeOnDimmerClick={false}
       >
           <Modal.Header className="center-align signup-header">
