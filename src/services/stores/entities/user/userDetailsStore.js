@@ -527,12 +527,12 @@ export class UserDetailsStore {
       routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
       routingUrl = '/app/summary/account-creation';
-    } else if (this.signupStatus.partialAccounts.length > 0) {
-      // const accValue =
-      //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
-      // accountStore.setAccTypeChange(accValue);
+    } else if (this.partialInvestNowSessionURL && this.signupStatus.partialAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
       routingUrl = `/app/summary/account-creation/${redirectAccount}`;
+    } else if (this.signupStatus.activeAccounts.length > 0) {
+      const redirectAccount = this.signupStatus.activeAccounts[0];
+      routingUrl = `/app/account-details/${redirectAccount}/portfolio`;
     } else {
       routingUrl = '/app/summary';
     }
