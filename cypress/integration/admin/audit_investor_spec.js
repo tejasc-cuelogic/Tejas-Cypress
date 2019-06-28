@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, forEach } from 'lodash';
 import { seedTestUsers, getMigratedUserAuditInfo, cleanUpTestUsers } from '../../fixtures/userQueries';
 import { apiRequest } from '../../support/common';
 import { requestBody, requestHeaders } from '../../fixtures/common';
@@ -34,9 +34,10 @@ const userInfo = ['dateAccountWasOpened',
   'totalAmtCashInterestTXAndUS.cashInterestUS'
 ];
 
-describe('Dynamic tests', () => {
 
-  context('dynamic users', () => {
+describe('Audit Investor', () => {
+
+  context('User Login', () => {
     before(() => {
       cy.login(adminCredentials.email, adminCredentials.password).then((user) => {
         console.log('user', user);
@@ -60,6 +61,7 @@ describe('Dynamic tests', () => {
                     apiRequest('cleanUpTestUsers', requestBody, requestHeaders)
                       .then((resCleanUpTestUsers) => {
                         console.log('Successfully cleanUp Test Users', resCleanUpTestUsers);
+
                       });
                   });
               });
@@ -68,7 +70,7 @@ describe('Dynamic tests', () => {
       })
     });
 
-    describe('fetched users', () => {
+    describe('Data compare', () => {
       userInfo.forEach(auditKey => {
         it(`should assert presence of ${auditKey}`, () => {
           assert.equal(get(auditInfo, auditKey), get(migratedUserAuditInfo, auditKey), `Successfully matched field: ${auditKey}`);
