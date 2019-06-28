@@ -233,4 +233,19 @@
 		}
 	}
 }
-
+.closable-card{
+    .ui.statistic{
+		margin:0;
+		flex: 1;
+        .value{
+            font-size:@20px !important;
+            text-transform:none;
+        }
+        .label{
+            font-size:@15px;
+		}
+		~div{
+			flex: 1;
+		}
+	}
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
-import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
+import { Card, Grid, Popup, Divider, Statistic, Icon, Header, Button } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 /*
@@ -31,6 +31,26 @@ const SummaryTitle = props => ((props.details.businessName) ? (
 
 const SummaryHeader = props => (
   <Aux>
+    <div className="closable-card">
+      <Button icon className="link-button">
+        <Icon className="ns-close-light" />
+      </Button>
+      <Card fluid raised>
+        <Card.Content>
+          <Statistic size="tiny" className="cta">
+            <Statistic.Value className="mb-half">Earn $100 by verifying your accredited investor status</Statistic.Value>
+            <Statistic.Label>
+              Are you an accredited investor? Go through the steps to verify your status
+              today, and for a limited time, we will add a $100 credit to your account.
+            </Statistic.Label>
+            <Link to="/" className="mt-10">See Rules</Link>
+          </Statistic>
+          <div className="center-align">
+            <Button compact primary content="Verify" />
+          </div>
+        </Card.Content>
+      </Card>
+    </div>
     {props.details.title !== false && props.details.businessName
       && <SummaryTitle {...props} />
     }

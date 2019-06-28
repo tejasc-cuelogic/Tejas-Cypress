@@ -484,6 +484,23 @@
         padding-left: @14px;
     }
 }
+.closable-card{
+    position: relative;
+    .ui.button.icon {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        z-index: 1;
+    }
+    .ui.card{
+        margin-top: 0;
+        .content{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+}
 
 .ui.cards{
     &.steps-card{
