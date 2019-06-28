@@ -1,11 +1,11 @@
-import { registerApiCall, uploadFile, applicationUnlock } from '../../support/common';
+import { registerApiCall, uploadFile } from '../../support/common';
 import { issuerDetails } from '../../support/issuerSignUp/issuerDetails';
 import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails, fillNextYearProjection, fillBusinessDetails, loginToApplication } from '../../support/issuerSignUp/issuerSignUp';
 
 describe('Issuer Sign Up', () => {
   beforeEach(() => {
     // cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-    // applicationUnlock();
+    // cy.applicationUnlock();
     // if (cy.get('a').contains('Sign Up')) {
     //   cy.get('a').contains('Sign Up').click();
     // } else {

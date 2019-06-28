@@ -21,7 +21,7 @@ import {
 export const initializeInvestNowFlow = async (investmentType = 'CF') => {
   cy.log('investment type==>', investmentType);
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-  applicationUnlock();
+  cy.applicationUnlock();
   OfferingListingFlow();
   if (investmentType === 'CF') {
     OfferingDetailFlow();
@@ -46,6 +46,7 @@ export const proceedInvalidLoginAction = async () => {
 
 export const proceedInvalidUserLoginAction = async () => {
   const inValidUserCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidUserCredentials');
+  cy.log('inValidUserCredentials ==>', inValidUserCredentials);
   let inputFieldObj = [
     { key: 'type', value: "email" },
     { key: 'type', value: "password" }

@@ -14,12 +14,11 @@ import {
   generateAgreement,
   submitInvestment,
   } from './enteringInvestmentAmount';
-import { applicationUnlock } from '../common';
 
 export const initializeInvestNowFlow = (investmentType = 'CF') => {
   cy.log('investment type==>',investmentType);
   cy.visit('/', { failOnStatusCode: false , timeout: 100000 });
-  applicationUnlock();
+  cy.applicationUnlock();
   OfferingListingFlow();
   if (investmentType === 'CF') {
     OfferingDetailFlow();
