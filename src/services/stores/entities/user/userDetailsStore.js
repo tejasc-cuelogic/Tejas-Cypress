@@ -530,8 +530,9 @@ export class UserDetailsStore {
     } else if (this.partialInvestNowSessionURL && this.signupStatus.partialAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
       routingUrl = `/app/summary/account-creation/${redirectAccount}`;
-    } else if (this.signupStatus.activeAccounts.length > 0) {
-      const redirectAccount = this.signupStatus.activeAccounts[0];
+    } else if (this.signupStatus.activeAccounts.length > 0
+      || this.signupStatus.frozenAccounts.length > 0) {
+      const redirectAccount = this.signupStatus.activeAccounts[0] || this.signupStatus.frozenAccounts[0];
       routingUrl = `/app/account-details/${redirectAccount}/portfolio`;
     } else {
       routingUrl = '/app/summary';
