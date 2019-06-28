@@ -219,18 +219,14 @@ export class UserDetailsStore {
 
   @action
   deleteProfile = (isInvestor = false) => new Promise(async (resolve, reject) => {
-    if (!isInvestor) {
-      uiStore.addMoreInProgressArray('deleteProfile');
-    }
+    uiStore.addMoreInProgressArray('deleteProfile');
     try {
       const res = await client
         .mutate({
           mutation: deleteProfile,
-          variables: !isInvestor ? { userId: this.selectedUserId } : {},
+          variables: { userId: !isInvestor ? this.selectedUserId : this.currentUserId },
         });
-      if (!isInvestor) {
-        uiStore.removeOneFromProgressArray('deleteProfile');
-      }
+      uiStore.removeOneFromProgressArray('deleteProfile');
       if (res.data.adminDeleteInvestorOrIssuerUser.status) {
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
@@ -238,9 +234,7 @@ export class UserDetailsStore {
         reject(res.data.adminDeleteInvestorOrIssuerUser.message);
       }
     } catch (error) {
-      if (!isInvestor) {
-        uiStore.removeOneFromProgressArray('deleteProfile');
-      }
+      uiStore.removeOneFromProgressArray('deleteProfile');
       Helper.toast('Something went wrong, please try again in sometime', 'error');
     }
   });

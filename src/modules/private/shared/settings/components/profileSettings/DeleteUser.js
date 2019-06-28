@@ -1,10 +1,13 @@
 import React from 'react';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import { Button, Modal, Header, Divider, Message } from 'semantic-ui-react';
 import { InlineLoader, ListErrors } from '../../../../../../theme/shared';
+import { authActions } from '../../../../../../services/actions';
 
-@inject('userStore', 'userDetailsStore')
+@inject('userStore', 'userDetailsStore', 'uiStore')
+@withRouter
 @observer
 export default class DeleteUser extends React.Component {
   state = {
@@ -22,11 +25,17 @@ export default class DeleteUser extends React.Component {
   }
 
   handleDeleteUser = () => {
-    this.props.userDetailsStore.deleteProfile(true).then(() => this.setState({ failMessage: false })).catch(msg => this.setState({ failMessage: msg }));
+    this.props.userDetailsStore.deleteProfile(true).then(() => {
+      this.setState({ failMessage: false });
+      authActions.logout('user').then(() => {
+        this.props.history.push('/');
+      });
+    }).catch(msg => this.setState({ failMessage: msg }));
   }
 
   render() {
     const { getDeleteUserMeta, deleteUserLoading } = this.props.userStore;
+    const { inProgressArray } = this.props.uiStore;
     return (
       <Modal
         closeIcon
@@ -61,7 +70,7 @@ export default class DeleteUser extends React.Component {
               <div className="center-align mt-30">
                 <Button.Group>
                   <Button onClick={this.closeModal} type="button">Cancel</Button>
-                  <Button content="Delete" color="red" onClick={this.handleDeleteUser} disabled={!get(getDeleteUserMeta, 'isValidForDelete')} />
+                  <Button content="Delete" color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteUser} disabled={!get(getDeleteUserMeta, 'isValidForDelete')} />
                 </Button.Group>
               </div>
           </Modal.Content>
