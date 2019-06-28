@@ -25,16 +25,18 @@ export const invalidInvestmentAmount = () => {
 
 export const validInvestmentAmount = () => {
   registerApiCall('investNowGeneratePurchaseAgreement');
-  const enterdMaxValidAmount = '1000';
+  const investmentAction = window.localStorage.getItem('investmentAction');
+  const previousInvestedAmount = money.floatToAmount(window.localStorage.getItem('previousInvestment'));
+  const investmentAmountFloat = investmentAction === 'UPDATE' ? money.add(previousInvestedAmount, '100.00') : '1000';
+  const investmentAmount = Math.round(investmentAmountFloat);
   cy.wait(300);
   let inputFieldObj = [
     { key: 'name', value: "investmentAmount" }
   ];
   clearFormInput(inputFieldObj);
-  cy.get('input[name="investmentAmount"]').type(enterdMaxValidAmount);
+  cy.get('input[name="investmentAmount"]').type(investmentAmount);
   cy.get('input[name="investmentAmount"]').type('{enter}');
   cy.wait('@investNowGeneratePurchaseAgreement');
-  // cy.wait('@investNowGeneratePurchaseAgreement');
 };
 
 export const ConfirmTransferRequest = () => {
@@ -58,7 +60,6 @@ export const ConfirmTransferRequest = () => {
 };
 
 export const generateAgreement = () => {
-  // cy.wait('@investNowGeneratePurchaseAgreement');
   cy.wait(2000);
   cy.get('.confirm-investment').should('have.length', 1);
   cy.get('.signup-content').find('div:visible').find('.ui.form').find('.ui.stackable.grid')
@@ -111,19 +112,22 @@ export const enteringInvestmentAmount = () => {
   submitInvestment();
 };
 
-export const checkAndStoreInvestmentProcess = () => {
-  cy.get('.loader', { timeout: 4000 }).should('not.exist');
-  cy.get('.multistep-modal').find('.multistep.content')
-    .get('h3')
-    .invoke('text')
-    .then(($text1) => {
-      cy.log('text1 investment type===>', $text1);
-      if ($text1.includes('Update your Investment')) {
-        localStorage.setItem('investmentType', 'update');
-      } else {
-        localStorage.setItem('investmentType', 'add');
-      }
-    });
+export const checkAndStoreInvestmentProcess = async () => {
+  cy.get('.loader').should('not.contain', 'Loading..');
+  cy.get('.multistep-modal').find('.multistep.content').get('h4').contains('Enter new investment amount').should('be.visible');
+  let currentAction = await getInvestmentAction();
+  const investmentAction = currentAction;
+  if (investmentAction === 'UPDATE') {
+    cy.get('.multistep-modal').find('.multistep.content').find('h4.grey-header')
+      .invoke('text')
+      .then(($subHeaderText) => {
+        const splitArr = $subHeaderText.split('$');
+        const previousInvestment = splitArr[1];
+        window.localStorage.setItem('previousInvestment', previousInvestment);
+      });
+  } else {
+    window.localStorage.setItem('previousInvestment', '0');
+  }
 }
 
 export const invalidMultipleInvestmentAmount = () => {
@@ -152,4 +156,20 @@ export const invalidMinInvestmentAmount = () => {
   if (money.isNegative(comapirdWithMinInvetment)) {
     cy.get('input[name="investmentAmount"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
   }
+}
+
+export const getInvestmentAction = () => {
+  return new Cypress.Promise((resolve, reject) => {
+    cy.get('.multistep-modal').find('.multistep.content').find('h3')
+      .invoke('text')
+      .then(($text1) => {
+        if ($text1.includes('Update your Investment')) {
+          window.localStorage.setItem('investmentAction', 'UPDATE');
+          resolve('UPDATE');
+        } else {
+          window.localStorage.setItem('investmentAction', 'ADD');
+          resolve('ADD');
+        }
+      });
+  });
 }
