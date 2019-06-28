@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
-import { Link, NavLink, withRouter } from 'react-router-dom';
+import { Link, NavLink, withRouter, matchPath } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button, Accordion, Divider } from 'semantic-ui-react';
@@ -312,7 +312,7 @@ export class NavigationItems extends Component {
               </Button.Group>
             </Menu.Item>
             )
-            : !location.pathname.includes('/business-application')
+            : !location.pathname.includes('/business-application') && (!matchPath(location.pathname, { path: '/app' }))
             && (
               !currentUser ? (
                 <Aux>
