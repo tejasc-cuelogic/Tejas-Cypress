@@ -224,7 +224,7 @@ export class UserDetailsStore {
       const res = await client
         .mutate({
           mutation: deleteProfile,
-          variables: { userId: !isInvestor ? this.selectedUserId : this.currentUserId },
+          variables: !isInvestor ? { userId: this.selectedUserId } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
       if (res.data.adminDeleteInvestorOrIssuerUser.status) {
