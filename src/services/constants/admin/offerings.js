@@ -2724,7 +2724,7 @@ export const OFFERING_CLOSE_1 = {
     objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
-    placeHolder: 'Enter here',
+    placeHolder: 'MM/DD/YYYY',
   },
   gsFees: {
     value: '',
