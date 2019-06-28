@@ -1,6 +1,6 @@
 export const UPDATES = {
   title: {
-    value: '', label: 'Title', error: undefined, rule: 'required',
+    value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'Enter update title here...',
   },
   content: {
     value: '', label: 'description', error: undefined, rule: 'required',
@@ -9,7 +9,7 @@ export const UPDATES = {
     value: '', label: 'lastUpdate', error: undefined, rule: 'optional',
   },
   status: {
-    value: 'PENDING', label: 'Status', error: undefined, rule: 'required',
+    value: 'DRAFT', label: 'Status', error: undefined, rule: 'required',
   },
   tiers: {
     value: [],
@@ -23,6 +23,19 @@ export const UPDATES = {
     values: [{ label: 'Public', value: 'PUBLIC' }, { label: 'Investors Only', value: 'INVESTORS' }],
     error: undefined,
     rule: 'optional',
+  },
+  updatedDate: {
+    value: '', label: 'Updated Date', error: undefined, rule: 'optional', placeHolder: 'Updated Date',
+  },
+};
+
+export const TEMPLATE = {
+  type: {
+    label: 'Template Type',
+    value: 'LIVE',
+    values: [{ label: 'Live', value: 'LIVE' }, { label: 'Full', value: 'FULL' }],
+    error: undefined,
+    rule: 'required',
   },
 };
 
