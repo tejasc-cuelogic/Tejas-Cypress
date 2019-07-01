@@ -30,6 +30,7 @@ before_script:
     paths:
       - build/
       - .env
+      - node_modules/
     expire_in: 1 day
 
 .deploy_template: &deploy_defination
