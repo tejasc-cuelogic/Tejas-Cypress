@@ -161,6 +161,17 @@
         border: 1px solid @border-color !important;
         text-align: left;
         width: 100%;
+        &:focus{
+            background: @primary-one !important;
+            color: @white !important;
+            border-color: @white !important;
+            .details{
+                color: @white;
+                .ui.header,span{
+                    color: @white;
+                }
+            }
+        }
         .details{
             color: @neutral-middark;
             line-height: 20px;
