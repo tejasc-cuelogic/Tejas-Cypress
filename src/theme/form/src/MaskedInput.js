@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Button } from 'semantic-ui-react';
+import { Form, Popup, Icon, Button, Modal } from 'semantic-ui-react';
 import { has } from 'lodash';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
@@ -14,6 +14,8 @@ const NumberFormatWrapped = props => (
     <NumberFormat {...props} />
   </div>
 );
+
+
 @observer
 export default class MaskedInput extends Component {
   state = { showError: false };
@@ -45,18 +47,31 @@ export default class MaskedInput extends Component {
             {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip
               && (
-<Popup
-  hoverable={props.hoverable}
-  trigger={<Icon className="ns-help-circle" />}
-                // content={tooltip}
-  position={isMobile ? 'bottom center' : 'top center'}
-  className={props.containerClassname}
-  wide
->
-                <Popup.Content>
-                  {tooltip}
-                </Popup.Content>
-              </Popup>
+                <>
+                {isMobile ? (
+                  <Modal size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
+                    <h5>
+                      {label}
+                    </h5>
+                    {tooltip}
+                  </Modal>
+                )
+                  : (
+                  <Popup
+                    hoverable={props.hoverable}
+                    trigger={<Icon className="ns-help-circle" />}
+                    // content={tooltip}
+                    position={isMobile ? 'bottom center' : 'top center'}
+                    className={props.containerClassname}
+                    wide
+                  >
+                    <Popup.Content>
+                      {tooltip}
+                    </Popup.Content>
+                  </Popup>
+                  )
+                }
+                </>
               )
             }
             {props.removed
