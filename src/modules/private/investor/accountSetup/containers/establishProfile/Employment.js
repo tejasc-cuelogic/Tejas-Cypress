@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Message, Button } from 'semantic-ui-react';
-import { FormRadioGroup, FormInput, FormArrowButton } from '../../../../../../theme/form';
+import { Form, Header, Message } from 'semantic-ui-react';
+import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -17,7 +17,7 @@ export default class Employment extends Component {
         <Header as="h4">What is your employment status?</Header>
         {!isMobile && <p className="mb-40">Please indicate your current employment status</p>}
         <Form error className={isMobile ? 'mb-40' : ''}>
-          <Button.Group fluid vertical>
+          {/* <Button.Group fluid vertical>
             <FormArrowButton
               fielddata={{ content: 'Individual Account', description: 'Get started with a personal NextSeed Investment Account' }}
             />
@@ -27,7 +27,7 @@ export default class Employment extends Component {
             <FormArrowButton
               fielddata={{ name: 'I have some experience' }}
             />
-          </Button.Group>
+          </Button.Group> */}
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.status}
             name="status"

@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Button, Modal } from 'semantic-ui-react';
+import { Form, Popup, Icon, Button, Modal, Header } from 'semantic-ui-react';
 import { has } from 'lodash';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
@@ -50,10 +50,12 @@ export default class MaskedInput extends Component {
                 <>
                 {isMobile ? (
                   <Modal size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
-                    <h5>
-                      {label}
-                    </h5>
-                    {tooltip}
+                    <Modal.Content>
+                      <Header as="h5">
+                        {label}
+                      </Header>
+                      <span>{tooltip}</span>
+                    </Modal.Content>
                   </Modal>
                 )
                   : (
