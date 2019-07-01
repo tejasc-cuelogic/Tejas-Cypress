@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-// import Aux from 'react-aux';
 import { Modal, Button, Header, Form, Divider, Message, Table } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { ListErrors, FieldError, InlineLoader } from '../../../../../../theme/shared';
@@ -62,20 +61,20 @@ export default class BeneficiaryShareModal extends Component {
                 {
                   BENEFICIARY_META.fields.beneficiary.length
                     ? BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
-                      <Table.Row>
-                        <Table.Cell>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</Table.Cell>
-                        <Table.Cell>
-                          <MaskedInput
-                            percentage
-                            showErrorOnField
-                            tooltip={beneficiary.share.tooltip}
-                            type="text"
-                            name="share"
-                            fielddata={beneficiary.share}
-                            changed={values => beneficiaryShareChange(values, index)}
-                          />
-                        </Table.Cell>
-                      </Table.Row>
+                    <Table.Row>
+                      <Table.Cell>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</Table.Cell>
+                      <Table.Cell>
+                        <MaskedInput
+                          percentage
+                          showErrorOnField
+                          tooltip={beneficiary.share.tooltip}
+                          type="text"
+                          name="share"
+                          fielddata={beneficiary.share}
+                          changed={values => beneficiaryShareChange(values, index)}
+                        />
+                      </Table.Cell>
+                    </Table.Row>
                     ))
                     : <InlineLoader />
                 }
@@ -83,7 +82,7 @@ export default class BeneficiaryShareModal extends Component {
             </Table>
             {errors
               && (
-              <Message error className="mt-30">
+<Message error className="mt-30">
                 <ListErrors errors={[errors]} />
               </Message>
               )

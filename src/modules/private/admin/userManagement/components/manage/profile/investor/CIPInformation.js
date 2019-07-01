@@ -1,7 +1,6 @@
 import React from 'react';
 import { get } from 'lodash';
 import { Table, Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import moment from 'moment';
 
 const failType = {
@@ -18,7 +17,7 @@ const failReason = (msg) => {
 };
 
 const CIPInformation = ({ details }) => (
-  <Aux>
+  <>
     <Header as="h6">CIP Information</Header>
     <div className="bg-offwhite">
       <div className="table-wrapper">
@@ -48,7 +47,7 @@ const CIPInformation = ({ details }) => (
         </Table>
       </div>
     </div>
-  </Aux>
+  </>
 );
 
 export default CIPInformation;

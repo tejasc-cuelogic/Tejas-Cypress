@@ -1,5 +1,5 @@
 import { OfferingListingFlow } from '../publicOffering/offeringListing';
-import { OfferingDetailFlow } from '../publicOffering/offeringDetails';
+import { OfferingDetailFlow, Offering506CDetailFlow } from '../publicOffering/offeringDetails';
 import { inValidEmailCredentials, clearLoginForm } from '../auth/login';
 import {
   inValidUserCredentials,
@@ -16,11 +16,17 @@ import {
   } from './enteringInvestmentAmount';
 import { applicationUnlock } from '../common';
 
-export const initializeInvestNowFlow = () => {
+export const initializeInvestNowFlow = (investmentType = 'CF') => {
+  cy.log('investment type==>',investmentType);
   cy.visit('/', { failOnStatusCode: false , timeout: 100000 });
   applicationUnlock();
   OfferingListingFlow();
-  OfferingDetailFlow();
+  if (investmentType === 'CF') {
+    OfferingDetailFlow();
+  } else if (investmentType === '506C') {
+    cy.log('enter for 506C')
+    Offering506CDetailFlow();
+  }
 };
 
 export const proceedInvalidLoginAction = () => {
@@ -100,7 +106,7 @@ export const proceedWithValidUserLoginAction = () => {
 
 export const proceedWithValidCFInvestmentAction = () => {
   enteringInvestmentAmount();
-};
+}
 
 export const checkEnteredAmountMultiplesValidation = () => {
   invalidMultipleInvestmentAmount();
@@ -115,6 +121,7 @@ export const checkForValidAmountAndProceed = () => {
 }
 
 export const proceedToGenerateAgreement = () => {
+  // registerApiCall('investNowGeneratePurchaseAgreement');
   generateAgreement();
 }
 

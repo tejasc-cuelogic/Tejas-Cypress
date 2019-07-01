@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-
 import { FormRadioGroup, MaskedInput } from '../../../../../../../theme/form';
 
 const isMobile = document.documentElement.clientWidth < 768;

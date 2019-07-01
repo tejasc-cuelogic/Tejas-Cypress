@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
@@ -22,11 +21,11 @@ export default class AccountType extends Component {
         <Header as="h4" textAlign={isMobile ? '' : 'center'}>What type of IRA account do you want to create?</Header>
         {!isMobile
           && (
-            <Aux>
+            <>
               <Divider hidden />
               <p className="center-align tertiary-text">Choose an account type</p>
               <Divider section hidden />
-            </Aux>
+            </>
           )
         }
         <Form error className={isMobile ? '' : 'account-type-tab'}>

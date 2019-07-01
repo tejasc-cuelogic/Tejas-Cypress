@@ -22,13 +22,13 @@ const FormSelect = observer((props) => {
         {label}
         {props.tooltip
           && (
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={props.tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={props.tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
           )
         }
       </label>

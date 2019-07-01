@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Form } from 'semantic-ui-react';
 // import ManagerOverview from './ManagerOverview';
@@ -11,7 +10,7 @@ export default class Results extends Component {
   render() {
     const { RESULTS_FRM } = this.props.businessAppReviewStore;
     return (
-      <Aux>
+      <>
         <Header as="h4">
           Results
         </Header>
@@ -27,16 +26,8 @@ export default class Results extends Component {
               <Table.HeaderCell className="dark-cell" textAlign="right">Rate</Table.HeaderCell>
               <Table.HeaderCell className="dark-cell">DSCR</Table.HeaderCell>
               <Table.HeaderCell className="dark-cell">Feasible</Table.HeaderCell>
-              <Table.HeaderCell className="dark-cell" textAlign="right">
-Expected
-                <br />
-Pmt Amount
-              </Table.HeaderCell>
-              <Table.HeaderCell textAlign="right">
-RSL
-                <br />
-Multiple
-              </Table.HeaderCell>
+              <Table.HeaderCell className="dark-cell" textAlign="right">Expected<br />Pmt Amount</Table.HeaderCell>
+              <Table.HeaderCell textAlign="right">RSL<br />Multiple</Table.HeaderCell>
               <Table.HeaderCell>RSP</Table.HeaderCell>
               <Table.HeaderCell>DSCR</Table.HeaderCell>
               <Table.HeaderCell>Feasible</Table.HeaderCell>
@@ -50,8 +41,7 @@ Multiple
                     {result.term.value}
                   </Table.Cell>
                   <Table.Cell className="dark-cell" textAlign="right">
-                    {result.rate.value}
-%
+                    {result.rate.value}%
                   </Table.Cell>
                   <Table.Cell className="dark-cell">
                     {result.termLoanDscr.value}
@@ -66,8 +56,7 @@ Multiple
                     {Helper.CurrencyFormat(result.rslMultiple.value)}
                   </Table.Cell>
                   <Table.Cell>
-                    {result.rsp.value}
-%
+                    {result.rsp.value}%
                   </Table.Cell>
                   <Table.Cell>
                     {result.revShareDscr.value}
@@ -83,7 +72,7 @@ Multiple
         <Form>
           {/* <ManagerOverview form={MODEL_MANAGER_FRM} formName="MODEL_MANAGER_FRM" /> */}
         </Form>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
@@ -31,6 +30,11 @@ export default class Summary extends React.Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     const { userDetails } = this.props.userDetailsStore;
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
+  }
+
+  handleStepChange = (step) => {
+    this.props.individualAccountStore.setStepToBeRendered(step);
+    this.props.uiStore.clearErrors();
   }
 
   handleCreateAccount = () => {
@@ -90,8 +94,8 @@ export default class Summary extends React.Component {
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <Aux>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing! </Header>
+      <>
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing! </Header>
         <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
@@ -102,7 +106,7 @@ export default class Summary extends React.Component {
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
@@ -114,7 +118,7 @@ export default class Summary extends React.Component {
                 </Table.Row>
                 {!isEmpty(routingNum)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       {routingNum || ''}
@@ -128,6 +132,9 @@ export default class Summary extends React.Component {
                     {[-1, ''].includes(accountAttributes.initialDepositAmount)
                       ? Helper.CurrencyFormat(0)
                       : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                      <span className="pull-right">
+                        <Button className="link-button highlight-text" onClick={() => this.handleStepChange(1)}>Change</Button>
+                      </span>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -136,7 +143,7 @@ export default class Summary extends React.Component {
         </div>
         {errors
           && (
-          <Message error className="center-align">
+<Message error className="center-align">
             <ListErrors errors={[errors.message]} />
           </Message>
           )
@@ -165,7 +172,7 @@ export default class Summary extends React.Component {
         <div className="center-align mt-30">
           <Button primary size="large" fluid={isMobile} className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
         </div>
-      </Aux>
+      </>
     );
   }
 }

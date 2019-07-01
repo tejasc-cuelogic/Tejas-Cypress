@@ -44,8 +44,8 @@ class Updates extends Component {
         </Header>
         {updates && updates.length
           ? (
-            <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
-              {updates && updates.length
+<VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
+            {updates && updates.length
               && updates.map((dataItem, index) => (
                 <VerticalTimelineElement
                   position="right"
@@ -63,7 +63,7 @@ class Updates extends Component {
                       <div className="ui image avatar-image">
                         {companyAvatarUrl && companyAvatarUrl.length
                           ? <Image64 srcUrl={companyAvatarUrl} circular />
-                          : <UserAvatar UserInfo={{}} />
+                          : <UserAvatar UserInfo={{ firstName: dataItem.actingUserInfo.info.firstName, lastName: dataItem.actingUserInfo.info.lastName, avatarUrl: dataItem.actingUserInfo.info.avatar.url }} />
                       }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
@@ -87,15 +87,15 @@ class Updates extends Component {
                       />
                       {dataItem.content.length > 805
                         ? (
-                          <a
-                            href
-                            onClick={
+<a
+  href
+  onClick={
                             () => this.props.campaignStore.handleReadMoreReadLess(index)
                           }
-                            id={index}
-                          >
+  id={index}
+>
                           Read More
-                          </a>
+                        </a>
                         ) : ''
                       }
                     </div>
@@ -117,7 +117,7 @@ class Updates extends Component {
                 </VerticalTimelineElement>
               ))
             }
-            </VerticalTimeline>
+          </VerticalTimeline>
           )
           : <InlineLoader text="No Updates" className="bg-offwhite" />
         }

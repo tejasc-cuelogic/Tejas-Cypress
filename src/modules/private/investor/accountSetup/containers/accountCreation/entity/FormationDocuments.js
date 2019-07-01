@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
 import { DropZone } from '../../../../../../../theme/form';
@@ -39,8 +38,8 @@ export default class FormationDocumemts extends Component {
     const { FORM_DOCS_FRM } = this.props.entityAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
-      <Aux>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Upload required documentation</Header>
+      <>
+      <Header as="h4" textAlign={isMobile ? '' : 'center'}>Upload required documentation</Header>
         <Divider hidden />
         <Form error className={isMobile ? 'mb-30' : ''}>
           <DropZone
@@ -69,7 +68,7 @@ export default class FormationDocumemts extends Component {
           />
           {errors
             && (
-            <Message error className="mt-30">
+<Message error className="mt-30">
               <ListErrors errors={[errors.message]} />
             </Message>
             )
@@ -84,7 +83,7 @@ export default class FormationDocumemts extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

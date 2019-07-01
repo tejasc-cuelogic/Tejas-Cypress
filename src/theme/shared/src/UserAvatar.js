@@ -26,13 +26,13 @@ class UserAvatar extends Component {
         avatarProfile === 'leader-placeholder.jpg'
           ? <NSImage path={avatarProfile} size={imgSize} avatar circular />
           : (
-            <Image64
-              srcUrl={avatarProfile}
-              alt={UserInfo.firstName}
-              size={imgSize}
-              avatar
-              circular
-            />
+<Image64
+  srcUrl={avatarProfile}
+  alt={UserInfo.firstName}
+  size={imgSize}
+  avatar
+  circular
+/>
           )
       );
     }

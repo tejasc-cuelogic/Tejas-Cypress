@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import bugsnag from '@bugsnag/js';
 import bugsnagReact from '@bugsnag/plugin-react';
-import Aux from 'react-aux';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -197,7 +196,7 @@ export default class ReferralsDetails extends Component {
     }
 
     return (
-      <Aux>
+      <>
         {summaryHeader}
         <br />
         <Container textAlign="center">
@@ -254,15 +253,12 @@ export default class ReferralsDetails extends Component {
         <Container textAlign="center">
           <p>
             <em>
-              Full referral program terms and conditions may be found
-              {' '}
-              <Link className="positive-text" to="/agreements/referral-program-terms-and-conditions/">here</Link>
-.
+              Full referral program terms and conditions may be found <Link className="positive-text" to="/agreements/referral-program-terms-and-conditions/">here</Link>.
             </em>
           </p>
 
         </Container>
-      </Aux>
+      </>
     );
   }
 }

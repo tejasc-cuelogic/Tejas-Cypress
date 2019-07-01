@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Checkbox } from 'semantic-ui-react';
 import RewardList from '../../../../investor/rewardsWallet/components/RewardList';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -19,7 +18,7 @@ export default class BonusRewards extends Component {
       rewards, loading, error, option,
     } = this.props.rewardStore;
     return (
-      <Aux>
+      <>
         <Checkbox
           defaultChecked={option}
           onClick={this.activeOnly}
@@ -29,7 +28,7 @@ export default class BonusRewards extends Component {
         {loading ? <InlineLoader />
           : <RewardList match={this.props.match} rewards={rewards} error={error} admin />
         }
-      </Aux>
+      </>
     );
   }
 }

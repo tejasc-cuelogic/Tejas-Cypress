@@ -44,7 +44,7 @@ export default class FormInput extends Component {
       >
         {!props.ishidelabel && label !== ''
           && (
-          <label>
+<label>
             {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip
               && (
@@ -72,7 +72,7 @@ export default class FormInput extends Component {
             }
             {props.removed
               && (
-              <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
+<Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
                 <Icon className="ns-close-circle" color="grey" />
               </Link>
               )

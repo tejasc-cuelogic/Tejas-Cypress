@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
-import Aux from 'react-aux';
+import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
-import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -12,12 +10,7 @@ import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/details/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/details/${component}`));
 
 @inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
 @observer
@@ -32,7 +25,6 @@ export default class ApplicationDetails extends Component {
     if (this.props.businessAppStore.applicationId !== params.appId) {
       this.props.businessAppStore.fetchAdminApplicationById(params.appId, params.id, params.userId)
         .then(() => {
-          // this.props.businessAppReviewStore.resetForms();
           if (match.isExact) {
             this.props.history.push(`${match.url}/activity-history`);
           }
@@ -120,11 +112,7 @@ export default class ApplicationDetails extends Component {
         <Modal.Content className="transaction-details">
           <Header as="h3">
             {businessName}
-            <span className="title-meta">
-              {' '}
-Status:
-              <b>{appStepStatus}</b>
-            </span>
+            <span className="title-meta">  Status: <b>{appStepStatus}</b></span>
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
@@ -142,22 +130,17 @@ Status:
                     {(applicationStatus || prequalStatus)
                     !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                     && (
-                    <small className="pull-right">
+<small className="pull-right">
                       {this.state.displayOnly
-                        ? (
-                          <Link to="/" onClick={this.editBusinessDetails}>
-                            <Icon className="ns-pencil" />
-Edit
-                          </Link>
-                        )
+                        ? <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
                         : (
-                          <Aux>
+                          <>
                             <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
                             <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}>
                               <Icon name="save" />
 Update
                             </Link>
-                          </Aux>
+                          </>
                         )
                       }
                     </small>
@@ -193,9 +176,7 @@ Update
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Name</Header.Subheader>
-                          {firstName || primaryPOC.firstName}
-                          {' '}
-                          {lastName || primaryPOC.lastName}
+                          {firstName || primaryPOC.firstName} {lastName || primaryPOC.lastName}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
@@ -217,7 +198,7 @@ Update
               {(applicationStatus || prequalStatus)
               === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                 && (
-                <Grid.Column>
+<Grid.Column>
                   <Card fluid className="ba-info-card">
                     <Card.Header>Failed Reason</Card.Header>
                     <Card.Content>
@@ -234,35 +215,37 @@ Update
           </Grid>
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                component={navItems[0].component || getModule(this.module(navItems[0].title))}
-              />
-              {
-                navItems.map((item) => {
-                  const { params } = match;
-                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
-                  return (
-                    <Route
-                      key={item.to}
-                      path={`${match.url}/${item.to}`}
-                      render={props => (
-                        <CurrentComponent
-                          module={item.title === 'Activity History' ? 'applicationDetails' : false}
-                          showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
-                          resourceId={params.appId}
-                          appType={params.id}
-                          {...props}
-                        />
-                      )
-                      }
-                    />
-                  );
-                })
-              }
-            </Switch>
+            <Suspense fallback={<InlineLoader />}>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={navItems[0].component || getModule(this.module(navItems[0].title))}
+                />
+                {
+                  navItems.map((item) => {
+                    const { params } = match;
+                    const CurrentComponent = (item.component || getModule(this.module(item.title)));
+                    return (
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => (
+                          <CurrentComponent
+                            module={item.title === 'Activity History' ? 'applicationDetails' : false}
+                            showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
+                            resourceId={params.appId}
+                            appType={params.id}
+                            {...props}
+                          />
+                        )
+                        }
+                      />
+                    );
+                  })
+                }
+              </Switch>
+            </Suspense>
           </Card>
         </Modal.Content>
       </Modal>

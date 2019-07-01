@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
@@ -23,11 +22,10 @@ const highlights = [
     title: 'Pre-vetted opportunities',
     icon: 'icons/prevetted.svg',
     meta: (
-      <Aux>
+      <>
       Only the top 3% of businesses meet our
-    proprietary financial criteria.
-        <sup>1</sup>
-      </Aux>),
+    proprietary financial criteria.<sup>1</sup>
+      </>),
   },
   {
     title: 'Flexible amounts',
@@ -96,16 +94,12 @@ export default class WhyNextseed extends Component {
   render() {
     const { authStore } = this.props;
     return (
-      <Aux>
+      <>
         <section className="why-nextseed-section">
           <Container>
-            <Responsive maxWidth={767} as={Aux}>
+            <Responsive maxWidth={767} as={React.Fragment}>
               <Header as="h2">
-               Get access to
-                <br />
-pre-vetted, local
-                <br />
-investments.
+               Get access to<br />pre-vetted, local<br />investments.
               </Header>
               <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
               <Divider section />
@@ -135,16 +129,12 @@ investments.
             </Grid>
             <div className="center-align mb-50">
               { !authStore.isUserLoggedIn
-                && <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                && <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" secondary>Sign Up Free</Button>
               }
             </div>
             <p className="note center-align mb-50">
-              <sup>1</sup>
-This represents the percent of businesses that began the application
-              process, passed NextSeed&apos;s objective diligence
-              <Responsive minWidth={992} as="br" />
-              {' '}
-criteria, and launched an offering
+              <sup>1</sup>This represents the percent of businesses that began the application
+              process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering
               on the platform since NextSeed&apos;s inception.
             </p>
             {/* <Grid className="business-learn-more mb-30">
@@ -169,9 +159,8 @@ criteria, and launched an offering
             <section>
               <Container textAlign={isMobile ? 'left' : 'center'}>
                 <Header as="h2" className="mb-30">
-                Don’t just invest through Wall Street and Silicon Valley.
-                  {' '}
-                  <Responsive as={Aux} minWidth={1199}><br /></Responsive>
+                Don’t just invest through Wall Street and Silicon Valley.{' '}
+                  <Responsive as={React.Fragment} minWidth={1199}><br /></Responsive>
                 Be invested in the growth of local communities.
                 </Header>
                 <p className={isMobile ? 'mb-40' : 'mb-50'}>
@@ -181,11 +170,11 @@ criteria, and launched an offering
               </Container>
               {!isMobile
                 ? (
-                  <Container>
-                    <Grid centered stackable className="vertical-gutter">
-                      {businesses.map((row, index) => (
-                        <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
-                          {
+<Container>
+                  <Grid centered stackable className="vertical-gutter">
+                    {businesses.map((row, index) => (
+                      <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
+                        {
                         row.map(b => (
                           <Grid.Column textAlign="center" width={4}>
                             <NSImage path={b.image} centered />
@@ -194,31 +183,31 @@ criteria, and launched an offering
                           </Grid.Column>
                         ))
                       }
-                        </Grid.Row>
-                      ))
+                      </Grid.Row>
+                    ))
                   }
-                    </Grid>
-                  </Container>
+                  </Grid>
+                </Container>
                 )
                 : (
-                  <Aux>
-                    <Container>
-                      <NsCarousel {...settings}>
-                        {businesses.map(row => (
-                          row.map(b => (
-                            <Grid.Row>
-                              <Grid.Column className="center-align">
-                                <NSImage path={b.image} centered />
-                                <Header as="h5">{b.title}</Header>
-                                <p>{b.description}</p>
-                              </Grid.Column>
-                            </Grid.Row>
-                          ))
+<>
+                  <Container>
+                    <NsCarousel {...settings}>
+                      {businesses.map(row => (
+                        row.map(b => (
+                          <Grid.Row>
+                            <Grid.Column className="center-align">
+                              <NSImage path={b.image} centered />
+                              <Header as="h5">{b.title}</Header>
+                              <p>{b.description}</p>
+                            </Grid.Column>
+                          </Grid.Row>
                         ))
+                      ))
                     }
-                      </NsCarousel>
-                    </Container>
-                  </Aux>
+                    </NsCarousel>
+                  </Container>
+                </>
                 )
             }
             </section>
@@ -233,7 +222,7 @@ criteria, and launched an offering
             </List>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

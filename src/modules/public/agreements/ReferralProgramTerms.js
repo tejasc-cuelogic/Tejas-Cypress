@@ -33,10 +33,7 @@ export default class ReferralProgramTerms extends Component {
             <p>
               NextSeed Members will earn Investment Credits towards future NextSeed investments
               if a referred friend clicks on their referral link to create a valid NextSeed
-              account that complies with NextSeed’s
-              {' '}
-              <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>
-.
+              account that complies with NextSeed’s <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>.
             </p>
             <p>
               The referring NextSeed Member will be credited with the Investment Credit of
@@ -68,10 +65,7 @@ export default class ReferralProgramTerms extends Component {
             </p>
             <p>
               If for any reason you believe that there is a discrepancy regarding your balance
-              of Investment Credits, please contact
-              {' '}
-              <a className="positive-text" href="mailto:support@nextseed.com">support@nextseed.com</a>
-. NextSeed may require
+              of Investment Credits, please contact <a className="positive-text" href="mailto:support@nextseed.com">support@nextseed.com</a>. NextSeed may require
               you to submit additional information in order to make a determination regarding
               your balance. All decisions regarding your balance will be final and at
               NextSeed’s sole discretion.

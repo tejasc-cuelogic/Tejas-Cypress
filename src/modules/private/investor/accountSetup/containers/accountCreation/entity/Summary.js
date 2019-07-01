@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Message, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -81,7 +80,7 @@ export default class Summary extends Component {
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <Aux>
+      <>
         <Header as="h4" textAlign={isMobile ? '' : 'center'}>Verify information and submit for review</Header>
         <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
@@ -89,24 +88,18 @@ export default class Summary extends Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Entity Net Assets</Table.Cell>
-                  <Table.Cell>
-                    {Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value
-                      ? FIN_INFO_FRM.fields.netAssets.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value
+                    ? FIN_INFO_FRM.fields.netAssets.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Other CF Investments</Table.Cell>
-                  <Table.Cell>
-                    {Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value
-                      ? FIN_INFO_FRM.fields.annualIncome.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value
+                    ? FIN_INFO_FRM.fields.annualIncome.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>
-Entity
-                    {"'"}
-s Name
-                  </Table.Cell>
+                  <Table.Cell>Entity{"'"}s Name</Table.Cell>
                   <Table.Cell>{GEN_INFO_FRM.fields.name.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -115,8 +108,7 @@ s Name
                 </Table.Row>
                 <Table.Row verticalAlign="top">
                   <Table.Cell>Entity Address</Table.Cell>
-                  <Table.Cell>
-                    {GEN_INFO_FRM.fields.street.value}
+                  <Table.Cell>{GEN_INFO_FRM.fields.street.value}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -139,7 +131,7 @@ s Name
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
@@ -151,7 +143,7 @@ s Name
                 </Table.Row>
                 { !isEmpty(routingNum)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       { routingNum || '' }
@@ -173,7 +165,7 @@ s Name
         </div>
         {errors
           && (
-          <Message error>
+<Message error>
             <ListErrors errors={[errors.message]} />
           </Message>
           )
@@ -241,7 +233,7 @@ s Name
             />
           </p>
         </Responsive>
-      </Aux>
+      </>
     );
   }
 }

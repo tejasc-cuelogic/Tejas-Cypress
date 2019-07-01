@@ -35,10 +35,7 @@ export default class ConfirmModel extends Component {
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Header className="signup-header">
-          <Header textAlign="center" as="h3">
-Mark as
-            {actionValue === 'unfreeze' ? 'Unfreeze' : 'Freeze'}
-          </Header>
+          <Header textAlign="center" as="h3">Mark as {actionValue === 'unfreeze' ? 'Unfreeze' : 'Freeze'}</Header>
         </Modal.Header>
         <Modal.Content>
           <Form>

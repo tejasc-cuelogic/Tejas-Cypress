@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
@@ -19,14 +18,14 @@ export default class Funding extends Component {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>How would you like to fund your IRA?</Header>
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>How would you like to fund your [Traditional/Roth] IRA?</Header>
         {!isMobile
           && (
-            <Aux>
+            <>
               <Divider hidden />
               <p className="center-align tertiary-text">Choose funding option</p>
               <Divider section hidden />
-            </Aux>
+            </>
           )
         }
         <Form error className={isMobile ? '' : 'account-type-tab'}>
@@ -41,12 +40,12 @@ export default class Funding extends Component {
             {
               FUNDING_FRM.fields.fundingType.value === 0
                 ? (
-                  <p className="mt-20 grey-header">
+<p className="mt-20 grey-header">
                   Set up a new self-directed IRA with
                   an initial deposit from an external checking account.
                   Annual contribution limits apply.
-                    {/* <a target="_blank" rel="noopener noreferrer" href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">Check the IRS website for the latest rules</a> */}
-                  </p>
+                  {/* <a target="_blank" rel="noopener noreferrer" href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">Check the IRS website for the latest rules</a> */}
+                </p>
                 )
                 : FUNDING_FRM.fields.fundingType.value === 1
                   ? (

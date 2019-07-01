@@ -3,7 +3,6 @@ import { Route, Link, Switch } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
 import { isEmpty, includes } from 'lodash';
-import Aux from 'react-aux';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
 import ConfirmBankLinking from '../components/bankaccount/ConfirmBankLinking';
 import VerifyBankUpdate from '../components/bankaccount/VerifyBankUpdate';
@@ -61,12 +60,12 @@ export default class BankAccount extends Component {
         />
         {accountType !== 'ira'
           ? (
-            <Aux>
+            <>
               <Header as="h4">Bank Account</Header>
               <Grid>
                 {isEmpty(plaidAccDetails)
                 && (
-                <Grid.Row>
+<Grid.Row>
                   <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
                     <Card fluid>
                       <Card.Content>
@@ -82,9 +81,9 @@ export default class BankAccount extends Component {
                 </Grid.Row>
                 )
               }
-                {!isEmpty(plaidAccDetails)
+              {!isEmpty(plaidAccDetails)
                 && (
-                <Grid.Row>
+<Grid.Row>
                   <Grid.Column
                     widescreen={12}
                     largeScreen={16}
@@ -102,12 +101,12 @@ export default class BankAccount extends Component {
                       />
                       {plaidAccDetails.pendingUpdate
                         && (
-                        <AccountDetailsView
-                          accountDetails={pendingAccoungDetails}
-                          click={this.handleLinkBankInterface}
-                          match={this.props.match}
-                          accountType="pending"
-                        />
+<AccountDetailsView
+  accountDetails={pendingAccoungDetails}
+  click={this.handleLinkBankInterface}
+  match={this.props.match}
+  accountType="pending"
+/>
                         )
                       }
                     </Card>
@@ -116,12 +115,12 @@ export default class BankAccount extends Component {
                 )
               }
               </Grid>
-            </Aux>
+            </>
           )
           : (
-            <section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={NO_PERMISSION_MSG} /></h4>
-            </section>
+<section className="center-align">
+            <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={NO_PERMISSION_MSG} /></h4>
+          </section>
           )
         }
       </div>

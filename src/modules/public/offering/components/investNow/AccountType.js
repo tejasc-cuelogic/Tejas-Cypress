@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { includes, uniq, get } from 'lodash';
 import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -336,180 +335,166 @@ class AccountType extends Component {
       return <Spinner loaderMessage="Loading.." />;
     }
     return (
-      <Aux>
-        <Header as="h3" textAlign="center">
-          {' '}
-          {headerSubheaderObj.header}
-        </Header>
+      <>
+        <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
         <Form error className="account-type-tab mb-0">
           {investAccTypes.values.length && selectedAccountStatus && (userProfileFullStatus === 'FULL' || userProfileFullStatus === 'BASIC')
             ? (
-              <Aux>
-                {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest
-                  ? (
-                    <Aux>
-                      <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                      <FormRadioGroup
-                        name="investAccountType"
-                        containerclassname="button-radio center-align"
-                        fielddata={investAccTypes}
-                        changed={accTypeChanged}
-                      />
-                    </Aux>
-                  )
-                  : (
-                    <Aux>
-                      {isDocumentUpload === false
-                        ? (
-                          <div className="center-align">
-                            <p>
+<>
+              {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest
+                ? (
+<>
+                  <p className="center-align">{headerSubheaderObj.subHeader}</p>
+                  <FormRadioGroup
+                    name="investAccountType"
+                    containerclassname="button-radio center-align"
+                    fielddata={investAccTypes}
+                    changed={accTypeChanged}
+                  />
+                </>
+                )
+                : (
+<>
+                  {isDocumentUpload === false
+                    ? (
+<div className="center-align">
+                      <p>
                         There is a technical issue with this offering.
                         The NextSeed team has been notified and will
                         resolve it as soon as possible.
                         Please try back later.
-                            </p>
-                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                          </div>
-                        )
-                        : selectedAccountStatus === 'FULL'
-                          ? (
-                            <div className="center-align">
-                              {headerSubheaderObj.subHeader
-                                ? <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
+                      </p>
+                      <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                    </div>
+                    )
+                    : selectedAccountStatus === 'FULL'
+                      ? (
+<div className="center-align">
+                        {headerSubheaderObj.subHeader
+                          ? <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
                         }
-                              {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING'
-                                ? offeringReuglation && offeringReuglation === 'BD_CF_506C'
-                                  ? (
-                                    <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
-                                      <Card>
-                                        <Card.Content>
-                                          <Header as="h5" color="green">Yes, let’s get you verified.</Header>
-                                          <p className="accredetaion-intro mb-20">
+                        {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING'
+                          ? offeringReuglation && offeringReuglation === 'BD_CF_506C'
+                            ? (
+<Card.Group itemsPerRow={isMobile ? '1' : '2'}>
+                              <Card>
+                                <Card.Content>
+                                  <Header as="h5" color="green">Yes, let’s get you verified.</Header>
+                                  <p className="accredetaion-intro mb-20">
                                     By verifying your status, you can invest in this offering under
                                     Reg D and not have this count towards your annual Reg CF limits.
-                                          </p>
-                                          <Button as={Link} to={redirectURL} basic className="relaxed" content="Verify Status" />
-                                          <p className="note mt-20">
+                                  </p>
+                                  <Button as={Link} to={redirectURL} basic className="relaxed" content="Verify Status" />
+                                  <p className="note mt-20">
                                     For a limited time, accredited investors can earn a $100 bonus
-                                    by verifying your status on NextSeed.
-                                            <br />
-                                            <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See rules for details.</a>
-                                          </p>
-                                        </Card.Content>
-                                      </Card>
-                                      <Card>
-                                        <Card.Content>
-                                          <Header as="h5" color="green">No, no problem.</Header>
-                                          <p className="accredetaion-intro mb-20">
+                                    by verifying your status on NextSeed.<br />
+                                    <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See rules for details.</a>
+                                  </p>
+                                </Card.Content>
+                              </Card>
+                              <Card>
+                                <Card.Content>
+                                  <Header as="h5" color="green">No, no problem.</Header>
+                                  <p className="accredetaion-intro mb-20">
                                     Proceed to invest in this offering
                                     under Regulation Crowdfunding.
-                                          </p>
-                                          <Button basic className="relaxed" content="Continue" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
-                                        </Card.Content>
-                                      </Card>
-                                    </Card.Group>
-                                  )
-                                  : (
-                                    <Aux>
-                                      {/* <Link to={redirectURL} className="text-link">
+                                  </p>
+                                  <Button basic className="relaxed" content="Continue" onClick={e => this.handleInvestmentWihoutAccreditation(e)} />
+                                </Card.Content>
+                              </Card>
+                            </Card.Group>
+                            )
+                            : (
+<>
+                              {/* <Link to={redirectURL} className="text-link">
                                 <Icon className="ns-arrow-right" color="green" />
                                 Apply for accreditation
                               </Link> */}
-                                      <div className="mt-30">
-                                        <Button
-                                          as={Link}
-                                          to={redirectURL}
-                                          primary
-                                          className="relaxed"
-                                          content="Confirm Status"
-                                        />
-                                      </div>
-                                    </Aux>
-                                  )
-                                : userAccredetiationState === 'EXPIRED'
-                                  ? (
-                                    <Form error>
-                                      <FormCheckbox
-                                        fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
-                                        name="financialStatus"
-                                        changed={expirationChange}
-                                        defaults
-                                        containerclassname="ui relaxed list"
-                                      />
-                                      <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
-                                      <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
-                                    </Form>
-                                  )
-                                  : <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                              <div className="mt-30">
+                                <Button
+                                  as={Link}
+                                  to={redirectURL}
+                                  primary
+                                  className="relaxed"
+                                  content="Confirm Status"
+                                />
+                              </div>
+                            </>
+                            )
+                          : userAccredetiationState === 'EXPIRED'
+                            ? (
+<Form error>
+                              <FormCheckbox
+                                fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
+                                name="financialStatus"
+                                changed={expirationChange}
+                                defaults
+                                containerclassname="ui relaxed list"
+                              />
+                              <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
+                              <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
+                            </Form>
+                            )
+                            : <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                         }
-                            </div>
+                      </div>
+                      )
+                      : (
+<div className="center-align">
+                        {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                          ? (
+<>
+                            <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                          </>
                           )
-                          : (
-                            <div className="center-align">
-                              {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
-                                ? (
-                                  <Aux>
-                                    <p>
-Please contact
-                                      <a href="mailto:support@nextseed.com">support@nextseed.com</a>
-                                      {' '}
-to unlock your account.
-                                    </p>
-                                    <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                                  </Aux>
-                                )
-                                : null}
-                              {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL')
-                                ? (
-                                  <Aux>
-                                    <Link to={redirectURL} className="text-link">
-                                      <Icon className="ns-arrow-right" color="green" />
+                          : null}
+                        {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL')
+                          ? (
+<>
+                            <Link to={redirectURL} className="text-link">
+                              <Icon className="ns-arrow-right" color="green" />
                               Please finish your account setup.
-                                    </Link>
-                                    <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                                  </Aux>
-                                )
-                                : null}
-                              {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING')
-                                ? (
-                                  <Aux>
-                                    <p>We&apos;ll notify you through email when your account is set up.</p>
-                                    <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                                  </Aux>
-                                )
-                                : null}
-                            </div>
+                            </Link>
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                          </>
                           )
+                          : null}
+                        {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING')
+                          ? (
+<>
+                            <p>We&apos;ll notify you through email when your account is set up.</p>
+                            <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                          </>
+                          )
+                          : null}
+                      </div>
+                      )
                   }
-                    </Aux>
-                  )
+                </>
+                )
               }
-              </Aux>
+            </>
             )
             : (
-              <div className="center-align">
-                {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
-                  ? (
-                    <Aux>
-                      <p>
-Please contact
-                        <a href="mailto:support@nextseed.com">support@nextseed.com</a>
-                        {' '}
-to unlock your account.
-                      </p>
-                      <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                    </Aux>
-                  )
-                  : null}
-                {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
-                  ? (
-                    <Aux>
+<div className="center-align">
+              {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                ? (
+<>
+                  <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
+                  <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                </>
+                )
+                : null}
+              {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
+                ? (
+<>
                     Please answer a few basic questions to complete your Investor Profile.
-                      {/* <Link to={redirectURL} className="text-link">
+                    {/* <Link to={redirectURL} className="text-link">
                         <Icon className="ns-arrow-right" color="green" />
                         Please finish your account setup.
                       </Link> */}
-                      {/* <div className="mt-30">
+                    {/* <div className="mt-30">
                     <Button
                     as={Link}
                       to="/"
@@ -519,23 +504,23 @@ to unlock your account.
                           content="Confirm Status"
                           />
                     </div> */}
-                      <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
-                    </Aux>
-                  )
-                  : null}
-                {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow)
-                  ? (
-                    <Aux>
-                      <p>We&apos;ll notify you through email when your account is set up.</p>
-                      <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                    </Aux>
-                  )
-                  : null}
-              </div>
+                    <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
+                  </>
+                )
+                : null}
+              {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow)
+                ? (
+<>
+                  <p>We&apos;ll notify you through email when your account is set up.</p>
+                  <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                </>
+                )
+                : null}
+            </div>
             )
           }
         </Form>
-      </Aux>
+      </>
     );
   }
 }

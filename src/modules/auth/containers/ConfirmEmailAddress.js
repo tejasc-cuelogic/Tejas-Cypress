@@ -25,7 +25,7 @@ export default class ConfirmEmailAddress extends Component {
 
     if (!this.props.authStore.CONFIRM_FRM.fields.email.value
       && !this.props.authStore.isUserLoggedIn) {
-      this.props.history.push(this.props.refLink || '/auth/login');
+      this.props.history.push(this.props.refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
@@ -61,7 +61,7 @@ export default class ConfirmEmailAddress extends Component {
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
     && !this.props.userStore.currentUser) {
-      this.props.history.push('/auth/register-investor');
+      this.props.history.push('/register-investor');
     } else {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
@@ -72,7 +72,7 @@ export default class ConfirmEmailAddress extends Component {
             if (roles.includes('investor')) {
               this.props.identityStore.setIsOptConfirmed(true);
             } else {
-              const redirectUrl = !roles ? '/auth/login'
+              const redirectUrl = !roles ? '/login'
                 : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
               this.props.history.replace(redirectUrl);
             }
@@ -96,7 +96,7 @@ export default class ConfirmEmailAddress extends Component {
                 }
                 this.props.identityStore.setIsOptConfirmed(true);
               } else {
-                const redirectUrl = !roles ? '/auth/login'
+                const redirectUrl = !roles ? '/login'
                   : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
                 this.props.history.replace(redirectUrl);
               }
@@ -150,7 +150,7 @@ export default class ConfirmEmailAddress extends Component {
 
   render() {
     const changeEmailAddressLink = this.props.refLink
-      ? '/app/account-settings/profile-data/new-email-address' : '/auth/register-investor';
+      ? '/app/account-settings/profile-data/new-email-address' : '/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,
@@ -161,7 +161,7 @@ export default class ConfirmEmailAddress extends Component {
     const { isOptConfirmed } = this.props.identityStore;
     const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
     if (errors && errors.code === 'NotAuthorizedException') {
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
       return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
     }
@@ -182,7 +182,7 @@ export default class ConfirmEmailAddress extends Component {
         <Modal.Content className="signup-content center-align">
           { (confirmProgress === 'confirm' && inProgress)
           && (
-          <Dimmer page active={inProgress}>
+<Dimmer page active={inProgress}>
             <Loader active={inProgress} />
           </Dimmer>
           )
@@ -222,7 +222,7 @@ export default class ConfirmEmailAddress extends Component {
             </Form.Field>
             {errors
               && (
-              <Message error className="mb-40">
+<Message error className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
               )

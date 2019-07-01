@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -20,21 +19,21 @@ class IssuerStatement extends Component {
     //   campaign.keyTerms.shorthandBusinessName ?
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
-      <Aux>
+      <>
         <Header as="h3" className="anchor-wrap">
           Issuer Statement
           <span className="anchor" id="issuer-statement" />
         </Header>
         {offeirngDisclaimer
           ? (
-            <p className="mb-40 copyright-info">
-              {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
-              <HtmlEditor readOnly content={(offeirngDisclaimer)} />
-            </p>
+<p className="mb-40 copyright-info">
+            {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
+            <HtmlEditor readOnly content={(offeirngDisclaimer)} />
+          </p>
           )
           : <InlineLoader text="No Data Found" className="bg-offwhite" />
         }
-      </Aux>
+      </>
     );
   }
 }

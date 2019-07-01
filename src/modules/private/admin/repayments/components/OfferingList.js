@@ -33,10 +33,7 @@ const OfferingList = (props) => {
                   <Table.Row key={data.id}>
                     <Table.Cell>{data.offering}</Table.Cell>
                     <Table.Cell className={`status ${kebabCase(data.status)}`}>{data.status}</Table.Cell>
-                    <Table.Cell>
-                      {data.return}
-%
-                    </Table.Cell>
+                    <Table.Cell>{data.return}%</Table.Cell>
                     <Table.Cell>{data.investors}</Table.Cell>
                     <Table.Cell>{data.principal}</Table.Cell>
                     <Table.Cell>{Helper.CurrencyFormat(data.totalPayment)}</Table.Cell>

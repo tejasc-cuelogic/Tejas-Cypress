@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
@@ -35,7 +34,7 @@ export default class BonusRewards extends Component {
     const { requestState, investorLists } = this.props.offeringInvestorStore;
     const { isIssuer, isAdmin } = this.props.userStore;
     return (
-      <Aux>
+      <>
         <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
@@ -50,7 +49,7 @@ export default class BonusRewards extends Component {
               />
               {isAdmin
               && (
-              <Grid.Column floated="right" width={3} className="right-align">
+<Grid.Column floated="right" width={3} className="right-align">
                 <Button
                   primary
                   className="relaxed"
@@ -68,7 +67,7 @@ export default class BonusRewards extends Component {
         <div className={isIssuer ? 'ui card fluid' : ''}>
           <Listing />
         </div>
-      </Aux>
+      </>
     );
   }
 }

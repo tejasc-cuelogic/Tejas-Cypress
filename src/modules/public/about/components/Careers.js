@@ -1,18 +1,16 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Container, Grid, Button, Responsive } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Careers = () => (
-  <Aux>
+  <>
     <section>
       <Container>
         <Grid centered>
           <Grid.Column textAlign={isMobile ? 'left' : 'center'} computer={12} tablet={12} mobile={16}>
             <Header as="h2">
-              Democratize finance. Create change.
-              <Responsive minWidth={992} as="br" />
+              Democratize finance. Create change.<Responsive minWidth={992} as="br" />
               Join our team.
             </Header>
             <p className="mt-30">
@@ -35,7 +33,7 @@ const Careers = () => (
         </Grid>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default Careers;

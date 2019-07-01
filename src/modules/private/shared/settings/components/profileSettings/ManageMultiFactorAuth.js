@@ -44,11 +44,7 @@ export default class ManageMultiFactorAuth extends Component {
             </p>
           </Modal.Header>
           <Modal.Content className="signup-content center-align">
-            <Header as="h4">
-Where do you want to get
-              <br />
-the confirmation codes?
-            </Header>
+            <Header as="h4">Where do you want to get<br />the confirmation codes?</Header>
             <Form onSubmit={this.submit} className="account-type-tab">
               <FormRadioGroup
                 fielddata={MFA_MODE_TYPE_META.fields.mfaModeTypes}

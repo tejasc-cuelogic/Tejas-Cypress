@@ -2,7 +2,6 @@
 import React from 'react';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { includes } from 'lodash';
 import { Icon, Popup, List, Checkbox } from 'semantic-ui-react';
 
@@ -26,7 +25,7 @@ const FormCheckbox = observer((props) => {
                 value={c.value}
                 {...props}
                 label={(
-                  <label>
+<label>
                     {c.customLabel ? customLabel
                       : c.conditionalCustomLabel ? conditionalCustomLabel
                         : c.customUpdateLimitLabel ? customUpdateLimitLabel
@@ -41,7 +40,7 @@ const FormCheckbox = observer((props) => {
                 onChange={props.changed}
               />
             ) : (
-              <Aux>
+              <>
                 <input type="checkbox" readOnly checked={value.includes(c.value)} value={c.value} onChange={props.changed} {...props} />
                 <label>
                   {c.icon
@@ -50,17 +49,17 @@ const FormCheckbox = observer((props) => {
                   {c.customLabel ? customLabel : c.label}
                   {tooltip
                   && (
-                  <Popup
-                    trigger={<Icon className="ns-help-circle" />}
-                    content={tooltip}
-                    position="top center"
-                    className="center-align"
-                    wide
-                  />
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
                   )
                     }
                 </label>
-              </Aux>
+              </>
             )
             }
           </List.Item>

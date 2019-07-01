@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Form, Button, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { validationActions } from '../../../../../services/actions';
@@ -108,7 +107,7 @@ s account and routing number
               showerror
             />
             <Form.Field>
-              <Aux>
+              <>
                 {
                   <FormRadioGroup
                     fielddata={formLinkBankManually.fields.accountType}
@@ -117,16 +116,16 @@ s account and routing number
                     value={formLinkBankManually.fields.value}
                   />
                 }
-              </Aux>
+              </>
             </Form.Field>
           </div>
           {errors
             && (
-            <Message error className="mb-30">
+            <p className="error mb-30">
               <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
               {' '}
               {/* <ListErrors errors={[errors.message]} /> */}
-            </Message>
+            </p>
             )
           }
           <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={!formLinkBankManually.meta.isValid} />

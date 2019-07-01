@@ -49,7 +49,7 @@ Are you (or an immediate family member) a 10% shareholder,
           }
           {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
           )

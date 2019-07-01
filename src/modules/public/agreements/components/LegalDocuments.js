@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
@@ -11,25 +10,25 @@ import { InlineLoader, IframeModal } from '../../../../theme/shared';
 
 const legalDocsMeta = [
   {
-    id: 1, docName: (<Aux>NextSeed Securities LLC Privacy Policy</Aux>), refEnum: 'SECURITIES_PRIVACY_POLICY',
+    id: 1, docName: (<>NextSeed Securities LLC Privacy Policy</>), refEnum: 'SECURITIES_PRIVACY_POLICY',
   },
   {
-    id: 2, docName: (<Aux>NextSeed Securities LLC BCP Disclosure Statement</Aux>), refEnum: 'SECURITIES_BCP_DISCLOSURE',
+    id: 2, docName: (<>NextSeed Securities LLC BCP Disclosure Statement</>), refEnum: 'SECURITIES_BCP_DISCLOSURE',
   },
   {
-    id: 3, docName: (<Aux>NextSeed Securities LLC CIP Notice</Aux>), refEnum: 'SECURITIES_CIP_NOTICE',
+    id: 3, docName: (<>NextSeed Securities LLC CIP Notice</>), refEnum: 'SECURITIES_CIP_NOTICE',
   },
   {
-    id: 4, docName: (<Aux>NextSeed Securities LLC Brokercheck Notice</Aux>), refEnum: 'SECURITIES_BROKER_CHECK',
+    id: 4, docName: (<>NextSeed Securities LLC Brokercheck Notice</>), refEnum: 'SECURITIES_BROKER_CHECK',
   },
   {
-    id: 5, docName: (<Aux>NextSeed Securities LLC Investor Agreement</Aux>), refEnum: 'SECURITIES_INVESTOR_AGREEMENT',
+    id: 5, docName: (<>NextSeed Securities LLC Investor Agreement</>), refEnum: 'SECURITIES_INVESTOR_AGREEMENT',
   },
   {
-    id: 6, docName: (<Aux>NextSeed US LLC Membership Agreement</Aux>), refEnum: 'MEMBERSHIP_AGREEMENT',
+    id: 6, docName: (<>NextSeed US LLC Membership Agreement</>), refEnum: 'MEMBERSHIP_AGREEMENT',
   },
   {
-    id: 7, docName: (<Aux>Regulation Crowdfunding<br /> Welcome Kit</Aux>), refEnum: 'INVESTOR_WELCOME_PACKET',
+    id: 7, docName: (<>Regulation Crowdfunding<br /> Welcome Kit</>), refEnum: 'INVESTOR_WELCOME_PACKET',
   },
 ];
 
@@ -94,7 +93,7 @@ export default class LegalDocuments extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Header as="h2">Legal Documents</Header>
         <Divider hidden />
         <Grid columns={3} stackable doubling>
@@ -120,7 +119,7 @@ export default class LegalDocuments extends Component {
         {this.state.loaded &&
           <Route path={`${this.props.match.url}/:docKey`} component={LegalDoc} />
         }
-      </Aux>
+      </>
     );
   }
 }

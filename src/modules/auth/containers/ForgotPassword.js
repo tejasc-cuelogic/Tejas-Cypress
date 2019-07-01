@@ -21,7 +21,7 @@ export default class ForgotPassword extends Component {
   onSubmit = (event) => {
     event.preventDefault();
     authActions.resetPassword()
-      .then(() => this.props.history.push('/auth/reset-password'));
+      .then(() => this.props.history.push('/reset-password'));
   }
 
   handleCloseModal = (e) => {
@@ -56,7 +56,7 @@ export default class ForgotPassword extends Component {
             }
             {errors
               && (
-              <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
               )
@@ -67,11 +67,7 @@ export default class ForgotPassword extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>
-            <b>Back to</b>
-            {' '}
-            <Link to="/auth/login">Log in</Link>
-          </p>
+          <p><b>Back to</b> <Link to="/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

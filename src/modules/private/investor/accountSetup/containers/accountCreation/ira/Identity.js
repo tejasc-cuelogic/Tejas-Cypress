@@ -1,6 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { DropZoneLarge } from '../../../../../../../theme/form';
@@ -32,7 +31,7 @@ export default class Identity extends Component {
     const { IDENTITY_FRM } = this.props.iraAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
-      <Aux>
+      <>
         <Header as="h4" textAlign={isMobile ? '' : 'center'}>Confirm your identity</Header>
         {!isMobile && <Divider section hidden />}
         <Form className="file-uploader-large">
@@ -48,7 +47,7 @@ export default class Identity extends Component {
         </Form>
         {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={[errors.message]} />
           </Message>
           )
@@ -64,7 +63,7 @@ export default class Identity extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

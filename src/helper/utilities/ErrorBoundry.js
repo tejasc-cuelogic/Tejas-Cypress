@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 // TODO: Improve the component
 
-const catchErrorBoundry = !['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+const catchErrorBoundry = !['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
 
 @inject('authStore')
 @withRouter
@@ -53,8 +53,7 @@ class ErrorBoundary extends React.Component {
           </Header>
           <span>
             Hang tight -
-            we&lsquo;ve notified the team, and we&lsquo;re taking you back to the homepage.
-            <br />
+            we&lsquo;ve notified the team, and we&lsquo;re taking you back to the homepage.<br />
             <a href={window.location.origin}>Click here to be redirected now</a>
           </span>
         </div>

@@ -1,4 +1,4 @@
-import { registerApiCall } from '../common';
+import { registerApiCall } from '../../../../support/common';
 
 export const SignUpMeta = {
   givenName: 'Nextseed',
@@ -19,7 +19,7 @@ export const FillSignUpForm = () => {
   cy.get('form').within(() => {
     cy.get('input[name="givenName"]').type(SignUpMeta.givenName);
     cy.get('input[name="familyName"]').type(SignUpMeta.familyName);
-    cy.get('input[name="email"]').type(`test${Math.floor((Math.random() * 100000) + 1)}@nextseed.com`);
+    cy.get('input[name="email"]').type(`testing${Math.floor((Math.random() * 100000) + 1)}@nextseed.com`);
     cy.get('input[name="password"]').type(SignUpMeta.password);
     cy.get('input[name="verify"]').type(SignUpMeta.verify);
   });
@@ -32,3 +32,16 @@ export const fillSignUpFormAndProceed = () => {
   cy.get('button.button').contains('Register').click();
   cy.wait('@signUpForm');
 };
+
+
+export const confirmEmailAddressScreen = () => {
+  cy.wait(12000)
+  cy.contains('Continue').click();
+  cy.wait(2000)
+}
+
+export const confirmPhoneNumberScreen = () => {
+  registerApiCall('confirmPhone', '/v1/p');
+  cy.get('div.content > .center-align > button').contains('Continue').click({ force: true });
+  cy.wait('@confirmPhone')
+}

@@ -36,32 +36,32 @@ export default class Compose extends Component {
           <div>
             {editMessageId
               ? (
-                <Button.Group compact vertical size="small">
-                  <Button loading={buttonLoader === editScope} onClick={() => this.send(editScope, null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Update" />
-                  <Button onClick={this.reset} inverted color="red" content="Cancel" />
-                </Button.Group>
+<Button.Group compact vertical size="small">
+                <Button loading={buttonLoader === editScope} onClick={() => this.send(editScope, null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Update" />
+                <Button onClick={this.reset} inverted color="red" content="Cancel" />
+              </Button.Group>
               )
               : isIssuer
                 ? (
-                  <Button.Group compact vertical size="small">
-                    {!isPrivate
+<Button.Group compact vertical size="small">
+                {!isPrivate
                 && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} content="Note to NS" secondary />
                 }
-                    {isPublic
+                {isPublic
                 && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Submit for Review" />
                 }
-                  </Button.Group>
+              </Button.Group>
                 )
                 : (
-                  <Button.Group compact vertical size="small">
-                    <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Note to NS" />
-                    {!isPrivate
+<Button.Group compact vertical size="small">
+                <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Note to NS" />
+                {!isPrivate
                 && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Note to Issuer" />
                 }
-                    {isPublic
+                {isPublic
                 && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Publish to Public" />
                 }
-                  </Button.Group>
+              </Button.Group>
                 )
             }
           </div>

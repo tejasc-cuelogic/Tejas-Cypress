@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Grid, Popup, Icon, List, Divider } from 'semantic-ui-react';
+import { Grid, Popup, Icon, List, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 
-@inject('businessAppStore', 'userStore')
+@inject('businessAppStore', 'userStore', 'uiStore')
 @observer
 export default class BusinessDocumentation extends Component {
   componentWillMount() {
@@ -22,23 +21,30 @@ export default class BusinessDocumentation extends Component {
       getBusinessTypeCondtion,
       getPersonalGuaranteeCondition,
       formReadOnlyMode,
+      businessAppParitalSubmit,
+      enableSave,
+      businessApplicationDetailsAdmin,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
+    const { inProgress } = this.props.uiStore;
+    let disableFileUpload = true;
+    if (this.props.userStore.isAdmin && this.props.userStore.isApplicationManager) {
+      disableFileUpload = false;
+    }
     return (
-      <Aux>
+      <>
         <FormElementWrap
           hideFields={hideFields}
           header="Statements & Agreements"
           subHeader={(
-            <span>
+<span>
               Provide the most recent 6 months of bank statements for
               your business accounts. For new entities, provide if
-              statements are available.
-              <br />
+              statements are available.<br />
               Also provide the lease for your location. If only an LOIwith the landlord
               is currently available, please upload the LOI for review purposes.
               <Popup
@@ -59,13 +65,13 @@ export default class BusinessDocumentation extends Component {
                     sharableLink
                     blockDownload={get(userAccess, 'asSupport')}
                     hideFields={hideFields}
-                    disabled={formReadOnlyMode}
+                    disabled={formReadOnlyMode && disableFileUpload}
                     multiple
                     key={field}
                     name={field}
                     asterisk="true"
                     fielddata={fields[field]}
-                    ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                    ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                     tooltip={fields[field].tooltip}
                     toolTipClassName="left-align justify-text"
@@ -82,15 +88,13 @@ export default class BusinessDocumentation extends Component {
         >
           {!hideFields
             && (
-            <List bulleted>
+<List bulleted>
               <List.Item>
-                <b>For new entities</b>
-, please submit your personal tax returns and, if
+                <b>For new entities</b>, please submit your personal tax returns and, if
                 available, tax returns of a different business entity that you currently own.
               </List.Item>
               <List.Item>
-                <b>For existing entities</b>
-, please submit tax returns for the entity.
+                <b>For existing entities</b>, please submit tax returns for the entity.
               </List.Item>
             </List>
             )
@@ -103,13 +107,13 @@ export default class BusinessDocumentation extends Component {
                   sharableLink
                   blockDownload={get(userAccess, 'asSupport')}
                   hideFields={hideFields}
-                  disabled={formReadOnlyMode}
+                  disabled={formReadOnlyMode && disableFileUpload}
                   multiple
                   asterisk="true"
                   key={field}
                   name={field}
                   fielddata={fields[field]}
-                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                   onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                 />
               ))
@@ -144,14 +148,11 @@ export default class BusinessDocumentation extends Component {
           />
           {getPersonalGuaranteeCondition
             && (
-            <div>
+<div>
               {!hideFields
               && (
-              <p>
-                Please
-                {' '}
-                <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>
-, fill out and upload the
+<p>
+                Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
                 Personal Guarantee Form along with any supporting documentation
               </p>
               )
@@ -160,19 +161,35 @@ export default class BusinessDocumentation extends Component {
                 sharableLink
                 blockDownload={get(userAccess, 'asSupport')}
                 hideFields={hideFields}
-                disabled={formReadOnlyMode}
+                disabled={formReadOnlyMode && disableFileUpload}
                 asterisk="true"
                 multiple
                 name="personalGuaranteeForm"
                 fielddata={fields.personalGuaranteeForm}
-                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                 onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </div>
             )
           }
         </FormElementWrap>
-      </Aux>
+        {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager
+          ? (
+<div className="right aligned">
+            <Button
+              inverted
+              type="button"
+              onClick={() => businessAppParitalSubmit(true)}
+              className="align-right right-align"
+              color="green"
+              content="Save"
+              disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DOC_FRM.meta.isValid : enableSave)}
+              loading={inProgress}
+            />
+          </div>
+          )
+          : ''}
+      </>
     );
   }
 }

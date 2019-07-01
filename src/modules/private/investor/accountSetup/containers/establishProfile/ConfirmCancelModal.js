@@ -3,6 +3,8 @@ import { Modal, Button } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('investorProfileStore')
 @observer
 @withRouter
@@ -19,15 +21,15 @@ export default class ConfirmCancelModal extends React.Component {
       return (
         <Modal size="mini" open>
           <Modal.Content>
-            <p className="center-align mt-30 mb-30">
+            <p className={`${isMobile ? '' : 'center-align'} mt-30 mb-30`}>
               In order to participate in new investments, you will need to complete
               your investor profile.
             </p>
-            <p className="center-align mb-30">Visit your Investor Dashboard anytime to complete your profile.</p>
+            <p className={`${isMobile ? '' : 'center-align'} mb-30`}>Visit your Investor Dashboard anytime to complete your profile.</p>
             <div className="center-align mt-30">
-              <Button primary size="large" onClick={this.handleCloseModal} className="very relaxed" content="Go Back" />
+              <Button fluid={isMobile} primary size="large" onClick={this.handleCloseModal} className="very relaxed" content="Go Back" />
             </div>
-            <div className="center-align mt-30">
+            <div className={`${isMobile ? 'mb-30' : ''} center-align mt-30`}>
               <p><Link to="/app/summary" onClick={this.handleFinishLater}>Finish later</Link></p>
             </div>
           </Modal.Content>
