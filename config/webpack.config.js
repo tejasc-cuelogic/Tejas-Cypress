@@ -530,7 +530,7 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
-      !(['production', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      !(['production', 'prod', 'master', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
       && new HtmlWebpackTagsPlugin({
         scripts: [
           {
