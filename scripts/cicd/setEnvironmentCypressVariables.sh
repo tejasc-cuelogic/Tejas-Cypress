@@ -22,7 +22,7 @@
 
 settingEnv()
 {
-file="../../.env.local"
+file="../../.env"
 rm ../../cypress.env.json
 echo "{" >> ../../cypress.env.json
 while IFS= read -r line
