@@ -565,7 +565,7 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
-    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate'];
+    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'];
     const fieldValue = (cMap.includes(field)) ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
@@ -885,7 +885,7 @@ export class OfferingCreationStore {
       this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
     }
     if (form === 'COMPANY_LAUNCH_FRM' && get(offer, 'goldstar')) {
-      ['contactId', 'escrowAccount', 'isin', 'sinkFundAccount'].forEach((f) => {
+      ['contactId', 'esAccountNumber', 'isin', 'sfAccountNumber'].forEach((f) => {
         this.COMPANY_LAUNCH_FRM.fields[f].value = get(offer, `goldstar.${f}`);
       });
     }
@@ -1590,11 +1590,14 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step) => {
+  offeringClose = (params, step, scope) => {
     uiStore.setProgress(params.process);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
     if (formData.payload) {
+      if (scope) {
+        formData.payload.scope = scope;
+      }
       if (formData.payload.notePurchaseDate) {
         formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
       }
@@ -1604,6 +1607,8 @@ export class OfferingCreationStore {
       if (formData.payload.hardCloseDate) {
         formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
       }
+    } else if (!formData.payload && scope) {
+      formData.payload = { scope };
     }
     client
       .mutate({

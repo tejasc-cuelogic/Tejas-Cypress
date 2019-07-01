@@ -1,11 +1,12 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy } from 'lodash';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
-import { UPDATES } from '../../../../constants/offering';
-import { offeringCreationStore } from '../../../index';
+import { UPDATES, TEMPLATE } from '../../../../constants/offering';
+import { offeringCreationStore, uiStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
   sendOfferingUpdateTestEmail, offeringUpdatePublish,
@@ -17,6 +18,8 @@ export class UpdateStore {
     @observable filters = false;
 
     @observable currentUpdate = {};
+
+    @observable newUpdateId = null;
 
     @observable requestState = {
       skip: 0,
@@ -30,6 +33,8 @@ export class UpdateStore {
 
     @observable PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
 
+    @observable TEMPLATE_FRM = Validator.prepareFormObject(TEMPLATE);
+
     @action
     initRequest = () => {
       const variables = { offerId: offeringCreationStore.currentOfferingId };
@@ -37,6 +42,7 @@ export class UpdateStore {
         client,
         query: allUpdates,
         variables,
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.offeringUpdatesByOfferId) {
             this.requestState.page = 1;
@@ -76,6 +82,7 @@ export class UpdateStore {
 
     @action
     sendTestEmail = (offeringUpdateId) => {
+      uiStore.setLoaderMessage('...Sending Test Email');
       client
         .mutate({
           mutation: sendOfferingUpdateTestEmail,
@@ -83,25 +90,38 @@ export class UpdateStore {
             offeringUpdateId,
           },
         })
-        .then(() => { Helper.toast('Email sent ', 'success'); })
-        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
+        .then(() => {
+          uiStore.setLoaderMessage('');
+          Helper.toast('Email sent ', 'success');
+          uiStore.setProgress(false);
+        })
+        .catch(() => {
+          uiStore.setLoaderMessage('');
+          Helper.toast('Something went wrong, please try again later. ', 'error');
+          uiStore.setProgress(false);
+        });
     }
 
     @action
-    offeringUpdatePublish = (offeringUpdateId, data) => {
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
+    offeringUpdatePublish = (offeringUpdateId, data) => new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: offeringUpdatePublish,
           variables: {
             id: offeringUpdateId,
+            emailTemplate: this.TEMPLATE_FRM.fields.type.value,
             updatesInput: data,
           },
-          refetchQueries: [{ query: allUpdates, variables }],
         })
-        .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
-        .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
-    }
+        .then(() => {
+          Helper.toast('Offering Published Successfully ', 'success');
+          resolve();
+        })
+        .catch(() => {
+          Helper.toast('Something went wrong, please try again later. ', 'error');
+          reject();
+        });
+    });
 
     @action
     toggleSearch = () => {
@@ -117,58 +137,94 @@ export class UpdateStore {
         } else {
           this.PBUILDER_FRM.fields.tiers.values.splice(index, 1);
         }
+        this.PBUILDER_FRM.meta.isDirty = true;
         Validator.validateForm(this.PBUILDER_FRM, false, false, false);
       } else {
-        this.PBUILDER_FRM = Validator.onChange(this.PBUILDER_FRM, Validator.pullValues(e, result));
+        this.PBUILDER_FRM = Validator.onChange(this.PBUILDER_FRM, Validator.pullValues(e, result), true);
       }
     };
 
     @action
+    selectTemplate = (e, result) => {
+      this.TEMPLATE_FRM = Validator.onChange(this.TEMPLATE_FRM, Validator.pullValues(e, result), true);
+    };
+
+    @action
+    maskChange = (values, form, field) => {
+      const fieldValue = values.formattedValue;
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: fieldValue },
+      );
+    }
+
+    @action
     FChange = (field, value) => {
       this.PBUILDER_FRM.fields[field].value = value;
+      this.PBUILDER_FRM.meta.isDirty = true;
       Validator.validateForm(this.PBUILDER_FRM);
     }
 
     @action
-    save = (id, status, isManager = false, isAlreadyPublished = false) => {
+    setFieldValue = (field, value) => {
+      this[field] = value;
+    }
+
+    @action
+    save = (id, status) => new Promise((resolve) => {
+      uiStore.setProgress(true);
+      this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.isEarlyBirdOnly = false;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
-        this.offeringUpdatePublish(id, data);
-        return;
+        this.offeringUpdatePublish(id, data).then(() => {
+          uiStore.setProgress(false);
+          resolve();
+        });
       }
       client
         .mutate({
           mutation: id === 'new' ? newUpdate : editUpdate,
           variables: id === 'new' ? { updatesInput: data }
             : { ...{ updatesInput: data }, id },
-          refetchQueries: [{ query: allUpdates, variables }],
         })
         .then((res) => {
-          if (isManager && !isAlreadyPublished && status !== 'DRAFT') {
-            const UpdateId = res.data.createOfferingUpdates
-              ? res.data.createOfferingUpdates.id : res.data.updateOfferingUpdatesInfo.id;
-            this.approveUpdate(UpdateId);
-          } else {
-            Helper.toast('Update added.', 'success');
+          if (id === 'new') {
+            this.setStatus(status);
+            this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
+          } else if (status !== 'DRAFT') {
+            this.reset();
           }
-          this.reset();
+          Helper.toast(id === 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
+          this.setFormIsDirty(false);
+          uiStore.setProgress(false);
+          resolve();
         })
-        .catch(res => Helper.toast(`${res} Error`, 'error'));
+        .catch((res) => {
+          Helper.toast(`${res} Error`, 'error');
+          uiStore.setProgress(false);
+        });
+    });
+
+    @action
+    setStatus = (status) => {
+      this.PBUILDER_FRM.fields.status.value = status;
+    }
+
+    @action
+    setFormIsDirty = (isDirty) => {
+      this.PBUILDER_FRM.meta.isDirty = isDirty;
     }
 
     @action
     approveUpdate = (id) => {
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
       client.mutate({
         mutation: approveUpdate,
         variables: { id },
-        refetchQueries: [{ query: allUpdates, variables }],
       }).then(() => {
         Helper.toast('Update published.', 'success');
       })
@@ -192,9 +248,8 @@ export class UpdateStore {
           },
           refetchQueries: [{ query: allUpdates, variables }],
         })
-        .then(() => { Helper.toast('Offering Published Successfully ', 'success'); })
+        .then(() => { Helper.toast(`Offering update is ${!isVisible ? 'visible' : 'invisible'}`, 'success'); })
         .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
-      console.log(payload);
     }
 
     @action
@@ -204,15 +259,24 @@ export class UpdateStore {
         client,
         query: getUpdate,
         variables: { id },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
-          Object.keys(this.PBUILDER_FRM.fields).map((key) => {
-            this.PBUILDER_FRM.fields[key].value = res.offeringUpdatesById[key];
-            return null;
-          });
-          this.PBUILDER_FRM.fields.tiers.values = res.offeringUpdatesById.tiers;
-          Validator.validateForm(this.PBUILDER_FRM);
+          if (res) {
+            this.setFormData(res.offeringUpdatesById);
+          }
         },
       });
+    }
+
+    @action
+    setFormData = (offeringUpdatesById) => {
+      Object.keys(this.PBUILDER_FRM.fields).map((key) => {
+        this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        return null;
+      });
+      this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
+      this.PBUILDER_FRM.fields.updatedDate.value = moment(offeringUpdatesById.updated.date).format('MM/DD/YYYY');
+      Validator.validateForm(this.PBUILDER_FRM);
     }
 
     @action
@@ -245,27 +309,41 @@ export class UpdateStore {
       return this.currentUpdate.loading;
     }
 
+    @computed get currentUpdates() {
+      return this.currentUpdate.data.offeringUpdatesById || [];
+    }
+
     @computed get count() {
       return (this.db && this.db.length) || 0;
     }
 
     @action
-    deleteOfferingUpdates = (id) => {
-      const variables = { offerId: offeringCreationStore.currentOfferingId };
+    deleteOfferingUpdates = id => new Promise((resolve, reject) => {
+      uiStore.setProgress(true);
       client
         .mutate({
           mutation: deleteOfferingUpdate,
           variables: {
             id: [id],
           },
-          refetchQueries: [{ query: allUpdates, variables }],
         }).then(() => {
           Helper.toast('Update deleted.', 'success');
+          this.setFieldValue('newUpdateId', null);
+          resolve();
+          uiStore.setProgress(false);
+        }).catch(() => {
+          Helper.toast('Something went wrong.', 'error');
+          reject();
+          uiStore.setProgress(false);
         });
-    }
+    });
 
     @computed get loading() {
       return this.data.loading;
+    }
+
+    @computed get offeringUpdateData() {
+      return (this.currentUpdate.data && this.currentUpdate.data.offeringUpdatesById) || null;
     }
 }
 

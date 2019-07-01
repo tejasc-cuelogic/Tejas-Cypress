@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -30,13 +29,11 @@ class Banner extends Component {
     return (
       <section className="banner home-banner">
         <Container>
-          <Responsive minWidth={768} as={Aux}>
+          <Responsive minWidth={768} as={React.Fragment}>
             <div className="banner-caption">
               <Header as="h2">
-                Accelerate your
-                <br />
-                growth with the
-                <br />
+                Accelerate your<br />
+                growth with the<br />
                 power of the crowd.
               </Header>
               <Button.Group className={!isTablet && 'mt-30'}>
@@ -47,9 +44,7 @@ class Banner extends Component {
           </Responsive>
           <div className="banner-meta">
             <p>
-              <b>Brian Ching | Pitch 25</b>
-              <br />
-Raised $549,000 from 392 investors
+              <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
             </p>
           </div>
         </Container>

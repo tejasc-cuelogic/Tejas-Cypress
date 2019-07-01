@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
@@ -57,9 +56,9 @@ export default class Experience extends Component {
     } = this.props.investorProfileStore;
     const { errorMessage } = this.state;
     return (
-      <Aux>
+      <>
         {
-          !isMobile ? <Header as="h3" textAlign="center">Investment Experience</Header>
+          !isMobile ? <Header as="h4" textAlign="center">Investment Experience</Header>
             : <Header as="h4">Please select the box that best describes your investment experience</Header>
         }
         {!isMobile && (
@@ -92,7 +91,7 @@ export default class Experience extends Component {
           />
           {errorMessage
           && (
-          <Message error className="mt-20">
+<Message error className="mt-20">
             <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
           </Message>
           )
@@ -124,7 +123,7 @@ export default class Experience extends Component {
             }
           </div>
         </Form>
-      </Aux>
+      </>
     );
   }
 }

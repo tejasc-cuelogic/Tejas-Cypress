@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 import { ListErrors } from '../../../../../theme/shared';
@@ -89,7 +88,7 @@ export default class AddFunds extends Component {
     const { errors } = this.props.uiStore;
     const isInValid = this.isValidFund(addFundsByAccType);
     return (
-      <Aux>
+      <>
         <div className={isMobile ? '' : 'center-align'}>
           <Header as="h4">How much would you like to deposit?</Header>
           <p>
@@ -114,7 +113,7 @@ export default class AddFunds extends Component {
             </div>
             {errors
               && (
-              <Message error className="mb-30">
+<Message error className="mb-30">
                 <ListErrors errors={[errors.message]} />
               </Message>
               )
@@ -128,7 +127,7 @@ export default class AddFunds extends Component {
               </div>
             )}
         </div>
-      </Aux>
+      </>
     );
   }
 }

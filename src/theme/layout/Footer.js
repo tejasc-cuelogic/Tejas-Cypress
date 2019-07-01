@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Grid } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { SocialLinks } from '../shared';
 import NSImage from '../../modules/shared/NSImage';
 
@@ -52,7 +51,7 @@ class Footer extends Component {
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
               <div className="footer-left-nav mb-30">
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                  <Aux path={path}>
+                  <React.Fragment path={path}>
                     <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
                       <Menu.Item header>Resources</Menu.Item>
                       <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
@@ -64,7 +63,7 @@ class Footer extends Component {
                       <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
                       <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
                     </Menu>
-                  </Aux>
+                  </React.Fragment>
                 } */}
                 <Menu
                   text
@@ -84,11 +83,11 @@ class Footer extends Component {
                   {/* } */}
                 </Menu>
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
-                <Aux path={path}>
+                <React.Fragment path={path}>
                   <div className={isTablet && 'mt-20 center-align'}>
                     <NSImage path="secure-horizontal-1.jpg" />
                   </div>
-                </Aux>
+                </React.Fragment>
                 {/* } */}
               </div>
               <div className="footer-social">
@@ -98,31 +97,17 @@ class Footer extends Component {
             </Grid.Column>
             <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">
               <p>
-                This site is operated by NextSeed Services LLC (
-                {'"'}
-NextSeed
-                {'"'}
-), which is
+                This site is operated by NextSeed Services LLC ({'"'}NextSeed{'"'}), which is
                 neither a registered broker-dealer nor funding portal.
               </p>
               <p>
                 All securities-related activity is conducted by regulated affiliates of
                 NextSeed: NextSeed Securities, LLC, a registered broker dealer and member
-                of
-                {' '}
-                <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
-                {' '}
-                <b>
-(check out the background of our broker-dealer on
-                  {' '}
-                  <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>
-)
-                </b>
-                {' '}
-                or NextSeed US LLC, a registered funding portal and member of
-                {' '}
-                <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
-.
+                of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>{' '}
+                <b>(check out the background of our broker-dealer on{' '}
+                  <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>)
+                </b>{' '}
+                or NextSeed US LLC, a registered funding portal and member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
               </p>
               <p>
                 Any securities offered on this website have not been recommended or approved
@@ -134,31 +119,19 @@ NextSeed
                 In making an investment decision, investors must rely on their own examination of
                 the issuer and the terms of the offering, including the merits and risks involved.
                 Investments on NextSeed are speculative, illiquid and involve a high degree of
-                risk, including the possible loss of your entire investment.
-                {' '}
-                <b>
-See general risk factors
-                  {' '}
+                risk, including the possible loss of your entire investment.{' '}
+                <b>See general risk factors{' '}
                   <a href="https://nextseed.com/agreements/legal/general-risk-factors" target="_blank" rel="noopener noreferrer">here</a>
-                </b>
-.
+                </b>.
                 NextSeed does not verify the adequacy, accuracy or completeness of any
                 information. Neither NextSeed nor any of its officers, directors, agents and
                 employees makes any warranty, express or implied, of any kind whatsoever related
                 to the adequacy, accuracy or completeness of any information on this site or the
-                use of information on this site. See additional general disclosures
-                <Link to="/agreements/legal/general-disclosures" target="_blank">here</Link>
-.
+                use of information on this site. See additional general disclosures <Link to="/agreements/legal/general-disclosures" target="_blank">here</Link>.
               </p>
               <p>
-                By accessing this site and any pages thereof, you agree to be bound by the
-                {' '}
-                <Link to="/agreements/legal/terms-of-use" target="_blank">Terms of Use</Link>
-                {' '}
-and
-                {' '}
-                <Link to="/agreements/legal/privacy-policy" target="_blank">Privacy Policy</Link>
-.
+                By accessing this site and any pages thereof, you agree to be bound by the <Link to="/agreements/legal/terms-of-use" target="_blank">Terms of Use</Link> and
+                {' '}<Link to="/agreements/legal/privacy-policy" target="_blank">Privacy Policy</Link>.
               </p>
             </Grid.Column>
           </Grid>

@@ -90,12 +90,12 @@ export default class ProfileData extends Component {
                       <div className="profile-pic-wrapper">
                         {userAvatar.avatarUrl
                           ? (
-                            <Image64
-                              avatar
-                              circular
-                              size=""
-                              srcUrl={userAvatar.avatarUrl}
-                            />
+<Image64
+  avatar
+  circular
+  size=""
+  srcUrl={userAvatar.avatarUrl}
+/>
                           )
                           : <UserAvatar UserInfo={userAvatar} />
                         }
@@ -169,7 +169,7 @@ export default class ProfileData extends Component {
         </Grid.Column>
         {userAvatar.roles.includes('investor')
           && (
-          <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
+<Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
             <Card.Group>
               <UserVerifiedDetails
                 {...this.props}
@@ -182,10 +182,10 @@ export default class ProfileData extends Component {
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile
               && (
-              <UserInvestorDetails
-                {...this.props}
-                investorProfileData={investorProfileData}
-              />
+<UserInvestorDetails
+  {...this.props}
+  investorProfileData={investorProfileData}
+/>
               )
             }
             <Route exact path={`${this.props.match.url}/establish-profile`} render={() => <EstablishProfile refUrl={this.props.match.url} />} />

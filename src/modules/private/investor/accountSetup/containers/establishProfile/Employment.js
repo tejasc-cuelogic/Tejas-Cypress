@@ -14,7 +14,7 @@ export default class Employment extends Component {
     const { errors } = this.props.uiStore;
     return (
       <div className={isMobile ? '' : 'center-align'}>
-        <Header as="h3">What is your employment status?</Header>
+        <Header as="h4">What is your employment status?</Header>
         {!isMobile && <p className="mb-40">Please indicate your current employment status</p>}
         <Form error className={isMobile ? 'mb-40' : ''}>
           <FormRadioGroup
@@ -49,7 +49,7 @@ export default class Employment extends Component {
           }
           {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
           )

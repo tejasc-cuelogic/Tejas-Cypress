@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput, FormPasswordStrength } from '../../../../theme/form';
@@ -93,7 +92,7 @@ class Success extends Component {
     const { fields } = SIGNUP_FRM;
     const { errors } = this.props.uiStore;
     return (
-      <Aux>
+      <>
         <Grid container>
           <Grid.Column className="issuer-signup">
             <Icon className="ns-paper-plane" size="massive" color="green" />
@@ -113,38 +112,38 @@ class Success extends Component {
             </p>
             {this.props.isPublic
               && (
-              <Form error>
+<Form error>
                 <Grid>
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                     {!userExists
                       ? ['email', 'password', 'verify'].map(field => (
                         (field === 'password')
                           ? (
-                            <FormPasswordStrength
-                              key="password"
-                              name="password"
-                              type="password"
-                              userInputs={[fields.email.value]}
-                              iconDisplay
-                              minLength={8}
-                              minScore={4}
-                              tooShortWord="Weak"
-                              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-                              changed={signupChange}
-                              fielddata={fields[field]}
-                            />
+<FormPasswordStrength
+  key="password"
+  name="password"
+  type="password"
+  userInputs={[fields.email.value]}
+  iconDisplay
+  minLength={8}
+  minScore={4}
+  tooShortWord="Weak"
+  scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+  inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+  changed={signupChange}
+  fielddata={fields[field]}
+/>
                           )
                           : (
-                            <FormInput
-                              key={field}
-                              readOnly={field === 'email'}
+<FormInput
+  key={field}
+  readOnly={field === 'email'}
                             // icon={field !== 'email' ? togglePasswordType(field) : null}
-                              type={field !== 'email' ? pwdInputType : 'text'}
-                              name={field}
-                              fielddata={fields[field]}
-                              changed={signupChange}
-                            />
+  type={field !== 'email' ? pwdInputType : 'text'}
+  name={field}
+  fielddata={fields[field]}
+  changed={signupChange}
+/>
                           )
                       ))
                       : ['email', 'password'].map(field => (
@@ -161,7 +160,7 @@ class Success extends Component {
                     }
                     {errors
                       && (
-                      <Message error className="mt-30">
+<Message error className="mt-30">
                         <ListErrors errors={[errors.message]} />
                       </Message>
                       )
@@ -177,7 +176,7 @@ class Success extends Component {
         </Grid>
         {this.state.showProgressLoader
         && (
-        <Dimmer active className="fullscreen">
+<Dimmer active className="fullscreen">
           <Loader size="large">
             <Header as="h3">
               Please wait...
@@ -189,7 +188,7 @@ class Success extends Component {
         </Dimmer>
         )
         }
-      </Aux>
+      </>
     );
   }
 }

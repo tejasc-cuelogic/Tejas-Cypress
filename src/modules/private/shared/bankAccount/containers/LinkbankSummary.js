@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Table } from 'semantic-ui-react';
@@ -33,7 +32,7 @@ export default class LinkbankSummary extends React.Component {
     const bankAccountNumber = !isEmpty(plaidAccDetails)
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
-      <Aux>
+      <>
         <Header as="h4" textAlign={isMobile ? '' : 'center'}>The bank account you have currently linked to this account is</Header>
         <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
@@ -41,7 +40,7 @@ export default class LinkbankSummary extends React.Component {
               <Table.Body>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
@@ -53,7 +52,7 @@ export default class LinkbankSummary extends React.Component {
                 </Table.Row>
                 { !isEmpty(routingNum)
                   && (
-                  <Table.Row>
+<Table.Row>
                     <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       { routingNum || '' }
@@ -80,7 +79,7 @@ export default class LinkbankSummary extends React.Component {
         <div className={`${isMobile ? 'mb-30' : ''} center-align mt-30`}>
           <Button color="green" className="link-button" content="Change link bank account" onClick={() => changeLinkbank()} />
         </div>
-      </Aux>
+      </>
     );
   }
 }

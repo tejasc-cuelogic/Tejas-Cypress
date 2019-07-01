@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider } from 'semantic-ui-react';
@@ -22,7 +21,7 @@ export default class FinancialInformation extends React.Component {
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
-      <Aux>
+      <>
         <Header as="h4" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
         <p className={isMobile ? '' : 'center-align'}>
 Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.
@@ -69,7 +68,7 @@ Your net worth and annual income are used to determine your 12-month investment 
           }
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
         </Form>
-      </Aux>
+      </>
     );
   }
 }

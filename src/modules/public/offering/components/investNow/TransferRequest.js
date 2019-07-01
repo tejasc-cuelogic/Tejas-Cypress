@@ -64,8 +64,7 @@ class TransferRequest extends Component {
       return (
         <div className="center-align">
           <Header as="h3" textAlign="center">Your investment transaction was not processed.</Header>
-          <p className="mt-30 mb-30">
-This may have happened because your session expired or your network connection dropped.
+          <p className="mt-30 mb-30">This may have happened because your session expired or your network connection dropped.
             We did not complete your investment transaction. Please check your account, and
             try again to complete your investment.
           </p>
@@ -86,7 +85,7 @@ This may have happened because your session expired or your network connection d
             </Table.Row>
             {changeInvest
               && (
-              <Table.Row>
+<Table.Row>
                 <Table.Cell>Previous Investment:</Table.Cell>
                 <Table.Cell collapsing>
                   {Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
@@ -124,7 +123,7 @@ This may have happened because your session expired or your network connection d
         </Table>
         {investmentFlowErrorMessage
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             {investmentFlowErrorMessage}
           </Message>
           )
@@ -135,11 +134,7 @@ This may have happened because your session expired or your network connection d
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from
-          my
-          {' '}
-          {bankAndAccountName}
-          {' '}
-to my NextSeed account in the
+          my {bankAndAccountName} to my NextSeed account in the
           amount equal to the Transfer Requested above. I understand this transfer will
           be initiated within 1-3 business days.
         </p>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Container, Menu, Responsive, Visibility } from 'semantic-ui-react';
@@ -17,8 +16,8 @@ export default class PublicSubNav extends Component {
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     return (
-      <Aux>
-        <Responsive minWidth={992} as={Aux}>
+      <>
+        <Responsive minWidth={992} as={React.Fragment}>
           <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous>
             <Menu
               secondary
@@ -29,10 +28,7 @@ export default class PublicSubNav extends Component {
                   secondary
                   className={`menu-secondary ${(moreProps && moreProps.onlyNav) ? '' : 'center-align'}`}
                 >
-                  <Menu.Item header>
-                    {title}
-:
-                  </Menu.Item>
+                  <Menu.Item header>{title}:</Menu.Item>
                   <NavItems sub refLoc="public" location={location} navItems={navItems} />
                 </Menu.Menu>
               </Container>
@@ -47,7 +43,7 @@ export default class PublicSubNav extends Component {
           navStatus={navStatus}
           location={location}
         />
-      </Aux>
+      </>
     );
   }
 }

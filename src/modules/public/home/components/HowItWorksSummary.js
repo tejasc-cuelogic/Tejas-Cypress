@@ -9,11 +9,7 @@ const HowItWorksSummary = props => (
       <Header as="h2" className="mb-30">A new way to invest in local businesses.</Header>
       <p className="mb-80">
         Local entrepreneurs and investors are reshaping the face of Main Street.
-        NextSeed offers the opportunity
-        {' '}
-        <br />
-        {' '}
-to invest in restaurants, fitness studios,
+        NextSeed offers the opportunity <br /> to invest in restaurants, fitness studios,
         craft breweries and a variety of growing concepts.
       </p>
     </Container>

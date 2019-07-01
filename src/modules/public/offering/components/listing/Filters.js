@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Container, Grid, Menu, Header, Checkbox, Form, Icon, Popup, List, Button } from 'semantic-ui-react';
 import Slider from 'react-slick';
 import { BUSINESS_INDUSTRIES } from '../../../../../services/constants/offering';
@@ -98,7 +97,7 @@ export default class Filters extends Component {
 
   render() {
     const BusinessTypesComp = (
-      <Aux>
+      <>
         <Header as="h6" dividing className="text-uppercase">Business Type</Header>
         <List relaxed="very">
           {this.state.BusinessTypes.map((item, index) => (
@@ -108,10 +107,10 @@ export default class Filters extends Component {
             </List.Item>
           ))}
         </List>
-      </Aux>
+      </>
     );
     const InvestAndFundingTypeComp = (
-      <Aux>
+      <>
         <Header as="h6" dividing className="text-uppercase">
           Investment Options
         </Header>
@@ -149,10 +148,10 @@ export default class Filters extends Component {
             }
           </Form>
         </div>
-      </Aux>
+      </>
     );
     const OtherFiltersComp = (
-      <Aux>
+      <>
         <Header as="h6" dividing className={`${isMobile && 'mt-80'} text-uppercase`}>
           More Options
         </Header>
@@ -171,10 +170,10 @@ export default class Filters extends Component {
             }
           </Form>
         </div>
-      </Aux>
+      </>
     );
     return (
-      <Aux>
+      <>
         <div className="filter-menu">
           <Container>
             <Menu text>
@@ -187,14 +186,14 @@ export default class Filters extends Component {
                   {isMobile
                     ? <Menu.Item name="clear all" onClick={this.clearAll}>CLEAR ALL</Menu.Item>
                     : (
-                      <Menu.Item name="clear all">
-                        <NSImage path="icons/icon_close.png" className="closeIcon" onClick={this.props.toggleFilters} />
-                      </Menu.Item>
+<Menu.Item name="clear all">
+                      <NSImage path="icons/icon_close.png" className="closeIcon" onClick={this.props.toggleFilters} />
+                    </Menu.Item>
                     )
                   }
                 </Menu.Menu>
               ) : (
-                <Menu.Item name="3 Results Found" position="right" />
+                  <Menu.Item name="3 Results Found" position="right" />
               )
               }
             </Menu>
@@ -205,70 +204,70 @@ export default class Filters extends Component {
                 <Container>
                   {!isMobile
                     ? (
-                      <Grid stackable columns={3}>
-                        <Grid.Column className="donut-chart">
-                          {BusinessTypesComp}
-                        </Grid.Column>
-                        <Grid.Column>
-                          {InvestAndFundingTypeComp}
-                        </Grid.Column>
-                        <Grid.Column>
-                          {OtherFiltersComp}
-                          <Button.Group>
-                            <Button primary>Update</Button>
-                            <Button basic onClick={this.clearAll}>Clear All</Button>
-                          </Button.Group>
-                        </Grid.Column>
-                      </Grid>
+<Grid stackable columns={3}>
+                      <Grid.Column className="donut-chart">
+                        {BusinessTypesComp}
+                      </Grid.Column>
+                      <Grid.Column>
+                        {InvestAndFundingTypeComp}
+                      </Grid.Column>
+                      <Grid.Column>
+                        {OtherFiltersComp}
+                        <Button.Group>
+                          <Button primary>Update</Button>
+                          <Button basic onClick={this.clearAll}>Clear All</Button>
+                        </Button.Group>
+                      </Grid.Column>
+                    </Grid>
                     )
                     : (
-                      <div className="carousel">
-                        <Slider ref={c => this.setProp(c)} {...this.settings}>
-                          <Aux>
-                            {BusinessTypesComp}
-                          </Aux>
-                          <Aux>
-                            {InvestAndFundingTypeComp}
-                            {OtherFiltersComp}
-                          </Aux>
-                        </Slider>
-                        <div className="filter-buttons mt-10">
-                          {this.state.activeSlide === 1
-                            ? (
-                              <Button.Group>
-                                <Button
-                                  onClick={this.previous}
-                                  floated="left"
-                                  className="link-button"
-                                  labelPosition="left"
-                                >
-                                  <Icon className="ns-arrow-left" color="grey" />
+<div className="carousel">
+                      <Slider ref={c => this.setProp(c)} {...this.settings}>
+                        <>
+                          {BusinessTypesComp}
+                        </>
+                        <>
+                          {InvestAndFundingTypeComp}
+                          {OtherFiltersComp}
+                        </>
+                      </Slider>
+                      <div className="filter-buttons mt-10">
+                        {this.state.activeSlide === 1
+                          ? (
+<Button.Group>
+                            <Button
+                              onClick={this.previous}
+                              floated="left"
+                              className="link-button"
+                              labelPosition="left"
+                            >
+                              <Icon className="ns-arrow-left" color="grey" />
                               BACK
-                                </Button>
-                                <Button
-                                  onClick={this.done}
-                                  floated="right"
-                                  className="link-button highlight-text"
-                                >
+                            </Button>
+                            <Button
+                              onClick={this.done}
+                              floated="right"
+                              className="link-button highlight-text"
+                            >
                               UPDATE
-                                </Button>
-                              </Button.Group>
-                            )
-                            : (
-                              <Button.Group>
-                                <Button
-                                  onClick={this.next}
-                                  floated="right"
-                                  className="link-button"
-                                >
+                            </Button>
+                          </Button.Group>
+                          )
+                          : (
+<Button.Group>
+                            <Button
+                              onClick={this.next}
+                              floated="right"
+                              className="link-button"
+                            >
                               NEXT
-                                  <Icon className="ns-arrow-right right" color="grey" />
-                                </Button>
-                              </Button.Group>
-                            )
+                              <Icon className="ns-arrow-right right" color="grey" />
+                            </Button>
+                          </Button.Group>
+                          )
                         }
-                        </div>
                       </div>
+                    </div>
                     )
                   }
                 </Container>
@@ -277,7 +276,7 @@ export default class Filters extends Component {
           )
           }
         </div>
-      </Aux>
+      </>
     );
   }
 }

@@ -114,7 +114,7 @@ export default class NewBusinessForm extends React.Component {
           <Modal.Content>
             {editBusinessMode === false
             && (
-            <Form error>
+<Form error>
               <Form.Input
                 loading={this.props.uiStore.asyncCheckLoader}
                 placeholder={newOfferingInformation.businessName.label}
@@ -154,7 +154,7 @@ export default class NewBusinessForm extends React.Component {
             }
             {editBusinessMode
             && (
-            <Form error>
+<Form error>
               <Form.Input
                 placeholder="Business Name"
                 className="column"

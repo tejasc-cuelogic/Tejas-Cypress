@@ -4,7 +4,6 @@ import { Header, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { includes, isEmpty, get } from 'lodash';
 import money from 'money-math';
-import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -50,7 +49,7 @@ export default class TransferFunds extends Component {
       <div>
         { !isEmpty(linkedBank) && accountType !== 'ira'
           ? (
-            <Aux>
+            <>
               <Header as="h4">Transfer funds</Header>
               <Grid>
                 <Grid.Row>
@@ -65,21 +64,21 @@ export default class TransferFunds extends Component {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
-            </Aux>
+            </>
           ) : accountType === 'ira'
             ? (
-              <section className="center-align">
-                <h4 style={{ color: '#31333d7d' }}>
-                  <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
-                </h4>
-              </section>
+<section className="center-align">
+              <h4 style={{ color: '#31333d7d' }}>
+                <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
+              </h4>
+            </section>
             )
             : (
-              <section className="center-align">
-                <h4 style={{ color: '#31333d7d' }}>
-                  <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
-                </h4>
-              </section>
+<section className="center-align">
+              <h4 style={{ color: '#31333d7d' }}>
+                <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
+              </h4>
+            </section>
             )
         }
       </div>

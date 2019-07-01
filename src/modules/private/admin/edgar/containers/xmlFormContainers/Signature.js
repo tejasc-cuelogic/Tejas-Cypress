@@ -71,7 +71,7 @@ export default class Signature extends React.Component {
           {
             xmlSubmissionStatus === XML_STATUSES.draft
             && (
-            <div>
+<div>
               <Button primary compact onClick={this.handleAdd}>Add</Button>
             </div>
             )

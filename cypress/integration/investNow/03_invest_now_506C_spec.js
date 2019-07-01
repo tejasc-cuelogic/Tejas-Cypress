@@ -17,7 +17,7 @@ describe('Invest now 506C investment flow', () => {
         cy.saveLocalStorage();
     });
 
-    it('Should be login with valid investor and proceed for 506C investment', () => {
+    it.skip('Should be login with valid investor and proceed for 506C investment', () => {
         openLogingPopupAndAutheticate();
     });
 

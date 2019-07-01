@@ -135,22 +135,18 @@ class Login extends Component {
             </Form.Field>
             {errors
               && (
-              <Message error className="mt-30">
+<Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
               )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress || !isEmpty(inProgressArray)} disabled={!LOGIN_FRM.meta.isValid} />
+              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress || !isEmpty(inProgressArray)} disabled={!LOGIN_FRM.meta.isValid || inProgress || !isEmpty(inProgressArray)} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>
-            <b>Don&#39;t have an account?</b>
-            {' '}
-            <Link to="/register">Sign up</Link>
-          </p>
+          <p><b>Don&#39;t have an account?</b> <Link to="/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

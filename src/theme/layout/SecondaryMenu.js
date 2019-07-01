@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
 import { MobileDropDownNav } from '../shared';
@@ -8,7 +7,7 @@ import { MobileDropDownNav } from '../shared';
 const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
-  <Aux key={item.to}>
+  <React.Fragment key={item.to}>
     {(item.subNavigations)
       ? (
         <Dropdown
@@ -37,22 +36,22 @@ const NavItems = ({
           {item.showIcon
             ? stepsStatus[key].status === 'IN_PROGRESS'
               ? (
-                <Popup
-                  trigger={(
-                    <Icon
-                      name={item.icon[stepsStatus[key].status]}
-                      color={item.icon_color[stepsStatus[key].status]}
-                    />
+<Popup
+  trigger={(
+<Icon
+  name={item.icon[stepsStatus[key].status]}
+  color={item.icon_color[stepsStatus[key].status]}
+/>
 )}
-                  content={item.toolTipTitle || ''}
-                  position="top center"
-                />
+  content={item.toolTipTitle || ''}
+  position="top center"
+/>
               )
               : (
-                <Icon
-                  color={item.icon_color[stepsStatus[key].status]}
-                  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
-                />
+<Icon
+  color={item.icon_color[stepsStatus[key].status]}
+  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
+/>
               )
             : null
           }
@@ -61,7 +60,7 @@ const NavItems = ({
           {addon && addon.pos !== 'left' && addon.data[item.to]}
         </Menu.Item>
       )}
-  </Aux>
+  </React.Fragment>
 ));
 
 @withRouter
@@ -82,8 +81,8 @@ class SecondaryMenu extends Component {
     } = this.props;
     // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
-      <Aux>
-        <Responsive minWidth={768} as={Aux}>
+      <>
+        <Responsive minWidth={768} as={React.Fragment}>
           {heading
             && <Header as="h6">{heading}</Header>
           }
@@ -109,7 +108,7 @@ class SecondaryMenu extends Component {
             {this.props.rightLabel}
           </Menu>
         </Responsive>
-        <Responsive className="secondary-menu" maxWidth={767} as={Aux}>
+        <Responsive className="secondary-menu" maxWidth={767} as={React.Fragment}>
           {match.url === '/agreements/legal'
             ? (
               <MobileDropDownNav
@@ -131,7 +130,7 @@ class SecondaryMenu extends Component {
             )
           }
         </Responsive>
-      </Aux>
+      </>
     );
   }
 }

@@ -137,10 +137,7 @@ class LegalDetails extends React.Component {
             />
           </Form.Group>
           <p className="note center-align">
-            By selecting
-            {' '}
-            <b>Verify my identity</b>
-  , you agree NextSeed may deliver verification
+            By selecting <b>Verify my identity</b>, you agree NextSeed may deliver verification
             codes to you using the phone number you have provided. Codes may be sent using text
             messages, an autodialer, or artificial or prerecorded voice messages to such phone
             number. Your mobile carrier’s messaging and data fees may apply.

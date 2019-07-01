@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Message, Divider } from 'semantic-ui-react';
@@ -22,8 +21,8 @@ export default class FinancialInformation extends Component {
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
-      <Aux>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
+      <>
+      <Header as="h4" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
         <p className={isMobile ? '' : 'center-align'}>
           Your net worth and annual income are used to determine your 12-month
           investment limit under Regulation Crowdfunding.
@@ -60,17 +59,14 @@ export default class FinancialInformation extends Component {
           && (
           <Message error className={isMobile ? '' : 'center-align'}>
             Based on your entity&apos;s net assets and annual income, your 12-month investment
-            limit is
-            {' '}
-            {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
-.
+            limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
             This is below the $5,000 minimum opening deposit.
           </Message>
           )
           }
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
         </Form>
-      </Aux>
+      </>
     );
   }
 }

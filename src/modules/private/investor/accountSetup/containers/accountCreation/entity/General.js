@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Form, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES_FOR_INVESTOR, ENTITY_TYPES } from '../../../../../../../constants/account';
@@ -24,8 +23,8 @@ export default class General extends Component {
     } = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
     return (
-      <Aux>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>General information</Header>
+      <>
+      <Header as="h4" textAlign={isMobile ? '' : 'center'}>General information</Header>
         <p className={isMobile ? '' : 'center-align'}>
           Let
           {"'"}
@@ -105,7 +104,7 @@ s create your Entity Investment Account. Get started by providing your
             )
           }
         </Form>
-      </Aux>
+      </>
     );
   }
 }

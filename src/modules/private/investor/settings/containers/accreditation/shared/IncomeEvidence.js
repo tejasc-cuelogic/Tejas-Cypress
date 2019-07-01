@@ -48,7 +48,7 @@ export default class IncomeEvidence extends Component {
         </Form>
         {ACCREDITATION_FORM.fields.method.value === false
           && (
-          <p className="center-align">
+<p className="center-align">
             Note: Verification of your accredited investor status using net worth is only valid for
             90 days from the date of your most recently submitted documentation.
           </p>

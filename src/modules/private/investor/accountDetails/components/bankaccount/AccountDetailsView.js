@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
@@ -82,7 +81,7 @@ export default class AccountDetailsView extends Component {
                   : (
 <div className="ui tiny image">
                     <NSImage path="banks/default.png" />
-</div>
+                  </div>
                   )
                 }
               </Item>
@@ -117,12 +116,12 @@ export default class AccountDetailsView extends Component {
             <Grid.Column>
               <Item>
                 <Item.Content>
-                  <Aux>
+                  <>
                     <Item.Extra>Status</Item.Extra>
                       <Item.Header>
                         {currentStaus}
                       </Item.Header>
-                  </Aux>
+                  </>
                 </Item.Content>
               </Item>
             </Grid.Column>
@@ -130,11 +129,11 @@ export default class AccountDetailsView extends Component {
               {accountType === 'active'
                 ? accountDetails && !accountDetails.pendingUpdate
                 && (
-<Aux>
+<>
                 {
                   <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
                 }
-</Aux>
+</>
                 )
                 : <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }

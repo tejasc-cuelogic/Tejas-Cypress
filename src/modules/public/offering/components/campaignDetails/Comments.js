@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
@@ -122,56 +121,48 @@ class Comments extends Component {
           although some questions require more thorough analyses and will take additional
           time.
         </p>
-        <p>
-See our
-          <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link>
-          {' '}
-on posting.
-        </p>
+        <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
         <p>
           If you have any technical questions or questions about NextSeed, please
-          email
-          {' '}
-          <a href="mailto:support@nextseed.com">support@nextseed.com</a>
-.
+          email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
         </p>
         {!isRightToPostComment
           ? (
-            <section className="center-align mt-30">
-              {loggedInAsInvestor && !accountStatusFull
-                ? <p>In order to leave comments, please create any type of account first.</p>
-                : <p>In order to leave comments, please sign up and verify your identity.</p>
+<section className="center-align mt-30">
+            {loggedInAsInvestor && !accountStatusFull
+              ? <p>In order to leave comments, please create any type of account first.</p>
+              : <p>In order to leave comments, please sign up and verify your identity.</p>
                 }
-              <Form reply className="public-form clearfix">
-                {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
-                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+            <Form reply className="public-form clearfix">
+              {loggedInAsInvestor && !accountStatusFull
+                ? <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
+                : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                   }
-              </Form>
-            </section>
+            </Form>
+          </section>
           )
           : !disablePostComment
               && (
-              <Aux>
+              <>
                 { visiblePost
                   ? (
-                    <Form className="public-form mt-30 clearfix" reply>
-                      <FormTextarea
-                        fielddata={MESSAGE_FRM.fields.comment}
-                        name="comment"
-                        changed={msgEleChange}
-                        containerclassname="secondary"
-                      />
-                      <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
-                    </Form>
+<Form className="public-form mt-30 clearfix" reply>
+                    <FormTextarea
+                      fielddata={MESSAGE_FRM.fields.comment}
+                      name="comment"
+                      changed={msgEleChange}
+                      containerclassname="secondary"
+                    />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                  </Form>
                   ) : ''
                 }
-              </Aux>
+              </>
               )
         }
         {comments && commentsMainThreadCount
           ? (
-            <Aux>
+            <>
               <Segment color="green" className="mt-50 offering-comment">
                 {comments
                 && comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
@@ -187,7 +178,7 @@ on posting.
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
                           {isUserLoggedIn && !disablePostComment
                           && (
-                          <Comment.Actions>
+<Comment.Actions>
                             <Comment.Action onClick={() => this.toggleVisibility(c.id)}>
                               Reply
                             </Comment.Action>
@@ -202,16 +193,15 @@ on posting.
                             />
                             {(c.comment.length > readMoreLength)
                             && (
-                            <Link
-                              to="/"
-                              onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
-                            >
-                              {this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
+<Link
+  to="/"
+  onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
+>{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
                             </Link>
                             )}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
-                            <Aux>
+                            <>
                               <Form className="public-form mt-30" reply>
                                 <FormTextarea
                                   fielddata={MESSAGE_FRM.fields.comment}
@@ -234,23 +224,15 @@ on posting.
                                 questions require more thorough analyses and will take additional
                                 time.
                               </p>
-                              <p>
-See our
-                                <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link>
-                                {' '}
-on posting. If you have any technical questions or questions about NextSeed,
-                                {' '}
-                                please email
-                                {' '}
-                                <a href="mailto:support@nextseed.com">support@nextseed.com</a>
-.
+                              <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
+                                please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
                               </p>
-                            </Aux>
+                            </>
                           ) : ''}
                         </Comment.Content>
                         {c.threadComment.length !== 0
                         && (
-                        <Comment.Group className="reply-comments">
+<Comment.Group className="reply-comments">
                           {c.threadComment
                           && c.threadComment.map(tc => ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
                             && tc.approved)
@@ -264,7 +246,7 @@ on posting. If you have any technical questions or questions about NextSeed,
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
                                 {isUserLoggedIn && !disablePostComment
                                 && (
-                                <Comment.Actions>
+<Comment.Actions>
                                   <Comment.Action
                                     onClick={() => this.toggleVisibility(tc.id)}
                                     className="grey-header"
@@ -282,16 +264,15 @@ on posting. If you have any technical questions or questions about NextSeed,
                                   />
                                   {(tc.comment.length > readMoreLength)
                                   && (
-                                  <Link
-                                    to="/"
-                                    onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
-                                  >
-                                    {this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
+<Link
+  to="/"
+  onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
+>{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
                                   </Link>
                                   )}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
-                                  <Aux>
+                                  <>
                                     <Form className="public-form mt-30" reply>
                                       <FormTextarea
                                         fielddata={MESSAGE_FRM.fields.comment}
@@ -314,18 +295,10 @@ on posting. If you have any technical questions or questions about NextSeed,
                                       business days, although some questions require more thorough
                                       analyses and will take additional time.
                                     </p>
-                                    <p>
-See our
-                                      <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link>
-                                      {' '}
-on posting. If you have any technical questions or questions about NextSeed,
-                                      {' '}
-                                      please email
-                                      {' '}
-                                      <a href="mailto:support@nextseed.com">support@nextseed.com</a>
-.
+                                    <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
+                                      please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
                                     </p>
-                                  </Aux>
+                                  </>
                                 ) : ''}
                               </Comment.Content>
                             </Comment>
@@ -338,14 +311,14 @@ on posting. If you have any technical questions or questions about NextSeed,
                 )))
               }
               </Segment>
-            </Aux>
+            </>
           )
           : (
-            <Segment color="green" className="mt-50 offering-comment">
-              <section className={`${isMobile ? 'mt-40 mb-40' : 'mt-80 mb-80'} center-align`}>
-                <Header as="h3" className="grey-header">No Comments</Header>
-              </section>
-            </Segment>
+<Segment color="green" className="mt-50 offering-comment">
+            <section className={`${isMobile ? 'mt-40 mb-40' : 'mt-80 mb-80'} center-align`}>
+              <Header as="h3" className="grey-header">No Comments</Header>
+            </section>
+          </Segment>
           )
         }
         <Switch>
