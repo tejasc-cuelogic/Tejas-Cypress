@@ -32,7 +32,7 @@ if [ "$environment" = "" ]; then
 	exit 1
 fi
 
-aws ssm get-parameters-by-path --recursive --path "/ns-client/" --region $region --output json| jq -r '.Parameters| .[] | .Name + " = " + .Value +""  ' > Env.txt || { echo "aws ssm command not executed properly in setEnvironmentVariables.sh script. Try again." ; exit 1; }
+aws ssm get-parameters-by-path --recursive --path "/ns-client/" --region $region --output json| jq -r '.Parameters| .[] | .Name + " = " + .Value +""  ' > Env.txt || { echo "aws ssm command not executed properly in setEnvironmentCypressVariables.sh script. Try again." ; exit 1; }
 cat Env.txt
 
 case $environment in
