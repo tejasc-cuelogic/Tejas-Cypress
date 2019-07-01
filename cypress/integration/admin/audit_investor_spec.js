@@ -71,9 +71,6 @@ describe('Audit Investor', () => {
     });
 
     describe('Data compare', () => {
-      it('AWS key should be equal to ', () => {
-        assert.equal(Cypress.env('AWS_COGNITO_USER_POOL_ID'), 'aws-key-shoulddfjkl', 'Successfully matched');
-      });
       userInfo.forEach(auditKey => {
         it(`should assert presence of ${auditKey}`, () => {
           assert.equal(get(auditInfo, auditKey), get(migratedUserAuditInfo, auditKey), `Successfully matched field: ${auditKey}`);

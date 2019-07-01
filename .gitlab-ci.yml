@@ -116,7 +116,6 @@ test:review:
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
     # - npm install
-    - echo $CYPRESS_AWS_COGNITO_IDENTITY_POOL_ID
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
   dependencies:
     - build:review
