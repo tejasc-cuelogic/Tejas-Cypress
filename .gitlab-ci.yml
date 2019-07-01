@@ -119,6 +119,8 @@ test:review:
     # - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     # - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
+  dependencies:
+  - build:review
 
 #---------------------------------PRE DEV-------------------------------------------
 build:predev:
