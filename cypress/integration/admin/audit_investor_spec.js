@@ -54,6 +54,7 @@ describe('Audit Investor', () => {
             const authToken = user.signInUserSession.idToken.jwtToken;
             requestHeaders.authorization = `Bearer ${authToken}`;
             requestBody.query = seedTestUsers;
+            cleanUpUser(userId);
             apiRequest('seedTestUsers', requestBody, requestHeaders)
               .then((resSeedTestUsers) => {
                 userId = resSeedTestUsers.body.data.seedTestUsers.created[0].id;
@@ -63,6 +64,7 @@ describe('Audit Investor', () => {
                 apiRequest('getMigratedUserAuditInfo', requestBody, requestHeaders)
                   .then((resGetMigratedUserAuditInfo) => {
                     migratedUserAuditInfo = resGetMigratedUserAuditInfo.body.data.getMigratedUserAuditInfo;
+                    cy.log(migratedUserAuditInfo);
                     console.log('auditInfo', auditInfo);
                     console.log('migratedUserAuditInfo', migratedUserAuditInfo);
                     cleanUpUser(userId);
