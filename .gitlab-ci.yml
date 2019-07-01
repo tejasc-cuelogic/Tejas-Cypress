@@ -64,12 +64,13 @@ build:review:
       - /root/.cache/Cypress
   # <<: *before_script_defination
   script:
+    - export USERNAME=Helloworkd
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
     - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
-    - npm install
-    - npm run build
+    # - npm install
+    # - npm run build
 
 #Deploying code to s3 bucket
 deploy:review:
@@ -112,6 +113,7 @@ test:review:
       - cypress/reports/screenshots
       - cypress/reports/videos
   script:
+    - echo $USERNAME
     # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
     # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
     # - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
