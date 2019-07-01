@@ -618,6 +618,7 @@ export class UserDetailsStore {
   resetStoreData = () => {
     this.currentUser = {};
     this.userFirstLoad = false;
+    this.accountForWhichCipExpired = '';
     this.setPartialInvestmenSession();
   }
 

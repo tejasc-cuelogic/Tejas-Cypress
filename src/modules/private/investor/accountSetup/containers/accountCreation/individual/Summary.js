@@ -6,7 +6,7 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -30,33 +30,59 @@ export default class Summary extends React.Component {
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
 
+  handleuserIdentity = () => {
+    this.props.uiStore.setProgress();
+    this.props.identityStore.setCipDetails();
+    this.props.identityStore.verifyUserIdentity()
+      .then(() => {
+        const {
+          key,
+          route,
+        } = this.props.identityStore.userVerficationStatus;
+        if (key === 'id.failure') {
+          this.props.identityStore.setIdentityQuestions();
+          this.props.history.push(route);
+        } else {
+          this.handleSubmitAccount();
+        }
+      });
+  }
+
+  handleSubmitAccount = () => {
+    const {
+      partialInvestNowSessionURL,
+      setPartialInvestmenSession,
+    } = this.props.userDetailsStore;
+    this.props.individualAccountStore.submitAccount().then(() => {
+      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      if (partialInvestNowSessionURL) {
+        this.props.history.push(partialInvestNowSessionURL);
+        setPartialInvestmenSession();
+      } else if (!this.props.individualAccountStore.showProcessingModal) {
+        this.props.history.push('/app/summary');
+        this.props.uiStore.resetcreateAccountMessage();
+      }
+    }).catch(() => { });
+  }
+
   handleCreateAccount = () => {
     const {
       isCipExpired,
       signupStatus,
-      partialInvestNowSessionURL,
-      setPartialInvestmenSession,
     } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-      this.props.history.push('/app/summary/identity-verification/0');
-      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+      this.handleuserIdentity();
+      // this.props.history.push('/app/summary/identity-verification/0');
+      // Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else if (isCipExpired) {
-      this.props.history.push('/app/summary/identity-verification/0');
-      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+      // this.props.history.push('/app/summary/identity-verification/0');
+      // Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+      this.handleuserIdentity();
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.props.individualAccountStore.submitAccount().then(() => {
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-        if (partialInvestNowSessionURL) {
-          this.props.history.push(partialInvestNowSessionURL);
-          setPartialInvestmenSession();
-        } else if (!this.props.individualAccountStore.showProcessingModal) {
-          this.props.history.push('/app/summary');
-          this.props.uiStore.resetcreateAccountMessage();
-        }
-      }).catch(() => { });
+      this.handleSubmitAccount();
     }
   }
 
