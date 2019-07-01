@@ -390,7 +390,7 @@ out of required
                 )
               }
             </>
-            ) : offerStatus.isFailed ? (
+            ) : !(hoursToClose > 0) && offerStatus.isFailed ? (
               <Card fluid className="center-align ba-info-card">
                 <Card.Header>
                   This campaign has Failed
