@@ -77,8 +77,6 @@ Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
 });
 
 const amplifyLogin = async (username, password) => {
-  console.log('Cypress Environment variables');
-  console.log(Cypress.env());
   Amplify.configure({
     Auth: awsConfig,
   });
