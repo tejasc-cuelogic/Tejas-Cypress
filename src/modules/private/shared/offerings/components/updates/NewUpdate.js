@@ -88,7 +88,7 @@ export default class NewUpdate extends Component {
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const { userDetails } = this.props.userDetailsStore;
-    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: userDetails.info.avatar.url } : '';
+    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
     if (loadingCurrentUpdate || inProgress) {
       return <InlineLoader />;
     }
