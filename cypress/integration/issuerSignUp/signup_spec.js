@@ -1,7 +1,7 @@
 import { registerApiCall, uploadFile, applicationUnlock } from '../../support/common';
 import { issuerPreQualDetails } from '../../fixtures/issuer/issuerPreQual';
 import { issuerBusinessDetails } from '../../fixtures/issuer/issuerBusinessDetails';
-import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails, fillNextYearProjection, fillBusinessDetails, loginToApplication } from '../../support/issuerSignUp/issuerSignUp';
+import { issuerSignUp, fillBasicDetails, fillGeneralInfo, fillExperienceDetails, fillNextYearProjection, fillBusinessDetails, loginToApplication } from './utility/issuerSignUp';
 
 describe('Issuer Sign Up', () => {
   beforeEach(() => {
@@ -57,8 +57,6 @@ describe('Issuer Sign Up', () => {
     cy.get('<div.ui.loader>', { timeout: 6000 }).should('not.exist');
     uploadFile('input[name="personalTaxReturn"]');
     cy.get('<div.ui.loader>', { timeout: 6000 }).should('not.exist');
-    cy.get('a').contains('Performance').click();
-    cy.get('a').contains('Documentation').click();
     cy.get('input[name="blanketLien"]').check('false', { force: true });
     cy.get('input[name="personalGuarantee"]').check('false', { force: true });
     if (cy.get('button').contains('Submit')) {
