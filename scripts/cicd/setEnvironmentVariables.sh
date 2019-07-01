@@ -97,6 +97,11 @@ settingEnv()
     REACT_APP_PUBLIC_API_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/key/ { print $3 }')
     sed -i.bak "s#^\(REACT_APP_PUBLIC_API_KEY=\).*#\1${REACT_APP_PUBLIC_API_KEY}#" .envTEMPLATE
 
+	if [ "$ci_commit_ref" = "review" ]; then
+		export CYPRESS_HOST=${REACT_APP_AWS_COGNITO_USER_POOL_ID}
+	fi
+
+
 	if [ "$ci_commit_ref" = "predev" ] || [ "$ci_commit_ref" = "dev" ] || [ "$ci_commit_ref" = "qa" ] || [ "$ci_commit_ref" = "demo" ] || [ "$ci_commit_ref" = "master" ]; then
 		REACT_APP_BUG_SNAG_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/bugsnag\/apiKey/ { print $3 }')
 		sed -i.bak "s#^\(REACT_APP_BUG_SNAG_KEY=\).*#\1${REACT_APP_BUG_SNAG_KEY}#" .envTEMPLATE
