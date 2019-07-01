@@ -115,7 +115,7 @@ test:review:
       - cypress/reports/videos
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
-    # - npm install
+    - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
   dependencies:
     - build:review
