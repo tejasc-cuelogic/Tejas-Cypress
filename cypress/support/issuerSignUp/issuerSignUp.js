@@ -41,7 +41,7 @@ export const fillNextYearProjection = (nextYearProjection) => {
 
 export const fillBusinessDetails = (businessDetails) => {
   uploadFile('input[name="businessPlan"]');
-  cy.get('.loader', { timeout: 6000 }).should('not.exist');
+  cy.get('<div.ui.loader>', { timeout: 6000 }).should('not.exist');
   fillExistingDebt(businessDetails.existingDebt);
   fillOwnerInfo(businessDetails.owner);
 }
@@ -59,21 +59,21 @@ export const loginToApplication = () => {
       })
 }
 
-export const fillOwnerInfo = (owner) => {
-    cy.get('input[name="fullLegalName"]').type(owner.fullLegalName);
-    cy.get('input[name="title"]').type(owner.title);
-    cy.get('input[name="yearsOfExp"]').type(owner.yearsOfExp);
-    cy.get('input[name="companyOwnerShip"]').type(owner.companyOwnerShip);
-    cy.get('input[name="dateOfService"]').type(owner.dateOfService);
-    cy.get('input[name="ssn"]').type(owner.ssn);
-    cy.get('input[name="linkedInUrl"]').type(owner.linkedInUrl);
-    uploadFile('input[name="resume"]');
-    cy.get('.loader', { timeout: 6000 }).should('not.exist');
-}
-
 export const fillExistingDebt = (existingDebt) => {
     cy.get('input[name="amount"]').type(existingDebt.amount);
     cy.get('input[name="interestExpenses"]').type(existingDebt.interestExpenses);
-    cy.get('input[name="remainingPrincipal"]').type(existingDebt.remainingPrincipal);
-    cy.get('input[name="term"]').type(existingDebt.term);
+    cy.get('input[name="remainingPrincipal"]').type(existingDebt.remainingPrincipal, {force: true});
+    cy.get('input[name="term"]').type(existingDebt.term, {force: true});
+}
+
+export const fillOwnerInfo = (owner) => {
+    cy.get('input[name="fullLegalName"]').type(owner.fullLegalName, {force: true});
+    cy.get('input[name="title"]').type(owner.title, {force: true});
+    cy.get('input[name="yearsOfExp"]').type(owner.yearsOfExp, {force: true});
+    cy.get('input[name="companyOwnerShip"]').type(owner.companyOwnerShip);
+    cy.get('input[name="dateOfService"]').type(owner.dateOfService, {force: true});
+    cy.get('input[name="ssn"]').type(owner.ssn, {force: true});
+    cy.get('input[name="linkedInUrl"]').type(owner.linkedInUrl, {force: true});
+    uploadFile('input[name="resume"]');
+    cy.get('<div.ui.loader>', { timeout: 6000 }).should('not.exist');
 }
