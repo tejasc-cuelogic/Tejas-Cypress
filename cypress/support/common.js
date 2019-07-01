@@ -1,3 +1,5 @@
+import { rejects } from "assert";
+
 export const waitForAPIcall = (operationName) => {
   cy.wait(`@${operationName}`);
 }
@@ -7,22 +9,26 @@ export const registerApiCall = (operationName, url = '**/**') => {
   cy.route('POST', url).as(operationName);
 }
 
-export const apiRequest = (operationName, requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve) => {
-  cy.request(
-    {
-      url: requestParams.url,
-      method: requestParams.method,
-      body: {
-        query: requestParams.query,
-      },
-      failOnStatusCode: false,
-      headers,
-    }
-  )
-  .as(operationName)
-  .then((result) => {
-    resolve(result);
-  });
+export const apiRequest = (operationName, requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve, reject) => {
+  try{
+    cy.request(
+      {
+        url: requestParams.url,
+        method: requestParams.method,
+        body: {
+          query: requestParams.query,
+        },
+        failOnStatusCode: false,
+        headers,
+      }
+    )
+    .as(operationName)
+    .then((result) => {
+      resolve(result);
+    });
+  } catch(err) {
+    reject(err);
+  }
 });
 
 export const typeOtpCode = () => {
