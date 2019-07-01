@@ -113,6 +113,8 @@ test:review:
       - cypress/reports/screenshots
       - cypress/reports/videos
   script:
+    - export USERNAMEE=Helloworkd
+    - echo $USERNAMEE
     - echo $USERNAME
     # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
     # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
