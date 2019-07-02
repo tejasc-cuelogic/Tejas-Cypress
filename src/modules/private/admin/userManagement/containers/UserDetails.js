@@ -95,6 +95,8 @@ export default class AccountDetails extends Component {
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
     };
+    const access = this.props.userStore.myAccessForModule('USERS');
+    const isFullUser = access.level === 'FULL';
     return (
       <>
         {/* <Route exact path={`${match.url}/individual/investments/investment-details/:id`}
@@ -121,7 +123,9 @@ export default class AccountDetails extends Component {
                     </Header.Subheader>
                   </Header>
                   <Button.Group floated="right">
-                    <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.handleConfirmModal(true)} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
+                    {isFullUser
+                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.handleConfirmModal(true)} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
+                    }
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
                       <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                     </Button>
