@@ -48,10 +48,6 @@ describe('Issuer Sign Up', () => {
     uploadFile('input[name="sourcesAndUses"]');
     cy.wait(5000);
     cy.get('div[class="pull-right"]').children().click({ force: true });
-    uploadFile('input[name="leaseAgreementsOrLOIs"]');
-    cy.wait(5000);
-    uploadFile('input[name="personalTaxReturn"]');
-    cy.wait(5000);
     cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
     uploadFile('input[name="leaseAgreementsOrLOIs"]');
     cy.get('<div.ui.loader>', { timeout: 6000 }).should('not.exist');
