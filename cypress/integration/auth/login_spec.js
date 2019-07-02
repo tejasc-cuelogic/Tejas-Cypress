@@ -3,7 +3,6 @@ import { applicationUnlock } from '../../support/common';
 
 describe('Log In', () => {
   beforeEach(() => {
-    console.log(Cypress.env());
     cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
     applicationUnlock();
     goToLoginScreen();
