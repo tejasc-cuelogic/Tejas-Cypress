@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 
@@ -9,7 +8,7 @@ const isTablet = clientWidth >= 768 && clientWidth < 992;
 const Banner = () => (
   <section fluid className="banner invest-banner">
     <Container>
-      <Responsive minWidth={768} as={Aux}>
+      <Responsive minWidth={768} as={React.Fragment}>
         <div className="banner-caption">
           <Header as="h2">
             Get access to pre-vetted,<br />local investments.

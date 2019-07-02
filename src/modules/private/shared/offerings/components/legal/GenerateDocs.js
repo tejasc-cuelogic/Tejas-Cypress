@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { isEmpty } from 'lodash';
 import { Form, Header, Button, Divider } from 'semantic-ui-react';
 import EdgarFilingList from './EdgarFilingList';
@@ -62,7 +61,7 @@ export default class GenerateDocs extends Component {
           />
           {!isEmpty(offeringFilingList)
             && (
-<Aux>
+            <>
               <Header as="h4">Upload Final Signed Docs</Header>
               {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
                 <DropZone
@@ -77,7 +76,7 @@ export default class GenerateDocs extends Component {
                 // </div>
               ))
               }
-            </Aux>
+            </>
             )
           }
         </Form>

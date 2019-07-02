@@ -2,7 +2,6 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { get, capitalize, has, lowerCase } from 'lodash';
 import { Card, Table, Button, Icon } from 'semantic-ui-react';
 import { InlineLoader, DateTimeFormat, NsPagination } from '../../../../../theme/shared';
@@ -69,7 +68,7 @@ export default class AllTransactions extends Component {
     const transStatus = STATUS_MAPPING[statusType].status;
     const columns = STATUS_META.filter(trans => trans.refStatus.includes(transStatus[0]));
     return (
-      <Aux>
+      <>
         <Card fluid>
           <div className="table-wrapper">
             <Table unstackable striped sortable className="user-list">
@@ -107,11 +106,11 @@ export default class AllTransactions extends Component {
                                     : col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field])
                                       : col.field === 'direction' ? capitalize(row[col.field]) : col.field === 'accountType'
                                         ? (
-<Aux>
-                                    {get(row, 'investorAccountInfo.accountType')
-                                      ? <Icon size="large" className={`ns-${lowerCase(get(row, 'investorAccountInfo.accountType'))}-line`} color="green" /> : 'N/A'
+                                          <>
+                                            {get(row, 'investorAccountInfo.accountType')
+                                              ? <Icon size="large" className={`ns-${lowerCase(get(row, 'investorAccountInfo.accountType'))}-line`} color="green" /> : 'N/A'
                                     }
-                                  </Aux>
+                                          </>
                                         )
                                         : col.field === 'cpAccountId'
                                   && get(row, 'accountId')
@@ -173,7 +172,7 @@ export default class AllTransactions extends Component {
             && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
           }
         </Card>
-      </Aux>
+      </>
     );
   }
 }

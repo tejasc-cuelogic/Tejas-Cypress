@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Table, Popup, Icon, Label } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { reject, get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
@@ -55,7 +54,7 @@ export default class Listing extends Component {
     }
     const { sortOrder } = this.props.offeringInvestorStore;
     return (
-      <Aux>
+      <>
         <div className="table-wrapper">
           <Table sortable unstackable singleLine className="investment-details">
             <Table.Header>
@@ -96,9 +95,9 @@ export default class Listing extends Component {
                       }
                       {isAdmin && get(data, 'userEmail')
                       && (
-<Aux>
+                      <>
                         <p>{`${get(data, 'userEmail')}`}</p>
-                      </Aux>
+                      </>
                       )
                       }
                     </div>
@@ -155,7 +154,7 @@ export default class Listing extends Component {
             </Table.Body>
           </Table>
         </div>
-      </Aux>
+      </>
     );
   }
 }

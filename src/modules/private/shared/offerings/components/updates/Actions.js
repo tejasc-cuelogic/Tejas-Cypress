@@ -1,127 +1,114 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
 
 const Actions = observer((props) => {
   const {
-    save, meta, isManager, isPending, isPublished,
-    edit, editForm, deleteUpdate, id, cancelUpdate, cancelChanges,
+    save, meta, isManager, isPublished,
+    deleteUpdate, id, cancelUpdate, isDraft,
   } = props;
   return (
-    <Aux>
-      {(isManager && !isPublished) || editForm
-        ? (
-<Button.Group compact floated="right">
-          <Button
-            inverted
-            color="red"
-            onClick={editForm ? cancelChanges : cancelUpdate}
-            content="Cancel"
-          />
-          {id !== 'new'
-            && (
-            <Button
-              inverted
-              color="red"
-              onClick={deleteUpdate}
-              content="Delete"
-            />
-            )
-          }
-            <Button
-              inverted
-              onClick={() => save('DRAFT')}
-              color="green"
-              content={editForm ? 'Save and Unpublish' : 'Save as draft'}
-              disabled={!meta.isValid}
-            />
-            {id !== 'new'
-            && (
-              <Button
-                primary
-                onClick={() => save('PUBLISHED')}
-                content={editForm ? 'Save and Publish' : 'Publish'}
-                disabled={!meta.isValid}
-              />
-            )
-            }
-          </Button.Group>
-        )
-        : (
-<Button.Group compact floated="right">
-            {!isManager
-            && (
-            <Button
-              inverted
-              color="red"
-              onClick={cancelUpdate}
-              content="Cancel"
-            />
-            )
-          }
-          {id !== 'new' && !isPublished
-            && (
-            <Button
-              inverted
-              color="red"
-              onClick={deleteUpdate}
-              content="Delete"
-            />
-            )
-          }
-          {!isPending && !isPublished
-            && (
-            <Button
-              inverted
-              onClick={() => save('DRAFT')}
-              color="green"
-              content="Save as draft"
-              disabled={!meta.isValid}
-            />
-            )
-          }
-            {!isPublished && id !== 'new'
-            && (
-            <Button
-              primary
-              onClick={() => save('PENDING')}
-              content={isPending ? 'Awaiting Manager Approval' : 'Submit for Approval'}
-              disabled={!meta.isValid || isPending}
-            />
-            )
-          }
-        </Button.Group>
-        )
-      }
-      {isManager && isPublished && !editForm
-        && (
-<Button.Group compact floated="right">
-          <Button
-            inverted
-            color="red"
-            onClick={cancelUpdate}
-            content="Cancel"
-          />
-          {id !== 'new'
-            && (
-            <Button
-              inverted
-              color="red"
-              onClick={deleteUpdate}
-              content="Delete"
-            />
-            )
-          }
-          <Button
-            primary
-            onClick={() => edit()}
-            content="Edit"
-          />
-        </Button.Group>
-        )
-      }
-    </Aux>
+    <>
+      <Button.Group compact floated="right">
+        <Button
+          inverted
+          color="red"
+          onClick={cancelUpdate}
+          content="Cancel"
+        />
+        {!isManager && !isPublished
+          && (
+            <>
+              {id
+                ? (
+                  <>
+                    {isDraft
+                      && (
+                        <>
+                          <Button
+                            inverted
+                            color="red"
+                            onClick={deleteUpdate}
+                            content="Delete"
+                          />
+                        </>
+                      )
+                    }
+                    <Button
+                      inverted
+                      onClick={() => save(id, 'DRAFT')}
+                      color="green"
+                      content="Save"
+                      disabled={!(meta.isValid && meta.isDirty)}
+                    />
+                    <Button
+                      primary
+                      onClick={() => save(id, 'PENDING')}
+                      content="Submit"
+                      disabled={!meta.isValid}
+                    />
+                  </>
+                )
+                : (
+                  <Button
+                    inverted
+                    onClick={() => save('new', 'DRAFT')}
+                    color="green"
+                    content="Create"
+                    disabled={!meta.isValid}
+                  />
+                )
+              }
+            </>
+          )
+        }
+        {isManager
+          && (
+            <>
+              {id
+                ? (
+                    <>
+                      <Button
+                        inverted
+                        color="red"
+                        onClick={deleteUpdate}
+                        content="Delete"
+                      />
+                      <Button
+                        inverted
+                        onClick={() => save(id, 'DRAFT')}
+                        color="green"
+                        content="Save"
+                        disabled={!(meta.isValid && meta.isDirty)}
+                      />
+                      {!isPublished
+                        && (
+                          <Button
+                            primary
+                            onClick={() => save(id, 'PUBLISHED')}
+                            content="Publish"
+                            disabled={!meta.isValid}
+                          />
+                        )
+                      }
+                    </>
+                ) : (
+                    <>
+                      <Button
+                        inverted
+                        onClick={() => save('new', 'DRAFT')}
+                        color="green"
+                        content="Create"
+                        disabled={!meta.isValid}
+                      />
+                    </>
+                )
+                }
+            </>
+          )
+        }
+      </Button.Group>
+    </>
   );
 });
 

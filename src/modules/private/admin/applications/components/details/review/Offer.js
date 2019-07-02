@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Form, Confirm, Divider, Table } from 'semantic-ui-react';
@@ -71,7 +70,7 @@ export default class Offer extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" submitted={submitted} isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
           <Header as="h4">
@@ -141,7 +140,7 @@ export default class Offer extends Component {
             <Form.Group widths={2}>
               {
                 OFFERS_FRM.fields.expectedAnnualRevenue.map((expectedAnnualRevenue, index) => (
-                  <Aux>
+                  <>
                     <MaskedInput
                       removed={(!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > expAnnualRevCount && (OFFERS_FRM.fields.expectedAnnualRevenue.length - 1 === index)) ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
                       containerclassname={isReadonly ? 'display-only' : ''}
@@ -154,7 +153,7 @@ export default class Offer extends Component {
                       fielddata={expectedAnnualRevenue.year}
                       changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'expectedAnnualRevenue', field, index)}
                     />
-                  </Aux>
+                  </>
                 ))
             }
             </Form.Group>
@@ -179,7 +178,7 @@ export default class Offer extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

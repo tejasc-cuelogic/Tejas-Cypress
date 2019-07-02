@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { lowerCase, get } from 'lodash';
 import { withRouter, Route, Link } from 'react-router-dom';
@@ -76,10 +75,10 @@ export default class AllCrowdPay extends Component {
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 {type === 'review'
                   && (
-<Aux>
+                  <>
                     <Table.HeaderCell>Account Type</Table.HeaderCell>
                     <Table.HeaderCell>Brokerage / Public Company</Table.HeaderCell>
-                  </Aux>
+                  </>
                   )
                 }
                 <Table.HeaderCell>Creation date</Table.HeaderCell>
@@ -120,7 +119,7 @@ export default class AllCrowdPay extends Component {
                     </Table.Cell>
                     {type === 'review'
                       && (
-<Aux>
+                      <>
                         <Table.Cell>
                           <Icon className={`ns-${lowerCase(account.accountType)}-line`} color="green" size="large" />
                         </Table.Cell>
@@ -129,7 +128,7 @@ export default class AllCrowdPay extends Component {
                           <br />
                           {`Ticker: ${get(account, 'investorProfileData.publicCompanyTicker') ? get(account, 'investorProfileData.publicCompanyTicker') : 'N/A'}`}
                         </Table.Cell>
-                      </Aux>
+                      </>
                       )
                     }
                     <Table.Cell>
@@ -181,26 +180,26 @@ export default class AllCrowdPay extends Component {
                       )
                       : type !== 'entity'
                         ? (
-<Table.Cell>
-                          { type === 'review'
-                            ? get(account, 'storageDetails.rootFolder.id')
-                              ? (
-<Aux>
-                                <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.rootFolder.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
+                          <Table.Cell>
+                            { type === 'review'
+                              ? get(account, 'storageDetails.rootFolder.id')
+                                ? (
+                                  <>
+                                    <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.rootFolder.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
                                   View Documents
-                                </a>
-                              </Aux>
-                              )
-                              : <p className="intro-text">N/A</p>
-                            : get(account, 'storageDetails.Profile.CIP.id')
-                              ? (
-<Aux>
-                              <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.Profile.CIP.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
+                                    </a>
+                                  </>
+                                )
+                                : <p className="intro-text">N/A</p>
+                              : get(account, 'storageDetails.Profile.CIP.id')
+                                ? (
+                                  <>
+                                    <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.Profile.CIP.id')}`} className="link filename-link" rel="noopener noreferrer" target="_blank">
                                 View Documents
-                              </a>
-                            </Aux>
-                              )
-                              : <p className="intro-text">N/A</p>
+                                    </a>
+                                  </>
+                                )
+                                : <p className="intro-text">N/A</p>
 
                           }
                         </Table.Cell>

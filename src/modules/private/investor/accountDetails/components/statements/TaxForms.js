@@ -1,4 +1,3 @@
-import Aux from 'react-aux';
 import { includes } from 'lodash';
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
@@ -58,7 +57,7 @@ export default class TaxForms extends Component {
     }
 
     return (
-      <Aux>
+      <>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
@@ -77,7 +76,7 @@ export default class TaxForms extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

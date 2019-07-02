@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { Button, Icon, Divider } from 'semantic-ui-react';
 
@@ -7,15 +6,15 @@ const ButtonGroup = ({
   formName, submitted, approved, isManager, submitWithApproval,
   inProgress, isReadonly, showDeclinedBtn, updateApplicationStatus,
 }) => (
-  <Aux>
+  <>
     {((isManager && !submitted)
     || (!isManager && (!approved || (approved && !approved.status))))
       ? (
-<Aux>
-        <Divider hidden />
-        <div className="sticky-actions">
-          <Button.Group vertical icon size="tiny" className="time-stamp">
-            {submitted
+        <>
+          <Divider hidden />
+          <div className="sticky-actions">
+            <Button.Group vertical icon size="tiny" className="time-stamp">
+              {submitted
               && (
 <Button as="span" className="time-stamp">
                 <Icon className="ns-circle" color="green" />{' '}
@@ -32,23 +31,23 @@ const ButtonGroup = ({
             {showDeclinedBtn
               && <Button loading={inProgress === 'REVIEW_FAILED'} onClick={updateApplicationStatus} color="red">Decline Application</Button>
             }
-          </Button.Group>
-        </div>
-      </Aux>
+            </Button.Group>
+          </div>
+        </>
       )
       : ((!isManager && isReadonly && approved && approved.status) || (isManager && submitted))
       && (!isReadonly && isManager && submitted)
       && (
-<Aux>
+      <>
         <Divider hidden />
         <div className="sticky-actions">
           <Button.Group className="time-stamp" />
           <Button primary className="relaxed" content="Save" loading={inProgress === 'SAVE'} />
         </div>
-      </Aux>
+      </>
       )
       }
-  </Aux>
+  </>
 );
 
 export default ButtonGroup;

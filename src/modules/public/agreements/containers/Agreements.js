@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-import Aux from 'react-aux';
+import React, { Component, Suspense, lazy } from 'react';
 import { Grid, Container } from 'semantic-ui-react';
 import { observer, inject } from 'mobx-react';
-import Loadable from 'react-loadable';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import SecondaryMenu from '../../../../theme/layout/SecondaryMenu';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -10,12 +8,7 @@ import { InlineLoader } from '../../../../theme/shared';
 import { DataFormatter } from '../../../../helper';
 import NotFound from '../../../shared/NotFound';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazy(() => import(`../components/${component}`));
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('navStore')
@@ -39,7 +32,7 @@ export default class TermsOfUse extends Component {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Aux>
+      <>
         {isMobile
         && <SecondaryMenu secondary vertical match={match} navItems={navItems} />
         }
@@ -62,26 +55,28 @@ export default class TermsOfUse extends Component {
                 )
               }
               <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
-                <Switch>
-                  {navItems[0] && (
-                    <Route
-                      exact
-                      path={match.url}
-                      component={getModule(this.module(navItems[0].title))}
-                    />
-                  )}
-                  {
-                  navItems.map(item => (
-                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                  ))
-                  }
-                  <Route component={NotFound} />
-                </Switch>
+                <Suspense fallback={<InlineLoader />}>
+                  <Switch>
+                    {navItems[0] && (
+                      <Route
+                        exact
+                        path={match.url}
+                        component={getModule(this.module(navItems[0].title))}
+                      />
+                    )}
+                    {
+                    navItems.map(item => (
+                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                    ))
+                    }
+                    <Route component={NotFound} />
+                  </Switch>
+                </Suspense>
               </Grid.Column>
             </Grid>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

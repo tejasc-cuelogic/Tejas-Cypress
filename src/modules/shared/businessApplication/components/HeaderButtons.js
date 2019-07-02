@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 
 export const SubmitButton = props => (
   <Button
@@ -16,7 +15,7 @@ export const SubmitButton = props => (
 );
 
 export const HeaderButtons = props => (
-  <Aux>
+  <>
     {!props.disabled
       ? (!props.showSubNav && !props.preQualPage
         ? (
@@ -48,5 +47,5 @@ export const HeaderButtons = props => (
       </Button.Group>
       )
     }
-  </Aux>
+  </>
 );

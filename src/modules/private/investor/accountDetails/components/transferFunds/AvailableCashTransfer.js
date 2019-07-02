@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, withRouter } from 'react-router-dom';
 import { Grid, Card, Button, Statistic, Icon, Popup } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
@@ -46,7 +45,7 @@ class AvailableCashTransfer extends Component {
     }
 
     return (
-      <Aux>
+      <>
         <Card fluid>
           <Card.Content>
             <Grid>
@@ -68,13 +67,13 @@ class AvailableCashTransfer extends Component {
               <Grid.Column mobile={16} tablet={10} computer={10} verticalAlign="middle" className="right-align">
                 <Button.Group widths="2">
                   {
-                    <Aux>
+                    <>
                       {
                         this.transferCtaInfo().map(info => (
                           <Button inverted color="green" content={info.content} onClick={() => this.handleTransferFunds(info.url)} />
                         ))
                       }
-                    </Aux>
+                    </>
                   }
                 </Button.Group>
               </Grid.Column>
@@ -97,7 +96,7 @@ class AvailableCashTransfer extends Component {
           )
           }
         />
-      </Aux>
+      </>
     );
   }
 }

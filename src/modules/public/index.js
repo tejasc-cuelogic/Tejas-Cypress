@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Route, Switch, matchPath } from 'react-router-dom';
 import { Responsive } from 'semantic-ui-react';
 import { publicRoutes } from '../routes';
@@ -98,11 +97,11 @@ export default class Public extends React.Component {
       return <Spinner loaderMessage="Loading..." />;
     }
     return (
-      <Aux>
+      <>
         {this.props.campaignStore.showFireworkAnimation
           && <Firework />
         }
-        <Responsive minWidth={992} as={Aux}>
+        <Responsive minWidth={992} as={React.Fragment}>
           {hasHeader && (
             <Header
               location={location}
@@ -118,7 +117,7 @@ export default class Public extends React.Component {
           {this.getRoutes(isAuthLocation)}
           <Footer path={location.pathname} />
         </Responsive>
-        <Responsive maxWidth={991} as={Aux}>
+        <Responsive maxWidth={991} as={React.Fragment}>
           <NavBarMobile
             onPusherClick={this.handlePusher}
             onToggle={this.handleToggle}
@@ -133,7 +132,7 @@ export default class Public extends React.Component {
             hasHeader={hasHeader}
           />
         </Responsive>
-      </Aux>
+      </>
     );
   }
 }

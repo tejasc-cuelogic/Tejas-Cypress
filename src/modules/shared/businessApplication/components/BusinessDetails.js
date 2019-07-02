@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -91,7 +90,7 @@ export default class BusinessDetails extends Component {
             hideFields={hideFields}
             header="Business Plan"
             subHeader={(
-<Aux>
+              <>
                 The business plan is intended to describe the who, what, when, where,
                 how and why of your project.*
                 {!hideFields && currentApplicationType === 'business'
@@ -106,7 +105,7 @@ export default class BusinessDetails extends Component {
 />
                   )
                 }
-              </Aux>
+              </>
 )}
           >
             <DropZone
@@ -332,10 +331,10 @@ export default class BusinessDetails extends Component {
             }
             {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5
               && (
-<Aux>
+              <>
                 <Divider hidden />
                 <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
-              </Aux>
+              </>
               )
             }
           </FormElementWrap>

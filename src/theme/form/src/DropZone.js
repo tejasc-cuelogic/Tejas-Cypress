@@ -4,7 +4,6 @@ import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Icon, Responsive, Button, Popup, Dimmer, Loader } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
-import Aux from 'react-aux';
 import { isArray } from 'lodash';
 import { FieldError } from '../../shared';
 
@@ -52,7 +51,7 @@ const DropZone = observer((props) => {
           <div className="file-uploader attached">
             {!props.disabled
               && (
-<Aux>
+              <>
                 <Responsive
                   as={Button}
                   minWidth={768}
@@ -70,7 +69,7 @@ const DropZone = observer((props) => {
                   className="pull-right"
                   onClick={e => props.onremove(e, props.name, key)}
                 />
-              </Aux>
+              </>
               )
             }
             <span title={item}>{item}</span>
@@ -80,7 +79,7 @@ const DropZone = observer((props) => {
 <div className="file-uploader attached">
           {!props.disabled
             && (
-<Aux>
+            <>
               <Responsive
                 as={Button}
                 minWidth={768}
@@ -98,7 +97,7 @@ const DropZone = observer((props) => {
                 className="pull-right"
                 onClick={e => props.onremove(e, props.name)}
               />
-            </Aux>
+            </>
             )
           }
           <span title={value}>{value}</span>
