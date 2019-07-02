@@ -4,11 +4,12 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import find from 'lodash/find';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const AccTypeDescription = observer((props) => {
   const { value, values } = props.accTypes;
   const isAccExist = find(values, v => v.value === value);
   return (
-    <div className="option-details">
+    <div className={isMobile ? '' : 'option-details'}>
       { /* Individual */ }
       {isAccExist && value === 0
         && (
@@ -33,8 +34,8 @@ const AccTypeDescription = observer((props) => {
       {isAccExist && value === 1
         && (
         <>
-          <div className="promitional-offer-block center-align mb-20 bg-offwhite">
-            <Header as="h5">Promotional Offer</Header>
+          <div className={`${isMobile ? '' : 'center-align'} promitional-offer-block mb-20 bg-offwhite`}>
+            <Header as="h5" className="positive-text">Promotional Offer</Header>
             <p>
               For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and
               annual account fees for four years. See the{' '}
