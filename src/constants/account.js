@@ -351,7 +351,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: (<span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</span>),
+    tooltip: (<>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</>),
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
