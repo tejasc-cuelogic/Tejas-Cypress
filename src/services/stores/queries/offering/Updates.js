@@ -47,6 +47,10 @@ export const getUpdate = gql`
         by
         date
       }
+      updated {
+        by
+        date
+      }
     }
   }
 `;
@@ -84,6 +88,7 @@ mutation _offeringUpdatesApprovedByInfo($id: ID!) {
   }
 }
 `;
+
 export const sendOfferingUpdateTestEmail = gql`
 mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!) {
   sendOfferingUpdateTestEmail(
@@ -92,15 +97,15 @@ mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!) {
 }`;
 
 export const offeringUpdatePublish = gql`
-mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!) {
+mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!) {
   offeringUpdatePublish(
     id: $id
     updatesInput: $updatesInput
+    emailTemplate: $emailTemplate
   ) {
     id
   }
 }`;
-
 
 export const deleteOfferingUpdate = gql`
 mutation deleteOfferingUpdate($id: [ID]) {

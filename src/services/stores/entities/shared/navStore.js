@@ -67,6 +67,9 @@ export class NavStore {
       if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
         navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
       }
+      if (userDetailsStore.signupStatus.activeAccounts.length <= 0) {
+        navigationItems = navigationItems.filter(item => item.title !== 'Referrals');
+      }
       if (permitted && permitted.length > 1 && permitted.includes('investor')) {
         const pInvestorInfo = {
           roles,
