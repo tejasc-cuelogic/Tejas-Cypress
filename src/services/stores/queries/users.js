@@ -637,6 +637,16 @@ mutation adminDeleteInvestorOrIssuerUser($userId: String) {
   }
  }`;
 
+export const adminHardDeleteUser = gql`
+mutation adminHardDeleteUser($userId: String!) {
+  adminHardDeleteUser(
+     cognitoUUId: $userId
+  ) {
+    status
+    message
+  }
+ }`;
+
 export const frozenEmailToAdmin = gql`
 mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
   notifyAdminFrozenAccountActivity(

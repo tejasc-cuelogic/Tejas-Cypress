@@ -1,7 +1,7 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
-import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
+import { Item, Header, Button, Icon, Modal, Card, Confirm } from 'semantic-ui-react';
 import { intersection, isEmpty, includes, get } from 'lodash';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
@@ -39,6 +39,7 @@ export default class AccountDetails extends Component {
   state = {
     errorMsg: '',
     copied: false,
+    showConfirm: false,
   }
 
   componentWillMount() {
@@ -51,8 +52,13 @@ export default class AccountDetails extends Component {
     this.props.userDetailsStore.toggleState(id, accountStatus);
   }
 
-  handleDeleteProfile = () => {
-    this.props.userDetailsStore.deleteProfile().then(() => {
+  handleConfirmModal = (val) => {
+    this.setState({ showConfirm: val });
+  }
+
+  handleDeleteProfile = (isHardDelete = false) => {
+    this.handleConfirmModal(false);
+    this.props.userDetailsStore.deleteProfile(false, isHardDelete).then(() => {
       this.props.history.push(this.props.refLink);
     }).catch((res) => {
       this.setState({ errorMsg: res });
@@ -115,9 +121,7 @@ export default class AccountDetails extends Component {
                     </Header.Subheader>
                   </Header>
                   <Button.Group floated="right">
-                    {!includes(details.status, 'DELETED') && details.status !== 'ADMIN'
-                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteProfile} content="Delete Profile" />
-                    }
+                    <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.handleConfirmModal(true)} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
                       <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                     </Button>
@@ -161,6 +165,15 @@ export default class AccountDetails extends Component {
             </Card>
           </Modal.Content>
         </Modal>
+        <Confirm
+          header="Confirm"
+          content={`Are you sure you want to ${includes(details.status, 'DELETED') ? 'hard' : 'soft'} delete this user account?`}
+          open={this.state.showConfirm}
+          onCancel={() => this.handleConfirmModal(false)}
+          onConfirm={() => this.handleDeleteProfile(includes(details.status, 'DELETED'))}
+          size="mini"
+          className="deletion"
+        />
       </>
     );
   }
