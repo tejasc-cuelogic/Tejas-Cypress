@@ -9,6 +9,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('investorProfileStore', 'uiStore')
 @observer
 export default class Employment extends Component {
+  componentWillMount() {
+    const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
+    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED') {
+      this.props.uiStore.addMoreInProgressArray('EMPLOYED');
+    }
+  }
+
   componentWillUnmount() {
     this.props.uiStore.setFieldvalue('inProgressArray', []);
   }
@@ -36,7 +43,7 @@ export default class Employment extends Component {
       return (
         <div className={isMobile ? '' : 'center-align'}>
           <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
-          <Form error className={isMobile ? 'mb-40' : ''}>
+          <Form onSubmit={this.handleupdateInvestorProfileData} error className={isMobile ? 'mb-40' : ''}>
             <Form.Group widths="equal">
               {
               ['employer', 'position'].map(field => (
@@ -48,7 +55,7 @@ export default class Employment extends Component {
                   showerror
                 />
               ))}
-              <Button primary size="large" onClick={this.handleupdateInvestorProfileData} fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
+              <Button primary size="large" onClick={() => this.handleupdateInvestorProfileData()} fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
             </Form.Group>
           </Form>
           </div>
