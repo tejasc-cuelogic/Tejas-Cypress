@@ -195,6 +195,10 @@ class InvestorProfileStore {
     if (this[currentStep.form].meta.isValid) {
       let formPayload = '';
       if (currentStep.form === 'EMPLOYMENT_FORM') {
+        if (this.EMPLOYMENT_FORM.fields.status.value !== 'EMPLOYED') {
+          FormValidator.resetFormData(this.EMPLOYMENT_FORM, ['employer', 'position']);
+          uiStore.setFieldvalue('inProgressArray', []);
+        }
         formPayload = { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
