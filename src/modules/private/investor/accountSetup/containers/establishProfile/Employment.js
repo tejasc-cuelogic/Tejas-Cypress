@@ -9,38 +9,88 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('investorProfileStore', 'uiStore')
 @observer
 export default class Employment extends Component {
+  componentWillUnmount() {
+    this.props.uiStore.setFieldvalue('inProgressArray', []);
+  }
+
+  handleupdateInvestorProfileData = () => {
+    const { updateInvestorProfileData, stepToBeRendered, EMPLOYMENT_FORM } = this.props.investorProfileStore;
+    const { multiSteps } = this.props.uiStore;
+    if (EMPLOYMENT_FORM.meta.isValid) {
+      updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered]);
+    }
+  }
+
+  toggleInputFields = () => {
+    const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
+    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' && isMobile) {
+      this.props.uiStore.addMoreInProgressArray('EMPLOYED');
+    }
+  }
+
+
   render() {
     const { EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgressArray } = this.props.uiStore;
+    if (inProgressArray.includes('EMPLOYED')) {
+      return (
+        <div className={isMobile ? '' : 'center-align'}>
+          <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
+          <Form error className={isMobile ? 'mb-40' : ''}>
+            <Form.Group widths="equal">
+              {
+              ['employer', 'position'].map(field => (
+                <FormInput
+                  key={field}
+                  fielddata={EMPLOYMENT_FORM.fields[field]}
+                  name={field}
+                  changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
+                  showerror
+                />
+              ))}
+              <Button primary size="large" onClick={this.handleupdateInvestorProfileData} fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
+            </Form.Group>
+          </Form>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className={isMobile ? '' : 'center-align'}>
         <Header as="h4">What is your employment status?</Header>
         {!isMobile && <p className="mb-40">Please indicate your current employment status</p>}
         <Form error className={isMobile ? 'mb-40' : ''}>
-          <Button.Group fluid vertical>
+          {isMobile
+            ? (
             <FormArrowButton
-              fielddata={{ content: 'Individual Account', description: 'Get started with a personal NextSeed Investment Account' }}
+              fielddata={EMPLOYMENT_FORM.fields.status}
+              name="status"
+              changed={
+                (e, result) => {
+                  employmentChange(e, 'EMPLOYMENT_FORM', result);
+                  this.toggleInputFields();
+                  // this.props.uiStore.scrollIntoActiveInputFields();
+                }
+              }
+              action={this.handleupdateInvestorProfileData}
             />
-            <FormArrowButton
-              fielddata={{ content: 'Self-Directed IRA', description: 'Open a traditional or Roth IRA (minimum deposit of $5,000)' }}
-            />
-            <FormArrowButton
-              fielddata={{ name: 'I have some experience' }}
-            />
-          </Button.Group>
+            ) : (
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.status}
             name="status"
             changed={
               (e, result) => {
                 employmentChange(e, 'EMPLOYMENT_FORM', result);
-                this.props.uiStore.scrollIntoActiveInputFields();
+                // this.props.uiStore.scrollIntoActiveInputFields();
               }
             }
             containerclassname="three wide button-radio center-align"
             showerror
           />
-          {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED'
+            )
+          }
+          {
+            !isMobile && EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED'
           && (
           <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
             <Form.Group widths="equal">

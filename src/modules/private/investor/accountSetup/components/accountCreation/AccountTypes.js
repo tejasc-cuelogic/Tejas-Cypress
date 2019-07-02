@@ -1,7 +1,9 @@
 import React from 'react';
 import { Modal, Grid, Button, Header, Form } from 'semantic-ui-react';
-import { FormRadioGroup } from '../../../../../../theme/form';
+import { FormArrowButton, FormRadioGroup } from '../../../../../../theme/form';
 import AccTypeDescription from './AccTypeDescription';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 const AccountTypes = ({
   form,
@@ -24,16 +26,30 @@ const AccountTypes = ({
         }}
       >
         <Form error className="account-type-tab">
-          <FormRadioGroup
-            fielddata={form.fields.accType}
-            name="accType"
-            changed={handleAccTypeChange}
-            containerclassname="button-radio center-align"
-          />
+          {!isMobile
+            ? (
+            <FormRadioGroup
+              fielddata={form.fields.accType}
+              name="accType"
+              changed={handleAccTypeChange}
+              containerclassname="button-radio center-align"
+            />
+            )
+            : (
+              <FormArrowButton
+                fielddata={form.fields.accType}
+                name="accType"
+                changed={handleAccTypeChange}
+                action={renderAccType}
+              />
+            )
+          }
           <AccTypeDescription accTypes={form.fields.accType} />
         </Form>
       </Grid>
-      <Button circular icon={{ className: 'ns-arrow-right' }} className="multistep__btn next active" onClick={() => renderAccType()} />
+      {!isMobile
+      && (<Button circular icon={{ className: 'ns-arrow-right' }} className="multistep__btn next active" onClick={() => renderAccType()} />)
+      }
     </Modal.Content>
   </Modal>
 );

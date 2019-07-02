@@ -45,6 +45,7 @@ export default class MultiStep extends React.Component {
   }
 
   componentWillMount() {
+    this.props.setUiStorevalue('multiSteps', this.props.steps);
     if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
       this.setNavState(this.props.stepToBeRendered);
     }
@@ -176,6 +177,10 @@ export default class MultiStep extends React.Component {
   }
 
   previous() {
+    if (this.props.inProgressArray.length) {
+      this.props.setUiStorevalue('inProgressArray', []);
+      return;
+    }
     if (this.state.compState > 0) {
       if (this.props.isAccountCreation) {
         if (this.props.steps[this.state.compState].addFunds) {
@@ -294,8 +299,8 @@ export default class MultiStep extends React.Component {
 />
               )
             }
-            {this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
-              || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)
+            {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
+              || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && !isMobile
               ? (
                 <>
                   {!this.props.steps[this.state.compState].disableNextButton

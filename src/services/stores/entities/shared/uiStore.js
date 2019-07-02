@@ -69,6 +69,8 @@ export class UiStore {
 
   @observable defaultNavExpandedVal = + new Date();
 
+  @observable multiSteps = undefined;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
