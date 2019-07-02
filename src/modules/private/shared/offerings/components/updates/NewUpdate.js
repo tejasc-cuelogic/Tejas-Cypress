@@ -182,6 +182,7 @@ export default class NewUpdate extends Component {
                           fielddata={PBUILDER_FRM.fields.scope}
                           name="scope"
                           changed={(e, result) => UpdateChange(e, result)}
+                          containerclassname="mb-10"
                           widths="equal"
                           value={PBUILDER_FRM.fields.scope.value}
                         />
