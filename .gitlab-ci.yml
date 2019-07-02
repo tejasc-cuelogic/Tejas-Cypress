@@ -224,8 +224,11 @@ test:dev:
       - cypress/screenshots
       - cypress/videos
   script:
+    - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
     - npm install
     - CYPRESS_baseUrl=https://$DEV_URL $(npm bin)/cypress run
+  dependencies:
+    - build:review
 
 
 #---------------------------------Qa--------------------------------------------
