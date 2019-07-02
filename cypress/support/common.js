@@ -11,10 +11,14 @@ export const registerApiCall = (operationName, url = '**/**') => {
 
 export const apiRequest = (operationName, requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve, reject) => {
   try{
+    headers = {
+      ...headers,
+      "content-type":"application/json"
+    };
     cy.request(
       {
-        url: requestParams.url,
-        method: requestParams.method,
+        url: requestParams.url || "https://dev-api-us-east-1.nextseed.qa/dev/graphql",
+        method: requestParams.method || "POST",
         body: {
           query: requestParams.query,
         },

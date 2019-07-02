@@ -221,8 +221,8 @@ test:dev:
     expire_in: 1 day
     when: always
     paths:
-      - cypress/screenshots
-      - cypress/videos
+      - cypress/reports/screenshots
+      - cypress/reports/videos
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
     - npm install
