@@ -6,6 +6,7 @@ import { adminCredentials } from './../../fixtures/user';
 
 let auditInfo = {};
 let migratedUserAuditInfo = {};
+let userId = null;
 const userInfo = ['dateAccountWasOpened',
   'numberOf1099FormsToExpect',
   'currentBalanceWithoutAnyInflightMoney',
@@ -37,6 +38,13 @@ const userInfo = ['dateAccountWasOpened',
 
 describe('Audit Investor', () => {
 
+  const cleanUpUser = (userId) => {
+    requestBody.query = cleanUpTestUsers(userId);
+    apiRequest('cleanUpTestUsers', requestBody, requestHeaders)
+      .then((resCleanUpTestUsers) => {
+        console.log('Successfully cleanUp Test Users', resCleanUpTestUsers);
+      });
+  }
   context('User Login', () => {
     before(() => {
       cy.login(adminCredentials.email, adminCredentials.password).then((user) => {
@@ -46,24 +54,27 @@ describe('Audit Investor', () => {
             const authToken = user.signInUserSession.idToken.jwtToken;
             requestHeaders.authorization = `Bearer ${authToken}`;
             requestBody.query = seedTestUsers;
+            cleanUpUser(userId);
             apiRequest('seedTestUsers', requestBody, requestHeaders)
               .then((resSeedTestUsers) => {
-                const userId = resSeedTestUsers.body.data.seedTestUsers.created[0].id;
+                userId = resSeedTestUsers.body.data.seedTestUsers.created[0].id;
                 auditInfo = resSeedTestUsers.body.data.seedTestUsers.created[0].auditInfo;
                 console.log('userId', userId);
                 requestBody.query = getMigratedUserAuditInfo(userId, 'INDIVIDUAL');
                 apiRequest('getMigratedUserAuditInfo', requestBody, requestHeaders)
                   .then((resGetMigratedUserAuditInfo) => {
                     migratedUserAuditInfo = resGetMigratedUserAuditInfo.body.data.getMigratedUserAuditInfo;
+                    cy.log(migratedUserAuditInfo);
                     console.log('auditInfo', auditInfo);
                     console.log('migratedUserAuditInfo', migratedUserAuditInfo);
-                    requestBody.query = cleanUpTestUsers(userId);
-                    apiRequest('cleanUpTestUsers', requestBody, requestHeaders)
-                      .then((resCleanUpTestUsers) => {
-                        console.log('Successfully cleanUp Test Users', resCleanUpTestUsers);
-
-                      });
+                    cleanUpUser(userId);
+                  })
+                  .catch(() => {
+                    cleanUpUser(userId);
                   });
+              })
+              .catch(() => {
+                cleanUpUser(userId);
               });
           }
         }

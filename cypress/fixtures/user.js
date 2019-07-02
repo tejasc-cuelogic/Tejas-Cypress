@@ -11,6 +11,6 @@ export const inValidEmailCredentials = {
 };
 
 export const adminCredentials = {
-  email: 'v2+admin@nextseed.com',
+  email: 'admintestuser@nextseed.com',
   password: 'nextseedTest'
 }
