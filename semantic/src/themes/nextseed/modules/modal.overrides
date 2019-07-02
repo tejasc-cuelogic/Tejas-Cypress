@@ -595,7 +595,7 @@
             font-size: @12px;
             text-align: center;
             color: @neutral-middark !important;
-            border-bottom: 0;
+            // border-bottom: 0;
             border-radius: 0;
             .ui.progress.attached {
                 bottom: -18px;

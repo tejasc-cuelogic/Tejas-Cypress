@@ -17,10 +17,10 @@ const AccountTypes = ({
     closeOnDimmerClick={false}
     dimmer={isMobile && 'inverted'}
     centered={!isMobile}
-    className={isMobile ? 'multistep-modal' : ''}
+    className={isMobile ? 'multistep-modal bg-white' : ''}
     basic={isMobile}
   >
-    <Modal.Header className={`${isMobile ? '' : 'center-align'} signup-header`}>
+    <Modal.Header className={isMobile ? '' : 'center-align signup-header'}>
       {!isMobile && (
       <Header as="h3">What type of Investment Account would you like to start?</Header>
       )}
@@ -51,8 +51,9 @@ const AccountTypes = ({
             renderAccType();
           }
         }}
+        className={isMobile && 'mt-30'}
       >
-        <Form error className="account-type-tab">
+        <Form error className={isMobile ? '' : 'account-type-tab'}>
           {!isMobile
             ? (
             <FormRadioGroup
@@ -71,7 +72,17 @@ const AccountTypes = ({
               />
             )
           }
-          <AccTypeDescription accTypes={form.fields.accType} />
+          {isMobile
+            ? (
+              <p className="grey-header mt-30">
+                NextSeed accounts are provided and held at our partner bank, Happy State Bank
+                DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up
+                to $250,000 of uninvested cash in NextSeed accounts.
+              </p>
+            )
+            : (
+            <AccTypeDescription accTypes={form.fields.accType} />
+            )}
         </Form>
       </Grid>
       {!isMobile
