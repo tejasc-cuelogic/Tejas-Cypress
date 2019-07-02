@@ -25,15 +25,17 @@ const AccountTypes = ({
       <Header as="h3">What type of Investment Account would you like to start?</Header>
       )}
       {isMobile && (
-        <Button
-          icon={{ className: 'ns-chevron-left' }}
-          className="multistep__btn prev"
-        />
+        <>
+          <Button
+            icon={{ className: 'ns-chevron-left' }}
+            className="multistep__btn prev"
+          />
+          <Button
+            icon={{ className: 'ns-close-light' }}
+            className="link-button pull-right multistep__btn"
+          />
+        </>
       )}
-      <Button
-        icon={{ className: 'ns-close-light' }}
-        className="link-button pull-right multistep__btn"
-      />
     </Modal.Header>
     <Modal.Content className="signup-content">
       {isMobile && (
