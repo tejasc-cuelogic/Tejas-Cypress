@@ -67,6 +67,7 @@ export default class Portfolio extends Component {
 
   onCloseSticky = () => {
     this.setState({ showSticky: false });
+    localStorage.setItem('hideNotifications', true);
   }
 
   toggleAccordion = (of) => {
@@ -179,12 +180,13 @@ export default class Portfolio extends Component {
     const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
+    const hideNotifications = localStorage.getItem('hideNotifications');
     return (
       <>
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
-        {userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts') && this.state.showSticky
+        {userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts') && this.state.showSticky && !hideNotifications
         && (
           <StickyNotification
             {...this.props}
