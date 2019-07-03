@@ -61,8 +61,6 @@ export default class NewUpdate extends Component {
         if (status !== 'DRAFT') {
           this.props.updateStore.setFieldValue('newUpdateId', null);
           this.props.history.push(this.props.refLink);
-        } else {
-          this.props.history.push(`${this.props.refLink}/edit/${this.props.match.params.id || this.props.updateStore.newUpdateId}`);
         }
       })
       .catch(() => {
@@ -76,10 +74,10 @@ export default class NewUpdate extends Component {
 
   render() {
     const {
-      PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate,
+      PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
       loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM, currentUpdate,
     } = this.props.updateStore;
-    const isNew = this.props.match.params.action === 'new';
+    const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const { offer } = this.props.offeringsStore;
@@ -89,7 +87,7 @@ export default class NewUpdate extends Component {
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const { userDetails } = this.props.userDetailsStore;
     const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
-    if (loadingCurrentUpdate || inProgress) {
+    if (loadingCurrentUpdate) {
       return <InlineLoader />;
     }
     return (
@@ -110,8 +108,9 @@ export default class NewUpdate extends Component {
               editForm={this.state.editForm}
               edit={this.edit}
               deleteUpdate={this.showConfirmModal}
-              id={this.props.match.params.id}
+              id={this.props.match.params.id || newUpdateId}
               cancelUpdate={this.handleCloseModal}
+              inProgress={inProgress}
             />
           </Header>
           <Divider hidden />
