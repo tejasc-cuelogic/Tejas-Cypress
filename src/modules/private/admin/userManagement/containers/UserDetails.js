@@ -59,6 +59,7 @@ export default class AccountDetails extends Component {
   handleDeleteProfile = (isHardDelete = false) => {
     this.handleConfirmModal(false);
     this.props.userDetailsStore.deleteProfile(false, isHardDelete).then(() => {
+      this.props.userDetailsStore.setFieldValue('selectedUserId', null);
       this.props.history.push(this.props.refLink);
     }).catch((res) => {
       this.setState({ errorMsg: res });
