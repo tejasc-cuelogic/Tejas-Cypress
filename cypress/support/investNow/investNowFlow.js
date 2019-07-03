@@ -1,18 +1,23 @@
-import { OfferingListingFlow } from '../../offerings/offeringListing.utility';
-import { OfferingDetailFlow, Offering506CDetailFlow } from '../../offerings/offeringDetails.utility';
-import { getJSONDataFromFixtures } from '../../common.utility';
+import { OfferingListingFlow } from '../publicOffering/offeringListing';
+import { OfferingDetailFlow, Offering506CDetailFlow } from '../publicOffering/offeringDetails';
+import { inValidEmailCredentials, clearLoginForm } from '../auth/login';
+import {
+  inValidUserCredentials,
+  validInvestorHavingOnceAccountCredentials,
+  validInvestorWithIncompleteCIPCredentials,
+} from './investorsCredentailConstant';
 import {
   enteringInvestmentAmount,
-  checkAndStoreInvestmentProcess,
   invalidMultipleInvestmentAmount,
   invalidMinInvestmentAmount,
   validInvestmentAmount,
   generateAgreement,
   submitInvestment,
-} from './enteringInvestmentAmount.utility';
+  } from './enteringInvestmentAmount';
 
-export const initializeInvestNowFlow = async (investmentType = 'CF') => {
-  cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
+export const initializeInvestNowFlow = (investmentType = 'CF') => {
+  cy.log('investment type==>',investmentType);
+  cy.visit('/', { failOnStatusCode: false , timeout: 100000 });
   cy.applicationUnlock();
   OfferingListingFlow();
   if (investmentType === 'CF') {
@@ -23,33 +28,18 @@ export const initializeInvestNowFlow = async (investmentType = 'CF') => {
   }
 };
 
-export const proceedInvalidLoginAction = async () => {
-  const inValidEmailCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidEmailCredentials');
-  const dataSet = {
-    email: {
-      selector: 'type',
-      value: inValidEmailCredentials.email,
-      showError: true,
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+export const proceedInvalidLoginAction = () => {
+  clearLoginForm();
+  cy.get('input[type="email"]').type(inValidEmailCredentials.email);
+  cy.get('input[type="email"]').blur();
+  cy.wait(500);
+  cy.get('input[type="email"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
 };
 
-export const proceedInvalidUserLoginAction = async () => {
-  const inValidUserCredentials = await getJSONDataFromFixtures('investor/user.json', 'inValidUserCredentials');
-  const dataSet = {
-    email: {
-      selector: 'type',
-      value: inValidUserCredentials.email
-    },
-    password: {
-      selector: 'type',
-      value: inValidUserCredentials.password
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+export const proceedInvalidUserLoginAction = () => {
+  clearLoginForm();
+  cy.get('input[type="email"]').type(inValidUserCredentials.email);
+  cy.get('input[type="password"]').type(inValidUserCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
   cy.wait(8000);
   cy.get('div.header-wrap').find('.stackable').find('.container').find('.menu-button')
@@ -61,23 +51,13 @@ export const proceedInvalidUserLoginAction = async () => {
     .click();
 };
 
-export const proceedWithIncompleteInvestorCIPAction = async () => {
-  const validInvestorWithIncompleteCIPCredentials = await getJSONDataFromFixtures('investor/user.json', 'validInvestorWithIncompleteCIPCredentials');
+export const proceedWithIncompleteInvestorCIPAction = () => {
   cy.wait(2000);
   cy.get('div.modals').find('.transition .content').get('button').contains('Login as an Investor')
     .click();
-  const dataSet = {
-    email: {
-      selector: 'type',
-      value: validInvestorWithIncompleteCIPCredentials.email
-    },
-    password: {
-      selector: 'type',
-      value: validInvestorWithIncompleteCIPCredentials.password
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+  clearLoginForm();
+  cy.get('input[type="email"]').type(validInvestorWithIncompleteCIPCredentials.email);
+  cy.get('input[type="password"]').type(validInvestorWithIncompleteCIPCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
   cy.wait(8000);
   cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
@@ -92,23 +72,13 @@ export const proceedWithIncompleteInvestorCIPAction = async () => {
     .click();
 };
 
-export const proceedWithValidUserLoginAction = async () => {
-  const validInvestorHavingOnceAccountCredentials = await getJSONDataFromFixtures('investor/user.json', 'validInvestorHavingOnceAccountCredentials');
+export const proceedWithValidUserLoginAction = () => {
   cy.wait(2000);
   cy.get('div.modals').find('.transition .content').get('button').contains('Login as an Investor')
     .click();
-  const dataSet = {
-    email: {
-      selector: 'type',
-      value: validInvestorHavingOnceAccountCredentials.email
-    },
-    password: {
-      selector: 'type',
-      value: validInvestorHavingOnceAccountCredentials.password
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+  clearLoginForm();
+  cy.get('input[type="email"]').type(validInvestorHavingOnceAccountCredentials.email);
+  cy.get('input[type="password"]').type(validInvestorHavingOnceAccountCredentials.password);
   cy.get('button.button').contains('Log in').click({ force: true });
   cy.wait(10000);
   cy.get('div.header-wrap').find('.stackable').find('.container').find('.menu-button')
@@ -135,25 +105,25 @@ export const proceedWithValidUserLoginAction = async () => {
 
 export const proceedWithValidCFInvestmentAction = () => {
   enteringInvestmentAmount();
-};
+}
 
 export const checkEnteredAmountMultiplesValidation = () => {
-  checkAndStoreInvestmentProcess();
   invalidMultipleInvestmentAmount();
-};
+}
 
 export const checkAmountGreaterThanMinInvestmentValidation = () => {
   invalidMinInvestmentAmount();
-};
+}
 
 export const checkForValidAmountAndProceed = () => {
   validInvestmentAmount();
-};
+}
 
 export const proceedToGenerateAgreement = () => {
+  // registerApiCall('investNowGeneratePurchaseAgreement');
   generateAgreement();
-};
+}
 
 export const sumbmitingInvestment = () => {
   submitInvestment();
-};
+}

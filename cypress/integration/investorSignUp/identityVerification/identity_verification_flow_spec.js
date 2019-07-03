@@ -1,3 +1,3 @@
-describe('Legal Details positive flow', () => {
+describe.skip('Legal Details positive flow', () => {
   
 });
