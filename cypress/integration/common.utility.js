@@ -29,7 +29,5 @@ export const clearFormInput = (inputArr = []) => {
       cy.get(`input[${props.key.replace(/["']/g, "")}=${props.value}]`).clear();
     });
   }
-  // cy.get('input[type="email"]').clear();
-  // cy.get('input[type="password"]').clear();
 };
 
