@@ -43,25 +43,21 @@ export default class Employment extends Component {
     const { errors, inProgressArray, multiSteps } = this.props.uiStore;
     if (inProgressArray.includes('EMPLOYED')) {
       return (
-        <div className={isMobile ? '' : 'center-align'}>
-          <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
-          <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? 'mb-40' : ''}>
-            <Form.Group widths="equal">
-              {
-              ['employer', 'position'].map(field => (
-                <FormInput
-                  key={field}
-                  fielddata={EMPLOYMENT_FORM.fields[field]}
-                  name={field}
-                  changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
-                  showerror
-                />
-              ))}
-              <Button primary size="large" onClick={() => this.handleupdateInvestorProfileData()} fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
-            </Form.Group>
-          </Form>
-          </div>
-        </div>
+        <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className="mb-40">
+          <Form.Group widths="equal">
+            {
+            ['employer', 'position'].map(field => (
+              <FormInput
+                key={field}
+                fielddata={EMPLOYMENT_FORM.fields[field]}
+                name={field}
+                changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
+                showerror
+              />
+            ))}
+            <Button primary size="large" fluid className="relaxed" content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
+          </Form.Group>
+        </Form>
       );
     }
     return (
