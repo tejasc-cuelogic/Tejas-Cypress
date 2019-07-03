@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
+import moment from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
@@ -61,8 +62,6 @@ export default class NewUpdate extends Component {
         if (status !== 'DRAFT') {
           this.props.updateStore.setFieldValue('newUpdateId', null);
           this.props.history.push(this.props.refLink);
-        } else {
-          this.props.history.push(`${this.props.refLink}/edit/${this.props.match.params.id || this.props.updateStore.newUpdateId}`);
         }
       })
       .catch(() => {
@@ -76,10 +75,10 @@ export default class NewUpdate extends Component {
 
   render() {
     const {
-      PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate,
+      PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
       loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM, currentUpdate,
     } = this.props.updateStore;
-    const isNew = this.props.match.params.action === 'new';
+    const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const { offer } = this.props.offeringsStore;
@@ -88,8 +87,8 @@ export default class NewUpdate extends Component {
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const { userDetails } = this.props.userDetailsStore;
-    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: userDetails.info.avatar.url } : '';
-    if (loadingCurrentUpdate || inProgress) {
+    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
+    if (loadingCurrentUpdate) {
       return <InlineLoader />;
     }
     return (
@@ -110,8 +109,9 @@ export default class NewUpdate extends Component {
               editForm={this.state.editForm}
               edit={this.edit}
               deleteUpdate={this.showConfirmModal}
-              id={this.props.match.params.id}
+              id={this.props.match.params.id || newUpdateId}
               cancelUpdate={this.handleCloseModal}
+              inProgress={inProgress}
             />
           </Header>
           <Divider hidden />
@@ -153,13 +153,18 @@ export default class NewUpdate extends Component {
                           )}
                         >
                           <Modal.Content>
-                            <div className="ui image avatar-image">
-                              {companyAvatarUrl && companyAvatarUrl.length
-                                ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                : <UserAvatar UserInfo={userInfo} />
-                              }
-                              {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
-                            </div>
+                            <Header>
+                              <div className="ui image avatar-image">
+                                {companyAvatarUrl && companyAvatarUrl.length
+                                  ? <Image64 srcUrl={companyAvatarUrl} circular />
+                                  : <UserAvatar UserInfo={userInfo} />
+                                }
+                              </div>
+                              <Header.Content className="grey-header">
+                                {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
+                                <Header.Subheader>{moment().format('ll')}</Header.Subheader>
+                              </Header.Content>
+                            </Header>
                             <Header as="h4">{PBUILDER_FRM.fields.title.value}</Header>
                             <HtmlEditor readOnly content={(PBUILDER_FRM.fields.content.value || '')} />
                           </Modal.Content>
@@ -182,11 +187,12 @@ export default class NewUpdate extends Component {
                           fielddata={PBUILDER_FRM.fields.scope}
                           name="scope"
                           changed={(e, result) => UpdateChange(e, result)}
+                          containerclassname="mb-10"
                           widths="equal"
                           value={PBUILDER_FRM.fields.scope.value}
                         />
                         <Form>
-                          {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                             <Form.Field key={rewardTier}>
                               <Checkbox
                                 name="tiers"
