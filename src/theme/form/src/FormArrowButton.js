@@ -26,7 +26,7 @@ const FormArrowButton = observer((props) => {
     basic
     fluid
     labelPosition="left"
-    className="arrow-button"
+    className={`arrow-button ${value === field.value ? 'active' : ''}`}
   >
   <div className="details">
     {field.label && field.labelDescription

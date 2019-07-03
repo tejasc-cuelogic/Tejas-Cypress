@@ -197,6 +197,7 @@ class InvestorProfileStore {
       if (currentStep.form === 'EMPLOYMENT_FORM') {
         if (this.EMPLOYMENT_FORM.fields.status.value !== 'EMPLOYED') {
           FormValidator.resetFormData(this.EMPLOYMENT_FORM, ['employer', 'position']);
+          this[currentStep.form] = FormValidator.validateForm(this[currentStep.form], false, true);
           uiStore.setFieldvalue('inProgressArray', []);
         }
         formPayload = { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
