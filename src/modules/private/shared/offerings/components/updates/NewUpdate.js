@@ -192,7 +192,7 @@ export default class NewUpdate extends Component {
                           value={PBUILDER_FRM.fields.scope.value}
                         />
                         <Form>
-                          {offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                             <Form.Field key={rewardTier}>
                               <Checkbox
                                 name="tiers"
