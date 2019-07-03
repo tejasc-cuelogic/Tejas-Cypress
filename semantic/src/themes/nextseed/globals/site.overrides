@@ -369,6 +369,13 @@ footer{
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				justify-content: center;
 			}
+			img.ui.image {
+				display: inline-block;
+				margin-right: @38px;
+				~a img.ui.image{
+					margin-right: 0;
+				}
+			}
 		}
 	}
 	.footer-social {
