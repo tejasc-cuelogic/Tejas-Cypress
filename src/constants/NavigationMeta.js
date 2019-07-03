@@ -51,19 +51,19 @@ export const PRIVATE_NAV = [
     ],
   },
   {
-    icon: 'ns-dashboard',
-    title: 'Summary',
-    to: 'summary',
-    path: 'investor/summary',
-    accessibleTo: ['investor'],
-    subPanel: 0,
-  },
-  {
     title: 'Accounts',
     accessibleTo: ['ira', 'individual', 'entity'],
     to: 'summary',
     path: 'investor/summary',
     isMenuHeader: true,
+    subPanel: 0,
+  },
+  {
+    icon: 'ns-dashboard',
+    title: 'Summary',
+    to: 'summary',
+    path: 'investor/summary',
+    accessibleTo: ['investor'],
     subPanel: 0,
   },
   {

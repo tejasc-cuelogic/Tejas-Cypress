@@ -15,7 +15,7 @@ import {
 } from '../../../../../constants/account';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore')
+@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore', 'userStore')
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
@@ -49,12 +49,14 @@ export default class AccountSetup extends Component {
       getStepStatus,
       isBasicVerDoneForMigratedFullUser,
     } = this.props.userDetailsStore;
+    const { isInvestor } = this.props.userStore;
     return (
       <PrivateLayout
         {...this.props}
         P5={!signupStatus.finalStatus ? !currentUser.loading
           ? (
 <StickyNotification
+  isInvestor={isInvestor}
   signupStatus={signupStatus}
   userDetailsStore={this.props.userDetailsStore}
 />

@@ -18,6 +18,7 @@ import Congratulation from '../../../../public/offering/components/investNow/agr
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import StickyNotification from '../../summary/components/stickyNotification';
 
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
 @observer
@@ -109,6 +110,9 @@ export default class Portfolio extends Component {
 
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
+    const {
+      multipleUserAccounts, userAccreditationStatus,
+    } = userDetailsStore;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     if (portfolioStore.loading) {
       return (
@@ -133,6 +137,15 @@ export default class Portfolio extends Component {
         </div>
       );
     }
+    const notificationCard = {
+      message:
+  <span>
+        Are you an accredited investor? Go through the steps to verify your status
+        today, and for a limited time, we will add a $100 credit to your account.
+    <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+  </span>,
+      header: 'Earn $100 by verifying your accredited investor status',
+    };
     // const tnarValue = get(getInvestorAccounts, 'tnar');
     const summaryDetails = {
       isAccountFrozen: isUserAccountFrozen,
@@ -165,6 +178,17 @@ export default class Portfolio extends Component {
       <>
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
+        }
+        {userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
+        && (
+          <StickyNotification
+            {...this.props}
+            notificationCard={notificationCard}
+            multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+            accountId={get(multipleUserAccounts, 'accountId') || null}
+            accountType={get(multipleUserAccounts, 'accountType') || null}
+          />
+        )
         }
         <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
