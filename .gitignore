@@ -14,6 +14,7 @@ build
 npm-debug.log
 .idea
 .eslintrc
+cypress.env.json
 
 src/assets/app.css
 # cypress screenshots and videos
