@@ -328,6 +328,10 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
+          avatar{
+            url
+            name
+          }
         }
       }
     }
