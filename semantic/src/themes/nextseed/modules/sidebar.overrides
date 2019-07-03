@@ -70,6 +70,10 @@
 		position: fixed;
 		margin-top: 72px !important;
 		height: calc(100vh - 72px) !important;
+		@media only screen and (max-width : @largestMobileScreen) {
+			margin-top: 0 !important;
+			height: auto !important;
+		}
 		.ns-scrollbar{
 			.view{
 				padding:0 @15px;
