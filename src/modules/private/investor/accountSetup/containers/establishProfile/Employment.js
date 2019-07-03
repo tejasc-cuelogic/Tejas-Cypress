@@ -10,10 +10,10 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 export default class Employment extends Component {
   componentWillMount() {
-    const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
-    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED') {
-      this.props.uiStore.addMoreInProgressArray('EMPLOYED');
-    }
+    // const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
+    // if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED') {
+    //   this.props.uiStore.addMoreInProgressArray('EMPLOYED');
+    // }
   }
 
   componentWillUnmount() {
@@ -23,9 +23,11 @@ export default class Employment extends Component {
   handleupdateInvestorProfileData = () => {
     const { updateInvestorProfileData, stepToBeRendered, EMPLOYMENT_FORM } = this.props.investorProfileStore;
     const { multiSteps } = this.props.uiStore;
-    if (EMPLOYMENT_FORM.meta.isValid) {
-      updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered]);
+    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' && isMobile) {
+      this.props.uiStore.addMoreInProgressArray('EMPLOYED');
+      return;
     }
+    updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered]);
   }
 
   toggleInputFields = () => {
@@ -37,13 +39,13 @@ export default class Employment extends Component {
 
 
   render() {
-    const { EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
-    const { errors, inProgressArray } = this.props.uiStore;
+    const { EMPLOYMENT_FORM, employmentChange, updateInvestorProfileData, stepToBeRendered } = this.props.investorProfileStore;
+    const { errors, inProgressArray, multiSteps } = this.props.uiStore;
     if (inProgressArray.includes('EMPLOYED')) {
       return (
         <div className={isMobile ? '' : 'center-align'}>
           <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
-          <Form onSubmit={this.handleupdateInvestorProfileData} error className={isMobile ? 'mb-40' : ''}>
+          <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? 'mb-40' : ''}>
             <Form.Group widths="equal">
               {
               ['employer', 'position'].map(field => (
