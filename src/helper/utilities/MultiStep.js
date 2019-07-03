@@ -243,7 +243,7 @@ export default class MultiStep extends React.Component {
           basic
           open
           closeIcon={!isMobile}
-          className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
+          className={`${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
           id="multistep-modal"

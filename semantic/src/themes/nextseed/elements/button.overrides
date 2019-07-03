@@ -176,6 +176,7 @@
             color: @neutral-middark;
             line-height: 20px;
             font-size: @13px;
+            padding-right: @20px;
             .ui.header,span{
                 font-size: @15px;
                 line-height: 24px;
