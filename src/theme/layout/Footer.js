@@ -85,7 +85,7 @@ class Footer extends Component {
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
                 <React.Fragment path={path}>
                   <div className={isTablet && 'mt-20 center-align'}>
-                    <NSImage path="footer-secure.png" />
+                    <NSImage path="secure-horizontal-1.jpg" />
                   </div>
                 </React.Fragment>
                 {/* } */}
