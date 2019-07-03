@@ -8,7 +8,7 @@ import {
 } from './utility/investNowFlow.utility';
 import { openLogingPopupAndAutheticate } from './utility/validInvestorLoginForInvestment.utility';
 
-describe('Invest now Parallel CF investment flow', () => {
+describe.skip('Invest now Parallel CF investment flow', () => {
   before(() => {
     initializeInvestNowFlow('Parallel_CF');
   });
