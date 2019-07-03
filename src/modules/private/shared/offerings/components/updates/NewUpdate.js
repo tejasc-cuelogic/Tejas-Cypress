@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
+import moment from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
@@ -152,13 +153,18 @@ export default class NewUpdate extends Component {
                           )}
                         >
                           <Modal.Content>
-                            <div className="ui image avatar-image">
-                              {companyAvatarUrl && companyAvatarUrl.length
-                                ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                : <UserAvatar UserInfo={userInfo} />
-                              }
-                              {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
-                            </div>
+                            <Header>
+                              <div className="ui image avatar-image">
+                                {companyAvatarUrl && companyAvatarUrl.length
+                                  ? <Image64 srcUrl={companyAvatarUrl} circular />
+                                  : <UserAvatar UserInfo={userInfo} />
+                                }
+                              </div>
+                              <Header.Content className="grey-header">
+                                {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
+                                <Header.Subheader>{moment().format('ll')}</Header.Subheader>
+                              </Header.Content>
+                            </Header>
                             <Header as="h4">{PBUILDER_FRM.fields.title.value}</Header>
                             <HtmlEditor readOnly content={(PBUILDER_FRM.fields.content.value || '')} />
                           </Modal.Content>
