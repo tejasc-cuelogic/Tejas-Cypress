@@ -110,7 +110,7 @@ export default class AccountDetails extends Component {
                         text={get(details, 'id')}
                         onCopy={() => this.setState({ copied: true })}
                       >
-                        <span> {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}</span>
+                        <span className="text-lowercase"> {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}</span>
                       </CopyToClipboard>
                     </Header.Subheader>
                   </Header>
