@@ -177,7 +177,7 @@ export class NavItems extends Component {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          ) : (item.isMenuHeader && hasMoreThanOneAcc)
+          ) : (item.isMenuHeader && investorAccounts.length)
             ? (
 <Menu.Item className="menu-header">
               <Menu.Header>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</Menu.Header>
