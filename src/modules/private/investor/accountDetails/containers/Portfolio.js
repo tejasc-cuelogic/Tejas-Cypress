@@ -27,6 +27,7 @@ export default class Portfolio extends Component {
     open: false,
     embedUrl: '',
     inActiveItems: [],
+    showSticky: true,
   };
 
   componentWillMount() {
@@ -62,6 +63,10 @@ export default class Portfolio extends Component {
 
   closeModal = () => {
     this.setState({ open: false });
+  }
+
+  onCloseSticky = () => {
+    this.setState({ showSticky: false });
   }
 
   toggleAccordion = (of) => {
@@ -179,11 +184,12 @@ export default class Portfolio extends Component {
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
-        {userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
+        {userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts') && this.state.showSticky
         && (
           <StickyNotification
             {...this.props}
             notificationCard={notificationCard}
+            onCloseSticky={this.onCloseSticky}
             multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
             accountId={get(multipleUserAccounts, 'accountId') || null}
             accountType={get(multipleUserAccounts, 'accountType') || null}

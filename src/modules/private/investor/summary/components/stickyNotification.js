@@ -27,7 +27,7 @@ export default class StickyNotification extends Component {
     const { props } = this;
     return (
       <div className="closable-card">
-        <Button icon className="link-button">
+        <Button onClick={props.onCloseSticky} icon className="link-button">
           <Icon className="ns-close-light" />
         </Button>
         <Card fluid raised>
