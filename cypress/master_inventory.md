@@ -1,8 +1,15 @@
 ### Master Inventory NS-Client
 
+**Note:** Date format need to be **mm/dd/yyyy**
+
+- API
+	- Investor
+		- [X] Matching `seedTestUsers` data values with `getMigratedUserAuditInfo` data (Date : **07-04-2018**)
+
+
 - Authentication
 	- Login
-		- [X] Invalid Email Address/ Invalid Password  (Date : **10-10-2018**)
+		- [ ] Invalid Email Address/ Invalid Password
 		- [ ] Invalid Email Address/ valid Password
 		- [ ] Valid email address/ invalid password
 	- Login with migrated user
