@@ -147,8 +147,8 @@
 	- [X] Update investment limit (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Check overdraft amount 
 	- [X] Invest successfully in offering `CF Type Offering` (Date : **07-04-2018** | By **Vaibhav**)
-	- [] Invest successfully in offering `BD_506C Type Offering`
-	- [] Invest successfully in offering `BD_506B Type Offering`
+	- [ ] Invest successfully in offering `BD_506C Type Offering`
+	- [ ] Invest successfully in offering `BD_506B Type Offering`
 
 - Portfolio
 	- [ ] View Agreement
