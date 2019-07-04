@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { observable, action, computed } from 'mobx';
-import { find, get } from 'lodash';
+import { find, get, capitalize } from 'lodash';
 import { FormValidator } from '../../../helper';
 import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore } from '../index';
 import Helper from '../../../helper/utility';
@@ -14,6 +15,8 @@ export class AccountStore {
   @observable INVESTMENT_ACC_TYPES = FormValidator.prepareFormObject(ACC_TYPE);
 
   @observable showAccountFrozenModal = false;
+
+  @observable selectedClosedAccount = {};
 
   @observable ACC_TYPE_MAPPING = {
     0: {
@@ -32,6 +35,81 @@ export class AccountStore {
       name: 'entity',
     },
   };
+
+  metaData = {
+    data: {
+      getInvestorCloseAccounts: [
+        {
+          userId: '2525a521-5e9a-4567-aa2b-f85be95a7a5f',
+          accountId: '05ceee30-892a-11e9-a9f5-476846bbe123',
+          accountType: 'INDIVIDUAL',
+          accountStatus: 'CLOSED',
+          linkedBank: {
+            accountNumber: 'XXXXXX0008',
+            routingNumber: 'r1/GUX+zgwBytzkIjfzILzxDbioH2+g9aeYzGAuJcWypu+h9Otpprlg6iErtojicdTQQEKxWvjpE4lZFv2QfbXr57gGI7os1g2a6rxeLsJndrDPKWGKQLLuFZ/1P+R44HI4KPRUuT7OE',
+            bankName: 'WELLS FARGO BANK NA (ARIZONA)',
+          },
+          taxStatement: null,
+          goldstar: {
+            contactId: '167941',
+            investorKey: null,
+            accountNumber: '182822193',
+          },
+        },
+        {
+          userId: '2525a521-5e9a-4567-aa2b-f85be95a7a5f',
+          accountId: '19394df0-9c0b-11e9-bbb7-d78dc8e3ace3',
+          accountType: 'ENTITY',
+          accountStatus: 'CLOSED',
+          linkedBank: {
+            accountNumber: 'XXXXXXXXXXXX0000',
+            routingNumber: 'ChY2djX916OxUmqHLqJr4UlkhJngr06BheU53GmFl0QqnzPg3Tcdu0XanC5aKCoYfVq5h0STYKzvCfb+OQn5LePsltqRkMrYtHD7nozPHOaaWeNE88EbIUZ09hpdT3NOBkNbOTkCsEfI',
+            bankName: 'Wells Fargo',
+          },
+          taxStatement: null,
+          goldstar: {
+            contactId: '168477',
+            investorKey: null,
+            accountNumber: '182822434',
+          },
+        },
+        {
+          userId: '2525a521-5e9a-4567-aa2b-f85be95a7a5f',
+          accountId: '19394df0-9c0b-11e9-bbb7-d78dc8e3ace3',
+          accountType: 'INDIVIDUAL',
+          accountStatus: 'CLOSED',
+          linkedBank: {
+            accountNumber: 'XXXXXXXXXXXX0000',
+            routingNumber: 'ChY2djX916OxUmqHLqJr4UlkhJngr06BheU53GmFl0QqnzPg3Tcdu0XanC5aKCoYfVq5h0STYKzvCfb+OQn5LePsltqRkMrYtHD7nozPHOaaWeNE88EbIUZ09hpdT3NOBkNbOTkCsEfI',
+            bankName: 'Wells Fargo',
+          },
+          taxStatement: null,
+          goldstar: {
+            contactId: '168477',
+            investorKey: null,
+            accountNumber: '182822434',
+          },
+        },
+        {
+          userId: '2525a521-5e9a-4567-aa2b-f85be95a7a5f',
+          accountId: '19394df0-9c0b-11e9-bbb7-d78dc8e3ace3',
+          accountType: 'IRA',
+          accountStatus: 'CLOSED',
+          linkedBank: {
+            accountNumber: 'XXXXXXXXXXXX0000',
+            routingNumber: 'ChY2djX916OxUmqHLqJr4UlkhJngr06BheU53GmFl0QqnzPg3Tcdu0XanC5aKCoYfVq5h0STYKzvCfb+OQn5LePsltqRkMrYtHD7nozPHOaaWeNE88EbIUZ09hpdT3NOBkNbOTkCsEfI',
+            bankName: 'Wells Fargo',
+          },
+          taxStatement: null,
+          goldstar: {
+            contactId: '168477',
+            investorKey: null,
+            accountNumber: '182822434',
+          },
+        },
+      ],
+    },
+  }
 
   @action
   setInvestmentAccType = (e, result) => {
@@ -54,6 +132,30 @@ export class AccountStore {
     } else if (currentStep.name !== 'Link bank') {
       Helper.toast(`${currentStep.name} ${actionName} successfully.`, 'success');
     }
+  }
+
+  @computed
+  get sortedAccounts() {
+    const filteredAccounts = ['individual', 'ira', 'entity'].map((accType) => {
+      const closedAccounts = this.metaData.data.getInvestorCloseAccounts.filter(closedAccount => closedAccount.accountType === accType.toUpperCase());
+      return closedAccounts.map((closedAccount, index) => (
+        { details: {
+          ...closedAccount,
+          accountType: `${capitalize(closedAccount.accountType)} ${(index + 10).toString(36).toUpperCase()}`,
+          to: `${closedAccount.accountType} ${(index + 10).toString(36).toUpperCase()}`.replace(/ +/g, '-').toLowerCase(),
+        } }
+      ));
+    });
+    return [].concat(...filteredAccounts);
+  }
+
+  @computed
+  get sortedNavAccounts() {
+    return this.sortedAccounts.map(closedAccount => ({ title: closedAccount.details.accountType, to: closedAccount.details.to }));
+  }
+
+  @action setSelectedClosedAccount = (accountType) => {
+    this.selectedClosedAccount = this.sortedAccounts.find(account => (account.details.to === accountType));
   }
 
   getAccountIdByType = () => {

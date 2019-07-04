@@ -24,7 +24,7 @@ const CopyToClipboardAccountId = ({ account }) => (
   </CopyToClipboard>
 );
 
-@inject('userDetailsStore', 'bankAccountStore', 'transactionStore', 'portfolioStore')
+@inject('userDetailsStore', 'bankAccountStore', 'transactionStore', 'portfolioStore', 'accountStore')
 @withRouter
 @observer
 export default class Overview extends Component {

@@ -26,6 +26,9 @@ const navMeta = [
     title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
   },
   {
+    title: 'Closed', to: 'closed', component: 'ClosedAccount', accessibleTo: ['admin'],
+  },
+  {
     title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop', 'dev'],
   },
   {
