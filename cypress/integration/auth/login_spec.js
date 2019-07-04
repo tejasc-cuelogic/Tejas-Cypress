@@ -24,10 +24,9 @@ describe('Log In', () => {
 
     it('should check email format', () => {
       cy.get('@users').then((userData) => {
-        const { inValidEmailCredentials } = userData
-        cy.get('input[type="email"]').type(inValidEmailCredentials.email);
-        cy.get('input[type="email"]').blur();
-        cy.get('input[type="email"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
+        const { inValidEmailCredentials } = userData;
+        cy.clearFormField(inValidEmailCredentials, 'loginForm');
+        cy.formFill(inValidEmailCredentials, 'loginForm');
       });
     });
   });

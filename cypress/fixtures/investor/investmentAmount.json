@@ -1,0 +1,14 @@
+{
+  "invalidMultipleAmount": {
+    "investmentAmount": {
+      "value": "101",
+      "showError": true
+    }
+  },
+  "invalidMinInvestmentAmount": {
+    "investmentAmount": {
+      "value": "100",
+      "showError": true
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import money from 'money-math';
-import { registerApiCall, clearFormInput } from '../../common.utility';
+import { registerApiCall, clearFormInput, getJSONDataFromFixtures } from '../../common.utility';
 
 export const invalidInvestmentAmount = () => {
   let inputFieldObj = [
@@ -142,15 +142,11 @@ export const checkAndStoreInvestmentProcess = async () => {
 }
 
 export const invalidMultipleInvestmentAmount = () => {
-  const dataSet = {
-    investmentAmount: {
-      selector: 'name',
-      value: '101',
-      showError: true
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+  cy.fixture('investor/investmentAmount.json').then((data) => {
+    const { invalidMultipleAmount } = data;
+    cy.clearFormField(invalidMultipleAmount);
+    cy.formFill(invalidMultipleAmount);
+  });
 }
 
 export const invalidMinInvestmentAmount = () => {

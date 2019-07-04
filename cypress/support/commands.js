@@ -85,29 +85,41 @@ Cypress.Commands.add('applicationUnlock', () => {
 //   }
 // });
 
-Cypress.Commands.add('formFill', (dataSet) => {
+Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
   if (!isEmpty(dataSet)) {
     forIn(dataSet, (val, key) => {
       const selector = dataSet[key].selector || 'name';
+      let cySelector = '';
+      if (parentSelector) {
+        cySelector = cy.get(`[data-cy=${parentSelector}]`).find(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+      } else {
+        cySelector = cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`);
+      }
+
       if (!dataSet[key].skip) {
-        cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).type(dataSet[key].value);
+        cySelector.type(dataSet[key].value);
+      } 
+      if (!dataSet[key].skip && dataSet[key].isEnterEvent) {
+        cySelector.type('{enter}');
       }
-      if (dataSet[key].isEnterEvent) {
-        cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).type('{enter}');
+      if (!dataSet[key].skip && dataSet[key].showError) {
+        cySelector.blur();
+        cySelector.parentsUntil('.field').get('p').should('have.class', 'field-error');
       }
-      if (dataSet[key].showError) {
-        cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).blur();
-        cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).parentsUntil('.field').get('p').should('have.class', 'field-error');
-      }
+
     });
   }
 });
 
-Cypress.Commands.add('clearFormField', (dataSet) => {
+Cypress.Commands.add('clearFormField', (dataSet, parentSelector = false) => {
   if (!isEmpty(dataSet)) {
     forIn(dataSet, (val, key) => {
       const selector = dataSet[key].selector || 'name';
-      cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).clear();
+      if (parentSelector) {
+        cy.get(`[data-cy=${parentSelector}]`).find(`input[${selector.replace(/["']/g, "")}="${key}"]`).clear();
+      } else {
+        cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).clear();
+      }
     });
   }
 });
