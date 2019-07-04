@@ -1,0 +1,253 @@
+### Master Inventory NS-Client
+
+**Note:** Date format need to be **mm/dd/yyyy**
+
+- API
+	- Investor
+		- [X] Matching `seedTestUsers` data values with `getMigratedUserAuditInfo` data (Date : **07-04-2018**)
+
+
+- Authentication
+	- Login
+		- [ ] Invalid Email Address/ Invalid Password
+		- [ ] Invalid Email Address/ valid Password
+		- [ ] Valid email address/ invalid password
+	- Login with migrated user
+		- [ ] Migrated full (should display confirm phone screen)
+		- [ ] Migrated partial (should go to incomplete steps i.e go to email verification if it is not verified) 
+	- Forgot Password
+		- [ ] Invalid email
+		- [ ] Incorrect Verification Code
+		- [ ] Correct Verification Code
+		- [ ] Password mismatch
+		- [ ] Weak Password Strength Reset
+		- [ ] Successful Reset
+
+- Investor Signup
+	- Basic
+		-  Email
+			- [ ] Duplicate email address
+			- [ ] Invalid email address
+			- [ ] Invalid password
+			- [ ] Password mismatch
+			- [ ] Password strength
+			- [ ] Valid Email with correct MFA Code
+			- [ ] Valid Email with incorrect MFA Code
+			- [ ] Change email address
+			- [ ] Resend MFA to Email
+		- CIP
+			- [ ] Entered Business Address
+			- [ ] Entered Business Address with ByPassAddressCheckFlag
+			- [ ] Entered an invalid age
+			- [ ] Duplicate SSN
+			- [ ] Invalid Phone Number
+			- [ ] CIP Submit and Pass
+			- CIP Submit and Fail with Questions
+				- [ ] Correct Answers
+				- [ ] Incorrect Answers
+			- CIP Submit and Fail with Uploads
+				- [ ] Upload with invalid filename
+				- [ ] Submit with Upload
+				- [ ] Clean / good upload
+		
+		- Phone MFA
+			- [ ] Text
+			- [ ] Resend Text
+			- [ ] Call
+			- [ ] Resend Call
+			- [ ] Incorrect Code
+			- [ ] Correct Code
+	- [ ] Investor Profile Questions
+
+- Individual Account
+	- Link Bank
+		- [ ] Link bank directly
+		- [ ] Search bank
+		- [ ] Change linked bank
+		- [ ] keep existing linked bank
+	- Link bank manually
+		- [ ] Wrong routing number
+		- [ ] Wrong account number
+		- [ ] Successful link bank manually
+	- Add funds
+		- [ ] I don't want to deposit any money
+		- [ ] Add fund below $100
+		- [ ] Create account
+
+- IRA Account
+	- Link Bank
+		- [ ] Link bank directly
+		- [ ] Search bank
+		- [ ] Change linked bank
+		- [ ] keep existing linked bank
+	- Add funds
+		- [ ] I don't want to deposit any money
+		- [ ] Add fund below $5000
+		- [ ] Add fund above $6000
+		- [ ] Create account
+	- Upload file
+		- [ ] Upload with invalid filename
+		- [ ] Remove uploaded files
+	- [ ] Switch to account type and funding tab from summary page, change account type and funding options
+	- [ ] Check hyperlinks (Summary page)
+	- [ ] Create account
+
+- Entity Account
+	- [ ] Check Investment Limit
+	- [ ] Duplicate TAX ID
+	- [ ] Invalid zip code
+	- [ ] Switch between tabs, change options
+	- [ ] Upload with invalid filename
+	- [ ] Remove uploaded files
+	- [ ] Add fund below $5000
+	- [ ] Account creation
+
+- Deposit Funds
+	- [ ] Add funds
+	- [ ] Chnage amount 
+	- [ ] Cancel add funds
+	- [ ] Withdraw funds
+	- [ ] Available cash, total balance and net deposit
+
+- Change Linked Bank
+	- [ ] Link bank directly
+	- [ ] Search bank
+	- [ ] Change linked bank
+	- [ ] Keep existing linked bank
+	- [ ] Link bank manually
+	- [ ] Cancel change linked bank
+	- [ ] Incorrect verification code
+	- [ ] Correct verification code
+	- [ ] Resend code
+
+- Offerings
+	- [ ] Create new offering
+	- [ ] Generate docs
+	- [ ] Edit POC
+	- [ ] Data room upload document
+	- [ ] Add bonus rewards
+	- [ ] Launch offering
+	- [ ] Offering Preview
+	- [ ] Referral code
+	- [ ] Offering closure
+	- [ ] Do not upload NPA document, try to invest in such offering
+
+- Invest Now 
+	- [ ] Invest for freeze account
+	- [ ] Invalid user login credentials
+	- [ ] Invest when investor not logged in
+	- [ ] Invest in partially created account
+	- [ ] Investment with multiple account type selection
+	- [ ] Accreditation popup for parallel offering (506C and 506B)
+	- [ ] Invest when accreditation request pending
+	- [ ] Invest below min investment amount
+	- [ ] Invest above max investment amount
+	- [ ] Update investment limit
+	- [ ] Check overdraft amount 
+	- [ ] Invest successfully in offering
+
+- Portfolio
+	- [ ] View Agreement
+	- [ ] Change investment
+	- Cancel investment
+		- [ ] No, keep investment
+		- [ ] Cancel investment
+
+- Issuer Signup
+	 - [ ] Prequal Success
+	 - [ ] Prequal with existing email id
+	 - [ ] Prequal failed
+	 - [ ] Prequal failed but lendio pass
+	 - [ ] Resume Business application and save as draft
+	 - [ ] Submit business application
+
+- Account Settings
+	- [ ]  Change email
+	- [ ] Invalid email
+	- [ ] Duplicate email
+	- [ ] Change phone
+	- [ ] Invalid / Valid code
+	- [ ] Change password
+	- [ ] Incorrect old password
+	- [ ] New password and Confirm new password mismatch
+
+- Accreditation Status
+	- [ ] Accreditation: Income verification
+	- [ ] Invalid verifier email address
+	- [ ] Upload document
+	- [ ] Invalid document
+	- [ ] Remove uploaded document
+	- [ ] Income verification: Net worth verification
+
+- Manage Users
+	- [ ] Add new users
+	- [ ] Password length
+	- [ ] Edit profile data
+	- [ ] Login with newly created user
+	- [ ] Freeze/Unfreeze account
+	- [ ] Soft/Hard delete user profile
+	- [ ] Deposit funds
+
+- Accreditation requests
+	- [ ] Resend verifier email
+	- [ ] Share link
+	- [ ] Upload justification document
+	- [ ] Upload invalid file name
+	- [ ] Remove uploaded document
+	- [ ] Approve request
+	- [ ] Decline request
+
+- Linked Bank Request
+	- [ ] Verify linked bank request
+
+- Crowdpay
+	- [ ] Approve request (Review)
+	- [ ] Decline request (Review)
+	- [ ] GS Process (IRA)
+	- [ ] Decline or Validate (IRA)
+
+- Transfer Request
+	- [ ] Pending tab (Approve, sync and Decline transactions)
+	- [ ] Processing tab (Verify transactions)
+	- [ ] Complete tab
+
+- Applications
+	- Prequal failed
+		- [ ] Promote application
+		- [ ] Delete Application
+		- [ ] View Application
+	- In-Progress
+		- [ ] Stash application
+		- [ ] Unstash application
+		- [ ] Delete Application
+		- [ ] View Application
+	- Completed
+		- [ ] Delete Application
+		- View Application
+			- Review tab
+				- [ ] Save
+				- [ ] Submit for approval
+				- [ ] Approve/Decline
+				- [ ] Generate PA (Offer tab)
+				- [ ] Submit offer (Offer tab) 		 
+
+	- Contents
+		- Categories
+			- [ ] Add category
+			- [ ] Delete category
+			- [ ] Edit category
+		- FAQ
+			- [ ] Add faq
+			- [ ] Manage categories
+			- [ ] Edit faq
+			- [ ] Delete faq
+			- [ ] Search faq
+		- Knowledge Base
+			- [ ] New KB article
+			- [ ] Delete Knowledge base
+			- [ ] Edit knowledge base
+			- [ ] Search knowledge base
+		- Insights
+			- [ ] Add new insights
+			- [ ] Delete insights
+			- [ ] Edit insights

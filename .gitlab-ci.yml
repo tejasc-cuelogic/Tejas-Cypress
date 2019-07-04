@@ -29,6 +29,7 @@ before_script:
   artifacts:
     paths:
       - build/
+      - .env
     expire_in: 1 day
 
 .deploy_template: &deploy_defination
@@ -112,8 +113,11 @@ test:review:
       - cypress/reports/screenshots
       - cypress/reports/videos
   script:
+    - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
     - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
+  dependencies:
+    - build:review
 
 #---------------------------------PRE DEV-------------------------------------------
 build:predev:
@@ -217,11 +221,14 @@ test:dev:
     expire_in: 1 day
     when: always
     paths:
-      - cypress/screenshots
-      - cypress/videos
+      - cypress/reports/screenshots
+      - cypress/reports/videos
   script:
+    - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
     - npm install
     - CYPRESS_baseUrl=https://$DEV_URL $(npm bin)/cypress run
+  dependencies:
+    - build:review
 
 
 #---------------------------------Qa--------------------------------------------

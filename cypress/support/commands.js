@@ -1,6 +1,6 @@
 import { API_ROOT } from '../../src/constants/common';
-import { forIn, isEmpty } from 'lodash';
-
+import Amplify from '@aws-amplify/core';
+import AmplifyAuth from '@aws-amplify/auth';
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -74,6 +74,22 @@ Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
     });
   });
 });
+
+const amplifyLogin = async (username, password) => {
+  Amplify.configure({
+    Auth: {
+      identityPoolId: Cypress.env('identityPoolId'),
+      region: Cypress.env('region'),
+      userPoolId: Cypress.env('userPoolId'),
+      userPoolWebClientId: Cypress.env('userPoolWebClientId'),
+    },
+  });
+  return await AmplifyAuth.signIn({ username, password});
+};
+
+Cypress.Commands.add('login', amplifyLogin);
+
+// UTILS
 
 Cypress.Commands.add('applicationUnlock', () => {
   cy.get('input[name="password"]').type(Cypress.env('appPassword'));
