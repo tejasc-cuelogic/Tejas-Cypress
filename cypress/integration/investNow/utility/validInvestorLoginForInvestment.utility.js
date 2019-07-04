@@ -3,18 +3,8 @@ import { registerApiCall, getJSONDataFromFixtures, clearFormInput } from '../../
 export const validInvestorLoginAction = async () => {
   const validInvestorHavingOnceAccountCredentials = await getJSONDataFromFixtures('investor/user.json', 'validInvestorHavingOnceAccountCredentials');
   registerApiCall('investNowHealthCheck');
-  const dataSet = {
-    email: {
-      selector: 'type',
-      value: validInvestorHavingOnceAccountCredentials.email
-    },
-    password: {
-      selector: 'type',
-      value: validInvestorHavingOnceAccountCredentials.password
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+  cy.clearFormField(validInvestorHavingOnceAccountCredentials, 'loginForm');
+  cy.formFill(validInvestorHavingOnceAccountCredentials, 'loginForm');
   cy.get('button.button').contains('Log in').click({ force: true });
   cy.wait(10000);
   cy.get('div.header-wrap').find('.stackable').find('.container').find('.menu-button')
