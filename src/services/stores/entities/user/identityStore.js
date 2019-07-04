@@ -202,7 +202,7 @@ export class IdentityStore {
     return { userInfo, phoneDetails };
   }
 
-  checkIncorrectAns = res => res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete')
+  checkIncorrectAns = res => res.key && (res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete'))
 
   CipFailReasons = (failReasonArr, obj) => {
     failReasonArr.push(obj);
@@ -404,15 +404,17 @@ export class IdentityStore {
     uiStore.setProgress();
     const cipStatus = 'MANUAL_VERIFICATION_PENDING';
     this.setCipStatus(cipStatus);
+    console.log('upload mutation');
     return new Promise((resolve, reject) => {
       this.updateUserInfo()
         .then(() => {
           uiStore.setProgress(false);
           resolve();
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('upload error', err);
           uiStore.setProgress(false);
-          reject();
+          reject(err);
         });
       // .finally(() => {
       // });

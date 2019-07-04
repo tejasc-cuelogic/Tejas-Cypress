@@ -80,22 +80,19 @@ export default class Summary extends React.Component {
   }
 
   handleCreateAccount = () => {
-    // const {
-    //   isCipExpired,
-    //   signupStatus,
-    // } = this.props.userDetailsStore;
-    // this.props.uiStore.setcreateAccountMessage();
-    this.handleSubmitAccount();
-
-    // if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-    //   this.handleuserIdentity();
-    //   this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-    // } else if (isCipExpired) {
-    //   this.handleuserIdentity();
-    //   this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-    // } else {
-    //   this.handleLegalDocsBeforeSubmit();
-    // }
+    const {
+      isCipExpired,
+      signupStatus,
+    } = this.props.userDetailsStore;
+    if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
+      this.handleuserIdentity();
+      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
+    } else if (isCipExpired) {
+      this.handleuserIdentity();
+      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
+    } else {
+      this.handleLegalDocsBeforeSubmit();
+    }
   }
 
   openModal = (type) => {
