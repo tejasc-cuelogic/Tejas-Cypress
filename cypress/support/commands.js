@@ -1,6 +1,7 @@
 import { API_ROOT } from '../../src/constants/common';
 import Amplify from '@aws-amplify/core';
 import AmplifyAuth from '@aws-amplify/auth';
+import { isEmpty, forIn } from 'lodash';
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
