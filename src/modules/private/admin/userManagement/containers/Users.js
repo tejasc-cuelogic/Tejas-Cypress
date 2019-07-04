@@ -37,7 +37,11 @@ class Users extends Component {
   }
 
   searchOnChange = (e) => {
-    this.props.userListingStore.searchOnChange('keyword', e.target.value);
+    if (e.target.value === '') {
+      this.props.userListingStore.setInitiateSrch('keyword', e.target.value);
+    } else {
+      this.props.userListingStore.searchOnChange('keyword', e.target.value);
+    }
   }
 
   paginate = params => this.props.userListingStore.initRequest(params);
