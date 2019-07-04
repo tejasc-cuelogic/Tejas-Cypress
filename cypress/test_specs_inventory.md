@@ -1,20 +1,20 @@
-### Tests Specs Master Inventory
+### Master Inventory NS-Client
 
 - Authentication
 	- Login
-		- [ ] Invalid Email Address/ Invalid Password  (**10-10-2018**)
+		- [X] Invalid Email Address/ Invalid Password  (Date : **10-10-2018**)
 		- [ ] Invalid Email Address/ valid Password
 		- [ ] Valid email address/ invalid password
 	- Login with migrated user
-		 - [ ] Migrated full (should display confirm phone screen)
-		 - [ ] Migrated partial (should go to incomplete steps i.e go to email verification if it is not verified) 
+		- [ ] Migrated full (should display confirm phone screen)
+		- [ ] Migrated partial (should go to incomplete steps i.e go to email verification if it is not verified) 
 	- Forgot Password
-		 - [ ] Invalid email
-		 - [ ] Incorrect Verification Code
-		 - [ ] Correct Verification Code
-		 - [ ] Password mismatch
-		 - [ ] Weak Password Strength Reset
-		 - [ ] Successful Reset
+		- [ ] Invalid email
+		- [ ] Incorrect Verification Code
+		- [ ] Correct Verification Code
+		- [ ] Password mismatch
+		- [ ] Weak Password Strength Reset
+		- [ ] Successful Reset
 
 - Investor Signup
 	- Basic
