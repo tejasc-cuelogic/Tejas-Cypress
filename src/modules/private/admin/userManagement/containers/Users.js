@@ -36,6 +36,10 @@ class Users extends Component {
     }
   }
 
+  searchOnChange = (e) => {
+    this.props.userListingStore.searchOnChange('keyword', e.target.value);
+  }
+
   paginate = params => this.props.userListingStore.initRequest(params);
 
   render() {
@@ -50,6 +54,7 @@ class Users extends Component {
         P1={(
 <P1
   executeSearch={this.executeSearch}
+  change={this.searchOnChange}
   requestState={requestState}
   filters={filters}
   toggleSearch={this.toggleSearch}
