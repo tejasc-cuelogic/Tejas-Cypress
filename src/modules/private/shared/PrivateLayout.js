@@ -14,24 +14,27 @@ class PrivateLayout extends Component {
   render() {
     const { location, navStore } = this.props;
     const pageMeta = navStore.navMeta;
+    const { isInvestor } = this.props.userStore;
     if (!pageMeta) {
       return <NotFound />;
     }
     return (
       <>
-        <div className={`page-header-section ${this.props.userStore.isInvestor ? 'investor' : ''}`}>
+      {isInvestor
+      && (
+        <Link to="/"><Logo
+          dataSrc="LogoGreenGrey"
+          className="mobile-header-logo"
+        /></Link>
+      )
+      }
+        <div className={`page-header-section ${isInvestor ? 'investor' : ''}`}>
           <Grid columns="equal" stackable>
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
-                {(!this.props.P0 && !isMobile)
-                  ? <Header as={this.props.userStore.isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
-                  : !this.props.P0 ? (
-                <Link to="/"><Logo
-                  dataSrc="LogoGreenGrey"
-                  className="mobile-header-logo"
-                /></Link>
-                  )
-                    : this.props.P0
+                {!this.props.P0
+                  ? <Header as={isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+                  : this.props.P0
                 }
               </Grid.Column>
               {!this.props.P4 ? (
@@ -48,7 +51,7 @@ class PrivateLayout extends Component {
           </Grid>
         </div>
         {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav)
-          && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className={`${this.props.userStore.isInvestor ? 'investor' : ''} secondary-menu`} navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
+          && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className={`${isInvestor ? 'investor' : ''} secondary-menu`} navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
         {this.props.P1
           && (
