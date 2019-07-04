@@ -1,80 +1,104 @@
-import { registerApiCall, uploadFile } from '../../common.utility';
+import { registerApiCall, uploadFile, getJSONDataFromFixtures, btnClickAndWaitByButtonName } from '../../common.utility';
 
 export const issuerSignUp = () => {
-    cy.get('h4').contains('Business').click();
-    cy.get('a').contains('Start application process').click();
+  cy.get('h4').contains('Business').click();
+  cy.get('a').contains('Start application process').click();
 }
 
-export const fillBasicDetails = (basicDetails) => {
-    cy.get('input[name="firstName"]').type(basicDetails.firstName);
-    cy.get('input[name="lastName"]').type(basicDetails.lastName);
-    cy.get('input[name="email"]').type(basicDetails.email);
-    registerApiCall('Continue');
-    cy.get('button').contains('Continue').click();
-    cy.wait('@Continue');
-}
+export const fillBasicDetails = async (basicDetails) => {
+  issuerSignUp();
+  cy.clearFormField(basicDetails);
+  cy.formFill(basicDetails);
+  btnClickAndWaitByButtonName('Continue');
+};
 
-export const fillGeneralInfo = (generalInfo) => {
-    cy.get('input[name="businessName"]').type(generalInfo.businessName);
-    cy.get('input[name="website"]').type(generalInfo.website);
-    cy.get('input[name="phoneNumber"]').type(generalInfo.phoneNumber);
-    cy.get('input[name="street"]').type(generalInfo.street);
-    cy.get('input[name="city"]').type(generalInfo.city);
-    cy.get('input[name="state"]').type(generalInfo.state);
-    cy.get('input[name="zipCode"]').type(generalInfo.zipCode);
+export const fillGeneralInfo = async (generalInfo) => {
+  cy.clearFormField(generalInfo);
+  cy.formFill(generalInfo);
 }
   
-export const fillExperienceDetails = (experienceDetails) => {
-    cy.get('input[name="industryExperience"]').type(experienceDetails.industryExperience);
-    cy.get('input[name="estimatedCreditScore"]').type(experienceDetails.estimatedCreditScore);
-    cy.get('input[name="totalProjectCost"]').type(experienceDetails.totalProjectCost);
-    cy.get('input[name="amountNeeded"]').type(experienceDetails.amountNeeded);
+export const fillExperienceDetails = async (experienceDetails) => {
+  cy.clearFormField(experienceDetails);
+  cy.formFill(experienceDetails);
 }
 
 export const fillNextYearProjection = (nextYearProjection) => {
-    cy.get('input[value="RENOVATIONS"]').click();
-    cy.get('input[name="nextYearGrossSales"]').type(nextYearProjection.nextYearGrossSales);
-    cy.get('input[name="nextYearCogSold"]').type(nextYearProjection.nextYearCogSold);
-    cy.get('input[name="nextYearOperatingExpenses"]').type(nextYearProjection.nextYearOperatingExpenses);
-    cy.get('input[name="nextYearNetIncome"]').type(nextYearProjection.nextYearNetIncome);
+  cy.get('input[value="RENOVATIONS"]').click();
+  cy.clearFormField(nextYearProjection);
+  cy.formFill(nextYearProjection);
 }
 
-export const fillBusinessDetails = (businessDetails) => {
-  uploadFile('input[name="businessPlan"]');
-  cy.get('<div.ui.loader>', { timeout: 6000 }).should('not.exist');
+export const fillBusinessDetails = async (businessDetails) => {
+  cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="businessPlan"]', '/dev/graphql');
+  cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
   fillExistingDebt(businessDetails.existingDebt);
   fillOwnerInfo(businessDetails.owner);
 }
 
 export const loginToApplication = () => {
-    cy.get('input[name="password"]').type('nextseedTest');
-    cy.get('form').should('have.class', 'form')
-      .children()
-      .children()
-      .children()
-      .then(($field) => {
-        if ($field.length > 2) {
-          cy.get('input[name="verify"]').type('nextseedTest');
-        }
-      })
+  cy.get('input[name="password"]').type('nextseedTest');
+  cy.get('form').should('have.class', 'form')
+    .children()
+    .children()
+    .children()
+    .then(($field) => {
+    if ($field.length > 2) {
+      cy.get('input[name="verify"]').type('nextseedTest');
+    }
+    })
 }
 
 export const fillExistingDebt = (existingDebt) => {
-    cy.get('input[name="amount"]').type(existingDebt.amount);
-    cy.get('input[name="interestExpenses"]').type(existingDebt.interestExpenses);
-    cy.get('input[name="remainingPrincipal"]').type(existingDebt.remainingPrincipal, {force: true});
-    cy.get('input[name="term"]').type(existingDebt.term, {force: true});
+  cy.clearFormField(existingDebt);
+  cy.formFill(existingDebt);
 }
 
 export const fillOwnerInfo = (owner) => {
-    cy.get('input[name="fullLegalName"]').type(owner.fullLegalName, {force: true});
-    cy.get('input[name="title"]').type(owner.title, {force: true});
-    cy.get('input[name="yearsOfExp"]').type(owner.yearsOfExp, {force: true});
-    cy.get('input[name="companyOwnerShip"]').type(owner.companyOwnerShip);
-    cy.get('input[name="dateOfService"]').type(owner.dateOfService, {force: true});
-    cy.get('input[name="ssn"]').type(owner.ssn, {force: true});
-    cy.get('input[name="linkedInUrl"]').type(owner.linkedInUrl, {force: true});
-    uploadFile('input[name="resume"]');
-    cy.get('<div.ui.loader>', { timeout: 6000 }).should('not.exist');
-    cy.wait(10000);
+  cy.clearFormField(owner);
+  cy.formFill(owner);
+  cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="resume"]', '/dev/graphql');
+  cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
+}
+
+export const completeBusinessApplication = async () => {
+  const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQual.json');
+  fillBasicDetails(issuerPreQual.basicDetails);
+  cy.get('input[value="B2C"]').click();
+  fillGeneralInfo(issuerPreQual.generalInfo);
+  cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
+  cy.get('input[value="BRAND_NEW"]').click();
+  fillExperienceDetails(issuerPreQual.experienceDetails);
+  fillNextYearProjection(issuerPreQual.nextYearProjection);
+  cy.get('input[value="LLC"]').click();
+  cy.get('input[name="legalConfirmation"]').click({ force: true, multiple: true });
+  cy.get('button').contains('Submit').click();
+  cy.get('.loader', { timeout: 6000 }).should('not.exist');
+  loginToApplication();
+  registerApiCall('Proceed');
+  cy.get('button').contains('Proceed').click();
+  cy.wait('@Proceed');
+  cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
+  fillBusinessDetails(issuerPreQual.businessDetails);
+  registerApiCall('perfomance');
+  cy.get('div[class="pull-right"]').children().click({ force: true });
+  cy.wait('@perfomance');
+  cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
+  registerApiCall('perfomance');
+  cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="fiveYearProjection"]', '/dev/graphql');
+  cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
+  cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="sourcesAndUses"]', '/dev/graphql');
+  cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
+  cy.get('div[class="pull-right"]').children().click({ force: true });
+  cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
+  cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="leaseAgreementsOrLOIs"]', '/dev/graphql');
+  cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
+  cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="personalTaxReturn"]', '/dev/graphql');
+  cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
+  cy.get('input[name="blanketLien"]').check('false', { force: true });
+  cy.get('input[name="personalGuarantee"]').check('false', { force: true });
+  if (cy.get('button').contains('Submit')) {
+    cy.get('button').contains('Submit').click();
+  } else {
+    cy.get('button').contains('Save').click();
+  }
 }
