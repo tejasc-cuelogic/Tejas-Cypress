@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, withRouter, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
-import Aux from 'react-aux';
 import { Menu, Icon, Button } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
@@ -35,7 +34,7 @@ export class SidebarNav extends Component {
     } = props;
     if (onlyMount) return null;
     return (
-      <Aux>
+      <>
         <NavItems
           location={location}
           navItems={navStore.sidebarItems}
@@ -61,7 +60,7 @@ export class SidebarNav extends Component {
             </Menu.Item>
             )
         }
-      </Aux>
+      </>
     );
   }
 }

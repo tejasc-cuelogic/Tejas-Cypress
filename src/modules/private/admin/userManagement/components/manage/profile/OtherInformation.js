@@ -1,11 +1,10 @@
 import React from 'react';
 import { get } from 'lodash';
 import { Table, Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import moment from 'moment';
 
 const OtherInformation = ({ details }) => (
-  <Aux>
+  <>
     <Header as="h6">Other Information</Header>
     <div className="bg-offwhite">
       <div className="table-wrapper">
@@ -43,7 +42,7 @@ const OtherInformation = ({ details }) => (
         </Table>
       </div>
     </div>
-  </Aux>
+  </>
 );
 
 export default OtherInformation;

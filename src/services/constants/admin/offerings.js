@@ -763,14 +763,14 @@ export const COMPANY_LAUNCH = {
   },
   contactId: {
     value: '',
-    label: 'GoldStar ContactId',
+    label: 'GoldStar Contact ID',
     error: undefined,
     rule: 'optional',
     objRefOutput: 'goldstar',
     objRef: 'goldstar',
     placeHolder: 'Enter here',
   },
-  escrowAccount: {
+  esAccountNumber: {
     value: '',
     label: 'GoldStar Escrow Account Number',
     error: undefined,
@@ -779,7 +779,7 @@ export const COMPANY_LAUNCH = {
     objRef: 'goldstar',
     placeHolder: 'Enter here',
   },
-  sinkFundAccount: {
+  sfAccountNumber: {
     value: '',
     label: 'GoldStar Sink Fund Account Number',
     error: undefined,
@@ -2724,13 +2724,13 @@ export const OFFERING_CLOSE_1 = {
     objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
-    placeHolder: 'Enter here',
+    placeHolder: 'MM/DD/YYYY',
   },
   gsFees: {
     value: '',
     label: 'Goldstar Fees',
-    objRefOutput: 'closureSummary',
-    objRef: 'closureSummary',
+    objRefOutput: 'closureSummary.keyTerms',
+    objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',

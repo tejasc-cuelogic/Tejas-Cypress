@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Form, Header, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
@@ -57,7 +56,7 @@ export default class PreQual extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
@@ -68,7 +67,7 @@ export default class PreQual extends Component {
           </Header>
           {
             JUSTIFICATIONS_FRM.fields.justifications.map((justifications, index) => (
-              <Aux>
+              <>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
                   readOnly={isReadonly}
@@ -79,7 +78,7 @@ export default class PreQual extends Component {
                   removed={!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length > 1 ? e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM') : false}
                   linkto={this.props.match.url}
                 />
-              </Aux>
+              </>
             ))
           }
           <ButtonGroup
@@ -102,7 +101,7 @@ export default class PreQual extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

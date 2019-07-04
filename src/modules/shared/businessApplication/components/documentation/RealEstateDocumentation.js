@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
@@ -32,7 +31,7 @@ export default class RealEstateDocumentation extends Component {
       disableFileUpload = false;
     }
     return (
-      <Aux>
+      <>
         <FormElementWrap
           hideFields={hideFields}
           header="Upload Your Due Dilligence Documents*"
@@ -92,7 +91,7 @@ export default class RealEstateDocumentation extends Component {
           </div>
           )
           : ''}
-      </Aux>
+      </>
     );
   }
 }

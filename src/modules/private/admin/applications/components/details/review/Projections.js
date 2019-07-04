@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider } from 'semantic-ui-react';
 import { FormTextarea, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
@@ -60,7 +59,7 @@ export default class Projections extends Component {
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={PROJECTIONS_FRM.meta.isValid} formName="PROJECTIONS_FRM" />
           {
             ['reasonableHistoricals', 'projectionsComplete', 'revenueCheck'].map((field, index) => (
-              <Aux>
+              <>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
                   readOnly={isReadonly}
@@ -72,7 +71,7 @@ export default class Projections extends Component {
                 {index !== 2
                   && <Divider section />
                 }
-              </Aux>
+              </>
             ))
           }
           <DropZone
@@ -88,7 +87,7 @@ export default class Projections extends Component {
           <Divider section />
           {
             ['opex', 'rent', 'benchmark'].map((field, index) => (
-              <Aux>
+              <>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
                   readOnly={isReadonly}
@@ -100,7 +99,7 @@ export default class Projections extends Component {
                 {index !== 2
                 && <Divider section />
                 }
-              </Aux>
+              </>
             ))
           }
           <DropZone

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
@@ -34,7 +33,7 @@ export default class CampaignSecondaryMenu extends Component {
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
               {!isMobile
                 && (
-<Aux>
+<>
                   <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
                   {!isClosed && diff > 0
                     && <List.Item>{diff} days left</List.Item>
@@ -43,7 +42,7 @@ export default class CampaignSecondaryMenu extends Component {
                     ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
                     : (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
                   }
-                </Aux>
+                </>
                 )
             }
               {!isClosed

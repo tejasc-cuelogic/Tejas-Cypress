@@ -2,14 +2,12 @@ import {
   initializeInvestNowFlow,
   proceedInvalidLoginAction,
   proceedInvalidUserLoginAction,
-  // proceedWithIncompleteInvestorCIPAction,
   proceedWithValidUserLoginAction,
-} from '../../support/investNow/investNowFlow';
+} from './utility/investNowFlow.utility';
+
+import { userDetail } from '../common.utility';
 
 describe('Invest now flow', () => {
-  // before(() => {
-  //   initializeInvestNowFlow();
-  // });
   beforeEach(() => {
     cy.restoreLocalStorage();
   });
@@ -29,16 +27,17 @@ describe('Invest now flow', () => {
       .contains('Invest Now')
       .click();
   });
+
   it('Invalid login credentails action', () => {
     proceedInvalidLoginAction();
   });
+
   it('Invalid user type login action', () => {
     proceedInvalidUserLoginAction();
   });
-  // it('Investor with incomplete CIP information', () => {
-  //   proceedWithIncompleteInvestorCIPAction();
-  // });
+
   it('succesfully login as investor with one account', () => {
     proceedWithValidUserLoginAction();
   });
+
 });

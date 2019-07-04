@@ -6,6 +6,7 @@ const handleOverviewStep = () => {
 
 export const completeInvestorProfile = () => {
   cy.get('.dimmer-visible').should('not.be.visible')
+  cy.wait(200);
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
     // eslint-disable-next-line default-case

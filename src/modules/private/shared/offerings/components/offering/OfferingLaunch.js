@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
@@ -97,7 +96,7 @@ export default class OfferingLaunch extends Component {
                 <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
                 {legalDocs && legalDocs[document] && legalDocs[document].fileName
                   ? (
-<Aux>
+<>
                     <div className="display-only">
                       <Link to={this.props.match.url} onClick={() => this.handleFileLink(legalDocs[document].fileId)} title={legalDocs[document].fileName}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
@@ -106,7 +105,7 @@ export default class OfferingLaunch extends Component {
                         moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
                       }
                     </p>
-                  </Aux>
+                  </>
                   )
                   : <div>Not Uploaded</div>
                 }
@@ -117,13 +116,15 @@ export default class OfferingLaunch extends Component {
         <Divider section />
         <Header as="h4">GoldStar</Header>
         <Form.Group widths="equal">
-          {['isin', 'contactId', 'escrowAccount', 'sinkFundAccount'].map(field => (
-            <MaskedInput
+          {['isin', 'contactId', 'esAccountNumber', 'sfAccountNumber'].map(field => (
+            <FormInput
               displayMode={isReadonly}
+              key={field}
+              type="text"
               name={field}
               fielddata={COMPANY_LAUNCH_FRM.fields[field]}
-              changed={(values, name) => maskChange(values, formName, name)}
-              number
+              changed={(e, result) => formChange(e, result, formName)}
+              showerror
             />
           ))
           }

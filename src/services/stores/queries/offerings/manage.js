@@ -98,8 +98,8 @@ export const getOfferingDetails = gql`
       goldstar {
         isin
         contactId
-        escrowAccount
-        sinkFundAccount
+        esAccountNumber
+        sfAccountNumber
       }
       linkedBank {
         accountNumber
@@ -891,9 +891,8 @@ export const getOfferingDetails = gql`
           investorFee
           maturityDate
           anticipatedPaymentStartDate
+          gsFees
         }
-        gsFees
-        nsFee
         repayment {
           startDate
           completeDate

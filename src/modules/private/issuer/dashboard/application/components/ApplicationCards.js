@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
@@ -45,7 +44,7 @@ export default class ApplicationCards extends Component {
     }
 
     return (
-      <Aux>
+      <>
         <Header as="h3" className={isMobile ? 'mb-30' : ''}>Applications</Header>
         <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
           <Card fluid>
@@ -108,7 +107,7 @@ export default class ApplicationCards extends Component {
           }
         </Card.Group>
         <Route exact path="/app/dashboard/select-application-type" component={ApplicationTypeModal} />
-      </Aux>
+      </>
     );
   }
 }

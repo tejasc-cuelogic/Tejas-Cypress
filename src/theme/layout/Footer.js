@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Grid } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { SocialLinks } from '../shared';
 import NSImage from '../../modules/shared/NSImage';
 
@@ -52,7 +51,7 @@ class Footer extends Component {
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
               <div className="footer-left-nav mb-30">
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                  <Aux path={path}>
+                  <React.Fragment path={path}>
                     <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
                       <Menu.Item header>Resources</Menu.Item>
                       <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
@@ -64,7 +63,7 @@ class Footer extends Component {
                       <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
                       <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
                     </Menu>
-                  </Aux>
+                  </React.Fragment>
                 } */}
                 <Menu
                   text
@@ -84,11 +83,14 @@ class Footer extends Component {
                   {/* } */}
                 </Menu>
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
-                <Aux path={path}>
+                <React.Fragment path={path}>
                   <div className={isTablet && 'mt-20 center-align'}>
                     <NSImage path="secure-horizontal-1.jpg" />
+                    <a href="https://www.aoiplatforms.org/" target="_blank" rel="noopener noreferrer">
+                      <NSImage path="aoip.png" />
+                    </a>
                   </div>
-                </Aux>
+                </React.Fragment>
                 {/* } */}
               </div>
               <div className="footer-social">

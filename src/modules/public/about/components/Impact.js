@@ -1,10 +1,9 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Container, Grid, Divider, Statistic } from 'semantic-ui-react';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Impact = () => (
-  <Aux>
+  <>
     <Container>
       <section>
         <Grid centered>
@@ -202,7 +201,7 @@ const Impact = () => (
         </p>
       </section>
     </Container>
-  </Aux>
+  </>
 );
 
 export default Impact;

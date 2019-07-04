@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Container, Grid, Icon, Responsive, Divider, Button, Card } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
@@ -8,7 +7,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const Summary = props => (
   <section>
     <Container text textAlign={isMobile ? 'left' : 'center'}>
-      <Responsive maxWidth={767} as={Aux}>
+      <Responsive maxWidth={767} as={React.Fragment}>
         <Header as="h2">Education Center</Header>
         <Divider section />
       </Responsive>
