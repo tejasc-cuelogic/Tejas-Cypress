@@ -77,6 +77,7 @@ class IndividualAccountStore {
           }
         }).catch((err) => {
           console.log('Error', err);
+          reject(err);
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
