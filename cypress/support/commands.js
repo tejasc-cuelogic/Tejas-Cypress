@@ -108,6 +108,9 @@ Cypress.Commands.add('formFill', (dataSet) => {
       if (!dataSet[key].skip) {
         cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).type(dataSet[key].value);
       }
+      if (dataSet[key].isEnterEvent) {
+        cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).type('{enter}');
+      }
       if (dataSet[key].showError) {
         cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).blur();
         cy.get(`input[${selector.replace(/["']/g, "")}="${key}"]`).parentsUntil('.field').get('p').should('have.class', 'field-error');
