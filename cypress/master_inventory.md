@@ -136,17 +136,19 @@
 
 - Invest Now 
 	- [ ] Invest for freeze account
-	- [ ] Invalid user login credentials
-	- [ ] Invest when investor not logged in
+	- [X] Invalid user login credentials (Date : **07-04-2018** | By **Vaibhav**)
+	- [X] Invest when investor not logged in (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Invest in partially created account
 	- [ ] Investment with multiple account type selection
 	- [ ] Accreditation popup for parallel offering (506C and 506B)
-	- [ ] Invest when accreditation request pending
-	- [ ] Invest below min investment amount
+	- [X] Invest when accreditation request pending (Date : **07-04-2018** | By **Vaibhav**)
+	- [X] Invest below min investment amount (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Invest above max investment amount
-	- [ ] Update investment limit
+	- [X] Update investment limit (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Check overdraft amount 
-	- [ ] Invest successfully in offering
+	- [X] Invest successfully in offering `CF Type Offering` (Date : **07-04-2018** | By **Vaibhav**)
+	- [] Invest successfully in offering `BD_506C Type Offering`
+	- [] Invest successfully in offering `BD_506B Type Offering`
 
 - Portfolio
 	- [ ] View Agreement

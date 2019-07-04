@@ -8,7 +8,7 @@
   "invalidMinInvestmentAmount": {
     "investmentAmount": {
       "value": "100",
-      "showError": true
+      "isEnterEvent": true
     }
   }
 }
