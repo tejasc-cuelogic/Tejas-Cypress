@@ -84,6 +84,7 @@ export default class Summary extends React.Component {
       isCipExpired,
       signupStatus,
     } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.handleuserIdentity();
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
