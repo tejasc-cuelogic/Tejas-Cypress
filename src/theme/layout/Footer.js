@@ -86,6 +86,9 @@ class Footer extends Component {
                 <React.Fragment path={path}>
                   <div className={isTablet && 'mt-20 center-align'}>
                     <NSImage path="secure-horizontal-1.jpg" />
+                    <a href="https://www.aoiplatforms.org/" target="_blank" rel="noopener noreferrer">
+                      <NSImage path="aoip.png" />
+                    </a>
                   </div>
                 </React.Fragment>
                 {/* } */}
