@@ -492,6 +492,11 @@ export class UserDetailsStore {
     return this.validAccStatus.includes(accDetails.idVerification);
   }
 
+  @computed get isLegalDocsPresent() {
+    return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
+      || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');
+  }
+
   @action
   setDelStatus = (status) => {
     this.deleting = status;

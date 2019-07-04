@@ -44,9 +44,18 @@ export default class Summary extends React.Component {
           this.props.history.push(route);
         } else {
           this.props.uiStore.setProgress();
-          this.handleSubmitAccount();
+          this.handleLegalDocsBeforeSubmit();
         }
       });
+  }
+
+  handleLegalDocsBeforeSubmit = () => {
+    const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
+    if (!isUserVerified && !isLegalDocsPresent) {
+      this.props.history.push('/app/summary/identity-verification/1');
+    } else {
+      this.handleSubmitAccount();
+    }
   }
 
   handleSubmitAccount = () => {
@@ -72,18 +81,15 @@ export default class Summary extends React.Component {
       signupStatus,
     } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
+
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.handleuserIdentity();
-      // this.props.history.push('/app/summary/identity-verification/0');
-      // Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else if (isCipExpired) {
-      // this.props.history.push('/app/summary/identity-verification/0');
-      // Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.handleuserIdentity();
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.handleSubmitAccount();
+      this.handleLegalDocsBeforeSubmit();
     }
   }
 
