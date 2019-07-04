@@ -16,6 +16,9 @@
 		height: calc(100vh - 72px);
 		overflow-y:auto;
 		background-color:@neutral-offwhite;
+		@media only screen and (max-width : @largestMobileScreen){
+			height: auto;
+		}
 		.ui.vertical.segment.content{
 			padding:0;
 			min-height:~"calc(100vh - 58px)";
