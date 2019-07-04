@@ -16,11 +16,6 @@ export const typeOtpCode = () => {
   });
 };
 
-export const applicationUnlock = () => {
-  cy.get('input[name="password"]').type('fourroses');
-  cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
-}
-
 export const clickonDashboard = () => {
   cy.wait(7000)
   cy.get('.header-wrap').get('button.button').contains('Dashboard').click({ force: true });
@@ -52,7 +47,6 @@ export const enterCodeAndConfirm = () => {
   typeOtpCode();
   cy.wait(100);
   cy.get('form').find('button').contains('Confirm').click();
-
   cy.wait('@confirm');
   cy.wait(500);
 };

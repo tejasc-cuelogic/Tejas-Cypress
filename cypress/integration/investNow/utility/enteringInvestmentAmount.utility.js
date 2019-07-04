@@ -30,12 +30,22 @@ export const validInvestmentAmount = () => {
   const investmentAmountFloat = investmentAction === 'UPDATE' ? money.add(previousInvestedAmount, '100.00') : '1000';
   const investmentAmount = Math.round(investmentAmountFloat);
   cy.wait(300);
-  let inputFieldObj = [
-    { key: 'name', value: "investmentAmount" }
-  ];
-  clearFormInput(inputFieldObj);
-  cy.get('input[name="investmentAmount"]').type(investmentAmount);
-  cy.get('input[name="investmentAmount"]').type('{enter}');
+  // let inputFieldObj = [
+  //   { key: 'name', value: "investmentAmount" }
+  // ];
+  // clearFormInput(inputFieldObj);
+  // cy.get('input[name="investmentAmount"]').type(investmentAmount);
+  // cy.get('input[name="investmentAmount"]').type('{enter}');
+
+  const dataSet = {
+    investmentAmount: {
+      selector: 'name',
+      value: investmentAmount,
+      isEnterEvent: true,
+    }
+  };
+  cy.clearFormField(dataSet);
+  cy.formFill(dataSet);
   cy.wait('@investNowGeneratePurchaseAgreement');
 };
 
@@ -114,7 +124,8 @@ export const enteringInvestmentAmount = () => {
 
 export const checkAndStoreInvestmentProcess = async () => {
   cy.get('.loader').should('not.contain', 'Loading..');
-  cy.get('.multistep-modal').find('.multistep.content').get('h4').contains('Enter new investment amount').should('be.visible');
+  // cy.get('.multistep-modal').find('.multistep.content').get('h4').contains('Enter new investment amount').should('be.visible');
+  cy.get('.multistep-modal').find('.multistep.content').get('form').should('have.class', 'ui');
   let currentAction = await getInvestmentAction();
   const investmentAction = currentAction;
   if (investmentAction === 'UPDATE') {
@@ -131,31 +142,32 @@ export const checkAndStoreInvestmentProcess = async () => {
 }
 
 export const invalidMultipleInvestmentAmount = () => {
-  let inputFieldObj = [
-    { key: 'name', value: "investmentAmount" }
-  ];
-  clearFormInput(inputFieldObj);
-  cy.get('input[name="investmentAmount"]').type('101');
-  cy.get('input[name="investmentAmount"]').blur();
-  cy.wait(500);
-  cy.get('input[name="investmentAmount"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
+  const dataSet = {
+    investmentAmount: {
+      selector: 'name',
+      value: '101',
+      showError: true
+    }
+  };
+  cy.clearFormField(dataSet);
+  cy.formFill(dataSet);
 }
 
 export const invalidMinInvestmentAmount = () => {
   registerApiCall('investNowGeneratePurchaseAgreement');
-  let inputFieldObj = [
-    { key: 'name', value: "investmentAmount" }
-  ];
-  clearFormInput(inputFieldObj);
   const minInvestmentAmount = localStorage.getItem('minInvestAmount');
   const enterdMinValidAmount = '100';
   const comapirdWithMinInvetment = money.cmp(enterdMinValidAmount, minInvestmentAmount).toString();
-  cy.get('input[name="investmentAmount"]').type(enterdMinValidAmount);
-  cy.get('input[name="investmentAmount"]').type('{enter}');
-  cy.wait(500);
-  if (money.isNegative(comapirdWithMinInvetment)) {
-    cy.get('input[name="investmentAmount"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
-  }
+  const dataSet = {
+    investmentAmount: {
+      selector: 'name',
+      value: enterdMinValidAmount,
+      isEnterEvent: true,
+      showError: money.isNegative(comapirdWithMinInvetment)
+    }
+  };
+  cy.clearFormField(dataSet);
+  cy.formFill(dataSet);
 }
 
 export const getInvestmentAction = () => {
