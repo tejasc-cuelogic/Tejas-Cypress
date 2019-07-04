@@ -20,7 +20,7 @@ class PrivateLayout extends Component {
     }
     return (
       <>
-      {isInvestor
+      {isMobile && isInvestor
       && (
         <Link to="/"><Logo
           dataSrc="LogoGreenGrey"
