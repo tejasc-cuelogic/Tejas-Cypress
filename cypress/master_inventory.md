@@ -2,9 +2,10 @@
 
 **Note:** Date format need to be **mm/dd/yyyy**
 
+
 - API
 	- Investor
-		- [X] Matching `seedTestUsers` data values with `getMigratedUserAuditInfo` data (Date : **07-04-2018**)
+		- [X] Matching `seedTestUsers` data values with `getMigratedUserAuditInfo` data (Date : **07-04-2018** | By **Chetan and Pratik**)
 
 
 - Authentication
