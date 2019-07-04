@@ -43,6 +43,7 @@ export default class Summary extends React.Component {
           this.props.identityStore.setIdentityQuestions();
           this.props.history.push(route);
         } else {
+          this.props.uiStore.setProgress();
           this.handleSubmitAccount();
         }
       });
