@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, Link, withRouter } from 'react-router-dom';
 // Embed
 import { inject, observer } from 'mobx-react';
@@ -97,10 +96,10 @@ class HowItWorks extends Component {
     const isTablet = document.documentElement.clientWidth < 992;
 
     return (
-      <Aux>
+      <>
         <section>
           <Container>
-            <Responsive maxWidth={767} as={Aux}>
+            <Responsive maxWidth={767} as={React.Fragment}>
               <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
               <div className={`${isMobile ? 'left-align' : 'center-align'}`}>
                 <Button.Group size={isMobile && 'tiny'}>
@@ -111,10 +110,7 @@ class HowItWorks extends Component {
               <Divider section />
             </Responsive>
             <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
-              Get flexible financing that doesn’t
-              {' '}
-              <Responsive minWidth={768} as="br" />
-cost you everything.
+              Get flexible financing that doesn’t <Responsive minWidth={768} as="br" />cost you everything.
             </Header>
             <Grid stackable columns={3} doubling>
               <Grid.Column className="info-grid">
@@ -166,11 +162,11 @@ cost you everything.
           </Container>
           {!isMobile
             ? (
-              <Container>
-                <Grid centered stackable relaxed={isTablet ? '' : 'very'}>
-                  {businesses.map((row, index) => (
-                    <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
-                      {
+<Container>
+              <Grid centered stackable relaxed={isTablet ? '' : 'very'}>
+                {businesses.map((row, index) => (
+                  <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
+                    {
                   row.map(b => (
                     <Grid.Column textAlign="center" width={isTablet ? 5 : 4}>
                       <NSImage path={b.image} centered />
@@ -179,31 +175,31 @@ cost you everything.
                     </Grid.Column>
                   ))
                 }
-                    </Grid.Row>
-                  ))
+                  </Grid.Row>
+                ))
             }
-                </Grid>
-              </Container>
+              </Grid>
+            </Container>
             )
             : (
-              <Aux>
-                <Container>
-                  <NsCarousel {...settings}>
-                    {businesses.map(row => (
-                      row.map(b => (
-                        <Grid.Row>
-                          <Grid.Column className="center-align">
-                            <NSImage path={b.image} centered />
-                            <Header as="h5">{b.title}</Header>
-                            <p>{b.description}</p>
-                          </Grid.Column>
-                        </Grid.Row>
-                      ))
+<>
+              <Container>
+                <NsCarousel {...settings}>
+                  {businesses.map(row => (
+                    row.map(b => (
+                  <Grid.Row>
+                    <Grid.Column className="center-align">
+                      <NSImage path={b.image} centered />
+                      <Header as="h5">{b.title}</Header>
+                      <p>{b.description}</p>
+                    </Grid.Column>
+                  </Grid.Row>
                     ))
+                  ))
               }
-                  </NsCarousel>
-                </Container>
-              </Aux>
+                </NsCarousel>
+              </Container>
+            </>
             )
       }
         </section>
@@ -220,9 +216,7 @@ cost you everything.
                     <Item.Content verticalAlign="middle">
                       <Item.Header as={isMobile ? 'h3' : 'h2'}>{t.title}</Item.Header>
                       <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
-                    “
-                        {t.description}
-”
+                    “{t.description}”
                       </Item.Description>
                       <Item.Extra className="testimonial-user-details">
                         <p><b>{t.name}</b></p>
@@ -327,7 +321,7 @@ cost you everything.
           </Container>
         </section>
         <Route path="/business/how-it-works/video" render={props => <VideoModal {...props} videoDetails={nsvideos} />} />
-      </Aux>
+      </>
     );
   }
 }

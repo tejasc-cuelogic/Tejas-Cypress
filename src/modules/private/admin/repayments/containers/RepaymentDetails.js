@@ -40,7 +40,7 @@ export default class RepaymentDetails extends Component {
                 filters={filters}
                 more="no"
                 addon={(
-                  <Grid.Column width={5} textAlign="right">
+<Grid.Column width={5} textAlign="right">
                     <Button primary floated="right">Process Payments</Button>
                     <Button secondary floated="right">Save as Draft</Button>
                   </Grid.Column>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { matchPath } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Form, Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
@@ -18,7 +17,7 @@ class PrivateLayout extends Component {
       return <NotFound />;
     }
     return (
-      <Aux>
+      <>
         <div className="page-header-section">
           <Grid columns="equal" stackable>
             <Grid.Row>
@@ -35,7 +34,7 @@ class PrivateLayout extends Component {
                   <span className="unread-count">3</span> */}
                 </span>
               ) : (
-                <Grid.Column only="large screen" width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
+                  <Grid.Column only="large screen" width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated={!isMobile ? 'right' : ''} textAlign={!isMobile ? 'right' : 'center'}>{this.props.P4}</Grid.Column>
               )
               }
             </Grid.Row>
@@ -46,7 +45,7 @@ class PrivateLayout extends Component {
         }
         {this.props.P1
           && (
-          <div className="search-filters">
+<div className="search-filters">
             <Form>
               <Grid stackable>
                 <Grid.Row>
@@ -63,7 +62,7 @@ class PrivateLayout extends Component {
         <div className={`${(overrideContainerClass.find(item => matchPath(location.pathname, { path: `/app/${item}` }))) ? '' : 'content-spacer'}`}>
           {this.props.children}
         </div>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider, Icon, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { startsWith } from 'lodash';
 import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
@@ -269,12 +268,11 @@ export default class KeyTerms extends Component {
             }
           </Header>
           {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
-            <Aux>
-              <Header as="h6">
-                {`Term ${index + 1}`}
+            <>
+              <Header as="h6">{`Term ${index + 1}`}
                 {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1
                 && (
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
                 )
@@ -300,7 +298,7 @@ export default class KeyTerms extends Component {
                   />
                 </Form.Field>
               </div>
-            </Aux>
+            </>
           ))}
           <Header as="h4">Legal</Header>
           <Form.Group widths={3}>

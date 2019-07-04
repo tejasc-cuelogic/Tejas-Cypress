@@ -109,8 +109,8 @@ test:review:
     expire_in: 4 hrs
     when: always
     paths:
-      - cypress/screenshots
-      - cypress/videos
+      - cypress/reports/screenshots
+      - cypress/reports/videos
   script:
     - npm install
     - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run

@@ -56,25 +56,25 @@ export default class CrowdPay extends Component {
         subNav
         // subNavAddon={{ data: this.representAddon(summary) }}
         P1={(
-          <ByKeyword
-            w={[8]}
-            placeholder="Search by Name or E-mail address"
-            toggleSearch={this.toggleSearch}
-            requestState={requestState}
-            filters={filters}
-            change={this.executeSearch}
-          />
+<ByKeyword
+  w={[8]}
+  placeholder="Search by Name or E-mail address"
+  toggleSearch={this.toggleSearch}
+  requestState={requestState}
+  filters={filters}
+  change={this.executeSearch}
+/>
 )}
         P2={(
-          <Filters
-            requestState={requestState}
-            filters={filters}
-            setSearchParam={this.setSearchParam}
-            executeSearch={this.executeSearch}
-            change={this.change}
-            FILTER_FRM={FILTER_FRM}
-            fChange={fChange}
-          />
+<Filters
+  requestState={requestState}
+  filters={filters}
+  setSearchParam={this.setSearchParam}
+  executeSearch={this.executeSearch}
+  change={this.change}
+  FILTER_FRM={FILTER_FRM}
+  fChange={fChange}
+/>
 )}
       >
         <Route path={`${match.url}/:type`} component={AllCrowdPay} />

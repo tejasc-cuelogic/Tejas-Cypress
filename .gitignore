@@ -14,11 +14,12 @@ build
 npm-debug.log
 .idea
 .eslintrc
+cypress.env.json
 
 src/assets/app.css
 # cypress screenshots and videos
-cypress/screenshots/*
-cypress/videos/*
+cypress/reports/screenshots/*
+cypress/reports/videos/*
 
 # semantic ui based theme (less)
 src/assets/semantic/*

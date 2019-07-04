@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Grid, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup, FormCheckbox, MaskedInput } from '../../../../../theme/form';
@@ -21,7 +20,7 @@ export default class PreQualBusiness extends Component {
     const { fields } = BUSINESS_APP_FRM;
     const { hideFields } = this.props;
     return (
-      <Aux>
+      <>
         <FormElementWrap
           hideFields={hideFields}
           header="What is your Business Model?*"
@@ -70,7 +69,7 @@ export default class PreQualBusiness extends Component {
               <div className="field-wrap">
                 {getFranchiseCondition
                   && (
-                  <Aux>
+<>
                     <Header as="h6" content="Are you an existing or previous franchise holder?*" />
                     <FormRadioGroup
                       disabled={preQualFormDisabled}
@@ -80,12 +79,12 @@ export default class PreQualBusiness extends Component {
                       containerclassname="button-radio"
                     />
                     <Divider section hidden />
-                  </Aux>
+                  </>
                   )
                 }
                 {getBusinessTypeCondtion
                   && (
-                  <Aux>
+<>
                     <Header as="h6" content="How long has the existing business been operating?" />
                     <Form.Group widths="equal">
                       {
@@ -106,7 +105,7 @@ export default class PreQualBusiness extends Component {
                       }
                     </Form.Group>
                     <Divider section hidden />
-                  </Aux>
+                  </>
                   )
                 }
                 <Experience
@@ -131,7 +130,7 @@ export default class PreQualBusiness extends Component {
           <Grid>
             {getBusinessTypeCondtion
               && (
-              <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
+<Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
                 <Header as={hideFields ? 'h4' : 'h3'}>
                   Previous year
                   <Header.Subheader>
@@ -195,7 +194,7 @@ export default class PreQualBusiness extends Component {
           preQualFormDisabled={preQualFormDisabled}
           businessAppEleChange={businessAppEleChange}
         />
-      </Aux>
+      </>
     );
   }
 }

@@ -12,7 +12,7 @@ export default class ChangePassword extends Component {
   componentWillMount() {
     const loginData = mapValues(this.props.authStore.LOGIN_FRM.fields, f => f.value);
     if (this.props.refModule !== 'security' && loginData.email === '') {
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     }
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.resetForm('CHANGE_PASS_FRM');
@@ -25,7 +25,7 @@ export default class ChangePassword extends Component {
     authActions[method](this.props.refModule)
       .then(() => {
         authActions.logout('updatedPassword').then(() => {
-          this.props.history.push('/auth/login');
+          this.props.history.push('/login');
         });
       })
       .catch((err) => {
@@ -56,37 +56,37 @@ export default class ChangePassword extends Component {
               ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
                 (field === 'newPasswd')
                   ? (
-                    <FormPasswordStrength
-                      key="newPasswd"
-                      name="newPasswd"
-                      type="password"
-                      iconDisplay
-                      minLength={8}
-                      minScore={4}
-                      tooShortWord="Weak"
-                      scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                      inputProps={{
-                        name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd',
-                      }}
-                      changed={changePassChange}
-                      fielddata={CHANGE_PASS_FRM.fields[field]}
-                    />
+<FormPasswordStrength
+  key="newPasswd"
+  name="newPasswd"
+  type="password"
+  iconDisplay
+  minLength={8}
+  minScore={4}
+  tooShortWord="Weak"
+  scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+  inputProps={{
+    name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd',
+  }}
+  changed={changePassChange}
+  fielddata={CHANGE_PASS_FRM.fields[field]}
+/>
                   )
                   : (
-                    <FormInput
-                      key={field}
-                      type={pwdInputType}
+<FormInput
+  key={field}
+  type={pwdInputType}
                     // icon={(field === 'oldPasswd') ? togglePasswordType() : null}
-                      name={field}
-                      fielddata={CHANGE_PASS_FRM.fields[field]}
-                      changed={changePassChange}
-                    />
+  name={field}
+  fielddata={CHANGE_PASS_FRM.fields[field]}
+  changed={changePassChange}
+/>
                   )
               ))
             }
             {errors
               && (
-              <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
                 <ListErrors errors={get(errors, 'code') === 'NotAuthorizedException' ? ['Incorrect old password'] : [get(errors, 'message')]} />
               </Message>
               )

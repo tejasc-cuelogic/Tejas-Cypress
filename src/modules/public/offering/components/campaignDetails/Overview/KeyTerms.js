@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -25,7 +24,7 @@ class KeyTerms extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
-      <Aux>
+      <>
         <Header as="h3" className={`${isMobile ? 'mb-10' : 'mb-30'} anchor-wrap`}>
           Investment Highlights
           <span className="anchor" id="investment-highlights" />
@@ -33,8 +32,7 @@ class KeyTerms extends Component {
         <Table basic="very" className="key-terms-table neutral-text">
           <Table.Body>
             <Table.Row verticalAlign="top">
-              <Table.Cell>
-                <b>Issuer</b>
+              <Table.Cell><b>Issuer</b>
               </Table.Cell>
               <Table.Cell className="grey-header">
                 {get(campaign, 'keyTerms.legalBusinessName')
@@ -42,22 +40,18 @@ class KeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell>
-                <b>
-Type of Offering
-                  {' '}
-                </b>
+              <Table.Cell><b>Type of Offering {' '}</b>
                 { get(campaign, 'regulation')
                   && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                   ? (
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={
+<Popup
+  trigger={<Icon name="help circle" color="green" />}
+  content={
                         CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                       }
-                      hoverable
-                      position="top center"
-                    />
+  hoverable
+  position="top center"
+/>
                   ) : ''
                 }
               </Table.Cell>
@@ -76,13 +70,9 @@ Type of Offering
             </Table.Row>
             {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
             && (
-            <Aux>
+            <>
               <Table.Row verticalAlign="top">
-                <Table.Cell width={5} className="neutral-text">
-                  <b>
-Interest Rate
-                    {' '}
-                  </b>
+                <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
                     content={`Interest payment is calculated at a gross annualized interest rate of ${campaign && campaign.keyTerms && campaign.keyTerms.interestRate
@@ -97,27 +87,18 @@ Interest Rate
                 }
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
             )
             }
             {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
             && (
-            <Aux>
+            <>
               <Table.Row verticalAlign="top">
-                <Table.Cell>
-                  <b>Multiple</b>
-                  {' '}
+                <Table.Cell><b>Multiple</b>{' '}
                   <Popup
                     hoverable
                     trigger={<Icon name="help circle" color="green" />}
-                    content={(
-                      <span>
-The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the
-                        <Link to={`${this.props.refLink}/investment-details/#key-terms`}>Key Terms</Link>
-                        {' '}
-for more details.
-                      </span>
-)}
+                    content={(<span>The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the <Link to={`${this.props.refLink}/investment-details/#key-terms`}>Key Terms</Link> for more details.</span>)}
                     position="top center"
                   />
                 </Table.Cell>
@@ -126,19 +107,11 @@ for more details.
                 </Table.Cell>
               </Table.Row>
               <Table.Row verticalAlign="top">
-                <Table.Cell collapsing>
-                  <b>Revenue Sharing Percentage</b>
-                  {' '}
+                <Table.Cell collapsing><b>Revenue Sharing Percentage</b>{' '}
                   <Popup
                     hoverable
                     trigger={<Icon name="help circle" color="green" />}
-                    content={(
-                      <span>
-To learn more about how Revenue Sharing works, check out the
-                        <Link to="/resources/education-center/investor/how-revenue-sharing-notes-work">Education Center</Link>
-.
-                      </span>
-)}
+                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center/investor/how-revenue-sharing-notes-work">Education Center</Link>.</span>)}
                     position="top center"
                   />
                 </Table.Cell>
@@ -146,31 +119,29 @@ To learn more about how Revenue Sharing works, check out the
                   {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? `${get(campaign, 'keyTerms.revSharePercentage')}${get(campaign, 'keyTerms.revSharePercentage').includes('%') ? '' : '%'}` : '-'}
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
             )
             }
             {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
               ? (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={5}>
-                    <b>Maturity</b>
-                    {' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                      position="top center"
-                    />
-                  </Table.Cell>
-                  <Table.Cell className="grey-header">
-                    {maturityMonth
-                      ? `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
-                      : '-'
+<Table.Row verticalAlign="top">
+                <Table.Cell width={5}><b>Maturity</b>{' '}
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                    position="top center"
+                  />
+                </Table.Cell>
+                <Table.Cell className="grey-header">
+                  {maturityMonth
+                    ? `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                    : '-'
                   }
-                  </Table.Cell>
-                </Table.Row>
+                </Table.Cell>
+              </Table.Row>
               )
               : (
-                <Aux>
+                <>
                   {/* <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Total Round Size{' '}</b>
                   </Table.Cell>
@@ -178,7 +149,7 @@ To learn more about how Revenue Sharing works, check out the
                     NA
                   </Table.Cell>
                 </Table.Row> */}
-                  {/* {get(campaign, 'keyTerms.premoneyValuation') &&
+                {/* {get(campaign, 'keyTerms.premoneyValuation') &&
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
                   </Table.Cell>
@@ -191,14 +162,10 @@ To learn more about how Revenue Sharing works, check out the
                   </Table.Cell>
                 </Table.Row>
                 } */}
-                  {get(campaign, 'keyTerms.unitPrice')
+                {get(campaign, 'keyTerms.unitPrice')
                 && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text">
-                    <b>
-Share Price
-                      {' '}
-                    </b>
+<Table.Row verticalAlign="top">
+                  <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
@@ -208,7 +175,7 @@ Share Price
                 </Table.Row>
                 )
                 }
-                </Aux>
+                </>
               )
             }
             <Table.Row verticalAlign="top">
@@ -225,7 +192,7 @@ Share Price
           View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
-      </Aux>
+      </>
     );
   }
 }

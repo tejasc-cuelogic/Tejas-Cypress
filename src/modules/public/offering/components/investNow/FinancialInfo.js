@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -73,26 +72,19 @@ class FinancialInfo extends Component {
     }
 
     return (
-      <Aux>
+      <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest
           && (
-          <Aux>
-            <Header as="h4" textAlign="center" className="grey-header">
-Your current investment in
-              {offerName}
-:
-              <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span>
-            </Header>
+<>
+            <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
             <Divider section className="small" />
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
             {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
               && (
-              <p>
-                Your investment limit:
-                {' '}
-                {' '}
+<p>
+                Your investment limit: {' '}
                 {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
                 <Popup
                   wide
@@ -102,14 +94,8 @@ Your current investment in
                       Under Regulation Crowdfunding, you have a limit as to how much you may invest
                       in Reg CF offerings over a 12-month period.
                        This limit is calculated based on your
-            annual income and net worth.
-                      {' '}
-                      <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link>
-                      {' '}
-for how this is calculated. If you believe
-            your limit is innacurate, please update your
-                      {' '}
-                      <Link to="/app/account-settings/profile-data">Investor Profile</Link>
+            annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
+            your limit is innacurate, please update your <Link to="/app/account-settings/profile-data">Investor Profile</Link>
                     </span>
                   )}
                   position="top center"
@@ -119,20 +105,20 @@ for how this is calculated. If you believe
               </p>
               )
             }
-          </Aux>
+          </>
           )
         }
         {/* {!this.props.changeInvest && currentInvestmentStatus !== ('BD_506C' || 'BD_506B') && */}
         {!this.props.changeInvest && !includes(['BD_506C', 'BD_506B'], currentInvestmentStatus)
           && (
-          <InvestmentLimit
-            changeInvest={this.props.changeInvest}
-            match={this.props.match}
-            refLink={refLink}
-            getCurrentLimitForAccount={currentInvestmentLimit}
-            setStepToBeRendered={setStepToBeRendered}
-            diffLimitAmount={getDiffInvestmentLimitAmount}
-          />
+<InvestmentLimit
+  changeInvest={this.props.changeInvest}
+  match={this.props.match}
+  refLink={refLink}
+  getCurrentLimitForAccount={currentInvestmentLimit}
+  setStepToBeRendered={setStepToBeRendered}
+  diffLimitAmount={getDiffInvestmentLimitAmount}
+/>
           )
         }
         <Form error size="huge">
@@ -151,24 +137,14 @@ for how this is calculated. If you believe
         </Form>
         {this.props.changeInvest && getDiffInvestmentLimitAmount
           && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
-          ? (
-            <p className="mt-10">
-Your investment will be
-              {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'}
-              {' '}
-by
-              <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span>
-            </p>
-          ) : ''
+          ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }
         <Divider hidden />
         {// isValidInvestAmtInOffering &&
           estReturnVal && estReturnVal !== '-'
             && investmentAmount
             ? (
-              <Header as="h4">
-Total Investment Return: Up to
-                {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
+<Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
                 <Popup
                   wide
                   trigger={<Icon className="ns-help-circle" color="green" />}
@@ -183,13 +159,10 @@ Total Investment Return: Up to
           // isValidInvestAmtInOffering &&
           validBonusRewards && validBonusRewards.length > 0
           && validBonusRewards.map(reward => (
-            <p className="grey-header">
-+
-              {reward.title}
-            </p>
+            <p className="grey-header">+ {reward.title}</p>
           ))
         }
-      </Aux>
+      </>
     );
   }
 }

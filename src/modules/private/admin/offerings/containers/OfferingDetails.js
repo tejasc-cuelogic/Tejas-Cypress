@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { find, get } from 'lodash';
-import Aux from 'react-aux';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -50,7 +49,7 @@ export default class OfferingDetails extends Component {
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
-    const isDev = ['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+    const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     navItems = navStore.filterByAccess(
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
@@ -66,7 +65,7 @@ export default class OfferingDetails extends Component {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));
     }
     return (
-      <Aux>
+      <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
             <Header as="h3">
@@ -76,16 +75,10 @@ export default class OfferingDetails extends Component {
                 ))}
               <Header.Subheader className="mt-10">
                 <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}/overview`}>
-                  <Icon className="ns-view" />
-                  <b>Preview the offering page</b>
+                  <Icon className="ns-view" /><b>Preview the offering page</b>
                 </Link>
                 {offer.stage === 'CREATION'
-                  && (
-                  <Link to={`${match.url}/editPoc`} className="pull-right">
-                    <Icon className="ns-pencil" />
-Edit
-                  </Link>
-                  )
+                  && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
                 }
               </Header.Subheader>
             </Header>
@@ -99,11 +92,11 @@ Edit
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
                     return (
-                      <Route
-                        key={item.to}
-                        path={`${match.url}/${item.to}`}
-                        render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
-                      />
+                        <Route
+                          key={item.to}
+                          path={`${match.url}/${item.to}`}
+                          render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} resourceId={offeringid} offeringId={offeringid} />}
+                        />
                     );
                   })
                 }
@@ -113,7 +106,7 @@ Edit
         </Modal>
         <Route path={`${match.url}/editPoc`} render={props => <EditPoc stage={offer.stage} refLink={match.url} {...props} />} />
         <Route path={`${match.url}/editOffering`} render={props => <EditOffering refLink={match.url} {...props} />} />
-      </Aux>
+      </>
     );
   }
 }

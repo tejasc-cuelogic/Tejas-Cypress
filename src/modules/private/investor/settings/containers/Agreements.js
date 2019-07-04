@@ -20,16 +20,16 @@ export default class Agreements extends Component {
       <div>
         {getNavItems && getNavItems.length
           ? (
-            <Grid>
-              <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
-                <SecondaryMenu secondary vertical match={match} navItems={getNavItems} />
-              </Grid.Column>
-              <Grid.Column floated="right" widescreen={12} largeScreen={11} computer={12} tablet={12} mobile={16}>
-                <Switch>
-                  <Route exact path={`${match.url}/:agreementKey?`} component={AgreementsPdfLoader} />
-                </Switch>
-              </Grid.Column>
-            </Grid>
+<Grid>
+            <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
+              <SecondaryMenu secondary vertical match={match} navItems={getNavItems} />
+            </Grid.Column>
+            <Grid.Column floated="right" widescreen={12} largeScreen={11} computer={12} tablet={12} mobile={16}>
+              <Switch>
+                <Route exact path={`${match.url}/:agreementKey?`} component={AgreementsPdfLoader} />
+              </Switch>
+            </Grid.Column>
+          </Grid>
           ) : <EmptyDataSet title="No data available for agreements." />
         }
       </div>

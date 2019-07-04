@@ -1,6 +1,6 @@
-/** *****************************
+/*******************************
           Update Repos
-****************************** */
+*******************************/
 
 /*
 
@@ -12,90 +12,99 @@
 
 */
 
-const
-  gulp = require('gulp');
+var
+  gulp           = require('gulp'),
 
-// node dependencies
-const console = require('better-console');
-const fs = require('fs');
-const path = require('path');
-const git = require('gulp-git');
-const githubAPI = require('github');
-const requireDotFile = require('require-dot-file');
+  // node dependencies
+  console        = require('better-console'),
+  fs             = require('fs'),
+  path           = require('path'),
+  git            = require('gulp-git'),
+  githubAPI      = require('github'),
+  requireDotFile = require('require-dot-file'),
 
-// admin files
-const github = require('../../config/admin/github.js');
-const release = require('../../config/admin/release');
-const project = require('../../config/project/release');
+  // admin files
+  github         = require('../../config/admin/github.js'),
+  release        = require('../../config/admin/release'),
+  project        = require('../../config/project/release'),
 
 
-// oAuth configuration for GitHub
-const oAuth = fs.existsSync(`${__dirname}/../../config/admin/oauth.js`)
-  ? require('../../config/admin/oauth')
-  : false;
+  // oAuth configuration for GitHub
+  oAuth          = fs.existsSync(__dirname + '/../../config/admin/oauth.js')
+    ? require('../../config/admin/oauth')
+    : false,
 
-// shorthand
-const { version } = project;
-module.exports = function (callback) {
-  let
-    index = -1;
-  const total = release.components.length;
-  let timer;
-  let stream;
-  let stepRepo;
-  if (!oAuth) {
+  // shorthand
+  version = project.version
+;
+
+module.exports = function(callback) {
+
+  var
+    index = -1,
+    total = release.components.length,
+    timer,
+    stream,
+    stepRepo
+  ;
+
+  if(!oAuth) {
     console.error('Must add oauth token for GitHub in tasks/config/admin/oauth.js');
     return;
   }
 
   // Do Git commands synchronously per component, to avoid issues
-  stepRepo = function () {
-    index += 1;
-    if (index >= total) {
+  stepRepo = function() {
+
+    index = index + 1;
+    if(index >= total) {
       callback();
       return;
     }
 
-    const
-      component = release.components[index];
-    const outputDirectory = path.resolve(path.join(release.outputRoot, component));
-    const capitalizedComponent = component.charAt(0).toUpperCase() + component.slice(1);
-    const repoName = release.componentRepoRoot + capitalizedComponent;
+    var
+      component            = release.components[index],
+      outputDirectory      = path.resolve(path.join(release.outputRoot, component)),
+      capitalizedComponent = component.charAt(0).toUpperCase() + component.slice(1),
+      repoName             = release.componentRepoRoot + capitalizedComponent,
 
-    const gitURL = `https://github.com/${release.org}/${repoName}.git`;
-    const repoURL = `https://github.com/${release.org}/${repoName}/`;
+      gitURL               = 'https://github.com/' + release.org + '/' + repoName + '.git',
+      repoURL              = 'https://github.com/' + release.org + '/' + repoName + '/',
 
-    const commitArgs = (oAuth.name !== undefined && oAuth.email !== undefined)
-      ? `--author "${oAuth.name} <${oAuth.email}>"`
-      : '';
+      commitArgs = (oAuth.name !== undefined && oAuth.email !== undefined)
+        ? '--author "' + oAuth.name + ' <' + oAuth.email + '>"'
+        : '',
 
-    const componentPackage = fs.existsSync(`${outputDirectory}package.json`)
-      ? require(`${outputDirectory}package.json`)
-      : false;
+      componentPackage = fs.existsSync(outputDirectory + 'package.json' )
+        ? require(outputDirectory + 'package.json')
+        : false,
 
-    const isNewVersion = (version && componentPackage.version != version);
+      isNewVersion  = (version && componentPackage.version != version),
 
-    const commitMessage = (isNewVersion)
-      ? `Updated component to version ${version}`
-      : 'Updated files from main repo';
+      commitMessage = (isNewVersion)
+        ? 'Updated component to version ' + version
+        : 'Updated files from main repo',
 
-    const gitOptions = { cwd: outputDirectory };
-    const commitOptions = { args: commitArgs, cwd: outputDirectory };
-    const releaseOptions = { tag_name: version, owner: release.org, repo: repoName };
+      gitOptions      = { cwd: outputDirectory },
+      commitOptions   = { args: commitArgs, cwd: outputDirectory },
+      releaseOptions  = { tag_name: version, owner: release.org, repo: repoName },
 
-    const fileModeOptions = { args: 'config core.fileMode false', cwd: outputDirectory };
-    const usernameOptions = { args: `config user.name "${oAuth.name}"`, cwd: outputDirectory };
-    const emailOptions = { args: `config user.email "${oAuth.email}"`, cwd: outputDirectory };
-    const versionOptions = { args: 'rev-parse --verify HEAD', cwd: outputDirectory };
+      fileModeOptions = { args : 'config core.fileMode false', cwd: outputDirectory },
+      usernameOptions = { args : 'config user.name "' + oAuth.name + '"', cwd: outputDirectory },
+      emailOptions    = { args : 'config user.email "' + oAuth.email + '"', cwd: outputDirectory },
+      versionOptions =  { args : 'rev-parse --verify HEAD', cwd: outputDirectory },
 
-    const localRepoSetup = fs.existsSync(path.join(outputDirectory, '.git'));
-    const canProceed = true;
-    console.info(`Processing repository:${outputDirectory}`);
+      localRepoSetup  = fs.existsSync(path.join(outputDirectory, '.git')),
+      canProceed      = true
+    ;
+
+
+    console.info('Processing repository:' + outputDirectory);
 
     function setConfig() {
-      git.exec(fileModeOptions, () => {
-        git.exec(usernameOptions, () => {
-          git.exec(emailOptions, () => {
+      git.exec(fileModeOptions, function() {
+        git.exec(usernameOptions, function () {
+          git.exec(emailOptions, function () {
             commitFiles();
           });
         });
@@ -106,27 +115,29 @@ module.exports = function (callback) {
     // standard path
     function commitFiles() {
       // commit files
-      console.info(`Committing ${component} files`, commitArgs);
+      console.info('Committing ' + component + ' files', commitArgs);
       gulp.src('./', gitOptions)
         .pipe(git.add(gitOptions))
         .pipe(git.commit(commitMessage, commitOptions))
-        .on('error', (error) => {
+        .on('error', function(error) {
           // canProceed = false; bug in git commit <https://github.com/stevelacy/gulp-git/issues/49>
         })
-        .on('finish', (callback) => {
-          if (canProceed) {
+        .on('finish', function(callback) {
+          if(canProceed) {
             pushFiles();
-          } else {
+          }
+          else {
             console.info('Nothing new to commit');
             nextRepo();
           }
-        });
+        })
+      ;
     }
 
     // push changes to remote
     function pushFiles() {
-      console.info(`Pushing files for ${component}`);
-      git.push('origin', 'master', { args: '', cwd: outputDirectory }, (error) => {
+      console.info('Pushing files for ' + component);
+      git.push('origin', 'master', { args: '', cwd: outputDirectory }, function(error) {
         console.info('Push completed successfully');
         getSHA();
       });
@@ -134,7 +145,7 @@ module.exports = function (callback) {
 
     // gets SHA of last commit
     function getSHA() {
-      git.exec(versionOptions, (error, version) => {
+      git.exec(versionOptions, function(error, version) {
         version = version.trim();
         createRelease(version);
       });
@@ -142,10 +153,10 @@ module.exports = function (callback) {
 
     // create release on GitHub.com
     function createRelease(version) {
-      if (version) {
+      if(version) {
         releaseOptions.target_commitish = version;
       }
-      github.repos.createRelease(releaseOptions, () => {
+      github.repos.createRelease(releaseOptions, function() {
         nextRepo();
       });
     }
@@ -159,12 +170,15 @@ module.exports = function (callback) {
     }
 
 
-    if (localRepoSetup) {
+    if(localRepoSetup) {
       setConfig();
-    } else {
+    }
+    else {
       console.error('Repository must be setup before running update components');
     }
+
   };
 
   stepRepo();
+
 };

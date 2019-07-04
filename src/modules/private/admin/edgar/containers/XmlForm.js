@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Form, Grid, Icon, Button, Header, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -403,7 +402,7 @@ export default class XmlForm extends React.Component {
     }
     const { offer } = this.props.offeringsStore;
     return (
-      <Aux>
+      <>
         <div className="page-header-section">
           <Header as="h1">
             <Responsive
@@ -419,10 +418,10 @@ export default class XmlForm extends React.Component {
               {
                 xmlSubmissionStatus === XML_STATUSES.completed
                 && (
-                <Button
-                  color="green"
-                  onClick={this.handleXmlSubmissionCopy}
-                >
+<Button
+  color="green"
+  onClick={this.handleXmlSubmissionCopy}
+>
                   Copy XML Submission
                 </Button>
                 )
@@ -430,11 +429,11 @@ export default class XmlForm extends React.Component {
               {
                 xmlSubmissionStatus === XML_STATUSES.draft
                 && (
-                <Button
-                  color="green"
-                  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
-                  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
-                >
+<Button
+  color="green"
+  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
+  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
+>
                   Save
                 </Button>
                 )
@@ -442,11 +441,11 @@ export default class XmlForm extends React.Component {
               {
                 xmlSubmissionStatus === XML_STATUSES.draft
                 && (
-                <Button
-                  color="red"
-                  disabled={!this.props.businessStore.checkStepsStatus}
-                  onClick={this.handleXmlSubmissionSubmit}
-                >
+<Button
+  color="red"
+  disabled={!this.props.businessStore.checkStepsStatus}
+  onClick={this.handleXmlSubmissionSubmit}
+>
                   Submit
                 </Button>
                 )
@@ -475,7 +474,7 @@ export default class XmlForm extends React.Component {
             <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
           </Grid>
         </div>
-      </Aux>
+      </>
     );
   }
 }

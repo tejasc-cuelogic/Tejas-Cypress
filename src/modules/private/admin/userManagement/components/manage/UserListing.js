@@ -56,7 +56,7 @@ class UserListing extends Component {
                   <Table.Cell>
                     {!user.profilepic
                       && (
-                      <div className="user-image">
+<div className="user-image">
                         <UserAvatar
                           UserInfo={{
                             firstName: user.info ? user.info.firstName : '',

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Grid, Item, Divider, Button, Responsive } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -10,9 +9,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class PreferredEquity extends Component {
   render() {
     const { isUserLoggedIn } = this.props.authStore;
-    const link = '/auth/register/applynow';
+    const link = '/register/applynow';
     return (
-      <Aux>
+      <>
         <Header as="h3">Preferred Equity</Header>
         <Grid doubling columns={2} relaxed="very">
           <Grid.Column>
@@ -36,7 +35,7 @@ export default class PreferredEquity extends Component {
                 </Item.Content>
               </Item>
             </Item.Group>
-            <Responsive minWidth={993} as={Aux}>
+            <Responsive minWidth={993} as={React.Fragment}>
               <Divider hidden />
               {
             isUserLoggedIn
@@ -53,22 +52,18 @@ export default class PreferredEquity extends Component {
                 Who is this option best for?
                   </Header>
                   <Item.Description>
-                    <p>
-There are several situations that make the selling of equity the best
+                    <p>There are several situations that make the selling of equity the best
                   choice for a business.
                     </p>
-                    <p>
-Equity may be best for high growth businesses that are looking at a
+                    <p>Equity may be best for high growth businesses that are looking at a
                   long-term return. Some businesses need to reinvest all their cashflow
                   back into the business to support their long-term growth. Consumer packaged
                   goods companies are a good example.
                     </p>
-                    <p>
-Other instances require that a business raise significant amounts of
+                    <p>Other instances require that a business raise significant amounts of
                   capital and are at an earlier stage of fundraising.
                     </p>
-                    <p>
-This may also be best for businesses that are also seeking capital that
+                    <p>This may also be best for businesses that are also seeking capital that
                   can be leveraged for a larger bank loan or debt raise while eliminating
                   strict remedies if the investment is not paid back timely.
                     </p>
@@ -76,7 +71,7 @@ This may also be best for businesses that are also seeking capital that
                 </Item.Content>
               </Item>
             </Item.Group>
-            <Responsive maxWidth={992} as={Aux}>
+            <Responsive maxWidth={992} as={React.Fragment}>
               {
             isUserLoggedIn
               ? ''
@@ -85,7 +80,7 @@ This may also be best for businesses that are also seeking capital that
             </Responsive>
           </Grid.Column>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

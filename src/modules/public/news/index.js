@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Container, Header, Grid, Item, Message, Responsive, Button, Segment, Form, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -73,7 +72,7 @@ class News extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
-      this.props.history.push('/auth/change-password');
+      this.props.history.push('/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
@@ -84,7 +83,7 @@ class News extends Component {
         });
         if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
           this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
-            this.props.history.push('/auth/confirm-email');
+            this.props.history.push('/confirm-email');
           });
         }
       });
@@ -99,17 +98,14 @@ class News extends Component {
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
-      <Aux>
+      <>
         <Container>
           <section className="center-align">
             <Link to="/">
               <Logo centered dataSrc="LogoBlack" />
             </Link>
           </section>
-          <Header as="h2" className="center-align mt-0">
-Small business investing,
-            <span className="highlight-text">made easy.</span>
-          </Header>
+          <Header as="h2" className="center-align mt-0">Small business investing, <span className="highlight-text">made easy.</span></Header>
           <section>
             <Grid stackable doubling centered relaxed="very" className="mb-30">
               <Grid.Row>
@@ -191,7 +187,7 @@ Small business investing,
                       />
                       {errors
                         && (
-                        <Message error textAlign="left" className="mt-30">
+<Message error textAlign="left" className="mt-30">
                           <ListErrors errors={[customError]} />
                         </Message>
                         )
@@ -222,8 +218,7 @@ Small business investing,
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">Receive</Header>
-                  <p>
-NextSeed collects and processes payments directly
+                  <p>NextSeed collects and processes payments directly
                       into your investment account.
                   </p>
                 </Grid.Column>
@@ -234,9 +229,8 @@ NextSeed collects and processes payments directly
         <section className="bg-offwhite">
           <Container textAlign={isMobile ? 'left' : 'center'} className="mt-30">
             <Header as="h2" className="mb-30">
-            Build an investment portfolio
-              {' '}
-              <Responsive as={Aux} minWidth={1199}><br /></Responsive>
+            Build an investment portfolio{' '}
+              <Responsive as={React.Fragment} minWidth={1199}><br /></Responsive>
             you care about.
             </Header>
             <p className={isMobile ? 'mb-40' : 'mb-50'}>
@@ -247,36 +241,36 @@ NextSeed collects and processes payments directly
           </Container>
           {!isMobile
             ? (
-              <Container className="mb-30">
-                <Grid centered stackable className="vertical-gutter">
-                  {businesses.map(b => (
-                    <Grid.Column textAlign="center" width={5}>
-                      <NSImage path={b.image} centered />
-                      <Header as="h5">{b.title}</Header>
-                      <p>{b.description}</p>
-                    </Grid.Column>
-                  ))
+<Container className="mb-30">
+              <Grid centered stackable className="vertical-gutter">
+                {businesses.map(b => (
+                  <Grid.Column textAlign="center" width={5}>
+                    <NSImage path={b.image} centered />
+                    <Header as="h5">{b.title}</Header>
+                    <p>{b.description}</p>
+                  </Grid.Column>
+                ))
               }
-                </Grid>
-              </Container>
+              </Grid>
+            </Container>
             )
             : (
-              <Aux>
-                <Container className="mb-30">
-                  <NsCarousel {...settings}>
-                    {businesses.map(b => (
-                      <Grid.Row>
-                        <Grid.Column className="center-align">
-                          <NSImage path={b.image} centered />
-                          <Header as="h5">{b.title}</Header>
-                          <p>{b.description}</p>
-                        </Grid.Column>
-                      </Grid.Row>
-                    ))
+<>
+              <Container className="mb-30">
+                <NsCarousel {...settings}>
+                  {businesses.map(b => (
+                    <Grid.Row>
+                      <Grid.Column className="center-align">
+                        <NSImage path={b.image} centered />
+                        <Header as="h5">{b.title}</Header>
+                        <p>{b.description}</p>
+                      </Grid.Column>
+                    </Grid.Row>
+                  ))
                 }
-                  </NsCarousel>
-                </Container>
-              </Aux>
+                </NsCarousel>
+              </Container>
+            </>
             )
         }
         </section>
@@ -287,14 +281,14 @@ NextSeed collects and processes payments directly
                 <Grid.Column width={10} textAlign="center">
                   <Header as="h2">Start investing today</Header>
                   <Button.Group vertical={isMobile}>
-                    <Button as={Link} to="/auth/register-investor" primary>Sign Up Free</Button>
+                    <Button as={Link} to="/register-investor" primary>Sign Up Free</Button>
                   </Button.Group>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </section>
-      </Aux>
+      </>
     );
   }
 }

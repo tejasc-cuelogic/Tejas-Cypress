@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { capitalize } from 'lodash';
-import Aux from 'react-aux';
 import { FormTextarea, FormInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
@@ -114,11 +113,7 @@ export default class StatusChangeAppModal extends Component {
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">
-            {params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)}
-            {' '}
-Application?
-          </Header>
+          <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error>
@@ -131,7 +126,7 @@ Application?
             />
             {params.action === 'PROMOTE'
               ? (
-<Aux>
+<>
                 <FormInput
                   fluid
                   type="password"
@@ -146,7 +141,7 @@ Application?
                   fielddata={PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword}
                   changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_PASSWORD_FRM')}
                 />
-              </Aux>
+              </>
               )
               : ''
             }

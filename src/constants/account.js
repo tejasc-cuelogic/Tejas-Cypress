@@ -205,12 +205,11 @@ export const IND_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'optional|numeric|min:100|max:25000',
+    rule: 'optional|numeric|min:100',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $100.',
-      max: 'The deposit amount should not be more than $25,000.',
     },
   },
 };
@@ -220,12 +219,11 @@ export const ENTITY_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'optional|numeric|min:5000|max:25000',
+    rule: 'optional|numeric|min:5000',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $5,000.',
-      max: 'The deposit amount should not be more than $25,000.',
     },
   },
 };
@@ -352,12 +350,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: (<span>
-Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the
-      <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a>
-      {' '}
-for the latest information
-              </span>),
+    tooltip: (<span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</span>),
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
@@ -494,10 +487,7 @@ export const ACC_TYPE = {
     value: 0,
     values: [
       {
-        label: (<label>
-          <Icon className="ns-individual-line" />
-Individual
-                </label>),
+        label: (<label><Icon className="ns-individual-line" />Individual</label>),
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
         An initial deposit can be quickly and securely completed by linking your checking account. 
@@ -508,10 +498,7 @@ Individual
         accType: 'individual',
       },
       {
-        label: (<label>
-          <Icon className="ns-ira-line" />
-IRA
-                </label>),
+        label: (<label><Icon className="ns-ira-line" />IRA</label>),
         value: 1,
         description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.) 
         Minimum opening deposit: $5,000. Investment limits apply. 
@@ -520,10 +507,7 @@ IRA
         accType: 'ira',
       },
       {
-        label: (<label>
-          <Icon className="ns-entity-line" />
-Entity
-        </label>),
+        label: (<label><Icon className="ns-entity-line" />Entity</label>),
         value: 2,
         description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts) 
         An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. 

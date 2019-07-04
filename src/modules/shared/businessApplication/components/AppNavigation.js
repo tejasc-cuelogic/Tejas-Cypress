@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Helper from '../../../../helper/utility';
@@ -26,7 +25,7 @@ export default class AppNavigation extends Component {
     } = this.props.businessAppStore;
     if (where >= 0) {
       // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
-      this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
+      this.submitSaveContinue();
       this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       // }
     } else {
@@ -34,8 +33,8 @@ export default class AppNavigation extends Component {
     }
   }
 
-  submitSaveContinue = (stepUrl) => {
-    this.props.businessAppStore.businessAppParitalSubmit(stepUrl);
+  submitSaveContinue = () => {
+    this.props.businessAppStore.businessAppParitalSubmit();
   }
 
   submit = (e) => {
@@ -63,16 +62,16 @@ export default class AppNavigation extends Component {
     const { isFileUploading, formReadOnlyMode, ButtonTextToggle } = this.props.businessAppStore;
     const { inProgress } = this.props.uiStore;
     return (
-      <Aux>
+      <>
         {!this.props.hideFields
           && (
-          <div className="navigation-buttons">
+<div className="navigation-buttons">
             {!formReadOnlyMode
               && (
-              <Aux>
+              <>
                 {this.state.step > 0
                   && (
-                  <div className="pull-left">
+<div className="pull-left">
                     <Button type="button" circular icon className="multistep__btn prev" disabled={isFileUploading} onClick={() => this.actualSubmit(-1)}>
                       <Icon className="ns-arrow-left" />
                     </Button>
@@ -82,30 +81,30 @@ export default class AppNavigation extends Component {
                 }
                 <div className="pull-right">
                   {this.state.step < (this.state.navItems.length - 1) ? (
-                    <Aux>
+                    <>
                       {this.state.navItems[this.state.step + 1].title}
                       <Button type="button" circular icon primary className={`multistep__btn next ${isFileUploading ? '' : 'active'}`} disabled={isFileUploading} onClick={() => this.actualSubmit(1)}>
                         <Icon className="ns-arrow-right" />
                       </Button>
-                    </Aux>
+                    </>
                   )
                     : (
-                      <Aux>
-                        {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
+<>
+                      {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
                     primary className="very relaxed" content={isFileUploading
                     ? 'File operation in process' : 'Save'} /> */}
-                        <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
-                      </Aux>
+                      <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
+                    </>
                     )
                   }
                 </div>
-              </Aux>
+              </>
               )
             }
           </div>
           )
         }
-      </Aux>
+      </>
     );
   }
 }

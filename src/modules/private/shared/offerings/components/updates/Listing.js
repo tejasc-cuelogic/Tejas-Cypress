@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Table, Modal, Button, Icon, Card } from 'semantic-ui-react';
+import { Table, Button, Icon, Card } from 'semantic-ui-react';
 import { kebabCase, capitalize } from 'lodash';
 import { observer, inject } from 'mobx-react';
-import NewUpdate from './NewUpdate';
+import { Link } from 'react-router-dom';
 import { DateTimeFormat, NsPagination } from '../../../../../../theme/shared';
 
 @inject('updateStore', 'userStore')
@@ -42,23 +42,11 @@ export default class Listing extends Component {
                 : this.props.data.map(record => (
                   <Table.Row key={record.refId}>
                     <Table.Cell>
-                      <Modal dimmer="inverted" closeOnEscape={false} onClose={this.close} closeOnDimmerClick={false} size="large" trigger={<Button className="link-button">{record.title}</Button>}>
-                        <NewUpdate
-                          refLink={this.props.match.url}
-                          id={record.refId}
-                          match={this.props.match}
-                          status={record.status}
-                        />
-                      </Modal>
+                      <Link to={`${this.props.match.url}/edit/${record.refId}`}>{record.title}</Link>
                     </Table.Cell>
                     <Table.Cell>{capitalize(record.scope)}</Table.Cell>
                     <Table.Cell><DateTimeFormat datetime={record.updated.date} /></Table.Cell>
-                    <Table.Cell className={`status ${kebabCase(record.status)}`}>
-                      {' '}
-                      <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} />
-                      {' '}
-                      {capitalize(record.status)}
-                    </Table.Cell>
+                    <Table.Cell className={`status ${kebabCase(record.status)}`}> <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} /> {capitalize(record.status)}</Table.Cell>
                     <Table.Cell textAlign="right">{record.status === 'PUBLISHED' ? 'Update is published' : record.status === 'DRAFT' ? 'Saved To Draft' : 'Sent update for review'}</Table.Cell>
                     {isManager
                     && (

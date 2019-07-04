@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Modal, Button, Form, Divider } from 'semantic-ui-react';
 import { activityActions } from '../../../services/actions';
 import { Logo, FieldError } from '../../../theme/shared';
@@ -41,7 +40,7 @@ class DevPassProtected extends Component {
 
   render() {
     return (
-      <Aux>
+      <>
         <Modal size="mini" basic open className="multistep-modal">
           <Logo size="medium" centered dataSrc="LogoWhiteGreen" />
           <Divider hidden />
@@ -65,7 +64,7 @@ class DevPassProtected extends Component {
             </Form>
           </Modal.Content>
         </Modal>
-      </Aux>
+      </>
     );
   }
 }

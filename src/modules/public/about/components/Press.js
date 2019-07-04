@@ -1,11 +1,10 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Container, Grid, Divider, Segment } from 'semantic-ui-react';
 import MediaResources from './press/MediaResources';
 import NSImage from '../../../shared/NSImage';
 
 const Press = () => (
-  <Aux>
+  <>
     <section className="press-news">
       <Container>
         <Header as="h2">In the news</Header>
@@ -84,20 +83,8 @@ Quisque interdum elit sapien,
             magnis dis parturient montes, nascetur ridiculus mus.
             </p>
             <address>
-              <p>
-                <b>
-Media Contact:
-                  <br />
-Vivian Kim
-                </b>
-              </p>
-              <p>
-Director of Marketing
-                <br />
-+1 243 567 8901
-                <br />
-email@nextseed.com
-              </p>
+              <p><b>Media Contact: <br />Vivian Kim</b></p>
+              <p>Director of Marketing <br />+1 243 567 8901<br />email@nextseed.com</p>
             </address>
           </Grid.Column>
           <Grid.Column width={6}>
@@ -115,7 +102,7 @@ email@nextseed.com
         </Grid>
       </Container>
     </section>
-  </Aux>
+  </>
 );
 
 export default Press;

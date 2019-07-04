@@ -13,8 +13,7 @@ export default class PublicCompanyRel extends Component {
     return (
       <div className="center-align">
         <Header as="h3">Public Company Relations</Header>
-        <p>
-Are you (or an immediate family member) a 10% shareholder,
+        <p>Are you (or an immediate family member) a 10% shareholder,
           director or senior officer at a publicly traded U.S. company?
         </p>
         <Divider hidden />
@@ -29,7 +28,7 @@ Are you (or an immediate family member) a 10% shareholder,
           />
           {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes'
           && (
-          <div className="field-wrap left-align">
+<div className="field-wrap left-align">
             <Form.Group widths="equal">
               <FormInput
                 key="publicCompanyTicker"
@@ -44,7 +43,7 @@ Are you (or an immediate family member) a 10% shareholder,
           }
           {errors
           && (
-          <Message error className="mt-30">
+<Message error className="mt-30">
             <ListErrors errors={errors.message ? [errors.message] : [errors]} />
           </Message>
           )

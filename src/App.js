@@ -62,7 +62,7 @@ class App extends Component {
         }
       })
       .catch((err) => {
-        console.log('Catch error in app.js verifySession. ', err);
+        console.log('Catch error in app.js verifySession.', err);
       });
   }
 
@@ -102,7 +102,7 @@ class App extends Component {
         // console.log('Browser tab is hidden');
       } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
         authActions.forceLogout('timeout').then(() => {
-          this.props.history.push('/auth/login');
+          this.props.history.push('/login');
         });
       }
     });
@@ -137,7 +137,9 @@ class App extends Component {
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
       authActions.logout('timeout').then(() => {
-        this.props.history.push('/auth/login');
+        if (this.props.location.pathname.includes('/app/')) {
+          this.props.history.push('/login');
+        }
       });
     }
   }
@@ -191,20 +193,20 @@ class App extends Component {
       <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
         {this.props.authStore.isUserLoggedIn
         && (
-        <IdleTimer
-          ref={(ref) => { this.props.authStore.idleTimer = ref; }}
-          element={document}
-          events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
-          onIdle={this.onIdle}
-          onAction={() => {
-            if (this.props.authStore.idleTimer) {
-              localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
-            }
-          }}
-          debounce={250}
-          timeout={userIdleTime}
-          stopOnIdle
-        />
+<IdleTimer
+  ref={(ref) => { this.props.authStore.idleTimer = ref; }}
+  element={document}
+  events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
+  onIdle={this.onIdle}
+  onAction={() => {
+    if (this.props.authStore.idleTimer) {
+      localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+    }
+  }}
+  debounce={250}
+  timeout={userIdleTime}
+  stopOnIdle
+/>
         )
         }
         <MetaTagGenerator metaTagsData={metaTagsData} />

@@ -1,6 +1,5 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
-import Aux from 'react-aux';
 import React from 'react';
 import { Popup } from 'semantic-ui-react';
 
@@ -56,9 +55,7 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <Aux>
-You can choose your
-          {' '}
+        <>You can choose your{' '}
           <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
@@ -66,7 +63,7 @@ You can choose your
               require additional confirmation with a code sent to your phone or email address.
             </Popup.Content>
           </Popup>
-        </Aux>
+        </>
       ),
     descriptionNotAvailable: '',
     action: ['mfa', 'Select Your Active MFA'],
@@ -344,45 +341,11 @@ export const UPDATE_PROFILE_INFO = {
 };
 
 export const USER_PROFILE_ADDRESS_ADMIN = {
-  street: {
-    value: '',
-    label: 'Residential Street',
-    error: undefined,
-    rule: 'string',
-    placeHolder: 'Residential Street',
-    objRef: 'info.mailingAddress',
-  },
-  streetTwo: {
-    value: '',
-    label: 'Address Line 2',
-    error: undefined,
-    rule: 'string',
-    placeHolder: 'Address Line 2',
-    objRef: 'info.mailingAddress',
-  },
-  city: {
-    value: '',
-    label: 'City',
-    error: undefined,
-    rule: 'string',
-    placeHolder: 'City',
-    objRef: 'info.mailingAddress',
-  },
-  state: {
-    value: '',
-    label: 'State',
-    error: undefined,
-    rule: 'string',
-    objRef: 'info.mailingAddress',
-  },
-  zipCode: {
-    value: '',
-    label: 'ZIP Code',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'ZIP Code',
-    objRef: 'info.mailingAddress',
-  },
+  street: { ...USER_IDENTITY.residentalStreet, objRef: 'info.mailingAddress' },
+  streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.mailingAddress' },
+  city: { ...USER_IDENTITY.city, objRef: 'info.mailingAddress' },
+  state: { ...USER_IDENTITY.state, objRef: 'info.mailingAddress' },
+  zipCode: { ...USER_IDENTITY.zipCode, objRef: 'info.mailingAddress' },
 };
 
 export const USER_PROFILE_FOR_ADMIN = {

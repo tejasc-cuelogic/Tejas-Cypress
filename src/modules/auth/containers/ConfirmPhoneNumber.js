@@ -148,7 +148,7 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Content className="signup-content center-align">
           {dataLoading
             && (
-            <Dimmer active={dataLoading}>
+<Dimmer active={dataLoading}>
               <Loader active={dataLoading} />
             </Dimmer>
             )
@@ -177,10 +177,10 @@ export default class ConfirmPhoneNumber extends Component {
           <Form className="mb-20" error onSubmit={this.handleConfirmPhoneNumber}>
             {!editMode
             && (
-            <Form.Field className="otp-wrap">
+<Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 autoFocus={!isMobile}
                 type="number"
@@ -197,7 +197,7 @@ export default class ConfirmPhoneNumber extends Component {
             }
             {editMode
               && (
-              <div className="mt-30 mb-30">
+<div className="mt-30 mb-30">
                 <Header as="h6">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
                 <FormRadioGroup
                   fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
@@ -210,7 +210,7 @@ export default class ConfirmPhoneNumber extends Component {
             }
             {errors
               && (
-              <Message error textAlign="left" className="mb-30">
+<Message error textAlign="left" className="mb-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
               )
@@ -218,10 +218,10 @@ export default class ConfirmPhoneNumber extends Component {
             {!editMode
               ? <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} />
               : (
-                <Button.Group widths="2" className="inline">
-                  <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                  <Button type="button" loading={reSendVerificationCode && this.props.uiStore.inProgress} disabled={errors || !ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
-                </Button.Group>
+<Button.Group widths="2" className="inline">
+                <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
+                <Button type="button" loading={reSendVerificationCode && this.props.uiStore.inProgress} disabled={errors || !ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
+              </Button.Group>
               )
             }
           </Form>

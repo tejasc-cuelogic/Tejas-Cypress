@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { kebabCase } from 'lodash';
@@ -35,7 +34,7 @@ export default class AllRepayments extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form>
           <Grid stackable>
             <Grid.Row>
@@ -48,7 +47,7 @@ export default class AllRepayments extends Component {
                 filters={filters}
                 more="no"
                 addon={(
-                  <Grid.Column width={5} textAlign="right">
+<Grid.Column width={5} textAlign="right">
                     <Button color="green" as={Link} floated="right" to="/app/repayments/new">
                       Add New Repayment
                     </Button>
@@ -90,7 +89,7 @@ export default class AllRepayments extends Component {
             </Table>
           </div>
         </Card>
-      </Aux>
+      </>
     );
   }
 }

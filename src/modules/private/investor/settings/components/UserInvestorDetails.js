@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { map, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Card, Header, Divider, Form, Button } from 'semantic-ui-react';
@@ -62,21 +61,20 @@ export default class UserInvestorDetails extends Component {
     return (
       <Card fluid className="form-card">
         <Form>
-          <Header as="h5">
-Investor Profile
+          <Header as="h5">Investor Profile
             {!this.props.isAdmin && (this.state.displayOnly
               ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={this.toogleField}><small>Edit information</small></Link>
               : (
-                <Button.Group floated="right" size="mini" compact>
-                  <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={this.toogleField} />
-                  <Button
-                    primary
-                    onClick={this.handleSubmit}
-                    disabled={!(INVESTOR_PROFILE_FULL.meta.isValid && isInvestmentExperienceValid)}
-                  >
+<Button.Group floated="right" size="mini" compact>
+                <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={this.toogleField} />
+                <Button
+                  primary
+                  onClick={this.handleSubmit}
+                  disabled={!(INVESTOR_PROFILE_FULL.meta.isValid && isInvestmentExperienceValid)}
+                >
                   Update
-                  </Button>
-                </Button.Group>
+                </Button>
+              </Button.Group>
               ))
             }
           </Header>
@@ -99,7 +97,7 @@ Investor Profile
             </dd>
             {INVESTOR_PROFILE_FULL.fields.status.value === 'EMPLOYED'
               && (
-              <Aux>
+              <>
                 <dt className="regular-text">Employer</dt>
                 <dd>
                   <FormInput
@@ -126,7 +124,7 @@ Investor Profile
                     ishidelabel
                   />
                 </dd>
-              </Aux>
+              </>
               )
             }
             <Divider hidden />
@@ -148,7 +146,7 @@ Investor Profile
             </dd>
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
               && (
-              <Aux>
+              <>
                 <dt className="regular-text">Member Firm Name</dt>
                 <dd>
                   <FormInput
@@ -162,7 +160,7 @@ Investor Profile
                     ishidelabel
                   />
                 </dd>
-              </Aux>
+              </>
               )
             }
             <Divider hidden />
@@ -184,7 +182,7 @@ Investor Profile
             </dd>
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
               && (
-              <Aux>
+              <>
                 <dt className="regular-text">Ticker Symbol</dt>
                 <dd>
                   <FormInput
@@ -198,7 +196,7 @@ Investor Profile
                     ishidelabel
                   />
                 </dd>
-              </Aux>
+              </>
               )
             }
             <Divider hidden />
@@ -232,11 +230,8 @@ Investor Profile
               />
             </dd>
             {map(yearValues.annualIncomePreviousYear, (year, key) => (
-              <Aux>
-                <dt className="regular-text">
-Annual Income
-                  {year}
-                </dt>
+              <>
+                <dt className="regular-text">Annual Income {year}</dt>
                 <dd>
                   <MaskedInput
                     displayMode={this.state.displayOnly}
@@ -249,7 +244,7 @@ Annual Income
                     hidelabel
                   />
                 </dd>
-              </Aux>
+              </>
             ))
             }
             <Divider hidden />
@@ -283,7 +278,7 @@ Annual Income
           }
           {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
-            <p className="negative-text">
+<p className="negative-text">
               NextSeed investments are suitable for experienced investors
               are comfortable with long-term risk.
               Please confirm that you fit this profile in order to proceed.
@@ -292,10 +287,8 @@ Annual Income
           }
           {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
-            <p className="negative-text">
-              Otherwise, please reference our
-              {' '}
-              <Link to="/app/resources/welcome-packet">Education Center </Link>
+<p className="negative-text">
+              Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center </Link>
               to learn more about investing on NextSeed.
             </p>
             )

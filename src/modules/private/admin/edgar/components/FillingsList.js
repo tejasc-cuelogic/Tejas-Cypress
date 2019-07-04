@@ -20,9 +20,7 @@ const FillingsList = observer((props) => {
               >
                 <Icon name="dropdown" />
                 <span>
-                  {filing.filingFolderName}
-,
-                  <DateTimeFormat datetime={filing.created} />
+                  {filing.filingFolderName}, <DateTimeFormat datetime={filing.created} />
                 </span>
                 <div className="actions">
                   <Link

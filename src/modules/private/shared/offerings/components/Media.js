@@ -240,7 +240,7 @@ export default class Media extends Component {
               ))}
             {!isReadonly
             && (
-            <List.Item>
+<List.Item>
               <ImageCropper
                 disabled={isReadonly}
                 fieldData={MEDIA_FRM.fields.gallery}

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Form, Message, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { ListErrors } from '../../../../../../../theme/shared';
@@ -33,7 +32,7 @@ export default class PersonalInformation extends Component {
     const { currentUser } = this.props.userStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
-      <Aux>
+      <>
         <Header as="h3" textAlign="center">Authorized Signatory Information</Header>
         <p className="center-align">Please provide your title and a copy of your photo ID.</p>
         <Form error>
@@ -69,7 +68,7 @@ export default class PersonalInformation extends Component {
           />
           {errors
             && (
-            <Message error className="mt-30">
+<Message error className="mt-30">
               <ListErrors errors={[errors.message]} />
             </Message>
             )
@@ -84,7 +83,7 @@ export default class PersonalInformation extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

@@ -53,11 +53,7 @@ export default class ConfirmOTPModal extends Component {
           <Header as="h3">Please confirm with the code</Header>
           <Divider section className="small" />
           <p>
-            To proceed with
-            {' '}
-            <b>{headerMessageToShow}</b>
-            {' '}
-please
+            To proceed with <b>{headerMessageToShow}</b> please
             check the verification code in the message we sent to:
           </p>
         </Modal.Header>
@@ -65,16 +61,16 @@ please
           {mfaMode && mfaMode === 'PHONE'
             ? <p className="display-only">{formattedPhoneNumber}</p>
             : (
-              <FormInput
-                ishidelabel
-                type="email"
-                size="huge"
-                name="email"
-                fielddata={{ value: this.getOTPEmailAddress() }}
-                readOnly
-                displayMode
-                className="display-only"
-              />
+<FormInput
+  ishidelabel
+  type="email"
+  size="huge"
+  name="email"
+  fielddata={{ value: this.getOTPEmailAddress() }}
+  readOnly
+  displayMode
+  className="display-only"
+/>
             )
           }
           <p>
@@ -84,7 +80,7 @@ please
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
                 className="otp-field"
@@ -98,7 +94,7 @@ please
             </Form.Field>
             {errors
               && (
-              <Message error className="mb-40">
+<Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
               )
