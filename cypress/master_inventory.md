@@ -160,7 +160,7 @@
 	 - [ ] Prequal failed
 	 - [ ] Prequal failed but lendio pass
 	 - [ ] Resume Business application and save as draft
-	 - [ ] Submit business application
+	 - [X] Submit business application
 
 - Account Settings
 	- [ ]  Change email
