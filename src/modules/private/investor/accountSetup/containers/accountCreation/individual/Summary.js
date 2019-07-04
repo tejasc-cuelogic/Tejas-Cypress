@@ -52,6 +52,7 @@ export default class Summary extends React.Component {
   handleLegalDocsBeforeSubmit = () => {
     const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
     if (!isUserVerified && !isLegalDocsPresent) {
+      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
       this.props.history.push('/app/summary/identity-verification/1');
     } else {
       this.handleSubmitAccount();
@@ -70,6 +71,7 @@ export default class Summary extends React.Component {
         setPartialInvestmenSession();
       } else if (!this.props.individualAccountStore.showProcessingModal) {
         this.props.history.push('/app/summary');
+        window.localStorage.removeItem('individual');
         this.props.uiStore.resetcreateAccountMessage();
       }
     }).catch((err) => {
