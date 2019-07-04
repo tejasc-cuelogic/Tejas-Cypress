@@ -10,7 +10,7 @@
 - Authentication
 	- Login
 		- [ ] Invalid Email Address/ Invalid Password
-		- [ ] Invalid Email Address/ valid Password
+		- [X] Invalid Email Address/ valid Password (Date : **07-04-2018**)
 		- [ ] Valid email address/ invalid password
 	- Login with migrated user
 		- [ ] Migrated full (should display confirm phone screen)
@@ -38,10 +38,11 @@
 		- CIP
 			- [ ] Entered Business Address
 			- [ ] Entered Business Address with ByPassAddressCheckFlag
+	        - [X] Deny Business Address (Date : **07-04-2018**)
 			- [ ] Entered an invalid age
 			- [ ] Duplicate SSN
 			- [ ] Invalid Phone Number
-			- [ ] CIP Submit and Pass
+			- [X] CIP Submit and Pass (Date : **07-04-2018**)
 			- CIP Submit and Fail with Questions
 				- [ ] Correct Answers
 				- [ ] Incorrect Answers
@@ -61,18 +62,18 @@
 
 - Individual Account
 	- Link Bank
-		- [ ] Link bank directly
+		- [X] Link bank directly (Date : **07-04-2018**)
 		- [ ] Search bank
 		- [ ] Change linked bank
 		- [ ] keep existing linked bank
 	- Link bank manually
 		- [ ] Wrong routing number
 		- [ ] Wrong account number
-		- [ ] Successful link bank manually
+		- [X] Successful link bank manually (Date : **07-04-2018**)
 	- Add funds
 		- [ ] I don't want to deposit any money
 		- [ ] Add fund below $100
-		- [ ] Create account
+		- [X] Create account (Date : **07-04-2018**)
 
 - IRA Account
 	- Link Bank
@@ -90,7 +91,7 @@
 		- [ ] Remove uploaded files
 	- [ ] Switch to account type and funding tab from summary page, change account type and funding options
 	- [ ] Check hyperlinks (Summary page)
-	- [ ] Create account
+	- [X] Create account (Date : **07-04-2018**)
 
 - Entity Account
 	- [ ] Check Investment Limit
@@ -100,7 +101,7 @@
 	- [ ] Upload with invalid filename
 	- [ ] Remove uploaded files
 	- [ ] Add fund below $5000
-	- [ ] Account creation
+    - [X] Account Creation (Date : **07-04-2018**)
 
 - Deposit Funds
 	- [ ] Add funds
