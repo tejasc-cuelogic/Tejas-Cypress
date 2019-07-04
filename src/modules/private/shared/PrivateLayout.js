@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { matchPath, Link } from 'react-router-dom';
+import { matchPath } from 'react-router-dom';
 import { Form, Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
-import { Logo } from '../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const overrideContainerClass = ['account-details/:accountType/transactions'];
@@ -20,14 +19,6 @@ class PrivateLayout extends Component {
     }
     return (
       <>
-      {isInvestor
-      && (
-        <Link to="/"><Logo
-          dataSrc="LogoGreenGrey"
-          className="mobile-header-logo"
-        /></Link>
-      )
-      }
         <div className={`page-header-section ${isInvestor ? 'investor' : ''}`}>
           <Grid columns="equal" stackable>
             <Grid.Row>

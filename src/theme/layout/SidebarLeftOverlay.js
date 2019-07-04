@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav } from './SidebarNav';
-import { UserAvatar, Image64 } from '../shared';
+import { UserAvatar, Image64, Logo } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
 const progressMap = ['viewLoanAgreement', 'portfolio'];
@@ -91,7 +92,19 @@ const MySidebar = observer(props => (
       className={`${props.match.url.includes('/business-application')
         ? 'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
     >
-      {props.mobile && <Icon onClick={props.toggle} className="ns-hamburger" />}
+      {props.mobile
+      && (
+        <div className="public-header-section">
+          <Link to="/">
+            <Logo
+              dataSrc="LogoGreenGrey"
+              className="mobile-header-logo"
+            />
+          </Link>
+          <Icon className="ns-hamburger" role="button" tabIndex="0" onClick={props.toggle} />
+          {/* <Icon onClick={props.toggle} className="ns-hamburger" /> */}
+        </div>
+      )}
       {props.children}
     </Sidebar.Pusher>
     <NotificationPanel status={props.layoutState.notificationPanel} />
