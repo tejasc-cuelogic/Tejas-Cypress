@@ -5,7 +5,7 @@
 
 - API
 	- Investor
-		- [X] Matching `seedTestUsers` data values with `getMigratedUserAuditInfo` data (Date : **07-04-2018** by Chetan and Pratik)
+		- [X] Matching `seedTestUsers` data values with `getMigratedUserAuditInfo` data (Date : **07-04-2018** | By **Chetan and Pratik**)
 
 
 - Authentication
