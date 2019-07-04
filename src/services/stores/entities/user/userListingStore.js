@@ -182,6 +182,11 @@ export class UserListingStore {
   }
 
   @action
+  searchOnChange = (name, value) => {
+    this.requestState.search[name] = value;
+  }
+
+  @action
   removeFilter = (name) => {
     delete this.requestState.search[name];
     this.initRequest();
