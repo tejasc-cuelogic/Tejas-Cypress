@@ -10,6 +10,8 @@ import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
 import NsHeader from '../../theme/layout/Header';
 import NotFound from '../shared/NotFound';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore')
 @withRouter
 @observer
@@ -76,16 +78,20 @@ export default class Private extends React.Component {
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <>
-        <NsHeader
-          location={location}
-          stepInRoute={this.props.navStore.stepInRoute}
-          currentUser={this.props.userStore.currentUser}
-          handleLogOut={this.handleLogOut}
-          // canSubmitApp={isValid}
-          // isPrequalQulify={isPrequalQulify}
-          // preQualSubmit={this.preQualSubmit}
-          // loading={inProgress}
-        />
+        {!isMobile
+        && (
+          <NsHeader
+            location={location}
+            stepInRoute={this.props.navStore.stepInRoute}
+            currentUser={this.props.userStore.currentUser}
+            handleLogOut={this.handleLogOut}
+            // canSubmitApp={isValid}
+            // isPrequalQulify={isPrequalQulify}
+            // preQualSubmit={this.preQualSubmit}
+            // loading={inProgress}
+          />
+        )
+        }
         <SidebarLeftOverlay
           match={match}
           UserInfo={UserInfo}
