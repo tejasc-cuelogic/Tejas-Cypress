@@ -645,7 +645,7 @@ export class UserDetailsStore {
 
   @action
   setAccountForWhichCipExpired = (accountName) => {
-    window.localStorage.setItem('individual', accountName);
+    window.sessionStorage.setItem('individualAccountCipExp', accountName);
     this.accountForWhichCipExpired = accountName;
   }
 
