@@ -2,12 +2,14 @@ import { toJS, observable, action, computed } from 'mobx';
 import { matchPath } from 'react-router-dom';
 import cookie from 'react-cookies';
 import _ from 'lodash';
-import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
+import { PRIVATE_NAV, MOBILE_NAV } from '../../../../constants/NavigationMeta';
 import { userStore, userDetailsStore, offeringsStore, statementStore } from '../../index';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class NavStore {
   @observable NAV_ITEMS = [...PRIVATE_NAV];
+
+  @observable MOBILE_NAV_ITEMS = [...MOBILE_NAV];
 
   @observable params = {
     roles: [], currentNav: [], appStatus: null, specificNav: null,
@@ -46,37 +48,36 @@ export class NavStore {
     return _.intersection(userStore.myCapabilities, capabilityCheck).length > 0;
   }
 
-  @computed get myRoutes() {
-    try {
-      const uKey = _.get(userStore, 'currentUser.sub') || 'public';
-      let permitted = [];
-      let navigationItems = this.NAV_ITEMS;
-      const { roles } = this.params;
-      const User = { ...userStore.currentUser };
-      const { userDetails } = userDetailsStore;
-      if (userDetailsStore.signupStatus.isMigratedFullAccount
-        && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
-        permitted = [...roles];
-      } else {
-        permitted = [...roles,
-          ...userDetailsStore.signupStatus.partialAccounts,
-          ...userDetailsStore.signupStatus.activeAccounts,
-          ...userDetailsStore.signupStatus.processingAccounts,
-          ...userDetailsStore.signupStatus.frozenAccounts];
-      }
-      if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
-        navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
-      }
-      navigationItems = navigationItems.filter(item => item.title !== (userDetailsStore.signupStatus.activeAccounts.length > 0 ? 'Summary' : 'Referrals'));
-      if (permitted && permitted.length > 1 && permitted.includes('investor')) {
-        const pInvestorInfo = {
-          roles,
-          signupStatus: userDetailsStore.signupStatus,
-          permitted,
-        };
-        localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
-      }
-      const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
+  filterRoutes = (uKey, isMobile = false) => {
+    let permitted = [];
+    let navigationItems = isMobile ? this.MOBILE_NAV_ITEMS : this.NAV_ITEMS;
+    const { roles } = this.params;
+    const User = { ...userStore.currentUser };
+    const { userDetails } = userDetailsStore;
+    if (userDetailsStore.signupStatus.isMigratedFullAccount
+      && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
+      permitted = [...roles];
+    } else {
+      permitted = [...roles,
+        ...userDetailsStore.signupStatus.partialAccounts,
+        ...userDetailsStore.signupStatus.activeAccounts,
+        ...userDetailsStore.signupStatus.processingAccounts,
+        ...userDetailsStore.signupStatus.frozenAccounts];
+    }
+    if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
+      navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
+    }
+    navigationItems = navigationItems.filter(item => item.title !== (userDetailsStore.signupStatus.activeAccounts.length > 0 ? 'Summary' : 'Referrals'));
+    if (permitted && permitted.length > 1 && permitted.includes('investor')) {
+      const pInvestorInfo = {
+        roles,
+        signupStatus: userDetailsStore.signupStatus,
+        permitted,
+      };
+      localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
+    }
+    const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
+    if (userStore.currentUser) {
       if (userDetailsStore.userFirstLoad !== true
         && (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {
@@ -88,21 +89,38 @@ export class NavStore {
       if (pInvestorInfo && permitted.includes('investor')) {
         permitted = JSON.parse(pInvestorInfo).permitted || permitted;
       }
-      let routes = _.filter(
-        navigationItems,
-        n => ((!n.accessibleTo || n.accessibleTo.length === 0
-          || _.intersection(n.accessibleTo, permitted).length > 0)
-        && (!n.env || n.env.length === 0
-          || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)
-          && (!n.capability || this.canAccessBasedOnCapability(n.capability))),
-      );
-      routes = _.map(routes, r => ({
-        ...r,
-        subNavigations:
-        _.filter(r.subNavigations, s => (!s.capability
-          || this.canAccessBasedOnCapability(s.capability))),
-      }));
-      return routes;
+    }
+    let routes = _.filter(
+      navigationItems,
+      n => ((!n.accessibleTo || n.accessibleTo.length === 0
+        || _.intersection(n.accessibleTo, permitted).length > 0)
+      && (!n.env || n.env.length === 0
+        || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)
+        && (!n.capability || this.canAccessBasedOnCapability(n.capability))),
+    );
+    routes = _.map(routes, r => ({
+      ...r,
+      subNavigations:
+      _.filter(r.subNavigations, s => (!s.capability
+        || this.canAccessBasedOnCapability(s.capability))),
+    }));
+    return routes;
+  }
+
+  @computed get myRoutes() {
+    try {
+      const uKey = _.get(userStore, 'currentUser.sub') || 'public';
+      return this.filterRoutes(uKey, false);
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  @computed get myMobileRoutes() {
+    try {
+      const uKey = _.get(userStore, 'currentUser.sub') || 'public';
+      return this.filterRoutes(uKey, true);
     } catch (err) {
       console.log(err);
       return [];

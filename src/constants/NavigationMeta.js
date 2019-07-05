@@ -664,8 +664,44 @@ export const PUBLIC_NAV = [
       { title: 'Legal Documents', to: 'legal-documents' },
     ],
   },
+  {
+    title: 'About Us',
+    to: 'about',
+  },
 ];
 
+export const MOBILE_NAV = [
+  {
+    title: 'Individual',
+    to: 'app/account-details/individual/portfolio',
+    accessibleTo: ['individual'],
+    isLoggedIn: true,
+  },
+  {
+    title: 'IRA',
+    to: 'app/account-details/ira/portfolio',
+    accessibleTo: ['ira'],
+    isLoggedIn: true,
+  },
+  {
+    title: 'Entity',
+    to: 'app/account-details/entity/portfolio',
+    accessibleTo: ['entity'],
+    isLoggedIn: true,
+  },
+  { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
+  {
+    title: 'Refer a Friend',
+    to: 'app/referrals',
+    accessibleTo: ['ira', 'individual', 'entity'],
+    isLoggedIn: true,
+  },
+  { title: 'Explore', to: 'offerings', isLoggedIn: true },
+  { title: 'How it Works Investor', to: 'invest' },
+  { title: 'How it Works Business', to: 'business' },
+  { title: 'Education Center', to: 'resources/education-center' },
+  { title: 'About Us', to: 'about' },
+];
 
 export const FOOTER_NAV = [
   // {

@@ -7,14 +7,27 @@ import { Logo, SocialLinks } from '../shared';
 import { NavItems, NavigationItems } from './NavigationItems';
 import Footer from './Footer';
 import { GetNavMeta } from './SidebarNav';
-import { PUBLIC_NAV } from '../../constants/NavigationMeta';
+// import { MOBILE_NAV } from '../../constants/NavigationMeta';
 // import NSImage from '../../modules/shared/NSImage';
 
 const hasFooter = ['/'];
 // const getLogo = path => (path.includes('/lendio') ? 'nextseed_and_lendio.svg' : 'logo.svg');
-@inject('uiStore', 'businessAppStore')
+@inject('uiStore', 'businessAppStore', 'navStore', 'userStore', 'userDetailsStore')
 @observer
 export default class NavBarMobile extends Component {
+  componentWillMount() {
+    if (this.props.userStore.isInvestor) {
+      this.props.navStore.setAccessParams('roles', this.props.currentUser.roles);
+      this.props.navStore.setAccessParams('currentNav', this.props.match.url);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.userStore.isInvestor) {
+      this.props.navStore.setAccessParams('currentNav', this.props.match.url);
+    }
+  }
+
   setAuthRef = () => {
     this.props.uiStore.setAuthRef(this.props.location.pathname);
   }
@@ -24,7 +37,7 @@ export default class NavBarMobile extends Component {
       onPusherClick, onToggle, visible,
       publicContent, location, isMobile,
       navStatus, currentUser, stepInRoute,
-      hasHeader,
+      hasHeader, userDetailsStore,
     } = this.props;
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
@@ -46,6 +59,9 @@ export default class NavBarMobile extends Component {
     } else if (location.pathname.startsWith('/agreements/legal')) {
       navTitle = 'Legal';
     }
+    const { signupStatus } = userDetailsStore;
+    const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => this.props.userStore.isInvestor && e.isLoggedIn);
+    const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && e.to === 'offerings'));
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <>
@@ -63,40 +79,42 @@ export default class NavBarMobile extends Component {
               </div>
               {location.pathname.startsWith('/business-application/')
                 ? (
-<NavigationItems
-  {...this.props}
-  isMobBussinessApp
-  isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
-/>
+                  <NavigationItems
+                    {...this.props}
+                    isMobBussinessApp
+                    isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
+                  />
                 )
                 : (
-<div
-  className={`public-header-section ${visible ? 'active' : ''}
+                  <div
+                    className={`public-header-section ${visible ? 'active' : ''}
                   ${navStatus === 'sub' ? 'slide-up' : ''}`}
->
-                  {navTitle === 'Home' || (location.pathname.startsWith('/offerings'))
-                    ? (
-<Logo
-  dataSrc="LogoGreenGrey"
-  className="mobile-header-logo"
-/>
-                    )
-                    : <Header as="h5">{navTitle}</Header>
-                  }
+                  >
+                    {navTitle === 'Home' || (location.pathname.startsWith('/offerings') || this.props.userStore.isInvestor)
+                      ? (
+                        <Link to="/">
+                          <Logo
+                            dataSrc="LogoGreenGrey"
+                            className="mobile-header-logo"
+                          />
+                        </Link>
+                      )
+                      : <Header as="h5">{navTitle}</Header>
+                    }
                     {!currentUser ? (
                       <Link onClick={this.setAuthRef} to={`/${stepInRoute.to}`} className="sign-in neutral-text">
                         {stepInRoute.title}
                       </Link>
-                    ) : (
+                    ) : ((this.props.userStore.isInvestor && !location.pathname.startsWith('/app')) || !this.props.userStore.isInvestor) ? (
                       <Link
                         to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
                         className="sign-in neutral-text"
                       >
-                      Dashboard
+                        Dashboard
                     </Link>
-                    )
-                  }
-                </div>
+                    ) : null
+                    }
+                  </div>
                 )
               }
             </>
@@ -117,6 +135,20 @@ export default class NavBarMobile extends Component {
               renderView={p => <div {...p} className="view" />}
             >
               <Icon onClick={onToggle} className="ns-close-light" />
+              {this.props.userStore.isInvestor
+                && (
+                  <div className="public-header-nav logged-in-nav">
+                    <NavItems
+                      refLoc="public"
+                      currentUser={currentUser}
+                      location={location}
+                      isMobile={isMobile}
+                      navStatus={navStatus}
+                      onToggle={onToggle}
+                      navItems={loggedInNavs}
+                    />
+                  </div>
+                )}
               <div className="public-header-nav">
                 <NavItems
                   refLoc="public"
@@ -125,17 +157,8 @@ export default class NavBarMobile extends Component {
                   isMobile={isMobile}
                   navStatus={navStatus}
                   onToggle={onToggle}
-                  navItems={PUBLIC_NAV}
+                  navItems={publicNav}
                 />
-                {/* <NavItems
-                  refLoc="public"
-                  currentUser={currentUser}
-                  location={location}
-                  isMobile={isMobile}
-                  navStatus={navStatus}
-                  onToggle={onToggle}
-                  navItems={FOOTER_NAV}
-                /> */}
                 <div className="public-action-nav mt-20">
                   {!currentUser ? logInSignUp.map(route => (
                     <Menu.Item className="btn-item">
@@ -143,9 +166,20 @@ export default class NavBarMobile extends Component {
                     </Menu.Item>
                   ))
                     : (
-<Menu.Item className="btn-item">
-                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
-                  </Menu.Item>
+                      <>
+                        {this.props.userStore.isInvestor
+                          && signupStatus && signupStatus.finalStatus && signupStatus.investorProfileCompleted
+                          && signupStatus.inActiveAccounts.length > 0
+                          && (
+                            <Menu.Item className="btn-item mt-30">
+                              <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Add New Account" />
+                            </Menu.Item>
+                          )
+                        }
+                        <Menu.Item className="btn-item">
+                          <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
+                        </Menu.Item>
+                      </>
                     )
                   }
                 </div>
@@ -163,8 +197,9 @@ export default class NavBarMobile extends Component {
             className={`public-pusher ${!hasHeader && 'noheader'}`}
           >
             {publicContent}
+            {this.props.userStore.isInvestor && this.props.children}
             {(hasFooter.find(item => matchPath(location.pathname, { path: item })))
-            && <Footer path={location.pathname} />}
+              && <Footer path={location.pathname} />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </>

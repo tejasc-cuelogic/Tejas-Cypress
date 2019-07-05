@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav } from './SidebarNav';
 import { UserAvatar, Image64, Logo } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
+import NavBarMobile from './NavBarMobile';
 
 const progressMap = ['viewLoanAgreement', 'portfolio'];
 
-@inject('uiStore')
+@inject('uiStore', 'navStore', 'userStore')
+@withRouter
 @observer
 class SidebarLeftPush extends Component {
   toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
@@ -35,7 +37,22 @@ class SidebarLeftPush extends Component {
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
         </Responsive>
         <Responsive maxWidth={1199}>
-          <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
+          {this.props.userStore.isInvestor
+            ? (
+              <NavBarMobile
+                onPusherClick={this.handlePusher}
+                onToggle={this.toggleMobile}
+                visible={layoutState.leftPanelMobile}
+                handleLogOut={this.props.handleLogOut}
+                isMobile
+                stepInRoute={this.props.navStore.stepInRoute}
+                currentUser={this.props.userStore.currentUser}
+                // publicContent={this.getRoutes(isAuthLocation)}
+                hasHeader
+                {...this.props}
+              />
+            ) : <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
+          }
         </Responsive>
       </>
     );

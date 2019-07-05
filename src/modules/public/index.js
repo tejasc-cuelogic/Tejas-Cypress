@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, matchPath } from 'react-router-dom';
+import { Route, Switch, matchPath, withRouter } from 'react-router-dom';
 import { Responsive } from 'semantic-ui-react';
 import { publicRoutes } from '../routes';
 import NavBarMobile from '../../theme/layout/NavBarMobile';
@@ -16,6 +16,7 @@ import Firework from './offering/components/investNow/agreement/components/Firew
 import { Spinner } from '../../theme/shared';
 
 @inject('uiStore', 'navStore', 'userStore', 'businessAppStore', 'campaignStore')
+@withRouter
 @observer
 export default class Public extends React.Component {
   state = {
