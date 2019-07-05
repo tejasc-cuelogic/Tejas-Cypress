@@ -5,7 +5,7 @@ import {
   proceedWithValidUserLoginAction,
 } from './utility/investNowFlow.utility';
 
-import { isAbortTestCases, clearStorage } from '../common.utility';
+// import { isAbortTestCases } from '../common.utility';
 
 describe('Invest now flow', () => {
   const whenFailed = () => {

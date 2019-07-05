@@ -10,7 +10,6 @@ export const uploadFile = (selector = '') => {
   cy.fixture('images/test-img.png').as('img');
   cy.upload_file('images/test-img.png', 'png', selector || 'input[type=file]');
   cy.wait('@fileUpload');
-  cy.wait(1000);
 };
 
 export const clickonDashboard = () => {
@@ -68,4 +67,10 @@ export const isAbortTestCases = () => {
 
 export const clearStorage = (keyParam) => {
   window.localStorage.removeItem(keyParam);
+}
+
+export const btnClickAndWaitByButtonName = (buttonName) => {
+  registerApiCall(`${buttonName}`);
+  cy.get('button').contains(`${buttonName}`).click();
+  cy.wait(`@${buttonName}`);
 }
