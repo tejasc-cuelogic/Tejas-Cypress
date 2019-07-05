@@ -158,9 +158,9 @@
 		- [ ] Cancel investment
 
 - Issuer Signup
-	 - [ ] Prequal Success (Date : **07-05-2018** | By **Pankaj**)
+	 - [X] Prequal Success (Date : **07-05-2018** | By **Pankaj**)
 	 - [ ] Prequal with existing email id
-	 - [ ] Prequal failed (Date : **07-05-2018** | By **Pankaj**)
+	 - [X] Prequal failed (Date : **07-05-2018** | By **Pankaj**)
 	 - [ ] Prequal failed but lendio pass
 	 - [ ] Resume Business application and save as draft
 	 - [X] Submit business application (Date : **07-04-2018** | By **Pankaj**)
