@@ -37,7 +37,7 @@ describe('Invest now CF investment flow', () => {
     checkEnteredAmountMultiplesValidation();
   });
 
-  it.skip('Should show validation error if investment amount is less than minimum investment amount', () => {
+  it('Should show validation error if investment amount is less than minimum investment amount', () => {
     checkAmountGreaterThanMinInvestmentValidation();
   });
 

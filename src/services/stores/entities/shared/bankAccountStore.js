@@ -437,8 +437,19 @@ export class BankAccountStore {
     Validator.validateForm(form, false);
   }
 
+  // @computed get count() {
+  //   return (get(this.data, 'data.listLinkedBankUsers.resultCount')) || 0;
+  // }
+
   @computed get count() {
-    return (get(this.data, 'data.listLinkedBankUsers.resultCount')) || 0;
+    if (!this.requestState.isLocked) {
+      return (this.db && this.db.length
+        && toJS(filter(
+          this.db,
+          changeRequest => get(changeRequest, 'userInfo.locked.lock') !== 'LOCKED',
+        ).length)) || 0;
+    }
+    return (this.db && this.db.length) || 0;
   }
 
   @computed get isLinkbankInComplete() {
