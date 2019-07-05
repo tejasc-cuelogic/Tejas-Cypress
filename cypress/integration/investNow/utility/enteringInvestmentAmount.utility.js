@@ -1,5 +1,5 @@
 import money from 'money-math';
-import { registerApiCall, clearFormInput } from '../../common.utility';
+import { registerApiCall, clearFormInput, getJSONDataFromFixtures } from '../../common.utility';
 
 export const invalidInvestmentAmount = () => {
   let inputFieldObj = [
@@ -142,32 +142,25 @@ export const checkAndStoreInvestmentProcess = async () => {
 }
 
 export const invalidMultipleInvestmentAmount = () => {
-  const dataSet = {
-    investmentAmount: {
-      selector: 'name',
-      value: '101',
-      showError: true
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+  cy.fixture('investor/investmentAmount.json').then((data) => {
+    const { invalidMultipleAmount } = data;
+    cy.clearFormField(invalidMultipleAmount);
+    cy.formFill(invalidMultipleAmount);
+  });
 }
 
 export const invalidMinInvestmentAmount = () => {
   registerApiCall('investNowGeneratePurchaseAgreement');
-  const minInvestmentAmount = localStorage.getItem('minInvestAmount');
-  const enterdMinValidAmount = '100';
-  const comapirdWithMinInvetment = money.cmp(enterdMinValidAmount, minInvestmentAmount).toString();
-  const dataSet = {
-    investmentAmount: {
-      selector: 'name',
-      value: enterdMinValidAmount,
-      isEnterEvent: true,
-      showError: money.isNegative(comapirdWithMinInvetment)
-    }
-  };
-  cy.clearFormField(dataSet);
-  cy.formFill(dataSet);
+  // const invalidMinInvestmentAmount = await getJSONDataFromFixtures('investor/investmentAmount.json', 'invalidMinInvestmentAmount')
+  cy.fixture('investor/investmentAmount.json').then((data) => {
+    const { invalidMinInvestmentAmount } = data;
+    const minInvestmentAmount = localStorage.getItem('minInvestAmount');
+    const comapirdWithMinInvetment = money.cmp('100', minInvestmentAmount).toString();
+    const isError = money.isNegative(comapirdWithMinInvetment);
+    const minInvestmentObj = { "investmentAmount" : { ...invalidMinInvestmentAmount.investmentAmount, showError: isError } };
+    cy.clearFormField(minInvestmentObj);
+    cy.formFill(minInvestmentObj);
+  });
 }
 
 export const getInvestmentAction = () => {

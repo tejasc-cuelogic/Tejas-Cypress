@@ -1,5 +1,5 @@
 {
-"baseUrl": "https://dev.nextseed.qa/",
+"baseUrl": "http://localhost:3000/",
 "chromeWebSecurity": false,
 "pageTimeoutLoad": 80000,
 "defaultCommandTimeout": 60000,

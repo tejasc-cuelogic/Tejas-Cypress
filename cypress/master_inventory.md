@@ -1,9 +1,17 @@
 ### Master Inventory NS-Client
 
+**Note:** Date format need to be **mm/dd/yyyy**
+
+
+- API
+	- Investor
+		- [X] Matching `seedTestUsers` data values with `getMigratedUserAuditInfo` data (Date : **07-04-2018** | By **Chetan and Pratik**)
+
+
 - Authentication
 	- Login
-		- [X] Invalid Email Address/ Invalid Password  (Date : **10-10-2018**)
-		- [ ] Invalid Email Address/ valid Password
+		- [ ] Invalid Email Address/ Invalid Password
+		- [X] Invalid Email Address/ valid Password (Date : **07-04-2018**)
 		- [ ] Valid email address/ invalid password
 	- Login with migrated user
 		- [ ] Migrated full (should display confirm phone screen)
@@ -31,10 +39,11 @@
 		- CIP
 			- [ ] Entered Business Address
 			- [ ] Entered Business Address with ByPassAddressCheckFlag
+	        - [X] Deny Business Address (Date : **07-04-2018** | By **Swapnil**)
 			- [ ] Entered an invalid age
 			- [ ] Duplicate SSN
 			- [ ] Invalid Phone Number
-			- [ ] CIP Submit and Pass
+			- [X] CIP Submit and Pass (Date : **07-04-2018** | By **Swapnil**)
 			- CIP Submit and Fail with Questions
 				- [ ] Correct Answers
 				- [ ] Incorrect Answers
@@ -54,18 +63,18 @@
 
 - Individual Account
 	- Link Bank
-		- [ ] Link bank directly
+		- [X] Link bank directly (Date : **07-04-2018** | By **Swapnil**)
 		- [ ] Search bank
 		- [ ] Change linked bank
 		- [ ] keep existing linked bank
 	- Link bank manually
 		- [ ] Wrong routing number
 		- [ ] Wrong account number
-		- [ ] Successful link bank manually
+		- [X] Successful link bank manually (Date : **07-04-2018** | By **Swapnil**)
 	- Add funds
 		- [ ] I don't want to deposit any money
 		- [ ] Add fund below $100
-		- [ ] Create account
+		- [X] Create account (Date : **07-04-2018** | By **Swapnil**)
 
 - IRA Account
 	- Link Bank
@@ -83,7 +92,7 @@
 		- [ ] Remove uploaded files
 	- [ ] Switch to account type and funding tab from summary page, change account type and funding options
 	- [ ] Check hyperlinks (Summary page)
-	- [ ] Create account
+	- [X] Create account (Date : **07-04-2018** | By **Swapnil**)
 
 - Entity Account
 	- [ ] Check Investment Limit
@@ -93,7 +102,7 @@
 	- [ ] Upload with invalid filename
 	- [ ] Remove uploaded files
 	- [ ] Add fund below $5000
-	- [ ] Account creation
+    - [X] Account Creation (Date : **07-04-2018** | By **Swapnil**)
 
 - Deposit Funds
 	- [ ] Add funds
@@ -127,17 +136,19 @@
 
 - Invest Now 
 	- [ ] Invest for freeze account
-	- [ ] Invalid user login credentials
-	- [ ] Invest when investor not logged in
+	- [X] Invalid user login credentials (Date : **07-04-2018** | By **Vaibhav**)
+	- [X] Invest when investor not logged in (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Invest in partially created account
 	- [ ] Investment with multiple account type selection
 	- [ ] Accreditation popup for parallel offering (506C and 506B)
-	- [ ] Invest when accreditation request pending
-	- [ ] Invest below min investment amount
+	- [X] Invest when accreditation request pending (Date : **07-04-2018** | By **Vaibhav**)
+	- [X] Invest below min investment amount (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Invest above max investment amount
-	- [ ] Update investment limit
+	- [X] Update investment limit (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Check overdraft amount 
-	- [ ] Invest successfully in offering
+	- [X] Invest successfully in offering `CF Type Offering` (Date : **07-04-2018** | By **Vaibhav**)
+	- [ ] Invest successfully in offering `BD_506C Type Offering`
+	- [ ] Invest successfully in offering `BD_506B Type Offering`
 
 - Portfolio
 	- [ ] View Agreement
@@ -152,7 +163,7 @@
 	 - [ ] Prequal failed
 	 - [ ] Prequal failed but lendio pass
 	 - [ ] Resume Business application and save as draft
-	 - [ ] Submit business application
+	 - [X] Submit business application
 
 - Account Settings
 	- [ ]  Change email

@@ -41,15 +41,15 @@ describe('Invest now CF investment flow', () => {
     checkAmountGreaterThanMinInvestmentValidation();
   });
 
-  it('Should enter valid amount and proceed', () => {
+  it.skip('Should enter valid amount and proceed', () => {
     checkForValidAmountAndProceed();
   });
 
-  it('Should generate agreement and show agreement model popup', () => {
+  it.skip('Should generate agreement and show agreement model popup', () => {
     proceedToGenerateAgreement();
   });
 
-  it('Should submit investment and redirect to investment portfolio', () => {
+  it.skip('Should submit investment and redirect to investment portfolio', () => {
     sumbmitingInvestment();
   });
 });
