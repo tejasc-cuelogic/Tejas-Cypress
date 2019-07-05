@@ -761,7 +761,6 @@ export class BusinessAppReviewStore {
             resolve(result);
           })
           .catch((error) => {
-            // Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
             reject(error);
           })
