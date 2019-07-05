@@ -1,7 +1,4 @@
-import { registerApiCall } from '../common.utility';
-import { issuerPreQualDetails } from '../../fixtures/issuer/issuerPreQual';
-import { issuerBusinessDetails } from '../../fixtures/issuer/issuerBusinessDetails';
-import { completeBusinessApplication, fillBasicDetails, fillGeneralInfo, fillExperienceDetails, fillNextYearProjection, fillBusinessDetails, loginToApplication } from './utility/issuerSignUp';
+import { completeBusinessApplication, preQualificationSuccess, preQualificationFail } from './utility/issuerSignUp';
 
 describe('Issuer Sign Up', () => {
   beforeEach(() => {
@@ -16,8 +13,12 @@ describe('Issuer Sign Up', () => {
     }
   });
 
-  it.skip ('should be able to fill basic details of issuer', () => {
-    fillBasicDetails();
+  it ('Pre-qualification should be failed', () => {
+    preQualificationFail();
+  })
+
+  it ('should be able to fill basic details of issuer', () => {
+    preQualificationSuccess();
   })
 
   it ('should able to submit business application and login', () => {

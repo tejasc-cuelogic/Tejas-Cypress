@@ -1,0 +1,103 @@
+{
+  "basicDetails": {
+    "firstName": {
+      "value": "automation"
+    },
+    "lastName": {
+      "value": "test"
+    },
+    "email": {
+      "value": "pankaj.cuelogic+issuer@nextseed.com"
+    }
+  },
+  "generalInfo": {
+    "businessName": {
+      "value": "automation test"
+    },
+    "website": {
+      "value": "http://localhost:3001/"
+    },
+    "phoneNumber": {
+      "value": 1111111111
+    },
+    "street": {
+      "value": "Aesthetic Way"
+    },
+    "city": {
+      "value": "Greensburg"
+    },
+    "state": {
+      "value": "Pennsylvania"
+    },
+    "zipCode": {
+      "value": 15601
+    }
+  },
+  "experienceDetails": {
+    "industryExperience": {
+      "value": 5
+    },
+    "estimatedCreditScore": {
+      "value": 300
+    },
+    "totalProjectCost": {
+      "value": 1000
+    },
+    "amountNeeded": {
+      "value": 5000
+    }
+  },
+  "nextYearProjection": {
+    "nextYearGrossSales": {
+      "value": 7500
+    },
+    "nextYearCogSold": {
+      "value": 750
+    },
+    "nextYearOperatingExpenses": {
+      "value": 150000
+    },
+    "nextYearNetIncome": {
+      "value": 52500
+    }
+  },
+  "businessDetails": {
+    "existingDebt": {
+      "amount": {
+        "value": 100000
+      },
+      "interestExpenses": {
+        "value": 30
+      },
+      "remainingPrincipal": {
+        "value": 80000
+      },
+      "term": {
+        "value": 35
+      }
+    },
+    "owner": {
+      "fullLegalName": {
+        "value": "automation test"
+      },
+      "title": {
+        "value": "CEO"
+      },
+      "yearsOfExp": {
+        "value": 10
+      },
+      "companyOwnerShip": {
+        "value": 40
+      },
+      "dateOfService": {
+        "value": "10/10/2019"
+      },
+      "ssn": {
+        "value": "111111111"
+      },
+      "linkedInUrl": {
+        "value": "http://linkedin.com/username"
+      }
+    }
+  }
+}

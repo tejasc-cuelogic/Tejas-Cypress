@@ -60,8 +60,7 @@ export const fillOwnerInfo = (owner) => {
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
 }
 
-export const completeBusinessApplication = async () => {
-  const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQual.json');
+export const fillPreQaulificationDetails = (issuerPreQual) => {
   fillBasicDetails(issuerPreQual.basicDetails);
   cy.get('input[value="B2C"]').click();
   fillGeneralInfo(issuerPreQual.generalInfo);
@@ -73,6 +72,22 @@ export const completeBusinessApplication = async () => {
   cy.get('input[name="legalConfirmation"]').click({ force: true, multiple: true });
   cy.get('button').contains('Submit').click();
   cy.get('.loader', { timeout: 6000 }).should('not.exist');
+}
+
+export const preQualificationSuccess = async () => {
+  const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQual.json');
+  fillPreQaulificationDetails(issuerPreQual);
+}
+
+export const preQualificationFail = async () => {
+  const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQualFail.json');
+  fillPreQaulificationDetails(issuerPreQual);
+  cy.wait(5000);
+}
+
+export const completeBusinessApplication = async () => {
+  const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQual.json');
+  fillPreQaulificationDetails(issuerPreQual);
   loginToApplication();
   registerApiCall('Proceed');
   cy.get('button').contains('Proceed').click();
