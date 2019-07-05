@@ -433,7 +433,8 @@ footer{
 	}
 	@media only screen and (max-width : @largestTabletScreen){
 		.footer-left-nav div>.ui.image {
-			margin: auto;
+			display: inline-block;
+			margin-right: @38px;
 		}
 		&.offering-footer{
 			padding-bottom: 60px;
