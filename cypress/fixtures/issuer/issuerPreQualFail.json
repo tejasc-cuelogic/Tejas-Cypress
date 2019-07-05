@@ -7,12 +7,12 @@
       "value": "test"
     },
     "email": {
-      "value": "pankaj.cuelogic+issuer@nextseed.com"
+      "value": "pankaj.cuelogic+issuer123@nextseed.com"
     }
   },
   "generalInfo": {
     "businessName": {
-      "value": "automation test"
+      "value": "automation test fail"
     },
     "website": {
       "value": "http://localhost:3001/"
@@ -49,13 +49,13 @@
   },
   "nextYearProjection": {
     "nextYearGrossSales": {
-      "value": 7500
+      "value": 7
     },
     "nextYearCogSold": {
       "value": 750
     },
     "nextYearOperatingExpenses": {
-      "value": 150000
+      "value": 10
     },
     "nextYearNetIncome": {
       "value": 52500
@@ -73,7 +73,7 @@
         "value": 80000
       },
       "term": {
-        "value": 35
+        "value": 3
       }
     },
     "owner": {
