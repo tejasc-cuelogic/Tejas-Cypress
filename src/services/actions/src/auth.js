@@ -420,7 +420,7 @@ export class Auth {
     commonStore.setToken(undefined);
     localStorage.removeItem('lastActiveTime');
     localStorage.removeItem('defaultNavExpanded');
-    localStorage.removeItem('individual');
+    window.sessionStorage.removeItem('individualAccountCipExp');
     authStore.setUserLoggedIn(false);
     userStore.forgetUser();
     this.segmentTrackLogout(logoutType);
