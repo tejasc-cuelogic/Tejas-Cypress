@@ -67,7 +67,7 @@ class LegalDoc extends Component {
     );
   }
 }
-@inject('agreementsStore')
+@inject('agreementsStore', 'uiStore')
 @observer
 export default class LegalDocuments extends Component {
   state = { loaded: false };
@@ -83,6 +83,7 @@ export default class LegalDocuments extends Component {
     } else {
       this.setState({ loaded: true });
     }
+    this.props.uiStore.setProgress(false);
   }
   componentWillUnmount() {
     this.props.agreementsStore.setField('alreadySet', false);

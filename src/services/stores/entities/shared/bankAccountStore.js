@@ -725,7 +725,7 @@ export class BankAccountStore {
           if (this.routingNum !== res) {
             this.routingNum = res;
           }
-          uiStore.setProgress(!!uiStore.createAccountMessage);
+          uiStore.setProgress(!isEmpty(uiStore.createAccountMessage));
         }));
     }
   }

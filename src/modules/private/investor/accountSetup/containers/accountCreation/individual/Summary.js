@@ -64,6 +64,7 @@ export default class Summary extends React.Component {
       partialInvestNowSessionURL,
       setPartialInvestmenSession,
     } = this.props.userDetailsStore;
+    this.props.uiStore.setcreateAccountMessage();
     this.props.individualAccountStore.submitAccount().then(() => {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       if (partialInvestNowSessionURL) {
@@ -86,7 +87,6 @@ export default class Summary extends React.Component {
       isCipExpired,
       signupStatus,
     } = this.props.userDetailsStore;
-    this.props.uiStore.setcreateAccountMessage();
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.handleuserIdentity();
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
@@ -190,7 +190,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
         </div>
       </>
     );

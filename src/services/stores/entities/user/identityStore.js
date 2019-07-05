@@ -590,28 +590,31 @@ export class IdentityStore {
     });
   }
 
-  updateUserInfo = () => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: updateUserCIPInfo,
-        variables: {
-          user: this.formattedUserInfo.userInfo,
-          phoneDetails: this.formattedUserInfo.phoneDetails,
-          cip: this.formattedUserInfo.legalCip,
-        },
-      })
-      .then((data) => {
-        userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
-          if (d) {
-            resolve(data);
-          }
+  updateUserInfo = () => {
+    this.setCipDetails();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserCIPInfo,
+          variables: {
+            user: this.formattedUserInfo.userInfo,
+            phoneDetails: this.formattedUserInfo.phoneDetails,
+            cip: this.formattedUserInfo.legalCip,
+          },
+        })
+        .then((data) => {
+          userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
+            if (d) {
+              resolve(data);
+            }
+          });
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
         });
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        reject(err);
-      });
-  });
+    });
+  };
 
   updateUserPhoneDetails = () => new Promise((res, rej) => {
     client
