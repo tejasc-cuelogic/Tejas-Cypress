@@ -17,11 +17,10 @@ export default class ClosedAccount extends Component {
 
   render() {
     const { sortedNavAccounts } = this.props.accountStore;
-    const navItems = sortedNavAccounts.length > 0 ? sortedNavAccounts.filter(n => (n.component === 'ClosedAccount')) : sortedNavAccounts;
 
     return (
       <>
-        <SecondaryMenu force2ary match={this.props.match} navItems={navItems} />
+        <SecondaryMenu force2ary match={this.props.match} navItems={sortedNavAccounts} />
         <div className="inner-content-spacer">
           <Route path={`${this.props.match.url}/:id`} render={() => <AccountDetails />} />
         </div>
