@@ -39,11 +39,11 @@
 		- CIP
 			- [ ] Entered Business Address
 			- [ ] Entered Business Address with ByPassAddressCheckFlag
-	        - [X] Deny Business Address (Date : **07-04-2018**)
+	        - [X] Deny Business Address (Date : **07-04-2018** | By **Swapnil**)
 			- [ ] Entered an invalid age
 			- [ ] Duplicate SSN
 			- [ ] Invalid Phone Number
-			- [X] CIP Submit and Pass (Date : **07-04-2018**)
+			- [X] CIP Submit and Pass (Date : **07-04-2018** | By **Swapnil**)
 			- CIP Submit and Fail with Questions
 				- [ ] Correct Answers
 				- [ ] Incorrect Answers
@@ -63,18 +63,18 @@
 
 - Individual Account
 	- Link Bank
-		- [X] Link bank directly (Date : **07-04-2018**)
+		- [X] Link bank directly (Date : **07-04-2018** | By **Swapnil**)
 		- [ ] Search bank
 		- [ ] Change linked bank
 		- [ ] keep existing linked bank
 	- Link bank manually
 		- [ ] Wrong routing number
 		- [ ] Wrong account number
-		- [X] Successful link bank manually (Date : **07-04-2018**)
+		- [X] Successful link bank manually (Date : **07-04-2018** | By **Swapnil**)
 	- Add funds
 		- [ ] I don't want to deposit any money
 		- [ ] Add fund below $100
-		- [X] Create account (Date : **07-04-2018**)
+		- [X] Create account (Date : **07-04-2018** | By **Swapnil**)
 
 - IRA Account
 	- Link Bank
@@ -92,7 +92,7 @@
 		- [ ] Remove uploaded files
 	- [ ] Switch to account type and funding tab from summary page, change account type and funding options
 	- [ ] Check hyperlinks (Summary page)
-	- [X] Create account (Date : **07-04-2018**)
+	- [X] Create account (Date : **07-04-2018** | By **Swapnil**)
 
 - Entity Account
 	- [ ] Check Investment Limit
@@ -102,7 +102,7 @@
 	- [ ] Upload with invalid filename
 	- [ ] Remove uploaded files
 	- [ ] Add fund below $5000
-    - [X] Account Creation (Date : **07-04-2018**)
+    - [X] Account Creation (Date : **07-04-2018** | By **Swapnil**)
 
 - Deposit Funds
 	- [ ] Add funds
