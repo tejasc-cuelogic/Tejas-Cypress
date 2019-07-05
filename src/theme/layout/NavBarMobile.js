@@ -198,7 +198,7 @@ export default class NavBarMobile extends Component {
           >
             {publicContent}
             {this.props.userStore.isInvestor && this.props.children}
-            {(hasFooter.find(item => matchPath(location.pathname, { path: item })))
+            {!location.pathname.startsWith('/app') && (hasFooter.find(item => matchPath(location.pathname, { path: item })))
               && <Footer path={location.pathname} />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
