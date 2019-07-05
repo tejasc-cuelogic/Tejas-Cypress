@@ -44,7 +44,7 @@ class PrivateHOC extends Component {
         {(pageMeta.subPanel === 1 || this.props.subNav)
           && <SecondaryMenu navCustomClick={this.props.navCustomClick} addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
-        <div className={`${isInvestor ? 'pt-0' : ''} content-spacer`}>
+        <div className="content-spacer">
         {isInvestor && this.props.P5}
           {this.props.children}
         </div>
