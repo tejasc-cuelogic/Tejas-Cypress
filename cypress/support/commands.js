@@ -85,7 +85,7 @@ const amplifyLogin = async (username, password) => {
       userPoolWebClientId: Cypress.env('userPoolWebClientId'),
     },
   });
-  return await AmplifyAuth.signIn({ username, password});
+  return await AmplifyAuth.signIn({ username, password });
 };
 
 Cypress.Commands.add('login', amplifyLogin);
@@ -115,7 +115,7 @@ Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
 
       if (!dataSet[key].skip) {
         cySelector.type(dataSet[key].value);
-      } 
+      }
       if (!dataSet[key].skip && dataSet[key].isEnterEvent) {
         cySelector.type('{enter}');
       }
@@ -139,4 +139,38 @@ Cypress.Commands.add('clearFormField', (dataSet, parentSelector = false) => {
       }
     });
   }
+});
+
+Cypress.Commands.add('getOffering', (offeirId) => {
+  let retries = -1
+  function searchForOffering() {
+    retries++;
+    cy.get('.campaign-list-wrapper').find('.container').find('.stackable')
+      .then(($parent) => {
+        try {
+          if ($parent.find(`div[data-cy=${offeirId}]`).length) {
+            cy.log('Find offering...');
+            cy.wrap($parent.find(`div[data-cy=${offeirId}]`)).click();
+          } else {
+            cy.log('Move for Read More...');
+            cy.get('body').then(($body) => {
+              if ($body.find('div[data-cy=activeToDisplay]').length) {
+                cy.get('div[data-cy=activeToDisplay]').find('button').contains('Load More')
+                  .click();
+                return searchForOffering();
+              } else {
+                if (retries > 2) {
+                  cy.log('ERROR :: offeirng not found');
+                }
+              }
+            });
+          }
+        } catch (err) {
+          if (retries > 2) {
+            cy.log('ERROR :: offeirng not found');
+          }
+        }
+      });
+  }
+  return searchForOffering();
 });
