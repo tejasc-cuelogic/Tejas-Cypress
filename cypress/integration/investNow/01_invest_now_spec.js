@@ -5,11 +5,17 @@ import {
   proceedWithValidUserLoginAction,
 } from './utility/investNowFlow.utility';
 
-import { userDetail } from '../common.utility';
+import { isAbortTestCases, clearStorage } from '../common.utility';
 
 describe('Invest now flow', () => {
+  const whenFailed = () => {
+    this.skip();
+  }
   beforeEach(() => {
     cy.restoreLocalStorage();
+    // if (isAbortTestCases() === 'true') {
+    //   this.skip();
+    // }
   });
 
   afterEach(() => {
@@ -39,5 +45,4 @@ describe('Invest now flow', () => {
   it('succesfully login as investor with one account', () => {
     proceedWithValidUserLoginAction();
   });
-
 });

@@ -161,6 +161,7 @@ Cypress.Commands.add('getOffering', (offeirId) => {
               } else {
                 if (retries > 2) {
                   cy.log('ERROR :: offeirng not found');
+                  window.localStorage.setItem('abortTestCase', true);
                 }
               }
             });

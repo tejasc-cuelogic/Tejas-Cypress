@@ -61,3 +61,11 @@ export const clearFormInput = (inputArr = []) => {
   }
 };
 
+export const isAbortTestCases = () => {
+  const testAction = window.localStorage.getItem('abortTestCase');
+  return (testAction === 'true' || testAction === true) ? 'true' : 'false';
+}
+
+export const clearStorage = (keyParam) => {
+  window.localStorage.removeItem(keyParam);
+}
