@@ -6,6 +6,7 @@ const ssri = require('ssri');
 const webpack = require('webpack');
 const resolve = require('resolve');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
+const GoogleFontsPlugin = require('google-fonts-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -600,6 +601,8 @@ module.exports = (webpackEnv) => {
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
       // }),
+      //  pack up Google Fonts from ./googleFonts.json config file
+      new GoogleFontsPlugin(path.join(__dirname, 'googleFonts.json')),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       isEnvProduction &&

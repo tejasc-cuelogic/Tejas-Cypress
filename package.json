@@ -11,6 +11,7 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.17.2",
     "gh-pages": "^1.0.0",
+    "google-fonts-plugin": "^4.1.0",
     "hard-source-webpack-plugin": "^0.13.1",
     "html-webpack-tags-plugin": "^2.0.12",
     "semantic-ui": "^2.4.2",
