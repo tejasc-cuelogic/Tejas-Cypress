@@ -2,6 +2,7 @@
 const fs = require('fs');
 const isWsl = require('is-wsl');
 const path = require('path');
+const ssri = require('ssri');
 const webpack = require('webpack');
 const resolve = require('resolve');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
@@ -73,6 +74,34 @@ module.exports = (webpackEnv) => {
     : isEnvDevelopment && '';
   // Get environment variables to inject into our app.
   const env = getClientEnvironment(publicUrl);
+
+
+  //generated needed SRI hashs for extra files, note transforms need to match anything used by CopyPlugin
+  const aIntg = ssri.fromData(
+      fs.readFileSync(path.join(__dirname, '..', 'src', 'assets', 'js', 'a.js'), { encoding: 'utf8' }
+      ).replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].REACT_APP_SEGMENT_WRITE_KEY),
+      {
+        algorithms: ['sha256']
+      }
+  ).toString();
+
+  const rIntg = ssri.fromData(
+      fs.readFileSync(path.join(__dirname, '..', 'src', 'assets', 'js', 'r.js'), { encoding: 'utf8' }
+      ),
+      {
+        algorithms: ['sha256']
+      }
+  ).toString();
+
+  const cypressIntg = ssri.fromData(
+      fs.readFileSync(path.join(__dirname, '..', 'src', 'assets', 'js', 'cypressSri.js'), { encoding: 'utf8' }
+      ),
+      {
+        algorithms: ['sha256']
+      }
+  ).toString();
+
+  console.log(`Generated SRIs: ${aIntg}, ${rIntg}, ${cypressIntg}`);
 
   // common function to get style loaders
   const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -530,19 +559,43 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
+      // will calculate and add sri / integrity keys
+      // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
+      new HtmlWebpackTagsPlugin({
+        scripts: [
+          {
+            path: 'assets/js/a.js',
+            attributes: {
+              integrity: aIntg,
+              type: 'text/javascript',
+              crossorigin: "anonymous"
+            }
+          },
+          {
+            path: 'assets/js/r.js',
+            attributes: {
+              integrity: rIntg,
+              type: 'text/javascript',
+              crossorigin: "anonymous"
+            }
+          },
+        ],
+        append: false
+      }),
       !(['production', 'master', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
       && new HtmlWebpackTagsPlugin({
         scripts: [
           {
             path: 'assets/js/cypressSri.js',
             attributes: {
-              integrity: ''
+              integrity: cypressIntg,
+              type: 'text/javascript',
+              crossorigin: "anonymous"
             }
-          }
+          },
         ],
-        append: false
+        append: true
       }),
-
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
@@ -612,14 +665,14 @@ module.exports = (webpackEnv) => {
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new SriPlugin({
+        hashFuncNames: ['sha256'],
+        enabled: isEnvProduction,
+      }),
       new CopyPlugin([
         {
           from: 'src/assets/js/r.js',
           to: 'assets/js/r.js',
-        },
-        {
-          from: 'src/assets/js/cypressSri.js',
-          to: 'assets/js/cypressSri.js',
         },
         {
           from: 'src/assets/js/a.js',
@@ -629,10 +682,13 @@ module.exports = (webpackEnv) => {
           },
         },
       ]),
-      new SriPlugin({
-        hashFuncNames: ['sha256'],
-        enabled: isEnvProduction,
-      }),
+      !(['production', 'master', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      && new CopyPlugin([
+        {
+          from: 'src/assets/js/cypressSri.js',
+          to: 'assets/js/cypressSri.js',
+        },
+      ]),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
       isEnvProduction &&
