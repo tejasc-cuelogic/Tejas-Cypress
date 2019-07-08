@@ -560,43 +560,43 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
+      // // will calculate and add sri / integrity keys
+      // // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
+      new HtmlWebpackTagsPlugin({
+        scripts: [
+          {
+            path: 'assets/js/a.js',
+            attributes: {
+              integrity: aIntg,
+              type: 'text/javascript',
+              crossorigin: "anonymous"
+            }
+          },
+          {
+            path: 'assets/js/r.js',
+            attributes: {
+              integrity: rIntg,
+              type: 'text/javascript',
+              crossorigin: "anonymous"
+            }
+          }
+        ],
+        append: false
+      }),
       !(['production', 'master', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
       && new HtmlWebpackTagsPlugin({
         scripts: [
           {
             path: 'assets/js/cypressSri.js',
             attributes: {
-              integrity: '',
-              type: 'text/javascript',
-              crossorigin: "anonymous"
+              integrity: ''
+              // type: 'text/javascript',
+              // crossorigin: "anonymous"
             }
-          },
+          }
         ],
-        append: true
+        append: false
       }),
-      // // will calculate and add sri / integrity keys
-      // // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
-      // new HtmlWebpackTagsPlugin({
-      //   scripts: [
-      //     {
-      //       path: 'assets/js/a.js',
-      //       attributes: {
-      //         integrity: aIntg,
-      //         type: 'text/javascript',
-      //         crossorigin: "anonymous"
-      //       }
-      //     },
-      //     {
-      //       path: 'assets/js/r.js',
-      //       attributes: {
-      //         integrity: rIntg,
-      //         type: 'text/javascript',
-      //         crossorigin: "anonymous"
-      //       }
-      //     },
-      //   ],
-      //   append: false
-      // }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
