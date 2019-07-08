@@ -664,10 +664,6 @@ export const PUBLIC_NAV = [
       { title: 'Legal Documents', to: 'legal-documents' },
     ],
   },
-  {
-    title: 'About Us',
-    to: 'about',
-  },
 ];
 
 export const MOBILE_NAV = [
