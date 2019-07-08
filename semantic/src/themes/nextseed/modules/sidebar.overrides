@@ -230,10 +230,7 @@
 			}
 		}
 		&.public-sidebar {
-			padding-bottom: @64px;
-			.ns-close-light {
-				top: 7px;		
-			}
+			width: 100%;
 		}
 	}
 	.ui.image.logo{

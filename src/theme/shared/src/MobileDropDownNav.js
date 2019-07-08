@@ -46,7 +46,7 @@ export default class MobileDropDownNav extends React.Component {
     const { navStatus, campaignHeaderStatus } = navStore;
     return (
       <Responsive maxWidth={location.pathname.startsWith('/offerings/') ? 991 : 991} as={React.Fragment}>
-        <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="private-dropdown">
+        <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className={location.pathname.startsWith('/app/') ? 'private-dropdown' : ''}>
           <Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
             <Dropdown item text={this.activeText()}>
               <Dropdown.Menu>

@@ -518,8 +518,8 @@ footer .ui.text.menu{
         >.item {
             justify-content: space-between;
             width: 100%;
-            border: 1px solid @neutral-darkwhite;
-            border-radius: 4px;
+            // border: 1px solid @neutral-darkwhite;
+            // border-radius: 4px;
             >i.dropdown.icon:before {
                 content: '\e914';
                 font-family: 'nextseed';
@@ -638,9 +638,6 @@ footer .ui.text.menu{
         background-color: transparent;
     }
 }
-.public-header-nav{
-    padding:@47px 0 @20px;
-}
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
     z-index: 103;
@@ -648,18 +645,15 @@ footer .ui.text.menu{
         margin-left: @24px;
         margin-right: @24px;
     }
-    &.overlay .ui.image.logo {
-        margin: @14px 0 0 @24px;
-        width: 150px;
-    }
     &.vertical {
         .item {
             border-radius: 0 !important;
-            padding: @14px @26px;
-            font-weight: @fontMedium;
+            padding: @10px @22px;
+            font-weight: @normal;
             span {
                 margin-left: 0;
                 max-width: 100%;
+                text-transform: none;
             }
             &.dropdown {
                 .icon.dropdown {
@@ -690,6 +684,14 @@ footer .ui.text.menu{
             .ui.button.basic{
                 box-shadow:0 0 0 1px @thumbInactiveBackground inset !important;
                 border:none !important;
+            }
+        }
+        .logged-in-nav{
+            background-color: @neutral-offwhite;
+            margin-bottom: 20px;
+            padding: @14px 0;
+            .item span {
+                font-weight: @fontMedium;
             }
         }
     }
@@ -775,6 +777,21 @@ footer .ui.text.menu{
             span {
                 color: @white;
             }
+        }
+    }
+    .sidebar-logo {
+        height: @58px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .ui.image.logo {
+            width: 130px;
+            margin-left: @22px;
+        }
+        .ns-close-light{
+            position: relative;
+            margin-right: @26px;
+            right: 0;
         }
     }
 }

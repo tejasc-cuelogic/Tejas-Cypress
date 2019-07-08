@@ -1455,7 +1455,6 @@ div.login-form {
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
-		margin-top: @58px;
 		padding: @14px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
@@ -2871,9 +2870,4 @@ table.css-wu4c77-diff-container {
 			word-break: break-all;
 		}
 	}
-}
-.private-dropdown {
-	position: absolute;
-	top: 58px;
-	width: 100%;
 }

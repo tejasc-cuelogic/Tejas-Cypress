@@ -236,6 +236,9 @@
     .ui.statistic{
 		margin:0;
 		flex: 1;
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-right: @18px;
+		}
         .value{
             font-size:@20px !important;
 			text-transform:none;
