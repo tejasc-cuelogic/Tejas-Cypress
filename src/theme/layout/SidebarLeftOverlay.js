@@ -109,19 +109,7 @@ const MySidebar = observer(props => (
       className={`${props.match.url.includes('/business-application')
         ? 'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
     >
-      {/* {props.mobile
-      && (
-        <div className="public-header-section">
-          <Link to="/">
-            <Logo
-              dataSrc="LogoGreenGrey"
-              className="mobile-header-logo"
-            />
-          </Link>
-          <Icon className="ns-hamburger" role="button" tabIndex="0" onClick={props.toggle} />
-        </div>
-      )} */}
-      {/* <Icon onClick={props.toggle} className="ns-hamburger" /> */}
+      {props.mobile && <Icon onClick={props.toggle} className="ns-hamburger" />}
       {props.children}
     </Sidebar.Pusher>
     <NotificationPanel status={props.layoutState.notificationPanel} />
