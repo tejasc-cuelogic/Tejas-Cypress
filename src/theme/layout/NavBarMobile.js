@@ -59,7 +59,7 @@ export default class NavBarMobile extends Component {
     } else if (location.pathname.startsWith('/agreements/legal')) {
       navTitle = 'Legal';
     }
-    const { signupStatus } = userDetailsStore;
+    const { signupStatus, pendingStep } = userDetailsStore;
     const isAddNewAccount = signupStatus && signupStatus.finalStatus && signupStatus.investorProfileCompleted && signupStatus.inActiveAccounts.length > 0;
     const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => (e.isLoggedIn && this.props.userStore.isInvestor && (e.title !== 'Add New Account' || (e.title === 'Add New Account' && isAddNewAccount))));
     const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && e.to === 'offerings'));
@@ -108,7 +108,7 @@ export default class NavBarMobile extends Component {
                       </Link>
                     ) : ((this.props.userStore.isInvestor && !location.pathname.startsWith('/app')) || !this.props.userStore.isInvestor) ? (
                       <Link
-                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'setup' : 'dashboard'}`}
+                        to={this.props.userStore.isInvestor ? pendingStep : '/app/dashboard'}
                         className="sign-in neutral-text"
                       >
                         Dashboard
