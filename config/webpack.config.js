@@ -589,13 +589,13 @@ module.exports = (webpackEnv) => {
           {
             path: 'assets/js/cypressSri.js',
             attributes: {
-              integrity: ''
-              // type: 'text/javascript',
-              // crossorigin: "anonymous"
+              integrity: cypressIntg,
+              type: 'text/javascript',
+              crossorigin: "anonymous"
             }
           }
         ],
-        append: true
+        append: false
       }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
