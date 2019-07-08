@@ -750,6 +750,7 @@ footer .ui.text.menu{
         .item {
             &:hover,&:focus,&.active{
                 color: @primary-one !important;
+                text-decoration: none !important;
             }
             &.active.no-active{
                 background-color: transparent !important;
