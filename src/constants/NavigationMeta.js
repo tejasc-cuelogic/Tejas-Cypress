@@ -705,7 +705,7 @@ export const MOBILE_NAV = [
   { title: 'How it Works Business', to: 'business' },
   { title: 'Education Center', to: 'resources/education-center' },
   { title: 'About Us', to: 'about' },
-  { title: 'Blog', to: 'resources/insights' },
+  { title: 'Insights', to: 'resources/insights' },
   { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
 ];
 
