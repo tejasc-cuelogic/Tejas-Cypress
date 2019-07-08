@@ -1,0 +1,44 @@
+{
+  "inValidUserCredentials": {
+    "email": {
+      "value": "v2+admin@nextseed.com"
+    },
+    "password": {
+      "selector": "type",
+      "value": "nextseedTest"
+    }
+  },
+  "validInvestorHavingOnceAccountCredentials": {
+    "email": {
+      "value": "jackdemerse2017+15@gmail.com"
+    },
+    "password": {
+      "selector": "type",
+      "value": "Jack@12345"
+    }
+  },
+  "validInvestorWithIncompleteCIPCredentials": {
+    "email": {
+      "value": "jackdemerse2017+23@gmail.com"
+    },
+    "password": {
+      "selector": "type",
+      "value": "Jack@12345"
+    }
+  },
+  "investorLoginCredentials": {
+    "name": "Valentino",
+    "email": "test001@nextseed.com",
+    "password": "nextseed01test'"
+  },
+  "inValidEmailCredentials": {
+    "email": {
+      "value": "test001nextseed.com",
+      "showError": true
+    },
+    "password": {
+      "selector": "type",
+      "value": "nextseed01test"
+    }
+  }
+}
