@@ -169,7 +169,7 @@ Cypress.Commands.add('getOffering', (offeirId) => {
               } else {
                 if (retries > 2) {
                   cy.log('ERROR :: offeirng not found');
-                  window.localStorage.setItem('abortTestCase', true);
+                  cy.addWindowLocalStorageKey('abortRemainingTestCase', true);
                 }
               }
             });
@@ -177,9 +177,18 @@ Cypress.Commands.add('getOffering', (offeirId) => {
         } catch (err) {
           if (retries > 2) {
             cy.log('ERROR :: offeirng not found');
+            cy.addWindowLocalStorageKey('abortRemainingTestCase', true);
           }
         }
       });
   }
   return searchForOffering();
+});
+
+Cypress.Commands.add('clearLocalStorageKey', (KEY_NAME) => {
+  localStorage.removeItem(KEY_NAME);
+});
+
+Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE= false) => {
+  window.localStorage.setItem(KEY_NAME, VALUE);
 });

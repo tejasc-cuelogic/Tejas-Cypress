@@ -13,7 +13,7 @@ import {
 
 export const initializeInvestNowFlow = async (investmentType = 'CF') => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-  // cy.applicationUnlock();
+  cy.applicationUnlock();
   OfferingListingFlow();
   if (investmentType === 'CF') {
     OfferingDetailFlow();
