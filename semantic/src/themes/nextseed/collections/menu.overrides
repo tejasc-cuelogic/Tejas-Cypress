@@ -650,6 +650,7 @@ footer .ui.text.menu{
             border-radius: 0 !important;
             padding: @10px @22px;
             font-weight: @normal;
+            font-size: @18px;
             span {
                 margin-left: 0;
                 max-width: 100%;
@@ -680,7 +681,7 @@ footer .ui.text.menu{
         }
         .public-action-nav .item {
             border-bottom: 0;
-            padding: @8px @26px;
+            padding: @8px @22px;
             .ui.button.basic{
                 box-shadow:0 0 0 1px @thumbInactiveBackground inset !important;
                 border:none !important;
