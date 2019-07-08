@@ -67,8 +67,8 @@ export class NavStore {
     if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
       navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
     }
-    navigationItems = navigationItems.filter(item => (item.title !== 'Setup' && (userDetailsStore.signupStatus.activeAccounts.length > 0 || userDetailsStore.signupStatus.partialAccounts.length > 0 || userDetailsStore.signupStatus.inprogressAccounts.length > 0)));
-    navigationItems = navigationItems.filter(item => ((item.title !== 'Referrals' || item.title !== 'Refer a Friend') && userDetailsStore.signupStatus.activeAccounts.length > 0));
+    navigationItems = navigationItems.filter(item => (item.title !== 'Setup' || (item.title === 'Setup' && (userDetailsStore.signupStatus.activeAccounts.length > 0 || userDetailsStore.signupStatus.partialAccounts.length > 0 || userDetailsStore.signupStatus.inprogressAccounts.length > 0))));
+    navigationItems = navigationItems.filter(item => ((item.title !== 'Referrals' || item.title !== 'Refer a Friend') || ((item.title === 'Referrals' || item.title === 'Refer a Friend') && userDetailsStore.signupStatus.activeAccounts.length > 0)));
     if (permitted && permitted.length > 1 && permitted.includes('investor')) {
       const pInvestorInfo = {
         roles,
