@@ -5,7 +5,7 @@ import { devices } from '../../fixtures/common/devices';
 prepareTestsForDevices("/", devices, (deviceDetails) => {
   describe(`Log In for device width-${deviceDetails.width} height-${deviceDetails.height}`, () => {
     beforeEach(() => {
-      // cy.applicationUnlock();
+      cy.applicationUnlock();
       goToLoginScreen(deviceDetails);
     });
 
