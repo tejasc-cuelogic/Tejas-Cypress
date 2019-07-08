@@ -228,7 +228,7 @@ test:dev:
     - npm install
     - CYPRESS_baseUrl=https://$DEV_URL $(npm bin)/cypress run
   dependencies:
-    - build:review
+    - build:dev
 
 
 #---------------------------------Qa--------------------------------------------
