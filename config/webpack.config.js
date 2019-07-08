@@ -566,7 +566,7 @@ module.exports = (webpackEnv) => {
           {
             path: 'assets/js/cypressSri.js',
             attributes: {
-              integrity: cypressIntg,
+              integrity: '',
               type: 'text/javascript',
               crossorigin: "anonymous"
             }
@@ -574,29 +574,29 @@ module.exports = (webpackEnv) => {
         ],
         append: true
       }),
-      // will calculate and add sri / integrity keys
-      // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
-      new HtmlWebpackTagsPlugin({
-        scripts: [
-          {
-            path: 'assets/js/a.js',
-            attributes: {
-              integrity: aIntg,
-              type: 'text/javascript',
-              crossorigin: "anonymous"
-            }
-          },
-          {
-            path: 'assets/js/r.js',
-            attributes: {
-              integrity: rIntg,
-              type: 'text/javascript',
-              crossorigin: "anonymous"
-            }
-          },
-        ],
-        append: false
-      }),
+      // // will calculate and add sri / integrity keys
+      // // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
+      // new HtmlWebpackTagsPlugin({
+      //   scripts: [
+      //     {
+      //       path: 'assets/js/a.js',
+      //       attributes: {
+      //         integrity: aIntg,
+      //         type: 'text/javascript',
+      //         crossorigin: "anonymous"
+      //       }
+      //     },
+      //     {
+      //       path: 'assets/js/r.js',
+      //       attributes: {
+      //         integrity: rIntg,
+      //         type: 'text/javascript',
+      //         crossorigin: "anonymous"
+      //       }
+      //     },
+      //   ],
+      //   append: false
+      // }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
       //   manifest: require("../dist/nodeModuleDll.json") // eslint-disable-line
