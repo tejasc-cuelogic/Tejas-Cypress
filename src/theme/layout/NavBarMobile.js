@@ -89,7 +89,7 @@ export default class NavBarMobile extends Component {
                       </Link>
                     ) : (
                       <Link
-                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'setup' : 'dashboard'}`}
                         className="sign-in neutral-text"
                       >
                       Dashboard

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Grid, Header } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
-import { Logo } from '../../../theme/shared';
 
-const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('uiStore', 'navStore', 'userStore')
 @observer
@@ -19,14 +16,6 @@ class PrivateHOC extends Component {
     }
     return (
       <>
-      {isMobile && isInvestor
-        && (
-          <Link to="/"><Logo
-            dataSrc="LogoGreenGrey"
-            className="mobile-header-logo"
-          /></Link>
-        )
-        }
         <div className={`${isInvestor ? 'investor' : ''} page-header-section`}>
           <Grid columns="equal" stackable>
             <Grid.Row>

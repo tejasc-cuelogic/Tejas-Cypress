@@ -18,7 +18,7 @@ import Congratulation from '../../../../public/offering/components/investNow/agr
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
-import StickyNotification from '../../summary/components/stickyNotification';
+import StickyNotification from '../../setup/components/stickyNotification';
 
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
 @observer

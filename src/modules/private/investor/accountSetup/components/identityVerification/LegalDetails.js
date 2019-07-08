@@ -16,7 +16,7 @@ class LegalDetails extends React.Component {
     if ((this.props.userDetailsStore.signupStatus.isMigratedFullAccount
       && this.props.match.url !== this.props.userDetailsStore.pendingStep)
       || this.props.userDetailsStore.isLegaLVerificationDone) {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/app/setup');
     }
   }
 
@@ -162,7 +162,7 @@ class LegalDetails extends React.Component {
         </Form>
       </Modal.Content>
       <Modal.Actions className="signup-actions">
-        <p><Link to="/app/summary" onClick={close}>I’ll finish this later</Link></p>
+        <p><Link to="/app/setup" onClick={close}>I’ll finish this later</Link></p>
       </Modal.Actions>
     </Modal>
     );
