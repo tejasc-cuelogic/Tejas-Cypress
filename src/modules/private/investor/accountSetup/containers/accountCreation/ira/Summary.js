@@ -32,22 +32,11 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
-    const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
-    if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-      this.props.history.push('/app/setup/identity-verification/0');
-      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
-      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
-    } else if (isCipExpired) {
-      this.props.history.push('/app/setup/identity-verification/0');
-      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
-      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
-    } else {
-      this.props.iraAccountStore.submitAccount().then(() => {
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-        // this.props.history.push('app/setup');
-      });
-    }
+    this.props.iraAccountStore.submitAccount().then(() => {
+      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      // this.props.history.push('app/setup');
+    });
   }
 
   openModal = (type) => {

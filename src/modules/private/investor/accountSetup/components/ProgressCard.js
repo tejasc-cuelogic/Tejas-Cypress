@@ -2,6 +2,7 @@ import React from 'react';
 import { isEmpty } from 'lodash';
 import { Card, Icon, Button } from 'semantic-ui-react';
 import Helper from '../helper';
+import NSImage from '../../../../shared/NSImage';
 
 const progressMeta = Helper.Progress();
 
@@ -14,6 +15,8 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
     } else if (signupStatus.isMigratedFullAccount
       && signupStatus.isCipDoneForMigratedUser
       && signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed) {
+      status = 2;
+    } else if (signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount) {
       status = 2;
     } else {
       status = 1;
@@ -80,18 +83,22 @@ const ProgressCard = props => (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
             <Card.Content>
               <Icon.Group size="huge">
-                <Icon className={`ns-${key}`} />
+                {/* <Icon className={`ns-${key}`} /> */}
+                <NSImage path={(status === 2 || status === 0) ? (`cards/${key}.png`) : (`cards/${key}-green.png`)} />
                 <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''}`} />
               </Icon.Group>
               <p><b>{currentCard.label}</b></p>
-              {status === 2 ? <p>{currentCard.successMsg}</p> : '' }
+              </Card.Content>
+              <Card.Content extra className="pt-0">
+              {status === 2 ? <p className="mt-0 grey-header"><b>{currentCard.successMsg}</b></p> : '' }
+              {status === 0 && <p className="mt-0" />}
               {status === 0
                 ? ''
                 : status !== 2
                   ? (
 <Button
   color="green"
-  content={currentCard.step === 2 ? 'Create' : 'Continue'}
+  content={<>{currentCard.step === 2 ? 'Create' : 'Continue'} <Icon className="ns-caret-right" color="green" /></>}
   onClick={() => (currentCard.step !== 0
     ? props.history.push(`${pathToRender}`)
     : !isEmailVerified
@@ -99,10 +106,11 @@ const ProgressCard = props => (
       : !verificationStatus
         ? props.history.push(`${pathToRender}`)
         : props.history.push(`${altPathToRender}`))
-                    }
+      }
+  className="link-button"
 />
                   )
-                  : ''
+                  : ' '
               }
             </Card.Content>
           </Card>
@@ -159,6 +167,7 @@ const ProgressCard = props => (
               content="Continue Account Creation"
               disabled={props.getStepStatus('accounts') === 'disable'}
               onClick={() => props.navToAccTypes()}
+              className="link-button"
             />
           </Button.Group>
         </Card.Content>

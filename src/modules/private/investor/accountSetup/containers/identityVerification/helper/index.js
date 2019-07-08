@@ -42,6 +42,7 @@ class Helper {
       details.alertMsg = 'Verification failed';
       details.route = '/app/setup/identity-verification/1';
       details.msgType = 'error';
+      details.key = key;
     }
     return details;
   }

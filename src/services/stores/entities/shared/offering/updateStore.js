@@ -172,7 +172,7 @@ export class UpdateStore {
 
     @action
     save = (id, status) => new Promise((resolve) => {
-      uiStore.setProgress(true);
+      uiStore.setProgress(status);
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       data.status = status;
@@ -185,6 +185,7 @@ export class UpdateStore {
           uiStore.setProgress(false);
           resolve();
         });
+        return;
       }
       client
         .mutate({

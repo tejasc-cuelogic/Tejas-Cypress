@@ -62,7 +62,7 @@ export default class AccountSetup extends Component {
 />
           ) : <InlineLoader /> : ''}
       >
-        <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
+        <Header as={isMobile ? 'h5' : 'h4'} className={isMobile ? 'mb-30 center-align' : 'mt-80 mb-30'}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading
           ? (
 <ProgressCard

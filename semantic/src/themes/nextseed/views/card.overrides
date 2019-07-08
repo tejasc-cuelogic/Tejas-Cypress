@@ -544,13 +544,23 @@
 }
 
 .ui.card.verification{
-    min-height:210px;
+    min-height:190px;
     text-align:center;
-    justify-content:center;
+    // justify-content:center;
     .content{
         flex-grow:0;
         p{
-            margin:@21px 0;
+            margin:@19px 0 @10px;
+            color: @neutral;
+        }
+        &.extra{
+            border-top: 0 !important;
+        }
+        .ui.button{
+            font-weight: @bold;
+            i.icon{
+                vertical-align: top;
+            }
         }
     }
     .icon{
@@ -560,11 +570,16 @@
             right:-.4em;
         }
     }
-    &.disabled{
-        color:@border-color;
+    &.disabled .content{
+       p{
+           color:@neutral-offdark;
+        }
     }
     &.done{
         box-shadow:none;
+        .content p{
+            color:@neutral-offdark;
+        }
     }
 }
 

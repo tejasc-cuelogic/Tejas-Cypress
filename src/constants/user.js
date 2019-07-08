@@ -33,12 +33,14 @@ export const DELETED_ACCOUNT_STATUS = {
   PARTIAL: ['DELETED_INVESTOR_PARTIAL'],
   BASIC: ['DELETED_INVESTOR_BASIC'],
   FULL: ['DELETED_INVESTOR_FULL'],
+  MIGRATION_PARTIAL: ['DELETED_INVESTOR_MIGRATION_PARTIAL'],
+  MIGRATION_FULL: ['DELETED_INVESTOR_MIGRATION_FULL'],
   FROZEN: [],
   LOCKED: [''],
   UNLOCKED: [''],
   ISSUER: ['DELETED_ISSUER_ISSUER'],
   ADMIN: ['DELETED_ADMIN_ADMIN'],
-  INVESTOR: ['DELETED_INVESTOR_PARTIAL', 'DELETED_INVESTOR_BASIC', 'DELETED_INVESTOR_FULL'],
+  INVESTOR: ['DELETED_INVESTOR_PARTIAL', 'DELETED_INVESTOR_BASIC', 'DELETED_INVESTOR_FULL', 'DELETED_INVESTOR_MIGRATION_PARTIAL', 'DELETED_INVESTOR_MIGRATION_FULL'],
 };
 
 export const FILTER_META = {
@@ -57,6 +59,8 @@ export const FILTER_META = {
     { text: 'Partial', value: 'PARTIAL', allowedDeleted: true },
     { text: 'Basic', value: 'BASIC', allowedDeleted: true },
     { text: 'Full', value: 'FULL', allowedDeleted: true },
+    { text: 'Migration Partial', value: 'MIGRATION_PARTIAL', allowedDeleted: true },
+    { text: 'Migration Full', value: 'MIGRATION_FULL', allowedDeleted: true },
     { text: 'Frozen', value: 'FROZEN', allowedDeleted: false },
     { text: 'Locked', value: 'LOCKED', allowedDeleted: false },
     { text: 'Unlocked', value: 'UNLOCKED', allowedDeleted: false },
