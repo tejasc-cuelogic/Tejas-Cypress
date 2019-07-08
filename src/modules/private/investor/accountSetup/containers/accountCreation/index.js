@@ -6,7 +6,7 @@ import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 
-@inject('identityStore', 'accountStore', 'bankAccountStore')
+@inject('identityStore', 'accountStore', 'bankAccountStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class AccountCreation extends Component {
@@ -21,7 +21,9 @@ export default class AccountCreation extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.history.push('/app/summary');
+    const { signupStatus } = this.props.userDetailsStore;
+    const accountType = signupStatus.activeAccounts[0] || signupStatus.partialAccounts[0];
+    this.props.history.push(accountType ? `/app/account-details/${accountType}/portfolio` : '/app/setup');
   }
 
   renderAccType = () => {

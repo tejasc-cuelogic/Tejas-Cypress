@@ -109,7 +109,7 @@ export default class ConfirmEmailAddress extends Component {
 
   handleCloseModal = () => {
     // if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
-    //   this.props.history.push('/app/summary');
+    //   this.props.history.push('/app/setup');
     // } else {
     //   this.props.history.push(this.props.uiStore.authRef || '/');
     // }
@@ -143,7 +143,7 @@ export default class ConfirmEmailAddress extends Component {
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
-      this.props.history.replace('/app/summary/identity-verification/0');
+      this.props.history.replace('/app/setup/identity-verification/0');
     }
     this.props.identityStore.setIsOptConfirmed(false);
   }

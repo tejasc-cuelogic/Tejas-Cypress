@@ -53,16 +53,16 @@ export const PRIVATE_NAV = [
   {
     title: 'Accounts',
     accessibleTo: ['ira', 'individual', 'entity'],
-    to: 'summary',
-    path: 'investor/summary',
+    to: 'setup',
+    path: 'investor/setup',
     isMenuHeader: true,
     subPanel: 0,
   },
   {
     icon: 'ns-dashboard',
-    title: 'Summary',
-    to: 'summary',
-    path: 'investor/summary',
+    title: 'Setup',
+    to: 'setup',
+    path: 'investor/setup',
     accessibleTo: ['investor'],
     subPanel: 0,
   },
@@ -644,7 +644,7 @@ export const PUBLIC_NAV = [
   //   subPanel: 1,
   //   exact: true,
   //   subNavigations: [
-  //     { title: 'Portfolio', to: 'app/summary' },
+  //     { title: 'Portfolio', to: 'app/setup' },
   //     { title: 'Settings', to: 'app/account-settings' },
   //     { title: 'Refer a Friend', to: 'app/referrals' },
   //     { title: 'Log out', to: '' },
@@ -663,10 +663,6 @@ export const PUBLIC_NAV = [
       { title: 'General Risk Factors', to: 'general-risk-factors' },
       { title: 'Legal Documents', to: 'legal-documents' },
     ],
-  },
-  {
-    title: 'About Us',
-    to: 'about',
   },
 ];
 
@@ -689,14 +685,14 @@ export const MOBILE_NAV = [
     accessibleTo: ['entity'],
     isLoggedIn: true,
   },
-  { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
+  { title: 'Explore', to: 'offerings', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',
     accessibleTo: ['ira', 'individual', 'entity'],
     isLoggedIn: true,
   },
-  { title: 'Explore', to: 'offerings', isLoggedIn: true },
+  { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
   { title: 'How it Works Investor', to: 'invest' },
   { title: 'How it Works Business', to: 'business' },
   { title: 'Education Center', to: 'resources/education-center' },

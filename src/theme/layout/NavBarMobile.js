@@ -107,7 +107,7 @@ export default class NavBarMobile extends Component {
                       </Link>
                     ) : ((this.props.userStore.isInvestor && !location.pathname.startsWith('/app')) || !this.props.userStore.isInvestor) ? (
                       <Link
-                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                        to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'setup' : 'dashboard'}`}
                         className="sign-in neutral-text"
                       >
                         Dashboard

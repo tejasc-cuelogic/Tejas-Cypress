@@ -23,7 +23,6 @@ export default class AccountCreation extends React.Component {
 
   handleMultiStepModalclose = () => {
     this.updateUser();
-    this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetStoreData();
     this.props.uiStore.setProgress(false);
@@ -36,7 +35,15 @@ export default class AccountCreation extends React.Component {
   }
 
   updateUser = () => {
-    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub).then(() => {
+      const { getInvestorAccountsRoute } = this.props.userDetailsStore;
+      const route = getInvestorAccountsRoute('ira');
+      if (route) {
+        this.props.history.push(`/app/account-details/${route}/portfolio`);
+      } else {
+        this.props.history.push('/app/setup');
+      }
+    });
   }
 
   closeProcessingModal = () => {
@@ -46,7 +53,7 @@ export default class AccountCreation extends React.Component {
       this.props.history.push(partialInvestNowSessionURL);
       setPartialInvestmenSession();
     } else {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/app/account-details/ira/portfolio');
       this.props.uiStore.resetcreateAccountMessage();
     }
   }

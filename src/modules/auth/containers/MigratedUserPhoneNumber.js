@@ -30,7 +30,7 @@ export default class MigratedUserPhoneNumber extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.history.push('/app/summary');
+    this.props.history.push('/app/setup');
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }

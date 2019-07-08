@@ -33,7 +33,7 @@ export default class Summary extends Component {
     this.props.uiStore.setcreateAccountMessage();
     this.props.entityAccountStore.submitAccount().then(() => {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      // this.props.history.push('app/summary');
+      // this.props.history.push('app/setup');
     });
   }
 
