@@ -60,8 +60,8 @@ export const clearFormInput = (inputArr = []) => {
   }
 };
 
-export const isAbortTestCases = () => {
-  const testAction = window.localStorage.getItem('abortTestCase');
+export const isAbortRemainingTestCases = () => {
+  const testAction = window.localStorage.getItem('abortRemainingTestCase');
   return (testAction === 'true' || testAction === true) ? 'true' : 'false';
 }
 

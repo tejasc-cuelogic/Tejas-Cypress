@@ -1,4 +1,4 @@
-import { registerApiCall, getJSONDataFromFixtures } from '../common.utility';
+import { registerApiCall, isAbortRemainingTestCases } from '../common.utility';
 
 export const goToCFOfferingDetailScreen = () => {
   cy.fixture('investor/offeringForInvestment.json').then((offerings) => {
@@ -19,11 +19,21 @@ export const goTo506COfferingDetailScreen = () => {
 };
 
 export const OfferingDetailFlow = () => {
-  registerApiCall('getOfferingDetailsBySlug');
-  goToCFOfferingDetailScreen();
+  try {
+    registerApiCall('getOfferingDetailsBySlug');
+    goToCFOfferingDetailScreen();
+  } catch (err) {
+    cy.addWindowLocalStorageKey('abortRemainingTestCase', true);
+  }
 };
 
 export const Offering506CDetailFlow = () => {
-  registerApiCall('getOfferingDetailsBySlug');
-  goTo506COfferingDetailScreen();
+  try {
+    if (isAbortRemainingTestCases() !== 'true') {
+      registerApiCall('getOfferingDetailsBySlug');
+      goTo506COfferingDetailScreen();
+    }
+  } catch (err) {
+    cy.addWindowLocalStorageKey('abortRemainingTestCase', true);
+  }
 }
