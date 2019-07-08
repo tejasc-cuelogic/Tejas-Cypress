@@ -60,6 +60,14 @@ function hexStringToByte(str) {
   return new Uint8Array(a);
 }
 
+Cypress.Commands.add('uploadFile', (fileName, fileType, selector, url = '**/**') => {
+  cy.server();
+  cy.route('POST', url).as('fileUpload');
+  cy.fixture(fileName).as('img');
+  cy.upload_file(fileName, fileType, selector);
+  cy.wait('@fileUpload');
+});
+
 Cypress.Commands.add('upload_file', (fileName, fileType, selector) => {
   cy.get(selector).then((subject) => {
     cy.fixture(fileName, 'hex').then((fileHex) => {
@@ -161,6 +169,7 @@ Cypress.Commands.add('getOffering', (offeirId) => {
               } else {
                 if (retries > 2) {
                   cy.log('ERROR :: offeirng not found');
+                  window.localStorage.setItem('abortTestCase', true);
                 }
               }
             });
