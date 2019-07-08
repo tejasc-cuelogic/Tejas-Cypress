@@ -15,6 +15,8 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
       && signupStatus.isCipDoneForMigratedUser
       && signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed) {
       status = 2;
+    } else if (signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount) {
+      status = 2;
     } else {
       status = 1;
     }

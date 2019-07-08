@@ -1,7 +1,7 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, omit, get, isNull, uniqWith, isEqual } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, omit, get, uniqWith, isEqual } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -202,7 +202,7 @@ export class IdentityStore {
     return { userInfo, phoneDetails };
   }
 
-  checkIncorrectAns = res => res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete')
+  checkIncorrectAns = res => res.key && (res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete'))
 
   CipFailReasons = (failReasonArr, obj) => {
     failReasonArr.push(obj);
@@ -224,7 +224,7 @@ export class IdentityStore {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.passId;
       if (response.key && Helper.matchRegexWithString(/\bcorrect(?![-])\b/, response.message)) {
-        legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }]
+        legalCip.failReason = !get(cip, 'failReason') ? [{ key: response.key, message: response.message }]
           : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
         legalCip.failType = 'FAIL_WITH_QUESTIONS';
       }
@@ -232,20 +232,20 @@ export class IdentityStore {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.softFailId;
       legalCip.failType = 'FAIL_WITH_QUESTIONS';
-      legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
+      legalCip.failReason = !get(cip, 'failReason') ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
         : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
     } else if (this.checkIncorrectAns(response) && response.hardFailId) {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.hardFailId;
       legalCip.failType = 'FAIL_WITH_UPLOADS';
-      legalCip.failReason = isNull(cip) ? [{ key: response.key, message: response.message }]
+      legalCip.failReason = !get(cip, 'failReason') ? [{ key: response.key, message: response.message }]
         : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
     } else {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
       legalCip.failType = 'FAIL_WITH_UPLOADS';
       if (response.qualifiers && response.qualifiers !== null) {
-        legalCip.failReason = isNull(cip) ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
+        legalCip.failReason = !get(cip, 'failReason') ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
           : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
       }
     }
@@ -319,7 +319,8 @@ export class IdentityStore {
             this.updateUserInfo().then(() => {
               this.setFieldValue('signUpLoading', false);
               resolve();
-            }).catch(() => {
+            }).catch((err) => {
+              console.log('error update user', err);
               this.setFieldValue('signUpLoading', false);
               reject();
             });
@@ -403,15 +404,17 @@ export class IdentityStore {
     uiStore.setProgress();
     const cipStatus = 'MANUAL_VERIFICATION_PENDING';
     this.setCipStatus(cipStatus);
+    console.log('upload mutation');
     return new Promise((resolve, reject) => {
       this.updateUserInfo()
         .then(() => {
           uiStore.setProgress(false);
           resolve();
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('upload error', err);
           uiStore.setProgress(false);
-          reject();
+          reject(err);
         });
       // .finally(() => {
       // });
@@ -587,28 +590,31 @@ export class IdentityStore {
     });
   }
 
-  updateUserInfo = () => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: updateUserCIPInfo,
-        variables: {
-          user: this.formattedUserInfo.userInfo,
-          phoneDetails: this.formattedUserInfo.phoneDetails,
-          cip: this.formattedUserInfo.legalCip,
-        },
-      })
-      .then((data) => {
-        userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
-          if (d) {
-            resolve(data);
-          }
+  updateUserInfo = () => {
+    this.setCipDetails();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserCIPInfo,
+          variables: {
+            user: this.formattedUserInfo.userInfo,
+            phoneDetails: this.formattedUserInfo.phoneDetails,
+            cip: this.formattedUserInfo.legalCip,
+          },
+        })
+        .then((data) => {
+          userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
+            if (d) {
+              resolve(data);
+            }
+          });
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
         });
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        reject(err);
-      });
-  });
+    });
+  };
 
   updateUserPhoneDetails = () => new Promise((res, rej) => {
     client
@@ -872,7 +878,7 @@ export class IdentityStore {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
     if (legalDetails && legalDetails.ssn) {
-      if (!legalDetails.ssn.includes('X')) {
+      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('individualAccountCipExp')) {
         fields.ssn.value = legalDetails.ssn;
       }
     }
