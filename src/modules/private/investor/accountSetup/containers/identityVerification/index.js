@@ -43,7 +43,7 @@ export default class IdentityVerification extends Component {
 
   handleCloseModal = () => {
     this.props.uiStore.setErrors(null);
-    this.props.history.push('/app/summary');
+    this.props.history.push('/app/setup');
   }
 
   handleVerifyUserIdentity = (e) => {
@@ -81,13 +81,13 @@ export default class IdentityVerification extends Component {
                       if (phoneVerification === 'DONE') {
                         Helper.toast(alertMsg, msgType);
                         if (isCipExpired && accountForWhichCipExpired) {
-                          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+                          this.props.history.push(`/app/setup/account-creation/${accountForWhichCipExpired}`);
                         } else {
                           this.props.history.push(route);
                         }
                       } else {
                         this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
-                          this.props.history.push('/app/summary/identity-verification/3');
+                          this.props.history.push('/app/setup/identity-verification/3');
                         })
                           .catch((err) => {
                             this.props.uiStore.showErrorMessage(err.graphQLErrors[0].message);
@@ -124,15 +124,15 @@ export default class IdentityVerification extends Component {
         const { accountForWhichCipExpired } = this.props.userDetailsStore;
         const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
         if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
-          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
+          this.props.history.push(`/app/setup/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
         } else {
-          this.props.history.push('/app/summary');
+          this.props.history.push('/app/setup');
         }
         this.props.identityStore.setFieldValue('signUpLoading', false);
       } else {
         this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
           this.props.identityStore.setFieldValue('signUpLoading', false);
-          this.props.history.push('/app/summary/identity-verification/3');
+          this.props.history.push('/app/setup/identity-verification/3');
         })
           .catch((err) => {
             this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
@@ -154,15 +154,15 @@ export default class IdentityVerification extends Component {
           const { accountForWhichCipExpired } = this.props.userDetailsStore;
           const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
           if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
-            this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
+            this.props.history.push(`/app/setup/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
           } else {
-            this.props.history.push('/app/summary');
+            this.props.history.push('/app/setup');
           }
           this.props.identityStore.setFieldValue('signUpLoading', false);
         } else {
           this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
             this.props.identityStore.setFieldValue('signUpLoading', false);
-            this.props.history.push('/app/summary/identity-verification/3');
+            this.props.history.push('/app/setup/identity-verification/3');
           })
             .catch((err) => {
               this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
@@ -171,7 +171,7 @@ export default class IdentityVerification extends Component {
         }
       } else {
         Helper.toast('Identity questions not verified.', 'error');
-        this.props.history.push('/app/summary/identity-verification/1');
+        this.props.history.push('/app/setup/identity-verification/1');
       }
     });
   }

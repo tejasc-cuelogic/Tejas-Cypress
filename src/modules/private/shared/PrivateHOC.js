@@ -4,6 +4,7 @@ import { Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
+
 @inject('uiStore', 'navStore', 'userStore')
 @observer
 class PrivateHOC extends Component {

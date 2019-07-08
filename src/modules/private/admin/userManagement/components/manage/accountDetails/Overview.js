@@ -11,7 +11,7 @@ import IraSummary from './IraSummary';
 import EntitySummary from './EntitySummary';
 import Helper from '../../../../../../../helper/utility';
 import LockedInformation from '../profile/LockedInformation';
-import CashMovement from '../../../../../investor/summary/components/CashMovement';
+import CashMovement from '../../../../../investor/setup/components/CashMovement';
 
 const CopyToClipboardAccountId = ({ account }) => (
   <CopyToClipboard
