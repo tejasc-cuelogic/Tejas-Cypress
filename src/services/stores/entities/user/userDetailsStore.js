@@ -522,18 +522,18 @@ export class UserDetailsStore {
           routingUrl = '/app/summary/establish-profile';
         }
       }
-    } else if (this.signupStatus.investorProfileCompleted
-      && get(this.userDetails, 'cip')
-      && !this.isUserVerified) {
+    } else if (this.signupStatus.phoneVerification !== 'DONE') {
+      routingUrl = '/app/summary/identity-verification/3';
+    } else if (!this.signupStatus.investorProfileCompleted) {
+      routingUrl = '/app/summary/establish-profile';
+    } else if (get(this.userDetails, 'cip')
+      && !this.isUserVerified
+      && !this.isCompleteIndividualAccount) {
       routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
-    } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/app/summary/identity-verification/3';
-    } else if (!this.signupStatus.investorProfileCompleted) {
-      routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
       routingUrl = '/app/summary/account-creation';
     } else if (this.partialInvestNowSessionURL && this.signupStatus.partialAccounts.length > 0) {
@@ -563,6 +563,11 @@ export class UserDetailsStore {
       return validPanes;
     });
     return validPanes;
+  }
+
+  @computed get isCompleteIndividualAccount() {
+    return this.signupStatus.activeAccounts.includes('individual')
+      || this.signupStatus.frozenAccounts.includes('individual');
   }
 
   @action
