@@ -595,7 +595,7 @@ module.exports = (webpackEnv) => {
             }
           }
         ],
-        append: false
+        append: true
       }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
