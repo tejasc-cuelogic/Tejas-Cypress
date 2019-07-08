@@ -654,7 +654,6 @@ footer .ui.text.menu{
             span {
                 margin-left: 0;
                 max-width: 100%;
-                text-transform: none;
             }
             &.dropdown {
                 .icon.dropdown {
@@ -749,7 +748,6 @@ footer .ui.text.menu{
     }
     &.left {
         .item {
-            text-transform: uppercase;
             &:hover,&:focus,&.active{
                 color: @primary-one !important;
             }
