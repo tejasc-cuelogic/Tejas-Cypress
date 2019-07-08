@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
 import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { Logo, SocialLinks } from '../shared';
+import { Logo } from '../shared';
 import { NavItems, NavigationItems } from './NavigationItems';
 import Footer from './Footer';
 import { GetNavMeta } from './SidebarNav';
@@ -135,7 +135,13 @@ export default class NavBarMobile extends Component {
               renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
               renderView={p => <div {...p} className="view" />}
             >
-              <Icon onClick={onToggle} className="ns-close-light" />
+              <div className="sidebar-logo">
+                <Logo
+                  dataSrc="LogoGreenGrey"
+                  className="mobile-header-logo"
+                />
+                <Icon onClick={onToggle} className="ns-close-light" />
+              </div>
               {this.props.userStore.isInvestor
                 && (
                   <div className="public-header-nav logged-in-nav">
@@ -187,11 +193,11 @@ export default class NavBarMobile extends Component {
               </div>
             </Scrollbars>
           </Sidebar>
-          <div className="social-media">
+          {/* <div className="social-media">
             <Menu>
               <SocialLinks />
             </Menu>
-          </div>
+          </div> */}
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
