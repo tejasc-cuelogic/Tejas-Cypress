@@ -66,15 +66,16 @@ export default class Summary extends React.Component {
     } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
     this.props.individualAccountStore.submitAccount().then(() => {
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      if (partialInvestNowSessionURL) {
-        this.props.history.push(partialInvestNowSessionURL);
-        setPartialInvestmenSession();
-      } else if (!this.props.individualAccountStore.showProcessingModal) {
-        this.props.history.push('/app/account-details/individual/portfolio');
-        window.sessionStorage.removeItem('individualAccountCipExp');
-        this.props.uiStore.resetcreateAccountMessage();
-      }
+      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub).then(() => {
+        if (partialInvestNowSessionURL) {
+          this.props.history.push(partialInvestNowSessionURL);
+          setPartialInvestmenSession();
+        } else if (!this.props.individualAccountStore.showProcessingModal) {
+          this.props.history.push('/app/account-details/individual/portfolio');
+          window.sessionStorage.removeItem('individualAccountCipExp');
+          this.props.uiStore.resetcreateAccountMessage();
+        }
+      });
     }).catch((err) => {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
         this.handleLegalDocsBeforeSubmit();
