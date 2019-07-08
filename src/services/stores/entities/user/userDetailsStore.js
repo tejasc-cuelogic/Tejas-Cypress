@@ -828,10 +828,10 @@ export class UserDetailsStore {
   }
 
   getInvestorAccountsRoute = (accType) => {
-    if (this.signupStatus.activeAccounts.includes(accType) || this.signupStatus.partialAccounts.includes(accType)) {
+    if (this.signupStatus.activeAccounts.includes(accType) || this.signupStatus.partialAccounts.includes(accType) || this.signupStatus.inprogressAccounts.includes(accType)) {
       return accType;
     }
-    return this.signupStatus.activeAccounts[0] || this.signupStatus.partialAccounts[0] || false;
+    return this.signupStatus.activeAccounts[0] || this.signupStatus.partialAccounts[0] || this.signupStatus.inprogressAccounts[0] || false;
   }
 }
 

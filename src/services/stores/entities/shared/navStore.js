@@ -67,7 +67,7 @@ export class NavStore {
       if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
         navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
       }
-      navigationItems = navigationItems.filter(item => item.title !== ((userDetailsStore.signupStatus.activeAccounts.length > 0 || userDetailsStore.signupStatus.partialAccounts.length > 0) && 'Setup'));
+      navigationItems = navigationItems.filter(item => item.title !== ((userDetailsStore.signupStatus.activeAccounts.length > 0 || userDetailsStore.signupStatus.partialAccounts.length > 0 || userDetailsStore.signupStatus.inprogressAccounts.length > 0) && 'Setup'));
       navigationItems = navigationItems.filter(item => item.title !== (userDetailsStore.signupStatus.activeAccounts.length > 0 && 'Referrals'));
       if (permitted && permitted.length > 1 && permitted.includes('investor')) {
         const pInvestorInfo = {
