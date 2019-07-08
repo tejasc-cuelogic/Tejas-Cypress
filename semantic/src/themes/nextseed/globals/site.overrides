@@ -2872,3 +2872,8 @@ table.css-wu4c77-diff-container {
 		}
 	}
 }
+.private-dropdown {
+	position: absolute;
+	top: 58px;
+	width: 100%;
+}
