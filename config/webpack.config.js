@@ -560,6 +560,20 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
+      !(['production', 'master', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      && new HtmlWebpackTagsPlugin({
+        scripts: [
+          {
+            path: 'assets/js/cypressSri.js',
+            attributes: {
+              integrity: cypressIntg,
+              type: 'text/javascript',
+              crossorigin: "anonymous"
+            }
+          },
+        ],
+        append: true
+      }),
       // will calculate and add sri / integrity keys
       // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
       new HtmlWebpackTagsPlugin({
@@ -582,20 +596,6 @@ module.exports = (webpackEnv) => {
           },
         ],
         append: false
-      }),
-      !(['production', 'master', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
-      && new HtmlWebpackTagsPlugin({
-        scripts: [
-          {
-            path: 'assets/js/cypressSri.js',
-            attributes: {
-              integrity: cypressIntg,
-              type: 'text/javascript',
-              crossorigin: "anonymous"
-            }
-          },
-        ],
-        append: true
       }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
