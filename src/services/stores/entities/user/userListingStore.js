@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import React from 'react';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { capitalize, isArray } from 'lodash';
+import { capitalize, isArray, uniq } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from '../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
@@ -52,7 +52,7 @@ export class UserListingStore {
     delete filters.keyword;
     let deletedAccountStatus = [];
     const allAccountTypes = ['ADMIN', 'ISSUER', 'INVESTOR', 'IRA', 'INDIVIDUAL', 'ENTITY'];
-    const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'FROZEN', 'LOCKED', 'UNLOCKED'];
+    const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'MIGRATION_PARTIAL', 'MIGRATION_FULL', 'FROZEN', 'LOCKED', 'UNLOCKED'];
     if (isDeleted) {
       if (accountType && accountType.length && !accountStatus) {
         accountType.forEach((s) => {
@@ -71,7 +71,7 @@ export class UserListingStore {
     let params = {
       search: keyword,
       accountType: !accountType && !accountStatus && !deletedAccountStatus.length ? allAccountTypes : accountType,
-      accountStatus: isDeleted ? deletedAccountStatus : !accountStatus ? allAccountStatus : accountStatus,
+      accountStatus: isDeleted ? uniq(deletedAccountStatus) : !accountStatus ? allAccountStatus : accountStatus,
       page: reqParams ? reqParams.page : 1,
       limit: getAllUsers ? 100 : this.requestState.perPage,
     };
@@ -179,6 +179,11 @@ export class UserListingStore {
       }
       this.initiateSearch(srchParams);
     }
+  }
+
+  @action
+  searchOnChange = (name, value) => {
+    this.requestState.search[name] = value;
   }
 
   @action
