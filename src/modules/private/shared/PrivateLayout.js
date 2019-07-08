@@ -7,13 +7,22 @@ import NotFound from '../../shared/NotFound';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const overrideContainerClass = ['account-details/:accountType/transactions'];
-@inject('uiStore', 'navStore', 'userStore')
+@inject('uiStore', 'navStore', 'userStore', 'userDetailsStore')
 @observer
 class PrivateLayout extends Component {
   render() {
     const { location, navStore } = this.props;
     const pageMeta = navStore.navMeta;
     const { isInvestor } = this.props.userStore;
+    const { match } = this.props;
+    const {
+      processingAccounts,
+      partialAccounts,
+    } = this.props.userDetailsStore.signupStatus;
+    const splittedUrl = match.url.split('/');
+    const accType = splittedUrl.pop();
+    const isAccProcessing = processingAccounts.includes(accType);
+    const isAccPartial = partialAccounts.includes(accType);
     if (!pageMeta) {
       return <NotFound />;
     }
@@ -41,7 +50,7 @@ class PrivateLayout extends Component {
             </Grid.Row>
           </Grid>
         </div>
-        {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav)
+        {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav && !(isInvestor && (isAccPartial || isAccProcessing)))
           && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className={`${isInvestor ? 'investor' : ''} secondary-menu`} navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
         {this.props.P1
