@@ -1,22 +1,10 @@
-// import { proceedWithValidUserLoginAction } from './investNowFlow';
-import { clearLoginForm } from '../auth/login';
-import { validInvestorHavingOnceAccountCredentials } from './investorsCredentailConstant';
-import { registerApiCall } from '../common';
+import { registerApiCall, getJSONDataFromFixtures, clearFormInput } from '../../common.utility';
 
-export const openLoginModelPopup = () => {
-  cy.get('.loader', { timeout: 6000 }).should('not.exist');
-  cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
-    .find('.center-align')
-    .contains('Invest Now')
-    .click();
-}
-
-export const validInvestorLoginAction = () => {
-  // cy.wait(2000);
+export const validInvestorLoginAction = async () => {
+  const validInvestorHavingOnceAccountCredentials = await getJSONDataFromFixtures('investor/user.json', 'validInvestorHavingOnceAccountCredentials');
   registerApiCall('investNowHealthCheck');
-  clearLoginForm();
-  cy.get('input[type="email"]').type(validInvestorHavingOnceAccountCredentials.email);
-  cy.get('input[type="password"]').type(validInvestorHavingOnceAccountCredentials.password);
+  cy.clearFormField(validInvestorHavingOnceAccountCredentials, 'loginForm');
+  cy.formFill(validInvestorHavingOnceAccountCredentials, 'loginForm');
   cy.get('button.button').contains('Log in').click({ force: true });
   cy.wait(10000);
   cy.get('div.header-wrap').find('.stackable').find('.container').find('.menu-button')
@@ -27,7 +15,6 @@ export const validInvestorLoginAction = () => {
     .get('small')
     .invoke('text')
     .then((text1) => {
-      cy.log('minAmount===>', text1);
       const splitArr = text1.split(' ');
       const amountArr = splitArr[0].split('$');
       const minInvestAmount = amountArr[1];
@@ -43,6 +30,5 @@ export const validInvestorLoginAction = () => {
 };
 
 export const openLogingPopupAndAutheticate = () => {
-  openLoginModelPopup();
   validInvestorLoginAction();
 }
