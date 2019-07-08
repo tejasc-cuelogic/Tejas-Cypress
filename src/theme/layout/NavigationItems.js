@@ -194,21 +194,25 @@ export class NavItems extends Component {
                 && (
                 <Divider />)
                 }
-                <Menu.Item
-                  key={item.to}
-                  name={item.to}
-                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}`}
-                  as={NavLink}
-                  onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                  to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
-                >
-                  {item.icon && <Icon className={item.icon} />}
-                  {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
-                  {item.title !== 'Updates' ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
-                  {(item.to === 'updates' || item.to === 'comments') && this.props.countData
-                    ? <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
-                  }
-                </Menu.Item>
+                {item.external
+                  ? (<a className="item" href={item.to} rel="noopener noreferrer" target="_blank">{item.title}</a>)
+                  : (
+                  <Menu.Item
+                    key={item.to}
+                    name={item.to}
+                    className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}`}
+                    as={NavLink}
+                    onClick={isMobile ? this.mobileMenuClick : this.doNothing}
+                    to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
+                  >
+                    {item.icon && <Icon className={item.icon} />}
+                    {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
+                    {item.title !== 'Updates' ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
+                    {(item.to === 'updates' || item.to === 'comments') && this.props.countData
+                      ? <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
+                    }
+                  </Menu.Item>
+                  )}
                 </>
                   ) : '' : ''
               )}

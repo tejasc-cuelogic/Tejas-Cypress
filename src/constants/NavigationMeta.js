@@ -10,6 +10,43 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
   ],
 };
 
+
+const INDIVIDUAL_ACC = {
+  icon: 'ns-individual',
+  title: 'Individual',
+  heading: 'Individual Account',
+  to: 'account-details/individual',
+  accessibleTo: ['individual'],
+  path: 'investor/accountDetails/containers/AccountDetails',
+  hideSubOnSideBar: true,
+  subPanel: 1,
+  ...INVESTER_ACC_SUB_NAV_ITEMS,
+};
+
+const IRA_ACC = {
+  icon: 'ns-ira',
+  title: 'IRA',
+  heading: 'IRA Account',
+  to: 'account-details/ira',
+  accessibleTo: ['ira'],
+  path: 'investor/accountDetails/containers/AccountDetails',
+  hideSubOnSideBar: true,
+  subPanel: 1,
+  ...INVESTER_ACC_SUB_NAV_ITEMS,
+};
+
+const ENTITY_ACC = {
+  icon: 'ns-entity',
+  title: 'Entity',
+  heading: 'Entity Account',
+  to: 'account-details/entity',
+  accessibleTo: ['entity'],
+  path: 'investor/accountDetails/containers/AccountDetails',
+  hideSubOnSideBar: true,
+  subPanel: 1,
+  ...INVESTER_ACC_SUB_NAV_ITEMS,
+};
+
 /*
 subPanel => 0: none, 1: subnavigation, 2: has search panel
 */
@@ -114,39 +151,9 @@ export const PRIVATE_NAV = [
       },
     ],
   },
-  {
-    icon: 'ns-individual',
-    title: 'Individual',
-    heading: 'Individual Account',
-    to: 'account-details/individual',
-    accessibleTo: ['individual'],
-    path: 'investor/accountDetails/containers/AccountDetails',
-    hideSubOnSideBar: true,
-    subPanel: 1,
-    ...INVESTER_ACC_SUB_NAV_ITEMS,
-  },
-  {
-    icon: 'ns-ira',
-    title: 'IRA',
-    heading: 'IRA Account',
-    to: 'account-details/ira',
-    accessibleTo: ['ira'],
-    path: 'investor/accountDetails/containers/AccountDetails',
-    hideSubOnSideBar: true,
-    subPanel: 1,
-    ...INVESTER_ACC_SUB_NAV_ITEMS,
-  },
-  {
-    icon: 'ns-entity',
-    title: 'Entity',
-    heading: 'Entity Account',
-    to: 'account-details/entity',
-    accessibleTo: ['entity'],
-    path: 'investor/accountDetails/containers/AccountDetails',
-    hideSubOnSideBar: true,
-    subPanel: 1,
-    ...INVESTER_ACC_SUB_NAV_ITEMS,
-  },
+  { ...INDIVIDUAL_ACC },
+  { ...IRA_ACC },
+  { ...ENTITY_ACC },
   // {
   //   icon: 'ns-wallet',
   //   title: 'Rewards wallet',
@@ -668,21 +675,21 @@ export const PUBLIC_NAV = [
 
 export const MOBILE_NAV = [
   {
-    title: 'Individual',
-    to: 'app/account-details/individual/portfolio',
-    accessibleTo: ['individual'],
+    title: INDIVIDUAL_ACC.title,
+    to: `app/${INDIVIDUAL_ACC.to}/portfolio`,
+    accessibleTo: INDIVIDUAL_ACC.accessibleTo,
     isLoggedIn: true,
   },
   {
-    title: 'IRA',
-    to: 'app/account-details/ira/portfolio',
-    accessibleTo: ['ira'],
+    title: IRA_ACC.title,
+    to: `app/${IRA_ACC.to}/portfolio`,
+    accessibleTo: IRA_ACC.accessibleTo,
     isLoggedIn: true,
   },
   {
-    title: 'Entity',
-    to: 'app/account-details/entity/portfolio',
-    accessibleTo: ['entity'],
+    title: ENTITY_ACC.title,
+    to: `app/${ENTITY_ACC.to}/portfolio`,
+    accessibleTo: ENTITY_ACC.accessibleTo,
     isLoggedIn: true,
   },
   { title: 'Explore', to: 'offerings', isLoggedIn: true },
@@ -693,10 +700,13 @@ export const MOBILE_NAV = [
     isLoggedIn: true,
   },
   { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
+  { title: 'Add New Account', to: 'app/setup/account-creation', isLoggedIn: true },
   { title: 'How it Works Investor', to: 'invest' },
   { title: 'How it Works Business', to: 'business' },
   { title: 'Education Center', to: 'resources/education-center' },
   { title: 'About Us', to: 'about' },
+  { title: 'Blog', to: 'resources/insights' },
+  { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
 ];
 
 export const FOOTER_NAV = [

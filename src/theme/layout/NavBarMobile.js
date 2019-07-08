@@ -60,7 +60,8 @@ export default class NavBarMobile extends Component {
       navTitle = 'Legal';
     }
     const { signupStatus } = userDetailsStore;
-    const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => this.props.userStore.isInvestor && e.isLoggedIn);
+    const isAddNewAccount = signupStatus && signupStatus.finalStatus && signupStatus.investorProfileCompleted && signupStatus.inActiveAccounts.length > 0;
+    const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => (e.isLoggedIn && this.props.userStore.isInvestor && (e.title !== 'Add New Account' || (e.title === 'Add New Account' && isAddNewAccount))));
     const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && e.to === 'offerings'));
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
@@ -167,15 +168,15 @@ export default class NavBarMobile extends Component {
                   ))
                     : (
                       <>
-                        {this.props.userStore.isInvestor
+                        {/* {this.props.userStore.isInvestor
                           && signupStatus && signupStatus.finalStatus && signupStatus.investorProfileCompleted
                           && signupStatus.inActiveAccounts.length > 0
                           && (
                             <Menu.Item className="btn-item mt-30">
-                              <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Add New Account" />
+                              <Button fluid basic compact as={Link} to="/app/setup/account-creation" content="Add New Account" />
                             </Menu.Item>
                           )
-                        }
+                        } */}
                         <Menu.Item className="btn-item">
                           <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
                         </Menu.Item>
