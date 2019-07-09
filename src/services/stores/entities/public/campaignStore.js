@@ -229,7 +229,7 @@ export class CampaignStore {
     const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.elevatorPitch)
       || (campaign && campaign.offering && campaign.offering.overview
-      && campaign.offering.overview.highlight);
+        && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
     campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
     campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
