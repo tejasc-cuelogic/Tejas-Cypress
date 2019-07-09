@@ -1,24 +1,34 @@
-import { loginCredentials, inValidEmailCredentials, goToLoginScreen } from './utility/login.utility';
-import { applicationUnlock } from '../../support/common';
+import { goToLoginScreen } from './utility/login.utility';
 
 describe('Log In', () => {
   beforeEach(() => {
     cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-    applicationUnlock();
+    cy.applicationUnlock();
     goToLoginScreen();
   });
 
-  it('succesfully performs login action', () => {
-    cy.get('input[type="email"]').type(loginCredentials.email);
-    cy.get('input[type="password"]').type(loginCredentials.password);
-    cy.get('button.button').contains('Log in').click({ force: true });
-  });
+  context('login form', () => {
+    beforeEach(() => {
+      cy.fixture('investor/user.json').as('users');
+    });
+    it('succesfully performs login action', () => {
+      cy.get('@users').then((userData) => {
+        const { investorLoginCredentials } = userData
+        cy.log('investorLoginCredentials=>', investorLoginCredentials)
+        cy.log('investorLoginCredentials =>', investorLoginCredentials);
+        cy.get('input[type="email"]').type(investorLoginCredentials.email);
+        cy.get('input[type="password"]').type(investorLoginCredentials.password);
+        cy.get('button.button').contains('Log in').click({ force: true });
+      });
+    });
 
-  it('should check email format', () => {
-    cy.get('input[type="email"]').type(inValidEmailCredentials.email);
-    cy.get('input[type="email"]').blur();
-    cy.wait(500);
-    cy.get('input[type="email"]').parentsUntil('.field').get('p').should('have.class', 'field-error');
+    it('should check email format', () => {
+      cy.get('@users').then((userData) => {
+        const { inValidEmailCredentials } = userData;
+        cy.clearFormField(inValidEmailCredentials, 'loginForm');
+        cy.formFill(inValidEmailCredentials, 'loginForm');
+      });
+    });
   });
 
   it('should be able to go on forgot password', () => {
@@ -28,6 +38,7 @@ describe('Log In', () => {
         .then((href) => {
           cy.log('href', href)
           cy.visit(href, { failOnStatusCode: false });
+          cy.url().should('contain', '/forgot-password');
         });
     });
   });
@@ -39,6 +50,7 @@ describe('Log In', () => {
       .then((href) => {
         cy.log('href', href)
         cy.visit(href, { failOnStatusCode: false });
+        cy.url().should('contain', '/register');
       });
   });
 });
