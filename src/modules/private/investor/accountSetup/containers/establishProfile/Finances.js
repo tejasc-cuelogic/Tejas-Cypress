@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Message, Divider } from 'semantic-ui-react';
+import { Header, Form, Message, Divider, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -13,11 +13,11 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class Finances extends Component {
   render() {
     const {
-      FINANCES_FORM,
+      FINANCES_FORM, stepToBeRendered,
       financesChange,
-      investorProfileChange,
+      updateInvestorProfileData,
     } = this.props.investorProfileStore;
-    const { errors } = this.props.uiStore;
+    const { errors, multiSteps } = this.props.uiStore;
     return (
       <div className={isMobile ? '' : 'center-align'}>
         <Header as="h4">
@@ -34,7 +34,7 @@ export default class Finances extends Component {
         </p> */}
         {!isMobile && <Divider hidden />}
         <Form error>
-          <FormRadioGroup
+          {/* <FormRadioGroup
             fielddata={FINANCES_FORM.fields.investorProfileType}
             name="investorProfileType"
             changed={(e, result) => {
@@ -44,7 +44,7 @@ export default class Finances extends Component {
             containerclassname="three wide button-radio center-align"
             showerror
           />
-          <Divider hidden />
+          <Divider hidden /> */}
           <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <Form.Group widths={2}>
               {['netWorth', 'annualIncomeCurrentYear'].map(field => (
@@ -75,6 +75,7 @@ export default class Finances extends Component {
         <p className="tertiary-text note mt-10 mb-30">
           We will never share your personal information with third parties without your consent
         </p>
+        <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : 'mb-20'} relaxed`} disabled={!FINANCES_FORM.meta.isValid} content="Continue" />
       </div>
     );
   }

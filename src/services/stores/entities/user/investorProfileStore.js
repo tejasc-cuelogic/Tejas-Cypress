@@ -78,13 +78,13 @@ class InvestorProfileStore {
       this.INVESTOR_PROFILE_FULL.fields.brokerageFirmName.value = '';
       this.INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value = 'no';
     }
-    if (investorProfileData && investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
-      && investorProfileData.publicCompanyTicker !== 'false') {
-      this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'yes';
-    } else {
-      this.INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value = '';
-      this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'no';
-    }
+    // if (investorProfileData && investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
+    //   && investorProfileData.publicCompanyTicker !== 'false') {
+    //   this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'yes';
+    // } else {
+    //   this.INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value = '';
+    //   this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'no';
+    // }
     ['isRiskTaker', 'isComfortable'].map((field) => {
       if (investorProfileData && investorProfileData[field]) {
         this.INVESTOR_PROFILE_FULL.fields[field].value = investorProfileData[field] ? ['checked'] : [];
@@ -203,23 +203,20 @@ class InvestorProfileStore {
         formPayload = { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
-        if (fields.brokerageEmployment.value === 'no') {
-          fields.brokerageFirmName.value = null;
-        } else {
-          fields.brokerageFirmName.value = fields.brokerageFirmName.value;
-        }
+        fields.brokerageFirmName.value = (uiStore.inProgressArray.includes('BROKERAGE_EMPLOYMENT') && fields.brokerageFirmName.value) || null;
         formPayload = { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
-        if (fields.publicCompanyRel.value === 'no') {
-          fields.publicCompanyTicker.value = null;
-        } else {
-          fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
-        }
+        // if (fields.publicCompanyRel.value === 'no') {
+        //   fields.publicCompanyTicker.value = null;
+        // } else {
+        //   fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
+        // }
+        fields.publicCompanyTicker.value = (uiStore.inProgressArray.includes('PUBLIC_COMPANY_REL') && fields.publicCompanyTicker.value) || null;
         formPayload = { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
-          taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
+          // taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
           annualIncome: [
             {
               year: this.FINANCES_FORM.fields.annualIncomeCurrentYear.year,
@@ -372,12 +369,12 @@ class InvestorProfileStore {
             } else {
               fields.brokerageFirmName.value = '';
             }
-            if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== ''
-              && investorProfileData.brokerageFirmName !== 'false') {
-              fields.brokerageEmployment.value = 'yes';
-            } else {
-              fields.brokerageEmployment.value = 'no';
-            }
+            // if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== ''
+            //   && investorProfileData.brokerageFirmName !== 'false') {
+            //   fields.brokerageEmployment.value = 'yes';
+            // } else {
+            //   fields.brokerageEmployment.value = 'no';
+            // }
           }
           break;
         case 'PUBLIC_COMPANY_REL_FORM':
@@ -388,12 +385,12 @@ class InvestorProfileStore {
             } else {
               fields.publicCompanyTicker.value = '';
             }
-            if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
-              && investorProfileData.publicCompanyTicker !== 'false') {
-              fields.publicCompanyRel.value = 'yes';
-            } else {
-              fields.publicCompanyRel.value = 'no';
-            }
+            // if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
+            //   && investorProfileData.publicCompanyTicker !== 'false') {
+            //   fields.publicCompanyRel.value = 'yes';
+            // } else {
+            //   fields.publicCompanyRel.value = 'no';
+            // }
           }
           break;
         case 'INVESTMENT_EXP_FORM':
@@ -424,7 +421,7 @@ class InvestorProfileStore {
           break;
         case 'FINANCES_FORM':
           this.FINANCES_FORM.fields.netWorth.value = investorProfileData.netWorth;
-          this.FINANCES_FORM.fields.investorProfileType.value = investorProfileData.taxFilingAs;
+          // this.FINANCES_FORM.fields.investorProfileType.value = investorProfileData.taxFilingAs;
           if (investorProfileData.annualIncome) {
             ['annualIncomeCurrentYear'].map((item, index) => {
               this.FINANCES_FORM.fields[item].value = investorProfileData.annualIncome[index].income;

@@ -9,6 +9,10 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('investorProfileStore', 'uiStore')
 @observer
 export default class BrokerageEmployment extends Component {
+  componentWillUnmount() {
+    this.props.uiStore.removeOneFromProgressArray('BROKERAGE_EMPLOYMENT');
+  }
+
   handleShowFields = () => {
     this.props.uiStore.addMoreInProgressArray('BROKERAGE_EMPLOYMENT');
   }
@@ -45,7 +49,7 @@ securities brokerage firm?
         </p>
         <Divider hidden /> */}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you.</p>
-        <Form error className={isMobile ? ' mb-30' : ''}>
+        <Form error className={isMobile ? ' mb-30 center-align' : ''}>
           {/* <FormRadioGroup
             fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
             name="brokerageEmployment"
@@ -56,8 +60,14 @@ securities brokerage firm?
             containerclassname="three wide button-radio center-align"
             showerror
           /> */}
-            <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="No" />
-            <Button className="link-button mt-30" onClick={this.handleShowFields} content="Yes" />
+          {!inProgressArray.includes('BROKERAGE_EMPLOYMENT')
+          && (
+            <Button.Group vertical>
+            <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : 'mb-20'} relaxed`} content="No" />
+            <Button className="link-button" onClick={this.handleShowFields} color="green" content="Yes" />
+            </Button.Group>
+          )
+          }
           {inProgressArray.includes('BROKERAGE_EMPLOYMENT') && !isMobile
           && (
           <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
