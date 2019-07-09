@@ -43,6 +43,7 @@ export default class AccountHeader extends Component {
 <span className="pull-right">
             <Button.Group compact size="tiny">
               <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
+              <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
             </Button.Group>
           </span>
           )

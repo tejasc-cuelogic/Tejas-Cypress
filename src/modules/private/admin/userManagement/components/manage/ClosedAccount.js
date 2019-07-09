@@ -17,7 +17,6 @@ export default class ClosedAccount extends Component {
 
   render() {
     const { sortedNavAccounts } = this.props.accountStore;
-
     return (
       <>
         <SecondaryMenu force2ary match={this.props.match} navItems={sortedNavAccounts} />

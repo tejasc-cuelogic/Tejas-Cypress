@@ -59,6 +59,8 @@ export default class Overview extends Component {
     }).catch(() => this.setState({ loading: false }));
   }
 
+  checkInvestorAccType = (accType, account) => [get(account, 'name'), get(account, 'details.accountType')].map(a => (a && a.toLowerCase())).includes(accType)
+
   render() {
     const { getChartData } = this.props.portfolioStore;
     const investor = this.props.userDetailsStore.getDetailsOfUser;
@@ -108,7 +110,7 @@ export default class Overview extends Component {
         <div className="bg-offwhite">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
-              {get(account, 'name') === 'individual'
+              { this.checkInvestorAccType('individual', account)
                 ? (
                   <IndividualSummary
                     investor={investor}
@@ -119,9 +121,9 @@ export default class Overview extends Component {
                     CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
                   />
                 )
-                : get(account, 'name') === 'ira'
+                : this.checkInvestorAccType('ira', account)
                   ? <IraSummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} />
-                  : get(account, 'name') === 'entity'
+                  : this.checkInvestorAccType('entity', account)
                     ? <EntitySummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} /> : null
               }
             </Table>

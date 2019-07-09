@@ -482,6 +482,15 @@ export const ENTITY_FORMATION_DOCS = {
   },
 };
 
+export const CLOSE_INVESTOR_ACCOUNT = {
+  reason: {
+    value: '',
+    label: 'Reason:',
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 export const ACC_TYPE = {
   accType: {
     value: 0,

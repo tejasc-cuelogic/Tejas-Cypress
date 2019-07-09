@@ -48,6 +48,7 @@ export default class AccountDetails extends Component {
     if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
     }
+    this.props.accountStore.getInvestorCloseAccounts(this.props.match.params.userId);
   }
 
   toggleState = (id, accountStatus) => {
@@ -70,11 +71,11 @@ export default class AccountDetails extends Component {
   render() {
     const { match } = this.props;
     const { inProgressArray } = this.props.uiStore;
-    const { sortedNavAccounts } = this.props.accountStore;
+    const { sortedNavAccounts, closedAccounts } = this.props.accountStore;
     const {
       getDetailsOfUserLoading, getDetailsOfUser,
     } = this.props.userDetailsStore;
-    if (getDetailsOfUserLoading) {
+    if (getDetailsOfUserLoading || closedAccounts.loading) {
       return <InlineLoader text="Loading User Details..." />;
     }
     const details = getDetailsOfUser;
