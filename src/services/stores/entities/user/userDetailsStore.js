@@ -567,7 +567,8 @@ export class UserDetailsStore {
 
   @computed get isCompleteIndividualAccount() {
     return this.signupStatus.activeAccounts.includes('individual')
-      || this.signupStatus.frozenAccounts.includes('individual');
+      || this.signupStatus.frozenAccounts.includes('individual')
+      || this.signupStatus.processingAccounts.includes('individual');
   }
 
   @action
