@@ -9,7 +9,7 @@ import {
 import { openLogingPopupAndAutheticate } from './utility/validInvestorLoginForInvestment.utility';
 import { isAbortRemainingTestCases } from '../common.utility';
 
-describe('Invest now CF investment flow', () => {
+describe.skip('Invest now CF investment flow', () => {
   let isNeedToSkip = false;
   before(() => {
     initializeInvestNowFlow('CF');
