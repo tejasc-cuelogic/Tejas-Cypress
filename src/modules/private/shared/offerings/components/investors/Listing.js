@@ -44,6 +44,7 @@ export default class Listing extends Component {
     const referralCode = get(offer, 'referralCode');
     let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
