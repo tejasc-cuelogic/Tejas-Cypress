@@ -298,7 +298,7 @@ export class UserDetailsStore {
   }
 
   getUserStorageDetails = (userId) => {
-    uiStore.setProgress();
+    uiStore.setProgress('userBoxAccount');
     return new Promise((resolve, rej) => {
       graphql({
         client,

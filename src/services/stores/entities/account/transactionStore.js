@@ -2,20 +2,23 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
+import cleanDeep from 'clean-deep';
 import money from 'money-math';
-import { get, includes, orderBy, isArray } from 'lodash';
+import { get, includes, orderBy, isArray, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
-import { TRANSFER_FUND, VERIFY_OTP } from '../../../constants/transaction';
+import { TRANSFER_FUND, VERIFY_OTP, ADD_WITHDRAW_FUND } from '../../../constants/transaction';
 import { uiStore, userDetailsStore, userStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
+
+  @observable inProgress = [];
 
   @observable hasError = false;
 
@@ -32,6 +35,8 @@ export class TransactionStore {
   };
 
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
+
+  @observable ADD_WITHDRAW_FUND_FRM = Validator.prepareFormObject(ADD_WITHDRAW_FUND);
 
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
 
@@ -74,6 +79,15 @@ export class TransactionStore {
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  operateInProgress = (setVal, remove = false) => {
+    if (remove) {
+      this.inProgress = filter(this.inProgress, e => e !== setVal);
+    } else {
+      this.inProgress.push(setVal);
+    }
   }
 
   @action
@@ -240,6 +254,30 @@ export class TransactionStore {
   }
 
   @action
+  resetAddWithdrawFunds = () => {
+    uiStore.clearErrors();
+    this.ADD_WITHDRAW_FUND_FRM = Validator.prepareFormObject(ADD_WITHDRAW_FUND);
+  }
+
+  @action
+  checkedChange = (value, field, formName) => {
+    uiStore.clearErrors();
+    this[formName].fields[field].value = value;
+    if (field === 'showAgreementId' && !value) {
+      this[formName].fields.agreementId.value = '';
+    }
+  };
+
+  @action
+  formChange = (values, field, formName, mask = false) => {
+    uiStore.clearErrors();
+    this[formName] = Validator.onChange(this[formName], {
+      name: field,
+      value: mask ? values.floatValue : values,
+    });
+  };
+
+  @action
   TransferChange = (values, field, formName = 'TRANSFER_FRM', checkWithdrawAmt = false) => {
     uiStore.clearErrors();
     const errorMessage = 'Please enter a valid amount to deposit.';
@@ -259,6 +297,33 @@ export class TransactionStore {
       this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
     }
   };
+
+  @action
+  addWithdrawFunds = (userId, accountId, actionType) => new Promise((resolve, reject) => {
+    this.operateInProgress(actionType);
+    const variables = cleanDeep(Validator.evaluateFormData(this.ADD_WITHDRAW_FUND_FRM.fields));
+    client
+      .mutate({
+        mutation: actionType === 'addfunds' ? addFundMutation : withdrawFundMutation,
+        variables: {
+          userId,
+          accountId,
+          ...variables,
+        },
+      })
+      .then(() => {
+        Helper.toast(`Funds ${actionType === 'addfunds' ? 'added' : 'withdraw'} successfully.`, 'success');
+        this.operateInProgress(actionType, true);
+        this.initRequest();
+        resolve();
+      })
+      .catch((error) => {
+        uiStore.setErrors(error.message);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        this.operateInProgress(actionType, true);
+        reject();
+      });
+  });
 
   @action
   addFunds = (amount, description) => {
