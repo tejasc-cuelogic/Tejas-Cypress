@@ -116,10 +116,11 @@ class Login extends Component {
             </Button>
           </Form>
           <Divider horizontal section>or</Divider> */}
-          <Form error onSubmit={this.handleSubmitForm}>
+          <Form error onSubmit={this.handleSubmitForm} data-cy="loginForm">
             {
               Object.keys(LOGIN_FRM.fields).map(field => (
                 <FormInput
+                  data-cy={field}
                   key={field}
                   type={field === 'password' ? pwdInputType : 'email'}
                   icon={field === 'password' ? togglePasswordType() : null}

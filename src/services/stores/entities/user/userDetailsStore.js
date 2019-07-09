@@ -522,10 +522,10 @@ export class UserDetailsStore {
           routingUrl = '/app/summary/establish-profile';
         }
       }
-    } else if (this.signupStatus.investorProfileCompleted
-      && get(this.userDetails, 'cip')
-      && !this.isUserVerified) {
-      routingUrl = '/app/summary/account-creation/individual';
+    // } else if (this.signupStatus.investorProfileCompleted
+    //   && get(this.userDetails, 'cip')
+    //   && !this.isUserVerified) {
+    //   routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
