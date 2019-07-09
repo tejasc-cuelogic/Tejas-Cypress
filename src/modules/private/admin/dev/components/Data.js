@@ -9,6 +9,7 @@ import OfferingAudit from './data/OfferingAudit';
 import ProcessFullAccount from './data/processFullAccount';
 import RecreateGoldstar from './data/recreateGoldstar';
 import EncryptDecryptUtility from './data/encryptDecryptUtility';
+import PartialOrCipProcessingList from './data/partialOrCipProcessingList';
 import AuditBoxFolder from './data/auditBoxFolder';
 
 @inject('elasticSearchStore', 'uiStore')
@@ -94,6 +95,7 @@ export default class Data extends Component {
           <OfferingAudit />
           <EncryptDecryptUtility />
           <AuditBoxFolder />
+          <PartialOrCipProcessingList />
         </Grid.Column>
       </Grid>
     );

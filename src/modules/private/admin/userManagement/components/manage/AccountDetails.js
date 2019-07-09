@@ -13,6 +13,7 @@ import Statements from '../../../../investor/accountDetails/containers/Statement
 import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import Helper from '../../../../../../helper/utility';
 import ConfirmModel from './accountDetails/ConfirmModel';
+import AddWithdrawFunds from './accountDetails/AddWithdrawFunds';
 
 const navMeta = [
   { title: 'Overview', to: 'overview' },
@@ -59,7 +60,7 @@ export default class AccountDetails extends Component {
         <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
           <SecondaryMenu secondary vertical match={match} navItems={navMeta} />
           <Divider hidden />
-          <Button color="blue" className="link-button" content={inProgress ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
+          <Button color="blue" className="link-button" content={inProgress === 'userBoxAccount' ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
@@ -68,6 +69,7 @@ export default class AccountDetails extends Component {
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio isAdmin {...props} />} />
             <Route path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
+            <Route exact path={`${match.url}/transactions/:action`} render={props => <AddWithdrawFunds {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/transactions`} accountId={get(account, 'details.accountId')} />} />
             <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />
             <Route exact path={`${match.url}/overview/:action`} render={props => <ConfirmModel {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/overview`} accountId={get(account, 'details.accountId')} />} />
           </Switch>
