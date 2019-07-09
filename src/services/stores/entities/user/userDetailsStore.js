@@ -522,10 +522,6 @@ export class UserDetailsStore {
           routingUrl = '/app/summary/establish-profile';
         }
       }
-    } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/app/summary/identity-verification/3';
-    } else if (!this.signupStatus.investorProfileCompleted) {
-      routingUrl = '/app/summary/establish-profile';
     } else if (get(this.userDetails, 'cip')
       && !this.isUserVerified
       && !this.isCompleteIndividualAccount) {
@@ -534,6 +530,10 @@ export class UserDetailsStore {
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
+    } else if (this.signupStatus.phoneVerification !== 'DONE') {
+      routingUrl = '/app/summary/identity-verification/3';
+    } else if (!this.signupStatus.investorProfileCompleted) {
+      routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
       routingUrl = '/app/summary/account-creation';
     } else if (this.partialInvestNowSessionURL && this.signupStatus.partialAccounts.length > 0) {
