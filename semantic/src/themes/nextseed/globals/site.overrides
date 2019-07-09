@@ -375,6 +375,13 @@ footer{
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				justify-content: center;
 			}
+			img.ui.image {
+				display: inline-block;
+				margin-right: @38px;
+				~a img.ui.image{
+					margin-right: 0;
+				}
+			}
 		}
 	}
 	.footer-social {
@@ -432,7 +439,8 @@ footer{
 	}
 	@media only screen and (max-width : @largestTabletScreen){
 		.footer-left-nav div>.ui.image {
-			margin: auto;
+			display: inline-block;
+			margin-right: @38px;
 		}
 		&.offering-footer{
 			padding-bottom: 60px;

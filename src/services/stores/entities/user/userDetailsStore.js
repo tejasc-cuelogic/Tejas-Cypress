@@ -492,6 +492,11 @@ export class UserDetailsStore {
     return this.validAccStatus.includes(accDetails.idVerification);
   }
 
+  @computed get isLegalDocsPresent() {
+    return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
+      || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');
+  }
+
   @action
   setDelStatus = (status) => {
     this.deleting = status;
@@ -517,6 +522,10 @@ export class UserDetailsStore {
           routingUrl = '/app/summary/establish-profile';
         }
       }
+    // } else if (this.signupStatus.investorProfileCompleted
+    //   && get(this.userDetails, 'cip')
+    //   && !this.isUserVerified) {
+    //   routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
@@ -618,6 +627,7 @@ export class UserDetailsStore {
   resetStoreData = () => {
     this.currentUser = {};
     this.userFirstLoad = false;
+    this.accountForWhichCipExpired = '';
     this.setPartialInvestmenSession();
   }
 
@@ -635,6 +645,7 @@ export class UserDetailsStore {
 
   @action
   setAccountForWhichCipExpired = (accountName) => {
+    window.sessionStorage.setItem('individualAccountCipExp', accountName);
     this.accountForWhichCipExpired = accountName;
   }
 

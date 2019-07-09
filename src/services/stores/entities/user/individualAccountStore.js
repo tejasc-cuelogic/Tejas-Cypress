@@ -81,6 +81,7 @@ class IndividualAccountStore {
           }
         }).catch((err) => {
           console.log('Error', err);
+          reject(err);
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
@@ -105,12 +106,10 @@ class IndividualAccountStore {
       uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', true);
-      }
-      if (!isMobile) {
         Helper.toast('Individual account created successfully.', 'success');
+        bankAccountStore.resetStoreData();
+        this.isFormSubmitted = true;
       }
-      bankAccountStore.resetStoreData();
-      this.isFormSubmitted = true;
       resolve();
     }).catch((err) => {
       console.log('Error', err);

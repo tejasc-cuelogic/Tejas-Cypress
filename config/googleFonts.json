@@ -1,0 +1,54 @@
+{
+  "google-fonts-plugin": {
+    "fonts": [
+      {
+        "family": "Titillium Web",
+        "variants": [
+          "700"
+        ],
+        "subsets": [
+          "latin"
+        ]
+      },
+      {
+        "family": "Source Serif Pro",
+        "variants": [
+          "400",
+          "700"
+        ],
+        "subsets": [
+          "latin"
+        ]
+      },
+      {
+        "family": "Merriweather Sans",
+        "variants": [
+          "400",
+          "700"
+        ],
+        "subsets": [
+          "latin"
+        ]
+      },
+      {
+        "family": "Source Sans Pro",
+        "variants": [
+          "300",
+          "400",
+          "600",
+          "700",
+          "300i",
+          "400i",
+          "600i",
+          "700i"
+        ],
+        "subsets": [
+          "latin"
+        ]
+      }
+    ],
+    "formats": [
+      "woff"
+    ]
+  }
+}

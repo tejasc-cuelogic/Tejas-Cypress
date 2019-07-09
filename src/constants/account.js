@@ -204,12 +204,11 @@ export const IND_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'optional|numeric|min:100|max:25000',
+    rule: 'optional|numeric|min:100',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $100.',
-      max: 'The deposit amount should not be more than $25,000.',
     },
   },
 };
@@ -219,12 +218,11 @@ export const ENTITY_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'optional|numeric|min:5000|max:25000',
+    rule: 'optional|numeric|min:5000',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $5,000.',
-      max: 'The deposit amount should not be more than $25,000.',
     },
   },
 };
