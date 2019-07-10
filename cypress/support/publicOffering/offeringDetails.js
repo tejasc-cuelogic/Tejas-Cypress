@@ -4,7 +4,7 @@ export const goToCFOfferingDetailScreen = () => {
   cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg')
     .should('not.exist');
   cy.get('.campaign-list-wrapper').find('.container').find('.stackable').children()
-    .eq(2)
+    .eq(7)
     .click();
   cy.wait('@getOfferingDetailsBySlug');
 };
@@ -13,7 +13,7 @@ export const goTo506COfferingDetailScreen = () => {
   cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg')
     .should('not.exist');
   cy.get('.campaign-list-wrapper').find('.container').find('.stackable').children()
-    .eq(3)
+    .eq(5)
     .click();
   cy.wait('@getOfferingDetailsBySlug');
 };

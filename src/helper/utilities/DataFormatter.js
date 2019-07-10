@@ -89,7 +89,7 @@ class DataFormatter {
     const startDate = moment();
     const endDate = isDayEnd ? moment(`${timeStamp2} 23:59:59`) : moment(timeStamp2);
     const resultHours = moment.duration(endDate.diff(startDate)).asHours();
-    return Math.round(resultHours);
+    return Math.floor(resultHours);
   }
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {

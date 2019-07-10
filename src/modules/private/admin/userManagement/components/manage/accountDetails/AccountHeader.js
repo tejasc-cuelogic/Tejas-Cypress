@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { includes, startCase, get } from 'lodash';
 import { Header, Icon, Button, Divider, Confirm } from 'semantic-ui-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 @inject('userDetailsStore', 'uiStore')
 @withRouter
@@ -39,14 +39,24 @@ export default class AccountHeader extends Component {
             </Header>
           </span>
           {this.props.showFreezeCTA
-          && (
-<span className="pull-right">
-            <Button.Group compact size="tiny">
-              <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
-              <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
-            </Button.Group>
-          </span>
-          )
+            && (
+              <span className="pull-right">
+                <Button.Group compact size="tiny">
+                  <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
+                  <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
+                </Button.Group>
+              </span>
+            )
+          }
+          {this.props.showAddWithdrawFundCta
+            && (
+              <span className="pull-right">
+                <Button.Group floated="right" compact size="tiny">
+                  <Button as={Link} to={`${this.props.refLink}/addfunds`} primary>Add Funds</Button>
+                  <Button as={Link} to={`${this.props.refLink}/withdraw-funds`} primary>Withdraw Funds</Button>
+                </Button.Group>
+              </span>
+            )
           }
         </div>
         <Divider hidden />

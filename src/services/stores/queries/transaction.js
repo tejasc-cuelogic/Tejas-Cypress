@@ -42,8 +42,8 @@ mutation CreateTransaction($transactionType: String!, $description: String!, $am
 `;
 
 export const addFundMutation = gql`
-  mutation _addFunds($userId: String!, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int) {
-    addFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId)
+  mutation _addFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
+    addFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)
   }
 `;
 
@@ -57,8 +57,8 @@ export const requestOptForTransaction = gql`
 `;
 
 export const withdrawFundMutation = gql`
-  mutation _withdrawFunds($userId: String!, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int) {
-    withdrawFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId)
+  mutation _withdrawFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
+    withdrawFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)
   }
 `;
 

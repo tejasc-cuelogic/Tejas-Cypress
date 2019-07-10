@@ -1,9 +1,9 @@
 
-import { observable, action, toJS } from 'mobx';
+import { observable, action, toJS, computed } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
-import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -31,6 +31,8 @@ export class DataStore {
     encryptOrDecryptValue: false,
     auditBoxFolder: false,
   };
+
+  @observable partialOrCipAccountData = {};
 
   @observable outputMsg = null;
 
@@ -243,6 +245,20 @@ export class DataStore {
         this.setFieldValue('inProgress', false, 'auditBoxFolder');
       });
   });
+
+  @action
+  getListOfPartialOrCIPProcessingAccount = () => {
+    this.partialOrCipAccountData = graphql({
+      client,
+      query: getListOfPartialOrCIPProcessingAccount,
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  @computed get partialOrCipAccountList() {
+    return get(this.partialOrCipAccountData, 'data.getListOfPartialOrCIPProcessingAccount') || [];
+  }
 }
+
 
 export default new DataStore();
