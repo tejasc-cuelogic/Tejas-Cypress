@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Modal, Header, Button, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormTextarea } from '../../../../../../../theme/form';
@@ -23,22 +24,41 @@ export default class ConfirmModel extends Component {
     'close-account': { headerTitle: 'Closed',
       form: this.props.accountStore.CLOSE_ACCOUNT_FRM,
       formKey: 'CLOSE_ACCOUNT_FRM',
-      formChange: this.props.userDetailsStore.formChange },
+      formChange: this.props.accountStore.formChange },
     unfreeze: { headerTitle: 'Unfreeze',
       form: this.props.userDetailsStore.FRM_FREEZE,
       formKey: 'FRM_FREEZE',
       formChange: this.props.userDetailsStore.formChange },
   })
 
-  freezeAccountToggle = (userId, accountId, freeze) => {
-    const { FRM_FREEZE } = this.props.userDetailsStore;
-    this.props.userDetailsStore.freezeAccountToggle(
-      userId,
-      accountId,
-      freeze !== 'unfreeze',
-      FRM_FREEZE.fields.reason.value,
-    );
-    this.handleBack();
+  handleConfirm = (userId, accountId, actionValue) => {
+    if (['freeze', 'unfreeze'].includes(actionValue)) {
+      const { FRM_FREEZE } = this.props.userDetailsStore;
+      this.props.userDetailsStore.freezeAccountToggle(
+        userId,
+        accountId,
+        actionValue !== 'unfreeze',
+        FRM_FREEZE.fields.reason.value,
+      );
+      this.handleBack();
+    } else {
+      const { CLOSE_ACCOUNT_FRM } = this.props.accountStore;
+      const account = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+      this.props.accountStore.closeInvestorAccount(
+        userId,
+        accountId,
+        account.name.toUpperCase(),
+        CLOSE_ACCOUNT_FRM.fields.reason.value,
+      ).then((res) => {
+        if (!get(res, 'data.closeInvestorAccount.errorMessage')) {
+          this.props.userDetailsStore.getUser(this.props.userDetailsStore.getDetailsOfUser.id).then(() => {
+            this.props.history.push(`/app/users/${this.props.userDetailsStore.getDetailsOfUser.id}/profile-data/basic`);
+          });
+        } else {
+          this.handleBack();
+        }
+      });
+    }
   }
 
   render() {
@@ -61,7 +81,7 @@ export default class ConfirmModel extends Component {
               changed={(e, result) => formChange(e, result, confirmForm[actionValue].formKey)}
             />
             <div className="center-align mt-30">
-              <Button className="primary relaxed" content={`${confirmForm[actionValue].headerTitle} Account`} loading={inProgress} onClick={() => this.freezeAccountToggle(userId, accountId, actionValue)} />
+              <Button className="primary relaxed" content={`${confirmForm[actionValue].headerTitle} Account`} loading={inProgress} onClick={() => this.handleConfirm(userId, accountId, actionValue)} />
             </div>
           </Form>
         </Modal.Content>

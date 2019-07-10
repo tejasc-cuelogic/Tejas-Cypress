@@ -76,9 +76,9 @@ export class NavStore {
           signupStatus: userDetailsStore.signupStatus,
           permitted,
         };
-        localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
+        sessionStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
-      const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
+      const pInvestorInfo = sessionStorage.getItem(`${uKey}_pInfo`);
       if (userDetailsStore.userFirstLoad !== true
         && (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {

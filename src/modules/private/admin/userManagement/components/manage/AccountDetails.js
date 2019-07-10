@@ -23,21 +23,23 @@ const navMeta = [
   { title: 'Activity', to: 'activity' },
 ];
 
-@inject('userDetailsStore', 'uiStore', 'accountStore')
+@inject('userDetailsStore', 'uiStore', 'accountStore', 'transactionStore', 'portfolioStore')
 @withRouter
 @observer
 export default class AccountDetails extends Component {
   componentWillMount() {
-    if (this.props.match.params.id) {
-      this.props.accountStore.setSelectedClosedAccount(this.props.match.params.id);
+    if (this.props.match.params.closedAccountId) {
+      this.props.accountStore.setSelectedClosedAccount(this.props.match.params.closedAccountId);
     }
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
-    setFieldValue('isClosedAccount', !!this.props.match.params.id);
+    setFieldValue('isClosedAccount', !!this.props.match.params.closedAccountId);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
+    this.props.portfolioStore.setFieldValue('apiCall', false);
+    this.props.transactionStore.setFieldValue('apiCall', false);
   }
 
   getUserStorageDetails = (e) => {

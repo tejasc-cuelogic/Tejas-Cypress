@@ -63,13 +63,14 @@ export default class Overview extends Component {
 
   render() {
     const { getChartData } = this.props.portfolioStore;
+    const { isClosedAccount } = this.props.userDetailsStore;
     const investor = this.props.userDetailsStore.getDetailsOfUser;
     const account = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const cashMovementData = getChartData('cashMovement');
     return (
       <Form>
         {this.props.isAdmin
-          && <AccountHeader showFreezeCTA pathname={this.props.location.pathname} />
+          && <AccountHeader showFreezeCTA={!isClosedAccount} pathname={this.props.location.pathname} />
         }
         {get(account, 'details.accountStatus') === 'FROZEN'
         && (

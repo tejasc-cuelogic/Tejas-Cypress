@@ -3,9 +3,9 @@ import { observable, action, computed } from 'mobx';
 import { find, get, capitalize } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator } from '../../../helper';
-import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore } from '../index';
+import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
-import { getInvestorCloseAccounts } from '../queries/account';
+import { getInvestorCloseAccounts, closeInvestorAccount } from '../queries/account';
 import Helper from '../../../helper/utility';
 import {
   INVESTMENT_ACCOUNT_TYPES,
@@ -83,6 +83,29 @@ export class AccountStore {
       variables: { userId: userId || userDetailsStore.getDetailsOfUser.id },
     });
   }
+
+  @action
+  closeInvestorAccount = (userId, accountId, accountType, reason) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: closeInvestorAccount,
+        variables: {
+          userId,
+          accountId,
+          accountType,
+          reason,
+        },
+      })
+      .then((res) => {
+        if (get(res, 'data.closeInvestorAccount.errorMessage')) {
+          Helper.toast(get(res, 'data.closeInvestorAccount.errorMessage'), 'error');
+        } else {
+          Helper.toast(`${accountType} account closed successfully.`, 'success');
+        }
+        resolve(res);
+      })
+      .catch(() => { reject(); Helper.toast('Error while closing account', 'error'); uiStore.setProgress(false); });
+  });
 
   @computed
   get sortedAccounts() {

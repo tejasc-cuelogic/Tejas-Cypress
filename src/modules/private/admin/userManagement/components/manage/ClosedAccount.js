@@ -4,7 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import AccountDetails from './AccountDetails';
 
-@inject('accountStore')
+@inject('accountStore', 'transactionStore')
 @withRouter
 @observer
 export default class ClosedAccount extends Component {
@@ -21,7 +21,7 @@ export default class ClosedAccount extends Component {
       <>
         <SecondaryMenu force2ary match={this.props.match} navItems={sortedNavAccounts} />
         <div className="inner-content-spacer">
-          <Route path={`${this.props.match.url}/:id`} render={() => <AccountDetails />} />
+          <Route path={`${this.props.match.url}/:closedAccountId`} render={() => <AccountDetails />} />
         </div>
       </>
     );

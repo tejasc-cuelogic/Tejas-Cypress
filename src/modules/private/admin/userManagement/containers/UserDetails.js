@@ -45,7 +45,7 @@ export default class AccountDetails extends Component {
   }
 
   componentWillMount() {
-    if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
+    if ((this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId)) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
     }
     this.props.accountStore.getInvestorCloseAccounts(this.props.match.params.userId);
