@@ -2,7 +2,7 @@ import { registerApiCall, isAbortRemainingTestCases } from '../common.utility';
 
 export const goToCFOfferingDetailScreen = () => {
   cy.fixture('investor/offeringForInvestment.json').then((offerings) => {
-    cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg', { timeout: 6000 })
+    cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg', { timeout: 60000 })
       .should('not.exist');
     cy.getOffering(offerings.offeringCF.id);
     cy.wait('@getOfferingDetailsBySlug');
@@ -11,7 +11,7 @@ export const goToCFOfferingDetailScreen = () => {
 
 export const goTo506COfferingDetailScreen = () => {
   cy.fixture('investor/offeringForInvestment.json').then((offerings) => {
-    cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg', { timeout: 6000 })
+    cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg', { timeout: 60000 })
       .should('not.exist');
     cy.getOffering(offerings.offering506C.id);
     cy.wait('@getOfferingDetailsBySlug');
