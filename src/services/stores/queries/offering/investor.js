@@ -6,8 +6,11 @@ export const getInvestorListForOffering = gql`
       userId
       firstName
       lastName
+      street
+      streetTwo
       city
       state
+      zipCode
       amount
       investmentDate
       userEmail
