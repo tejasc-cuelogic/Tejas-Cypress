@@ -123,6 +123,7 @@ class FinancialInfo extends Component {
         }
         <Form error size="huge">
           <MaskedInput
+            data-cy="investmentAmount"
             hidelabel
             name="investmentAmount"
             currency

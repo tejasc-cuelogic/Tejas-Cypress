@@ -298,7 +298,7 @@ export class UserDetailsStore {
   }
 
   getUserStorageDetails = (userId) => {
-    uiStore.setProgress();
+    uiStore.setProgress('userBoxAccount');
     return new Promise((resolve, rej) => {
       graphql({
         client,
@@ -522,10 +522,10 @@ export class UserDetailsStore {
           routingUrl = '/app/setup/establish-profile';
         }
       }
-    } else if (this.signupStatus.investorProfileCompleted
-      && get(this.userDetails, 'cip')
-      && !this.isUserVerified) {
-      routingUrl = '/app/setup/account-creation/individual';
+    // } else if (this.signupStatus.investorProfileCompleted
+    //   && get(this.userDetails, 'cip')
+    //   && !this.isUserVerified) {
+    //   routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {

@@ -6,7 +6,7 @@ import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
 const LoadMoreBtn = ({ action, param }) => (
-  <div className="center-align mb-50">
+  <div className="center-align mb-50" data-cy={param}>
     <Button secondary content="Load More" onClick={() => action(param)} />
   </div>
 );

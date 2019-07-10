@@ -3,8 +3,11 @@
 "chromeWebSecurity": false,
 "pageTimeoutLoad": 80000,
 "defaultCommandTimeout": 60000,
+"requestTimeout": 60000,
 "ignoreTestFiles": "*.utility.js",
 "screenshotsFolder": "cypress/reports/screenshots",
 "videosFolder": "cypress/reports/videos",
-"videoUploadOnPasses": false
+"env": {
+  "appPassword": "fourroses"
+}
 }

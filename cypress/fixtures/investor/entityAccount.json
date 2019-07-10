@@ -1,0 +1,11 @@
+{
+  "generalInfoMeta": {
+    "name": "John Smith",
+    "taxId": "12",
+    "entityType": "LLC",
+    "residentalStreet": "222333 Peachtree Place",
+    "city": "Atlanta",
+    "state": "GEORGIA",
+    "zipCode": "30318"
+  }
+}

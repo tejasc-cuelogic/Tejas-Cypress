@@ -560,8 +560,8 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
-      // will calculate and add sri / integrity keys
-      // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
+      // // will calculate and add sri / integrity keys
+      // // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
       new HtmlWebpackTagsPlugin({
         scripts: [
           {
@@ -579,7 +579,7 @@ module.exports = (webpackEnv) => {
               type: 'text/javascript',
               crossorigin: "anonymous"
             }
-          },
+          }
         ],
         append: false
       }),
@@ -593,9 +593,9 @@ module.exports = (webpackEnv) => {
               type: 'text/javascript',
               crossorigin: "anonymous"
             }
-          },
+          }
         ],
-        append: true
+        append: false
       }),
       // isEnvDevelopment &&  new webpack.DllReferencePlugin({
       //   context: __dirname,
