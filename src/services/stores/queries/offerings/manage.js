@@ -46,6 +46,7 @@ const common = {
   closureSummary {
     processingDate
     hardCloseDate
+    launchDate
     repayment {
       currentRepaidAmount
       count
