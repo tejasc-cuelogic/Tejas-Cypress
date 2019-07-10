@@ -133,8 +133,8 @@ export default class Listing extends Component {
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                             {offering.offering && offering.offering.launch
-                          && offering.offering.launch.targetDate
-                              ? DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
+                          && offering.closureSummary.launchDate
+                              ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? get(offering, 'closureSummary.launchDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
                           }
                           </Table.Cell>
                         </>
