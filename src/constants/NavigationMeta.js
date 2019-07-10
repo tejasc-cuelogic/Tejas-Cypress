@@ -263,7 +263,7 @@ export const PRIVATE_NAV = [
       { title: 'Overview', to: 'overview', env: ['localhost', 'develop', 'dev'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
-      { title: 'ᕕ( ᐛ )ᕗ', to: 'completed' },
+      { title: 'ᕕ( ᐛ )ᕗ', to: 'completed', capability: 'OFFERINGS_FULL' },
       // { title: 'Engagement', to: 'engagement' },
       // { title: 'Completed', to: 'completed' },
       { title: '¯\\_(ツ)_/¯', to: 'failed' },

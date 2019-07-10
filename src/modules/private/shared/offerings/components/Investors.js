@@ -21,7 +21,7 @@ export default class BonusRewards extends Component {
   populateCsvData = () => {
     const { investorListsForCsvExport } = this.props.offeringInvestorStore;
     const { offer } = this.props.offeringsStore;
-    const fields = ['firstName', 'lastName', 'userEmail', 'city', 'state', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode', 'earlyBirdEligibility'];
+    const fields = ['firstName', 'lastName', 'userEmail', 'street', 'streetTwo', 'city', 'state', 'zipCode', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode', 'earlyBirdEligibility'];
     const params = {
       fields,
       data: toJS(investorListsForCsvExport),
