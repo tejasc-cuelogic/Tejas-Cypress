@@ -53,7 +53,7 @@ export default class Summary extends React.Component {
     const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
     if (!isUserVerified && !isLegalDocsPresent) {
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-      this.props.history.push('/app/summary/identity-verification/1');
+      this.handleuserIdentity();
     } else {
       this.handleSubmitAccount();
     }

@@ -1,4 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
+import { uniqBy } from 'lodash';
 import { FormValidator as Validator } from '../../../helper';
 import { GqlClient as clientPublic } from '../../../api/publicApi';
 import { NEW_USER } from '../../../constants/user';
@@ -72,14 +73,14 @@ export class UserStore {
     });
     primaryCapabilities.forEach((c) => {
       if (c) {
-        const meta = c.replace('_ANY', '');
+        const meta = c.includes('_ANY') ? c.replace('_ANY', '') : c.includes('_FULL') ? c.replace('_FULL', '') : c.includes('_MANAGER') ? c.replace('_MANAGER', '') : c.replace('_SUPPORT', '');
         capabilities = [
           ...capabilities,
           ...[prepareOpt(meta, 'FULL'), prepareOpt(meta, 'MANAGER'), prepareOpt(meta, 'SUPPORT')],
         ];
       }
     });
-    return [...new Set(capabilities)];
+    return [...new Set(uniqBy(capabilities, 'key'))];
   }
 
   @computed get myCapabilities() {

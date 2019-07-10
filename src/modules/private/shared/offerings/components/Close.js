@@ -196,7 +196,7 @@ out of required
                 </>
           </p>
           <Divider section />
-          {hoursToClose <= 0 && !offerStatus.isFailed
+          {((hoursToClose <= 0 && !offerStatus.isFailed) || true)
             ? (
 <>
               <Step.Group className="campaign-close">

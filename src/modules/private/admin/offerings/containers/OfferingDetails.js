@@ -12,7 +12,7 @@ import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
-@inject('navStore', 'offeringsStore', 'offeringCreationStore')
+@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
 @observer
 export default class OfferingDetails extends Component {
   componentWillMount() {
@@ -63,6 +63,10 @@ export default class OfferingDetails extends Component {
     }
     if (this.props.match.params.stage === 'engagement' && !isDev) {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));
+    }
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    if (access.level !== 'FULL') {
+      navItems = navItems.filter(n => (n.title !== 'Close'));
     }
     return (
       <>
