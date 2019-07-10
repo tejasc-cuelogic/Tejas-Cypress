@@ -13,6 +13,7 @@ const meta = [
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
+  { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' },
   { label: 'Investment Amount', value: 'amount' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
@@ -43,6 +44,7 @@ export default class Listing extends Component {
     const referralCode = get(offer, 'referralCode');
     let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -111,18 +113,20 @@ export default class Listing extends Component {
                     </Table.Cell>
                     )
                   }
-                  {isAdmin
-                    ? (
-                      <Table.Cell>
+                  <Table.Cell>
                         {data.earlyBirdEligibility
                           ? <Label color="green" circular empty className="mr-10" />
                           : ''
                         }
+                  </Table.Cell>
+                  {isAdmin
+                    ? (
+                      <Table.Cell>
                         {Helper.CurrencyFormat(data.amount, 0)}
                         {parseInt(data.investmentsCount, 10) > 1
                           ? (
                             <span>
-                              {`${data.investmentsCount} Investments`}
+                              {` (${data.investmentsCount} Investments)`}
                             </span>
                           )
                           : null}

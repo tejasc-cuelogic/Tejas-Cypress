@@ -143,9 +143,9 @@ export default class Listing extends Component {
                     }
                     {stage === 'live'
                       && (
-<Table.Cell>
+                      <Table.Cell>
                         {offering.closureSummary && offering.closureSummary.processingDate
-                          ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
+                          ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                         }
                       </Table.Cell>
                       )
