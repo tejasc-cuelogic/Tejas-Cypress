@@ -77,6 +77,10 @@ class Success extends Component {
         if (roles && roles.includes('issuer')) {
           const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
+        } else {
+          Helper.toast(`This email is already a registered account of type ${roles}. Please provide new email address.`, 'error');
+          this.props.businessAppStore.setFieldvalue('showUserError', true);
+          this.props.businessAppStore.setFieldvalue('userExists', false);
         }
       }).catch(() => {
         this.setState({ showProgressLoader: false });
@@ -88,9 +92,10 @@ class Success extends Component {
       signupChange, togglePasswordType, SIGNUP_FRM,
       LoginChange, LOGIN_FRM, pwdInputType, currentScore,
     } = this.props.authStore;
-    const { userExists } = this.props.businessAppStore;
+    const { userExists, showUserError } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
     const { errors } = this.props.uiStore;
+    const roles = this.props.userStore.currentUser ? this.props.userStore.currentUser.roles : [];
     return (
       <>
         <Grid container>
@@ -137,8 +142,7 @@ class Success extends Component {
                           : (
 <FormInput
   key={field}
-  readOnly={field === 'email'}
-                            // icon={field !== 'email' ? togglePasswordType(field) : null}
+  readOnly={field === 'email' && !showUserError}
   type={field !== 'email' ? pwdInputType : 'text'}
   name={field}
   fielddata={fields[field]}
@@ -171,6 +175,13 @@ class Success extends Component {
               )
             }
             <Divider section hidden />
+            {showUserError && roles
+              && (
+                <p className="negative-text">
+                  {`This email is already a registered account of type ${roles}. Please provide new email address.`}
+                </p>
+              )
+            }
             <Button primary size="large" className="very relaxed" content="Proceed" loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!SIGNUP_FRM.meta.isValid || !currentScore) && !userExists)} />
           </Grid.Column>
         </Grid>

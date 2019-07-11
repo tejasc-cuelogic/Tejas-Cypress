@@ -101,6 +101,8 @@ export class BusinessAppStore {
 
   @observable enableSave = false;
 
+  @observable showUserError = false;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
