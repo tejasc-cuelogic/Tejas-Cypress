@@ -49,7 +49,7 @@ export default class Transactions extends Component {
     return (
       <>
         {this.props.isAdmin
-          && <AccountHeader module="Transactions" pathname={this.props.location.pathname} />
+          && <AccountHeader showAddWithdrawFundCta module="Transactions" refLink={this.props.match.url} pathname={this.props.location.pathname} />
         }
         <div className="more search-filters bg-offwhite">
           <Form>

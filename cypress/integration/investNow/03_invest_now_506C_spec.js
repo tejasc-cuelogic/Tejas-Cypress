@@ -5,7 +5,7 @@ import { openLogingPopupAndAutheticate } from './utility/validInvestorLoginForIn
 import { checkRegulationAndAccreditation } from './utility/offeringRegulationChecks.utility';
 import { isAbortRemainingTestCases } from '../common.utility';
 
-describe('Invest now 506C investment flow', () => {
+describe.skip('Invest now 506C investment flow', () => {
   let isNeedToSkip = false;
   before(() => {
     initializeInvestNowFlow('506C');

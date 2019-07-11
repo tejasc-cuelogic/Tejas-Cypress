@@ -13,6 +13,7 @@ const meta = [
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
+  { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' },
   { label: 'Investment Amount', value: 'amount' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
@@ -43,6 +44,7 @@ export default class Listing extends Component {
     const referralCode = get(offer, 'referralCode');
     let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -94,35 +96,39 @@ export default class Listing extends Component {
                         : `${data.firstName} ${data.lastName}`
                       }
                       {isAdmin && get(data, 'userEmail')
-                      && (
-                      <>
-                        <p>{`${get(data, 'userEmail')}`}</p>
-                      </>
-                      )
+                        && (
+                          <>
+                            <p>{`${get(data, 'userEmail')}`}</p>
+                          </>
+                        )
                       }
                     </div>
                   </Table.Cell>
-                  <Table.Cell>{data.city}</Table.Cell>
+                  <Table.Cell title={`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}${data.city}, ${data.state}, ${data.zipCode}`}>
+                    {data.city}
+                  </Table.Cell>
                   <Table.Cell>{data.state}</Table.Cell>
                   {isAdmin
                     && (
-<Table.Cell>
-                      {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
-                    </Table.Cell>
+                      <Table.Cell>
+                        {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
+                      </Table.Cell>
                     )
                   }
+                  <Table.Cell>
+                    {data.earlyBirdEligibility
+                      ? <Label color="green" circular empty className="mr-10" />
+                      : ''
+                    }
+                  </Table.Cell>
                   {isAdmin
                     ? (
                       <Table.Cell>
-                        {data.earlyBirdEligibility
-                          ? <Label color="green" circular empty className="mr-10" />
-                          : ''
-                        }
                         {Helper.CurrencyFormat(data.amount, 0)}
                         {parseInt(data.investmentsCount, 10) > 1
                           ? (
                             <span>
-                              {`${data.investmentsCount} Investments`}
+                              {` (${data.investmentsCount} Investments)`}
                             </span>
                           )
                           : null}
@@ -136,12 +142,12 @@ export default class Listing extends Component {
                                   {data.autoDraftAmount && data.credit ? <br /> : ''}
                                   {data.autoDraftAmount ? `Auto Draft: ${data.autoDraftAmount}` : ''}
                                 </span>
-)}
+                              )}
                               hoverable
                               position="top center"
                             />
                           ) : null
-                      }
+                        }
                       </Table.Cell>
                     )
                     : null

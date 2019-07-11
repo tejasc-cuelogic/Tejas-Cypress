@@ -47,7 +47,7 @@ export default class ProfileData extends Component {
     const {
       email, legalDetails, info, phone, investorProfileData, status,
     } = this.props.userDetailsStore.userDetails;
-    const { signupStatus, validAccStatus } = this.props.userDetailsStore;
+    const { signupStatus, validAccStatus, isCompleteIndividualAccount } = this.props.userDetailsStore;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
@@ -178,6 +178,7 @@ export default class ProfileData extends Component {
                 status={status}
                 signupStatus={signupStatus}
                 validAccStatus={validAccStatus}
+                isIndividualFullAccount={isCompleteIndividualAccount}
               />
             </Card.Group>
             {investorProfileData && !investorProfileData.isPartialProfile
