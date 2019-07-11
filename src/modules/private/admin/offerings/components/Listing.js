@@ -119,9 +119,9 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage
-                        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 0
+                        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) <= 0
                           ? STAGES.PROCESSING.label
-                          : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 2
+                          : stage === 'live' && get(offering, 'closureSummary.processingDate') && (DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) === 2 || DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) <= 48)
                             ? STAGES.LOCK.label
                             : STAGES[offering.stage].label
                         : STAGES[offering.stage].label
@@ -133,9 +133,9 @@ export default class Listing extends Component {
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                             {offering.offering && offering.offering.launch
-                          && offering.closureSummary.launchDate
+                              && offering.closureSummary.launchDate
                               ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? get(offering, 'closureSummary.launchDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
-                          }
+                            }
                           </Table.Cell>
                         </>
                       )
@@ -143,11 +143,11 @@ export default class Listing extends Component {
                     }
                     {stage === 'live'
                       && (
-                      <Table.Cell>
-                        {offering.closureSummary && offering.closureSummary.processingDate
-                          ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
-                        }
-                      </Table.Cell>
+                        <Table.Cell>
+                          {offering.closureSummary && offering.closureSummary.processingDate
+                            ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
+                          }
+                        </Table.Cell>
                       )
                     }
                     {stage !== 'engagement'
@@ -182,9 +182,9 @@ export default class Listing extends Component {
                         {Object.keys(actions).map(action => (
                           action.label === 'Delete' && stage === 'engagement' ? ''
                             : (
-<Button icon className="link-button">
-                            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
-                          </Button>
+                              <Button icon className="link-button">
+                                <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
+                              </Button>
                             )
                         ))}
                       </Button.Group>
