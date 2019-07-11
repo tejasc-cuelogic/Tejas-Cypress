@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Card } from 'semantic-ui-react';
-// import { get } from 'lodash';
 import MessagesList from './comments/MessagesList';
 import MessagesWrap from './comments/MessagesWrap';
 import { InlineLoader } from '../../../../../theme/shared';
-// import { DataFormatter } from '../../../../../helper';
 
 @inject('offeringCreationStore', 'messageStore', 'userStore', 'offeringsStore')
 @observer
@@ -27,8 +25,6 @@ export default class Comments extends Component {
       messages, currentMessageId, loading, error, threadUsersList, newPostComment, threadMsgCount,
     } = messageStore;
     const { isIssuer, isAdmin } = userStore;
-    // const { offer } = offeringsStore;
-    // const passedProcessingDate = DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) <= 0;
     const passedProcessingDate = false;
     if (loading) {
       return <InlineLoader />;

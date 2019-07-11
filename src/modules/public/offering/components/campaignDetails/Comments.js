@@ -98,7 +98,6 @@ class Comments extends Component {
     // const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
     const passedProcessingDate = DataFormatter.getDateDifferenceInHours(get(campaign, 'closureSummary.processingDate'), true) <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
-    // const disablePostComment = !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
     const comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
