@@ -7,7 +7,7 @@ import {
 
 import { isAbortRemainingTestCases } from '../common.utility';
 
-describe('Invest now flow', () => {
+describe.skip('Invest now flow', () => {
   let isNeedToSkip = false;
   beforeEach(() => {
     cy.restoreLocalStorage();
@@ -56,7 +56,7 @@ describe('Invest now flow', () => {
     }
   });
 
-  it('succesfully login as investor with one account', () => {
+  it.skip('succesfully login as investor with one account', () => {
     if (!isNeedToSkip) {
       proceedWithValidUserLoginAction();
     } else {

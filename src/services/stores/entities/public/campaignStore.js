@@ -198,6 +198,7 @@ export class CampaignStore {
     const closingDate = get(campaign, 'closureSummary.processingDate') && get(campaign, 'closureSummary.processingDate') !== 'Invalid date' ? get(campaign, 'closureSummary.processingDate') : null;
     campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
     campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHours(closingDate, true);
+    campaignStatus.countDown = campaignStatus.diffForProcessing < 48 ? { valueToShow: campaignStatus.diffForProcessing, labelToShow: 'Hours Left' } : { valueToShow: campaignStatus.diff, labelToShow: 'Days Left' };
     campaignStatus.isInProcessing = campaignStatus.diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
@@ -471,6 +472,9 @@ export class CampaignStore {
           || closeDaysToRemains === null)
           && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
           resultObject.bannerFirstText = 'NEW';
+        } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+          const labelBannerFirst = closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left`;
+          resultObject.bannerFirstText = labelBannerFirst;
         }
         resultObject.isBannerShow = true;
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
