@@ -29,8 +29,16 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
 @withRouter
 @observer
 export default class Leader extends Component {
+  state = {
+    leaderFormInvalid: false,
+  }
+
   componentWillMount() {
     this.props.offeringCreationStore.setLeadershipExpData(this.props.index);
+  }
+
+  componentWillUnmount() {
+    this.setState({ leaderFormInvalid: false });
   }
 
   onFileDrop = (files, name, index) => {
@@ -60,7 +68,12 @@ export default class Leader extends Component {
 
   handleFormSubmit = (isApproved = null, successMsg) => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
+    if (LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.value !== '' && (LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.error === undefined || LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.error === false)) {
+      this.setState({ leaderFormInvalid: false });
+      updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
+    } else {
+      this.setState({ leaderFormInvalid: true });
+    }
   }
 
   addMore = (e, formName, arrayName) => {
@@ -106,6 +119,11 @@ export default class Leader extends Component {
     const leaderNumber = this.props.index;
     const index = leaderNumber || 0;
     this.props.offeringCreationStore.uploadMediaForLeadership(name, 'LEADERSHIP_FRM', index);
+  }
+
+  arrayFormChange = (e, result, formName, arrayName, index) => {
+    this.setState({ leaderFormInvalid: false });
+    this.props.offeringCreationStore.formArrayChange(e, result, formName, arrayName, index);
   }
 
   editorChange =
@@ -162,7 +180,7 @@ export default class Leader extends Component {
                   displayMode={isReadonly}
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                  changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+                  changed={(e, result) => this.arrayFormChange(e, result, formName, 'leadership', index)}
                 />
               ))
             }
@@ -433,6 +451,7 @@ export default class Leader extends Component {
             approved={approved}
             updateOffer={isApproved => this.handleFormSubmit(isApproved, 'Leadership has been Updated Successfully')}
             issuerSubmitted={issuerSubmitted}
+            leaderFormInvalid={this.state.leaderFormInvalid}
           />
         </Form>
         <Confirm
