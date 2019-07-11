@@ -5,8 +5,13 @@
 // 	Sidebar pushable CSS
 .pushable {
 	&:not(body) {
-		transform: none;
+		// transform: none;
 		position: relative;
+		width: 1680px;
+		margin: auto;
+		@media only screen and (max-width : @largestMobileScreen){
+			width: 100%;
+		}
 	}
 	.ui.push.sidebar {
 		z-index: 100;
@@ -71,7 +76,7 @@
 		visibility:visible;
 		transition:all .5s ease;
 		position: fixed;
-		margin-top: 72px !important;
+		// margin-top: 72px !important;
 		height: calc(100vh - 72px) !important;
 		@media only screen and (max-width : @largestMobileScreen) {
 			margin-top: 0 !important;
