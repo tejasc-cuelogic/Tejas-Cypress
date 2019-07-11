@@ -12,7 +12,7 @@ import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication,
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
+import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
 
 
 export class AuthStore {
@@ -117,9 +117,6 @@ export class AuthStore {
     }
     if (e.score !== undefined) {
       this.currentScore = e.score;
-    }
-    if (result && result.name === 'email') {
-      businessAppStore.setFieldvalue('showUserError', false);
     }
   };
 

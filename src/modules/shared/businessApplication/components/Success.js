@@ -39,6 +39,7 @@ class Success extends Component {
     const {
       userExists, currentApplicationType, applicationId, setFieldvalue,
     } = this.props.businessAppStore;
+    this.props.businessAppStore.setFieldvalue('showUserError', false);
     if (this.props.isPublic) {
       this.setState({ showProgressLoader: true });
       if (!userExists) {
