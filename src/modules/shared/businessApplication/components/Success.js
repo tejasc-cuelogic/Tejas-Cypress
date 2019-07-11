@@ -78,7 +78,6 @@ class Success extends Component {
           const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
         } else {
-          Helper.toast(`This email is already a registered account of type ${roles}. Please provide new email address.`, 'error');
           this.props.businessAppStore.setFieldvalue('showUserError', true);
           this.props.businessAppStore.setFieldvalue('userExists', false);
         }
