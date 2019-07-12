@@ -89,7 +89,7 @@ export const PRIVATE_NAV = [
   },
   {
     title: 'Accounts',
-    accessibleTo: ['ira', 'individual', 'entity'],
+    accessibleTo: ['investor'],
     to: 'setup',
     path: 'investor/setup',
     isMenuHeader: true,
@@ -229,24 +229,24 @@ export const PRIVATE_NAV = [
       },
     ],
   },
-  {
-    icon: 'ns-article',
-    title: { issuer: 'Resources', investor: 'Education Center' },
-    hideSubOnSideBar: true,
-    to: 'resources',
-    accessibleTo: ['investor', 'issuer'],
-    subPanel: 1,
-    path: 'shared/education/containers/Education',
-    subNavigations: [
-      {
-        title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
-      },
-      { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
-      {
-        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop', 'dev'],
-      },
-    ],
-  },
+  // {
+  //   icon: 'ns-article',
+  //   title: { issuer: 'Resources', investor: 'Education Center' },
+  //   hideSubOnSideBar: true,
+  //   to: 'resources',
+  //   accessibleTo: ['investor', 'issuer'],
+  //   subPanel: 1,
+  //   path: 'shared/education/containers/Education',
+  //   subNavigations: [
+  //     {
+  //       title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
+  //     },
+  //     { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
+  //     {
+  //       title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop', 'dev'],
+  //     },
+  //   ],
+  // },
   // {
   //   icon: 'calendar',
   //   title: 'Events',
