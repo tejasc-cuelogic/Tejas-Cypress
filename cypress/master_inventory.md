@@ -63,18 +63,18 @@
 
 - Individual Account
 	- Link Bank
-		- [X] Link bank directly (Date : **07-04-2018** | By **Swapnil**)
+		- **skipped -** Link bank directly (Date : **07-04-2018** | By **Swapnil**)
 		- [ ] Search bank
 		- [ ] Change linked bank
 		- [ ] keep existing linked bank
 	- Link bank manually
 		- [ ] Wrong routing number
 		- [ ] Wrong account number
-		- [X] Successful link bank manually (Date : **07-04-2018** | By **Swapnil**)
+		- **skipped -** Successful link bank manually (Date : **07-04-2018** | By **Swapnil**)
 	- Add funds
 		- [ ] I don't want to deposit any money
 		- [ ] Add fund below $100
-		- [X] Create account (Date : **07-04-2018** | By **Swapnil**)
+		- **skipped -** Create account (Date : **07-04-2018** | By **Swapnil**)
 
 - IRA Account
 	- Link Bank
@@ -92,7 +92,7 @@
 		- [ ] Remove uploaded files
 	- [ ] Switch to account type and funding tab from summary page, change account type and funding options
 	- [ ] Check hyperlinks (Summary page)
-	- [X] Create account (Date : **07-04-2018** | By **Swapnil**)
+		- **skipped -** Create account (Date : **07-04-2018** | By **Swapnil**)
 
 - Entity Account
 	- [ ] Check Investment Limit
@@ -102,7 +102,7 @@
 	- [ ] Upload with invalid filename
 	- [ ] Remove uploaded files
 	- [ ] Add fund below $5000
-    - [X] Account Creation (Date : **07-04-2018** | By **Swapnil**)
+    	- **skipped -** Account Creation (Date : **07-04-2018** | By **Swapnil**)
 
 - Deposit Funds
 	- [ ] Add funds
@@ -136,17 +136,17 @@
 
 - Invest Now 
 	- [ ] Invest for freeze account
-	- [X] Invalid user login credentials (Date : **07-04-2018** | By **Vaibhav**)
-	- [X] Invest when investor not logged in (Date : **07-04-2018** | By **Vaibhav**)
+		- **skipped -** Invalid user login credentials (Date : **07-04-2018** | By **Vaibhav**)
+		- **skipped -** Invest when investor not logged in (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Invest in partially created account
 	- [ ] Investment with multiple account type selection
 	- [ ] Accreditation popup for parallel offering (506C and 506B)
-	- [X] Invest when accreditation request pending (Date : **07-04-2018** | By **Vaibhav**)
-	- [X] Invest below min investment amount (Date : **07-04-2018** | By **Vaibhav**)
+		- **skipped -** Invest when accreditation request pending (Date : **07-04-2018** | By **Vaibhav**)
+		- **skipped -** Invest below min investment amount (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Invest above max investment amount
-	- [X] Update investment limit (Date : **07-04-2018** | By **Vaibhav**)
+		- **skipped -** Update investment limit (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Check overdraft amount 
-	- [X] Invest successfully in offering `CF Type Offering` (Date : **07-04-2018** | By **Vaibhav**)
+		- **skipped -** Invest successfully in offering `CF Type Offering` (Date : **07-04-2018** | By **Vaibhav**)
 	- [ ] Invest successfully in offering `BD_506C Type Offering`
 	- [ ] Invest successfully in offering `BD_506B Type Offering`
 
