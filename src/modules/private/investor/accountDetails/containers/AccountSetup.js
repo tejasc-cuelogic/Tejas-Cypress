@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { includes, capitalize } from 'lodash';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const isTablet = document.documentElement.clientWidth < 992;
 @inject('userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -32,7 +31,7 @@ export default class AccountSetup extends Component {
           <Card.Content>
             <Statistic size="tiny" className="cta">
               <Statistic.Value className="mb-half">You&apos;re almost there!</Statistic.Value>
-              <Statistic.Label>Once you finish setting up your {currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Account,{!isTablet && <br />} you can begin investing on NextSeed.</Statistic.Label>
+              <Statistic.Label>Once you finish setting up your {currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Account, you can begin investing on NextSeed.</Statistic.Label>
             </Statistic>
             <div className="center-align">
               <Button onClick={() => this.renderAccType()} className={isMobile && 'mt-20'} compact color="green">Continue</Button>
