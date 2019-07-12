@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
@@ -8,6 +9,7 @@ import { authActions } from '../../../../services/actions';
 import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore', 'authStore', 'userStore', 'uiStore')
+@withRouter
 @observer
 class Success extends Component {
   state = {
@@ -32,6 +34,8 @@ class Success extends Component {
         this.props.authStore.setUserDetails(fields);
       }
     }
+    this.props.uiStore.setFieldvalue('authRef', this.props.match.url);
+    this.props.uiStore.setFieldvalue('isFromBusinessApplication', true);
   }
 
   onProceed = (e) => {
@@ -85,6 +89,10 @@ class Success extends Component {
         }
       }).catch(() => {
         this.setState({ showProgressLoader: false });
+      }).finally(() => {
+        this.props.uiStore.setFieldvalue('authRef', null);
+        this.props.uiStore.setFieldvalue('isFromBusinessApplication', false);
+        this.props.uiStore.removeOneFromProgressArray('login');
       });
   }
 
@@ -116,6 +124,9 @@ class Success extends Component {
                 will walk you through the steps and keep the process organized.`
               }
             </p>
+            {userExists
+              && <h3 className="ui header">Log In</h3>
+            }
             {this.props.isPublic
               && (
 <Form error>
@@ -151,17 +162,24 @@ class Success extends Component {
 />
                           )
                       ))
-                      : ['email', 'password'].map(field => (
-                        <FormInput
-                          key={field}
-                          icon={field === 'password' ? togglePasswordType(field) : null}
-                          type={field === 'password' ? pwdInputType : 'text'}
-                          name={field}
-                          readOnly={field === 'email'}
-                          fielddata={LOGIN_FRM.fields[field]}
-                          changed={LoginChange}
-                        />
-                      ))
+                      : (
+                        <>
+                          {['email', 'password'].map(field => (
+                            <FormInput
+                              key={field}
+                              icon={field === 'password' ? togglePasswordType(field) : null}
+                              type={field === 'password' ? pwdInputType : 'text'}
+                              name={field}
+                              readOnly={field === 'email'}
+                              fielddata={LOGIN_FRM.fields[field]}
+                              changed={LoginChange}
+                            />
+                          ))}
+                        <Form.Field>
+                          <Link to="/forgot-password">Forgot password?</Link>
+                        </Form.Field>
+                        </>
+                      )
                     }
                     {errors
                       && (
@@ -180,7 +198,7 @@ class Success extends Component {
               roles
                 ? (
                 <p className="negative-text">
-                  {`This email is already a registered account of type ${roles}. Please provide new email address.`}
+                  {`This email is already registered as an ${roles}.  Please enter a new email address.`}
                 </p>
                 ) : (
                 <p className="negative-text">

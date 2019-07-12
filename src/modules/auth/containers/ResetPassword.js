@@ -29,7 +29,13 @@ export default class ResetPassword extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    authActions.setNewPassword().then(() => this.props.history.push('/login'));
+    authActions.setNewPassword().then(() => {
+      if (this.props.uiStore.isFromBusinessApplication) {
+        this.props.history.push(this.props.uiStore.authRef);
+      } else {
+        this.props.history.push('/login');
+      }
+    });
   }
 
   handleCloseModal = (e) => {
