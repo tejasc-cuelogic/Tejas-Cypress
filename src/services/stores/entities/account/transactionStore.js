@@ -609,9 +609,13 @@ export class TransactionStore {
       },
       onFetch: (data) => {
         if (data && !this.investmentsByOffering.loading) {
-          this.setInvestmentOptions(data.getInvestmentsByUserIdAndOfferingId);
-          if (data.getInvestmentsByUserIdAndOfferingId[0]) {
-            this.setInvestment(data.getInvestmentsByUserIdAndOfferingId[0].investmentId);
+          const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
+            : userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+          const accountId = get(account, 'details.accountId');
+          const investmentsByUserIdAndOfferingId = filter(data.getInvestmentsByUserIdAndOfferingId, e => e.accountId === accountId);
+          this.setInvestmentOptions(investmentsByUserIdAndOfferingId);
+          if (get(investmentsByUserIdAndOfferingId, '[0]')) {
+            this.setInvestment(get(investmentsByUserIdAndOfferingId, '[0].investmentId'));
           }
           resolve();
         }
