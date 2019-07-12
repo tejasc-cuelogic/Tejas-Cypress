@@ -146,9 +146,11 @@ export default class Portfolio extends Component {
     const notificationCard = {
       message:
   <span>
+    <p>
         Are you an accredited investor? Go through the steps to verify your status
         today, and for a limited time, we will add a $100 credit to your account.
-    <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+    </p>
+    <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
   </span>,
       header: 'Earn $100 by verifying your accredited investor status',
     };
