@@ -14,7 +14,7 @@ export const ADD_WITHDRAW_FUND = {
   amount: TRANSFER_FUND.amount,
   description: {
     value: '',
-    label: 'Justify your decision',
+    label: 'Justify',
     error: undefined,
     rule: 'optional',
     placeHolder: 'Type your comment here...',

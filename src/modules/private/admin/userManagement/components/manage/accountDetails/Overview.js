@@ -116,6 +116,7 @@ export default class Overview extends Component {
                   <IndividualSummary
                     investor={investor}
                     account={account}
+                    isClosedAccount={isClosedAccount}
                     getRoutingNumber={this.getRoutingNumber}
                     loading={this.state.loading}
                     routingNumber={this.props.bankAccountStore.routingNum}
@@ -123,9 +124,23 @@ export default class Overview extends Component {
                   />
                 )
                 : this.checkInvestorAccType('ira', account)
-                  ? <IraSummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} />
+                  ? (
+                    <IraSummary
+                      investor={investor}
+                      isClosedAccount={isClosedAccount}
+                      account={account}
+                      CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
+                    />
+                  )
                   : this.checkInvestorAccType('entity', account)
-                    ? <EntitySummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} /> : null
+                    ? (
+                    <EntitySummary
+                      investor={investor}
+                      isClosedAccount={isClosedAccount}
+                      account={account}
+                      CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
+                    />
+                    ) : null
               }
             </Table>
           </div>

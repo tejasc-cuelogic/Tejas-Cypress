@@ -10,6 +10,7 @@ import { FormTextarea } from '../../../../../../../theme/form';
 export default class ConfirmModel extends Component {
   componentWillMount() {
     this.props.userDetailsStore.resetModalForm();
+    this.props.accountStore.closeAccountForm();
   }
 
   handleBack = () => {
@@ -18,14 +19,17 @@ export default class ConfirmModel extends Component {
 
   confirmForm = () => ({
     freeze: { headerTitle: 'Freeze',
+      btntext: 'Freeze',
       form: this.props.userDetailsStore.FRM_FREEZE,
       formKey: 'FRM_FREEZE',
       formChange: this.props.userDetailsStore.formChange },
     'close-account': { headerTitle: 'Closed',
+      btntext: 'Close',
       form: this.props.accountStore.CLOSE_ACCOUNT_FRM,
       formKey: 'CLOSE_ACCOUNT_FRM',
       formChange: this.props.accountStore.formChange },
     unfreeze: { headerTitle: 'Unfreeze',
+      btntext: 'Unfreeze',
       form: this.props.userDetailsStore.FRM_FREEZE,
       formKey: 'FRM_FREEZE',
       formChange: this.props.userDetailsStore.formChange },
@@ -54,6 +58,7 @@ export default class ConfirmModel extends Component {
           this.props.userDetailsStore.getUser(this.props.userDetailsStore.getDetailsOfUser.id).then(() => {
             this.props.history.push(`/app/users/${this.props.userDetailsStore.getDetailsOfUser.id}/profile-data/basic`);
           });
+          this.props.uiStore.setProgress();
         } else {
           this.handleBack();
         }
@@ -81,7 +86,7 @@ export default class ConfirmModel extends Component {
               changed={(e, result) => formChange(e, result, confirmForm[actionValue].formKey)}
             />
             <div className="center-align mt-30">
-              <Button className="primary relaxed" content={`${confirmForm[actionValue].headerTitle} Account`} loading={inProgress} onClick={() => this.handleConfirm(userId, accountId, actionValue)} />
+              <Button className="primary relaxed" content={`${confirmForm[actionValue].btntext} Account`} loading={inProgress} onClick={() => this.handleConfirm(userId, accountId, actionValue)} />
             </div>
           </Form>
         </Modal.Content>

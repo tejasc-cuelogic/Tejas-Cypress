@@ -497,6 +497,11 @@ export class UserDetailsStore {
     return this.validAccStatus.includes(accDetails.idVerification);
   }
 
+  @computed get isSelectedAccountFull() {
+    return get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus')
+      ? get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FULL' : null;
+  }
+
   @computed get isLegalDocsPresent() {
     return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
       || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');

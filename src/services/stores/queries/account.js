@@ -109,6 +109,11 @@ query getInvestorCloseAccounts($userId: String!) {
     skipAddressVerifyCheck
     accountType
     accountStatus
+    closed{
+      date
+      reason
+      by
+    }
     taxStatement{
       fileId
       fileName

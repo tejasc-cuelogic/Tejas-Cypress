@@ -85,27 +85,30 @@ export class AccountStore {
   }
 
   @action
-  closeInvestorAccount = (userId, accountId, accountType, reason) => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: closeInvestorAccount,
-        variables: {
-          userId,
-          accountId,
-          accountType,
-          reason,
-        },
-      })
-      .then((res) => {
-        if (get(res, 'data.closeInvestorAccount.errorMessage')) {
-          Helper.toast(get(res, 'data.closeInvestorAccount.errorMessage'), 'error');
-        } else {
-          Helper.toast(`${accountType} account closed successfully.`, 'success');
-        }
-        resolve(res);
-      })
-      .catch(() => { reject(); Helper.toast('Error while closing account', 'error'); uiStore.setProgress(false); });
-  });
+  closeInvestorAccount = (userId, accountId, accountType, reason) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: closeInvestorAccount,
+          variables: {
+            userId,
+            accountId,
+            accountType,
+            reason,
+          },
+        })
+        .then((res) => {
+          if (get(res, 'data.closeInvestorAccount.errorMessage')) {
+            Helper.toast(get(res, 'data.closeInvestorAccount.errorMessage'), 'error');
+          } else {
+            Helper.toast(`${accountType} account closed successfully.`, 'success');
+          }
+          resolve(res);
+        })
+        .catch(() => { reject(); Helper.toast('Error while closing account', 'error'); uiStore.setProgress(false); });
+    });
+  }
 
   @computed
   get sortedAccounts() {
@@ -168,6 +171,11 @@ export class AccountStore {
   resetStoreData = () => {
     this.INVESTMENT_ACC_TYPES.fields.accType.values = ACC_TYPE.accType.values;
     this.INVESTMENT_ACC_TYPES.fields.accType.value = 0;
+  }
+
+  @action
+  closeAccountForm = () => {
+    this.CLOSE_ACCOUNT_FRM = FormValidator.prepareFormObject(CLOSE_INVESTOR_ACCOUNT);
   }
 }
 export default new AccountStore();
