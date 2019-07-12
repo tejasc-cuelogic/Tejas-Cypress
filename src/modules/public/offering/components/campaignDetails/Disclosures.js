@@ -73,7 +73,8 @@ export default class TermsOfUse extends Component {
         </div>
       );
     }
-    const index = (this.props.location.hash || '#1').substr(1);
+    // const index = (this.props.location.hash || '#1').substr(1);
+    const index = 1;
     return (
       <div className="campaign-content-wrapper">
         {this.dataRoomHeader}

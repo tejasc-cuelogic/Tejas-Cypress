@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
+import { Item, Header, Label, Divider } from 'semantic-ui-react';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { Image64, UserAvatar } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const isTablet = document.documentElement.clientWidth < 992;
 
 @withRouter
 class LatestUpdates extends Component {
@@ -70,10 +69,6 @@ class LatestUpdates extends Component {
             </Item.Content>
           </Item>
         </Item.Group>
-        <Button fluid={isTablet} onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
-          View Updates
-          <Icon size="small" className="ns-chevron-right right" color="white" />
-        </Button>
       </>
     );
   }

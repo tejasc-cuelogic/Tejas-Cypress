@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import { toJS } from 'mobx';
 import { Divider } from 'semantic-ui-react';
 import CompanyTopThings from './AboutCompany/CompanyTopThings';
@@ -12,33 +13,34 @@ import CompanyHistory from './AboutCompany/CompanyHistory';
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 550 : 200;
-const isMobile = document.documentElement.clientWidth < 992;
+// const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
+@withRouter
 @observer
 class AboutCompany extends Component {
-  componentWillMount() {
-    window.addEventListener('scroll', this.handleOnScroll);
-  }
+  // componentWillMount() {
+  //   window.addEventListener('scroll', this.handleOnScroll);
+  // }
 
   componentDidMount() {
-    if (this.props.location.hash && this.props.location.hash !== '') {
-      this.props.navStore.setFieldValue('currentActiveHash', null);
-      if (document.querySelector(`${this.props.location.hash}`)) {
-        document.querySelector(`${this.props.location.hash}`).scrollIntoView({
-          block: 'start',
-          behavior: 'smooth',
-        });
-      }
-    } else if (!isMobile) {
-      const { campaignNavData } = this.props.campaignStore;
-      const navs = (campaignNavData.find(i => i.title === 'About the Company')).subNavigations;
-      const sel = navs && navs[0] && navs[0].to;
-      if (sel) {
-        document.querySelector(sel).scrollIntoView(true);
-        this.props.navStore.setFieldValue('currentActiveHash', sel);
-      }
-    }
+    // if (this.props.location.hash && this.props.location.hash !== '') {
+    //   this.props.navStore.setFieldValue('currentActiveHash', null);
+    //   if (document.querySelector(`${this.props.location.hash}`)) {
+    //     document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+    //       block: 'start',
+    //       behavior: 'smooth',
+    //     });
+    //   }
+    // } else if (!isMobile) {
+    //   const { campaignNavData } = this.props.campaignStore;
+    //   const navs = (campaignNavData.find(i => i.title === 'About the Company')).subNavigations;
+    //   const sel = navs && navs[0] && navs[0].to;
+    //   if (sel) {
+    //     document.querySelector(sel).scrollIntoView(true);
+    //     this.props.navStore.setFieldValue('currentActiveHash', sel);
+    //   }
+    // }
   }
 
   componentWillUnmount() {
