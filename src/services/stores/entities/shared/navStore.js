@@ -77,6 +77,12 @@ export class NavStore {
           permitted,
         };
         sessionStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
+      } else {
+        const pInvestorInfo = {
+          signupStatus: userDetailsStore.signupStatus,
+          permitted,
+        };
+        sessionStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
       const pInvestorInfo = sessionStorage.getItem(`${uKey}_pInfo`);
       if (userDetailsStore.userFirstLoad !== true
