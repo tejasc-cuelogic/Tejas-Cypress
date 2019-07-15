@@ -29,12 +29,12 @@ class Overview extends Component {
         behavior: 'smooth',
       });
     } else {
-      // const { campaignNavData } = this.props.campaignStore;
-      // const navs = (campaignNavData.find(i => i.title === 'Summary')).subNavigations;
-      // const sel = navs && navs[0] && navs[0].to;
-      // if (sel) {
-      //   this.props.navStore.setFieldValue('currentActiveHash', sel);
-      // }
+      const { campaignNavData } = this.props.campaignStore;
+      const navs = (campaignNavData.find(i => i.title === 'Summary')).subNavigations;
+      const sel = navs && navs[0] && navs[0].to;
+      if (sel) {
+        this.props.navStore.setFieldValue('currentActiveHash', sel);
+      }
     }
   }
 

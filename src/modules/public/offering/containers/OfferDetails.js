@@ -157,7 +157,7 @@ class offerDetails extends Component {
 
   render() {
     const {
-      match, campaignStore, location,
+      match, campaignStore, location, newLayout,
     } = this.props;
     if (this.state.showPassDialog) {
       return (
@@ -235,13 +235,15 @@ class offerDetails extends Component {
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
                       <Route exact path={match.url} component={getModule(navItems[0].component)} />
-                      {
+                      {!newLayout
+                      && (
                         navItems.map((item) => {
                           const CurrentComponent = getModule(item.component);
                           return (
                             <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
                           );
                         })
+                      )
                       }
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
