@@ -30,9 +30,10 @@ export default class CampaignSideBar extends Component {
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
       earlyBird, isEarlyBirdRewards, bonusRewards, countDown,
     } = campaignStatus;
+    const isCampainLayout = this.props.match.url.includes('/offerings-layout');
     return (
       <>
-        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
+        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} ${isCampainLayout ? 'offering-layout-menu' : ''} offering-side-menu `}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>
