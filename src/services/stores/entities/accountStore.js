@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { observable, action, computed } from 'mobx';
-import { find, get, capitalize } from 'lodash';
+import { find, get, capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import { FormValidator } from '../../../helper';
 import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
@@ -97,12 +98,13 @@ export class AccountStore {
             accountType,
             reason,
           },
+          refetchQueries: [{ query: getInvestorCloseAccounts, variables: { userId } }],
         })
         .then((res) => {
           if (get(res, 'data.closeInvestorAccount.errorMessage')) {
             Helper.toast(get(res, 'data.closeInvestorAccount.errorMessage'), 'error');
           } else {
-            Helper.toast(`${accountType} account closed successfully.`, 'success');
+            Helper.toast(`${accountType === 'IRA' ? accountType : accountType.toLowerCase()} account closed successfully.`, 'success');
           }
           resolve(res);
         })
@@ -115,10 +117,11 @@ export class AccountStore {
     const filteredAccounts = ['individual', 'ira', 'entity'].map((accType) => {
       if (get(this.closedAccounts, 'data.getInvestorCloseAccounts')) {
         const closedAccounts = this.closedAccounts.data.getInvestorCloseAccounts.filter(closedAccount => closedAccount.accountType === accType.toUpperCase());
-        return closedAccounts.map((closedAccount, index) => (
+        const sortAccBydate = orderBy(closedAccounts, o => (o.closed.date ? moment(new Date(o.closed.date)).unix() : ''), ['desc']);
+        return sortAccBydate.map((closedAccount, index) => (
           { details: {
             ...closedAccount,
-            title: `${capitalize(closedAccount.accountType)} ${(index + 10).toString(36).toUpperCase()}`,
+            title: `${closedAccount.accountType === 'IRA' ? closedAccount.accountType : capitalize(closedAccount.accountType)} ${(index + 10).toString(36).toUpperCase()}`,
             to: `${closedAccount.accountType} ${(index + 10).toString(36).toUpperCase()}`.replace(/ +/g, '-').toLowerCase(),
           } }
         ));

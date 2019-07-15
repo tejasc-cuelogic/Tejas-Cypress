@@ -84,7 +84,7 @@ export default class ConfirmModel extends Component {
               changed={(e, result) => formChange(e, result, confirmForm[actionValue].formKey)}
             />
             <div className="center-align mt-30">
-              <Button className="primary relaxed" content={`${confirmForm[actionValue].btntext} Account`} loading={inProgress} onClick={() => this.handleConfirm(userId, accountId, actionValue)} />
+              <Button className="primary relaxed" content={`${confirmForm[actionValue].btntext} Account`} loading={inProgress} disabled={inProgress} onClick={() => this.handleConfirm(userId, accountId, actionValue)} />
             </div>
           </Form>
         </Modal.Content>
