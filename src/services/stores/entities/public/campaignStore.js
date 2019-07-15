@@ -54,6 +54,8 @@ export class CampaignStore {
 
   @observable isFetchedError = false;
 
+  @observable docLoading = false;
+
 
   @action
   setFieldValue = (field, val) => {

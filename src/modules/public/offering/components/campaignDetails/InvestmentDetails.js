@@ -12,26 +12,28 @@ const isMobile = document.documentElement.clientWidth < 992;
 class InvestmentDetails extends Component {
   componentWillMount() {
     this.props.campaignStore.calculateTotalPaymentData();
-    // window.addEventListener('scroll', this.handleOnScroll);
+    if (!this.props.newLayout) {
+      window.addEventListener('scroll', this.handleOnScroll);
+    }
   }
 
-  // componentDidMount() {
-  //   if (this.props.location.hash && this.props.location.hash !== '') {
-  //     this.props.navStore.setFieldValue('currentActiveHash', null);
-  //     document.querySelector(`${this.props.location.hash}`).scrollIntoView({
-  //       block: 'start',
-  //       behavior: 'smooth',
-  //     });
-  //   } else if (!isMobile) {
-  //     const { campaignNavData } = this.props.campaignStore;
-  //     const navs = (campaignNavData.find(i => i.title === 'Investment Details')).subNavigations;
-  //     const sel = navs && navs[0] && navs[0].to;
-  //     if (sel) {
-  //       this.props.navStore.setFieldValue('currentActiveHash', sel);
-  //       document.querySelector(sel).scrollIntoView(true);
-  //     }
-  //   }
-  // }
+  componentDidMount() {
+    if (!this.props.newLayout && this.props.location.hash && this.props.location.hash !== '') {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    } else if (!this.props.newLayout && !isMobile) {
+      const { campaignNavData } = this.props.campaignStore;
+      const navs = (campaignNavData.find(i => i.title === 'Investment Details')).subNavigations;
+      const sel = navs && navs[0] && navs[0].to;
+      if (sel) {
+        this.props.navStore.setFieldValue('currentActiveHash', sel);
+        document.querySelector(sel).scrollIntoView(true);
+      }
+    }
+  }
 
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -58,6 +60,9 @@ class InvestmentDetails extends Component {
     const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <>
+        {this.props.newLayout
+        && (
+        <>
         <Header as="h3" className="mb-30 anchor-wrap">
           Key Terms
           <span className="anchor" id="key-terms" />
@@ -67,6 +72,8 @@ class InvestmentDetails extends Component {
           KeyTerms={campaign && campaign.keyTerms}
           {...this.props}
         />
+        </>
+        )}
         {campaignStatus.useOfProcceds
         && (
           <>
@@ -91,6 +98,20 @@ class InvestmentDetails extends Component {
           fluid
         /> */}
         <Divider section hidden />
+        </>
+        )}
+        {!this.props.newLayout
+        && (
+        <>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Key Terms
+          <span className="anchor" id="key-terms" />
+        </Header>
+        <KeytermsDetails
+          refLink={this.props.refLink}
+          KeyTerms={campaign && campaign.keyTerms}
+          {...this.props}
+        />
         </>
         )}
       </>

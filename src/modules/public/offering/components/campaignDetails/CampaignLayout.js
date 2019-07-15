@@ -13,7 +13,7 @@ import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
 import IssuerStatement from './Overview/IssuerStatement';
 import BonusRewards from './BonusRewards';
-import Disclosures from './Disclosures';
+import Documents from './documents';
 import Comments from './Comments';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
@@ -33,7 +33,7 @@ class CampaignLayout extends Component {
   // }
 
   componentDidMount() {
-    if (this.props.location.hash && this.props.location.hash !== '') {
+    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
@@ -124,7 +124,7 @@ class CampaignLayout extends Component {
             <Divider hidden section />
           </>
         )}
-        {dataRoomDocs.length && <Disclosures newLayout />}
+        {dataRoomDocs.length && <Documents />}
         {campaign && campaign.comments && campaign.comments.length
           && (
             <>

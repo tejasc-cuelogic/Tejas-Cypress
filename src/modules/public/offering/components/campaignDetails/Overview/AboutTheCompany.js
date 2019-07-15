@@ -22,7 +22,7 @@ class AboutTheCompany extends Component {
     return (
       <>
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
-          Highlights
+          {newLayout ? 'Highlights' : 'Top Things to Know'}
           <span className="anchor" id="top-things-to-know" />
         </Header>
         {
