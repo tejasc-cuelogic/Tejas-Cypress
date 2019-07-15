@@ -26,9 +26,9 @@ export default class CampaignSideBar extends Component {
       campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus,
     } = campaignStore;
     const {
-      diff, isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
+      isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
-      earlyBird, isEarlyBirdRewards, bonusRewards,
+      earlyBird, isEarlyBirdRewards, bonusRewards, countDown,
     } = campaignStatus;
     return (
       <>
@@ -86,11 +86,11 @@ export default class CampaignSideBar extends Component {
               </p>
               <div className="offer-stats">
                 <Statistic.Group>
-                  {!isClosed && diff > 0
+                  {!isClosed && diffForProcessing > 0
                     && (
 <Statistic size="mini" className="basic">
-                      <Statistic.Value>{diff}</Statistic.Value>
-                      <Statistic.Label>Days left</Statistic.Label>
+                      <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                      <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                     </Statistic>
                     )
                   }

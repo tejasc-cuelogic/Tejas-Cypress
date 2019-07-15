@@ -221,6 +221,14 @@ export const userDetailsQuery = gql`
         }
         dateOfBirth
         ssn
+        verificationDocs {
+          addressProof {
+            fileId
+          }
+          idProof {
+            fileId
+          }
+        }
         legalAddress {
           street
           city

@@ -519,7 +519,9 @@ export class BusinessAppReviewStore {
         })
         .then((result) => {
           this.removeUploadedFiles();
-          Helper.toast('Data saved successfully.', 'success');
+          if (showLoader) {
+            Helper.toast('Data saved successfully.', 'success');
+          }
           this.setFieldvalue('inProgress', false);
           resolve(result);
         })
@@ -759,7 +761,6 @@ export class BusinessAppReviewStore {
             resolve(result);
           })
           .catch((error) => {
-            Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
             reject(error);
           })

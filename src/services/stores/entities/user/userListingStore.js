@@ -73,7 +73,7 @@ export class UserListingStore {
       accountType: !accountType && !accountStatus && !deletedAccountStatus.length ? allAccountTypes : accountType,
       accountStatus: isDeleted ? uniq(deletedAccountStatus) : !accountStatus ? allAccountStatus : accountStatus,
       page: reqParams ? reqParams.page : 1,
-      limit: getAllUsers ? 100 : this.requestState.perPage,
+      limit: getAllUsers ? 500 : this.requestState.perPage,
     };
 
     this.requestState.page = params.page;
@@ -179,6 +179,11 @@ export class UserListingStore {
       }
       this.initiateSearch(srchParams);
     }
+  }
+
+  @action
+  searchOnChange = (name, value) => {
+    this.requestState.search[name] = value;
   }
 
   @action

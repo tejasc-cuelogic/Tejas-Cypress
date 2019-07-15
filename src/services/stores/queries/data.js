@@ -74,3 +74,27 @@ mutation _auditBox($role:UserRoleEnum!, $userId: String, $jobId: String, $waitin
     activity
   }
 }`;
+
+export const getListOfPartialOrCIPProcessingAccount = gql`
+query getListOfPartialOrCIPProcessingAccount {
+  getListOfPartialOrCIPProcessingAccount {
+    userId
+    accountId
+    accountType
+    accountStatus
+    cip {
+      requestId
+      expiration
+      failType
+      failReason {
+        key
+        message
+      }
+    }
+    legalStatus
+    totalBalance
+    numberOfValidAgreements
+    userStatus
+    accountCreatedDate
+  }
+}`;

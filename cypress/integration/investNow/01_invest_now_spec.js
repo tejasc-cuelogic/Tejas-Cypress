@@ -2,45 +2,65 @@ import {
   initializeInvestNowFlow,
   proceedInvalidLoginAction,
   proceedInvalidUserLoginAction,
-  // proceedWithIncompleteInvestorCIPAction,
   proceedWithValidUserLoginAction,
-} from '../../support/investNow/investNowFlow';
+} from './utility/investNowFlow.utility';
 
-describe('Invest now flow', () => {
-  // before(() => {
-  //   initializeInvestNowFlow();
-  // });
+import { isAbortRemainingTestCases } from '../common.utility';
+
+describe.skip('Invest now flow', () => {
+  let isNeedToSkip = false;
   beforeEach(() => {
     cy.restoreLocalStorage();
   });
 
   afterEach(() => {
     cy.saveLocalStorage();
+    if (isAbortRemainingTestCases() === 'true') {
+      isNeedToSkip = true;
+    }
   });
 
-  it.skip('Should proceed for invest now flow', () => {
+  after(() => {
+    cy.clearLocalStorageKey('abortRemainingTestCase');
+  });
+
+  it('Should proceed for invest now flow', () => {
     initializeInvestNowFlow();
   });
 
-  it.skip('Should open login popup if click on Invest Now button and not loged in', () => {
-    cy.get('.loader', { timeout: 6000 }).should('not.exist');
-    cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
-      .find('.center-align')
-      .contains('Invest Now')
-      .click();
+  it('Should open login popup if click on Invest Now button and not loged in', () => {
+    if (!isNeedToSkip) {
+      cy.get('.loader', { timeout: 6000 }).should('not.exist');
+      cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
+        .find('.center-align')
+        .contains('Invest Now')
+        .click();
+    } else {
+      cy.log('Skipped :: due to initial error.');
+    }
   });
 
-  it.skip('Invalid login credentails action', () => {
-    proceedInvalidLoginAction();
+  it('Invalid login credentails action', () => {
+    if (!isNeedToSkip) {
+      proceedInvalidLoginAction();
+    } else {
+      cy.log('Skipped :: due to initial error.');
+    }
   });
 
-  it.skip('Invalid user type login action', () => {
-    proceedInvalidUserLoginAction();
+  it('Invalid user type login action', () => {
+    if (!isNeedToSkip) {
+      proceedInvalidUserLoginAction();
+    } else {
+      cy.log('Skipped :: due to initial error.');
+    }
   });
-  // it('Investor with incomplete CIP information', () => {
-  //   proceedWithIncompleteInvestorCIPAction();
-  // });
+
   it.skip('succesfully login as investor with one account', () => {
-    proceedWithValidUserLoginAction();
+    if (!isNeedToSkip) {
+      proceedWithValidUserLoginAction();
+    } else {
+      cy.log('Skipped :: due to initial error.');
+    }
   });
 });

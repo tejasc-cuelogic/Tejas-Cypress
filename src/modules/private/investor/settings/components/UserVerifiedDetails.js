@@ -5,12 +5,12 @@ import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
 const userVerifiedDetails = ({
-  legalDetails, status, signupStatus, validAccStatus,
+  legalDetails, status, signupStatus, validAccStatus, isIndividualFullAccount,
 }) => {
   const setupComplete = () => ['FULL', 'MIGRATION_FULL'].includes(status);
   const isIdentityVerified = (cipStatus) => {
     if (cipStatus !== null) {
-      return validAccStatus.includes(cipStatus);
+      return validAccStatus.includes(cipStatus) || isIndividualFullAccount;
     }
     return false;
   };

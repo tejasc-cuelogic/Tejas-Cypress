@@ -1,3 +1,3 @@
-describe('Mobile Verification', () => {
+describe.skip('Mobile Verification', () => {
   
 });
