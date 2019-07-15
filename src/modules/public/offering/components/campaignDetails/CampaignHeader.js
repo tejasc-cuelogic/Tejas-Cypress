@@ -21,12 +21,10 @@ export default class CampaignHeader extends Component {
     const { campaignStore } = this.props;
     const { campaign, offerStructure, campaignStatus } = campaignStore;
     const {
-      diff, isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
+      isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
-      percentBefore, diffForProcessing,
+      percentBefore, diffForProcessing, countDown,
     } = campaignStatus;
-    const labelToShow = diffForProcessing < 48 ? 'Hours Left' : 'Days Left';
-    const valueToShow = diffForProcessing < 48 ? diffForProcessing : diff;
     return (
       <>
         <div className="campaign-banner">
@@ -63,8 +61,8 @@ export default class CampaignHeader extends Component {
                         {!isClosed && diffForProcessing > 0
                           && (
 <Statistic size="mini" className="basic">
-                            <Statistic.Value>{valueToShow}</Statistic.Value>
-                            <Statistic.Label>{labelToShow}</Statistic.Label>
+                            <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                            <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                           </Statistic>
                           )
                         }

@@ -19,10 +19,14 @@ const closingActions = {
     label: 'Verify Escrow', ref: 3, enum: 'VERIFY_SECURITY_TRANSACTION',
   },
   ENUM7: { label: 'Process Notes', ref: 3, enum: 'PROCESS_NOTES' },
-  ENUM8: { label: 'Finalize Notes', ref: 3, enum: 'FINALIZE_NOTES' },
-  ENUM9: { label: 'Close', ref: 4, enum: 'close' },
-  ENUM10: {
+  ENUM8: { label: 'Validate Envelope', ref: 3, enum: 'VALIDATE_NOTES' },
+  ENUM9: { label: 'Finalize Envelope', ref: 3, enum: 'FINALIZE_NOTES' },
+  ENUM10: { label: 'Close', ref: 4, enum: 'close' },
+  ENUM11: {
     label: 'Hard Close Notification', ref: 4, enum: 'HARD_CLOSE_NOTIFICATION',
+  },
+  ENUM12: {
+    label: 'Export Envelopes', ref: 4, enum: 'EXPORT_ENVELOPES',
   },
 };
 
@@ -76,7 +80,7 @@ export default class Close extends Component {
     const confirmFor = find(closingActions, a => a.enum === status && a.confirm === true);
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
-    } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION') {
+    } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION' || status === 'PROCESS_NOTES') {
       this.setState({ openModal: true, action: status });
     } else {
       if (status === 'close' || status === 'update') {
@@ -196,7 +200,7 @@ out of required
                 </>
           </p>
           <Divider section />
-          {hoursToClose <= 0 && !offerStatus.isFailed
+          {((hoursToClose <= 0 && !offerStatus.isFailed) || true)
             ? (
 <>
               <Step.Group className="campaign-close">

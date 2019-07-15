@@ -532,10 +532,10 @@ export class UserDetailsStore {
           routingUrl = '/app/summary/establish-profile';
         }
       }
-    // } else if (this.signupStatus.investorProfileCompleted
-    //   && get(this.userDetails, 'cip')
-    //   && !this.isUserVerified) {
-    //   routingUrl = '/app/summary/account-creation/individual';
+    } else if (get(this.userDetails, 'cip')
+      && !this.isUserVerified
+      && !this.isCompleteIndividualAccount) {
+      routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
@@ -573,6 +573,12 @@ export class UserDetailsStore {
       return validPanes;
     });
     return validPanes;
+  }
+
+  @computed get isCompleteIndividualAccount() {
+    return this.signupStatus.activeAccounts.includes('individual')
+      || this.signupStatus.frozenAccounts.includes('individual')
+      || this.signupStatus.processingAccounts.includes('individual');
   }
 
   @action
