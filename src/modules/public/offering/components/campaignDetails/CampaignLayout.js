@@ -78,7 +78,7 @@ class CampaignLayout extends Component {
       <div className="campaign-content-wrapper">
         {campaignStatus.hasTopThingToKnow && (
           <>
-            <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
+            <AboutTheCompany newLayout refLink={this.props.refLink} campaign={campaign} />
             <Divider hidden section />
           </>
         )}
@@ -88,9 +88,10 @@ class CampaignLayout extends Component {
           && (
             <>
               {this.state.expandUpdate
-                ? <Updates handleUpdateCollapseExpand={this.handleUpdateCollapseExpand} />
+                ? <Updates newLayout handleUpdateCollapseExpand={this.handleUpdateCollapseExpand} />
                 : (
                   <LatestUpdates
+                    newLayout
                     handleUpdateCollapseExpand={this.handleUpdateCollapseExpand}
                     updates={campaign && campaign.updates}
                     refLink={this.props.refLink}
@@ -109,23 +110,24 @@ class CampaignLayout extends Component {
             </>
           )
         }
-        <InvestmentDetails />
-        <AboutCompany />
-        <BonusRewards />
+        <InvestmentDetails newLayout />
+        <AboutCompany newLayout />
+        <BonusRewards newLayout />
         {campaignStatus.gallary && campaignStatus.gallary !== 0 && (
           <>
             <Gallery
+              newLayout
               galleryUrl={this.props.match.url}
               campaign={campaign}
             />
             <Divider hidden section />
           </>
         )}
-        {dataRoomDocs.length !== 0 && <Documents />}
+        {dataRoomDocs.length && <Documents />}
         {campaign && campaign.comments && campaign.comments.length
           && (
             <>
-              <Comments showOnlyOne={!this.state.expandComments} />
+              <Comments newLayout showOnlyOne={!this.state.expandComments} />
               <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} basic compact className="highlight-text mt-40">
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
                 <Icon size="small" className="ns-chevron-right right" color="white" />
@@ -134,10 +136,10 @@ class CampaignLayout extends Component {
           )
         }
         {campaignStatus.issuerStatement && (
-          <IssuerStatement campaign={campaign} />
+          <IssuerStatement newLayout campaign={campaign} />
         )
         }
-        <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
+        <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal newLayout refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
       </div>
     );
