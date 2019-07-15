@@ -93,9 +93,9 @@ export default class Documents extends Component {
     return (
       <>
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
-            Documents
-            <span className="anchor" />
-            </Header>
+          Documents
+          <span className="anchor" id="data-room" />
+        </Header>
         <Divider hidden />
         <Grid columns={3} stackable doubling>
           {
