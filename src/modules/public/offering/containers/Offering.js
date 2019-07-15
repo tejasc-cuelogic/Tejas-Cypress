@@ -36,6 +36,7 @@ class Offering extends Component {
           </Header>
         </Responsive>
         <CampaignList
+          refLink={this.props.match.url}
           loading={loading}
           campaigns={active}
           filters
@@ -58,6 +59,7 @@ class Offering extends Component {
         {!loading
           && (
 <CampaignList
+  refLink={this.props.match.url}
   loading={loading}
   campaigns={completed}
   locked={3}
