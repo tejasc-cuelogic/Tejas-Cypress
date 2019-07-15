@@ -129,37 +129,51 @@ class Success extends Component {
             }
             {this.props.isPublic
               && (
-<Form error>
+                <Form error>
                 <Grid>
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                     {!userExists
                       ? ['email', 'password', 'verify'].map(field => (
                         (field === 'password')
                           ? (
-<FormPasswordStrength
-  key="password"
-  name="password"
-  type="password"
-  userInputs={[fields.email.value]}
-  iconDisplay
-  minLength={8}
-  minScore={4}
-  tooShortWord="Weak"
-  scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-  inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-  changed={signupChange}
-  fielddata={fields[field]}
-/>
+                              <FormPasswordStrength
+                                key="password"
+                                name="password"
+                                type="password"
+                                userInputs={[fields.email.value]}
+                                iconDisplay
+                                minLength={8}
+                                minScore={4}
+                                tooShortWord="Weak"
+                                scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                                inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+                                changed={signupChange}
+                                fielddata={fields[field]}
+                              />
                           )
                           : (
-<FormInput
-  key={field}
-  readOnly={field === 'email' && !showUserError}
-  type={field !== 'email' ? pwdInputType : 'text'}
-  name={field}
-  fielddata={fields[field]}
-  changed={signupChange}
-/>
+                            <>
+                              <FormInput
+                                key={field}
+                                readOnly={field === 'email' && !showUserError}
+                                type={field !== 'email' ? pwdInputType : 'text'}
+                                name={field}
+                                fielddata={fields[field]}
+                                changed={signupChange}
+                              />
+                              {field === 'email' && showUserError && (
+                                roles
+                                  ? (
+                                  <p className="negative-text">
+                                    {`This email is already registered as an ${roles}.  Please enter a new email address.`}
+                                  </p>
+                                  ) : (
+                                  <p className="negative-text">
+                                    This email address is already registered. Please provide new email address
+                                  </p>
+                                  ))
+                              }
+                            </>
                           )
                       ))
                       : (
@@ -183,7 +197,7 @@ class Success extends Component {
                     }
                     {errors
                       && (
-<Message error className="mt-30">
+                      <Message error className="mt-30">
                         <ListErrors errors={[errors.message]} />
                       </Message>
                       )
@@ -194,24 +208,12 @@ class Success extends Component {
               )
             }
             <Divider section hidden />
-            {showUserError && (
-              roles
-                ? (
-                <p className="negative-text">
-                  {`This email is already registered as an ${roles}.  Please enter a new email address.`}
-                </p>
-                ) : (
-                <p className="negative-text">
-                  This email address is already registered. Please provide new email address
-                </p>
-                ))
-            }
             <Button primary size="large" className="very relaxed" content="Proceed" loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!SIGNUP_FRM.meta.isValid || !currentScore) && !userExists)} />
           </Grid.Column>
         </Grid>
         {this.state.showProgressLoader
         && (
-<Dimmer active className="fullscreen">
+        <Dimmer active className="fullscreen">
           <Loader size="large">
             <Header as="h3">
               Please wait...
