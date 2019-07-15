@@ -14,7 +14,7 @@ class AboutTheCompany extends Component {
   }
 
   render() {
-    const { campaign } = this.props;
+    const { campaign, newLayout } = this.props;
     const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.elevatorPitch)
       || (campaign && campaign.offering && campaign.offering.overview
@@ -53,9 +53,9 @@ class AboutTheCompany extends Component {
             )
             : <InlineLoader className="bg-offwhite" text="No data found." />
         }
-        <Button fluid={isTablet} onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
+        <Button fluid={isTablet} onClick={this.handleViewAboutCompany} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button' : ''} highlight-text mt-40`}>
           Learn More About the Company
-          <Icon size="small" className="ns-chevron-right right" color="white" />
+          <Icon size={newLayout ? '' : 'small'} className={`${newLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
         </Button>
       </>
     );

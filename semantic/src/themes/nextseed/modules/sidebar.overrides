@@ -132,8 +132,8 @@
 				min-width:~"calc(100% - 27px)";
 			}
 			&:first-child:before, &:before{
-				display:none;
-				background:none;
+				// display:none;
+				// background:none;
 			}
 			.icon:not(.dropdown){
 				float:left;

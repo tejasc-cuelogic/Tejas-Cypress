@@ -73,6 +73,7 @@ class CampaignLayout extends Component {
   }
 
   render() {
+    const isCampaignLayout = this.props.match.url.includes('/offerings-layout');
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
     return (
       <div className="campaign-content-wrapper">
@@ -83,7 +84,7 @@ class CampaignLayout extends Component {
           </>
         )}
         {/* <KeyTerms refLink={this.props.refLink} campaign={campaign} /> */}
-        <Divider hidden section />
+        {!isCampaignLayout ? <Divider hidden section /> : ''}
         {campaignStatus.updates !== 0
           && (
             <>
@@ -102,9 +103,9 @@ class CampaignLayout extends Component {
                   />
                 )
               }
-              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandUpdate')} basic compact className="highlight-text mt-40">
+              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandUpdate')} basic={!isCampaignLayout} compact={!isCampaignLayout} className={`${isCampaignLayout ? 'link-button' : ''} highlight-text mt-40`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
-                <Icon size="small" className="ns-chevron-right right" color="white" />
+                <Icon size={isCampaignLayout ? '' : 'small'} className={`${isCampaignLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
               </Button>
               <Divider hidden section />
             </>
@@ -128,9 +129,9 @@ class CampaignLayout extends Component {
           && (
             <>
               <Comments newLayout showOnlyOne={!this.state.expandComments} />
-              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} basic compact className="highlight-text mt-40">
+              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} basic={!isCampaignLayout} compact={!isCampaignLayout} className={`${isCampaignLayout ? 'link-button' : ''} highlight-text mt-40`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
-                <Icon size="small" className="ns-chevron-right right" color="white" />
+                <Icon size={isCampaignLayout ? '' : 'small'} className={`${isCampaignLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
               </Button>
             </>
           )
