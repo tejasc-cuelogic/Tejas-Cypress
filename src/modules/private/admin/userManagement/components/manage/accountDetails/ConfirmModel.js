@@ -55,10 +55,8 @@ export default class ConfirmModel extends Component {
         CLOSE_ACCOUNT_FRM.fields.reason.value,
       ).then((res) => {
         if (!get(res, 'data.closeInvestorAccount.errorMessage')) {
-          this.props.userDetailsStore.getUser(this.props.userDetailsStore.getDetailsOfUser.id).then(() => {
-            this.props.history.push(`/app/users/${this.props.userDetailsStore.getDetailsOfUser.id}/profile-data/basic`);
-          });
-          this.props.uiStore.setProgress();
+          this.props.userDetailsStore.getUserProfileDetails(this.props.userId);
+          this.props.history.push(`/app/users/${this.props.userId}/profile-data/basic`);
         } else {
           this.handleBack();
         }
