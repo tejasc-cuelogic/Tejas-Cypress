@@ -64,6 +64,7 @@ mutation updatePreQualInfo($preQualificationData: PreQualDetailsInput!) {
       status
       failReasons
     }
+    userRoles
   }
 }
 `;
