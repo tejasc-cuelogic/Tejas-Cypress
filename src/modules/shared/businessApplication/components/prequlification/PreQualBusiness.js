@@ -53,6 +53,15 @@ export default class PreQualBusiness extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
+        <FormElementWrap hideFields={hideFields} header="Which of the following securities are you open to exploring with NextSeed?*" subHeader="Please select all that apply.">
+          <FormCheckbox
+            disabled={preQualFormDisabled}
+            fielddata={fields.securityTypes}
+            name="securityTypes"
+            changed={businessAppEleChange}
+            containerclassname="iconic-checkbox"
+          />
+        </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="What can NextSeed help you with?*" subHeader="Select in which area NextSeed can help your business.">
           <FormRadioGroup
             disabled={preQualFormDisabled}
