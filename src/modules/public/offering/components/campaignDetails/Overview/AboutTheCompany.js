@@ -10,7 +10,8 @@ const isTablet = document.documentElement.clientWidth < 991;
 class AboutTheCompany extends Component {
   handleViewAboutCompany = (e) => {
     e.preventDefault();
-    this.props.history.push(`${this.props.refLink}/about`);
+    const url = this.props.newLayout ? '#company-description' : '/about';
+    this.props.history.push(`${this.props.refLink}${url}`);
   }
 
   render() {

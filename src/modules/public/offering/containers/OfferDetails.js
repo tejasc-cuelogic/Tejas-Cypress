@@ -192,6 +192,7 @@ class offerDetails extends Component {
     const offeringId = get(campaign, 'id');
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
+    const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     return (
       <>
         {campaign
@@ -234,7 +235,7 @@ class offerDetails extends Component {
                 <Grid.Column computer={12} mobile={16}>
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
-                      <Route exact path={match.url} component={getModule(!newLayout ? navItems[0].component : 'CampaignLayout')} />
+                      <Route exact path={match.url} render={props => <InitialComponent refLink={this.props.match.url} {...props} />} />
                       {!newLayout
                       && (
                         navItems.map((item) => {
