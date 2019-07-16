@@ -93,6 +93,8 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
+  @observable userRoles = false;
+
   @observable urlParameter = null;
 
   @observable businessAppDataById = null;
@@ -975,11 +977,13 @@ export class BusinessAppStore {
                 id,
                 status,
                 userExists,
+                userRoles,
               },
             },
           } = result;
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
+          this.setFieldvalue('userRoles', userRoles);
           let lendioPartners = '';
           if (!isEmpty(partnerStatus)) {
             lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });

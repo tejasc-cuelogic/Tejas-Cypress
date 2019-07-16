@@ -101,7 +101,7 @@ class Success extends Component {
       signupChange, togglePasswordType, SIGNUP_FRM,
       LoginChange, LOGIN_FRM, pwdInputType, currentScore,
     } = this.props.authStore;
-    const { userExists, showUserError } = this.props.businessAppStore;
+    const { userExists, showUserError, userRoles } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
     const { errors } = this.props.uiStore;
     const roles = get(this.props.userStore, 'currentUser.roles');
@@ -132,7 +132,7 @@ class Success extends Component {
                 <Form error>
                 <Grid>
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                    {!userExists
+                    {!userExists || !userRoles.includes('issuer')
                       ? ['email', 'password', 'verify'].map(field => (
                         (field === 'password')
                           ? (
@@ -155,7 +155,7 @@ class Success extends Component {
                             <>
                               <FormInput
                                 key={field}
-                                readOnly={field === 'email' && !showUserError}
+                                readOnly={field === 'email' && userRoles.includes('issuer')}
                                 type={field !== 'email' ? pwdInputType : 'text'}
                                 name={field}
                                 fielddata={fields[field]}
