@@ -894,6 +894,7 @@ export class BusinessAppStore {
         ...preQualData,
         businessGoal: data.businessGoal.value,
         businessModel: data.businessModel.value,
+        securityTypes: data.securityTypes.value,
         legalConfirmations: [...preQualData.legalConfirmations,
           {
             label: 'HAS_NOT_RAISED_SECURITIES',
