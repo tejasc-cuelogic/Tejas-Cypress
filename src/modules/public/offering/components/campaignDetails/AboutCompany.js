@@ -46,8 +46,10 @@ class AboutCompany extends Component {
   }
 
   componentWillUnmount() {
-    this.props.navStore.setFieldValue('currentActiveHash', null);
-    window.removeEventListener('scroll', this.handleOnScroll);
+    if (!this.props.newLayout) {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      window.removeEventListener('scroll', this.handleOnScroll);
+    }
   }
 
   handleOnScroll = () => {

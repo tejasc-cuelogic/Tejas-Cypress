@@ -41,7 +41,7 @@ class Updates extends Component {
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Updates
-          <span className="anchor" />
+          <span className="anchor" id={newLayout ? 'updates' : ''} />
         </Header>
         {updates && updates.length
           ? (

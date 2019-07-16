@@ -235,14 +235,13 @@ export class CampaignStore {
       && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
     campaignStatus.dataRooms = this.dataRoomDocs.length;
-    campaignStatus.comments = get(campaign, 'comments[0]');
     campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
     campaignStatus.keyTerms = get(campaign, 'keyTerms');
     campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
     campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
     campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');
-    campaignStatus.history = get(campaign, 'offering.about.history');
+    campaignStatus.history = get(campaign, 'campaign.offering.about.history');
     campaignStatus.team = get(campaign, 'leadership');
     campaignStatus.useOfProcceds = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
@@ -610,6 +609,8 @@ export class CampaignStore {
           newNavList.push(tempItem);
         }
       } else if (tempItem && tempItem.key && this.campaignStatus[tempItem.key]) {
+        newNavList.push(tempItem);
+      } else if (tempItem && !tempItem.key) {
         newNavList.push(tempItem);
       }
     });

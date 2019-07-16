@@ -26,7 +26,7 @@ class Comments extends Component {
   }
 
   componentDidMount() {
-    if (!isMobile) {
+    if (!this.props.newLayout && !isMobile) {
       const sel = 'anchor';
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }

@@ -535,7 +535,7 @@ export const PUBLIC_NAV = [
         title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
       },
       {
-        title: 'Comments', to: '#comments', useRefLink: true, key: 'comments',
+        title: 'Comments', to: '#comments', useRefLink: true,
       },
     ],
   },

@@ -123,17 +123,13 @@ class CampaignLayout extends Component {
           </>
         ) : null}
         {dataRoomDocs.length ? <Documents /> : null}
-        {campaign && campaign.comments && campaign.comments.length
-          ? (
-            <>
-              <Comments newLayout showOnlyOne={!this.state.expandComments} />
-              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
-                {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
-                <Icon className="ns-caret-down right" />
-              </Button>
-            </>
-          ) : null
-        }
+        <>
+          <Comments newLayout showOnlyOne={!this.state.expandComments} />
+          <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
+            {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
+            <Icon className="ns-caret-down right" />
+          </Button>
+        </>
         {campaignStatus.issuerStatement ? (
           <IssuerStatement newLayout campaign={campaign} />
         ) : null
