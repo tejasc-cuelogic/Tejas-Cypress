@@ -73,16 +73,16 @@ class CampaignLayout extends Component {
   }
 
   render() {
-    const isCampaignLayout = this.props.match.url.includes('/offerings-layout');
+    const isCampaignLayout = this.props.match.url.includes('/offerings-v2');
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
     return (
       <div className="campaign-content-wrapper">
-        {campaignStatus.hasTopThingToKnow && (
+        {campaignStatus.hasTopThingToKnow ? (
           <>
             <AboutTheCompany newLayout refLink={this.props.refLink} campaign={campaign} />
             <Divider hidden section />
           </>
-        )}
+        ) : null}
         {/* <KeyTerms refLink={this.props.refLink} campaign={campaign} /> */}
         {!isCampaignLayout ? <Divider hidden section /> : ''}
         {campaignStatus.updates !== 0
@@ -114,7 +114,7 @@ class CampaignLayout extends Component {
         <InvestmentDetails newLayout />
         <AboutCompany newLayout />
         <BonusRewards newLayout />
-        {campaignStatus.gallary && campaignStatus.gallary !== 0 && (
+        {campaignStatus.gallary && campaignStatus.gallary !== 0 ? (
           <>
             <Gallery
               newLayout
@@ -123,10 +123,10 @@ class CampaignLayout extends Component {
             />
             <Divider hidden section />
           </>
-        )}
-        {dataRoomDocs.length && <Documents />}
+        ) : null}
+        {dataRoomDocs.length ? <Documents /> : null}
         {campaign && campaign.comments && campaign.comments.length
-          && (
+          ? (
             <>
               <Comments newLayout showOnlyOne={!this.state.expandComments} />
               <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} basic={!isCampaignLayout} compact={!isCampaignLayout} className={`${isCampaignLayout ? 'link-button' : ''} highlight-text mt-40`}>
@@ -134,11 +134,11 @@ class CampaignLayout extends Component {
                 <Icon size={isCampaignLayout ? '' : 'small'} className={`${isCampaignLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
               </Button>
             </>
-          )
+          ) : null
         }
-        {campaignStatus.issuerStatement && (
+        {campaignStatus.issuerStatement ? (
           <IssuerStatement newLayout campaign={campaign} />
-        )
+        ) : null
         }
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal newLayout refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />

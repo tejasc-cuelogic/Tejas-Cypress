@@ -87,7 +87,7 @@ export const publicRoutes = [
     component: OfferDetails,
   },
   {
-    path: '/offerings-layout/:id',
+    path: '/offerings-v2/:id',
     component: OfferDetails,
     props: 'newLayout',
   },

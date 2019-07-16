@@ -182,7 +182,7 @@ class offerDetails extends Component {
       navItems = this.removeSubNavs(navItems);
     } else {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
-      navItems = modifySubNavs(navItems);
+      navItems = modifySubNavs(navItems, newLayout);
     }
     if ((details && details.data
       && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
@@ -207,7 +207,7 @@ class offerDetails extends Component {
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              <CampaignSideBar navItems={navItems} />
+              <CampaignSideBar newLayout={newLayout} navItems={navItems} />
               <MobileDropDownNav
                 inverted
                 refMatch={match}
@@ -227,14 +227,14 @@ class offerDetails extends Component {
                 {!isMobile
                   && (
 <Grid.Column width={4}>
-                    <CampaignSideBar navItems={navItems} />
+                    <CampaignSideBar newLayout={newLayout} navItems={navItems} />
                   </Grid.Column>
                   )
                 }
                 <Grid.Column computer={12} mobile={16}>
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
-                      <Route exact path={match.url} component={getModule(navItems[0].component)} />
+                      <Route exact path={match.url} component={getModule(!newLayout ? navItems[0].component : 'CampaignLayout')} />
                       {!newLayout
                       && (
                         navItems.map((item) => {

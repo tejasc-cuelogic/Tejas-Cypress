@@ -498,7 +498,8 @@ export const PUBLIC_NAV = [
   },
   {
     title: 'Explore Campaigns',
-    to: 'offerings-layout/',
+    to: 'offerings-v2/',
+    header: false,
     subNavigations: [
       {
         component: 'CampaignLayout', title: 'Highlights', to: '#top-things-to-know', useRefLink: true, defaultActive: true, key: 'hasTopThingToKnow',
@@ -507,7 +508,7 @@ export const PUBLIC_NAV = [
         title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
       },
       {
-        title: 'Investment Terms', to: '#key-terms', useRefLink: true,
+        title: 'Investment Terms', to: '#key-terms', useRefLink: true, key: 'keyTerms',
       },
       {
         title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true, key: 'useOfProcceds',
@@ -525,16 +526,16 @@ export const PUBLIC_NAV = [
         title: 'The Team', to: '#team', useRefLink: true, key: 'team',
       },
       {
-        title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true,
+        title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true, key: 'isBonusReward',
       },
       {
         title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
       },
       {
-        title: 'Documents', to: '#data-room', useRefLink: true,
+        title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
       },
       {
-        title: 'Comments', to: '#comments', useRefLink: true,
+        title: 'Comments', to: '#comments', useRefLink: true, key: 'comments',
       },
     ],
   },

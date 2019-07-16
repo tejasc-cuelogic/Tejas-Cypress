@@ -234,7 +234,10 @@ export class CampaignStore {
       || (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
+    campaignStatus.dataRooms = this.dataRoomDocs.length;
+    campaignStatus.comments = get(campaign, 'comments[0]');
     campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
+    campaignStatus.keyTerms = get(campaign, 'keyTerms');
     campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
     campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
@@ -553,49 +556,60 @@ export class CampaignStore {
   }
 
   @action
-  modifySubNavs = (navList) => {
+  modifySubNavs = (navList, newLayout = false) => {
     const newNavList = [];
     const offeringStage = get(this.campaign, 'stage');
     navList.forEach((item) => {
       const tempItem = item;
-      let temNavList = item.subNavigations;
-      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
-        const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-        if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
-          if (existanceResult.length) {
+      if (!newLayout) {
+        let temNavList = item.subNavigations;
+        if (has(item, 'subNavigations') && item.title === 'Investment Details') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+            if (existanceResult.length) {
+              remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+            }
+            temNavList.push({
+              title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'revenueSharingSummary',
+            });
+          } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+            if (existanceResult.length) {
+              remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+            }
+            temNavList.push({
+              title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+            });
+          } else if (existanceResult.length) {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
           }
-          temNavList.push({
-            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'revenueSharingSummary',
-          });
-        } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-          temNavList.push({
-            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
-          });
-        } else if (existanceResult.length) {
-          remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          tempItem.subNavigations = uniqWith(temNavList, isEqual);
         }
-        tempItem.subNavigations = uniqWith(temNavList, isEqual);
-      }
-      if (tempItem.title === 'Summary' || tempItem.title === 'About the Company' || tempItem.title === 'Investment Details') {
-        const arr = temNavList;
-        if (arr && Array.isArray(arr)) {
-          arr.forEach((i) => {
+        if (tempItem.title === 'Summary' || tempItem.title === 'About the Company' || tempItem.title === 'Investment Details') {
+          const arr = temNavList;
+          if (arr && Array.isArray(arr)) {
+            arr.forEach((i) => {
+              if (i.key && !this.campaignStatus[i.key]) {
+                temNavList = temNavList.filter(n => n.title !== i.title);
+              }
+            });
+          }
+        }
+        if (temNavList && Array.isArray(temNavList)) {
+          temNavList.forEach((i) => {
             if (i.key && !this.campaignStatus[i.key]) {
               temNavList = temNavList.filter(n => n.title !== i.title);
             }
           });
         }
-      }
-      tempItem.subNavigations = temNavList;
-      if (tempItem.to === 'data-room') {
-        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+        tempItem.subNavigations = temNavList;
+        if (tempItem.to === 'data-room') {
+          if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+            newNavList.push(tempItem);
+          }
+        } else if (!temNavList || (temNavList && temNavList.length)) {
           newNavList.push(tempItem);
         }
-      } else if (!temNavList || (temNavList && temNavList.length)) {
+      } else if (tempItem && tempItem.key && this.campaignStatus[tempItem.key]) {
         newNavList.push(tempItem);
       }
     });
