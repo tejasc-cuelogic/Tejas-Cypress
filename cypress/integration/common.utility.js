@@ -5,15 +5,15 @@ export const registerApiCall = (operationName, url = '**/**') => {
   cy.route('POST', url).as(operationName);
 }
 
-export const uploadFile = (selector = '') => {
-  registerApiCall('fileUpload');
+export const uploadFile = (selector, url = '**/**') => {
+  registerApiCall('fileUpload', url);
   cy.fixture('images/test-img.png').as('img');
-  cy.upload_file('images/test-img.png', 'png', selector || 'input[type=file]');
+  cy.upload_file('images/test-img.png', 'png', selector);
   cy.wait('@fileUpload');
-};
+}
 
 export const clickonDashboard = () => {
-  cy.wait(7000)
+  cy.wait(1000)
   cy.get('.header-wrap').get('button.button').contains('Dashboard').click({ force: true });
 }
 

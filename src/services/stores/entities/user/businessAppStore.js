@@ -93,6 +93,8 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
+  @observable userRoles = false;
+
   @observable urlParameter = null;
 
   @observable businessAppDataById = null;
@@ -100,6 +102,8 @@ export class BusinessAppStore {
   @observable applicationIssuerId = null;
 
   @observable enableSave = false;
+
+  @observable showUserError = false;
 
   @action
   setFieldvalue = (field, value) => {
@@ -342,6 +346,9 @@ export class BusinessAppStore {
       });
       this.BUSINESS_APP_FRM.fields.phoneNumber.value = data.businessGeneralInfo.contactDetails.phone.number;
       if (this.currentApplicationType === 'business') {
+        data.businessSecurities.forEach((ele) => {
+          this.BUSINESS_APP_FRM.fields.businessSecurities.value.push(ele);
+        });
         ['businessModel', 'businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
@@ -890,6 +897,7 @@ export class BusinessAppStore {
         ...preQualData,
         businessGoal: data.businessGoal.value,
         businessModel: data.businessModel.value,
+        businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
           {
             label: 'HAS_NOT_RAISED_SECURITIES',
@@ -973,11 +981,13 @@ export class BusinessAppStore {
                 id,
                 status,
                 userExists,
+                userRoles,
               },
             },
           } = result;
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
+          this.setFieldvalue('userRoles', userRoles);
           let lendioPartners = '';
           if (!isEmpty(partnerStatus)) {
             lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });
