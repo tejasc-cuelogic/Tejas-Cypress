@@ -12,7 +12,7 @@ export const FillSignUpForm = () => {
     cy.get('form').within(() => {
       cy.get('input[name="givenName"]').type(SignUpMeta.givenName);
       cy.get('input[name="familyName"]').type(SignUpMeta.familyName);
-      cy.get('input[name="email"]').type(`testing${Math.floor((Math.random() * 100000) + 1)}@nextseed.com`);
+      cy.get('input[name="email"]').type(`testing${Math.floor(((Math.random() + Math.random()) * 1000000) + 1)}@nextseed.com`);
       cy.get('input[name="password"]').type(SignUpMeta.password);
       cy.get('input[name="verify"]').type(SignUpMeta.verify);
     });
@@ -28,7 +28,6 @@ export const fillSignUpFormAndProceed = () => {
 };
 
 export const confirmEmailAddressScreen = () => {
-  cy.wait('@confirm');
   cy.wait('@confirm');
   cy.wait('@confirm');
   cy.contains('Continue').click();
