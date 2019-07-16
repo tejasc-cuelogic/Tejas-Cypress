@@ -124,7 +124,7 @@ class Success extends Component {
                 will walk you through the steps and keep the process organized.`
               }
             </p>
-            {userExists
+            {userExists && userRoles.includes('issuer')
               && <h3 className="ui header">Log In</h3>
             }
             {this.props.isPublic
