@@ -113,7 +113,7 @@ class Comments extends Component {
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Comments
-          <span className="anchor" />
+          <span className="anchor" id="comments" />
         </Header>
         {!showOnlyOne
         && (

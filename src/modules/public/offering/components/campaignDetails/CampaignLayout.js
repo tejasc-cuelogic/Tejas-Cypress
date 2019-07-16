@@ -28,9 +28,9 @@ class CampaignLayout extends Component {
     expandComments: false,
   }
 
-  // componentWillMount() {
-  //   window.addEventListener('scroll', this.handleOnScroll);
-  // }
+  componentWillMount() {
+    window.addEventListener('scroll', this.handleOnScroll);
+  }
 
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
@@ -56,7 +56,7 @@ class CampaignLayout extends Component {
 
   handleOnScroll = () => {
     const { campaignNavData } = this.props.campaignStore;
-    const navs = toJS((campaignNavData.find(i => i.title === 'Summary')).subNavigations);
+    const navs = toJS(campaignNavData);
     if (navs && Array.isArray(navs)) {
       navs.forEach((item) => {
         if (document.getElementById(item.to.slice(1))
