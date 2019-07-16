@@ -291,7 +291,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
     customErrors: { required: 'required' },
   },
-  securityTypes: {
+  businessSecurities: {
     value: [],
     values: [
       { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
