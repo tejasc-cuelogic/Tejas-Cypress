@@ -511,6 +511,12 @@ export const PUBLIC_NAV = [
         title: 'Investment Terms', to: '#key-terms', useRefLink: true, key: 'keyTerms',
       },
       {
+        title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'isRevenueShare',
+      },
+      {
+        title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
+      },
+      {
         title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true, key: 'useOfProcceds',
       },
       {
