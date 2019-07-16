@@ -294,9 +294,9 @@ export const BUSINESS_PRE_QUALIFICATION = {
   securityTypes: {
     value: [],
     values: [
-      { label: 'Equity', icon: 'ns-calculator-icon', value: 'FASHION_AND_MERCHANDISING' },
-      { label: 'Debt', icon: 'ns-debt-icon', value: 'BEAUTY_AND_SPA' },
-      { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'FOOD_AND_BEVERAGE' },
+      { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
+      { label: 'Debt', icon: 'ns-debt-icon', value: 'DEBT' },
+      { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'CONVERTIBLE_NOTE' },
     ],
     error: undefined,
     rule: 'required',
