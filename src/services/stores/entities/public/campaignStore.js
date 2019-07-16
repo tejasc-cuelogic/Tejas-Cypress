@@ -242,7 +242,7 @@ export class CampaignStore {
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
     campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
     campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');
-    campaignStatus.history = get(campaign, 'campaign.offering.about.history');
+    campaignStatus.history = get(campaign, 'offering.about.history');
     campaignStatus.team = get(campaign, 'leadership');
     campaignStatus.useOfProcceds = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
