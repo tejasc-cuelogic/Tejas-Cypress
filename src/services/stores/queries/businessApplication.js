@@ -237,6 +237,7 @@ query _getBusinessApplicationById ($id: String!) {
           netIncome
         }
       }
+      businessSecurities
     }
     businessDetails {
       planDocs {
