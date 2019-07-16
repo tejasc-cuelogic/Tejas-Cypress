@@ -35,6 +35,7 @@ export default class PreQualBusiness extends Component {
             containerclassname="button-radio"
           />
         </FormElementWrap>
+        <div className="application-scroll" />
         <GeneralInformation
           hideFields={hideFields}
           fields={fields}

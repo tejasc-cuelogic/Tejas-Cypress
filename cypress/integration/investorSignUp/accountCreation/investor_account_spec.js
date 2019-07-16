@@ -8,7 +8,7 @@ import {
        } from './utility/investorAccount.utlity';
 import { registerApiCall } from '../../common.utility';
 
-describe.skip('Account Creation', () => {
+describe('Account Creation', () => {
   before(() => {
     investorFlowProcess();
   });
@@ -47,6 +47,7 @@ describe.skip('Account Creation', () => {
       cy.wait('@addFunds');
       cy.wait('@addFunds');
     registerApiCall('submitAccount', '/dev/graphql');
+    cy.get('.dimmer-visible').should('not.be.visible')
     cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
     cy.wait('@submitAccount');
     cy.wait('@submitAccount');
