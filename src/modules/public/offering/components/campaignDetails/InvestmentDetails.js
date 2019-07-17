@@ -65,8 +65,8 @@ class InvestmentDetails extends Component {
         {this.props.newLayout
         && (
         <>
-        <Header as="h3" className="mb-30 anchor-wrap">
-          Key Terms
+        <Header as="h3" className="mb-40 anchor-wrap">
+          Investment Terms
           <span className="anchor" id="key-terms" />
         </Header>
         <KeytermsDetails
@@ -80,7 +80,8 @@ class InvestmentDetails extends Component {
         && (
           <>
           <Divider section hidden />
-          <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} mt-20 anchor-wrap`}>
+          {this.props.newLayout && <Divider section hidden />}
+          <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${this.props.newLayout ? '' : 'mt-20'}mt-20 anchor-wrap`}>
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>

@@ -75,7 +75,7 @@ class CampaignLayout extends Component {
   render() {
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
     return (
-      <div className="campaign-content-wrapper">
+      <div className="campaign-content-wrapper v-2">
         {campaignStatus.hasTopThingToKnow ? (
           <>
             <AboutTheCompany newLayout refLink={this.props.refLink} campaign={campaign} />
@@ -101,10 +101,11 @@ class CampaignLayout extends Component {
                   />
                 )
               }
-              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandUpdate')} className="link-button highlight-text mt-40">
+              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandUpdate')} className="link-button highlight-text mt-20">
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
-                <Icon className="ns-caret-down right" />
+                <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
               </Button>
+              <Divider hidden section />
               <Divider hidden section />
             </>
           )
@@ -127,7 +128,7 @@ class CampaignLayout extends Component {
           <Comments newLayout showOnlyOne={!this.state.expandComments} />
           <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
             {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
-            <Icon className="ns-caret-down right" />
+            <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
           </Button>
         </>
         {campaignStatus.issuerStatement ? (

@@ -51,8 +51,8 @@
             align-items:center;
             .avatar-image{
                 border-radius:50%;
-                width:36px;
-                height:36px;
+                width:@36px;
+                height:@36px;
                 background:@neutral-midwhite;
                 overflow:hidden;
                 &.team-avatar{
@@ -90,6 +90,10 @@
                     margin-top: @20px;
 
                 }
+            }
+            &.campaign-avatar-v2 .avatar-image {
+                width:60px;
+                height:60px;
             }
         }
         .avatar-description{
