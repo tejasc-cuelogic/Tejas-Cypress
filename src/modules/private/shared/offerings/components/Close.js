@@ -80,7 +80,7 @@ export default class Close extends Component {
     const confirmFor = find(closingActions, a => a.enum === status && a.confirm === true);
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
-    } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION' || status === 'PROCESS_NOTES') {
+    } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION' || status === 'PROCESS_NOTES' || status === 'VALIDATE_NOTES') {
       this.setState({ openModal: true, action: status });
     } else {
       if (status === 'close' || status === 'update') {
@@ -100,7 +100,7 @@ export default class Close extends Component {
 
   handleHardOrSoftClose = (type) => {
     const { offer } = this.props.offeringsStore;
-    const { offeringClose } = this.props.offeringCreationStore;
+    const { offeringClose, resetForm } = this.props.offeringCreationStore;
     switch (type) {
       case 'Cancel':
         this.handleCloseModal();
@@ -117,6 +117,14 @@ export default class Close extends Component {
           offeringId: offer.id,
           process: this.state.action,
         }, this.state.activeStep, 'INVESTOR');
+        this.handleCloseModal();
+        break;
+      case 'Validate Envelope':
+        offeringClose({
+          offeringId: offer.id,
+          process: this.state.action,
+        }, this.state.activeStep);
+        resetForm('OFFERING_CLOSE_3', ['npaPageCount', 'pnPageCount', 'documentsCount']);
         this.handleCloseModal();
         break;
       default: break;
@@ -410,14 +418,50 @@ out of required
             OfferingClose
           />
         </div>
-        <Modal open={this.state.openModal} closeIcon size="tiny" onClose={this.handleCloseModal}>
+        <Modal open={this.state.openModal} closeIcon size={this.state.action === 'VALIDATE_NOTES' ? 'small' : 'tiny'} onClose={this.handleCloseModal}>
           <Modal.Header>
-            {this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
+            {this.state.action === 'VALIDATE_NOTES' ? 'Validate Notes' : this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
           </Modal.Header>
+          {!this.state.action === 'VALIDATE_NOTES'
+            && (
           <Modal.Content className="pb-20">
             Please select notification action to perform.
           </Modal.Content>
+            )
+          }
           <Modal.Actions>
+            {this.state.action === 'VALIDATE_NOTES'
+              ? (
+            <Form>
+            <Form.Group widths={3} className="left-align">
+            {['npaPageCount', 'pnPageCount'].map(field => (
+                  <FormInput
+                    key={field}
+                    name={field}
+                    fielddata={OFFERING_CLOSE_3.fields[field]}
+                    changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_3')}
+                  />
+            ))
+              }
+                  <MaskedInput
+                    name="documentsCount"
+                    containerwidth="4"
+                    fielddata={OFFERING_CLOSE_3.fields.documentsCount}
+                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
+                    number
+                  />
+              </Form.Group>
+              {['Cancel', 'Validate Envelope'].map(item => (
+              <Button
+                onClick={() => this.handleHardOrSoftClose(item)}
+                primary={item !== 'Cancel'}
+                content={item}
+              />
+              ))
+            }
+            </Form>
+              )
+              : (
             <Button.Group className="actions">
             {['Cancel', 'Send to Test Email', 'Send to Investors'].map(item => (
               <Button
@@ -428,6 +472,8 @@ out of required
             ))
             }
             </Button.Group>
+              )
+            }
           </Modal.Actions>
         </Modal>
         <Confirm
