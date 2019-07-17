@@ -575,17 +575,18 @@ export class BusinessAppStore {
 
   @action
   businessDetailsMaskingChange = (field, values, subFormName = '', index = -1) => {
+    const val = field === 'ssn' ? values.value : values.floatValue;
     if (subFormName) {
       this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
         this.BUSINESS_DETAILS_FRM,
-        { name: field, value: values.floatValue },
+        { name: field, value: val },
         subFormName,
         index,
       );
     } else {
       this.BUSINESS_DETAILS_FRM = Validator.onChange(
         this.BUSINESS_DETAILS_FRM,
-        { name: field, value: values.floatValue },
+        { name: field, value: val },
       );
     }
   };

@@ -426,7 +426,7 @@ class KeyTermsDetails extends Component {
               final month) indicates the cumulative amount contractually required to be paid
               to an investor after the end of that month, assuming the loan is not prepaid.
               This calculation is a mathematical illustration only and may not reflect actual
-              performance. It does not take into account NextSeed fees of 1% on each payment
+              performance. It does not take into account NextSeed fees of {get(campaign, 'keyTerms.nsFeePercentage') || '2.00'}% on each payment
               made to investors. Payment is not guaranteed or insured and investors may lose
               some or all of the principal invested if the Issuer cannot make its payments.
               </p>
