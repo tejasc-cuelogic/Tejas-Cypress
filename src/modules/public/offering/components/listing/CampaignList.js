@@ -48,7 +48,7 @@ export default class CampaignList extends Component {
   }
 
   render() {
-    const { campaigns, loading, refLink } = this.props;
+    const { campaigns, loading } = this.props;
     return (
       <>
         {/* {this.props.filters &&
@@ -63,7 +63,7 @@ export default class CampaignList extends Component {
 <Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
                     <Grid.Column key={offering.id} data-cy={offering.id}>
-                      <Card className="campaign" fluid as={Link} to={`${refLink}/${offering.offeringSlug}/overview`}>
+                      <Card className="campaign" fluid as={Link} to={`offerings/${offering.offeringSlug}/overview`}>
                         <div className="campaign-image-wrap">
                           <div className="campaign-card-image">
                             <Image64
