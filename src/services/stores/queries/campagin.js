@@ -135,6 +135,7 @@ export const campaignDetailsQuery = gql`
       investmentMultipleSummary
       state
       city
+      nsFeePercentage
     }
     bonusRewards {
       id
