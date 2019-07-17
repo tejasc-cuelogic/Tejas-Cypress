@@ -155,6 +155,15 @@ export const FILE_UPLOAD_STEPS = {
   einVerificationDoc: 'ACCOUNT_ENTITY_EIN_VERIFICATION',
 };
 
+export const BANK_REQUEST_VERIFY_DENY_FORM = {
+  reason: {
+    value: '',
+    label: 'Reason:',
+    error: undefined,
+    rule: 'optional',
+  },
+};
+
 export const IND_LINK_BANK_MANUALLY = {
   routingNumber: {
     key: 'routingNumber',

@@ -4,12 +4,13 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { get, lowerCase } from 'lodash';
 import { Card, Table, Button, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { InlineLoader, NsPagination } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import Actions from './Actions';
 
 @inject('bankAccountStore', 'uiStore')
+@withRouter
 @observer
 export default class AllRequests extends Component {
   state = {

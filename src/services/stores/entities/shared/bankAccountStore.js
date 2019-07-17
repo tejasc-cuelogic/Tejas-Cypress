@@ -8,7 +8,7 @@ import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, linkB
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
-  IRA_ADD_FUND,
+  IRA_ADD_FUND, BANK_REQUEST_VERIFY_DENY_FORM,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
@@ -32,6 +32,8 @@ export class BankAccountStore {
   @observable bankSelect = false;
 
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
+
+  @observable formBankRequestVerifyDeny = Validator.prepareFormObject(BANK_REQUEST_VERIFY_DENY_FORM);
 
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
 
@@ -697,7 +699,7 @@ export class BankAccountStore {
   }
 
   @action
-  updateAccountChangeAction = (accountId, userId, isDeny = false) => {
+  updateAccountChangeAction = (accountId, userId, justification, isDeny = false) => {
     this.addLoadingRequestId(userId);
     return new Promise((resolve, reject) => {
       client
@@ -706,6 +708,7 @@ export class BankAccountStore {
           variables: {
             accountId,
             userId,
+            justification,
           },
         })
         .then((res) => {
