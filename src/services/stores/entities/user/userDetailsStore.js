@@ -494,9 +494,9 @@ export class UserDetailsStore {
 
   @computed get userHasOneFullAccount() {
     return (this.userDetails.status === 'FULL'
-    || this.signupStatus.activeAccounts.length > 0
+    && (this.signupStatus.activeAccounts.length > 0
     || this.signupStatus.frozenAccounts.length > 0
-    || this.signupStatus.processingAccounts.length > 0);
+    || this.signupStatus.processingAccounts.length > 0));
   }
 
   @computed get isLegalDocsPresent() {
