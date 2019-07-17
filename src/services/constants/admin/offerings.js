@@ -2651,6 +2651,30 @@ export const OFFERING_CLOSE_3 = {
     rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
+  documentsCount: {
+    value: '',
+    label: 'Documents Count',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  npaPageCount: {
+    value: '',
+    label: 'Npa Page Count',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  pnPageCount: {
+    value: '',
+    label: 'Pn Page Count',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const OFFERING_CLOSE_1 = {
