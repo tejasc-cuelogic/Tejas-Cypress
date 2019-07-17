@@ -68,6 +68,8 @@ export class UiStore {
 
   @observable defaultNavExpandedVal = + new Date();
 
+  @observable isFromBusinessApplication = false;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;

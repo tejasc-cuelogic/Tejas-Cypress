@@ -247,8 +247,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetForm = (form) => {
-    Validator.resetFormData(this[form]);
+  resetForm = (form, targetedFields = []) => {
+    Validator.resetFormData(this[form], targetedFields);
   }
 
   @action

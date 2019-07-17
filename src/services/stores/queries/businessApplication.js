@@ -64,6 +64,7 @@ mutation updatePreQualInfo($preQualificationData: PreQualDetailsInput!) {
       status
       failReasons
     }
+    userRoles
   }
 }
 `;
@@ -236,6 +237,7 @@ query _getBusinessApplicationById ($id: String!) {
           netIncome
         }
       }
+      businessSecurities
     }
     businessDetails {
       planDocs {
