@@ -111,7 +111,11 @@ class CampaignLayout extends Component {
         }
         <InvestmentDetails newLayout />
         <AboutCompany newLayout />
-        <BonusRewards newLayout />
+        {campaignStatus.isBonusReward
+        && (
+          <BonusRewards newLayout />
+        )
+        }
         {campaignStatus.gallary && campaignStatus.gallary !== 0 ? (
           <>
             <Gallery
