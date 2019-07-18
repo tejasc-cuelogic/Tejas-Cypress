@@ -386,7 +386,7 @@ export class BusinessAppReviewStore {
   }
 
  @action
-  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '') => {
+  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '', temporaryPassword = '') => {
     const applicationSource = applStatus
     === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
@@ -411,6 +411,9 @@ export class BusinessAppReviewStore {
     };
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
+    }
+    if (temporaryPassword) {
+      payload = { ...payload, temporaryPassword };
     }
     return new Promise((resolve, reject) => {
       client
