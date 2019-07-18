@@ -408,6 +408,28 @@ footer .ui.text.menu{
     }
 }
 
+// offering layout menu
+.offering-layout-menu .ui.vertical.menu{
+    .item{
+        &:hover, &.active{
+            color: @neutral;
+            &:first-child:before{
+                display: block !important;
+            }
+            &:before{
+                content: '';
+                width: 3px;
+                height: 15px;
+                position: absolute;
+                left: -14px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: @primary-one;
+            }
+        }
+    }
+}
+
 //  Private pages menus
 .ui.menu{
     &.pagination.text{
@@ -783,3 +805,4 @@ footer .ui.text.menu{
     max-width: 1680px;
     margin: auto !important;
 }
+

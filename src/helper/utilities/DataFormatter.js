@@ -87,7 +87,6 @@ class DataFormatter {
   }
 
   getDateDifferenceInHours = (timeStamp2, isDayEnd = false) => {
-    console.log('Local time zone==>', momentZone.tz.guess());
     const startDate = momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss');
     // const startDate = momentZone.tz('Asia/Calcutta').format('MM/DD/YYYY HH:mm:ss');
     const endDate = isDayEnd ? moment(`${timeStamp2} 23:59:59`) : moment(timeStamp2);

@@ -31,15 +31,24 @@ export default class Public extends React.Component {
 
   getRoutes = (isAuthLocation = false) => (
     <Switch>
-      {publicRoutes.map(route => (
+      {publicRoutes.map((route) => {
+        const CurrentComponent = route.auth ? route.auth(route.component, this.props) : route.component;
+        return (
         <Route
           exact={route.exact ? route.exact : false}
           path={route.path}
-          component={route.auth
-            ? route.auth(route.component, this.props) : route.component}
+          render={props => (
+            <CurrentComponent
+              newLayout={route.props === 'newLayout'}
+              {...props}
+            />
+          )
+          }
           key={route.path}
         />
-      ))}
+        );
+      })
+      }
       <Route path="/password-protected" component={NotFound} />
       <Route exact path="/:fromUrl/:fromUrl2?" component={isAuthLocation ? Auth : RedirectManager} />
       <Route component={NotFound} />

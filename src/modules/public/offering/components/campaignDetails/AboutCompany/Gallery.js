@@ -18,7 +18,7 @@ class Gallery extends Component {
   }
 
   render() {
-    const { campaign } = this.props;
+    const { campaign, newLayout } = this.props;
     return (
       <>
         <Header as="h3" className="mb-30 anchor-wrap mb-30">
@@ -39,9 +39,9 @@ class Gallery extends Component {
         </div>
         {get(campaign, 'media.gallery')
           && (
-<Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
+<Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button' : ''} highlight-text mt-40`}>
             View Gallery
-            <Icon size="small" className="ns-chevron-right right" color="white" />
+            <Icon size={newLayout ? '' : 'small'} className={`${newLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
           </Button>
           )
         }
