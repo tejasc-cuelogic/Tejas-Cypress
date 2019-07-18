@@ -16,7 +16,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 @observer
 class BonusRewards extends Component {
   componentDidMount() {
-    if (!isMobile) {
+    if (!this.props.newLayout && !isMobile) {
       const sel = 'anchor';
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }
@@ -34,9 +34,9 @@ class BonusRewards extends Component {
       && campaign.offering.misc.additionalBonusRewardsContent
       ? campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
-      <div className="campaign-content-wrapper">
+      <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
-          <span className="anchor" />
+          <span className="anchor" id={this.props.newLayout ? 'bonus-rewards' : ''} />
           Bonus Rewards
         </Header>
         {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0))
