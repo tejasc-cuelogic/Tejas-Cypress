@@ -103,10 +103,12 @@ class offerDetails extends Component {
 
   addRemoveUpdatesSubnav = (oldNav, updates) => {
     const tempNav = [...oldNav];
-    if (updates && updates.length === 0 && tempNav[0].subNavigations.length === 5) {
-      tempNav[0].subNavigations.splice(2, 1);
-    } else if (updates && updates.length !== 0 && tempNav[0].subNavigations.length !== 5) {
-      tempNav[0].subNavigations.splice(2, 0, { title: 'Updates', to: '#updates', useRefLink: true });
+    const hasUpdatesNav = tempNav.find(i => i.title === 'Updates');
+    const index = tempNav.findIndex(i => i.title === 'Updates');
+    if (updates && updates.length === 0 && hasUpdatesNav) {
+      tempNav.splice(index, 1);
+    } else if (updates && updates.length !== 0 && !hasUpdatesNav) {
+      tempNav.splice(2, 0, { title: 'Updates', to: '#updates', useRefLink: true });
     }
     return tempNav;
   }
@@ -183,6 +185,7 @@ class offerDetails extends Component {
     } else {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
       navItems = modifySubNavs(navItems, newLayout);
+      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
     if ((details && details.data
       && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])

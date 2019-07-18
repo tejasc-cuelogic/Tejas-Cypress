@@ -500,6 +500,7 @@ export const PUBLIC_NAV = [
     title: 'Explore Campaigns',
     to: 'offerings-v2/',
     header: false,
+    headerMobile: false,
     subNavigations: [
       {
         component: 'CampaignLayout', title: 'Highlights', to: '#top-things-to-know', useRefLink: true, defaultActive: true, key: 'hasTopThingToKnow',
