@@ -95,7 +95,7 @@ export class NavItems extends Component {
       location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
     const app = (isApp) ? 'app' : '';
-    const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
+    const myNavItems = this.props.navItems.filter(n => n.headerMobile !== false && n.noNav !== true);
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map((item, key) => (
