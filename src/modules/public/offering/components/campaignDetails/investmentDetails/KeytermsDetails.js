@@ -37,7 +37,7 @@ class KeyTermsDetails extends Component {
   }
 
   render() {
-    const { KeyTerms } = this.props;
+    const { KeyTerms, newLayout } = this.props;
     const {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure, campaignStatus,
     } = this.props.campaignStore;
@@ -62,11 +62,11 @@ class KeyTermsDetails extends Component {
       <>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
-            <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA'}</p>
+            <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p>
-              <b>Type of Offering</b>
+              <b className={newLayout ? 'neutral-text' : ''}>Type of Offering</b>
               {get(campaign, 'regulation')
                 && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                 ? (
@@ -85,12 +85,12 @@ class KeyTermsDetails extends Component {
             </p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Offered By</b><br />
+            <p><b className={newLayout ? 'neutral-text' : ''}>Offered By</b><br />
               {CAMPAIGN_OFFERED_BY[get(KeyTerms, 'regulation')]}
             </p>
           </Grid.Column>
         </Grid>
-        {!isMobile ? <Divider /> : null}
+        {!isMobile ? <Divider hidden={newLayout} /> : null}
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
@@ -363,10 +363,11 @@ class KeyTermsDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section={!isMobile} hidden />
+        {newLayout && <Divider section={!isMobile} hidden />}
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
           ? (
             <>
-              <Header as="h3" className={`${isTablet && 'mt-40'} mb-30 anchor-wrap`}>
+              <Header as="h3" className={`${isTablet && 'mt-40'} ${newLayout ? 'mb-40' : 'mb-30'} anchor-wrap`}>
               Total Payment Calculator
               <span className="anchor" id="total-payment-calculator" />
             </Header>
