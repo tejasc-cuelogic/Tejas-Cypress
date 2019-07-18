@@ -132,7 +132,7 @@ export default class StatusChangeAppModal extends Component {
             />
             {params.action === 'PROMOTE'
               ? (
-<>
+              <>
                 <FormInput
                   fluid
                   type="password"
