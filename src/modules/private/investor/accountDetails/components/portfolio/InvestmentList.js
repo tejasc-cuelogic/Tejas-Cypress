@@ -79,7 +79,7 @@ const InvestmentList = (props) => {
                         </Table.Cell>
                         <Table.Cell collapsing>
                           {props.listOf === 'pending'
-                            ? get(data, 'offering.closureSummary.processingDate') ? DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) < 0 ? get(data, 'offering.closureSummary.processingDate') : DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(data, 'offering.closureSummary.processingDate')).diffText : 'N/A'
+                            ? get(data, 'offering.closureSummary.processingDate') ? DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) < 0 ? '' : DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(data, 'offering.closureSummary.processingDate')).diffText : 'N/A'
                             : get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.closureSummary.hardCloseDate')} /> : 'N/A'}
                         </Table.Cell>
                         <Table.Cell collapsing>
