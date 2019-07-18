@@ -101,10 +101,9 @@ class Success extends Component {
       signupChange, togglePasswordType, SIGNUP_FRM,
       LoginChange, LOGIN_FRM, pwdInputType, currentScore,
     } = this.props.authStore;
-    const { userExists, showUserError, userRoles } = this.props.businessAppStore;
+    const { userExists, userRoles } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
     const { errors } = this.props.uiStore;
-    const roles = get(this.props.userStore, 'currentUser.roles');
     return (
       <>
         <Grid container>
@@ -161,11 +160,11 @@ class Success extends Component {
                                 fielddata={fields[field]}
                                 changed={signupChange}
                               />
-                              {field === 'email' && showUserError && (
-                                roles
+                              {field === 'email' && (
+                                userRoles
                                   ? (
                                   <p className="negative-text">
-                                    {`This email is already registered as an ${roles}.  Please enter a new email address.`}
+                                    {`This email is already registered as an ${userRoles}.  Please enter a new email address.`}
                                   </p>
                                   ) : (
                                   <p className="negative-text">

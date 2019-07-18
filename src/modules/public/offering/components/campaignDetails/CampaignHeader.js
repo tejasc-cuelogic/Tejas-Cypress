@@ -18,7 +18,7 @@ export default class CampaignHeader extends Component {
   }
 
   render() {
-    const { campaignStore } = this.props;
+    const { campaignStore, newLayout } = this.props;
     const { campaign, offerStructure, campaignStatus } = campaignStore;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
@@ -39,7 +39,7 @@ export default class CampaignHeader extends Component {
                     {campaign && campaign.media
                       && campaign.media.heroVideo && campaign.media.heroVideo.url
                       ? (
-<Link to={`${this.props.match.url}/overview/herovideo`}>
+<Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
                           <Image64
                             bg
                             srcUrl={get(campaign, 'media.heroImage.url')}
@@ -106,7 +106,7 @@ export default class CampaignHeader extends Component {
                           }
                         </React.Fragment>
                       )) : ''}
-                    <Link to={`${this.props.match.url}/overview/photogallery`} onClick={this.handleViewGallery} className="pull-right">
+                    <Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/photogallery`} onClick={this.handleViewGallery} className="pull-right">
                       View gallery <Icon size="small" className="ns-chevron-right" />
                     </Link>
                   </div>

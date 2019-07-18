@@ -29,6 +29,7 @@ class Updates extends Component {
   handleClose = () => this.props.history.goBack();
 
   render() {
+    const { newLayout } = this.props;
     const { campaign } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
     updates = orderBy(updates, ['updated.date'], 'desc');
@@ -37,10 +38,10 @@ class Updates extends Component {
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
     const issuerId = campaign && campaign.issuerId;
     return (
-      <div className="campaign-content-wrapper">
-        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      <div className={newLayout ? '' : 'campaign-content-wrapper'}>
+        <Header as="h3" className={`${newLayout ? 'mt-40 mb-60' : 'mt-20 mb-30'} anchor-wrap`}>
           Updates
-          <span className="anchor" />
+          <span className="anchor" id={newLayout ? 'updates' : ''} />
         </Header>
         {updates && updates.length
           ? (

@@ -492,6 +492,13 @@ export class UserDetailsStore {
     return this.validAccStatus.includes(accDetails.idVerification);
   }
 
+  @computed get userHasOneFullAccount() {
+    return (this.userDetails.status === 'FULL'
+    && (this.signupStatus.activeAccounts.length > 0
+    || this.signupStatus.frozenAccounts.length > 0
+    || this.signupStatus.processingAccounts.length > 0));
+  }
+
   @computed get isLegalDocsPresent() {
     return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
       || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');

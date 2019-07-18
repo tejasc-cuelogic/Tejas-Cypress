@@ -628,6 +628,11 @@ footer{
 	.ui.padded.segment h6.ui.header {
 		margin: @7px 0;
 	}
+	.v-2{
+		p b{
+			color: @neutral;
+		}
+	}
 }
 
 /** Share icons **/
