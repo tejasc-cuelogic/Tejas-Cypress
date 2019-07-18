@@ -67,6 +67,9 @@ export default class StatusChangeAppModal extends Component {
                   userId,
                   params.appStatus,
                   params.action,
+                  '',
+                  '',
+                  userDetails.TemporaryPassword,
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
                   this.props.history.push('/app/applications/in-progress');
