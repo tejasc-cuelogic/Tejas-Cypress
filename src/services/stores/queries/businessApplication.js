@@ -451,6 +451,7 @@ mutation updateApplicationData(
   $offers: OffersReviewInput
   $comments: [BusinessApplicationCommentInput]
   $approvedStatus: ApprovedStatusEnum
+  $temporaryPassword: String
 ) {
   updateApplicationStatusAndReview(
     applicationId: $applicationId
@@ -464,6 +465,7 @@ mutation updateApplicationData(
     offers: $offers
     comments: $comments
     approvedStatus: $approvedStatus
+    temporaryPassword: $temporaryPassword
   )
 }
 `;
