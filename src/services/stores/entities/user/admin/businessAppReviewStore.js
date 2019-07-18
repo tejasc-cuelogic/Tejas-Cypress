@@ -6,7 +6,7 @@ import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
 import money from 'money-math';
-import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD } from '../../../../constants/admin/businessApplication';
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -22,6 +22,9 @@ export class BusinessAppReviewStore {
 
   @observable PROMOTE_APPLICATION_STATUS_PASSWORD_FRM =
     Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
+
+  @observable PROMOTE_APPLICATION_STATUS_EMAIL_FRM =
+    Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_EMAIL);
 
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
 

@@ -1364,6 +1364,10 @@ export class BusinessAppStore {
     }
     return card;
   }
+
+  @computed get applicationRoles() {
+    return get(this.businessApplicationDetailsAdmin, 'roles');
+  }
 }
 
 export default new BusinessAppStore();
