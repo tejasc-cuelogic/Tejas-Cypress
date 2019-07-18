@@ -12,17 +12,19 @@ const isMobile = document.documentElement.clientWidth < 992;
 class InvestmentDetails extends Component {
   componentWillMount() {
     this.props.campaignStore.calculateTotalPaymentData();
-    window.addEventListener('scroll', this.handleOnScroll);
+    if (!this.props.newLayout) {
+      window.addEventListener('scroll', this.handleOnScroll);
+    }
   }
 
   componentDidMount() {
-    if (this.props.location.hash && this.props.location.hash !== '') {
+    if (!this.props.newLayout && this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       });
-    } else if (!isMobile) {
+    } else if (!this.props.newLayout && !isMobile) {
       const { campaignNavData } = this.props.campaignStore;
       const navs = (campaignNavData.find(i => i.title === 'Investment Details')).subNavigations;
       const sel = navs && navs[0] && navs[0].to;
@@ -34,8 +36,10 @@ class InvestmentDetails extends Component {
   }
 
   componentWillUnmount() {
-    this.props.navStore.setFieldValue('currentActiveHash', null);
-    window.removeEventListener('scroll', this.handleOnScroll);
+    if (!this.props.newLayout) {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      window.removeEventListener('scroll', this.handleOnScroll);
+    }
   }
 
   handleOnScroll = () => {
@@ -58,10 +62,26 @@ class InvestmentDetails extends Component {
     const offeringExpenseAmountDescription = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     return (
       <>
+        {this.props.newLayout
+        && (
+        <>
+        <Header as="h3" className="mb-40 anchor-wrap">
+          Investment Terms
+          <span className="anchor" id="key-terms" />
+        </Header>
+        <KeytermsDetails
+          refLink={this.props.refLink}
+          KeyTerms={campaign && campaign.keyTerms}
+          {...this.props}
+        />
+        </>
+        )}
         {campaignStatus.useOfProcceds
         && (
           <>
-          <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} mt-20 anchor-wrap`}>
+          <Divider section hidden />
+          {this.props.newLayout && <Divider section hidden />}
+          <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${this.props.newLayout ? '' : 'mt-20'}mt-20 anchor-wrap`}>
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
@@ -83,6 +103,9 @@ class InvestmentDetails extends Component {
         <Divider section hidden />
         </>
         )}
+        {!this.props.newLayout
+        && (
+        <>
         <Header as="h3" className="mb-30 anchor-wrap">
           Key Terms
           <span className="anchor" id="key-terms" />
@@ -92,6 +115,8 @@ class InvestmentDetails extends Component {
           KeyTerms={campaign && campaign.keyTerms}
           {...this.props}
         />
+        </>
+        )}
       </>
     );
   }

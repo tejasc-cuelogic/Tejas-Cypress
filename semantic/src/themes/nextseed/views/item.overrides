@@ -91,6 +91,10 @@
 
                 }
             }
+            &.campaign-avatar-v2 .avatar-image {
+                width:60px;
+                height:60px;
+            }
         }
         .avatar-description{
             img{
