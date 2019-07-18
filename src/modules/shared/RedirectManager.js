@@ -45,8 +45,31 @@ export default class RedirectManager extends React.PureComponent {
   }
 
   findRedirectUrl = (params) => {
-    const redirectMeta = find(REDIRECT_META, d => params === d.from && d.live);
-    return redirectMeta || false;
+    const redirectMeta = find(REDIRECT_META, (d) => {
+      if (d.from.includes(':param1')) {
+        const splitUrl = params.split('/');
+        if (d.from.includes(splitUrl[0])) {
+          return true;
+        }
+      } else {
+        return params === d.from && d.live;
+      }
+      return redirectMeta || false;
+    });
+
+    if (redirectMeta.from.includes(':param1')) {
+      const splitUrl = params.split('/');
+      const slug = splitUrl[(splitUrl.length) - 1];
+      if (redirectMeta.from.includes(splitUrl[0])) {
+        const replacedTo = redirectMeta.to.replace(':param1', slug);
+        return {
+          from: redirectMeta.from,
+          live: redirectMeta.live,
+          to: replacedTo,
+        };
+      }
+    }
+    return redirectMeta;
   }
 
   findIssuerReferralCode = (referralCode) => {

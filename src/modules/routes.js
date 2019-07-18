@@ -58,13 +58,14 @@ export const publicRoutes = [
     path: '/about',
     component: About,
   },
-  {
-    path: '/blog/:postId',
-    component: Blog,
-  },
+  // {
+  //   path: '/blog/:postId',
+  //   component: Blog,
+  // },
   {
     path: '/blog',
     component: Blog,
+    exact: true,
   },
   {
     path: '/invest/get-started',
