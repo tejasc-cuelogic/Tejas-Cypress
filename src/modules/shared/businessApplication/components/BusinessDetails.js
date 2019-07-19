@@ -3,8 +3,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { toJS } from 'mobx';
-import { cloneDeep } from 'lodash';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../theme/shared';
@@ -58,12 +56,6 @@ export default class BusinessDetails extends Component {
       setField('docLoading', false);
       window.open(res.data.getBoxEmbedLink, '_blank');
     });
-  }
-
-  encrypSsnNumber = (form) => {
-    const formData = cloneDeep(toJS({ ...form }));
-    formData.ssn.value = Helper.encryptNumberWithX(formData.ssn.value);
-    return formData;
   }
 
   render() {
@@ -305,7 +297,7 @@ export default class BusinessDetails extends Component {
                           <FormInput
                             key="ssn"
                             name="ssn"
-                            fielddata={this.encrypSsnNumber(owner).ssn}
+                            fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
                             displayMode={formReadOnlyMode}
                           />
                         )

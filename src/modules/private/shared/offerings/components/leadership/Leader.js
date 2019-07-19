@@ -1,8 +1,6 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { toJS } from 'mobx';
-import { cloneDeep } from 'lodash';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper } from '../../../../../../theme/form';
@@ -77,12 +75,6 @@ export default class Leader extends Component {
     } else {
       this.setState({ leaderFormInvalid: true });
     }
-  }
-
-  encrypSsnNumber = (form) => {
-    const formData = cloneDeep(toJS({ ...form }));
-    formData.ssn.value = Helper.encryptNumberWithX(formData.ssn.value);
-    return formData;
   }
 
   addMore = (e, formName, arrayName) => {
@@ -243,7 +235,7 @@ export default class Leader extends Component {
               <FormInput
                 key="ssn"
                 name="ssn"
-                fielddata={this.encrypSsnNumber(LEADERSHIP_FRM.fields.leadership[index]).ssn}
+                fielddata={Helper.encrypSsnNumberByForm(LEADERSHIP_FRM.fields.leadership[index]).ssn}
                 changed={(e, result) => formArrayChange(e, result, formName)}
                 displayMode={isReadonly}
               />
