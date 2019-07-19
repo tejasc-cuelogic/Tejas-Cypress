@@ -85,19 +85,22 @@ export default class StatusChangeAppModal extends Component {
                 });
             } else {
               adminActions.createNewUser(userDetails, 'SUPPRESS').then(() => {
-                this.props.businessAppReviewStore
-                  .updateApplicationStatus(
-                    params.appId,
-                    this.props.adminStore.userId,
-                    params.appStatus,
-                    params.action,
-                    '',
-                    '',
-                    userDetails.TemporaryPassword,
-                  ).then(() => {
-                    this.props.uiStore.setErrors(null);
-                    this.props.history.push('/app/applications/in-progress');
-                  });
+                // This timeout is added intentionally beacause of parellel mutation executes. Don't delete this
+                setTimeout(() => {
+                  this.props.businessAppReviewStore
+                    .updateApplicationStatus(
+                      params.appId,
+                      this.props.adminStore.userId,
+                      params.appStatus,
+                      params.action,
+                      '',
+                      '',
+                      userDetails.TemporaryPassword,
+                    ).then(() => {
+                      this.props.uiStore.setErrors(null);
+                      this.props.history.push('/app/applications/in-progress');
+                    });
+                }, 5000);
               }).catch(() => {
                 Helper.toast('Something went wrong. Please try again after sometime', 'error');
               });
