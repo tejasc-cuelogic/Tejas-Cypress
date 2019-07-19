@@ -70,7 +70,7 @@ class AboutCompany extends Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const emptyStatement = 'Detail not found';
     return (
-      <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
+      <div className={this.props.newLayout ? 'mt-50' : 'campaign-content-wrapper'}>
         {campaignStatus.companyDescription && (
         <>
           <CompanyTopThings emptyStatement={emptyStatement} campaign={campaign} />
