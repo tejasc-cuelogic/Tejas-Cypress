@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
-import { filter, find, get } from 'lodash';
-import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
+import omitDeep from 'omit-deep';
+import { filter, find, get, capitalize } from 'lodash';
+import beautify from 'json-beautify';
+import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal, Grid, Table } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { MaskedInput, FormInput } from '../../../../../theme/form';
@@ -44,6 +46,7 @@ export default class Close extends Component {
     action: '',
     confirmed: false,
     inProgress: false,
+    visibilityStatus: false,
   }
 
   componentWillMount() {
@@ -166,6 +169,21 @@ export default class Close extends Component {
       });
   }
 
+  jsonModal = json => (
+  <Modal closeIcon trigger={<Button className="link-button highlight-text" content="see Response" />}>
+      <Modal.Content>
+      <pre className="no-updates bg-offwhite padded">
+        {beautify(json, null, 2, 100)}
+      </pre>
+      </Modal.Content>
+      </Modal>
+  );
+
+  toggleVisibilityStatus = () => {
+    const currStatus = this.state.visibilityStatus;
+    this.setState({ visibilityStatus: !currStatus });
+  }
+
   render() {
     const {
       OFFERING_CLOSE_FRM,
@@ -180,6 +198,8 @@ export default class Close extends Component {
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer, offerStatus } = this.props.offeringsStore;
+    let { closureProcess } = offer;
+    closureProcess = omitDeep(closureProcess, ['__typename']);
     const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
@@ -300,7 +320,12 @@ out of required
                 </Form.Group>
                 {outputMsg && outputMsg.data
                 && (
-                  <FieldError error={outputMsg.data} />
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
                 )
                 }
                 <Button.Group className="mt-50">
@@ -335,7 +360,12 @@ out of required
                   </Form.Group>
                   {outputMsg && outputMsg.data
                 && (
-                  <FieldError error={outputMsg.data} />
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
                 )
                 }
                   <Button.Group className="mt-50">
@@ -366,7 +396,12 @@ out of required
                 </Form.Group>
                 {outputMsg && outputMsg.data
                 && (
-                  <FieldError error={outputMsg.data} />
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
                 )
                 }
                 <Button.Group className="mt-50">
@@ -429,6 +464,34 @@ out of required
               </Card>
             ) : null
           }
+          <Header as="h4"> Closure Process Status <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+          {this.state.visibilityStatus
+          && (
+          <Grid columns={3}>
+          {closureProcess ? Object.keys(closureProcess).map(key => (
+            <Grid.Column className="center-align"><b>{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</b>
+            <div className="table-wrapper">
+            <Table unstackable basic="very">
+              <Table.Body>
+                {closureProcess[key] ? Object.keys(closureProcess[key]).map(k => (
+                <Table.Row>
+                  <Table.Cell>{capitalize(k.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Table.Cell>
+                  <Table.Cell>
+                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? moment(closureProcess[key][k]).format('MM/DD/YYYY') : '-' : closureProcess[key][k] || '-'}
+                  </Table.Cell>
+                </Table.Row>
+                )) : <p>No Data Found</p>
+                }
+                </Table.Body>
+              </Table>
+            </div>
+            </Grid.Column>
+          ))
+            : <p>No Data Found</p>}
+          </Grid>
+          )
+          }
+          <Divider section />
           <Contingency
             formArrayChange={formArrayChange}
             form={CLOSING_CONTITNGENCIES_FRM}
