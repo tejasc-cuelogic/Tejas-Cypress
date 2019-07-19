@@ -67,6 +67,9 @@ export default class StatusChangeAppModal extends Component {
                   userId,
                   params.appStatus,
                   params.action,
+                  '',
+                  '',
+                  userDetails.TemporaryPassword,
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
                   this.props.history.push('/app/applications/in-progress');
@@ -79,6 +82,9 @@ export default class StatusChangeAppModal extends Component {
                     this.props.adminStore.userId,
                     params.appStatus,
                     params.action,
+                    '',
+                    '',
+                    userDetails.TemporaryPassword,
                   ).then(() => {
                     this.props.uiStore.setErrors(null);
                     this.props.history.push('/app/applications/in-progress');
@@ -126,7 +132,7 @@ export default class StatusChangeAppModal extends Component {
             />
             {params.action === 'PROMOTE'
               ? (
-<>
+              <>
                 <FormInput
                   fluid
                   type="password"

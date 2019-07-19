@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
@@ -14,6 +14,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
+@withRouter
 @observer
 class Comments extends Component {
   state={
@@ -25,7 +26,7 @@ class Comments extends Component {
   }
 
   componentDidMount() {
-    if (!isMobile) {
+    if (!this.props.newLayout && !isMobile) {
       const sel = 'anchor';
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }
@@ -98,20 +99,25 @@ class Comments extends Component {
     // const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
     const passedProcessingDate = DataFormatter.getDateDifferenceInHours(get(campaign, 'closureSummary.processingDate'), true) <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
-    const comments = campaign && campaign.comments;
+    let comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
     const issuerId = campaign && campaign.issuerId;
     const {
       MESSAGE_FRM, msgEleChange, buttonLoader,
     } = this.props.messageStore;
+    const { showOnlyOne } = this.props;
+    comments = showOnlyOne ? [get(comments, '[0]')] : comments;
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mt-20 mb-30 anchor-wrap">
           Comments
-          <span className="anchor" />
+          <span className="anchor" id="comments" />
         </Header>
+        {!showOnlyOne
+        && (
+        <>
         <p>
           Note that both NextSeed and issuers are notified of all comments immediately,
           but there may be a slight delay in response to questions submitted outside of
@@ -127,6 +133,8 @@ class Comments extends Component {
           If you have any technical questions or questions about NextSeed, please
           email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
         </p>
+        </>
+        )}
         {!isRightToPostComment
           ? (
 <section className="center-align mt-30">
@@ -142,7 +150,7 @@ class Comments extends Component {
             </Form>
           </section>
           )
-          : !disablePostComment
+          : (!disablePostComment && !showOnlyOne)
               && (
               <>
                 { visiblePost
@@ -177,7 +185,7 @@ class Comments extends Component {
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                           </Comment.Author>
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
-                          {isUserLoggedIn && !disablePostComment
+                          {isUserLoggedIn && !disablePostComment && !showOnlyOne
                           && (
 <Comment.Actions>
                             <Comment.Action onClick={() => this.toggleVisibility(c.id)}>
@@ -245,7 +253,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
-                                {isUserLoggedIn && !disablePostComment
+                                {isUserLoggedIn && !disablePostComment && !showOnlyOne
                                 && (
 <Comment.Actions>
                                   <Comment.Action

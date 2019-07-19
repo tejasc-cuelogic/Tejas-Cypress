@@ -346,9 +346,11 @@ export class BusinessAppStore {
       });
       this.BUSINESS_APP_FRM.fields.phoneNumber.value = data.businessGeneralInfo.contactDetails.phone.number;
       if (this.currentApplicationType === 'business') {
-        data.businessSecurities.forEach((ele) => {
-          this.BUSINESS_APP_FRM.fields.businessSecurities.value.push(ele);
-        });
+        if (data.businessSecurities) {
+          data.businessSecurities.forEach((ele) => {
+            this.BUSINESS_APP_FRM.fields.businessSecurities.value.push(ele);
+          });
+        }
         ['businessModel', 'businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
