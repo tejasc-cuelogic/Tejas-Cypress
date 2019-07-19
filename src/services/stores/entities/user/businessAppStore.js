@@ -1366,7 +1366,13 @@ export class BusinessAppStore {
   }
 
   @computed get applicationRoles() {
-    return get(this.businessApplicationDetailsAdmin, 'roles');
+    const roles = [];
+    if (get(this.businessApplicationDetailsAdmin, 'roles')) {
+      get(this.businessApplicationDetailsAdmin, 'roles').forEach((userRole) => {
+        roles.push(userRole.name);
+      });
+    }
+    return roles;
   }
 }
 
