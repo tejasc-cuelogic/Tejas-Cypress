@@ -8,6 +8,7 @@ import Contingency from './overview/Contingency';
 import { MaskedInput, FormInput } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
+import { FieldError } from '../../../../../theme/shared';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -71,7 +72,10 @@ export default class Close extends Component {
     this.setState({ open: false, action: '' });
   }
 
-  toggleStep = activeStep => (this.setState({ activeStep }));
+  toggleStep = (activeStep) => {
+    this.setState({ activeStep });
+    this.props.offeringCreationStore.setFieldValue('outputMsg', null);
+  };
 
   closeAction = async (status, step, forced = false) => {
     const { offer } = this.props.offeringsStore;
@@ -170,7 +174,7 @@ export default class Close extends Component {
       OFFERING_CLOSE_3,
       OFFERING_CLOSE_4,
       CLOSING_CONTITNGENCIES_FRM,
-      maskChange,
+      maskChange, outputMsg,
       formArrayChange, formChange,
     } = this.props.offeringCreationStore;
     const { inProgress } = this.props.uiStore;
@@ -235,7 +239,7 @@ out of required
                           <MaskedInput
                             key={field}
                             name={field}
-                            number={['interestRate', 'revSharePercentage'].includes(field)}
+                            percentage={['interestRate', 'revSharePercentage'].includes(field)}
                             currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
                             dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
                             fielddata={OFFERING_CLOSE_1.fields[field]}
@@ -294,6 +298,11 @@ out of required
                     number
                   />
                 </Form.Group>
+                {outputMsg && outputMsg.data
+                && (
+                  <FieldError error={outputMsg.data} />
+                )
+                }
                 <Button.Group className="mt-50">
                   {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
@@ -324,6 +333,11 @@ out of required
                     ))
                     }
                   </Form.Group>
+                  {outputMsg && outputMsg.data
+                && (
+                  <FieldError error={outputMsg.data} />
+                )
+                }
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
@@ -350,6 +364,11 @@ out of required
                       number
                     />
                 </Form.Group>
+                {outputMsg && outputMsg.data
+                && (
+                  <FieldError error={outputMsg.data} />
+                )
+                }
                 <Button.Group className="mt-50">
                 {filter(closingActions, a => a.ref === 4).map(fA => (
                   <Button

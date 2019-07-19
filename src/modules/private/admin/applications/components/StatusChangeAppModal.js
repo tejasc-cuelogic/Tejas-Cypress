@@ -48,12 +48,12 @@ export default class StatusChangeAppModal extends Component {
       .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
         const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
-        const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM } = this.props.businessAppReviewStore;
+        const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM, PROMOTE_APPLICATION_STATUS_EMAIL_FRM } = this.props.businessAppReviewStore;
         if (prequalData) {
           const userDetails = {
             givenName: prequalData.firstName,
             familyName: prequalData.lastName,
-            email: prequalData.email,
+            email: prequalData.roles && !prequalData.roles.includes('investor') ? prequalData.email : PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.TemporaryPassword.value,
             TemporaryPassword:
               PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.TemporaryPassword.value,
             verifyPassword: PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword.value,
@@ -67,6 +67,9 @@ export default class StatusChangeAppModal extends Component {
                   userId,
                   params.appStatus,
                   params.action,
+                  '',
+                  '',
+                  userDetails.TemporaryPassword,
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
                   this.props.history.push('/app/applications/in-progress');
@@ -79,6 +82,9 @@ export default class StatusChangeAppModal extends Component {
                     this.props.adminStore.userId,
                     params.appStatus,
                     params.action,
+                    '',
+                    '',
+                    userDetails.TemporaryPassword,
                   ).then(() => {
                     this.props.uiStore.setErrors(null);
                     this.props.history.push('/app/applications/in-progress');
@@ -98,7 +104,9 @@ export default class StatusChangeAppModal extends Component {
       APPLICATION_STATUS_COMMENT_FRM,
       formChange,
       PROMOTE_APPLICATION_STATUS_PASSWORD_FRM,
+      PROMOTE_APPLICATION_STATUS_EMAIL_FRM,
     } = businessAppReviewStore;
+    const { applicationRoles } = this.props.businessAppStore;
     const { fields } = APPLICATION_STATUS_COMMENT_FRM;
     const { inProgress } = uiStore;
     const { errors } = uiStore;
@@ -126,7 +134,16 @@ export default class StatusChangeAppModal extends Component {
             />
             {params.action === 'PROMOTE'
               ? (
-<>
+              <>
+                {applicationRoles && applicationRoles.includes('investor') && (
+                  <FormInput
+                    fluid
+                    type="text"
+                    name="emailAddress"
+                    fielddata={PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress}
+                    changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_EMAIL_FRM')}
+                  />
+                )}
                 <FormInput
                   fluid
                   type="password"
