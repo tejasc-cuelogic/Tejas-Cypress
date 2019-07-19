@@ -5,6 +5,7 @@ import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'seman
 import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper } from '../../../../../../theme/form';
 import { Image64 } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 import {
   PROFILE_PHOTO_BYTES,
   PROFILE_PHOTO_EXTENSIONS,
@@ -202,14 +203,6 @@ export default class Leader extends Component {
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />
-            <MaskedInput
-              displayMode={isReadonly}
-              name="ssn"
-              type="tel"
-              fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
-              ssn
-              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
-            />
             <FormInput
               displayMode={isReadonly}
               name="citizenship"
@@ -237,6 +230,26 @@ export default class Leader extends Component {
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />
+          {isReadonly
+            ? (
+              <FormInput
+                key="ssn"
+                name="ssn"
+                fielddata={Helper.encrypSsnNumberByForm(LEADERSHIP_FRM.fields.leadership[index]).ssn}
+                changed={(e, result) => formArrayChange(e, result, formName)}
+                displayMode={isReadonly}
+              />
+            )
+            : (
+                <MaskedInput
+                  name="ssn"
+                  type="tel"
+                  fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
+                  ssn
+                  changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+                />
+            )}
+
           </Form.Group>
           <Header as="h4">Address</Header>
           <AutoComplete

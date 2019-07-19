@@ -96,6 +96,7 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      rootFolderId
       goldstar {
         isin
         contactId
