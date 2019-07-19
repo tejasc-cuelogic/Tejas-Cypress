@@ -17,6 +17,13 @@ export default class StatusChangeAppModal extends Component {
     if (this.props.match.params.action === 'PROMOTE') {
       this.props.businessAppReviewStore.resetPasswordFrm();
       this.props.businessAppReviewStore.resetEmailFrm();
+      const { businessApplicationsDetailsAdmin, fetchAdminApplicationById } = this.props.businessAppStore;
+      if (!businessApplicationsDetailsAdmin) {
+        fetchAdminApplicationById(this.props.match.params.appId, this.props.match.params.id)
+          .then(() => {
+            this.props.businessAppReviewStore.resetEmailFrm();
+          });
+      }
     }
   }
 
@@ -146,9 +153,14 @@ export default class StatusChangeAppModal extends Component {
                       fielddata={PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress}
                       changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_EMAIL_FRM')}
                     />
-                    <p className="negative-text">
-                      This email is already registered as an investor.  Please enter a new email address.
-                    </p>
+                    {!PROMOTE_APPLICATION_STATUS_EMAIL_FRM.meta.isDirty
+                      ? (
+                        <p className="negative-text">
+                          This email is already registered as an investor.  Please enter a new email address.
+                        </p>
+                      )
+                      : ''
+                    }
                   </>
                 )}
                 <FormInput
