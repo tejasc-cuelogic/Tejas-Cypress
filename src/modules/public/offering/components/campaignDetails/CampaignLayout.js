@@ -114,7 +114,10 @@ class CampaignLayout extends Component {
         <AboutCompany newLayout />
         {campaignStatus.isBonusReward
         && (
-          <BonusRewards newLayout />
+          <>
+            <BonusRewards newLayout />
+            <Divider hidden section />
+          </>
         )
         }
         {campaignStatus.gallary && campaignStatus.gallary !== 0 ? (
@@ -127,12 +130,20 @@ class CampaignLayout extends Component {
             <Divider hidden section />
           </>
         ) : null}
-        {dataRoomDocs.length ? <Documents /> : null}
+        {dataRoomDocs.length
+          ? (
+          <>
+            <Documents newLayout />
+            <Divider hidden section />
+          </>
+          ) : null
+        }
         <>
           <Comments newLayout showOnlyOne={!this.state.expandComments} />
           <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
             {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
             <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
+            <Divider hidden section />
           </Button>
         </>
         {campaignStatus.issuerStatement ? (

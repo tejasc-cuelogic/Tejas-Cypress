@@ -70,16 +70,16 @@ class AboutCompany extends Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const emptyStatement = 'Detail not found';
     return (
-      <div className={this.props.newLayout ? 'mt-50' : 'campaign-content-wrapper'}>
+      <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
         {campaignStatus.companyDescription && (
         <>
-          <CompanyTopThings emptyStatement={emptyStatement} campaign={campaign} />
+          <CompanyTopThings newLayout={this.props.newLayout} emptyStatement={emptyStatement} campaign={campaign} />
           <Divider hidden section />
         </>
         )}
         {campaignStatus.businessModel && (
         <>
-          <BusinessModel businessModelUrl={this.props.match.url} campaign={campaign} />
+          <BusinessModel newLayout={this.props.newLayout} businessModelUrl={this.props.match.url} campaign={campaign} />
           <Divider hidden section />
         </>
         )}
@@ -89,13 +89,14 @@ class AboutCompany extends Component {
           isTabletLand={isTabletLand}
           LocationAnalysisDetailUrl={this.props.match.url}
           campaign={campaign}
+          newLayout={this.props.newLayout}
         />
         <Divider hidden section />
         </>
         )}
         {campaignStatus.history && (
         <>
-        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
+        <CompanyHistory newLayout={this.props.newLayout} campaign={campaign} emptyStatement={emptyStatement} />
         <Divider hidden section />
         </>
         )}
@@ -105,6 +106,7 @@ class AboutCompany extends Component {
           campaign={campaign}
           emptyStatement={emptyStatement}
           meetOurTeamUrl={this.props.match.url}
+          newLayout={this.props.newLayout}
         />
         <Divider hidden section />
         </>

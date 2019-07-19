@@ -19,7 +19,7 @@ class MeetOurTeam extends Component {
     ));
     return (
       <>
-        <Header as="h3" className="anchor-wrap mb-30">
+        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : ''} anchor-wrap mb-30`}>
           Meet the Team
           <span className="anchor" id="team" />
         </Header>
