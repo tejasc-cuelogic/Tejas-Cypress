@@ -16,6 +16,7 @@ export default class StatusChangeAppModal extends Component {
     this.props.businessAppReviewStore.resetCommentFrm();
     if (this.props.match.params.action === 'PROMOTE') {
       this.props.businessAppReviewStore.resetPasswordFrm();
+      this.props.businessAppReviewStore.resetEmailFrm();
     }
   }
 
@@ -49,11 +50,12 @@ export default class StatusChangeAppModal extends Component {
       .then((data) => {
         const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
         const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM, PROMOTE_APPLICATION_STATUS_EMAIL_FRM } = this.props.businessAppReviewStore;
+        const { applicationRoles } = this.props.businessAppStore;
         if (prequalData) {
           const userDetails = {
             givenName: prequalData.firstName,
             familyName: prequalData.lastName,
-            email: prequalData.roles && !prequalData.roles.includes('investor') ? prequalData.email : PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.TemporaryPassword.value,
+            email: !applicationRoles.includes('investor') ? prequalData.email : PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress.value,
             TemporaryPassword:
               PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.TemporaryPassword.value,
             verifyPassword: PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword.value,
@@ -136,13 +138,18 @@ export default class StatusChangeAppModal extends Component {
               ? (
               <>
                 {applicationRoles && applicationRoles.includes('investor') && (
-                  <FormInput
-                    fluid
-                    type="text"
-                    name="emailAddress"
-                    fielddata={PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress}
-                    changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_EMAIL_FRM')}
-                  />
+                  <>
+                    <FormInput
+                      fluid
+                      type="text"
+                      name="emailAddress"
+                      fielddata={PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress}
+                      changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_EMAIL_FRM')}
+                    />
+                    <p className="negative-text">
+                      This email is already registered as an investor.  Please enter a new email address.
+                    </p>
+                  </>
                 )}
                 <FormInput
                   fluid

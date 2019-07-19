@@ -385,6 +385,13 @@ export class BusinessAppReviewStore {
     this.PROMOTE_APPLICATION_STATUS_PASSWORD_FRM = Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_PASSWORD);
   }
 
+  @action
+  resetEmailFrm = () => {
+    this.PROMOTE_APPLICATION_STATUS_EMAIL_FRM = Validator.prepareFormObject(PROMOTE_APPLICATION_STATUS_EMAIL);
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    this.PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress.value = businessApplicationDetailsAdmin ? businessApplicationDetailsAdmin.email : '';
+  }
+
  @action
   updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '', temporaryPassword = '') => {
     const applicationSource = applStatus
