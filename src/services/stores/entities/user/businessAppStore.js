@@ -1364,6 +1364,16 @@ export class BusinessAppStore {
     }
     return card;
   }
+
+  @computed get applicationRoles() {
+    const roles = [];
+    if (get(this.businessApplicationDetailsAdmin, 'roles')) {
+      get(this.businessApplicationDetailsAdmin, 'roles').forEach((userRole) => {
+        roles.push(userRole.name);
+      });
+    }
+    return roles;
+  }
 }
 
 export default new BusinessAppStore();

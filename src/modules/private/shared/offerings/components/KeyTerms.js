@@ -20,8 +20,16 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'KEY_TERMS_PROFORMAS', false, true);
   }
 
+  onFileDrop = (files, name) => {
+    this.props.offeringCreationStore.uploadFileToS3('KEY_TERMS_FRM', name, files);
+  }
+
   handleDelDoc = (field) => {
-    this.props.offeringCreationStore.removeUploadedDataMultiple('KEY_TERMS_FRM', field, null, '');
+    if (field === 'revShareSummaryUpload') {
+      this.props.offeringCreationStore.removeFileFromS3('KEY_TERMS_FRM', field);
+    } else {
+      this.props.offeringCreationStore.removeUploadedDataMultiple('KEY_TERMS_FRM', field, null, '');
+    }
   }
 
   handleFormSubmit = (isApproved = null) => {
@@ -375,15 +383,6 @@ export default class KeyTerms extends Component {
                 />
               </div>
             ))}
-            <DropZone
-              disabled={isReadonly}
-              name="uploadProformas"
-              fielddata={KEY_TERMS_FRM.fields.uploadProformas}
-              ondrop={(files, name) => this.onProFormasDrop(files, name)}
-              onremove={fieldName => this.handleDelDoc(fieldName)}
-              uploadtitle="Upload a file"
-              containerclassname={!isReadonly ? 'field' : 'field display-only'}
-            />
             {['isAlcohol', 'isFood'].map(field => (
               <div className={!isReadonly ? 'field' : 'field display-only'}>
                 <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
@@ -396,6 +395,18 @@ export default class KeyTerms extends Component {
                 />
               </div>
             ))}
+             {['uploadProformas', 'revShareSummaryUpload'].map(field => (
+              <DropZone
+                disabled={isReadonly}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                ondrop={(files, name) => (field === 'uploadProformas' ? this.onProFormasDrop(files, name) : this.onFileDrop(files, name))}
+                onremove={fieldName => this.handleDelDoc(fieldName)}
+                uploadtitle="Upload a file"
+                containerclassname={!isReadonly ? 'field' : 'field display-only'}
+              />
+             ))
+            }
           </Form.Group>
           <Divider hidden />
           <ButtonGroupType2

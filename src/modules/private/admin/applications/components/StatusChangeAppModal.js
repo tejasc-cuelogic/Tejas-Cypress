@@ -16,6 +16,14 @@ export default class StatusChangeAppModal extends Component {
     this.props.businessAppReviewStore.resetCommentFrm();
     if (this.props.match.params.action === 'PROMOTE') {
       this.props.businessAppReviewStore.resetPasswordFrm();
+      this.props.businessAppReviewStore.resetEmailFrm();
+      const { businessApplicationsDetailsAdmin, fetchAdminApplicationById } = this.props.businessAppStore;
+      if (!businessApplicationsDetailsAdmin) {
+        fetchAdminApplicationById(this.props.match.params.appId, this.props.match.params.id)
+          .then(() => {
+            this.props.businessAppReviewStore.resetEmailFrm();
+          });
+      }
     }
   }
 
@@ -48,12 +56,13 @@ export default class StatusChangeAppModal extends Component {
       .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
         const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
-        const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM } = this.props.businessAppReviewStore;
+        const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM, PROMOTE_APPLICATION_STATUS_EMAIL_FRM } = this.props.businessAppReviewStore;
+        const { applicationRoles } = this.props.businessAppStore;
         if (prequalData) {
           const userDetails = {
             givenName: prequalData.firstName,
             familyName: prequalData.lastName,
-            email: prequalData.email,
+            email: !applicationRoles.includes('investor') ? prequalData.email : PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress.value,
             TemporaryPassword:
               PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.TemporaryPassword.value,
             verifyPassword: PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword.value,
@@ -76,19 +85,22 @@ export default class StatusChangeAppModal extends Component {
                 });
             } else {
               adminActions.createNewUser(userDetails, 'SUPPRESS').then(() => {
-                this.props.businessAppReviewStore
-                  .updateApplicationStatus(
-                    params.appId,
-                    this.props.adminStore.userId,
-                    params.appStatus,
-                    params.action,
-                    '',
-                    '',
-                    userDetails.TemporaryPassword,
-                  ).then(() => {
-                    this.props.uiStore.setErrors(null);
-                    this.props.history.push('/app/applications/in-progress');
-                  });
+                // This timeout is added intentionally beacause of parellel mutation executes. Don't delete this
+                setTimeout(() => {
+                  this.props.businessAppReviewStore
+                    .updateApplicationStatus(
+                      params.appId,
+                      this.props.adminStore.userId,
+                      params.appStatus,
+                      params.action,
+                      '',
+                      '',
+                      userDetails.TemporaryPassword,
+                    ).then(() => {
+                      this.props.uiStore.setErrors(null);
+                      this.props.history.push('/app/applications/in-progress');
+                    });
+                }, 5000);
               }).catch(() => {
                 Helper.toast('Something went wrong. Please try again after sometime', 'error');
               });
@@ -104,7 +116,9 @@ export default class StatusChangeAppModal extends Component {
       APPLICATION_STATUS_COMMENT_FRM,
       formChange,
       PROMOTE_APPLICATION_STATUS_PASSWORD_FRM,
+      PROMOTE_APPLICATION_STATUS_EMAIL_FRM,
     } = businessAppReviewStore;
+    const { applicationRoles } = this.props.businessAppStore;
     const { fields } = APPLICATION_STATUS_COMMENT_FRM;
     const { inProgress } = uiStore;
     const { errors } = uiStore;
@@ -133,6 +147,25 @@ export default class StatusChangeAppModal extends Component {
             {params.action === 'PROMOTE'
               ? (
               <>
+                {applicationRoles && applicationRoles.includes('investor') && (
+                  <>
+                    <FormInput
+                      fluid
+                      type="text"
+                      name="emailAddress"
+                      fielddata={PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress}
+                      changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_EMAIL_FRM')}
+                    />
+                    {!PROMOTE_APPLICATION_STATUS_EMAIL_FRM.meta.isDirty
+                      ? (
+                        <p className="negative-text">
+                          This email is already registered as an investor.  Please enter a new email address.
+                        </p>
+                      )
+                      : ''
+                    }
+                  </>
+                )}
                 <FormInput
                   fluid
                   type="password"

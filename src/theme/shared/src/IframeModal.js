@@ -5,10 +5,23 @@ import { InlineLoader } from '../index';
 class IframeModal extends React.Component {
   render() {
     const {
-      srcUrl, open, close, loading,
+      srcUrl, open, close, loading, trigger, isPdf,
     } = this.props;
+    if (isPdf) {
+      return (
+<Modal open={open} size="large" closeIcon trigger={trigger} onClose={close}>
+      <Modal.Content>
+        <div className="pdf-viewer">
+          {(loading || !srcUrl) ? <InlineLoader />
+            : <embed width="100%" height="100%" title="agreement" src={srcUrl} />
+          }
+        </div>
+      </Modal.Content>
+    </Modal>
+      );
+    }
     return (
-      <Modal open={open} size="large" closeIcon onClose={close}>
+      <Modal open={open} size="large" closeIcon trigger={trigger} onClose={close}>
         <Modal.Content>
           <div className="pdf-viewer">
             {(loading || !srcUrl) ? <InlineLoader />
