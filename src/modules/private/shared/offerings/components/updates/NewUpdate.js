@@ -161,7 +161,7 @@ export default class NewUpdate extends Component {
                                 }
                               </div>
                               <Header.Content className="grey-header">
-                                {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
+                                {!isNew && isManager && !newUpdateId ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
                                 <Header.Subheader>{moment().format('ll')}</Header.Subheader>
                               </Header.Content>
                             </Header>
@@ -171,7 +171,7 @@ export default class NewUpdate extends Component {
                         </Modal>
                       </List.Item>
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id)} />
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
                       </List.Item>
                     </List>
                   </Card.Content>
