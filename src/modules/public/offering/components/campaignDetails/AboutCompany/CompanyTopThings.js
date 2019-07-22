@@ -10,7 +10,7 @@ class CompanyTopThings extends Component {
     } = this.props;
     return (
       <>
-        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : 'mt-20'} anchor-wrap mb-30`}>
           Company Description
           <span className="anchor" id="company-description" />
         </Header>
