@@ -91,8 +91,8 @@ export default class Documents extends Component {
   render() {
     const { dataRoomDocs } = this.props.campaignStore;
     return (
-      <>
-        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      <div>
+        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : 'mt-20'} anchor-wrap mb-30`}>
           Documents
           <span className="anchor" id="data-room" />
         </Header>
@@ -120,7 +120,7 @@ export default class Documents extends Component {
         &&
         <LegalDoc doc={this.state.doc} close={this.close} />
         }
-      </>
+      </div>
     );
   }
 }

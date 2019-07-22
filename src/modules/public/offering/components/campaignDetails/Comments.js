@@ -106,12 +106,12 @@ class Comments extends Component {
     const {
       MESSAGE_FRM, msgEleChange, buttonLoader,
     } = this.props.messageStore;
-    const { showOnlyOne } = this.props;
+    const { showOnlyOne, newLayout } = this.props;
     comments = showOnlyOne ? [get(comments, '[0]')] : comments;
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
-      <div className="campaign-content-wrapper">
-        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      <div className={newLayout ? '' : 'campaign-content-wrapper'}>
+        <Header as="h3" className={`${newLayout ? 'mt-50 mb-50' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
         </Header>
