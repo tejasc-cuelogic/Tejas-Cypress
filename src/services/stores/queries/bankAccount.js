@@ -58,4 +58,8 @@ mutation linkBankRequestDeny($accountId: String!, $userId: String!, $justificati
     accountId: $accountId
     justification: $justification
   )
+  {
+    verified
+    message
+  }
 }`;

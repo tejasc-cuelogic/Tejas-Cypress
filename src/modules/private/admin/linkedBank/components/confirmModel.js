@@ -28,8 +28,7 @@ export default class ConfirmModel extends Component {
       formChange: this.props.bankAccountStore.formChange },
   })
 
-  handleConfirm = (form, action) => {
-    const { accountId, userId } = this.props;
+  handleConfirm = (form, action, accountId, userId) => {
     const { value } = form.fields.reason;
     this.props.bankAccountStore.updateAccountChangeAction(accountId, userId, value, action === 'deny').then(() => {
       this.handleBack();
@@ -40,6 +39,7 @@ export default class ConfirmModel extends Component {
     const actionValue = this.props.match.params.action;
     const { inProgress } = this.props.uiStore;
     const confirmForm = this.confirmForm();
+    const { accountId, userId } = this.props;
     const { formChange } = confirmForm[actionValue];
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
@@ -55,7 +55,7 @@ export default class ConfirmModel extends Component {
               changed={(e, result) => formChange(e, result, confirmForm[actionValue].formKey)}
             />
             <div className="center-align mt-30">
-              <Button className="primary relaxed" content={`${confirmForm[actionValue].btntext} Link Bank Request`} loading={inProgress} disabled={!confirmForm[actionValue].form.meta.isValid || inProgress} onClick={() => this.handleConfirm(confirmForm[actionValue].form, actionValue)} />
+              <Button className="primary relaxed" content={`${confirmForm[actionValue].btntext} Link Bank Request`} loading={inProgress} disabled={!confirmForm[actionValue].form.meta.isValid || inProgress} onClick={() => this.handleConfirm(confirmForm[actionValue].form, actionValue, accountId, userId)} />
             </div>
           </Form>
         </Modal.Content>

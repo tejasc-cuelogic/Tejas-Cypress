@@ -18,7 +18,9 @@ export default class AllRequests extends Component {
   }
 
   componentWillMount() {
-    this.props.bankAccountStore.initRequest();
+    if (!this.props.bankAccountStore.apiCall) {
+      this.props.bankAccountStore.initRequest();
+    }
   }
 
   getRoutingNumber = (e, accountId, userId) => {
@@ -96,8 +98,8 @@ export default class AllRequests extends Component {
                     </Table.Cell>
                     <Actions
                       inProgress={inProgress}
-                      userId={req.userId}
-                      accountId={req.accountId}
+                      userId={get(req, 'userId')}
+                      accountId={get(req, 'accountId')}
                       isLocked={get(req, 'userInfo.locked.lock') === 'LOCKED'}
                       updateAccountChangeAction={bankAccountStore.updateAccountChangeAction}
                     />

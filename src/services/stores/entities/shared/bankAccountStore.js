@@ -31,6 +31,8 @@ export class BankAccountStore {
 
   @observable bankSelect = false;
 
+  @observable apiCall = false;
+
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
 
   @observable formBankRequestVerifyDeny = Validator.prepareFormObject(BANK_REQUEST_VERIFY_DENY_FORM);
@@ -352,6 +354,7 @@ export class BankAccountStore {
           if (res && !this.data.loading) {
             this.setDb(res.listLinkedBankUsers.linkedBankList);
           }
+          this.setFieldValue('apiCall', true);
         },
       });
     }
@@ -700,6 +703,7 @@ export class BankAccountStore {
 
   @action
   updateAccountChangeAction = (accountId, userId, justification, isDeny = false) => {
+    uiStore.setProgress();
     this.addLoadingRequestId(userId);
     return new Promise((resolve, reject) => {
       client
@@ -714,12 +718,14 @@ export class BankAccountStore {
         .then((res) => {
           this.removeLoadingRequestId(userId);
           Helper.toast(isDeny ? (res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
+          uiStore.setProgress(false);
           resolve();
         })
         .catch((error) => {
           if (error) {
             Helper.toast(error.message, 'error');
             uiStore.setErrors(error.message);
+            uiStore.setProgress(false);
             reject();
             this.removeLoadingRequestId(userId, true);
           }

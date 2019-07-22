@@ -14,7 +14,7 @@ const actions = {
 @observer
 export default class Actions extends Component {
   handleOnClickAction(action) {
-    this.props.history.push(`/app/change-linked-bank-requests/${action}`);
+    this.props.history.push(`/app/change-linked-bank-requests/${this.props.accountId}/${action}`);
   }
 
   render() {
@@ -36,7 +36,7 @@ export default class Actions extends Component {
             : <Button disabled className="red">Locked</Button>
           }
         </Button.Group>
-        <Route exact path={`${match.url}/:action`} render={props => <ConfirmModel {...props} userId={userId} accountId={accountId} refLink={match.url} />} />
+        <Route exact path={`${match.url}/${accountId}/:action`} render={props => <ConfirmModel {...props} userId={userId} accountId={accountId} refLink={match.url} />} />
       </Table.Cell>
     );
   }
