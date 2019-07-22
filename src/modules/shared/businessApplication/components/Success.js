@@ -160,18 +160,11 @@ class Success extends Component {
                                 fielddata={fields[field]}
                                 changed={signupChange}
                               />
-                              {field === 'email' && (
-                                userRoles
-                                  ? (
-                                  <p className="negative-text">
-                                    {`This email is already registered as an ${userRoles}.  Please enter a new email address.`}
-                                  </p>
-                                  ) : (
-                                  <p className="negative-text">
-                                    This email address is already registered. Please provide new email address
-                                  </p>
-                                  ))
-                              }
+                              {field === 'email' && userRoles.length ? (
+                                <p className="negative-text">
+                                  {`This email is already registered as an ${userRoles}.  Please enter a new email address.`}
+                                </p>
+                              ) : ''}
                             </>
                           )
                       ))
