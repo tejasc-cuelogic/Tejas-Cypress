@@ -9,7 +9,9 @@ import { FormCheckbox } from '../../../../theme/form';
 @observer
 export default class CrowdPay extends Component {
   componentWillMount() {
-    this.props.bankAccountStore.initRequest();
+    if (!this.props.bankAccountStore.apiCall) {
+      this.props.bankAccountStore.initRequest();
+    }
   }
 
   setSearchParam = (e, { name, value }) => this.props.bankAccountStore.setInitiateSrch(name, value);
