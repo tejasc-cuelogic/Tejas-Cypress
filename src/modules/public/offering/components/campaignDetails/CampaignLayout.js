@@ -37,7 +37,7 @@ class CampaignLayout extends Component {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
-        behavior: 'smooth',
+        // behavior: 'smooth',
       });
     } else {
       // const { campaignNavData } = this.props.campaignStore;

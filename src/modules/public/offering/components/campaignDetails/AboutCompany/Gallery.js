@@ -29,7 +29,7 @@ class Gallery extends Component {
           {get(campaign, 'media.gallery')
             ? campaign.media.gallery.map((data, index) => (
               <>
-                {index < 3
+                {index < (newLayout ? 1 : 3)
                   && <Image64 onClick={e => this.handleViewGallary(e, index)} fluid className="about-gallery-bg" srcUrl={data.url} />
                 }
               </>
