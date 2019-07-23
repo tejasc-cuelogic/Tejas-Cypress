@@ -1619,7 +1619,7 @@ export class OfferingCreationStore {
         variables: { ...params, ...formData },
       }).then((data) => {
         uiStore.setProgress(false);
-        // this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
+        this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
         console.log(data);
       }).catch((err) => {
         uiStore.setProgress(false);

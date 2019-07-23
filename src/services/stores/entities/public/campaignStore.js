@@ -98,14 +98,18 @@ export class CampaignStore {
   }
 
   @action
-  getIssuerIdForOffering = id => new Promise((resolve) => {
+  getIssuerIdForOffering = id => new Promise((resolve, reject) => {
     this.details = graphql({
       client: clientPublic,
       query: getOfferingById,
       variables: { id },
       onFetch: (data) => {
         if (data && !this.details.loading) {
-          resolve(data.getOfferingDetailsBySlug);
+          if (data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length) {
+            resolve(data.getOfferingDetailsBySlug);
+          } else {
+            reject();
+          }
         }
       },
       fetchPolicy: 'network-only',
@@ -241,7 +245,7 @@ export class CampaignStore {
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
     campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
     campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');
-    campaignStatus.history = get(campaign, 'campaign.offering.about.history');
+    campaignStatus.history = get(campaign, 'offering.about.history');
     campaignStatus.team = get(campaign, 'leadership');
     campaignStatus.useOfProcceds = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
