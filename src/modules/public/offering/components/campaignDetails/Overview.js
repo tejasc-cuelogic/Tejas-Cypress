@@ -43,7 +43,7 @@ class Overview extends Component {
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
-    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'REMOVE');
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
   }
 
   handleOnScroll = () => {
