@@ -123,7 +123,7 @@ class Success extends Component {
                 will walk you through the steps and keep the process organized.`
               }
             </p>
-            {userExists && userRoles.includes('issuer')
+            {this.props.isPublic && userExists && userRoles.includes('issuer')
               && <h3 className="ui header">Log In</h3>
             }
             {this.props.isPublic
@@ -160,18 +160,11 @@ class Success extends Component {
                                 fielddata={fields[field]}
                                 changed={signupChange}
                               />
-                              {field === 'email' && (
-                                userRoles
-                                  ? (
-                                  <p className="negative-text">
-                                    {`This email is already registered as an ${userRoles}.  Please enter a new email address.`}
-                                  </p>
-                                  ) : (
-                                  <p className="negative-text">
-                                    This email address is already registered. Please provide new email address
-                                  </p>
-                                  ))
-                              }
+                              {field === 'email' && userRoles.length ? (
+                                <p className="negative-text">
+                                  {`This email is already registered as an ${userRoles}.  Please enter a new email address.`}
+                                </p>
+                              ) : ''}
                             </>
                           )
                       ))

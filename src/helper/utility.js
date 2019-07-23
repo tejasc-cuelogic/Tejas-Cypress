@@ -4,6 +4,7 @@
 import { toast } from 'react-toastify';
 import _ from 'lodash';
 import moment from 'moment';
+import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
@@ -110,6 +111,12 @@ export class Utility {
   encryptNumberWithX = (number) => {
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
+  }
+
+  encrypSsnNumberByForm = (form) => {
+    const formData = _.cloneDeep(toJS({ ...form }));
+    formData.ssn.value = this.encryptNumberWithX(formData.ssn.value);
+    return formData;
   }
 
   replaceKeysDeep = (obj, keysMap) => _.transform(obj, (result, value, key) => {
@@ -245,6 +252,27 @@ export class Utility {
       console.log(e);
     }
   }
+
+  eventListnerHandler = (className, funName, action = 'add') => {
+    const classname = document.getElementsByClassName(className);
+    Array.from(classname).forEach((element) => {
+      element[`${action}EventListener`]('click', this[funName]);
+    });
+  }
+
+  toggleReadMore = (e) => {
+    const htmlContent = e.target.closest('.parsed-data').querySelector('.html-toggle-content');
+    const toggleButtonText = e.target.closest('.parsed-data').querySelector('.toggleReadMoreText');
+    if (htmlContent.classList.contains('hide-content')) {
+      htmlContent.classList.add('read-content');
+      htmlContent.classList.remove('hide-content');
+      toggleButtonText.innerHTML = 'Collapse ';
+    } else {
+      htmlContent.classList.add('hide-content');
+      htmlContent.classList.remove('read-content');
+      toggleButtonText.innerHTML = 'Expand ';
+    }
+  };
 }
 
 export default new Utility();

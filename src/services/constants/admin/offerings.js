@@ -277,6 +277,18 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  revShareSummaryUpload: {
+    label: 'Revenue Sharing Summary Upload',
+    value: '',
+    error: undefined,
+    showLoader: false,
+    rule: 'optional',
+    preSignedUrl: '',
+    id: '',
+    fileData: '',
+    fileName: '',
+    objType: 's3File',
+  },
   isNewBusiness: {
     value: '',
     values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],

@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import money from 'money-math';
-import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
+import { Header, Table, Divider, Grid, Popup, Icon, Statistic, Button } from 'semantic-ui-react';
 import {
   CAMPAIGN_KEYTERMS_SECURITIES,
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
 } from '../../../../../../constants/offering';
-import { InlineLoader } from '../../../../../../theme/shared';
+import { InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
+import { UPLOADS_CONFIG } from '../../../../../../constants/aws';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -444,6 +445,17 @@ class KeyTermsDetails extends Component {
                 ? (
 <p className="detail-section">
                   <HtmlEditor readOnly content={revenueShareSummary} />
+                  {newLayout && get(KeyTerms, 'revShareSummaryUpload')
+                  && (
+                    <section className="center-align mt-30 field-wrap">
+                    <Header as="h3" className="anchor-wrap">How do Revenue Sharing Notes work?</Header>
+                    <span className="mb-10">See our Infographic for a detailed explaination</span>
+                    <div>
+                    <IframeModal isPdf srcUrl={`https://${UPLOADS_CONFIG.bucket}/${get(KeyTerms, 'revShareSummaryUpload').url}`} trigger={<Button className="primary mt-20" content="View" />} />
+                    </div>
+                    </section>
+                  )
+                  }
                 </p>
                 )
                 : <InlineLoader text="No data available" className="bg-offwhite" />

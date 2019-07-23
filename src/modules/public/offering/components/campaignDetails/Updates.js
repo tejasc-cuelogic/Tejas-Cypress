@@ -64,7 +64,7 @@ class Updates extends Component {
                       <div className="ui image avatar-image">
                         {companyAvatarUrl && companyAvatarUrl.length
                           ? <Image64 srcUrl={companyAvatarUrl} circular />
-                          : <UserAvatar UserInfo={{ firstName: dataItem.actingUserInfo.info.firstName, lastName: dataItem.actingUserInfo.info.lastName, avatarUrl: dataItem.actingUserInfo.info.avatar.url }} />
+                          : <UserAvatar UserInfo={{ firstName: get(dataItem, 'actingUserInfo.info.firstName'), lastName: get(dataItem, 'actingUserInfo.info.lastName'), avatarUrl: get(dataItem, 'actingUserInfo.info.avatar.url') || '' }} />
                       }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">

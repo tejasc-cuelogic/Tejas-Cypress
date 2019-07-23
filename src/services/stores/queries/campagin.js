@@ -103,6 +103,11 @@ export const campaignDetailsQuery = gql`
       id
     }
     keyTerms {
+      revShareSummaryUpload {
+        id
+        url
+        isPublic
+      }
       unitPrice
       roundType
       premoneyValuation

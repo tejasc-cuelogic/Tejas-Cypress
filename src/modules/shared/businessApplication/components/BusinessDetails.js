@@ -9,6 +9,7 @@ import { InlineLoader } from '../../../../theme/shared';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
+import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore', 'agreementsStore', 'commonStore', 'userStore', 'uiStore')
 @observer
@@ -291,16 +292,27 @@ export default class BusinessDetails extends Component {
                         changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                         dateOfBirth
                       />
-                      <MaskedInput
-                        readOnly={formReadOnlyMode}
-                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                        ssn
-                        type="text"
-                        name="ssn"
-                        asterisk="true"
-                        fielddata={owner.ssn}
-                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                      />
+                      {formReadOnlyMode
+                        ? (
+                          <FormInput
+                            key="ssn"
+                            name="ssn"
+                            fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
+                            displayMode={formReadOnlyMode}
+                          />
+                        )
+                        : (
+                          <MaskedInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            ssn
+                            type="text"
+                            name="ssn"
+                            asterisk="true"
+                            fielddata={owner.ssn}
+                            changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                          />
+                        )}
                     </Form.Group>
                     <Form.Group widths="equal">
                       <FormInput

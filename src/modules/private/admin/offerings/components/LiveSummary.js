@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Grid, Icon, Header } from 'semantic-ui-react';
+import { Card, Grid, Icon, Header, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
@@ -21,13 +21,15 @@ const rightSummary = offer => [
   { title: 'Email', content: get(offer, 'issuerDetails.email.address') || 'N/A' },
   { title: 'Phone', content: get(offer, 'issuerDetails.phone.number') || 'N/A' },
 ];
-const LiveSummary = ({ offer, refLink }) => (
+
+const LiveSummary = ({ offer, refLink, onClick }) => (
   <Grid columns="equal">
     <Grid.Row>
       <Grid.Column>
         <Card fluid className="ba-info-card">
           <Card.Header>
-            Information
+            Information {' '}
+            <Button color="green" className="link-button" content="Box Link" onClick={onClick} />
             <small className="pull-right"><Link to={`${refLink}/editOffering`}><Icon className="ns-pencil" />Edit</Link></small>
           </Card.Header>
           <Card.Content>

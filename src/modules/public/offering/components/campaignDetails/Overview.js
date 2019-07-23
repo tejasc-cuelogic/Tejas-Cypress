@@ -10,6 +10,7 @@ import VideoModal from './Overview/VideoModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
 import IssuerStatement from './Overview/IssuerStatement';
+import Helper from '../../../../../helper/utility';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -36,11 +37,13 @@ class Overview extends Component {
         this.props.navStore.setFieldValue('currentActiveHash', sel);
       }
     }
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
   }
 
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
   }
 
   handleOnScroll = () => {
