@@ -25,25 +25,6 @@ window.jQuery = $;
 @inject('uiStore')
 @observer
 export default class HtmlEditor extends React.Component {
-  componentDidMount() {
-    const classname = $('.toggleReadMore');
-    Array.from(classname).forEach((element) => {
-      element.addEventListener('click', this.toggleReadMore);
-    });
-  }
-
-  toggleReadMore = (e) => {
-    if ($(e.target).parents('.parsed-data').find('.html-toggle-content').hasClass('hide-content')) {
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').removeClass('hide-content');
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').addClass('read-content');
-      $(e.target).parents('.parsed-data').find('.toggleReadMoreText').html('Collapse ');
-    } else {
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').removeClass('read-content');
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').addClass('hide-content');
-      $(e.target).parents('.parsed-data').find('.toggleReadMoreText').html('Expand ');
-    }
-  };
-
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
