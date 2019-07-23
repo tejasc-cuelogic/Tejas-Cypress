@@ -196,14 +196,14 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required|max:2147483647', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
   amountNeeded: {
     value: '',
     maxLength: 16,
     label: 'How much do you need to raise on NextSeed?',
     error: undefined,
-    rule: 'required|max:2147483647',
+    rule: 'required',
     customErrors: { required: 'required' },
     placeHolder: 'e.g. $50,000',
     tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a href="/business" target="_blank">click here.</a></span>),

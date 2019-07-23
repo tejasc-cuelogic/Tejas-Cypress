@@ -84,7 +84,7 @@ export default class AddFunds extends Component {
       isAccountPresent,
       addFundsByAccType,
     } = this.props.bankAccountStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const isInValid = this.isValidFund(addFundsByAccType);
     return (
       <>
@@ -113,10 +113,10 @@ export default class AddFunds extends Component {
               </Message>
               )
             }
-            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent} />
+            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
           </Form>
           {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
-            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
           }
         </div>
       </>

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
-import { filter, find, get } from 'lodash';
-import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
+import omitDeep from 'omit-deep';
+import { filter, find, get, capitalize } from 'lodash';
+import beautify from 'json-beautify';
+import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal, Grid, Table } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { MaskedInput, FormInput } from '../../../../../theme/form';
@@ -44,6 +46,8 @@ export default class Close extends Component {
     action: '',
     confirmed: false,
     inProgress: false,
+    visibilityStatus: false,
+    actionLabel: '',
   }
 
   componentWillMount() {
@@ -77,7 +81,7 @@ export default class Close extends Component {
     this.props.offeringCreationStore.setFieldValue('outputMsg', null);
   };
 
-  closeAction = async (status, step, forced = false) => {
+  closeAction = async (status, step, forced = false, actionLabel = '') => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
     const { confirmed } = this.state;
@@ -85,7 +89,7 @@ export default class Close extends Component {
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
     } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION' || status === 'PROCESS_NOTES' || status === 'VALIDATE_NOTES') {
-      this.setState({ openModal: true, action: status });
+      this.setState({ openModal: true, action: status, actionLabel });
     } else {
       if (status === 'close' || status === 'update') {
         this.handleUpdateOffering(status);
@@ -98,7 +102,7 @@ export default class Close extends Component {
           step,
         );
       }
-      this.setState({ confirmed: false, action: '' });
+      this.setState({ confirmed: false, action: '', actionLabel });
     }
   }
 
@@ -166,6 +170,21 @@ export default class Close extends Component {
       });
   }
 
+  jsonModal = json => (
+  <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
+      <Modal.Content>
+      <pre className="no-updates bg-offwhite padded">
+        {beautify(json, null, 2, 100)}
+      </pre>
+      </Modal.Content>
+      </Modal>
+  );
+
+  toggleVisibilityStatus = () => {
+    const currStatus = this.state.visibilityStatus;
+    this.setState({ visibilityStatus: !currStatus });
+  }
+
   render() {
     const {
       OFFERING_CLOSE_FRM,
@@ -180,6 +199,8 @@ export default class Close extends Component {
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer, offerStatus } = this.props.offeringsStore;
+    let { closureProcess } = offer;
+    closureProcess = omitDeep(closureProcess, ['__typename']);
     const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
@@ -274,7 +295,7 @@ out of required
                       {filter(closingActions, a => a.ref === 1).map(fA => (
                         <Button
                           loading={this.state.inProgress === fA.enum}
-                          onClick={() => this.closeAction(fA.enum, 1)}
+                          onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
                           primary
                         >
                           {fA.label}
@@ -300,14 +321,19 @@ out of required
                 </Form.Group>
                 {outputMsg && outputMsg.data
                 && (
-                  <FieldError error={outputMsg.data} />
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
                 )
                 }
                 <Button.Group className="mt-50">
                   {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
-                      onClick={() => this.closeAction(fA.enum, 2)}
+                      onClick={() => this.closeAction(fA.enum, 2, false, fA.label)}
                       primary
                     >{fA.label}
                     </Button>
@@ -335,14 +361,19 @@ out of required
                   </Form.Group>
                   {outputMsg && outputMsg.data
                 && (
-                  <FieldError error={outputMsg.data} />
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
                 )
                 }
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
-                        onClick={() => this.closeAction(fA.enum, 3)}
+                        onClick={() => this.closeAction(fA.enum, 3, false, fA.label)}
                         primary
                       >{fA.label}
                       </Button>
@@ -366,14 +397,19 @@ out of required
                 </Form.Group>
                 {outputMsg && outputMsg.data
                 && (
-                  <FieldError error={outputMsg.data} />
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
                 )
                 }
                 <Button.Group className="mt-50">
                 {filter(closingActions, a => a.ref === 4).map(fA => (
                   <Button
                     loading={inProgress === fA.enum}
-                    onClick={() => this.closeAction(fA.enum, 4)}
+                    onClick={() => this.closeAction(fA.enum, 4, false, fA.label)}
                     primary
                   >
                     {fA.label}
@@ -429,6 +465,34 @@ out of required
               </Card>
             ) : null
           }
+          <Header as="h4"> Closure Process Status <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+          {this.state.visibilityStatus
+          && (
+          <Grid columns={3}>
+          {closureProcess ? Object.keys(closureProcess).map(key => (
+            <Grid.Column className="center-align"><b>{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</b>
+            <div className="table-wrapper">
+            <Table unstackable basic="very">
+              <Table.Body>
+                {closureProcess[key] ? Object.keys(closureProcess[key]).map(k => (
+                <Table.Row>
+                  <Table.Cell>{capitalize(k.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Table.Cell>
+                  <Table.Cell>
+                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? moment(closureProcess[key][k]).format('MM/DD/YYYY') : '-' : closureProcess[key][k] || '-'}
+                  </Table.Cell>
+                </Table.Row>
+                )) : <p>No Data Found</p>
+                }
+                </Table.Body>
+              </Table>
+            </div>
+            </Grid.Column>
+          ))
+            : <p>No Data Found</p>}
+          </Grid>
+          )
+          }
+          <Divider section />
           <Contingency
             formArrayChange={formArrayChange}
             form={CLOSING_CONTITNGENCIES_FRM}
@@ -441,7 +505,7 @@ out of required
           <Modal.Header>
             {this.state.action === 'VALIDATE_NOTES' ? 'Validate Notes' : this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
           </Modal.Header>
-          {!this.state.action === 'VALIDATE_NOTES'
+          {this.state.action !== 'VALIDATE_NOTES'
             && (
           <Modal.Content className="pb-20">
             Please select notification action to perform.
