@@ -35,9 +35,12 @@ class offerDetails extends Component {
   }
 
   componentWillMount() {
-    const { currentUser } = this.props.userStore;
+    const { currentUser, isAdmin } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-      const oMinData = data ? data[0] : null;
+      const oMinData = data.length ? data[0] : null;
+      if (['TERMINATED', 'FAILED'].includes(oMinData.stage) && !isAdmin) {
+        this.props.history.push('/offerings');
+      }
       if ((currentUser && currentUser.roles.includes('admin'))
         || oMinData.isAvailablePublicly
         || oMinData.stage === 'LIVE'
@@ -45,9 +48,11 @@ class offerDetails extends Component {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
       } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
-        this.setState(oMinData.stage === 'CREATION'
-          ? { showPassDialog: true, preLoading: false }
-          : { showPassDialog: false, found: 2, preLoading: false });
+        if (oMinData.stage === 'CREATION') {
+          this.setState({ showPassDialog: true, preLoading: false });
+        } else {
+          this.props.history.push('/offerings');
+        }
       } else if (currentUser && currentUser.roles.includes('investor')) {
         const params = {
           userId: currentUser.sub,
@@ -59,7 +64,7 @@ class offerDetails extends Component {
             this.setState({ preLoading: false, showPassDialog: false });
             this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
           } else {
-            this.setState({ showPassDialog: false, found: 2, preLoading: false });
+            this.props.history.push('/offerings');
           }
         });
       } else {
@@ -71,7 +76,7 @@ class offerDetails extends Component {
           this.props.history.push('/login');
         }
       }
-    });
+    }).catch(() => this.props.history.push('/offerings'));
   }
 
   componentDidMount() {
@@ -170,7 +175,7 @@ class offerDetails extends Component {
 />
       );
     }
-    if (campaignStore.loading || !campaignStore.campaignStatus.doneComputing || this.state.preLoading) {
+    if (campaignStore.loading || (this.state.found !== 2 && !campaignStore.campaignStatus.doneComputing) || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
