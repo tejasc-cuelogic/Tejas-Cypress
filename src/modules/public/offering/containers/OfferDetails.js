@@ -35,9 +35,12 @@ class offerDetails extends Component {
   }
 
   componentWillMount() {
-    const { currentUser } = this.props.userStore;
+    const { currentUser, isAdmin } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-      const oMinData = data ? data[0] : null;
+      const oMinData = data.length ? data[0] : null;
+      if (['TERMINATED', 'FAILED'].includes(oMinData.stage) && !isAdmin) {
+        this.props.history.push('/offerings');
+      }
       if ((currentUser && currentUser.roles.includes('admin'))
         || oMinData.isAvailablePublicly
         || oMinData.stage === 'LIVE'
@@ -71,7 +74,7 @@ class offerDetails extends Component {
           this.props.history.push('/login');
         }
       }
-    });
+    }).catch(() => this.setState({ showPassDialog: false, found: 2, preLoading: false }));
   }
 
   componentDidMount() {
@@ -170,7 +173,7 @@ class offerDetails extends Component {
 />
       );
     }
-    if (campaignStore.loading || !campaignStore.campaignStatus.doneComputing || this.state.preLoading) {
+    if (campaignStore.loading || (this.state.found !== 2 && !campaignStore.campaignStatus.doneComputing) || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {

@@ -98,14 +98,18 @@ export class CampaignStore {
   }
 
   @action
-  getIssuerIdForOffering = id => new Promise((resolve) => {
+  getIssuerIdForOffering = id => new Promise((resolve, reject) => {
     this.details = graphql({
       client: clientPublic,
       query: getOfferingById,
       variables: { id },
       onFetch: (data) => {
         if (data && !this.details.loading) {
-          resolve(data.getOfferingDetailsBySlug);
+          if (data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length) {
+            resolve(data.getOfferingDetailsBySlug);
+          } else {
+            reject();
+          }
         }
       },
       fetchPolicy: 'network-only',
