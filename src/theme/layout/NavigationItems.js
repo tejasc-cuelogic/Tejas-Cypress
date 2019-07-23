@@ -95,7 +95,7 @@ export class NavItems extends Component {
       location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
     const app = (isApp) ? 'app' : '';
-    const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
+    const myNavItems = this.props.navItems.filter(n => n.headerMobile !== false && n.noNav !== true);
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     return myNavItems.map((item, key) => (
@@ -185,23 +185,23 @@ export class NavItems extends Component {
             )
             : (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader)
               ? null
-              : ((item.to === 'updates' && this.props.countData && this.props.countData[item.to])
-              || (item.to !== 'updates')
+              : (((item.to === 'updates' || item.to === '#updates') && this.props.countData && this.props.countData[item.to])
+              || (item.to !== 'updates' || item.to !== '#updates')
                 ? (item.title === 'Bonus Rewards' && this.props.isBonusReward)
               || (item.title !== 'Bonus Rewards') ? (
                 <Menu.Item
                   key={item.to}
                   name={item.to}
-                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
+                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
                   as={NavLink}
                   onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                  to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
+                  to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : '/'}${item.to}`}
                 >
                   {item.icon && <Icon className={item.icon} />}
                   {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
-                  {item.title !== 'Updates' ? <span>{item.title}</span> : (item.title === 'Updates' && item.to === 'updates' && this.props.countData ? <span>{item.title}</span> : '')}
-                  {(item.to === 'updates' || item.to === 'comments') && this.props.countData
-                    ? <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
+                  {item.title !== 'Updates' ? <span>{item.title}</span> : (item.title === 'Updates' && (item.to === 'updates' || item.to === '#updates') && this.props.countData ? <span>{item.title}</span> : '')}
+                  {((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) && this.props.countData
+                    ? <Label circular color="blue" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
                   }
                 </Menu.Item>
                   ) : '' : ''

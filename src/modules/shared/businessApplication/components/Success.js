@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { FormInput, FormPasswordStrength } from '../../../../theme/form';
 import { ListErrors } from '../../../../theme/shared';
 import { authActions } from '../../../../services/actions';
 import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore', 'authStore', 'userStore', 'uiStore')
+@withRouter
 @observer
 class Success extends Component {
   state = {
@@ -31,6 +34,8 @@ class Success extends Component {
         this.props.authStore.setUserDetails(fields);
       }
     }
+    this.props.uiStore.setFieldvalue('authRef', this.props.match.url);
+    this.props.uiStore.setFieldvalue('isFromBusinessApplication', true);
   }
 
   onProceed = (e) => {
@@ -38,6 +43,7 @@ class Success extends Component {
     const {
       userExists, currentApplicationType, applicationId, setFieldvalue,
     } = this.props.businessAppStore;
+    this.props.businessAppStore.setFieldvalue('showUserError', false);
     if (this.props.isPublic) {
       this.setState({ showProgressLoader: true });
       if (!userExists) {
@@ -72,14 +78,21 @@ class Success extends Component {
     authActions.login()
       .then(() => {
         this.setState({ showProgressLoader: false });
-        const { roles } = this.props.userStore.currentUser;
+        const roles = get(this.props.userStore, 'currentUser.roles');
         this.props.authStore.resetForm('LOGIN_FRM');
         if (roles && roles.includes('issuer')) {
           const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
+        } else {
+          this.props.businessAppStore.setFieldvalue('showUserError', true);
+          this.props.businessAppStore.setFieldvalue('userExists', false);
         }
       }).catch(() => {
         this.setState({ showProgressLoader: false });
+      }).finally(() => {
+        this.props.uiStore.setFieldvalue('authRef', null);
+        this.props.uiStore.setFieldvalue('isFromBusinessApplication', false);
+        this.props.uiStore.removeOneFromProgressArray('login');
       });
   }
 
@@ -88,7 +101,7 @@ class Success extends Component {
       signupChange, togglePasswordType, SIGNUP_FRM,
       LoginChange, LOGIN_FRM, pwdInputType, currentScore,
     } = this.props.authStore;
-    const { userExists } = this.props.businessAppStore;
+    const { userExists, userRoles } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
     const { errors } = this.props.uiStore;
     return (
@@ -110,57 +123,73 @@ class Success extends Component {
                 will walk you through the steps and keep the process organized.`
               }
             </p>
+            {userExists && userRoles.includes('issuer')
+              && <h3 className="ui header">Log In</h3>
+            }
             {this.props.isPublic
               && (
-<Form error>
+                <Form error>
                 <Grid>
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                    {!userExists
+                    {!userExists || !userRoles.includes('issuer')
                       ? ['email', 'password', 'verify'].map(field => (
                         (field === 'password')
                           ? (
-<FormPasswordStrength
-  key="password"
-  name="password"
-  type="password"
-  userInputs={[fields.email.value]}
-  iconDisplay
-  minLength={8}
-  minScore={4}
-  tooShortWord="Weak"
-  scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-  inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-  changed={signupChange}
-  fielddata={fields[field]}
-/>
+                              <FormPasswordStrength
+                                key="password"
+                                name="password"
+                                type="password"
+                                userInputs={[fields.email.value]}
+                                iconDisplay
+                                minLength={8}
+                                minScore={4}
+                                tooShortWord="Weak"
+                                scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                                inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+                                changed={signupChange}
+                                fielddata={fields[field]}
+                              />
                           )
                           : (
-<FormInput
-  key={field}
-  readOnly={field === 'email'}
-                            // icon={field !== 'email' ? togglePasswordType(field) : null}
-  type={field !== 'email' ? pwdInputType : 'text'}
-  name={field}
-  fielddata={fields[field]}
-  changed={signupChange}
-/>
+                            <>
+                              <FormInput
+                                key={field}
+                                readOnly={field === 'email' && userRoles.includes('issuer')}
+                                type={field !== 'email' ? pwdInputType : 'text'}
+                                name={field}
+                                fielddata={fields[field]}
+                                changed={signupChange}
+                              />
+                              {field === 'email' && userRoles.length ? (
+                                <p className="negative-text">
+                                  {`This email is already registered as an ${userRoles}.  Please enter a new email address.`}
+                                </p>
+                              ) : ''}
+                            </>
                           )
                       ))
-                      : ['email', 'password'].map(field => (
-                        <FormInput
-                          key={field}
-                          icon={field === 'password' ? togglePasswordType(field) : null}
-                          type={field === 'password' ? pwdInputType : 'text'}
-                          name={field}
-                          readOnly={field === 'email'}
-                          fielddata={LOGIN_FRM.fields[field]}
-                          changed={LoginChange}
-                        />
-                      ))
+                      : (
+                        <>
+                          {['email', 'password'].map(field => (
+                            <FormInput
+                              key={field}
+                              icon={field === 'password' ? togglePasswordType(field) : null}
+                              type={field === 'password' ? pwdInputType : 'text'}
+                              name={field}
+                              readOnly={field === 'email'}
+                              fielddata={LOGIN_FRM.fields[field]}
+                              changed={LoginChange}
+                            />
+                          ))}
+                        <Form.Field>
+                          <Link to="/forgot-password">Forgot password?</Link>
+                        </Form.Field>
+                        </>
+                      )
                     }
                     {errors
                       && (
-<Message error className="mt-30">
+                      <Message error className="mt-30">
                         <ListErrors errors={[errors.message]} />
                       </Message>
                       )
@@ -176,7 +205,7 @@ class Success extends Component {
         </Grid>
         {this.state.showProgressLoader
         && (
-<Dimmer active className="fullscreen">
+        <Dimmer active className="fullscreen">
           <Loader size="large">
             <Header as="h3">
               Please wait...

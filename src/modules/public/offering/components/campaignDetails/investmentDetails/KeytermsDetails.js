@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import money from 'money-math';
-import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
+import { Header, Table, Divider, Grid, Popup, Icon, Statistic, Button } from 'semantic-ui-react';
 import {
   CAMPAIGN_KEYTERMS_SECURITIES,
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
 } from '../../../../../../constants/offering';
-import { InlineLoader } from '../../../../../../theme/shared';
+import { InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
+import { UPLOADS_CONFIG } from '../../../../../../constants/aws';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -37,7 +38,7 @@ class KeyTermsDetails extends Component {
   }
 
   render() {
-    const { KeyTerms } = this.props;
+    const { KeyTerms, newLayout } = this.props;
     const {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure, campaignStatus,
     } = this.props.campaignStore;
@@ -62,11 +63,11 @@ class KeyTermsDetails extends Component {
       <>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
-            <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA'}</p>
+            <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p>
-              <b>Type of Offering</b>
+              <b className={newLayout ? 'neutral-text' : ''}>Type of Offering</b>
               {get(campaign, 'regulation')
                 && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                 ? (
@@ -85,12 +86,12 @@ class KeyTermsDetails extends Component {
             </p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Offered By</b><br />
+            <p><b className={newLayout ? 'neutral-text' : ''}>Offered By</b><br />
               {CAMPAIGN_OFFERED_BY[get(KeyTerms, 'regulation')]}
             </p>
           </Grid.Column>
         </Grid>
-        {!isMobile ? <Divider /> : null}
+        {!isMobile ? <Divider hidden={newLayout} /> : null}
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
@@ -363,10 +364,11 @@ class KeyTermsDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section={!isMobile} hidden />
+        {newLayout && <Divider section={!isMobile} hidden />}
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
           ? (
             <>
-              <Header as="h3" className={`${isTablet && 'mt-40'} mb-30 anchor-wrap`}>
+              <Header as="h3" className={`${isTablet && 'mt-40'} ${newLayout ? 'mb-40' : 'mb-30'} anchor-wrap`}>
               Total Payment Calculator
               <span className="anchor" id="total-payment-calculator" />
             </Header>
@@ -426,7 +428,7 @@ class KeyTermsDetails extends Component {
               final month) indicates the cumulative amount contractually required to be paid
               to an investor after the end of that month, assuming the loan is not prepaid.
               This calculation is a mathematical illustration only and may not reflect actual
-              performance. It does not take into account NextSeed fees of 1% on each payment
+              performance. It does not take into account NextSeed fees of {Math.trunc(get(campaign, 'keyTerms.nsFeePercentage')) || '2'}% on each payment
               made to investors. Payment is not guaranteed or insured and investors may lose
               some or all of the principal invested if the Issuer cannot make its payments.
               </p>
@@ -443,6 +445,17 @@ class KeyTermsDetails extends Component {
                 ? (
 <p className="detail-section">
                   <HtmlEditor readOnly content={revenueShareSummary} />
+                  {newLayout && get(KeyTerms, 'revShareSummaryUpload')
+                  && (
+                    <section className="center-align mt-30 field-wrap">
+                    <Header as="h3" className="anchor-wrap">How do Revenue Sharing Notes work?</Header>
+                    <span className="mb-10">See our Infographic for a detailed explaination</span>
+                    <div>
+                    <IframeModal isPdf srcUrl={`https://${UPLOADS_CONFIG.bucket}/${get(KeyTerms, 'revShareSummaryUpload').url}`} trigger={<Button className="primary" content="View" />} />
+                    </div>
+                    </section>
+                  )
+                  }
                 </p>
                 )
                 : <InlineLoader text="No data available" className="bg-offwhite" />

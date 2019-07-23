@@ -96,6 +96,7 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      rootFolderId
       goldstar {
         isin
         contactId
@@ -135,6 +136,12 @@ export const getOfferingDetails = gql`
       }
       }
       keyTerms {
+        revShareSummaryUpload {
+          id
+          url
+          fileName
+          isPublic
+        }
         unitPrice
         roundType
         premoneyValuation

@@ -8,7 +8,7 @@ import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, linkB
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
-  IRA_ADD_FUND,
+  IRA_ADD_FUND, BANK_REQUEST_VERIFY_DENY_FORM,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
 import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
@@ -31,7 +31,11 @@ export class BankAccountStore {
 
   @observable bankSelect = false;
 
+  @observable apiCall = false;
+
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
+
+  @observable formBankRequestVerifyDeny = Validator.prepareFormObject(BANK_REQUEST_VERIFY_DENY_FORM);
 
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
 
@@ -350,6 +354,7 @@ export class BankAccountStore {
           if (res && !this.data.loading) {
             this.setDb(res.listLinkedBankUsers.linkedBankList);
           }
+          this.setFieldValue('apiCall', true);
         },
       });
     }
@@ -697,7 +702,8 @@ export class BankAccountStore {
   }
 
   @action
-  updateAccountChangeAction = (accountId, userId, isDeny = false) => {
+  updateAccountChangeAction = (accountId, userId, justification, isDeny = false) => {
+    uiStore.setProgress();
     this.addLoadingRequestId(userId);
     return new Promise((resolve, reject) => {
       client
@@ -706,17 +712,20 @@ export class BankAccountStore {
           variables: {
             accountId,
             userId,
+            justification,
           },
         })
         .then((res) => {
           this.removeLoadingRequestId(userId);
           Helper.toast(isDeny ? (res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
+          uiStore.setProgress(false);
           resolve();
         })
         .catch((error) => {
           if (error) {
             Helper.toast(error.message, 'error');
             uiStore.setErrors(error.message);
+            uiStore.setProgress(false);
             reject();
             this.removeLoadingRequestId(userId, true);
           }

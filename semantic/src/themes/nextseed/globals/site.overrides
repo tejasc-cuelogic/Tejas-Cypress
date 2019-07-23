@@ -345,6 +345,14 @@ i.icon.right {
 		max-width: 100%;
 		height: auto;
 	}
+	.html-toggle-content{
+		&.read-content{
+			display: block;
+		}
+		&.hide-content{
+			display: none;
+		}
+	}
 }
 //	Helper Classes Ends
 
@@ -627,6 +635,11 @@ footer{
 	}
 	.ui.padded.segment h6.ui.header {
 		margin: @7px 0;
+	}
+	.v-2{
+		p b{
+			color: @neutral;
+		}
 	}
 }
 

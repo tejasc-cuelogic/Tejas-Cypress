@@ -37,17 +37,19 @@ export default class Overview extends Component {
   }
 
   componentWillMount() {
-    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    const { setFieldValue } = this.props.userDetailsStore;
-    setFieldValue('currentActiveAccount', accountType);
-    this.setState({ availableCashL: true, totalBalanceL: true });
-    this.props.transactionStore.getInvestorAvailableCash(false, true).then((data) => {
-      this.setState({ availableCash: get(data, 'getInvestorAvailableCash'), availableCashL: false });
-      this.props.transactionStore.getInvestorAvailableCash(true, true).then((dataN) => {
-        this.setState({ totalBalance: get(dataN, 'getInvestorAvailableCash'), totalBalanceL: false });
+    if (!this.props.copied) {
+      const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+      const { setFieldValue } = this.props.userDetailsStore;
+      setFieldValue('currentActiveAccount', accountType);
+      this.setState({ availableCashL: true, totalBalanceL: true });
+      this.props.transactionStore.getInvestorAvailableCash(false, true).then((data) => {
+        this.setState({ availableCash: get(data, 'getInvestorAvailableCash'), availableCashL: false });
+        this.props.transactionStore.getInvestorAvailableCash(true, true).then((dataN) => {
+          this.setState({ totalBalance: get(dataN, 'getInvestorAvailableCash'), totalBalanceL: false });
+        }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
       }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
-    }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
-    this.props.portfolioStore.getSummary(true);
+      this.props.portfolioStore.getSummary(true);
+    }
   }
 
   getRoutingNumber = (e, accountId, userId) => {

@@ -158,6 +158,8 @@ export class OfferingCreationStore {
 
   @observable isListingPage = false;
 
+  @observable outputMsg = null;
+
   @action
   setFieldValue = (field, value, field2 = false) => {
     if (field2) {
@@ -247,8 +249,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetForm = (form) => {
-    Validator.resetFormData(this[form]);
+  resetForm = (form, targetedFields = []) => {
+    Validator.resetFormData(this[form], targetedFields);
   }
 
   @action
@@ -575,7 +577,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate'], field) ? values.value : values.floatValue;
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate', 'ssn'], field) ? values.value : values.floatValue;
     if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -1592,6 +1594,7 @@ export class OfferingCreationStore {
   @action
   offeringClose = (params, step, scope) => {
     uiStore.setProgress(params.process);
+    this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
     if (formData.payload) {
@@ -1616,9 +1619,11 @@ export class OfferingCreationStore {
         variables: { ...params, ...formData },
       }).then((data) => {
         uiStore.setProgress(false);
+        // this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
         console.log(data);
       }).catch((err) => {
         uiStore.setProgress(false);
+        this.setFieldValue('outputMsg', { type: 'error', data: get(err, 'message') });
         console.log(err);
         Helper.toast('Something went wrong.', 'error');
       });
