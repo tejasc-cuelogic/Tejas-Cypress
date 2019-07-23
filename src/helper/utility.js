@@ -6,8 +6,6 @@ import _ from 'lodash';
 import moment from 'moment';
 import { toJS } from 'mobx';
 import money from 'money-math';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import $ from 'jquery';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 // import userStore from './../services/stores/entities/userStore';
@@ -267,14 +265,16 @@ export class Utility {
   }
 
   toggleReadMore = (e) => {
-    if ($(e.target).parents('.parsed-data').find('.html-toggle-content').hasClass('hide-content')) {
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').removeClass('hide-content');
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').addClass('read-content');
-      $(e.target).parents('.parsed-data').find('.toggleReadMoreText').html('Collapse ');
+    const htmlContent = e.target.closest('.parsed-data').querySelector('.html-toggle-content');
+    const toggleButtonText = e.target.closest('.parsed-data').querySelector('.toggleReadMoreText');
+    if (htmlContent.classList.contains('hide-content')) {
+      htmlContent.classList.remove('hide-content');
+      htmlContent.classList.add('read-content');
+      toggleButtonText.innerHTML = 'Collapse ';
     } else {
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').removeClass('read-content');
-      $(e.target).parents('.parsed-data').find('.html-toggle-content').addClass('hide-content');
-      $(e.target).parents('.parsed-data').find('.toggleReadMoreText').html('Expand ');
+      htmlContent.classList.remove('read-content');
+      htmlContent.classList.add('hide-content');
+      toggleButtonText.innerHTML = 'Expand ';
     }
   };
 }
