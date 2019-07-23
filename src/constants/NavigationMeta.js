@@ -518,10 +518,10 @@ export const PUBLIC_NAV = [
         title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
       },
       {
-        title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true, key: 'useOfProcceds',
+        title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, key: 'useOfProcceds',
       },
       {
-        title: 'Company Description', to: '#company-description', useRefLink: true, defaultActive: true, key: 'companyDescription',
+        title: 'Company Description', to: '#company-description', useRefLink: true, key: 'companyDescription',
       },
       {
         title: 'Business Model', to: '#business-model', useRefLink: true, key: 'businessModel',
