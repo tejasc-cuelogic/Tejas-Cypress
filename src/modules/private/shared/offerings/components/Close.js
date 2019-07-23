@@ -47,6 +47,7 @@ export default class Close extends Component {
     confirmed: false,
     inProgress: false,
     visibilityStatus: false,
+    actionLabel: '',
   }
 
   componentWillMount() {
@@ -80,7 +81,7 @@ export default class Close extends Component {
     this.props.offeringCreationStore.setFieldValue('outputMsg', null);
   };
 
-  closeAction = async (status, step, forced = false) => {
+  closeAction = async (status, step, forced = false, actionLabel = '') => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
     const { confirmed } = this.state;
@@ -88,7 +89,7 @@ export default class Close extends Component {
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
     } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION' || status === 'PROCESS_NOTES' || status === 'VALIDATE_NOTES') {
-      this.setState({ openModal: true, action: status });
+      this.setState({ openModal: true, action: status, actionLabel });
     } else {
       if (status === 'close' || status === 'update') {
         this.handleUpdateOffering(status);
@@ -101,7 +102,7 @@ export default class Close extends Component {
           step,
         );
       }
-      this.setState({ confirmed: false, action: '' });
+      this.setState({ confirmed: false, action: '', actionLabel });
     }
   }
 
@@ -170,7 +171,7 @@ export default class Close extends Component {
   }
 
   jsonModal = json => (
-  <Modal closeIcon trigger={<Button className="link-button highlight-text" content="see Response" />}>
+  <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
       <Modal.Content>
       <pre className="no-updates bg-offwhite padded">
         {beautify(json, null, 2, 100)}
@@ -294,7 +295,7 @@ out of required
                       {filter(closingActions, a => a.ref === 1).map(fA => (
                         <Button
                           loading={this.state.inProgress === fA.enum}
-                          onClick={() => this.closeAction(fA.enum, 1)}
+                          onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
                           primary
                         >
                           {fA.label}
@@ -332,7 +333,7 @@ out of required
                   {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
-                      onClick={() => this.closeAction(fA.enum, 2)}
+                      onClick={() => this.closeAction(fA.enum, 2, false, fA.label)}
                       primary
                     >{fA.label}
                     </Button>
@@ -372,7 +373,7 @@ out of required
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
-                        onClick={() => this.closeAction(fA.enum, 3)}
+                        onClick={() => this.closeAction(fA.enum, 3, false, fA.label)}
                         primary
                       >{fA.label}
                       </Button>
@@ -408,7 +409,7 @@ out of required
                 {filter(closingActions, a => a.ref === 4).map(fA => (
                   <Button
                     loading={inProgress === fA.enum}
-                    onClick={() => this.closeAction(fA.enum, 4)}
+                    onClick={() => this.closeAction(fA.enum, 4, false, fA.label)}
                     primary
                   >
                     {fA.label}
@@ -504,7 +505,7 @@ out of required
           <Modal.Header>
             {this.state.action === 'VALIDATE_NOTES' ? 'Validate Notes' : this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
           </Modal.Header>
-          {!this.state.action === 'VALIDATE_NOTES'
+          {this.state.action !== 'VALIDATE_NOTES'
             && (
           <Modal.Content className="pb-20">
             Please select notification action to perform.
