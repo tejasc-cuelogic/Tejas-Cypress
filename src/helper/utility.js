@@ -103,12 +103,14 @@ export class Utility {
   }
 
   encryptNumber = (number) => {
+    if (!number) return null;
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
 
   encryptNumberWithX = (number) => {
+    if (!number) return null;
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
   }
