@@ -37,7 +37,6 @@ export default class RedirectManager extends React.PureComponent {
       this.setState({ viaProtect: false });
     }
     if (redirectMeta) {
-      // const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `https://${window.location.hostname}${redirectMeta.to}`;
       const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `${window.location.protocol}//${window.location.hostname}${redirectMeta.to}`;
       window.location = toUrl;
     } else if (fromUrl !== 'password-protected') {
@@ -50,7 +49,7 @@ export default class RedirectManager extends React.PureComponent {
       if (d.from.includes(':param1')) {
         const splitUrl = params.split('/');
         if (d.from.includes(splitUrl[0])) {
-          return true;
+          return true && d.live;
         }
       } else {
         return params === d.from && d.live;
@@ -61,17 +60,22 @@ export default class RedirectManager extends React.PureComponent {
   }
 
   getMetaData = (params) => {
-    const redirectMeta = this.findRedirectUrl(params);
+    let redirectMeta = this.findRedirectUrl(params);
     if (redirectMeta && redirectMeta.from.includes(':param1')) {
-      const splitUrl = params.split('/');
-      const slug = splitUrl[(splitUrl.length) - 1];
-      if (redirectMeta.from.includes(splitUrl[0])) {
-        const replacedTo = redirectMeta.to.replace(':param1', slug);
-        return {
+      const fromArr = redirectMeta.from.split('/');
+      const paramArr = [':param1'];
+      let replacedTo;
+      paramArr.forEach((key) => {
+        if (redirectMeta && redirectMeta.from.includes(key)) {
+          const splitUrl = params.split('/');
+          const param1 = splitUrl[fromArr.indexOf(key)];
+          replacedTo = redirectMeta.to.replace(key, param1);
+        }
+        redirectMeta = {
           ...redirectMeta,
           to: replacedTo,
         };
-      }
+      });
     }
     return redirectMeta;
   }
