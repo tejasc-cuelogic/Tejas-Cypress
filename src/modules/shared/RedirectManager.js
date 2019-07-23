@@ -49,7 +49,7 @@ export default class RedirectManager extends React.PureComponent {
       if (d.from.includes(':param1')) {
         const splitUrl = params.split('/');
         if (d.from.includes(splitUrl[0])) {
-          return true && d.live;
+          return d.live;
         }
       } else {
         return params === d.from && d.live;
