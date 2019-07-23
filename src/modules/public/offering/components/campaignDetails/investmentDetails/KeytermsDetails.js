@@ -451,7 +451,7 @@ class KeyTermsDetails extends Component {
                     <Header as="h3" className="anchor-wrap">How do Revenue Sharing Notes work?</Header>
                     <span className="mb-10">See our Infographic for a detailed explaination</span>
                     <div>
-                    <IframeModal isPdf srcUrl={`https://${UPLOADS_CONFIG.bucket}/${get(KeyTerms, 'revShareSummaryUpload').url}`} trigger={<Button className="primary" content="View" />} />
+                    <IframeModal isPdf srcUrl={`https://${UPLOADS_CONFIG.bucket}/${get(KeyTerms, 'revShareSummaryUpload').url}`} trigger={<Button className="primary mt-20" content="View" />} />
                     </div>
                     </section>
                   )
