@@ -94,6 +94,11 @@ class DataFormatter {
     return Math.floor(resultHours);
   }
 
+  getDateInCST = (dataVal) => {
+    const dateInCST = moment(dataVal).tz('America/Chicago').format('MM/DD/YYYY');
+    return dateInCST;
+  }
+
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
     let formatedDate = moment(this.formatedDate(date)).utc();
     formatedDate = dayType === 'startDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(new Date(formatedDate)).add(1, 'day').endOf('day') : formatedDate;
