@@ -54,10 +54,14 @@ class AboutTheCompany extends Component {
             )
             : <InlineLoader className="bg-offwhite" text="No data found." />
         }
+        {!newLayout
+        && (
         <Button fluid={isTablet} onClick={this.handleViewAboutCompany} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button mt-20' : 'mt-40'} highlight-text`}>
           Learn More About the Company
           <Icon size={newLayout ? '' : 'small'} className={`${newLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
         </Button>
+        )
+        }
       </>
     );
   }
