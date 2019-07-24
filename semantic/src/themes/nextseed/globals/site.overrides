@@ -338,6 +338,42 @@ i.icon.right {
 			font-style: italic;
 			background: @neutral-offwhite;
 		}
+		//Desktop only
+		@media only screen and (min-width : @largeMonitorBreakpoint){
+			.fr-desktop{
+				display: block;
+			}
+			.fr-mobile, .fr-tablet, .fr-tablet-landscape{
+				display: none;
+			}
+		}
+		//Tablet only
+		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
+			.fr-tablet{
+				display: block;
+			}
+			.fr-mobile, .fr-desktop, .fr-tablet-landscape{
+				display: none;
+			}
+		}
+		//Tablet landscape only
+		@media only screen and (min-width : @computerBreakpoint) and (max-width : @monitorBreakpoint){
+			.fr-tablet-landscape{
+				display: block;
+			}
+			.fr-mobile, .fr-desktop, .fr-tablet{
+				display: none;
+			}
+		}
+		//Mobile only
+		@media only screen and (max-width : @largestMobileScreen){
+			.fr-mobile{
+				display: block;
+			}
+			.fr-tablet, .fr-desktop, .fr-tablet-landscape{
+				display: none;
+			}
+		}
 	}
 	.wp-caption {
 		max-width: 100%;
