@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import money from 'money-math';
+// import money from 'money-math';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic, Button } from 'semantic-ui-react';
 import {
   CAMPAIGN_KEYTERMS_SECURITIES,
@@ -57,8 +57,8 @@ class KeyTermsDetails extends Component {
       { key: 'maxOfferingAmountCF', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.' },
       { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount to participate in this offering.' },
     ];
-    const minOfferingAmountD = get(KeyTerms, 'minOfferingAmount506') ? get(KeyTerms, 'minOfferingAmount506') : get(KeyTerms, 'minOfferingAmount506C');
-    const maxOfferingAmountD = get(KeyTerms, 'maxOfferingAmount506') ? get(KeyTerms, 'maxOfferingAmount506') : get(KeyTerms, 'maxOfferingAmount506C');
+    // const minOfferingAmountD = get(KeyTerms, 'minOfferingAmount506') ? get(KeyTerms, 'minOfferingAmount506') : get(KeyTerms, 'minOfferingAmount506C');
+    // const maxOfferingAmountD = get(KeyTerms, 'maxOfferingAmount506') ? get(KeyTerms, 'maxOfferingAmount506') : get(KeyTerms, 'maxOfferingAmount506C');
     return (
       <>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
@@ -112,19 +112,20 @@ class KeyTermsDetails extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <p>
-                        {get(KeyTerms, 'regulation') === 'BD_CF_506C' && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
-                          ? type.key === 'minOfferingAmountCF'
-                            ? Helper
-                              .CurrencyFormat(money
-                                .add(get(KeyTerms, type.key), minOfferingAmountD), 0)
-                            : type.key === 'maxOfferingAmountCF'
-                            && Helper
-                              .CurrencyFormat(money
-                                .add(get(KeyTerms, type.key), maxOfferingAmountD), 0)
-                          : get(KeyTerms, type.key)
-                            ? Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
-                            : 'NA'}
-                      </p>
+                          {get(KeyTerms, 'regulation') === 'BD_CF_506C' && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
+                            ? type.key === 'minOfferingAmountCF'
+                              ? Helper.CurrencyFormat(campaignStatus.minOffering, 0)
+                              : type.key === 'maxOfferingAmountCF'
+                              && Helper.CurrencyFormat(campaignStatus.maxOffering, 0)
+                            : ['BD_506C', 'BD_506B'].includes(get(KeyTerms, 'regulation')) && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
+                              ? type.key === 'minOfferingAmountCF'
+                                ? Helper.CurrencyFormat(campaignStatus.minOffering, 0)
+                                : type.key === 'maxOfferingAmountCF'
+                                && Helper.CurrencyFormat(campaignStatus.maxOffering, 0)
+                              : get(KeyTerms, type.key)
+                                ? Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
+                                : 'NA'}
+                        </p>
                     </Table.Cell>
                   </Table.Row>
                   ) : ''
