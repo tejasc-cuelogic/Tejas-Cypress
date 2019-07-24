@@ -6,6 +6,7 @@ import { Header, Divider } from 'semantic-ui-react';
 import KeytermsDetails from './investmentDetails/KeytermsDetails';
 import { InlineLoader } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'navStore')
@@ -33,6 +34,7 @@ class InvestmentDetails extends Component {
         document.querySelector(sel).scrollIntoView(true);
       }
     }
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
   }
 
   componentWillUnmount() {
@@ -40,6 +42,7 @@ class InvestmentDetails extends Component {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       window.removeEventListener('scroll', this.handleOnScroll);
     }
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
   }
 
   handleOnScroll = () => {

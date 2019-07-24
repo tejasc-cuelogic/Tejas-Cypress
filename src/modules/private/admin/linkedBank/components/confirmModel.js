@@ -16,7 +16,7 @@ export default class ConfirmModel extends Component {
   }
 
   confirmForm = () => ({
-    approve: { headerTitle: 'Aproved',
+    approve: { headerTitle: 'Approved',
       btntext: 'Approve',
       form: this.props.bankAccountStore.formBankRequestVerifyDeny,
       formKey: 'formBankRequestVerifyDeny',

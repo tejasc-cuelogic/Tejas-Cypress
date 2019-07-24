@@ -103,12 +103,14 @@ export class Utility {
   }
 
   encryptNumber = (number) => {
+    if (!number) return null;
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
 
   encryptNumberWithX = (number) => {
+    if (!number) return null;
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
   }
@@ -197,7 +199,7 @@ export class Utility {
 
   downloadCSV = (params) => {
     try {
-      const parser = new Parser({ fields: params.fields, quote: '' });
+      const parser = new Parser({ fields: params.fields, quote: params.quote || '', delimiter: params.delimiter || '\t' });
       const csv = parser.parse(params.data);
       const uri = `data:text/csv;charset=utf-8,${escape(csv)}`;
       const link = document.createElement('a');
@@ -252,6 +254,27 @@ export class Utility {
       console.log(e);
     }
   }
+
+  eventListnerHandler = (className, funName, action = 'add') => {
+    const classname = document.getElementsByClassName(className);
+    Array.from(classname).forEach((element) => {
+      element[`${action}EventListener`]('click', this[funName]);
+    });
+  }
+
+  toggleReadMore = (e) => {
+    const htmlContent = e.target.closest('.parsed-data').querySelector('.html-toggle-content');
+    const toggleButtonText = e.target.closest('.parsed-data').querySelector('.toggleReadMoreText');
+    if (htmlContent.classList.contains('hide-content')) {
+      htmlContent.classList.add('read-content');
+      htmlContent.classList.remove('hide-content');
+      toggleButtonText.innerHTML = 'Collapse ';
+    } else {
+      htmlContent.classList.add('hide-content');
+      htmlContent.classList.remove('read-content');
+      toggleButtonText.innerHTML = 'Expand ';
+    }
+  };
 }
 
 export default new Utility();
