@@ -22,6 +22,8 @@ class IndividualAccountStore {
 
   @observable isFormSubmitted = false;
 
+  @observable apiCall = false;
+
   retry = 0;
 
   retryGoldStar = 0;
@@ -133,57 +135,63 @@ class IndividualAccountStore {
     return data;
   }
 
+  @action
   createAccount = (currentStep) => {
     uiStore.setProgress();
-    const mutation = upsertInvestorAccount;
-    const variables = {
-      accountAttributes: {
-        ...bankAccountStore.accountAttributes,
-        ...this.investmentLimitsAttributes(),
-      },
-      accountType: 'INDIVIDUAL',
-    };
-    const actionPerformed = 'submitted';
-    if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-      if (accountDetails || this.individualAccId) {
-        variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
+    if (!this.apiCall) {
+      this.setFieldValue('apiCall', true);
+      const mutation = upsertInvestorAccount;
+      const variables = {
+        accountAttributes: {
+          ...bankAccountStore.accountAttributes,
+          ...this.investmentLimitsAttributes(),
+        },
+        accountType: 'INDIVIDUAL',
+      };
+      const actionPerformed = 'submitted';
+      if (userDetailsStore.currentUser.data) {
+        const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+        if (accountDetails || this.individualAccId) {
+          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
+        }
       }
-    }
-    return new Promise((resolve, reject) => {
-      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
-        client
-          .mutate({
-            mutation,
-            variables,
-          })
-          .then(action((result) => {
-            if (result.data.upsertInvestorAccount) {
-              this.individualAccId = result.data.upsertInvestorAccount.accountId;
-              const { linkedBank } = result.data.upsertInvestorAccount;
-              bankAccountStore.setPlaidAccDetails(linkedBank);
-            }
-            const { isValid } = bankAccountStore.formAddFunds.meta;
-            if (currentStep) {
-              if (currentStep.name === 'Add funds' && isValid) {
-                Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+      return new Promise((resolve, reject) => {
+        bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+          client
+            .mutate({
+              mutation,
+              variables,
+            })
+            .then(action((result) => {
+              if (result.data.upsertInvestorAccount) {
+                this.individualAccId = result.data.upsertInvestorAccount.accountId;
+                const { linkedBank } = result.data.upsertInvestorAccount;
+                bankAccountStore.setPlaidAccDetails(linkedBank);
+                this.setFieldValue('apiCall', false);
               }
-            }
-            uiStore.setErrors(null);
-            uiStore.setProgress(false);
-            resolve(result);
-          }))
-          .catch(action((err) => {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              const { isValid } = bankAccountStore.formAddFunds.meta;
+              if (currentStep) {
+                if (currentStep.name === 'Add funds' && isValid) {
+                  Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+                }
+              }
+              uiStore.setErrors(null);
+              uiStore.setProgress(false);
+              resolve(result);
+            }))
+            .catch(action((err) => {
+              uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              uiStore.setProgress(false);
+              reject();
+            }));
+        })
+          .catch(() => {
             uiStore.setProgress(false);
             reject();
-          }));
-      })
-        .catch(() => {
-          uiStore.setProgress(false);
-          reject();
-        });
-    });
+          });
+      });
+    }
+    return false;
   }
 
   @action
