@@ -6,7 +6,7 @@ import {
         iraAccountCreation,
         entityAccountCreation
        } from './utility/investorAccount.utlity';
-import { registerApiCall } from '../../common.utility';
+import { registerApiCall } from '../../../common.utility';
 
 describe('Account Creation', () => {
   before(() => {

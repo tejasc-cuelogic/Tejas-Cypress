@@ -1,4 +1,4 @@
-import { registerApiCall, enterCodeAndConfirm } from '../../../../support/common';
+import { registerApiCall, enterCodeAndConfirm } from '../../../../../support/common';
 import { fillSignUpFormAndProceed, confirmEmailAddressScreen } from '../../basicSignUp/utility/basicSignup.utlity';
 
 export const fillLegalDetailsForm = (legalDetails = undefined) => {

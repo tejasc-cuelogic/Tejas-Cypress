@@ -1,4 +1,4 @@
-import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../../../../support/common';
+import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../../../../../support/common';
 
 const handleOverviewStep = () => {
   cy.get('div.multistep > .center-align > button').contains('Continue').click({ force: true });

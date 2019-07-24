@@ -1,4 +1,4 @@
-import { registerApiCall } from '../../../common.utility';
+import { registerApiCall } from '../../../../common.utility';
 
 export const goToSignUpScreen = () => {
   cy.contains('Sign Up');

@@ -1,7 +1,7 @@
 import { fillSignUpFormAndProceed, confirmEmailAddressScreen, confirmPhoneNumberScreen } from '../../basicSignUp/utility/basicSignup.utlity';
 import { fillLegalFormAndProceed } from '../../identityVerification/utility/identityVerification.utlity';
 import { completeInvestorProfile } from '../../InvestorProfile/utlity/investorProfile.utlity';
-import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile, enterCodeAndConfirm } from '../../../common.utility';
+import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile, enterCodeAndConfirm } from '../../../../common.utility';
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
