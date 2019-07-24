@@ -329,13 +329,15 @@ i.icon.right {
 	pointer-events: none !important;
 }
 .parsed-data { // for migrated/parsed data
-	.fr-view blockquote {
-		border-left: solid 3px @primary-one;
-		padding: @15px @20px;
-		color: @neutral;
-		font-size: @16px;
-		font-style: italic;
-		background: @neutral-offwhite;
+	.fr-view{
+		blockquote {
+			border-left: solid 3px @primary-one;
+			padding: @15px @20px;
+			color: @neutral;
+			font-size: @16px;
+			font-style: italic;
+			background: @neutral-offwhite;
+		}
 	}
 	.wp-caption {
 		max-width: 100%;
