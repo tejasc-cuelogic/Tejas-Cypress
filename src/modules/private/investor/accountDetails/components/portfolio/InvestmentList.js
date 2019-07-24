@@ -72,7 +72,7 @@ const InvestmentList = (props) => {
                             <>
                               {Helper.CurrencyFormat(data.investedAmount, 0)}
                               <p className="date-stamp">
-                                <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                                <DateTimeFormat format="MM/DD/YYYY" datetime={DataFormatter.getDateInCST(data.investmentDate, true)} />
                               </p>
                             </>
                           }

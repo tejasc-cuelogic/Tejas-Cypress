@@ -6,6 +6,7 @@ import { reject, get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 const meta = [
   { label: '', value: 'avatar' },
@@ -152,7 +153,7 @@ export default class Listing extends Component {
                     )
                     : null
                   }
-                  <Table.Cell>{data.investmentDate ? <DateTimeFormat format="MM/DD/YYYY  h:mma" datetime={data.investmentDate} /> : 'N/A'}</Table.Cell>
+                  <Table.Cell>{data.investmentDate ? <DateTimeFormat format="MM/DD/YYYY  h:mma" datetime={DataFormatter.getDateInCST(data.investmentDate, true)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{this.showReferralCode(referralCode, data.referralCode)}</Table.Cell>
                 </Table.Row>
               ))

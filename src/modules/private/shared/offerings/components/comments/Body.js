@@ -1,11 +1,11 @@
 import React from 'react';
-import moment from 'moment';
 import { get } from 'lodash';
 import Parser from 'html-react-parser';
 import { Link } from 'react-router-dom';
 import { Label, Item, Header, Icon } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import { OFFERING_COMMENTS_SCOPE } from '../../../../../../constants/offering';
+import { DataFormatter } from '../../../../../../helper';
 
 const MsgContent = ({
   body, extra, edit, classes,
@@ -40,7 +40,7 @@ const Body = props => (
       {props.thread && props.thread.length
         ? props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
-          const msgDate = moment(date).format('ll');
+          const msgDate = DataFormatter.getDateInCST(date, true, true);
           const userFullName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
           const userInfo = {
             firstName: get(msg, 'createdUserInfo.info.firstName'),

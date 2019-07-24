@@ -94,9 +94,12 @@ class DataFormatter {
     return Math.floor(resultHours);
   }
 
-  getDateInCST = (dataVal) => {
-    const dateInCST = moment(dataVal).tz('America/Chicago').format('MM/DD/YYYY');
-    return dateInCST;
+  getDateInCST = (dataParam, isISOString = false, isLLFormat = false, showTime = true) => {
+    const dataVal = isISOString ? moment(dataParam) : dataParam;
+    const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
+    const displayCutoff = utcCutoff.clone().tz('America/Chicago');
+    console.log('result time==>', displayCutoff.format('MM/DD/YYYY HH:mm:ss'));
+    return isLLFormat ? displayCutoff.format('ll') : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ss') : displayCutoff.format('MM/DD/YYYY');
   }
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
