@@ -498,6 +498,56 @@ export const PUBLIC_NAV = [
   },
   {
     title: 'Explore Campaigns',
+    to: 'offerings-v2/',
+    header: false,
+    headerMobile: false,
+    subNavigations: [
+      {
+        component: 'CampaignLayout', title: 'Highlights', to: '#top-things-to-know', useRefLink: true, defaultActive: true, key: 'hasTopThingToKnow',
+      },
+      {
+        title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
+      },
+      {
+        title: 'Investment Terms', to: '#key-terms', useRefLink: true, key: 'keyTerms',
+      },
+      {
+        title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'isRevenueShare',
+      },
+      {
+        title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
+      },
+      {
+        title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, key: 'useOfProcceds',
+      },
+      {
+        title: 'Company Description', to: '#company-description', useRefLink: true, key: 'companyDescription',
+      },
+      {
+        title: 'Business Model', to: '#business-model', useRefLink: true, key: 'businessModel',
+      },
+      {
+        title: 'Location Analysis', to: '#location-analysis', useRefLink: true, key: 'localAnalysis',
+      },
+      {
+        title: 'The Team', to: '#team', useRefLink: true, key: 'team',
+      },
+      {
+        title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true, key: 'isBonusReward',
+      },
+      {
+        title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
+      },
+      {
+        title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
+      },
+      {
+        title: 'Comments', to: '#comments', useRefLink: true,
+      },
+    ],
+  },
+  {
+    title: 'Explore Campaigns',
     to: 'offerings',
     subNavigations: [
       {

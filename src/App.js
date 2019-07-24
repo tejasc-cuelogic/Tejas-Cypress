@@ -44,6 +44,10 @@ const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', 
 @withRouter
 @observer
 class App extends Component {
+  state = {
+    authChecked: false,
+  };
+
   componentWillMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
@@ -63,6 +67,8 @@ class App extends Component {
       })
       .catch((err) => {
         console.log('Catch error in app.js verifySession. ', err);
+      }).finally(() => {
+        this.setState({ authChecked: true });
       });
   }
 
@@ -179,12 +185,13 @@ class App extends Component {
 
   render() {
     const { location } = this.props;
+    const { authChecked } = this.state;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
       );
     }
-    if (this.props.uiStore.appLoader) {
+    if (this.props.uiStore.appLoader || !authChecked) {
       return (
         <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
       );

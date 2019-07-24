@@ -35,9 +35,12 @@ class offerDetails extends Component {
   }
 
   componentWillMount() {
-    const { currentUser } = this.props.userStore;
+    const { currentUser, isAdmin } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-      const oMinData = data ? data[0] : null;
+      const oMinData = data.length ? data[0] : null;
+      if (['TERMINATED', 'FAILED'].includes(oMinData.stage) && !isAdmin) {
+        this.props.history.push('/offerings');
+      }
       if ((currentUser && currentUser.roles.includes('admin'))
         || oMinData.isAvailablePublicly
         || oMinData.stage === 'LIVE'
@@ -45,9 +48,11 @@ class offerDetails extends Component {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
       } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
-        this.setState(oMinData.stage === 'CREATION'
-          ? { showPassDialog: true, preLoading: false }
-          : { showPassDialog: false, found: 2, preLoading: false });
+        if (oMinData.stage === 'CREATION') {
+          this.setState({ showPassDialog: true, preLoading: false });
+        } else {
+          this.props.history.push('/offerings');
+        }
       } else if (currentUser && currentUser.roles.includes('investor')) {
         const params = {
           userId: currentUser.sub,
@@ -59,7 +64,7 @@ class offerDetails extends Component {
             this.setState({ preLoading: false, showPassDialog: false });
             this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
           } else {
-            this.setState({ showPassDialog: false, found: 2, preLoading: false });
+            this.props.history.push('/offerings');
           }
         });
       } else {
@@ -71,7 +76,7 @@ class offerDetails extends Component {
           this.props.history.push('/login');
         }
       }
-    });
+    }).catch(() => this.props.history.push('/offerings'));
   }
 
   componentDidMount() {
@@ -103,10 +108,12 @@ class offerDetails extends Component {
 
   addRemoveUpdatesSubnav = (oldNav, updates) => {
     const tempNav = [...oldNav];
-    if (updates && updates.length === 0 && tempNav[0].subNavigations.length === 5) {
-      tempNav[0].subNavigations.splice(2, 1);
-    } else if (updates && updates.length !== 0 && tempNav[0].subNavigations.length !== 5) {
-      tempNav[0].subNavigations.splice(2, 0, { title: 'Updates', to: '#updates', useRefLink: true });
+    const hasUpdatesNav = tempNav.find(i => i.title === 'Updates');
+    const index = tempNav.findIndex(i => i.title === 'Updates');
+    if (updates && updates.length === 0 && hasUpdatesNav) {
+      tempNav.splice(index, 1);
+    } else if (updates && updates.length !== 0 && !hasUpdatesNav) {
+      tempNav.splice(2, 0, { title: 'Updates', to: '#updates', useRefLink: true });
     }
     return tempNav;
   }
@@ -157,7 +164,7 @@ class offerDetails extends Component {
 
   render() {
     const {
-      match, campaignStore, location,
+      match, campaignStore, location, newLayout,
     } = this.props;
     if (this.state.showPassDialog) {
       return (
@@ -168,7 +175,7 @@ class offerDetails extends Component {
 />
       );
     }
-    if (campaignStore.loading || !campaignStore.campaignStatus.doneComputing || this.state.preLoading) {
+    if (campaignStore.loading || (this.state.found !== 2 && !campaignStore.campaignStatus.doneComputing) || this.state.preLoading) {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
@@ -182,7 +189,8 @@ class offerDetails extends Component {
       navItems = this.removeSubNavs(navItems);
     } else {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
-      navItems = modifySubNavs(navItems);
+      navItems = modifySubNavs(navItems, newLayout);
+      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
     if ((details && details.data
       && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
@@ -192,6 +200,7 @@ class offerDetails extends Component {
     const offeringId = get(campaign, 'id');
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
+    const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     return (
       <>
         {campaign
@@ -207,7 +216,7 @@ class offerDetails extends Component {
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              <CampaignSideBar navItems={navItems} />
+              <CampaignSideBar newLayout={newLayout} navItems={navItems} />
               <MobileDropDownNav
                 inverted
                 refMatch={match}
@@ -227,21 +236,23 @@ class offerDetails extends Component {
                 {!isMobile
                   && (
 <Grid.Column width={4}>
-                    <CampaignSideBar navItems={navItems} />
+                    <CampaignSideBar newLayout={newLayout} navItems={navItems} />
                   </Grid.Column>
                   )
                 }
                 <Grid.Column computer={12} mobile={16}>
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
-                      <Route exact path={match.url} component={getModule(navItems[0].component)} />
-                      {
+                      <Route exact path={match.url} render={props => <InitialComponent refLink={this.props.match.url} {...props} />} />
+                      {!newLayout
+                      && (
                         navItems.map((item) => {
                           const CurrentComponent = getModule(item.component);
                           return (
                             <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
                           );
                         })
+                      )
                       }
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />

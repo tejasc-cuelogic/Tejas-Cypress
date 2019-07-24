@@ -21,7 +21,7 @@ export default class CampaignSideBar extends Component {
   }
 
   render() {
-    const { campaignStore } = this.props;
+    const { campaignStore, newLayout } = this.props;
     const {
       campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus,
     } = campaignStore;
@@ -30,9 +30,10 @@ export default class CampaignSideBar extends Component {
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
       earlyBird, isEarlyBirdRewards, bonusRewards, countDown,
     } = campaignStatus;
+    const isCampaignLayout = newLayout;
     return (
       <>
-        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
+        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} ${isCampaignLayout ? 'offering-layout-menu' : ''} offering-side-menu `}>
           <Responsive maxWidth={991} as={React.Fragment}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>

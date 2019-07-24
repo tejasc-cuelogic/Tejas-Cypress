@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import { toJS } from 'mobx';
 import { Divider } from 'semantic-ui-react';
 import CompanyTopThings from './AboutCompany/CompanyTopThings';
@@ -7,7 +8,7 @@ import MeetOurTeam from './AboutCompany/MeetOurTeam';
 import BusinessModel from './AboutCompany/BusinessModel';
 import LocationAnalysis from './AboutCompany/LocationAnalysis';
 import CompanyHistory from './AboutCompany/CompanyHistory';
-
+import Helper from '../../../../../helper/utility';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -15,14 +16,17 @@ const topsAsPerWindowheight = window.innerHeight > 1000 ? 550 : 200;
 const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
+@withRouter
 @observer
 class AboutCompany extends Component {
   componentWillMount() {
-    window.addEventListener('scroll', this.handleOnScroll);
+    if (!this.props.newLayout) {
+      window.addEventListener('scroll', this.handleOnScroll);
+    }
   }
 
   componentDidMount() {
-    if (this.props.location.hash && this.props.location.hash !== '') {
+    if (!this.props.newLayout && this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       if (document.querySelector(`${this.props.location.hash}`)) {
         document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -30,7 +34,7 @@ class AboutCompany extends Component {
           behavior: 'smooth',
         });
       }
-    } else if (!isMobile) {
+    } else if (!this.props.newLayout && !isMobile) {
       const { campaignNavData } = this.props.campaignStore;
       const navs = (campaignNavData.find(i => i.title === 'About the Company')).subNavigations;
       const sel = navs && navs[0] && navs[0].to;
@@ -39,11 +43,15 @@ class AboutCompany extends Component {
         this.props.navStore.setFieldValue('currentActiveHash', sel);
       }
     }
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
   }
 
   componentWillUnmount() {
-    this.props.navStore.setFieldValue('currentActiveHash', null);
-    window.removeEventListener('scroll', this.handleOnScroll);
+    if (!this.props.newLayout) {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      window.removeEventListener('scroll', this.handleOnScroll);
+    }
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
   }
 
   handleOnScroll = () => {
@@ -64,16 +72,16 @@ class AboutCompany extends Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const emptyStatement = 'Detail not found';
     return (
-      <div className="campaign-content-wrapper">
+      <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
         {campaignStatus.companyDescription && (
         <>
-          <CompanyTopThings emptyStatement={emptyStatement} campaign={campaign} />
+          <CompanyTopThings newLayout={this.props.newLayout} emptyStatement={emptyStatement} campaign={campaign} />
           <Divider hidden section />
         </>
         )}
         {campaignStatus.businessModel && (
         <>
-          <BusinessModel businessModelUrl={this.props.match.url} campaign={campaign} />
+          <BusinessModel newLayout={this.props.newLayout} businessModelUrl={this.props.match.url} campaign={campaign} />
           <Divider hidden section />
         </>
         )}
@@ -83,13 +91,14 @@ class AboutCompany extends Component {
           isTabletLand={isTabletLand}
           LocationAnalysisDetailUrl={this.props.match.url}
           campaign={campaign}
+          newLayout={this.props.newLayout}
         />
         <Divider hidden section />
         </>
         )}
         {campaignStatus.history && (
         <>
-        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
+        <CompanyHistory newLayout={this.props.newLayout} campaign={campaign} emptyStatement={emptyStatement} />
         <Divider hidden section />
         </>
         )}
@@ -99,6 +108,7 @@ class AboutCompany extends Component {
           campaign={campaign}
           emptyStatement={emptyStatement}
           meetOurTeamUrl={this.props.match.url}
+          newLayout={this.props.newLayout}
         />
         <Divider hidden section />
         </>

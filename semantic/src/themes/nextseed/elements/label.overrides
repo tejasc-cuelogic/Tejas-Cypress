@@ -29,7 +29,14 @@
         }
     }
 }
-
+.ui.pointing.label{
+    &.above{
+        display: none;
+    }
+    &:before {
+        display: none;
+    }
+}
 // .ui.label{                  // commented to resolve label design in sidebar menu
 //     &.circular.horizontal{
 //         min-height:auto;
