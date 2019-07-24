@@ -26,7 +26,7 @@ export default class RedirectManager extends React.PureComponent {
     let { fromUrl } = this.props.match.params;
     const { fromUrl2 } = this.props.match.params;
     const { viaProtect } = this.state;
-    const redirectMeta = this.findRedirectUrl(fromUrl2 ? `${fromUrl}/${fromUrl2}` : fromUrl);
+    const redirectMeta = this.getMetaData(fromUrl2 ? `${fromUrl}/${fromUrl2}` : fromUrl);
     if (fromUrl === 'password-protected') {
       if (ref) {
         this.setState({ viaProtect: true });
@@ -37,7 +37,7 @@ export default class RedirectManager extends React.PureComponent {
       this.setState({ viaProtect: false });
     }
     if (redirectMeta) {
-      const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `https://${window.location.hostname}${redirectMeta.to}`;
+      const toUrl = (redirectMeta.to.includes('http://') || redirectMeta.to.includes('https://')) ? redirectMeta.to : window.location.hostname === 'localhost' ? `http://${window.location.host}${redirectMeta.to}` : `${window.location.protocol}//${window.location.hostname}${redirectMeta.to}`;
       window.location = toUrl;
     } else if (fromUrl !== 'password-protected') {
       this.findIssuerReferralCode(fromUrl);
@@ -45,8 +45,39 @@ export default class RedirectManager extends React.PureComponent {
   }
 
   findRedirectUrl = (params) => {
-    const redirectMeta = find(REDIRECT_META, d => params === d.from && d.live);
-    return redirectMeta || false;
+    const redirectMeta = find(REDIRECT_META, (d) => {
+      if (d.from.includes(':param1')) {
+        const splitUrl = params.split('/');
+        if (d.from.includes(splitUrl[0])) {
+          return d.live;
+        }
+      } else {
+        return params === d.from && d.live;
+      }
+      return redirectMeta || false;
+    });
+    return redirectMeta;
+  }
+
+  getMetaData = (params) => {
+    let redirectMeta = this.findRedirectUrl(params);
+    if (redirectMeta && redirectMeta.from.includes(':param1')) {
+      const fromArr = redirectMeta.from.split('/');
+      const paramArr = [':param1'];
+      let replacedTo;
+      paramArr.forEach((key) => {
+        if (redirectMeta && redirectMeta.from.includes(key)) {
+          const splitUrl = params.split('/');
+          const param1 = splitUrl[fromArr.indexOf(key)];
+          replacedTo = redirectMeta.to.replace(key, param1);
+        }
+        redirectMeta = {
+          ...redirectMeta,
+          to: replacedTo,
+        };
+      });
+    }
+    return redirectMeta;
   }
 
   findIssuerReferralCode = (referralCode) => {

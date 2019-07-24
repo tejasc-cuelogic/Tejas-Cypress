@@ -94,7 +94,7 @@ export const entityAccountCreation = () => {
       entityAccountCreation();
       break;
     case 'Link bank':
-      individualPlaidProcess('.progtrckr-doing', '1');
+      individualPlaidProcess('.progtrckr-doing', '3');
       addFunds('7000');
       cy.wait('@addFunds');
       cy.wait('@addFunds');

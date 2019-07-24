@@ -96,11 +96,84 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      rootFolderId
       goldstar {
         isin
         contactId
         esAccountNumber
         sfAccountNumber
+      }
+      closureProcess {
+        checkBalance {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        exportEnvelopes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        finalizeNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        fundEscrow {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        hardCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        issueCredits {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        processNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        softCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        validateNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        verifySecurityTransaction {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
       }
       linkedBank {
         accountNumber
@@ -135,6 +208,12 @@ export const getOfferingDetails = gql`
       }
       }
       keyTerms {
+        revShareSummaryUpload {
+          id
+          url
+          fileName
+          isPublic
+        }
         unitPrice
         roundType
         premoneyValuation
