@@ -179,6 +179,7 @@ class IndividualAccountStore {
             resolve(result);
           }))
           .catch(action((err) => {
+            this.setFieldValue('apiCall', false);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
@@ -235,6 +236,7 @@ class IndividualAccountStore {
     this.retry = 0;
     this.retryGoldStar = 0;
     this.isFormSubmitted = false;
+    this.apiCall = false;
   }
 }
 export default new IndividualAccountStore();
