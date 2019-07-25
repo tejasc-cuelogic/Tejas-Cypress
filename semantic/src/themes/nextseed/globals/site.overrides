@@ -87,6 +87,9 @@ h6{
 .mb-10 {
 	margin-bottom: @10px !important;
 }
+.mb-14{
+	margin-bottom: @14px !important;
+}
 .mb-20 {
 	margin-bottom: @20px !important;
 }
@@ -146,6 +149,9 @@ h6{
 }
 .pt-0{
 	padding-top:0 !important;
+}
+.pb-0{
+	padding-bottom:0 !important;
 }
 .pl-50{
 	padding-left: @50px !important;
@@ -338,48 +344,52 @@ i.icon.right {
 			font-style: italic;
 			background: @neutral-offwhite;
 		}
+		.fr-fic, .fr-video{
+			margin-top: @30px;
+			margin-bottom: @30px;
+		}
 		//Desktop only
 		@media only screen and (min-width : @largeMonitorBreakpoint){
-			.fr-desktop{
+			.fr-editor-desktop{
 				display: block;
 			}
-			.fr-mobile, .fr-tablet, .fr-tablet-landscape{
+			.fr-editor-mobile, .fr-editor-tablet, .fr-editor-tablet-landscape{
 				display: none;
 			}
 		}
 		//Tablet only
 		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
-			.fr-tablet{
+			.fr-editor-tablet{
 				display: block;
 			}
-			.fr-mobile, .fr-desktop, .fr-tablet-landscape{
+			.fr-editor-mobile, .fr-editor-desktop, .fr-editor-tablet-landscape{
 				display: none;
 			}
 		}
 		//Mobile only
 		@media only screen and (max-width : @largestMobileScreen){
-			.fr-mobile{
+			.fr-editor-mobile{
 				display: block;
 			}
-			.fr-tablet, .fr-desktop, .fr-tablet-landscape{
+			.fr-editor-tablet, .fr-editor-desktop, .fr-editor-tablet-landscape{
 				display: none;
 			}
 		}
 		//Tablet and mobilelandscape
 		@media only screen and (max-width : @monitorBreakpoint){
-			.fr-tablet.fr-mobile{
+			.fr-editor-tablet.fr-editor-mobile{
 				display: block;
 			}
-			.fr-desktop{
+			.fr-editor-desktop{
 				display: none;
 			}
 		}
 		//Tablet landscape only
 		@media only screen and (min-width : @computerBreakpoint) and (max-width : @monitorBreakpoint){
-			.fr-tablet-landscape{
+			.fr-editor-tablet-landscape{
 				display: block;
 			}
-			.fr-mobile, .fr-desktop, .fr-tablet{
+			.fr-editor-mobile, .fr-editor-desktop, .fr-editor-tablet{
 				display: none;
 			}
 		}
