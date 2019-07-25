@@ -23,7 +23,7 @@ const navMeta = [
   { title: 'Activity', to: 'activity' },
 ];
 
-@inject('userDetailsStore', 'uiStore')
+@inject('userDetailsStore', 'uiStore', 'transactionStore', 'portfolioStore')
 @withRouter
 @observer
 export default class AccountDetails extends Component {
@@ -34,6 +34,8 @@ export default class AccountDetails extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
+    this.props.portfolioStore.setFieldValue('apiCall', false);
+    this.props.transactionStore.setFieldValue('apiCall', false);
   }
 
   getUserStorageDetails = (e) => {

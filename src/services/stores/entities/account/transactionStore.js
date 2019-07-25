@@ -147,7 +147,7 @@ export class TransactionStore {
 
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading
-    || this.paymentHistoryData.loading || this.loanAgreementData.loading;
+      || this.paymentHistoryData.loading || this.loanAgreementData.loading;
   }
 
   @computed get error() {
