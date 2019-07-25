@@ -105,7 +105,7 @@ export const entityAccountCreation = () => {
       cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
       cy.wait('@submitAccount');
       cy.wait('@submitAccount');
-      cy.get('.modal', { timeout: 5000 }).then(($el) => {
+      cy.get('.modal').then(($el) => {
         const element = cy.wrap($el)
         element.get('button.button').contains('Continue').click({ force: true });
       });
@@ -151,7 +151,7 @@ export const iraAccountCreation = () => {
         cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
         cy.wait('@submitAccount');
         cy.wait('@submitAccount');
-        cy.get('.modal', { timeout: 10000 }).then(($el) => {
+        cy.get('.modal').then(($el) => {
           const element = cy.wrap($el);
           element.get('button.button').contains('Continue').click({ force: true });
         });
