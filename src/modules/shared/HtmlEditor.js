@@ -6,7 +6,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header } from 'semantic-ui-react';
+import { Modal, Header, Accordion, Icon } from 'semantic-ui-react';
 import { get } from 'lodash';
 // import Parser from 'html-react-parser';
 import 'froala-editor/js/froala_editor.pkgd.min';
@@ -32,13 +32,14 @@ window.jQuery = $;
 export default class HtmlEditor extends React.Component {
   state = {
     showModal: false,
+    activeIndex: 0,
   }
 
   constructor(props) {
     super(props);
     $.FroalaEditor.DefineIcon('buttonIcon', { NAME: 'info', SVG_KEY: 'help' });
     $.FroalaEditor.RegisterCommand('myButton', {
-      title: 'Show Short-Code Template',
+      title: 'Show Short Codes Information',
       icon: 'buttonIcon',
       undo: false,
       focus: false,
@@ -47,8 +48,15 @@ export default class HtmlEditor extends React.Component {
     });
   }
 
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+    this.setState({ activeIndex: newIndex });
+  }
+
   toggleModal = () => {
-    this.setState({ showModal: !this.state.showModal });
+    this.setState({ showModal: !this.state.showModal, activeIndex: 0 });
   }
 
   getConfig = (keyStart, overrides) => {
@@ -128,6 +136,7 @@ export default class HtmlEditor extends React.Component {
     if (readOnly) {
       return <div className="parsed-data"><FroalaEditorView model={this.props.content} /></div>;
     }
+    const { activeIndex } = this.state;
     return (
       <div>
         <FroalaEditor
@@ -144,11 +153,14 @@ export default class HtmlEditor extends React.Component {
           <p className="primary-two-text">
           Note : In HTML editor when switching to code mode after adding short code need to switch back preview mode then save.
           </p>
-          <p>
+          <Accordion>
+          <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
+          <Icon name="dropdown" />
           <b>
-          * Short code for Expand/Collapse in HTML editor
+          Short code for Expand/Collapse in HTML editor
           </b>
-          </p>
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 0}>
           <p>
           <pre className="bg-offwhite">
           {'<div class="html-toggle-content hide-content">'}<br />
@@ -171,9 +183,15 @@ export default class HtmlEditor extends React.Component {
           Note : Do not change the {'<Span>'} tag in above short code
           </p>
           <br />
+          </Accordion.Content>
+          <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
+          <Icon name="dropdown" />
           <b>
-          * For rendering image/content dynamically as per devices need to add below classes for respective tag
+          For rendering image/content dynamically as per devices need to add below classes for respective tag
           </b>
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 1}>
+            <p>
           <ul>
             <li><b>Desktop only</b> = &apos;fr-editor-desktop&apos;</li>
             <li><b>Mobile only</b> = &apos;fr-editor-mobile&apos;</li>
@@ -189,7 +207,7 @@ export default class HtmlEditor extends React.Component {
   <p>
     <img src="https://prod-cdn-us-east-1.nextseed.qa/image.jpg"
       style="width: 300px;"
-      class=fr-fic fr-dib`}<span className="negative-text"> fr-editor-mobile</span>{`
+      class="fr-fic fr-dib`}<span className="negative-text"> fr-editor-mobile</span>{`"
     >
   </p>`}
           </pre>
@@ -197,6 +215,9 @@ export default class HtmlEditor extends React.Component {
           <p className="primary-two-text">
           Note : If the class attribute exist in tag then no need to add class attribute just add class name in same attribute.
           </p>
+            </p>
+          </Accordion.Content>
+          </Accordion>
           </Modal.Content>
         </Modal>
       </div>
