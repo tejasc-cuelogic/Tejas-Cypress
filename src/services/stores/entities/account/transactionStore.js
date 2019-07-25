@@ -154,12 +154,6 @@ export class TransactionStore {
     return (this.data && this.data.error && this.data.error.message) || null;
   }
 
-  @computed get accountTransactionsOld() {
-    const transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
-      && this.data.data.getAccountTransactions.transactions)) || [];
-    return this.sortBydate(transactions);
-  }
-
   @computed get accountTransactions() {
     let transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
       && this.data.data.getAccountTransactions.transactions)) || [];
