@@ -1,7 +1,12 @@
+/* eslint-disable react/jsx-curly-brace-presence */
+/* eslint-disable no-template-curly-in-string */
+/* eslint-disable camelcase */
+/* eslint-disable func-names */
 /* eslint-disable import/no-extraneous-dependencies  */
 import React from 'react';
 import $ from 'jquery';
 import { inject, observer } from 'mobx-react';
+import { Modal, Header } from 'semantic-ui-react';
 import { get } from 'lodash';
 // import Parser from 'html-react-parser';
 import 'froala-editor/js/froala_editor.pkgd.min';
@@ -25,10 +30,31 @@ window.jQuery = $;
 @inject('uiStore')
 @observer
 export default class HtmlEditor extends React.Component {
+  state = {
+    showModal: false,
+  }
+
+  constructor(props) {
+    super(props);
+    $.FroalaEditor.DefineIcon('buttonIcon', { NAME: 'info', SVG_KEY: 'help' });
+    $.FroalaEditor.RegisterCommand('myButton', {
+      title: 'Show Short-Code Template',
+      icon: 'buttonIcon',
+      undo: false,
+      focus: false,
+      plugin: 'customPlugin',
+      callback: this.toggleModal,
+    });
+  }
+
+  toggleModal = () => {
+    this.setState({ showModal: !this.state.showModal });
+  }
+
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
-      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
+      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen', '|', 'myButton'],
       charCounterCount: false,
       editorClass: 'html-editor',
       key: FROALA_EDITOR_LICENSE,
@@ -36,6 +62,7 @@ export default class HtmlEditor extends React.Component {
       heightMin: 244,
       heightMax: '70vh',
       imageManager: false,
+      pluginsEnabled: ['customPlugin', 'align', 'charCounter', 'codeBeautifier', 'codeView', 'colors', 'draggable', 'embedly', 'emoticons', 'entities', 'file', 'fontFamily', 'fontSize', 'fullscreen', 'image', 'imageManager', 'inlineStyle', 'lineBreaker', 'link', 'lists', 'paragraphFormat', 'paragraphStyle', 'quickInsert', 'quote', 'save', 'table', 'url', 'video', 'wordPaste'],
       events: {
         'froalaEditor.image.inserted': (e, editor, image) => {
           if (image.prevObject) {
@@ -109,6 +136,69 @@ export default class HtmlEditor extends React.Component {
           config={this.getConfig(keyStart, this.props.overrides)}
           onModelChange={this.handleModelChange}
         />
+        <Modal closeIcon onClose={this.toggleModal} closeOnDimmerClick open={this.state.showModal}>
+        <Modal.Header className="center-align signup-header">
+            <Header as="h3">Short Codes Information</Header>
+          </Modal.Header>
+          <Modal.Content>
+          <p className="primary-two-text">
+          Note : In HTML editor when switching to code mode after adding short code need to switch back preview mode then save.
+          </p>
+          <p>
+          <b>
+          * Short code for Expand/Collapse in HTML editor
+          </b>
+          </p>
+          <p>
+          <pre className="bg-offwhite">
+          {'<div class="html-toggle-content hide-content">'}<br />
+          <span className="negative-text">{'   "${ExtraContent}"'}</span>
+          <br />
+          {'</div>'}
+          {`
+<p>
+  <a class="toggleReadMore">
+    <span class="toggleReadMoreText">Expand&nbsp;</span>`}
+    <span className="negative-text">{'"${Title}"'}</span>
+{`
+  </a>
+</p>
+          `}
+          </pre>
+          </p>
+          <br />
+          <p className="primary-two-text">
+          Note : Do not change the {'<Span>'} tag in above short code
+          </p>
+          <br />
+          <b>
+          * For rendering image/content dynamically as per devices need to add below classes for respective tag
+          </b>
+          <ul>
+            <li><b>Desktop only</b> = &apos;fr-editor-desktop&apos;</li>
+            <li><b>Mobile only</b> = &apos;fr-editor-mobile&apos;</li>
+            <li><b>Tablet only</b> = &apos;fr-editor-tablet&apos;</li>
+            <li><b>For both Mobile and Tablet</b> = &apos;fr-editor-mobile fr-editor-tablet&apos;</li>
+          </ul>
+          <p><b>Example:</b></p>
+          <p>
+            * For showing image only for mobile:
+          </p>
+          <pre className="bg-offwhite">
+            {`
+  <p>
+    <img src="https://prod-cdn-us-east-1.nextseed.qa/image.jpg"
+      style="width: 300px;"
+      class=fr-fic fr-dib`}<span className="negative-text"> fr-editor-mobile</span>{`
+    >
+  </p>`}
+          </pre>
+          <br />
+          <p className="primary-two-text">
+          Note : If the class attribute exist in tag then no need to add class attribute just add class name in same attribute.
+          </p>
+          </Modal.Content>
+        </Modal>
       </div>
     );
   }
