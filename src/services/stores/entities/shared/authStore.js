@@ -12,7 +12,7 @@ import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication,
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
+import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
 
 
 export class AuthStore {
@@ -376,8 +376,11 @@ export class AuthStore {
   }
 
   @action
-  checkEmailExistsPresignup = email => new Promise((res, rej) => {
+  checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res, rej) => {
     if (DataFormatter.validateEmail(email)) {
+      if (isBusinessApplication) {
+        uiStore.setProgress();
+      }
       this.checkEmail = graphql({
         client: clientPublic,
         query: checkEmailExistsPresignup,
@@ -386,12 +389,19 @@ export class AuthStore {
         },
         onFetch: (data) => {
           uiStore.clearErrors();
-          if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
-            this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
-            this.SIGNUP_FRM.meta.isValid = false;
+          if (!this.checkEmail.loading && get(data, 'checkEmailExistsPresignup.isEmailExits')) {
+            if (isBusinessApplication) {
+              businessAppStore.setFieldvalue('userRoles', get(data, 'checkEmailExistsPresignup.roles'));
+              businessAppStore.setFieldvalue('userExists', true);
+              businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : 'This email address is already exists as investor. Please try with differrent email.');
+              res();
+            } else {
+              this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
+              this.SIGNUP_FRM.meta.isValid = false;
+              rej();
+            }
             uiStore.setProgress(false);
-            rej();
-          } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
+          } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
             this.SIGNUP_FRM.fields.email.error = '';
             uiStore.setProgress(false);
             res();

@@ -10,9 +10,10 @@ import PreQualBusiness from './prequlification/PreQualBusiness';
 import PreQualRealEstate from './prequlification/PreQualRealEstate';
 import NotFound from '../../NotFound';
 import { DataFormatter } from '../../../../helper';
+import { authActions } from '../../../../services/actions';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('businessAppStore', 'uiStore')
+@inject('businessAppStore', 'uiStore', 'authStore')
 @withRouter
 @observer
 export default class PreQualification extends Component {
@@ -54,24 +55,50 @@ export default class PreQualification extends Component {
   prequalBasicSubmit = (e) => {
     e.preventDefault();
     const { params } = this.props.match;
+    const { BUSINESS_APP_FRM_BASIC, BUSINESS_ACCOUNT, currentApplicationType } = this.props.businessAppStore;
     if (this.props.isPublic) {
-      this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
+      this.props.authStore.checkEmailExistsPresignup(BUSINESS_APP_FRM_BASIC.fields.email.value, true)
         .then(() => {
-          this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
-          const sel = params.applicationType === 'commercial-real-estate' ? 'cre-scroll'
-            : 'application-scroll';
-          document.querySelector(`.${sel}`).scrollIntoView({
-            top: 0,
-            behavior: 'smooth',
-          });
+          if (!this.props.businessAppStore.userExists) {
+            this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
+              .then(() => {
+                this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+                const sel = params.applicationType === 'commercial-real-estate' ? 'cre-scroll'
+                  : 'application-scroll';
+                document.querySelector(`.${sel}`).scrollIntoView({
+                  top: 0,
+                  behavior: 'smooth',
+                });
+              });
+          } else if (this.props.businessAppStore.userExists && this.props.businessAppStore.userRoles.includes('issuer')) {
+            this.props.authStore.setUserLoginDetails(BUSINESS_APP_FRM_BASIC.fields.email.value, BUSINESS_ACCOUNT.fields.password.value);
+            this.proceedLoginIn(currentApplicationType);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     }
   }
 
+  proceedLoginIn = (currentApplicationType) => {
+    authActions.login()
+      .then(() => {
+        this.props.authStore.resetForm('LOGIN_FRM');
+        const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+        const redirectUrl = `/app/business-application/${currentApplicationType}/${url}`;
+        this.props.history.push(redirectUrl);
+      }).finally(() => {
+        this.props.uiStore.setFieldvalue('authRef', null);
+        this.props.uiStore.setFieldvalue('isFromBusinessApplication', false);
+        this.props.uiStore.removeOneFromProgressArray('login');
+      });
+  }
+
   render() {
     const {
-      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, preQualFormDisabled, businessAppEleChange,
-      isPrequalQulify, currentApplicationType, fetchBusinessApplicationsDataById,
+      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, preQualFormDisabled, businessAppEleChange, userExists, userRoles,
+      isPrequalQulify, currentApplicationType, fetchBusinessApplicationsDataById, BUSINESS_ACCOUNT,
     } = this.props.businessAppStore;
     const { hideFields, match } = this.props;
     const { params } = match;
@@ -118,6 +145,21 @@ export default class PreQualification extends Component {
                     />
                   ))
                 }
+                {userExists && userRoles.includes('issuer')
+                  ? (
+                  <FormInput
+                    readOnly={isPrequalQulify}
+                    containerclassname={isPrequalQulify ? 'display-only' : ''}
+                    key="password"
+                    type="password"
+                    asterisk="true"
+                    name="password"
+                    fielddata={BUSINESS_ACCOUNT.fields.password}
+                    changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_ACCOUNT')}
+                  />
+                  )
+                  : ''
+                }
               </Form.Group>
             </div>
             {!isPrequalQulify
@@ -126,7 +168,7 @@ export default class PreQualification extends Component {
               <Divider hidden />
               <Button
                 loading={this.props.uiStore.inProgress}
-                disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
+                disabled={!userExists ? !BUSINESS_APP_FRM_BASIC.meta.isValid : !(BUSINESS_APP_FRM_BASIC.meta.isValid && BUSINESS_ACCOUNT.fields.password.value !== '')}
                 size="large"
                 color="green"
                 className="very relaxed"
