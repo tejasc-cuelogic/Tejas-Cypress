@@ -94,12 +94,12 @@ class DataFormatter {
     return Math.floor(resultHours);
   }
 
-  getDateInCST = (dataParam, isISOString = false, isLLFormat = false, showTime = true) => {
+  getDateInCST = (dataParam, isISOString = false, isLLFormat = false, showTime = true, isCustomFormat = undefined) => {
     const dataVal = isISOString ? moment(dataParam) : dataParam;
     const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
     const displayCutoff = utcCutoff.clone().tz('America/Chicago');
-    console.log('result time==>', displayCutoff.format('MM/DD/YYYY HH:mm:ss'));
-    return isLLFormat ? displayCutoff.format('ll') : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ss') : displayCutoff.format('MM/DD/YYYY');
+    // console.log('result time==>', displayCutoff.format('MM/DD/YYYY HH:mm:ss'));
+    return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
   }
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
@@ -111,8 +111,13 @@ class DataFormatter {
 
   formatedDate = date => moment(new Date(date)).format('MM/DD/YYYY');
 
+  getCurrentCSTDate = (showTime = false) => (showTime ? momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss') : momentZone.tz('America/Chicago').format('MM/DD/YYYY'));
+
+  getCurrentCSTMoment = () => momentZone.tz('America/Chicago');
+
   mapDatesToType = (data, keys, dateType = 'iso') => data.map((d) => {
-    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
+    // const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
+    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(this.getDateInCST(d[k], true, false, false), dateType) }));
     const filterInvalidDates = convertedDates
       .filter(obj => moment(Object.values(obj)[0]).isValid());
     const convDatesObj = reduce(filterInvalidDates, (old, current) => assign(old, current), {});

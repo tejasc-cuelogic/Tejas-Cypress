@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
@@ -11,6 +10,7 @@ import ApplicationListButtons from './ApplicationListButtons';
 import { AppStatusLabel } from './AppStatusLabel';
 import { InlineLoader, NsPaginationType2 } from '../../../../../theme/shared';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
+import { DataFormatter } from '../../../../../helper';
 
 @inject('businessAppAdminStore')
 @observer
@@ -122,10 +122,10 @@ export default class ApplicationsList extends Component {
                             <span>
                               Started{' '}
                               <b>
-                                {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${application.created.date}` ? moment(` ${application.created.date}`).format('MM/DD/YYYY') : '-')}
+                                {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateInCST(` ${application.submittedDate}`, true, false, false) : '-') : (` ${application.created.date}` ? DataFormatter.getDateInCST(` ${application.created.date}`, true, false, false) : '-')}
                               </b>
                             </span>
-                            <span>Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b></span>
+                            <span>Updated <b>{application.updated ? DataFormatter.getDateInCST(` ${application.updated.date}`, true, false, false) : '-'}</b></span>
                           </p>
                         </div>
                       </Table.Cell>
@@ -139,8 +139,8 @@ export default class ApplicationsList extends Component {
                                 {application.comments[application.comments.length - 1].text}
                               </Item.Description>
                               <Item.Extra>
-                                <b>{moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA')}</b>
-                                <b>
+                                <b>{DataFormatter.getDateInCST(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
+                                <b>{' '}
                                   {
                                   application.comments[application.comments.length - 1].commentor.by
                                   }

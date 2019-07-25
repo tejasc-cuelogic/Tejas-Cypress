@@ -130,16 +130,16 @@ export default class Listing extends Component {
                     {stage !== 'engagement'
                       ? (
                         <>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
+                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                             {offering.offering && offering.offering.launch
                               && offering.closureSummary.launchDate
-                              ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? get(offering, 'closureSummary.launchDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
+                              ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateInCST(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
                             }
                           </Table.Cell>
                         </>
                       )
-                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}</Table.Cell>
+                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
                     }
                     {stage === 'live'
                       && (

@@ -8,6 +8,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { InlineLoader, NsPagination } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import Actions from './Actions';
+import { DataFormatter } from '../../../../../helper';
 
 @inject('bankAccountStore', 'uiStore')
 @withRouter
@@ -75,7 +76,7 @@ export default class AllRequests extends Component {
                       <Link to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      {get(req, 'linkedBank.changeRequest.dateRequested') ? moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')).format('MM/DD/YYYY') : 'N/A'}
+                      {get(req, 'linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateInCST(moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')), false, false, false) : 'N/A'}
                     </Table.Cell>
                     <Table.Cell>
                       {req.accountType
