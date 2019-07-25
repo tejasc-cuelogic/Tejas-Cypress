@@ -23,7 +23,7 @@ const navMeta = [
   { title: 'Activity', to: 'activity' },
 ];
 
-@inject('userDetailsStore', 'uiStore')
+@inject('userDetailsStore', 'uiStore', 'transactionStore', 'portfolioStore')
 @withRouter
 @observer
 export default class AccountDetails extends Component {
@@ -34,6 +34,8 @@ export default class AccountDetails extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
+    this.props.portfolioStore.setFieldValue('apiCall', false);
+    this.props.transactionStore.setFieldValue('apiCall', false);
   }
 
   getUserStorageDetails = (e) => {
@@ -70,7 +72,7 @@ export default class AccountDetails extends Component {
             <Route path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
             <Route exact path={`${match.url}/transactions/:action`} render={props => <AddWithdrawFunds {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/transactions`} accountId={get(account, 'details.accountId')} />} />
-            <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />
+            <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin copied={this.props.copied} {...props} />} />
             <Route exact path={`${match.url}/overview/:action`} render={props => <ConfirmModel {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/overview`} accountId={get(account, 'details.accountId')} />} />
           </Switch>
         </Grid.Column>

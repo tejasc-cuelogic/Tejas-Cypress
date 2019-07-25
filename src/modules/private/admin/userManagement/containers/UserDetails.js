@@ -157,6 +157,7 @@ export default class AccountDetails extends Component {
                                 {...props}
                                 adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                                 resourceId={details.id}
+                                copied={this.state.copied}
                               />
                             )
                                   }

@@ -53,6 +53,7 @@ export default class Application extends Component {
       LENDIO_QUAL_FRM,
       lendioEleChange,
       lendioObj,
+      lendioMaskChange,
     } = this.props.businessAppLendioStore;
     const { fields } = LENDIO_QUAL_FRM;
     const checkIsPresent = indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
@@ -126,7 +127,7 @@ export default class Application extends Component {
                     <MaskedInput
                       name="phoneNumber"
                       fielddata={fields.phoneNumber}
-                      changed={lendioEleChange}
+                      changed={lendioMaskChange}
                     />
                     <FormInput
                       key="comments"

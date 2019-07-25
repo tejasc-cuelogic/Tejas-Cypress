@@ -103,6 +103,11 @@ export const campaignDetailsQuery = gql`
       id
     }
     keyTerms {
+      revShareSummaryUpload {
+        id
+        url
+        isPublic
+      }
       unitPrice
       roundType
       premoneyValuation
@@ -135,6 +140,7 @@ export const campaignDetailsQuery = gql`
       investmentMultipleSummary
       state
       city
+      nsFeePercentage
     }
     bonusRewards {
       id

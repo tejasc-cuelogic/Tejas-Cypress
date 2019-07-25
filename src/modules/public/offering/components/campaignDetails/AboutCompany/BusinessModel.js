@@ -11,7 +11,7 @@ class BusinessModel extends Component {
     const { campaign } = this.props.campaignStore;
     return (
       <>
-        <Header as="h3" className="anchor-wrap mb-30">
+        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : ''} anchor-wrap mb-30`}>
           Business Model
           <span className="anchor" id="business-model" />
         </Header>

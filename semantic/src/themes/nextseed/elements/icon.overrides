@@ -1775,6 +1775,9 @@ i.icon[class*="ns-"]{
 .ns-business:before{
     content:@ns-business;
 }
+.ns-calculator-icon:before{
+    content:@ns-calculator-icon;
+}
 .ns-calendar:before{
     content:@ns-calendar;
 }
@@ -1883,6 +1886,9 @@ i.icon[class*="ns-"]{
 .ns-contact-card:before{
     content:@ns-contact-card;
 }
+.ns-convertible-icon:before{
+    content:@ns-convertible-icon;
+}
 .ns-corporation:before{
     content:@ns-corporation;
 }
@@ -1894,6 +1900,9 @@ i.icon[class*="ns-"]{
 }
 .ns-dashboard-circle:before{
     content:@ns-dashboard-circle;
+}
+.ns-debt-icon:before{
+    content:@ns-debt-icon;
 }
 .ns-document:before{
     content:@ns-document;

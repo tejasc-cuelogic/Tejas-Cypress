@@ -58,13 +58,14 @@ export const publicRoutes = [
     path: '/about',
     component: About,
   },
-  {
-    path: '/blog/:postId',
-    component: Blog,
-  },
+  // {
+  //   path: '/blog/:postId',
+  //   component: Blog,
+  // },
   {
     path: '/blog',
     component: Blog,
+    exact: true,
   },
   {
     path: '/invest/get-started',
@@ -85,6 +86,11 @@ export const publicRoutes = [
   {
     path: '/offerings/preview/:id',
     component: OfferDetails,
+  },
+  {
+    path: '/offerings-v2/:id',
+    component: OfferDetails,
+    props: 'newLayout',
   },
   {
     path: '/offerings/:id',
