@@ -9,7 +9,7 @@ describe('Legal Details', () => {
   it('should verify residential address', () => {
   });
 
-  it('should deny business address', () => {
+  it.skip('should deny business address', () => {
     cy.fixture('investor/identityVerification.json').then((legalData) => {
       const { withBusinessAddress, legalDetailsMeta } = legalData;
       fillLegalDetailsForm({ ...legalDetailsMeta, ...withBusinessAddress })

@@ -6,7 +6,7 @@ import cleanDeep from 'clean-deep';
 import money from 'money-math';
 import { get, includes, orderBy, isArray, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { ClientDb, FormValidator as Validator } from '../../../../helper';
+import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
@@ -147,16 +147,23 @@ export class TransactionStore {
 
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading
-    || this.paymentHistoryData.loading || this.loanAgreementData.loading;
+      || this.paymentHistoryData.loading || this.loanAgreementData.loading;
   }
 
   @computed get error() {
     return (this.data && this.data.error && this.data.error.message) || null;
   }
 
-  @computed get accountTransactions() {
+  @computed get accountTransactionsOld() {
     const transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
       && this.data.data.getAccountTransactions.transactions)) || [];
+    return this.sortBydate(transactions);
+  }
+
+  @computed get accountTransactions() {
+    let transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
+      && this.data.data.getAccountTransactions.transactions)) || [];
+    transactions = transactions.map(t => ({ ...t, date: DataFormatter.formatedDate(t.date) }));
     return this.sortBydate(transactions);
   }
 
