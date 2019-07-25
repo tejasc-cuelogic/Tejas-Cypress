@@ -9,7 +9,7 @@ import {
 import { openLogingPopupAndAutheticate } from './utility/validInvestorLoginForInvestment.utility';
 import { isAbortRemainingTestCases } from '../common.utility';
 
-describe.skip('Invest now CF investment flow', () => {
+describe('Invest now CF investment flow', () => {
   let isNeedToSkip = false;
   before(() => {
     initializeInvestNowFlow('CF');
@@ -66,7 +66,7 @@ describe.skip('Invest now CF investment flow', () => {
     }
   });
 
-  it('Should enter valid amount and proceed', () => {
+  it.skip('Should enter valid amount and proceed', () => {
     if (!isNeedToSkip) {
       checkForValidAmountAndProceed();
     } else {
@@ -74,7 +74,7 @@ describe.skip('Invest now CF investment flow', () => {
     }
   });
 
-  it('Should generate agreement and show agreement model popup', () => {
+  it.skip('Should generate agreement and show agreement model popup', () => {
     if (!isNeedToSkip) {
       proceedToGenerateAgreement();
     } else {
@@ -82,7 +82,7 @@ describe.skip('Invest now CF investment flow', () => {
     }
   });
 
-  it('Should submit investment and redirect to investment portfolio', () => {
+  it.skip('Should submit investment and redirect to investment portfolio', () => {
     if (!isNeedToSkip) {
       sumbmitingInvestment();
     } else {
