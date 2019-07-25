@@ -41,13 +41,19 @@ export default class MobileDropDownNav extends React.Component {
 
   render() {
     const {
-      navItems, location, className, navStore, slideUpNot, useIsActive, id,
+      navItems, location, className, navStore, slideUpNot, useIsActive, id, newLayout,
     } = this.props;
     const { navStatus, campaignHeaderStatus } = navStore;
     return (
-      <Responsive maxWidth={location.pathname.startsWith('/offerings/') ? 991 : 991} as={React.Fragment}>
+      <Responsive maxWidth={991} as={React.Fragment}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
-          <Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
+          {newLayout ? (
+            <Menu text className="campaign-mobile-menu-v2">
+              <NavItems sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />
+            </Menu>
+          )
+            : (
+<Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
             <Dropdown item text={this.activeText()}>
               <Dropdown.Menu>
                 <NavItems sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />
@@ -57,6 +63,7 @@ export default class MobileDropDownNav extends React.Component {
               && <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
             }
           </Menu>
+            )}
           <div className="animate-placeholder" />
         </Visibility>
       </Responsive>
