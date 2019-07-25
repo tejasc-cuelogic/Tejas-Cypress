@@ -8,10 +8,11 @@ import NewEmailAddress from './profileSettings/NewEmailAddress';
 import ConfirmEmailAddress from '../../../../auth/containers/ConfirmEmailAddress';
 import ConfirmPhoneNumber from './profileSettings/ConfirmPhoneNumber';
 import Helper from '../../../../../helper/utility';
+// import DeleteUser from './profileSettings/DeleteUser';
 import { securitySections } from '../../../../../services/constants/user';
 import ManageMultiFactorAuth from './profileSettings/ManageMultiFactorAuth';
 
-@inject('userDetailsStore')
+@inject('userDetailsStore', 'userStore')
 @withRouter
 @observer
 export default class Security extends Component {
@@ -100,19 +101,33 @@ export default class Security extends Component {
                           />
                         </Button.Group>
                       ) : (
-                        <Button
-                          disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
-                          as={Link}
-                          to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/account-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
-                          inverted
-                          color="green"
-                          content={section.action[1]}
-                        />
+                          <Button
+                            disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
+                            as={Link}
+                            to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/account-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
+                            inverted
+                            color="green"
+                            content={section.action[1]}
+                          />
                       )
                       }
                     </Card.Description>
                   </Card.Content>
-                </Card>
+                  </Card>
+                  {/* { section.action[0] === 'change-password' && this.props.userStore.isInvestor
+                  && (
+                  <Card fluid>
+                    <Card.Content>
+                        <Header as="h4">Delete Account</Header>
+                        <p>Delete your Nextseed Account.</p>
+                        <Divider hidden />
+                        <Card.Description>
+                          <DeleteUser />
+                        </Card.Description>
+                    </Card.Content>
+                  </Card>
+                  )
+                  } */}
               </Grid.Column>
             ))
           }

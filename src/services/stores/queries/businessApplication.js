@@ -583,3 +583,9 @@ mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [Busine
   )
 }
 `;
+
+export const exportAllToEmail = gql`
+mutation exportAllToEmail($applicationType: ApplicationTypeEnum!) {
+  exportAllToEmail(applicationType: $applicationType)
+}
+`;

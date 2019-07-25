@@ -5,7 +5,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FILTER_META } from '../../../../../constants/user';
 import { BUSINESS_DETAILS_EDIT_META } from '../../../../constants/businessApplication';
-import { getBusinessApplicationsDetailsAdmin, getBusinessApplicationAdmin, getBusinessApplicationSummary, updateBusinessApplicationInformation } from '../../../queries/businessApplication';
+import { getBusinessApplicationsDetailsAdmin, getBusinessApplicationAdmin, getBusinessApplicationSummary, updateBusinessApplicationInformation, exportAllToEmail } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
 import { uiStore } from '../../../index';
 
@@ -243,6 +243,32 @@ export class BusinessAppStore {
         })
         .then(() => {
           resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  exportBusinessApplications = (applicationType) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: exportAllToEmail,
+          variables: {
+            applicationType: applicationType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : applicationType === 'in-progress' ? 'IN_PROGRESS' : 'COMPLETED',
+          },
+        })
+        .then((result) => {
+          Helper.toast('Busines Application CSV is sent to email.', 'success');
+          resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
