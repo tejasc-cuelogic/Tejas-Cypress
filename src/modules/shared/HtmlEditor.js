@@ -1,3 +1,7 @@
+/* eslint-disable react/jsx-curly-brace-presence */
+/* eslint-disable no-template-curly-in-string */
+/* eslint-disable camelcase */
+/* eslint-disable func-names */
 /* eslint-disable import/no-extraneous-dependencies  */
 import React from 'react';
 import $ from 'jquery';
@@ -18,6 +22,7 @@ import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
 import { fileUpload } from '../../services/actions';
 import { FROALA_EDITOR_LICENSE } from '../../constants/common';
 import { UPLOADS_CONFIG } from '../../constants/aws';
+import ShortCodeInforModal from './ShortCodeInfo';
 
 window.$ = $;
 window.jQuery = $;
@@ -25,10 +30,39 @@ window.jQuery = $;
 @inject('uiStore')
 @observer
 export default class HtmlEditor extends React.Component {
+  state = {
+    showModal: false,
+    activeIndex: 0,
+  }
+
+  constructor(props) {
+    super(props);
+    $.FroalaEditor.DefineIcon('buttonIcon', { NAME: 'info', SVG_KEY: 'help' });
+    $.FroalaEditor.RegisterCommand('popup-btn', {
+      title: 'Show Short Codes Information',
+      icon: 'buttonIcon',
+      undo: false,
+      focus: false,
+      plugin: 'customPlugin',
+      callback: this.toggleModal,
+    });
+  }
+
+  handleAccClick = (e, titleProps) => {
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+    this.setState({ activeIndex: newIndex });
+  }
+
+  toggleModal = () => {
+    this.setState({ showModal: !this.state.showModal, activeIndex: 0 });
+  }
+
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
-      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
+      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen', '|', 'popup-btn'],
       charCounterCount: false,
       editorClass: 'html-editor',
       key: FROALA_EDITOR_LICENSE,
@@ -36,6 +70,7 @@ export default class HtmlEditor extends React.Component {
       heightMin: 244,
       heightMax: '70vh',
       imageManager: false,
+      pluginsEnabled: ['customPlugin', 'align', 'charCounter', 'codeBeautifier', 'codeView', 'colors', 'draggable', 'embedly', 'emoticons', 'entities', 'file', 'fontFamily', 'fontSize', 'fullscreen', 'image', 'imageManager', 'inlineStyle', 'lineBreaker', 'link', 'lists', 'paragraphFormat', 'paragraphStyle', 'quickInsert', 'quote', 'save', 'table', 'url', 'video', 'wordPaste'],
       events: {
         'froalaEditor.image.inserted': (e, editor, image) => {
           if (image.prevObject) {
@@ -109,6 +144,7 @@ export default class HtmlEditor extends React.Component {
           config={this.getConfig(keyStart, this.props.overrides)}
           onModelChange={this.handleModelChange}
         />
+        <ShortCodeInforModal toggleModal={this.toggleModal} handleAccClick={this.handleAccClick} activeIndex={this.state.activeIndex} showModal={this.state.showModal} />
       </div>
     );
   }
