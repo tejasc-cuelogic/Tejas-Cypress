@@ -12,7 +12,7 @@ import { AppStatusLabel } from './AppStatusLabel';
 import { InlineLoader, NsPaginationType2 } from '../../../../../theme/shared';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-@inject('businessAppAdminStore')
+@inject('businessAppAdminStore', 'uiStore')
 @observer
 export default class ApplicationsList extends Component {
   componentWillMount() {
@@ -37,8 +37,9 @@ export default class ApplicationsList extends Component {
     const { match } = this.props;
     const {
       getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
-      totalRecords, businessApplicationsList, setKeyword,
+      totalRecords, businessApplicationsList, setKeyword, exportBusinessApplications,
     } = this.props.businessAppAdminStore;
+    const { inProgress } = this.props.uiStore;
     if (businessApplicationsList.loading) {
       return <InlineLoader />;
     }
@@ -54,7 +55,7 @@ export default class ApplicationsList extends Component {
                 <DropdownFilter name="Sort By Field" keyName="by" change={this.setSearchParam} value={requestState.sort.by} options={FILTER_META.businessAppSortField} />
               </Grid.Column>
               <Grid.Column width={3} floated="right" textAlign="right">
-                <Button primary className="relaxed" content="Export" />
+                <Button primary className="relaxed" loading={inProgress} content="Export" onClick={() => exportBusinessApplications(this.props.match.params.applicationType)} />
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
@@ -90,7 +91,7 @@ export default class ApplicationsList extends Component {
                     (application.applicationStatus || application.prequalStatus)
                     !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
                     && (
-<Table.Row verticalAlign="top">
+                    <Table.Row verticalAlign="top">
                       <Table.Cell singleLine>
                         <Header as="h6">
                           <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
@@ -134,7 +135,7 @@ export default class ApplicationsList extends Component {
                           <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
                           {application.comments && application.comments.length
                             && (
-<Item.Content>
+                            <Item.Content>
                               <Item.Description>
                                 {application.comments[application.comments.length - 1].text}
                               </Item.Description>
@@ -162,7 +163,7 @@ export default class ApplicationsList extends Component {
                     )
                   ))
                   : (
-<Table.Row>
+                  <Table.Row>
                     <Table.Cell colSpan="6">
                       <InlineLoader text="No data available." />
                     </Table.Cell>
