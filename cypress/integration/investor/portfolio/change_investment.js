@@ -1,0 +1,3 @@
+describe.skip('Change investment', () => {
+
+});
