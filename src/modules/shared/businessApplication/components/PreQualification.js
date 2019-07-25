@@ -72,7 +72,9 @@ export default class PreQualification extends Component {
               });
           } else if (this.props.businessAppStore.userExists && this.props.businessAppStore.userRoles.includes('issuer')) {
             this.props.authStore.setUserLoginDetails(BUSINESS_APP_FRM_BASIC.fields.email.value, BUSINESS_ACCOUNT.fields.password.value);
-            this.proceedLoginIn(currentApplicationType);
+            if (BUSINESS_ACCOUNT.fields.password.value) {
+              this.proceedLoginIn(currentApplicationType);
+            }
           }
         })
         .catch((error) => {
@@ -88,7 +90,12 @@ export default class PreQualification extends Component {
         const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
         const redirectUrl = `/app/business-application/${currentApplicationType}/${url}`;
         this.props.history.push(redirectUrl);
-      }).finally(() => {
+      })
+      .catch((error) => {
+        console.log(error);
+        Helper.toast(error.message, 'error');
+      })
+      .finally(() => {
         this.props.uiStore.setFieldvalue('authRef', null);
         this.props.uiStore.setFieldvalue('isFromBusinessApplication', false);
         this.props.uiStore.removeOneFromProgressArray('login');
@@ -147,16 +154,21 @@ export default class PreQualification extends Component {
                 }
                 {userExists && userRoles.includes('issuer')
                   ? (
-                  <FormInput
-                    readOnly={isPrequalQulify}
-                    containerclassname={isPrequalQulify ? 'display-only' : ''}
-                    key="password"
-                    type="password"
-                    asterisk="true"
-                    name="password"
-                    fielddata={BUSINESS_ACCOUNT.fields.password}
-                    changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_ACCOUNT')}
-                  />
+                    <>
+                      <Form.Field>
+                        <FormInput
+                          readOnly={isPrequalQulify}
+                          containerclassname={isPrequalQulify ? 'display-only' : ''}
+                          key="password"
+                          type="password"
+                          asterisk="true"
+                          name="password"
+                          fielddata={BUSINESS_ACCOUNT.fields.password}
+                          changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_ACCOUNT')}
+                        />
+                        <Link to="/forgot-password">Forgot password?</Link>
+                      </Form.Field>
+                    </>
                   )
                   : ''
                 }
