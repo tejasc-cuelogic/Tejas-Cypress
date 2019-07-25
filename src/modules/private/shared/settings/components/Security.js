@@ -8,7 +8,7 @@ import NewEmailAddress from './profileSettings/NewEmailAddress';
 import ConfirmEmailAddress from '../../../../auth/containers/ConfirmEmailAddress';
 import ConfirmPhoneNumber from './profileSettings/ConfirmPhoneNumber';
 import Helper from '../../../../../helper/utility';
-import DeleteUser from './profileSettings/DeleteUser';
+// import DeleteUser from './profileSettings/DeleteUser';
 import { securitySections } from '../../../../../services/constants/user';
 import ManageMultiFactorAuth from './profileSettings/ManageMultiFactorAuth';
 
@@ -114,7 +114,7 @@ export default class Security extends Component {
                     </Card.Description>
                   </Card.Content>
                   </Card>
-                  { section.action[0] === 'change-password' && this.props.userStore.isInvestor
+                  {/* { section.action[0] === 'change-password' && this.props.userStore.isInvestor
                   && (
                   <Card fluid>
                     <Card.Content>
@@ -127,7 +127,7 @@ export default class Security extends Component {
                     </Card.Content>
                   </Card>
                   )
-                  }
+                  } */}
               </Grid.Column>
             ))
           }
