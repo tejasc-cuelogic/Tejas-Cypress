@@ -47,7 +47,7 @@ export default class CrowdPay extends Component {
       requestState, filters, FILTER_FRM, fChange, loading,
       // summary,
     } = crowdpayStore;
-    if (loading) {
+    if (loading && requestState.page === 1) {
       return <InlineLoader />;
     }
     return (

@@ -52,6 +52,7 @@ export default class NsPagination extends Component {
     const {
       first, currentPageNo, totalPages, stateOptions, recPerPage,
     } = this.state;
+    const { isLazyloading } = this.props;
     return (
       <Menu pagination text {...this.props}>
         <Menu.Menu position="right">
@@ -85,18 +86,18 @@ export default class NsPagination extends Component {
             />
           </Menu.Item>
           <Menu.Item>of</Menu.Item>
-          <Menu.Item>{totalPages}</Menu.Item>
+          <Menu.Item>{isLazyloading ? currentPageNo !== totalPages ? `${totalPages} + ` : totalPages : totalPages}</Menu.Item>
           <Menu.Item
             icon
             onClick={() => this.goToPage(currentPageNo + 1)}
-            className={currentPageNo === totalPages ? 'disabled' : ''}
+            className={isLazyloading && currentPageNo !== totalPages ? '' : currentPageNo === totalPages ? 'disabled' : ''}
           >
             <Icon className="ns-chevron-right" color="green" />
           </Menu.Item>
           <Menu.Item
             icon
             onClick={() => this.goToPage(totalPages)}
-            className={currentPageNo === totalPages ? 'disabled' : ''}
+            className={currentPageNo === totalPages || isLazyloading ? 'disabled' : ''}
           >
             <Icon className="ns-arrow-double-right" color="green" />
           </Menu.Item>
