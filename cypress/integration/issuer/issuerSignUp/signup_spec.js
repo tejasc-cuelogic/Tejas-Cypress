@@ -1,4 +1,4 @@
-import { completeBusinessApplication, preQualificationSuccess, preQualificationFail } from './utility/issuerSignUp';
+import { completeBusinessApplication, preQualificationSuccess, preQualificationFail } from './utility/issuerSignUp.utility';
 
 describe('Issuer Sign Up', () => {
   beforeEach(() => {

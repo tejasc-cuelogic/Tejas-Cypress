@@ -1,4 +1,4 @@
-import { registerApiCall, getJSONDataFromFixtures, btnClickAndWaitByButtonName } from '../../common.utility';
+import { registerApiCall, getJSONDataFromFixtures, btnClickAndWaitByButtonName } from '../../../common.utility';
 
 export const issuerSignUp = () => {
   cy.get('h4').contains('Business').click();

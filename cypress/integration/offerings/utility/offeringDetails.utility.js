@@ -1,4 +1,4 @@
-import { registerApiCall, isAbortRemainingTestCases } from '../common.utility';
+import { registerApiCall, isAbortRemainingTestCases } from '../../common.utility';
 
 export const goToCFOfferingDetailScreen = () => {
   cy.fixture('investor/offeringForInvestment.json').then((offerings) => {
